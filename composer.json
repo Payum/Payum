@@ -1,0 +1,23 @@
+{
+    "name": "fp/paymnt",
+    "type": "library",
+    "description": "Payment lib",
+    "keywords": ["payment", "paypal"],
+    "homepage": "",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kotlyar Maksim",
+            "email": "kotlyar.maksim@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "kriswallsmith/buzz": "0.7.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Paymnt": "src/"
+        }
+    }
+}
