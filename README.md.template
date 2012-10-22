@@ -1,0 +1,46 @@
+Payum
+=====
+
+The lib tends to provide very abstract interface to handle any possible payments. 
+
+Basic concepts
+--------------
+
+* **Action** - it executes some logic depending on information from a request.
+* **Request** - it contains information needed to run particular action.
+* **ActionPaymentAware** - the action can ask payment to execute a request required for its job. 
+* **InteractiveRequest** - The request requires an input from the user (display form, redirect somewhere, confirmation etc) It has to be thrown by an action.
+* **Instruction** - Payment specific information. The request may aggregate or\and be aware of instruction.
+* **Payment** - Contains payment specific actions. On request tries to find action responsible for the request. Pass the request to the found action.
+
+Key principles:
+--------------
+
+* **Storage unaware** - It is up to you where to store all info.
+* **Flexible** - It provides complete solution but you are free to change any part of it (Thanks to the "action" idea).
+* **Domain logic friendly** - You can develop your domain logic without any limitations from the lib side. The "request" does not require any interface to be implemented
+* **Decomposed** - The whole logic exploded into several actions.
+* **Heavily tested** - As a result the lib is pretty stable.
+
+Big Picture
+===========
+
+```php
+<?php
+{{testo:Payum\Examples\ReadmeTest::bigPicture}}
+```
+
+Interactive requests
+====================
+
+```php
+<?php
+{{testo:Payum\Examples\ReadmeTest::interactiveRequests}}
+```
+
+Getting Request Status
+======================
+
+```php
+{{testo:Payum\Examples\ReadmeTest::gettingRequestStatus}}
+```
