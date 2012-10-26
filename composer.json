@@ -1,0 +1,35 @@
+{
+    "name": "payum/payum-paypal-express-checkout",
+    "type": "library",
+    "description": "Paypal express checkout",
+    "keywords": ["payment", "paypal", "express checkout"],
+    "homepage": "",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kotlyar Maksim",
+            "email": "kotlyar.maksim@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "kriswallsmith/buzz": "0.7.*",
+        "payum/payum": "dev-master"
+    },
+    "require-dev": {
+        "doctrine/orm": "2.*",
+        "ext-curl": "*"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:formapro/payum.git"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Payum\\Paypal\\ExpressCheckout": "src/" 
+        }
+    },
+    "target-dir": "Payum/Paypal/ExpressCheckout"
+}
