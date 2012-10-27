@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
+>
+    <mapped-superclass name="Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity\Instruction">
+        
+        <field name="token" column="token" type="string" length="255" />
+
+        <field name="paymentrequest_n_amt" column="paymentrequest_n_amt" type="array" />
+
+        <field name="paymentrequest_n_paymentaction" column="paymentrequest_n_paymentaction" type="array" />
+        
+    </mapped-superclass>
+</doctrine-mapping>

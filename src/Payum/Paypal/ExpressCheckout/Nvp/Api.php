@@ -4,8 +4,10 @@ namespace Payum\Paypal\ExpressCheckout\Nvp;
 use Buzz\Client\ClientInterface;
 use Buzz\Message\Form\FormRequest;
 
-use Payum\Exception\Http\HttpResponseNotSuccessfulException;
+use Payum\Exception\Http\HttpResponseStatusNotSuccessfulException;
+use Payum\Exception\InvalidArgumentException;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
+use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 
 /**
  * Docs:
@@ -13,6 +15,9 @@ use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
  *   ACK: https://www.x.com/content/paypal-nvp-api-overview
  *   CHECKOUTSTATUS: https://www.x.com/developers/paypal/documentation-tools/api/getexpresscheckoutdetails-api-operation-nvp
  *   PAYMENTSTATUS: https://www.x.com/developers/paypal/documentation-tools/api/doexpresscheckoutpayment-api-operation-nvp
+ * 
+ *   https://www.x.com/developers/paypal/documentation-tools/api/setexpresscheckout-api-operation-nvp
+ *   https://www.x.com/developers/paypal/documentation-tools/api/gettransactiondetails-api-operation-nvp *  
  */
 class Api
 {
@@ -33,6 +38,8 @@ class Api
     const CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS = 'PaymentActionInProgress';
         
     const CHECKOUTSTATUS_PAYMENT_COMPLETED = 'PaymentCompleted';
+
+    const CHECKOUTSTATUS_PAYMENT_ACTION_COMPLETED = 'PaymentActionCompleted';
 
     /**
      * No status
@@ -105,36 +112,61 @@ class Api
     const PAYMENTSTATUS_COMPLETED_FUNDS_HELD = 'Completed-Funds-Held';
 
     /**
+     * How you want to obtain payment. When implementing parallel payments, this field is required and must be set to Order. When implementing digital goods, this field is required and must be set to Sale. You can specify up to 10 payments, where n is a digit between 0 and 9, inclusive; except for digital goods, which supports single payments only. If the transaction does not include a one-time purchase, this field is ignored. It is one of the following values:
+     * 
+     * Sale – This is a final sale for which you are requesting payment (default).
+     */
+    const PAYMENTACTION_SALE = 'Sale';
+
+    /**
+     * How you want to obtain payment. When implementing parallel payments, this field is required and must be set to Order. When implementing digital goods, this field is required and must be set to Sale. You can specify up to 10 payments, where n is a digit between 0 and 9, inclusive; except for digital goods, which supports single payments only. If the transaction does not include a one-time purchase, this field is ignored. It is one of the following values:
+     *
+     * Authorization – This payment is a basic authorization subject to settlement with PayPal Authorization and Capture.
+     */
+    const PAYMENTACTION_AUTHORIZATION = 'Authorization';
+
+    /**
+     * How you want to obtain payment. When implementing parallel payments, this field is required and must be set to Order. When implementing digital goods, this field is required and must be set to Sale. You can specify up to 10 payments, where n is a digit between 0 and 9, inclusive; except for digital goods, which supports single payments only. If the transaction does not include a one-time purchase, this field is ignored. It is one of the following values:
+     *
+     * Order – This payment is an order authorization subject to settlement with PayPal Authorization and Capture.
+     */
+    const PAYMENTACTION_ORDER = 'Order';
+
+    /**
      * Payment has not been authorized by the user.
      */
     const L_ERRORCODE_PAYMENT_NOT_AUTHORIZED = 10485;
     
     const VERSION = '65.1';
 
-    protected $password;
-
-    protected $username;
-
-    protected $signature;
-
-    protected $returnUrl;
-
-    protected $cancelUrl;
-
-    protected $debug;
-
     protected $client;
+    
+    protected $options = array(
+        'username' => null,
+        'password' => null,
+        'signature' => null,
+        'return_url' => null,
+        'cancel_url' => null,
+        'sandbox' => null,
+    );
 
-    public function __construct(ClientInterface $client, $username, $password, $signature, $returnUrl, $cancelUrl, $debug)
+    public function __construct(ClientInterface $client, array $options)
     {
         $this->client = $client;
-        $this->username = $username;
-        $this->password = $password;
-        $this->signature = $signature;
-        $this->returnUrl = $returnUrl;
-        $this->cancelUrl = $cancelUrl;
-
-        $this->debug = (boolean) $debug;
+        $this->options = array_replace($this->options, $options);
+        
+        if (true == empty($this->options['username'])) {
+            throw new InvalidArgumentException('The username option must be set.');
+        }
+        if (true == empty($this->options['password'])) {
+            throw new InvalidArgumentException('The password option must be set.');
+        }
+        if (true == empty($this->options['signature'])) {
+            throw new InvalidArgumentException('The signature option must be set.');
+        }
+        if (false == is_bool($this->options['sandbox'])) {
+            throw new InvalidArgumentException('The boolean sandbox option must be set.');
+        }
     }
     
     /**
@@ -146,10 +178,25 @@ class Api
      */
     public function setExpressCheckout(FormRequest $request)
     {
-        $request->setField('METHOD', 'SetExpressCheckout');
-        $request->setField('RETURNURL', $this->returnUrl);
-        $request->setField('CANCELURL', $this->cancelUrl);
+        $fields = $request->getFields();
+        if (false == isset($fields['RETURNURL'])) {
+            if (false == $this->options['return_url']) {
+                throw new \Payum\Exception\RuntimeException('The return_url must be set either to FormRequest or to options.');
+            }
 
+            $request->setField('RETURNURL', $this->options['return_url']);
+        }
+
+        if (false == isset($fields['CANCELURL'])) {
+            if (false == $this->options['cancel_url']) {
+                throw new \Payum\Exception\RuntimeException('The cancel_url must be set either to FormRequest or to options.');
+            }
+
+            $request->setField('CANCELURL', $this->options['cancel_url']);
+        }
+
+        $request->setField('METHOD', 'SetExpressCheckout');
+        
         $this->addVersionField($request);
         $this->addAuthorizeFields($request);
         
@@ -174,6 +221,23 @@ class Api
     }
 
     /**
+     * Require: TRANSACTIONID
+     *
+     * @param \Buzz\Message\Form\FormRequest $request
+     *
+     * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
+     */
+    public function getTransactionDetails(FormRequest $request)
+    {
+        $request->setField('METHOD', 'GetTransactionDetails');
+
+        $this->addVersionField($request);
+        $this->addAuthorizeFields($request);
+
+        return $this->doRequest($request);
+    }
+
+    /**
      * Require: PAYMENTREQUEST_0_AMT, PAYMENTREQUEST_0_PAYMENTACTION, PAYERID, TOKEN
      *
      * @param \Buzz\Message\Form\FormRequest $request
@@ -193,7 +257,7 @@ class Api
     /**
      * @param \Buzz\Message\Form\FormRequest $request
      * 
-     * @throws \Payum\Exception\Http\HttpResponseNotSuccessfulException
+     * @throws \Payum\Exception\Http\HttpResponseStatusNotSuccessfulException
      * 
      * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
      */
@@ -205,7 +269,10 @@ class Api
         $this->client->send($request, $response = $this->createResponse());
         
         if (false == $response->isSuccessful()) {
-            throw new HttpResponseNotSuccessfulException('The request failed with status '.$response->getStatusCode());
+            throw new HttpResponseStatusNotSuccessfulException($request, $response);
+        }
+        if (false == ($response['ACK'] == self::ACK_SUCCESS || $response['ACK'] ==  self::ACK_SUCCESS_WITH_WARNING)) {
+            throw new HttpResponseAckNotSuccessException($request, $response);
         }
 
         return $response;
@@ -213,7 +280,7 @@ class Api
 
     public function getAuthorizeTokenUrl($token)
     {
-        $host = $this->debug ? 'www.sandbox.paypal.com' : 'www.paypal.com';
+        $host = $this->options['sandbox'] ? 'www.sandbox.paypal.com' : 'www.paypal.com';
 
         return sprintf(
             'https://%s/cgi-bin/webscr?cmd=_express-checkout&token=%s',
@@ -224,17 +291,17 @@ class Api
 
     protected function getApiEndpoint()
     {
-        return $this->debug ?
+        return $this->options['sandbox'] ?
             'https://api-3t.sandbox.paypal.com/nvp' :
             'https://api-3t.paypal.com/nvp'
-            ;
+        ;
     }
     
     protected function addAuthorizeFields(FormRequest $request)
     {
-        $request->setField('PWD', $this->password);
-        $request->setField('USER', $this->username);
-        $request->setField('SIGNATURE', $this->signature);
+        $request->setField('PWD', $this->options['password']);
+        $request->setField('USER', $this->options['username']);
+        $request->setField('SIGNATURE', $this->options['signature']);
     }
     
     protected function addVersionField(FormRequest $request)
@@ -243,7 +310,7 @@ class Api
     }
 
     /**
-     * @return \Payum\Paypal\ExpressCheckout\Nvp\Buzz\Response
+     * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
      */
     protected function createResponse()
     {

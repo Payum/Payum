@@ -1,13 +1,16 @@
 <?php
-require_once __DIR__.'/../vendor/autoload.php';
+if (!$loader = @include __DIR__.'/../vendor/autoload.php') {
+    echo <<<EOM
+You must set up the project dependencies by running the following commands:
 
-spl_autoload_register(function($class) {
-    if (0 === strpos($class, 'Payum\\Paypal\\ExpressCheckout\\Nvp\\')) {
-        $path = __DIR__.'/../src/'.implode('/', array_slice(explode('\\', $class), 0)).'.php';
-        if (!stream_resolve_include_path($path)) {
-            return false;
-        }
-        require_once $path;
-        return true;
-    }
-});
+    curl -s http://getcomposer.org/installer | php
+    php composer.phar install --dev
+
+EOM;
+
+    exit(1);
+}
+
+$loader->add('Payum\Paypal\ExpressCheckout\Nvp\Tests', __DIR__);
+$loader->add('Payum\Paypal\ExpressCheckout\Nvp\Examples', __DIR__.'/../examples');
+$loader->add('Payum\Tests', __DIR__.'/../vendor/payum/payum/tests');

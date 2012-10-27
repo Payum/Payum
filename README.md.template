@@ -1,0 +1,20 @@
+Payum Paypal ExpressCheckout Nvp
+================================
+
+Create api:
+```php
+<?php
+{{testo:Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::createApi}}
+```
+
+Create payment:
+```php
+<?php
+{{testo:Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::createPayment}}
+```
+
+Do sell:
+```php
+<?php
+{{testo:Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::doSell}}
+```

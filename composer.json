@@ -17,8 +17,14 @@
         "payum/payum": "dev-master"
     },
     "require-dev": {
-        "doctrine/orm": "2.*",
-        "ext-curl": "*"
+        "doctrine/orm": "2.2.*",
+        "phpunit/phpunit": "3.7.*",
+        "fp/testo": "dev-master",
+        "ext-curl": "*",
+        "ext-pdo_sqlite": "*"
+    },
+    "config": {
+        "bin-dir": "bin"
     },
     "repositories": [
         {
@@ -27,9 +33,6 @@
         }
     ],
     "autoload": {
-        "psr-0": {
-            "Payum\\Paypal\\ExpressCheckout": "src/" 
-        }
-    },
-    "target-dir": "Payum/Paypal/ExpressCheckout"
+        "psr-0": { "Payum\\Paypal\\ExpressCheckout\\Nvp": "src/" }
+    }
 }
