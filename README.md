@@ -1,7 +1,10 @@
 Payum Paypal ExpressCheckout Nvp
 ================================
 
-Create api:
+The lib implements [Paypal Express Checkout](https://www.x.com/content/paypal-nvp-api-overview) payment. 
+
+Create api
+----------
 ```php
 <?php
 //Source: Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::createApi()
@@ -17,6 +20,7 @@ $api = new \Payum\Paypal\ExpressCheckout\Nvp\Api(new \Buzz\Client\Curl, array(
 ```
 
 Create payment:
+--------------
 ```php
 <?php
 //Source: Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::createPayment()
@@ -31,9 +35,11 @@ $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\DoExpressChecko
 $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\SaleAction());
 $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\SimpleSellAction());
 $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\StatusAction());
+$payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\SyncAction());
 ```
 
-Do sell:
+Do simple sell:
+--------------
 ```php
 <?php
 //Source: Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::doSell()
@@ -60,5 +66,7 @@ if ($statusRequest->isSuccess()) {
     //Failed
 } elseif ($statusRequest->isInProgress()) {
     //In progress!
+} elseif ($statusRequest->isUnknown()) {
+    //Status unknown!
 }
 ```

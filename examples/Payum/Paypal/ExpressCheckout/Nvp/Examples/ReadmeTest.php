@@ -40,6 +40,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\SaleAction());
         $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\SimpleSellAction());
         $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\StatusAction());
+        $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\SyncAction());
         //@testo:end
         
         return $payment;
@@ -74,6 +75,8 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
             //Failed
         } elseif ($statusRequest->isInProgress()) {
             //In progress!
+        } elseif ($statusRequest->isUnknown()) {
+            //Status unknown!
         }
     }
 }

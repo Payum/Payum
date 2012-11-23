@@ -1,19 +1,24 @@
 Payum Paypal ExpressCheckout Nvp
 ================================
 
-Create api:
+The lib implements [Paypal Express Checkout](https://www.x.com/content/paypal-nvp-api-overview) payment. 
+
+Create api
+----------
 ```php
 <?php
 {{testo:Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::createApi}}
 ```
 
 Create payment:
+--------------
 ```php
 <?php
 {{testo:Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::createPayment}}
 ```
 
-Do sell:
+Do simple sell:
+--------------
 ```php
 <?php
 {{testo:Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::doSell}}
