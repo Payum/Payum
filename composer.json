@@ -1,5 +1,5 @@
 {
-    "name": "payum/payum-paypal-express-checkout",
+    "name": "payum/paypal-express-checkout-nvp",
     "type": "library",
     "description": "Paypal express checkout",
     "keywords": ["payment", "paypal", "express checkout"],
