@@ -39,11 +39,14 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         
         $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\SetExpressCheckoutAction($api));
         $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\GetExpressCheckoutDetailsAction($api));
+        $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\GetTransactionDetailsAction($api));
         $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\DoExpressCheckoutPaymentAction($api));
         $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\SaleAction());
-        $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\SimpleSellAction());
         $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\StatusAction());
         $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\SyncAction());
+        
+        //app specific action
+        $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\SimpleSellAction());
         //@testo:end
         
         return $payment;
