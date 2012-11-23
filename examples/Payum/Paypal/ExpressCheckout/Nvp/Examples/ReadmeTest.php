@@ -9,7 +9,10 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
     public function createApi()
     {
         //@testo:start
-        $api = new \Payum\Paypal\ExpressCheckout\Nvp\Api(new \Buzz\Client\Curl, array(
+        $client = new \Buzz\Client\Curl;
+        $client->setTimeout(30000);
+        
+        $api = new \Payum\Paypal\ExpressCheckout\Nvp\Api($client, array(
             'username' => 'a_username',
             'password' => 'a_pasword',
             'signature' => 'a_signature',
