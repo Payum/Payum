@@ -1029,7 +1029,7 @@ class Instruction implements InstructionInterface
     {
         $authorizeNet->ignore_not_x_fields = true;
         
-        $authorizeNet->setFields(get_object_vars($this));
+        $authorizeNet->setFields(array_filter(get_object_vars($this)));
     }
 
     public function updateFromResponse(\AuthorizeNetAIM_Response $response)

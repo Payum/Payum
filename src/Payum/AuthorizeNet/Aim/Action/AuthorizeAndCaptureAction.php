@@ -2,6 +2,7 @@
 namespace Payum\AuthorizeNet\Aim\Action;
 
 use Payum\Action\ActionInterface;
+use Payum\Request\RedirectUrlInteractiveRequest;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\AuthorizeNet\Aim\Request\AuthorizeAndCaptureRequest;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
@@ -14,11 +15,18 @@ class AuthorizeAndCaptureAction implements ActionInterface
     protected $authorizeNetAim;
 
     /**
+     * @var string
+     */
+    protected $userInputRequiredUrl;
+
+    /**
      * @param \AuthorizeNetAIM $authorizeNetAim
      */
-    public function __construct(AuthorizeNetAIM $authorizeNetAim)
+    public function __construct(AuthorizeNetAIM $authorizeNetAim, $userInputRequiredUrl)
     {
         $this->authorizeNetAim = $authorizeNetAim;
+        
+        $this->userInputRequiredUrl = $userInputRequiredUrl;
     }
     
     /**
@@ -31,13 +39,15 @@ class AuthorizeAndCaptureAction implements ActionInterface
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
+        $instruction = $request->getInstruction();
+        if (false == ($instruction->getAmount() && $instruction->getCardNum() && $instruction->getExpDate())) {
+            throw new RedirectUrlInteractiveRequest($this->userInputRequiredUrl);
+        }
+
         $authorizeNetAim = clone $this->authorizeNetAim;
 
-        $request->getInstruction()->fillRequest($authorizeNetAim);
-        
-        $response = $authorizeNetAim->authorizeAndCapture();
-        
-        $request->getInstruction()->updateFromResponse($response);
+        $instruction->fillRequest($authorizeNetAim);
+        $instruction->updateFromResponse($authorizeNetAim->authorizeAndCapture());
     }
 
     /**

@@ -7,6 +7,7 @@ use Payum\Request\InstructionAggregateRequestInterface;
 use Payum\Request\InstructionAwareRequestInterface;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\AuthorizeNet\Aim\Request\Instruction;
+use Payum\AuthorizeNet\Aim\Request\AuthorizeAndCaptureRequest;;
 
 class SimpleSellAction extends ActionPaymentAware
 {
@@ -20,8 +21,13 @@ class SimpleSellAction extends ActionPaymentAware
         if (false == $request->getInstruction()) {
             $request->setInstruction($this->createInstruction());
         }
+        
+        /** @var $instruction \Payum\AuthorizeNet\Aim\Request\Instruction */
+        $instruction = $request->getInstruction(); 
 
-        $this->payment->execute(new SaleRequest($request->getInstruction()));
+        $instruction->setAmount($request->getPrice());
+
+        $this->payment->execute(new AuthorizeAndCaptureRequest($request->getInstruction()));
     }
 
     public function supports($request)
