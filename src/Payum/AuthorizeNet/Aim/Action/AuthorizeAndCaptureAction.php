@@ -2,7 +2,7 @@
 namespace Payum\AuthorizeNet\Aim\Action;
 
 use Payum\Action\ActionInterface;
-use Payum\Request\RedirectUrlInteractiveRequest;
+use Payum\Request\UserInputRequiredInteractiveRequest;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\AuthorizeNet\Aim\Request\AuthorizeAndCaptureRequest;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
@@ -13,20 +13,13 @@ class AuthorizeAndCaptureAction implements ActionInterface
      * @var \AuthorizeNetAIM
      */
     protected $authorizeNetAim;
-
-    /**
-     * @var string
-     */
-    protected $userInputRequiredUrl;
-
+    
     /**
      * @param \AuthorizeNetAIM $authorizeNetAim
      */
-    public function __construct(AuthorizeNetAIM $authorizeNetAim, $userInputRequiredUrl)
+    public function __construct(AuthorizeNetAIM $authorizeNetAim)
     {
         $this->authorizeNetAim = $authorizeNetAim;
-        
-        $this->userInputRequiredUrl = $userInputRequiredUrl;
     }
     
     /**
@@ -41,7 +34,7 @@ class AuthorizeAndCaptureAction implements ActionInterface
 
         $instruction = $request->getInstruction();
         if (false == ($instruction->getAmount() && $instruction->getCardNum() && $instruction->getExpDate())) {
-            throw new RedirectUrlInteractiveRequest($this->userInputRequiredUrl);
+            throw new UserInputRequiredInteractiveRequest();
         }
 
         $authorizeNetAim = clone $this->authorizeNetAim;
