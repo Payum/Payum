@@ -6,19 +6,19 @@ interface RequestStorageInterface
     /**
      * @return mixed
      */
-    function create();
+    function createRequest();
 
     /**
      * @param mixed $request
      *
      * @return void
      */
-    function update($request);
+    function updateRequest($request);
 
     /**
      * @param mixed $id
-     *
-     * @return mixed|null
+     * 
+     * @return mixed
      */
-    function find($id);
+    function findRequestById($id);
 }

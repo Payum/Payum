@@ -21,39 +21,35 @@ class FilesystemRequestStorage implements RequestStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function create()
+    public function createRequest()
     {
-        $request = new $this->requestClass;
-
-        $id = uniqid();
-
-        $rp = new \ReflectionProperty($request, $this->idProperty);
-        $rp->setAccessible(true);
-        $rp->setValue($request, $id);
-        $rp->setAccessible(false);
-
-        file_put_contents($this->storageDir.'/request-'.$id, serialize($request));
-
-        return $request;
+        return new $this->requestClass;
     }
-
 
     /**
      * {@inheritdoc}
      */
-    public function update($request)
+    public function updateRequest($request)
     {
         if (false == $request instanceof $this->requestClass) {
             throw new InvalidArgumentException(sprintf(
-                'Invalid request given. Should be instance of ',
+                'Invalid request given. Should be instance of %s',
                 $this->requestClass
             ));
         }
 
         $rp = new \ReflectionProperty($request, $this->idProperty);
+        
         $rp->setAccessible(true);
         $id = $rp->getValue($request);
         $rp->setAccessible(false);
+        if (false == $id) {
+            $id = uniqid();
+
+            $rp->setAccessible(true);
+            $rp->setValue($request, $id);
+            $rp->setAccessible(false);
+        }
 
         file_put_contents($this->storageDir.'/request-'.$id, serialize($request));
     }
@@ -61,7 +57,7 @@ class FilesystemRequestStorage implements RequestStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function find($id)
+    public function findRequestById($id)
     {
         if (file_exists($this->storageDir.'/request-'.$id)) {
             return unserialize(file_get_contents($this->storageDir.'/request-'.$id));

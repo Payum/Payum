@@ -32,7 +32,7 @@ class DoctrineRequestStorage implements RequestStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function create()
+    public function createRequest()
     {
         return new $this->requestClass;
     }
@@ -40,11 +40,11 @@ class DoctrineRequestStorage implements RequestStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function update($request)
+    public function updateRequest($request)
     {
         if (false == $request instanceof $this->requestClass) {
             throw new InvalidArgumentException(sprintf(
-                'Invalid request given. Should be instance of ',
+                'Invalid request given. Should be instance of %s',
                 $this->requestClass
             ));
         }
@@ -56,7 +56,7 @@ class DoctrineRequestStorage implements RequestStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function find($id)
+    public function findRequestById($id)
     {
         return $this->objectManager->find($this->requestClass, $id);
     }

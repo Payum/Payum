@@ -11,15 +11,31 @@ class UserInputRequiredInteractiveRequestTest extends \PHPUnit_Framework_TestCas
     public function shouldImplementInteractiveRequestInterface()
     {
         $rc = new \ReflectionClass('Payum\Request\UserInputRequiredInteractiveRequest');
-        
+
         $this->assertTrue($rc->implementsInterface('Payum\Request\InteractiveRequestInterface'));
     }
 
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
+    public function couldBeConstructedWithReqioreFieldsAsArgument()
     {
-        new UserInputRequiredInteractiveRequest();
+        new UserInputRequiredInteractiveRequest(array(
+            'a_field',
+        ));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetRequiredFieldsSetInConstructor()
+    {
+        $expectedRequiredFields = array(
+            'a_field',
+        );
+
+        $request = new UserInputRequiredInteractiveRequest($expectedRequiredFields);
+
+        $this->assertEquals($expectedRequiredFields, $request->getRequiredFields());
     }
 }
