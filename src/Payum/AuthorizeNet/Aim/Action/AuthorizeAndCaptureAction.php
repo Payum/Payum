@@ -34,7 +34,7 @@ class AuthorizeAndCaptureAction implements ActionInterface
 
         $instruction = $request->getInstruction();
         if (false == ($instruction->getAmount() && $instruction->getCardNum() && $instruction->getExpDate())) {
-            throw new UserInputRequiredInteractiveRequest();
+            throw new UserInputRequiredInteractiveRequest(array('amount', 'card_num', 'exp_date'));
         }
 
         $authorizeNetAim = clone $this->authorizeNetAim;
