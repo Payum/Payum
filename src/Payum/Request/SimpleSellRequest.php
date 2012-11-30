@@ -4,6 +4,11 @@ namespace Payum\Request;
 class SimpleSellRequest implements InstructionAggregateRequestInterface, InstructionAwareRequestInterface
 {
     /**
+     * @var mixed
+     */
+    protected $id;
+    
+    /**
      * @var float
      */
     protected $price = 0;
@@ -17,6 +22,14 @@ class SimpleSellRequest implements InstructionAggregateRequestInterface, Instruc
      * @var InstructionInterface
      */
     protected $instruction;
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * @return float

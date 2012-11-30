@@ -2,7 +2,7 @@
 namespace Payum\Tests\Request\Storage;
 
 use Payum\Request\Storage\FilesystemRequestStorage;
-use Payum\Request\SimpleSellRequest as BaseSimpleSellRequest;
+use Payum\Request\SimpleSellRequest;
 
 class FilesystemRequestStorageTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,7 +23,7 @@ class FilesystemRequestStorageTest extends \PHPUnit_Framework_TestCase
     {
         new FilesystemRequestStorage(
             sys_get_temp_dir(), 
-            'Payum\Tests\Request\Storage\SimpleSellRequest',
+            'Payum\Request\SimpleSellRequest',
             'id'
         );
     }
@@ -33,7 +33,7 @@ class FilesystemRequestStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCreateInstanceOfRequestClassGivenInConstructor()
     {
-        $expectedRequestClass = 'Payum\Tests\Request\Storage\SimpleSellRequest';
+        $expectedRequestClass = 'Payum\Request\SimpleSellRequest';
         
         $storage = new FilesystemRequestStorage(
             sys_get_temp_dir(),
@@ -52,7 +52,7 @@ class FilesystemRequestStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUpdateRequestAndSetIdToRequest()
     {
-        $expectedRequestClass = 'Payum\Tests\Request\Storage\SimpleSellRequest';
+        $expectedRequestClass = 'Payum\Request\SimpleSellRequest';
 
         $storage = new FilesystemRequestStorage(
             sys_get_temp_dir(),
@@ -75,7 +75,7 @@ class FilesystemRequestStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = new FilesystemRequestStorage(
             sys_get_temp_dir(),
-            'Payum\Tests\Request\Storage\SimpleSellRequest',
+            'Payum\Request\SimpleSellRequest',
             'id'
         );
 
@@ -97,7 +97,7 @@ class FilesystemRequestStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = new FilesystemRequestStorage(
             sys_get_temp_dir(),
-            'Payum\Tests\Request\Storage\SimpleSellRequest',
+            'Payum\Request\SimpleSellRequest',
             'id'
         );
 
@@ -114,7 +114,7 @@ class FilesystemRequestStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = new FilesystemRequestStorage(
             sys_get_temp_dir(),
-            'Payum\Tests\Request\Storage\SimpleSellRequest',
+            'Payum\Request\SimpleSellRequest',
             'id'
         );
 
@@ -131,13 +131,13 @@ class FilesystemRequestStorageTest extends \PHPUnit_Framework_TestCase
      * @test
      * 
      * @expectedException \Payum\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid request given. Should be instance of Payum\Tests\Request\Storage\SimpleSellRequest
+     * @expectedExceptionMessage Invalid request given. Should be instance of Payum\Request\SimpleSellRequest
      */
     public function throwIfTryUpdateRequestNotInstanceOfRequestClass()
     {
         $storage = new FilesystemRequestStorage(
             sys_get_temp_dir(),
-            'Payum\Tests\Request\Storage\SimpleSellRequest',
+            'Payum\Request\SimpleSellRequest',
             'id'
         );
         
@@ -151,7 +151,7 @@ class FilesystemRequestStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = new FilesystemRequestStorage(
             sys_get_temp_dir(),
-            'Payum\Tests\Request\Storage\SimpleSellRequest',
+            'Payum\Request\SimpleSellRequest',
             'id'
         );
         
@@ -171,7 +171,7 @@ class FilesystemRequestStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = new FilesystemRequestStorage(
             sys_get_temp_dir(),
-            'Payum\Tests\Request\Storage\SimpleSellRequest',
+            'Payum\Request\SimpleSellRequest',
             'id'
         );
 
@@ -186,21 +186,5 @@ class FilesystemRequestStorageTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($request, $foundRequest);
         $this->assertEquals($expectedPrice, $foundRequest->getPrice());
         $this->assertEquals($expectedCurrency, $foundRequest->getCurrency());
-    }
-}
-
-class SimpleSellRequest extends BaseSimpleSellRequest
-{
-    /**
-     * @var
-     */
-    protected $id;
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 }

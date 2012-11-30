@@ -2,7 +2,7 @@
 namespace Payum\Tests\Bridge\Doctrine\Request\Storage;
 
 use Payum\Bridge\Doctrine\Request\Storage\DoctrineRequestStorage;
-use Payum\Request\SimpleSellRequest as BaseSimpleSellRequest;
+use Payum\Request\SimpleSellRequest;
 
 class DoctrineRequestStorageTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,7 +30,7 @@ class DoctrineRequestStorageTest extends \PHPUnit_Framework_TestCase
     {
         new DoctrineRequestStorage(
             $this->createObjectManager(),
-            'Payum\Tests\Bridge\Doctrine\Request\Storage\SimpleSellRequest'
+            'Payum\Request\SimpleSellRequest'
         );
     }
 
@@ -39,11 +39,11 @@ class DoctrineRequestStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCreateInstanceOfRequestClassGivenInConstructor()
     {
-        $expectedRequestClass = 'Payum\Tests\Bridge\Doctrine\Request\Storage\SimpleSellRequest';
+        $expectedRequestClass = 'Payum\Request\SimpleSellRequest';
 
         $storage = new DoctrineRequestStorage(
             $this->createObjectManager(),
-            'Payum\Tests\Bridge\Doctrine\Request\Storage\SimpleSellRequest'
+            'Payum\Request\SimpleSellRequest'
         );
 
         $request = $storage->createRequest();
@@ -61,7 +61,7 @@ class DoctrineRequestStorageTest extends \PHPUnit_Framework_TestCase
         $objectManagerMock
             ->expects($this->once())
             ->method('persist')
-            ->with($this->isInstanceOf('Payum\Tests\Bridge\Doctrine\Request\Storage\SimpleSellRequest'))
+            ->with($this->isInstanceOf('Payum\Request\SimpleSellRequest'))
         ;
         $objectManagerMock
             ->expects($this->once())
@@ -70,7 +70,7 @@ class DoctrineRequestStorageTest extends \PHPUnit_Framework_TestCase
         
         $storage = new DoctrineRequestStorage(
             $objectManagerMock,
-            'Payum\Tests\Bridge\Doctrine\Request\Storage\SimpleSellRequest'
+            'Payum\Request\SimpleSellRequest'
         );
 
         $request = $storage->createRequest();
@@ -83,7 +83,7 @@ class DoctrineRequestStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldFindRequestById()
     {
-        $expectedRequestClass = 'Payum\Tests\Bridge\Doctrine\Request\Storage\SimpleSellRequest';
+        $expectedRequestClass = 'Payum\Request\SimpleSellRequest';
         $expectedRequestId = 123;
         $expectedFoundRequest = new SimpleSellRequest;
         
@@ -97,7 +97,7 @@ class DoctrineRequestStorageTest extends \PHPUnit_Framework_TestCase
 
         $storage = new DoctrineRequestStorage(
             $objectManagerMock,
-            'Payum\Tests\Bridge\Doctrine\Request\Storage\SimpleSellRequest'
+            'Payum\Request\SimpleSellRequest'
         );
 
         $actualRequest = $storage->findRequestById($expectedRequestId);
@@ -109,13 +109,13 @@ class DoctrineRequestStorageTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid request given. Should be instance of Payum\Tests\Bridge\Doctrine\Request\Storage\SimpleSellRequest
+     * @expectedExceptionMessage Invalid request given. Should be instance of Payum\Request\SimpleSellRequest
      */
     public function throwIfTryUpdateRequestNotInstanceOfRequestClass()
     {
         $storage = new DoctrineRequestStorage(
             $this->createObjectManager(),
-            'Payum\Tests\Bridge\Doctrine\Request\Storage\SimpleSellRequest'
+            'Payum\Request\SimpleSellRequest'
         );
 
         $storage->updateRequest(new \stdClass());
@@ -127,22 +127,5 @@ class DoctrineRequestStorageTest extends \PHPUnit_Framework_TestCase
     protected function createObjectManager()
     {
         return $this->getMock('Doctrine\Common\Persistence\ObjectManager');    
-    }
-}
-
-
-class SimpleSellRequest extends BaseSimpleSellRequest
-{
-    /**
-     * @var
-     */
-    protected $id;
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 }
