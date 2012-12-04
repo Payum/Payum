@@ -2,13 +2,13 @@
 namespace Payum\Request;
 
 use Payum\Domain\ModelInterface;
-use Payum\Domain\InstructionAggregateInterface;
+use Payum\Domain\InstructionAwareInterface;
 use Payum\Exception\InvalidArgumentException;
 
 class CreatePaymentInstructionRequest
 {
     /**
-     * @var \Payum\Domain\ModelInterface|InstructionAggregateInterface
+     * @var \Payum\Domain\ModelInterface|\Payum\Domain\InstructionAwareInterface
      */
     protected $model;
 
@@ -17,9 +17,9 @@ class CreatePaymentInstructionRequest
      */
     public function __construct(ModelInterface $model)
     {
-        if (false == $model instanceof InstructionAggregateInterface) {
+        if (false == $model instanceof InstructionAwareInterface) {
             throw new InvalidArgumentException(sprintf(
-                'Invalid domain model %s given. Should implement InstructionAggregateInterface interface',
+                'Invalid domain model %s given. Should implement InstructionAwareInterface interface',
                 get_class($model)
             ));
         }
@@ -28,7 +28,7 @@ class CreatePaymentInstructionRequest
     }
 
     /**
-     * @return ModelInterface|InstructionAggregateInterface
+     * @return ModelInterface|InstructionAwareInterface
      */
     public function getModel()
     {
