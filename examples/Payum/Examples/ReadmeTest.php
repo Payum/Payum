@@ -54,7 +54,15 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
                 echo 'User must be redirected to '.$interactiveRequest->getUrl();
             } 
             
-            //...
+            //..
+            
+            //@testo:end
+            else {
+            //@testo:start
+            throw new \Payum\Exception\LogicException('Unsupported interactive request', null, $interactiveRequest);
+            //@testo:end
+            }
+            //@testo:start
         }
     }
 

@@ -6,11 +6,12 @@ The lib tends to provide very abstract interface to handle any possible payments
 Basic concepts
 --------------
 
-* **Action** - it executes some logic depending on information from a request.
-* **Request** - it contains information needed to run particular action.
-* **ActionPaymentAware** - the action can ask payment to execute a request required for its job. 
+* **Action** - It executes some logic depending on information from a request.
+* **Request** - It contains information needed to run particular action.
+* **DomainModel** - It is a model from your domain layer. The model may aggregate or\and be aware of payment instruction.  
+* **ActionPaymentAware** - The action can ask payment to execute a request required for its job. 
 * **InteractiveRequest** - The request requires an input from the user (display form, redirect somewhere, confirmation etc) It has to be thrown by an action.
-* **Instruction** - Payment specific information. The request may aggregate or\and be aware of instruction.
+* **PaymentInstruction** - Payment specific information. You have to take of transforming data from domain model to payment instruction.  
 * **Payment** - Contains payment specific actions. On request tries to find action responsible for the request. Pass the request to the found action.
 
 Key principles:
