@@ -2,13 +2,14 @@
 namespace Payum\Request;
 
 use Payum\Exception\LogicException;
+use Payum\Domain\ModelInterface;
 
 class BinaryMaskStatusRequest extends LogicException implements StatusRequestInterface 
 {
     /**
-     * @var mixed
+     * @var ModelInterface
      */
-    protected $request;
+    protected $model;
 
     /**
      * @var int
@@ -28,11 +29,11 @@ class BinaryMaskStatusRequest extends LogicException implements StatusRequestInt
     );
 
     /**
-     * @param mixed $request
+     * @param mixed $model
      */
-    public function __construct($request)
+    public function __construct(ModelInterface $model)
     {
-        $this->request = $request;
+        $this->model = $model;
         
         $this->markUnknown();
     }
@@ -40,9 +41,9 @@ class BinaryMaskStatusRequest extends LogicException implements StatusRequestInt
     /**
      * {@inheritdoc}
      */
-    public function getRequest()
+    public function getModel()
     {
-        return $this->request;
+        return $this->model;
     }
 
     /**

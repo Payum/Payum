@@ -12,9 +12,9 @@ class HttpException extends LogicException
 
     protected $response;
 
-    public function __construct(Request $request, Response $response, $message = "", $code = 0, \Exception $previous = null)
+    public function __construct(Request $model, Response $response, $message = "", $code = 0, \Exception $previous = null)
     {
-        $this->request = $request;
+        $this->request = $model;
         $this->response = $response;
 
         parent::__construct($message, $code, $previous);

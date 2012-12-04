@@ -52,21 +52,21 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithRequestAsArgument()
+    public function couldBeConstructedWithModelAsArgument()
     {
-        new BinaryMaskStatusRequest($request = new \stdClass());
+        new BinaryMaskStatusRequest($this->createModelMock());
     }
 
     /**
      * @test
      */
-    public function shouldAllowGetRequestSetInConstructor()
+    public function shouldAllowGetModelSetInConstructor()
     {
-        $expectedRequest = new \stdClass();
+        $expectedModel = $this->createModelMock();
         
-        $statusRequest = new BinaryMaskStatusRequest($expectedRequest);
+        $statusRequest = new BinaryMaskStatusRequest($expectedModel);
         
-        $this->assertSame($expectedRequest, $statusRequest->getRequest());
+        $this->assertSame($expectedModel, $statusRequest->getModel());
     }
 
     /**
@@ -74,7 +74,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkUnknownInConstructor()
     {
-        $statusRequest = new BinaryMaskStatusRequest(new \stdClass());
+        $statusRequest = new BinaryMaskStatusRequest($this->createModelMock());
 
         $this->assertTrue($statusRequest->isUnknown());
     }
@@ -86,7 +86,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetMarkedStatus($markXXXMethod)
     {
-        $statusRequest = new BinaryMaskStatusRequest(new \stdClass());
+        $statusRequest = new BinaryMaskStatusRequest($this->createModelMock());
 
         $statusRequest->$markXXXMethod();
         
@@ -98,7 +98,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersStatusIfMarkedSuccess()
     {
-        $statusRequest = new BinaryMaskStatusRequest(new \stdClass());
+        $statusRequest = new BinaryMaskStatusRequest($this->createModelMock());
 
         $statusRequest->markSuccess();
         
@@ -116,7 +116,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersStatusIfMarkedFailed()
     {
-        $statusRequest = new BinaryMaskStatusRequest(new \stdClass());
+        $statusRequest = new BinaryMaskStatusRequest($this->createModelMock());
 
         $statusRequest->markFailed();
 
@@ -134,7 +134,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersStatusIfMarkedInPorgress()
     {
-        $statusRequest = new BinaryMaskStatusRequest(new \stdClass());
+        $statusRequest = new BinaryMaskStatusRequest($this->createModelMock());
 
         $statusRequest->markInProgress();
 
@@ -152,7 +152,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersStatusIfMarkedCanceled()
     {
-        $statusRequest = new BinaryMaskStatusRequest(new \stdClass());
+        $statusRequest = new BinaryMaskStatusRequest($this->createModelMock());
 
         $statusRequest->markCanceled();
 
@@ -170,7 +170,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersStatusIfMarkedNew()
     {
-        $statusRequest = new BinaryMaskStatusRequest(new \stdClass());
+        $statusRequest = new BinaryMaskStatusRequest($this->createModelMock());
 
         $statusRequest->markNew();
 
@@ -188,7 +188,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersStatusIfMarkedUnknown()
     {
-        $statusRequest = new BinaryMaskStatusRequest(new \stdClass());
+        $statusRequest = new BinaryMaskStatusRequest($this->createModelMock());
 
         $statusRequest->markUnknown();
 
@@ -199,6 +199,14 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($statusRequest->isInProgress());
         $this->assertFalse($statusRequest->isFailed());
         $this->assertFalse($statusRequest->isNew());
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Domain\ModelInterface
+     */
+    protected function createModelMock()
+    {
+        return $this->getMock('Payum\Domain\ModelInterface');
     }
 }
 

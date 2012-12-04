@@ -1,8 +1,9 @@
 <?php
-namespace Payum\Examples;
+namespace Payum\Examples\Action;
 
 use Payum\Action\ActionInterface;
 use Payum\Request\RedirectUrlInteractiveRequest;
+use Payum\Examples\Request\AuthorizeRequest;
 
 class AuthorizeAction implements ActionInterface
 {

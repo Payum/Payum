@@ -1,7 +1,9 @@
 <?php
-namespace Payum\Request;
+namespace Payum\Domain;
 
-class SimpleSellRequest implements InstructionAggregateRequestInterface, InstructionAwareRequestInterface
+use Payum\PaymentInstructionInterface;
+
+class SimpleSell implements ModelInterface, InstructionAggregateInterface, InstructionAwareInterface
 {
     /**
      * @var mixed
@@ -19,7 +21,7 @@ class SimpleSellRequest implements InstructionAggregateRequestInterface, Instruc
     protected $currency = '';
 
     /**
-     * @var InstructionInterface
+     * @var PaymentInstructionInterface
      */
     protected $instruction;
 
@@ -64,7 +66,7 @@ class SimpleSellRequest implements InstructionAggregateRequestInterface, Instruc
     }
 
     /**
-     * @return \Payum\Request\InstructionInterface|null
+     * {@inheritdoc}
      */
     public function getInstruction()
     {
@@ -72,9 +74,9 @@ class SimpleSellRequest implements InstructionAggregateRequestInterface, Instruc
     }
 
     /**
-     * @param \Payum\Request\InstructionInterface $instruction
+     * {@inheritdoc}
      */
-    public function setInstruction(InstructionInterface $instruction)
+    public function setInstruction(PaymentInstructionInterface $instruction)
     {
         $this->instruction = $instruction;
     }

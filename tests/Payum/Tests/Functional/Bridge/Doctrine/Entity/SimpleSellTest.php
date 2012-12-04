@@ -2,16 +2,16 @@
 namespace Payum\Tests\Functional\Bridge\Doctrine\Entity;
 
 use Payum\Tests\Functional\Bridge\Doctrine\OrmTest;
-use Payum\Examples\Entity\SimpleSellRequest;
+use Payum\Examples\Entity\SimpleSell;
 
-class SimpleSellRequestTest extends OrmTest
+class SimpleSellTest extends OrmTest
 {
     /**
      * @test
      */
     public function shouldAllowPersist()
     {
-        $request = new SimpleSellRequest;
+        $request = new SimpleSell;
         
         //guard
         $this->assertNull($request->getId());
@@ -27,7 +27,7 @@ class SimpleSellRequestTest extends OrmTest
      */
     public function shouldAllowFindPersistedRequest()
     {
-        $request = new SimpleSellRequest;
+        $request = new SimpleSell;
         $request->setCurrency($expectedCurrency = 'AUD');
         $request->setPrice($expectedPrice = 123.15);
         
@@ -38,7 +38,7 @@ class SimpleSellRequestTest extends OrmTest
 
         $this->em->clear();
         
-        $foundRequest = $this->em->find('Payum\Examples\Entity\SimpleSellRequest', $id);
+        $foundRequest = $this->em->find('Payum\Examples\Entity\SimpleSell', $id);
         
         $this->assertNotSame($request, $foundRequest);
         

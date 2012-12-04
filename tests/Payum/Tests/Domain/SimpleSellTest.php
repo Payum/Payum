@@ -1,28 +1,38 @@
 <?php
-namespace Payum\Tests\Request;
+namespace Payum\Tests\Domain;
 
-use Payum\Request\SimpleSellRequest;
+use Payum\Domain\SimpleSell;
 
-class SimpleSellRequestTest extends \PHPUnit_Framework_TestCase
+class SimpleSellTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldImplementInstructionAwareRequestInterface()
+    public function shouldImplementInstructionAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Request\SimpleSellRequest');
+        $rc = new \ReflectionClass('Payum\Domain\SimpleSell');
         
-        $this->assertTrue($rc->implementsInterface('Payum\Request\InstructionAwareRequestInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Domain\InstructionAwareInterface'));
     }
 
     /**
      * @test
      */
-    public function shouldImplementInstructionAggregateRequestInterface()
+    public function shouldImplementInstructionAggregateInterface()
     {
-        $rc = new \ReflectionClass('Payum\Request\SimpleSellRequest');
+        $rc = new \ReflectionClass('Payum\Domain\SimpleSell');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Request\InstructionAggregateRequestInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Domain\InstructionAggregateInterface'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldImplementModelInterface()
+    {
+        $rc = new \ReflectionClass('Payum\Domain\SimpleSell');
+
+        $this->assertTrue($rc->implementsInterface('Payum\Domain\ModelInterface'));
     }
 
     /**
@@ -30,7 +40,7 @@ class SimpleSellRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeWithoutAnyArguments()
     {
-        new SimpleSellRequest();
+        new SimpleSell();
     }
 
     /**
@@ -38,7 +48,7 @@ class SimpleSellRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetPrice()
     {
-        $request = new SimpleSellRequest();
+        $request = new SimpleSell();
         
         $request->setPrice(100.05);
     }
@@ -50,7 +60,7 @@ class SimpleSellRequestTest extends \PHPUnit_Framework_TestCase
     {
         $expectedPrice = 123.45;
         
-        $request = new SimpleSellRequest();
+        $request = new SimpleSell();
         
         $request->setPrice($expectedPrice);
         
@@ -62,7 +72,7 @@ class SimpleSellRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetCurrency()
     {
-        $request = new SimpleSellRequest();
+        $request = new SimpleSell();
 
         $request->setCurrency('USD');
     }
@@ -74,7 +84,7 @@ class SimpleSellRequestTest extends \PHPUnit_Framework_TestCase
     {
         $expectedCurrency = 'EUR';
 
-        $request = new SimpleSellRequest();
+        $request = new SimpleSell();
 
         $request->setCurrency($expectedCurrency);
 
@@ -86,7 +96,7 @@ class SimpleSellRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetInstruction()
     {
-        $request = new SimpleSellRequest();
+        $request = new SimpleSell();
 
         $request->setInstruction($this->createInstructionMock());
     }
@@ -98,7 +108,7 @@ class SimpleSellRequestTest extends \PHPUnit_Framework_TestCase
     {
         $expectedInstruction = $this->createInstructionMock();
 
-        $request = new SimpleSellRequest();
+        $request = new SimpleSell();
 
         $request->setInstruction($expectedInstruction);
 
@@ -110,7 +120,7 @@ class SimpleSellRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldGetEmptyStringIfCurrencyIfNotSet()
     {
-        $request = new SimpleSellRequest();
+        $request = new SimpleSell();
 
         $this->assertSame('', $request->getCurrency());
     }
@@ -120,7 +130,7 @@ class SimpleSellRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldGetZeroIntIfPriceNotSet()
     {
-        $request = new SimpleSellRequest();
+        $request = new SimpleSell();
 
         $this->assertSame(0, $request->getPrice());
     }
@@ -130,16 +140,16 @@ class SimpleSellRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldGetNullIfInstructionNotSet()
     {
-        $request = new SimpleSellRequest();
+        $request = new SimpleSell();
 
         $this->assertNull($request->getInstruction());
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Request\InstructionInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\PaymentInstructionInterface
      */
     protected function createInstructionMock()
     {
-        return $this->getMock('Payum\Request\InstructionInterface');
+        return $this->getMock('Payum\PaymentInstructionInterface');
     }
 }
