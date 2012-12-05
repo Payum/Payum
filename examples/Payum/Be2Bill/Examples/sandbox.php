@@ -7,9 +7,9 @@ $api = new \Payum\Be2Bill\Api(new \Buzz\Client\Curl(), array(
     'sandbox' => true
 ));
 
-$payment = new \Payum\Be2Bill\Payment();
-$payment->addAction(new \Payum\Be2Bill\Action\CaptureAction($api));
-$payment->addAction(new \Payum\Be2Bill\Action\StatusAction());
+$payment = new \Payum\Be2Bill\Payment($api);
+$payment->addAction(new \Payum\Be2Bill\Action\CaptureAction);
+$payment->addAction(new \Payum\Be2Bill\Action\StatusAction);
 
 $sell = new \Payum\Domain\SimpleSell();
 $sell->setPrice(10);

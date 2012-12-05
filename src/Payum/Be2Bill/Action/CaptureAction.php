@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Be2Bill\Action;
 
-use Payum\Action\ActionPaymentAware;
 use Payum\Request\CaptureRequest;
 use Payum\Request\CreatePaymentInstructionRequest;
 use Payum\Request\UserInputRequiredInteractiveRequest;
@@ -14,19 +13,6 @@ use Payum\Be2Bill\Api;
 
 class CaptureAction extends ActionPaymentAware
 {
-    /**
-     * @var \Payum\Be2Bill\Api
-     */
-    protected $api;
-
-    /**
-     * @param \Payum\Be2Bill\Api $api
-     */
-    public function __construct(Api $api)
-    {
-        $this->api = $api;
-    }
-    
     /**
      * {inheritdoc}
      */
@@ -57,7 +43,7 @@ class CaptureAction extends ActionPaymentAware
                 ));
             }
             
-            $response = $this->api->payment($instruction->toParams());
+            $response = $this->payment->getApi()->payment($instruction->toParams());
             
             $instruction->fromParams((array) $response->getContentJson());
         }

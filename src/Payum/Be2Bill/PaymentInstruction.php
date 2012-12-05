@@ -177,7 +177,7 @@ class PaymentInstruction implements PaymentInstructionInterface
     protected $transactionid;
 
     /**
-     * Description: Card number
+     * Description: Card number. Do not store this property
      * Type: String (16)
      * Example: 1111222233334444
      *
@@ -186,7 +186,16 @@ class PaymentInstruction implements PaymentInstructionInterface
     protected $cardcode;
 
     /**
-     * Description: Validity date
+     * Description: Secured card number
+     * Type: String (16)
+     * Example: ************4444
+     *
+     * @var string
+     */
+    protected $cardcodeSecured;
+
+    /**
+     * Description: Validity date. Do not store this property
      * Type: YY-MM
      * Example: 13-05
      *
@@ -195,7 +204,7 @@ class PaymentInstruction implements PaymentInstructionInterface
     protected $cardvaliditydate;
 
     /**
-     * Description: Visual cryptogram
+     * Description: Visual cryptogram. Do not store this property
      * Type: Integer
      * Example: 123
      *
@@ -204,7 +213,7 @@ class PaymentInstruction implements PaymentInstructionInterface
     protected $cardcvv;
 
     /**
-     * Description: Full name shown on the cardholder's card
+     * Description: Full name shown on the cardholder's card. Do not store this property
      * Type: String (255 max)
      * Example: John Doe
      *
@@ -557,6 +566,21 @@ class PaymentInstruction implements PaymentInstructionInterface
     public function setCardcode($cardcode)
     {
         $this->cardcode = $cardcode;
+        
+        $this->setCardcodeSecured($cardcode);
+    }
+
+    /** 
+     * @return string
+     */
+    public function getCardcodeSecured()
+    {
+        return $this->cardcodeSecured;
+    }
+    
+    protected function setCardcodeSecured($cardcode)
+    {
+        $this->cardcodeSecured = str_repeat('*', 12).substr($cardcode, -4);   
     }
 
     /**
@@ -660,9 +684,41 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function toParams()
     {
+        $be2billParameters = array(
+            'OPERATIONTYPE', 
+            'DESCRIPTION', 
+            'ORDERID', 'AMOUNT', 
+            'CARDTYPE', 
+            'CLIENTIDENT', 
+            'CLIENTEMAIL', 
+            'CLIENTADDRESS', 
+            'CLIENTDOB', 
+            'CLIENTREFERER',
+            'CLIENTUSERAGENT', 
+            'CLIENTIP', 
+            'FIRSTNAME', 
+            'LASTNAME', 
+            'LANGUAGE', 
+            'CREATEALIAS', 
+            'ALIAS', 
+            'ALIASMODE', 
+            'TRANSACTIONID', 
+            'CARDCODE', 
+            'CARDCODE', 
+            'CARDVALIDITYDATE', 
+            'CARDCVV',
+            'CARDFULLNAME',
+            'EXECCODE',
+            'MESSAGE',
+            'DESCRIPTOR',
+        );
+        
         $params = array();
         foreach (get_object_vars($this) as $name => $value) {
-            $params[strtoupper($name)] = $value;
+            $name = strtoupper($name);
+            if (in_array($name, $be2billParameters)) {
+                $params[$name] = $value;
+            }
         }
         
         return array_filter($params);
@@ -681,5 +737,3 @@ class PaymentInstruction implements PaymentInstructionInterface
         }
     }
 }
-
-
