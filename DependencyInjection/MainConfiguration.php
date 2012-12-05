@@ -42,10 +42,7 @@ class MainConfiguration implements ConfigurationInterface
         $contextsPrototypeNode = $rootNode
             ->children()
                 ->arrayNode('contexts')
-                ->isRequired()
-                ->requiresAtLeastOneElement()
-                ->disallowNewKeysInSubsequentConfigs()
-                ->prototype('array')
+                    ->prototype('array')
         ;
         
         $contextsPrototypeNode

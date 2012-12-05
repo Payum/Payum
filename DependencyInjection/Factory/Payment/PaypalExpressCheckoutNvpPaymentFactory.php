@@ -84,7 +84,7 @@ class PaypalExpressCheckoutNvpPaymentFactory implements PaymentFactoryInterface
                 ->scalarNode('username')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('password')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('signature')->isRequired()->cannotBeEmpty()->end()
-                ->booleanNode('sandbox')->defaultFalse()->end()
+                ->booleanNode('sandbox')->defaultTrue()->end()
             ->end()
         ->end();
     }

@@ -23,7 +23,7 @@ class PayumPaymentExtension extends Extension
 
         $config = $this->processConfiguration($mainConfig, $configs);
 
-        $container->setParameter('payum_payment.template.engine', $configs['template']['engine']);
+        $container->setParameter('payum_payment.template.engine', $config['template']['engine']);
 
         // load services
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
