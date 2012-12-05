@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="./Tests/bootstrap.php" color="true">
+    <testsuites>
+        <testsuite name="PayumPaymentBundle">
+            <directory suffix="Test.php">./Tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

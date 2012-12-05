@@ -1,0 +1,15 @@
+{% extends "PayumPaymentBundle::layout.html.twig" %}
+
+{% block payum_payment_content %}
+    {% if status.success %}
+        Payment succesfully finished!
+    {% elseif status.canceled %}
+        Payment was canceled!
+    {% elseif status.failed %}
+        Payment failed!
+    {% elseif status.inProgress %}
+        Payment still in progress!
+    {% elseif status.inProgress %}
+        Payment status unknown!
+    {% endif %}
+{% endblock payum_payment_content %}

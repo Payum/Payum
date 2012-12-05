@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="payum_payment.storage.doctrine.orm.class"></parameter>
+    </parameters>
+    
+    <services>
+        <service id="payum_payment.storage.doctrine.orm" class="%payum_payment.storage.doctrine.orm.class%" public="false">
+            <argument type="service" id="payum_payment.entity_manager" />
+            <argument><!-- should be set in DoctrineStorageFactory --></argument>
+        </service>
+
+        <service id="payum_payment.entity_manager" factory-service="doctrine" factory-method="getManager" class="Doctrine\ORM\EntityManager" public="false">
+        </service>
+    </services>
+</container>

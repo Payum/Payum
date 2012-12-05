@@ -1,0 +1,16 @@
+payum:
+    contexts:
+        simple_sell:
+            filesystem_storage: 
+                storage_dir:
+                id_property:
+                model_class:
+            paypal_express_checkout_nvp_payment:
+                instruction_class: Paypal\Instruction
+                create_instruction_from_model_action: foo.action
+                api:
+                    username: foo
+                    password: bar 
+                    signature: baz
+                    return_url: http://example.com/return
+                    cancel_url: http://example.com/return
