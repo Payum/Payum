@@ -23,11 +23,15 @@ class PaymentController extends Controller
         }
         
         if ($interactiveRequest = $context->getPayment()->execute(new CaptureRequest($model))) {
+            $context->getStorage()->updateModel($model);
+            
             return $this->handle($context->getInteractiveController(), array(
                 'context' => $context,
                 'request' => $interactiveRequest
             ));
         }
+
+        $context->getStorage()->updateModel($model);
 
         return $this->handle($context->getStatusController(), array(
             'context' => $context,

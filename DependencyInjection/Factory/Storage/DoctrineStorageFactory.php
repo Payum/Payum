@@ -16,7 +16,7 @@ class DoctrineStorageFactory implements StorageFactoryInterface
     {
         $this->load($container, $config['driver']);
         
-        $contextStorageDefinition = new DefinitionDecorator('payum_payment.storage.doctrine.default');
+        $contextStorageDefinition = new DefinitionDecorator('payum_payment.storage.doctrine.'.$config['driver']);
         $contextStorageDefinition->replaceArgument(1, $config['model_class']);
         
         $contextStorageId = 'payum_payment.context.'.$contextName.'.storage';

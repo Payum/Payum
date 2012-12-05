@@ -15,6 +15,7 @@
         <service
             id="payum_payment.be2bill.payment"
             class="%payum_payment.be2bill.payment.class%"
+            abstract="true"
             public="false"
         >
             <!-- It is template service. The real service will be created by Be2BillPaymentFactory -->
@@ -23,6 +24,7 @@
         <service
             id="payum_payment.be2bill.api"
             class="%payum_payment.be2bill.api.class%"
+            abstract="true"
             public="false"
         >
             <argument type="service">payum_payment.buzz.client</argument>
@@ -34,8 +36,10 @@
         <service
             id="payum_payment.be2bill.action.capture"
             class="%payum_payment.be2bill.action.capture.class%"
+            abstract="true"
             public="false"
         >
+            <argument id="service">payum_payment.be2bill.api</argument>
         </service>
 
         <service

@@ -44,12 +44,12 @@ class PayumPaymentExtension extends Extension
                 }
             }
             
-            $paymentDefinition = $container->getDefinition($paymentServiceId);
-            $paymentDefinition->addMethodCall('addAction', new Reference($config['domain_action_service']));
-
             $contextDefinition = new Definition();
+            $contextDefinition->setClass('PayumPaymemtBundle\Context\LazyContext');
             $contextDefinition->setPublic(false);
-            $contextDefinition->setMethodCalls('setContainer', new Reference('service_container'));
+            $contextDefinition->addMethodCall('setContainer', array(
+                new Reference('service_container')
+            ));
             $contextDefinition->setArguments(array(
                 $contextName,
                 $paymentServiceId,

@@ -35,8 +35,15 @@ class Be2BillPaymentFactory implements PaymentFactoryInterface
 
         
         $paymentDefinition = new DefinitionDecorator('payum_payment.be2bill.payment');
-        $paymentDefinition->addMethodCall('addAction', new Reference('payum_payment.context.'.$contextName.'.action.capture'));
-        $paymentDefinition->addMethodCall('addAction', new Reference('payum_payment.be2bill.action.status'));
+        $paymentDefinition->addMethodCall('addAction', array(
+            new Reference('payum_payment.context.'.$contextName.'.action.capture')
+        ));
+        $paymentDefinition->addMethodCall('addAction', array(
+            new Reference('payum_payment.be2bill.action.status')
+        ));
+        $paymentDefinition->addMethodCall('addAction', array(
+            new Reference($config['create_instruction_from_model_action'])
+        ));
 
         $paymentId = 'payum_payment.context.'.$contextName.'.payment';
         $container->setDefinition($paymentId, $paymentDefinition);
