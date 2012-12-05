@@ -43,15 +43,17 @@ class CaptureAction extends ActionPaymentAware
                 $this->payment->execute(new SetExpressCheckoutRequest($instruction));
                 $this->payment->execute(new AuthorizeTokenRequest($instruction));
             }
-    
-            if ($instruction->getPayerid() && null == $instruction->getCheckoutstatus()) {
-                $this->payment->execute(new DoExpressCheckoutPaymentRequest($instruction));
-            } else if ($instruction->getPayerid() && Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $instruction->getCheckoutstatus()) {
+
+            $this->payment->execute(new SyncRequest($instruction));
+            
+            if (
+                $instruction->getPayerid() &&  
+                Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $instruction->getCheckoutstatus()
+            ) {
                 $this->payment->execute(new DoExpressCheckoutPaymentRequest($instruction));
             }
 
             $this->payment->execute(new SyncRequest($instruction));
-            
         } catch (HttpResponseAckNotSuccessException $e) {
             $instruction->clearErrors();
             $instruction->fromNvp($e->getResponse());
