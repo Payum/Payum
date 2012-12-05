@@ -1,12 +1,14 @@
 <?php
 namespace Payum\PaymentBundle\Controller;
 
-use Payum\Request\RedirectUrlInteractiveRequest;
 use Payum\Domain\ModelInterface;
 use Payum\Exception\LogicException;
+use Payum\Request\RedirectUrlInteractiveRequest;
 use Payum\Request\InteractiveRequestInterface;
 use Payum\Request\CaptureRequest;
+use Payum\Request\StatusRequestInterface;
 use Payum\PaymentBundle\Context\ContextInterface;
+use Payum\PaymentBundle\Request\ResponseInteractiveRequest;
 
 class PaymentController extends Controller
 {
@@ -31,11 +33,16 @@ class PaymentController extends Controller
             ));
         }
 
+        $statusRequest = $context->createStatusRequest($model);
+        if ($interactiveRequest = $context->getPayment()->execute($statusRequest)) {
+            throw new LogicException('Unsupported interactive request.', null, $interactiveRequest);
+        }
+        
         $context->getStorage()->updateModel($model);
 
         return $this->handle($context->getStatusController(), array(
             'context' => $context,
-            'model' => $model
+            'request' => $statusRequest
         ));
     }
     
@@ -44,20 +51,18 @@ class PaymentController extends Controller
         if ($request instanceof RedirectUrlInteractiveRequest) {
             return $this->redirect($request->getUrl());
         }
-        //todo user input required
+        if ($request instanceof ResponseInteractiveRequest) {
+            return $request->getResponse();
+        }
 
         throw new LogicException('Unsupported interactive request.', null, $request);
     }
 
-    public function statusAction(ContextInterface $context, ModelInterface $model)
+    public function statusAction(ContextInterface $context, StatusRequestInterface $request)
     {
-        $statusRequest = $context->createStatusRequest($model);
-        
-        $context->getPayment()->execute($statusRequest);
-
         return $this->render(
             'PayumPaymentBundle:Payment:status.html.'.$this->container->getParameter('payum_payment.template.engine'), 
-            array('status' => $statusRequest)
+            array('status' => $request)
         );
     }
 
