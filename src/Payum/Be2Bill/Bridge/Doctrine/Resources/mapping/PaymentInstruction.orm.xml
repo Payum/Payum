@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
+        >
+    <mapped-superclass name="Payum\Be2Bill\Bridge\Doctrine\Entity\PaymentInstruction">
+
+        <field name="operationtype" column="operationtype" type="string" length="255" />
+
+        <field name="description" column="description" type="string" length="510" />
+
+        <field name="orderid" column="orderid" type="string" length="40" />
+
+        <field name="amount" column="amount" type="integer" />
+
+        <field name="cardtype" column="cardtype" type="string" length="40" />
+
+        <field name="clientident" column="clientident" type="string" length="255" />
+
+        <field name="clientemail" column="clientemail" type="string" length="255" />
+
+        <field name="clientaddress" column="clientaddress" type="string" length="510" />
+
+        <field name="clientdob" column="clientdob" type="string" length="40" />
+
+        <field name="clientreferer" column="clientreferer" type="string" length="255" />
+
+        <field name="clientuseragent" column="clientuseragent" type="string" length="255" />
+
+        <field name="clientip" column="clientip" type="string" length="15" />
+
+        <field name="firstname" column="firstname" type="string" length="127" />
+
+        <field name="lastname" column="lastname" type="string" length="127" />
+        
+        <field name="createalias" column="createalias" type="string" length="3" />
+
+        <field name="alias" column="alias" type="string" length="32" />
+
+        <field name="aliasmode" column="aliasmode" type="string" length="40" />
+
+        <field name="transactionid" column="transactionid" type="string" length="32" />
+
+        <field name="cardcodeSecured" column="cardcode_secured" type="string" length="16" />
+
+        <field name="cardfullname" column="cardfullname" type="string" length="255" />
+
+        <field name="execcode" column="execcode" type="string" length="4" />
+
+        <field name="message" column="message" type="string" length="510" />
+
+        <field name="descriptor" column="descriptor" type="string" length="32" />
+    </mapped-superclass>
+</doctrine-mapping>

@@ -2,14 +2,14 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 $api = new \Payum\Be2Bill\Api(new \Buzz\Client\Curl(), array(
-    'identifier' => 'REMIXJOB',
-    'password' => '{=Tk<%V}WY]L(haB',
+    'identifier' => 'foo',
+    'password' => 'bar',
     'sandbox' => true
 ));
 
-$payment = new \Payum\Be2Bill\Payment();
-$payment->addAction(new \Payum\Be2Bill\Action\CaptureAction($api));
-$payment->addAction(new \Payum\Be2Bill\Action\StatusAction());
+$payment = new \Payum\Be2Bill\Payment($api);
+$payment->addAction(new \Payum\Be2Bill\Action\CaptureAction);
+$payment->addAction(new \Payum\Be2Bill\Action\StatusAction);
 
 $sell = new \Payum\Domain\SimpleSell();
 $sell->setPrice(10);
