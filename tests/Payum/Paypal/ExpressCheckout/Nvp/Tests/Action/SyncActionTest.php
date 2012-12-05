@@ -6,7 +6,7 @@ use Buzz\Message\Form\FormRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\SyncAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\SyncRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Instruction;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 
@@ -37,7 +37,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new SyncAction();
         
-        $this->assertTrue($action->supports(new SyncRequest(new Instruction)));
+        $this->assertTrue($action->supports(new SyncRequest(new PaymentInstruction)));
     }
 
     /**
@@ -76,7 +76,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new SyncAction();
         $action->setPayment($paymentMock);
 
-        $request = new SyncRequest(new Instruction);
+        $request = new SyncRequest(new PaymentInstruction);
         
         $action->execute($request);
     }
@@ -96,7 +96,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new SyncAction();
         $action->setPayment($paymentMock);
 
-        $request = new SyncRequest(new Instruction);
+        $request = new SyncRequest(new PaymentInstruction);
         $request->getInstruction()->setToken('theToken');
 
         $action->execute($request);
@@ -122,7 +122,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new SyncAction();
         $action->setPayment($paymentMock);
 
-        $request = new SyncRequest(new Instruction);
+        $request = new SyncRequest(new PaymentInstruction);
         $request->getInstruction()->setToken('theToken');
         $request->getInstruction()->setPaymentrequestNTransactionid(0, 'fooTransId');
         $request->getInstruction()->setPaymentrequestNTransactionid(2, 'barTransId');
@@ -153,7 +153,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new SyncAction();
         $action->setPayment($paymentMock);
 
-        $request = new SyncRequest(new Instruction);
+        $request = new SyncRequest(new PaymentInstruction);
         $request->getInstruction()->setLErrorcoden(100, 'theErrorCodeToBeCleaned');
         $request->getInstruction()->setToken('aToken');
 

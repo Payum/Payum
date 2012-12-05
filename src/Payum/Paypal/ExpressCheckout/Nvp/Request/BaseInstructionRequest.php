@@ -1,26 +1,28 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Request;
 
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Instruction;
-use Payum\Request\InstructionAggregateRequestInterface;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
+use Payum\Domain\InstructionAggregateInterface;
 
-abstract class BaseInstructionRequest implements InstructionAggregateRequestInterface 
+abstract class BaseInstructionRequest implements InstructionAggregateInterface 
 {
     /**
-     * @var \Payum\Paypal\ExpressCheckout\Nvp\Request\Instruction
+     * @var PaymentInstruction
      */
     protected $instruction;
 
     /**
-     * @param \Payum\Paypal\ExpressCheckout\Nvp\Request\Instruction $instruction
+     * @param PaymentInstruction $instruction
      */
-    public function __construct(Instruction $instruction)
+    public function __construct(PaymentInstruction $instruction)
     {
         $this->instruction = $instruction;
     }
 
     /**
-     * @return \Payum\Paypal\ExpressCheckout\Nvp\Request\Instruction
+     * {@inheritdoc}
+     * 
+     * @return PaymentInstruction
      */
     public function getInstruction()
     {

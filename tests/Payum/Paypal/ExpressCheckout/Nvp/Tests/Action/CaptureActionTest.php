@@ -3,21 +3,23 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Buzz\Message\Form\FormRequest;
 
+use Payum\Request\CaptureRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\SaleAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\SaleRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Instruction;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 
-class SaleActionTest extends \PHPUnit_Framework_TestCase
+use Payum\Paypal\ExpressCheckout\Nvp\Examples\Model\ModelWithInstruction;
+
+class CaptureActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfActionPaymentAware()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\SaleAction');
+        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction');
         
         $this->assertTrue($rc->isSubclassOf('Payum\Action\ActionPaymentAware'));
     }
@@ -27,25 +29,45 @@ class SaleActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()   
     {
-        new SaleAction();
+        new CaptureAction();
     }
 
     /**
      * @test
      */
-    public function shouldSupportSaleRequest()
+    public function shouldSupportCaptureRequestAndInstructionNotSet()
     {
-        $action = new SaleAction();
+        $action = new CaptureAction();
         
-        $this->assertTrue($action->supports(new SaleRequest(new Instruction)));
+        $model = new ModelWithInstruction();
+        
+        //guard
+        $this->assertNull($model->getInstruction());
+        
+        $this->assertTrue($action->supports(new CaptureRequest($model)));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotSaleRequest()
+    public function shouldSupportCaptureRequestAndInstructionSet()
     {
-        $action = new SaleAction();
+        $action = new CaptureAction();
+
+        $model = new ModelWithInstruction();
+
+        //guard
+        $this->assertNull($model->getInstruction());
+
+        $this->assertTrue($action->supports(new CaptureRequest($model)));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotSupportAnythingNotCaptureRequest()
+    {
+        $action = new CaptureAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -57,7 +79,7 @@ class SaleActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $action = new SaleAction();
+        $action = new CaptureAction();
 
         $action->execute(new \stdClass());
     }
@@ -67,16 +89,19 @@ class SaleActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSetZeroPaymentActionAsSell()
     {
-        $action = new SaleAction();
+        $action = new CaptureAction();
         $action->setPayment($this->createPaymentMock());
 
-        $request = new SaleRequest(new Instruction);
+        $instruction = new PaymentInstruction;
         
-        $action->execute($request);
+        $model = new ModelWithInstruction();
+        $model->setInstruction($instruction);
+        
+        $action->execute(new CaptureRequest($model));
         
         $this->assertEquals(
             Api::PAYMENTACTION_SALE,
-            $request->getInstruction()->getPaymentrequestNPaymentaction(0)
+            $instruction->getPaymentrequestNPaymentaction(0)
         );
     }
 
@@ -97,10 +122,15 @@ class SaleActionTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\AuthorizeTokenRequest'))
         ;
         
-        $action = new SaleAction();
+        $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $action->execute(new SaleRequest(new Instruction));
+        $instruction = new PaymentInstruction;
+
+        $model = new ModelWithInstruction();
+        $model->setInstruction($instruction);
+
+        $action->execute(new CaptureRequest($model));
     }
 
     /**
@@ -112,16 +142,19 @@ class SaleActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\GetExpressCheckoutDetailsRequest'))
+            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\SyncRequest'))
         ;
 
-        $action = new SaleAction();
+        $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $request = new SaleRequest(new Instruction);
-        $request->getInstruction()->setToken('aToken');
+        $instruction = new PaymentInstruction;
+        $instruction->setToken('aToken');
+
+        $model = new ModelWithInstruction();
+        $model->setInstruction($instruction);
         
-        $action->execute($request);
+        $action->execute(new CaptureRequest($model));
     }
 
     /**
@@ -133,28 +166,26 @@ class SaleActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\GetExpressCheckoutDetailsRequest'))
+            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\DoExpressCheckoutPaymentRequest'))
         ;
         $paymentMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\DoExpressCheckoutPaymentRequest'))
-        ;
-        $paymentMock
-            ->expects($this->at(2))
-            ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\SyncRequest'))
         ;
 
-        $action = new SaleAction();
+        $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $request = new SaleRequest(new Instruction);
-        $request->getInstruction()->setToken('aToken');
-        $request->getInstruction()->setPayerid('aPayerId');
-        $request->getInstruction()->setCheckoutstatus(API::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED);
+        $instruction = new PaymentInstruction;
+        $instruction->setToken('aToken');
+        $instruction->setPayerid('aPayerId');
+        $instruction->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED);
 
-        $action->execute($request);
+        $model = new ModelWithInstruction();
+        $model->setInstruction($instruction);
+
+        $action->execute(new CaptureRequest($model));
     }
 
     /**
@@ -166,22 +197,21 @@ class SaleActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\GetExpressCheckoutDetailsRequest'))
-        ;
-        $paymentMock
-            ->expects($this->at(1))
-            ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\SyncRequest'))
         ;
 
-        $action = new SaleAction();
+        $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $request = new SaleRequest(new Instruction);
-        $request->getInstruction()->setToken('aToken');
-        $request->getInstruction()->setCheckoutstatus(API::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED);
+        $instruction = new PaymentInstruction;
+        $instruction->setToken('aToken');
+        $instruction->setPayerid(null);
+        $instruction->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED);
 
-        $action->execute($request);
+        $model = new ModelWithInstruction();
+        $model->setInstruction($instruction);
+        
+        $action->execute(new CaptureRequest($model));
     }
 
     /**
@@ -193,22 +223,20 @@ class SaleActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\GetExpressCheckoutDetailsRequest'))
-        ;
-        $paymentMock
-            ->expects($this->at(1))
-            ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\SyncRequest'))
         ;
 
-        $action = new SaleAction();
+        $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $request = new SaleRequest(new Instruction);
-        $request->getInstruction()->setToken('aToken');
-        $request->getInstruction()->setCheckoutstatus(API::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS);
+        $instruction = new PaymentInstruction;
+        $instruction->setToken('aToken');
+        $instruction->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS);
 
-        $action->execute($request);
+        $model = new ModelWithInstruction();
+        $model->setInstruction($instruction);
+
+        $action->execute(new CaptureRequest($model));
     }
 
     /**
@@ -231,19 +259,25 @@ class SaleActionTest extends \PHPUnit_Framework_TestCase
             ->will($this->throwException($ackFailedException))
         ;
 
-        $action = new SaleAction();
+        $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $request = new SaleRequest(new Instruction);
-        $request->getInstruction()->setLErrorcoden(100, 'theErrorCodeToBeCleaned');
-        $request->getInstruction()->setToken('aToken');
-        $request->getInstruction()->setCheckoutstatus(API::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS);
+        $action = new CaptureAction();
+        $action->setPayment($paymentMock);
 
-        $action->execute($request);
+        $instruction = new PaymentInstruction;
+        $instruction->setLErrorcoden(100, 'theErrorCodeToBeCleaned');
+        $instruction->setToken('aToken');
+        $instruction->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS);
 
-        $this->assertEquals('foo_error', $request->getInstruction()->getLErrorcoden(0));
-        $this->assertEquals('bar_error', $request->getInstruction()->getLErrorcoden(1));
-        $this->assertNotContains('theErrorCodeToBeCleaned', $request->getInstruction()->getLErrorcoden());
+        $model = new ModelWithInstruction();
+        $model->setInstruction($instruction);
+
+        $action->execute(new CaptureRequest($model));
+
+        $this->assertEquals('foo_error', $instruction->getLErrorcoden(0));
+        $this->assertEquals('bar_error', $instruction->getLErrorcoden(1));
+        $this->assertNotContains('theErrorCodeToBeCleaned', $instruction->getLErrorcoden());
     }
     
     /**

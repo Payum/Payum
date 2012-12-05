@@ -1,19 +1,19 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request;
 
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Instruction;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 
-class InstructionTest extends \PHPUnit_Framework_TestCase
+class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldImplementPayumInstructionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\Instruction');
+        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction');
         
-        $this->assertTrue($rc->implementsInterface('Payum\Request\InstructionInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\PaymentInstructionInterface'));
     }
 
     /**
@@ -21,7 +21,7 @@ class InstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new Instruction();
+        new PaymentInstruction();
     }
     
     public function provideStringFields()
@@ -115,7 +115,7 @@ class InstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetStringValue($getter, $setter, $value, $paypalName)
     {
-        $instruction = new Instruction();
+        $instruction = new PaymentInstruction();
         
         $instruction->$setter($value);
     }
@@ -127,7 +127,7 @@ class InstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetStringValue($getter, $setter, $value, $paypalName)
     {
-        $instruction = new Instruction();
+        $instruction = new PaymentInstruction();
 
         $instruction->$setter($value);
 
@@ -141,7 +141,7 @@ class InstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSetStringValueFromNvp($getter, $setter, $value, $paypalName)
     {
-        $instruction = new Instruction();
+        $instruction = new PaymentInstruction();
 
         $instruction->fromNvp(array(
             $paypalName => $value
@@ -157,7 +157,7 @@ class InstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldToNvpStringValue($getter, $setter, $value, $paypalName)
     {
-        $instruction = new Instruction();
+        $instruction = new PaymentInstruction();
 
         $instruction->$setter($value);
 
@@ -176,7 +176,7 @@ class InstructionTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
         
-        $instruction = new Instruction();
+        $instruction = new PaymentInstruction();
 
         $instruction->$setter(0, $value);
         $instruction->$setter(9, $value);
@@ -191,7 +191,7 @@ class InstructionTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
         
-        $instruction = new Instruction();
+        $instruction = new PaymentInstruction();
 
         $instruction->$setter(0, $value);
         $instruction->$setter(9, $value);
@@ -207,7 +207,7 @@ class InstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldGetNullIfNotSetArrayValue($getter, $setter, $paypalName0, $paypalName9)
     {
-        $instruction = new Instruction();
+        $instruction = new PaymentInstruction();
 
         $this->assertNull($instruction->$getter(0));
         $this->assertNull($instruction->$getter(9));
@@ -226,7 +226,7 @@ class InstructionTest extends \PHPUnit_Framework_TestCase
             9 => $value
         );
         
-        $instruction = new Instruction();
+        $instruction = new PaymentInstruction();
 
         $instruction->$setter(0, $value);
         $instruction->$setter(9, $value);
@@ -243,7 +243,7 @@ class InstructionTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
         
-        $instruction = new Instruction();
+        $instruction = new PaymentInstruction();
         
         $instruction->fromNvp(array(
             $paypalName0 => $value,
@@ -263,7 +263,7 @@ class InstructionTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
         
-        $instruction = new Instruction();
+        $instruction = new PaymentInstruction();
 
         $instruction->$setter(0, $value);
         $instruction->$setter(9, $value);
@@ -288,7 +288,7 @@ class InstructionTest extends \PHPUnit_Framework_TestCase
         $response['PAYMENTREQUEST_0_AMT'] = 'theAmt';
         $response['PAYMENTREQUEST_9_CURRENCYCODE'] = 'theCurrency';
         
-        $instruction = new Instruction();
+        $instruction = new PaymentInstruction();
         $instruction->fromNvp($response);
         
         $this->assertEquals('theToken', $instruction->getToken());
@@ -304,7 +304,7 @@ class InstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfInvalidArgumentForFromNvp()
     {
-        $instruction = new Instruction();
+        $instruction = new PaymentInstruction();
         $instruction->fromNvp(new \stdClass);
     }
 }

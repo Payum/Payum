@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request;
 
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Instruction;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 
 class BaseInstructionRequestTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,7 +22,7 @@ class BaseInstructionRequestTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\BaseInstructionRequest');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Request\InstructionAggregateRequestInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Domain\InstructionAggregateInterface'));
     }
 
     /**
@@ -32,7 +32,7 @@ class BaseInstructionRequestTest extends \PHPUnit_Framework_TestCase
     {
         $this->getMockForAbstractClass(
             'Payum\Paypal\ExpressCheckout\Nvp\Request\BaseInstructionRequest', 
-            array(new Instruction)
+            array(new PaymentInstruction)
         );
     }
 
@@ -41,7 +41,7 @@ class BaseInstructionRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetInstructionSetInConstructor()
     {
-        $expectedInstruction = new Instruction;
+        $expectedInstruction = new PaymentInstruction;
         
         $request = $this->getMockForAbstractClass(
             'Payum\Paypal\ExpressCheckout\Nvp\Request\BaseInstructionRequest',

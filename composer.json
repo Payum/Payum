@@ -26,12 +26,6 @@
     "config": {
         "bin-dir": "bin"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:formapro/payum.git"
-        }
-    ],
     "autoload": {
         "psr-0": { "Payum\\Paypal\\ExpressCheckout\\Nvp": "src/" }
     }

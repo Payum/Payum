@@ -7,8 +7,6 @@ use Payum\Exception\LogicException;
 use Payum\Action\ActionInterface;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\GetTransactionDetailsRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Instruction;
-use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Exception\RequestNotSupportedException;
 
 class GetTransactionDetailsAction implements ActionInterface

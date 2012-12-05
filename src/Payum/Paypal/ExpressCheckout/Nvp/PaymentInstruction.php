@@ -1,14 +1,14 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\Nvp\Request;
+namespace Payum\Paypal\ExpressCheckout\Nvp;
 
-use Payum\Request\InstructionInterface;
+use Payum\PaymentInstructionInterface;
 use Payum\Exception\InvalidArgumentException;
 
 /**
  * Docs:
  *   SetExpressCheckout: {@link https://www.x.com/developers/paypal/documentation-tools/api/setexpresscheckout-api-operation-nvp}
  */
-class Instruction implements InstructionInterface
+class PaymentInstruction implements PaymentInstructionInterface
 {
     protected $token = '';
 

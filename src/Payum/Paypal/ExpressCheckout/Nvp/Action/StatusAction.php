@@ -3,10 +3,9 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Payum\Action\ActionInterface;
 use Payum\Exception\RequestNotSupportedException;
-use Payum\Exception\LogicException;
+use Payum\Domain\InstructionAggregateInterface;
 use Payum\Request\StatusRequestInterface;
-use Payum\Request\InstructionAggregateRequestInterface;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Instruction;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class StatusAction implements ActionInterface
@@ -18,11 +17,8 @@ class StatusAction implements ActionInterface
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        /** @var $internalRequest InstructionAggregateRequestInterface */
-        $internalRequest = $request->getRequest();
-        
-        /** @var $instruction Instruction */
-        $instruction = $internalRequest->getInstruction();
+        /** @var $instruction PaymentInstruction */
+        $instruction = $request->getModel()->getInstruction();
 
         if (in_array(Api::L_ERRORCODE_PAYMENT_NOT_AUTHORIZED, $instruction->getLErrorcoden())) {
             $request->markCanceled();
@@ -109,8 +105,8 @@ class StatusAction implements ActionInterface
     {
         return
             $request instanceof StatusRequestInterface &&
-            $request->getRequest() instanceof InstructionAggregateRequestInterface &&
-            $request->getRequest()->getInstruction() instanceof Instruction
+            $request->getModel() instanceof InstructionAggregateInterface &&
+            $request->getModel()->getInstruction() instanceof PaymentInstruction
         ;
     }
 }

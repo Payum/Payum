@@ -2,7 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Request\SetExpressCheckoutRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Instruction;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 
 class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
@@ -32,7 +32,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new SetExpressCheckoutAction($this->createApiMock());
         
-        $this->assertTrue($action->supports(new SetExpressCheckoutRequest(new Instruction)));
+        $this->assertTrue($action->supports(new SetExpressCheckoutRequest(new PaymentInstruction)));
     }
 
     /**
@@ -67,7 +67,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new SetExpressCheckoutAction($this->createApiMock());
         
-        $request = new SetExpressCheckoutRequest(new Instruction);
+        $request = new SetExpressCheckoutRequest(new PaymentInstruction);
 
         $action->execute($request);
     }
@@ -92,7 +92,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
         
         $action = new SetExpressCheckoutAction($apiMock);
 
-        $request = new SetExpressCheckoutRequest(new Instruction);
+        $request = new SetExpressCheckoutRequest(new PaymentInstruction);
         $request->getInstruction()->setPaymentrequestNAmt(0, $expectedAmount = 154.23);
 
         $action->execute($request);
@@ -127,7 +127,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new SetExpressCheckoutAction($apiMock);
 
-        $request = new SetExpressCheckoutRequest(new Instruction);
+        $request = new SetExpressCheckoutRequest(new PaymentInstruction);
         $request->getInstruction()->setPaymentrequestNAmt(0, 154.23);
 
         $action->execute($request);

@@ -41,12 +41,12 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\GetExpressCheckoutDetailsAction($api));
         $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\GetTransactionDetailsAction($api));
         $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\DoExpressCheckoutPaymentAction($api));
-        $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\SaleAction());
+        $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction());
         $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\StatusAction());
         $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\SyncAction());
         
         //app specific action
-        $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\SimpleSellAction());
+        $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\CreateInstructionFromSimpleSellAction());
         //@testo:end
         
         return $payment;
@@ -61,11 +61,11 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
     {
         //...
         
-        $sell = new \Payum\Request\SimpleSellRequest();
+        $sell = new \Payum\Domain\SimpleSell();
         $sell->setPrice(100);
         $sell->setCurrency('USD');
 
-        if ($interactiveRequest = $payment->execute($sell)) {
+        if ($interactiveRequest = $payment->execute(new \Payum\Request\CaptureRequest($sell))) {
             if ($interactiveRequest instanceof \Payum\Request\RedirectUrlInteractiveRequest) {
                 echo 'Paypal requires the user be redirected to: '.$interactiveRequest->getUrl();
             }

@@ -4,7 +4,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\GetExpressCheckoutDetailsAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\GetExpressCheckoutDetailsRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Instruction;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 
 class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,7 +33,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new GetExpressCheckoutDetailsAction($this->createApiMock());
         
-        $this->assertTrue($action->supports(new GetExpressCheckoutDetailsRequest(new Instruction)));
+        $this->assertTrue($action->supports(new GetExpressCheckoutDetailsRequest(new PaymentInstruction)));
     }
 
     /**
@@ -68,7 +68,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new GetExpressCheckoutDetailsAction($this->createApiMock());
         
-        $request = new GetExpressCheckoutDetailsRequest(new Instruction);
+        $request = new GetExpressCheckoutDetailsRequest(new PaymentInstruction);
 
         $action->execute($request);
     }
@@ -93,7 +93,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
         
         $action = new GetExpressCheckoutDetailsAction($apiMock);
 
-        $request = new GetExpressCheckoutDetailsRequest(new Instruction);
+        $request = new GetExpressCheckoutDetailsRequest(new PaymentInstruction);
         $request->getInstruction()->setToken($expectedToken = 'theToken');
 
         $action->execute($request);
@@ -128,7 +128,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new GetExpressCheckoutDetailsAction($apiMock);
 
-        $request = new GetExpressCheckoutDetailsRequest(new Instruction);
+        $request = new GetExpressCheckoutDetailsRequest(new PaymentInstruction);
         $request->getInstruction()->setToken('aToken');
 
         $action->execute($request);

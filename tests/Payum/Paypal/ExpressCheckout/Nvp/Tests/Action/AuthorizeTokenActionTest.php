@@ -4,7 +4,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 use Payum\Request\RedirectUrlInteractiveRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\AuthorizeTokenAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\AuthorizeTokenRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Instruction;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 
 class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,7 +33,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AuthorizeTokenAction($this->createApiMock());
         
-        $this->assertTrue($action->supports(new AuthorizeTokenRequest(new Instruction)));
+        $this->assertTrue($action->supports(new AuthorizeTokenRequest(new PaymentInstruction)));
     }
 
     /**
@@ -68,7 +68,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AuthorizeTokenAction($this->createApiMock());
 
-        $request = new AuthorizeTokenRequest(new Instruction);
+        $request = new AuthorizeTokenRequest(new PaymentInstruction);
 
         $action->execute($request);
     }
@@ -91,7 +91,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
                 
         $action = new AuthorizeTokenAction($api);
 
-        $request = new AuthorizeTokenRequest(new Instruction);
+        $request = new AuthorizeTokenRequest(new PaymentInstruction);
         $request->getInstruction()->setToken($expectedToken);
 
         try {
@@ -118,7 +118,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
         
         $action = new AuthorizeTokenAction($api);
 
-        $request = new AuthorizeTokenRequest(new Instruction);
+        $request = new AuthorizeTokenRequest(new PaymentInstruction);
         $request->getInstruction()->setToken('aToken');
         //payer id means that the user already authorize the token. 
         //Entered his login\passowrd and press enter at paypal side.
@@ -140,7 +140,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new AuthorizeTokenAction($api);
 
-        $request = new AuthorizeTokenRequest(new Instruction, $force = true);
+        $request = new AuthorizeTokenRequest(new PaymentInstruction, $force = true);
         $request->getInstruction()->setToken('aToken');
         $request->getInstruction()->setPayerid('aPayerId');
 

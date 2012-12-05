@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Request;
 
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
+
 class GetTransactionDetailsRequest extends BaseInstructionRequest
 {
     /**
@@ -10,9 +12,9 @@ class GetTransactionDetailsRequest extends BaseInstructionRequest
 
     /**
      * @param int $paymentRequestN
-     * @param \Payum\Paypal\ExpressCheckout\Nvp\Request\Instruction $instruction
+     * @param PaymentInstruction $instruction
      */
-    public function __construct($paymentRequestN, Instruction $instruction)
+    public function __construct($paymentRequestN, PaymentInstruction $instruction)
     {
         $this->paymentRequestN = $paymentRequestN;
         

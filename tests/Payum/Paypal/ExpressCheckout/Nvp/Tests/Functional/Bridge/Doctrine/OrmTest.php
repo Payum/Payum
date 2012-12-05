@@ -19,7 +19,7 @@ abstract class OrmTest extends BaseOrmTest
     {   
         $rootDir = realpath(__DIR__.'/../../../../../../../../../');
         if (false === $rootDir || false === is_dir($rootDir.'/src/Payum')) {
-            throw new \RuntimeException('Cannot gues Payum root dir.');
+            throw new \RuntimeException('Cannot guess Payum root dir.');
         }
         
         $driver = new DriverChain;

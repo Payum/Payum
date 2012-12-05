@@ -4,7 +4,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\GetTransactionDetailsAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\GetTransactionDetailsRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Instruction;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
@@ -34,7 +34,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new GetTransactionDetailsAction($this->createApiMock());
         
-        $request = new GetTransactionDetailsRequest($paymentRequestN = 5, new Instruction);
+        $request = new GetTransactionDetailsRequest($paymentRequestN = 5, new PaymentInstruction);
         
         $this->assertTrue($action->supports($request));
     }
@@ -71,7 +71,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new GetTransactionDetailsAction($this->createApiMock());
 
-        $request = new GetTransactionDetailsRequest($paymentRequestN = 5, new Instruction);
+        $request = new GetTransactionDetailsRequest($paymentRequestN = 5, new PaymentInstruction);
         
         //guard
         $this->assertNull($request->getInstruction()->getPaymentrequestNTransactionid($paymentRequestN));
@@ -99,7 +99,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
         
         $action = new GetTransactionDetailsAction($apiMock);
 
-        $request = new GetTransactionDetailsRequest($paymentRequestN = 5, new Instruction);
+        $request = new GetTransactionDetailsRequest($paymentRequestN = 5, new PaymentInstruction);
         $request->getInstruction()->setPaymentrequestNTransactionid(
             $paymentRequestN, 
             $expectedTransactionId = 'theTransactionId'
@@ -138,7 +138,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new GetTransactionDetailsAction($apiMock);
 
-        $request = new GetTransactionDetailsRequest($paymentRequestN = 5, new Instruction);
+        $request = new GetTransactionDetailsRequest($paymentRequestN = 5, new PaymentInstruction);
         $request->getInstruction()->setPaymentrequestNTransactionid(
             $paymentRequestN,
             $expectedTransactionId = 'theTransactionId'

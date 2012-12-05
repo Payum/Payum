@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request;
 
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Instruction;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\GetTransactionDetailsRequest;
 
 class GetTransactionDetailsRequestTest extends \PHPUnit_Framework_TestCase
@@ -21,7 +21,7 @@ class GetTransactionDetailsRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithPaymentRequestNAndInstructionAsArguments()
     {
-        new GetTransactionDetailsRequest($paymentRequestN = 5, new Instruction);
+        new GetTransactionDetailsRequest($paymentRequestN = 5, new PaymentInstruction);
     }
 
     /**
@@ -29,7 +29,7 @@ class GetTransactionDetailsRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetInstructionSetInConstructor()
     {
-        $expectedInstruction = new Instruction;
+        $expectedInstruction = new PaymentInstruction;
 
         $request = new GetTransactionDetailsRequest($paymentRequestN = 5, $expectedInstruction);
         
@@ -43,7 +43,7 @@ class GetTransactionDetailsRequestTest extends \PHPUnit_Framework_TestCase
     {
         $expectedPaymentRequestN = 7;
 
-        $request = new GetTransactionDetailsRequest($expectedPaymentRequestN, new Instruction);
+        $request = new GetTransactionDetailsRequest($expectedPaymentRequestN, new PaymentInstruction);
 
         $this->assertSame($expectedPaymentRequestN, $request->getPaymentRequestN());
     }

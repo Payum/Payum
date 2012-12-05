@@ -3,12 +3,12 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Examples\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity\Instruction as BaseInstruction;
+use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity\PaymentInstruction as BasePaymentInstruction;
 
 /**
  * @ORM\Entity
  */
-class Instruction extends BaseInstruction
+class PaymentInstruction extends BasePaymentInstruction
 {
     /**
      * @ORM\Column(name="id", type="integer")

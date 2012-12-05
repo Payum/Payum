@@ -4,9 +4,9 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Functional\Bridge\Doctrine\Enti
 use Doctrine\ORM\Tools\SchemaValidator;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Tests\Functional\Bridge\Doctrine\OrmTest;
-use Payum\Paypal\ExpressCheckout\Nvp\Examples\Entity\Instruction;
+use Payum\Paypal\ExpressCheckout\Nvp\Examples\Entity\PaymentInstruction;
 
-class InstructionTest extends OrmTest
+class PaymentInstructionTest extends OrmTest
 {
     /**
      * @test
@@ -23,7 +23,7 @@ class InstructionTest extends OrmTest
      */
     public function shouldAllowPersist()
     {
-        $request = new Instruction;
+        $request = new PaymentInstruction;
         
         //guard
         $this->assertNull($request->getId());
@@ -39,7 +39,7 @@ class InstructionTest extends OrmTest
      */
     public function shouldAllowFindPersistedRequest()
     {
-        $instruction = new Instruction;
+        $instruction = new PaymentInstruction;
         $instruction->setToken($expectedToken = 'theToken');
         $instruction->setPaymentrequestNAmt(0, $expectedAmount = 123.15);
         $instruction->setPaymentrequestNPaymentaction(0, $expectedAction = 'thePaymentAction');

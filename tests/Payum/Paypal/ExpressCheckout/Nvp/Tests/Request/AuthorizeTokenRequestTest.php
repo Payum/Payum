@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request;
 
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Instruction;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\AuthorizeTokenRequest;
 
 class AuthorizeTokenRequestTest extends \PHPUnit_Framework_TestCase
@@ -21,7 +21,7 @@ class AuthorizeTokenRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithInstructionAsArgument()
     {
-        $request = new AuthorizeTokenRequest(new Instruction);
+        new AuthorizeTokenRequest(new PaymentInstruction);
     }
 
     /**
@@ -29,7 +29,7 @@ class AuthorizeTokenRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetInstructionSetInConstructor()
     {
-        $expectedInstruction = new Instruction;
+        $expectedInstruction = new PaymentInstruction;
 
         $request = new AuthorizeTokenRequest($expectedInstruction);
         
@@ -41,7 +41,7 @@ class AuthorizeTokenRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetDefaultForceSetToFalseByDefault()
     {
-        $request = new AuthorizeTokenRequest(new Instruction);
+        $request = new AuthorizeTokenRequest(new PaymentInstruction);
         
         $this->assertFalse($request->isForced());
     }
@@ -51,7 +51,7 @@ class AuthorizeTokenRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetForceSetInConstructor()
     {
-        $request = new AuthorizeTokenRequest(new Instruction, $force = true);
+        $request = new AuthorizeTokenRequest(new PaymentInstruction, $force = true);
 
         $this->assertTrue($request->isForced());
     }

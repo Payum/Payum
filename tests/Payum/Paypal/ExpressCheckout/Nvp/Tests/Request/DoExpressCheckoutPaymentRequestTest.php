@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request;
 
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Instruction;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\DoExpressCheckoutPaymentRequest;
 
 class DoExpressCheckoutPaymentRequestTest extends \PHPUnit_Framework_TestCase
@@ -21,7 +21,7 @@ class DoExpressCheckoutPaymentRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithInstructionAsArgument()
     {
-        new DoExpressCheckoutPaymentRequest(new Instruction);
+        new DoExpressCheckoutPaymentRequest(new PaymentInstruction);
     }
 
     /**
@@ -29,7 +29,7 @@ class DoExpressCheckoutPaymentRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetInstructionSetInConstructor()
     {
-        $expectedInstruction = new Instruction;
+        $expectedInstruction = new PaymentInstruction;
 
         $request = new DoExpressCheckoutPaymentRequest($expectedInstruction);
         

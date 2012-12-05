@@ -4,7 +4,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\DoExpressCheckoutPaymentAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\DoExpressCheckoutPaymentRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Instruction;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 
 class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,7 +33,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new DoExpressCheckoutPaymentAction($this->createApiMock());
         
-        $this->assertTrue($action->supports(new DoExpressCheckoutPaymentRequest(new Instruction)));
+        $this->assertTrue($action->supports(new DoExpressCheckoutPaymentRequest(new PaymentInstruction)));
     }
 
     /**
@@ -68,7 +68,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new DoExpressCheckoutPaymentAction($this->createApiMock());
         
-        $request = new DoExpressCheckoutPaymentRequest(new Instruction);
+        $request = new DoExpressCheckoutPaymentRequest(new PaymentInstruction);
 
         $action->execute($request);
     }
@@ -83,7 +83,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new DoExpressCheckoutPaymentAction($this->createApiMock());
 
-        $request = new DoExpressCheckoutPaymentRequest(new Instruction);
+        $request = new DoExpressCheckoutPaymentRequest(new PaymentInstruction);
         $request->getInstruction()->setToken('aToken');
 
         $action->execute($request);
@@ -99,7 +99,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new DoExpressCheckoutPaymentAction($this->createApiMock());
 
-        $request = new DoExpressCheckoutPaymentRequest(new Instruction);
+        $request = new DoExpressCheckoutPaymentRequest(new PaymentInstruction);
         $request->getInstruction()->setToken('aToken');
         $request->getInstruction()->setPayerid('aPayerId');
 
@@ -116,7 +116,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new DoExpressCheckoutPaymentAction($this->createApiMock());
 
-        $request = new DoExpressCheckoutPaymentRequest(new Instruction);
+        $request = new DoExpressCheckoutPaymentRequest(new PaymentInstruction);
         $request->getInstruction()->setToken('aToken');
         $request->getInstruction()->setPayerid('aPayerId');
         $request->getInstruction()->setPaymentrequestNPaymentaction(0, 'anAction');
@@ -144,7 +144,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
         
         $action = new DoExpressCheckoutPaymentAction($apiMock);
 
-        $request = new DoExpressCheckoutPaymentRequest(new Instruction);
+        $request = new DoExpressCheckoutPaymentRequest(new PaymentInstruction);
         $request->getInstruction()->setToken($expectedToken = 'theToken');
         $request->getInstruction()->setPayerid($expectedPayerId = 'thePayerId');
         $request->getInstruction()->setPaymentrequestNPaymentaction(0, $expectedPaymentAction = 'theAction');
@@ -191,7 +191,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new DoExpressCheckoutPaymentAction($apiMock);
 
-        $request = new DoExpressCheckoutPaymentRequest(new Instruction);
+        $request = new DoExpressCheckoutPaymentRequest(new PaymentInstruction);
         $request->getInstruction()->setToken('aToken');
         $request->getInstruction()->setPayerid('aPayerId');
         $request->getInstruction()->setPaymentrequestNPaymentaction(0, 'anAction');
