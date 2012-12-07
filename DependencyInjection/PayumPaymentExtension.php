@@ -45,7 +45,7 @@ class PayumPaymentExtension extends Extension
             }
             
             $contextDefinition = new Definition();
-            $contextDefinition->setClass('PayumPaymemtBundle\Context\LazyContext');
+            $contextDefinition->setClass('Payum\PaymentBundle\Context\LazyContext');
             $contextDefinition->setPublic(false);
             $contextDefinition->addMethodCall('setContainer', array(
                 new Reference('service_container')
@@ -58,11 +58,12 @@ class PayumPaymentExtension extends Extension
                 $context['interactive_controller'],
                 $context['status_controller'],
             ));
-            $container->setDefinition('payum_payment.context.'.$contextName, $contextDefinition);
+            $contextId = 'payum_payment.context.'.$contextName;
+            $container->setDefinition($contextId, $contextDefinition);
             
-            $payumPaymentDefinition = $container->getDefinition('payum');
+            $payumPaymentDefinition = $container->getDefinition('payum_payment');
             $payumPaymentDefinition->addMethodCall('addContext', array(
-                new Reference('payum_payment.context.'.$contextName)
+                new Reference($contextId)
             ));
         }
     }

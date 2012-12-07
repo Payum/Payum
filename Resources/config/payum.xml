@@ -7,21 +7,13 @@
     <parameters>
         <parameter key="payum_payment.class">Payum\PaymentBundle\Context\ContextRegistry</parameter>
         <parameter key="payum_payment.buzz.client.class">Buzz\Client\Curl</parameter>
-        <parameter key="payum_payment.status_request_handler.class">Payum\PaymentBundle\Request\StatusRequestHandler</parameter>
-        <parameter key="payum_payment.interactive_request_handler.class">Payum\PaymentBundle\Request\InteractiveRequestHandler</parameter>
     </parameters>
 
     <services>
         <service id="payum_payment.buzz.client" class="%payum_payment.buzz.client.class%" public="false">
         </service>
 
-        <service id="payum_payment.status_request_handler" class="%payum_payment.status_request_handler.class%" public="false">
-        </service>
-
-        <service id="payum_payment.interactive_request_handler" class="%payum_payment.interactive_request_handler.class%" public="false">
-        </service>
-
-        <service id="payum" class="%payum_payment.class%">
+        <service id="payum_payment" class="%payum_payment.class%">
         </service>
     </services>
 </container>

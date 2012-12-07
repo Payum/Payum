@@ -14,7 +14,13 @@
             <argument><!-- should be set in DoctrineStorageFactory --></argument>
         </service>
 
-        <service id="payum_payment.entity_manager" factory-service="doctrine" factory-method="getManager" class="Doctrine\ORM\EntityManager" public="false">
+        <service 
+            id="payum_payment.entity_manager" 
+            factory-service="doctrine" 
+            factory-method="getManager" 
+            class="Doctrine\ORM\EntityManager" 
+            public="false"
+        >
         </service>
     </services>
 </container>
