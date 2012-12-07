@@ -6,6 +6,18 @@ use Payum\Domain\ModelInterface;
 
 class BinaryMaskStatusRequest extends LogicException implements StatusRequestInterface 
 {
+    const STATUS_UNKNOWN = 2097152; //2^21
+    
+    const STATUS_FAILED = 1048576; //2^20
+    
+    const STATUS_SUCCESS = 32768; // 2^15
+
+    const STATUS_IN_PROGRESS = 1024; // 2^10
+
+    const STATUS_CANCELED = 32; //2^5; //2^1
+
+    const STATUS_NEW = 2; //2^1
+    
     /**
      * @var ModelInterface
      */
@@ -15,18 +27,6 @@ class BinaryMaskStatusRequest extends LogicException implements StatusRequestInt
      * @var int
      */
     protected $status;
-
-    /**
-     * @var array
-     */
-    protected $statusesMap = array(
-        'unknown' => 2097152, //2^21
-        'failed' => 1048576, //2^20
-        'success' => 32768, // 2^15 
-        'in_progress' => 1024, // 2^10
-        'canceled' => 32, //2^5
-        'new' => 2, //2^1
-    );
 
     /**
      * @param mixed $model
@@ -59,7 +59,7 @@ class BinaryMaskStatusRequest extends LogicException implements StatusRequestInt
      */
     public function markSuccess()
     {
-        $this->status = $this->statusesMap['success'];
+        $this->status = static::STATUS_SUCCESS;
     }
 
     /**
@@ -67,7 +67,7 @@ class BinaryMaskStatusRequest extends LogicException implements StatusRequestInt
      */
     public function isSuccess()
     {
-        return $this->isCurrentStatusEqualTo($this->statusesMap['success']);
+        return $this->isCurrentStatusEqualTo(static::STATUS_SUCCESS);
     }
 
     /**
@@ -75,7 +75,7 @@ class BinaryMaskStatusRequest extends LogicException implements StatusRequestInt
      */
     public function markCanceled()
     {
-        $this->status = $this->statusesMap['canceled'];
+        $this->status = static::STATUS_CANCELED;
     }
 
     /**
@@ -83,7 +83,7 @@ class BinaryMaskStatusRequest extends LogicException implements StatusRequestInt
      */
     public function isCanceled()
     {
-        return $this->isCurrentStatusEqualTo($this->statusesMap['canceled']);
+        return $this->isCurrentStatusEqualTo(static::STATUS_CANCELED);
     }
 
     /**
@@ -91,7 +91,7 @@ class BinaryMaskStatusRequest extends LogicException implements StatusRequestInt
      */
     public function markInProgress()
     {
-        $this->status = $this->statusesMap['in_progress'];
+        $this->status = static::STATUS_IN_PROGRESS;
     }
 
     /**
@@ -99,7 +99,7 @@ class BinaryMaskStatusRequest extends LogicException implements StatusRequestInt
      */
     public function isInProgress()
     {
-        return $this->isCurrentStatusEqualTo($this->statusesMap['in_progress']);
+        return $this->isCurrentStatusEqualTo(static::STATUS_IN_PROGRESS);
     }
 
     /**
@@ -107,7 +107,7 @@ class BinaryMaskStatusRequest extends LogicException implements StatusRequestInt
      */
     public function markFailed()
     {
-        $this->status = $this->statusesMap['failed'];
+        $this->status = static::STATUS_FAILED;
     }
 
     /**
@@ -115,7 +115,7 @@ class BinaryMaskStatusRequest extends LogicException implements StatusRequestInt
      */
     public function isFailed()
     {
-        return $this->isCurrentStatusEqualTo($this->statusesMap['failed']);
+        return $this->isCurrentStatusEqualTo(static::STATUS_FAILED);
     }
 
     /**
@@ -123,7 +123,7 @@ class BinaryMaskStatusRequest extends LogicException implements StatusRequestInt
      */
     public function markNew()
     {
-        $this->status = $this->statusesMap['new'];
+        $this->status = static::STATUS_NEW;
     }
 
     /**
@@ -131,23 +131,23 @@ class BinaryMaskStatusRequest extends LogicException implements StatusRequestInt
      */
     public function isNew()
     {
-        return $this->isCurrentStatusEqualTo($this->statusesMap['new']);
+        return $this->isCurrentStatusEqualTo(static::STATUS_NEW);
     }
 
     /**
      * {@inheritdoc}
      */
-    function markUnknown()
+    public function markUnknown()
     {
-        $this->status = $this->statusesMap['unknown'];
+        $this->status = static::STATUS_UNKNOWN;
     }
 
     /**
      * {@inheritdoc}
      */
-    function isUnknown()
+    public function isUnknown()
     {
-        return $this->isCurrentStatusEqualTo($this->statusesMap['unknown']);
+        return $this->isCurrentStatusEqualTo(static::STATUS_UNKNOWN);
     }
 
     /**
