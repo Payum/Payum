@@ -2,8 +2,8 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 $api = new \Payum\Be2Bill\Api(new \Buzz\Client\Curl(), array(
-    'identifier' => 'REMIXJOB',
-    'password' => '{=Tk<%V}WY]L(haB',
+    'identifier' => 'foo',
+    'password' => 'bar',
     'sandbox' => true
 ));
 
