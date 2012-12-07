@@ -29,7 +29,7 @@ class CaptureController extends Controller
             
             return $this->handle($context->getInteractiveController(), array(
                 'context' => $context,
-                'request' => $interactiveRequest
+                'interactiveRequest' => $interactiveRequest
             ));
         }
 
@@ -37,32 +37,34 @@ class CaptureController extends Controller
         if ($interactiveRequest = $context->getPayment()->execute($statusRequest)) {
             throw new LogicException('Unsupported interactive request.', null, $interactiveRequest);
         }
-        
-        $context->getStorage()->updateModel($model);
 
-        return $this->handle($context->getStatusController(), array(
+        $response = $this->handle($context->getStatusController(), array(
             'context' => $context,
-            'request' => $statusRequest
+            'statusRequest' => $statusRequest
         ));
+
+        $context->getStorage()->updateModel($model);
+        
+        return $response;
     }
     
-    public function interactiveAction(ContextInterface $context, InteractiveRequestInterface $request)
+    public function interactiveAction(ContextInterface $context, InteractiveRequestInterface $interactiveRequest)
     {
-        if ($request instanceof RedirectUrlInteractiveRequest) {
-            return $this->redirect($request->getUrl());
+        if ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {
+            return $this->redirect($interactiveRequest->getUrl());
         }
-        if ($request instanceof ResponseInteractiveRequest) {
-            return $request->getResponse();
+        if ($interactiveRequest instanceof ResponseInteractiveRequest) {
+            return $interactiveRequest->getResponse();
         }
 
-        throw new LogicException('Unsupported interactive request.', null, $request);
+        throw new LogicException('Unsupported interactive request.', null, $interactiveRequest);
     }
 
-    public function statusAction(ContextInterface $context, StatusRequestInterface $request)
+    public function statusAction(ContextInterface $context, StatusRequestInterface $statusRequest)
     {
         return $this->render(
             'PayumPaymentBundle:Capture:status.html.'.$this->container->getParameter('payum_payment.template.engine'), 
-            array('status' => $request)
+            array('status' => $status)
         );
     }
 
