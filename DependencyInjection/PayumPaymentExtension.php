@@ -43,7 +43,7 @@ class PayumPaymentExtension extends Extension
                     $storageServiceId = $this->storageFactories[$serviceName]->create($container, $contextName, $service);
                 }
             }
-            
+
             $contextDefinition = new Definition();
             $contextDefinition->setClass('Payum\PaymentBundle\Context\LazyContext');
             $contextDefinition->setPublic(false);

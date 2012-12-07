@@ -40,8 +40,8 @@ class Be2BillPaymentFactory implements PaymentFactoryInterface
         $captureActionId = 'payum_payment.context.'.$contextName.'.action.capture';
         $container->setDefinition($captureActionId, $captureActionDefinition);
 
-        $statusActionDefinition = new DefinitionDecorator('payum_payment.be2bill.action.capture');
-        $statusActionId = 'payum_payment.context.'.$contextName.'.action.capture';
+        $statusActionDefinition = new DefinitionDecorator('payum_payment.be2bill.action.status');
+        $statusActionId = 'payum_payment.context.'.$contextName.'.action.status';
         $container->setDefinition($statusActionId, $statusActionDefinition);
 
         $createInstructionActionDefinition = new DefinitionDecorator($config['create_instruction_from_model_action']);

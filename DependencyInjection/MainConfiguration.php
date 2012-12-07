@@ -48,8 +48,8 @@ class MainConfiguration implements ConfigurationInterface
         $contextsPrototypeNode
             ->children()
                 ->scalarNode('status_request_class')->defaultValue('Payum\Request\BinaryMaskStatusRequest')->end()
-                ->scalarNode('interactive_controller')->defaultValue('PayumPaymentBundle:Payment:interactive')->end()
-                ->scalarNode('status_controller')->defaultValue('PayumPaymentBundle:Payment:status')->end()
+                ->scalarNode('interactive_controller')->defaultValue('PayumPaymentBundle:Capture:interactive')->end()
+                ->scalarNode('status_controller')->defaultValue('PayumPaymentBundle:Capture:status')->end()
             ->end()
         ;
 

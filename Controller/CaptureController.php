@@ -10,9 +10,9 @@ use Payum\Request\StatusRequestInterface;
 use Payum\PaymentBundle\Context\ContextInterface;
 use Payum\PaymentBundle\Request\ResponseInteractiveRequest;
 
-class PaymentController extends Controller
+class CaptureController extends Controller
 {
-    public function captureAction($contextName, $modelId)
+    public function doAction($contextName, $modelId)
     {
         if (false == $this->getPayum()->hasContext($contextName)) {
             throw $this->createNotFoundException(sprintf('Payment context %s not found', $contextName));
@@ -61,7 +61,7 @@ class PaymentController extends Controller
     public function statusAction(ContextInterface $context, StatusRequestInterface $request)
     {
         return $this->render(
-            'PayumPaymentBundle:Payment:status.html.'.$this->container->getParameter('payum_payment.template.engine'), 
+            'PayumPaymentBundle:Capture:status.html.'.$this->container->getParameter('payum_payment.template.engine'), 
             array('status' => $request)
         );
     }
@@ -71,6 +71,6 @@ class PaymentController extends Controller
      */
     protected function getPayum()
     {
-        return $this->get('payum');
+        return $this->get('payum_payment');
     }
 }
