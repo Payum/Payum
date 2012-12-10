@@ -64,7 +64,7 @@ class CaptureController extends Controller
     {
         return $this->render(
             'PayumPaymentBundle:Capture:status.html.'.$this->container->getParameter('payum_payment.template.engine'), 
-            array('status' => $status)
+            array('status' => $statusRequest)
         );
     }
 
