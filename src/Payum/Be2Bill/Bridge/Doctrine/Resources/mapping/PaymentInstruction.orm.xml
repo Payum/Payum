@@ -14,42 +14,42 @@
 
         <field name="amount" column="amount" type="integer" />
 
-        <field name="cardtype" column="cardtype" type="string" length="40" />
+        <field name="cardtype" column="cardtype" type="string" length="40" nullable="true" />
 
         <field name="clientident" column="clientident" type="string" length="255" />
 
         <field name="clientemail" column="clientemail" type="string" length="255" />
 
-        <field name="clientaddress" column="clientaddress" type="string" length="510" />
+        <field name="clientaddress" column="clientaddress" type="string" length="510" nullable="true" />
 
-        <field name="clientdob" column="clientdob" type="string" length="40" />
+        <field name="clientdob" column="clientdob" type="string" length="40" nullable="true" />
 
-        <field name="clientreferer" column="clientreferer" type="string" length="255" />
+        <field name="clientreferer" column="clientreferer" type="string" length="255" nullable="true" />
 
         <field name="clientuseragent" column="clientuseragent" type="string" length="255" />
 
         <field name="clientip" column="clientip" type="string" length="15" />
 
-        <field name="firstname" column="firstname" type="string" length="127" />
+        <field name="firstname" column="firstname" type="string" length="127" nullable="true" />
 
-        <field name="lastname" column="lastname" type="string" length="127" />
+        <field name="lastname" column="lastname" type="string" length="127" nullable="true" />
         
-        <field name="createalias" column="createalias" type="string" length="3" />
+        <field name="createalias" column="createalias" type="string" length="3" nullable="true" />
 
-        <field name="alias" column="alias" type="string" length="32" />
+        <field name="alias" column="alias" type="string" length="32" nullable="true" />
 
-        <field name="aliasmode" column="aliasmode" type="string" length="40" />
+        <field name="aliasmode" column="aliasmode" type="string" length="40" nullable="true" />
 
-        <field name="transactionid" column="transactionid" type="string" length="32" />
+        <field name="transactionid" column="transactionid" type="string" length="32" nullable="true" />
 
         <field name="cardcodeSecured" column="cardcode_secured" type="string" length="16" />
 
         <field name="cardfullname" column="cardfullname" type="string" length="255" />
 
-        <field name="execcode" column="execcode" type="string" length="4" />
+        <field name="execcode" column="execcode" type="string" length="4" nullable="true" />
 
-        <field name="message" column="message" type="string" length="510" />
+        <field name="message" column="message" type="string" length="510" nullable="true" />
 
-        <field name="descriptor" column="descriptor" type="string" length="32" />
+        <field name="descriptor" column="descriptor" type="string" length="32" nullable="true" />
     </mapped-superclass>
 </doctrine-mapping>
