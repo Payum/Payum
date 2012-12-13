@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
-use Payum\Action\ActionPaymentAware;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Exception\LogicException;
 use Payum\Request\CaptureRequest;
@@ -9,12 +8,12 @@ use Payum\Request\CreatePaymentInstructionRequest;
 use Payum\Domain\InstructionAggregateInterface;
 use Payum\Domain\InstructionAwareInterface;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
-use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\SetExpressCheckoutRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\AuthorizeTokenRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\DoExpressCheckoutPaymentRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\SyncRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class CaptureAction extends ActionPaymentAware
 {
@@ -24,12 +23,12 @@ class CaptureAction extends ActionPaymentAware
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
-        
+
         if (null === $request->getModel()->getInstruction()) {
             $this->payment->execute(new CreatePaymentInstructionRequest($request->getModel()));
 
-            if (null === $request->getModel()->getInstruction()) {
-                throw new LogicException('The create payment instruction action must set instruction to the model');
+            if (false == $request->getModel()->getInstruction() instanceof PaymentInstruction) {
+                throw new LogicException('Create payment instruction request should set expected instruction to the model');
             }
         }
 
@@ -37,8 +36,7 @@ class CaptureAction extends ActionPaymentAware
 
             /** @var $instruction PaymentInstruction */
             $instruction = $request->getModel()->getInstruction();
-            $instruction->setPaymentrequestNPaymentaction(0, Api::PAYMENTACTION_SALE);
-            
+            $instruction->setPaymentrequestPaymentaction(0, Api::PAYMENTACTION_SALE);
             if (false == $instruction->getToken()) {
                 $this->payment->execute(new SetExpressCheckoutRequest($instruction));
                 $this->payment->execute(new AuthorizeTokenRequest($instruction));

@@ -25,6 +25,12 @@ class StatusAction implements ActionInterface
             
             return;
         }
+
+        if (count($instruction->getLErrorcoden()) > 0) {
+            $request->markFailed();
+
+            return;
+        }
         
         //treat this situation as canceled. In other case we can get into an endless cycle.
         if (
@@ -61,7 +67,7 @@ class StatusAction implements ActionInterface
             Api::CHECKOUTSTATUS_PAYMENT_ACTION_COMPLETED == $instruction->getCheckoutstatus()
         ) {
             $successCounter = 0;
-            foreach ($instruction->getPaymentrequestNPaymentstatus() as $paymentStatus) {
+            foreach ($instruction->getPaymentrequestPaymentstatus() as $paymentStatus) {
                 $inProgress = array(
                     Api::PAYMENTSTATUS_IN_PROGRESS,
                     Api::PAYMENTSTATUS_PENDING,
@@ -93,7 +99,7 @@ class StatusAction implements ActionInterface
                 }
             }
             
-            if ($successCounter == count($instruction->getPaymentrequestNPaymentstatus())) {
+            if ($successCounter == count($instruction->getPaymentrequestPaymentstatus())) {
                 $request->markSuccess();
                 
                 return;

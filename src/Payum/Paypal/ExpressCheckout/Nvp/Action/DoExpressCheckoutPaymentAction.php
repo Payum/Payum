@@ -3,21 +3,13 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Buzz\Message\Form\FormRequest;
 
-use Payum\Action\ActionInterface;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Exception\LogicException;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\DoExpressCheckoutPaymentRequest;
 
-class DoExpressCheckoutPaymentAction implements ActionInterface
+class DoExpressCheckoutPaymentAction extends ActionPaymentAware
 {
-    protected $api;
-    
-    public function __construct(Api $api) 
-    {
-        $this->api = $api;
-    }
-    
     public function execute($request)
     {
         /** @var $request DoExpressCheckoutPaymentRequest */
@@ -32,17 +24,17 @@ class DoExpressCheckoutPaymentAction implements ActionInterface
         if (false == $instruction->getPayerid()) {
             throw new LogicException('The payerid must be set.');
         }
-        if (false == $instruction->getPaymentrequestNPaymentaction(0)) {
+        if (false == $instruction->getPaymentrequestPaymentaction(0)) {
             throw new LogicException('The zero paymentaction must be set.');
         }
-        if (false == $instruction->getPaymentrequestNAmt(0)) {
+        if (false == $instruction->getPaymentrequestAmt(0)) {
             throw new LogicException('The zero paymentamt must be set.');
         }        
         
         $buzzRequest = new FormRequest();
         $buzzRequest->setFields($instruction->toNvp());
 
-        $response = $this->api->doExpressCheckoutPayment($buzzRequest);
+        $response = $this->payment->getApi()->doExpressCheckoutPayment($buzzRequest);
 
         $instruction->fromNvp($response);
     }

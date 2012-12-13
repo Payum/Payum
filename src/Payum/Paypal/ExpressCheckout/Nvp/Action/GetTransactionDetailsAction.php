@@ -4,20 +4,12 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 use Buzz\Message\Form\FormRequest;
 
 use Payum\Exception\LogicException;
-use Payum\Action\ActionInterface;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\GetTransactionDetailsRequest;
 use Payum\Exception\RequestNotSupportedException;
 
-class GetTransactionDetailsAction implements ActionInterface
+class GetTransactionDetailsAction extends ActionPaymentAware
 {
-    protected $api;
-    
-    public function __construct(Api $api) 
-    {
-        $this->api = $api;
-    }
-    
     public function execute($request)
     {
         /** @var $request GetTransactionDetailsRequest */
@@ -27,7 +19,7 @@ class GetTransactionDetailsAction implements ActionInterface
         
         $instruction = $request->getInstruction();
         
-        $transactionId = $instruction->getPaymentrequestNTransactionid($request->getPaymentRequestN());
+        $transactionId = $instruction->getPaymentrequestTransactionid($request->getPaymentRequestN());
         if (false == $transactionId) {
             throw new LogicException('The TransactionId must be set.');
         }
@@ -35,7 +27,7 @@ class GetTransactionDetailsAction implements ActionInterface
         $buzzRequest = new FormRequest();
         $buzzRequest->setField('TRANSACTIONID', $transactionId);
         
-        $response = $this->api->getTransactionDetails($buzzRequest);
+        $response = $this->payment->getApi()->getTransactionDetails($buzzRequest);
         
         $paymentRequestFields = array(
             'TRANSACTIONID',

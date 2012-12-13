@@ -3,21 +3,12 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Buzz\Message\Form\FormRequest;
 
-use Payum\Action\ActionInterface;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Exception\LogicException;
-use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\GetExpressCheckoutDetailsRequest;
 
-class GetExpressCheckoutDetailsAction implements ActionInterface
+class GetExpressCheckoutDetailsAction extends  ActionPaymentAware
 {
-    protected $api;
-    
-    public function __construct(Api $api) 
-    {
-        $this->api = $api;
-    }
-    
     public function execute($request)
     {
         /** @var $request GetExpressCheckoutDetailsRequest */
@@ -33,7 +24,7 @@ class GetExpressCheckoutDetailsAction implements ActionInterface
         $buzzRequest = new FormRequest();
         $buzzRequest->setField('TOKEN', $instruction->getToken());
         
-        $response = $this->api->getExpressCheckoutDetails($buzzRequest);
+        $response = $this->payment->getApi()->getExpressCheckoutDetails($buzzRequest);
         
         $instruction->fromNvp($response);
     }

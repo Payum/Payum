@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
-use Payum\Action\ActionPaymentAware;
 use Payum\Domain\SimpleSell;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp;
@@ -34,8 +33,8 @@ class CreateInstructionFromSimpleSellAction extends ActionPaymentAware
         
         /** @var $instruction \Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction */
         $instruction = new $this->paymentInstructionClass;
-        $instruction->setPaymentrequestNAmt(0, $simpleSell->getPrice());
-        $instruction->setPaymentrequestNCurrencycode(0, $simpleSell->getCurrency());
+        $instruction->setPaymentrequestAmt(0, $simpleSell->getPrice());
+        $instruction->setPaymentrequestCurrencycode(0, $simpleSell->getCurrency());
         
         $request->getModel()->setInstruction($instruction);
     }

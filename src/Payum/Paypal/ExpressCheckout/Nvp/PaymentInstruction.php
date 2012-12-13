@@ -25,6 +25,10 @@ class PaymentInstruction implements PaymentInstructionInterface
     protected $redirectrequired;
     
     protected $checkoutstatus;
+
+    protected $returnurl;
+
+    protected $cancelurl;
     
     protected $giftmessage;
 
@@ -70,89 +74,97 @@ class PaymentInstruction implements PaymentInstructionInterface
 
     protected $ack;
     
-    protected $paymentrequest_n_shiptoname = array();
+    protected $paymentrequest_nnn_shiptoname = array();
     
-    protected $paymentrequest_n_shiptostreet = array();
+    protected $paymentrequest_nnn_shiptostreet = array();
     
-    protected $paymentrequest_n_shiptostreet2 = array();
+    protected $paymentrequest_nnn_shiptostreet2 = array();
     
-    protected $paymentrequest_n_shiptocity = array();
+    protected $paymentrequest_nnn_shiptocity = array();
     
-    protected $paymentrequest_n_shiptostate = array();
+    protected $paymentrequest_nnn_shiptostate = array();
     
-    protected $paymentrequest_n_shiptozip = array();
+    protected $paymentrequest_nnn_shiptozip = array();
     
-    protected $paymentrequest_n_shiptocountrycode = array();
+    protected $paymentrequest_nnn_shiptocountrycode = array();
     
-    protected $paymentrequest_n_shiptophonenum = array();
+    protected $paymentrequest_nnn_shiptophonenum = array();
     
-    protected $paymentrequest_n_addressstatus = array();
+    protected $paymentrequest_nnn_addressstatus = array();
     
-    protected $paymentrequest_n_amt = array();
+    protected $paymentrequest_nnn_amt = array();
     
-    protected $paymentrequest_n_currencycode = array();
+    protected $paymentrequest_nnn_currencycode = array();
     
-    protected $paymentrequest_n_itemamt = array();
+    protected $paymentrequest_nnn_itemamt = array();
     
-    protected $paymentrequest_n_shippingamt = array();
+    protected $paymentrequest_nnn_shippingamt = array();
     
-    protected $paymentrequest_n_insuranceamt = array();
+    protected $paymentrequest_nnn_insuranceamt = array();
     
-    protected $paymentrequest_n_shipdiscamt = array();
+    protected $paymentrequest_nnn_shipdiscamt = array();
     
-    protected $paymentrequest_n_insuranceoptionoffered = array();
+    protected $paymentrequest_nnn_insuranceoptionoffered = array();
     
-    protected $paymentrequest_n_handlingamt = array();
+    protected $paymentrequest_nnn_handlingamt = array();
     
-    protected $paymentrequest_n_taxamt = array();
+    protected $paymentrequest_nnn_taxamt = array();
     
-    protected $paymentrequest_n_desc = array();
+    protected $paymentrequest_nnn_desc = array();
     
-    protected $paymentrequest_n_custom = array();
+    protected $paymentrequest_nnn_custom = array();
     
-    protected $paymentrequest_n_invnum = array();
+    protected $paymentrequest_nnn_invnum = array();
     
-    protected $paymentrequest_n_notifyurl = array();
+    protected $paymentrequest_nnn_notifyurl = array();
     
-    protected $paymentrequest_n_notetext = array();
+    protected $paymentrequest_nnn_notetext = array();
     
-    protected $paymentrequest_n_transactionid = array();
+    protected $paymentrequest_nnn_transactionid = array();
     
-    protected $paymentrequest_n_allowedpaymentmethod = array();
+    protected $paymentrequest_nnn_allowedpaymentmethod = array();
     
-    protected $paymentrequest_n_paymentrequestid = array();
+    protected $paymentrequest_nnn_paymentrequestid = array();
     
-    protected $paymentrequest_n_paymentaction = array();
+    protected $paymentrequest_nnn_paymentaction = array();
     
-    protected $paymentrequest_n_paymentstatus = array();
+    protected $paymentrequest_nnn_paymentstatus = array();
 
-    protected $paymentrequest_n_exchangerate = array();
+    protected $paymentrequest_nnn_exchangerate = array();
     
-    protected $paymentrequest_n_settleamt = array();
+    protected $paymentrequest_nnn_settleamt = array();
     
-    protected $paymentrequest_n_feeamt = array();
+    protected $paymentrequest_nnn_feeamt = array();
     
-    protected $paymentrequest_n_ordertime = array();
+    protected $paymentrequest_nnn_ordertime = array();
     
-    protected $paymentrequest_n_paymenttype = array();
+    protected $paymentrequest_nnn_paymenttype = array();
     
-    protected $paymentrequest_n_transactiontype = array();
+    protected $paymentrequest_nnn_transactiontype = array();
     
-    protected $paymentrequest_n_receiptid = array();
+    protected $paymentrequest_nnn_receiptid = array();
     
-    protected $paymentrequest_n_parenttransactionid = array();
+    protected $paymentrequest_nnn_parenttransactionid = array();
     
-    protected $paymentrequest_n_pendingreason = array();
+    protected $paymentrequest_nnn_pendingreason = array();
     
-    protected $paymentrequest_n_reasoncode = array();
+    protected $paymentrequest_nnn_reasoncode = array();
 
-    protected $l_errorcoden = array();
+    protected $l_paymentrequest_nnn_namemmm = array();
 
-    protected $l_shortmessagen = array();
+    protected $l_paymentrequest_nnn_descmmm = array();
+
+    protected $l_paymentrequest_nnn_qtymmm = array();
+
+    protected $l_paymentrequest_nnn_amtmmm = array();
+
+    protected $l_errorcodennn = array();
+
+    protected $l_shortmessagennn = array();
     
-    protected $l_longmessagen = array();
+    protected $l_longmessagennn = array();
     
-    protected $l_severitycoden = array();
+    protected $l_severitycodennn = array();
 
     public function getToken()
     {
@@ -454,448 +466,492 @@ class PaymentInstruction implements PaymentInstructionInterface
         $this->ack = $ack;
     }
 
-    public function getPaymentrequestNShiptostreet($n = null)
+    public function getReturnurl()
     {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        return $this->returnurl;
     }
 
-    public function setPaymentrequestNShiptostreet($n, $paymentrequest_n_shiptostreet)
+    public function setReturnurl($returnurl)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_shiptostreet);
+        $this->returnurl = $returnurl;
     }
 
-    public function getPaymentrequestNShiptoname($n = null)
+    public function getCancelurl()
     {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        return $this->cancelurl;
     }
 
-    public function setPaymentrequestNShiptoname($n, $paymentrequest_n_shiptoname)
+    public function setCancelurl($cancelurl)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_shiptoname);
+        $this->cancelurl = $cancelurl;
     }
 
-    public function getPaymentrequestNShiptostreet2($n = null)
+    public function getPaymentrequestShiptostreet($n = null)
     {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        return $this->get('paymentrequest_nnn_shiptostreet', $n);
     }
 
-    public function setPaymentrequestNShiptostreet2($n, $paymentrequest_n_shiptostreet2)
+    public function setPaymentrequestShiptostreet($n, $value)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_shiptostreet2);
+        $this->set('paymentrequest_nnn_shiptostreet', $value, $n);
     }
 
-    public function getPaymentrequestNShiptocity($n = null)
+    public function getPaymentrequestShiptoname($n = null)
     {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        return $this->get('paymentrequest_nnn_shiptoname', $n);
     }
 
-    public function setPaymentrequestNShiptocity($n, $paymentrequest_n_shiptocity)
+    public function setPaymentrequestShiptoname($n, $value)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_shiptocity);
-    }
-    
-    public function getPaymentrequestNShiptostate($n = null)
-    {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        $this->set('paymentrequest_nnn_shiptoname', $value, $n);
     }
 
-    public function setPaymentrequestNShiptostate($n, $paymentrequest_n_shiptostate)
+    public function getPaymentrequestShiptostreet2($n = null)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_shiptostate);
+        return $this->get('paymentrequest_nnn_shiptostreet2', $n);
     }
 
-    public function getPaymentrequestNShiptozip($n = null)
+    public function setPaymentrequestShiptostreet2($n, $value)
     {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        $this->set('paymentrequest_nnn_shiptostreet2', $value, $n);
     }
 
-    public function setPaymentrequestNShiptozip($n, $paymentrequest_n_shiptozip)
+    public function getPaymentrequestShiptocity($n = null)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_shiptozip);
-    }
-    
-    public function getPaymentrequestNShiptocountrycode($n = null)
-    {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        return $this->get('paymentrequest_nnn_shiptocity', $n);
     }
 
-    public function setPaymentrequestNShiptocountrycode($n, $paymentrequest_n_shiptocountrycode)
+    public function setPaymentrequestShiptocity($n, $value)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_shiptocountrycode);
-    }
-
-    public function getPaymentrequestNShiptophonenum($n = null)
-    {
-        return $this->getPaymentrequest(__METHOD__, $n);
-    }
-
-    public function setPaymentrequestNShiptophonenum($n, $paymentrequest_n_shiptophonenum)
-    {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_shiptophonenum);
-    }
-
-    public function getPaymentrequestNAddressstatus($n = null)
-    {
-        return $this->getPaymentrequest(__METHOD__, $n);
-    }
-
-    public function setPaymentrequestNAddressstatus($n, $paymentrequest_n_addressstatus)
-    {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_addressstatus);
-    }
-
-    public function getPaymentrequestNAmt($n = null)
-    {
-        return $this->getPaymentrequest(__METHOD__, $n);
-    }
-
-    public function setPaymentrequestNAmt($n, $paymentrequest_n_amt)
-    {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_amt);
-    }
-
-    public function getPaymentrequestNCurrencycode($n = null)
-    {
-        return $this->getPaymentrequest(__METHOD__, $n);
-    }
-
-    public function setPaymentrequestNCurrencycode($n, $paymentrequest_n_currencycode)
-    {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_currencycode);
-    }
-
-    public function getPaymentrequestNItemamt($n = null)
-    {
-        return $this->getPaymentrequest(__METHOD__, $n);
-    }
-
-    public function setPaymentrequestNItemamt($n, $paymentrequest_n_itemamt)
-    {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_itemamt);
-    }
-
-    public function getPaymentrequestNShippingamt($n = null)
-    {
-        return $this->getPaymentrequest(__METHOD__, $n);
-    }
-
-    public function setPaymentrequestNShippingamt($n, $paymentrequest_n_shippingamt)
-    {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_shippingamt);
-    }
-
-    public function getPaymentrequestNInsuranceamt($n = null)
-    {
-        return $this->getPaymentrequest(__METHOD__, $n);
-    }
-
-    public function setPaymentrequestNInsuranceamt($n, $paymentrequest_n_insuranceamt)
-    {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_insuranceamt);
-    }
-
-    public function getPaymentrequestNShipdiscamt($n = null)
-    {
-        return $this->getPaymentrequest(__METHOD__, $n);
-    }
-
-    public function setPaymentrequestNShipdiscamt($n, $paymentrequest_n_shipdiscamt)
-    {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_shipdiscamt);
-    }
-
-    public function getPaymentrequestNInsuranceoptionoffered($n = null)
-    {
-        return $this->getPaymentrequest(__METHOD__, $n);
-    }
-
-    public function setPaymentrequestNInsuranceoptionoffered($n, $paymentrequest_n_insuranceoptionoffered)
-    {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_insuranceoptionoffered);
-    }
-
-    public function getPaymentrequestNHandlingamt($n = null)
-    {
-        return $this->getPaymentrequest(__METHOD__, $n);
-    }
-
-    public function setPaymentrequestNHandlingamt($n, $paymentrequest_n_handlingamt)
-    {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_handlingamt);
-    }
-
-    public function getPaymentrequestNTaxamt($n = null)
-    {
-        return $this->getPaymentrequest(__METHOD__, $n);
-    }
-
-    public function setPaymentrequestNTaxamt($n, $paymentrequest_n_taxamt)
-    {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_taxamt);
+        $this->set('paymentrequest_nnn_shiptocity', $value, $n);
     }
     
-    public function getPaymentrequestNDesc($n = null)
+    public function getPaymentrequestShiptostate($n = null)
     {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        return $this->get('paymentrequest_nnn_shiptostate', $n);
     }
 
-    public function setPaymentrequestNDesc($n, $paymentrequest_n_desc)
+    public function setPaymentrequestShiptostate($n, $value)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_desc);
+        $this->set('paymentrequest_nnn_shiptostate', $value, $n);
     }
 
-    public function getPaymentrequestNCustom($n = null)
+    public function getPaymentrequestShiptozip($n = null)
     {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        return $this->get('paymentrequest_nnn_shiptozip', $n);
     }
 
-    public function setPaymentrequestNCustom($n, $paymentrequest_n_custom)
+    public function setPaymentrequestShiptozip($n, $value)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_custom);
-    }
-
-    public function getPaymentrequestNInvnum($n = null)
-    {
-        return $this->getPaymentrequest(__METHOD__, $n);
-    }
-
-    public function setPaymentrequestNInvnum($n, $paymentrequest_n_invnum)
-    {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_invnum);
-    }
-
-    public function getPaymentrequestNNotifyurl($n = null)
-    {
-        return $this->getPaymentrequest(__METHOD__, $n);
-    }
-
-    public function setPaymentrequestNNotifyurl($n, $paymentrequest_n_notifyurl)
-    {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_notifyurl);
-    }
-
-    public function getPaymentrequestNNotetext($n = null)
-    {
-        return $this->getPaymentrequest(__METHOD__, $n);
-    }
-
-    public function setPaymentrequestNNotetext($n, $paymentrequest_n_notetext)
-    {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_notetext);
-    }
-
-    public function getPaymentrequestNTransactionid($n = null)
-    {
-        return $this->getPaymentrequest(__METHOD__, $n);
-    }
-
-    public function setPaymentrequestNTransactionid($n, $paymentrequest_n_transactionid)
-    {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_transactionid);
-    }
-
-    public function getPaymentrequestNAllowedpaymentmethod($n = null)
-    {
-        return $this->getPaymentrequest(__METHOD__, $n);
-    }
-
-    public function setPaymentrequestNAllowedpaymentmethod($n, $paymentrequest_n_allowedpaymentmethod)
-    {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_allowedpaymentmethod);
-    }
-
-    public function getPaymentrequestNPaymentrequestid($n = null)
-    {
-        return $this->getPaymentrequest(__METHOD__, $n);
-    }
-
-    public function setPaymentrequestNPaymentrequestid($n, $paymentrequest_n_paymentrequestid)
-    {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_paymentrequestid);
+        $this->set('paymentrequest_nnn_shiptozip', $value, $n);
     }
     
-    public function getPaymentrequestNPaymentaction($n = null)
+    public function getPaymentrequestShiptocountrycode($n = null)
     {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        return $this->get('paymentrequest_nnn_shiptocountrycode', $n);
+    }
+
+    public function setPaymentrequestShiptocountrycode($n, $value)
+    {
+        $this->set('paymentrequest_nnn_shiptocountrycode', $value, $n);
+    }
+
+    public function getPaymentrequestShiptophonenum($n = null)
+    {
+        return $this->get('paymentrequest_nnn_shiptophonenum', $n);
+    }
+
+    public function setPaymentrequestShiptophonenum($n, $value)
+    {
+        $this->set('paymentrequest_nnn_shiptophonenum', $value, $n);
+    }
+
+    public function getPaymentrequestAddressstatus($n = null)
+    {
+        return $this->get('paymentrequest_nnn_addressstatus', $n);
+    }
+
+    public function setPaymentrequestAddressstatus($n, $value)
+    {
+        $this->set('paymentrequest_nnn_addressstatus', $value, $n);
+    }
+
+    public function getPaymentrequestAmt($n = null)
+    {
+        return $this->get('paymentrequest_nnn_amt', $n);
+    }
+
+    public function setPaymentrequestAmt($n, $value)
+    {
+        $this->set('paymentrequest_nnn_amt', $value, $n);
+    }
+
+    public function getPaymentrequestCurrencycode($n = null)
+    {
+        return $this->get('paymentrequest_nnn_currencycode', $n);
+    }
+
+    public function setPaymentrequestCurrencycode($n, $value)
+    {
+        $this->set('paymentrequest_nnn_currencycode', $value, $n);
+    }
+
+    public function getPaymentrequestItemamt($n = null)
+    {
+        return $this->get('paymentrequest_nnn_itemamt', $n);
+    }
+
+    public function setPaymentrequestItemamt($n, $value)
+    {
+        $this->set('paymentrequest_nnn_itemamt', $value, $n);
+    }
+
+    public function getPaymentrequestShippingamt($n = null)
+    {
+        return $this->get('paymentrequest_nnn_shippingamt', $n);
+    }
+
+    public function setPaymentrequestShippingamt($n, $value)
+    {
+        $this->set('paymentrequest_nnn_shippingamt', $value, $n);
+    }
+
+    public function getPaymentrequestInsuranceamt($n = null)
+    {
+        return $this->get('paymentrequest_nnn_insuranceamt', $n);
+    }
+
+    public function setPaymentrequestInsuranceamt($n, $value)
+    {
+        $this->set('paymentrequest_nnn_insuranceamt', $value, $n);
+    }
+
+    public function getPaymentrequestShipdiscamt($n = null)
+    {
+        return $this->get('paymentrequest_nnn_shipdiscamt', $n);
+    }
+
+    public function setPaymentrequestShipdiscamt($n, $value)
+    {
+        $this->set('paymentrequest_nnn_shipdiscamt', $value, $n);
+    }
+
+    public function getPaymentrequestInsuranceoptionoffered($n = null)
+    {
+        return $this->get('paymentrequest_nnn_insuranceoptionoffered', $n);
+    }
+
+    public function setPaymentrequestInsuranceoptionoffered($n, $value)
+    {
+        $this->set('paymentrequest_nnn_insuranceoptionoffered', $value, $n);
+    }
+
+    public function getPaymentrequestHandlingamt($n = null)
+    {
+        return $this->get('paymentrequest_nnn_handlingamt', $n);
+    }
+
+    public function setPaymentrequestHandlingamt($n, $value)
+    {
+        $this->set('paymentrequest_nnn_handlingamt', $value, $n);
+    }
+
+    public function getPaymentrequestTaxamt($n = null)
+    {
+        return $this->get('paymentrequest_nnn_taxamt', $n);
+    }
+
+    public function setPaymentrequestTaxamt($n, $value)
+    {
+        $this->set('paymentrequest_nnn_taxamt', $value, $n);
     }
     
-    public function setPaymentrequestNPaymentaction($n, $paymentrequest_n_paymentaction)
+    public function getPaymentrequestDesc($n = null)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_paymentaction);
+        return $this->get('paymentrequest_nnn_desc', $n);
     }
 
-    public function getPaymentrequestNPaymentstatus($n = null)
+    public function setPaymentrequestDesc($n, $value)
     {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        $this->set('paymentrequest_nnn_desc', $value, $n);
+    }
+
+    public function getPaymentrequestCustom($n = null)
+    {
+        return $this->get('paymentrequest_nnn_custom', $n);
+    }
+
+    public function setPaymentrequestCustom($n, $value)
+    {
+        $this->set('paymentrequest_nnn_custom', $value, $n);
+    }
+
+    public function getPaymentrequestInvnum($n = null)
+    {
+        return $this->get('paymentrequest_nnn_invnum', $n);
+    }
+
+    public function setPaymentrequestInvnum($n, $value)
+    {
+        $this->set('paymentrequest_nnn_invnum', $value, $n);
+    }
+
+    public function getPaymentrequestNotifyurl($n = null)
+    {
+        return $this->get('paymentrequest_nnn_notifyurl', $n);
+    }
+
+    public function setPaymentrequestNotifyurl($n, $value)
+    {
+        $this->set('paymentrequest_nnn_notifyurl', $value, $n);
+    }
+
+    public function getPaymentrequestNotetext($n = null)
+    {
+        return $this->get('paymentrequest_nnn_notetext', $n);
+    }
+
+    public function setPaymentrequestNotetext($n, $value)
+    {
+        $this->set('paymentrequest_nnn_notetext', $value, $n);
+    }
+
+    public function getPaymentrequestTransactionid($n = null)
+    {
+        return $this->get('paymentrequest_nnn_transactionid', $n);
+    }
+
+    public function setPaymentrequestTransactionid($n, $value)
+    {
+        $this->set('paymentrequest_nnn_transactionid', $value, $n);
+    }
+
+    public function getPaymentrequestAllowedpaymentmethod($n = null)
+    {
+        return $this->get('paymentrequest_nnn_allowedpaymentmethod', $n);
+    }
+
+    public function setPaymentrequestAllowedpaymentmethod($n, $value)
+    {
+        $this->set('paymentrequest_nnn_allowedpaymentmethod', $value, $n);
+    }
+
+    public function getPaymentrequestPaymentrequestid($n = null)
+    {
+        return $this->get('paymentrequest_nnn_paymentrequestid', $n);
+    }
+
+    public function setPaymentrequestPaymentrequestid($n, $value)
+    {
+        $this->set('paymentrequest_nnn_paymentrequestid', $value, $n);
     }
     
-    public function setPaymentrequestNPaymentstatus($n, $paymentrequest_n_paymentstatus)
+    public function getPaymentrequestPaymentaction($n = null)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_paymentstatus);
+        return $this->get('paymentrequest_nnn_paymentaction', $n);
+    }
+    
+    public function setPaymentrequestPaymentaction($n, $value)
+    {
+        $this->set('paymentrequest_nnn_paymentaction', $value, $n);
     }
 
-    public function getPaymentrequestNExchangerate($n = null)
+    public function getPaymentrequestPaymentstatus($n = null)
     {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        return $this->get('paymentrequest_nnn_paymentstatus', $n);
+    }
+    
+    public function setPaymentrequestPaymentstatus($n, $value)
+    {
+        $this->set('paymentrequest_nnn_paymentstatus', $value, $n);
     }
 
-    public function setPaymentrequestNExchangerate($n, $paymentrequest_n_exchangerate)
+    public function getPaymentrequestExchangerate($n = null)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_exchangerate);
+        return $this->get('paymentrequest_nnn_exchangerate', $n);
     }
 
-    public function getPaymentrequestNSettleamt($n = null)
+    public function setPaymentrequestExchangerate($n, $value)
     {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        $this->set('paymentrequest_nnn_exchangerate', $value, $n);
     }
 
-    public function setPaymentrequestNSettleamt($n, $paymentrequest_n_settleamt)
+    public function getPaymentrequestSettleamt($n = null)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_settleamt);
+        return $this->get('paymentrequest_nnn_settleamt', $n);
     }
 
-    public function getPaymentrequestNFeeamt($n = null)
+    public function setPaymentrequestSettleamt($n, $value)
     {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        $this->set('paymentrequest_nnn_settleamt', $value, $n);
     }
 
-    public function setPaymentrequestNFeeamt($n, $paymentrequest_n_feeamt)
+    public function getPaymentrequestFeeamt($n = null)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_feeamt);
+        return $this->get('paymentrequest_nnn_feeamt', $n);
     }
 
-    public function getPaymentrequestNOrdertime($n = null)
+    public function setPaymentrequestFeeamt($n, $value)
     {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        $this->set('paymentrequest_nnn_feeamt', $value, $n);
     }
 
-    public function setPaymentrequestNOrdertime($n, $paymentrequest_n_ordertime)
+    public function getPaymentrequestOrdertime($n = null)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_ordertime);
+        return $this->get('paymentrequest_nnn_ordertime', $n);
     }
 
-    public function getPaymentrequestNPaymenttype($n = null)
+    public function setPaymentrequestOrdertime($n, $value)
     {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        $this->set('paymentrequest_nnn_ordertime', $value, $n);
     }
 
-    public function setPaymentrequestNPaymenttype($n, $paymentrequest_n_paymenttype)
+    public function getPaymentrequestPaymenttype($n = null)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_paymenttype);
+        return $this->get('paymentrequest_nnn_paymenttype', $n);
     }
 
-    public function getPaymentrequestNTransactiontype($n = null)
+    public function setPaymentrequestPaymenttype($n, $value)
     {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        $this->set('paymentrequest_nnn_paymenttype', $value, $n);
     }
 
-    public function setPaymentrequestNTransactiontype($n, $paymentrequest_n_transactiontype)
+    public function getPaymentrequestTransactiontype($n = null)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_transactiontype);
+        return $this->get('paymentrequest_nnn_transactiontype', $n);
     }
 
-    public function getPaymentrequestNReceiptid($n = null)
+    public function setPaymentrequestTransactiontype($n, $value)
     {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        $this->set('paymentrequest_nnn_transactiontype', $value, $n);
     }
 
-    public function setPaymentrequestNReceiptid($n, $paymentrequest_n_receiptid)
+    public function getPaymentrequestReceiptid($n = null)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_receiptid);
+        return $this->get('paymentrequest_nnn_receiptid', $n);
     }
 
-    public function getPaymentrequestNParenttransactionid($n = null)
+    public function setPaymentrequestReceiptid($n, $value)
     {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        $this->set('paymentrequest_nnn_receiptid', $value, $n);
     }
 
-    public function setPaymentrequestNParenttransactionid($n, $paymentrequest_n_parenttransactionid)
+    public function getPaymentrequestParenttransactionid($n = null)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_parenttransactionid);
+        return $this->get('paymentrequest_nnn_parenttransactionid', $n);
     }
 
-    public function getPaymentrequestNPendingreason($n = null)
+    public function setPaymentrequestParenttransactionid($n, $value)
     {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        $this->set('paymentrequest_nnn_parenttransactionid', $value, $n);
     }
 
-    public function setPaymentrequestNPendingreason($n, $paymentrequest_n_pendingreason)
+    public function getPaymentrequestPendingreason($n = null)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_pendingreason);
+        return $this->get('paymentrequest_nnn_pendingreason', $n);
     }
 
-    public function getPaymentrequestNReasoncode($n = null)
+    public function setPaymentrequestPendingreason($n, $value)
     {
-        return $this->getPaymentrequest(__METHOD__, $n);
+        $this->set('paymentrequest_nnn_pendingreason', $value, $n);
     }
 
-    public function setPaymentrequestNReasoncode($n, $paymentrequest_n_reasoncode)
+    public function getPaymentrequestReasoncode($n = null)
     {
-        $this->setPaymentrequest(__METHOD__, $n, $paymentrequest_n_reasoncode);
+        return $this->get('paymentrequest_nnn_reasoncode', $n);
+    }
+
+    public function setPaymentrequestReasoncode($n, $value)
+    {
+        $this->set('paymentrequest_nnn_reasoncode', $value, $n);
+    }
+
+    public function getLPaymentrequestName($n, $m)
+    {
+        return $this->get('l_paymentrequest_nnn_namemmm', $n, $m);
+    }
+
+    public function setLPaymentrequestName($n, $m, $value)
+    {
+        $this->set('l_paymentrequest_nnn_namemmm', $value, $n, $m);
+    }
+
+    public function getLPaymentrequestDesc($n, $m)
+    {
+        return $this->get('l_paymentrequest_nnn_descmmm', $n, $m);
+    }
+
+    public function setLPaymentrequestDesc($n, $m, $value)
+    {
+        $this->set('l_paymentrequest_nnn_descmmm', $value, $n, $m);
+    }
+
+    public function getLPaymentrequestQty($n, $m)
+    {
+        return $this->get('l_paymentrequest_nnn_qtymmm', $n, $m);
+    }
+
+    public function setLPaymentrequestQty($n, $m, $value)
+    {
+        $this->set('l_paymentrequest_nnn_qtymmm', $value, $n, $m);
+    }
+
+    public function getLPaymentrequestAmt($n, $m)
+    {
+        return $this->get('l_paymentrequest_nnn_amtmmm', $n, $m);
+    }
+
+    public function setLPaymentrequestAmt($n, $m, $value)
+    {
+        $this->set('l_paymentrequest_nnn_amtmmm', $value, $n, $m);
     }
 
     public function getLSeveritycoden($n = null)
     {
-        if (null === $n) {
-            return $this->l_severitycoden;
-        }
-        
-        return isset($this->l_severitycoden[$n]) ? $this->l_severitycoden[$n] : null;
+        return $this->get('l_severitycodennn', $n);
     }
 
-    public function setLSeveritycoden($n, $l_severitycoden)
+    public function setLSeveritycoden($n, $value)
     {
-        $this->l_severitycoden[$n] = $l_severitycoden;
+        $this->set('l_severitycodennn', $value, $n);
     }
 
     public function getLLongmessagen($n = null)
     {
-        if (null === $n) {
-            return $this->l_longmessagen;
-        }
-
-        return isset($this->l_longmessagen[$n]) ? $this->l_longmessagen[$n] : null;
+        return $this->get('l_longmessagennn', $n);
     }
 
-    public function setLLongmessagen($n, $l_longmessagen)
+    public function setLLongmessagen($n, $value)
     {
-        $this->l_longmessagen[$n] = $l_longmessagen;
+        $this->set('l_longmessagennn', $value, $n);
     }
 
     public function getLShortmessagen($n = null)
     {
-        if (null === $n) {
-            return $this->l_shortmessagen;
-        }
-
-        return isset($this->l_shortmessagen[$n]) ? $this->l_shortmessagen[$n] : null;
+        return $this->get('l_shortmessagennn', $n);
     }
 
-    public function setLShortmessagen($n, $l_shortmessagen)
+    public function setLShortmessagen($n, $value)
     {
-        $this->l_shortmessagen[$n] = $l_shortmessagen;
+        $this->set('l_shortmessagennn', $value, $n);
     }
 
     public function getLErrorcoden($n = null)
     {
-        if (null === $n) {
-            return $this->l_errorcoden;
-        }
-
-        return isset($this->l_errorcoden[$n]) ? $this->l_errorcoden[$n] : null;
+        return $this->get('l_errorcodennn', $n);
     }
 
-    public function setLErrorcoden($n, $l_errorcoden)
+    public function setLErrorcoden($n, $value)
     {
-        $this->l_errorcoden[$n] = $l_errorcoden;
+        $this->set('l_errorcodennn', $value, $n);
     }
     
     public function clearErrors()
     {
-        $this->l_errorcoden = array();
-        $this->l_longmessagen = array();
-        $this->l_severitycoden = array();
-        $this->l_shortmessagen = array();
+        $this->l_errorcodennn = array();
+        $this->l_longmessagennn = array();
+        $this->l_severitycodennn = array();
+        $this->l_shortmessagennn = array();
     }
 
     /**
@@ -908,95 +964,88 @@ class PaymentInstruction implements PaymentInstructionInterface
         }
         
         foreach ($nvp as $name => $value) {
-            if (0 === strpos($name, 'PAYMENTREQUEST')) {
-                list($part1, $part2, $part3) = explode('_', $name);
-                
-                $property = strtolower($part1.'_n_'.$part3);
-                
-                if (false == property_exists($this, $property)) {
-                    continue;
-                }
-                
-                $p = $this->$property;
-                $p[$part2] = $value;
-                $this->$property = $p;
-                
-                continue;
-            }
-            
-            //14 symbols.
-            if (0 === strpos($name, 'L_SEVERITYCODE') ||
-                0 === strpos($name, 'L_SHORTMESSAGE') ||
-                0 === strpos($name, 'L_LONGMESSAGE') ||
-                0 === strpos($name, 'L_ERRORCODE')
-            ) {
-                $index = substr($name, -1);
-                $property = substr(strtolower($name), 0, -1).'n';
-                
-                $p = $this->$property;
-                $p[$index] = $value;
-                $this->$property = $p;
-            }
-            
-            $property = strtolower($name);
+            $property = $name;
+            $property = preg_replace('/\d/', 'nnn', $property, 1);
+            $property = preg_replace('/\d/', 'mmm', $property, 1);
+            $property = strtolower($property);
+
             if (false == property_exists($this, $property)) {
                 continue;
             }
-            
-            $this->$property = $value;
+
+            $matches = array();
+            preg_match('/\d/', $name, $matches);
+            if (array_key_exists(0, $matches)) {
+                if (array_key_exists(1, $matches)) {
+                    $this->set($property, $value, $matches[0], $matches[1]);
+                } else {
+                    $this->set($property, $value, $matches[0]);
+                }
+            } else {
+                $this->$property = $value;
+            }
         } 
     }
     
     public function toNvp()
     {
         $nvp = array();
-        foreach (get_object_vars($this) as $property => $value) {            
-            if (0 === strpos($property, 'paymentrequest')) {
-                foreach ($value as $paymentrequestIndex => $paymentrequestValue) {
-                    $name = strtoupper($property);
-                    $name[15] = $paymentrequestIndex;
-                    $nvp[$name] = $paymentrequestValue;
-                }
-                
-                continue;
-            }
-            //14 symbols.
-            if (in_array($property, array('l_severitycoden', 'l_shortmessagen', 'l_longmessagen', 'l_errorcoden'))) {
-                foreach ($value as $paymentrequestIndex => $paymentrequestValue) {
-                    $nvp[substr(strtoupper($property), 0, -1).$paymentrequestIndex] = $paymentrequestValue;
-                }
-
-                continue;
-            }
+        foreach (get_object_vars($this) as $property => $value) {
+            $name = strtoupper($property);
             
-            $nvp[strtoupper($property)] = $value;
+            if (is_array($value)) {
+                foreach ($value as $indexN => $valueN) {
+                    $nameN = str_replace('NNN', $indexN, $name);
+                    if (is_array($valueN)) {
+                        foreach ($valueN as $indexM => $valueM) {
+                            $nameM = str_replace('MMM', $indexM, $nameN);
+                            $nvp[$nameM] = $valueM;
+                        }
+                    } else {
+                        $nvp[$nameN] = $valueN;
+                    }
+                }
+            } else {
+                $nvp[$name] = $value;
+            }
         }
-        
-        return $nvp;
+
+        return array_filter($nvp);
     }
     
-    protected function getPaymentrequest($method, $n)
-    {        
-        list(, $method) = explode('::', $method);
-        $property = strtolower(str_replace('getPaymentrequestN', 'paymentrequest_n_', $method));
-        
-        if (null === $n) {
-            return $this->$property;
+    protected function set($property, $value, $n = null, $m = null)
+    {
+        $currentValue = $this->$property;
+        if (null !== $n && null !== $m) {
+            if (false == isset($currentValue[$n])) {
+                $currentValue[$n] = array();
+            }
+
+            $currentValue[$n][$m] = $value;
+        } else if (null !== $n) {
+            $currentValue[$n] = $value;
         }
         
-        $p = $this->$property;
-        
-        return isset($p[$n]) ? $p[$n] : null;  
+        $this->$property = $currentValue;
     }
 
-    protected function setPaymentrequest($method, $n, $value)
+    protected function get($property, $n = false, $m = false)
     {
-        list(, $method) = explode('::', $method);
+        $currentValue = $this->$property;
         
-        $property = strtolower(str_replace('setPaymentrequestN', 'paymentrequest_n_', $method));
-        
-        $p = $this->$property;
-        $p[$n] =$value;
-        $this->$property = $p;
+        if (false !== $n && false !== $m) {
+            if (null === $n && null === $m) {
+                return $currentValue;
+            }
+            if (array_key_exists($n, $currentValue) && array_key_exists($m, $currentValue[$n])) {
+                return $currentValue[$n][$m];
+            }
+        }
+        if (null === $n) {
+            return $currentValue;
+        }
+        if (array_key_exists($n, $currentValue)) {
+            return $currentValue[$n];
+        }
     }
 }

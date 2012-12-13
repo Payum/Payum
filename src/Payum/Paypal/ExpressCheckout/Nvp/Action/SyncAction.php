@@ -3,13 +3,11 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Buzz\Message\Form\FormRequest;
 
-use Payum\Action\ActionPaymentAware;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\SyncRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\GetExpressCheckoutDetailsRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\GetTransactionDetailsRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class SyncAction extends ActionPaymentAware
 {
@@ -29,7 +27,7 @@ class SyncAction extends ActionPaymentAware
         try {
             $this->payment->execute(new GetExpressCheckoutDetailsRequest($instruction));
             
-            foreach ($instruction->getPaymentrequestNTransactionid() as $paymentRequestN => $transactionId) {
+            foreach ($instruction->getPaymentrequestTransactionid() as $paymentRequestN => $transactionId) {
                 $this->payment->execute(new GetTransactionDetailsRequest($paymentRequestN, $instruction));
             }
         } catch (HttpResponseAckNotSuccessException $e) {
