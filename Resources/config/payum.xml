@@ -11,6 +11,9 @@
 
     <services>
         <service id="payum_payment.buzz.client" class="%payum_payment.buzz.client.class%" public="false">
+            <call method="setTimeout">
+                <argument>200</argument>
+            </call>
         </service>
 
         <service id="payum_payment" class="%payum_payment.class%">
