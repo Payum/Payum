@@ -6,31 +6,31 @@
 >
     <mapped-superclass name="Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity\PaymentInstruction">
         
-        <field name="token" column="token" type="string" length="255" />
+        <field name="token" column="token" type="string" length="255" nullable="false" />
 
-        <field name="payerid" column="payerid" type="string" length="255" />
+        <field name="payerid" column="payerid" type="string" length="255" nullable="true" />
 
-        <field name="correlationid" column="correlationid" type="string" length="255" />
+        <field name="correlationid" column="correlationid" type="string" length="255" nullable="true" />
 
-        <field name="checkoutstatus" column="checkoutstatus" type="string" length="255" />
+        <field name="checkoutstatus" column="checkoutstatus" type="string" length="255" nullable="true" />
 
-        <field name="paymentrequest_nnn_amt" column="paymentrequest_amts" type="array" />
+        <field name="paymentrequest_nnn_amt" column="paymentrequest_amts" type="array" nullable="true" />
 
-        <field name="paymentrequest_nnn_currencycode" column="paymentrequest_currencycodes" type="array" />
+        <field name="paymentrequest_nnn_currencycode" column="paymentrequest_currencycodes" type="array" nullable="true" />
 
-        <field name="paymentrequest_nnn_transactionid" column="paymentrequest_transactionids" type="array" />
+        <field name="paymentrequest_nnn_transactionid" column="paymentrequest_transactionids" type="array" nullable="true" />
 
-        <field name="paymentrequest_nnn_paymentstatus" column="paymentrequest_paymentstatuses" type="array" />
+        <field name="paymentrequest_nnn_paymentstatus" column="paymentrequest_paymentstatuses" type="array" nullable="true" />
 
-        <field name="paymentrequest_nnn_paymentaction" column="paymentrequest_paymentactions" type="array" />
+        <field name="paymentrequest_nnn_paymentaction" column="paymentrequest_paymentactions" type="array" nullable="true" />
 
-        <field name="l_errorcodennn" column="l_errorcodes" type="array" />
+        <field name="l_errorcodennn" column="l_errorcodes" type="array" nullable="true" />
 
-        <field name="l_shortmessagennn" column="l_shortmessages" type="array" />
+        <field name="l_shortmessagennn" column="l_shortmessages" type="array" nullable="true" />
 
-        <field name="l_longmessagennn" column="l_longmessages" type="array" />
+        <field name="l_longmessagennn" column="l_longmessages" type="array" nullable="true" />
 
-        <field name="l_severitycodennn" column="l_severitycodes" type="array" />
+        <field name="l_severitycodennn" column="l_severitycodes" type="array" nullable="true" />
         
     </mapped-superclass>
 </doctrine-mapping>

@@ -174,7 +174,7 @@ class Api
      * 
      * @param array $fields
      *
-     * @return Respons
+     * @return Response
      */
     public function setExpressCheckout(FormRequest $request)
     {
