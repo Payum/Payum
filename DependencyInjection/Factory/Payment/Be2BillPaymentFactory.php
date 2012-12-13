@@ -26,13 +26,9 @@ class Be2BillPaymentFactory implements PaymentFactoryInterface
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/payment'));
         $loader->load('be2bill.xml');
 
-        $apiDefinition = new Definition();
-        $apiDefinition->setClass(new Parameter('payum_payment.be2bill.api.class'));
-        $apiDefinition->setPublic(false);
-        $apiDefinition->setArguments(array(
-            new Reference($config['api']['client']),
-            $config['api']['options']
-        ));
+        $apiDefinition = new DefinitionDecorator('payum_payment.be2bill.api');
+        $apiDefinition->replaceArgument(0, new Reference($config['api']['client']));
+        $apiDefinition->replaceArgument(1, $config['api']['options']);
         $apiId = 'payum_payment.context.'.$contextName.'.api';
         $container->setDefinition($apiId, $apiDefinition);
         
@@ -48,7 +44,7 @@ class Be2BillPaymentFactory implements PaymentFactoryInterface
         $createInstructionActionId = 'payum_payment.context.'.$contextName.'.action.create_instruction';
         $container->setDefinition($createInstructionActionId, $createInstructionActionDefinition);
 
-        $paymentDefinition = new Definition('payum_payment.be2bill.payment');
+        $paymentDefinition = new Definition();
         $paymentDefinition->setClass(new Parameter('payum_payment.be2bill.payment.class'));
         $paymentDefinition->setPublic('false');
         $paymentDefinition->setArguments(array(new Reference($apiId)));

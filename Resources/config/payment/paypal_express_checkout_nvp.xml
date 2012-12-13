@@ -16,27 +16,18 @@
         <parameter key="payum_payment.paypal.express_checkout_nvp.action.capture.class">Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction</parameter>
         <parameter key="payum_payment.paypal.express_checkout_nvp.action.status.class">Payum\Paypal\ExpressCheckout\Nvp\Action\StatusAction</parameter>
         <parameter key="payum_payment.paypal.express_checkout_nvp.action.sync.class">Payum\Paypal\ExpressCheckout\Nvp\Action\SyncAction</parameter>
-        
-        <parameter key="payum_payment.paypal.express_checkout_nvp.action.create_instruction_from_simple_sell.class">Payum\Paypal\ExpressCheckout\Nvp\Action\CreateInstructionFromSimpleSellAction</parameter>
     </parameters>
 
     <services>
         <service
-            id="payum_payment.paypal.express_checkout_nvp.payment"
-            class="%payum_payment.paypal.express_checkout_nvp.payment.class%"
-            public="false"
-        >
-            <!-- It is template service. The real service will be created by PaypalExpressCheckoutNvpPaymentFactory -->
-        </service>
-
-        <service
             id="payum_payment.paypal.express_checkout_nvp.api"
             class="%payum_payment.paypal.express_checkout_nvp.api.class%"
+            abstract="true"
             public="false"
         >
-            <argument type="service">payum_payment.buzz.client</argument>
+            <argument type="service" id="payum_payment.buzz.client" />
             <argument type="collection">
-                <!-- It is template service. The real service will be created by PaypalExpressCheckoutNvpPaymentFactory -->
+                <!-- It is template service. The real service will be created by Be2BillPaymentFactory -->
             </argument>
         </service>
         
@@ -44,68 +35,48 @@
             id="payum_payment.paypal.express_checkout_nvp.action.authorize_token" 
             class="%payum_payment.paypal.express_checkout_nvp.action.authorize_token.class%" 
             public="false"
-        >
-            <argument id="service">payum_payment.paypal.express_checkout_nvp.api</argument>
-        </service>
+        />
 
         <service
             id="payum_payment.paypal.express_checkout_nvp.action.do_express_checkout_payment"
             class="%payum_payment.paypal.express_checkout_nvp.action.do_express_checkout_payment.class%"
             public="false"
-        >
-            <argument id="service">payum_payment.paypal.express_checkout_nvp.api</argument>
-        </service>
-
+        />
+        
         <service
             id="payum_payment.paypal.express_checkout_nvp.action.get_express_checkout_details"
             class="%payum_payment.paypal.express_checkout_nvp.action.get_express_checkout_details.class%"
             public="false"
-        >
-            <argument id="service">payum_payment.paypal.express_checkout_nvp.api</argument>
-        </service>
+        />
 
         <service
             id="payum_payment.paypal.express_checkout_nvp.action.get_transaction_details"
             class="%payum_payment.paypal.express_checkout_nvp.action.get_transaction_details.class%"
             public="false"
-        >
-            <argument id="service">payum_payment.paypal.express_checkout_nvp.api</argument>
-        </service>
+        />
 
         <service
             id="payum_payment.paypal.express_checkout_nvp.action.set_express_checkout"
             class="%payum_payment.paypal.express_checkout_nvp.action.set_express_checkout.class%"
             public="false"
-        >
-            <argument id="service">payum_payment.paypal.express_checkout_nvp.api</argument>
-        </service>
+        />
 
         <service
             id="payum_payment.paypal.express_checkout_nvp.action.capture"
             class="%payum_payment.paypal.express_checkout_nvp.action.capture.class%"
             public="false"
-        >
-        </service>
+        />
 
         <service
             id="payum_payment.paypal.express_checkout_nvp.action.status"
             class="%payum_payment.paypal.express_checkout_nvp.action.status.class%"
             public="false"
-        >
-        </service>
+        />
 
         <service
             id="payum_payment.paypal.express_checkout_nvp.action.sync"
             class="%payum_payment.paypal.express_checkout_nvp.action.sync.class%"
             public="false"
-        >
-        </service>
-
-        <service
-            id="payum_payment.paypal.express_checkout_nvp.action.create_instruction_from_simple_sell"
-            class="%payum_payment.paypal.express_checkout_nvp.action.create_instruction_from_simple_sell.class%"
-            public="false"
-        >
-        </service>
+        />
     </services>
 </container>
