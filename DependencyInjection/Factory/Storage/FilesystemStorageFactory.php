@@ -1,5 +1,5 @@
 <?php
-namespace Payum\PaymentBundle\DependencyInjection\Factory\Storage;
+namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -14,12 +14,12 @@ class FilesystemStorageFactory implements StorageFactoryInterface
      */
     public function create(ContainerBuilder $container, $contextName, array $config)
     {
-        $contextStorageDefinition = new DefinitionDecorator('payum_payment.storage.filesystem.default');
+        $contextStorageDefinition = new DefinitionDecorator('payum.storage.filesystem.default');
         $contextStorageDefinition->replaceArgument(0, $config['storage_dir']);
         $contextStorageDefinition->replaceArgument(1, $config['model_class']);
         $contextStorageDefinition->replaceArgument(2, $config['id_property']);
         
-        $contextStorageId = 'payum_payment.context.'.$contextName.'.storage';
+        $contextStorageId = 'payum.context.'.$contextName.'.storage';
         $container->setDefinition($contextStorageId, $contextStorageDefinition);
         
         return $contextStorageId;

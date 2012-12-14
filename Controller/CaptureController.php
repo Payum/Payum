@@ -1,5 +1,5 @@
 <?php
-namespace Payum\PaymentBundle\Controller;
+namespace Payum\Bundle\PayumBundle\Controller;
 
 use Payum\Domain\ModelInterface;
 use Payum\Exception\LogicException;
@@ -7,8 +7,8 @@ use Payum\Request\RedirectUrlInteractiveRequest;
 use Payum\Request\InteractiveRequestInterface;
 use Payum\Request\CaptureRequest;
 use Payum\Request\StatusRequestInterface;
-use Payum\PaymentBundle\Context\ContextInterface;
-use Payum\PaymentBundle\Request\ResponseInteractiveRequest;
+use Payum\Bundle\PayumBundle\Context\ContextInterface;
+use Payum\Bundle\PayumBundle\Request\ResponseInteractiveRequest;
 
 class CaptureController extends Controller
 {
@@ -63,16 +63,16 @@ class CaptureController extends Controller
     public function statusAction(ContextInterface $context, StatusRequestInterface $statusRequest)
     {
         return $this->render(
-            'PayumPaymentBundle:Capture:status.html.'.$this->container->getParameter('payum_payment.template.engine'), 
+            'PayumBundle:Capture:status.html.'.$this->container->getParameter('payum.template.engine'), 
             array('status' => $statusRequest)
         );
     }
 
     /**
-     * @return \Payum\PaymentBundle\Context\ContextRegistry
+     * @return \Payum\Bundle\PayumBundle\Context\ContextRegistry
      */
     protected function getPayum()
     {
-        return $this->get('payum_payment');
+        return $this->get('payum');
     }
 }

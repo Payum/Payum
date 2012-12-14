@@ -1,5 +1,5 @@
 <?php
-namespace Payum\PaymentBundle\DependencyInjection\Factory\Storage;
+namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -16,11 +16,11 @@ class DoctrineStorageFactory implements StorageFactoryInterface
     {
         $this->load($container, $config['driver']);
         
-        $contextStorageDefinition = new DefinitionDecorator('payum_payment.storage.doctrine.'.$config['driver']);
+        $contextStorageDefinition = new DefinitionDecorator('payum.storage.doctrine.'.$config['driver']);
         $contextStorageDefinition->setPublic(true);
         $contextStorageDefinition->replaceArgument(1, $config['model_class']);
         
-        $contextStorageId = 'payum_payment.context.'.$contextName.'.storage';
+        $contextStorageId = 'payum.context.'.$contextName.'.storage';
         $container->setDefinition($contextStorageId, $contextStorageDefinition);
         
         return $contextStorageId;

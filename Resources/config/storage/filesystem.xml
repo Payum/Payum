@@ -5,11 +5,11 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="payum_payment.storage.filesystem.class"></parameter>
+        <parameter key="payum.storage.filesystem.class"></parameter>
     </parameters>
 
     <services>
-        <service id="payum_payment.storage.filesystem" class="%payum_payment.storage.filesystem.class%" public="false">
+        <service id="payum.storage.filesystem" class="%payum.storage.filesystem.class%" public="false">
             <argument><!-- should be set in FilesystemStorageFactory --></argument>
             <argument><!-- should be set in FilesystemStorageFactory --></argument>
             <argument><!-- should be set in FilesystemStorageFactory --></argument>

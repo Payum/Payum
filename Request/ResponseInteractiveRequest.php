@@ -1,5 +1,5 @@
 <?php
-namespace Payum\PaymentBundle\Request;
+namespace Payum\Bundle\PayumBundle\Request;
 
 use Symfony\Component\HttpFoundation\Response;
 

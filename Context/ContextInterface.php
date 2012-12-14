@@ -1,5 +1,5 @@
 <?php
-namespace Payum\PaymentBundle\Context;
+namespace Payum\Bundle\PayumBundle\Context;
 
 use Payum\Domain\ModelInterface;
 

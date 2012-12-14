@@ -1,5 +1,5 @@
 <?php
-namespace Payum\PaymentBundle\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -26,33 +26,33 @@ class Be2BillPaymentFactory implements PaymentFactoryInterface
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/payment'));
         $loader->load('be2bill.xml');
 
-        $apiDefinition = new DefinitionDecorator('payum_payment.be2bill.api');
+        $apiDefinition = new DefinitionDecorator('payum.be2bill.api');
         $apiDefinition->replaceArgument(0, new Reference($config['api']['client']));
         $apiDefinition->replaceArgument(1, $config['api']['options']);
-        $apiId = 'payum_payment.context.'.$contextName.'.api';
+        $apiId = 'payum.context.'.$contextName.'.api';
         $container->setDefinition($apiId, $apiDefinition);
         
-        $captureActionDefinition = new DefinitionDecorator('payum_payment.be2bill.action.capture');
-        $captureActionId = 'payum_payment.context.'.$contextName.'.action.capture';
+        $captureActionDefinition = new DefinitionDecorator('payum.be2bill.action.capture');
+        $captureActionId = 'payum.context.'.$contextName.'.action.capture';
         $container->setDefinition($captureActionId, $captureActionDefinition);
 
-        $statusActionDefinition = new DefinitionDecorator('payum_payment.be2bill.action.status');
-        $statusActionId = 'payum_payment.context.'.$contextName.'.action.status';
+        $statusActionDefinition = new DefinitionDecorator('payum.be2bill.action.status');
+        $statusActionId = 'payum.context.'.$contextName.'.action.status';
         $container->setDefinition($statusActionId, $statusActionDefinition);
 
         $createInstructionActionDefinition = new DefinitionDecorator($config['create_instruction_from_model_action']);
-        $createInstructionActionId = 'payum_payment.context.'.$contextName.'.action.create_instruction';
+        $createInstructionActionId = 'payum.context.'.$contextName.'.action.create_instruction';
         $container->setDefinition($createInstructionActionId, $createInstructionActionDefinition);
 
         $paymentDefinition = new Definition();
-        $paymentDefinition->setClass(new Parameter('payum_payment.be2bill.payment.class'));
+        $paymentDefinition->setClass(new Parameter('payum.be2bill.payment.class'));
         $paymentDefinition->setPublic('false');
         $paymentDefinition->setArguments(array(new Reference($apiId)));
         $paymentDefinition->addMethodCall('addAction', array(new Reference($captureActionId)));
         $paymentDefinition->addMethodCall('addAction', array(new Reference($statusActionId)));
         $paymentDefinition->addMethodCall('addAction', array(new Reference($createInstructionActionId)));
 
-        $paymentId = 'payum_payment.context.'.$contextName.'.payment';
+        $paymentId = 'payum.context.'.$contextName.'.payment';
         $container->setDefinition($paymentId, $paymentDefinition);
 
         return $paymentId;
@@ -74,7 +74,7 @@ class Be2BillPaymentFactory implements PaymentFactoryInterface
         $builder->children()
             ->scalarNode('create_instruction_from_model_action')->isRequired()->cannotBeEmpty()->end()
             ->arrayNode('api')->children()
-                ->scalarNode('client')->defaultValue('payum_payment.buzz.client')->cannotBeEmpty()->end()
+                ->scalarNode('client')->defaultValue('payum.buzz.client')->cannotBeEmpty()->end()
                 ->arrayNode('options')->children()
                     ->scalarNode('identifier')->isRequired()->cannotBeEmpty()->end()
                     ->scalarNode('password')->isRequired()->cannotBeEmpty()->end()

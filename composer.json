@@ -1,5 +1,5 @@
 {
-    "name": "payum/payment-bundle",
+    "name": "payum/payum-bundle",
     "type": "symfony-bundle",
     "description": "Integrate payum libs into symfony2 framework",
     "keywords": ["payment"],
@@ -26,10 +26,10 @@
         "payum/be2bill": "If you want to use be2bill gateway"
     },
     "autoload": {
-        "psr-0": { "Payum\\PaymentBundle": "" }
+        "psr-0": { "Payum\\Bundle\\PayumBundle": "" }
     },
     "config": {
         "bin-dir": "bin"
     },
-    "target-dir": "Payum/PaymentBundle"
+    "target-dir": "Payum/Bundle/PayumBundle"
 }

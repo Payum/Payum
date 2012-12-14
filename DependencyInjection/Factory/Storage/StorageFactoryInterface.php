@@ -1,5 +1,5 @@
 <?php
-namespace Payum\PaymentBundle\DependencyInjection\Factory\Storage;
+namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;

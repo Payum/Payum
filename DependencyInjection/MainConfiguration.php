@@ -1,5 +1,5 @@
 <?php
-namespace Payum\PaymentBundle\DependencyInjection;
+namespace Payum\Bundle\PayumBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -35,7 +35,7 @@ class MainConfiguration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $tb = new TreeBuilder();
-        $rootNode = $tb->root('payum_payment');
+        $rootNode = $tb->root('payum');
         
         $this->addTemplateSection($rootNode);
         
@@ -48,8 +48,8 @@ class MainConfiguration implements ConfigurationInterface
         $contextsPrototypeNode
             ->children()
                 ->scalarNode('status_request_class')->defaultValue('Payum\Request\BinaryMaskStatusRequest')->end()
-                ->scalarNode('interactive_controller')->defaultValue('PayumPaymentBundle:Capture:interactive')->end()
-                ->scalarNode('status_controller')->defaultValue('PayumPaymentBundle:Capture:status')->end()
+                ->scalarNode('interactive_controller')->defaultValue('PayumBundle:Capture:interactive')->end()
+                ->scalarNode('status_controller')->defaultValue('PayumBundle:Capture:status')->end()
             ->end()
         ;
 

@@ -5,17 +5,17 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="payum_payment.storage.doctrine.orm.class">Payum\Bridge\Doctrine\Storage\DoctrineModelStorage</parameter>
+        <parameter key="payum.storage.doctrine.orm.class">Payum\Bridge\Doctrine\Storage\DoctrineModelStorage</parameter>
     </parameters>
     
     <services>
-        <service id="payum_payment.storage.doctrine.orm" class="%payum_payment.storage.doctrine.orm.class%" public="false" abstract="true">
-            <argument type="service" id="payum_payment.entity_manager" />
+        <service id="payum.storage.doctrine.orm" class="%payum.storage.doctrine.orm.class%" public="false" abstract="true">
+            <argument type="service" id="payum.entity_manager" />
             <argument><!-- should be set in DoctrineStorageFactory --></argument>
         </service>
 
         <service 
-            id="payum_payment.entity_manager" 
+            id="payum.entity_manager" 
             factory-service="doctrine" 
             factory-method="getManager" 
             class="Doctrine\ORM\EntityManager" 

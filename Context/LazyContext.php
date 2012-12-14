@@ -1,5 +1,5 @@
 <?php
-namespace Payum\PaymentBundle\Context;
+namespace Payum\Bundle\PayumBundle\Context;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;

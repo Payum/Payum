@@ -1,5 +1,5 @@
 <?php
-namespace Payum\PaymentBundle\DependencyInjection;
+namespace Payum\Bundle\PayumBundle\DependencyInjection;
 
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -8,10 +8,10 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-use Payum\PaymentBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
-use Payum\PaymentBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface;
 
-class PayumPaymentExtension extends Extension
+class PayumExtension extends Extension
 {
     protected $storageFactories = array();
 
@@ -23,7 +23,7 @@ class PayumPaymentExtension extends Extension
 
         $config = $this->processConfiguration($mainConfig, $configs);
 
-        $container->setParameter('payum_payment.template.engine', $config['template']['engine']);
+        $container->setParameter('payum.template.engine', $config['template']['engine']);
 
         // load services
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
@@ -45,7 +45,7 @@ class PayumPaymentExtension extends Extension
             }
 
             $contextDefinition = new Definition();
-            $contextDefinition->setClass('Payum\PaymentBundle\Context\LazyContext');
+            $contextDefinition->setClass('Payum\Bundle\PayumBundle\Context\LazyContext');
             $contextDefinition->setPublic(false);
             $contextDefinition->addMethodCall('setContainer', array(
                 new Reference('service_container')
@@ -58,10 +58,10 @@ class PayumPaymentExtension extends Extension
                 $context['interactive_controller'],
                 $context['status_controller'],
             ));
-            $contextId = 'payum_payment.context.'.$contextName;
+            $contextId = 'payum.context.'.$contextName;
             $container->setDefinition($contextId, $contextDefinition);
             
-            $payumPaymentDefinition = $container->getDefinition('payum_payment');
+            $payumPaymentDefinition = $container->getDefinition('payum');
             $payumPaymentDefinition->addMethodCall('addContext', array(
                 new Reference($contextId)
             ));

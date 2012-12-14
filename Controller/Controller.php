@@ -1,5 +1,5 @@
 <?php
-namespace Payum\PaymentBundle\Controller;
+namespace Payum\Bundle\PayumBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -27,7 +27,7 @@ class Controller extends BaseController
     }
     
     /**
-     * @return \Payum\PaymentBundle\Context\ContextRegistry
+     * @return \Payum\Bundle\PayumBundle\Context\ContextRegistry
      */
     protected function getPayum()
     {

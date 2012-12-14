@@ -16,7 +16,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
 
-            new Payum\PaymentBundle\PayumPaymentBundle(),
+            new Payum\Bundle\PayumBundle\PayumBundle(),
         );
 
         return $bundles;
@@ -41,7 +41,7 @@ class AppKernel extends Kernel
      */
     public function getCacheDir()
     {
-        return sys_get_temp_dir() . '/PayumPaymentBundle/cache';
+        return sys_get_temp_dir() . '/PayumBundle/cache';
     }
 
     /**
@@ -49,7 +49,7 @@ class AppKernel extends Kernel
      */
     public function getLogDir()
     {
-        return sys_get_temp_dir() . '/PayumPaymentBundle/logs';
+        return sys_get_temp_dir() . '/PayumBundle/logs';
     }
 
     /**
