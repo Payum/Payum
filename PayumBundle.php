@@ -1,5 +1,5 @@
 <?php
-namespace Payum\PaymentBundle;
+namespace Payum\Bundle\PayumBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
