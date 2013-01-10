@@ -6,19 +6,19 @@
         >
     <mapped-superclass name="Payum\Be2Bill\Bridge\Doctrine\Entity\PaymentInstruction">
 
-        <field name="operationtype" column="operationtype" type="string" length="255" />
+        <field name="operationtype" column="operationtype" type="string" length="255" nullable="true" />
 
-        <field name="description" column="description" type="string" length="510" />
+        <field name="description" column="description" type="string" length="510" nullable="true" />
 
-        <field name="orderid" column="orderid" type="string" length="40" />
+        <field name="orderid" column="orderid" type="string" length="40" nullable="true" />
 
-        <field name="amount" column="amount" type="integer" />
+        <field name="amount" column="amount" type="integer" nullable="true" />
 
         <field name="cardtype" column="cardtype" type="string" length="40" nullable="true" />
 
-        <field name="clientident" column="clientident" type="string" length="255" />
-
-        <field name="clientemail" column="clientemail" type="string" length="255" />
+        <field name="clientident" column="clientident" type="string" length="255" nullable="true" />
+        
+        <field name="clientemail" column="clientemail" type="string" length="255" nullable="true" />
 
         <field name="clientaddress" column="clientaddress" type="string" length="510" nullable="true" />
 
@@ -26,9 +26,9 @@
 
         <field name="clientreferer" column="clientreferer" type="string" length="255" nullable="true" />
 
-        <field name="clientuseragent" column="clientuseragent" type="string" length="255" />
+        <field name="clientuseragent" column="clientuseragent" type="string" length="255" nullable="true" />
 
-        <field name="clientip" column="clientip" type="string" length="15" />
+        <field name="clientip" column="clientip" type="string" length="15" nullable="true" />
 
         <field name="firstname" column="firstname" type="string" length="127" nullable="true" />
 
@@ -42,9 +42,9 @@
 
         <field name="transactionid" column="transactionid" type="string" length="32" nullable="true" />
 
-        <field name="cardcodeSafe" column="cardcode" type="string" length="16" />
+        <field name="cardcodeSafe" column="cardcode" type="string" length="16" nullable="true" />
 
-        <field name="cardfullnameSafe" column="cardfullname" type="string" length="255" />
+        <field name="cardfullnameSafe" column="cardfullname" type="string" length="255" nullable="true" />
 
         <field name="execcode" column="execcode" type="string" length="4" nullable="true" />
 
