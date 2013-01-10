@@ -35,17 +35,21 @@ class CaptureAction extends ActionPaymentAware
         $instruction = $request->getModel()->getInstruction();
         
         if (null === $instruction->getExeccode()) {
-            if (false == ($instruction->getCardcode() && $instruction->getCardcvv() && $instruction->getCardvaliditydate())) {
+            //instruction must have an alias set (e.g oneclick payment) or credit card info. 
+            if ($instruction->getAlias() ||
+                ($instruction->getCardcode() && $instruction->getCardcvv() && $instruction->getCardvaliditydate())
+            ) {
+                $response = $this->payment->getApi()->payment($instruction->toParams());
+
+                $instruction->fromParams((array) $response->getContentJson());
+            } else {
                 throw new UserInputRequiredInteractiveRequest(array(
                     'cardcode',
                     'cardcvv',
-                    'cardvaliditydate'
+                    'cardvaliditydate',
+                    'cardfullname'
                 ));
             }
-            
-            $response = $this->payment->getApi()->payment($instruction->toParams());
-            
-            $instruction->fromParams((array) $response->getContentJson());
         }
     }
 
