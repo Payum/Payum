@@ -192,7 +192,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      *
      * @var string
      */
-    protected $cardcodeSecured;
+    protected $cardcodeSafe;
 
     /**
      * Description: Validity date. Do not store this property
@@ -220,6 +220,11 @@ class PaymentInstruction implements PaymentInstructionInterface
      * @var string
      */
     protected $cardfullname;
+
+    /**
+     * @var string
+     */
+    protected $cardfullnameSafe;
 
     /**
      * Description: Transaction action code
@@ -567,20 +572,37 @@ class PaymentInstruction implements PaymentInstructionInterface
     {
         $this->cardcode = $cardcode;
         
-        $this->setCardcodeSecured($cardcode);
+        $this->setCardcodeSafe($cardcode);
     }
 
     /** 
      * @return string
      */
-    public function getCardcodeSecured()
+    public function getCardcodeSafe()
     {
-        return $this->cardcodeSecured;
+        return $this->cardcodeSafe;
     }
     
-    protected function setCardcodeSecured($cardcode)
+    protected function setCardcodeSafe($cardcode)
     {
-        $this->cardcodeSecured = str_repeat('*', 12).substr($cardcode, -4);   
+        $cardcodeLength = mb_strlen($cardcode);
+        
+        $this->cardcodeSafe = str_repeat('*', $cardcodeLength - 4).substr($cardcode, -4);   
+    }
+
+    /**
+     * @return string
+     */
+    public function getCardfullnameSafe()
+    {
+        return $this->cardfullnameSafe;
+    }
+
+    protected function setCardfullnameSafe($cardfullname)
+    {
+        $cardfullnameLength = mb_strlen($cardfullname);
+
+        $this->cardfullnameSafe = str_repeat('*', $cardfullnameLength - 4).substr($cardfullname, -4);
     }
 
     /**
@@ -629,6 +651,8 @@ class PaymentInstruction implements PaymentInstructionInterface
     public function setCardfullname($cardfullname)
     {
         $this->cardfullname = $cardfullname;
+        
+        $this->setCardfullnameSafe($cardfullname);
     }
 
     /**

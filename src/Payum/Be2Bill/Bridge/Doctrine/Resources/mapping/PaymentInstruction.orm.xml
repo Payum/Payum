@@ -42,9 +42,9 @@
 
         <field name="transactionid" column="transactionid" type="string" length="32" nullable="true" />
 
-        <field name="cardcodeSecured" column="cardcode_secured" type="string" length="16" />
+        <field name="cardcodeSafe" column="cardcode" type="string" length="16" />
 
-        <field name="cardfullname" column="cardfullname" type="string" length="255" />
+        <field name="cardfullnameSafe" column="cardfullname" type="string" length="255" />
 
         <field name="execcode" column="execcode" type="string" length="4" nullable="true" />
 
