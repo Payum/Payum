@@ -55,8 +55,8 @@ class PayumExtension extends Extension
                 $paymentServiceId,
                 $storageServiceId,
                 $context['status_request_class'],
-                $context['interactive_controller'],
-                $context['status_controller'],
+                $context['capture_interactive_controller'],
+                $context['capture_finished_controller'],
             ));
             $contextId = 'payum.context.'.$contextName;
             $container->setDefinition($contextId, $contextDefinition);

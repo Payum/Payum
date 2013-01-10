@@ -27,7 +27,7 @@ class CaptureController extends Controller
         if ($interactiveRequest = $context->getPayment()->execute(new CaptureRequest($model))) {
             $context->getStorage()->updateModel($model);
             
-            return $this->handle($context->getInteractiveController(), array(
+            return $this->handle($context->getCaptureInteractiveController(), array(
                 'context' => $context,
                 'interactiveRequest' => $interactiveRequest
             ));
@@ -38,7 +38,7 @@ class CaptureController extends Controller
             throw new LogicException('Unsupported interactive request.', null, $interactiveRequest);
         }
 
-        $response = $this->handle($context->getStatusController(), array(
+        $response = $this->handle($context->getCaptureFinishedController(), array(
             'context' => $context,
             'statusRequest' => $statusRequest
         ));
@@ -60,10 +60,10 @@ class CaptureController extends Controller
         throw new LogicException('Unsupported interactive request.', null, $interactiveRequest);
     }
 
-    public function statusAction(ContextInterface $context, StatusRequestInterface $statusRequest)
+    public function finishedAction(ContextInterface $context, StatusRequestInterface $statusRequest)
     {
         return $this->render(
-            'PayumBundle:Capture:status.html.'.$this->container->getParameter('payum.template.engine'), 
+            'PayumBundle:Capture:finished.html.'.$this->container->getParameter('payum.template.engine'), 
             array('status' => $statusRequest)
         );
     }
