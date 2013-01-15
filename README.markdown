@@ -9,6 +9,7 @@ Features include:
 - Supports [be2bill](https://github.com/Payum/Be2Bill) out of the box.
 - Easy to integrate other payments.
 - Extremely extensible
+- Supports doctrine storage and filesystem one to easy start.
 
 Documentation
 -------------
