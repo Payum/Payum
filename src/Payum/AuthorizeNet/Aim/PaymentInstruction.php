@@ -1,10 +1,10 @@
 <?php
-namespace Payum\AuthorizeNet\Aim\Request;
+namespace Payum\AuthorizeNet\Aim;
 
-use Payum\Request\InstructionInterface;
+use Payum\PaymentInstructionInterface;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 
-class Instruction implements InstructionInterface
+class PaymentInstruction implements PaymentInstructionInterface
 {
     protected $address;
     

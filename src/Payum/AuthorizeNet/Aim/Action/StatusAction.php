@@ -2,13 +2,16 @@
 namespace Payum\AuthorizeNet\Aim\Action;
 
 use Payum\Action\ActionInterface;
+use Payum\AuthorizeNet\Aim\PaymentInstruction;
+use Payum\Domain\InstructionAggregateInterface;
 use Payum\Exception\RequestNotSupportedException;
-use Payum\Request\InstructionAggregateRequestInterface;
 use Payum\Request\StatusRequestInterface;
-use Payum\AuthorizeNet\Aim\Request\Instruction;
 
 class StatusAction implements ActionInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public function execute($request)
     {
         /** @var $request \Payum\Request\StatusRequestInterface */
@@ -16,11 +19,8 @@ class StatusAction implements ActionInterface
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        /** @var $internalRequest InstructionAggregateRequestInterface */
-        $internalRequest = $request->getRequest();
-        
-        /** @var $instruction Instruction */
-        $instruction = $internalRequest->getInstruction();
+        /** @var $instruction PaymentInstruction */
+        $instruction = $request->getModel()->getInstruction();
         
         if (\AuthorizeNetAIM_Response::APPROVED == $instruction->getResponseCode()) {
             $request->markSuccess();
@@ -46,13 +46,16 @@ class StatusAction implements ActionInterface
             return;
         }
     }
-   
+
+    /**
+     * {@inheritdoc}
+     */
     public function supports($request)
     {
         return
             $request instanceof StatusRequestInterface &&
-            $request->getRequest() instanceof InstructionAggregateRequestInterface &&
-            $request->getRequest()->getInstruction() instanceof Instruction
+            $request->getModel() instanceof InstructionAggregateInterface &&
+            $request->getModel()->getInstruction() instanceof PaymentInstruction
         ;
     }
 }
