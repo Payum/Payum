@@ -14,7 +14,7 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "payum/payum": "dev-master"
+        "payum/payum": "0.1.*"
     },
     "config": {
         "bin-dir": "bin"
