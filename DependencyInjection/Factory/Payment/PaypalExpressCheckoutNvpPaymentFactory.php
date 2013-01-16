@@ -32,58 +32,59 @@ class PaypalExpressCheckoutNvpPaymentFactory implements PaymentFactoryInterface
         $apiId = 'payum.context.'.$contextName.'.api';
         $container->setDefinition($apiId, $apiDefinition);
 
-        $authorizeTokenDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.authorize_token');
-        $authorizeTokenId = 'payum.context.'.$contextName.'.action.authorize_token';
-        $container->setDefinition($authorizeTokenId, $authorizeTokenDefinition);
-
-        $doExpressCheckoutPaymentDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.do_express_checkout_payment');
-        $doExpressCheckoutPaymentId = 'payum.context.'.$contextName.'.action.do_express_checkout_payment';
-        $container->setDefinition($doExpressCheckoutPaymentId, $doExpressCheckoutPaymentDefinition);
-
-        $getExpressCheckoutDetailsDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.get_express_checkout_details');
-        $getExpressCheckoutDetailsId = 'payum.context.'.$contextName.'.action.get_express_checkout_details';
-        $container->setDefinition($getExpressCheckoutDetailsId, $getExpressCheckoutDetailsDefinition);
-
-        $getTransactionDetailsDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.get_transaction_details');
-        $getTransactionDetailsId = 'payum.context.'.$contextName.'.action.get_transaction_details';
-        $container->setDefinition($getTransactionDetailsId, $getTransactionDetailsDefinition);
-
-        $setExpressCheckoutDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.set_express_checkout');
-        $setExpressCheckoutId = 'payum.context.' . $contextName . '.action.set_express_checkout';
-        $container->setDefinition($setExpressCheckoutId, $setExpressCheckoutDefinition);
-
-        $captureDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.capture');
-        $captureId = 'payum.context.' . $contextName . '.action.capture';
-        $container->setDefinition($captureId, $captureDefinition);
-
-        $statusDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.status');
-        $statusId = 'payum.context.' . $contextName . '.action.status';
-        $container->setDefinition($statusId, $statusDefinition);
-
-        $syncDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.sync');
-        $syncId = 'payum.context.' . $contextName . '.action.sync';
-        $container->setDefinition($syncId, $syncDefinition);
-
-        $createInstructionActionDefinition = new DefinitionDecorator($config['create_instruction_from_model_action']);
-        $createInstructionActionId = 'payum.context.'.$contextName.'.action.create_instruction';
-        $container->setDefinition($createInstructionActionId, $createInstructionActionDefinition);
-
         $paymentDefinition = new Definition();
         $paymentDefinition->setClass(new Parameter('payum.paypal.express_checkout_nvp.payment.class'));
         $paymentDefinition->setPublic('false');
         $paymentDefinition->setArguments(array(new Reference($apiId)));
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($authorizeTokenId)));
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($getExpressCheckoutDetailsId)));
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($getTransactionDetailsId)));
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($doExpressCheckoutPaymentId)));
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($setExpressCheckoutId)));
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($captureId)));
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($statusId)));
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($syncId)));
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($createInstructionActionId)));
-
         $paymentId = 'payum.context.'.$contextName.'.payment';
         $container->setDefinition($paymentId, $paymentDefinition);
+
+        $authorizeTokenDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.authorize_token');
+        $authorizeTokenId = 'payum.context.'.$contextName.'.action.authorize_token';
+        $container->setDefinition($authorizeTokenId, $authorizeTokenDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($authorizeTokenId)));
+        
+        $doExpressCheckoutPaymentDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.do_express_checkout_payment');
+        $doExpressCheckoutPaymentId = 'payum.context.'.$contextName.'.action.do_express_checkout_payment';
+        $container->setDefinition($doExpressCheckoutPaymentId, $doExpressCheckoutPaymentDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($doExpressCheckoutPaymentId)));
+
+        $getExpressCheckoutDetailsDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.get_express_checkout_details');
+        $getExpressCheckoutDetailsId = 'payum.context.'.$contextName.'.action.get_express_checkout_details';
+        $container->setDefinition($getExpressCheckoutDetailsId, $getExpressCheckoutDetailsDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($getExpressCheckoutDetailsId)));
+
+        $getTransactionDetailsDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.get_transaction_details');
+        $getTransactionDetailsId = 'payum.context.'.$contextName.'.action.get_transaction_details';
+        $container->setDefinition($getTransactionDetailsId, $getTransactionDetailsDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($getTransactionDetailsId)));
+
+        $setExpressCheckoutDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.set_express_checkout');
+        $setExpressCheckoutId = 'payum.context.' . $contextName . '.action.set_express_checkout';
+        $container->setDefinition($setExpressCheckoutId, $setExpressCheckoutDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($setExpressCheckoutId)));
+
+        $captureDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.capture');
+        $captureId = 'payum.context.' . $contextName . '.action.capture';
+        $container->setDefinition($captureId, $captureDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($captureId)));
+
+        $statusDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.status');
+        $statusId = 'payum.context.' . $contextName . '.action.status';
+        $container->setDefinition($statusId, $statusDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($statusId)));
+
+        $syncDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.sync');
+        $syncId = 'payum.context.' . $contextName . '.action.sync';
+        $container->setDefinition($syncId, $syncDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($syncId)));
+
+        if ($config['create_instruction_from_model_action']) {
+            $createInstructionActionDefinition = new DefinitionDecorator($config['create_instruction_from_model_action']);
+            $createInstructionActionId = 'payum.context.'.$contextName.'.action.create_instruction';
+            $container->setDefinition($createInstructionActionId, $createInstructionActionDefinition);
+            $paymentDefinition->addMethodCall('addAction', array(new Reference($createInstructionActionId)));
+        }
 
         return $paymentId;
     }
@@ -102,7 +103,7 @@ class PaypalExpressCheckoutNvpPaymentFactory implements PaymentFactoryInterface
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
         $builder->children()
-            ->scalarNode('create_instruction_from_model_action')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('create_instruction_from_model_action')->defaultNull()->end()
             ->arrayNode('api')->children()
                 ->scalarNode('client')->defaultValue('payum.buzz.client')->cannotBeEmpty()->end()
                 ->arrayNode('options')->children()

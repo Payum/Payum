@@ -8,6 +8,7 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCh
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\DoctrineStorageFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\FilesystemStorageFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AuthorizeNetAimPaymentFactory;
 
 class PayumBundle extends Bundle
 {
@@ -20,6 +21,7 @@ class PayumBundle extends Bundle
         
         $extension->addPaymentFactory(new PaypalExpressCheckoutNvpPaymentFactory());
         $extension->addPaymentFactory(new Be2BillPaymentFactory());
+        $extension->addPaymentFactory(new AuthorizeNetAimPaymentFactory());
 
         $extension->addStorageFactory(new FilesystemStorageFactory());
         $extension->addStorageFactory(new DoctrineStorageFactory());

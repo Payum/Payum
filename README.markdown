@@ -6,6 +6,7 @@ The PayumBundle adds support of [payum](https://github.com/Payum/Payum) lib. and
 Features include:
 
 - Supports [paypal express checkout](https://github.com/Payum/PaypalExpressCheckoutNvp) out of the box.
+- Supports [authorize.net](https://github.com/Payum/AuthorizeNetAim) out of the box.
 - Supports [be2bill](https://github.com/Payum/Be2Bill) out of the box.
 - Easy to integrate other payments.
 - Extremely extensible

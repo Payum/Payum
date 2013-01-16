@@ -19,10 +19,13 @@
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
         "payum/paypal-express-checkout-nvp": "0.1.*",
-        "payum/be2bill": "0.1.*"
+        "payum/be2bill": "0.1.*",
+        "payum/authorize-net-aim": "0.1.*",
+        "ajbdev/authorizenet-php-api": "dev-master@dev"
     },
     "suggest": {
         "payum/paypal-express-checkout-nvp": "If you want to use paypal express checkout nvp gateway",
+        "payum/authorize-net-aim": "If you want to use authorize.net gateway",
         "payum/be2bill": "If you want to use be2bill gateway"
     },
     "autoload": {

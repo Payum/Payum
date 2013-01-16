@@ -12,39 +12,40 @@ use Symfony\Component\Config\FileLocator;
 
 use Payum\Exception\RuntimeException;
 
-class Be2BillPaymentFactory implements PaymentFactoryInterface
+class AuthorizeNetAimPaymentFactory implements PaymentFactoryInterface
 {
     /**
      * {@inheritdoc}
      */
     public function create(ContainerBuilder $container, $contextName, array $config)
     {
-        if (false == class_exists('Payum\Be2Bill\Payment')) {
-            throw new RuntimeException('Cannot find be2bill payment class. Have you installed payum/be2bill package?');
+        if (false == class_exists('Payum\AuthorizeNet\Aim\Payment')) {
+            throw new RuntimeException('Cannot find Authorize.net payment class. Have you installed payum/authorize-net-aim package?');
         }
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/payment'));
-        $loader->load('be2bill.xml');
+        $loader->load('authorize_net_aim.xml');
 
-        $apiDefinition = new DefinitionDecorator('payum.be2bill.api');
-        $apiDefinition->replaceArgument(0, new Reference($config['api']['client']));
-        $apiDefinition->replaceArgument(1, $config['api']['options']);
+        $apiDefinition = new DefinitionDecorator('payum.authorize_net_aim.api');
+        $apiDefinition->replaceArgument(0, $config['api']['options']['login_id']);
+        $apiDefinition->replaceArgument(1, $config['api']['options']['transaction_key']);
+        $apiDefinition->addMethodCall('setSandbox', array($config['api']['options']['sandbox']));
         $apiId = 'payum.context.'.$contextName.'.api';
         $container->setDefinition($apiId, $apiDefinition);
 
         $paymentDefinition = new Definition();
-        $paymentDefinition->setClass(new Parameter('payum.be2bill.payment.class'));
+        $paymentDefinition->setClass(new Parameter('payum.authorize_net_aim.payment.class'));
         $paymentDefinition->setPublic('false');
         $paymentDefinition->setArguments(array(new Reference($apiId)));
         $paymentId = 'payum.context.'.$contextName.'.payment';
         $container->setDefinition($paymentId, $paymentDefinition);
         
-        $captureActionDefinition = new DefinitionDecorator('payum.be2bill.action.capture');
+        $captureActionDefinition = new DefinitionDecorator('payum.authorize_net_aim.action.capture');
         $captureActionId = 'payum.context.'.$contextName.'.action.capture';
         $container->setDefinition($captureActionId, $captureActionDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($captureActionId)));
 
-        $statusActionDefinition = new DefinitionDecorator('payum.be2bill.action.status');
+        $statusActionDefinition = new DefinitionDecorator('payum.authorize_net_aim.action.status');
         $statusActionId = 'payum.context.'.$contextName.'.action.status';
         $container->setDefinition($statusActionId, $statusActionDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($statusActionId)));
@@ -55,9 +56,7 @@ class Be2BillPaymentFactory implements PaymentFactoryInterface
             $container->setDefinition($createInstructionActionId, $createInstructionActionDefinition);
             $paymentDefinition->addMethodCall('addAction', array(new Reference($createInstructionActionId)));
         }
-
-
-
+        
         return $paymentId;
     }
 
@@ -66,7 +65,7 @@ class Be2BillPaymentFactory implements PaymentFactoryInterface
      */
     public function getName()
     {
-        return 'be2bill_payment';
+        return 'authorize_net_aim_payment';
     }
 
     /**
@@ -77,10 +76,9 @@ class Be2BillPaymentFactory implements PaymentFactoryInterface
         $builder->children()
             ->scalarNode('create_instruction_from_model_action')->defaultNull()->end()
             ->arrayNode('api')->children()
-                ->scalarNode('client')->defaultValue('payum.buzz.client')->cannotBeEmpty()->end()
                 ->arrayNode('options')->children()
-                    ->scalarNode('identifier')->isRequired()->cannotBeEmpty()->end()
-                    ->scalarNode('password')->isRequired()->cannotBeEmpty()->end()
+                    ->scalarNode('login_id')->isRequired()->cannotBeEmpty()->end()
+                    ->scalarNode('transaction_key')->isRequired()->cannotBeEmpty()->end()
                     ->booleanNode('sandbox')->defaultTrue()->end()
                 ->end()
             ->end()
