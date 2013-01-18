@@ -2,7 +2,7 @@
     "name": "payum/payum-bundle",
     "type": "symfony-bundle",
     "description": "Integrate payum libs into symfony2 framework",
-    "keywords": ["payment", "paypal", "be2bill"],
+    "keywords": ["payment", "paypal", "be2bill", "authorize.net"],
     "homepage": "",
     "license": "MIT",
     "authors": [
