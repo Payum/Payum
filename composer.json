@@ -1,0 +1,27 @@
+{
+    "name": "payum/paypal-pro-checkout-nvp",
+    "type": "library",
+    "description": "Paypal pro checkout",
+    "keywords": ["payment", "paypal", "pro checkout"],
+    "homepage": "",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ton Sharp",
+            "email": "Forma-PRO@66ton99.org.ua"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "payum/payum": "0.1.*"
+    },
+    "require-dev": {
+        "ext-curl": "*",
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": { "Payum\\Paypal\\ProCheckout\\Nvp": "src/" }
+    }
+}
