@@ -9,7 +9,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
+    public function mustBeConstructed()
     {
         $apiMock = $this->getMock('Payum\Paypal\ProCheckout\Nvp\Api', array(), array(), '', false);
         new Payment($apiMock);
