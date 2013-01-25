@@ -13,10 +13,11 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "payum/payum": "0.1.*"
+        "payum/payum": "0.1.*",
+        "kriswallsmith/buzz": "0.7.*"
     },
     "require-dev": {
-        "ext-curl": "*",
+        "ext-curl": "*"
     },
     "config": {
         "bin-dir": "bin"
