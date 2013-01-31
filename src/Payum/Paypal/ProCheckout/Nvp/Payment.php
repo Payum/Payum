@@ -19,4 +19,12 @@ class Payment extends BasePayment
     {
       $this->api = $api;
     }
+
+    /**
+     * @return Api
+     */
+    public function getApi()
+    {
+        return $this->api;
+    }
 }

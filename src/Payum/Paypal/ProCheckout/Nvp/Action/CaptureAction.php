@@ -1,6 +1,14 @@
 <?php
+
 namespace Payum\Paypal\ProCheckout\Nvp\Action;
 
+use Payum\Action\ActionPaymentAware;
+use Payum\Request\CreatePaymentInstructionRequest;
+use Payum\Paypal\ProCheckout\Nvp\Bridge\Buzz\Request;
+use Payum\Paypal\ProCheckout\Nvp\PaymentInstruction;
+use Payum\Domain\InstructionAggregateInterface;
+use Payum\Domain\InstructionAwareInterface;
+use Payum\Request\CaptureRequest;
 
 class CaptureAction extends ActionPaymentAware
 {
@@ -19,30 +27,16 @@ class CaptureAction extends ActionPaymentAware
             }
         }
 
-        try {
 
-            /** @var $instruction PaymentInstruction */
-            $instruction = $request->getModel()->getInstruction();
-            $instruction->setPaymentrequestPaymentaction(0, Api::PAYMENTACTION_SALE);
-            if (false == $instruction->getToken()) {
-                $this->payment->execute(new SetExpressCheckoutRequest($instruction));
-                $this->payment->execute(new AuthorizeTokenRequest($instruction));
-            }
+        /** @var $instruction PaymentInstruction */
+        $instruction = $request->getModel()->getInstruction();
+        $buzzRequest = new Request();
+        $buzzRequest->setFields($instruction->toNvp());
 
-            $this->payment->execute(new SyncRequest($instruction));
-            
-            if (
-                $instruction->getPayerid() &&  
-                Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $instruction->getCheckoutstatus()
-            ) {
-                $this->payment->execute(new DoExpressCheckoutPaymentRequest($instruction));
-            }
+        $response = $this->payment->getApi()->doPayment($buzzRequest);
 
-            $this->payment->execute(new SyncRequest($instruction));
-        } catch (HttpResponseAckNotSuccessException $e) {
-            $instruction->clearErrors();
-            $instruction->fromNvp($e->getResponse());
-        }
+        $instruction->fromNvp($response);
+
     }
 
     public function supports($request)

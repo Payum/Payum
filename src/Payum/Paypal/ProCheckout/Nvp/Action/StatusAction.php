@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Paypal\ProCheckout\Nvp\Action;
 
+use Payum\Action\ActionInterface;
+
 class StatusAction implements ActionInterface
 {
     public function execute($request)
@@ -27,7 +29,7 @@ class StatusAction implements ActionInterface
         
         //treat this situation as canceled. In other case we can get into an endless cycle.
         if (
-            false == $instruction->getPayerid() && 
+            false == $instruction->getPayerid() &&
             $instruction->getCheckoutstatus() == Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED
         ) {
             $request->markCanceled();
@@ -36,7 +38,7 @@ class StatusAction implements ActionInterface
         }
         
         if (
-            false == $instruction->getCheckoutstatus() || 
+            false == $instruction->getCheckoutstatus() ||
             Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $instruction->getCheckoutstatus()
         ) {
             $request->markNew();
