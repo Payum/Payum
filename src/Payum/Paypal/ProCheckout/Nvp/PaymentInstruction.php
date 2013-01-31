@@ -28,6 +28,37 @@ class PaymentInstruction implements PaymentInstructionInterface
         'BILLTOCOUNTRY' => null,
     );
 
+    protected $response = array(
+        'PNREF' => null,
+        'PPREF' => null,
+        'RESULT' => null,
+        'CVV2MATCH' => null,
+        'RESPMSG' => null,
+        'AUTHCODE' => null,
+        'AVSADDR' => null,
+        'AVSZIP' => null,
+        'IAVS' => null,
+        'PROCAVS' => null,
+        'PROCCVV2' => null,
+        'HOSTCODE' => null,
+        'RESPTEXT' => null,
+        'PROCCARDSECURE' => null,
+        'ADDLMSGS' => null,
+        'PAYMENTTYPE' => null,
+        'CORRELATIONID' => null,
+        'AMEXID' => null,
+        'AMEXPOSDATA' => null,
+        'AMT' => null,
+        'ORIGAMT' => null,
+        'CARDTYPE' => null,
+        'EMAILMATCH' => null,
+        'PHONEMATCH' => null,
+        'EXTRSPMSG' => null,
+        'TRANSTIME' => null,
+        'DUPLICATE' => null,
+        'DATE_TO_SETTLE' => null,
+    );
+
     /**
      * @return string
      */
@@ -257,12 +288,18 @@ class PaymentInstruction implements PaymentInstructionInterface
     }
 
     /**
+     * @return array
+     */
+    public function getResponse()
+    {
+        return $this->response;
+    }
+
+    /**
      * @param $nvp array|\Traversable 
      */
     public function fromNvp($nvp)
     {
-      var_dump($nvp);die('OK');
-
         if (false == (is_array($nvp) || $nvp instanceof \Traversable)) {
             throw new InvalidArgumentException('Invalid nvp argument. Should be an array of an object implemented Traversable interface.');
         }

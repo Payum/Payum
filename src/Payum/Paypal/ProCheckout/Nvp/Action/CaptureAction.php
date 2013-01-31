@@ -32,11 +32,18 @@ class CaptureAction extends ActionPaymentAware
         $instruction = $request->getModel()->getInstruction();
         $buzzRequest = new Request();
         $buzzRequest->setFields($instruction->toNvp());
-
-        $response = $this->payment->getApi()->doPayment($buzzRequest);
+        $exception = null;
+        try {
+            $response = $this->payment->getApi()->doPayment($buzzRequest);
+        } catch (HttpException $e) {
+            $exception = $e;
+        }
 
         $instruction->fromNvp($response);
 
+        if ($exception) {
+            throw $exception;
+        }
     }
 
     public function supports($request)

@@ -152,7 +152,7 @@ class Api
         }
 
         if (self::RESULT_SUCCESS != $response['RESULT']) {
-            throw new HttpResponseNotSuccessException($request, $response);
+            throw new HttpResponseNotSuccessException($request, $response, "", $response['RESULT']);
         }
 
         return $response;
