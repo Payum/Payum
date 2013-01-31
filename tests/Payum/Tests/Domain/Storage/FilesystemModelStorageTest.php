@@ -2,7 +2,6 @@
 namespace Payum\Tests\Domain\Storage;
 
 use Payum\Domain\Storage\FilesystemModelStorage;
-use Payum\Domain\SimpleSell;
 
 class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
 {
