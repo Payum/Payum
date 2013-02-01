@@ -29,34 +29,35 @@ class PaymentInstruction implements PaymentInstructionInterface
     );
 
     protected $response = array(
-        'PNREF' => null,
-        'PPREF' => null,
-        'RESULT' => null,
-        'CVV2MATCH' => null,
-        'RESPMSG' => null,
-        'AUTHCODE' => null,
-        'AVSADDR' => null,
-        'AVSZIP' => null,
-        'IAVS' => null,
-        'PROCAVS' => null,
-        'PROCCVV2' => null,
-        'HOSTCODE' => null,
-        'RESPTEXT' => null,
-        'PROCCARDSECURE' => null,
-        'ADDLMSGS' => null,
-        'PAYMENTTYPE' => null,
-        'CORRELATIONID' => null,
-        'AMEXID' => null,
-        'AMEXPOSDATA' => null,
-        'AMT' => null,
-        'ORIGAMT' => null,
-        'CARDTYPE' => null,
-        'EMAILMATCH' => null,
-        'PHONEMATCH' => null,
-        'EXTRSPMSG' => null,
-        'TRANSTIME' => null,
-        'DUPLICATE' => null,
-        'DATE_TO_SETTLE' => null,
+        'pnref' => null,
+        'ppref' => null,
+        'result' => null,
+        'cvv2match' => null,
+        'respmsg' => null,
+        'prefpsmsg' => null,
+        'authcode' => null,
+        'avsaddr' => null,
+        'avszip' => null,
+        'iavs' => null,
+        'procavs' => null,
+        'proccvv2' => null,
+        'hostcode' => null,
+        'resptext' => null,
+        'proccardsecure' => null,
+        'addlmsgs' => null,
+        'paymenttype' => null,
+        'correlationid' => null,
+        'amexid' => null,
+        'amexposdata' => null,
+        'amt' => null,
+        'origamt' => null,
+        'cardtype' => null,
+        'emailmatch' => null,
+        'phonematch' => null,
+        'extrspmsg' => null,
+        'transtime' => null,
+        'duplicate' => null,
+        'date_to_settle' => null,
     );
 
     /**
@@ -303,28 +304,15 @@ class PaymentInstruction implements PaymentInstructionInterface
         if (false == (is_array($nvp) || $nvp instanceof \Traversable)) {
             throw new InvalidArgumentException('Invalid nvp argument. Should be an array of an object implemented Traversable interface.');
         }
-        
         foreach ($nvp as $name => $value) {
-            $property = $name;
-            $property = preg_replace('/\d/', 'nnn', $property, 1);
-            $property = preg_replace('/\d/', 'mmm', $property, 1);
-            $property = strtolower($property);
-
-            if (false == property_exists($this, $property)) {
-                continue;
+            $name = strtolower($name);
+            if (!array_key_exists($name, $this->response)) {
+                trigger_error(
+                  "Key '{$name}' does not exist in the repose: " . print_r($this->response, true),
+                  E_USER_NOTICE
+                );
             }
-
-            $matches = array();
-            preg_match('/\d/', $name, $matches);
-            if (array_key_exists(0, $matches)) {
-                if (array_key_exists(1, $matches)) {
-                    $this->set($property, $value, $matches[0], $matches[1]);
-                } else {
-                    $this->set($property, $value, $matches[0]);
-                }
-            } else {
-                $this->$property = $value;
-            }
+            $this->response[$name] = $value;
         } 
     }
     

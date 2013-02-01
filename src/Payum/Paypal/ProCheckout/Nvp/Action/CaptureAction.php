@@ -3,6 +3,7 @@
 namespace Payum\Paypal\ProCheckout\Nvp\Action;
 
 use Payum\Action\ActionPaymentAware;
+use Payum\Exception\Http\HttpException;
 use Payum\Request\CreatePaymentInstructionRequest;
 use Payum\Paypal\ProCheckout\Nvp\Bridge\Buzz\Request;
 use Payum\Paypal\ProCheckout\Nvp\PaymentInstruction;
@@ -36,6 +37,7 @@ class CaptureAction extends ActionPaymentAware
         try {
             $response = $this->payment->getApi()->doPayment($buzzRequest);
         } catch (HttpException $e) {
+            $response = $e->getResponse();
             $exception = $e;
         }
 
