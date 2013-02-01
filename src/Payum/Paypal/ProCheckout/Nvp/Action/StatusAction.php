@@ -2,6 +2,9 @@
 namespace Payum\Paypal\ProCheckout\Nvp\Action;
 
 use Payum\Action\ActionInterface;
+use Payum\Paypal\ProCheckout\Nvp\PaymentInstruction;
+use Payum\Domain\InstructionAggregateInterface;
+use Payum\Request\BinaryMaskStatusRequest;
 
 class StatusAction implements ActionInterface
 {
@@ -11,13 +14,13 @@ class StatusAction implements ActionInterface
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
-        // Do nothing
+        $request->markSuccess();
     }
    
     public function supports($request)
     {
         return
-            $request instanceof StatusRequestInterface &&
+            $request instanceof BinaryMaskStatusRequest &&
             $request->getModel() instanceof InstructionAggregateInterface &&
             $request->getModel()->getInstruction() instanceof PaymentInstruction
         ;

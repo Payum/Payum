@@ -35,6 +35,7 @@ class PaymentInstruction implements PaymentInstructionInterface
         'cvv2match' => null,
         'respmsg' => null,
         'prefpsmsg' => null,
+        'postfpsmsg' => null,
         'authcode' => null,
         'avsaddr' => null,
         'avszip' => null,
