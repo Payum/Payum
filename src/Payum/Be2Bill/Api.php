@@ -91,13 +91,15 @@ class Api
         return $response;
     }
 
+    /**
+     * @return string
+     */
     protected function getApiEndpoint()
     {
-        if ($this->options['sandbox']) {
-            return 'https://secure-test.be2bill.com/front/service/rest/process';
-        }
-        
-        throw new \Payum\Exception\LogicException('TODO');
+        return $this->options['sandbox'] ?
+            'https://secure-test.be2bill.com/front/service/rest/process' :
+            'https://secure-magenta1.be2bill.com/front/service/rest/process'
+        ;
     }
     
     /**
