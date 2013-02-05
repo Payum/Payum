@@ -1,5 +1,4 @@
 <?php
-
 namespace Payum\Paypal\ProCheckout\Nvp;
 
 use Payum\Payment as BasePayment;
@@ -9,7 +8,6 @@ use Payum\Payment as BasePayment;
  */
 class Payment extends BasePayment
 {
-
     /**
      * @var Api
      */

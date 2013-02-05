@@ -4,11 +4,10 @@ namespace Payum\Paypal\ProCheckout\Nvp\Bridge\Buzz;
 use Buzz\Message\Request as BaseRequest;
 
 /**
- *
+ * @author Ton Sharp <Forma-PRO@66ton99.org.ua>
  */
 class Request extends BaseRequest
 {
-
     /**
      * @param array $values
      * @param string $prefix

@@ -6,6 +6,9 @@ use Payum\Paypal\ProCheckout\Nvp\PaymentInstruction;
 use Payum\Domain\InstructionAggregateInterface;
 use Payum\Request\BinaryMaskStatusRequest;
 
+/**
+ * @author Ton Sharp <Forma-PRO@66ton99.org.ua>
+ */
 class StatusAction implements ActionInterface
 {
     public function execute($request)

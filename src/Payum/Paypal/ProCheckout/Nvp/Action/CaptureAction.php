@@ -1,5 +1,4 @@
 <?php
-
 namespace Payum\Paypal\ProCheckout\Nvp\Action;
 
 use Payum\Action\ActionPaymentAware;
@@ -11,6 +10,9 @@ use Payum\Domain\InstructionAggregateInterface;
 use Payum\Domain\InstructionAwareInterface;
 use Payum\Request\CaptureRequest;
 
+/**
+ * @author Ton Sharp <Forma-PRO@66ton99.org.ua>
+ */
 class CaptureAction extends ActionPaymentAware
 {
     public function execute($request)

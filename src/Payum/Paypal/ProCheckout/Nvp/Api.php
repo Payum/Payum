@@ -14,7 +14,6 @@ use Payum\Exception\InvalidArgumentException;
  */
 class Api
 {
-
     /**
      * Use an AMOUNT of $1000 or less
      * For all processors except Global Payments Central (MAPP) and FDI
@@ -37,12 +36,14 @@ class Api
 
     /**
      * Use an invalid TRXTYPE, such as G
+     * Use the AMOUNT 10402
      * @var int
      */
     const RESULT_INVALID_TRANSACTION_TYPE = 3;
 
     /**
      * Use an invalid AMOUNT, such as –1
+     * Use any of these as AMOUNT: 10400, 10401, 10403, 10404
      * @var int
      */
     const RESULT_INVALID_AMOUNT = 4;
@@ -52,27 +53,74 @@ class Api
      * Global Payments East
      * Global Payments Central
      * American Express
+     * Use any of these as AMOUNT: 10548, 10549
      * @var int
      */
     const RESULT_INVALID_MERCHANT_INFORMATION = 5;
 
     /**
      * Submit a delayed capture transaction with no ORIGID
+     * Use any of these as AMOUNT: 10405, 10406, 10407, 10408, 10409, 10410, 10412, 10413, 10416, 10419, 10420, 10421,
+     * 10509, 10512, 10513, 10514, 10515, 10516, 10517, 10518, 10540, 10542
      * @var int
      */
     const RESULT_FIELD_FORMAT_ERROR = 7;
 
     /**
      * Use the AMOUNT1012 or an AMOUNT of 2001 or more
+     * Use any of these as AMOUNT: 10417, 15002, 15005, 15006, 15028, 15039, 10544, 10545, 10546
      * @var int
      */
     const RESULT_DECLINED = 12;
 
     /**
      * Use the AMOUNT1013
+     * Use the AMOUNT 10422
      * @var int
      */
     const RESULT_REFERRAL = 13;
+
+    /**
+     * Use any of these as AMOUNT: 10519, 10521, 10522, 10527, 10535, 10541, 10543
+     * @var int
+     */
+    const RESULT_INVALID_ACCOUNT_NUMBER = 23;
+
+    /**
+     * Use any of these as AMOUNT: 10502, 10508
+     * @var int
+     */
+    const RESULT_INVALID_EXPIRATION_DATE = 24;
+
+    /**
+     * Use the AMOUNT 10536
+     * @var int
+     */
+    const RESULT_DUPLICATE_TRANSACTION = 30;
+
+    /**
+     * Attempt to credit an authorization
+     * @var int
+     */
+    const RESULT_CREDIT_ERROR = 105;
+
+    /**
+     * Use the AMOUNT 10505
+     * @var int
+     */
+    const RESULT_FAILED_AVS_CHECK = 112;
+
+    /**
+     * Use the AMOUNT 10504
+     * @var int
+     */
+    const RESULT_CVV2_MISMATCH = 114;
+
+    /**
+     * Use an AMOUNT other than those listed in this column
+     * @var int
+     */
+    const RESULT_GENERIC_HOST_OR_PROCESSOR_ERROR = 1000;
 
     /**
      * @var ClientInterface

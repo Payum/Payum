@@ -3,9 +3,11 @@ namespace Payum\Paypal\ProCheckout\Nvp\Tests;
 
 use Payum\Paypal\ProCheckout\Nvp\Payment;
 
+/**
+ * @author Ton Sharp <Forma-PRO@66ton99.org.ua>
+ */
 class PaymentTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @test
      */

@@ -9,7 +9,6 @@ use Payum\Exception\InvalidArgumentException;
  */
 class PaymentInstruction implements PaymentInstructionInterface
 {
-
     /**
      * @var array
      */
