@@ -1,4 +1,4 @@
-Payum
+Payum [![Build Status](https://secure.travis-ci.org/payum/payum.png?branch=master)](http://travis-ci.org/payum/payum)
 =====
 
 The lib tends to provide very abstract interface to handle any possible payments. 
