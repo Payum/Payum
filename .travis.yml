@@ -6,8 +6,6 @@ php:
 
 before_script: composer install --dev
 
-script: ./bin/phpunit
-
 branches:
   only:
     - master
