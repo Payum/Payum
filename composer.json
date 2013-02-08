@@ -24,13 +24,7 @@
     },
     "suggest": {
         "doctrine/orm": "If you want to store to database."
-    }, 
-    "repositories": [
-        {
-            "type": "vcs"
-            ,"url": "git@github.com:formapro/testo.git"
-        }
-    ],
+    },
     "config": {
         "bin-dir": "bin"
     },
