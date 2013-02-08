@@ -101,7 +101,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         
         $this->assertEquals(
             Api::PAYMENTACTION_SALE,
-            $instruction->getPaymentrequestNPaymentaction(0)
+            $instruction->getPaymentrequestPaymentaction(0)
         );
     }
 
@@ -164,12 +164,12 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $paymentMock = $this->createPaymentMock();
         $paymentMock
-            ->expects($this->at(0))
+            ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\DoExpressCheckoutPaymentRequest'))
         ;
         $paymentMock
-            ->expects($this->at(1))
+            ->expects($this->at(2))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\SyncRequest'))
         ;

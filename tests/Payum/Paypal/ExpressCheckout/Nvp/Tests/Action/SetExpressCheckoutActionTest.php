@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
+use Payum\Paypal\ExpressCheckout\Nvp\Payment;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\SetExpressCheckoutRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
@@ -10,19 +11,19 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementActionInterface()
+    public function shouldBeSubClassOfActionPaymentAware()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\SetExpressCheckoutAction');
-        
-        $this->assertTrue($rc->implementsInterface('Payum\Action\ActionInterface'));
+
+        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\ActionPaymentAware'));
     }
 
     /**
      * @test
      */
-    public function couldBeConstructedWithApiArgument()   
+    public function couldBeConstructedWithoutAnyArguments()   
     {
-        new SetExpressCheckoutAction($this->createApiMock());
+        new SetExpressCheckoutAction();
     }
 
     /**
@@ -31,6 +32,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
     public function shouldSupportSetExpressCheckoutRequest()
     {
         $action = new SetExpressCheckoutAction($this->createApiMock());
+        $action->setPayment(new Payment($this->createApiMock()));
         
         $this->assertTrue($action->supports(new SetExpressCheckoutRequest(new PaymentInstruction)));
     }
@@ -40,7 +42,8 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotAuthorizeTokenRequest()
     {
-        $action = new SetExpressCheckoutAction($this->createApiMock());
+        $action = new SetExpressCheckoutAction();
+        $action->setPayment(new Payment($this->createApiMock()));
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -52,7 +55,8 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $action = new SetExpressCheckoutAction($this->createApiMock());
+        $action = new SetExpressCheckoutAction();
+        $action->setPayment(new Payment($this->createApiMock()));
 
         $action->execute(new \stdClass());
     }
@@ -65,7 +69,8 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfInstructionNotHavePaymentAmountSetInInstruction()
     {
-        $action = new SetExpressCheckoutAction($this->createApiMock());
+        $action = new SetExpressCheckoutAction();
+        $action->setPayment(new Payment($this->createApiMock()));
         
         $request = new SetExpressCheckoutRequest(new PaymentInstruction);
 
@@ -91,9 +96,10 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
         ;
         
         $action = new SetExpressCheckoutAction($apiMock);
+        $action->setPayment(new Payment($apiMock));
 
         $request = new SetExpressCheckoutRequest(new PaymentInstruction);
-        $request->getInstruction()->setPaymentrequestNAmt(0, $expectedAmount = 154.23);
+        $request->getInstruction()->setPaymentrequestAmt(0, $expectedAmount = 154.23);
 
         $action->execute($request);
         
@@ -125,10 +131,11 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $action = new SetExpressCheckoutAction($apiMock);
+        $action = new SetExpressCheckoutAction();
+        $action->setPayment(new Payment($apiMock));
 
         $request = new SetExpressCheckoutRequest(new PaymentInstruction);
-        $request->getInstruction()->setPaymentrequestNAmt(0, 154.23);
+        $request->getInstruction()->setPaymentrequestAmt(0, 154.23);
 
         $action->execute($request);
         

@@ -966,7 +966,11 @@ class PaymentInstruction implements PaymentInstructionInterface
         foreach ($nvp as $name => $value) {
             $property = $name;
             $property = preg_replace('/\d/', 'nnn', $property, 1);
-            $property = preg_replace('/\d/', 'mmm', $property, 1);
+            
+            if (false === strpos($name, 'SHIPTOSTREET2')) {
+                $property = preg_replace('/\d/', 'mmm', $property, 1);
+            }
+            
             $property = strtolower($property);
 
             if (false == property_exists($this, $property)) {
@@ -974,12 +978,12 @@ class PaymentInstruction implements PaymentInstructionInterface
             }
 
             $matches = array();
-            preg_match('/\d/', $name, $matches);
-            if (array_key_exists(0, $matches)) {
-                if (array_key_exists(1, $matches)) {
-                    $this->set($property, $value, $matches[0], $matches[1]);
+            preg_match_all('/\d/', $name, $matches);
+            if (array_key_exists(0, $matches) && array_key_exists(0, $matches[0])) {
+                if (array_key_exists(1, $matches[0]) && false === strpos($name, 'SHIPTOSTREET2')) {
+                    $this->set($property, $value, $matches[0][1], $matches[0][1]);
                 } else {
-                    $this->set($property, $value, $matches[0]);
+                    $this->set($property, $value, $matches[0][0]);
                 }
             } else {
                 $this->$property = $value;
@@ -1032,7 +1036,6 @@ class PaymentInstruction implements PaymentInstructionInterface
     protected function get($property, $n = false, $m = false)
     {
         $currentValue = $this->$property;
-        
         if (false !== $n && false !== $m) {
             if (null === $n && null === $m) {
                 return $currentValue;

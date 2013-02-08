@@ -3,6 +3,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\GetExpressCheckoutDetailsAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Payment;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\GetExpressCheckoutDetailsRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 
@@ -11,19 +12,19 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementActionInterface()
+    public function shouldBeSubClassOfActionPaymentAware()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\GetExpressCheckoutDetailsAction');
-        
-        $this->assertTrue($rc->implementsInterface('Payum\Action\ActionInterface'));
+
+        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\ActionPaymentAware'));
     }
 
     /**
      * @test
      */
-    public function couldBeConstructedWithApiArgument()   
+    public function couldBeConstructedWithoutAnyArguments()   
     {
-        new GetExpressCheckoutDetailsAction($this->createApiMock());
+        new GetExpressCheckoutDetailsAction();
     }
 
     /**
@@ -31,7 +32,8 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportGetExpressCheckoutDetailsRequest()
     {
-        $action = new GetExpressCheckoutDetailsAction($this->createApiMock());
+        $action = new GetExpressCheckoutDetailsAction();
+        $action->setPayment(new Payment($this->createApiMock()));
         
         $this->assertTrue($action->supports(new GetExpressCheckoutDetailsRequest(new PaymentInstruction)));
     }
@@ -41,7 +43,8 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotGetExpressCheckoutDetailsRequest()
     {
-        $action = new GetExpressCheckoutDetailsAction($this->createApiMock());
+        $action = new GetExpressCheckoutDetailsAction();
+        $action->setPayment(new Payment($this->createApiMock()));
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -53,7 +56,8 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $action = new GetExpressCheckoutDetailsAction($this->createApiMock());
+        $action = new GetExpressCheckoutDetailsAction();
+        $action->setPayment(new Payment($this->createApiMock()));
 
         $action->execute(new \stdClass());
     }
@@ -66,7 +70,8 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfInstructionNotHaveTokenSetInInstruction()
     {
-        $action = new GetExpressCheckoutDetailsAction($this->createApiMock());
+        $action = new GetExpressCheckoutDetailsAction();
+        $action->setPayment(new Payment($this->createApiMock()));
         
         $request = new GetExpressCheckoutDetailsRequest(new PaymentInstruction);
 
@@ -91,7 +96,8 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
             }))
         ;
         
-        $action = new GetExpressCheckoutDetailsAction($apiMock);
+        $action = new GetExpressCheckoutDetailsAction();
+        $action->setPayment(new Payment($apiMock));
 
         $request = new GetExpressCheckoutDetailsRequest(new PaymentInstruction);
         $request->getInstruction()->setToken($expectedToken = 'theToken');
@@ -126,7 +132,8 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $action = new GetExpressCheckoutDetailsAction($apiMock);
+        $action = new GetExpressCheckoutDetailsAction();
+        $action->setPayment(new Payment($apiMock));
 
         $request = new GetExpressCheckoutDetailsRequest(new PaymentInstruction);
         $request->getInstruction()->setToken('aToken');

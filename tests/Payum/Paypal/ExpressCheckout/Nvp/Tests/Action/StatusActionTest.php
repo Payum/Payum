@@ -166,8 +166,8 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $instruction = new PaymentInstruction();
         $instruction->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_COMPLETED);
-        $instruction->setPaymentrequestNPaymentstatus(0, Api::PAYMENTSTATUS_COMPLETED);
-        $instruction->setPaymentrequestNPaymentstatus(1, Api::PAYMENTSTATUS_IN_PROGRESS);
+        $instruction->setPaymentrequestPaymentstatus(0, Api::PAYMENTSTATUS_COMPLETED);
+        $instruction->setPaymentrequestPaymentstatus(1, Api::PAYMENTSTATUS_IN_PROGRESS);
 
         $model = new ModelWithInstruction();
         $model->setInstruction($instruction);
@@ -186,8 +186,8 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $instruction = new PaymentInstruction();
         $instruction->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_COMPLETED);
-        $instruction->setPaymentrequestNPaymentstatus(0, Api::PAYMENTSTATUS_COMPLETED);
-        $instruction->setPaymentrequestNPaymentstatus(1, Api::PAYMENTSTATUS_FAILED);
+        $instruction->setPaymentrequestPaymentstatus(0, Api::PAYMENTSTATUS_COMPLETED);
+        $instruction->setPaymentrequestPaymentstatus(1, Api::PAYMENTSTATUS_FAILED);
 
         $model = new ModelWithInstruction();
         $model->setInstruction($instruction);
@@ -206,8 +206,8 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $instruction = new PaymentInstruction();
         $instruction->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_COMPLETED);
-        $instruction->setPaymentrequestNPaymentstatus(0, Api::PAYMENTSTATUS_COMPLETED);
-        $instruction->setPaymentrequestNPaymentstatus(1, Api::PAYMENTSTATUS_PROCESSED);
+        $instruction->setPaymentrequestPaymentstatus(0, Api::PAYMENTSTATUS_COMPLETED);
+        $instruction->setPaymentrequestPaymentstatus(1, Api::PAYMENTSTATUS_PROCESSED);
 
         $model = new ModelWithInstruction();
         $model->setInstruction($instruction);
@@ -244,7 +244,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $instruction = new PaymentInstruction();
         $instruction->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_COMPLETED);
-        $instruction->setPaymentrequestNPaymentstatus(0, 'unknownPaymentStatus');
+        $instruction->setPaymentrequestPaymentstatus(0, 'unknownPaymentStatus');
 
         $model = new ModelWithInstruction();
         $model->setInstruction($instruction);

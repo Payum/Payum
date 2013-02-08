@@ -41,8 +41,8 @@ class PaymentInstructionTest extends OrmTest
     {
         $instruction = new PaymentInstruction;
         $instruction->setToken($expectedToken = 'theToken');
-        $instruction->setPaymentrequestNAmt(0, $expectedAmount = 123.15);
-        $instruction->setPaymentrequestNPaymentaction(0, $expectedAction = 'thePaymentAction');
+        $instruction->setPaymentrequestAmt(0, $expectedAmount = 123.15);
+        $instruction->setPaymentrequestPaymentaction(0, $expectedAction = 'thePaymentAction');
         
         $this->em->persist($instruction);
         $this->em->flush();
@@ -56,7 +56,7 @@ class PaymentInstructionTest extends OrmTest
         $this->assertNotSame($instruction, $foundInstruction);
         
         $this->assertEquals($expectedToken, $foundInstruction->getToken());
-        $this->assertEquals($expectedAmount, $foundInstruction->getPaymentrequestNAmt(0));
-        $this->assertEquals($expectedAction, $foundInstruction->getPaymentrequestNPaymentaction(0));
+        $this->assertEquals($expectedAmount, $foundInstruction->getPaymentrequestAmt(0));
+        $this->assertEquals($expectedAction, $foundInstruction->getPaymentrequestPaymentaction(0));
     }
 }

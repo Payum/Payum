@@ -63,48 +63,59 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
     public function provideArrayFields()
     {
         return array(
-            array('getPaymentrequestNShiptostreet', 'setPaymentrequestNShiptostreet', 'PAYMENTREQUEST_0_SHIPTOSTREET', 'PAYMENTREQUEST_9_SHIPTOSTREET'),
-            array('getPaymentrequestNShiptoname', 'setPaymentrequestNShiptoname', 'PAYMENTREQUEST_0_SHIPTONAME', 'PAYMENTREQUEST_9_SHIPTONAME'),
-            array('getPaymentrequestNShiptostreet2', 'setPaymentrequestNShiptostreet2', 'PAYMENTREQUEST_0_SHIPTOSTREET2', 'PAYMENTREQUEST_9_SHIPTOSTREET2'),
-            array('getPaymentrequestNShiptocity', 'setPaymentrequestNShiptocity', 'PAYMENTREQUEST_0_SHIPTOCITY', 'PAYMENTREQUEST_9_SHIPTOCITY'),
-            array('getPaymentrequestNShiptostate', 'setPaymentrequestNShiptostate', 'PAYMENTREQUEST_0_SHIPTOSTATE', 'PAYMENTREQUEST_9_SHIPTOSTATE'),
-            array('getPaymentrequestNShiptozip', 'setPaymentrequestNShiptozip', 'PAYMENTREQUEST_0_SHIPTOZIP', 'PAYMENTREQUEST_9_SHIPTOZIP'),
-            array('getPaymentrequestNShiptocountrycode', 'setPaymentrequestNShiptocountrycode', 'PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE', 'PAYMENTREQUEST_9_SHIPTOCOUNTRYCODE'),
-            array('getPaymentrequestNShiptophonenum', 'setPaymentrequestNShiptophonenum', 'PAYMENTREQUEST_0_SHIPTOPHONENUM', 'PAYMENTREQUEST_9_SHIPTOPHONENUM'),
-            array('getPaymentrequestNAddressstatus', 'setPaymentrequestNAddressstatus', 'PAYMENTREQUEST_0_ADDRESSSTATUS', 'PAYMENTREQUEST_9_ADDRESSSTATUS'),
-            array('getPaymentrequestNAmt', 'setPaymentrequestNAmt', 'PAYMENTREQUEST_0_AMT', 'PAYMENTREQUEST_9_AMT'),
-            array('getPaymentrequestNCurrencycode', 'setPaymentrequestNCurrencycode', 'PAYMENTREQUEST_0_CURRENCYCODE', 'PAYMENTREQUEST_9_CURRENCYCODE'),
-            array('getPaymentrequestNItemamt', 'setPaymentrequestNItemamt', 'PAYMENTREQUEST_0_ITEMAMT', 'PAYMENTREQUEST_9_ITEMAMT'),
-            array('getPaymentrequestNShippingamt', 'setPaymentrequestNShippingamt', 'PAYMENTREQUEST_0_SHIPPINGAMT', 'PAYMENTREQUEST_9_SHIPPINGAMT'),
-            array('getPaymentrequestNInsuranceamt', 'setPaymentrequestNInsuranceamt', 'PAYMENTREQUEST_0_INSURANCEAMT', 'PAYMENTREQUEST_9_INSURANCEAMT'),
-            array('getPaymentrequestNShipdiscamt', 'setPaymentrequestNShipdiscamt', 'PAYMENTREQUEST_0_SHIPDISCAMT', 'PAYMENTREQUEST_9_SHIPDISCAMT'),
-            array('getPaymentrequestNInsuranceoptionoffered', 'setPaymentrequestNInsuranceoptionoffered', 'PAYMENTREQUEST_0_INSURANCEOPTIONOFFERED', 'PAYMENTREQUEST_9_INSURANCEOPTIONOFFERED'),
-            array('getPaymentrequestNHandlingamt', 'setPaymentrequestNHandlingamt', 'PAYMENTREQUEST_0_HANDLINGAMT', 'PAYMENTREQUEST_9_HANDLINGAMT'),
-            array('getPaymentrequestNTaxamt', 'setPaymentrequestNTaxamt', 'PAYMENTREQUEST_0_TAXAMT', 'PAYMENTREQUEST_9_TAXAMT'),
-            array('getPaymentrequestNDesc', 'setPaymentrequestNDesc', 'PAYMENTREQUEST_0_DESC', 'PAYMENTREQUEST_9_DESC'),
-            array('getPaymentrequestNCustom', 'setPaymentrequestNCustom', 'PAYMENTREQUEST_0_CUSTOM', 'PAYMENTREQUEST_9_CUSTOM'),
-            array('getPaymentrequestNInvnum', 'setPaymentrequestNInvnum', 'PAYMENTREQUEST_0_INVNUM', 'PAYMENTREQUEST_9_INVNUM'),
-            array('getPaymentrequestNNotifyurl', 'setPaymentrequestNNotifyurl', 'PAYMENTREQUEST_0_NOTIFYURL', 'PAYMENTREQUEST_9_NOTIFYURL'),
-            array('getPaymentrequestNNotetext', 'setPaymentrequestNNotetext', 'PAYMENTREQUEST_0_NOTETEXT', 'PAYMENTREQUEST_9_NOTETEXT'),
-            array('getPaymentrequestNTransactionid', 'setPaymentrequestNTransactionid', 'PAYMENTREQUEST_0_TRANSACTIONID', 'PAYMENTREQUEST_9_TRANSACTIONID'),
-            array('getPaymentrequestNAllowedpaymentmethod', 'setPaymentrequestNAllowedpaymentmethod', 'PAYMENTREQUEST_0_ALLOWEDPAYMENTMETHOD', 'PAYMENTREQUEST_9_ALLOWEDPAYMENTMETHOD'),
-            array('getPaymentrequestNPaymentrequestid', 'setPaymentrequestNPaymentrequestid', 'PAYMENTREQUEST_0_PAYMENTREQUESTID', 'PAYMENTREQUEST_9_PAYMENTREQUESTID'),
-            array('getPaymentrequestNPaymentaction', 'setPaymentrequestNPaymentaction', 'PAYMENTREQUEST_0_PAYMENTACTION', 'PAYMENTREQUEST_9_PAYMENTACTION'),
-            array('getPaymentrequestNPaymentstatus', 'setPaymentrequestNPaymentstatus', 'PAYMENTREQUEST_0_PAYMENTSTATUS', 'PAYMENTREQUEST_9_PAYMENTSTATUS'),
-            array('getPaymentrequestNExchangerate', 'setPaymentrequestNExchangerate', 'PAYMENTREQUEST_0_EXCHANGERATE', 'PAYMENTREQUEST_9_EXCHANGERATE'),
-            array('getPaymentrequestNSettleamt', 'setPaymentrequestNSettleamt', 'PAYMENTREQUEST_0_SETTLEAMT', 'PAYMENTREQUEST_9_SETTLEAMT'),
-            array('getPaymentrequestNFeeamt', 'setPaymentrequestNFeeamt', 'PAYMENTREQUEST_0_FEEAMT', 'PAYMENTREQUEST_9_FEEAMT'),
-            array('getPaymentrequestNOrdertime', 'setPaymentrequestNOrdertime', 'PAYMENTREQUEST_0_ORDERTIME', 'PAYMENTREQUEST_9_ORDERTIME'),
-            array('getPaymentrequestNPaymenttype', 'setPaymentrequestNPaymenttype', 'PAYMENTREQUEST_0_PAYMENTTYPE', 'PAYMENTREQUEST_9_PAYMENTTYPE'),
-            array('getPaymentrequestNTransactiontype', 'setPaymentrequestNTransactiontype', 'PAYMENTREQUEST_0_TRANSACTIONTYPE', 'PAYMENTREQUEST_9_TRANSACTIONTYPE'),
-            array('getPaymentrequestNReceiptid', 'setPaymentrequestNReceiptid', 'PAYMENTREQUEST_0_RECEIPTID', 'PAYMENTREQUEST_9_RECEIPTID'),
-            array('getPaymentrequestNParenttransactionid', 'setPaymentrequestNParenttransactionid', 'PAYMENTREQUEST_0_PARENTTRANSACTIONID', 'PAYMENTREQUEST_9_PARENTTRANSACTIONID'),
-            array('getPaymentrequestNPendingreason', 'setPaymentrequestNPendingreason', 'PAYMENTREQUEST_0_PENDINGREASON', 'PAYMENTREQUEST_9_PENDINGREASON'),
-            array('getPaymentrequestNReasoncode', 'setPaymentrequestNReasoncode', 'PAYMENTREQUEST_0_REASONCODE', 'PAYMENTREQUEST_9_REASONCODE'),
-            array('getLSeveritycoden', 'setLSeveritycoden', 'L_SEVERITYCODE0', 'L_SEVERITYCODE9'),
-            array('getLLongmessagen', 'setLLongmessagen', 'L_LONGMESSAGE0', 'L_LONGMESSAGE9'),
-            array('getLShortmessagen', 'setLShortmessagen', 'L_SHORTMESSAGE0', 'L_SHORTMESSAGE9'),
-            array('getLErrorcoden', 'setLErrorcoden', 'L_ERRORCODE0', 'L_ERRORCODE9'),
+//            array('getPaymentrequestShiptostreet', 'setPaymentrequestShiptostreet', 'PAYMENTREQUEST_0_SHIPTOSTREET', 'PAYMENTREQUEST_9_SHIPTOSTREET'),
+//            array('getPaymentrequestShiptoname', 'setPaymentrequestShiptoname', 'PAYMENTREQUEST_0_SHIPTONAME', 'PAYMENTREQUEST_9_SHIPTONAME'),
+            array('getPaymentrequestShiptostreet2', 'setPaymentrequestShiptostreet2', 'PAYMENTREQUEST_0_SHIPTOSTREET2', 'PAYMENTREQUEST_9_SHIPTOSTREET2'),
+//            array('getPaymentrequestShiptocity', 'setPaymentrequestShiptocity', 'PAYMENTREQUEST_0_SHIPTOCITY', 'PAYMENTREQUEST_9_SHIPTOCITY'),
+//            array('getPaymentrequestShiptostate', 'setPaymentrequestShiptostate', 'PAYMENTREQUEST_0_SHIPTOSTATE', 'PAYMENTREQUEST_9_SHIPTOSTATE'),
+//            array('getPaymentrequestShiptozip', 'setPaymentrequestShiptozip', 'PAYMENTREQUEST_0_SHIPTOZIP', 'PAYMENTREQUEST_9_SHIPTOZIP'),
+//            array('getPaymentrequestShiptocountrycode', 'setPaymentrequestShiptocountrycode', 'PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE', 'PAYMENTREQUEST_9_SHIPTOCOUNTRYCODE'),
+//            array('getPaymentrequestShiptophonenum', 'setPaymentrequestShiptophonenum', 'PAYMENTREQUEST_0_SHIPTOPHONENUM', 'PAYMENTREQUEST_9_SHIPTOPHONENUM'),
+//            array('getPaymentrequestAddressstatus', 'setPaymentrequestAddressstatus', 'PAYMENTREQUEST_0_ADDRESSSTATUS', 'PAYMENTREQUEST_9_ADDRESSSTATUS'),
+//            array('getPaymentrequestAmt', 'setPaymentrequestAmt', 'PAYMENTREQUEST_0_AMT', 'PAYMENTREQUEST_9_AMT'),
+//            array('getPaymentrequestCurrencycode', 'setPaymentrequestCurrencycode', 'PAYMENTREQUEST_0_CURRENCYCODE', 'PAYMENTREQUEST_9_CURRENCYCODE'),
+//            array('getPaymentrequestItemamt', 'setPaymentrequestItemamt', 'PAYMENTREQUEST_0_ITEMAMT', 'PAYMENTREQUEST_9_ITEMAMT'),
+//            array('getPaymentrequestShippingamt', 'setPaymentrequestShippingamt', 'PAYMENTREQUEST_0_SHIPPINGAMT', 'PAYMENTREQUEST_9_SHIPPINGAMT'),
+//            array('getPaymentrequestInsuranceamt', 'setPaymentrequestInsuranceamt', 'PAYMENTREQUEST_0_INSURANCEAMT', 'PAYMENTREQUEST_9_INSURANCEAMT'),
+//            array('getPaymentrequestShipdiscamt', 'setPaymentrequestShipdiscamt', 'PAYMENTREQUEST_0_SHIPDISCAMT', 'PAYMENTREQUEST_9_SHIPDISCAMT'),
+//            array('getPaymentrequestInsuranceoptionoffered', 'setPaymentrequestInsuranceoptionoffered', 'PAYMENTREQUEST_0_INSURANCEOPTIONOFFERED', 'PAYMENTREQUEST_9_INSURANCEOPTIONOFFERED'),
+//            array('getPaymentrequestHandlingamt', 'setPaymentrequestHandlingamt', 'PAYMENTREQUEST_0_HANDLINGAMT', 'PAYMENTREQUEST_9_HANDLINGAMT'),
+//            array('getPaymentrequestTaxamt', 'setPaymentrequestTaxamt', 'PAYMENTREQUEST_0_TAXAMT', 'PAYMENTREQUEST_9_TAXAMT'),
+//            array('getPaymentrequestDesc', 'setPaymentrequestDesc', 'PAYMENTREQUEST_0_DESC', 'PAYMENTREQUEST_9_DESC'),
+//            array('getPaymentrequestCustom', 'setPaymentrequestCustom', 'PAYMENTREQUEST_0_CUSTOM', 'PAYMENTREQUEST_9_CUSTOM'),
+//            array('getPaymentrequestInvnum', 'setPaymentrequestInvnum', 'PAYMENTREQUEST_0_INVNUM', 'PAYMENTREQUEST_9_INVNUM'),
+//            array('getPaymentrequestNotifyurl', 'setPaymentrequestNotifyurl', 'PAYMENTREQUEST_0_NOTIFYURL', 'PAYMENTREQUEST_9_NOTIFYURL'),
+//            array('getPaymentrequestNotetext', 'setPaymentrequestNotetext', 'PAYMENTREQUEST_0_NOTETEXT', 'PAYMENTREQUEST_9_NOTETEXT'),
+//            array('getPaymentrequestTransactionid', 'setPaymentrequestTransactionid', 'PAYMENTREQUEST_0_TRANSACTIONID', 'PAYMENTREQUEST_9_TRANSACTIONID'),
+//            array('getPaymentrequestAllowedpaymentmethod', 'setPaymentrequestAllowedpaymentmethod', 'PAYMENTREQUEST_0_ALLOWEDPAYMENTMETHOD', 'PAYMENTREQUEST_9_ALLOWEDPAYMENTMETHOD'),
+//            array('getPaymentrequestPaymentrequestid', 'setPaymentrequestPaymentrequestid', 'PAYMENTREQUEST_0_PAYMENTREQUESTID', 'PAYMENTREQUEST_9_PAYMENTREQUESTID'),
+//            array('getPaymentrequestPaymentaction', 'setPaymentrequestPaymentaction', 'PAYMENTREQUEST_0_PAYMENTACTION', 'PAYMENTREQUEST_9_PAYMENTACTION'),
+//            array('getPaymentrequestPaymentstatus', 'setPaymentrequestPaymentstatus', 'PAYMENTREQUEST_0_PAYMENTSTATUS', 'PAYMENTREQUEST_9_PAYMENTSTATUS'),
+//            array('getPaymentrequestExchangerate', 'setPaymentrequestExchangerate', 'PAYMENTREQUEST_0_EXCHANGERATE', 'PAYMENTREQUEST_9_EXCHANGERATE'),
+//            array('getPaymentrequestSettleamt', 'setPaymentrequestSettleamt', 'PAYMENTREQUEST_0_SETTLEAMT', 'PAYMENTREQUEST_9_SETTLEAMT'),
+//            array('getPaymentrequestFeeamt', 'setPaymentrequestFeeamt', 'PAYMENTREQUEST_0_FEEAMT', 'PAYMENTREQUEST_9_FEEAMT'),
+//            array('getPaymentrequestOrdertime', 'setPaymentrequestOrdertime', 'PAYMENTREQUEST_0_ORDERTIME', 'PAYMENTREQUEST_9_ORDERTIME'),
+//            array('getPaymentrequestPaymenttype', 'setPaymentrequestPaymenttype', 'PAYMENTREQUEST_0_PAYMENTTYPE', 'PAYMENTREQUEST_9_PAYMENTTYPE'),
+//            array('getPaymentrequestTransactiontype', 'setPaymentrequestTransactiontype', 'PAYMENTREQUEST_0_TRANSACTIONTYPE', 'PAYMENTREQUEST_9_TRANSACTIONTYPE'),
+//            array('getPaymentrequestReceiptid', 'setPaymentrequestReceiptid', 'PAYMENTREQUEST_0_RECEIPTID', 'PAYMENTREQUEST_9_RECEIPTID'),
+//            array('getPaymentrequestParenttransactionid', 'setPaymentrequestParenttransactionid', 'PAYMENTREQUEST_0_PARENTTRANSACTIONID', 'PAYMENTREQUEST_9_PARENTTRANSACTIONID'),
+//            array('getPaymentrequestPendingreason', 'setPaymentrequestPendingreason', 'PAYMENTREQUEST_0_PENDINGREASON', 'PAYMENTREQUEST_9_PENDINGREASON'),
+//            array('getPaymentrequestReasoncode', 'setPaymentrequestReasoncode', 'PAYMENTREQUEST_0_REASONCODE', 'PAYMENTREQUEST_9_REASONCODE'),
+//            
+//            array('getLSeveritycoden', 'setLSeveritycoden', 'L_SEVERITYCODE0', 'L_SEVERITYCODE9'),
+//            array('getLLongmessagen', 'setLLongmessagen', 'L_LONGMESSAGE0', 'L_LONGMESSAGE9'),
+//            array('getLShortmessagen', 'setLShortmessagen', 'L_SHORTMESSAGE0', 'L_SHORTMESSAGE9'),
+//            array('getLErrorcoden', 'setLErrorcoden', 'L_ERRORCODE0', 'L_ERRORCODE9'),
+        );
+    }
+    
+    public static function provideMultiArrayValues()
+    {
+        return array(
+            array('getLPaymentrequestName', 'setLPaymentrequestName', 'L_PAYMENTREQUEST_0_NAME0', 'L_PAYMENTREQUEST_9_NAME9'),
+            array('getLPaymentrequestDesc', 'setLPaymentrequestDesc', 'L_PAYMENTREQUEST_0_DESC0', 'L_PAYMENTREQUEST_9_DESC9'),
+            array('getLPaymentrequestQty', 'setLPaymentrequestQty', 'L_PAYMENTREQUEST_0_QTY0', 'L_PAYMENTREQUEST_9_QTY9'),
+            array('getLPaymentrequestAmt', 'setLPaymentrequestAmt', 'L_PAYMENTREQUEST_0_AMT0', 'L_PAYMENTREQUEST_9_AMT9'),
         );
     }
     
@@ -280,6 +291,96 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     *
+     * @dataProvider provideMultiArrayValues
+     */
+    public function shouldAllowSetMultiArrayValue($getter, $setter, $paypalName0, $paypalName9)
+    {
+        $value = 'theValue';
+
+        $instruction = new PaymentInstruction();
+
+        $instruction->$setter(0, 0, $value);
+        $instruction->$setter(9, 9, $value);
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider provideMultiArrayValues
+     */
+    public function shouldAllowGetPreviouslySetMultiArrayValue($getter, $setter, $paypalName0, $paypalName9)
+    {
+        $value = 'theValue';
+
+        $instruction = new PaymentInstruction();
+
+        $instruction->$setter(0, 0, $value);
+        $instruction->$setter(9, 9, $value);
+
+        $this->assertEquals($value, $instruction->$getter(0, 0));
+        $this->assertEquals($value, $instruction->$getter(9, 9));
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider provideMultiArrayValues
+     */
+    public function shouldGetNullIfNotSetMultiArrayValue($getter, $setter, $paypalName0, $paypalName9)
+    {
+        $instruction = new PaymentInstruction();
+
+        $this->assertNull($instruction->$getter(0, 0));
+        $this->assertNull($instruction->$getter(9, 9));
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider provideMultiArrayValues
+     */
+    public function shouldFromNvpMultiArrayValue($getter, $setter, $paypalName0, $paypalName9)
+    {
+        $value = 'theValue';
+
+        $instruction = new PaymentInstruction();
+
+        $instruction->fromNvp(array(
+            $paypalName0 => $value,
+            $paypalName9 => $value
+        ));
+
+        $this->assertEquals($value, $instruction->$getter(0, 0));
+        $this->assertEquals($value, $instruction->$getter(9, 9));
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider provideMultiArrayValues
+     */
+    public function shouldToNvpMultiArrayValue($getter, $setter, $paypalName0, $paypalName9)
+    {
+        $value = 'theValue';
+
+        $instruction = new PaymentInstruction();
+
+        $instruction->$setter(0, 0, $value);
+        $instruction->$setter(9, 9, $value);
+
+        $nvp = $instruction->toNvp();
+        $this->assertInternalType('array', $nvp);
+
+        $this->assertArrayHasKey($paypalName0, $nvp);
+        $this->assertEquals($value, $nvp[$paypalName0]);
+
+        $this->assertArrayHasKey($paypalName9, $nvp);
+        $this->assertEquals($value, $nvp[$paypalName9]);
+    }
+
+    /**
+     * @test
      */
     public function shouldAllowToUseResponseInFromNvp()
     {
@@ -292,8 +393,8 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
         $instruction->fromNvp($response);
         
         $this->assertEquals('theToken', $instruction->getToken());
-        $this->assertEquals('theAmt', $instruction->getPaymentrequestNAmt(0));
-        $this->assertEquals('theCurrency', $instruction->getPaymentrequestNCurrencycode(9));
+        $this->assertEquals('theAmt', $instruction->getPaymentrequestAmt(0));
+        $this->assertEquals('theCurrency', $instruction->getPaymentrequestCurrencycode(9));
     }
 
     /**

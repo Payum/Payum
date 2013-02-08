@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
+use Payum\Paypal\ExpressCheckout\Nvp\Payment;
 use Payum\Request\RedirectUrlInteractiveRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\AuthorizeTokenAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\AuthorizeTokenRequest;
@@ -11,19 +12,19 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementActionInterface()
+    public function shouldBeSubClassOfActionPaymentAware()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\AuthorizeTokenAction');
         
-        $this->assertTrue($rc->implementsInterface('Payum\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\ActionPaymentAware'));
     }
 
     /**
      * @test
      */
-    public function couldBeConstructedWithApiArgument()   
+    public function couldBeConstructedWithoutAnyArgument()   
     {
-        new AuthorizeTokenAction($this->createApiMock());
+        new AuthorizeTokenAction();
     }
 
     /**
@@ -31,7 +32,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportAuthorizeTokenRequest()
     {
-        $action = new AuthorizeTokenAction($this->createApiMock());
+        $action = new AuthorizeTokenAction();
         
         $this->assertTrue($action->supports(new AuthorizeTokenRequest(new PaymentInstruction)));
     }
@@ -68,9 +69,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AuthorizeTokenAction($this->createApiMock());
 
-        $request = new AuthorizeTokenRequest(new PaymentInstruction);
-
-        $action->execute($request);
+        $action->execute(new AuthorizeTokenRequest(new PaymentInstruction));
     }
 
     /**
@@ -81,15 +80,16 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
         $expectedToken = 'theAuthToken';
         $expectedRedirectUrl = 'theRedirectUrl';
         
-        $api = $this->createApiMock();
-        $api
+        $apiMock = $this->createApiMock();
+        $apiMock
             ->expects($this->once())
             ->method('getAuthorizeTokenUrl')
             ->with($expectedToken)
             ->will($this->returnValue($expectedRedirectUrl))
         ;
                 
-        $action = new AuthorizeTokenAction($api);
+        $action = new AuthorizeTokenAction();
+        $action->setPayment(new Payment($apiMock));
 
         $request = new AuthorizeTokenRequest(new PaymentInstruction);
         $request->getInstruction()->setToken($expectedToken);
@@ -110,13 +110,14 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldDoNothingIfUserAlreadyAuthorizedToken()
     {
-        $api = $this->createApiMock();
-        $api
+        $apiMock = $this->createApiMock();
+        $apiMock
             ->expects($this->never())
             ->method('getAuthorizeTokenUrl')
         ;
         
-        $action = new AuthorizeTokenAction($api);
+        $action = new AuthorizeTokenAction();
+        $action->setPayment(new Payment($apiMock));
 
         $request = new AuthorizeTokenRequest(new PaymentInstruction);
         $request->getInstruction()->setToken('aToken');
@@ -132,13 +133,14 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwRedirectUrlRequestIfForceTrue()
     {
-        $api = $this->createApiMock();
-        $api
+        $apiMock = $this->createApiMock();
+        $apiMock
             ->expects($this->once())
             ->method('getAuthorizeTokenUrl')
         ;
 
-        $action = new AuthorizeTokenAction($api);
+        $action = new AuthorizeTokenAction();
+        $action->setPayment(new Payment($apiMock));
 
         $request = new AuthorizeTokenRequest(new PaymentInstruction, $force = true);
         $request->getInstruction()->setToken('aToken');

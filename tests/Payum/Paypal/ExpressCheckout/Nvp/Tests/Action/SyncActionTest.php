@@ -124,8 +124,8 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
 
         $request = new SyncRequest(new PaymentInstruction);
         $request->getInstruction()->setToken('theToken');
-        $request->getInstruction()->setPaymentrequestNTransactionid(0, 'fooTransId');
-        $request->getInstruction()->setPaymentrequestNTransactionid(2, 'barTransId');
+        $request->getInstruction()->setPaymentrequestTransactionid(0, 'fooTransId');
+        $request->getInstruction()->setPaymentrequestTransactionid(2, 'barTransId');
 
         $action->execute($request);
     }

@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests;
 
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Payment;
 
 class PaymentTest extends \PHPUnit_Framework_TestCase
@@ -8,7 +9,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubclassOfPayumPaymeny()
+    public function shouldBeSubclassOfPayumPayment()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Payment');
         
@@ -18,8 +19,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
+    public function couldBeConstructedWithApiAsFirstArgument()
     {
-        new Payment;
+        new Payment($this->getMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false));
     }
 }
