@@ -44,9 +44,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction());
         $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\StatusAction());
         $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\SyncAction());
-        
-        //app specific action
-        $payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\CreateInstructionFromSimpleSellAction());
+
         //@testo:end
         
         return $payment;
@@ -64,6 +62,10 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         $sell = new \Payum\Domain\SimpleSell();
         $sell->setPrice(100);
         $sell->setCurrency('USD');
+        
+        $sell->setInstruction(new \Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction);
+        $sell->getInstruction()->setPaymentrequestAmt(0, $sell->getPrice());
+        $sell->getInstruction()->setPaymentrequestCurrencycode(0, $sell->getCurrency());
 
         if ($interactiveRequest = $payment->execute(new \Payum\Request\CaptureRequest($sell))) {
             if ($interactiveRequest instanceof \Payum\Request\RedirectUrlInteractiveRequest) {
