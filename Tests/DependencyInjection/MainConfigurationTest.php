@@ -199,10 +199,12 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         'paypal_express_checkout_nvp_payment' => array(
                             'create_instruction_from_model_action' => 'foo',
                             'api' => array(
-                                'username' => 'aUsername',
-                                'password' => 'aPassword',
-                                'signature' => 'aSignature',
-                                'sandbox' => true
+                                'options' => array(
+                                    'username' => 'aUsername',
+                                    'password' => 'aPassword',
+                                    'signature' => 'aSignature',
+                                    'sandbox' => true
+                                )
                             )
                         )
                     )
