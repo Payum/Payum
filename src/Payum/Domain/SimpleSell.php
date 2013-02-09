@@ -1,7 +1,10 @@
 <?php
 namespace Payum\Domain;
 
-class SimpleSell implements InstructionAggregateInterface, InstructionAwareInterface
+use Payum\PaymentInstructionAwareInterface;
+use Payum\PaymentInstructionAggregateInterface;
+
+class SimpleSell implements PaymentInstructionAggregateInterface, PaymentInstructionAwareInterface
 {
     /**
      * @var mixed
@@ -66,7 +69,7 @@ class SimpleSell implements InstructionAggregateInterface, InstructionAwareInter
     /**
      * {@inheritdoc}
      */
-    public function getInstruction()
+    public function getPaymentInstruction()
     {
         return $this->instruction;
     }
@@ -74,7 +77,7 @@ class SimpleSell implements InstructionAggregateInterface, InstructionAwareInter
     /**
      * {@inheritdoc}
      */
-    public function setInstruction($instruction)
+    public function setPaymentInstruction($instruction)
     {
         $this->instruction = $instruction;
     }

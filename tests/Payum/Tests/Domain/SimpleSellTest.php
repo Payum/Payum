@@ -8,21 +8,21 @@ class SimpleSellTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementInstructionAwareInterface()
+    public function shouldImplementPaymentInstructionAwareInterface()
     {
         $rc = new \ReflectionClass('Payum\Domain\SimpleSell');
         
-        $this->assertTrue($rc->implementsInterface('Payum\Domain\InstructionAwareInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\PaymentInstructionAwareInterface'));
     }
 
     /**
      * @test
      */
-    public function shouldImplementInstructionAggregateInterface()
+    public function shouldImplementPaymentInstructionAggregateInterface()
     {
         $rc = new \ReflectionClass('Payum\Domain\SimpleSell');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Domain\InstructionAggregateInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\PaymentInstructionAggregateInterface'));
     }
 
     /**
@@ -84,25 +84,25 @@ class SimpleSellTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowSetInstruction()
+    public function shouldAllowSetPaymentInstruction()
     {
         $request = new SimpleSell();
 
-        $request->setInstruction(new \stdClass);
+        $request->setPaymentInstruction(new \stdClass);
     }
 
     /**
      * @test
      */
-    public function shouldAllowGetInstructionPreviouslySet()
+    public function shouldAllowGetPaymentInstructionPreviouslySet()
     {
         $expectedInstruction = new \stdClass;
 
         $request = new SimpleSell();
 
-        $request->setInstruction($expectedInstruction);
+        $request->setPaymentInstruction($expectedInstruction);
 
-        $this->assertEquals($expectedInstruction, $request->getInstruction());
+        $this->assertEquals($expectedInstruction, $request->getPaymentInstruction());
     }
 
     /**
@@ -132,6 +132,6 @@ class SimpleSellTest extends \PHPUnit_Framework_TestCase
     {
         $request = new SimpleSell();
 
-        $this->assertNull($request->getInstruction());
+        $this->assertNull($request->getPaymentInstruction());
     }
 }
