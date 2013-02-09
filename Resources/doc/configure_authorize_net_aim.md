@@ -30,7 +30,6 @@ $ php composer.phar install
 payum:
     contexts:
         simple_sell_authorize_net:
-            create_instruction_from_model_action: payum.action.create_authorize_net_instruction_from_simple_sell
             authorize_net_aim_payment:
                 api:
                     options:

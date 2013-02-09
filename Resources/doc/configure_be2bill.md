@@ -29,7 +29,6 @@ $ php composer.phar install
 payum:
     contexts:
         simple_sell_be2bill:
-            create_instruction_from_model_action: payum.action.create_be2bill_instruction_from_simple_sell
             be2bill_payment:
                 api:
                     options:

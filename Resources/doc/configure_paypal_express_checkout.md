@@ -30,7 +30,6 @@ payum:
     contexts:
         simple_sell_paypal:
             paypal_express_checkout_nvp_payment:
-                create_instruction_from_model_action: payum.action.create_paypal_instruction_from_simple_sell
                 api:
                     options:
                         username:  ''
