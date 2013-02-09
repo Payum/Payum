@@ -22,16 +22,8 @@ class CaptureAction extends ActionPaymentAware
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        if (null == $request->getModel()->getInstruction()) {
-            $this->payment->execute(new CreatePaymentInstructionRequest($request->getModel()));
-
-            if (false == $request->getModel()->getInstruction() instanceof PaymentInstruction) {
-                throw new LogicException('Create payment instruction request should set expected instruction to the model');
-            }
-        }
-
         /** @var $instruction PaymentInstruction */
-        $instruction = $request->getModel()->getInstruction();
+        $instruction = $request->getModel();
         if (false == $instruction->getResponseCode()) {
             if ($instruction->getAmount() && $instruction->getCardNum() && $instruction->getExpDate()) {
                 $api = clone $this->payment->getApi();
@@ -45,18 +37,13 @@ class CaptureAction extends ActionPaymentAware
     }
 
     /**
-     * {inheritdoc}
+     * {@inheritdoc}
      */
     public function supports($request)
     {
         return
             $request instanceof CaptureRequest &&
-            $request->getModel() instanceof InstructionAwareInterface &&
-            $request->getModel() instanceof InstructionAggregateInterface &&
-            (
-                null == $request->getModel()->getInstruction() ||
-                $request->getModel()->getInstruction() instanceof PaymentInstruction
-            )
+            $request->getModel() instanceof PaymentInstruction
         ;
     }
 }

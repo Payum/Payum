@@ -20,7 +20,7 @@ class StatusAction implements ActionInterface
         }
         
         /** @var $instruction PaymentInstruction */
-        $instruction = $request->getModel()->getInstruction();
+        $instruction = $request->getModel();
         
         if (\AuthorizeNetAIM_Response::APPROVED == $instruction->getResponseCode()) {
             $request->markSuccess();
@@ -54,8 +54,7 @@ class StatusAction implements ActionInterface
     {
         return
             $request instanceof StatusRequestInterface &&
-            $request->getModel() instanceof InstructionAggregateInterface &&
-            $request->getModel()->getInstruction() instanceof PaymentInstruction
+            $request->getModel() instanceof PaymentInstruction
         ;
     }
 }
