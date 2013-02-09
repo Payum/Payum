@@ -1,14 +1,12 @@
 <?php
 namespace Payum\Domain;
 
-use Payum\PaymentInstructionInterface;
-
 interface InstructionAwareInterface  
 {
     /**
-     * @param PaymentInstructionInterface $instruction
+     * @param object $instruction
      * 
      * @return void
      */
-    function setInstruction(PaymentInstructionInterface $instruction);
+    function setInstruction($instruction);
 }

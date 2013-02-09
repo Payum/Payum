@@ -141,7 +141,7 @@ class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
             'id'
         );
         
-        $storage->updateModel($this->getMock('Payum\Domain\ModelInterface'));
+        $storage->updateModel(new \stdClass);
     }
 
     /**

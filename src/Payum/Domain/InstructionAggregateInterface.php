@@ -4,7 +4,7 @@ namespace Payum\Domain;
 interface InstructionAggregateInterface
 {
     /**
-     * @return \Payum\PaymentInstructionInterface
+     * @return object
      */
     function getInstruction();
 }

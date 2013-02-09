@@ -118,7 +118,7 @@ class DoctrineModelStorageTest extends \PHPUnit_Framework_TestCase
             'Payum\Domain\SimpleSell'
         );
 
-        $storage->updateModel($this->getMock('Payum\Domain\ModelInterface'));
+        $storage->updateModel(new \stdClass);
     }
 
     /**

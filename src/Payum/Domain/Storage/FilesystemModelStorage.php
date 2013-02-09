@@ -2,7 +2,6 @@
 namespace Payum\Domain\Storage;
 
 use Payum\Exception\InvalidArgumentException;
-use Payum\Domain\ModelInterface;
 
 class FilesystemModelStorage implements ModelStorageInterface
 {
@@ -30,7 +29,7 @@ class FilesystemModelStorage implements ModelStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function updateModel(ModelInterface $model)
+    public function updateModel($model)
     {
         if (false == $model instanceof $this->modelClass) {
             throw new InvalidArgumentException(sprintf(

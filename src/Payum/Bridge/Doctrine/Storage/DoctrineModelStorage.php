@@ -4,7 +4,6 @@ namespace Payum\Bridge\Doctrine\Storage;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Payum\Domain\Storage\ModelStorageInterface;
-use Payum\Domain\ModelInterface;
 use Payum\Exception\InvalidArgumentException;
 
 class DoctrineModelStorage implements ModelStorageInterface
@@ -41,7 +40,7 @@ class DoctrineModelStorage implements ModelStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function updateModel(ModelInterface $model)
+    public function updateModel($model)
     {
         if (false == $model instanceof $this->modelClass) {
             throw new InvalidArgumentException(sprintf(

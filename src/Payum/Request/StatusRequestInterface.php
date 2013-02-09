@@ -4,9 +4,7 @@ namespace Payum\Request;
 interface StatusRequestInterface extends InteractiveRequestInterface
 {
     /**
-     * The domain model the status has to be calculated for. 
-     * 
-     * @return \Payum\Domain\ModelInterface
+     * @return object
      */
     function getModel();
 

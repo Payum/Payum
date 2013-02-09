@@ -28,16 +28,6 @@ class SimpleSellTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementModelInterface()
-    {
-        $rc = new \ReflectionClass('Payum\Domain\SimpleSell');
-
-        $this->assertTrue($rc->implementsInterface('Payum\Domain\ModelInterface'));
-    }
-
-    /**
-     * @test
-     */
     public function couldBeWithoutAnyArguments()
     {
         new SimpleSell();
@@ -98,7 +88,7 @@ class SimpleSellTest extends \PHPUnit_Framework_TestCase
     {
         $request = new SimpleSell();
 
-        $request->setInstruction($this->createInstructionMock());
+        $request->setInstruction(new \stdClass);
     }
 
     /**
@@ -106,7 +96,7 @@ class SimpleSellTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetInstructionPreviouslySet()
     {
-        $expectedInstruction = $this->createInstructionMock();
+        $expectedInstruction = new \stdClass;
 
         $request = new SimpleSell();
 
@@ -143,13 +133,5 @@ class SimpleSellTest extends \PHPUnit_Framework_TestCase
         $request = new SimpleSell();
 
         $this->assertNull($request->getInstruction());
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\PaymentInstructionInterface
-     */
-    protected function createInstructionMock()
-    {
-        return $this->getMock('Payum\PaymentInstructionInterface');
     }
 }

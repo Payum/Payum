@@ -1,19 +1,23 @@
 <?php
 namespace Payum\Request;
 
-use Payum\Domain\ModelInterface;
-
 class CaptureRequest
 {
+    /**
+     * @var object
+     */
     protected $model;
-    
-    public function __construct(ModelInterface $model)
+
+    /**
+     * @param object $model
+     */
+    public function __construct($model)
     {
         $this->model = $model;
     }
 
     /**
-     * @return ModelInterface
+     * @return object
      */
     public function getModel()
     {

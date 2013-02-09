@@ -2,7 +2,6 @@
 namespace Payum\Request;
 
 use Payum\Exception\LogicException;
-use Payum\Domain\ModelInterface;
 
 class BinaryMaskStatusRequest extends LogicException implements StatusRequestInterface 
 {
@@ -19,7 +18,7 @@ class BinaryMaskStatusRequest extends LogicException implements StatusRequestInt
     const STATUS_NEW = 2; //2^1
     
     /**
-     * @var ModelInterface
+     * @var object
      */
     protected $model;
 
@@ -31,7 +30,7 @@ class BinaryMaskStatusRequest extends LogicException implements StatusRequestInt
     /**
      * @param mixed $model
      */
-    public function __construct(ModelInterface $model)
+    public function __construct($model)
     {
         $this->model = $model;
         

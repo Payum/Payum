@@ -1,28 +1,26 @@
 <?php
 namespace Payum\Domain\Storage;
 
-use Payum\Domain\ModelInterface;
-
 interface ModelStorageInterface
 {
     /**
-     * @return \Payum\Domain\ModelInterface
+     * @return object
      */
     function createModel();
 
     /**
-     * @param \Payum\Domain\ModelInterface $model
+     * @param object $model
      * 
      * @throws \Payum\Exception\InvalidArgumentException if not supported model given. 
      *
      * @return void
      */
-    function updateModel(ModelInterface $model);
+    function updateModel($model);
 
     /**
      * @param mixed $id
      * 
-     * @return \Payum\Domain\ModelInterface|null
+     * @return object|null
      */
     function findModelById($id);
 }
