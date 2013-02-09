@@ -12,7 +12,12 @@ abstract class ActionPaymentAware extends BaseActionPaymentAware
      * @var \Payum\Be2Bill\Payment
      */
     protected $payment;
-    
+
+    /**
+     * {@inheritdoc}
+     * 
+     * @throws \Payum\Exception\InvalidArgumentException if invalid payment instance given.
+     */
     public function setPayment(PaymentInterface $payment)
     {
         if (false == $payment instanceof Payment) {

@@ -10,6 +10,9 @@ use Payum\Be2Bill\Api;
 
 class StatusAction implements ActionInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public function execute($request)
     {
         /** @var $request \Payum\Request\StatusRequestInterface */
@@ -33,12 +36,14 @@ class StatusAction implements ActionInterface
         $request->markFailed();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function supports($request)
     {
         return
             $request instanceof StatusRequestInterface &&
-            $request->getModel() instanceof InstructionAggregateInterface &&
-            $request->getModel()->getInstruction() instanceof PaymentInstruction
+            $request->getModel() instanceof PaymentInstruction
         ;
     }
 }

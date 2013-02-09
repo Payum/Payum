@@ -1,9 +1,7 @@
 <?php
 namespace Payum\Be2Bill;
 
-use Payum\PaymentInstructionInterface;
-
-class PaymentInstruction implements PaymentInstructionInterface
+class PaymentInstruction
 {
     /**
      * Description: Action to be carried out
