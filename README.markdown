@@ -17,12 +17,12 @@ Documentation
 
 The bulk of the documentation is stored in the `Resources/doc/index.md` file in this bundle:
 
-[Read the Documentation for master](PayumBundle/blob/master/Resources/doc/index.md)
+[Read the Documentation for master](Resources/doc/index.md)
 
 Installation
 ------------
 
-All the installation instructions are located in [documentation](PayumBundle/blob/master/Resources/doc/index.md).
+All the installation instructions are located in [documentation](Resources/doc/index.md).
 
 License
 -------
