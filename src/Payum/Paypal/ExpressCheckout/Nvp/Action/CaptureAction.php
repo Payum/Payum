@@ -1,13 +1,9 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
-use Payum\Exception\RequestNotSupportedException;
-use Payum\Exception\LogicException;
 use Payum\Request\CaptureRequest;
-use Payum\Request\CreatePaymentInstructionRequest;
-use Payum\Domain\InstructionAggregateInterface;
-use Payum\Domain\InstructionAwareInterface;
 use Payum\Action\ActionPaymentAware as BaseActionPaymentAware;
+use Payum\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\SetExpressCheckoutRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\AuthorizeTokenRequest;

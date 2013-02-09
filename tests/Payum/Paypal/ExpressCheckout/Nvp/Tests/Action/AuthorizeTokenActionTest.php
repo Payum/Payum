@@ -92,7 +92,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment(new Payment($apiMock));
 
         $request = new AuthorizeTokenRequest(new PaymentInstruction);
-        $request->getInstruction()->setToken($expectedToken);
+        $request->getPaymentInstruction()->setToken($expectedToken);
 
         try {
             $action->execute($request);
@@ -120,10 +120,10 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment(new Payment($apiMock));
 
         $request = new AuthorizeTokenRequest(new PaymentInstruction);
-        $request->getInstruction()->setToken('aToken');
+        $request->getPaymentInstruction()->setToken('aToken');
         //payer id means that the user already authorize the token. 
         //Entered his login\passowrd and press enter at paypal side.
-        $request->getInstruction()->setPayerid('aPayerId');
+        $request->getPaymentInstruction()->setPayerid('aPayerId');
 
         $action->execute($request);
     }
@@ -143,8 +143,8 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment(new Payment($apiMock));
 
         $request = new AuthorizeTokenRequest(new PaymentInstruction, $force = true);
-        $request->getInstruction()->setToken('aToken');
-        $request->getInstruction()->setPayerid('aPayerId');
+        $request->getPaymentInstruction()->setToken('aToken');
+        $request->getPaymentInstruction()->setPayerid('aPayerId');
 
         try {
             $action->execute($request);

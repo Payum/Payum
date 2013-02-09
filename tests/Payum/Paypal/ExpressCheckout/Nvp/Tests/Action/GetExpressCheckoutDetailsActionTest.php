@@ -100,7 +100,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment(new Payment($apiMock));
 
         $request = new GetExpressCheckoutDetailsRequest(new PaymentInstruction);
-        $request->getInstruction()->setToken($expectedToken = 'theToken');
+        $request->getPaymentInstruction()->setToken($expectedToken = 'theToken');
 
         $action->execute($request);
         
@@ -136,12 +136,12 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment(new Payment($apiMock));
 
         $request = new GetExpressCheckoutDetailsRequest(new PaymentInstruction);
-        $request->getInstruction()->setToken('aToken');
+        $request->getPaymentInstruction()->setToken('aToken');
 
         $action->execute($request);
         
-        $this->assertEquals('theFirstname', $request->getInstruction()->getFirstname());
-        $this->assertEquals('the@example.com', $request->getInstruction()->getEmail());
+        $this->assertEquals('theFirstname', $request->getPaymentInstruction()->getFirstname());
+        $this->assertEquals('the@example.com', $request->getPaymentInstruction()->getEmail());
     }
 
     /**

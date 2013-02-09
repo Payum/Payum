@@ -97,7 +97,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment($paymentMock);
 
         $request = new SyncRequest(new PaymentInstruction);
-        $request->getInstruction()->setToken('theToken');
+        $request->getPaymentInstruction()->setToken('theToken');
 
         $action->execute($request);
     }
@@ -123,9 +123,9 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment($paymentMock);
 
         $request = new SyncRequest(new PaymentInstruction);
-        $request->getInstruction()->setToken('theToken');
-        $request->getInstruction()->setPaymentrequestTransactionid(0, 'fooTransId');
-        $request->getInstruction()->setPaymentrequestTransactionid(2, 'barTransId');
+        $request->getPaymentInstruction()->setToken('theToken');
+        $request->getPaymentInstruction()->setPaymentrequestTransactionid(0, 'fooTransId');
+        $request->getPaymentInstruction()->setPaymentrequestTransactionid(2, 'barTransId');
 
         $action->execute($request);
     }
@@ -154,14 +154,14 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment($paymentMock);
 
         $request = new SyncRequest(new PaymentInstruction);
-        $request->getInstruction()->setLErrorcoden(100, 'theErrorCodeToBeCleaned');
-        $request->getInstruction()->setToken('aToken');
+        $request->getPaymentInstruction()->setLErrorcoden(100, 'theErrorCodeToBeCleaned');
+        $request->getPaymentInstruction()->setToken('aToken');
 
         $action->execute($request);
 
-        $this->assertEquals('foo_error', $request->getInstruction()->getLErrorcoden(0));
-        $this->assertEquals('bar_error', $request->getInstruction()->getLErrorcoden(1));
-        $this->assertNotContains('theErrorCodeToBeCleaned', $request->getInstruction()->getLErrorcoden());
+        $this->assertEquals('foo_error', $request->getPaymentInstruction()->getLErrorcoden(0));
+        $this->assertEquals('bar_error', $request->getPaymentInstruction()->getLErrorcoden(1));
+        $this->assertNotContains('theErrorCodeToBeCleaned', $request->getPaymentInstruction()->getLErrorcoden());
     }
     
     /**

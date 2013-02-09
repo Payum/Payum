@@ -33,6 +33,6 @@ class GetExpressCheckoutDetailsRequestTest extends \PHPUnit_Framework_TestCase
 
         $request = new GetExpressCheckoutDetailsRequest($expectedInstruction);
         
-        $this->assertSame($expectedInstruction, $request->getInstruction());
+        $this->assertSame($expectedInstruction, $request->getPaymentInstruction());
     }
 }

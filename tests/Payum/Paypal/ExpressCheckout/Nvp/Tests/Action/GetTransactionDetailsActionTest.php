@@ -79,7 +79,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
         $request = new GetTransactionDetailsRequest($paymentRequestN = 5, new PaymentInstruction);
         
         //guard
-        $this->assertNull($request->getInstruction()->getPaymentrequestTransactionid($paymentRequestN));
+        $this->assertNull($request->getPaymentInstruction()->getPaymentrequestTransactionid($paymentRequestN));
 
         $action->execute($request);
     }
@@ -106,7 +106,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment(new Payment($apiMock));
 
         $request = new GetTransactionDetailsRequest($paymentRequestN = 5, new PaymentInstruction);
-        $request->getInstruction()->setPaymentrequestTransactionid(
+        $request->getPaymentInstruction()->setPaymentrequestTransactionid(
             $paymentRequestN, 
             $expectedTransactionId = 'theTransactionId'
         );
@@ -146,18 +146,18 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment(new Payment($apiMock));
 
         $request = new GetTransactionDetailsRequest($paymentRequestN = 5, new PaymentInstruction);
-        $request->getInstruction()->setPaymentrequestTransactionid(
+        $request->getPaymentInstruction()->setPaymentrequestTransactionid(
             $paymentRequestN,
             $expectedTransactionId = 'theTransactionId'
         );
 
         $action->execute($request);
         
-        $this->assertEquals('theFirstname', $request->getInstruction()->getFirstname());
-        $this->assertEquals('the@example.com', $request->getInstruction()->getEmail());
+        $this->assertEquals('theFirstname', $request->getPaymentInstruction()->getFirstname());
+        $this->assertEquals('the@example.com', $request->getPaymentInstruction()->getEmail());
         $this->assertEquals(
             'theStatus', 
-            $request->getInstruction()->getPaymentrequestPaymentstatus($paymentRequestN)
+            $request->getPaymentInstruction()->getPaymentrequestPaymentstatus($paymentRequestN)
         );
     }
 

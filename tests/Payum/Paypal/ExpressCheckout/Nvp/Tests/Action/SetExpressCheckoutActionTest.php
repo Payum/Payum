@@ -99,7 +99,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment(new Payment($apiMock));
 
         $request = new SetExpressCheckoutRequest(new PaymentInstruction);
-        $request->getInstruction()->setPaymentrequestAmt(0, $expectedAmount = 154.23);
+        $request->getPaymentInstruction()->setPaymentrequestAmt(0, $expectedAmount = 154.23);
 
         $action->execute($request);
         
@@ -135,12 +135,12 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment(new Payment($apiMock));
 
         $request = new SetExpressCheckoutRequest(new PaymentInstruction);
-        $request->getInstruction()->setPaymentrequestAmt(0, 154.23);
+        $request->getPaymentInstruction()->setPaymentrequestAmt(0, 154.23);
 
         $action->execute($request);
         
-        $this->assertEquals('theFirstname', $request->getInstruction()->getFirstname());
-        $this->assertEquals('the@example.com', $request->getInstruction()->getEmail());
+        $this->assertEquals('theFirstname', $request->getPaymentInstruction()->getFirstname());
+        $this->assertEquals('the@example.com', $request->getPaymentInstruction()->getEmail());
     }
 
     /**

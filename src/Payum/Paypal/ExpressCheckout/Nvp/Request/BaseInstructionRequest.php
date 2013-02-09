@@ -2,9 +2,9 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Request;
 
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
-use Payum\Domain\InstructionAggregateInterface;
+use Payum\PaymentInstructionAggregateInterface;
 
-abstract class BaseInstructionRequest implements InstructionAggregateInterface 
+abstract class BaseInstructionRequest implements PaymentInstructionAggregateInterface 
 {
     /**
      * @var PaymentInstruction
@@ -24,7 +24,7 @@ abstract class BaseInstructionRequest implements InstructionAggregateInterface
      * 
      * @return PaymentInstruction
      */
-    public function getInstruction()
+    public function getPaymentInstruction()
     {
         return $this->instruction;
     }

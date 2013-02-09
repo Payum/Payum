@@ -19,7 +19,7 @@ class GetExpressCheckoutDetailsAction extends  ActionPaymentAware
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        $instruction = $request->getInstruction();
+        $instruction = $request->getPaymentInstruction();
         if (false == $instruction->getToken()) {
             throw new LogicException('The token must be set. Have you run SetExpressCheckoutAction?');
         }

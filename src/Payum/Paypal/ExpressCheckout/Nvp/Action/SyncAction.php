@@ -19,7 +19,7 @@ class SyncAction extends BaseActionPaymentAware
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        $instruction = $request->getInstruction();
+        $instruction = $request->getPaymentInstruction();
         
         if (false == $instruction->getToken()) {
             return;
@@ -33,7 +33,7 @@ class SyncAction extends BaseActionPaymentAware
             }
         } catch (HttpResponseAckNotSuccessException $e) {
             $instruction->clearErrors();
-            $request->getInstruction()->fromNvp($e->getResponse());
+            $request->getPaymentInstruction()->fromNvp($e->getResponse());
         }
     }
 

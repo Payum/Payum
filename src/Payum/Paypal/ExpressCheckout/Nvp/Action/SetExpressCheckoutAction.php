@@ -20,13 +20,13 @@ class SetExpressCheckoutAction extends ActionPaymentAware
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        $instruction = $request->getInstruction();
+        $instruction = $request->getPaymentInstruction();
         if (false == $instruction->getPaymentrequestAmt(0)) {
             throw new LogicException('The zero paymentamt must be set.');
         }
 
         $buzzRequest = new FormRequest;
-        $buzzRequest->setFields($request->getInstruction()->toNvp());
+        $buzzRequest->setFields($request->getPaymentInstruction()->toNvp());
         
         $response = $this->payment->getApi()->setExpressCheckout($buzzRequest);
 

@@ -33,6 +33,6 @@ class DoExpressCheckoutPaymentRequestTest extends \PHPUnit_Framework_TestCase
 
         $request = new DoExpressCheckoutPaymentRequest($expectedInstruction);
         
-        $this->assertSame($expectedInstruction, $request->getInstruction());
+        $this->assertSame($expectedInstruction, $request->getPaymentInstruction());
     }
 }

@@ -88,7 +88,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment(new Payment($this->createApiMock()));
 
         $request = new DoExpressCheckoutPaymentRequest(new PaymentInstruction);
-        $request->getInstruction()->setToken('aToken');
+        $request->getPaymentInstruction()->setToken('aToken');
 
         $action->execute($request);
     }
@@ -105,8 +105,8 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment(new Payment($this->createApiMock()));
 
         $request = new DoExpressCheckoutPaymentRequest(new PaymentInstruction);
-        $request->getInstruction()->setToken('aToken');
-        $request->getInstruction()->setPayerid('aPayerId');
+        $request->getPaymentInstruction()->setToken('aToken');
+        $request->getPaymentInstruction()->setPayerid('aPayerId');
 
         $action->execute($request);
     }
@@ -123,9 +123,9 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment(new Payment($this->createApiMock()));
 
         $request = new DoExpressCheckoutPaymentRequest(new PaymentInstruction);
-        $request->getInstruction()->setToken('aToken');
-        $request->getInstruction()->setPayerid('aPayerId');
-        $request->getInstruction()->setPaymentrequestPaymentaction(0, 'anAction');
+        $request->getPaymentInstruction()->setToken('aToken');
+        $request->getPaymentInstruction()->setPayerid('aPayerId');
+        $request->getPaymentInstruction()->setPaymentrequestPaymentaction(0, 'anAction');
 
         $action->execute($request);
     }
@@ -152,10 +152,10 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment(new Payment($apiMock));
 
         $request = new DoExpressCheckoutPaymentRequest(new PaymentInstruction);
-        $request->getInstruction()->setToken($expectedToken = 'theToken');
-        $request->getInstruction()->setPayerid($expectedPayerId = 'thePayerId');
-        $request->getInstruction()->setPaymentrequestPaymentaction(0, $expectedPaymentAction = 'theAction');
-        $request->getInstruction()->setPaymentrequestAmt(0, $expectedPaymentAmount = 'anAmt');
+        $request->getPaymentInstruction()->setToken($expectedToken = 'theToken');
+        $request->getPaymentInstruction()->setPayerid($expectedPayerId = 'thePayerId');
+        $request->getPaymentInstruction()->setPaymentrequestPaymentaction(0, $expectedPaymentAction = 'theAction');
+        $request->getPaymentInstruction()->setPaymentrequestAmt(0, $expectedPaymentAmount = 'anAmt');
 
         $action->execute($request);
         
@@ -200,15 +200,15 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment(new Payment($apiMock));
 
         $request = new DoExpressCheckoutPaymentRequest(new PaymentInstruction);
-        $request->getInstruction()->setToken('aToken');
-        $request->getInstruction()->setPayerid('aPayerId');
-        $request->getInstruction()->setPaymentrequestPaymentaction(0, 'anAction');
-        $request->getInstruction()->setPaymentrequestAmt(0, 'anAmt');
+        $request->getPaymentInstruction()->setToken('aToken');
+        $request->getPaymentInstruction()->setPayerid('aPayerId');
+        $request->getPaymentInstruction()->setPaymentrequestPaymentaction(0, 'anAction');
+        $request->getPaymentInstruction()->setPaymentrequestAmt(0, 'anAmt');
 
         $action->execute($request);
         
-        $this->assertEquals('theFirstname', $request->getInstruction()->getFirstname());
-        $this->assertEquals('the@example.com', $request->getInstruction()->getEmail());
+        $this->assertEquals('theFirstname', $request->getPaymentInstruction()->getFirstname());
+        $this->assertEquals('the@example.com', $request->getPaymentInstruction()->getEmail());
     }
 
     /**

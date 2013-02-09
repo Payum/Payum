@@ -33,7 +33,7 @@ class AuthorizeTokenRequestTest extends \PHPUnit_Framework_TestCase
 
         $request = new AuthorizeTokenRequest($expectedInstruction);
         
-        $this->assertSame($expectedInstruction, $request->getInstruction());
+        $this->assertSame($expectedInstruction, $request->getPaymentInstruction());
     }
 
     /**

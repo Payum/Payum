@@ -33,7 +33,7 @@ class GetTransactionDetailsRequestTest extends \PHPUnit_Framework_TestCase
 
         $request = new GetTransactionDetailsRequest($paymentRequestN = 5, $expectedInstruction);
         
-        $this->assertSame($expectedInstruction, $request->getInstruction());
+        $this->assertSame($expectedInstruction, $request->getPaymentInstruction());
     }
 
     /**

@@ -1,10 +1,10 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Examples\Model;
 
-use Payum\Domain\InstructionAggregateInterface;
-use Payum\Domain\InstructionAwareInterface;
+use Payum\PaymentInstructionAggregateInterface;
+use Payum\PaymentInstructionAwareInterface;
 
-class ModelWithInstruction implements InstructionAggregateInterface, InstructionAwareInterface
+class ModelWithInstruction implements PaymentInstructionAggregateInterface, PaymentInstructionAwareInterface
 {
     /**
      * @var object
@@ -14,7 +14,7 @@ class ModelWithInstruction implements InstructionAggregateInterface, Instruction
     /**
      * {@inheritdoc}
      */
-    public function getInstruction()
+    public function getPaymentInstruction()
     {
         return $this->instruction;
     }
@@ -22,7 +22,7 @@ class ModelWithInstruction implements InstructionAggregateInterface, Instruction
     /**
      * {@inheritdoc}
      */
-    public function setInstruction($instruction)
+    public function setPaymentInstruction($instruction)
     {
         $this->instruction = $instruction;
     }

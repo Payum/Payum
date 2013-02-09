@@ -22,12 +22,12 @@ class AuthorizeTokenAction extends ActionPaymentAware
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        $instruction = $request->getInstruction();
+        $instruction = $request->getPaymentInstruction();
         if (false == $instruction->getToken()) {
             throw new LogicException('The token must be set. Have you run SetExpressCheckoutAction?');
         }
           
-        if (false == $request->getInstruction()->getPayerid() || $request->isForced()) {
+        if (false == $request->getPaymentInstruction()->getPayerid() || $request->isForced()) {
             throw new RedirectUrlInteractiveRequest(
                 $this->payment->getApi()->getAuthorizeTokenUrl($instruction->getToken())
             );

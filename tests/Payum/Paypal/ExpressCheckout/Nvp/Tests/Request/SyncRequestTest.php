@@ -33,6 +33,6 @@ class SyncRequestTest extends \PHPUnit_Framework_TestCase
 
         $request = new SyncRequest($expectedInstruction);
         
-        $this->assertSame($expectedInstruction, $request->getInstruction());
+        $this->assertSame($expectedInstruction, $request->getPaymentInstruction());
     }
 }

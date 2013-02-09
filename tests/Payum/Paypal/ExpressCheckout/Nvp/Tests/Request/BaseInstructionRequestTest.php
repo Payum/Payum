@@ -18,11 +18,11 @@ class BaseInstructionRequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementInstructionAggregateInterface()
+    public function shouldImplementPaymentInstructionAggregateInterface()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\BaseInstructionRequest');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Domain\InstructionAggregateInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\PaymentInstructionAggregateInterface'));
     }
 
     /**
@@ -39,7 +39,7 @@ class BaseInstructionRequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowGetInstructionSetInConstructor()
+    public function shouldAllowGetPaymentInstructionSetInConstructor()
     {
         $expectedInstruction = new PaymentInstruction;
         
@@ -48,6 +48,6 @@ class BaseInstructionRequestTest extends \PHPUnit_Framework_TestCase
             array($expectedInstruction)
         );
         
-        $this->assertSame($expectedInstruction, $request->getInstruction());
+        $this->assertSame($expectedInstruction, $request->getPaymentInstruction());
     }
 }

@@ -20,7 +20,7 @@ class GetTransactionDetailsAction extends ActionPaymentAware
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        $instruction = $request->getInstruction();
+        $instruction = $request->getPaymentInstruction();
         
         $transactionId = $instruction->getPaymentrequestTransactionid($request->getPaymentRequestN());
         if (false == $transactionId) {
