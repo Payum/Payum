@@ -1,3 +1,10 @@
+
+Be2Bill
+=======
+
+The lib implements [Be2Bill](http://www.be2bill.com/) payment. 
+
+```php
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -11,10 +18,7 @@ $payment = new \Payum\Be2Bill\Payment($api);
 $payment->addAction(new \Payum\Be2Bill\Action\CaptureAction);
 $payment->addAction(new \Payum\Be2Bill\Action\StatusAction);
 
-$sell = new \Payum\Domain\SimpleSell();
-$sell->setPrice(10);
-$sell->setCurrency('EUR');
-$sell->setInstruction($instruction = new \Payum\Be2Bill\PaymentInstruction());
+$instruction = new \Payum\Be2Bill\PaymentInstruction();
 $instruction->setAmount(10);
 $instruction->setClientuseragent('Firefox');
 $instruction->setClientip('82.117.234.33');
@@ -27,8 +31,25 @@ $instruction->setCardfullname('John Doe');
 $instruction->setCardvaliditydate('10-13');
 $instruction->setCardcvv('123');
 
-$payment->execute(new \Payum\Request\CaptureRequest($sell));
-$payment->execute($statusRequest = new \Payum\Request\BinaryMaskStatusRequest($sell));
+$captureRequest = new \Payum\Request\CaptureRequest($instruction);
+if ($interactiveRequest = $payment->execute($captureRequest)) {
+    throw $interactiveRequest;
+}
 
-var_dump($instruction, $statusRequest);
-die;
+$statusRequest = new \Payum\Request\BinaryMaskStatusRequest($instruction);
+if ($interactiveRequest = $payment->execute($statusRequest)) {
+    throw $interactiveRequest;
+}
+
+if ($statusRequest->isSuccess()) {
+    //We are done!
+} else if ($statusRequest->isCanceled()) {
+    //Canceled!
+} elseif ($statusRequest->isFailed()) {
+    //Failed
+} elseif ($statusRequest->isInProgress()) {
+    //In progress!
+} elseif ($statusRequest->isUnknown()) {
+    //Status unknown!
+}
+```

@@ -2,12 +2,8 @@
 namespace Payum\Be2Bill\Action;
 
 use Payum\Request\CaptureRequest;
-use Payum\Request\CreatePaymentInstructionRequest;
 use Payum\Request\UserInputRequiredInteractiveRequest;
-use Payum\Domain\InstructionAwareInterface;
-use Payum\Domain\InstructionAggregateInterface;
 use Payum\Exception\RequestNotSupportedException;
-use Payum\Exception\LogicException;
 use Payum\Be2Bill\PaymentInstruction;
 use Payum\Be2Bill\Api;
 

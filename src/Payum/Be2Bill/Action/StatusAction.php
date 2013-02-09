@@ -3,7 +3,7 @@ namespace Payum\Be2Bill\Action;
 
 use Payum\Action\ActionInterface;
 use Payum\Request\StatusRequestInterface;
-use Payum\Domain\InstructionAggregateInterface;
+use Payum\PaymentInstructionAggregateInterface;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Be2Bill\PaymentInstruction;
 use Payum\Be2Bill\Api;
@@ -21,7 +21,7 @@ class StatusAction implements ActionInterface
         }
         
         /** @var $instruction PaymentInstruction */
-        $instruction = $request->getModel()->getInstruction();
+        $instruction = $request->getModel()->getPaymentInstruction();
         if (null === $instruction->getExeccode()) {
             $request->markNew();
             
