@@ -3,3 +3,4 @@
 
 * `ModelInterface` interface was removed.
 * `PaymentInstructionInterface` interface was removed.
+* `CreatePaymentInstructionRequest` class was removed.
