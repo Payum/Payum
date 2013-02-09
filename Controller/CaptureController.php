@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Controller;
 
-use Payum\Domain\ModelInterface;
 use Payum\Exception\LogicException;
 use Payum\Request\RedirectUrlInteractiveRequest;
 use Payum\Request\InteractiveRequestInterface;

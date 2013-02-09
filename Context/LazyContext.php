@@ -4,8 +4,6 @@ namespace Payum\Bundle\PayumBundle\Context;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
-use Payum\Domain\ModelInterface;
-
 class LazyContext extends ContainerAware implements ContextInterface
 {
     /**
@@ -77,7 +75,7 @@ class LazyContext extends ContainerAware implements ContextInterface
     /**
      * {@inheritdoc}
      */
-    public function createStatusRequest(ModelInterface $model)
+    public function createStatusRequest($model)
     {
         return new $this->statusRequestClass($model);
     }

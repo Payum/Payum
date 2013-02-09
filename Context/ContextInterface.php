@@ -1,8 +1,6 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Context;
 
-use Payum\Domain\ModelInterface;
-
 interface ContextInterface
 {
     /**
@@ -16,11 +14,11 @@ interface ContextInterface
     function getStorage();
 
     /**
-     * @param ModelInterface $model
+     * @param object $model
      * 
      * @return \Payum\Request\StatusRequestInterface
      */
-    function createStatusRequest(ModelInterface $model);
+    function createStatusRequest($model);
 
     /**
      * @return string
