@@ -9,6 +9,9 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\GetExpressCheckoutDetailsRequest;
 
 class GetExpressCheckoutDetailsAction extends  ActionPaymentAware
 {
+    /**
+     * {@inheritdoc}
+     */
     public function execute($request)
     {
         /** @var $request GetExpressCheckoutDetailsRequest */
@@ -29,6 +32,9 @@ class GetExpressCheckoutDetailsAction extends  ActionPaymentAware
         $instruction->fromNvp($response);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function supports($request)
     {
         return $request instanceof GetExpressCheckoutDetailsRequest;

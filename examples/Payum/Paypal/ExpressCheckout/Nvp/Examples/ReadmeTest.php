@@ -59,21 +59,17 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
     {
         //...
         
-        $sell = new \Payum\Domain\SimpleSell();
-        $sell->setPrice(100);
-        $sell->setCurrency('USD');
-        
-        $sell->setInstruction(new \Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction);
-        $sell->getInstruction()->setPaymentrequestAmt(0, $sell->getPrice());
-        $sell->getInstruction()->setPaymentrequestCurrencycode(0, $sell->getCurrency());
+        $instruction = new \Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
+        $instruction->setPaymentrequestAmt(0, 100);
+        $instruction->setPaymentrequestCurrencycode(0, 'USD');
 
-        if ($interactiveRequest = $payment->execute(new \Payum\Request\CaptureRequest($sell))) {
+        if ($interactiveRequest = $payment->execute(new \Payum\Request\CaptureRequest($instruction))) {
             if ($interactiveRequest instanceof \Payum\Request\RedirectUrlInteractiveRequest) {
                 echo 'Paypal requires the user be redirected to: '.$interactiveRequest->getUrl();
             }
         }
 
-        $statusRequest = new \Payum\Request\BinaryMaskStatusRequest($sell);
+        $statusRequest = new \Payum\Request\BinaryMaskStatusRequest($instruction);
         $payment->execute($statusRequest);
         if ($statusRequest->isSuccess()) {
             //We are done!

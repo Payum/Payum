@@ -10,6 +10,9 @@ use Payum\Exception\RequestNotSupportedException;
 
 class GetTransactionDetailsAction extends ActionPaymentAware
 {
+    /**
+     * {@inheritdoc}
+     */
     public function execute($request)
     {
         /** @var $request GetTransactionDetailsRequest */
@@ -60,6 +63,9 @@ class GetTransactionDetailsAction extends ActionPaymentAware
         $instruction->fromNvp($nvp);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function supports($request)
     {
         return $request instanceof GetTransactionDetailsRequest;

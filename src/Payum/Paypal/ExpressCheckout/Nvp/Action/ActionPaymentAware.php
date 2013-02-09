@@ -12,7 +12,12 @@ abstract class ActionPaymentAware extends BaseActionPaymentAware
      * @var \Payum\Paypal\ExpressCheckout\Nvp\Payment
      */
     protected $payment;
-    
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \Payum\Exception\InvalidArgumentException
+     */
     public function setPayment(PaymentInterface $payment)
     {
         if (false == $payment instanceof Payment) {

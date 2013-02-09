@@ -10,6 +10,9 @@ use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class StatusAction implements ActionInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public function execute($request)
     {
         /** @var $request \Payum\Request\StatusRequestInterface */
@@ -18,7 +21,7 @@ class StatusAction implements ActionInterface
         }
         
         /** @var $instruction PaymentInstruction */
-        $instruction = $request->getModel()->getInstruction();
+        $instruction = $request->getModel();
 
         if (in_array(Api::L_ERRORCODE_PAYMENT_NOT_AUTHORIZED, $instruction->getLErrorcoden())) {
             $request->markCanceled();
@@ -106,13 +109,15 @@ class StatusAction implements ActionInterface
             }
         }
     }
-   
+
+    /**
+     * {@inheritdoc}
+     */
     public function supports($request)
     {
         return
             $request instanceof StatusRequestInterface &&
-            $request->getModel() instanceof InstructionAggregateInterface &&
-            $request->getModel()->getInstruction() instanceof PaymentInstruction
+            $request->getModel() instanceof PaymentInstruction
         ;
     }
 }

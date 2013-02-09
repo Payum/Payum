@@ -9,16 +9,6 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementPayumInstructionInterface()
-    {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction');
-        
-        $this->assertTrue($rc->implementsInterface('Payum\PaymentInstructionInterface'));
-    }
-
-    /**
-     * @test
-     */
     public function couldBeConstructedWithoutAnyArguments()
     {
         new PaymentInstruction();

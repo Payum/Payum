@@ -33,22 +33,31 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportStatusRequestWithModelAggregatesPaypalInstruction()
+    public function shouldSupportStatusRequestWithPaymentInstructionAsModel()
     {
         $action = new StatusAction();
         
-        $instruction = new PaymentInstruction();
+        $request = new BinaryMaskStatusRequest(new PaymentInstruction());
         
-        $model = new ModelWithInstruction();
-        $model->setInstruction($instruction);
-        
-        $this->assertTrue($action->supports(new BinaryMaskStatusRequest($model)));
+        $this->assertTrue($action->supports($request));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotStatusRequestInterface()
+    public function shouldNotSupportStatusRequestWithNoPaymentInstructionAsModel()
+    {
+        $action = new StatusAction();
+
+        $request = new BinaryMaskStatusRequest(new \stdClass());
+
+        $this->assertFalse($action->supports($request));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotSupportNotStatusRequest()
     {
         $action = new StatusAction();
 
@@ -72,12 +81,9 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkCanceledIfPaymentNotAuthorized()
     {
-        $instruction = new PaymentInstruction();
-        $instruction->setLErrorcoden(0, Api::L_ERRORCODE_PAYMENT_NOT_AUTHORIZED);
+        $model = new PaymentInstruction();
+        $model->setLErrorcoden(0, Api::L_ERRORCODE_PAYMENT_NOT_AUTHORIZED);
 
-        $model = new ModelWithInstruction();
-        $model->setInstruction($instruction);
-        
         $action = new StatusAction();
 
         $action->execute($request = new BinaryMaskStatusRequest($model));
@@ -90,12 +96,9 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkCanceledIfPayerIdNotSetAndCheckoutStatusNotInitiated()
     {
-        $instruction = new PaymentInstruction();
-        $instruction->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED);
-        $instruction->setPayerid(null);
-
-        $model = new ModelWithInstruction();
-        $model->setInstruction($instruction);
+        $model = new PaymentInstruction();
+        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED);
+        $model->setPayerid(null);
         
         $action = new StatusAction();
 
@@ -109,12 +112,9 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkNewIfPayerIdSetAndCheckoutStatusNotInitiated()
     {
-        $instruction = new PaymentInstruction();
-        $instruction->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED);
-        $instruction->setPayerid('thePayerId');
-
-        $model = new ModelWithInstruction();
-        $model->setInstruction($instruction);
+        $model = new PaymentInstruction();
+        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED);
+        $model->setPayerid('thePayerId');
         
         $action = new StatusAction();
 
@@ -128,11 +128,8 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkInProgressIfCheckoutStatusInProgress()
     {
-        $instruction = new PaymentInstruction();
-        $instruction->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS);
-
-        $model = new ModelWithInstruction();
-        $model->setInstruction($instruction);
+        $model = new PaymentInstruction();
+        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS);
         
         $action = new StatusAction();
 
@@ -146,11 +143,8 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkFailedIfCheckoutStatusFailed()
     {
-        $instruction = new PaymentInstruction();
-        $instruction->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_FAILED);
-
-        $model = new ModelWithInstruction();
-        $model->setInstruction($instruction);
+        $model = new PaymentInstruction();
+        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_FAILED);
         
         $action = new StatusAction();
 
@@ -164,13 +158,10 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkInProgressIfAtLeastOnePaymentStatusInProgress()
     {
-        $instruction = new PaymentInstruction();
-        $instruction->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_COMPLETED);
-        $instruction->setPaymentrequestPaymentstatus(0, Api::PAYMENTSTATUS_COMPLETED);
-        $instruction->setPaymentrequestPaymentstatus(1, Api::PAYMENTSTATUS_IN_PROGRESS);
-
-        $model = new ModelWithInstruction();
-        $model->setInstruction($instruction);
+        $model = new PaymentInstruction();
+        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_COMPLETED);
+        $model->setPaymentrequestPaymentstatus(0, Api::PAYMENTSTATUS_COMPLETED);
+        $model->setPaymentrequestPaymentstatus(1, Api::PAYMENTSTATUS_IN_PROGRESS);
         
         $action = new StatusAction();
 
@@ -184,13 +175,10 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkFailedIfAtLeastOnePaymentStatusFailed()
     {
-        $instruction = new PaymentInstruction();
-        $instruction->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_COMPLETED);
-        $instruction->setPaymentrequestPaymentstatus(0, Api::PAYMENTSTATUS_COMPLETED);
-        $instruction->setPaymentrequestPaymentstatus(1, Api::PAYMENTSTATUS_FAILED);
-
-        $model = new ModelWithInstruction();
-        $model->setInstruction($instruction);
+        $model = new PaymentInstruction();
+        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_COMPLETED);
+        $model->setPaymentrequestPaymentstatus(0, Api::PAYMENTSTATUS_COMPLETED);
+        $model->setPaymentrequestPaymentstatus(1, Api::PAYMENTSTATUS_FAILED);
         
         $action = new StatusAction();
 
@@ -204,13 +192,10 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkSuccessIfAllPaymentStatusCompletedOrProcessed()
     {
-        $instruction = new PaymentInstruction();
-        $instruction->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_COMPLETED);
-        $instruction->setPaymentrequestPaymentstatus(0, Api::PAYMENTSTATUS_COMPLETED);
-        $instruction->setPaymentrequestPaymentstatus(1, Api::PAYMENTSTATUS_PROCESSED);
-
-        $model = new ModelWithInstruction();
-        $model->setInstruction($instruction);
+        $model = new PaymentInstruction();
+        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_COMPLETED);
+        $model->setPaymentrequestPaymentstatus(0, Api::PAYMENTSTATUS_COMPLETED);
+        $model->setPaymentrequestPaymentstatus(1, Api::PAYMENTSTATUS_PROCESSED);
 
         $action = new StatusAction();
 
@@ -224,11 +209,8 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkUnknownIfCheckoutStatusUnknown()
     {
-        $instruction = new PaymentInstruction();
-        $instruction->setCheckoutstatus('unknowCheckoutStatus');
-
-        $model = new ModelWithInstruction();
-        $model->setInstruction($instruction);
+        $model = new PaymentInstruction();
+        $model->setCheckoutstatus('unknowCheckoutStatus');
         
         $action = new StatusAction();
 
@@ -242,12 +224,9 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkUnknownIfPaymentStatusUnknown()
     {
-        $instruction = new PaymentInstruction();
-        $instruction->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_COMPLETED);
-        $instruction->setPaymentrequestPaymentstatus(0, 'unknownPaymentStatus');
-
-        $model = new ModelWithInstruction();
-        $model->setInstruction($instruction);
+        $model = new PaymentInstruction();
+        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_COMPLETED);
+        $model->setPaymentrequestPaymentstatus(0, 'unknownPaymentStatus');
         
         $action = new StatusAction();
 

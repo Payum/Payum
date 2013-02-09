@@ -35,41 +35,37 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestAndInstructionNotSet()
+    public function shouldSupportCaptureRequestAndPaymentInstructionAsModel()
     {
         $action = new CaptureAction();
+
+        $request = new CaptureRequest(new PaymentInstruction);
         
-        $model = new ModelWithInstruction();
-        
-        //guard
-        $this->assertNull($model->getInstruction());
-        
-        $this->assertTrue($action->supports(new CaptureRequest($model)));
+        $this->assertTrue($action->supports($request));
     }
 
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestAndInstructionSet()
+    public function shouldNotSupportNotCaptureRequest()
     {
         $action = new CaptureAction();
+        
+        $request = new \stdClass();
 
-        $model = new ModelWithInstruction();
-
-        //guard
-        $this->assertNull($model->getInstruction());
-
-        $this->assertTrue($action->supports(new CaptureRequest($model)));
+        $this->assertFalse($action->supports($request));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotCaptureRequest()
+    public function shouldNotSupportCaptureRequestAndNoyPaymentInstructionAsModel()
     {
         $action = new CaptureAction();
-
-        $this->assertFalse($action->supports(new \stdClass()));
+        
+        $request = new CaptureRequest(new \stdClass());
+        
+        $this->assertFalse($action->supports($request));
     }
 
     /**
@@ -92,16 +88,13 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($this->createPaymentMock());
 
-        $instruction = new PaymentInstruction;
-        
-        $model = new ModelWithInstruction();
-        $model->setInstruction($instruction);
+        $model = new PaymentInstruction;
         
         $action->execute(new CaptureRequest($model));
         
         $this->assertEquals(
             Api::PAYMENTACTION_SALE,
-            $instruction->getPaymentrequestPaymentaction(0)
+            $model->getPaymentrequestPaymentaction(0)
         );
     }
 
@@ -125,10 +118,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $instruction = new PaymentInstruction;
-
-        $model = new ModelWithInstruction();
-        $model->setInstruction($instruction);
+        $model = new PaymentInstruction;
 
         $action->execute(new CaptureRequest($model));
     }
@@ -148,12 +138,9 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $instruction = new PaymentInstruction;
-        $instruction->setToken('aToken');
+        $model = new PaymentInstruction;
+        $model->setToken('aToken');
 
-        $model = new ModelWithInstruction();
-        $model->setInstruction($instruction);
-        
         $action->execute(new CaptureRequest($model));
     }
 
@@ -177,13 +164,10 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $instruction = new PaymentInstruction;
-        $instruction->setToken('aToken');
-        $instruction->setPayerid('aPayerId');
-        $instruction->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED);
-
-        $model = new ModelWithInstruction();
-        $model->setInstruction($instruction);
+        $model = new PaymentInstruction;
+        $model->setToken('aToken');
+        $model->setPayerid('aPayerId');
+        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED);
 
         $action->execute(new CaptureRequest($model));
     }
@@ -203,14 +187,11 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $instruction = new PaymentInstruction;
-        $instruction->setToken('aToken');
-        $instruction->setPayerid(null);
-        $instruction->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED);
+        $model = new PaymentInstruction;
+        $model->setToken('aToken');
+        $model->setPayerid(null);
+        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED);
 
-        $model = new ModelWithInstruction();
-        $model->setInstruction($instruction);
-        
         $action->execute(new CaptureRequest($model));
     }
 
@@ -229,12 +210,9 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $instruction = new PaymentInstruction;
-        $instruction->setToken('aToken');
-        $instruction->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS);
-
-        $model = new ModelWithInstruction();
-        $model->setInstruction($instruction);
+        $model = new PaymentInstruction;
+        $model->setToken('aToken');
+        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS);
 
         $action->execute(new CaptureRequest($model));
     }
@@ -265,19 +243,16 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $instruction = new PaymentInstruction;
-        $instruction->setLErrorcoden(100, 'theErrorCodeToBeCleaned');
-        $instruction->setToken('aToken');
-        $instruction->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS);
-
-        $model = new ModelWithInstruction();
-        $model->setInstruction($instruction);
+        $model = new PaymentInstruction;
+        $model->setLErrorcoden(100, 'theErrorCodeToBeCleaned');
+        $model->setToken('aToken');
+        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS);
 
         $action->execute(new CaptureRequest($model));
 
-        $this->assertEquals('foo_error', $instruction->getLErrorcoden(0));
-        $this->assertEquals('bar_error', $instruction->getLErrorcoden(1));
-        $this->assertNotContains('theErrorCodeToBeCleaned', $instruction->getLErrorcoden());
+        $this->assertEquals('foo_error', $model->getLErrorcoden(0));
+        $this->assertEquals('bar_error', $model->getLErrorcoden(1));
+        $this->assertNotContains('theErrorCodeToBeCleaned', $model->getLErrorcoden());
     }
     
     /**
