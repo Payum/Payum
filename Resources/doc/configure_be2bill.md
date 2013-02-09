@@ -62,14 +62,14 @@ namespace AcmeDemoBundle\Payum\Action;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Payum\Action\ActionInterface;
-use Payum\Request\CreatePaymentInstructionRequest;
+use Payum\Action\ActionPaymentAware;
+use Payum\Request\CaptureRequest;
 use Payum\Domain\InstructionAggregateInterface;
 use Payum\Domain\InstructionAwareInterface;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Be2Bill\PaymentInstruction;
 
-class CreateBe2BillInstructionFromSimpleSellAction implements ActionInterface 
+class CaptureSimpleSellWithBe2BillAction extends ActionPaymentAware 
 {
     protected $container;
     
@@ -83,7 +83,7 @@ class CreateBe2BillInstructionFromSimpleSellAction implements ActionInterface
      */
     public function execute($request)
     {
-        /** @var $request CreatePaymentInstructionRequest */
+        /** @var $request CaptureRequest */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -104,7 +104,7 @@ class CreateBe2BillInstructionFromSimpleSellAction implements ActionInterface
         $instruction->setCardfullname($this->container->get('request')->get('cardFullname'));
         $instruction->setCardvaliditydate($this->container->get('request')->get('cardValiditydate'));
         
-        $simpleSell->setInstruction($instruction);
+        $this->payment->execute(new CaptureRequest($instruction));
     }
 
     /**
@@ -113,9 +113,7 @@ class CreateBe2BillInstructionFromSimpleSellAction implements ActionInterface
     public function supports($request)
     {
         return
-            $request instanceof CreatePaymentInstructionRequest &&
-            $request->getModel() instanceof InstructionAggregateInterface &&
-            $request->getModel() instanceof InstructionAwareInterface &&
+            $request instanceof CaptureRequest &&
             $request->getModel() instanceof SimpleSell
         ;
     }
@@ -126,10 +124,18 @@ Second we have to add this service to container.
 
 ```yaml
 services:
-    payum.action.create_be2bill_instruction_from_simple_sell:
-        class:                                                    AcmeDemoBundle\Payum\Action\CreateBe2BillInstructionFromSimpleSellAction
+    payum.action.capture_simple_sell_with_be2bill:
+        class:                                                    AcmeDemoBundle\Payum\Action\CaptureSimpleSellWithBe2BillAction
         arguments:
             -                                                     @service_container
+            
+payum:
+    context:
+        your_context:
+            be2bill_payment:
+                #..
+                actions:
+                    - payum.action.capture_simple_sell_with_be2bill
 ```
 
 ### Next Step

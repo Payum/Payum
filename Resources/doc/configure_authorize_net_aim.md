@@ -63,14 +63,14 @@ namespace AcmeDemoBundle\Payum\Action;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Payum\Action\ActionInterface;
-use Payum\Request\CreatePaymentInstructionRequest;
+use Payum\Action\ActionPaymentAware;
+use Payum\Request\CaptureRequest;
 use Payum\Domain\InstructionAggregateInterface;
 use Payum\Domain\InstructionAwareInterface;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\AuthorizeNet\Aim\PaymentInstruction;
 
-class CreateAuthorizeNetAimInstructionFromSimpleSellAction implements ActionInterface 
+class CaptureSimpleSellWithAuthorizeNetAimAction extends ActionPaymentAware 
 {
     protected $container;
     
@@ -84,7 +84,7 @@ class CreateAuthorizeNetAimInstructionFromSimpleSellAction implements ActionInte
      */
     public function execute($request)
     {
-        /** @var $request CreatePaymentInstructionRequest */
+        /** @var $request CaptureRequest */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -98,7 +98,7 @@ class CreateAuthorizeNetAimInstructionFromSimpleSellAction implements ActionInte
         $instruction->setExpDate($this->container->get('request')->get('card_num'));
         $instruction->setAmount($simpleSell->getPrice());
         
-        $simpleSell->setInstruction($instruction);
+        $this->payment->execute(new CaptureRequest($instruction));
     }
 
     /**
@@ -107,9 +107,7 @@ class CreateAuthorizeNetAimInstructionFromSimpleSellAction implements ActionInte
     public function supports($request)
     {
         return
-            $request instanceof CreatePaymentInstructionRequest &&
-            $request->getModel() instanceof InstructionAggregateInterface &&
-            $request->getModel() instanceof InstructionAwareInterface &&
+            $request instanceof CaptureRequest &&
             $request->getModel() instanceof SimpleSell
         ;
     }
@@ -120,10 +118,18 @@ Second we have to add this service to container.
 
 ```yaml
 services:
-    payum.action.create_authorize_net_instruction_from_simple_sell:
-        class:                                                    AcmeDemoBundle\Payum\Action\CreateAuthorizeNetAimInstructionFromSimpleSellAction
+    payum.action.capture_simple_sell_with_authorize_net:
+        class:                                                    AcmeDemoBundle\Payum\Action\CaptureSimpleSellWithAuthorizeNetAimAction
         arguments:
             -                                                     @service_container
+            
+payum:
+    context:
+        your_context:
+            authorize_net_aim_payment:
+                #..
+                actions:
+                    - payum.action.capture_simple_sell_with_authorize_net
 ```
 
 ### Next Step

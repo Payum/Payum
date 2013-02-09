@@ -61,15 +61,15 @@ namespace AcmeDemoBundle\Payum\Action;
 
 use Symfony\Component\Routing\RouterInterface;
 
-use Payum\Action\ActionInterface;
-use Payum\Request\CreatePaymentInstructionRequest;
+use Payum\Action\ActionPaymentAware;
+use Payum\Request\CaptureRequest;
 use Payum\Domain\InstructionAggregateInterface;
 use Payum\Domain\InstructionAwareInterface;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Domain\SimpleSell;
 
-class CreatePaypalInstructionFromSimpleSellAction implements ActionInterface 
+class CaptureSimpleSellWithPaypalAction extends ActionPaymentAware 
 {
     protected $router;
     
@@ -82,28 +82,31 @@ class CreatePaypalInstructionFromSimpleSellAction implements ActionInterface
      * {@inheritdoc}
      */
     public function execute($request)
-    {
-        /** @var $request CreatePaymentInstructionRequest */
+    {        
+        /** @var $request CaptureRequest */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
         $simpleSell = $request->getModel();
-        
-        $instruction = new PaymentInstruction();
-        
-        $returnUrl = $this->router->generate('payum_payment_capture', array(
-            'contextName' => 'simple_sell_paypal',
-            'modelId' => $simpleSell->getId(),
-        ), $absolute = true);
-        $instruction->setReturnurl($returnUrl);
-        $instruction->setCancelurl($returnUrl);
+        if (false == $simpleSell->getInstruction()) {
+            $instruction = new PaymentInstruction();
+            
+            $returnUrl = $this->router->generate('payum_payment_capture', array(
+                'contextName' => 'your_context',
+                'modelId' => $simpleSell->getId(),
+            ), $absolute = true);
+            $instruction->setReturnurl($returnUrl);
+            $instruction->setCancelurl($returnUrl);
+    
+            $instruction->setInvnum($simpleSell->getId());
+            $instruction->setPaymentrequestCurrencycode(0, $simpleSell->getCurrency());
+            $instruction->setPaymentrequestAmt(0,  number_format($simpleSell->getPrice())));
+            
+            $simpleSell->setInstruction($instruction);
+        }
 
-        $instruction->setInvnum($simpleSell->getId());
-        $instruction->setPaymentrequestCurrencycode(0, $simpleSell->getCurrency());
-        $instruction->setPaymentrequestAmt(0,  number_format($simpleSell->getPrice())));
-
-        $simpleSell->setInstruction($instruction);
+        $this->payment->execute(new CaptureRequest($simpleSell->getInstruction()));
     }
 
     /**
@@ -112,9 +115,9 @@ class CreatePaypalInstructionFromSimpleSellAction implements ActionInterface
     public function supports($request)
     {
         return
-            $request instanceof CreatePaymentInstructionRequest &&
-            $request->getModel() instanceof InstructionAggregateInterface &&
+            $request instanceof CaptureRequest &&
             $request->getModel() instanceof InstructionAwareInterface &&
+            $request->getModel() instanceof InstructionAggregateInterface &&
             $request->getModel() instanceof SimpleSell
         ;
     }
@@ -125,10 +128,18 @@ Second we have to add this service to container.
 
 ```yaml
 services:
-    payum.action.create_paypal_instruction_from_simple_sell:
-        class:                                                    AcmeDemoBundle\Payum\Action\CreatePaypalInstructionFromSimpleSellAction
+    payum.action.capture_simple_sell_with_paypal:
+        class:                                                    AcmeDemoBundle\Payum\Action\CaptureSimpleSellWithPaypalAction
         arguments:
             -                                                     @router
+            
+payum:
+    context:
+        your_context:
+            paypal_express_checkout_nvp_payment:
+                #..
+                actions:
+                    - payum.action.capture_simple_sell_with_paypal
 ```
 
 ### Next Step
