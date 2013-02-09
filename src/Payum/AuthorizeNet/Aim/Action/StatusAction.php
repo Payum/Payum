@@ -3,7 +3,6 @@ namespace Payum\AuthorizeNet\Aim\Action;
 
 use Payum\Action\ActionInterface;
 use Payum\AuthorizeNet\Aim\PaymentInstruction;
-use Payum\Domain\InstructionAggregateInterface;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Request\StatusRequestInterface;
 

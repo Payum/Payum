@@ -26,23 +26,16 @@ $payment = new Payment($authorizeNet);
 $payment->addAction(new CaptureAction());
 $payment->addAction(new StatusAction());
 
-$sell = $storage->createModel();
-$sell->setPrice(100);
-$sell->setCurrency('EUR');
-$sell->setInstruction();
-
 $instruction = new PaymentInstruction;
 $instruction->setCardNum($_REQUEST['card_num']);
 $instruction->setExpDate($_REQUEST['exp_date']);
 $instruction->setAmount($sell->getPrice());
 
-$sell->setInstruction($instruction);
-
-if ($interactiveRequest = $payment->execute(new CaptureRequest($sell))) {
+if ($interactiveRequest = $payment->execute(new CaptureRequest($instruction))) {
     throw $interactiveRequest;
 }
 
-$statusRequest = new BinaryMaskStatusRequest($sell);
+$statusRequest = new BinaryMaskStatusRequest($instruction);
 if ($interactiveRequest = $payment->execute($statusRequest)) {
     throw $interactiveRequest;
 }

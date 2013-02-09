@@ -1,11 +1,7 @@
 <?php
 namespace Payum\AuthorizeNet\Aim\Action;
 
-use Payum\Domain\InstructionAggregateInterface;
-use Payum\Domain\InstructionAwareInterface;
-use Payum\Exception\LogicException;
 use Payum\Request\CaptureRequest;
-use Payum\Request\CreatePaymentInstructionRequest;
 use Payum\Request\UserInputRequiredInteractiveRequest;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\AuthorizeNet\Aim\PaymentInstruction;
