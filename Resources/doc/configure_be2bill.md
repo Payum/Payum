@@ -63,8 +63,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Payum\Action\ActionPaymentAware;
 use Payum\Request\CaptureRequest;
-use Payum\Domain\InstructionAggregateInterface;
-use Payum\Domain\InstructionAwareInterface;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Be2Bill\PaymentInstruction;
 

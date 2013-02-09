@@ -62,8 +62,8 @@ use Symfony\Component\Routing\RouterInterface;
 
 use Payum\Action\ActionPaymentAware;
 use Payum\Request\CaptureRequest;
-use Payum\Domain\InstructionAggregateInterface;
-use Payum\Domain\InstructionAwareInterface;
+use Payum\PaymentInstructionAggregateInterface;
+use Payum\PaymentInstructionAwareInterface;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Domain\SimpleSell;
@@ -88,7 +88,7 @@ class CaptureSimpleSellWithPaypalAction extends ActionPaymentAware
         }
         
         $simpleSell = $request->getModel();
-        if (false == $simpleSell->getInstruction()) {
+        if (false == $simpleSell->getPaymentInstruction()) {
             $instruction = new PaymentInstruction();
             
             $returnUrl = $this->router->generate('payum_payment_capture', array(
@@ -102,10 +102,10 @@ class CaptureSimpleSellWithPaypalAction extends ActionPaymentAware
             $instruction->setPaymentrequestCurrencycode(0, $simpleSell->getCurrency());
             $instruction->setPaymentrequestAmt(0,  number_format($simpleSell->getPrice())));
             
-            $simpleSell->setInstruction($instruction);
+            $simpleSell->setPaymentInstruction($instruction);
         }
 
-        $this->payment->execute(new CaptureRequest($simpleSell->getInstruction()));
+        $this->payment->execute(new CaptureRequest($simpleSell->getPaymentInstruction()));
     }
 
     /**
@@ -115,8 +115,8 @@ class CaptureSimpleSellWithPaypalAction extends ActionPaymentAware
     {
         return
             $request instanceof CaptureRequest &&
-            $request->getModel() instanceof InstructionAwareInterface &&
-            $request->getModel() instanceof InstructionAggregateInterface &&
+            $request->getModel() instanceof PaymentInstructionAwareInterface &&
+            $request->getModel() instanceof PaymentInstructionAggregateInterface &&
             $request->getModel() instanceof SimpleSell
         ;
     }
