@@ -48,7 +48,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         
         $processor = new Processor();
 
-        $config = $processor->processConfiguration($configuration, array(
+        $processor->processConfiguration($configuration, array(
             'payum' => array(
                 'contexts' => array(
                     'a_context' => array(
@@ -76,7 +76,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
 
-        $config = $processor->processConfiguration($configuration, array(
+        $processor->processConfiguration($configuration, array(
             'payum' => array(
                 'contexts' => array(
                     'a_context' => array(
@@ -101,7 +101,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
 
-        $config = $processor->processConfiguration($configuration, array(
+        $processor->processConfiguration($configuration, array(
             'payum' => array(
                 'contexts' => array(
                     'a_context' => array(
@@ -126,7 +126,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
 
-        $config = $processor->processConfiguration($configuration, array(
+        $processor->processConfiguration($configuration, array(
             'payum' => array(
                 'contexts' => array(
                     'a_context' => array(
@@ -157,7 +157,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
 
-        $config = $processor->processConfiguration($configuration, array(
+        $processor->processConfiguration($configuration, array(
             'payum' => array(
                 'contexts' => array(
                     'a_context' => array(
@@ -197,7 +197,6 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                             'bar_opt' => 'bar'
                         ),
                         'paypal_express_checkout_nvp_payment' => array(
-                            'create_instruction_from_model_action' => 'foo',
                             'api' => array(
                                 'options' => array(
                                     'username' => 'aUsername',
@@ -272,6 +271,110 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                 )
             )
         ));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldPassConfigurationProcessingWithCustomActionDefined()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'contexts' => array(
+                    'a_context' => array(
+                        'bar_storage' => array(
+                            'bar_opt' => 'bar'
+                        ),
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo',
+                            'actions' => array('action.foo', 'action.baz'),
+                        )
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldPassConfigurationProcessingWithCustomStatusRequestClassDefined()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'contexts' => array(
+                    'a_context' => array(
+                        'status_request_class' => 'FooStatusRequest',
+                        'bar_storage' => array(
+                            'bar_opt' => 'bar'
+                        ),
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo',
+                        )
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldPassConfigurationProcessingWithCustomCaptureFinishControllerDefined()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'contexts' => array(
+                    'a_context' => array(
+                        'capture_finished_controller' => 'Acne:Payment:finishCapture',
+                        'bar_storage' => array(
+                            'bar_opt' => 'bar'
+                        ),
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo',
+                        )
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldPassConfigurationProcessingWithCustomCaptureInteractiveControllerDefined()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+                'payum' => array(
+                    'contexts' => array(
+                        'a_context' => array(
+                            'capture_interactive_controller' => 'Acne:Payment:interactiveCapture',
+                            'bar_storage' => array(
+                                'bar_opt' => 'bar'
+                            ),
+                            'foo_payment' => array(
+                                'foo_opt' => 'foo',
+                            )
+                        )
+                    )
+                )
+            ));
     }
 }
 

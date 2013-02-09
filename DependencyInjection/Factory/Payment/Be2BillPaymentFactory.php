@@ -49,15 +49,6 @@ class Be2BillPaymentFactory implements PaymentFactoryInterface
         $container->setDefinition($statusActionId, $statusActionDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($statusActionId)));
 
-        if ($config['create_instruction_from_model_action']) {
-            $createInstructionActionDefinition = new DefinitionDecorator($config['create_instruction_from_model_action']);
-            $createInstructionActionId = 'payum.context.'.$contextName.'.action.create_instruction';
-            $container->setDefinition($createInstructionActionId, $createInstructionActionDefinition);
-            $paymentDefinition->addMethodCall('addAction', array(new Reference($createInstructionActionId)));
-        }
-
-
-
         return $paymentId;
     }
 
@@ -75,7 +66,6 @@ class Be2BillPaymentFactory implements PaymentFactoryInterface
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
         $builder->children()
-            ->scalarNode('create_instruction_from_model_action')->defaultNull()->end()
             ->arrayNode('api')->children()
                 ->scalarNode('client')->defaultValue('payum.buzz.client')->cannotBeEmpty()->end()
                 ->arrayNode('options')->children()

@@ -79,13 +79,6 @@ class PaypalExpressCheckoutNvpPaymentFactory implements PaymentFactoryInterface
         $container->setDefinition($syncId, $syncDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($syncId)));
 
-        if ($config['create_instruction_from_model_action']) {
-            $createInstructionActionDefinition = new DefinitionDecorator($config['create_instruction_from_model_action']);
-            $createInstructionActionId = 'payum.context.'.$contextName.'.action.create_instruction';
-            $container->setDefinition($createInstructionActionId, $createInstructionActionDefinition);
-            $paymentDefinition->addMethodCall('addAction', array(new Reference($createInstructionActionId)));
-        }
-
         return $paymentId;
     }
 
@@ -103,7 +96,6 @@ class PaypalExpressCheckoutNvpPaymentFactory implements PaymentFactoryInterface
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
         $builder->children()
-            ->scalarNode('create_instruction_from_model_action')->defaultNull()->end()
             ->arrayNode('api')->children()
                 ->scalarNode('client')->defaultValue('payum.buzz.client')->cannotBeEmpty()->end()
                 ->arrayNode('options')->children()

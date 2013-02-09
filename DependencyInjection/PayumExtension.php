@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\DependencyInjection;
 
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -41,6 +42,14 @@ class PayumExtension extends Extension
                 }
                 if (isset($this->storageFactories[$serviceName])) {
                     $storageServiceId = $this->storageFactories[$serviceName]->create($container, $contextName, $service);
+                }
+            }
+
+            if (false == empty($config['actions'])) {
+                foreach ($config['actions'] as $actionId) {
+                    $container->getDefinition($paymentServiceId)
+                        ->addMethodCall('addAction', array(new Reference($actionId)))
+                    ;
                 }
             }
 

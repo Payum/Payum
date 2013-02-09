@@ -5,23 +5,26 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface;
+
 use Payum\Exception\LogicException;
 
 class MainConfiguration implements ConfigurationInterface
 {
     /**
-     * @var array
+     * @var PaymentFactoryInterface[]
      */
     protected $paymentFactories = array();
 
     /**
-     * @var array
+     * @var StorageFactoryInterface[]
      */
     protected $storageFactories = array();
 
     /**
-     * @param array $paymentFactories
-     * @param array $storageFactories
+     * @param PaymentFactoryInterface[] $paymentFactories
+     * @param StorageFactoryInterface[] $storageFactories
      */
     public function __construct(array $paymentFactories, array $storageFactories)
     {
@@ -112,8 +115,19 @@ class MainConfiguration implements ConfigurationInterface
                     $paymentName
                 ));
             }
+
+            $paymentSection = $contextsPrototypeNode->children()->arrayNode($paymentName);
             
-            $factory->addConfiguration($contextsPrototypeNode->children()->arrayNode($paymentName));
+            $factory->addConfiguration($paymentSection);
+
+            $paymentSection
+                ->children()
+                    ->arrayNode('actions')
+                        ->useAttributeAsKey('key')
+                        ->prototype('scalar')->end()
+                    ->end()
+                ->end()
+            ;
         }
     }
 
