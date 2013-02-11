@@ -3,7 +3,18 @@ Getting Started With PayumBundle
 
 ### Installation
 
-The installation is in three steps:
-* first, [the basic setup](basic_setup.md)
-* second, configure desired payment [paypal express checkout](configure_paypal_express_checkout.md), [authorize.net AIM](configure_authorize_net_aim.md) or [be2bill](configure_be2bill.md) 
-* then, how to [capture payment](capture_payment.md).
+The installation is in two steps:
+
+1. first, [the basic bundle setup](basic_setup.md)
+2. second, capture funds with: [paypal express checkout](capture_funds_with_paypal_express_checkout.md), [authorize.net AIM](capture_funds_with_authorize_net_aim.md), [be2bill](capture_funds_with_be2bill.md).
+
+### Other documents
+
+### Next Step
+
+You are ready to read 
+
+* [Managing interactive requests](interactive_requests.md).
+* [Customization of capture finished controller](customize_capture_finished_controller.md).
+* [Use domain model to capture funds](use_domain_model_to_capture_funds.md).
+* [Configuration reference](configuration_reference.md).
