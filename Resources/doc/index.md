@@ -10,8 +10,6 @@ The installation is in two steps:
 
 ### Other documents
 
-### Next Step
-
 You are ready to read 
 
 * [Managing interactive requests](interactive_requests.md).
