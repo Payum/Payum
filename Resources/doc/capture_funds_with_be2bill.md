@@ -153,8 +153,7 @@ class PaymentController extends Controller
         $paymentContext = $this->get('payum')->getContext($contextName);
     
         /** @var PaypalPaymentInstruction */
-        $instruction = new Be2billPaymentInstruction;
-    
+        $instruction = $paymentContext->getStorage()->createModel();
         $instruction->setAmount(10005); //be2bill amount format is cents: for example:  100.05 (EUR). will be 10005.
         $instruction->setClientemail('user@email.com');
         $instruction->setClientuseragent($request->headers->get('User-Agent', 'Unknown'));

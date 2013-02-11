@@ -153,8 +153,8 @@ class PaymentController extends Controller
     
         $paymentContext = $this->get('payum')->getContext($contextName);
     
-        /** @var PaypalPaymentInstruction */
-        $instruction = new Be2billPaymentInstruction;
+        /** @var AuthorizeNetPaymentInstruction */
+        $instruction = $paymentContext->getStorage()->createModel();
     
         $instruction->setAmount(1.23);
         $instruction->setClientemail('user@email.com');
