@@ -13,7 +13,7 @@ class DoctrineModelStorageOrmTest extends OrmTest
     {
         $storage = new DoctrineModelStorage(
             $this->em,
-            'Payum\Examples\Entity\SimpleSell'
+            'Payum\Examples\Entity\TestModel'
         );
         
         $request = $storage->createModel();
@@ -30,7 +30,7 @@ class DoctrineModelStorageOrmTest extends OrmTest
     {
         $storage = new DoctrineModelStorage(
             $this->em,
-            'Payum\Examples\Entity\SimpleSell'
+            'Payum\Examples\Entity\TestModel'
         );
 
         $request = $storage->createModel();
@@ -43,7 +43,7 @@ class DoctrineModelStorageOrmTest extends OrmTest
 
         $request = $storage->findModelById($requestId);
         
-        $this->assertInstanceOf('Payum\Examples\Entity\SimpleSell', $request);
+        $this->assertInstanceOf('Payum\Examples\Model\TestModel', $request);
         $this->assertEquals($requestId, $request->getId());
     }
 }

@@ -2,7 +2,7 @@
 namespace Payum\Tests\Bridge\Doctrine\Storage;
 
 use Payum\Bridge\Doctrine\Storage\DoctrineModelStorage;
-use Payum\Domain\SimpleSell;
+use Payum\Examples\Model\TestModel;
 
 class DoctrineModelStorageTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,7 +30,7 @@ class DoctrineModelStorageTest extends \PHPUnit_Framework_TestCase
     {
         new DoctrineModelStorage(
             $this->createObjectManager(),
-            'Payum\Domain\SimpleSell'
+            'Payum\Examples\Model\TestModel'
         );
     }
 
@@ -39,11 +39,11 @@ class DoctrineModelStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCreateInstanceOfModelClassGivenInConstructor()
     {
-        $expectedModelClass = 'Payum\Domain\SimpleSell';
+        $expectedModelClass = 'Payum\Examples\Model\TestModel';
 
         $storage = new DoctrineModelStorage(
             $this->createObjectManager(),
-            'Payum\Domain\SimpleSell'
+            $expectedModelClass
         );
 
         $model = $storage->createModel();
@@ -61,7 +61,7 @@ class DoctrineModelStorageTest extends \PHPUnit_Framework_TestCase
         $objectManagerMock
             ->expects($this->once())
             ->method('persist')
-            ->with($this->isInstanceOf('Payum\Domain\SimpleSell'))
+            ->with($this->isInstanceOf('Payum\Examples\Model\TestModel'))
         ;
         $objectManagerMock
             ->expects($this->once())
@@ -70,7 +70,7 @@ class DoctrineModelStorageTest extends \PHPUnit_Framework_TestCase
         
         $storage = new DoctrineModelStorage(
             $objectManagerMock,
-            'Payum\Domain\SimpleSell'
+            'Payum\Examples\Model\TestModel'
         );
 
         $model = $storage->createModel();
@@ -83,9 +83,9 @@ class DoctrineModelStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldFindModelById()
     {
-        $expectedModelClass = 'Payum\Domain\SimpleSell';
+        $expectedModelClass = 'Payum\Examples\Model\TestModel';
         $expectedModelId = 123;
-        $expectedFoundModel = new SimpleSell;
+        $expectedFoundModel = new TestModel;
         
         $objectManagerMock = $this->createObjectManager();
         $objectManagerMock
@@ -97,7 +97,7 @@ class DoctrineModelStorageTest extends \PHPUnit_Framework_TestCase
 
         $storage = new DoctrineModelStorage(
             $objectManagerMock,
-            'Payum\Domain\SimpleSell'
+            'Payum\Examples\Model\TestModel'
         );
 
         $actualModel = $storage->findModelById($expectedModelId);
@@ -109,13 +109,13 @@ class DoctrineModelStorageTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid model given. Should be instance of Payum\Domain\SimpleSell
+     * @expectedExceptionMessage Invalid model given. Should be instance of Payum\Tests\Bridge\Doctrine\Storage\TestModel
      */
     public function throwIfTryUpdateModelNotInstanceOfModelClass()
     {
         $storage = new DoctrineModelStorage(
             $this->createObjectManager(),
-            'Payum\Domain\SimpleSell'
+            'Payum\Tests\Bridge\Doctrine\Storage\TestModel'
         );
 
         $storage->updateModel(new \stdClass);

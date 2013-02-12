@@ -3,7 +3,6 @@ namespace Payum\Examples\Action;
 
 use Payum\Action\ActionInterface;
 use Payum\Request\StatusRequestInterface;
-use Payum\Domain\SimpleSell;
 
 class StatusAction implements ActionInterface
 {
@@ -20,9 +19,6 @@ class StatusAction implements ActionInterface
      */
     public function supports($request)
     {
-        return 
-            $request instanceof StatusRequestInterface && 
-            $request->getModel() instanceof SimpleSell
-        ;
+        return $request instanceof StatusRequestInterface;
     }
 }

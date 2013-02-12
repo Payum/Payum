@@ -2,7 +2,6 @@
 namespace Payum\Tests\Domain\Storage;
 
 use Payum\Domain\Storage\FilesystemModelStorage;
-use Payum\Domain\SimpleSell;
 
 class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,8 +21,8 @@ class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
     public function couldBeConstructedWithStorageDirModelClassAndIdPropertyArguments()
     {
         new FilesystemModelStorage(
-            sys_get_temp_dir(), 
-            'Payum\Domain\SimpleSell',
+            sys_get_temp_dir(),
+            'Payum\Examples\Model\TestModel',
             'id'
         );
     }
@@ -33,7 +32,7 @@ class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCreateInstanceOfModelClassGivenInConstructor()
     {
-        $expectedModelClass = 'Payum\Domain\SimpleSell';
+        $expectedModelClass = 'Payum\Examples\Model\TestModel';
         
         $storage = new FilesystemModelStorage(
             sys_get_temp_dir(),
@@ -52,7 +51,7 @@ class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUpdateModelAndSetIdToModel()
     {
-        $expectedModelClass = 'Payum\Domain\SimpleSell';
+        $expectedModelClass = 'Payum\Examples\Model\TestModel';
 
         $storage = new FilesystemModelStorage(
             sys_get_temp_dir(),
@@ -75,7 +74,7 @@ class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = new FilesystemModelStorage(
             sys_get_temp_dir(),
-            'Payum\Domain\SimpleSell',
+            'Payum\Examples\Model\TestModel',
             'id'
         );
 
@@ -97,7 +96,7 @@ class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = new FilesystemModelStorage(
             sys_get_temp_dir(),
-            'Payum\Domain\SimpleSell',
+            'Payum\Examples\Model\TestModel',
             'id'
         );
 
@@ -114,7 +113,7 @@ class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = new FilesystemModelStorage(
             sys_get_temp_dir(),
-            'Payum\Domain\SimpleSell',
+            'Payum\Examples\Model\TestModel',
             'id'
         );
 
@@ -131,13 +130,13 @@ class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
      * @test
      * 
      * @expectedException \Payum\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid model given. Should be instance of Payum\Domain\SimpleSell
+     * @expectedExceptionMessage Invalid model given. Should be instance of Payum\Examples\Model\TestModel
      */
     public function throwIfTryUpdateModelNotInstanceOfModelClass()
     {
         $storage = new FilesystemModelStorage(
             sys_get_temp_dir(),
-            'Payum\Domain\SimpleSell',
+            'Payum\Examples\Model\TestModel',
             'id'
         );
         
@@ -151,7 +150,7 @@ class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = new FilesystemModelStorage(
             sys_get_temp_dir(),
-            'Payum\Domain\SimpleSell',
+            'Payum\Examples\Model\TestModel',
             'id'
         );
         
@@ -171,7 +170,7 @@ class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = new FilesystemModelStorage(
             sys_get_temp_dir(),
-            'Payum\Domain\SimpleSell',
+            'Payum\Examples\Model\TestModel',
             'id'
         );
 

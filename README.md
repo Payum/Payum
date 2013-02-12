@@ -37,7 +37,7 @@ $payment->addAction(new \Payum\Examples\Action\AuthorizeAction());
 $payment->addAction(new \Payum\Examples\Action\StatusAction());
 
 //Create request object. It could be anything supported by an action.
-$sell = new \Payum\Domain\SimpleSell;
+$sell = new \Payum\Examples\Model\TestModel;
 $sell->setPrice(100.05);
 $sell->setCurrency('EUR');
 
@@ -57,7 +57,7 @@ Interactive requests
 //...
 
 //Create authorize required request.
-$sell = new \Payum\Examples\Model\AuthorizeRequiredSell();
+$sell = new \Payum\Examples\Model\AuthorizeRequiredModel();
 $sell->setPrice(100.05);
 $sell->setCurrency('EUR');
 

@@ -2,10 +2,10 @@
 namespace Payum\Tests\Functional\Bridge\Doctrine;
 
 use Doctrine\ORM\Tools\SchemaValidator;
-use Doctrine\ORM\Mapping\Driver\DriverChain;
 use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 
 class OrmTest extends BaseOrmTest
@@ -20,12 +20,12 @@ class OrmTest extends BaseOrmTest
             throw new \RuntimeException('Cannot gues Payum root dir.');
         }
         
-        $driver = new DriverChain;
+        $driver = new MappingDriverChain;
         
-        $xmlDriver = new SimplifiedXmlDriver(array(
-            $rootDir.'/src/Payum/Bridge/Doctrine/Resources/mapping' => 'Payum\Bridge\Doctrine\Entity'
-        ));        
-        $driver->addDriver($xmlDriver, 'Payum\Bridge\Doctrine\Entity');
+//        $xmlDriver = new SimplifiedXmlDriver(array(
+//            $rootDir.'/src/Payum/Bridge/Doctrine/Resources/mapping' => 'Payum\Bridge\Doctrine\Entity'
+//        ));        
+//        $driver->addDriver($xmlDriver, 'Payum\Bridge\Doctrine\Entity');
 
         $rc = new \ReflectionClass('\Doctrine\ORM\Mapping\Driver\AnnotationDriver');
         AnnotationRegistry::registerFile(dirname($rc->getFileName()) . '/DoctrineAnnotations.php');

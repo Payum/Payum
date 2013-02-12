@@ -10,3 +10,4 @@
 * `InstructionAggregateInterface` moved to `Payum` namespace.
 * `InstructionAggregateInterface` renamed to `PaymentInstructionAggregateInterface`
 * `InstructionAggregateInterface::getInstruction` renamed to `PaymentInstructionAggregateInterface::getPaymentInstruction`
+* `SimpleSell` class was removed.
