@@ -11,3 +11,5 @@
 * `InstructionAggregateInterface` renamed to `PaymentInstructionAggregateInterface`
 * `InstructionAggregateInterface::getInstruction` renamed to `PaymentInstructionAggregateInterface::getPaymentInstruction`
 * `SimpleSell` class was removed.
+* Remove Model prefix from `Storages`.
+* Change `Storages` namespace. It was `Payum\Domain\Storage\XXX` now `Payum\Storage\XXX`.

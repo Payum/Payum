@@ -2,16 +2,16 @@
 namespace Payum\Tests\Functional\Bridge\Doctrine\Request\Storage;
 
 use Payum\Tests\Functional\Bridge\Doctrine\OrmTest;
-use Payum\Bridge\Doctrine\Storage\DoctrineModelStorage;
+use Payum\Bridge\Doctrine\Storage\DoctrineStorage;
 
-class DoctrineModelStorageOrmTest extends OrmTest
+class DoctrineStorageOrmTest extends OrmTest
 {
     /**
      * @test
      */
     public function shouldUpdateModelAndSetId()
     {
-        $storage = new DoctrineModelStorage(
+        $storage = new DoctrineStorage(
             $this->em,
             'Payum\Examples\Entity\TestModel'
         );
@@ -28,7 +28,7 @@ class DoctrineModelStorageOrmTest extends OrmTest
      */
     public function shouldFindModelById()
     {
-        $storage = new DoctrineModelStorage(
+        $storage = new DoctrineStorage(
             $this->em,
             'Payum\Examples\Entity\TestModel'
         );

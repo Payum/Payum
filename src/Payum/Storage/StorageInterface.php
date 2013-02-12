@@ -1,7 +1,7 @@
 <?php
-namespace Payum\Domain\Storage;
+namespace Payum\Storage;
 
-interface ModelStorageInterface
+interface StorageInterface
 {
     /**
      * @return object

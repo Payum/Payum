@@ -3,10 +3,10 @@ namespace Payum\Bridge\Doctrine\Storage;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Payum\Domain\Storage\ModelStorageInterface;
+use Payum\Storage\StorageInterface;
 use Payum\Exception\InvalidArgumentException;
 
-class DoctrineModelStorage implements ModelStorageInterface
+class DoctrineStorage implements StorageInterface
 {
     /**
      * @var \Doctrine\Common\Persistence\ObjectManager

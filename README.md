@@ -8,7 +8,7 @@ Basic concepts
 
 * **Action** - It executes some logic depending on information from a request.
 * **Request** - It contains information needed to run particular action.
-* **DomainModel** - It is a model from your domain layer. The model may aggregate or\and be aware of payment instruction.  
+* **Model** - It is a model from your domain layer. The model may aggregate or\and be aware of payment instruction.  
 * **ActionPaymentAware** - The action can ask payment to execute a request required for its job. 
 * **InteractiveRequest** - The request requires an input from the user (display form, redirect somewhere, confirmation etc) It has to be thrown by an action.
 * **PaymentInstruction** - Payment specific information. You have to take of transforming data from domain model to payment instruction.  

@@ -1,9 +1,10 @@
 <?php
-namespace Payum\Domain\Storage;
+namespace Payum\Storage;
 
 use Payum\Exception\InvalidArgumentException;
+use Payum\Storage\StorageInterface;
 
-class FilesystemModelStorage implements ModelStorageInterface
+class FilesystemStorage implements StorageInterface
 {
     protected $storageDir;
 

@@ -1,18 +1,18 @@
 <?php
-namespace Payum\Tests\Domain\Storage;
+namespace Payum\Tests\Storage;
 
-use Payum\Domain\Storage\FilesystemModelStorage;
+use \Payum\Storage\FilesystemStorage;
 
-class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
+class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldImplementModelStorageInterface()
+    public function shouldImplementStorageInterface()
     {
-        $rc = new \ReflectionClass('Payum\Domain\Storage\FilesystemModelStorage');
+        $rc = new \ReflectionClass('Payum\Storage\FilesystemStorage');
         
-        $this->assertTrue($rc->implementsInterface('Payum\Domain\Storage\ModelStorageInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Storage\StorageInterface'));
     }
 
     /**
@@ -20,7 +20,7 @@ class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithStorageDirModelClassAndIdPropertyArguments()
     {
-        new FilesystemModelStorage(
+        new FilesystemStorage(
             sys_get_temp_dir(),
             'Payum\Examples\Model\TestModel',
             'id'
@@ -34,7 +34,7 @@ class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
     {
         $expectedModelClass = 'Payum\Examples\Model\TestModel';
         
-        $storage = new FilesystemModelStorage(
+        $storage = new FilesystemStorage(
             sys_get_temp_dir(),
             $expectedModelClass,
             'id'
@@ -53,7 +53,7 @@ class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
     {
         $expectedModelClass = 'Payum\Examples\Model\TestModel';
 
-        $storage = new FilesystemModelStorage(
+        $storage = new FilesystemStorage(
             sys_get_temp_dir(),
             $expectedModelClass,
             'id'
@@ -72,7 +72,7 @@ class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldKeepIdTheSameOnSeveralUpdates()
     {
-        $storage = new FilesystemModelStorage(
+        $storage = new FilesystemStorage(
             sys_get_temp_dir(),
             'Payum\Examples\Model\TestModel',
             'id'
@@ -94,7 +94,7 @@ class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCreateFileWithModelInfoInStorageDirOnUpdateModel()
     {
-        $storage = new FilesystemModelStorage(
+        $storage = new FilesystemStorage(
             sys_get_temp_dir(),
             'Payum\Examples\Model\TestModel',
             'id'
@@ -111,7 +111,7 @@ class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldGenerateDifferentIdsForDifferentModels()
     {
-        $storage = new FilesystemModelStorage(
+        $storage = new FilesystemStorage(
             sys_get_temp_dir(),
             'Payum\Examples\Model\TestModel',
             'id'
@@ -134,7 +134,7 @@ class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfTryUpdateModelNotInstanceOfModelClass()
     {
-        $storage = new FilesystemModelStorage(
+        $storage = new FilesystemStorage(
             sys_get_temp_dir(),
             'Payum\Examples\Model\TestModel',
             'id'
@@ -148,7 +148,7 @@ class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldFindModelById()
     {
-        $storage = new FilesystemModelStorage(
+        $storage = new FilesystemStorage(
             sys_get_temp_dir(),
             'Payum\Examples\Model\TestModel',
             'id'
@@ -168,7 +168,7 @@ class FilesystemModelStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldStoreInfoBetweenUpdateAndFind()
     {
-        $storage = new FilesystemModelStorage(
+        $storage = new FilesystemStorage(
             sys_get_temp_dir(),
             'Payum\Examples\Model\TestModel',
             'id'

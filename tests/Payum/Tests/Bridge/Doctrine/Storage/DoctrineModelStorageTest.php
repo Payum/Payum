@@ -1,10 +1,10 @@
 <?php
 namespace Payum\Tests\Bridge\Doctrine\Storage;
 
-use Payum\Bridge\Doctrine\Storage\DoctrineModelStorage;
+use Payum\Bridge\Doctrine\Storage\DoctrineStorage;
 use Payum\Examples\Model\TestModel;
 
-class DoctrineModelStorageTest extends \PHPUnit_Framework_TestCase
+class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
 {
     public static function setUpBeforeClass()
     {
@@ -16,11 +16,11 @@ class DoctrineModelStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementModelStorageInterface()    
+    public function shouldImplementStorageInterface()    
     {
-        $rc = new \ReflectionClass('Payum\Bridge\Doctrine\Storage\DoctrineModelStorage');
+        $rc = new \ReflectionClass('Payum\Bridge\Doctrine\Storage\DoctrineStorage');
         
-        $this->assertTrue($rc->implementsInterface('Payum\Domain\Storage\ModelStorageInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Storage\StorageInterface'));
     }
 
     /**
@@ -28,7 +28,7 @@ class DoctrineModelStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithObjectManagerAndModelClassAsArguments()
     {
-        new DoctrineModelStorage(
+        new DoctrineStorage(
             $this->createObjectManager(),
             'Payum\Examples\Model\TestModel'
         );
@@ -41,7 +41,7 @@ class DoctrineModelStorageTest extends \PHPUnit_Framework_TestCase
     {
         $expectedModelClass = 'Payum\Examples\Model\TestModel';
 
-        $storage = new DoctrineModelStorage(
+        $storage = new DoctrineStorage(
             $this->createObjectManager(),
             $expectedModelClass
         );
@@ -68,7 +68,7 @@ class DoctrineModelStorageTest extends \PHPUnit_Framework_TestCase
             ->method('flush')
         ;
         
-        $storage = new DoctrineModelStorage(
+        $storage = new DoctrineStorage(
             $objectManagerMock,
             'Payum\Examples\Model\TestModel'
         );
@@ -95,7 +95,7 @@ class DoctrineModelStorageTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($expectedFoundModel))
         ;
 
-        $storage = new DoctrineModelStorage(
+        $storage = new DoctrineStorage(
             $objectManagerMock,
             'Payum\Examples\Model\TestModel'
         );
@@ -113,7 +113,7 @@ class DoctrineModelStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfTryUpdateModelNotInstanceOfModelClass()
     {
-        $storage = new DoctrineModelStorage(
+        $storage = new DoctrineStorage(
             $this->createObjectManager(),
             'Payum\Tests\Bridge\Doctrine\Storage\TestModel'
         );
