@@ -7,10 +7,11 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 use Payum\Bundle\PayumBundle\DependencyInjection\MainConfiguration;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCheckoutNvpPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\DoctrineStorageFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\FilesystemStorageFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\NullStorageFactory;
 
 class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 {
@@ -328,6 +329,33 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldPassConfigurationProcessingWithNullStorageFactory()
+    {
+        $storageFactories = array(
+            new NullStorageFactory()
+        );
+
+        $configuration = new MainConfiguration($this->paymentFactories, $storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'contexts' => array(
+                    'a_context' => array(
+                        'null_storage' => true,
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo'
+                        )
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     */
     public function shouldPassConfigurationProcessingWithCustomCaptureFinishControllerDefined()
     {
         $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
@@ -361,20 +389,20 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $processor = new Processor();
 
         $processor->processConfiguration($configuration, array(
-                'payum' => array(
-                    'contexts' => array(
-                        'a_context' => array(
-                            'capture_interactive_controller' => 'Acne:Payment:interactiveCapture',
-                            'bar_storage' => array(
-                                'bar_opt' => 'bar'
-                            ),
-                            'foo_payment' => array(
-                                'foo_opt' => 'foo',
-                            )
+            'payum' => array(
+                'contexts' => array(
+                    'a_context' => array(
+                        'capture_interactive_controller' => 'Acne:Payment:interactiveCapture',
+                        'bar_storage' => array(
+                            'bar_opt' => 'bar'
+                        ),
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo',
                         )
                     )
                 )
-            ));
+            )
+        ));
     }
 }
 

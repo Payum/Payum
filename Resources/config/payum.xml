@@ -6,6 +6,7 @@
 
     <parameters>
         <parameter key="payum.class">Payum\Bundle\PayumBundle\Context\ContextRegistry</parameter>
+        <parameter key="payum.storage.null.class">Payum\Storage\NullStorage</parameter>
         <parameter key="payum.buzz.client.class">Buzz\Client\Curl</parameter>
     </parameters>
 
@@ -14,6 +15,9 @@
             <call method="setTimeout">
                 <argument>200</argument>
             </call>
+        </service>
+
+        <service id="payum.storage.null" class="%payum.storage.null.class%" public="false">
         </service>
 
         <service id="payum" class="%payum.class%">
