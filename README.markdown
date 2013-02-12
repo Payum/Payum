@@ -1,7 +1,7 @@
 PayumBundle
 ===========
 
-The PayumBundle adds support of [payum](https://github.com/Payum/Payum) lib. and its different implementatiob like  and 
+The PayumBundle adds support of [payum](https://github.com/Payum/Payum) lib to [symfony](symfony.com) framework.
 
 Features include:
 
