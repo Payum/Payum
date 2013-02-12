@@ -1,7 +1,7 @@
 Null Storage
 ============
 
-You can use this storage in case if you want storage models yourself. It just do nothing.
+You can use this storage in case if you want store models yourself. This storage just do nothing.
 
 ```yaml
 #app/config/config.yml
