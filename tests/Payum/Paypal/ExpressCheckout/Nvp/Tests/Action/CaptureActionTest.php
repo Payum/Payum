@@ -47,6 +47,25 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldSupportCaptureRequestPaymentInstructionAggregate()
+    {
+        $action = new CaptureAction();
+
+        $model = $this->getMock('Payum\PaymentInstructionAggregateInterface');
+        $model
+            ->expects($this->atLeastOnce())
+            ->method('getPaymentInstruction')
+            ->will($this->returnValue(new PaymentInstruction))
+        ;
+
+        $request = new CaptureRequest($model);
+
+        $this->assertTrue($action->supports($request));
+    }
+
+    /**
+     * @test
+     */
     public function shouldNotSupportNotCaptureRequest()
     {
         $action = new CaptureAction();
@@ -132,7 +151,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
         ;
 
         $action = new CaptureAction();
@@ -158,7 +177,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(2))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
         ;
 
         $action = new CaptureAction();
@@ -181,7 +200,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
         ;
 
         $action = new CaptureAction();
@@ -204,7 +223,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
         ;
 
         $action = new CaptureAction();

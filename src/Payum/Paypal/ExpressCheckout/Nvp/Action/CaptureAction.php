@@ -1,14 +1,15 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
+use Payum\PaymentInstructionAggregateInterface;
 use Payum\Request\CaptureRequest;
+use Payum\Request\SyncRequest;
 use Payum\Action\ActionPaymentAware as BaseActionPaymentAware;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\SetExpressCheckoutRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\AuthorizeTokenRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\DoExpressCheckoutPaymentRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\SyncRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
@@ -19,13 +20,11 @@ class CaptureAction extends BaseActionPaymentAware
      */
     public function execute($request)
     {
-        /** @var $request CaptureRequest */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        /** @var $instruction PaymentInstruction */
-        $instruction = $request->getModel();
+        $instruction = $this->getPaymentInstructionFromRequest($request);
 
         try {
             if (false == $instruction->getPaymentrequestPaymentaction(0)) {
@@ -53,11 +52,34 @@ class CaptureAction extends BaseActionPaymentAware
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function supports($request)
     {
-        return
-            $request instanceof CaptureRequest &&
-            $request->getModel() instanceof PaymentInstruction
-        ;
+        if (false == $request instanceof CaptureRequest) {
+            return false;
+        }
+        
+        return (bool) $this->getPaymentInstructionFromRequest($request); 
+    }
+
+    /**
+     * @param \Payum\Request\CaptureRequest $request
+     * 
+     * @return PaymentInstruction|null
+     */
+    protected function getPaymentInstructionFromRequest(CaptureRequest $request)
+    {
+        if ($request->getModel() instanceof PaymentInstruction) {
+            return $request->getModel();
+        }
+
+        if (
+            $request->getModel() instanceof PaymentInstructionAggregateInterface &&
+            $request->getModel()->getPaymentInstruction() instanceof PaymentInstruction
+        ) {
+            return $request->getModel()->getPaymentInstruction();
+        }
     }
 }

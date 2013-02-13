@@ -45,6 +45,25 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldSupportCaptureRequestPaymentInstructionAggregate()
+    {
+        $action = new StatusAction();
+
+        $model = $this->getMock('Payum\PaymentInstructionAggregateInterface');
+        $model
+            ->expects($this->atLeastOnce())
+            ->method('getPaymentInstruction')
+            ->will($this->returnValue(new PaymentInstruction))
+        ;
+
+        $request = new BinaryMaskStatusRequest($model);
+
+        $this->assertTrue($action->supports($request));
+    }
+
+    /**
+     * @test
+     */
     public function shouldNotSupportStatusRequestWithNoPaymentInstructionAsModel()
     {
         $action = new StatusAction();
