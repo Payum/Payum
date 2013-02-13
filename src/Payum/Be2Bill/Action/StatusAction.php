@@ -15,13 +15,12 @@ class StatusAction implements ActionInterface
      */
     public function execute($request)
     {
-        /** @var $request \Payum\Request\StatusRequestInterface */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        /** @var $instruction PaymentInstruction */
-        $instruction = $request->getModel()->getPaymentInstruction();
+        $instruction = $this->getPaymentInstructionFromRequest($request);
+        
         if (null === $instruction->getExeccode()) {
             $request->markNew();
             
@@ -32,6 +31,8 @@ class StatusAction implements ActionInterface
 
             return;
         }
+        
+        //TODO add more checks.
 
         $request->markFailed();
     }
@@ -41,9 +42,29 @@ class StatusAction implements ActionInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof StatusRequestInterface &&
-            $request->getModel() instanceof PaymentInstruction
-        ;
+        if (false == $request instanceof StatusRequestInterface) {
+            return false;
+        }
+        
+        return (bool) $this->getPaymentInstructionFromRequest($request);
+    }
+
+    /**
+     * @param \Payum\Request\CaptureRequest $request
+     *
+     * @return PaymentInstruction|null
+     */
+    protected function getPaymentInstructionFromRequest(StatusRequestInterface $request)
+    {
+        if ($request->getModel() instanceof PaymentInstruction) {
+            return $request->getModel();
+        }
+
+        if (
+            $request->getModel() instanceof PaymentInstructionAggregateInterface &&
+            $request->getModel()->getPaymentInstruction() instanceof PaymentInstruction
+        ) {
+            return $request->getModel()->getPaymentInstruction();
+        }
     }
 }

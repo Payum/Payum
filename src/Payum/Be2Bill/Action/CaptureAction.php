@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Be2Bill\Action;
 
+use Payum\PaymentInstructionAggregateInterface;
 use Payum\Request\CaptureRequest;
 use Payum\Request\UserInputRequiredInteractiveRequest;
 use Payum\Exception\RequestNotSupportedException;
@@ -14,13 +15,11 @@ class CaptureAction extends ActionPaymentAware
      */
     public function execute($request)
     {
-        /** @var $request CaptureRequest */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        /** @var $instruction PaymentInstruction */
-        $instruction = $request->getModel();
+        $instruction = $this->getPaymentInstructionFromRequest($request);
         
         if (null === $instruction->getExeccode()) {
             //instruction must have an alias set (e.g oneclick payment) or credit card info. 
@@ -46,9 +45,29 @@ class CaptureAction extends ActionPaymentAware
      */
     public function supports($request)
     {
-        return 
-            $request instanceof CaptureRequest &&
-            $request->getModel() instanceof PaymentInstruction
-        ;
+        if (false == $request instanceof CaptureRequest) {
+            return false;
+        }
+        
+        return (bool) $this->getPaymentInstructionFromRequest($request);
+    }
+
+    /**
+     * @param \Payum\Request\CaptureRequest $request
+     *
+     * @return PaymentInstruction|null
+     */
+    protected function getPaymentInstructionFromRequest(CaptureRequest $request)
+    {
+        if ($request->getModel() instanceof PaymentInstruction) {
+            return $request->getModel();
+        }
+
+        if (
+            $request->getModel() instanceof PaymentInstructionAggregateInterface &&
+            $request->getModel()->getPaymentInstruction() instanceof PaymentInstruction
+        ) {
+            return $request->getModel()->getPaymentInstruction();
+        }
     }
 }
