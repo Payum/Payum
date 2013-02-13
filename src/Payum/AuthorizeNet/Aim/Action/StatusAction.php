@@ -4,7 +4,9 @@ namespace Payum\AuthorizeNet\Aim\Action;
 use Payum\Action\ActionInterface;
 use Payum\AuthorizeNet\Aim\PaymentInstruction;
 use Payum\Exception\RequestNotSupportedException;
+use Payum\PaymentInstructionAggregateInterface;
 use Payum\Request\StatusRequestInterface;
+use Payum\Request\SyncRequest;
 
 class StatusAction implements ActionInterface
 {
@@ -13,13 +15,11 @@ class StatusAction implements ActionInterface
      */
     public function execute($request)
     {
-        /** @var $request \Payum\Request\StatusRequestInterface */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        /** @var $instruction PaymentInstruction */
-        $instruction = $request->getModel();
+        $instruction = $this->getPaymentInstructionFromRequest($request);
         
         if (\AuthorizeNetAIM_Response::APPROVED == $instruction->getResponseCode()) {
             $request->markSuccess();
@@ -51,9 +51,29 @@ class StatusAction implements ActionInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof StatusRequestInterface &&
-            $request->getModel() instanceof PaymentInstruction
-        ;
+        if (false == $request instanceof StatusRequestInterface) {
+            return false;
+        }
+        
+        return (bool) $this->getPaymentInstructionFromRequest($request);
+    }
+
+    /**
+     * @param \Payum\Request\CaptureRequest $request
+     *
+     * @return PaymentInstruction|null
+     */
+    protected function getPaymentInstructionFromRequest(StatusRequestInterface $request)
+    {
+        if ($request->getModel() instanceof PaymentInstruction) {
+            return $request->getModel();
+        }
+
+        if (
+            $request->getModel() instanceof PaymentInstructionAggregateInterface &&
+            $request->getModel()->getPaymentInstruction() instanceof PaymentInstruction
+        ) {
+            return $request->getModel()->getPaymentInstruction();
+        }
     }
 }

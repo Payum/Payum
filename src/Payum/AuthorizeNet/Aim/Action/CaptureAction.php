@@ -2,6 +2,7 @@
 namespace Payum\AuthorizeNet\Aim\Action;
 
 use Payum\Request\CaptureRequest;
+use Payum\PaymentInstructionAggregateInterface;
 use Payum\Request\UserInputRequiredInteractiveRequest;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\AuthorizeNet\Aim\PaymentInstruction;
@@ -13,13 +14,11 @@ class CaptureAction extends ActionPaymentAware
      */
     public function execute($request)
     {
-        /** @var $request CaptureRequest */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        /** @var $instruction PaymentInstruction */
-        $instruction = $request->getModel();
+        $instruction = $this->getPaymentInstructionFromRequest($request);
         if (false == $instruction->getResponseCode()) {
             if ($instruction->getAmount() && $instruction->getCardNum() && $instruction->getExpDate()) {
                 $api = clone $this->payment->getApi();
@@ -37,9 +36,29 @@ class CaptureAction extends ActionPaymentAware
      */
     public function supports($request)
     {
-        return
-            $request instanceof CaptureRequest &&
-            $request->getModel() instanceof PaymentInstruction
-        ;
+        if (false == $request instanceof CaptureRequest) {
+            return false;
+        }
+        
+        return (bool) $this->getPaymentInstructionFromRequest($request);
+    }
+
+    /**
+     * @param \Payum\Request\CaptureRequest $request
+     *
+     * @return PaymentInstruction|null
+     */
+    protected function getPaymentInstructionFromRequest(CaptureRequest $request)
+    {
+        if ($request->getModel() instanceof PaymentInstruction) {
+            return $request->getModel();
+        }
+
+        if (
+            $request->getModel() instanceof PaymentInstructionAggregateInterface &&
+            $request->getModel()->getPaymentInstruction() instanceof PaymentInstruction
+        ) {
+            return $request->getModel()->getPaymentInstruction();
+        }
     }
 }
