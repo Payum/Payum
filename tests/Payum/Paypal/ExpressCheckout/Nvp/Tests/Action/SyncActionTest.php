@@ -3,9 +3,9 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Buzz\Message\Form\FormRequest;
 
+use Payum\Request\SyncRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\SyncAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\SyncRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
@@ -33,11 +33,32 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportSyncRequest()
+    public function shouldSupportSyncRequestAndPaymentInstructionAsModel()
     {
         $action = new SyncAction();
-        
-        $this->assertTrue($action->supports(new SyncRequest(new PaymentInstruction)));
+
+        $request = new SyncRequest(new PaymentInstruction);
+
+        $this->assertTrue($action->supports($request));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSupportSyncRequestPaymentInstructionAggregate()
+    {
+        $action = new SyncAction();
+
+        $model = $this->getMock('Payum\PaymentInstructionAggregateInterface');
+        $model
+            ->expects($this->atLeastOnce())
+            ->method('getPaymentInstruction')
+            ->will($this->returnValue(new PaymentInstruction))
+        ;
+
+        $request = new SyncRequest($model);
+
+        $this->assertTrue($action->supports($request));
     }
 
     /**
@@ -96,10 +117,10 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new SyncAction();
         $action->setPayment($paymentMock);
 
-        $request = new SyncRequest(new PaymentInstruction);
-        $request->getPaymentInstruction()->setToken('theToken');
+        $instruction = new PaymentInstruction;
+        $instruction->setToken('theToken');
 
-        $action->execute($request);
+        $action->execute(new SyncRequest($instruction));
     }
 
     /**
@@ -122,12 +143,12 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new SyncAction();
         $action->setPayment($paymentMock);
 
-        $request = new SyncRequest(new PaymentInstruction);
-        $request->getPaymentInstruction()->setToken('theToken');
-        $request->getPaymentInstruction()->setPaymentrequestTransactionid(0, 'fooTransId');
-        $request->getPaymentInstruction()->setPaymentrequestTransactionid(2, 'barTransId');
+        $instruction = new PaymentInstruction;
+        $instruction->setToken('theToken');
+        $instruction->setPaymentrequestTransactionid(0, 'fooTransId');
+        $instruction->setPaymentrequestTransactionid(2, 'barTransId');
 
-        $action->execute($request);
+        $action->execute(new SyncRequest($instruction));
     }
 
     /**
@@ -153,15 +174,15 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new SyncAction();
         $action->setPayment($paymentMock);
 
-        $request = new SyncRequest(new PaymentInstruction);
-        $request->getPaymentInstruction()->setLErrorcoden(100, 'theErrorCodeToBeCleaned');
-        $request->getPaymentInstruction()->setToken('aToken');
+        $instruction = new PaymentInstruction;
+        $instruction->setLErrorcoden(100, 'theErrorCodeToBeCleaned');
+        $instruction->setToken('aToken');
 
-        $action->execute($request);
+        $action->execute(new SyncRequest($instruction));
 
-        $this->assertEquals('foo_error', $request->getPaymentInstruction()->getLErrorcoden(0));
-        $this->assertEquals('bar_error', $request->getPaymentInstruction()->getLErrorcoden(1));
-        $this->assertNotContains('theErrorCodeToBeCleaned', $request->getPaymentInstruction()->getLErrorcoden());
+        $this->assertEquals('foo_error', $instruction->getLErrorcoden(0));
+        $this->assertEquals('bar_error', $instruction->getLErrorcoden(1));
+        $this->assertNotContains('theErrorCodeToBeCleaned', $instruction->getLErrorcoden());
     }
     
     /**
