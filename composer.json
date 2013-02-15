@@ -2,13 +2,17 @@
     "name": "payum/payum-bundle",
     "type": "symfony-bundle",
     "description": "Integrate payum libs into symfony2 framework",
-    "keywords": ["payment", "paypal", "be2bill"],
+    "keywords": ["payment", "paypal", "be2bill", "authorize.net"],
     "homepage": "",
     "license": "MIT",
     "authors": [
         {
             "name": "Kotlyar Maksim",
             "email": "kotlyar.maksim@gmail.com"
+        },
+        {
+            "name": "Community",
+            "homepage": "https://github.com/Payum/PayumBundle/graphs/contributors"
         }
     ],
     "require": {
