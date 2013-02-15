@@ -24,5 +24,10 @@
     },
     "autoload": {
         "psr-0": { "Payum\\Paypal\\ProCheckout\\Nvp": "src/" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.2-dev"
+        }
     }
 }
