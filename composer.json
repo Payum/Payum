@@ -22,5 +22,10 @@
         "psr-0": {
             "Payum\\Be2Bill": "src/"
         }
-    }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.2-dev"
+        }
+    }`
 }
