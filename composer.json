@@ -9,6 +9,10 @@
         {
             "name": "Kotlyar Maksim",
             "email": "kotlyar.maksim@gmail.com"
+        },
+        {
+            "name": "Community",
+            "homepage": "https://github.com/Payum/PayumBundle/graphs/contributors"
         }
     ],
     "require": {
