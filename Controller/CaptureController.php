@@ -11,18 +11,22 @@ use Payum\Bundle\PayumBundle\Request\ResponseInteractiveRequest;
 
 class CaptureController extends Controller
 {
-    public function doAction($contextName, $modelId)
+    public function doAction($contextName, $model)
     {
         if (false == $this->getPayum()->hasContext($contextName)) {
             throw $this->createNotFoundException(sprintf('Payment context %s not found', $contextName));
         }
-        
         $context = $this->getPayum()->getContext($contextName);
-        
-        if (false == $model = $context->getStorage()->findModelById($modelId)) {
-            throw $this->createNotFoundException(sprintf('Request with id %s not found', $modelId));
+
+        if (false == is_object($model)) {
+            $modelId = $model;
+            if (false == $model = $context->getStorage()->findModelById($modelId)) {
+                throw $this->createNotFoundException(sprintf('Cannot find model with id %s', $modelId));
+            }
+            
+            unset($modelId);
         }
-        
+
         if ($interactiveRequest = $context->getPayment()->execute(new CaptureRequest($model))) {
             $context->getStorage()->updateModel($model);
             

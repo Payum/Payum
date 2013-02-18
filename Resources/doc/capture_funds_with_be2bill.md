@@ -176,7 +176,7 @@ class PaymentController extends Controller
         
         return $this->forward('PayumBundle:Capture:do', array(
             'contextName' => $contextName,
-            'modelId' => $instruction->getId()
+            'model' => $instruction
         ));
     }
 }

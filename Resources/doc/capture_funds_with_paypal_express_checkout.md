@@ -170,7 +170,7 @@ class PaymentController extends Controller
         
         $returnUrl = $this->generateUrl('payum_payment_capture', array(
             'contextName' => 'your_context',
-            'modelId' => $instruction->getId(),
+            'model' => $instruction->getId(),
         ), $absolute = true);
         $instruction->setReturnurl($returnUrl);
         $instruction->setCancelurl($returnUrl);
@@ -179,7 +179,7 @@ class PaymentController extends Controller
         
         return $this->forward('PayumBundle:Capture:do', array(
             'contextName' => $contextName,
-            'modelId' => $instruction->getId()
+            'model' => $instruction
         ));
     }
 }
