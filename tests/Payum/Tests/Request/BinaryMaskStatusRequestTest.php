@@ -42,11 +42,11 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfLogicException()
+    public function shouldBeSubClassOfInteractiveRequest()
     {
         $rc = new \ReflectionClass('Payum\Request\BinaryMaskStatusRequest');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Exception\LogicException'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Request\InteractiveRequest'));
     }
 
     /**

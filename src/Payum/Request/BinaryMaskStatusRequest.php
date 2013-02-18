@@ -1,9 +1,7 @@
 <?php
 namespace Payum\Request;
 
-use Payum\Exception\LogicException;
-
-class BinaryMaskStatusRequest extends LogicException implements StatusRequestInterface 
+class BinaryMaskStatusRequest extends InteractiveRequest implements StatusRequestInterface 
 {
     const STATUS_UNKNOWN = 2097152; //2^21
     
