@@ -40,16 +40,22 @@ class PayumExtension extends Extension
                 if (isset($this->paymentFactories[$serviceName])) {
                     $paymentServiceId = $this->paymentFactories[$serviceName]->create($container, $contextName, $service);
                 }
+                if (isset($this->paymentFactories[$serviceName])) {
+                    /** @var $paymentFactory PaymentFactoryInterface */
+                    $paymentFactory = $this->paymentFactories[$serviceName];
+
+                    $paymentServiceId = $paymentFactory->create($container, $contextName, $service);
+
+                    if (false == empty($config[$contextName][$paymentFactory->getName()]['actions'])) {
+                        foreach ($config['actions'] as $actionId) {
+                            $container->getDefinition($paymentServiceId)
+                                ->addMethodCall('addAction', array(new Reference($actionId)))
+                            ;
+                        }
+                    }
+                }
                 if (isset($this->storageFactories[$serviceName])) {
                     $storageServiceId = $this->storageFactories[$serviceName]->create($container, $contextName, $service);
-                }
-            }
-
-            if (false == empty($config['actions'])) {
-                foreach ($config['actions'] as $actionId) {
-                    $container->getDefinition($paymentServiceId)
-                        ->addMethodCall('addAction', array(new Reference($actionId)))
-                    ;
                 }
             }
 
