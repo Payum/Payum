@@ -11,25 +11,21 @@ $transactionKey = 'xxx';
 require_once $vendorDir.'/ajbdev/authorizenet-php-api/AuthorizeNet.php';
 require_once $vendorDir.'/vendor/autoload.php';
 
+use Payum\Request\CaptureRequest;
+use Payum\Request\BinaryMaskStatusRequest;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\AuthorizeNet\Aim\Payment;
-use Payum\AuthorizeNet\Aim\Action\StatusAction;
-use Payum\AuthorizeNet\Aim\Action\CaptureAction;
-use Payum\Request\CaptureRequest;
 use Payum\AuthorizeNet\Aim\PaymentInstruction;
-use Payum\Request\BinaryMaskStatusRequest;
 
 $authorizeNet = new AuthorizeNetAIM($apiLoginId, $transactionKey);
 $authorizeNet->setSandbox(true);
 
-$payment = new Payment($authorizeNet);
-$payment->addAction(new CaptureAction());
-$payment->addAction(new StatusAction());
+$payment = Payment::create($authorizeNet);
 
 $instruction = new PaymentInstruction;
-$instruction->setCardNum($_REQUEST['card_num']);
-$instruction->setExpDate($_REQUEST['exp_date']);
-$instruction->setAmount($sell->getPrice());
+$instruction->setCardNum('card_num');
+$instruction->setExpDate('exp_date');
+$instruction->setAmount(100);
 
 if ($interactiveRequest = $payment->execute(new CaptureRequest($instruction))) {
     throw $interactiveRequest;
