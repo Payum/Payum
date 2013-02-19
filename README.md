@@ -30,15 +30,7 @@ Create payment:
 
 //...
 
-$payment = new \Payum\Paypal\ExpressCheckout\Nvp\Payment($api);
-
-$payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\SetExpressCheckoutAction());
-$payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\GetExpressCheckoutDetailsAction());
-$payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\GetTransactionDetailsAction());
-$payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\DoExpressCheckoutPaymentAction());
-$payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction());
-$payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\StatusAction());
-$payment->addAction(new \Payum\Paypal\ExpressCheckout\Nvp\Action\SyncAction());
+$payment = \Payum\Paypal\ExpressCheckout\Nvp\Payment::create($api);
 ```
 
 Do simple sell:

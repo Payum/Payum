@@ -21,6 +21,38 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithApiAsFirstArgument()
     {
-        new Payment($this->getMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false));
+        $apiMock = $this->createApiMock();
+        
+        $payment = new Payment($apiMock);
+
+        $actions = $this->readAttribute($payment, 'actions');
+        $this->assertInternalType('array', $actions);
+        $this->assertEmpty($actions);
+
+        $this->assertAttributeSame($apiMock, 'api', $payment);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowCreatePaymentWithStandardActionsAdded()
+    {
+        $apiMock = $this->createApiMock();
+
+        $payment = Payment::create($apiMock);
+
+        $this->assertAttributeSame($apiMock, 'api', $payment);
+
+        $actions = $this->readAttribute($payment, 'actions');
+        $this->assertInternalType('array', $actions);
+        $this->assertNotEmpty($actions);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|Api
+     */
+    protected function createApiMock()
+    {
+        return $this->getMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
     }
 }
