@@ -1,4 +1,3 @@
-
 Be2Bill
 =======
 
@@ -8,17 +7,21 @@ The lib implements [Be2Bill](http://www.be2bill.com/) payment.
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
-$api = new \Payum\Be2Bill\Api(new \Buzz\Client\Curl(), array(
-    'identifier' => 'foo',
-    'password' => 'bar',
-    'sandbox' => true
-));
+use Buzz\Client\Curl;
 
-$payment = new \Payum\Be2Bill\Payment($api);
-$payment->addAction(new \Payum\Be2Bill\Action\CaptureAction);
-$payment->addAction(new \Payum\Be2Bill\Action\StatusAction);
+use Payum\Be2Bill\Api;
+use Payum\Be2Bill\Payment;
+use Payum\Be2Bill\PaymentInstruction;
+use Payum\Request\CaptureRequest;
+use Payum\Request\BinaryMaskStatusRequest;
 
-$instruction = new \Payum\Be2Bill\PaymentInstruction();
+$payment = Payment::create(new Api(new Curl(), array(
+   'identifier' => 'foo',
+   'password' => 'bar',
+   'sandbox' => true
+)));
+
+$instruction = new PaymentInstruction();
 $instruction->setAmount(10);
 $instruction->setClientuseragent('Firefox');
 $instruction->setClientip('82.117.234.33');
@@ -31,12 +34,12 @@ $instruction->setCardfullname('John Doe');
 $instruction->setCardvaliditydate('10-13');
 $instruction->setCardcvv('123');
 
-$captureRequest = new \Payum\Request\CaptureRequest($instruction);
+$captureRequest = new CaptureRequest($instruction);
 if ($interactiveRequest = $payment->execute($captureRequest)) {
     throw $interactiveRequest;
 }
 
-$statusRequest = new \Payum\Request\BinaryMaskStatusRequest($instruction);
+$statusRequest = new BinaryMaskStatusRequest($instruction);
 if ($interactiveRequest = $payment->execute($statusRequest)) {
     throw $interactiveRequest;
 }
