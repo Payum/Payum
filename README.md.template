@@ -11,6 +11,15 @@ The payment lib.
 * When you need different levels of abstraction.
 * When you need good status managing.
 
+### Which payments currently supported?
+
+* [Paypal Express Checkout Nvp](https://github.com/Payum/PaypalExpressCheckoutNvp)
+* [Paypal Pro Checkout Nvp](https://github.com/Payum/PaypalProCheckoutNvp)
+* [Authorize.Net AIM](https://github.com/Payum/AuthorizeNetAim)
+* [Be2Bill](https://github.com/Payum/Be2Bill)
+
+Also there is a [bundle](https://github.com/Payum/PayumBundle) for symfony2 developers.
+
 ### How to capture?
 
 ```php
