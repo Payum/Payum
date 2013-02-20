@@ -17,15 +17,16 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         $payment->addAction(new \Payum\Examples\Action\AuthorizeAction());
         $payment->addAction(new \Payum\Examples\Action\StatusAction());
 
-        //Create request object. It could be anything supported by an action.
-        $sell = new \Payum\Examples\Model\TestModel;
-        $sell->setPrice(100.05);
-        $sell->setCurrency('EUR');
+        //Create request object and model. It could be anything supported by an action.
+        $captureRequest = new \Payum\Request\CaptureRequest(array(
+            'amount' => 10,
+            'currency' => 'EUR'
+        ));
 
         //Execute request
-        if (null === $payment->execute(new \Payum\Request\CaptureRequest($sell))) {
-            echo 'We are done!';
-        }
+        $payment->execute($captureRequest);
+        
+        echo 'We are done!';
     }
 
     /**
@@ -44,23 +45,22 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         //@testo:start
         //...
         
-        //Create authorize required request.
-        $sell = new \Payum\Examples\Model\AuthorizeRequiredModel();
-        $sell->setPrice(100.05);
-        $sell->setCurrency('EUR');
+        //Create request object and model. It could be anything supported by an action.
+        $authorizeRequest = new \Payum\Examples\Model\AuthorizeRequiredModel(array(
+            'amount' => 10,
+            'currency' => 'EUR'
+        ));
         
-        if ($interactiveRequest = $payment->execute(new \Payum\Request\CaptureRequest($sell))) {    
+        if ($interactiveRequest = $payment->execute(new \Payum\Request\CaptureRequest($authorizeRequest), $isInteractiveRequestExpected = true)) {    
             if ($interactiveRequest instanceof \Payum\Request\RedirectUrlInteractiveRequest) {
                 echo 'User must be redirected to '.$interactiveRequest->getUrl();
-            } 
-            
-            //..
-            
+            }
+
             //@testo:end
             else {
-            //@testo:start
-            throw new \Payum\Exception\LogicException('Unsupported interactive request', null, $interactiveRequest);
-            //@testo:end
+                //@testo:start
+                throw $interactiveRequest;
+                //@testo:end
             }
             //@testo:start
         }
@@ -71,7 +71,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
      */
     public function gettingRequestStatus()
     {
-        $this->expectOutputString('We are done!');
+        $this->expectOutputString('We are done!Uhh something wrong. Check other possible statuses!');
         
         //Populate payment with actions.
         $payment = new \Payum\Payment;
@@ -101,16 +101,8 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         //Or there is a status which require our attention.
         if ($statusRequest->isSuccess()) {
             echo 'We are done!';
-        } else if ($statusRequest->isCanceled()) {
-            echo 'Canceled!';
-        } elseif ($statusRequest->isFailed()) {
-            echo 'Failed!';
-        } elseif ($statusRequest->isInProgress()) {
-            echo 'In progress!';
-        } elseif ($statusRequest->isUnknown()) {
-            echo 'Unknown!';
-        } elseif ($statusRequest->isNew()) {
-           echo 'New!';
-        }
+        } 
+        
+        echo 'Uhh something wrong. Check other possible statuses!';
     }
 }

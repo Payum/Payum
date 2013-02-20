@@ -1,3 +1,8 @@
+0.2 to 0.3
+==========
+
+* The `Payment::execute` method signature changed. Now you have to explicitly set when to catch interactive requests or not.
+
 0.1 to 0.2
 ==========
 

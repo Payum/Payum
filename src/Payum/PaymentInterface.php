@@ -14,10 +14,11 @@ interface PaymentInterface
 
     /**
      * @param mixed $request
+     * @param boolean $isInteractiveRequestExpected
      * 
      * @throws \Payum\Exception\RequestNotSupportedException if any action supports the request.
      * 
      * @return \Payum\Request\InteractiveRequestInterface|null
      */
-    function execute($request);
+    function execute($request, $isInteractiveRequestExpected = false);
 }

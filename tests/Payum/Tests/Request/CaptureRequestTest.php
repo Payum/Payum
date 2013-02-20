@@ -22,5 +22,29 @@ class CaptureRequestTest extends \PHPUnit_Framework_TestCase
         
         $this->assertSame($expectedModel, $request->getModel());
     }
+
+    /**
+     * @test
+     */
+    public function shouldAllowSetModel()
+    {
+        $request = new CaptureRequest('model');
+
+        $request->setModel(new \stdClass());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetPreviouslySetModel()
+    {
+        $expectedModel = new \stdClass();
+
+        $request = new CaptureRequest('model');
+
+        $request->setModel($expectedModel);
+
+        $this->assertSame($expectedModel, $request->getModel());
+    }
 }
 

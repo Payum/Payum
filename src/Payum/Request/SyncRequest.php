@@ -23,4 +23,12 @@ class SyncRequest
     {
         return $this->model;
     }
+
+    /**
+     * @param mixed $model
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
+    }
 }

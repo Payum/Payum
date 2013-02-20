@@ -4,9 +4,14 @@ namespace Payum\Request;
 interface StatusRequestInterface extends InteractiveRequestInterface
 {
     /**
-     * @return object
+     * @return mixed
      */
     function getModel();
+
+    /**
+     * @param mixed $model
+     */
+    function setModel($model);
 
     /**
      * @return mixed

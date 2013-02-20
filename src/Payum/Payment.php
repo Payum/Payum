@@ -44,7 +44,7 @@ class Payment implements PaymentInterface
     /**
      * {@inheritdoc}
      */
-    public function execute($request)
+    public function execute($request, $isInteractiveRequestExpected = false)
     {   
         if (false == $action = $this->findActionSupported($request)) {
             throw RequestNotSupportedException::create($request);
@@ -57,7 +57,7 @@ class Payment implements PaymentInterface
             
             $this->postExecute($action, $request);
         } catch (InteractiveRequestInterface $interactiveRequest) {
-            if ($request === $this->firstRequest) {
+            if ($isInteractiveRequestExpected) {
                 $this->postExecute($action, $request);
                 
                 return $interactiveRequest;

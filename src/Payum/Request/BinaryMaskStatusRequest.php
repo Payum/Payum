@@ -11,12 +11,12 @@ class BinaryMaskStatusRequest extends InteractiveRequest implements StatusReques
 
     const STATUS_IN_PROGRESS = 1024; // 2^10
 
-    const STATUS_CANCELED = 32; //2^5; //2^1
+    const STATUS_CANCELED = 32; //2^5
 
     const STATUS_NEW = 2; //2^1
     
     /**
-     * @var object
+     * @var mixed
      */
     protected $model;
 
@@ -41,6 +41,15 @@ class BinaryMaskStatusRequest extends InteractiveRequest implements StatusReques
     public function getModel()
     {
         return $this->model;
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
     }
 
     /**

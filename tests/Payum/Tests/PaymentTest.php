@@ -89,15 +89,17 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $payment = new Payment();
         $payment->addAction($actionMock);
 
-        $actualInteractiveRequest = $payment->execute($request);
+        $actualInteractiveRequest = $payment->execute($request, $isInteractiveRequestExpected = true);
         
         $this->assertSame($expectedInteractiveRequest, $actualInteractiveRequest);
     }
 
     /**
      * @test
+     * 
+     * @expectedException \Payum\Request\InteractiveRequest
      */
-    public function shouldCatchInteractiveRequestOnlyAtFirstRequestExecuteLevel()
+    public function shouldNotCatchInteractiveRequestByDefault()
     {
         $firstRequest = new \stdClass();
         $secondRequest = new \stdClass();
@@ -115,9 +117,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $payment->addAction($firstAction);
         $payment->addAction($secondAction);
 
-        $actualInteractiveRequest = $payment->execute($firstRequest);
-
-        $this->assertSame($interactiveRequest, $actualInteractiveRequest);
+        $payment->execute($firstRequest);
     }
 
     /**

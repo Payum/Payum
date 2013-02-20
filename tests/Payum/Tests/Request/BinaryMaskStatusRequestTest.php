@@ -64,9 +64,33 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
     {
         $expectedModel = new \stdClass;
         
-        $statusRequest = new BinaryMaskStatusRequest($expectedModel);
+        $request = new BinaryMaskStatusRequest($expectedModel);
         
-        $this->assertSame($expectedModel, $statusRequest->getModel());
+        $this->assertSame($expectedModel, $request->getModel());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowSetModel()
+    {
+        $request = new BinaryMaskStatusRequest('model');
+
+        $request->setModel(new \stdClass());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetPreviouslySetModel()
+    {
+        $expectedModel = new \stdClass();
+        
+        $request = new BinaryMaskStatusRequest('model');
+
+        $request->setModel($expectedModel);
+        
+        $this->assertSame($expectedModel, $request->getModel());
     }
 
     /**
