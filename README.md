@@ -1,58 +1,139 @@
 Be2Bill
 =======
 
-The lib implements [Be2Bill](http://www.be2bill.com/) payment. 
+The lib implements [Be2Bill](http://www.be2bill.com/) payment.
+
+## How to capture?
 
 ```php
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
-
 use Buzz\Client\Curl;
 
 use Payum\Be2Bill\Api;
 use Payum\Be2Bill\Payment;
-use Payum\Be2Bill\PaymentInstruction;
 use Payum\Request\CaptureRequest;
-use Payum\Request\BinaryMaskStatusRequest;
 
 $payment = Payment::create(new Api(new Curl(), array(
    'identifier' => 'foo',
    'password' => 'bar',
    'sandbox' => true
+))); 
+
+$payment->execute(new CaptureRequest(array(
+    'AMOUNT' => '1000', // 10$
+    'CLIENTUSERAGENT' => 'Firefox',
+    'CLIENTIP' => '82.117.234.33',
+    'CLIENTIDENT' => 'anIdent',
+    'CLIENTEMAIL' => 'test@example.com',
+    'CARDCODE' => '4111111111111111',
+    'DESCRIPTION' => 'aDescr',
+    'ORDERID' => 'anId',
+    'CARDFULLNAME' => 'John Doe',
+    'CARDVALIDITYDATE' => '10-13',
+    'CARDCVV' => '123'
 )));
+```
 
-$instruction = new PaymentInstruction();
-$instruction->setAmount(10);
-$instruction->setClientuseragent('Firefox');
-$instruction->setClientip('82.117.234.33');
-$instruction->setClientident('anIdent');
-$instruction->setClientemail('test@example.com');
-$instruction->setCardcode('4111111111111111');
-$instruction->setDescription('aDescr');
-$instruction->setOrderid('anId');
-$instruction->setCardfullname('John Doe');
-$instruction->setCardvaliditydate('10-13');
-$instruction->setCardcvv('123');
+## Was the payment finished successfully?
 
-$captureRequest = new CaptureRequest($instruction);
-if ($interactiveRequest = $payment->execute($captureRequest)) {
-    throw $interactiveRequest;
-}
+```php
+<?php
 
-$statusRequest = new BinaryMaskStatusRequest($instruction);
-if ($interactiveRequest = $payment->execute($statusRequest)) {
-    throw $interactiveRequest;
-}
+//...
+use Payum\Request\BinaryMaskStatusRequest;
+
+$statusRequest = new BinaryMaskStatusRequest($captureRequest->getModel());
+$payment->execute($statusRequest)) {
 
 if ($statusRequest->isSuccess()) {
-    //We are done!
-} else if ($statusRequest->isCanceled()) {
-    //Canceled!
-} elseif ($statusRequest->isFailed()) {
-    //Failed
-} elseif ($statusRequest->isInProgress()) {
-    //In progress!
-} elseif ($statusRequest->isUnknown()) {
-    //Status unknown!
+    echo 'We are done';
 }
+
+echo "Hmm. We are not. Let's check other possible statuses!";
+```
+
+## Have your cart? Want to use it? No problem!
+
+Write an action:
+
+```php
+<?php
+namespace Foo\Payum\Action;
+
+use Payum\Be2bill\Action\PaymentAwareAction;
+use Payum\Request\CaptureRequest;
+use Payum\Exception\RequestNotSupportedException;
+
+use Foo\AwesomeCart;
+
+class CaptureAwesomeCartAction extends PaymentAwareAction
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function execute($request)
+    {
+        /** @var $request CaptureRequest */
+        if (false == $this->supports($request)) {
+            throw RequestNotSupportedException::createActionNotSupported($this, $request);
+        }
+    
+        $cart = $request->getModel();
+    
+        $rawCaptureRequest = new CaptureRequest(array(
+            'AMOUNT' => $cart->getPrice(), // 10$
+            'CLIENTUSERAGENT' => $cart->getPayer()->getBrowser(),
+            'CLIENTIP' => $cart->getPayer()->getClientIp(),
+            'CLIENTIDENT' => $cart->getPayer()->getId(),
+            'CLIENTEMAIL' => $cart->getPayer()->getEmail(),
+            'DESCRIPTION' => $cart->getDescription(),
+            'ORDERID' => $cart->getId(),
+            'CARDCODE' => $cart->getPayer()->getCreditCard()->getNumber(),
+            'CARDFULLNAME' => $cart->getPayer()->getCreditCard()->getOwnerName(),
+            'CARDVALIDITYDATE' => $cart->getPayer()->getCreditCard()->getExpirationDate()->format('y-m'),
+            'CARDCVV' => $cart->getPayer()->getCreditCard()->getCvv()
+        ));
+        
+        $this->payment->execute($rawCaptureRequest);
+        
+        $cart->setPaymentDetails($rawCaptureRequest->getModel());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supports($request)
+    {
+        return 
+            $request instanceof CaptureRequest && 
+            $request->getModel instanceof AwesomeCart
+        ;
+    }
+}
+```
+
+Use it:
+
+```php
+<?php
+//...
+
+use Payum\Request\CaptureRequest;
+use Payum\Request\BinaryMaskStatusRequest;
+
+use Foo\Payum\Action\CaptureAwesomeCartAction;
+use Foo\AwesomeCart;
+
+$payment->addAction(new CaptureAwesomeCartAction);
+
+$payment->execute(new CaptureRequest($cart);
+
+$statusRequest = new BinaryMaskStatusRequest($cart->getPaymentDetails());
+$payment->execute($statusRequest);
+
+if ($statusRequest->isSuccess()) {
+    echo 'We are done';
+}
+
+echo "Hmm. We are not. Let's check other possible statuses!";
 ```

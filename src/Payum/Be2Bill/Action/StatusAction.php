@@ -2,6 +2,7 @@
 namespace Payum\Be2Bill\Action;
 
 use Payum\Action\ActionInterface;
+use Payum\Bridge\Spl\ArrayObject;
 use Payum\Request\StatusRequestInterface;
 use Payum\PaymentInstructionAggregateInterface;
 use Payum\Exception\RequestNotSupportedException;
@@ -18,15 +19,14 @@ class StatusAction implements ActionInterface
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
-        
-        $instruction = $this->getPaymentInstructionFromRequest($request);
-        
-        if (null === $instruction->getExeccode()) {
+
+        $model = new ArrayObject($request->getModel());        
+        if (null === $model['EXECCODE']) {
             $request->markNew();
             
             return;
         }
-        if (Api::EXECCODE_SUCCESSFUL === $instruction->getExeccode()) {
+        if (Api::EXECCODE_SUCCESSFUL === $model['EXECCODE']) {
             $request->markSuccess();
 
             return;
@@ -42,29 +42,12 @@ class StatusAction implements ActionInterface
      */
     public function supports($request)
     {
-        if (false == $request instanceof StatusRequestInterface) {
-            return false;
-        }
-        
-        return (bool) $this->getPaymentInstructionFromRequest($request);
-    }
-
-    /**
-     * @param \Payum\Request\CaptureRequest $request
-     *
-     * @return PaymentInstruction|null
-     */
-    protected function getPaymentInstructionFromRequest(StatusRequestInterface $request)
-    {
-        if ($request->getModel() instanceof PaymentInstruction) {
-            return $request->getModel();
-        }
-
-        if (
-            $request->getModel() instanceof PaymentInstructionAggregateInterface &&
-            $request->getModel()->getPaymentInstruction() instanceof PaymentInstruction
-        ) {
-            return $request->getModel()->getPaymentInstruction();
-        }
+        return
+            $request instanceof StatusRequestInterface &&
+            (
+                is_array($request->getModel()) ||
+                $request->getModel() instanceof \ArrayAccess
+            )
+        ;
     }
 }

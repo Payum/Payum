@@ -28,11 +28,11 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportStatusRequestAndPaymentInstructionAsModel()
+    public function shouldSupportStatusRequestWithArrayAsModel()
     {
         $action = new StatusAction();
 
-        $request = $this->createStatusRequestStub(new PaymentInstruction);
+        $request = $this->createStatusRequestStub(array());
         
         $this->assertTrue($action->supports($request));
     }
@@ -40,18 +40,11 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportStatusRequestPaymentInstructionAggregate()
+    public function shouldSupportStatusRequestWithArrayAccessAsModel()
     {
         $action = new StatusAction();
 
-        $model = $this->getMock('Payum\PaymentInstructionAggregateInterface');
-        $model
-            ->expects($this->atLeastOnce())
-            ->method('getPaymentInstruction')
-            ->will($this->returnValue(new PaymentInstruction))
-        ;
-
-        $request = $this->createStatusRequestStub($model);
+        $request = $this->createStatusRequestStub($this->getMock('ArrayAccess'));
 
         $this->assertTrue($action->supports($request));
     }
@@ -71,7 +64,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportStatusRequestAndNotPaymentInstructionAsModel()
+    public function shouldNotSupportStatusRequestWithNotArrayAsModel()
     {
         $action = new StatusAction();
 

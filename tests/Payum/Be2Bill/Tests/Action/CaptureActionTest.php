@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Be2Bill\Tests\Action;
 
+use Payum\Be2Bill\Api;
+use Payum\Be2Bill\Payment;
 use Payum\Request\CaptureRequest;
 use Payum\Be2Bill\Action\CaptureAction;
 use Payum\Be2Bill\PaymentInstruction;
@@ -28,11 +30,11 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestAndPaymentInstructionAsModel()
+    public function shouldSupportCaptureRequestWithArrayAsModel()
     {
         $action = new CaptureAction();
 
-        $request = new CaptureRequest(new PaymentInstruction);
+        $request = new CaptureRequest(array());
         
         $this->assertTrue($action->supports($request));
     }
@@ -40,18 +42,11 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestPaymentInstructionAggregate()
+    public function shouldSupportCaptureRequestWithArrayAccessAsModel()
     {
         $action = new CaptureAction();
 
-        $model = $this->getMock('Payum\PaymentInstructionAggregateInterface');
-        $model
-            ->expects($this->atLeastOnce())
-            ->method('getPaymentInstruction')
-            ->will($this->returnValue(new PaymentInstruction))
-        ;
-
-        $request = new CaptureRequest($model);
+        $request = new CaptureRequest($this->getMock('ArrayAccess'));
 
         $this->assertTrue($action->supports($request));
     }
@@ -71,7 +66,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestAndNotPaymentInstructionAsModel()
+    public function shouldNotSupportCaptureRequestAndNotArrayAsModel()
     {
         $action = new CaptureAction();
         
@@ -90,5 +85,52 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
 
         $action->execute(new \stdClass());
+    }
+
+    /**
+     * @test
+     * 
+     * @expectedException \Payum\Request\UserInputRequiredInteractiveRequest
+     */
+    public function throwIfRequiredDataNotSet()
+    {
+        $action = new CaptureAction();
+
+        $request = new CaptureRequest(array());
+
+        //guard
+        $this->assertTrue($action->supports($request));
+        
+        $action->execute($request);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldDoNothingIfExeccodeNotNull()
+    {
+        $apiMock = $this->createApiMock();
+        $apiMock
+            ->expects($this->never())
+            ->method('payment')
+        ;
+        
+        $action = new CaptureAction();
+        $action->setPayment(new Payment($apiMock));
+
+        $request = new CaptureRequest(array('EXECCODE' => 1));
+
+        //guard
+        $this->assertTrue($action->supports($request));
+
+        $action->execute($request);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|Api
+     */
+    protected function createApiMock()
+    {
+        return $this->getMock('Payum\Be2Bill\Api', array(), array(), '', false);
     }
 }
