@@ -47,7 +47,7 @@ class PayumExtension extends Extension
                     $paymentServiceId = $paymentFactory->create($container, $contextName, $service);
 
                     if (false == empty($config[$contextName][$paymentFactory->getName()]['actions'])) {
-                        foreach ($config['actions'] as $actionId) {
+                        foreach ($config[$contextName][$paymentFactory->getName()]['actions'] as $actionId) {
                             $container->getDefinition($paymentServiceId)
                                 ->addMethodCall('addAction', array(new Reference($actionId)))
                             ;
