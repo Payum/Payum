@@ -1,43 +1,33 @@
 Payum [![Build Status](https://travis-ci.org/Payum/Payum.png?branch=master)](https://travis-ci.org/Payum/Payum)
 =====
 
-The lib tends to provide very abstract interface to handle any possible payments. 
+The payment lib. 
 
-Basic concepts
---------------
+### Why would you want use it?
 
-* **Action** - It executes some logic depending on information from a request.
-* **Request** - It contains information needed to run particular action.
-* **Model** - It is a model from your domain layer. The model may aggregate or\and be aware of payment instruction.  
-* **ActionPaymentAware** - The action can ask payment to execute a request required for its job. 
-* **InteractiveRequest** - The request requires an input from the user (display form, redirect somewhere, confirmation etc) It has to be thrown by an action.
-* **PaymentInstruction** - Payment specific information. You have to take of transforming data from domain model to payment instruction.  
-* **Payment** - Contains payment specific actions. On request tries to find action responsible for the request. Pass the request to the found action.
+* When you need high level of flexibility.
+* When you need domain models friendly payment solution.
+* When you want to have control over every part of it.
+* When you need different levels of abstraction.
+* When you need good status managing.
 
-Key principles:
---------------
-
-* **Storage unaware** - It is up to you where to store all info.
-* **Flexible** - It provides complete solution but you are free to change any part of it (Thanks to the "action" idea).
-* **Domain logic friendly** - You can develop your domain logic without any limitations from the lib side. The "request" does not require any interface to be implemented
-* **Decomposed** - The whole logic exploded into several actions.
-* **Heavily tested** - As a result the lib is pretty stable.
-
-Big Picture
-===========
+### How to capture?
 
 ```php
 <?php
 //Source: Payum\Examples\ReadmeTest::bigPicture()
 
-//Populate payment with actions.
-$payment = new \Payum\Payment;
-$payment->addAction(new \Payum\Examples\Action\CaptureAction());
-$payment->addAction(new \Payum\Examples\Action\AuthorizeAction());
-$payment->addAction(new \Payum\Examples\Action\StatusAction());
+//use Payum\Examples\Action\CaptureAction;
+//use Payum\Examples\Action\StatusAction;
+//use Payum\Request\CaptureRequest;
+//use Payum\Payment;
 
-//Create request object and model. It could be anything supported by an action.
-$captureRequest = new \Payum\Request\CaptureRequest(array(
+//Populate payment with actions.
+$payment = new Payment;
+$payment->addAction(new CaptureAction());
+
+//Create request and model. It could be anything supported by an action.
+$captureRequest = new CaptureRequest(array(
     'amount' => 10,
     'currency' => 'EUR'
 ));
@@ -48,39 +38,47 @@ $payment->execute($captureRequest);
 echo 'We are done!';
 ```
 
-Interactive requests
-====================
+### How to manage authorize redirect?
 
 ```php
 <?php
 //Source: Payum\Examples\ReadmeTest::interactiveRequests()
 
-//...
+//use Payum\Examples\Request\AuthorizeRequest;
+//use Payum\Examples\Action\AuthorizeAction;
+//use Payum\Request\CaptureRequest;
+//use Payum\Request\RedirectUrlInteractiveRequest;
+//use Payum\Payment;
 
-//Create request object and model. It could be anything supported by an action.
-$authorizeRequest = new \Payum\Examples\Model\AuthorizeRequiredModel(array(
-    'amount' => 10,
-    'currency' => 'EUR'
-));
+$payment = new Payment;
+$payment->addAction(new AuthorizeAction());
 
-if ($interactiveRequest = $payment->execute(new \Payum\Request\CaptureRequest($authorizeRequest), $isInteractiveRequestExpected = true)) {    
-    if ($interactiveRequest instanceof \Payum\Request\RedirectUrlInteractiveRequest) {
+$request = new AuthorizeRequest($model);
+
+if ($interactiveRequest = $payment->execute($request, $catchInteractive = true)) {    
+    if ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {
         echo 'User must be redirected to '.$interactiveRequest->getUrl();
     }
 
-        throw $interactiveRequest;
+    throw $interactiveRequest;
 }
 ```
 
-Getting Request Status
-======================
+### How to check payment status
 
 ```php
+<?php
 //Source: Payum\Examples\ReadmeTest::gettingRequestStatus()
 
-//...
+//use Payum\Examples\Action\StatusAction;
+//use Payum\Request\BinaryMaskStatusRequest;
+//use Payum\Payment;
 
-$statusRequest = new \Payum\Request\BinaryMaskStatusRequest($sell);
+//Populate payment with actions.
+$payment = new Payment;
+$payment->addAction(new StatusAction());
+
+$statusRequest = new BinaryMaskStatusRequest($model);
 $payment->execute($statusRequest);
 
 //Or there is a status which require our attention.

@@ -1,47 +1,33 @@
 Payum [![Build Status](https://travis-ci.org/Payum/Payum.png?branch=master)](https://travis-ci.org/Payum/Payum)
 =====
 
-The lib tends to provide very abstract interface to handle any possible payments. 
+The payment lib. 
 
-Basic concepts
---------------
+### Why would you want use it?
 
-* **Action** - It executes some logic depending on information from a request.
-* **Request** - It contains information needed to run particular action.
-* **Model** - It is a model from your domain layer. The model may aggregate or\and be aware of payment instruction.  
-* **ActionPaymentAware** - The action can ask payment to execute a request required for its job. 
-* **InteractiveRequest** - The request requires an input from the user (display form, redirect somewhere, confirmation etc) It has to be thrown by an action.
-* **PaymentInstruction** - Payment specific information. You have to take of transforming data from domain model to payment instruction.  
-* **Payment** - Contains payment specific actions. On request tries to find action responsible for the request. Pass the request to the found action.
+* When you need high level of flexibility.
+* When you need domain models friendly payment solution.
+* When you want to have control over every part of it.
+* When you need different levels of abstraction.
+* When you need good status managing.
 
-Key principles:
---------------
-
-* **Storage unaware** - It is up to you where to store all info.
-* **Flexible** - It provides complete solution but you are free to change any part of it (Thanks to the "action" idea).
-* **Domain logic friendly** - You can develop your domain logic without any limitations from the lib side. The "request" does not require any interface to be implemented
-* **Decomposed** - The whole logic exploded into several actions.
-* **Heavily tested** - As a result the lib is pretty stable.
-
-Big Picture
-===========
+### How to capture?
 
 ```php
 <?php
 {{testo:Payum\Examples\ReadmeTest::bigPicture}}
 ```
 
-Interactive requests
-====================
+### How to manage authorize redirect?
 
 ```php
 <?php
 {{testo:Payum\Examples\ReadmeTest::interactiveRequests}}
 ```
 
-Getting Request Status
-======================
+### How to check payment status
 
 ```php
+<?php
 {{testo:Payum\Examples\ReadmeTest::gettingRequestStatus}}
 ```

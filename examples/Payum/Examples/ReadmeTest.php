@@ -1,6 +1,15 @@
 <?php
 namespace Payum\Examples;
 
+use Payum\Examples\Request\AuthorizeRequest;
+use Payum\Examples\Action\CaptureAction;
+use Payum\Request\BinaryMaskStatusRequest;
+use Payum\Examples\Action\AuthorizeAction;
+use Payum\Examples\Action\StatusAction;
+use Payum\Request\CaptureRequest;
+use Payum\Request\RedirectUrlInteractiveRequest;
+use Payum\Payment;
+
 class ReadmeTest extends \PHPUnit_Framework_TestCase
 {   
     /**
@@ -11,14 +20,17 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         $this->expectOutputString('We are done!');
         
         //@testo:start
+        //use Payum\Examples\Action\CaptureAction;
+        //use Payum\Examples\Action\StatusAction;
+        //use Payum\Request\CaptureRequest;
+        //use Payum\Payment;
+        
         //Populate payment with actions.
-        $payment = new \Payum\Payment;
-        $payment->addAction(new \Payum\Examples\Action\CaptureAction());
-        $payment->addAction(new \Payum\Examples\Action\AuthorizeAction());
-        $payment->addAction(new \Payum\Examples\Action\StatusAction());
+        $payment = new Payment;
+        $payment->addAction(new CaptureAction());
 
-        //Create request object and model. It could be anything supported by an action.
-        $captureRequest = new \Payum\Request\CaptureRequest(array(
+        //Create request and model. It could be anything supported by an action.
+        $captureRequest = new CaptureRequest(array(
             'amount' => 10,
             'currency' => 'EUR'
         ));
@@ -35,31 +47,30 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
     public function interactiveRequests()
     {
         $this->expectOutputString('User must be redirected to http://login.thePayment.com');
-        
-        //Populate payment with actions.
-        $payment = new \Payum\Payment;
-        $payment->addAction(new \Payum\Examples\Action\CaptureAction());
-        $payment->addAction(new \Payum\Examples\Action\AuthorizeAction());
-        $payment->addAction(new \Payum\Examples\Action\StatusAction());
 
-        //@testo:start
-        //...
+        $model = array();
         
-        //Create request object and model. It could be anything supported by an action.
-        $authorizeRequest = new \Payum\Examples\Model\AuthorizeRequiredModel(array(
-            'amount' => 10,
-            'currency' => 'EUR'
-        ));
+        //@testo:start        
+        //use Payum\Examples\Request\AuthorizeRequest;
+        //use Payum\Examples\Action\AuthorizeAction;
+        //use Payum\Request\CaptureRequest;
+        //use Payum\Request\RedirectUrlInteractiveRequest;
+        //use Payum\Payment;
+
+        $payment = new Payment;
+        $payment->addAction(new AuthorizeAction());
         
-        if ($interactiveRequest = $payment->execute(new \Payum\Request\CaptureRequest($authorizeRequest), $isInteractiveRequestExpected = true)) {    
-            if ($interactiveRequest instanceof \Payum\Request\RedirectUrlInteractiveRequest) {
+        $request = new AuthorizeRequest($model);
+        
+        if ($interactiveRequest = $payment->execute($request, $catchInteractive = true)) {    
+            if ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {
                 echo 'User must be redirected to '.$interactiveRequest->getUrl();
             }
 
             //@testo:end
             else {
                 //@testo:start
-                throw $interactiveRequest;
+            throw $interactiveRequest;
                 //@testo:end
             }
             //@testo:start
@@ -72,22 +83,19 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
     public function gettingRequestStatus()
     {
         $this->expectOutputString('We are done!Uhh something wrong. Check other possible statuses!');
+
+        $model = array();
+        
+        //@testo:start
+        //use Payum\Examples\Action\StatusAction;
+        //use Payum\Request\BinaryMaskStatusRequest;
+        //use Payum\Payment;
         
         //Populate payment with actions.
-        $payment = new \Payum\Payment;
-        $payment->addAction(new \Payum\Examples\Action\CaptureAction());
-        $payment->addAction(new \Payum\Examples\Action\AuthorizeAction());
-        $payment->addAction(new \Payum\Examples\Action\StatusAction());
+        $payment = new Payment;
+        $payment->addAction(new StatusAction());
 
-        //Create a sell object. It could be anything supported by an action.
-        $sell = new \Payum\Examples\Model\TestModel;
-        $sell->setPrice(100.05);
-        $sell->setCurrency('EUR');
-
-        //@testo:start
-        //...
-
-        $statusRequest = new \Payum\Request\BinaryMaskStatusRequest($sell);
+        $statusRequest = new BinaryMaskStatusRequest($model);
         $payment->execute($statusRequest);
 
         //@testo:end
