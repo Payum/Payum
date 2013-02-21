@@ -97,3 +97,17 @@ if ($statusRequest->isSuccess()) {
 
 echo 'Uhh something wrong. Check other possible statuses!';
 ```
+
+### Like it? Spread the world!
+
+You can star the lib on [github](https://github.com/Payum/Payum) or [packagist](https://packagist.org/packages/payum/payum). You may also drop a message on Twitter.  
+
+### Need support?
+
+If you are having general issues with [payum](https://github.com/Payum/Payum), we suggest posting your issue on [stackoverflow](http://stackoverflow.com/). Feel free to ping @maksim_ka2 on Twitter if you can't find a solution.
+
+If you believe you have found a bug, please report it using the [GitHub issue tracker](https://github.com/Payum/Payum/issues), or better yet, fork the library and submit a pull request.
+
+### License
+
+Payum is released under the MIT License. For more information, see [License](LICENSE).
