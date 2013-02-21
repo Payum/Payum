@@ -23,27 +23,22 @@ class CaptureAction extends ActionPaymentAware
         }
 
         $model = new ArrayObject($request->getModel());
-        if (null === $model['EXECCODE']) {
-            //instruction must have an alias set (e.g oneclick payment) or credit card info. 
-            if ($model['ALIAS'] ||
-                ($model->offsetsExists(array('CARDCODE', 'CARDCVV', 'CARDVALIDITYDATE', 'CARDFULLNAME')))
-            ) {
-                $response = $this->payment->getApi()->payment((array) $model);
-
-                $model->replace($response->getContentJson());
-                
-                if (false == is_object($request->getModel())) {
-                    $request->setModel($model);
-                }
-            } else {
-                throw new UserInputRequiredInteractiveRequest(array(
-                    'cardcode',
-                    'cardcvv',
-                    'cardvaliditydate',
-                    'cardfullname'
-                ));
-            }
+        
+        if (null !== $model['EXECCODE']) {
+            return;
         }
+
+        //instruction must have an alias set (e.g oneclick payment) or credit card info. 
+        if (false == (
+            $model['ALIAS'] ||
+            $model->offsetsExists(array('CARDCODE', 'CARDCVV', 'CARDVALIDITYDATE', 'CARDFULLNAME'))
+        )) {
+            throw new UserInputRequiredInteractiveRequest(array('CARDCODE', 'CARDCVV', 'CARDVALIDITYDATE', 'CARDFULLNAME'));
+        }
+
+        $response = $this->payment->getApi()->payment((array) $model);
+
+        $model->replace($response->getContentJson());
     }
 
     /**
@@ -51,12 +46,9 @@ class CaptureAction extends ActionPaymentAware
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof CaptureRequest &&
-            (
-                is_array($request->getModel()) || 
-                $request->getModel() instanceof \ArrayAccess
-            )
+            $request->getModel() instanceof \ArrayAccess
         ;
     }
 }

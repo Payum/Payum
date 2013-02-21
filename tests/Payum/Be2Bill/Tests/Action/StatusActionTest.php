@@ -1,9 +1,9 @@
 <?php
 namespace Payum\Be2Bill\Tests\Action;
 
+use Payum\Request\StatusRequestInterface;
 use Payum\Be2Bill\Action\StatusAction;
 use Payum\Be2Bill\PaymentInstruction;
-use Payum\Request\StatusRequestInterface;
 
 class StatusActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,23 +28,23 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportStatusRequestWithArrayAsModel()
+    public function shouldSupportStatusRequestWithArrayAccessAsModel()
     {
         $action = new StatusAction();
 
-        $request = $this->createStatusRequestStub(array());
-        
+        $request = $this->createStatusRequestStub($this->getMock('ArrayAccess'));
+
         $this->assertTrue($action->supports($request));
     }
 
     /**
      * @test
      */
-    public function shouldSupportStatusRequestWithArrayAccessAsModel()
+    public function shouldSupportCaptureRequestWithPaymentInstructionAsModel()
     {
         $action = new StatusAction();
 
-        $request = $this->createStatusRequestStub($this->getMock('ArrayAccess'));
+        $request = $this->createStatusRequestStub(new PaymentInstruction);
 
         $this->assertTrue($action->supports($request));
     }

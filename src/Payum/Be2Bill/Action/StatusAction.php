@@ -16,23 +16,30 @@ class StatusAction implements ActionInterface
      */
     public function execute($request)
     {
+        /** @var $request StatusRequestInterface */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
         $model = new ArrayObject($request->getModel());        
+        
         if (null === $model['EXECCODE']) {
             $request->markNew();
             
             return;
         }
+        
         if (Api::EXECCODE_SUCCESSFUL === $model['EXECCODE']) {
             $request->markSuccess();
 
             return;
         }
         
-        //TODO add more checks.
+        if (Api::EXECCODE_TIME_OUT  === $model['EXECCODE']) {
+            $request->markUnknown();
+            
+            return;
+        }
 
         $request->markFailed();
     }
@@ -44,10 +51,7 @@ class StatusAction implements ActionInterface
     {
         return
             $request instanceof StatusRequestInterface &&
-            (
-                is_array($request->getModel()) ||
-                $request->getModel() instanceof \ArrayAccess
-            )
+            $request->getModel() instanceof \ArrayAccess
         ;
     }
 }
