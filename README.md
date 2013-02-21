@@ -19,7 +19,7 @@ $payment = Payment::create(new Api(new Curl(), array(
    'sandbox' => true
 )));
 
-$payment->execute(new CaptureRequest(array(
+$payment->execute($captureRequest = new CaptureRequest(array(
     'AMOUNT' => '1000', // 10$
     'CLIENTUSERAGENT' => 'Firefox',
     'CLIENTIP' => '82.117.234.33',
