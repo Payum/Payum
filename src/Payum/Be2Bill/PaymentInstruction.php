@@ -765,34 +765,13 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
      */
     protected function getSupportedArrayFields()
     {
-        return array(
-            'OPERATIONTYPE',
-            'DESCRIPTION',
-            'ORDERID', 
-            'AMOUNT',
-            'CARDTYPE',
-            'CLIENTIDENT',
-            'CLIENTEMAIL',
-            'CLIENTADDRESS',
-            'CLIENTDOB',
-            'CLIENTREFERER',
-            'CLIENTUSERAGENT',
-            'CLIENTIP',
-            'FIRSTNAME',
-            'LASTNAME',
-            'LANGUAGE',
-            'CREATEALIAS',
-            'ALIAS',
-            'ALIASMODE',
-            'TRANSACTIONID',
-            'CARDCODE',
-            'CARDCODE',
-            'CARDVALIDITYDATE',
-            'CARDCVV',
-            'CARDFULLNAME',
-            'EXECCODE',
-            'MESSAGE',
-            'DESCRIPTOR',
-        );
+        $rc = new \ReflectionClass(get_class($this));
+
+        $fields = array();
+        foreach ($rc->getProperties() as $rp) {
+            $fields[] = strtoupper($rp->getName());
+        }
+
+        return $fields;
     }
 }
