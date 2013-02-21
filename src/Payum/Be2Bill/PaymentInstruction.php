@@ -1,7 +1,9 @@
 <?php
 namespace Payum\Be2Bill;
 
-class PaymentInstruction
+use Payum\Exception\InvalidArgumentException;
+
+class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
 {
     /**
      * Description: Action to be carried out
@@ -702,60 +704,95 @@ class PaymentInstruction
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function offsetExists($offset)
+    {
+        return 
+            in_array($offset, $this->getSupportedArrayFields()) &&     
+            property_exists($this, strtolower($offset))
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetGet($offset)
+    {
+        return $this->offsetExists($offset) ?
+            $this->{strtolower($offset)} :
+            null
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetSet($offset, $value)
+    {
+        if (false == $this->offsetExists($offset)) {
+            throw new InvalidArgumentException(sprintf('Unsupported offset given %s.', $offset));
+        }
+        
+        $this->{strtolower($offset)} = $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetUnset($offset)
+    {
+        if ($this->offsetExists($offset)) {
+            $this->{strtolower($offset)} = null;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator()
+    {
+        $array = array();
+        foreach ($this->getSupportedArrayFields() as $name) {
+            $array[$name] = $this[$name];
+        }
+
+        return new \ArrayIterator(array_filter($array));
+    }
+
+    /**
      * @return array
      */
-    public function toParams()
+    protected function getSupportedArrayFields()
     {
-        $be2billParameters = array(
-            'OPERATIONTYPE', 
-            'DESCRIPTION', 
-            'ORDERID', 'AMOUNT', 
-            'CARDTYPE', 
-            'CLIENTIDENT', 
-            'CLIENTEMAIL', 
-            'CLIENTADDRESS', 
-            'CLIENTDOB', 
+        return array(
+            'OPERATIONTYPE',
+            'DESCRIPTION',
+            'ORDERID', 
+            'AMOUNT',
+            'CARDTYPE',
+            'CLIENTIDENT',
+            'CLIENTEMAIL',
+            'CLIENTADDRESS',
+            'CLIENTDOB',
             'CLIENTREFERER',
-            'CLIENTUSERAGENT', 
-            'CLIENTIP', 
-            'FIRSTNAME', 
-            'LASTNAME', 
-            'LANGUAGE', 
-            'CREATEALIAS', 
-            'ALIAS', 
-            'ALIASMODE', 
-            'TRANSACTIONID', 
-            'CARDCODE', 
-            'CARDCODE', 
-            'CARDVALIDITYDATE', 
+            'CLIENTUSERAGENT',
+            'CLIENTIP',
+            'FIRSTNAME',
+            'LASTNAME',
+            'LANGUAGE',
+            'CREATEALIAS',
+            'ALIAS',
+            'ALIASMODE',
+            'TRANSACTIONID',
+            'CARDCODE',
+            'CARDCODE',
+            'CARDVALIDITYDATE',
             'CARDCVV',
             'CARDFULLNAME',
             'EXECCODE',
             'MESSAGE',
             'DESCRIPTOR',
         );
-        
-        $params = array();
-        foreach (get_object_vars($this) as $name => $value) {
-            $name = strtoupper($name);
-            if (in_array($name, $be2billParameters)) {
-                $params[$name] = $value;
-            }
-        }
-        
-        return array_filter($params);
-    }
-
-    /**
-     * @param array $params
-     */
-    public function fromParams(array $params)
-    {
-        foreach ($params as $name => $value) {
-            $property = strtolower($name);
-            if (property_exists($this, $property)) {
-                $this->$property = $value;
-            }
-        }
     }
 }
