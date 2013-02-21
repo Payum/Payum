@@ -17,7 +17,7 @@ $payment = Payment::create(new Api(new Curl(), array(
    'identifier' => 'foo',
    'password' => 'bar',
    'sandbox' => true
-))); 
+)));
 
 $payment->execute(new CaptureRequest(array(
     'AMOUNT' => '1000', // 10$
@@ -43,14 +43,25 @@ $payment->execute(new CaptureRequest(array(
 use Payum\Request\BinaryMaskStatusRequest;
 
 $statusRequest = new BinaryMaskStatusRequest($captureRequest->getModel());
-$payment->execute($statusRequest)) {
-
+$payment->execute($statusRequest);
 if ($statusRequest->isSuccess()) {
     echo 'We are done';
 }
 
 echo "Hmm. We are not. Let's check other possible statuses!";
 ```
+
+## Want to store payments somewhere?
+
+There are two storage supported out of the box. [doctrine2](https://github.com/Payum/Payum/blob/master/src/Payum/Bridge/Doctrine/Storage/DoctrineStorage.php)([offsite](http://www.doctrine-project.org/)) and [filesystem](https://github.com/Payum/Payum/blob/master/src/Payum/Storage/FilesystemStorage.php).
+The filesystem storage is easy to setup, does not have any requirements. It is expected to be used more in tests. 
+To use doctrine2 storage you have to follow several steps:
+
+* [Install](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/installation.html) doctrine2 lib. 
+* [Add](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/configuration.html#obtaining-an-entitymanager) mapping [schema](src/Payum/Be2Bill/Bridge/Doctrine/Resources/mapping/PaymentInstruction.orm.xml) to doctrine configuration. 
+* Extend provided [model](src/Payum/Be2Bill/Bridge/Doctrine/Entity/PaymentInstruction.php) and add `id` field.
+
+Want another storage? Contribute!
 
 ## Have your cart? Want to use it? No problem!
 
@@ -106,7 +117,7 @@ class CaptureAwesomeCartAction extends PaymentAwareAction
     {
         return 
             $request instanceof CaptureRequest && 
-            $request->getModel instanceof AwesomeCart
+            $request->getModel() instanceof AwesomeCart
         ;
     }
 }
@@ -137,3 +148,17 @@ if ($statusRequest->isSuccess()) {
 
 echo "Hmm. We are not. Let's check other possible statuses!";
 ```
+
+## Like it? Spread the world!
+
+You can star the lib on [github](https://github.com/Payum/Be2Bill) or [packagist](https://packagist.org/packages/payum/be2bill). You may also drop a message on Twitter.  
+
+## Need support?
+
+If you are having general issues with [be2bill](https://github.com/Payum/Be2Bill) or [payum](https://github.com/Payum/Payum), we suggest posting your issue on [stackoverflow](http://stackoverflow.com/). Feel free to ping @maksim_ka2 on Twitter if you can't find a solution.
+
+If you believe you have found a bug, please report it using the GitHub issue tracker: [be2bill](https://github.com/Payum/Be2Bill/issues) or [payum](https://github.com/Payum/Payum/issues), or better yet, fork the library and submit a pull request.
+
+## License
+
+Be2bill is released under the MIT License. For more information, see [License](LICENSE).
