@@ -1,9 +1,9 @@
 <?php
 namespace Payum\AuthorizeNet\Aim;
 
-use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
+use Payum\Exception\InvalidArgumentException;
 
-class PaymentInstruction
+class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
 {
     protected $address;
     
@@ -1022,21 +1022,71 @@ class PaymentInstruction
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    public function fillRequest(AuthorizeNetAIM $authorizeNet)
+    public function offsetExists($offset)
     {
-        $authorizeNet->ignore_not_x_fields = true;
-        
-        $authorizeNet->setFields(array_filter(get_object_vars($this)));
+        return
+            in_array($offset, $this->getSupportedArrayFields()) &&
+            property_exists($this, $offset)
+        ;
     }
 
-    public function updateFromResponse(\AuthorizeNetAIM_Response $response)
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetGet($offset)
     {
-        foreach (get_object_vars($response) as $name => $value) {
-            if (property_exists($this, $name)) {
-                $this->$name = $value;
-            }
+        return $this->offsetExists($offset) ? $this->$offset : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetSet($offset, $value)
+    {
+        if (false == $this->offsetExists($offset)) {
+            throw new InvalidArgumentException(sprintf('Unsupported offset given %s.', $offset));
         }
+
+        $this->$offset = $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetUnset($offset)
+    {
+        if ($this->offsetExists($offset)) {
+            $this->$offset = null;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator()
+    {
+        $array = array();
+        foreach ($this->getSupportedArrayFields() as $name) {
+            $array[$name] = $this[$name];
+        }
+
+        return new \ArrayIterator(array_filter($array));
+    }
+
+    /**
+     * @return array
+     */
+    protected function getSupportedArrayFields()
+    {
+        $rc = new \ReflectionClass(get_class($this));
+
+        $fields = array();
+        foreach ($rc->getProperties() as $rp) {
+            $fields[] = $rp->getName();
+        }
+        
+        return $fields;
     }
 }
