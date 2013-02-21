@@ -97,7 +97,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Request\InteractiveRequest
+     * @expectedException \Payum\Request\BaseInteractiveRequest
      */
     public function shouldNotCatchInteractiveRequestByDefault()
     {
@@ -193,7 +193,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     protected function createInteractiveRequestMock()
     {
-        return $this->getMock('Payum\Request\InteractiveRequest');
+        return $this->getMock('Payum\Request\BaseInteractiveRequest');
     }
 
     /**

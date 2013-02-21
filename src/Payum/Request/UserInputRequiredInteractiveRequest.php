@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Request;
 
-class UserInputRequiredInteractiveRequest extends InteractiveRequest
+class UserInputRequiredInteractiveRequest extends BaseInteractiveRequest
 {
     /**
      * @var array

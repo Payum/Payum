@@ -42,55 +42,11 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfInteractiveRequest()
+    public function shouldBeSubClassOfBaseModelInteractiveRequest()
     {
         $rc = new \ReflectionClass('Payum\Request\BinaryMaskStatusRequest');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Request\InteractiveRequest'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithModelAsArgument()
-    {
-        new BinaryMaskStatusRequest(new \stdClass);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetModelSetInConstructor()
-    {
-        $expectedModel = new \stdClass;
-        
-        $request = new BinaryMaskStatusRequest($expectedModel);
-        
-        $this->assertSame($expectedModel, $request->getModel());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetModel()
-    {
-        $request = new BinaryMaskStatusRequest('model');
-
-        $request->setModel(new \stdClass());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetModel()
-    {
-        $expectedModel = new \stdClass();
-        
-        $request = new BinaryMaskStatusRequest('model');
-
-        $request->setModel($expectedModel);
-        
-        $this->assertSame($expectedModel, $request->getModel());
+        $this->assertTrue($rc->isSubclassOf('Payum\Request\BaseModelInteractiveRequest'));
     }
 
     /**

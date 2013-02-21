@@ -1,14 +1,14 @@
 <?php
 namespace Payum\Tests\Request;
 
-class InteractiveRequestTest extends \PHPUnit_Framework_TestCase
+class BaseInteractiveRequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldImplementInteractiveRequestInterface()
     {
-        $rc = new \ReflectionClass('Payum\Request\InteractiveRequest');
+        $rc = new \ReflectionClass('Payum\Request\BaseInteractiveRequest');
         
         $this->assertTrue($rc->implementsInterface('Payum\Request\InteractiveRequestInterface'));
     }
@@ -18,7 +18,7 @@ class InteractiveRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfLogicException()
     {
-        $rc = new \ReflectionClass('Payum\Request\InteractiveRequest');
+        $rc = new \ReflectionClass('Payum\Request\BaseInteractiveRequest');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Exception\LogicException'));
     }

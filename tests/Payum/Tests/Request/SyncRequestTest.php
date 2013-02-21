@@ -1,50 +1,15 @@
 <?php
 namespace Payum\Tests\Request;
 
-use Payum\Request\SyncRequest;
-
 class SyncRequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function couldBeConstructedWithModel()
+    public function shouldBeSubClassOfBaseModelRequest()
     {
-        new SyncRequest(new \stdClass());
-    }
+        $rc = new \ReflectionClass('Payum\Request\SyncRequest');
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetModelSetInConstructor()
-    {
-        $request = new SyncRequest($expectedModel = new \stdClass());
-        
-        $this->assertSame($expectedModel, $request->getModel());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetModel()
-    {
-        $request = new SyncRequest('model');
-
-        $request->setModel(new \stdClass());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetModel()
-    {
-        $expectedModel = new \stdClass();
-
-        $request = new SyncRequest('model');
-
-        $request->setModel($expectedModel);
-
-        $this->assertSame($expectedModel, $request->getModel());
+        $this->assertTrue($rc->isSubclassOf('Payum\Request\BaseModelRequest'));
     }
 }
-

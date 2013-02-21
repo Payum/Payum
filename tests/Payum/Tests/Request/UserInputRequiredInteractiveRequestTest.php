@@ -18,7 +18,7 @@ class UserInputRequiredInteractiveRequestTest extends \PHPUnit_Framework_TestCas
     /**
      * @test
      */
-    public function couldBeConstructedWithReqioreFieldsAsArgument()
+    public function couldBeConstructedWithModelAndRequiredFieldsAsArgument()
     {
         new UserInputRequiredInteractiveRequest(array(
             'a_field',
