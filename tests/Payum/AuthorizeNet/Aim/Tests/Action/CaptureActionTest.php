@@ -28,30 +28,11 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestAndPaymentInstructionAsModel()
+    public function shouldSupportCaptureRequestAndArrayAccessAsModel()
     {
         $action = new CaptureAction();
 
-        $request = new CaptureRequest(new PaymentInstruction);
-        
-        $this->assertTrue($action->supports($request));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureRequestPaymentInstructionAggregate()
-    {
-        $action = new CaptureAction();
-
-        $model = $this->getMock('Payum\PaymentInstructionAggregateInterface');
-        $model
-            ->expects($this->atLeastOnce())
-            ->method('getPaymentInstruction')
-            ->will($this->returnValue(new PaymentInstruction))
-        ;
-
-        $request = new CaptureRequest($model);
+        $request = new CaptureRequest($this->getMock('ArrayAccess'));
 
         $this->assertTrue($action->supports($request));
     }
@@ -71,7 +52,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestAndNotPaymentInstructionAsModel()
+    public function shouldNotSupportCaptureRequestAndNotArrayAsModel()
     {
         $action = new CaptureAction();
         

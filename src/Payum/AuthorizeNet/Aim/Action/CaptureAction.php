@@ -1,11 +1,10 @@
 <?php
 namespace Payum\AuthorizeNet\Aim\Action;
 
+use Payum\Bridge\Spl\ArrayObject;
 use Payum\Request\CaptureRequest;
-use Payum\PaymentInstructionAggregateInterface;
 use Payum\Request\UserInputRequiredInteractiveRequest;
 use Payum\Exception\RequestNotSupportedException;
-use Payum\AuthorizeNet\Aim\PaymentInstruction;
 
 class CaptureAction extends ActionPaymentAware
 {
@@ -14,21 +13,28 @@ class CaptureAction extends ActionPaymentAware
      */
     public function execute($request)
     {
+        /** @var $request CaptureRequest */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        $instruction = $this->getPaymentInstructionFromRequest($request);
-        if (false == $instruction->getResponseCode()) {
-            if ($instruction->getAmount() && $instruction->getCardNum() && $instruction->getExpDate()) {
-                $api = clone $this->payment->getApi();
+        $model = new ArrayObject($request->getModel());
 
-                $instruction->fillRequest($api);
-                $instruction->updateFromResponse($api->authorizeAndCapture());
-            } else {
-                throw new UserInputRequiredInteractiveRequest(array('amount', 'card_num', 'exp_date'));
-            }
+        if (null != $model['response_code']) {
+            return;
         }
+        
+        if (false == ($model['amount'] && $model['card_num'] && $model['exp_date'])) {
+            throw new UserInputRequiredInteractiveRequest(array('amount', 'card_num', 'exp_date'));
+        }
+        
+        $api = clone $this->payment->getApi();
+        $api->ignore_not_x_fields = true;
+        $api->setFields(array_filter((array) $model));
+
+        $response = $api->authorizeAndCapture();
+
+        $model->replace((array) $response);
     }
 
     /**
@@ -36,29 +42,9 @@ class CaptureAction extends ActionPaymentAware
      */
     public function supports($request)
     {
-        if (false == $request instanceof CaptureRequest) {
-            return false;
-        }
-        
-        return (bool) $this->getPaymentInstructionFromRequest($request);
-    }
-
-    /**
-     * @param \Payum\Request\CaptureRequest $request
-     *
-     * @return PaymentInstruction|null
-     */
-    protected function getPaymentInstructionFromRequest(CaptureRequest $request)
-    {
-        if ($request->getModel() instanceof PaymentInstruction) {
-            return $request->getModel();
-        }
-
-        if (
-            $request->getModel() instanceof PaymentInstructionAggregateInterface &&
-            $request->getModel()->getPaymentInstruction() instanceof PaymentInstruction
-        ) {
-            return $request->getModel()->getPaymentInstruction();
-        }
+        return 
+            $request instanceof CaptureRequest &&
+            $request->getModel() instanceof \ArrayAccess
+        ;
     }
 }
