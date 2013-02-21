@@ -24,20 +24,19 @@ Installation
 
 All the installation instructions are located in [documentation](Resources/doc/index.md).
 
+Like it? Spread the world!
+--------------------------
+
+You can star the lib on [github](https://github.com/Payum/PayumBundle) or [packagist](https://packagist.org/packages/payum/payum-bundle). You may also drop a message on Twitter.  
+
+Need support?
+-------------
+
+If you are having general issues with [bundle](https://github.com/Payum/PayumBundle) or [payum](https://github.com/Payum/Payum), we suggest posting your issue on [stackoverflow](http://stackoverflow.com/). Feel free to ping @maksim_ka2 on Twitter if you can't find a solution.
+
+If you believe you have found a bug, please report it using the GitHub issue tracker: [bundle](https://github.com/Payum/PayumBundle/issues) or [payum](https://github.com/Payum/Payum/issues), or better yet, fork the library and submit a pull request.
+
 License
 -------
 
-This bundle is under the MIT license. See the complete license in the bundle:
-
-    Resources/meta/LICENSE
-
-About
------
-
-PayumBundle is a [formapro](https://github.com/formapro) initiative.
-See also the list of [contributors](contributors).
-
-Reporting an issue or a feature request
----------------------------------------
-
-Issues and feature requests are tracked in the [Github issue tracker](https://github.com/Payum/PayumBundle/issues).
+PayumBundle is released under the MIT License. For more information, see [License](Resources/meta/LICENSE).
