@@ -3,9 +3,9 @@ namespace Payum\Bundle\PayumBundle\Request;
 
 use Symfony\Component\HttpFoundation\Response;
 
-use Payum\Request\InteractiveRequest;
+use Payum\Request\BaseInteractiveRequest;
 
-class ResponseInteractiveRequest extends InteractiveRequest
+class ResponseInteractiveRequest extends BaseInteractiveRequest
 {
     /**
      * @var \Symfony\Component\HttpFoundation\Response
