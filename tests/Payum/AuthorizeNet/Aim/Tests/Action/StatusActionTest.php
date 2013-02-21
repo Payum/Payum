@@ -2,7 +2,10 @@
 namespace Payum\AuthorizeNet\Aim\Tests\Action;
 
 use Payum\AuthorizeNet\Aim\Action\StatusAction;
+use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\AuthorizeNet\Aim\PaymentInstruction;
+use Payum\Bridge\Spl\ArrayObject;
+use Payum\Request\BinaryMaskStatusRequest;
 use Payum\Request\StatusRequestInterface;
 
 class StatusActionTest extends \PHPUnit_Framework_TestCase
@@ -28,30 +31,11 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportStatusRequestAndPaymentInstructionAsModel()
+    public function shouldSupportStatusRequestAndArrayAccessAsModel()
     {
         $action = new StatusAction();
 
-        $request = $this->createStatusRequestStub(new PaymentInstruction);
-        
-        $this->assertTrue($action->supports($request));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestPaymentInstructionAggregate()
-    {
-        $action = new StatusAction();
-
-        $model = $this->getMock('Payum\PaymentInstructionAggregateInterface');
-        $model
-            ->expects($this->atLeastOnce())
-            ->method('getPaymentInstruction')
-            ->will($this->returnValue(new PaymentInstruction))
-        ;
-
-        $request = $this->createStatusRequestStub($model);
+        $request = $this->createStatusRequestStub($this->getMock('ArrayAccess'));
 
         $this->assertTrue($action->supports($request));
     }
@@ -62,7 +46,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     public function shouldNotSupportNotStatusRequest()
     {
         $action = new StatusAction();
-        
+
         $request = new \stdClass();
 
         $this->assertFalse($action->supports($request));
@@ -71,18 +55,18 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportStatusRequestAndNotPaymentInstructionAsModel()
+    public function shouldNotSupportStatusRequestAndNotArrayAccessAsModel()
     {
         $action = new StatusAction();
 
-        $request = $this->createStatusRequestStub(new \stdClass);
-        
+        $request = $this->createStatusRequestStub(new \stdClass());
+
         $this->assertFalse($action->supports($request));
     }
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
@@ -92,6 +76,88 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
         $action->execute(new \stdClass());
     }
 
+    /**
+     * @test
+     */
+    public function shouldMarkUnknownStatusIfEmptyArrayObjectSetAsModel()
+    {
+        $action = new StatusAction();
+
+        $request = new BinaryMaskStatusRequest(new ArrayObject());
+
+        $action->execute($request);
+        
+        $this->assertTrue($request->isUnknown());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkSuccessStatusIfArrayObjectHasResponseCodeApproved()
+    {
+        $action = new StatusAction();
+
+        $model = new ArrayObject();
+        $model['response_code'] = \AuthorizeNetAIM_Response::APPROVED;
+
+        $request = new BinaryMaskStatusRequest($model);
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isSuccess());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkFailedStatusIfArrayObjectHasResponseCodeError()
+    {
+        $action = new StatusAction();
+
+        $model = new ArrayObject();
+        $model['response_code'] = \AuthorizeNetAIM_Response::ERROR;
+
+        $request = new BinaryMaskStatusRequest($model);
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isFailed());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkInProgressStatusIfArrayObjectHasResponseCodeHeld()
+    {
+        $action = new StatusAction();
+
+        $model = new ArrayObject();
+        $model['response_code'] = \AuthorizeNetAIM_Response::HELD;
+
+        $request = new BinaryMaskStatusRequest($model);
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isInProgress());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkCanceledStatusIfArrayObjectHasResponseCodeDeclined()
+    {
+        $action = new StatusAction();
+
+        $model = new ArrayObject();
+        $model['response_code'] = \AuthorizeNetAIM_Response::DECLINED;
+
+        $request = new BinaryMaskStatusRequest($model);
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isCanceled());
+    }
+    
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|StatusRequestInterface
      */

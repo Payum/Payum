@@ -2,11 +2,9 @@
 namespace Payum\AuthorizeNet\Aim\Action;
 
 use Payum\Action\ActionInterface;
-use Payum\AuthorizeNet\Aim\PaymentInstruction;
-use Payum\Exception\RequestNotSupportedException;
-use Payum\PaymentInstructionAggregateInterface;
 use Payum\Request\StatusRequestInterface;
-use Payum\Request\SyncRequest;
+use Payum\Bridge\Spl\ArrayObject;
+use Payum\Exception\RequestNotSupportedException;
 
 class StatusAction implements ActionInterface
 {
@@ -15,35 +13,38 @@ class StatusAction implements ActionInterface
      */
     public function execute($request)
     {
+        /** @var $request StatusRequestInterface */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        $instruction = $this->getPaymentInstructionFromRequest($request);
+        $model = new ArrayObject($request->getModel());
         
-        if (\AuthorizeNetAIM_Response::APPROVED == $instruction->getResponseCode()) {
+        if (\AuthorizeNetAIM_Response::APPROVED == $model['response_code']) {
             $request->markSuccess();
             
             return;
         }
 
-        if (\AuthorizeNetAIM_Response::DECLINED == $instruction->getResponseCode()) {
+        if (\AuthorizeNetAIM_Response::DECLINED == $model['response_code']) {
             $request->markCanceled();
 
             return;
         }
 
-        if (\AuthorizeNetAIM_Response::ERROR == $instruction->getResponseCode()) {
+        if (\AuthorizeNetAIM_Response::ERROR == $model['response_code']) {
             $request->markFailed();
 
             return;
         }
 
-        if (\AuthorizeNetAIM_Response::HELD == $instruction->getResponseCode()) {
+        if (\AuthorizeNetAIM_Response::HELD == $model['response_code']) {
             $request->markInProgress();
 
             return;
         }
+        
+        $request->markUnknown();
     }
 
     /**
@@ -51,29 +52,9 @@ class StatusAction implements ActionInterface
      */
     public function supports($request)
     {
-        if (false == $request instanceof StatusRequestInterface) {
-            return false;
-        }
-        
-        return (bool) $this->getPaymentInstructionFromRequest($request);
-    }
-
-    /**
-     * @param \Payum\Request\CaptureRequest $request
-     *
-     * @return PaymentInstruction|null
-     */
-    protected function getPaymentInstructionFromRequest(StatusRequestInterface $request)
-    {
-        if ($request->getModel() instanceof PaymentInstruction) {
-            return $request->getModel();
-        }
-
-        if (
-            $request->getModel() instanceof PaymentInstructionAggregateInterface &&
-            $request->getModel()->getPaymentInstruction() instanceof PaymentInstruction
-        ) {
-            return $request->getModel()->getPaymentInstruction();
-        }
+        return 
+            $request instanceof StatusRequestInterface &&
+            $request->getModel() instanceof \ArrayAccess
+        ;
     }
 }
