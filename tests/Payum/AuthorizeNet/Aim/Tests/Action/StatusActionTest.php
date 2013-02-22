@@ -43,6 +43,18 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldSupportStatusRequestWithPaymentInstructionAsModel()
+    {
+        $action = new StatusAction();
+
+        $request = $this->createStatusRequestStub(new PaymentInstruction);
+
+        $this->assertTrue($action->supports($request));
+    }
+
+    /**
+     * @test
+     */
     public function shouldNotSupportNotStatusRequest()
     {
         $action = new StatusAction();

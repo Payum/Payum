@@ -40,6 +40,18 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldSupportCaptureRequestWithPaymentInstructionAsModel()
+    {
+        $action = new CaptureAction();
+
+        $request = new CaptureRequest(new PaymentInstruction);
+
+        $this->assertTrue($action->supports($request));
+    }
+
+    /**
+     * @test
+     */
     public function shouldNotSupportNotCaptureRequest()
     {
         $action = new CaptureAction();
