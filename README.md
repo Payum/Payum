@@ -1,7 +1,7 @@
 Omnipay Bridge [![Build Status](https://travis-ci.org/Payum/Payum.png?branch=master)](https://travis-ci.org/Payum/OmnipayBridge)
 ==============
 
-[Omnipay](https://github.com/adrianmacneil/omnipay) unified lib provides unified api for 25+ payment gateways.
+[Omnipay](https://github.com/adrianmacneil/omnipay) created by [Adrian Macneil](http://adrianmacneil.com/). The lib provides unified api for 25+ payment gateways. Plus, it simple, has unified, consistent API and fully covered with tests.  
 This bridge allows you to use omnipay gateways but in payum like way.
 
 ## How to capture?
