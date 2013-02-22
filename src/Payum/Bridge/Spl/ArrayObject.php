@@ -14,7 +14,7 @@ class ArrayObject extends \ArrayObject
      */
     public function replace($input)
     {
-        if (false == (is_array($input) instanceof \Traversable)) {
+        if (false == (is_array($input) || $input instanceof \Traversable)) {
             throw new InvalidArgumentException('Invalid input given. Should be an array or instance of \Traversable');
         }
         
