@@ -1,4 +1,4 @@
-Omnipay Bridge
+Omnipay Bridge [![Build Status](https://travis-ci.org/Payum/Payum.png?branch=master)](https://travis-ci.org/Payum/OmnipayBridge)
 ==============
 
 [Omnipay](https://github.com/adrianmacneil/omnipay) unified lib provides unified api for 25+ payment gateways.
