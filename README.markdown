@@ -8,6 +8,7 @@ Features include:
 - Supports [paypal express checkout](https://github.com/Payum/PaypalExpressCheckoutNvp) out of the box.
 - Supports [authorize.net](https://github.com/Payum/AuthorizeNetAim) out of the box.
 - Supports [be2bill](https://github.com/Payum/Be2Bill) out of the box.
+- Supports [omnipay](https://github.com/adrianmacneil/omnipay) gateways via [bridge](https://github.com/Payum/OmnipayBridge).
 - Easy to integrate other payments.
 - Extremely extensible
 - Supports doctrine storage and filesystem one to easy start.

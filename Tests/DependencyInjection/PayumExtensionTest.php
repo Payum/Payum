@@ -3,6 +3,7 @@ namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection;
 
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AuthorizeNetAimPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCheckoutNvpPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\NullStorageFactory;
@@ -164,6 +165,41 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.api'));
+        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
+        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.storage'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLoadExtensionWithOmnipayConfiguredPayment()
+    {
+        $config = array(
+            'contexts' => array(
+                'a_context' => array(
+                    'omnipay_payment' => array(
+                        'type' => 'Stripe',
+                        'options' => array(
+                            'apiKey' => 'abc123',
+                        )
+                    ),
+                    'null_storage' => true
+                )
+            )
+        );
+
+        $configs = array($config);
+
+        $containerBuilder = new ContainerBuilder(new ParameterBag);
+
+        $extension = new PayumExtension;
+        $extension->addPaymentFactory(new OmnipayPaymentFactory);
+        $extension->addStorageFactory(new NullStorageFactory);
+
+        $extension->load($configs, $containerBuilder);
+
+        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context'));
+        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.gateway'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.storage'));
     }

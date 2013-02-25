@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection;
 
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentFactory;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -205,6 +206,73 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                                     'signature' => 'aSignature',
                                     'sandbox' => true
                                 )
+                            )
+                        )
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldPassConfigurationProcessingWithOmnipayPaymentFactory()
+    {
+        $paymentFactories = array(
+            new OmnipayPaymentFactory()
+        );
+
+        $configuration = new MainConfiguration($paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'contexts' => array(
+                    'a_context' => array(
+                        'bar_storage' => array(
+                            'bar_opt' => 'bar'
+                        ),
+                        'omnipay_payment' => array(
+                            'type' => 'Stripe',
+                            'options' => array(
+                                'apiKey' => 'abc123',
+                            )
+                        )
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     * 
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Invalid configuration for path "payum.contexts.a_context.omnipay_payment": Given type invalidType is not supported.
+     */
+    public function throwIfInvalidOmnipayGatewayTypeProvided()
+    {
+        $paymentFactories = array(
+            new OmnipayPaymentFactory()
+        );
+
+        $configuration = new MainConfiguration($paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'contexts' => array(
+                    'a_context' => array(
+                        'bar_storage' => array(
+                            'bar_opt' => 'bar'
+                        ),
+                        'omnipay_payment' => array(
+                            'type' => 'invalidType',
+                            'options' => array(
+                                'apiKey' => 'abc123',
                             )
                         )
                     )

@@ -1,9 +1,9 @@
 {
     "name": "payum/payum-bundle",
     "type": "symfony-bundle",
-    "description": "Integrate payum libs into symfony2 framework",
-    "keywords": ["payment", "paypal", "be2bill", "authorize.net"],
-    "homepage": "",
+    "description": "The payment bundle integrates payum libs into symfony2 framework",
+    "keywords": ["payment", "paypal", "be2bill", "authorize.net", "omnipay"],
+    "homepage": "https://github.com/Payum/PayumBundle",
     "license": "MIT",
     "authors": [
         {
@@ -27,13 +27,15 @@
         "payum/paypal-express-checkout-nvp": "0.3.x-dev",
         "payum/paypal-pro-checkout-nvp": "0.3.x-dev",
         "payum/be2bill": "0.3.x-dev",
-        "payum/authorize-net-aim": "0.3.x-dev"
+        "payum/authorize-net-aim": "0.3.x-dev",
+        "payum/omnipay-bridge": "0.3.x-dev"
     },
     "suggest": {
         "payum/paypal-express-checkout-nvp": "If you want to use paypal express checkout nvp gateway",
         "payum/paypal-pro-checkout-nvp": "If you want to use paypal pro checkout nvp gateway",
         "payum/authorize-net-aim": "If you want to use authorize.net gateway",
-        "payum/be2bill": "If you want to use be2bill gateway"
+        "payum/be2bill": "If you want to use be2bill gateway",
+        "payum/omnipay-bridge": "If you want to use omnipay provided gateways"
     },
     "autoload": {
         "psr-0": { "Payum\\Bundle\\PayumBundle": "" }
