@@ -2,12 +2,13 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
 use Payum\Exception\InvalidArgumentException;
+use Payum\Exception\LogicException;
 
 /**
  * Docs:
  *   SetExpressCheckout: {@link https://www.x.com/developers/paypal/documentation-tools/api/setexpresscheckout-api-operation-nvp}
  */
-class PaymentInstruction
+class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
 {
     protected $token = '';
 
@@ -954,12 +955,14 @@ class PaymentInstruction
     }
 
     /**
+     * @deprecated since 0.3 move the logic to offsetSet
+     * 
      * @param $nvp array|\Traversable 
      */
-    public function fromNvp($nvp)
+    protected function fromNvp($nvp)
     {
         if (false == (is_array($nvp) || $nvp instanceof \Traversable)) {
-            throw new InvalidArgumentException('Invalid nvp argument. Should be an array of an object implemented Traversable interface.');
+            throw new InvalidArgumentException('Invalid nvp argument. Should be an array of an object implemented \Traversable interface.');
         }
         
         foreach ($nvp as $name => $value) {
@@ -989,8 +992,13 @@ class PaymentInstruction
             }
         } 
     }
-    
-    public function toNvp()
+
+    /**
+     * @deprecated since 0.3 move the logic to offsetGet
+     * 
+     * @return array
+     */
+    protected function toNvp()
     {
         $nvp = array();
         foreach (get_object_vars($this) as $property => $value) {
@@ -1049,5 +1057,50 @@ class PaymentInstruction
         if (array_key_exists($n, $currentValue)) {
             return $currentValue[$n];
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->toNvp());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetExists($offset)
+    {
+        return array_key_exists($offset, $this->toNvp());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetGet($offset)
+    {
+        $nvp = $this->toNvp();
+        
+        return array_key_exists($offset, $nvp) ?
+            $nvp[$offset] :
+            null
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetSet($offset, $value)
+    {
+        $this->fromNvp(array($offset => $value));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetUnset($offset)
+    {
+        throw new LogicException('Not implemented');
     }
 }

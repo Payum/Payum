@@ -1,11 +1,11 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
-use Payum\Paypal\ExpressCheckout\Nvp\Payment;
 use Payum\Request\RedirectUrlInteractiveRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Payment;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\AuthorizeTokenAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\AuthorizeTokenRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 
 class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,10 +30,20 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportAuthorizeTokenRequest()
+    public function shouldSupportAuthorizeTokenRequestWithArrayAccessAsModel()
     {
         $action = new AuthorizeTokenAction();
         
+        $this->assertTrue($action->supports(new AuthorizeTokenRequest($this->getMock('ArrayAccess'))));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSupportAuthorizeTokenRequestWithPaymentInstructionAsModel()
+    {
+        $action = new AuthorizeTokenAction();
+
         $this->assertTrue($action->supports(new AuthorizeTokenRequest(new PaymentInstruction)));
     }
 
@@ -63,19 +73,19 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
      * @test
      * 
      * @expectedException \Payum\Exception\LogicException
-     * @expectedExceptionMessage The token must be set. Have you run SetExpressCheckoutAction?
+     * @expectedExceptionMessage The TOKEN must be set. Have you executed SetExpressCheckoutAction?
      */
-    public function throwIfInstructionNotHaveTokenSet()
+    public function throwIfModelNotHaveTokenSet()
     {
         $action = new AuthorizeTokenAction($this->createApiMock());
 
-        $action->execute(new AuthorizeTokenRequest(new PaymentInstruction));
+        $action->execute(new AuthorizeTokenRequest(new \ArrayObject()));
     }
 
     /**
      * @test
      */
-    public function throwRedirectUrlRequestIfInstructionNotHavePayerIdSet()
+    public function throwRedirectUrlRequestIfModelNotHavePayerIdSet()
     {
         $expectedToken = 'theAuthToken';
         $expectedRedirectUrl = 'theRedirectUrl';
@@ -91,8 +101,12 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
         $action = new AuthorizeTokenAction();
         $action->setPayment(new Payment($apiMock));
 
-        $request = new AuthorizeTokenRequest(new PaymentInstruction);
-        $request->getPaymentInstruction()->setToken($expectedToken);
+        $model = new \ArrayObject();
+        $model['TOKEN'] = $expectedRedirectUrl; 
+        
+        $request = new AuthorizeTokenRequest(array(
+            'TOKEN' => $expectedToken
+        ));
 
         try {
             $action->execute($request);
@@ -119,11 +133,12 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
         $action = new AuthorizeTokenAction();
         $action->setPayment(new Payment($apiMock));
 
-        $request = new AuthorizeTokenRequest(new PaymentInstruction);
-        $request->getPaymentInstruction()->setToken('aToken');
-        //payer id means that the user already authorize the token. 
-        //Entered his login\passowrd and press enter at paypal side.
-        $request->getPaymentInstruction()->setPayerid('aPayerId');
+        $request = new AuthorizeTokenRequest(array(
+            'TOKEN' => 'aToken',
+            //payer id means that the user already authorize the token. 
+            //Entered his login\passowrd and press enter at paypal side.
+            'PAYERID' => 'aPayerId'
+        ));
 
         $action->execute($request);
     }
@@ -142,9 +157,10 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
         $action = new AuthorizeTokenAction();
         $action->setPayment(new Payment($apiMock));
 
-        $request = new AuthorizeTokenRequest(new PaymentInstruction, $force = true);
-        $request->getPaymentInstruction()->setToken('aToken');
-        $request->getPaymentInstruction()->setPayerid('aPayerId');
+        $request = new AuthorizeTokenRequest(array(
+            'TOKEN' => 'aToken',
+            'PAYERID' => 'aPayerId'
+        ), $force = true);
 
         try {
             $action->execute($request);

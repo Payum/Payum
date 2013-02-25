@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request;
 
-use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\AuthorizeTokenRequest;
 
 class AuthorizeTokenRequestTest extends \PHPUnit_Framework_TestCase
@@ -9,31 +8,11 @@ class AuthorizeTokenRequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfBaseInstructionRequest()
+    public function shouldBeSubClassOfBaseModelRequest()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\AuthorizeTokenRequest');
         
-        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Request\BaseInstructionRequest'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithInstructionAsArgument()
-    {
-        new AuthorizeTokenRequest(new PaymentInstruction);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetInstructionSetInConstructor()
-    {
-        $expectedInstruction = new PaymentInstruction;
-
-        $request = new AuthorizeTokenRequest($expectedInstruction);
-        
-        $this->assertSame($expectedInstruction, $request->getPaymentInstruction());
+        $this->assertTrue($rc->isSubclassOf('Payum\Request\BaseModelRequest'));
     }
 
     /**
@@ -41,7 +20,7 @@ class AuthorizeTokenRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetDefaultForceSetToFalseByDefault()
     {
-        $request = new AuthorizeTokenRequest(new PaymentInstruction);
+        $request = new AuthorizeTokenRequest(new \stdClass);
         
         $this->assertFalse($request->isForced());
     }
@@ -51,7 +30,7 @@ class AuthorizeTokenRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetForceSetInConstructor()
     {
-        $request = new AuthorizeTokenRequest(new PaymentInstruction, $force = true);
+        $request = new AuthorizeTokenRequest(new \stdClass(), $force = true);
 
         $this->assertTrue($request->isForced());
     }

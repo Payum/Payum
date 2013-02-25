@@ -3,6 +3,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Buzz\Message\Form\FormRequest;
 
+use Payum\Bridge\Spl\ArrayObject;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Exception\LogicException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\GetExpressCheckoutDetailsRequest;
@@ -19,17 +20,17 @@ class GetExpressCheckoutDetailsAction extends  ActionPaymentAware
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        $instruction = $request->getPaymentInstruction();
-        if (false == $instruction->getToken()) {
-            throw new LogicException('The token must be set. Have you run SetExpressCheckoutAction?');
+        $model = new ArrayObject($request->getModel());
+        if (false == $model['TOKEN']) {
+            throw new LogicException('TOKEN must be set. Have you run SetExpressCheckoutAction?');
         }
 
         $buzzRequest = new FormRequest();
-        $buzzRequest->setField('TOKEN', $instruction->getToken());
+        $buzzRequest->setField('TOKEN', $model['TOKEN']);
         
         $response = $this->payment->getApi()->getExpressCheckoutDetails($buzzRequest);
         
-        $instruction->fromNvp($response);
+        $model->replace($response);
     }
 
     /**
@@ -37,6 +38,9 @@ class GetExpressCheckoutDetailsAction extends  ActionPaymentAware
      */
     public function supports($request)
     {
-        return $request instanceof GetExpressCheckoutDetailsRequest;
+        return 
+            $request instanceof GetExpressCheckoutDetailsRequest &&
+            $request->getModel() instanceof \ArrayAccess
+        ;
     }
 }

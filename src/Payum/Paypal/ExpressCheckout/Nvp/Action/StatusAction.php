@@ -2,6 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Payum\Action\ActionInterface;
+use Payum\Bridge\Spl\ArrayObject;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\PaymentInstructionAggregateInterface;
 use Payum\Request\StatusRequestInterface;
@@ -15,28 +16,33 @@ class StatusAction implements ActionInterface
      */
     public function execute($request)
     {
+        /** @var $request StatusRequestInterface */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        $instruction = $this->getPaymentInstructionFromRequest($request);
+        $model = new ArrayObject($request->getModel());
 
-        if (in_array(Api::L_ERRORCODE_PAYMENT_NOT_AUTHORIZED, $instruction->getLErrorcoden())) {
-            $request->markCanceled();
-            
-            return;
+        foreach (range(0, 9) as $index) {
+            if (Api::L_ERRORCODE_PAYMENT_NOT_AUTHORIZED === $model['L_ERRORCODE'.$index]) {
+                $request->markCanceled();
+                
+                return;
+            }
         }
 
-        if (count($instruction->getLErrorcoden()) > 0) {
-            $request->markFailed();
+        foreach (range(0, 9) as $index) {
+            if ($model['L_ERRORCODE'.$index]) {
+                $request->markFailed();
 
-            return;
+                return;
+            }
         }
         
         //treat this situation as canceled. In other case we can get into an endless cycle.
         if (
-            false == $instruction->getPayerid() && 
-            $instruction->getCheckoutstatus() == Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED
+            false == $model['PAYERID'] &&
+            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $model['CHECKOUTSTATUS'] 
         ) {
             $request->markCanceled();
 
@@ -44,19 +50,19 @@ class StatusAction implements ActionInterface
         }
         
         if (
-            false == $instruction->getCheckoutstatus() || 
-            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $instruction->getCheckoutstatus()
+            false == $model['CHECKOUTSTATUS'] || 
+            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $model['CHECKOUTSTATUS']
         ) {
             $request->markNew();
 
             return;
         }
-        if (Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS == $instruction->getCheckoutstatus()) {
+        if (Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS == $model['CHECKOUTSTATUS']) {
             $request->markInProgress();
 
             return;
         }
-        if (Api::CHECKOUTSTATUS_PAYMENT_ACTION_FAILED == $instruction->getCheckoutstatus()) {
+        if (Api::CHECKOUTSTATUS_PAYMENT_ACTION_FAILED == $model['CHECKOUTSTATUS']) {
             $request->markFailed();
 
             return;
@@ -64,11 +70,18 @@ class StatusAction implements ActionInterface
         
         //todo check all payment statuses.
         if (
-            Api::CHECKOUTSTATUS_PAYMENT_COMPLETED == $instruction->getCheckoutstatus() ||
-            Api::CHECKOUTSTATUS_PAYMENT_ACTION_COMPLETED == $instruction->getCheckoutstatus()
+            Api::CHECKOUTSTATUS_PAYMENT_COMPLETED == $model['CHECKOUTSTATUS'] ||
+            Api::CHECKOUTSTATUS_PAYMENT_ACTION_COMPLETED == $model['CHECKOUTSTATUS']
         ) {
             $successCounter = 0;
-            foreach ($instruction->getPaymentrequestPaymentstatus() as $paymentStatus) {
+            $allCounter = 0;
+            foreach (range(0, 9) as $index) {
+                if (null === $paymentStatus = $model['PAYMENTREQUEST_'.$index.'_PAYMENTSTATUS']) {
+                    continue;
+                }
+
+                $allCounter++;
+                
                 $inProgress = array(
                     Api::PAYMENTSTATUS_IN_PROGRESS,
                     Api::PAYMENTSTATUS_PENDING,
@@ -100,7 +113,7 @@ class StatusAction implements ActionInterface
                 }
             }
             
-            if ($successCounter == count($instruction->getPaymentrequestPaymentstatus())) {
+            if ($successCounter === $allCounter) {
                 $request->markSuccess();
                 
                 return;
@@ -113,29 +126,9 @@ class StatusAction implements ActionInterface
      */
     public function supports($request)
     {
-        if (false == $request instanceof StatusRequestInterface) {
-            return false;
-        }
-        
-        return (bool) $this->getPaymentInstructionFromRequest($request);
-    }
-
-    /**
-     * @param \Payum\Request\StatusRequestInterface $request
-     *
-     * @return PaymentInstruction|null
-     */
-    protected function getPaymentInstructionFromRequest(StatusRequestInterface $request)
-    {
-        if ($request->getModel() instanceof PaymentInstruction) {
-            return $request->getModel();
-        }
-
-        if (
-            $request->getModel() instanceof PaymentInstructionAggregateInterface &&
-            $request->getModel()->getPaymentInstruction() instanceof PaymentInstruction
-        ) {
-            return $request->getModel()->getPaymentInstruction();
-        }
+        return 
+            $request instanceof StatusRequestInterface &&
+            $request->getModel() instanceof \ArrayAccess
+        ;
     }
 }

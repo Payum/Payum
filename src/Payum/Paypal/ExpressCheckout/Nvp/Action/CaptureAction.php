@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
+use Payum\Bridge\Spl\ArrayObject;
 use Payum\PaymentInstructionAggregateInterface;
 use Payum\Request\CaptureRequest;
 use Payum\Request\SyncRequest;
@@ -20,35 +21,35 @@ class CaptureAction extends BaseActionPaymentAware
      */
     public function execute($request)
     {
+        /** @var $request CaptureRequest */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        $instruction = $this->getPaymentInstructionFromRequest($request);
+        $model = new ArrayObject($request->getModel());
 
         try {
-            if (false == $instruction->getPaymentrequestPaymentaction(0)) {
-                $instruction->setPaymentrequestPaymentaction(0, Api::PAYMENTACTION_SALE);
+            if (false == $model['PAYMENTREQUEST_0_PAYMENTACTION']) {
+                $model['PAYMENTREQUEST_0_PAYMENTACTION'] = Api::PAYMENTACTION_SALE;
             }
             
-            if (false == $instruction->getToken()) {
-                $this->payment->execute(new SetExpressCheckoutRequest($instruction));
-                $this->payment->execute(new AuthorizeTokenRequest($instruction));
+            if (false == $model['TOKEN']) {
+                $this->payment->execute(new SetExpressCheckoutRequest($model));
+                $this->payment->execute(new AuthorizeTokenRequest($model));
             }
 
-            $this->payment->execute(new SyncRequest($instruction));
+            $this->payment->execute(new SyncRequest($model));
             
             if (
-                $instruction->getPayerid() &&  
-                Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $instruction->getCheckoutstatus()
+                $model['PAYERID'] &&  
+                Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $model['CHECKOUTSTATUS']
             ) {
-                $this->payment->execute(new DoExpressCheckoutPaymentRequest($instruction));
+                $this->payment->execute(new DoExpressCheckoutPaymentRequest($model));
             }
 
-            $this->payment->execute(new SyncRequest($instruction));
+            $this->payment->execute(new SyncRequest($model));
         } catch (HttpResponseAckNotSuccessException $e) {
-            $instruction->clearErrors();
-            $instruction->fromNvp($e->getResponse());
+            $model->replace($e->getResponse());
         }
     }
 
@@ -57,29 +58,9 @@ class CaptureAction extends BaseActionPaymentAware
      */
     public function supports($request)
     {
-        if (false == $request instanceof CaptureRequest) {
-            return false;
-        }
-        
-        return (bool) $this->getPaymentInstructionFromRequest($request); 
-    }
-
-    /**
-     * @param \Payum\Request\CaptureRequest $request
-     * 
-     * @return PaymentInstruction|null
-     */
-    protected function getPaymentInstructionFromRequest(CaptureRequest $request)
-    {
-        if ($request->getModel() instanceof PaymentInstruction) {
-            return $request->getModel();
-        }
-
-        if (
-            $request->getModel() instanceof PaymentInstructionAggregateInterface &&
-            $request->getModel()->getPaymentInstruction() instanceof PaymentInstruction
-        ) {
-            return $request->getModel()->getPaymentInstruction();
-        }
+        return 
+            $request instanceof CaptureRequest &&
+            $request->getModel() instanceof \ArrayAccess
+        ; 
     }
 }

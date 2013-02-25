@@ -1,19 +1,29 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Request;
 
-use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
+use Payum\Request\BaseModelRequest;
 
-class AuthorizeTokenRequest extends BaseInstructionRequest
-{    
+class AuthorizeTokenRequest extends BaseModelRequest
+{
+    /**
+     * @var bool
+     */
     protected $force;
 
-    public function __construct(PaymentInstruction $instruction, $force = false)
+    /**
+     * @param mixed $model
+     * @param bool $force
+     */
+    public function __construct($model, $force = false)
     {
-        parent::__construct($instruction);
+        parent::__construct($model);
         
         $this->force = $force;
     }
-    
+
+    /**
+     * @return bool
+     */
     public function isForced()
     {
         return $this->force;

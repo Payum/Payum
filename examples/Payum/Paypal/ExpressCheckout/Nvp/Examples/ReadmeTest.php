@@ -1,78 +1,143 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Examples;
 
+use Buzz\Client\Curl;
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use Payum\Paypal\ExpressCheckout\Nvp\Examples\Model\AwesomeCart;
+use Payum\Paypal\ExpressCheckout\Nvp\Payment;
+use Payum\Request\BinaryMaskStatusRequest;
+use Payum\Request\CaptureRequest;
+use Payum\Request\RedirectUrlInteractiveRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Examples\Action\CaptureAwesomeCartAction;
+
 class ReadmeTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function createApi()
+    public function doCapture()
     {
         //@testo:start
-        $client = new \Buzz\Client\Curl;
-        $client->setTimeout(30000);
-        
-        $api = new \Payum\Paypal\ExpressCheckout\Nvp\Api($client, array(
+        $payment = Payment::create(new Api(new Curl, array(
             'username' => 'a_username',
             'password' => 'a_pasword',
             'signature' => 'a_signature',
-            'return_url' => 'a_return_url',
-            'cancel_url' => 'a_return_url',
             'sandbox' => true
-        ));
-        //@testo:end
-        
-        return $api;
-    }
-    
-    /**
-     * @test
-     * 
-     * @depends createApi
-     */
-    public function createPayment(\Payum\Paypal\ExpressCheckout\Nvp\Api $api)
-    {
-        //@testo:start
-        //...
-        
-        $payment = \Payum\Paypal\ExpressCheckout\Nvp\Payment::create($api);
+        )));
 
+        $capture = new CaptureRequest(array(
+            'PAYMENTREQUEST_0_AMT' => 10,
+            'PAYMENTREQUEST_0_CURRENCY' => 'USD',
+            'RETURNURL' => 'http://foo.com/finishPayment',
+            'CANCELURL' => 'http://foo.com/finishPayment',
+        ));
+        
+        if ($interactiveRequest = $payment->execute($capture, $expectsInteractive = true)) {
+            //save your models somewhere.
+            if ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {
+                header('Location: '.$interactiveRequest->getUrl());
+                exit;
+            }
+            
+            throw $interactiveRequest;
+        }
+        // ...
         //@testo:end
         
-        return $payment;
+        $this->assertArrayHasKey('L_LONGMESSAGE0', $capture->getModel());
+        $this->assertEquals('Security header is not valid', $capture->getModel()['L_LONGMESSAGE0']);
+        
+        return array(
+            $payment,
+            $capture
+        );
     }
 
     /**
      * @test
      *
-     * @depends createPayment
+     * @depends doCapture
      */
-    public function doSell(\Payum\Paypal\ExpressCheckout\Nvp\Payment $payment)
+    public function doStatus(array $arguments)
     {
+        $payment = $arguments[0];
+        $capture = $arguments[1];
+        
+        unset($capture->getModel()['L_ERRORCODE0']);
+        $capture->getModel()['CHECKOUTSTATUS'] = Api::CHECKOUTSTATUS_PAYMENT_COMPLETED;
+        $capture->getModel()['PAYMENTREQUEST_0_PAYMENTSTATUS'] = Api::PAYMENTSTATUS_COMPLETED;
+        
+        //@testo:start
         //...
         
-        $instruction = new \Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
-        $instruction->setPaymentrequestAmt(0, 100);
-        $instruction->setPaymentrequestCurrencycode(0, 'USD');
-
-        if ($interactiveRequest = $payment->execute(new \Payum\Request\CaptureRequest($instruction))) {
-            if ($interactiveRequest instanceof \Payum\Request\RedirectUrlInteractiveRequest) {
-                echo 'Paypal requires the user be redirected to: '.$interactiveRequest->getUrl();
+        $status = new BinaryMaskStatusRequest($capture->getModel());
+        $payment->execute($status);
+        
+        if ($status->isSuccess()) {
+            //@testo:end
+            if (false) {
+            //@testo:start
+            echo 'We are done';
+            //@testo:end
             }
+            //@testo:start
         }
 
-        $statusRequest = new \Payum\Request\BinaryMaskStatusRequest($instruction);
-        $payment->execute($statusRequest);
-        if ($statusRequest->isSuccess()) {
-            //We are done!
-        } else if ($statusRequest->isCanceled()) {
-            //Canceled!
-        } elseif ($statusRequest->isFailed()) {
-            //Failed
-        } elseif ($statusRequest->isInProgress()) {
-            //In progress!
-        } elseif ($statusRequest->isUnknown()) {
-            //Status unknown!
+        //@testo:end
+        if (false) {
+        //@testo:start
+        echo "Hmm. We are not. Let's check other possible statuses!";
+        //@testo:end
         }
+
+        $this->assertTrue($status->isSuccess());
+    }
+
+    /**
+     * @test
+     *
+     * @depends doCapture
+     */
+    public function doCaptureAwesomeCart(array $arguments)
+    {
+        $payment = $arguments[0];
+
+        //@testo:start
+        //...
+        $cart = new AwesomeCart;
+
+        $payment->addAction(new CaptureAwesomeCartAction);
+
+        $capture = new CaptureRequest($cart);
+        if ($interactiveRequest = $payment->execute($capture, $expectsInteractive = true)) {
+            if ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {
+                header('Location: '.$interactiveRequest->getUrl());
+                exit;
+            }
+
+            throw $interactiveRequest; //unexpected request
+        }
+
+        $status = new BinaryMaskStatusRequest($capture->getModel()->getPaymentDetails());
+        $payment->execute($status);
+
+        if ($status->isSuccess()) {
+            //@testo:end
+            if (false) {
+                //@testo:start
+            echo 'We are done';
+                //@testo:end
+            }
+            //@testo:start
+        }
+
+        //@testo:end
+        if (false) {
+            //@testo:start
+        echo "Hmm. We are not. Let's check other possible statuses!";
+            //@testo:end
+        }
+
+        $this->assertTrue($status->isSuccess());
     }
 }

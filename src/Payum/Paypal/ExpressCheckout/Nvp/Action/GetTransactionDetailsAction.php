@@ -3,6 +3,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Buzz\Message\Form\FormRequest;
 
+use Payum\Bridge\Spl\ArrayObject;
 use Payum\Exception\LogicException;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\GetTransactionDetailsRequest;
@@ -20,19 +21,41 @@ class GetTransactionDetailsAction extends ActionPaymentAware
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        $instruction = $request->getPaymentInstruction();
-        
-        $transactionId = $instruction->getPaymentrequestTransactionid($request->getPaymentRequestN());
-        if (false == $transactionId) {
-            throw new LogicException('The TransactionId must be set.');
+        $model = new ArrayObject($request->getModel());
+
+        $transactionIndex = 'PAYMENTREQUEST_'.$request->getPaymentRequestN().'_TRANSACTIONID';
+        if (false == $model[$transactionIndex]) {
+            throw new LogicException($transactionIndex.' must be set.');
         }
 
         $buzzRequest = new FormRequest();
-        $buzzRequest->setField('TRANSACTIONID', $transactionId);
+        $buzzRequest->setField('TRANSACTIONID', $model[$transactionIndex]);
         
         $response = $this->payment->getApi()->getTransactionDetails($buzzRequest);
-        
-        $paymentRequestFields = array(
+        foreach ($response as $name => $value) {
+            if (in_array($name, $this->getPaymentRequestNFields())) {
+                $model['PAYMENTREQUEST_'.$request->getPaymentRequestN().'_'.$name] = $value;
+            }
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supports($request)
+    {
+        return 
+            $request instanceof GetTransactionDetailsRequest &&
+            $request->getModel() instanceof \ArrayAccess
+        ;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getPaymentRequestNFields()
+    {
+        return array(
             'TRANSACTIONID',
             'PARENTTRANSACTIONID',
             'RECEIPTID',
@@ -49,25 +72,5 @@ class GetTransactionDetailsAction extends ActionPaymentAware
             'PENDINGREASON',
             'REASONCODE'
         );
-        
-        $prefixPaymentRequest = 'PAYMENTREQUEST_'.$request->getPaymentRequestN().'_';
-        $nvp = iterator_to_array($response);
-        foreach ($nvp as $name => $value) {
-            if (in_array($name, $paymentRequestFields)) {
-                unset($nvp[$name]);
-                
-                $nvp[$prefixPaymentRequest.$name] = $value;
-            }
-        }
-        
-        $instruction->fromNvp($nvp);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function supports($request)
-    {
-        return $request instanceof GetTransactionDetailsRequest;
     }
 }

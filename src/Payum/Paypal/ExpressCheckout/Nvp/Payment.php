@@ -36,7 +36,7 @@ class Payment extends BasePayment
     /**
      * @param Api $api
      *
-     * @return static
+     * @return \Payum\Paypal\ExpressCheckout\Nvp\Payment
      */
     public static function create(Api $api)
     {

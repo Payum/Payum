@@ -3,6 +3,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Buzz\Message\Form\FormRequest;
 
+use Payum\Bridge\Spl\ArrayObject;
 use Payum\PaymentInstructionAggregateInterface;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Request\SyncRequest;
@@ -19,25 +20,27 @@ class SyncAction extends BaseActionPaymentAware
      */
     public function execute($request)
     {
+        /** @var $request SyncRequest */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        $instruction = $this->getPaymentInstructionFromRequest($request);
+        $model = new ArrayObject($request->getModel());
         
-        if (false == $instruction->getToken()) {
+        if (false == $model['TOKEN']) {
             return;
         }
         
         try {
-            $this->payment->execute(new GetExpressCheckoutDetailsRequest($instruction));
+            $this->payment->execute(new GetExpressCheckoutDetailsRequest($model));
             
-            foreach ($instruction->getPaymentrequestTransactionid() as $paymentRequestN => $transactionId) {
-                $this->payment->execute(new GetTransactionDetailsRequest($paymentRequestN, $instruction));
+            foreach (range(0, 9) as $index) {
+                if ($model['PAYMENTREQUEST_'.$index.'_TRANSACTIONID']) {
+                    $this->payment->execute(new GetTransactionDetailsRequest($index, $model));
+                }
             }
         } catch (HttpResponseAckNotSuccessException $e) {
-            $instruction->clearErrors();
-            $instruction->fromNvp($e->getResponse());
+            $model->replace($e->getResponse());
         }
     }
 
@@ -46,29 +49,9 @@ class SyncAction extends BaseActionPaymentAware
      */
     public function supports($request)
     {
-        if (false == $request instanceof SyncRequest) {
-            return false;
-        }
-        
-        return (bool) $this->getPaymentInstructionFromRequest($request);
-    }
-
-    /**
-     * @param SyncRequest $request
-     *
-     * @return PaymentInstruction|null
-     */
-    protected function getPaymentInstructionFromRequest(SyncRequest $request)
-    {
-        if ($request->getModel() instanceof PaymentInstruction) {
-            return $request->getModel();
-        }
-
-        if (
-            $request->getModel() instanceof PaymentInstructionAggregateInterface &&
-            $request->getModel()->getPaymentInstruction() instanceof PaymentInstruction
-        ) {
-            return $request->getModel()->getPaymentInstruction();
-        }
+        return 
+            $request instanceof SyncRequest &&
+            $request->getModel() instanceof \ArrayAccess
+        ;
     }
 }

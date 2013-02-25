@@ -1,8 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Functional\Bridge\Doctrine;
 
-use Doctrine\ORM\Tools\SchemaValidator;
-use Doctrine\ORM\Mapping\Driver\DriverChain;
+use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -21,8 +20,8 @@ abstract class OrmTest extends BaseOrmTest
         if (false === $rootDir || false === is_dir($rootDir.'/src/Payum')) {
             throw new \RuntimeException('Cannot guess Payum root dir.');
         }
-        
-        $driver = new DriverChain;
+
+        $driver = new MappingDriverChain;
         
         $xmlDriver = new SimplifiedXmlDriver(array(
             $rootDir.'/src/Payum/Paypal/ExpressCheckout/Nvp/Bridge/Doctrine/Resources/mapping' => 'Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity'

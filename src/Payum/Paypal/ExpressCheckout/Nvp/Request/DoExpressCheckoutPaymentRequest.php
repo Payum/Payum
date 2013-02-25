@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Request;
 
-class DoExpressCheckoutPaymentRequest extends BaseInstructionRequest
+use Payum\Request\BaseModelRequest;
+
+class DoExpressCheckoutPaymentRequest extends BaseModelRequest
 {
 }

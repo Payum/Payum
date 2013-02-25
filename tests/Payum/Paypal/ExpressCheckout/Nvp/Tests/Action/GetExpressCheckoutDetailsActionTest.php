@@ -4,8 +4,8 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\GetExpressCheckoutDetailsAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Payment;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\GetExpressCheckoutDetailsRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\GetExpressCheckoutDetailsRequest;
 
 class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,11 +30,23 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportGetExpressCheckoutDetailsRequest()
+    public function shouldSupportGetExpressCheckoutDetailsRequestAndArrayAccessAsModel()
     {
         $action = new GetExpressCheckoutDetailsAction();
         $action->setPayment(new Payment($this->createApiMock()));
         
+        $this->assertTrue(
+            $action->supports(new GetExpressCheckoutDetailsRequest($this->getMock('ArrayAccess')))
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSupportAuthorizeTokenRequestWithPaymentInstructionAsModel()
+    {
+        $action = new GetExpressCheckoutDetailsAction();
+
         $this->assertTrue($action->supports(new GetExpressCheckoutDetailsRequest(new PaymentInstruction)));
     }
 
@@ -66,14 +78,14 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Exception\LogicException
-     * @expectedExceptionMessage The token must be set. Have you run SetExpressCheckoutAction?
+     * @expectedExceptionMessage TOKEN must be set. Have you run SetExpressCheckoutAction?
      */
-    public function throwIfInstructionNotHaveTokenSetInInstruction()
+    public function throwIfTokenNotSetInModel()
     {
         $action = new GetExpressCheckoutDetailsAction();
         $action->setPayment(new Payment($this->createApiMock()));
         
-        $request = new GetExpressCheckoutDetailsRequest(new PaymentInstruction);
+        $request = new GetExpressCheckoutDetailsRequest(array());
 
         $action->execute($request);
     }
@@ -99,8 +111,9 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
         $action = new GetExpressCheckoutDetailsAction();
         $action->setPayment(new Payment($apiMock));
 
-        $request = new GetExpressCheckoutDetailsRequest(new PaymentInstruction);
-        $request->getPaymentInstruction()->setToken($expectedToken = 'theToken');
+        $request = new GetExpressCheckoutDetailsRequest(array(
+            'TOKEN' => 'theToken', 
+        ));
 
         $action->execute($request);
         
@@ -109,13 +122,13 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
         $fields = $actualRequest->getFields();
 
         $this->assertArrayHasKey('TOKEN', $fields);
-        $this->assertEquals($expectedToken, $fields['TOKEN']);
+        $this->assertEquals('theToken', $fields['TOKEN']);
     }
 
     /**
      * @test
      */
-    public function shouldCallApiGetExpressCheckoutDetailsMethodAndUpdateInstructionFromResponseOnSuccess()
+    public function shouldCallApiGetExpressCheckoutDetailsMethodAndUpdateModelFromResponseOnSuccess()
     {
         $apiMock = $this->createApiMock();
         $apiMock
@@ -135,13 +148,16 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
         $action = new GetExpressCheckoutDetailsAction();
         $action->setPayment(new Payment($apiMock));
 
-        $request = new GetExpressCheckoutDetailsRequest(new PaymentInstruction);
-        $request->getPaymentInstruction()->setToken('aToken');
+        $request = new GetExpressCheckoutDetailsRequest(array(
+            'TOKEN' => 'aToken',
+        ));
 
         $action->execute($request);
-        
-        $this->assertEquals('theFirstname', $request->getPaymentInstruction()->getFirstname());
-        $this->assertEquals('the@example.com', $request->getPaymentInstruction()->getEmail());
+
+        $this->assertArrayHasKey('FIRSTNAME', $request->getModel());
+        $this->assertEquals('theFirstname', $request->getModel()['FIRSTNAME']);
+        $this->assertArrayHasKey('EMAIL', $request->getModel());
+        $this->assertEquals('the@example.com', $request->getModel()['EMAIL']);
     }
 
     /**

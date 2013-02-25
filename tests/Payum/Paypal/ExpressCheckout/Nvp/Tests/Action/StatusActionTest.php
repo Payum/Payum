@@ -3,12 +3,10 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Buzz\Message\Form\FormRequest;
 
+use Payum\Request\BinaryMaskStatusRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\StatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
-use Payum\Request\BinaryMaskStatusRequest;
-
-use Payum\Paypal\ExpressCheckout\Nvp\Examples\Model\ModelWithInstruction;
 
 class StatusActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,11 +31,11 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportStatusRequestWithPaymentInstructionAsModel()
+    public function shouldSupportStatusRequestWithArrayAccessAsModel()
     {
         $action = new StatusAction();
         
-        $request = new BinaryMaskStatusRequest(new PaymentInstruction());
+        $request = new BinaryMaskStatusRequest($this->getMock('ArrayAccess'));
         
         $this->assertTrue($action->supports($request));
     }
@@ -45,26 +43,17 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestPaymentInstructionAggregate()
+    public function shouldSupportAuthorizeTokenRequestWithPaymentInstructionAsModel()
     {
         $action = new StatusAction();
 
-        $model = $this->getMock('Payum\PaymentInstructionAggregateInterface');
-        $model
-            ->expects($this->atLeastOnce())
-            ->method('getPaymentInstruction')
-            ->will($this->returnValue(new PaymentInstruction))
-        ;
-
-        $request = new BinaryMaskStatusRequest($model);
-
-        $this->assertTrue($action->supports($request));
+        $this->assertTrue($action->supports(new BinaryMaskStatusRequest(new PaymentInstruction)));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportStatusRequestWithNoPaymentInstructionAsModel()
+    public function shouldNotSupportStatusRequestWithNoArrayAccessAsModel()
     {
         $action = new StatusAction();
 
@@ -76,7 +65,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportNotStatusRequest()
+    public function shouldNotSupportAnythingNotStatusRequest()
     {
         $action = new StatusAction();
 
@@ -100,12 +89,13 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkCanceledIfPaymentNotAuthorized()
     {
-        $model = new PaymentInstruction();
-        $model->setLErrorcoden(0, Api::L_ERRORCODE_PAYMENT_NOT_AUTHORIZED);
-
         $action = new StatusAction();
 
-        $action->execute($request = new BinaryMaskStatusRequest($model));
+        $request = new BinaryMaskStatusRequest(array(
+            'L_ERRORCODE0' => Api::L_ERRORCODE_PAYMENT_NOT_AUTHORIZED
+        ));
+        
+        $action->execute($request);
         
         $this->assertTrue($request->isCanceled());
     }
@@ -113,15 +103,32 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldMarkCanceledIfPayerIdNotSetAndCheckoutStatusNotInitiated()
+    public function shouldMarkFailedIfErrorCodeSetToModel()
     {
-        $model = new PaymentInstruction();
-        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED);
-        $model->setPayerid(null);
-        
         $action = new StatusAction();
 
-        $action->execute($request = new BinaryMaskStatusRequest($model));
+        $request = new BinaryMaskStatusRequest(array(
+            'L_ERRORCODE9' => 'foo'
+        ));
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isFailed());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkCanceledIfPayerIdNotSetAndCheckoutStatusNotInitiated()
+    {
+        $action = new StatusAction();
+
+        $request = new BinaryMaskStatusRequest(array(
+            'PAYERID' => null,
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED
+        ));
+
+        $action->execute($request);
 
         $this->assertTrue($request->isCanceled());
     }
@@ -131,13 +138,14 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkNewIfPayerIdSetAndCheckoutStatusNotInitiated()
     {
-        $model = new PaymentInstruction();
-        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED);
-        $model->setPayerid('thePayerId');
-        
         $action = new StatusAction();
 
-        $action->execute($request = new BinaryMaskStatusRequest($model));
+        $request = new BinaryMaskStatusRequest(array(
+            'PAYERID' => 'thePayerId',
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED
+        ));
+
+        $action->execute($request);
 
         $this->assertTrue($request->isNew());
     }
@@ -147,12 +155,13 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkInProgressIfCheckoutStatusInProgress()
     {
-        $model = new PaymentInstruction();
-        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS);
-        
         $action = new StatusAction();
 
-        $action->execute($request = new BinaryMaskStatusRequest($model));
+        $request = new BinaryMaskStatusRequest(array(
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS
+        ));
+
+        $action->execute($request);
 
         $this->assertTrue($request->isInProgress());
     }
@@ -162,12 +171,13 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkFailedIfCheckoutStatusFailed()
     {
-        $model = new PaymentInstruction();
-        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_FAILED);
-        
         $action = new StatusAction();
 
-        $action->execute($request = new BinaryMaskStatusRequest($model));
+        $request = new BinaryMaskStatusRequest(array(
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_FAILED
+        ));
+        
+        $action->execute($request);
 
         $this->assertTrue($request->isFailed());
     }
@@ -177,14 +187,15 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkInProgressIfAtLeastOnePaymentStatusInProgress()
     {
-        $model = new PaymentInstruction();
-        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_COMPLETED);
-        $model->setPaymentrequestPaymentstatus(0, Api::PAYMENTSTATUS_COMPLETED);
-        $model->setPaymentrequestPaymentstatus(1, Api::PAYMENTSTATUS_IN_PROGRESS);
-        
         $action = new StatusAction();
 
-        $action->execute($request = new BinaryMaskStatusRequest($model));
+        $request = new BinaryMaskStatusRequest(array(
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
+            'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
+            'PAYMENTREQUEST_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_IN_PROGRESS,
+        ));
+
+        $action->execute($request);
 
         $this->assertTrue($request->isInProgress());
     }
@@ -194,14 +205,15 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkFailedIfAtLeastOnePaymentStatusFailed()
     {
-        $model = new PaymentInstruction();
-        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_COMPLETED);
-        $model->setPaymentrequestPaymentstatus(0, Api::PAYMENTSTATUS_COMPLETED);
-        $model->setPaymentrequestPaymentstatus(1, Api::PAYMENTSTATUS_FAILED);
-        
         $action = new StatusAction();
 
-        $action->execute($request = new BinaryMaskStatusRequest($model));
+        $request = new BinaryMaskStatusRequest(array(
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
+            'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
+            'PAYMENTREQUEST_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_FAILED,
+        ));
+
+        $action->execute($request);
 
         $this->assertTrue($request->isFailed());
     }
@@ -211,14 +223,15 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkSuccessIfAllPaymentStatusCompletedOrProcessed()
     {
-        $model = new PaymentInstruction();
-        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_COMPLETED);
-        $model->setPaymentrequestPaymentstatus(0, Api::PAYMENTSTATUS_COMPLETED);
-        $model->setPaymentrequestPaymentstatus(1, Api::PAYMENTSTATUS_PROCESSED);
-
         $action = new StatusAction();
 
-        $action->execute($request = new BinaryMaskStatusRequest($model));
+        $request = new BinaryMaskStatusRequest(array(
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
+            'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
+            'PAYMENTREQUEST_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PROCESSED,
+        ));
+
+        $action->execute($request);
 
         $this->assertTrue($request->isSuccess());
     }
@@ -228,12 +241,13 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkUnknownIfCheckoutStatusUnknown()
     {
-        $model = new PaymentInstruction();
-        $model->setCheckoutstatus('unknowCheckoutStatus');
-        
         $action = new StatusAction();
 
-        $action->execute($request = new BinaryMaskStatusRequest($model));
+        $request = new BinaryMaskStatusRequest(array(
+            'CHECKOUTSTATUS' => 'unknownCheckoutStatus',
+        ));
+
+        $action->execute($request);
 
         $this->assertTrue($request->isUnknown());
     }
@@ -243,13 +257,14 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkUnknownIfPaymentStatusUnknown()
     {
-        $model = new PaymentInstruction();
-        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_COMPLETED);
-        $model->setPaymentrequestPaymentstatus(0, 'unknownPaymentStatus');
-        
         $action = new StatusAction();
 
-        $action->execute($request = new BinaryMaskStatusRequest($model));
+        $request = new BinaryMaskStatusRequest(array(
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
+            'PAYMENTREQUEST_9_PAYMENTSTATUS' => 'unknownPaymentStatus',
+        ));
+
+        $action->execute($request);
 
         $this->assertTrue($request->isUnknown());
     }

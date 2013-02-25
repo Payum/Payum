@@ -5,8 +5,8 @@ use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\GetTransactionDetailsAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Payment;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\GetTransactionDetailsRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 
 class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,14 +31,24 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportGetTransactionDetailsRequest()
+    public function shouldSupportGetTransactionDetailsRequestAndArrayAccessAsModel()
     {
         $action = new GetTransactionDetailsAction();
         $action->setPayment(new Payment($this->createApiMock()));
         
-        $request = new GetTransactionDetailsRequest($paymentRequestN = 5, new PaymentInstruction);
+        $request = new GetTransactionDetailsRequest($this->getMock('ArrayAccess'), $paymentRequestN = 5);
         
         $this->assertTrue($action->supports($request));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSupportAuthorizeTokenRequestWithPaymentInstructionAsModel()
+    {
+        $action = new GetTransactionDetailsAction();
+
+        $this->assertTrue($action->supports(new GetTransactionDetailsRequest(new PaymentInstruction, $paymentRequestN = 5)));
     }
 
     /**
@@ -69,17 +79,14 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Exception\LogicException
-     * @expectedExceptionMessage The TransactionId must be set.
+     * @expectedExceptionMessage PAYMENTREQUEST_5_TRANSACTIONID must be set.
      */
-    public function throwIfInstructionNotHaveTokenSetInInstruction()
+    public function throwIfZeroPaymentRequestTransactionIdNotSetInModel()
     {
         $action = new GetTransactionDetailsAction();
         $action->setPayment(new Payment($this->createApiMock()));
-
-        $request = new GetTransactionDetailsRequest($paymentRequestN = 5, new PaymentInstruction);
         
-        //guard
-        $this->assertNull($request->getPaymentInstruction()->getPaymentrequestTransactionid($paymentRequestN));
+        $request = new GetTransactionDetailsRequest(array(), $paymentRequestN = 5);
 
         $action->execute($request);
     }
@@ -105,11 +112,9 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
         $action = new GetTransactionDetailsAction();
         $action->setPayment(new Payment($apiMock));
 
-        $request = new GetTransactionDetailsRequest($paymentRequestN = 5, new PaymentInstruction);
-        $request->getPaymentInstruction()->setPaymentrequestTransactionid(
-            $paymentRequestN, 
-            $expectedTransactionId = 'theTransactionId'
-        );
+        $request = new GetTransactionDetailsRequest(array(
+            'PAYMENTREQUEST_5_TRANSACTIONID' => 'theTransactionId' 
+        ), $paymentRequestN = 5);
 
         $action->execute($request);
         
@@ -118,13 +123,13 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
         $fields = $actualRequest->getFields();
 
         $this->assertArrayHasKey('TRANSACTIONID', $fields);
-        $this->assertEquals($expectedTransactionId, $fields['TRANSACTIONID']);
+        $this->assertEquals('theTransactionId', $fields['TRANSACTIONID']);
     }
 
     /**
      * @test
      */
-    public function shouldCallApiGetTransactionDetailsAndUpdateInstructionFromResponseOnSuccess()
+    public function shouldCallApiGetTransactionDetailsAndUpdateModelFromResponseOnSuccess()
     {
         $apiMock = $this->createApiMock();
         $apiMock
@@ -133,8 +138,6 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnCallback(function() {
                 $response = new Response;
                 $response->setContent(http_build_query(array(
-                    'FIRSTNAME'=> 'theFirstname',
-                    'EMAIL' => 'the@example.com',
                     'PAYMENTSTATUS' => 'theStatus',
                 )));
                 
@@ -145,19 +148,16 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
         $action = new GetTransactionDetailsAction();
         $action->setPayment(new Payment($apiMock));
 
-        $request = new GetTransactionDetailsRequest($paymentRequestN = 5, new PaymentInstruction);
-        $request->getPaymentInstruction()->setPaymentrequestTransactionid(
-            $paymentRequestN,
-            $expectedTransactionId = 'theTransactionId'
-        );
+        $request = new GetTransactionDetailsRequest(array(
+            'PAYMENTREQUEST_5_TRANSACTIONID' => 'aTransactionId'
+        ), $paymentRequestN = 5);
 
         $action->execute($request);
         
-        $this->assertEquals('theFirstname', $request->getPaymentInstruction()->getFirstname());
-        $this->assertEquals('the@example.com', $request->getPaymentInstruction()->getEmail());
+        $this->assertArrayHasKey('PAYMENTREQUEST_5_PAYMENTSTATUS', $request->getModel());
         $this->assertEquals(
-            'theStatus', 
-            $request->getPaymentInstruction()->getPaymentrequestPaymentstatus($paymentRequestN)
+            'theStatus',
+            $request->getModel()['PAYMENTREQUEST_5_PAYMENTSTATUS']
         );
     }
 

@@ -2,6 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Payum\Action\ActionInterface;
+use Payum\Bridge\Spl\ArrayObject;
 use Payum\Request\RedirectUrlInteractiveRequest;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Exception\LogicException;
@@ -22,14 +23,14 @@ class AuthorizeTokenAction extends ActionPaymentAware
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        $instruction = $request->getPaymentInstruction();
-        if (false == $instruction->getToken()) {
-            throw new LogicException('The token must be set. Have you run SetExpressCheckoutAction?');
+        $model = new ArrayObject($request->getModel());
+        if (false == $model['TOKEN']) {
+            throw new LogicException('The TOKEN must be set. Have you executed SetExpressCheckoutAction?');
         }
           
-        if (false == $request->getPaymentInstruction()->getPayerid() || $request->isForced()) {
+        if (false == $model['PAYERID'] || $request->isForced()) {
             throw new RedirectUrlInteractiveRequest(
-                $this->payment->getApi()->getAuthorizeTokenUrl($instruction->getToken())
+                $this->payment->getApi()->getAuthorizeTokenUrl($model['TOKEN'])
             );
         }
     }
@@ -39,6 +40,9 @@ class AuthorizeTokenAction extends ActionPaymentAware
      */
     public function supports($request)
     {
-        return $request instanceof AuthorizeTokenRequest;
+        return 
+            $request instanceof AuthorizeTokenRequest &&
+            $request->getModel() instanceof \ArrayAccess
+        ;
     }
 }

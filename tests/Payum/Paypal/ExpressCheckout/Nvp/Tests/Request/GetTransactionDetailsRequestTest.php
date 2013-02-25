@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request;
 
-use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
+use MyProject\Proxies\__CG__\stdClass;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\GetTransactionDetailsRequest;
 
 class GetTransactionDetailsRequestTest extends \PHPUnit_Framework_TestCase
@@ -9,41 +9,29 @@ class GetTransactionDetailsRequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfBaseInstructionRequest()
+    public function shouldBeSubClassOfBaseModelRequest()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\GetTransactionDetailsRequest');
-        
-        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Request\BaseInstructionRequest'));
+
+        $this->assertTrue($rc->isSubclassOf('Payum\Request\BaseModelRequest'));
     }
 
     /**
      * @test
      */
-    public function couldBeConstructedWithPaymentRequestNAndInstructionAsArguments()
+    public function couldBeConstructedWithModelAndPaymentRequestNAsArguments()
     {
-        new GetTransactionDetailsRequest($paymentRequestN = 5, new PaymentInstruction);
+        new GetTransactionDetailsRequest(new \stdClass, $paymentRequestN = 5);
     }
 
     /**
      * @test
      */
-    public function shouldAllowGetInstructionSetInConstructor()
-    {
-        $expectedInstruction = new PaymentInstruction;
-
-        $request = new GetTransactionDetailsRequest($paymentRequestN = 5, $expectedInstruction);
-        
-        $this->assertSame($expectedInstruction, $request->getPaymentInstruction());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetPaymentRequestBInstructionSetInConstructor()
+    public function shouldAllowGetPaymentRequestNSetInConstructor()
     {
         $expectedPaymentRequestN = 7;
 
-        $request = new GetTransactionDetailsRequest($expectedPaymentRequestN, new PaymentInstruction);
+        $request = new GetTransactionDetailsRequest(new \stdClass, $expectedPaymentRequestN);
 
         $this->assertSame($expectedPaymentRequestN, $request->getPaymentRequestN());
     }

@@ -3,6 +3,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Buzz\Message\Form\FormRequest;
 
+use Payum\Bridge\Spl\ArrayObject;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Exception\LogicException;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
@@ -19,27 +20,28 @@ class DoExpressCheckoutPaymentAction extends ActionPaymentAware
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
-        
-        $instruction = $request->getPaymentInstruction();
-        if (false == $instruction->getToken()) {
-            throw new LogicException('The token must be set. Have you run SetExpressCheckoutAction?');
+
+        $model = new ArrayObject($request->getModel());
+
+        if (false == $model['TOKEN']) {
+            throw new LogicException('TOKEN must be set. Have you run SetExpressCheckoutAction?');
         }
-        if (false == $instruction->getPayerid()) {
-            throw new LogicException('The payerid must be set.');
+        if (false == $model['PAYERID']) {
+            throw new LogicException('PAYERID must be set. Have user authorize this transaction?');
         }
-        if (false == $instruction->getPaymentrequestPaymentaction(0)) {
-            throw new LogicException('The zero paymentaction must be set.');
+        if (false == $model['PAYMENTREQUEST_0_PAYMENTACTION']) {
+            throw new LogicException('PAYMENTREQUEST_0_PAYMENTACTION must be set.');
         }
-        if (false == $instruction->getPaymentrequestAmt(0)) {
-            throw new LogicException('The zero paymentamt must be set.');
-        }        
+        if (false == $model['PAYMENTREQUEST_0_AMT']) {
+            throw new LogicException('PAYMENTREQUEST_0_AMT must be set.');
+        }
         
         $buzzRequest = new FormRequest();
-        $buzzRequest->setFields($instruction->toNvp());
+        $buzzRequest->setFields((array) $model);
 
         $response = $this->payment->getApi()->doExpressCheckoutPayment($buzzRequest);
 
-        $instruction->fromNvp($response);
+        $model->replace($response);
     }
 
     /**
@@ -47,6 +49,9 @@ class DoExpressCheckoutPaymentAction extends ActionPaymentAware
      */
     public function supports($request)
     {
-        return $request instanceof DoExpressCheckoutPaymentRequest;
+        return 
+            $request instanceof DoExpressCheckoutPaymentRequest &&
+            $request->getModel() instanceof \ArrayAccess
+        ;
     }
 }

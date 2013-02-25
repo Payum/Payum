@@ -4,9 +4,9 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 use Buzz\Message\Form\FormRequest;
 
 use Payum\Request\SyncRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\SyncAction;
-use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 
@@ -33,11 +33,11 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportSyncRequestAndPaymentInstructionAsModel()
+    public function shouldSupportSyncRequestAndArrayAccessAsModel()
     {
         $action = new SyncAction();
 
-        $request = new SyncRequest(new PaymentInstruction);
+        $request = new SyncRequest($this->getMock('ArrayAccess'));
 
         $this->assertTrue($action->supports($request));
     }
@@ -45,20 +45,11 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportSyncRequestPaymentInstructionAggregate()
+    public function shouldSupportAuthorizeTokenRequestWithPaymentInstructionAsModel()
     {
         $action = new SyncAction();
 
-        $model = $this->getMock('Payum\PaymentInstructionAggregateInterface');
-        $model
-            ->expects($this->atLeastOnce())
-            ->method('getPaymentInstruction')
-            ->will($this->returnValue(new PaymentInstruction))
-        ;
-
-        $request = new SyncRequest($model);
-
-        $this->assertTrue($action->supports($request));
+        $this->assertTrue($action->supports(new SyncRequest(new PaymentInstruction)));
     }
 
     /**
@@ -97,7 +88,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new SyncAction();
         $action->setPayment($paymentMock);
 
-        $request = new SyncRequest(new PaymentInstruction);
+        $request = new SyncRequest(array());
         
         $action->execute($request);
     }
@@ -105,7 +96,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldRequestGetExpressCheckoutDetailsIfTokenSetInInstruction()
+    public function shouldRequestGetExpressCheckoutDetailsIfTokenSetInModel()
     {
         $paymentMock = $this->createPaymentMock();
         $paymentMock
@@ -117,10 +108,9 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new SyncAction();
         $action->setPayment($paymentMock);
 
-        $instruction = new PaymentInstruction;
-        $instruction->setToken('theToken');
-
-        $action->execute(new SyncRequest($instruction));
+        $action->execute(new SyncRequest(array(
+            'TOKEN' => 'aToken'
+        )));
     }
 
     /**
@@ -143,18 +133,17 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new SyncAction();
         $action->setPayment($paymentMock);
 
-        $instruction = new PaymentInstruction;
-        $instruction->setToken('theToken');
-        $instruction->setPaymentrequestTransactionid(0, 'fooTransId');
-        $instruction->setPaymentrequestTransactionid(2, 'barTransId');
-
-        $action->execute(new SyncRequest($instruction));
+        $action->execute(new SyncRequest(array(
+            'TOKEN' => 'aToken',
+            'PAYMENTREQUEST_0_TRANSACTIONID' => 'zeroTransId',
+            'PAYMENTREQUEST_9_TRANSACTIONID' => 'nineTransId'
+        )));
     }
 
     /**
      * @test
      */
-    public function shouldUpdateInstructionFromResponseInCaughtAckFailedException()
+    public function shouldUpdateModelFromResponseInCaughtAckFailedException()
     {
         $response = new Response();
         $response->setContent(http_build_query(array(
@@ -174,15 +163,15 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new SyncAction();
         $action->setPayment($paymentMock);
 
-        $instruction = new PaymentInstruction;
-        $instruction->setLErrorcoden(100, 'theErrorCodeToBeCleaned');
-        $instruction->setToken('aToken');
+        $action->execute($request = new SyncRequest(array(
+            'TOKEN' => 'aToken',
+            'PAYMENTREQUEST_0_TRANSACTIONID' => 'aTransId',
+        )));
 
-        $action->execute(new SyncRequest($instruction));
-
-        $this->assertEquals('foo_error', $instruction->getLErrorcoden(0));
-        $this->assertEquals('bar_error', $instruction->getLErrorcoden(1));
-        $this->assertNotContains('theErrorCodeToBeCleaned', $instruction->getLErrorcoden());
+        $this->assertArrayHasKey('L_ERRORCODE0', $request->getModel());
+        $this->assertEquals('foo_error', $request->getModel()['L_ERRORCODE0']);
+        $this->assertArrayHasKey('L_ERRORCODE1', $request->getModel());
+        $this->assertEquals('bar_error', $request->getModel()['L_ERRORCODE1']);
     }
     
     /**
