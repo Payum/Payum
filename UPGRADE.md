@@ -3,6 +3,7 @@
 
 * Remove `fillRequest` method from `PaymentInstruction`.
 * Remove `updateFromResponse` method from `PaymentInstruction`.
+* `Payment` class was removed use `Payum\Payment` instead.
 
 0.1 to 0.2
 ==========

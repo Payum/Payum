@@ -1,13 +1,33 @@
 <?php
 namespace Payum\AuthorizeNet\Aim\Action;
 
+use Payum\Action\ActionApiAwareInterface;
+use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\Bridge\Spl\ArrayObject;
+use Payum\Exception\UnsupportedApiException;
 use Payum\Request\CaptureRequest;
 use Payum\Request\UserInputRequiredInteractiveRequest;
 use Payum\Exception\RequestNotSupportedException;
 
-class CaptureAction extends ActionPaymentAware
+class CaptureAction implements ActionApiAwareInterface
 {
+    /**
+     * @var AuthorizeNetAIM
+     */
+    protected $api;
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function setApi($api)
+    {
+        if (false == $api instanceof AuthorizeNetAIM) {
+            throw new UnsupportedApiException('Not supported.');
+        }
+        
+        $this->api = $api;
+    }
+    
     /**
      * {@inheritdoc}
      */
@@ -28,7 +48,7 @@ class CaptureAction extends ActionPaymentAware
             throw new UserInputRequiredInteractiveRequest(array('amount', 'card_num', 'exp_date'));
         }
         
-        $api = clone $this->payment->getApi();
+        $api = clone $this->api;
         $api->ignore_not_x_fields = true;
         $api->setFields(array_filter((array) $model));
 

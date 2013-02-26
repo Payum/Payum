@@ -10,11 +10,11 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfActionPaymentAware()
+    public function shouldImplementActionApiAwareInterface()
     {
         $rc = new \ReflectionClass('Payum\AuthorizeNet\Aim\Action\CaptureAction');
         
-        $this->assertTrue($rc->isSubclassOf('Payum\Action\ActionPaymentAware'));
+        $this->assertTrue($rc->implementsInterface('Payum\Action\ActionApiAwareInterface'));
     }
 
     /**
@@ -83,5 +83,38 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
 
         $action->execute(new \stdClass());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowSetApi()
+    {
+        $expectedApi = $this->createAuthorizeNetAIMMock();
+
+        $action = new CaptureAction();
+        $action->setApi($expectedApi);
+
+        $this->assertAttributeSame($expectedApi, 'api', $action);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Exception\UnsupportedApiException
+     */
+    public function throwIfUnsupportedApiGiven()
+    {
+        $action = new CaptureAction();
+
+        $action->setApi(new \stdClass);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|AuthorizeNetAIM
+     */
+    protected function createAuthorizeNetAIMMock()
+    {
+        return $this->getMock('Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM', array(), array(), '', false);
     }
 }

@@ -8,13 +8,13 @@ The lib implements [Authorize.Net AIM](http://www.authorize.net/) payment.
 ```php
 <?php
 use Payum\Request\CaptureRequest;
-use Payum\AuthorizeNet\Aim\Payment;
+use Payum\AuthorizeNet\Aim\PaymentFactory;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 
 $authorizeNet = new AuthorizeNetAIM($apiLoginId = 'xxx', $transactionKey = 'xxx');
 $authorizeNet->setSandbox(true);
 
-$payment = Payment::create($authorizeNet);
+$payment = PaymentFactory::create($authorizeNet);
 
 $payment->execute($captureRequest = new CaptureRequest(array(
   'amount' => 10,
