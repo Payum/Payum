@@ -6,6 +6,13 @@ use Payum\Action\ActionInterface;
 interface PaymentInterface
 {
     /**
+     * @param mixed $api
+     *
+     * @return void
+     */
+    function addApi($api);
+    
+    /**
      * @param ActionInterface $action
      * 
      * @return void

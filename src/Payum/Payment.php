@@ -1,6 +1,9 @@
 <?php
 namespace Payum;
 
+use Payum\Action\ActionApiAwareInterface;
+use Payum\Exception\LogicException;
+use Payum\Exception\UnsupportedApiException;
 use Payum\Request\InteractiveRequestInterface;
 use Payum\Action\ActionPaymentAwareInterface;
 use Payum\Action\ActionInterface;
@@ -10,9 +13,14 @@ use Payum\Exception\CycleRequestsException;
 class Payment implements PaymentInterface
 {
     /**
-     * @var array
+     * @var ActionInterface[]
      */
     protected $actions = array();
+
+    /**
+     * @var mixed[]
+     */
+    protected $apis = array();
 
     /**
      * @var array
@@ -32,10 +40,36 @@ class Payment implements PaymentInterface
     /**
      * {@inheritdoc}
      */
+    public function addApi($api)
+    {
+        $this->apis[] = $api;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
     public function addAction(ActionInterface $action)
     {
         if ($action instanceof ActionPaymentAwareInterface) {
             $action->setPayment($this);
+        }
+        
+        if ($action instanceof ActionApiAwareInterface) {
+            $apiSet = false;
+            foreach ($this->apis as $api) {
+                try {
+                    $action->setApi($api);
+                    $apiSet = true;
+                    break;
+                } catch (UnsupportedApiException $e) {}
+            }
+            
+            if (false == $apiSet) {
+                throw new LogicException(sprintf(
+                    'Cannot find right api supported by %s',
+                    get_class($action)
+                ));
+            }
         }
 
         $this->actions[spl_object_hash($action)] = $action;
