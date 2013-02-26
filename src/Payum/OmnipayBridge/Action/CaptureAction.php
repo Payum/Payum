@@ -9,7 +9,7 @@ use Payum\Exception\RequestNotSupportedException;
 use Payum\Request\CaptureRequest;
 use Payum\Request\RedirectUrlInteractiveRequest;
 
-class CaptureAction extends ActionPaymentAware
+class CaptureAction extends BaseActionApiAware
 {
     /**
      * {@inheritdoc}
@@ -23,7 +23,7 @@ class CaptureAction extends ActionPaymentAware
         try {
             $options = $request->getModel();
             
-            $response = $this->payment->getGateway()->purchase((array) $options);
+            $response = $this->gateway->purchase((array) $options);
 
             $options['_reference'] = $response->getGatewayReference();
             $options['_status_message'] = '';

@@ -2,7 +2,7 @@
 namespace Payum\OmnipayBridge\Tests\Integration;
 
 use Omnipay\Dummy\Gateway;
-use Payum\OmnipayBridge\Payment;
+use Payum\OmnipayBridge\PaymentFactory;
 use Payum\Request\BinaryMaskStatusRequest;
 use Payum\Request\CaptureRequest;
 
@@ -13,7 +13,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldFinishSuccessfully()
     {
-        $payment = Payment::create(new Gateway());
+        $payment = PaymentFactory::create(new Gateway());
 
         $captureRequest = new CaptureRequest(array(
             'amount' => 1000,
@@ -42,7 +42,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestIncomplete('The DummyGateway buggy at the moment');
         
-        $payment = Payment::create(new Gateway());
+        $payment = PaymentFactory::create(new Gateway());
 
         $captureRequest = new CaptureRequest(array(
             'amount' => 1000,

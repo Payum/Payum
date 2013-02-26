@@ -1,61 +1,25 @@
 <?php
 namespace Payum\OmnipayBridge\Action;
 
-use Omnipay\Common\RedirectResponse;
+use Payum\OmnipayBridge\Action\CaptureAction;
 
-use Omnipay\Common\Request;
-use Payum\Exception\LogicException;
-use Payum\Exception\RequestNotSupportedException;
-use Payum\Request\CaptureRequest;
-use Payum\Request\RedirectUrlInteractiveRequest;
-
-class CaptureAction extends ActionPaymentAware
+class CaptureActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * {@inheritdoc}
+     * @test
      */
-    public function execute($request)
+    public function shouldBeSubClassOfBaseApiAwareAction()
     {
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\CaptureAction');
         
-        try {
-            $options = $request->getModel();
-            
-            $response = $this->payment->getGateway()->purchase((array) $options);
-
-            $options['_reference'] = $response->getGatewayReference();
-            $options['_status_message'] = '';
-            
-            if ($response instanceof RedirectResponse) {                
-                throw new RedirectUrlInteractiveRequest($response->getRedirectUrl());
-            }
-            
-            if ($response->isSuccessful()) {
-                $options['_status'] = 'success';
-            } else {
-                $options['_status'] = 'failed';
-                $options['_status_message'] = $response->getMessage();
-            }
-        } catch (\Exception $e) {
-            $options['_status'] = 'failed';
-            
-            throw new LogicException('Omnipay unexpected exception', null, $e);
-        }
+        $this->assertTrue($rc->isSubclassOf('Payum\OmnipayBridge\Action\BaseActionApiAware'));
     }
 
     /**
-     * {@inheritdoc}
+     * @test
      */
-    public function supports($request)
+    public function couldBeConstructedWithoutAnyArguments()
     {
-        return 
-            $request instanceof CaptureRequest &&
-            (
-                $request->getModel() instanceof \ArrayAccess ||
-                $request->getModel() instanceof Request
-            )
-        ;
+        new CaptureAction;
     }
 }

@@ -11,9 +11,9 @@ This bridge allows you to use omnipay gateways but in payum like way.
 use Omnipay\Common\GatewayFactory;
 
 use Payum\Request\CaptureRequest;
-use Payum\OmnipayBridge\Payment;
+use Payum\OmnipayBridge\PaymentFactory;
 
-$payment = Payment::create(GatewayFactory::create('Dummy'));
+$payment = PaymentFactory::create(GatewayFactory::create('Dummy'));
 
 $payment->execute($captureRequest = new CaptureRequest(array(
     'amount' => 10,
