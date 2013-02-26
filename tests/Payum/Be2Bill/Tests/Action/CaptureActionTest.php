@@ -12,11 +12,11 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfActionPaymentAware()
+    public function shouldImplementActionApiAwareInterface()
     {
         $rc = new \ReflectionClass('Payum\Be2Bill\Action\CaptureAction');
-        
-        $this->assertTrue($rc->isSubclassOf('Payum\Action\ActionPaymentAware'));
+
+        $this->assertTrue($rc->implementsInterface('Payum\Action\ActionApiAwareInterface'));
     }
 
     /**
@@ -107,6 +107,31 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldAllowSetApi()
+    {
+        $expectedApi = $this->createApiMock();
+        
+        $action = new CaptureAction();
+        $action->setApi($expectedApi);
+        
+        $this->assertAttributeSame($expectedApi, 'api', $action);
+    }
+
+    /**
+     * @test
+     * 
+     * @expectedException \Payum\Exception\UnsupportedApiException
+     */
+    public function throwIfUnsupportedApiGiven()
+    {
+        $action = new CaptureAction();
+        
+        $action->setApi(new \stdClass);
+    }
+
+    /**
+     * @test
+     */
     public function shouldDoNothingIfExeccodeNotNull()
     {
         $apiMock = $this->createApiMock();
@@ -116,7 +141,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         ;
         
         $action = new CaptureAction();
-        $action->setPayment(new Payment($apiMock));
+        $action->setApi($apiMock);
 
         $request = new CaptureRequest(array('EXECCODE' => 1));
 

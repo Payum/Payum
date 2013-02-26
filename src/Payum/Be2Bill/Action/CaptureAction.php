@@ -1,17 +1,33 @@
 <?php
 namespace Payum\Be2Bill\Action;
 
+use Payum\Action\ActionApiAwareInterface;
 use Payum\Bridge\Spl\ArrayObject;
-use Payum\PaymentInstructionAggregateInterface;
-use Payum\PaymentInstructionAwareInterface;
 use Payum\Request\CaptureRequest;
 use Payum\Request\UserInputRequiredInteractiveRequest;
+use Payum\Exception\UnsupportedApiException;
 use Payum\Exception\RequestNotSupportedException;
-use Payum\Be2Bill\PaymentInstruction;
 use Payum\Be2Bill\Api;
 
-class CaptureAction extends ActionPaymentAware
+class CaptureAction implements ActionApiAwareInterface
 {
+    /**
+     * @var Api
+     */
+    protected $api;
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function setApi($api)
+    {
+        if (false == $api instanceof Api) {
+            throw new UnsupportedApiException('Not supported.');
+        }
+        
+        $this->api = $api;
+    }
+    
     /**
      * {@inheritdoc}
      */
@@ -36,7 +52,7 @@ class CaptureAction extends ActionPaymentAware
             throw new UserInputRequiredInteractiveRequest(array('CARDCODE', 'CARDCVV', 'CARDVALIDITYDATE', 'CARDFULLNAME'));
         }
 
-        $response = $this->payment->getApi()->payment((array) $model);
+        $response = $this->api->payment((array) $model);
 
         $model->replace($response->getContentJson());
     }

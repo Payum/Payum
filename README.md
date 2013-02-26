@@ -10,10 +10,10 @@ The lib implements [Be2Bill](http://www.be2bill.com/) payment.
 use Buzz\Client\Curl;
 
 use Payum\Be2Bill\Api;
-use Payum\Be2Bill\Payment;
+use Payum\Be2Bill\PaymentFactory;
 use Payum\Request\CaptureRequest;
 
-$payment = Payment::create(new Api(new Curl(), array(
+$payment = PaymentFactory::create(new Api(new Curl(), array(
    'identifier' => 'foo',
    'password' => 'bar',
    'sandbox' => true
