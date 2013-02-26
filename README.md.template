@@ -10,7 +10,7 @@ The lib implements [Paypal Express Checkout](https://www.x.com/content/paypal-nv
 use Buzz\Client\Curl;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
-use Payum\Paypal\ExpressCheckout\Nvp\Payment;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory;
 use Payum\Request\CaptureRequest;
 use Payum\Request\RedirectUrlInteractiveRequest;
 

@@ -12,11 +12,11 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfActionPaymentAware()
+    public function shouldBeSubClassOfBaseActionApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\GetExpressCheckoutDetailsAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\ActionPaymentAware'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\BaseActionApiAware'));
     }
 
     /**
@@ -33,7 +33,6 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
     public function shouldSupportGetExpressCheckoutDetailsRequestAndArrayAccessAsModel()
     {
         $action = new GetExpressCheckoutDetailsAction();
-        $action->setPayment(new Payment($this->createApiMock()));
         
         $this->assertTrue(
             $action->supports(new GetExpressCheckoutDetailsRequest($this->getMock('ArrayAccess')))
@@ -56,7 +55,6 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
     public function shouldNotSupportAnythingNotGetExpressCheckoutDetailsRequest()
     {
         $action = new GetExpressCheckoutDetailsAction();
-        $action->setPayment(new Payment($this->createApiMock()));
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -69,7 +67,6 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $action = new GetExpressCheckoutDetailsAction();
-        $action->setPayment(new Payment($this->createApiMock()));
 
         $action->execute(new \stdClass());
     }
@@ -83,7 +80,6 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
     public function throwIfTokenNotSetInModel()
     {
         $action = new GetExpressCheckoutDetailsAction();
-        $action->setPayment(new Payment($this->createApiMock()));
         
         $request = new GetExpressCheckoutDetailsRequest(array());
 
@@ -109,7 +105,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
         ;
         
         $action = new GetExpressCheckoutDetailsAction();
-        $action->setPayment(new Payment($apiMock));
+        $action->setApi($apiMock);
 
         $request = new GetExpressCheckoutDetailsRequest(array(
             'TOKEN' => 'theToken', 
@@ -146,7 +142,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new GetExpressCheckoutDetailsAction();
-        $action->setPayment(new Payment($apiMock));
+        $action->setApi($apiMock);
 
         $request = new GetExpressCheckoutDetailsRequest(array(
             'TOKEN' => 'aToken',

@@ -9,7 +9,7 @@ use Payum\Exception\LogicException;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\SetExpressCheckoutRequest;
 
-class SetExpressCheckoutAction extends ActionPaymentAware
+class SetExpressCheckoutAction extends BaseActionApiAware
 {
     /**
      * {@inheritdoc}
@@ -30,7 +30,7 @@ class SetExpressCheckoutAction extends ActionPaymentAware
         $buzzRequest = new FormRequest;
         $buzzRequest->setFields((array) $model);
         
-        $response = $this->payment->getApi()->setExpressCheckout($buzzRequest);
+        $response = $this->api->setExpressCheckout($buzzRequest);
         
         $model->replace($response);
     }

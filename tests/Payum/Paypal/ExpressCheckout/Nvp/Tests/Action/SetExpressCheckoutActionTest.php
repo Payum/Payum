@@ -11,11 +11,11 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfActionPaymentAware()
+    public function shouldBeSubClassOfBaseActionApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\SetExpressCheckoutAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\ActionPaymentAware'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\BaseActionApiAware'));
     }
 
     /**
@@ -104,7 +104,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
         ;
         
         $action = new SetExpressCheckoutAction($apiMock);
-        $action->setPayment(new Payment($apiMock));
+        $action->setApi($apiMock);
 
         $request = new SetExpressCheckoutRequest(array(
             'PAYMENTREQUEST_0_AMT' => $expectedAmount = 154.23
@@ -141,7 +141,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new SetExpressCheckoutAction();
-        $action->setPayment(new Payment($apiMock));
+        $action->setApi($apiMock);
 
         $request = new SetExpressCheckoutRequest(array(
             'PAYMENTREQUEST_0_AMT' => $expectedAmount = 154.23

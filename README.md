@@ -10,13 +10,13 @@ The lib implements [Paypal Express Checkout](https://www.x.com/content/paypal-nv
 use Buzz\Client\Curl;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
-use Payum\Paypal\ExpressCheckout\Nvp\Payment;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory;
 use Payum\Request\CaptureRequest;
 use Payum\Request\RedirectUrlInteractiveRequest;
 
 //Source: Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::doCapture()
 
-$payment = Payment::create(new Api(new Curl, array(
+$payment = PaymentFactory::create(new Api(new Curl, array(
     'username' => 'a_username',
     'password' => 'a_pasword',
     'signature' => 'a_signature',
@@ -82,9 +82,9 @@ Write an action:
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Examples\Action;
 
+use Payum\Action\ActionPaymentAware;
 use Payum\Request\CaptureRequest;
 use Payum\Exception\RequestNotSupportedException;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\ActionPaymentAware;
 use Payum\Paypal\ExpressCheckout\Nvp\Examples\Model\AwesomeCart; 
 
 class CaptureAwesomeCartAction extends ActionPaymentAware

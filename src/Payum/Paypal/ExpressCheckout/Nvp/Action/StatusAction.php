@@ -4,9 +4,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 use Payum\Action\ActionInterface;
 use Payum\Bridge\Spl\ArrayObject;
 use Payum\Exception\RequestNotSupportedException;
-use Payum\PaymentInstructionAggregateInterface;
 use Payum\Request\StatusRequestInterface;
-use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class StatusAction implements ActionInterface

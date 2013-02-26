@@ -1,14 +1,13 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
-use Payum\Action\ActionInterface;
 use Payum\Bridge\Spl\ArrayObject;
 use Payum\Request\RedirectUrlInteractiveRequest;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Exception\LogicException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\AuthorizeTokenRequest;
 
-class AuthorizeTokenAction extends ActionPaymentAware
+class AuthorizeTokenAction extends BaseActionApiAware
 {
     /**
      * {@inheritdoc}
@@ -30,7 +29,7 @@ class AuthorizeTokenAction extends ActionPaymentAware
           
         if (false == $model['PAYERID'] || $request->isForced()) {
             throw new RedirectUrlInteractiveRequest(
-                $this->payment->getApi()->getAuthorizeTokenUrl($model['TOKEN'])
+                $this->api->getAuthorizeTokenUrl($model['TOKEN'])
             );
         }
     }

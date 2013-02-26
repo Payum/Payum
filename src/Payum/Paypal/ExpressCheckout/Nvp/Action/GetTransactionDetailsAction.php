@@ -9,7 +9,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\GetTransactionDetailsRequest;
 use Payum\Exception\RequestNotSupportedException;
 
-class GetTransactionDetailsAction extends ActionPaymentAware
+class GetTransactionDetailsAction extends BaseActionApiAware
 {
     /**
      * {@inheritdoc}
@@ -31,7 +31,7 @@ class GetTransactionDetailsAction extends ActionPaymentAware
         $buzzRequest = new FormRequest();
         $buzzRequest->setField('TRANSACTIONID', $model[$transactionIndex]);
         
-        $response = $this->payment->getApi()->getTransactionDetails($buzzRequest);
+        $response = $this->api->getTransactionDetails($buzzRequest);
         foreach ($response as $name => $value) {
             if (in_array($name, $this->getPaymentRequestNFields())) {
                 $model['PAYMENTREQUEST_'.$request->getPaymentRequestN().'_'.$name] = $value;

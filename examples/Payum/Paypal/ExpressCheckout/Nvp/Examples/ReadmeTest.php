@@ -4,7 +4,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Examples;
 use Buzz\Client\Curl;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Examples\Model\AwesomeCart;
-use Payum\Paypal\ExpressCheckout\Nvp\Payment;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory;
 use Payum\Request\BinaryMaskStatusRequest;
 use Payum\Request\CaptureRequest;
 use Payum\Request\RedirectUrlInteractiveRequest;
@@ -18,7 +18,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
     public function doCapture()
     {
         //@testo:start
-        $payment = Payment::create(new Api(new Curl, array(
+        $payment = PaymentFactory::create(new Api(new Curl, array(
             'username' => 'a_username',
             'password' => 'a_pasword',
             'signature' => 'a_signature',

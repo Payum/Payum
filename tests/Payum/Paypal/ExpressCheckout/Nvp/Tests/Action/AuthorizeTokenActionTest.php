@@ -12,11 +12,11 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfActionPaymentAware()
+    public function shouldBeSubClassOfBaseActionApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\AuthorizeTokenAction');
         
-        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\ActionPaymentAware'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\BaseActionApiAware'));
     }
 
     /**
@@ -99,7 +99,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
         ;
                 
         $action = new AuthorizeTokenAction();
-        $action->setPayment(new Payment($apiMock));
+        $action->setApi($apiMock);
 
         $model = new \ArrayObject();
         $model['TOKEN'] = $expectedRedirectUrl; 
@@ -131,7 +131,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
         ;
         
         $action = new AuthorizeTokenAction();
-        $action->setPayment(new Payment($apiMock));
+        $action->setApi($apiMock);
 
         $request = new AuthorizeTokenRequest(array(
             'TOKEN' => 'aToken',
@@ -155,7 +155,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new AuthorizeTokenAction();
-        $action->setPayment(new Payment($apiMock));
+        $action->setApi($apiMock);
 
         $request = new AuthorizeTokenRequest(array(
             'TOKEN' => 'aToken',

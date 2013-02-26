@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
-use Payum\Payment as BasePayment;
+use Payum\Payment;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\DoExpressCheckoutPaymentAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\GetExpressCheckoutDetailsAction;
@@ -10,37 +10,18 @@ use Payum\Paypal\ExpressCheckout\Nvp\Action\StatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\SyncAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\SetExpressCheckoutAction;
 
-class Payment extends BasePayment
+abstract class PaymentFactory
 {
-    /**
-     * @var Api
-     */
-    protected $api;
-
-    /**
-     * @param Api $api
-     */
-    public function __construct(Api $api)
-    {
-        $this->api = $api;
-    }
-
-    /**
-     * @return Api
-     */
-    public function getApi()
-    {
-        return $this->api;
-    }
-
     /**
      * @param Api $api
      *
-     * @return \Payum\Paypal\ExpressCheckout\Nvp\Payment
+     * @return \Payum\Payment
      */
     public static function create(Api $api)
     {
-        $payment = new static($api);
+        $payment = new Payment($api);
+
+        $payment->addApi($api);
 
         $payment->addAction(new SetExpressCheckoutAction());
         $payment->addAction(new GetExpressCheckoutDetailsAction());
@@ -52,5 +33,11 @@ class Payment extends BasePayment
         $payment->addAction(new SyncAction());;
 
         return $payment;
+    }
+
+    /**
+     */
+    private  function __construct()
+    {
     }
 }

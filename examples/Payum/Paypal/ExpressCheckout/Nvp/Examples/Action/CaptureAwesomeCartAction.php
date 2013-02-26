@@ -1,9 +1,9 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Examples\Action;
 
+use Payum\Action\ActionPaymentAware;
 use Payum\Request\CaptureRequest;
 use Payum\Exception\RequestNotSupportedException;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\ActionPaymentAware;
 use Payum\Paypal\ExpressCheckout\Nvp\Examples\Model\AwesomeCart; 
 
 class CaptureAwesomeCartAction extends ActionPaymentAware

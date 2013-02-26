@@ -12,11 +12,11 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfActionPaymentAware()
+    public function shouldBeSubClassOfBaseActionApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\DoExpressCheckoutPaymentAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\ActionPaymentAware'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\BaseActionApiAware'));
     }
 
     /**
@@ -33,7 +33,6 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     public function shouldSupportDoExpressCheckoutPaymentRequestAndArrayAccessAsModel()
     {
         $action = new DoExpressCheckoutPaymentAction();
-        $action->setPayment(new Payment($this->createApiMock()));
         
         $this->assertTrue($action->supports(new DoExpressCheckoutPaymentRequest($this->getMock('ArrayAccess'))));
     }
@@ -54,7 +53,6 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     public function shouldNotSupportAnythingNotDoExpressCheckoutPaymentRequest()
     {
         $action = new DoExpressCheckoutPaymentAction();
-        $action->setPayment(new Payment($this->createApiMock()));
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -67,7 +65,6 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $action = new DoExpressCheckoutPaymentAction();
-        $action->setPayment(new Payment($this->createApiMock()));
 
         $action->execute(new \stdClass());
     }
@@ -81,7 +78,6 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     public function throwIfTokenNotSetInModel()
     {
         $action = new DoExpressCheckoutPaymentAction();
-        $action->setPayment(new Payment($this->createApiMock()));
         
         $action->execute(new DoExpressCheckoutPaymentRequest(array()));
     }
@@ -95,7 +91,6 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     public function throwIfPayerIdNotSetInModel()
     {
         $action = new DoExpressCheckoutPaymentAction();
-        $action->setPayment(new Payment($this->createApiMock()));
 
         $request = new DoExpressCheckoutPaymentRequest(array(
             'TOKEN' => 'aToken'
@@ -113,7 +108,6 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     public function throwIfZeroPaymentRequestActionNotSet()
     {
         $action = new DoExpressCheckoutPaymentAction();
-        $action->setPayment(new Payment($this->createApiMock()));
 
         $request = new DoExpressCheckoutPaymentRequest(array(
             'TOKEN' => 'aToken',
@@ -132,7 +126,6 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     public function throwIfZeroPaymentRequestAmtNotSet()
     {
         $action = new DoExpressCheckoutPaymentAction();
-        $action->setPayment(new Payment($this->createApiMock()));
 
         $request = new DoExpressCheckoutPaymentRequest(array(
             'TOKEN' => 'aToken',
@@ -162,7 +155,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
         ;
         
         $action = new DoExpressCheckoutPaymentAction();
-        $action->setPayment(new Payment($apiMock));
+        $action->setApi($apiMock);
 
         $request = new DoExpressCheckoutPaymentRequest(array(
             'TOKEN' => 'theToken',
@@ -211,7 +204,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new DoExpressCheckoutPaymentAction();
-        $action->setPayment(new Payment($apiMock));
+        $action->setApi($apiMock);
 
         $request = new DoExpressCheckoutPaymentRequest(array(
             'TOKEN' => 'aToken',

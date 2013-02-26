@@ -8,7 +8,7 @@ use Payum\Exception\RequestNotSupportedException;
 use Payum\Exception\LogicException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\GetExpressCheckoutDetailsRequest;
 
-class GetExpressCheckoutDetailsAction extends  ActionPaymentAware
+class GetExpressCheckoutDetailsAction extends  BaseActionApiAware
 {
     /**
      * {@inheritdoc}
@@ -28,7 +28,7 @@ class GetExpressCheckoutDetailsAction extends  ActionPaymentAware
         $buzzRequest = new FormRequest();
         $buzzRequest->setField('TOKEN', $model['TOKEN']);
         
-        $response = $this->payment->getApi()->getExpressCheckoutDetails($buzzRequest);
+        $response = $this->api->getExpressCheckoutDetails($buzzRequest);
         
         $model->replace($response);
     }

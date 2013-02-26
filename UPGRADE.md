@@ -2,6 +2,7 @@
 ==========
 
 * Remove `toNvp` and `fromNvp` from `PaymentInstruction` class.
+* `Payment` class was removed use `Payum\Payment` instead.
 
 0.1 to 0.2
 ==========
