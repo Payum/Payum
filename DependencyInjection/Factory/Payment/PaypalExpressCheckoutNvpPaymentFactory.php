@@ -19,7 +19,7 @@ class PaypalExpressCheckoutNvpPaymentFactory implements PaymentFactoryInterface
      */
     public function create(ContainerBuilder $container, $contextName, array $config)
     {
-        if (false == class_exists('Payum\Paypal\ExpressCheckout\Nvp\Payment')) {
+        if (false == class_exists('Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory')) {
             throw new RuntimeException('Cannot find paypal express checkout payment class. Have you installed payum/paypal-express-checkout-nvp package?');
         }
 
@@ -35,7 +35,7 @@ class PaypalExpressCheckoutNvpPaymentFactory implements PaymentFactoryInterface
         $paymentDefinition = new Definition();
         $paymentDefinition->setClass(new Parameter('payum.paypal.express_checkout_nvp.payment.class'));
         $paymentDefinition->setPublic('false');
-        $paymentDefinition->setArguments(array(new Reference($apiId)));
+        $paymentDefinition->addMethodCall('addApi', array(new Reference($apiId)));
         $paymentId = 'payum.context.'.$contextName.'.payment';
         $container->setDefinition($paymentId, $paymentDefinition);
 

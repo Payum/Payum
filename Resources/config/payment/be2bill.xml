@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="payum.be2bill.payment.class">Payum\Be2Bill\Payment</parameter>
+        <parameter key="payum.be2bill.payment.class">Payum\Payment</parameter>
         <parameter key="payum.be2bill.api.class">Payum\Be2Bill\Api</parameter>        
         <parameter key="payum.be2bill.action.capture.class">Payum\Be2Bill\Action\CaptureAction</parameter>
         <parameter key="payum.be2bill.action.status.class">Payum\Be2Bill\Action\StatusAction</parameter>
