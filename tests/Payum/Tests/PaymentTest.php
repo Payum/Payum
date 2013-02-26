@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Tests;
 
+use Payum\Exception\UnsupportedApiException;
 use Payum\Payment;
 use Payum\Action\ActionPaymentAware;
 use Payum\Action\ActionInterface;
@@ -24,6 +25,95 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     public function couldBeConstructedWithoutAnyArguments()
     {
         new Payment();
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowAddApi()
+    {
+        $payment = new Payment();
+
+        $payment->addApi(new \stdClass());
+        $payment->addApi(new \stdClass());
+        
+        $this->assertAttributeCount(2, 'apis', $payment);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSetFirstApiToActionApiAware()
+    {
+        $payment = new Payment();
+
+        $payment->addApi($firstApi = new \stdClass());
+        $payment->addApi($secondApi = new \stdClass());
+        
+        $action = $this->getMock('Payum\Action\ActionApiAwareInterface');
+        $action
+            ->expects($this->once())
+            ->method('setApi')
+            ->with($this->identicalTo($firstApi))
+        ;
+
+        $payment->addAction($action);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSetSecondApiToActionApiAwareIfFirstUnsupported()
+    {
+        $payment = new Payment();
+
+        $payment->addApi($firstApi = new \stdClass());
+        $payment->addApi($secondApi = new \stdClass());
+
+        $action = $this->getMock('Payum\Action\ActionApiAwareInterface');
+        $action
+            ->expects($this->at(0))
+            ->method('setApi')
+            ->with($this->identicalTo($firstApi))
+            ->will($this->throwException(new UnsupportedApiException('first api not supported')))
+        ;
+        $action
+            ->expects($this->at(1))
+            ->method('setApi')
+            ->with($this->identicalTo($secondApi))
+        ;
+
+        $payment->addAction($action);
+    }
+
+    /**
+     * @test
+     * 
+     * @expectedException \Payum\Exception\LogicException
+     * @expectedExceptionMessage Cannot find right api supported by
+     */
+    public function throwIfPaymentNotHaveApiSupportedByAction()
+    {
+        $payment = new Payment();
+
+        $payment->addApi($firstApi = new \stdClass());
+        $payment->addApi($secondApi = new \stdClass());
+
+        $action = $this->getMock('Payum\Action\ActionApiAwareInterface');
+        $action
+            ->expects($this->at(0))
+            ->method('setApi')
+            ->with($this->identicalTo($firstApi))
+            ->will($this->throwException(new UnsupportedApiException('first api not supported')))
+        ;
+        $action
+            ->expects($this->at(1))
+            ->method('setApi')
+            ->with($this->identicalTo($secondApi))
+            ->will($this->throwException(new UnsupportedApiException('second api not supported')))
+        ;
+
+        $payment->addAction($action);
     }
 
     /**
