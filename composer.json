@@ -18,7 +18,7 @@
     "require-dev": {
         "ext-curl": "*",
         "ext-pdo_sqlite": "*",
-        "doctrine/orm": "2.2.*",
+        "doctrine/orm": "2.*",
         "fp/testo": "dev-master",
         "phpunit/phpunit": "3.7.*"
     },
