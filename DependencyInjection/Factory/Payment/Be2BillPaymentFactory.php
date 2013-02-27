@@ -20,7 +20,7 @@ class Be2BillPaymentFactory implements PaymentFactoryInterface
     public function create(ContainerBuilder $container, $contextName, array $config)
     {
         if (false == class_exists('Payum\Be2Bill\PaymentFactory')) {
-            throw new RuntimeException('Cannot find be2bill Api class. Have you installed payum/be2bill package?');
+            throw new RuntimeException('Cannot find be2bill payment factory class. Have you installed payum/be2bill package?');
         }
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/payment'));

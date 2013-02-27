@@ -20,7 +20,7 @@ class AuthorizeNetAimPaymentFactory implements PaymentFactoryInterface
     public function create(ContainerBuilder $container, $contextName, array $config)
     {
         if (false == class_exists('Payum\AuthorizeNet\Aim\PaymentFactory')) {
-            throw new RuntimeException('Cannot find Authorize.net payment class. Have you installed payum/authorize-net-aim package?');
+            throw new RuntimeException('Cannot find Authorize.net payment factory class. Have you installed payum/authorize-net-aim package?');
         }
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/payment'));

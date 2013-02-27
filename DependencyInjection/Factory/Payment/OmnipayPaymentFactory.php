@@ -22,7 +22,7 @@ class OmnipayPaymentFactory implements PaymentFactoryInterface
     public function create(ContainerBuilder $container, $contextName, array $config)
     {
         if (false == class_exists('Payum\OmnipayBridge\PaymentFactory')) {
-            throw new RuntimeException('Cannot find OmnipayBridge payment class. Have you installed payum/omnipay-bridge package?');
+            throw new RuntimeException('Cannot find OmnipayBridge payment factory class. Have you installed payum/omnipay-bridge package?');
         }
         if (false == interface_exists('Omnipay\Common\GatewayInterface')) {
             throw new RuntimeException('Cannot find GatewayInterface interface. Have you installed omnipay/omnipay package?');

@@ -20,7 +20,7 @@ class PaypalExpressCheckoutNvpPaymentFactory implements PaymentFactoryInterface
     public function create(ContainerBuilder $container, $contextName, array $config)
     {
         if (false == class_exists('Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory')) {
-            throw new RuntimeException('Cannot find paypal express checkout payment class. Have you installed payum/paypal-express-checkout-nvp package?');
+            throw new RuntimeException('Cannot find paypal express checkout payment factory class. Have you installed payum/paypal-express-checkout-nvp package?');
         }
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/payment'));
