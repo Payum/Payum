@@ -46,13 +46,15 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         
         $payment = PaymentFactory::create(new Gateway());
 
+        $date = new \DateTime('now + 2 year');
+
         $captureRequest = new CaptureRequest(array(
             'amount' => 1000,
             'card' => array(
                 'number' => '5555557730105001', //ends one so will be declined
                 'cvv' => 123,
                 'expiryMonth' => 6,
-                'expiryYear' => (new \DateTime('now + 2 year'))->format('y'),
+                'expiryYear' => $date->format('y'),
                 'firstName' => 'foo',
                 'lastName' => 'bar',
             )
