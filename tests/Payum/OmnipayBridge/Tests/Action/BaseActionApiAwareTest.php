@@ -44,7 +44,7 @@ class BaseActionApiAwareTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfUnsupportedApiGiven()
     {
-        $action = $this->getMockForAbstractClass('Payum\Paypal\ExpressCheckout\Nvp\Action\BaseActionApiAware');
+        $action = $this->getMockForAbstractClass('Payum\OmnipayBridge\Action\BaseActionApiAware');
 
         $action->setApi(new \stdClass);
     }
