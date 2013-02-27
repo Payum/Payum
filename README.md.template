@@ -17,6 +17,7 @@ The payment lib.
 * [Paypal Pro Checkout Nvp](https://github.com/Payum/PaypalProCheckoutNvp)
 * [Authorize.Net AIM](https://github.com/Payum/AuthorizeNetAim)
 * [Be2Bill](https://github.com/Payum/Be2Bill)
+* All gateways supported by [omnipay](https://github.com/adrianmacneil/omnipay) lib via [bridge](https://github.com/Payum/OmnipayBridge).
 
 Also there is a [bundle](https://github.com/Payum/PayumBundle) for symfony2 developers.
 
