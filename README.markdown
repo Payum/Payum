@@ -1,4 +1,4 @@
-PayumBundle
+PayumBundle [![Build Status](https://travis-ci.org/Payum/PayumBundle.png?branch=master)](https://travis-ci.org/Payum/PayumBundle)
 ===========
 
 The PayumBundle adds support of [payum](https://github.com/Payum/Payum) lib to [symfony](symfony.com) framework.
