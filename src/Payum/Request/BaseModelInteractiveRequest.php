@@ -3,7 +3,7 @@ namespace Payum\Request;
 
 use Payum\Exception\LogicException;
 
-abstract class BaseModelInteractiveRequest  extends LogicException implements InteractiveRequestInterface
+abstract class BaseModelInteractiveRequest  extends LogicException implements InteractiveRequestInterface, ModelRequestInterface
 {
     /**
      * @var mixed

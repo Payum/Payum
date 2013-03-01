@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Tests;
 
+use MyProject\Proxies\__CG__\OtherProject\Proxies\__CG__\stdClass;
 use Payum\Exception\UnsupportedApiException;
 use Payum\Payment;
 use Payum\Action\ActionPaymentAware;
@@ -25,6 +26,30 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     public function couldBeConstructedWithoutAnyArguments()
     {
         new Payment();
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCreateExtensionCollectionInstanceInConstructor()
+    {
+        $payment = new Payment;
+
+        $this->assertAttributeInstanceOf('Payum\Extension\ExtensionCollection', 'extensions', $payment);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowAddExtension()
+    {
+        $payment = new Payment;
+
+        $payment->addExtension($this->createExtensionMock());
+
+        $extensions = $this->readAttribute($payment, 'extensions');
+        
+        $this->assertAttributeCount(1, 'extensions', $extensions);
     }
 
     /**
@@ -159,7 +184,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldCatchInteractiveRequestThrownAndReturnItByDefault()
+    public function shouldCatchInteractiveRequestThrownAndReturnIfInteractiveRequestSetTrue()
     {
         $expectedInteractiveRequest = $this->createInteractiveRequestMock();
         $request = new \stdClass();
@@ -229,53 +254,241 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * 
+     * @expectedException \LogicException
+     * @expectedExceptionMessage An error occurred
      */
-    public function shouldSetFirstRequestPropertyToNullIfOnExceptionThrown()
+    public function shouldCallExtensionOnExceptionWhenNotSupportedRequestThrown()
     {
-        $exception = new \LogicException('Test exception');
+        $expectedException = new \LogicException('An error occurred');
+        $expectedRequest = new \stdClass;
         
+        $actionMock = $this->createActionMock();
+        $actionMock
+            ->expects($this->once())
+            ->method('execute')
+            ->will($this->throwException($expectedException))
+        ;
+        $actionMock
+            ->expects($this->any())
+            ->method('supports')
+            ->will($this->returnValue(true))
+        ;
+        
+        $extensionMock = $this->createExtensionMock();
+        $extensionMock
+            ->expects($this->once())
+            ->method('onException')
+            ->with(
+                $this->identicalTo($expectedException),
+                $this->identicalTo($expectedRequest)
+            )
+        ;
+
         $payment = new Payment();
+        $payment->addAction($actionMock);
+        $payment->addExtension($extensionMock);
+
+        $payment->execute($expectedRequest);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCallExtensionOnInteractiveRequestWhenInteractiveRequestThrown()
+    {
+        $expectedInteractiveRequestMock = $this->createInteractiveRequestMock();
+        $expectedRequest = new \stdClass;
 
         $actionMock = $this->createActionMock();
         $actionMock
             ->expects($this->once())
             ->method('execute')
-            ->will($this->throwException($exception))
+            ->will($this->throwException($expectedInteractiveRequestMock))
         ;
         $actionMock
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
 
+        $extensionMock = $this->createExtensionMock();
+        $extensionMock
+            ->expects($this->once())
+            ->method('onInteractiveRequest')
+            ->with(
+                $this->identicalTo($expectedInteractiveRequestMock),
+                $this->identicalTo($expectedRequest),
+                $this->identicalTo($actionMock)
+            )
+        ;
+
+        $payment = new Payment();
         $payment->addAction($actionMock);
-        try {
-            $payment->execute(new \stdClass());
-            
-            $this->fail('Expected LogicException to be thrown.');
-        } catch (\Exception $e) {
-            $this->assertAttributeEmpty('firstRequest', $payment);
-        }
+        $payment->addExtension($extensionMock);
+
+        $actualInteractiveRequest = $payment->execute($expectedRequest, true);
+        
+        $this->assertSame($expectedInteractiveRequestMock, $actualInteractiveRequest);
     }
 
     /**
      * @test
-     * 
-     * @expectedException \Payum\Exception\CycleRequestsException
-     * @expectedExceptionMessage The action Payum\Tests\RequireOtherRequestAction is called 100 times. Possible requests infinite loop detected.
      */
-    public function throwCycleRequestIfActionCallsMoreThenLimitAllows()
+    public function shouldReturnNewInteractiveRequestProvidedByExtension()
     {
-        $cycledRequest = new \stdClass();
-        
-        $action = new RequireOtherRequestAction;
-        $action->setSupportedRequest($cycledRequest);
-        $action->setRequiredRequest($cycledRequest);
-        
-        $payment = new Payment();
-        $payment->addAction($action);
+        $thrownInteractiveRequestMock = $this->createInteractiveRequestMock();
+        $expectedInteractiveRequestMock = $this->createInteractiveRequestMock();
+        $expectedRequest = new \stdClass;
 
-        $payment->execute($cycledRequest);
+        $actionMock = $this->createActionMock();
+        $actionMock
+            ->expects($this->once())
+            ->method('execute')
+            ->will($this->throwException($thrownInteractiveRequestMock))
+        ;
+        $actionMock
+            ->expects($this->any())
+            ->method('supports')
+            ->will($this->returnValue(true))
+        ;
+
+        $extensionMock = $this->createExtensionMock();
+        $extensionMock
+            ->expects($this->once())
+            ->method('onInteractiveRequest')
+            ->with(
+                $this->identicalTo($thrownInteractiveRequestMock),
+                $this->identicalTo($expectedRequest),
+                $this->identicalTo($actionMock)
+            )
+            ->will($this->returnValue($expectedInteractiveRequestMock))
+        ;
+
+        $payment = new Payment();
+        $payment->addAction($actionMock);
+        $payment->addExtension($extensionMock);
+
+        $actualInteractiveRequest = $payment->execute($expectedRequest, true);
+
+        $this->assertSame($expectedInteractiveRequestMock, $actualInteractiveRequest);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCallExtensionOnPreExecute()
+    {
+        $expectedRequest = new \stdClass;
+
+        $actionMock = $this->createActionMock();
+        $actionMock
+            ->expects($this->any())
+            ->method('supports')
+            ->will($this->returnValue(true))
+        ;
+
+        $extensionMock = $this->createExtensionMock();
+        $extensionMock
+            ->expects($this->once())
+            ->method('onPreExecute')
+            ->with(
+                $this->identicalTo($expectedRequest)
+            )
+        ;
+
+        $payment = new Payment();
+        $payment->addAction($actionMock);
+        $payment->addExtension($extensionMock);
+
+        $payment->execute($expectedRequest);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCallExtensionOnExecute()
+    {
+        $expectedRequest = new \stdClass;
+
+        $actionMock = $this->createActionMock();
+        $actionMock
+            ->expects($this->any())
+            ->method('supports')
+            ->will($this->returnValue(true))
+        ;
+
+        $extensionMock = $this->createExtensionMock();
+        $extensionMock
+            ->expects($this->once())
+            ->method('onExecute')
+            ->with(
+                $this->identicalTo($expectedRequest),
+                $this->identicalTo($actionMock)
+            )
+        ;
+
+        $payment = new Payment();
+        $payment->addAction($actionMock);
+        $payment->addExtension($extensionMock);
+
+        $payment->execute($expectedRequest);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCallExtensionOnPostExecute()
+    {
+        $expectedRequest = new \stdClass;
+
+        $actionMock = $this->createActionMock();
+        $actionMock
+            ->expects($this->any())
+            ->method('supports')
+            ->will($this->returnValue(true))
+        ;
+
+        $extensionMock = $this->createExtensionMock();
+        $extensionMock
+            ->expects($this->once())
+            ->method('onPostExecute')
+            ->with(
+                $this->identicalTo($expectedRequest),
+                $this->identicalTo($actionMock)
+            )
+        ;
+
+        $payment = new Payment();
+        $payment->addAction($actionMock);
+        $payment->addExtension($extensionMock);
+
+        $payment->execute($expectedRequest);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Exception\RequestNotSupportedException
+     */
+    public function shouldCallExtensionOnExceptionWhenExceptionThrown()
+    {
+        $notSupportedRequest = new \stdClass;
+
+        $extensionMock = $this->createExtensionMock();
+        $extensionMock
+            ->expects($this->once())
+            ->method('onException')
+            ->with(
+                $this->isInstanceOf('Payum\Exception\RequestNotSupportedException'),
+                $this->identicalTo($notSupportedRequest)
+            )
+        ;
+
+        $payment = new Payment();
+        $payment->addExtension($extensionMock);
+
+        $payment->execute($notSupportedRequest);
     }
 
     /**
@@ -284,6 +497,14 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     protected function createInteractiveRequestMock()
     {
         return $this->getMock('Payum\Request\BaseInteractiveRequest');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Extension\ExtensionInterface
+     */
+    protected function createExtensionMock()
+    {
+        return $this->getMock('Payum\Extension\ExtensionInterface');
     }
 
     /**

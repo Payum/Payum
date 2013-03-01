@@ -3,16 +3,6 @@ namespace Payum\Tests\Request;
 
 class BaseModelRequestTest extends \PHPUnit_Framework_TestCase 
 {
-    /**
-     * @test
-     */
-    public function shouldBeAbstractClass()
-    {
-        $rc = new \ReflectionClass('Payum\Request\BaseModelRequest');
-        
-        $this->assertTrue($rc->isAbstract());
-    }
-
     public static function provideDifferentPhpTypes()
     {
         return array(
@@ -23,6 +13,26 @@ class BaseModelRequestTest extends \PHPUnit_Framework_TestCase
             'boolean' => array(false),
             'resource' => array(tmpfile())
         );
+    }
+    
+    /**
+     * @test
+     */
+    public function shouldBeAbstractClass()
+    {
+        $rc = new \ReflectionClass('Payum\Request\BaseModelRequest');
+        
+        $this->assertTrue($rc->isAbstract());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldImplementModelRequestInterface()
+    {
+        $rc = new \ReflectionClass('Payum\Request\BaseModelRequest');
+
+        $this->assertTrue($rc->implementsInterface('Payum\Request\ModelRequestInterface'));
     }
 
     /**

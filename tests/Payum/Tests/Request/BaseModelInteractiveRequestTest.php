@@ -16,6 +16,16 @@ class BaseModelInteractiveRequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldImplementModelRequestInterface()
+    {
+        $rc = new \ReflectionClass('Payum\Request\BaseModelInteractiveRequest');
+
+        $this->assertTrue($rc->implementsInterface('Payum\Request\ModelRequestInterface'));
+    }
+
+    /**
+     * @test
+     */
     public function shouldBeSubClassOfLogicException()
     {
         $rc = new \ReflectionClass('Payum\Request\BaseModelInteractiveRequest');
