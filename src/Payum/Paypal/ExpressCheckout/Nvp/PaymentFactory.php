@@ -2,6 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
 use Payum\Payment;
+use Payum\Extension\EndlessCycleDetectorExtension;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\DoExpressCheckoutPaymentAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\GetExpressCheckoutDetailsAction;
@@ -22,6 +23,8 @@ abstract class PaymentFactory
         $payment = new Payment($api);
 
         $payment->addApi($api);
+
+        $payment->addExtension(new EndlessCycleDetectorExtension);
 
         $payment->addAction(new SetExpressCheckoutAction());
         $payment->addAction(new GetExpressCheckoutDetailsAction());
