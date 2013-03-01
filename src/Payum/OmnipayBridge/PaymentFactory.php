@@ -3,12 +3,11 @@ namespace Payum\OmnipayBridge;
 
 use Omnipay\Common\GatewayInterface;
 
-use Payum\Payment as BasePayment;
 use Payum\OmnipayBridge\Action\CaptureAction;
 use Payum\OmnipayBridge\Action\StatusAction;
 use Payum\Payment;
 
-abstract class PaymentFactory extends BasePayment
+abstract class PaymentFactory
 {
     /**
      * @param \Omnipay\Common\GatewayInterface $gateway
