@@ -116,7 +116,10 @@ $payment->addExtension(new StorageExtension($storage));
 
 //do capture for example.
 ```
-What it does inside? First you can use model id. The extension will try to find it on `onPreExecute`. Second it saves the model on `onInteractiveRequest` and `postRequestExecute`
+What's inside? 
+
+* The extension will try to find model on `onPreExecute` if an id given.
+* Second, It saves the model after execute, on `onInteractiveRequest` and `postRequestExecute`.
 
 ### Like it? Spread the world!
 

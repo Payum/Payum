@@ -48,7 +48,10 @@ Also there is a [bundle](https://github.com/Payum/PayumBundle) for symfony2 deve
 <?php
 {{testo:Payum\Examples\ReadmeTest::persistPaymentDetails}}
 ```
-What it does inside? First you can use model id. The extension will try to find it on `onPreExecute`. Second it saves the model on `onInteractiveRequest` and `postRequestExecute`
+What's inside? 
+
+* The extension will try to find model on `onPreExecute` if an id given.
+* Second, It saves the model after execute, on `onInteractiveRequest` and `postRequestExecute`.
 
 ### Like it? Spread the world!
 
