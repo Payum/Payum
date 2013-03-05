@@ -37,6 +37,32 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldReturnTrueIfSupportedModelGiven()
+    {
+        $storage = new DoctrineStorage(
+            $this->createObjectManager(),
+            'Payum\Examples\Model\TestModel'
+        );
+
+        $this->assertTrue($storage->supportModel(new TestModel));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnFalseIfNotSupportedModelGiven()
+    {
+        $storage = new DoctrineStorage(
+            $this->createObjectManager(),
+            'Payum\Examples\Model\TestModel'
+        );
+
+        $this->assertFalse($storage->supportModel(new \stdClass));
+    }
+
+    /**
+     * @test
+     */
     public function shouldCreateInstanceOfModelClassGivenInConstructor()
     {
         $expectedModelClass = 'Payum\Examples\Model\TestModel';

@@ -19,6 +19,14 @@ class NullStorage implements StorageInterface
     /**
      * {@inheritdoc}
      */
+    public function supportModel($model)
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function updateModel($model)
     {
     }

@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Tests\Storage;
 
+use Payum\Examples\Model\TestModel;
 use \Payum\Storage\FilesystemStorage;
 
 class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
@@ -44,6 +45,34 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
         
         $this->assertInstanceOf($expectedModelClass, $model);
         $this->assertNull($model->getId());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnTrueIfSupportedModelGiven()
+    {
+        $storage = new FilesystemStorage(
+            sys_get_temp_dir(),
+            'Payum\Examples\Model\TestModel',
+            'id'
+        );
+        
+        $this->assertTrue($storage->supportModel(new TestModel));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnFalseIfNotSupportedModelGiven()
+    {
+        $storage = new FilesystemStorage(
+            sys_get_temp_dir(),
+            'Payum\Examples\Model\TestModel',
+            'id'
+        );
+
+        $this->assertFalse($storage->supportModel(new \stdClass));
     }
 
     /**

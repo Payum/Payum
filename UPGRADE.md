@@ -3,6 +3,7 @@
 
 * The `Payment::execute` method signature changed. Now you have to explicitly set when to catch interactive requests or not.
 * `InteractiveRequest` renamed to `BaseInteractiveRequest`.
+* A method `supportModel` was added to `StorageInterface`.
 
 0.1 to 0.2
 ==========

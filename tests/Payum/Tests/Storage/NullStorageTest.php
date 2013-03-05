@@ -41,6 +41,16 @@ class NullStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldReturnTrueOnSupportsModelCall()
+    {
+        $storage = new NullStorage();
+        
+        $this->assertTrue($storage->supportModel(new \stdClass));
+    }
+
+    /**
+     * @test
+     */
     public function shouldDoNothingOnModelUpdate()
     {
         $storage = new NullStorage();

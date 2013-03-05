@@ -11,6 +11,13 @@ interface StorageInterface
     /**
      * @param object $model
      * 
+     * @return boolean
+     */
+    function supportModel($model);
+
+    /**
+     * @param object $model
+     * 
      * @throws \Payum\Exception\InvalidArgumentException if not supported model given. 
      *
      * @return void

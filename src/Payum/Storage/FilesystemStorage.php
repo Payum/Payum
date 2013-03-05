@@ -30,9 +30,17 @@ class FilesystemStorage implements StorageInterface
     /**
      * {@inheritdoc}
      */
+    public function supportModel($model)
+    {
+        return $model instanceof $this->modelClass;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function updateModel($model)
     {
-        if (false == $model instanceof $this->modelClass) {
+        if (false == $this->supportModel($model)) {
             throw new InvalidArgumentException(sprintf(
                 'Invalid model given. Should be instance of %s',
                 $this->modelClass
