@@ -1,5 +1,5 @@
 <?php
-namespace Payum\OmnipayBridge\Tests\Action;
+namespace Payum\Bridge\Omnipay\Tests\Action;
 
 class BaseActionApiAwareTest extends \PHPUnit_Framework_TestCase
 {
@@ -8,7 +8,7 @@ class BaseActionApiAwareTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementActionApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\BaseActionApiAware');
+        $rc = new \ReflectionClass('Payum\Bridge\Omnipay\Action\BaseActionApiAware');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Action\ActionApiAwareInterface'));
     }
@@ -18,7 +18,7 @@ class BaseActionApiAwareTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeAbstract()
     {
-        $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\BaseActionApiAware');
+        $rc = new \ReflectionClass('Payum\Bridge\Omnipay\Action\BaseActionApiAware');
 
         $this->assertTrue($rc->isAbstract());
     }
@@ -30,7 +30,7 @@ class BaseActionApiAwareTest extends \PHPUnit_Framework_TestCase
     {
         $expectedApi = $this->createGatewayMock();
 
-        $action = $this->getMockForAbstractClass('Payum\OmnipayBridge\Action\BaseActionApiAware');
+        $action = $this->getMockForAbstractClass('Payum\Bridge\Omnipay\Action\BaseActionApiAware');
 
         $action->setApi($expectedApi);
 
@@ -44,7 +44,7 @@ class BaseActionApiAwareTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfUnsupportedApiGiven()
     {
-        $action = $this->getMockForAbstractClass('Payum\OmnipayBridge\Action\BaseActionApiAware');
+        $action = $this->getMockForAbstractClass('Payum\Bridge\Omnipay\Action\BaseActionApiAware');
 
         $action->setApi(new \stdClass);
     }

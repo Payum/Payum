@@ -11,4 +11,4 @@ EOM;
     exit(1);
 }
 
-$loader->add('Payum\OmnipayBridge\Tests', __DIR__);
+$loader->add('Payum\Bridge\Omnipay\Tests', __DIR__);

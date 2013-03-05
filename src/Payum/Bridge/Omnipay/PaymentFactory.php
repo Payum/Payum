@@ -1,10 +1,11 @@
 <?php
-namespace Payum\OmnipayBridge;
+namespace Payum\Bridge\Omnipay;
 
 use Omnipay\Common\GatewayInterface;
 
-use Payum\OmnipayBridge\Action\CaptureAction;
-use Payum\OmnipayBridge\Action\StatusAction;
+use Payum\Extension\EndlessCycleDetectorExtension;
+use Payum\Bridge\Omnipay\Action\CaptureAction;
+use Payum\Bridge\Omnipay\Action\StatusAction;
 use Payum\Payment;
 
 abstract class PaymentFactory
@@ -19,6 +20,8 @@ abstract class PaymentFactory
         $payment = new Payment;
         
         $payment->addApi($gateway);
+        
+        $payment->addExtension(new EndlessCycleDetectorExtension);
 
         $payment->addAction(new CaptureAction);
         $payment->addAction(new StatusAction);

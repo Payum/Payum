@@ -1,8 +1,8 @@
 <?php
-namespace Payum\OmnipayBridge\Tests;
+namespace Payum\Bridge\Omnipay\Tests;
 
 use Omnipay\Common\GatewayInterface;
-use Payum\OmnipayBridge\PaymentFactory;
+use Payum\Bridge\Omnipay\PaymentFactory;
 
 class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,7 +11,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldNotBeInstantiated()
     {
-        $rc = new \ReflectionClass('Payum\OmnipayBridge\PaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bridge\Omnipay\PaymentFactory');
 
         $this->assertFalse($rc->isInstantiable());
     }

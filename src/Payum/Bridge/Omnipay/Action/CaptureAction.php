@@ -1,9 +1,9 @@
 <?php
-namespace Payum\OmnipayBridge\Action;
+namespace Payum\Bridge\Omnipay\Action;
 
-use Omnipay\Common\RedirectResponse;
+use Omnipay\Common\Message\RedirectResponseInterface;
+use Omnipay\Common\Message\RequestInterface;
 
-use Omnipay\Common\Request;
 use Payum\Exception\LogicException;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Request\CaptureRequest;
@@ -23,12 +23,12 @@ class CaptureAction extends BaseActionApiAware
         try {
             $options = $request->getModel();
             
-            $response = $this->gateway->purchase((array) $options);
+            $response = $this->gateway->purchase((array) $options)->send();
 
-            $options['_reference'] = $response->getGatewayReference();
+            $options['_reference'] = $response->getTransactionReference();
             $options['_status_message'] = '';
             
-            if ($response instanceof RedirectResponse) {                
+            if ($response instanceof RedirectResponseInterface) {                
                 throw new RedirectUrlInteractiveRequest($response->getRedirectUrl());
             }
             
@@ -52,10 +52,7 @@ class CaptureAction extends BaseActionApiAware
     {
         return 
             $request instanceof CaptureRequest &&
-            (
-                $request->getModel() instanceof \ArrayObject ||
-                $request->getModel() instanceof Request
-            )
+            $request->getModel() instanceof \ArrayObject
         ;
     }
 }

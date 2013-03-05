@@ -1,8 +1,9 @@
 <?php
-namespace Payum\OmnipayBridge\Tests\Integration;
+namespace Payum\Bridge\Omnipay\Tests\Integration;
 
 use Omnipay\Dummy\Gateway;
-use Payum\OmnipayBridge\PaymentFactory;
+
+use Payum\Bridge\Omnipay\PaymentFactory;
 use Payum\Request\BinaryMaskStatusRequest;
 use Payum\Request\CaptureRequest;
 
@@ -20,7 +21,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $captureRequest = new CaptureRequest(array(
             'amount' => 1000,
             'card' => array(
-                'number' => '5555556778250000', //end zero so will be accepted
+                'number' => '4242424242424242', // must be authorized
                 'cvv' => 123,
                 'expiryMonth' => 6,
                 'expiryYear' => $date->format('y'),
@@ -42,8 +43,6 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldFinishWithFailed()
     {
-        $this->markTestIncomplete('The DummyGateway buggy at the moment');
-        
         $payment = PaymentFactory::create(new Gateway());
 
         $date = new \DateTime('now + 2 year');
@@ -51,7 +50,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $captureRequest = new CaptureRequest(array(
             'amount' => 1000,
             'card' => array(
-                'number' => '5555557730105001', //ends one so will be declined
+                'number' => '4111111111111111', //must be declined,
                 'cvv' => 123,
                 'expiryMonth' => 6,
                 'expiryYear' => $date->format('y'),

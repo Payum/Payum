@@ -1,5 +1,5 @@
 <?php
-namespace Payum\OmnipayBridge\Action;
+namespace Payum\Bridge\Omnipay\Action;
 
 use Payum\Action\ActionInterface;
 use Payum\Exception\RequestNotSupportedException;
