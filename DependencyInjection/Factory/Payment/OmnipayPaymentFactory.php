@@ -21,7 +21,7 @@ class OmnipayPaymentFactory implements PaymentFactoryInterface
      */
     public function create(ContainerBuilder $container, $contextName, array $config)
     {
-        if (false == class_exists('Payum\OmnipayBridge\PaymentFactory')) {
+        if (false == class_exists('Payum\Bridge\Omnipay\PaymentFactory')) {
             throw new RuntimeException('Cannot find OmnipayBridge payment factory class. Have you installed payum/omnipay-bridge package?');
         }
         if (false == interface_exists('Omnipay\Common\GatewayInterface')) {
@@ -41,18 +41,18 @@ class OmnipayPaymentFactory implements PaymentFactoryInterface
         $container->setDefinition($gatewayId, $gatewayDefinition);
 
         $paymentDefinition = new Definition();
-        $paymentDefinition->setClass(new Parameter('Payum\OmnipayBridge\Payment'));
+        $paymentDefinition->setClass(new Parameter('Payum\Bridge\Omnipay\Payment'));
         $paymentDefinition->setPublic('false');
         $paymentDefinition->addMethodCall('addApi', array(new Reference($gatewayId)));
         $paymentId = 'payum.context.'.$contextName.'.payment';
         $container->setDefinition($paymentId, $paymentDefinition);
 
-        $captureActionDefinition = new Definition('Payum\OmnipayBridge\Action\CaptureAction');
+        $captureActionDefinition = new Definition('Payum\Bridge\Omnipay\Action\CaptureAction');
         $captureActionId = 'payum.context.'.$contextName.'.action.capture';
         $container->setDefinition($captureActionId, $captureActionDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($captureActionId)));
 
-        $statusActionDefinition = new Definition('Payum\OmnipayBridge\Action\StatusAction');
+        $statusActionDefinition = new Definition('Payum\Bridge\Omnipay\Action\StatusAction');
         $statusActionId = 'payum.context.'.$contextName.'.action.status';
         $container->setDefinition($statusActionId, $statusActionDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($statusActionId)));
