@@ -23,7 +23,7 @@
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-0": { "Payum\\OmnipayBridge": "src/" }
+        "psr-0": { "Payum\\Bridge\\Omnipay": "src/" }
     },
     "extra": {
         "branch-alias": {
