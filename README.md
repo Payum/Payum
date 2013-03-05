@@ -99,6 +99,25 @@ if ($statusRequest->isSuccess()) {
 echo 'Uhh something wrong. Check other possible statuses!';
 ```
 
+### How to persist payment details?
+
+```php
+<?php
+//Source: Payum\Examples\ReadmeTest::persistPaymentDetails()
+
+//use Payum\Payment;
+//use Payum\Storage\FilesystemStorage;
+//use Payum\Extension\StorageExtension;
+
+$storage = new FilesystemStorage('path_to_storage_dir', 'YourModelClass', 'idProperty');
+
+$payment = new Payment;
+$payment->addExtension(new StorageExtension($storage));
+
+//do capture for example.
+```
+What it does inside? First you can use model id. The extension will try to find it on `onPreExecute`. Second it saves the model on `onInteractiveRequest` and `postRequestExecute`
+
 ### Like it? Spread the world!
 
 You can star the lib on [github](https://github.com/Payum/Payum) or [packagist](https://packagist.org/packages/payum/payum). You may also drop a message on Twitter.  

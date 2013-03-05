@@ -3,12 +3,14 @@ namespace Payum\Examples;
 
 use Payum\Examples\Request\AuthorizeRequest;
 use Payum\Examples\Action\CaptureAction;
+use Payum\Extension\StorageExtension;
 use Payum\Request\BinaryMaskStatusRequest;
 use Payum\Examples\Action\AuthorizeAction;
 use Payum\Examples\Action\StatusAction;
 use Payum\Request\CaptureRequest;
 use Payum\Request\RedirectUrlInteractiveRequest;
 use Payum\Payment;
+use Payum\Storage\FilesystemStorage;
 
 class ReadmeTest extends \PHPUnit_Framework_TestCase
 {   
@@ -112,5 +114,22 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         } 
         
         echo 'Uhh something wrong. Check other possible statuses!';
+    }
+
+    /**
+     * @test
+     */
+    public function persistPaymentDetails()
+    {
+        //use Payum\Payment;
+        //use Payum\Storage\FilesystemStorage;
+        //use Payum\Extension\StorageExtension;
+
+        $storage = new FilesystemStorage('path_to_storage_dir', 'YourModelClass', 'idProperty');
+
+        $payment = new Payment;
+        $payment->addExtension(new StorageExtension($storage));
+        
+        //do capture for example.
     }
 }

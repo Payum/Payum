@@ -42,6 +42,14 @@ Also there is a [bundle](https://github.com/Payum/PayumBundle) for symfony2 deve
 {{testo:Payum\Examples\ReadmeTest::gettingRequestStatus}}
 ```
 
+### How to persist payment details?
+
+```php
+<?php
+{{testo:Payum\Examples\ReadmeTest::persistPaymentDetails}}
+```
+What it does inside? First you can use model id. The extension will try to find it on `onPreExecute`. Second it saves the model on `onInteractiveRequest` and `postRequestExecute`
+
 ### Like it? Spread the world!
 
 You can star the lib on [github](https://github.com/Payum/Payum) or [packagist](https://packagist.org/packages/payum/payum). You may also drop a message on Twitter.  
