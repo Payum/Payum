@@ -36,7 +36,6 @@ payum:
                 type: Stripe
                 options:
                     apiKey: abc123
-            null_storage: true
 ```
 
 **Warning:**

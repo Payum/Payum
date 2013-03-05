@@ -18,18 +18,7 @@ class CaptureController extends Controller
         }
         $context = $this->getPayum()->getContext($contextName);
 
-        if (false == is_object($model)) {
-            $modelId = $model;
-            if (false == $model = $context->getStorage()->findModelById($modelId)) {
-                throw $this->createNotFoundException(sprintf('Cannot find model with id %s', $modelId));
-            }
-            
-            unset($modelId);
-        }
-
-        if ($interactiveRequest = $context->getPayment()->execute(new CaptureRequest($model))) {
-            $context->getStorage()->updateModel($model);
-            
+        if ($interactiveRequest = $context->getPayment()->execute(new CaptureRequest($model))) {           
             return $this->handle($context->getCaptureInteractiveController(), array(
                 'context' => $context,
                 'interactiveRequest' => $interactiveRequest
@@ -45,8 +34,6 @@ class CaptureController extends Controller
             'context' => $context,
             'statusRequest' => $statusRequest
         ));
-
-        $context->getStorage()->updateModel($model);
         
         return $response;
     }

@@ -94,10 +94,6 @@ doctrine:
                         prefix: Payum\Be2Bill\Bridge\Doctrine\Entity
 ```
 
-**Warning:**
-
-> It is possible to [disable storage](null_storage.md).
-
 #### 2-b. Configure filesystem storage
 
 Extend payment instruction class with added `id` property:
@@ -134,10 +130,6 @@ payum:
                 storage_dir: %kernel.root_dir%\Resources\payments
                 id_property: id
 ```
-
-**Warning:**
-
-> It is possible to [disable storage](null_storage.md).
 
 ### Step 3. Capture payment: 
 

@@ -12,7 +12,6 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCh
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\DoctrineStorageFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\FilesystemStorageFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\NullStorageFactory;
 
 class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 {
@@ -93,11 +92,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "payum.contexts.a_context": One storage from the  storages available must be selected
      */
-    public function throwIfNoneStorageSelected()
+    public function shouldPassIfNoneStorageSelected()
     {
         $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
 
@@ -387,33 +383,6 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         ),
                         'foo_payment' => array(
                             'foo_opt' => 'foo',
-                        )
-                    )
-                )
-            )
-        ));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldPassConfigurationProcessingWithNullStorageFactory()
-    {
-        $storageFactories = array(
-            new NullStorageFactory()
-        );
-
-        $configuration = new MainConfiguration($this->paymentFactories, $storageFactories);
-
-        $processor = new Processor();
-
-        $processor->processConfiguration($configuration, array(
-            'payum' => array(
-                'contexts' => array(
-                    'a_context' => array(
-                        'null_storage' => true,
-                        'foo_payment' => array(
-                            'foo_opt' => 'foo'
                         )
                     )
                 )

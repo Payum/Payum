@@ -36,6 +36,7 @@ class PayumExtension extends Extension
     protected function loadContexts(array $config, ContainerBuilder $container)
     {
         foreach ($config as $contextName => $context) {
+            $storageServiceId = null;
             foreach ($context as $serviceName => $service) {
                 if (isset($this->paymentFactories[$serviceName])) {
                     $paymentServiceId = $this->paymentFactories[$serviceName]->create($container, $contextName, $service);
@@ -58,6 +59,22 @@ class PayumExtension extends Extension
                     $storageServiceId = $this->storageFactories[$serviceName]->create($container, $contextName, $service);
                 }
             }
+            
+            if ($storageServiceId) {
+                $storageExtensionDefinition = new DefinitionDecorator('payum.extension.storage.prototype');
+                $storageExtensionDefinition->replaceArgument(0, $storageServiceId);
+                $storageExtensionDefinition->setPublic(false);
+                $storageExtensionDefinition->setAbstract(false);
+                $storageExtensionId ='payum.context.'.$contextName.'.extension.storage';
+                
+                $container->setDefinition($storageExtensionId, $storageExtensionDefinition);
+
+                $paymentDefinition = $container->getDefinition($paymentServiceId);
+                $paymentDefinition->addMethodCall('addExtension', array($storageExtensionDefinition));
+            }
+
+            $paymentDefinition = $container->getDefinition($paymentServiceId);
+            $paymentDefinition->addMethodCall('addExtension', array(new Reference('payum.extension.endless_cycle_detector')));
 
             $contextDefinition = new Definition();
             $contextDefinition->setClass('Payum\Bundle\PayumBundle\Context\LazyContext');

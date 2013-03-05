@@ -9,7 +9,7 @@ interface ContextInterface
     function getPayment();
 
     /**
-     * @return \Payum\Storage\StorageInterface
+     * @return \Payum\Storage\StorageInterface|null
      */
     function getStorage();
 

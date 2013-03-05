@@ -6,7 +6,8 @@
 
     <parameters>
         <parameter key="payum.class">Payum\Bundle\PayumBundle\Context\ContextRegistry</parameter>
-        <parameter key="payum.storage.null.class">Payum\Storage\NullStorage</parameter>
+        <parameter key="payum.extension.storage.prototype.class">Payum\Extension\StorageExtension</parameter>
+        <parameter key="payum.extension.endless_cycle_detector.class">Payum\Extension\EndlessCycleDetectorExtension</parameter>
         <parameter key="payum.buzz.client.class">Buzz\Client\Curl</parameter>
     </parameters>
 
@@ -17,10 +18,22 @@
             </call>
         </service>
 
-        <service id="payum.storage.null" class="%payum.storage.null.class%" public="false">
+        <service id="payum" class="%payum.class%">
         </service>
 
-        <service id="payum" class="%payum.class%">
+        <service
+            id="payum.extension.endless_cycle_detector"
+            class="%payum.extension.endless_cycle_detector.class%"
+            public="false"
+        />
+
+        <service 
+            id="payum.extension.storage.prototype" 
+            class="%payum.extension.storage.prototype.class%"
+            abstract="true"
+            public="false"
+        >
+            <argument/> <!-- this should be replaced with real storage service -->
         </service>
     </services>
 </container>

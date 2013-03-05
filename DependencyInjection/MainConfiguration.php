@@ -82,12 +82,6 @@ class MainConfiguration implements ConfigurationInterface
                             throw new LogicException('Only one payment per context could be selected');
                         }
 
-                        if (0 == count($storages)) {
-                            throw new LogicException(sprintf(
-                                'One storage from the %s storages available must be selected',
-                                implode(', ', array_keys($storages))
-                            ));
-                        }
                         if (count($storages) > 1) {
                             throw new LogicException('Only one storage per context could be selected');
                         }

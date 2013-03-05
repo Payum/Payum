@@ -69,7 +69,9 @@ class LazyContext extends ContainerAware implements ContextInterface
      */
     public function getStorage()
     {
-        return $this->container->get($this->storageServiceId);
+        if ($this->storageServiceId) {
+            return $this->container->get($this->storageServiceId);
+        }
     }
 
     /**

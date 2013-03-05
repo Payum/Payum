@@ -6,7 +6,6 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillPaymentF
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCheckoutNvpPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\NullStorageFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\PayumExtension;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -32,7 +31,6 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                             )
                         )
                     ),
-                    'null_storage' => true
                 )
             )
         );
@@ -43,14 +41,12 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new PaypalExpressCheckoutNvpPaymentFactory);
-        $extension->addStorageFactory(new NullStorageFactory);
         
         $extension->load($configs, $containerBuilder);
         
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.api'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
-        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.storage'));
     }
 
     /**
@@ -72,7 +68,6 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                             )
                         )
                     ),
-                    'null_storage' => true
                 )
             )
         );
@@ -83,14 +78,12 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new PaypalProCheckoutNvpPaymentFactory);
-        $extension->addStorageFactory(new NullStorageFactory);
 
         $extension->load($configs, $containerBuilder);
 
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.api'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
-        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.storage'));
     }
 
     /**
@@ -110,7 +103,6 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                             )
                         )
                     ),
-                    'null_storage' => true
                 )
             )
         );
@@ -121,14 +113,12 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new Be2BillPaymentFactory);
-        $extension->addStorageFactory(new NullStorageFactory);
 
         $extension->load($configs, $containerBuilder);
 
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.api'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
-        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.storage'));
     }
 
     /**
@@ -148,7 +138,6 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                             )
                         )
                     ),
-                    'null_storage' => true
                 )
             )
         );
@@ -159,14 +148,12 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new AuthorizeNetAimPaymentFactory);
-        $extension->addStorageFactory(new NullStorageFactory);
 
         $extension->load($configs, $containerBuilder);
 
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.api'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
-        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.storage'));
     }
 
     /**
@@ -183,7 +170,6 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                             'apiKey' => 'abc123',
                         )
                     ),
-                    'null_storage' => true
                 )
             )
         );
@@ -194,13 +180,11 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new OmnipayPaymentFactory);
-        $extension->addStorageFactory(new NullStorageFactory);
 
         $extension->load($configs, $containerBuilder);
 
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.gateway'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
-        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.storage'));
     }
 }
