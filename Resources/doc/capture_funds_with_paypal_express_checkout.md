@@ -129,7 +129,7 @@ payum:
         your_name_here:
             filesystem_storage:
                 model_class: Acme\DemoBundle\Model\PaypalPaymentInstruction
-                storage_dir: %kernel.root_dir%\Resources\payments
+                storage_dir: %kernel.root_dir%/Resources/payments
                 id_property: id
 ```
 
