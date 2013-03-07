@@ -17,6 +17,7 @@ class FilesystemStorageFactory implements StorageFactoryInterface
         $this->load($container);
         
         $contextStorageDefinition = new DefinitionDecorator('payum.storage.filesystem.prototype');
+        $contextStorageDefinition->setPublic(true);
         $contextStorageDefinition->replaceArgument(0, $config['storage_dir']);
         $contextStorageDefinition->replaceArgument(1, $config['model_class']);
         $contextStorageDefinition->replaceArgument(2, $config['id_property']);
