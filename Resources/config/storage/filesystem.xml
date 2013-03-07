@@ -9,7 +9,12 @@
     </parameters>
 
     <services>
-        <service id="payum.storage.filesystem" class="%payum.storage.filesystem.class%" public="false" abstract="true">
+        <service 
+            id="payum.storage.filesystem.prototype" 
+            class="%payum.storage.filesystem.class%" 
+            public="false" 
+            abstract="true"
+        >
             <argument><!-- should be set in FilesystemStorageFactory --></argument>
             <argument><!-- should be set in FilesystemStorageFactory --></argument>
             <argument><!-- should be set in FilesystemStorageFactory --></argument>
