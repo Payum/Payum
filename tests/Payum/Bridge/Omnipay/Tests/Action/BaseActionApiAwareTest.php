@@ -16,6 +16,16 @@ class BaseActionApiAwareTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldImplementActionInterface()
+    {
+        $rc = new \ReflectionClass('Payum\Bridge\Omnipay\Action\BaseActionApiAware');
+
+        $this->assertTrue($rc->implementsInterface('Payum\Action\ActionInterface'));
+    }
+
+    /**
+     * @test
+     */
     public function shouldBeAbstract()
     {
         $rc = new \ReflectionClass('Payum\Bridge\Omnipay\Action\BaseActionApiAware');
