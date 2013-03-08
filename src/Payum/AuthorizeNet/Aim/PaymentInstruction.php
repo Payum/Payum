@@ -241,6 +241,16 @@ class PaymentInstruction
         $this->bank_acct_name = $bank_acct_name;
     }
 
+    public function getBankAcctNum()
+    {
+        return $this->bank_acct_num;
+    }
+
+    public function setBankAcctNum($bank_acct_num)
+    {
+        $this->bank_acct_num = $bank_acct_num;
+    }
+
     public function getBankAcctType()
     {
         return $this->bank_acct_type;
@@ -319,6 +329,16 @@ class PaymentInstruction
     public function setCompany($company)
     {
         $this->company = $company;
+    }
+
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    public function setCountry($country)
+    {
+        $this->country = $country;
     }
 
     public function getCustId()
