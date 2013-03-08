@@ -19,7 +19,7 @@ class StatusPaymentInstructionAggregateAction extends ActionPaymentAware
         
         $model = $request->getModel();
         
-        $request->setModel($request->getModel()->getPaymentInstruction());
+        $request->setModel($model->getPaymentInstruction());
         $this->payment->execute($request);
 
         $request->setModel($model);

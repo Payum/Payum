@@ -100,14 +100,16 @@ class SyncPaymentInstructionAggregateActionTest extends \PHPUnit_Framework_TestC
     public function shouldCallPaymentExecuteWithSyncRequestAndInstructionSetAsModel()
     {
         $expectedInstruction = new \stdClass;
+
+        $testCase = $this;
         
         $paymentMock = $this->createPaymentMock();
         $paymentMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
-            ->will($this->returnCallback(function($request) use ($expectedInstruction) {
-                $this->assertSame($expectedInstruction, $request->getModel());
+            ->will($this->returnCallback(function($request) use ($expectedInstruction, $testCase) {
+                $testCase->assertSame($expectedInstruction, $request->getModel());
             }))
         ;
         
