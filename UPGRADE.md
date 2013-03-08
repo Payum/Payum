@@ -1,3 +1,8 @@
+0.2 to 0.3
+==========
+
+* `capture_interactive_controller` option removed from config. Now `InteractiveRequestListener` does the job.
+
 0.1 to 0.2
 ==========
 

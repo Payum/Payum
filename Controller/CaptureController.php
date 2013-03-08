@@ -19,36 +19,17 @@ class CaptureController extends Controller
         $context = $this->getPayum()->getContext($contextName);
 
         $captureRequest = new CaptureRequest($model);
-        if ($interactiveRequest = $context->getPayment()->execute($captureRequest)) {           
-            return $this->handle($context->getCaptureInteractiveController(), array(
-                'context' => $context,
-                'interactiveRequest' => $interactiveRequest
-            ));
-        }
-
+        $context->getPayment()->execute($captureRequest);
+        
         $statusRequest = $context->createStatusRequest($captureRequest->getModel());
-        if ($interactiveRequest = $context->getPayment()->execute($statusRequest)) {
-            throw new LogicException('Unsupported interactive request.', null, $interactiveRequest);
-        }
-
+        $context->getPayment()->execute($statusRequest);
+        
         $response = $this->handle($context->getCaptureFinishedController(), array(
             'context' => $context,
             'statusRequest' => $statusRequest
         ));
         
         return $response;
-    }
-    
-    public function interactiveAction(ContextInterface $context, InteractiveRequestInterface $interactiveRequest)
-    {
-        if ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {
-            return $this->redirect($interactiveRequest->getUrl());
-        }
-        if ($interactiveRequest instanceof ResponseInteractiveRequest) {
-            return $interactiveRequest->getResponse();
-        }
-
-        throw new LogicException('Unsupported interactive request.', null, $interactiveRequest);
     }
 
     public function finishedAction(ContextInterface $context, StatusRequestInterface $statusRequest)

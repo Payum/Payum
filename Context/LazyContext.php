@@ -29,11 +29,6 @@ class LazyContext extends ContainerAware implements ContextInterface
     /**
      * @var string
      */
-    protected $captureInteractiveController;
-
-    /**
-     * @var string
-     */
     protected $captureFinishedController;
     
     /**
@@ -45,14 +40,12 @@ class LazyContext extends ContainerAware implements ContextInterface
         $paymentServiceId, 
         $storageServiceId, 
         $statusRequestClass,
-        $captureInteractiveController,
         $captureFinishedController
     ) {
         $this->contextName = $contextName;
         $this->paymentServiceId = $paymentServiceId;
         $this->storageServiceId = $storageServiceId;
         $this->statusRequestClass = $statusRequestClass;
-        $this->captureInteractiveController = $captureInteractiveController;
         $this->captureFinishedController = $captureFinishedController;
     }
 
@@ -80,14 +73,6 @@ class LazyContext extends ContainerAware implements ContextInterface
     public function createStatusRequest($model)
     {
         return new $this->statusRequestClass($model);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCaptureInteractiveController()
-    {
-        return $this->captureInteractiveController;
     }
 
     /**

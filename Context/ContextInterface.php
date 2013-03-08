@@ -23,11 +23,6 @@ interface ContextInterface
     /**
      * @return string
      */
-    function getCaptureInteractiveController();
-
-    /**
-     * @return string
-     */
     function getCaptureFinishedController();
 
     /**

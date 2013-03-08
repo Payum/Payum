@@ -415,32 +415,6 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             )
         ));
     }
-
-    /**
-     * @test
-     */
-    public function shouldPassConfigurationProcessingWithCustomCaptureInteractiveControllerDefined()
-    {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
-
-        $processor = new Processor();
-
-        $processor->processConfiguration($configuration, array(
-            'payum' => array(
-                'contexts' => array(
-                    'a_context' => array(
-                        'capture_interactive_controller' => 'Acne:Payment:interactiveCapture',
-                        'bar_storage' => array(
-                            'bar_opt' => 'bar'
-                        ),
-                        'foo_payment' => array(
-                            'foo_opt' => 'foo',
-                        )
-                    )
-                )
-            )
-        ));
-    }
 }
 
 class FooPaymentFactory implements PaymentFactoryInterface
