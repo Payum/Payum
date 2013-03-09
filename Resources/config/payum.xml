@@ -6,7 +6,7 @@
 
     <parameters>
         <parameter key="payum.class">Payum\Bundle\PayumBundle\Context\ContextRegistry</parameter>
-        <parameter key="payum.extension.storage.prototype.class">Payum\Extension\StorageExtension</parameter>
+        <parameter key="payum.extension.storage.class">Payum\Extension\StorageExtension</parameter>
         <parameter key="payum.extension.endless_cycle_detector.class">Payum\Extension\EndlessCycleDetectorExtension</parameter>
         <parameter key="payum.buzz.client.class">Buzz\Client\Curl</parameter>
         <parameter key="payum.interactive_request_listener.class">Payum\Bundle\PayumBundle\EventListener\InteractiveRequestListener</parameter>
@@ -30,7 +30,7 @@
 
         <service 
             id="payum.extension.storage.prototype" 
-            class="%payum.extension.storage.prototype.class%"
+            class="%payum.extension.storage.class%"
             abstract="true"
             public="false"
         >

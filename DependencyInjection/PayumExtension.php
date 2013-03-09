@@ -62,15 +62,14 @@ class PayumExtension extends Extension
             
             if ($storageServiceId) {
                 $storageExtensionDefinition = new DefinitionDecorator('payum.extension.storage.prototype');
-                $storageExtensionDefinition->replaceArgument(0, $storageServiceId);
+                $storageExtensionDefinition->replaceArgument(0, new Reference($storageServiceId));
                 $storageExtensionDefinition->setPublic(false);
-                $storageExtensionDefinition->setAbstract(false);
                 $storageExtensionId ='payum.context.'.$contextName.'.extension.storage';
                 
                 $container->setDefinition($storageExtensionId, $storageExtensionDefinition);
 
                 $paymentDefinition = $container->getDefinition($paymentServiceId);
-                $paymentDefinition->addMethodCall('addExtension', array($storageExtensionDefinition));
+                $paymentDefinition->addMethodCall('addExtension', array(new Reference($storageExtensionId)));
             }
 
             $paymentDefinition = $container->getDefinition($paymentServiceId);
