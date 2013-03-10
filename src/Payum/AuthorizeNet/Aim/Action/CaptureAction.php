@@ -54,7 +54,7 @@ class CaptureAction implements ActionApiAwareInterface
 
         $response = $api->authorizeAndCapture();
 
-        $model->replace((array) $response);
+        $model->replace(get_object_vars($response));
     }
 
     /**

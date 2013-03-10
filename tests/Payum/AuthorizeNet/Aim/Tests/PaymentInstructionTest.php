@@ -51,15 +51,14 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
-     * @expectedException \Payum\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Unsupported offset given FOO.
      */
-    public function throwIfSetNotBe2billArrayField()
+    public function shouldDoNothingIfSetNotSupportedField()
     {
         $instruction = new PaymentInstruction;
 
         $instruction['FOO'] = 'foo';
+        
+        $this->assertNull($instruction['FOO']);
     }
 
     /**
