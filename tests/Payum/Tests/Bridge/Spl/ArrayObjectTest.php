@@ -26,7 +26,21 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(isset($array['foo']));
         $this->assertEquals('bar', $array['foo']);
     }
-    
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetValueSetInInternalArrayObject()
+    {
+        $internalArray = new \ArrayObject;
+        $internalArray['foo'] = 'bar';
+        
+        $array = new ArrayObject($internalArray);
+
+        $this->assertTrue(isset($array['foo']));
+        $this->assertEquals('bar', $array['foo']);
+    }
+
     /**
      * @test
      */
@@ -96,5 +110,124 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
         $array = new ArrayObject();
 
         $array->replace('foo');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowCastToArrayFromCustomArrayObject()
+    {
+        $input = new CustomArrayObject;
+        $input['foo'] = 'barbaz';
+
+        $arrayObject = new ArrayObject($input);
+
+        $array = (array) $arrayObject;
+
+        $this->assertInternalType('array', $array);
+        $this->assertEquals(array('foo' => 'barbaz'), $array);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowSetToCustomArrayObject()
+    {
+        $input = new CustomArrayObject;
+        $input['foo'] = 'barbaz';
+
+        $arrayObject = new ArrayObject($input);
+        $arrayObject['foo'] = 'ololo';
+
+        $this->assertEquals('ololo', $input['foo']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowUnsetToCustomArrayObject()
+    {
+        $input = new CustomArrayObject;
+        $input['foo'] = 'barbaz';
+
+        $arrayObject = new ArrayObject($input);
+        unset($arrayObject['foo']);
+
+        $this->assertNull($input['foo']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetValueFromCustomArrayObject()
+    {
+        $input = new CustomArrayObject;
+        $input['foo'] = 'barbaz';
+
+        $arrayObject = new ArrayObject($input);
+
+        $this->assertEquals('barbaz', $arrayObject['foo']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowIssetValueFromCustomArrayObject()
+    {
+        $input = new CustomArrayObject;
+        $input['foo'] = 'barbaz';
+
+        $arrayObject = new ArrayObject($input);
+
+        $this->assertTrue(isset($arrayObject['foo']));
+        $this->assertFalse(isset($arrayObject['bar']));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowIterateOverCustomArrayObject()
+    {
+        $input = new CustomArrayObject;
+        $input['foo'] = 'barbaz';
+
+        $arrayObject = new ArrayObject($input);
+
+        $array = iterator_to_array($arrayObject);
+
+        $this->assertInternalType('array', $array);
+        $this->assertEquals(array('foo' => 'barbaz'), $array);
+    }
+}
+
+class CustomArrayObject implements \ArrayAccess, \IteratorAggregate
+{
+    private $foo;
+    
+    public function offsetExists($offset)
+    {
+        return 'foo' === $offset;
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->{$offset};
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        $this->{$offset} = $value;
+    }
+
+    public function offsetUnset($offset)
+    {
+        $this->{$offset} = null;
+    }
+    
+    public function getIterator()
+    {
+        return new \ArrayIterator(array(
+            'foo' => $this->foo
+        ));
     }
 }
