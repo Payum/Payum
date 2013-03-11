@@ -3,6 +3,9 @@ namespace Payum\Be2Bill;
 
 use Payum\Payment;
 use Payum\Extension\EndlessCycleDetectorExtension;
+use Payum\Action\CapturePaymentInstructionAggregateAction;
+use Payum\Action\StatusPaymentInstructionAggregateAction;
+use Payum\Action\SyncPaymentInstructionAggregateAction;
 use Payum\Be2Bill\Action\CaptureAction;
 use Payum\Be2Bill\Action\StatusAction;
 
@@ -21,8 +24,11 @@ abstract class PaymentFactory
 
         $payment->addExtension(new EndlessCycleDetectorExtension);
 
-        $payment->addAction(new CaptureAction());
-        $payment->addAction(new StatusAction());
+        $payment->addAction(new CaptureAction);
+        $payment->addAction(new StatusAction);
+        $payment->addAction(new CapturePaymentInstructionAggregateAction);
+        $payment->addAction(new SyncPaymentInstructionAggregateAction);
+        $payment->addAction(new StatusPaymentInstructionAggregateAction);
         
         return $payment;
     }
