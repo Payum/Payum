@@ -100,4 +100,14 @@ class ArrayObject extends \ArrayObject
 
         return null;
     }
+
+    /**
+     * @param mixed $input
+     * 
+     * @return ArrayObject
+     */
+    public static function ensureArrayObject($input)
+    {
+        return $input instanceof static ? $input : new static($input);
+    }
 }
