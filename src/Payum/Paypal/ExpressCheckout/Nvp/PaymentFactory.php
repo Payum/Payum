@@ -3,6 +3,9 @@ namespace Payum\Paypal\ExpressCheckout\Nvp;
 
 use Payum\Payment;
 use Payum\Extension\EndlessCycleDetectorExtension;
+use Payum\Action\CapturePaymentInstructionAggregateAction;
+use Payum\Action\StatusPaymentInstructionAggregateAction;
+use Payum\Action\SyncPaymentInstructionAggregateAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\DoExpressCheckoutPaymentAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\GetExpressCheckoutDetailsAction;
@@ -26,14 +29,18 @@ abstract class PaymentFactory
 
         $payment->addExtension(new EndlessCycleDetectorExtension);
 
-        $payment->addAction(new SetExpressCheckoutAction());
-        $payment->addAction(new GetExpressCheckoutDetailsAction());
-        $payment->addAction(new GetTransactionDetailsAction());
-        $payment->addAction(new DoExpressCheckoutPaymentAction());
+        $payment->addAction(new SetExpressCheckoutAction);
+        $payment->addAction(new GetExpressCheckoutDetailsAction);
+        $payment->addAction(new GetTransactionDetailsAction);
+        $payment->addAction(new DoExpressCheckoutPaymentAction);
         
-        $payment->addAction(new CaptureAction());
-        $payment->addAction(new StatusAction());
-        $payment->addAction(new SyncAction());;
+        $payment->addAction(new CaptureAction);
+        $payment->addAction(new StatusAction);
+        $payment->addAction(new SyncAction);
+
+        $payment->addAction(new CapturePaymentInstructionAggregateAction);
+        $payment->addAction(new SyncPaymentInstructionAggregateAction);
+        $payment->addAction(new StatusPaymentInstructionAggregateAction);
 
         return $payment;
     }
