@@ -24,7 +24,7 @@ class CaptureAction extends ActionPaymentAware
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        $model = new ArrayObject($request->getModel());
+        $model = ArrayObject::ensureArrayObject($request->getModel());
 
         try {
             if (false == $model['PAYMENTREQUEST_0_PAYMENTACTION']) {

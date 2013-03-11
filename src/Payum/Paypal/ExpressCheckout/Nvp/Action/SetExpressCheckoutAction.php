@@ -20,8 +20,8 @@ class SetExpressCheckoutAction extends BaseActionApiAware
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
-        
-        $model = new ArrayObject($request->getModel());
+
+        $model = ArrayObject::ensureArrayObject($request->getModel());
 
         if (null === $model['PAYMENTREQUEST_0_AMT']) {
             throw new LogicException('The PAYMENTREQEUST_0_AMT must be set.');

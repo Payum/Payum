@@ -23,7 +23,7 @@ class SyncAction extends ActionPaymentAware
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        $model = new ArrayObject($request->getModel());
+        $model = ArrayObject::ensureArrayObject($request->getModel());
         
         if (false == $model['TOKEN']) {
             return;
@@ -34,7 +34,7 @@ class SyncAction extends ActionPaymentAware
             
             foreach (range(0, 9) as $index) {
                 if ($model['PAYMENTREQUEST_'.$index.'_TRANSACTIONID']) {
-                    $this->payment->execute(new GetTransactionDetailsRequest($index, $model));
+                    $this->payment->execute(new GetTransactionDetailsRequest($model, $index));
                 }
             }
         } catch (HttpResponseAckNotSuccessException $e) {

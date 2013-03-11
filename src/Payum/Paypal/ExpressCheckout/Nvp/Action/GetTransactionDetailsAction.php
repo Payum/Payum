@@ -21,7 +21,7 @@ class GetTransactionDetailsAction extends BaseActionApiAware
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        $model = new ArrayObject($request->getModel());
+        $model = ArrayObject::ensureArrayObject($request->getModel());
 
         $transactionIndex = 'PAYMENTREQUEST_'.$request->getPaymentRequestN().'_TRANSACTIONID';
         if (false == $model[$transactionIndex]) {

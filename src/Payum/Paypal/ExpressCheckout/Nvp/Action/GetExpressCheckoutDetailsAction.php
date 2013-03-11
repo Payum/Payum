@@ -20,7 +20,7 @@ class GetExpressCheckoutDetailsAction extends  BaseActionApiAware
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        $model = new ArrayObject($request->getModel());
+        $model = ArrayObject::ensureArrayObject($request->getModel());
         if (false == $model['TOKEN']) {
             throw new LogicException('TOKEN must be set. Have you run SetExpressCheckoutAction?');
         }

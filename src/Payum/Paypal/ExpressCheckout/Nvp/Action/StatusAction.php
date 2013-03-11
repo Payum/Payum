@@ -19,7 +19,7 @@ class StatusAction implements ActionInterface
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        $model = new ArrayObject($request->getModel());
+        $model = ArrayObject::ensureArrayObject($request->getModel());
 
         foreach (range(0, 9) as $index) {
             if (Api::L_ERRORCODE_PAYMENT_NOT_AUTHORIZED === $model['L_ERRORCODE'.$index]) {

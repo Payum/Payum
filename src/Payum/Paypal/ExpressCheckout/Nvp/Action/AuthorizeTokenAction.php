@@ -22,7 +22,7 @@ class AuthorizeTokenAction extends BaseActionApiAware
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        $model = new ArrayObject($request->getModel());
+        $model = ArrayObject::ensureArrayObject($request->getModel());
         if (false == $model['TOKEN']) {
             throw new LogicException('The TOKEN must be set. Have you executed SetExpressCheckoutAction?');
         }
