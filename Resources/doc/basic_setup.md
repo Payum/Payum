@@ -44,26 +44,6 @@ public function registerBundles()
 }
 ```
 
-### Step 3: Import PayumBundle routing files
-
-Now that you have activated and configured the bundle, all that is left to do is to
-import the PayumBundle routing file.
-
-In YAML:
-
-``` yaml
-# app/config/routing.yml
-payum_capture:
-    resource: "@PayumBundle/Resources/config/routing/capture.xml"
-```
-
-Or if you prefer XML:
-
-``` xml
-<!-- app/config/routing.xml -->
-<import resource="@PayumBundle/Resources/config/routing/capture.xml"/>
-```
-
 ### Next Step
 
 Now you are ready to configure desired payment. Proceed to [index](index.md) and choose payment specific document.

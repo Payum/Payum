@@ -363,58 +363,6 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             )
         ));
     }
-
-    /**
-     * @test
-     */
-    public function shouldPassConfigurationProcessingWithCustomStatusRequestClassDefined()
-    {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
-
-        $processor = new Processor();
-
-        $processor->processConfiguration($configuration, array(
-            'payum' => array(
-                'contexts' => array(
-                    'a_context' => array(
-                        'status_request_class' => 'FooStatusRequest',
-                        'bar_storage' => array(
-                            'bar_opt' => 'bar'
-                        ),
-                        'foo_payment' => array(
-                            'foo_opt' => 'foo',
-                        )
-                    )
-                )
-            )
-        ));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldPassConfigurationProcessingWithCustomCaptureFinishControllerDefined()
-    {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
-
-        $processor = new Processor();
-
-        $processor->processConfiguration($configuration, array(
-            'payum' => array(
-                'contexts' => array(
-                    'a_context' => array(
-                        'capture_finished_controller' => 'Acne:Payment:finishCapture',
-                        'bar_storage' => array(
-                            'bar_opt' => 'bar'
-                        ),
-                        'foo_payment' => array(
-                            'foo_opt' => 'foo',
-                        )
-                    )
-                )
-            )
-        ));
-    }
 }
 
 class FooPaymentFactory implements PaymentFactoryInterface

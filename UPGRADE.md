@@ -2,6 +2,10 @@
 ==========
 
 * `capture_interactive_controller` option removed from config. Now `InteractiveRequestListener` does the job.
+* `status_request_class` option was removed.
+* `capture_finished_controller` option was removed.
+* `ContextInterface::createStatusRequest` method was removed.
+* `ContextInterface::getCaptureFinishedController` method was removed.
 
 0.1 to 0.2
 ==========

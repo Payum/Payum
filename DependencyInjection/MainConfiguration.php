@@ -47,14 +47,6 @@ class MainConfiguration implements ConfigurationInterface
                 ->arrayNode('contexts')
                     ->prototype('array')
         ;
-        
-        $contextsPrototypeNode
-            ->children()
-                ->scalarNode('status_request_class')->defaultValue('Payum\Request\BinaryMaskStatusRequest')->end()
-                ->scalarNode('capture_interactive_controller')->defaultValue('PayumBundle:Capture:interactive')->end()
-                ->scalarNode('capture_finished_controller')->defaultValue('PayumBundle:Capture:finished')->end()
-            ->end()
-        ;
 
         $this->addPaymentsSection($contextsPrototypeNode, $this->paymentFactories);
         $this->addStoragesSection($contextsPrototypeNode, $this->storageFactories);
