@@ -135,7 +135,9 @@ payum:
 
 ### Step 3. Capture payment: 
 
-_**Note** : Here we assume you choose choose doctrine storage_ 
+_**Note** : We assume you choose a storage._
+ 
+_**Note** : We assume you use [simple capture controller](capture_simple_controller.md)._
 
 ```php
 <?php
@@ -146,7 +148,7 @@ use Acme\DemoBundle\Entity\PaypalPaymentInstruction;
 
 class PaymentController extends Controller 
 {
-    public function captureWithPaypalAction()
+    public function preparePaypalPaymentAction()
     {
         $contextName = 'your_context_name';
     
@@ -160,7 +162,7 @@ class PaymentController extends Controller
         $paymentContext->getStorage()->updateModel($instruction);
         $instruction->setInvnum($instruction->getId());
         
-        $returnUrl = $this->generateUrl('payum_payment_capture', array(
+        $returnUrl = $this->generateUrl('acme_payment_capture_simple', array(
             'contextName' => 'your_context',
             'model' => $instruction->getId(),
         ), $absolute = true);
@@ -169,7 +171,7 @@ class PaymentController extends Controller
         
         $paymentContext->getStorage()->updateModel($instruction);
         
-        return $this->forward('PayumBundle:Capture:do', array(
+        return $this->forward('AcmePaymentBundle:Capture:simpleCapture', array(
             'contextName' => $contextName,
             'model' => $instruction
         ));
@@ -177,14 +179,9 @@ class PaymentController extends Controller
 }
 ```
 
-**Warning:**
-
-> The example assume you imported payum routings. So this `payum_payment_capture` is exist.
-
 ### Next Step
-
-You are ready to read 
 
 * [how to manage interactive](interactive_requests.md).
 * [how to customize capture finished controller](customize_capture_finished_controller.md).
+* [an example of simple capture controller](capture_simple_controller.md).
 * [look at configuration reference](configuration_reference.md).

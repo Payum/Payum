@@ -133,8 +133,9 @@ payum:
 
 ### Step 3. Capture payment: 
 
-_**Note** : Here we assume you choose choose doctrine storage_  
-
+_**Note** : We assume you choose a storage._
+ 
+_**Note** : We assume you use [simple capture controller](capture_simple_controller.md)._
 
 ```php
 <?php
@@ -146,7 +147,7 @@ use Acme\DemoBundle\Entity\Be2billPaymentInstruction;
 
 class PaymentController extends Controller 
 {
-    public function captureWithBe2BillAction(Request $request)
+    public function prepareBe2BillPaymentAction(Request $request)
     {
         $contextName = 'your_context_name';
     
@@ -166,7 +167,7 @@ class PaymentController extends Controller
         $instruction->setCardfullname('John Doe');
         $instruction->setCardvaliditydate('15-11');
         
-        return $this->forward('PayumBundle:Capture:do', array(
+        return $this->forward('AcmePaymentBundle:Capture:simpleCapture', array(
             'contextName' => $contextName,
             'model' => $instruction
         ));
@@ -176,8 +177,7 @@ class PaymentController extends Controller
 
 ### Next Step
 
-You are ready to read 
-
 * [how to manage interactive](interactive_requests.md).
 * [how to customize capture finished controller](customize_capture_finished_controller.md).
+* [an example of simple capture controller](capture_simple_controller.md).
 * [look at configuration reference](configuration_reference.md).

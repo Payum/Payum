@@ -44,6 +44,10 @@ payum:
 
 ### Step 3. Capture payment:
 
+_**Note** : We assume you choose a filesystem storage._
+ 
+_**Note** : We assume you use [simple capture controller](capture_simple_controller.md)._
+
 ```php
 <?php
 //src/Acme/DemoBundle/Controller
@@ -53,7 +57,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PaymentController extends Controller 
 {
-    public function captureWithStripeAction(Request $request)
+    public function prepareStripePaymentAction(Request $request)
     {
         $contextName = 'your_context_name';
     
@@ -71,7 +75,7 @@ class PaymentController extends Controller
             )
         );
         
-        return $this->forward('PayumBundle:Capture:do', array(
+        return $this->forward('AcmePaymentBundle:Capture:simpleCapture', array(
             'contextName' => $contextName,
             'model' => $model
         ));
@@ -81,8 +85,7 @@ class PaymentController extends Controller
 
 ### Next Step
 
-You are ready to read:
-
 * [how to manage interactive](interactive_requests.md).
 * [how to customize capture finished controller](customize_capture_finished_controller.md).
+* [an example of simple capture controller](capture_simple_controller.md).
 * [look at configuration reference](configuration_reference.md).
