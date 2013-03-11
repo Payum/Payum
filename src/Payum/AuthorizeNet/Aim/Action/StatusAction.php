@@ -18,7 +18,7 @@ class StatusAction implements ActionInterface
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        $model = new ArrayObject($request->getModel());
+        $model = ArrayObject::ensureArrayObject($request->getModel());
         
         if (\AuthorizeNetAIM_Response::APPROVED == $model['response_code']) {
             $request->markSuccess();

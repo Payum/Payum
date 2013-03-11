@@ -38,7 +38,7 @@ class CaptureAction implements ActionApiAwareInterface
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        $model = new ArrayObject($request->getModel());
+        $model = ArrayObject::ensureArrayObject($request->getModel());
 
         if (null != $model['response_code']) {
             return;
