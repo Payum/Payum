@@ -46,12 +46,29 @@ class PayumExtension extends Extension
                     $paymentFactory = $this->paymentFactories[$serviceName];
 
                     $paymentServiceId = $paymentFactory->create($container, $contextName, $service);
+                    $paymentService = $container->getDefinition($paymentServiceId);
+
+                    $paymentService->addMethodCall(
+                        'addAction', 
+                        array(new Reference('payum.action.capture_payment_instruction_aggregate'))
+                    );
+
+                    $paymentService->addMethodCall(
+                        'addAction',
+                        array(new Reference('payum.action.sync_payment_instruction_aggregate'))
+                    );
+
+                    $paymentService->addMethodCall(
+                        'addAction',
+                        array(new Reference('payum.action.status_payment_instruction_aggregate'))
+                    );
 
                     if (false == empty($config[$contextName][$paymentFactory->getName()]['actions'])) {
                         foreach ($config[$contextName][$paymentFactory->getName()]['actions'] as $actionId) {
-                            $container->getDefinition($paymentServiceId)
-                                ->addMethodCall('addAction', array(new Reference($actionId)))
-                            ;
+                            $paymentService->addMethodCall(
+                                'addAction', 
+                                array(new Reference($actionId), $forcePrepend = true)
+                            );
                         }
                     }
                 }

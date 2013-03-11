@@ -9,7 +9,11 @@
         <parameter key="payum.extension.storage.class">Payum\Extension\StorageExtension</parameter>
         <parameter key="payum.extension.endless_cycle_detector.class">Payum\Extension\EndlessCycleDetectorExtension</parameter>
         <parameter key="payum.buzz.client.class">Buzz\Client\Curl</parameter>
-        <parameter key="payum.interactive_request_listener.class">Payum\Bundle\PayumBundle\EventListener\InteractiveRequestListener</parameter>
+        <parameter key="payum.listener.interactive_request.class">Payum\Bundle\PayumBundle\EventListener\InteractiveRequestListener</parameter>
+
+        <parameter key="payum.action.capture_payment_instruction_aggregate.class">Payum\Action\CapturePaymentInstructionAggregateAction</parameter>
+        <parameter key="payum.action.sync_payment_instruction_aggregate.class">Payum\Action\SyncPaymentInstructionAggregateAction</parameter>
+        <parameter key="payum.action.status_payment_instruction_aggregate.class">Payum\Action\StatusPaymentInstructionAggregateAction</parameter>
     </parameters>
 
     <services>
@@ -37,8 +41,23 @@
             <argument/> <!-- this should be replaced with real storage service -->
         </service>
 
-        <service id="payum.interactive_request_listener" class="%payum.interactive_request_listener.class%">
+        <service id="payum.listener.interactive_request" class="%payum.listener.interactive_request.class%">
             <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" priority="128" />
         </service>
+
+        <service 
+            id="payum.action.capture_payment_instruction_aggregate" 
+            class="%payum.action.capture_payment_instruction_aggregate.class%"
+        />
+
+        <service
+            id="payum.action.sync_payment_instruction_aggregate"
+            class="%payum.action.sync_payment_instruction_aggregate.class%"
+        />
+
+        <service
+            id="payum.action.status_payment_instruction_aggregate"
+            class="%payum.action.status_payment_instruction_aggregate.class%"
+        />
     </services>
 </container>
