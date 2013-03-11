@@ -12,13 +12,14 @@ interface PaymentInterface
      * @return void
      */
     function addApi($api);
-    
+
     /**
      * @param ActionInterface $action
-     * 
+     * @param bool $forcePrepend
+     *
      * @return void
      */
-    function addAction(ActionInterface $action);
+    function addAction(ActionInterface $action, $forcePrepend = false);
 
     /**
      * @param \Payum\Extension\ExtensionInterface $extension

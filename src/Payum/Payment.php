@@ -47,7 +47,7 @@ class Payment implements PaymentInterface
     /**
      * {@inheritdoc}
      */
-    public function addAction(ActionInterface $action)
+    public function addAction(ActionInterface $action, $forcePrepend = false)
     {
         if ($action instanceof ActionPaymentAwareInterface) {
             $action->setPayment($this);
@@ -71,7 +71,10 @@ class Payment implements PaymentInterface
             }
         }
 
-        $this->actions[spl_object_hash($action)] = $action;
+        $forcePrepend ?
+            array_unshift($this->actions, $action) :
+            array_push($this->actions, $action)
+        ;
     }
 
     /**

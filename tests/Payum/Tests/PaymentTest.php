@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Tests;
 
-use MyProject\Proxies\__CG__\OtherProject\Proxies\__CG__\stdClass;
 use Payum\Exception\UnsupportedApiException;
 use Payum\Payment;
 use Payum\Action\ActionPaymentAware;
@@ -50,6 +49,48 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $extensions = $this->readAttribute($payment, 'extensions');
         
         $this->assertAttributeCount(1, 'extensions', $extensions);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowAddActionAppendByDefault()
+    {
+        $expectedFirstAction = $this->createActionMock();
+        $expectedSecondAction = $this->createActionMock();
+        
+        $payment = new Payment;
+
+        $payment->addAction($expectedFirstAction);
+        $payment->addAction($expectedSecondAction);
+
+        $actualActions = $this->readAttribute($payment, 'actions');
+        
+        $this->assertInternalType('array', $actualActions);
+        $this->assertCount(2, $actualActions);
+        $this->assertSame($expectedFirstAction, $actualActions[0]);
+        $this->assertSame($expectedSecondAction, $actualActions[1]);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowAddActionWithPrependForced()
+    {
+        $expectedFirstAction = $this->createActionMock();
+        $expectedSecondAction = $this->createActionMock();
+
+        $payment = new Payment;
+
+        $payment->addAction($expectedSecondAction);
+        $payment->addAction($expectedFirstAction, $forcePrepend = true);
+
+        $actualActions = $this->readAttribute($payment, 'actions');
+
+        $this->assertInternalType('array', $actualActions);
+        $this->assertCount(2, $actualActions);
+        $this->assertSame($expectedFirstAction, $actualActions[0]);
+        $this->assertSame($expectedSecondAction, $actualActions[1]);
     }
 
     /**
