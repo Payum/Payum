@@ -42,6 +42,31 @@ if ($interactiveRequest = $payment->execute($capture, $expectsInteractive = true
 // ...
 ```
 
+You can also capture digital goods:
+
+```php
+<?php
+//Source: Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::doDigitalGoodsCapture()
+
+// ...
+
+$capture = new CaptureRequest(array(
+    
+    // ... 
+    
+    'NOSHIPPING' => Api::NOSHIPPING_NOT_DISPLAY_ADDRESS,
+    'REQCONFIRMSHIPPING' => Api::REQCONFIRMSHIPPING_NOT_REQUIRED,
+    'L_PAYMENTREQUEST_0_ITEMCATEGORY0' => Api::PAYMENTREQUEST_ITERMCATEGORY_DIGITAL, 
+    'L_PAYMENTREQUEST_0_NAME0' => 'Awesome e-book',
+    'L_PAYMENTREQUEST_0_DESC0' => 'Great stories of America.',
+    'L_PAYMENTREQUEST_0_AMT0' => 10,
+    'L_PAYMENTREQUEST_0_QTY0' => 1,
+    'L_PAYMENTREQUEST_0_TAXAMT0' => 2,
+));
+
+// ...
+```
+
 ## Was the payment finished successfully?
 
 ```php

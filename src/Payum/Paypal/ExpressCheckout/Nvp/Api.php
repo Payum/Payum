@@ -15,28 +15,28 @@ use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessExc
  *   ACK: https://www.x.com/content/paypal-nvp-api-overview
  *   CHECKOUTSTATUS: https://www.x.com/developers/paypal/documentation-tools/api/getexpresscheckoutdetails-api-operation-nvp
  *   PAYMENTSTATUS: https://www.x.com/developers/paypal/documentation-tools/api/doexpresscheckoutpayment-api-operation-nvp
- * 
+ *
  *   https://www.x.com/developers/paypal/documentation-tools/api/setexpresscheckout-api-operation-nvp
- *   https://www.x.com/developers/paypal/documentation-tools/api/gettransactiondetails-api-operation-nvp *  
+ *   https://www.x.com/developers/paypal/documentation-tools/api/gettransactiondetails-api-operation-nvp *
  */
 class Api
 {
     const ACK_SUCCESS = 'Success';
-    
+
     const ACK_SUCCESS_WITH_WARNING = 'SuccessWithWarning';
-    
+
     const ACK_FAILURE = 'Failure';
-    
+
     const ACK_FAILUREWITHWARNING = 'FailureWithWarning';
-    
+
     const ACK_WARNING = 'Warning';
-    
+
     const CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED = 'PaymentActionNotInitiated';
-        
+
     const CHECKOUTSTATUS_PAYMENT_ACTION_FAILED = 'PaymentActionFailed';
-        
+
     const CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS = 'PaymentActionInProgress';
-        
+
     const CHECKOUTSTATUS_PAYMENT_COMPLETED = 'PaymentCompleted';
 
     const CHECKOUTSTATUS_PAYMENT_ACTION_COMPLETED = 'PaymentActionCompleted';
@@ -77,7 +77,7 @@ class Api
     const PAYMENTSTATUS_IN_PROGRESS = 'In-Progress';
 
     /**
-     * The payment has been partially refunded. 
+     * The payment has been partially refunded.
      */
     const PAYMENTSTATUS_PARTIALLY_REFUNDED = 'Partially-Refunded';
 
@@ -113,7 +113,7 @@ class Api
 
     /**
      * How you want to obtain payment. When implementing parallel payments, this field is required and must be set to Order. When implementing digital goods, this field is required and must be set to Sale. You can specify up to 10 payments, where n is a digit between 0 and 9, inclusive; except for digital goods, which supports single payments only. If the transaction does not include a one-time purchase, this field is ignored. It is one of the following values:
-     * 
+     *
      * Sale – This is a final sale for which you are requesting payment (default).
      */
     const PAYMENTACTION_SALE = 'Sale';
@@ -136,11 +136,49 @@ class Api
      * Payment has not been authorized by the user.
      */
     const L_ERRORCODE_PAYMENT_NOT_AUTHORIZED = 10485;
-    
+
+    /**
+     * PayPal displays the shipping address on the PayPal pages.
+     */
+    const NOSHIPPING_DISPLAY_ADDRESS = 0;
+
+    /**
+     * PayPal does not display shipping address fields whatsoever.
+     */
+    const NOSHIPPING_NOT_DISPLAY_ADDRESS = 1;
+
+    /**
+     * If you do not pass the shipping address, PayPal obtains it from the buyer’s account profile.
+     */
+    const NOSHIPPING_DISPLAY_BUYER_ADDRESS = 2;
+
+    /**
+     * You do not require the buyer’s shipping address be a confirmed address.
+     * For digital goods, this field is required, and you must set it to 0.
+     * Setting this field overrides the setting you specified in your Merchant Account Profile.
+     */
+    const REQCONFIRMSHIPPING_NOT_REQUIRED = 0;
+
+    /**
+     * You require the buyer’s shipping address be a confirmed address.
+     * Setting this field overrides the setting you specified in your Merchant Account Profile.
+     */
+    const REQCONFIRMSHIPPING_REQUIRED = 1;
+
+    /**
+     * Indicates whether an item is digital or physical. For digital goods, this field is required and must be set to Digital. You can specify up to 10 payments, where n is a digit between 0 and 9, inclusive, and m specifies the list item within the payment; except for digital goods, which only supports single payments.
+     */
+    const PAYMENTREQUEST_ITERMCATEGORY_DIGITAL = 'Digital';
+
+    /**
+     * Indicates whether an item is digital or physical. For digital goods, this field is required and must be set to Digital. You can specify up to 10 payments, where n is a digit between 0 and 9, inclusive, and m specifies the list item within the payment; except for digital goods, which only supports single payments.
+     */
+    const PAYMENTREQUEST_ITERMCATEGORY_PHYSICAL = 'Physical';
+
     const VERSION = '65.1';
 
     protected $client;
-    
+
     protected $options = array(
         'username' => null,
         'password' => null,
@@ -154,7 +192,7 @@ class Api
     {
         $this->client = $client;
         $this->options = array_replace($this->options, $options);
-        
+
         if (true == empty($this->options['username'])) {
             throw new InvalidArgumentException('The username option must be set.');
         }
@@ -168,10 +206,10 @@ class Api
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
         }
     }
-    
+
     /**
      * Require: PAYMENTREQUEST_0_AMT
-     * 
+     *
      * @param array $fields
      *
      * @return Response
@@ -196,27 +234,27 @@ class Api
         }
 
         $request->setField('METHOD', 'SetExpressCheckout');
-        
+
         $this->addVersionField($request);
         $this->addAuthorizeFields($request);
-        
+
         return $this->doRequest($request);
     }
 
     /**
      * Require: TOKEN
-     * 
+     *
      * @param \Buzz\Message\Form\FormRequest $request
-     * 
+     *
      * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
      */
     public function getExpressCheckoutDetails(FormRequest $request)
     {
         $request->setField('METHOD', 'GetExpressCheckoutDetails');
-        
+
         $this->addVersionField($request);
         $this->addAuthorizeFields($request);
-        
+
         return $this->doRequest($request);
     }
 
@@ -256,9 +294,9 @@ class Api
 
     /**
      * @param \Buzz\Message\Form\FormRequest $request
-     * 
+     *
      * @throws \Payum\Exception\Http\HttpResponseStatusNotSuccessfulException
-     * 
+     *
      * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
      */
     protected function doRequest(FormRequest $request)
@@ -267,7 +305,7 @@ class Api
         $request->fromUrl($this->getApiEndpoint());
 
         $this->client->send($request, $response = $this->createResponse());
-        
+
         if (false == $response->isSuccessful()) {
             throw new HttpResponseStatusNotSuccessfulException($request, $response);
         }
@@ -294,16 +332,16 @@ class Api
         return $this->options['sandbox'] ?
             'https://api-3t.sandbox.paypal.com/nvp' :
             'https://api-3t.paypal.com/nvp'
-        ;
+            ;
     }
-    
+
     protected function addAuthorizeFields(FormRequest $request)
     {
         $request->setField('PWD', $this->options['password']);
         $request->setField('USER', $this->options['username']);
         $request->setField('SIGNATURE', $this->options['signature']);
     }
-    
+
     protected function addVersionField(FormRequest $request)
     {
         $request->setField('VERSION', self::VERSION);

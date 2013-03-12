@@ -17,6 +17,13 @@ use Payum\Request\RedirectUrlInteractiveRequest;
 {{testo:Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::doCapture}}
 ```
 
+You can also capture digital goods:
+
+```php
+<?php
+{{testo:Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::doDigitalGoodsCapture}}
+```
+
 ## Was the payment finished successfully?
 
 ```php
