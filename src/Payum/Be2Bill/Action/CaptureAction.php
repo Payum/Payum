@@ -54,7 +54,7 @@ class CaptureAction implements ActionApiAwareInterface
 
         $response = $this->api->payment((array) $model);
 
-        $model->replace($response->getContentJson());
+        $model->replace((array) $response->getContentJson());
     }
 
     /**
