@@ -34,6 +34,7 @@ class OmnipayPaymentFactory implements PaymentFactoryInterface
         $gatewayDefinition->setFactoryClass('Omnipay\Common\GatewayFactory');
         $gatewayDefinition->setFactoryMethod('create');
         $gatewayDefinition->addArgument($config['type']);
+        $gatewayDefinition->setPublic(true);
         foreach ($config['options'] as $name => $value) {
             $gatewayDefinition->addMethodCall('set'.strtoupper($name), array($value));
         }

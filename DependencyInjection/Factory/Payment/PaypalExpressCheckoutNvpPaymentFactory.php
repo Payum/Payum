@@ -29,6 +29,7 @@ class PaypalExpressCheckoutNvpPaymentFactory implements PaymentFactoryInterface
         $apiDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.api');
         $apiDefinition->replaceArgument(0, new Reference($config['api']['client']));
         $apiDefinition->replaceArgument(1, $config['api']['options']);
+        $apiDefinition->setPublic(true);
         $apiId = 'payum.context.'.$contextName.'.api';
         $container->setDefinition($apiId, $apiDefinition);
 
