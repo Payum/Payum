@@ -25,7 +25,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($rc->implementsInterface('IteratorAggregate'));
     }
-    
+
     /**
      * @test
      */
@@ -33,7 +33,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
     {
         new PaymentInstruction();
     }
-    
+
     public function provideStringFields()
     {
         return array(
@@ -67,6 +67,8 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
             array('getVersion', 'setVersion', 'theValue', 'VERSION'),
             array('getBuild', 'setBuild', 'theValue', 'BUILD'),
             array('getAck', 'setAck', 'theValue', 'ACK'),
+            array('getNoshipping', 'setNoshipping', 'theValue', 'NOSHIPPING'),
+            array('getReqconfirmshipping', 'setReqconfirmshipping', 'theValue', 'REQCONFIRMSHIPPING'),
         );
     }
 
@@ -111,14 +113,14 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
             array('getPaymentrequestParenttransactionid', 'setPaymentrequestParenttransactionid', 'PAYMENTREQUEST_0_PARENTTRANSACTIONID', 'PAYMENTREQUEST_9_PARENTTRANSACTIONID'),
             array('getPaymentrequestPendingreason', 'setPaymentrequestPendingreason', 'PAYMENTREQUEST_0_PENDINGREASON', 'PAYMENTREQUEST_9_PENDINGREASON'),
             array('getPaymentrequestReasoncode', 'setPaymentrequestReasoncode', 'PAYMENTREQUEST_0_REASONCODE', 'PAYMENTREQUEST_9_REASONCODE'),
-            
+
             array('getLSeveritycoden', 'setLSeveritycoden', 'L_SEVERITYCODE0', 'L_SEVERITYCODE9'),
             array('getLLongmessagen', 'setLLongmessagen', 'L_LONGMESSAGE0', 'L_LONGMESSAGE9'),
             array('getLShortmessagen', 'setLShortmessagen', 'L_SHORTMESSAGE0', 'L_SHORTMESSAGE9'),
             array('getLErrorcoden', 'setLErrorcoden', 'L_ERRORCODE0', 'L_ERRORCODE9'),
         );
     }
-    
+
     public static function provideMultiArrayValues()
     {
         return array(
@@ -126,18 +128,19 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
             array('getLPaymentrequestDesc', 'setLPaymentrequestDesc', 'L_PAYMENTREQUEST_0_DESC0', 'L_PAYMENTREQUEST_9_DESC9'),
             array('getLPaymentrequestQty', 'setLPaymentrequestQty', 'L_PAYMENTREQUEST_0_QTY0', 'L_PAYMENTREQUEST_9_QTY9'),
             array('getLPaymentrequestAmt', 'setLPaymentrequestAmt', 'L_PAYMENTREQUEST_0_AMT0', 'L_PAYMENTREQUEST_9_AMT9'),
+            array('getLPaymentrequestItemcategory', 'setLPaymentrequestItemcategory', 'L_PAYMENTREQUEST_0_ITEMCATEGORY0', 'L_PAYMENTREQUEST_9_ITEMCATEGORY9'),
         );
     }
-    
+
     /**
      * @test
-     * 
+     *
      * @dataProvider provideStringFields
      */
     public function shouldAllowSetStringValue($getter, $setter, $value, $paypalName)
     {
         $instruction = new PaymentInstruction();
-        
+
         $instruction->$setter($value);
     }
 
@@ -165,7 +168,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
         $instruction = new PaymentInstruction();
 
         $instruction[$paypalName] = $value;
-        
+
         $this->assertEquals($value, $instruction->$getter());
     }
 
@@ -201,13 +204,13 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @dataProvider provideArrayFields
      */
     public function shouldAllowSetArrayValue($getter, $setter, $paypalName0, $paypalName9)
     {
         $value = 'theValue';
-        
+
         $instruction = new PaymentInstruction();
 
         $instruction->$setter(0, $value);
@@ -222,7 +225,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
     public function shouldAllowGetPreviouslySetArrayValue($getter, $setter, $paypalName0, $paypalName9)
     {
         $value = 'theValue';
-        
+
         $instruction = new PaymentInstruction();
 
         $instruction->$setter(0, $value);
@@ -257,7 +260,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
             0 => $value,
             9 => $value
         );
-        
+
         $instruction = new PaymentInstruction();
 
         $instruction->$setter(0, $value);
@@ -274,9 +277,9 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
     public function shouldAllowSetArrayValueInArrayWay($getter, $setter, $paypalName0, $paypalName9)
     {
         $value = 'theValue';
-        
+
         $instruction = new PaymentInstruction();
-        
+
         $instruction[$paypalName0] = $value;
         $instruction[$paypalName9] = $value;
 
@@ -300,7 +303,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue(isset($instruction[$paypalName0]));
         $this->assertEquals($value, $instruction[$paypalName0]);
-        
+
         $this->assertTrue(isset($instruction[$paypalName9]));
         $this->assertEquals($value, $instruction[$paypalName9]);
     }
@@ -318,7 +321,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
 
         $instruction[$paypalName0] = $value;
         $instruction[$paypalName9] = $value;
-        
+
         $this->assertTrue(isset($instruction[$paypalName0]));
         $this->assertEquals($value, $instruction[$paypalName0]);
 

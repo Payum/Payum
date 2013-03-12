@@ -15,139 +15,143 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
     protected $custom;
 
     protected $invnum;
-    
+
     protected $phonenum;
-    
+
     protected $paypaladjustment;
-    
+
     protected $note;
-    
+
     protected $redirectrequired;
-    
+
     protected $checkoutstatus;
 
     protected $returnurl;
 
     protected $cancelurl;
-    
+
     protected $giftmessage;
 
     protected $giftreceiptenable;
-    
+
     protected $giftwrapname;
-    
+
     protected $giftwrapamount;
-    
+
     protected $buyermarketingemail;
-    
+
     protected $surveyquestion;
-    
+
     protected $surveychoiceselected;
-    
+
     protected $email;
-    
+
     protected $payerid;
-    
+
     protected $payerstatus;
-    
+
     protected $countrycode;
-    
+
     protected $business;
-    
+
     protected $salutation;
-    
+
     protected $firstname;
-    
+
     protected $middlename;
-    
+
     protected $lastname;
-    
+
     protected $suffix;
 
     protected $timestamp;
-    
+
     protected $correlationid;
-    
+
     protected $version;
-    
+
     protected $build;
 
     protected $ack;
     
+    protected $noshipping;
+
+    protected $reqconfirmshipping;
+
     protected $paymentrequest_nnn_shiptoname = array();
-    
+
     protected $paymentrequest_nnn_shiptostreet = array();
-    
+
     protected $paymentrequest_nnn_shiptostreet2 = array();
-    
+
     protected $paymentrequest_nnn_shiptocity = array();
-    
+
     protected $paymentrequest_nnn_shiptostate = array();
-    
+
     protected $paymentrequest_nnn_shiptozip = array();
-    
+
     protected $paymentrequest_nnn_shiptocountrycode = array();
-    
+
     protected $paymentrequest_nnn_shiptophonenum = array();
-    
+
     protected $paymentrequest_nnn_addressstatus = array();
-    
+
     protected $paymentrequest_nnn_amt = array();
-    
+
     protected $paymentrequest_nnn_currencycode = array();
-    
+
     protected $paymentrequest_nnn_itemamt = array();
-    
+
     protected $paymentrequest_nnn_shippingamt = array();
-    
+
     protected $paymentrequest_nnn_insuranceamt = array();
-    
+
     protected $paymentrequest_nnn_shipdiscamt = array();
-    
+
     protected $paymentrequest_nnn_insuranceoptionoffered = array();
-    
+
     protected $paymentrequest_nnn_handlingamt = array();
-    
+
     protected $paymentrequest_nnn_taxamt = array();
-    
+
     protected $paymentrequest_nnn_desc = array();
-    
+
     protected $paymentrequest_nnn_custom = array();
-    
+
     protected $paymentrequest_nnn_invnum = array();
-    
+
     protected $paymentrequest_nnn_notifyurl = array();
-    
+
     protected $paymentrequest_nnn_notetext = array();
-    
+
     protected $paymentrequest_nnn_transactionid = array();
-    
+
     protected $paymentrequest_nnn_allowedpaymentmethod = array();
-    
+
     protected $paymentrequest_nnn_paymentrequestid = array();
-    
+
     protected $paymentrequest_nnn_paymentaction = array();
-    
+
     protected $paymentrequest_nnn_paymentstatus = array();
 
     protected $paymentrequest_nnn_exchangerate = array();
-    
+
     protected $paymentrequest_nnn_settleamt = array();
-    
+
     protected $paymentrequest_nnn_feeamt = array();
-    
+
     protected $paymentrequest_nnn_ordertime = array();
-    
+
     protected $paymentrequest_nnn_paymenttype = array();
-    
+
     protected $paymentrequest_nnn_transactiontype = array();
-    
+
     protected $paymentrequest_nnn_receiptid = array();
-    
+
     protected $paymentrequest_nnn_parenttransactionid = array();
-    
+
     protected $paymentrequest_nnn_pendingreason = array();
-    
+
     protected $paymentrequest_nnn_reasoncode = array();
 
     protected $l_paymentrequest_nnn_namemmm = array();
@@ -158,12 +162,14 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
 
     protected $l_paymentrequest_nnn_amtmmm = array();
 
+    protected $l_paymentrequest_nnn_itemcategorymmm = array();
+
     protected $l_errorcodennn = array();
 
     protected $l_shortmessagennn = array();
-    
+
     protected $l_longmessagennn = array();
-    
+
     protected $l_severitycodennn = array();
 
     public function getToken()
@@ -486,6 +492,26 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
         $this->cancelurl = $cancelurl;
     }
 
+    public function getNoshipping()
+    {
+        return $this->noshipping;
+    }
+
+    public function setNoshipping($noshipping)
+    {
+        $this->noshipping = $noshipping;
+    }
+
+    public function getReqconfirmshipping()
+    {
+        return $this->reqconfirmshipping;
+    }
+
+    public function setReqconfirmshipping($reqconfirmshipping)
+    {
+        $this->reqconfirmshipping = $reqconfirmshipping;
+    }
+
     public function getPaymentrequestShiptostreet($n = null)
     {
         return $this->get('paymentrequest_nnn_shiptostreet', $n);
@@ -525,7 +551,7 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
     {
         $this->set('paymentrequest_nnn_shiptocity', $value, $n);
     }
-    
+
     public function getPaymentrequestShiptostate($n = null)
     {
         return $this->get('paymentrequest_nnn_shiptostate', $n);
@@ -545,7 +571,7 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
     {
         $this->set('paymentrequest_nnn_shiptozip', $value, $n);
     }
-    
+
     public function getPaymentrequestShiptocountrycode($n = null)
     {
         return $this->get('paymentrequest_nnn_shiptocountrycode', $n);
@@ -665,7 +691,7 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
     {
         $this->set('paymentrequest_nnn_taxamt', $value, $n);
     }
-    
+
     public function getPaymentrequestDesc($n = null)
     {
         return $this->get('paymentrequest_nnn_desc', $n);
@@ -745,12 +771,12 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
     {
         $this->set('paymentrequest_nnn_paymentrequestid', $value, $n);
     }
-    
+
     public function getPaymentrequestPaymentaction($n = null)
     {
         return $this->get('paymentrequest_nnn_paymentaction', $n);
     }
-    
+
     public function setPaymentrequestPaymentaction($n, $value)
     {
         $this->set('paymentrequest_nnn_paymentaction', $value, $n);
@@ -760,7 +786,7 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
     {
         return $this->get('paymentrequest_nnn_paymentstatus', $n);
     }
-    
+
     public function setPaymentrequestPaymentstatus($n, $value)
     {
         $this->set('paymentrequest_nnn_paymentstatus', $value, $n);
@@ -906,6 +932,16 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
         $this->set('l_paymentrequest_nnn_amtmmm', $value, $n, $m);
     }
 
+    public function getLPaymentrequestItemcategory($n, $m)
+    {
+        return $this->get('l_paymentrequest_nnn_itemcategorymmm', $n, $m);
+    }
+
+    public function setLPaymentrequestItemcategory($n, $m, $value)
+    {
+        $this->set('l_paymentrequest_nnn_itemcategorymmm', $value, $n, $m);
+    }
+
     public function getLSeveritycoden($n = null)
     {
         return $this->get('l_severitycodennn', $n);
@@ -945,7 +981,7 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
     {
         $this->set('l_errorcodennn', $value, $n);
     }
-    
+
     public function clearErrors()
     {
         $this->l_errorcodennn = array();
@@ -956,23 +992,23 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
 
     /**
      * @deprecated since 0.3 move the logic to offsetSet
-     * 
-     * @param $nvp array|\Traversable 
+     *
+     * @param $nvp array|\Traversable
      */
     protected function fromNvp($nvp)
     {
         if (false == (is_array($nvp) || $nvp instanceof \Traversable)) {
             throw new InvalidArgumentException('Invalid nvp argument. Should be an array of an object implemented \Traversable interface.');
         }
-        
+
         foreach ($nvp as $name => $value) {
             $property = $name;
             $property = preg_replace('/\d/', 'nnn', $property, 1);
-            
+
             if (false === strpos($name, 'SHIPTOSTREET2')) {
                 $property = preg_replace('/\d/', 'mmm', $property, 1);
             }
-            
+
             $property = strtolower($property);
 
             if (false == property_exists($this, $property)) {
@@ -990,12 +1026,12 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
             } else {
                 $this->$property = $value;
             }
-        } 
+        }
     }
 
     /**
      * @deprecated since 0.3 move the logic to offsetGet
-     * 
+     *
      * @return array
      */
     protected function toNvp()
@@ -1003,7 +1039,7 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
         $nvp = array();
         foreach (get_object_vars($this) as $property => $value) {
             $name = strtoupper($property);
-            
+
             if (is_array($value)) {
                 foreach ($value as $indexN => $valueN) {
                     $nameN = str_replace('NNN', $indexN, $name);
@@ -1023,7 +1059,7 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
 
         return array_filter($nvp);
     }
-    
+
     protected function set($property, $value, $n = null, $m = null)
     {
         $currentValue = $this->$property;
@@ -1036,7 +1072,7 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
         } else if (null !== $n) {
             $currentValue[$n] = $value;
         }
-        
+
         $this->$property = $currentValue;
     }
 
@@ -1081,11 +1117,11 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
     public function offsetGet($offset)
     {
         $nvp = $this->toNvp();
-        
+
         return array_key_exists($offset, $nvp) ?
             $nvp[$offset] :
             null
-        ;
+            ;
     }
 
     /**
