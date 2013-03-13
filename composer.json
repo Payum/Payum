@@ -2,7 +2,7 @@
     "name": "payum/paypal-express-checkout-nvp",
     "type": "library",
     "description": "Paypal express checkout",
-    "keywords": ["payment", "paypal", "express checkout"],
+    "keywords": ["payment", "paypal", "express checkout", "digital goods"],
     "homepage": "",
     "license": "MIT",
     "authors": [
