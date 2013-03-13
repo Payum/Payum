@@ -30,7 +30,6 @@ class OmnipayPaymentFactory implements PaymentFactoryInterface
 
         $gatewayDefinition = new Definition();
         $gatewayDefinition->setClass('Omnipay\Common\GatewayInterface');
-        $gatewayDefinition->setPublic(false);
         $gatewayDefinition->setFactoryClass('Omnipay\Common\GatewayFactory');
         $gatewayDefinition->setFactoryMethod('create');
         $gatewayDefinition->addArgument($config['type']);
@@ -42,7 +41,7 @@ class OmnipayPaymentFactory implements PaymentFactoryInterface
         $container->setDefinition($gatewayId, $gatewayDefinition);
 
         $paymentDefinition = new Definition();
-        $paymentDefinition->setClass(new Parameter('Payum\Bridge\Omnipay\Payment'));
+        $paymentDefinition->setClass('Payum\Payment');
         $paymentDefinition->setPublic('false');
         $paymentDefinition->addMethodCall('addApi', array(new Reference($gatewayId)));
         $paymentId = 'payum.context.'.$contextName.'.payment';

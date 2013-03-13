@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle;
 
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentFactory;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCheckoutNvpPaymentFactory;
@@ -19,12 +20,13 @@ class PayumBundle extends Bundle
         /** @var $extension \Payum\Bundle\PayumBundle\DependencyInjection\PayumExtension */
         $extension = $container->getExtension('payum');
 
-        $extension->addPaymentFactory(new PaypalExpressCheckoutNvpPaymentFactory());
-        $extension->addPaymentFactory(new PaypalProCheckoutNvpPaymentFactory());
-        $extension->addPaymentFactory(new Be2BillPaymentFactory());
-        $extension->addPaymentFactory(new AuthorizeNetAimPaymentFactory());
+        $extension->addPaymentFactory(new PaypalExpressCheckoutNvpPaymentFactory);
+        $extension->addPaymentFactory(new PaypalProCheckoutNvpPaymentFactory);
+        $extension->addPaymentFactory(new Be2BillPaymentFactory);
+        $extension->addPaymentFactory(new AuthorizeNetAimPaymentFactory);
+        $extension->addPaymentFactory(new OmnipayPaymentFactory);
 
-        $extension->addStorageFactory(new FilesystemStorageFactory());
-        $extension->addStorageFactory(new DoctrineStorageFactory());
+        $extension->addStorageFactory(new FilesystemStorageFactory);
+        $extension->addStorageFactory(new DoctrineStorageFactory);
     }
 }
