@@ -2,11 +2,11 @@
 namespace Payum\Bridge\Omnipay\Action;
 
 use Omnipay\Common\Message\RedirectResponseInterface;
-use Omnipay\Common\Message\RequestInterface;
 
 use Payum\Exception\LogicException;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Request\CaptureRequest;
+use Payum\Request\InteractiveRequestInterface;
 use Payum\Request\RedirectUrlInteractiveRequest;
 
 class CaptureAction extends BaseActionApiAware
@@ -23,7 +23,12 @@ class CaptureAction extends BaseActionApiAware
         try {
             $options = $request->getModel();
             
-            $response = $this->gateway->purchase((array) $options)->send();
+            if (isset($options['_completeCaptureRequired'])) {
+                unset($options['_completeCaptureRequired']);
+                $response = $this->gateway->completePurchase((array) $options)->send();
+            } else {
+                $response = $this->gateway->purchase((array) $options)->send();
+            }
 
             $options['_reference'] = $response->getTransactionReference();
             $options['_status_message'] = '';
@@ -38,6 +43,10 @@ class CaptureAction extends BaseActionApiAware
                 $options['_status'] = 'failed';
                 $options['_status_message'] = $response->getMessage();
             }
+        } catch (InteractiveRequestInterface $e) {
+            $options['_completeCaptureRequired'] = 1;
+            
+            throw $e;
         } catch (\Exception $e) {
             $options['_status'] = 'failed';
             
