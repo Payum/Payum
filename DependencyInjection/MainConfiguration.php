@@ -112,6 +112,14 @@ class MainConfiguration implements ConfigurationInterface
                         ->useAttributeAsKey('key')
                         ->prototype('scalar')->end()
                     ->end()
+                    ->arrayNode('apis')
+                        ->useAttributeAsKey('key')
+                        ->prototype('scalar')->end()
+                    ->end()
+                    ->arrayNode('extensions')
+                        ->useAttributeAsKey('key')
+                        ->prototype('scalar')->end()
+                    ->end()
                 ->end()
             ;
         }

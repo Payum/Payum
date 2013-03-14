@@ -71,6 +71,24 @@ class PayumExtension extends Extension
                             );
                         }
                     }
+
+                    if (false == empty($config[$contextName][$paymentFactory->getName()]['apis'])) {
+                        foreach ($config[$contextName][$paymentFactory->getName()]['apis'] as $actionId) {
+                            $paymentService->addMethodCall(
+                                'addApi',
+                                array(new Reference($actionId), $forcePrepend = true)
+                            );
+                        }
+                    }
+
+                    if (false == empty($config[$contextName][$paymentFactory->getName()]['extensions'])) {
+                        foreach ($config[$contextName][$paymentFactory->getName()]['extensions'] as $actionId) {
+                            $paymentService->addMethodCall(
+                                'addExtension',
+                                array(new Reference($actionId), $forcePrepend = true)
+                            );
+                        }
+                    }
                 }
                 if (isset($this->storageFactories[$serviceName])) {
                     $storageServiceId = $this->storageFactories[$serviceName]->create($container, $contextName, $service);
