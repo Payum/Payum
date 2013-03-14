@@ -40,8 +40,6 @@ class MainConfiguration implements ConfigurationInterface
         $tb = new TreeBuilder();
         $rootNode = $tb->root('payum');
         
-        $this->addTemplateSection($rootNode);
-        
         $contextsPrototypeNode = $rootNode
             ->children()
                 ->arrayNode('contexts')
@@ -143,21 +141,5 @@ class MainConfiguration implements ConfigurationInterface
 
             $factory->addConfiguration($contextsPrototypeNode->children()->arrayNode($storageName));
         }
-    }
-
-    /**
-     * @param ArrayNodeDefinition $node
-     */
-    private function addTemplateSection(ArrayNodeDefinition $node)
-    {
-        $node
-            ->children()
-                ->arrayNode('template')
-                ->addDefaultsIfNotSet()
-                ->children()
-                    ->scalarNode('engine')->defaultValue('twig')->end()
-                ->end()
-            ->end()
-        ->end();
     }
 }

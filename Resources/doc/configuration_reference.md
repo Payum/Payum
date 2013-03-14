@@ -8,6 +8,13 @@ payum:
         foo_payment_context:
             xxx_payment:
                 # payment specific options
+
+            xxx_storage:
+                # storage specific options
+                
+        bar_payment_context:
+            xxx_payment:
+                # payment specific options
                 
                 actions:
                     - action.foo
@@ -20,22 +27,9 @@ payum:
                 extensions:
                     - extension.foo
                     - extension.bar
-
+                
             xxx_storage:
                 # storage specific options
-                
-        bar_payment_context:
-            xxx_payment:
-                # payment specific options
-                
-                actions:
-                   - payum.action.foo.service
-                   - payum.action.bar.service
-            xxx_storage:
-                # storage specific options
-
-    template:
-        engine: twig
 ```
 
 ### Doctrine storage:
