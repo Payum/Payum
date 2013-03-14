@@ -10,8 +10,17 @@ payum:
                 # payment specific options
                 
                 actions:
-                   - payum.action.foo.service
-                   - payum.action.bar.service
+                    - action.foo
+                    - action.bar
+                   
+                apis:
+                    - api.foo
+                    - api.bar
+                
+                extensions:
+                    - extension.foo
+                    - extension.bar
+
             xxx_storage:
                 # storage specific options
                 
