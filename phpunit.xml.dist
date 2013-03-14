@@ -11,32 +11,17 @@
          syntaxCheck="false"
          bootstrap="tests/bootstrap.php"
 >
-    <!--<php>
-        <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_ACCOUNT" value="sellr1_1351171001_biz@gmail.com"/>
-        <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_USERNAME" value="sellr1_1351171001_biz_api1.gmail.com"/>
-        <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_PASSWORD" value="1351171022"/>
-        <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_SIGNATURE" value="Adt647eR0NhYG68dAfVYPGquxlvuAwSJBMEy12p4k4mO2p8oEz8t95gU"/>
+    <php>
+        <var name="__PAYUM_PAYPAL_PRO_CHECKOUT_NVP_API_USERNAME" value="palexanderpayflowtestapionly"/>
+        <var name="__PAYUM_PAYPAL_PRO_CHECKOUT_NVP_API_PASSWORD" value="demopass123"/>
+        <var name="__PAYUM_PAYPAL_PRO_CHECKOUT_NVP_API_PARTNER" value="PayPal"/>
+        <var name="__PAYUM_PAYPAL_PRO_CHECKOUT_NVP_API_VENDOR" value="palexanderpayflowtest"/>
     </php>
-
-    <listeners>
-        <listener class="Testo\Phpunit\ReGenerateDocsOnSuccessListener" file="vendor/fp/testo/src/Testo/Phpunit/ReGenerateDocsOnSuccessListener.php">
-            <arguments>
-                <array>
-                    <element key="README.md.template">
-                        <string>README.md</string>
-                    </element>
-                </array>
-            </arguments>
-        </listener>
-    </listeners>-->
     
     <testsuites>
         <testsuite name="Payum Paypal Express Checkout Nvp Tests">
             <directory>./tests</directory>
-        </testsuite>
-        <!--<testsuite name="Payum Paypal Express Checkout Nvp Examples">
-            <directory>./examples</directory>
-        </testsuite>-->
+        </testsuite>2
     </testsuites>
 
     <filter>

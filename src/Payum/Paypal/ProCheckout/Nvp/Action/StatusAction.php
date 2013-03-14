@@ -2,8 +2,8 @@
 namespace Payum\Paypal\ProCheckout\Nvp\Action;
 
 use Payum\Action\ActionInterface;
+use Payum\PaymentInstructionAggregateInterface;
 use Payum\Paypal\ProCheckout\Nvp\PaymentInstruction;
-use Payum\Domain\InstructionAggregateInterface;
 use Payum\Request\BinaryMaskStatusRequest;
 
 /**
@@ -24,8 +24,7 @@ class StatusAction implements ActionInterface
     {
         return
             $request instanceof BinaryMaskStatusRequest &&
-            $request->getModel() instanceof InstructionAggregateInterface &&
-            $request->getModel()->getInstruction() instanceof PaymentInstruction
+            $request->getModel() instanceof PaymentInstruction
         ;
     }
 }

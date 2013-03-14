@@ -116,11 +116,23 @@ class Api
      */
     const RESULT_CVV2_MISMATCH = 114;
 
+    // Here more error codes
+
+    /**
+     * Fraud Protection Services Filter — Declined by filters
+     * @var int
+     */
+    const RESULT_DECLINED_BY_FILTERS = 125;
+
+    // Here more error codes
+
     /**
      * Use an AMOUNT other than those listed in this column
      * @var int
      */
     const RESULT_GENERIC_HOST_OR_PROCESSOR_ERROR = 1000;
+
+    // Here more error codes too
 
     /**
      * @var ClientInterface
@@ -238,5 +250,20 @@ class Api
     protected function createResponse()
     {
         return new Response();
+    }
+
+    /**
+     * @return array
+     */
+    public static function getResultErrorCodes()
+    {
+        $return = array();
+        $refl = new \ReflectionClass(get_called_class());
+        foreach ($refl->getConstants() as $key => $val) {
+            if ('RESULT_' == substr($key, 0, strlen('RESULT_'))) {
+                $return[$key] = $val;
+            }
+        }
+        return $return;
     }
 }
