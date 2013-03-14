@@ -1,15 +1,17 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AuthorizeNetAimPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCheckoutNvpPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\PayumExtension;
-use Symfony\Component\Config\Definition\Processor;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\DependencyInjection\Reference;
 
 class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 {
@@ -47,6 +49,12 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.api'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
+
+        $this->assertDefinitionContainsMethodCall(
+            $containerBuilder->getDefinition('payum.context.a_context.payment'),
+            'addApi',
+            new Reference('payum.context.a_context.api')
+        );
     }
 
     /**
@@ -119,6 +127,12 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.api'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
+
+        $this->assertDefinitionContainsMethodCall(
+            $containerBuilder->getDefinition('payum.context.a_context.payment'),
+            'addApi',
+            new Reference('payum.context.a_context.api')
+        );
     }
 
     /**
@@ -154,6 +168,12 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.api'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
+
+        $this->assertDefinitionContainsMethodCall(
+            $containerBuilder->getDefinition('payum.context.a_context.payment'),
+            'addApi',
+            new Reference('payum.context.a_context.api')
+        );
     }
 
     /**
@@ -186,5 +206,177 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.gateway'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
+
+        $this->assertDefinitionContainsMethodCall(
+            $containerBuilder->getDefinition('payum.context.a_context.payment'),
+            'addApi',
+            new Reference('payum.context.a_context.gateway')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowAddCustomActions()
+    {
+        $config = array(
+            'contexts' => array(
+                'a_context' => array(
+                    'paypal_express_checkout_nvp_payment' => array(
+                        'api' => array(
+                            'options' => array(
+                                'username' => 'a_username',
+                                'password' => 'a_password',
+                                'signature' => 'a_signature',
+                                'sandbox' => true
+                            )
+                        ),
+                        'actions' => array(
+                            'action.foo',
+                            'action.bar'
+                        )
+                    ),
+                )
+            )
+        );
+
+        $configs = array($config);
+
+        $containerBuilder = new ContainerBuilder(new ParameterBag);
+
+        $extension = new PayumExtension;
+        $extension->addPaymentFactory(new PaypalExpressCheckoutNvpPaymentFactory);
+
+        $extension->load($configs, $containerBuilder);
+
+        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
+        
+        $this->assertDefinitionContainsMethodCall(
+            $containerBuilder->getDefinition('payum.context.a_context.payment'), 
+            'addAction', 
+            new Reference('action.foo')
+        );
+
+        $this->assertDefinitionContainsMethodCall(
+            $containerBuilder->getDefinition('payum.context.a_context.payment'),
+            'addAction',
+            new Reference('action.bar')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowAddCustomApis()
+    {
+        $config = array(
+            'contexts' => array(
+                'a_context' => array(
+                    'paypal_express_checkout_nvp_payment' => array(
+                        'api' => array(
+                            'options' => array(
+                                'username' => 'a_username',
+                                'password' => 'a_password',
+                                'signature' => 'a_signature',
+                                'sandbox' => true
+                            )
+                        ),
+                        'apis' => array(
+                            'api.foo',
+                            'api.bar'
+                        )
+                    ),
+                )
+            )
+        );
+
+        $configs = array($config);
+
+        $containerBuilder = new ContainerBuilder(new ParameterBag);
+
+        $extension = new PayumExtension;
+        $extension->addPaymentFactory(new PaypalExpressCheckoutNvpPaymentFactory);
+
+        $extension->load($configs, $containerBuilder);
+
+        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
+
+        $this->assertDefinitionContainsMethodCall(
+            $containerBuilder->getDefinition('payum.context.a_context.payment'),
+            'addApi',
+            new Reference('api.foo')
+        );
+
+        $this->assertDefinitionContainsMethodCall(
+            $containerBuilder->getDefinition('payum.context.a_context.payment'),
+            'addApi',
+            new Reference('api.bar')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowAddCustomExtensions()
+    {
+        $config = array(
+            'contexts' => array(
+                'a_context' => array(
+                    'paypal_express_checkout_nvp_payment' => array(
+                        'api' => array(
+                            'options' => array(
+                                'username' => 'a_username',
+                                'password' => 'a_password',
+                                'signature' => 'a_signature',
+                                'sandbox' => true
+                            )
+                        ),
+                        'extensions' => array(
+                            'extension.foo',
+                            'extension.bar'
+                        )
+                    ),
+                )
+            )
+        );
+
+        $configs = array($config);
+
+        $containerBuilder = new ContainerBuilder(new ParameterBag);
+
+        $extension = new PayumExtension;
+        $extension->addPaymentFactory(new PaypalExpressCheckoutNvpPaymentFactory);
+
+        $extension->load($configs, $containerBuilder);
+
+        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
+
+        $this->assertDefinitionContainsMethodCall(
+            $containerBuilder->getDefinition('payum.context.a_context.payment'),
+            'addExtension',
+            new Reference('extension.foo')
+        );
+
+        $this->assertDefinitionContainsMethodCall(
+            $containerBuilder->getDefinition('payum.context.a_context.payment'),
+            'addExtension',
+            new Reference('extension.bar')
+        );
+    }
+
+    protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)
+    {
+        foreach ($serviceDefinition->getMethodCalls() as $methodCall) {
+            if ($expectedMethod == $methodCall[0] && $expectedFirstArgument == $methodCall[1][0]) {
+                return;
+            }
+        }
+        
+        $this->fail(sprintf(
+            'Failed assert that service (Class: %s) has method %s been called with first argument %s',
+            $serviceDefinition->getClass(),
+            $expectedMethod,
+            $expectedFirstArgument
+        ));
     }
 }

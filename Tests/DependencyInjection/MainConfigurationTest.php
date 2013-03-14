@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentFactory;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -12,6 +11,7 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCh
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\DoctrineStorageFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\FilesystemStorageFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentFactory;
 
 class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 {
@@ -357,6 +357,58 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         'foo_payment' => array(
                             'foo_opt' => 'foo',
                             'actions' => array('action.foo', 'action.baz'),
+                        )
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldPassConfigurationProcessingWithCustomApiDefined()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'contexts' => array(
+                    'a_context' => array(
+                        'bar_storage' => array(
+                            'bar_opt' => 'bar'
+                        ),
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo',
+                            'apis' => array('api.foo', 'api.baz'),
+                        )
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldPassConfigurationProcessingWithCustomExtensionsDefined()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'contexts' => array(
+                    'a_context' => array(
+                        'bar_storage' => array(
+                            'bar_opt' => 'bar'
+                        ),
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo',
+                            'extensions' => array('extension.foo', 'extension.baz'),
                         )
                     )
                 )
