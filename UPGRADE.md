@@ -6,6 +6,7 @@
 * `capture_finished_controller` option was removed.
 * `ContextInterface::createStatusRequest` method was removed.
 * `ContextInterface::getCaptureFinishedController` method was removed.
+* `CaptureController` was removed. Use your own.
 
 0.1 to 0.2
 ==========
