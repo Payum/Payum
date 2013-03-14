@@ -131,8 +131,6 @@ Now that you have created a capture controller, all that is left to do is to add
 
 Back to [index](index.md).
 
-### Next Step 
+### Other documents: 
 
-* [how to manage interactive](interactive_requests.md).
-* [how to customize capture finished controller](customize_capture_finished_controller.md).
-* [look at configuration reference](configuration_reference.md).
+* [Configuration reference](configuration_reference.md).

@@ -5,13 +5,18 @@ The PayumBundle adds support of [payum](https://github.com/Payum/Payum) lib to [
 
 Features include:
 
-- Supports [paypal express checkout](https://github.com/Payum/PaypalExpressCheckoutNvp) out of the box.
-- Supports [authorize.net](https://github.com/Payum/AuthorizeNetAim) out of the box.
-- Supports [be2bill](https://github.com/Payum/Be2Bill) out of the box.
-- Supports [omnipay](https://github.com/adrianmacneil/omnipay) gateways via [bridge](https://github.com/Payum/OmnipayBridge).
-- Easy to integrate other payments.
-- Extremely extensible
-- Supports doctrine storage and filesystem one to easy start.
+- Easy to setup ([sandbox](https://github.com/Payum/PayumBundleSandbox)).
+- Several payments at once.
+- Extremely extensible.
+- Support storage out of the box.
+
+Supported Payments:
+-------------------
+
+- [Paypal express checkout](https://github.com/Payum/PaypalExpressCheckoutNvp).
+- [Authorize.Net AIM](https://github.com/Payum/AuthorizeNetAim).
+- [Be2Bill](https://github.com/Payum/Be2Bill).
+- [Omnipay](https://github.com/adrianmacneil/omnipay) gateways via [bridge](https://github.com/Payum/OmnipayBridge). 
 
 Documentation
 -------------

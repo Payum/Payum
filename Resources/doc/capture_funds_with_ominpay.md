@@ -36,6 +36,7 @@ payum:
                 type: Stripe
                 options:
                     apiKey: abc123
+                    testMode: true
 ```
 
 **Warning:**
@@ -85,7 +86,5 @@ class PaymentController extends Controller
 
 ### Next Step
 
-* [how to manage interactive](interactive_requests.md).
-* [how to customize capture finished controller](customize_capture_finished_controller.md).
-* [an example of simple capture controller](capture_simple_controller.md).
-* [look at configuration reference](configuration_reference.md).
+* [Simple capture controller (an example)](capture_simple_controller.md).
+* [Configuration reference](configuration_reference.md).
