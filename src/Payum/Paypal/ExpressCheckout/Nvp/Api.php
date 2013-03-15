@@ -295,6 +295,21 @@ class Api
     /**
      * @param \Buzz\Message\Form\FormRequest $request
      *
+     * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
+     */
+    public function createRecurringPaymentsProfile(FormRequest $request)
+    {
+        $request->setField('METHOD', 'CreateRecurringPaymentsProfile');
+
+        $this->addVersionField($request);
+        $this->addAuthorizeFields($request);
+
+        return $this->doRequest($request);
+    }
+
+    /**
+     * @param \Buzz\Message\Form\FormRequest $request
+     *
      * @throws \Payum\Exception\Http\HttpResponseStatusNotSuccessfulException
      *
      * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
