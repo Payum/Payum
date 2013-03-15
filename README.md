@@ -1,4 +1,8 @@
-PaypalProCheckoutNvp
+Payum Paypal ProCheckout Nvp
 ====================
 
-Paypal pro checkout payment
+The lib implements [PayPal Pro Checkout](https://www.paypalobjects.com/webstatic/en_US/developer/docs/pdf/payflowgateway_guide.pdf) payment
+
+## How to use?
+
+[Example](tests/Payum/Paypal/ExpressCheckout/Nvp/Tests/Functional/ExecuteTestCase.php)

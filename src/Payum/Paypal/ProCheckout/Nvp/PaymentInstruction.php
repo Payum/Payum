@@ -1,71 +1,63 @@
 <?php
 namespace Payum\Paypal\ProCheckout\Nvp;
 
-use Payum\PaymentInstructionInterface;
 use Payum\Exception\InvalidArgumentException;
 
 /**
  * @see https://www.x.com/sites/default/files/payflowgateway_guide.pdf
  */
-class PaymentInstruction implements PaymentInstructionInterface
+class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
 {
-    /**
-     * @var array
-     */
-    protected $request = array(
-        'CURRENCY' => null,
-        'AMT' => null,
-        'ACCT' => null,
-        'EXPDATE' => null,
-        'CVV2' => null,
-        'BILLTOFIRSTNAME' => null,
-        'BILLTOLASTNAME' => null,
-        'BILLTOSTREET' => null,
-        'BILLTOCITY' => null,
-        'BILLTOSTATE' => null,
-        'BILLTOZIP' => null,
-        'BILLTOCOUNTRY' => null,
-    );
+    protected $request_currency;
+    protected $request_amt;
+    protected $request_acct;
+    protected $request_expdate;
+    protected $request_cvv2;
+    protected $request_billtofirstname;
+    protected $request_billtolastname;
+    protected $request_billtostreet;
+    protected $request_billtocity;
+    protected $request_billtostate;
+    protected $request_billtozip;
+    protected $request_billtocountry;
 
-    protected $response = array(
-        'pnref' => null,
-        'ppref' => null,
-        'result' => null,
-        'cvv2match' => null,
-        'respmsg' => null,
-        'prefpsmsg' => null,
-        'postfpsmsg' => null,
-        'authcode' => null,
-        'avsaddr' => null,
-        'avszip' => null,
-        'iavs' => null,
-        'procavs' => null,
-        'proccvv2' => null,
-        'hostcode' => null,
-        'resptext' => null,
-        'proccardsecure' => null,
-        'addlmsgs' => null,
-        'paymenttype' => null,
-        'correlationid' => null,
-        'amexid' => null,
-        'amexposdata' => null,
-        'amt' => null,
-        'origamt' => null,
-        'cardtype' => null,
-        'emailmatch' => null,
-        'phonematch' => null,
-        'extrspmsg' => null,
-        'transtime' => null,
-        'duplicate' => null,
-        'date_to_settle' => null,
-    );
+    protected $response_pnref;
+    protected $response_ppref;
+    protected $response_result;
+    protected $response_cvv2match;
+    protected $response_respmsg;
+    protected $response_prefpsmsg;
+    protected $response_postfpsmsg;
+    protected $response_authcode;
+    protected $response_avsaddr;
+    protected $response_avszip;
+    protected $response_iavs;
+    protected $response_procavs;
+    protected $response_proccvv2;
+    protected $response_hostcode;
+    protected $response_resptext;
+    protected $response_proccardsecure;
+    protected $response_addlmsgs;
+    protected $response_paymenttype;
+    protected $response_correlationid;
+    protected $response_amexid;
+    protected $response_amexposdata;
+    protected $response_amt;
+    protected $response_origamt;
+    protected $response_cardtype;
+    protected $response_emailmatch;
+    protected $response_phonematch;
+    protected $response_extrspmsg;
+    protected $response_transtime;
+    protected $response_duplicate;
+    protected $response_date_to_settle;
 
     /**
      * @return string
      */
     public function getCurrency()
     {
-        return $this->request['CURRENCY'];
+        return $this->request_currency;
     }
 
     /**
@@ -75,7 +67,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function setCurrency($currency)
     {
-        $this->request['CURRENCY'] = $currency;
+        $this->request_currency = $currency;
         return $this;
     }
 
@@ -84,7 +76,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function getAmt()
     {
-        return $this->request['AMT'];
+        return $this->request_amt;
     }
 
     /**
@@ -94,7 +86,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function setAmt($amt)
     {
-        $this->request['AMT'] = $amt;
+        $this->request_amt = $amt;
         return $this;
     }
 
@@ -103,7 +95,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function getAcct()
     {
-        return $this->request['ACCT'];
+        return $this->request_acct;
     }
 
     /**
@@ -113,7 +105,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function setAcct($acct)
     {
-        $this->request['ACCT'] = $acct;
+        $this->request_acct = $acct;
         return $this;
     }
 
@@ -122,7 +114,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function getExpDate()
     {
-        return $this->request['EXPDATE'];
+        return $this->request_expdate;
     }
 
     /**
@@ -132,7 +124,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function setExpDate($expDate)
     {
-        $this->request['EXPDATE'] = $expDate;
+        $this->request_expdate = $expDate;
         return $this;
     }
 
@@ -141,7 +133,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function getCvv2()
     {
-        return $this->request['CVV2'];
+        return $this->request_cvv2;
     }
 
     /**
@@ -151,7 +143,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function setCvv2($cvv2)
     {
-        $this->request['CVV2'] = $cvv2;
+        $this->request_cvv2 = $cvv2;
         return $this;
     }
 
@@ -160,7 +152,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function getBillToFirstName()
     {
-        return $this->request['BILLTOFIRSTNAME'];
+        return $this->request_billtofirstname;
     }
 
     /**
@@ -170,7 +162,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function setBillToFirstName($billToFirstName)
     {
-        $this->request['BILLTOFIRSTNAME'] = $billToFirstName;
+        $this->request_billtofirstname = $billToFirstName;
         return $this;
     }
 
@@ -179,7 +171,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function getBillToLastName()
     {
-        return $this->request['BILLTOLASTNAME'];
+        return $this->request_billtolastname;
     }
 
     /**
@@ -189,7 +181,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function setBillToLastName($billToLastName)
     {
-        $this->request['BILLTOLASTNAME'] = $billToLastName;
+        $this->request_billtolastname = $billToLastName;
         return $this;
     }
 
@@ -198,7 +190,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function getBillToStreet()
     {
-        return $this->request['BILLTOSTREET'];
+        return $this->request_billtostreet;
     }
 
     /**
@@ -208,7 +200,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function setBillToStreet($billToLastStreet)
     {
-        $this->request['BILLTOSTREET'] = $billToLastStreet;
+        $this->request_billtostreet = $billToLastStreet;
         return $this;
     }
 
@@ -217,7 +209,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function getBillToCity()
     {
-        return $this->request['BILLTOCITY'];
+        return $this->request_billtocity;
     }
 
     /**
@@ -227,7 +219,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function setBillToCity($billToLastCity)
     {
-        $this->request['BILLTOCITY'] = $billToLastCity;
+        $this->request_billtocity = $billToLastCity;
         return $this;
     }
 
@@ -236,7 +228,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function getBillToState()
     {
-        return $this->request['BILLTOSTATE'];
+        return $this->request_billtostate;
     }
 
     /**
@@ -246,7 +238,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function setBillToState($billToLastState)
     {
-        $this->request['BILLTOSTATE'] = $billToLastState;
+        $this->request_billtostate = $billToLastState;
         return $this;
     }
 
@@ -255,7 +247,7 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function getBillToZip()
     {
-        return $this->request['BILLTOZIP'];
+        return $this->request_billtozip;
     }
 
     /**
@@ -265,16 +257,16 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function setBillToZip($billToLastZip)
     {
-        $this->request['BILLTOZIP'] = $billToLastZip;
+        $this->request_billtozip = $billToLastZip;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getBillToCountr()
+    public function getBillToCountry()
     {
-        return $this->request['BILLTOCOUNTRY'];
+        return $this->request_billtocountry;
     }
 
     /**
@@ -282,10 +274,38 @@ class PaymentInstruction implements PaymentInstructionInterface
      *
      * @return PaymentInstruction
      */
-    public function setBillToCountr($billToLastCountr)
+    public function setBillToCountry($billToLastCountry)
     {
-        $this->request['BILLTOCOUNTRY'] = $billToLastCountr;
+        $this->request_billtocountry = $billToLastCountry;
         return $this;
+    }
+
+    /**
+     * @param string $prefix
+     *
+     * @return array
+     */
+    protected function getProperties($prefix)
+    {
+        $properties = array();
+        $reflection = new \ReflectionClass($this);
+        /** @var $prop \ReflectionProperty */
+        foreach ($reflection->getProperties() as $prop) {
+            if ($prefix == substr($prop->getName(), 0, strlen($prefix))) {
+                $name = $prop->getName();
+                $properties[strtoupper(substr($prop->getName(), strlen($prefix)))] = $this->$name;
+            }
+        }
+
+        return $properties;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRequest()
+    {
+        return $this->getProperties('request_');
     }
 
     /**
@@ -293,11 +313,11 @@ class PaymentInstruction implements PaymentInstructionInterface
      */
     public function getResponse()
     {
-        return $this->response;
+        return $this->getProperties('response_');
     }
 
     /**
-     * @param $nvp array|\Traversable 
+     * @param $nvp array|\Traversable
      */
     public function fromNvp($nvp)
     {
@@ -305,24 +325,64 @@ class PaymentInstruction implements PaymentInstructionInterface
             throw new InvalidArgumentException('Invalid nvp argument. Should be an array of an object implemented Traversable interface.');
         }
         foreach ($nvp as $name => $value) {
-            $name = strtolower($name);
-            if (!array_key_exists($name, $this->response)) {
+            $name = 'response_' . strtolower($name);
+            if (!property_exists($this, $name)) {
                 trigger_error(
-                  "Key '{$name}' does not exist in the repose: " . print_r($this->response, true),
+                  "Key '{$name}' does not exist in the repose: " . print_r($this->getResponse(), true),
                   E_USER_NOTICE
                 );
             }
-            $this->response[$name] = $value;
+            $this->$name = $value;
         } 
     }
     
     public function toNvp()
     {
-        $nvp = array();
-        foreach ($this->request as $name => $value) {
-            $nvp[$name] = $value;
-        }
+        return array_filter($this->getRequest());
+    }
 
-        return array_filter($nvp);
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->toNvp());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetExists($offset)
+    {
+        return array_key_exists($offset, $this->toNvp());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetGet($offset)
+    {
+        $nvp = $this->toNvp();
+
+        return array_key_exists($offset, $nvp) ?
+            $nvp[$offset] :
+            null
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetSet($offset, $value)
+    {
+        $this->fromNvp(array($offset => $value));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetUnset($offset)
+    {
+        throw new LogicException('Not implemented');
     }
 }
