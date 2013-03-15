@@ -22,7 +22,7 @@ class PaypalProCheckoutNvpPaymentFactory implements PaymentFactoryInterface
      */
     public function create(ContainerBuilder $container, $contextName, array $config)
     {
-        if (false == class_exists('Payum\Paypal\ProCheckout\Nvp\Payment')) {
+        if (false == class_exists('Payum\Paypal\ProCheckout\Nvp\PaymentFactory')) {
             throw new RuntimeException(
               'Cannot find paypal pro checkout payment class. Have you installed payum/paypal-pro-checkout-nvp package?'
             );
@@ -41,7 +41,7 @@ class PaypalProCheckoutNvpPaymentFactory implements PaymentFactoryInterface
         $paymentDefinition = new Definition();
         $paymentDefinition->setClass(new Parameter('payum.paypal.pro_checkout_nvp.payment.class'));
         $paymentDefinition->setPublic('false');
-        $paymentDefinition->setArguments(array(new Reference($apiId)));
+        $paymentDefinition->addMethodCall('addApi', array(new Reference($apiId)));
         $paymentId = 'payum.context.'.$contextName.'.payment';
         $container->setDefinition($paymentId, $paymentDefinition);
 
@@ -54,13 +54,6 @@ class PaypalProCheckoutNvpPaymentFactory implements PaymentFactoryInterface
         $statusId = 'payum.context.' . $contextName . '.action.status';
         $container->setDefinition($statusId, $statusDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($statusId)));
-
-        if ($config['create_instruction_from_model_action']) {
-            $createInstructionActionDefinition = new DefinitionDecorator($config['create_instruction_from_model_action']);
-            $createInstructionActionId = 'payum.context.'.$contextName.'.action.create_instruction';
-            $container->setDefinition($createInstructionActionId, $createInstructionActionDefinition);
-            $paymentDefinition->addMethodCall('addAction', array(new Reference($createInstructionActionId)));
-        }
 
         return $paymentId;
     }
