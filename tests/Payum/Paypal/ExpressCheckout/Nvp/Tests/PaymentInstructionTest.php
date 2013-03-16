@@ -393,6 +393,26 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($value, $instruction->$getter(9, 9));
     }
 
+    /**
+     * @test
+     */
+    public function shouldAllowSetZeroPaymentrequestAmount()
+    {
+        $value = 0;
+
+        $instruction = new PaymentInstruction();
+
+        $instruction['PAYMENTREQUEST_0_AMT'] = $value;
+
+        $this->assertEquals($value, $instruction->getPaymentrequestAmt(0));
+        $this->assertEquals($value, $instruction['PAYMENTREQUEST_0_AMT']);
+        
+        $instructionAsArray = iterator_to_array($instruction);
+        
+        $this->assertArrayHasKey('PAYMENTREQUEST_0_AMT', $instructionAsArray);
+        $this->assertEquals($value, $instructionAsArray['PAYMENTREQUEST_0_AMT']);
+    }
+
 
     /**
      * @test

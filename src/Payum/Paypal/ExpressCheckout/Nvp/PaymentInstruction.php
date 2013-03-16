@@ -1057,7 +1057,7 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
             }
         }
 
-        return array_filter($nvp);
+        return array_filter($nvp, 'is_scalar');
     }
 
     protected function set($property, $value, $n = null, $m = null)
