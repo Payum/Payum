@@ -112,8 +112,9 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
             array('getPaymentrequestReceiptid', 'setPaymentrequestReceiptid', 'PAYMENTREQUEST_0_RECEIPTID', 'PAYMENTREQUEST_9_RECEIPTID'),
             array('getPaymentrequestParenttransactionid', 'setPaymentrequestParenttransactionid', 'PAYMENTREQUEST_0_PARENTTRANSACTIONID', 'PAYMENTREQUEST_9_PARENTTRANSACTIONID'),
             array('getPaymentrequestPendingreason', 'setPaymentrequestPendingreason', 'PAYMENTREQUEST_0_PENDINGREASON', 'PAYMENTREQUEST_9_PENDINGREASON'),
-            array('getPaymentrequestReasoncode', 'setPaymentrequestReasoncode', 'PAYMENTREQUEST_0_REASONCODE', 'PAYMENTREQUEST_9_REASONCODE'),
-
+            array('getLBillingtype', 'setLBillingtype', 'L_BILLINGTYPE0', 'L_BILLINGTYPE9'),
+            array('getLBillingagreementdescription', 'setLBillingagreementdescription', 'L_BILLINGAGREEMENTDESCRIPTION0', 'L_BILLINGAGREEMENTDESCRIPTION9'),
+            
             array('getLSeveritycoden', 'setLSeveritycoden', 'L_SEVERITYCODE0', 'L_SEVERITYCODE9'),
             array('getLLongmessagen', 'setLLongmessagen', 'L_LONGMESSAGE0', 'L_LONGMESSAGE9'),
             array('getLShortmessagen', 'setLShortmessagen', 'L_SHORTMESSAGE0', 'L_SHORTMESSAGE9'),

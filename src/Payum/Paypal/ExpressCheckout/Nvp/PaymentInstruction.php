@@ -172,6 +172,10 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
 
     protected $l_severitycodennn = array();
 
+    protected $l_billingtypennn = array();
+
+    protected $l_billingagreementdescriptionnnn = array();
+
     public function getToken()
     {
         return $this->token;
@@ -937,6 +941,26 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
         return $this->get('l_paymentrequest_nnn_itemcategorymmm', $n, $m);
     }
 
+    public function setLBillingtype($n, $value)
+    {
+        $this->set('l_billingtypennn', $value, $n);
+    }
+
+    public function getLBillingtype($n = null)
+    {
+        return $this->get('l_billingtypennn', $n);
+    }
+
+    public function setLBillingagreementdescription($n, $value)
+    {
+        $this->set('l_billingagreementdescriptionnnn', $value, $n);
+    }
+
+    public function getLBillingagreementdescription($n = null)
+    {
+        return $this->get('l_billingagreementdescriptionnnn', $n);
+    }
+
     public function setLPaymentrequestItemcategory($n, $m, $value)
     {
         $this->set('l_paymentrequest_nnn_itemcategorymmm', $value, $n, $m);
@@ -1042,7 +1066,8 @@ class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
 
             if (is_array($value)) {
                 foreach ($value as $indexN => $valueN) {
-                    $nameN = str_replace('NNN', $indexN, $name);
+                    //This fixes L_BILLINGAGREEMENTDESCRIPTIONNNN foe;d
+                    $nameN = strrev(str_replace('NNN', $indexN, strrev($name)));
                     if (is_array($valueN)) {
                         foreach ($valueN as $indexM => $valueM) {
                             $nameM = str_replace('MMM', $indexM, $nameN);
