@@ -40,7 +40,8 @@ class CaptureAction extends ActionPaymentAware
             
             if (
                 $model['PAYERID'] &&  
-                Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $model['CHECKOUTSTATUS']
+                Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $model['CHECKOUTSTATUS'] &&
+                $model['PAYMENTREQUEST_0_AMT'] > 0
             ) {
                 $this->payment->execute(new DoExpressCheckoutPaymentRequest($model));
             }

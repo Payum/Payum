@@ -168,6 +168,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action->execute(new CaptureRequest(array(
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
+            'PAYMENTREQUEST_0_AMT' => 5,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED
         )));
     }
@@ -210,6 +211,11 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
         ;
+        $paymentMock
+            ->expects($this->at(1))
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
+        ;
 
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
@@ -222,6 +228,35 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             'TOKEN' => 'aToken',
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS
         )));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotRequestDoExpressCheckoutPaymentActionIfAmountZero()
+    {
+        $paymentMock = $this->createPaymentMock();
+        $paymentMock
+            ->expects($this->at(0))
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
+        ;
+        $paymentMock
+            ->expects($this->at(1))
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
+        ;
+
+        $action = new CaptureAction();
+        $action->setPayment($paymentMock);
+
+        $model = new PaymentDetails;
+        $model->setToken('aToken');
+        $model['CHECKOUTSTATUS'] = Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED;
+        $model->setPayerid('aPayerId');
+        $model->setPaymentrequestAmt(0, 0);
+
+        $action->execute(new CaptureRequest($model));
     }
 
     /**
