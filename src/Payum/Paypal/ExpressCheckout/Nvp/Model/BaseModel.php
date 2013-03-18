@@ -26,7 +26,29 @@ abstract class BaseModel implements \ArrayAccess, \IteratorAggregate
 
         foreach ($nvp as $name => $value) {
             $property = $name;
+            $property = strtolower($property);
+
+            if ('shiptostreet2' === $property && in_array($property, $supportedFields)) {
+                $this->$property = $value;
+                
+                continue;
+            }
+
+            if ('cvv2' === $property && in_array($property, $supportedFields)) {
+                $this->$property = $value;
+
+                continue;
+            }
+
+            if ('street2' === $property && in_array($property, $supportedFields)) {
+                $this->$property = $value;
+
+                continue;
+            }
+            
             $property = preg_replace('/\d/', 'nnn', $property, 1);
+            
+            
 
             if (false === strpos($name, 'SHIPTOSTREET2')) {
                 $property = preg_replace('/\d/', 'mmm', $property, 1);

@@ -942,6 +942,11 @@ class PaymentDetails extends BaseModel
         return $this->get('l_paymentrequest_nnn_itemcategorymmm', $n, $m);
     }
 
+    public function setLPaymentrequestItemcategory($n, $m, $value)
+    {
+        $this->set('l_paymentrequest_nnn_itemcategorymmm', $value, $n, $m);
+    }
+
     public function setLBillingtype($n, $value)
     {
         $this->set('l_billingtypennn', $value, $n);
@@ -960,11 +965,6 @@ class PaymentDetails extends BaseModel
     public function getLBillingagreementdescription($n = null)
     {
         return $this->get('l_billingagreementdescriptionnnn', $n);
-    }
-
-    public function setLPaymentrequestItemcategory($n, $m, $value)
-    {
-        $this->set('l_paymentrequest_nnn_itemcategorymmm', $value, $n, $m);
     }
 
     public function getLSeveritycoden($n = null)
