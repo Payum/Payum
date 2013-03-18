@@ -175,6 +175,70 @@ class Api
      */
     const PAYMENTREQUEST_ITERMCATEGORY_PHYSICAL = 'Physical';
 
+    /**
+     * Indicates whether you would like PayPal to automatically bill the outstanding balance amount in the next billing cycle.
+     * 
+     * PayPal does not automatically bill the outstanding balance.
+     */
+    const AUTOBILLOUTAMT_NOAUTOBILL = 'NoAutoBill';
+
+    /**
+     * Indicates whether you would like PayPal to automatically bill the outstanding balance amount in the next billing cycle.
+     *
+     * PayPal automatically bills the outstanding balance.
+     */
+    const AUTOBILLOUTAMT_ADDTONEXTBILLING = 'AddToNextBilling';
+
+    const BILLINGPERIOD_DAY = 'Day';
+
+    const BILLINGPERIOD_WEEK = 'Week';
+
+    /**
+     * For SemiMonth, billing is done on the 1st and 15th of each month.
+     */
+    const BILLINGPERIOD_SEMIMONTH = 'SemiMonth';
+
+    const BILLINGPERIOD_MONTH = 'Month';
+
+    const BILLINGPERIOD_YEAR = 'Year';
+
+    /**
+     * By default, PayPal suspends the pending profile in the event that the initial payment amount fails. You can override this default behavior by setting this field to ContinueOnFailure. Then, if the initial payment amount fails, PayPal adds the failed payment amount to the outstanding balance for this recurring payment profile.
+     */
+    const FAILEDINITAMTACTION_CONTINUEONFAILURE = 'ContinueOnFailure';
+
+    /**
+     * If this field is not set or you set it to CancelOnFailure, PayPal creates the recurring payment profile, but places it into a pending status until the initial payment completes. If the initial payment clears, PayPal notifies you by IPN that the pending profile has been activated. If the payment fails, PayPal notifies you by IPN that the pending profile has been canceled.
+     */
+    const FAILEDINITAMTACTION_CANCELONFAILURE = 'CancelOnFailure';
+    
+    const CREDITCARDTYPE_VISA = 'Visa';
+
+    const CREDITCARDTYPE_MASTERCARD = 'MasterCard';
+
+    const CREDITCARDTYPE_DISCOVER = 'Discover';
+
+    const CREDITCARDTYPE_AMEX = 'Amex';
+
+    /**
+     * If the credit card type is Maestro, you must set CURRENCYCODE to GBP. In addition, you must specify either STARTDATE or ISSUENUMBER.
+     */
+    const CREDITCARDTYPE_MAESTRO = 'Maestro';
+    
+    const PAYERSTATUS_VERIFIED = 'verified';
+
+    const PAYERSTATUS_UNVERIFIED = 'unverified';
+
+    /**
+     * The recurring payment profile has been successfully created and activated for scheduled payments according the billing instructions from the recurring payments profile.
+     */
+    const PROFILESTATUS_ACTIVEPROFILE = 'ActiveProfile';
+
+    /**
+     * The system is in the process of creating the recurring payment profile. Please check your IPN messages for an update.
+     */
+    const PROFILESTATUS_PENDINGPROFILE = 'PendingProfile';
+
     const VERSION = '65.1';
 
     protected $client;
