@@ -3,9 +3,9 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction as BasePaymentInstruction;
+use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails as BasePaymentDetails;
 
-class PaymentInstruction extends BasePaymentInstruction
+class PaymentDetails extends BasePaymentDetails
 {
     /**
      * @var mixed

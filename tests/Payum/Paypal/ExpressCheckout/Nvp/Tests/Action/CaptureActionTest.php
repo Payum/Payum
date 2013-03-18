@@ -6,7 +6,7 @@ use Buzz\Message\Form\FormRequest;
 use Payum\Request\CaptureRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
-use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
+use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 
@@ -45,11 +45,11 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportAuthorizeTokenRequestWithPaymentInstructionAsModel()
+    public function shouldSupportAuthorizeTokenRequestWithPaymentDetailsAsModel()
     {
         $action = new CaptureAction();
 
-        $this->assertTrue($action->supports(new CaptureRequest(new PaymentInstruction)));
+        $this->assertTrue($action->supports(new CaptureRequest(new PaymentDetails)));
     }
 
     /**
@@ -187,7 +187,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $model = new PaymentInstruction;
+        $model = new PaymentDetails;
         $model->setToken('aToken');
         $model->setPayerid(null);
         $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED);
@@ -214,7 +214,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $model = new PaymentInstruction;
+        $model = new PaymentDetails;
         $model->setToken('aToken');
         $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS);
 

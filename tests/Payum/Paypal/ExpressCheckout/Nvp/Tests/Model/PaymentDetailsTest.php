@@ -1,17 +1,16 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request;
+namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Model;
 
-use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
-use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
+use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails;
 
-class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
+class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldImplementArrayAccessInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction');
+        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails');
 
         $this->assertTrue($rc->implementsInterface('ArrayAccess'));
     }
@@ -21,7 +20,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementIteratorAggregateInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction');
+        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails');
 
         $this->assertTrue($rc->implementsInterface('IteratorAggregate'));
     }
@@ -31,7 +30,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new PaymentInstruction();
+        new PaymentDetails();
     }
 
     public function provideStringFields()
@@ -140,7 +139,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetStringValue($getter, $setter, $value, $paypalName)
     {
-        $instruction = new PaymentInstruction();
+        $instruction = new PaymentDetails();
 
         $instruction->$setter($value);
     }
@@ -152,7 +151,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetStringValue($getter, $setter, $value, $paypalName)
     {
-        $instruction = new PaymentInstruction();
+        $instruction = new PaymentDetails();
 
         $instruction->$setter($value);
 
@@ -166,7 +165,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetStringValueInArrayWay($getter, $setter, $value, $paypalName)
     {
-        $instruction = new PaymentInstruction();
+        $instruction = new PaymentDetails();
 
         $instruction[$paypalName] = $value;
 
@@ -180,7 +179,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetStringValueInArrayWay($getter, $setter, $value, $paypalName)
     {
-        $instruction = new PaymentInstruction();
+        $instruction = new PaymentDetails();
 
         $instruction->$setter($value);
 
@@ -195,7 +194,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetAndGetStringValueInArrayWay($getter, $setter, $value, $paypalName)
     {
-        $instruction = new PaymentInstruction();
+        $instruction = new PaymentDetails();
 
         $instruction[$paypalName] = $value;
 
@@ -212,7 +211,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new PaymentInstruction();
+        $instruction = new PaymentDetails();
 
         $instruction->$setter(0, $value);
         $instruction->$setter(9, $value);
@@ -227,7 +226,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new PaymentInstruction();
+        $instruction = new PaymentDetails();
 
         $instruction->$setter(0, $value);
         $instruction->$setter(9, $value);
@@ -243,7 +242,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldGetNullIfNotSetArrayValue($getter, $setter, $paypalName0, $paypalName9)
     {
-        $instruction = new PaymentInstruction();
+        $instruction = new PaymentDetails();
 
         $this->assertNull($instruction->$getter(0));
         $this->assertNull($instruction->$getter(9));
@@ -262,7 +261,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
             9 => $value
         );
 
-        $instruction = new PaymentInstruction();
+        $instruction = new PaymentDetails();
 
         $instruction->$setter(0, $value);
         $instruction->$setter(9, $value);
@@ -279,7 +278,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new PaymentInstruction();
+        $instruction = new PaymentDetails();
 
         $instruction[$paypalName0] = $value;
         $instruction[$paypalName9] = $value;
@@ -297,7 +296,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new PaymentInstruction();
+        $instruction = new PaymentDetails();
 
         $instruction->$setter(0, $value);
         $instruction->$setter(9, $value);
@@ -318,7 +317,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new PaymentInstruction();
+        $instruction = new PaymentDetails();
 
         $instruction[$paypalName0] = $value;
         $instruction[$paypalName9] = $value;
@@ -339,7 +338,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new PaymentInstruction();
+        $instruction = new PaymentDetails();
 
         $instruction->$setter(0, 0, $value);
         $instruction->$setter(9, 9, $value);
@@ -354,7 +353,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new PaymentInstruction();
+        $instruction = new PaymentDetails();
 
         $instruction->$setter(0, 0, $value);
         $instruction->$setter(9, 9, $value);
@@ -370,7 +369,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldGetNullIfNotSetMultiArrayValue($getter, $setter, $paypalName0, $paypalName9)
     {
-        $instruction = new PaymentInstruction();
+        $instruction = new PaymentDetails();
 
         $this->assertNull($instruction->$getter(0, 0));
         $this->assertNull($instruction->$getter(9, 9));
@@ -385,7 +384,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new PaymentInstruction();
+        $instruction = new PaymentDetails();
 
         $instruction[$paypalName0] = $value;
         $instruction[$paypalName9] = $value;
@@ -424,7 +423,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new PaymentInstruction();
+        $instruction = new PaymentDetails();
 
         $instruction->$setter(0, 0, $value);
         $instruction->$setter(9, 9, $value);
@@ -445,7 +444,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new PaymentInstruction();
+        $instruction = new PaymentDetails();
 
         $instruction[$paypalName0] = $value;
         $instruction[$paypalName9] = $value;

@@ -5,7 +5,7 @@ use Buzz\Message\Form\FormRequest;
 
 use Payum\Request\BinaryMaskStatusRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\StatusAction;
-use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
+use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class StatusActionTest extends \PHPUnit_Framework_TestCase
@@ -43,11 +43,11 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportAuthorizeTokenRequestWithPaymentInstructionAsModel()
+    public function shouldSupportAuthorizeTokenRequestWithPaymentDetailsAsModel()
     {
         $action = new StatusAction();
 
-        $this->assertTrue($action->supports(new BinaryMaskStatusRequest(new PaymentInstruction)));
+        $this->assertTrue($action->supports(new BinaryMaskStatusRequest(new PaymentDetails)));
     }
 
     /**

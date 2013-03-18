@@ -3,10 +3,9 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\GetTransactionDetailsAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Payment;
+use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\GetTransactionDetailsRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
-use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
 
 class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,11 +42,11 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportAuthorizeTokenRequestWithPaymentInstructionAsModel()
+    public function shouldSupportAuthorizeTokenRequestWithPaymentDetailsAsModel()
     {
         $action = new GetTransactionDetailsAction();
 
-        $this->assertTrue($action->supports(new GetTransactionDetailsRequest(new PaymentInstruction, $paymentRequestN = 5)));
+        $this->assertTrue($action->supports(new GetTransactionDetailsRequest(new PaymentDetails, $paymentRequestN = 5)));
     }
 
     /**
