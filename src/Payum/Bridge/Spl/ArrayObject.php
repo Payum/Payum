@@ -72,26 +72,6 @@ class ArrayObject extends \ArrayObject
     }
 
     /**
-     * @deprecated since 0.3 use self::validatedRequired
-     * 
-     * Checks that all given keys a present and contains not empty value
-     *
-     * @param array $indexes
-     *
-     * @return boolean
-     */
-    public function offsetsExists(array $indexes)
-    {
-        foreach ($indexes as $index) {
-            if (false == $this[$index]) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function offsetSet($index, $value)
