@@ -390,7 +390,7 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 0;
 
-        $instruction = new PaymentInstruction();
+        $instruction = new PaymentDetails;
 
         $instruction['PAYMENTREQUEST_0_AMT'] = $value;
 

@@ -1,13 +1,9 @@
 <?php
-
-/**
- * @author Kotlyar Maksim <kotlyar.maksim@gmail.com>
- * @since 3/18/13
- */
-
 namespace Payum\Paypal\ExpressCheckout\Nvp\Model;
 
-
+/**
+ * @link https://www.x.com/developers/paypal/documentation-tools/api/createrecurringpaymentsprofile-api-operation-nvp
+ */
 class RecurringPaymentDetails extends BaseModel
 {
     protected $token;

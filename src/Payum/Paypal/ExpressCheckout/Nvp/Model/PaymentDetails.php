@@ -6,8 +6,7 @@ use Payum\Exception\LogicException;
 use Payum\Paypal\ExpressCheckout\Nvp\Model\BaseModel;
 
 /**
- * Docs:
- *   SetExpressCheckout: {@link https://www.x.com/developers/paypal/documentation-tools/api/setexpresscheckout-api-operation-nvp}
+ * @link https://www.x.com/developers/paypal/documentation-tools/api/setexpresscheckout-api-operation-nvp
  */
 class PaymentDetails extends BaseModel
 {

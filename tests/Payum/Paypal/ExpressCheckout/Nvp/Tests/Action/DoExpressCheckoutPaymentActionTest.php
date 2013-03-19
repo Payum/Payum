@@ -39,7 +39,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportAuthorizeTokenRequestWithPaymentDetailsAsModel()
+    public function shouldSupportDoExpressCheckoutPaymentRequestWithPaymentDetailsAsModel()
     {
         $action = new DoExpressCheckoutPaymentAction();
 
