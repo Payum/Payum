@@ -45,6 +45,35 @@ class ArrayObject extends \ArrayObject
     }
 
     /**
+     * @param array $required
+     * @param boolean $throwOnInvalid
+     * 
+     * @throws LogicException when one of the required fields is empty
+     * 
+     * @return void
+     */
+    public function validatedNotEmpty($required, $throwOnInvalid = true)
+    {
+        $required = is_array($required) ? $required : array($required);
+        
+        foreach ($required as $required) {
+            $value = $this[$required];
+            
+            if (empty($value)) {
+                if ($throwOnInvalid) {
+                    throw new LogicException(sprintf('The %s fields is required.', $required));
+                }
+
+                return false;
+            }
+        }
+        
+        return true;
+    }
+
+    /**
+     * @deprecated since 0.3 use self::validatedRequired
+     * 
      * Checks that all given keys a present and contains not empty value
      *
      * @param array $indexes
