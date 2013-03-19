@@ -239,6 +239,25 @@ class Api
      */
     const PROFILESTATUS_PENDINGPROFILE = 'PendingProfile';
 
+    /**
+     * Type of billing agreement. For recurring payments, this field must be set to RecurringPayments. In this case, you can specify up to ten billing agreements. Other defined values are not valid.
+     */
+    const BILLINGTYPE_RECURRING_PAYMENTS = 'RecurringPayments';
+
+    /**
+     * Type of billing agreement for reference transactions. You must have permission from PayPal to use this field. This field must be set to one of the following values:
+     * 
+     * PayPal creates a billing agreement for each transaction associated with buyer. You must specify version 54.0 or higher to use this option.
+     */
+    const BILLINGTYPE_MERCHANTINITIATEDBILLING = 'MerchantInitiatedBilling';
+
+    /**
+     * Type of billing agreement for reference transactions. You must have permission from PayPal to use this field. This field must be set to one of the following values:
+     * 
+     * PayPal creates a single billing agreement for all transactions associated with buyer. Use this value unless you need per-transaction billing agreements. You must specify version 58.0 or higher to use this option.
+     */
+    const BILLINGTYPE_MERCHANTINITIATEDBILLINGSINGLEAGREEMENT = 'MerchantInitiatedBilling';
+
     const VERSION = '65.1';
 
     protected $client;
