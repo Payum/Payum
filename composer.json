@@ -17,18 +17,18 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "payum/payum": "0.3.*",
+        "payum/payum": "0.4.x-dev",
         "symfony/framework-bundle": "2.*"
     },
     "require-dev": {
         "phpunit/phpunit": "*",
         "fp/testo": "@dev",
         "doctrine/orm": "*",
-        "payum/paypal-express-checkout-nvp": "0.3.x-dev",
-        "payum/paypal-pro-checkout-nvp": "0.3.x-dev",
-        "payum/be2bill": "0.3.x-dev",
-        "payum/authorize-net-aim": "0.3.x-dev",
-        "payum/omnipay-bridge": "0.3.x-dev"
+        "payum/paypal-express-checkout-nvp": "0.4.x-dev",
+        "payum/paypal-pro-checkout-nvp": "0.4.x-dev",
+        "payum/be2bill": "0.4.x-dev",
+        "payum/authorize-net-aim": "0.4.x-dev",
+        "payum/omnipay-bridge": "0.4.x-dev"
     },
     "suggest": {
         "payum/paypal-express-checkout-nvp": "If you want to use paypal express checkout nvp gateway",
@@ -42,7 +42,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.3-dev"
+            "dev-master": "0.4-dev"
         }
     },
     "config": {
