@@ -104,7 +104,9 @@ abstract class BaseModel implements \ArrayAccess, \IteratorAggregate
             }
         }
 
-        return array_filter($nvp);
+        return array_filter($nvp, function($value) {
+            return false === is_null($value);
+        });
     }
 
     /**
