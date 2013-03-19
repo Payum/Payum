@@ -44,12 +44,11 @@ class CaptureAction implements ActionApiAwareInterface
             return;
         }
 
+        $requiredCardFields = array('CARDCODE', 'CARDCVV', 'CARDVALIDITYDATE', 'CARDFULLNAME');
+        
         //instruction must have an alias set (e.g oneclick payment) or credit card info. 
-        if (false == (
-            $model['ALIAS'] ||
-            $model->offsetsExists(array('CARDCODE', 'CARDCVV', 'CARDVALIDITYDATE', 'CARDFULLNAME'))
-        )) {
-            throw new UserInputRequiredInteractiveRequest(array('CARDCODE', 'CARDCVV', 'CARDVALIDITYDATE', 'CARDFULLNAME'));
+        if (false == ($model['ALIAS'] || $model->validatedNotEmpty($requiredCardFields, false))) {
+            throw new UserInputRequiredInteractiveRequest($requiredCardFields);
         }
 
         $response = $this->api->payment((array) $model);
