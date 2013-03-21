@@ -20,6 +20,10 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldLoadExtensionWithPaypalExpressCheckoutConfiguredPayment()
     {
+        if (false == class_exists('Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory')) {
+            $this->markTestSkipped('Skipped because payment library is not installed.');
+        }
+        
         $config = array(
             'contexts' => array(
                 'a_context' => array(
@@ -62,6 +66,10 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldLoadExtensionWithPaypalProCheckoutConfiguredPayment()
     {
+        if (false == class_exists('Payum\Paypal\ProCheckout\Nvp\PaymentFactory')) {
+            $this->markTestSkipped('Skipped because payment library is not installed.');
+        }
+        
         $config = array(
             'contexts' => array(
                 'a_context' => array(
@@ -99,6 +107,10 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldLoadExtensionWithBe2billConfiguredPayment()
     {
+        if (false == class_exists('Payum\Be2Bill\PaymentFactory')) {
+            $this->markTestSkipped('Skipped because payment library is not installed.');
+        }
+        
         $config = array(
             'contexts' => array(
                 'a_context' => array(
@@ -140,6 +152,10 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldLoadExtensionWithAuthorizeNetAimConfiguredPayment()
     {
+        if (false == class_exists('Payum\AuthorizeNet\Aim\PaymentFactory')) {
+            $this->markTestSkipped('Skipped because payment library is not installed.');
+        }
+        
         $config = array(
             'contexts' => array(
                 'a_context' => array(
@@ -181,6 +197,10 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldLoadExtensionWithOmnipayConfiguredPayment()
     {
+        if (false == class_exists('Payum\Bridge\Omnipay\PaymentFactory')) {
+            $this->markTestSkipped('Skipped because payment library is not installed.');
+        }
+        
         $config = array(
             'contexts' => array(
                 'a_context' => array(
@@ -219,6 +239,10 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddCustomActions()
     {
+        if (false == class_exists('Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory')) {
+            $this->markTestSkipped('Skipped because payment library is not installed.');
+        }
+        
         $config = array(
             'contexts' => array(
                 'a_context' => array(
@@ -269,6 +293,10 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddCustomApis()
     {
+        if (false == class_exists('Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory')) {
+            $this->markTestSkipped('Skipped because payment library is not installed.');
+        }
+        
         $config = array(
             'contexts' => array(
                 'a_context' => array(
@@ -319,6 +347,10 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddCustomExtensions()
     {
+        if (false == class_exists('Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory')) {
+            $this->markTestSkipped('Skipped because payment library is not installed.');
+        }
+        
         $config = array(
             'contexts' => array(
                 'a_context' => array(

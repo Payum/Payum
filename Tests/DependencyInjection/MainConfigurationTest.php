@@ -179,6 +179,10 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldPassConfigurationProcessingWithPaypalExpressCheckoutNvpPaymentFactory()
     {
+        if (false == class_exists('Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory')) {
+            $this->markTestSkipped('Skipped because payment library is not installed.');
+        }
+        
         $paymentFactories = array(
             new PaypalExpressCheckoutNvpPaymentFactory()
         );
@@ -215,6 +219,10 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldPassConfigurationProcessingWithOmnipayPaymentFactory()
     {
+        if (false == class_exists('Payum\Bridge\Omnipay\PaymentFactory')) {
+            $this->markTestSkipped('Skipped because payment library is not installed.');
+        }
+        
         $paymentFactories = array(
             new OmnipayPaymentFactory()
         );
@@ -250,6 +258,10 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function throwIfInvalidOmnipayGatewayTypeProvided()
     {
+        if (false == class_exists('Payum\Bridge\Omnipay\PaymentFactory')) {
+            $this->markTestSkipped('Skipped because payment library is not installed.');
+        }
+        
         $paymentFactories = array(
             new OmnipayPaymentFactory()
         );
@@ -282,6 +294,10 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldPassConfigurationProcessingWithDoctrineStorageFactory()
     {
+        if (false == class_exists('Doctrine\ORM\Configuration')) {
+            $this->markTestSkipped('Skipped because payment library is not installed.');
+        }
+        
         $storageFactories = array(
             new DoctrineStorageFactory()
         );
