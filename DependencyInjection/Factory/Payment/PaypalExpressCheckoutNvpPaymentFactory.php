@@ -70,6 +70,11 @@ class PaypalExpressCheckoutNvpPaymentFactory implements PaymentFactoryInterface
         $container->setDefinition($createRecurringPaymentProfileId, $createRecurringPaymentProfileDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($createRecurringPaymentProfileId)));
 
+        $getRecurringPaymentsProfileDetailsDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.get_recurring_payments_profile_details');
+        $getRecurringPaymentsProfileDetailsId = 'payum.context.' . $contextName . '.action.get_recurring_payments_profile_details';
+        $container->setDefinition($getRecurringPaymentsProfileDetailsId, $getRecurringPaymentsProfileDetailsDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($getRecurringPaymentsProfileDetailsId)));
+
         $captureDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.capture');
         $captureId = 'payum.context.' . $contextName . '.action.capture';
         $container->setDefinition($captureId, $captureDefinition);
