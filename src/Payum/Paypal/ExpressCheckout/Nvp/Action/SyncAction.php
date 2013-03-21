@@ -24,7 +24,7 @@ class SyncAction extends ActionPaymentAware
         }
         
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        
+
         if (false == $model['TOKEN']) {
             return;
         }
@@ -47,9 +47,15 @@ class SyncAction extends ActionPaymentAware
      */
     public function supports($request)
     {
-        return 
-            $request instanceof SyncRequest &&
-            $request->getModel() instanceof \ArrayAccess
-        ;
+        if (false == $request instanceof SyncRequest) {
+            return false;
+        }
+
+        $model = $request->getModel();
+        if (false == $model instanceof \ArrayAccess) {
+            return false;
+        }
+
+        return isset($model['PAYMENTREQUEST_0_AMT']) && null !== $model['PAYMENTREQUEST_0_AMT'];
     }
 }

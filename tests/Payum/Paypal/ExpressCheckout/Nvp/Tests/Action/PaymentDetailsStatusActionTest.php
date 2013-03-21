@@ -4,18 +4,18 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 use Buzz\Message\Form\FormRequest;
 
 use Payum\Request\BinaryMaskStatusRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\StatusAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
-class StatusActionTest extends \PHPUnit_Framework_TestCase
+class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldImplementsActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\StatusAction');
+        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction');
         
         $this->assertTrue($rc->implementsInterface('Payum\Action\ActionInterface'));
     }
@@ -25,7 +25,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()   
     {
-        new StatusAction();
+        new PaymentDetailsStatusAction();
     }
 
     /**
@@ -33,7 +33,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportStatusRequestWithArrayAsModelWhichHasPaymentRequestAmountSet()
     {
-        $action = new StatusAction();
+        $action = new PaymentDetailsStatusAction();
         
         $paymentDetails = array(
            'PAYMENTREQUEST_0_AMT' => 1
@@ -49,7 +49,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportStatusRequestWithArrayAsModelWhichHasPaymentRequestAmountSetToZero()
     {
-        $action = new StatusAction();
+        $action = new PaymentDetailsStatusAction();
 
         $paymentDetails = array(
             'PAYMENTREQUEST_0_AMT' => 0
@@ -66,7 +66,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportStatusRequestWithPaymentDetailsAsModelWhichHasPaymentRequestAmountSet()
     {
-        $action = new StatusAction();
+        $action = new PaymentDetailsStatusAction();
 
         $paymentDetails = new PaymentDetails;
         $paymentDetails->setPaymentrequestAmt(0, 12);
@@ -79,7 +79,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportStatusRequestWithNoArrayAccessAsModel()
     {
-        $action = new StatusAction();
+        $action = new PaymentDetailsStatusAction();
 
         $request = new BinaryMaskStatusRequest(new \stdClass());
 
@@ -91,7 +91,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotStatusRequest()
     {
-        $action = new StatusAction();
+        $action = new PaymentDetailsStatusAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -103,7 +103,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $action = new StatusAction();
+        $action = new PaymentDetailsStatusAction();
 
         $action->execute(new \stdClass());
     }
@@ -113,7 +113,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkCanceledIfPaymentNotAuthorized()
     {
-        $action = new StatusAction();
+        $action = new PaymentDetailsStatusAction();
 
         $request = new BinaryMaskStatusRequest(array(
             'PAYMENTREQUEST_0_AMT' => 12,
@@ -130,7 +130,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkFailedIfErrorCodeSetToModel()
     {
-        $action = new StatusAction();
+        $action = new PaymentDetailsStatusAction();
 
         $request = new BinaryMaskStatusRequest(array(
             'PAYMENTREQUEST_0_AMT' => 21,
@@ -147,7 +147,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkCanceledIfPayerIdNotSetAndCheckoutStatusNotInitiated()
     {
-        $action = new StatusAction();
+        $action = new PaymentDetailsStatusAction();
 
         $request = new BinaryMaskStatusRequest(array(
             'PAYMENTREQUEST_0_AMT' => 12,
@@ -165,7 +165,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkSuccessIfCreateBillingAgreementRequestAndZeroAmount()
     {
-        $action = new StatusAction();
+        $action = new PaymentDetailsStatusAction();
 
         $request = new BinaryMaskStatusRequest(array(
             'PAYMENTREQUEST_0_AMT' => 0,
@@ -184,7 +184,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkNewIfPayerIdSetAndCheckoutStatusNotInitiated()
     {
-        $action = new StatusAction();
+        $action = new PaymentDetailsStatusAction();
 
         $request = new BinaryMaskStatusRequest(array(
             'PAYMENTREQUEST_0_AMT' => 0,
@@ -202,7 +202,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkPendingIfCheckoutStatusInProgress()
     {
-        $action = new StatusAction();
+        $action = new PaymentDetailsStatusAction();
 
         $request = new BinaryMaskStatusRequest(array(
             'PAYMENTREQUEST_0_AMT' => 12,
@@ -219,7 +219,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkFailedIfCheckoutStatusFailed()
     {
-        $action = new StatusAction();
+        $action = new PaymentDetailsStatusAction();
 
         $request = new BinaryMaskStatusRequest(array(
             'PAYMENTREQUEST_0_AMT' => 12,
@@ -236,7 +236,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkPendingIfAtLeastOnePaymentStatusInProgress()
     {
-        $action = new StatusAction();
+        $action = new PaymentDetailsStatusAction();
 
         $request = new BinaryMaskStatusRequest(array(
             'PAYMENTREQUEST_0_AMT' => 12,
@@ -255,7 +255,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkFailedIfAtLeastOnePaymentStatusFailed()
     {
-        $action = new StatusAction();
+        $action = new PaymentDetailsStatusAction();
 
         $request = new BinaryMaskStatusRequest(array(
             'PAYMENTREQUEST_0_AMT' => 12,
@@ -274,7 +274,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkSuccessIfAllPaymentStatusCompletedOrProcessed()
     {
-        $action = new StatusAction();
+        $action = new PaymentDetailsStatusAction();
 
         $request = new BinaryMaskStatusRequest(array(
             'PAYMENTREQUEST_0_AMT' => 12,
@@ -293,7 +293,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkUnknownIfCheckoutStatusUnknown()
     {
-        $action = new StatusAction();
+        $action = new PaymentDetailsStatusAction();
 
         $request = new BinaryMaskStatusRequest(array(
             'PAYMENTREQUEST_0_AMT' => 12,
@@ -310,7 +310,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkUnknownIfPaymentStatusUnknown()
     {
-        $action = new StatusAction();
+        $action = new PaymentDetailsStatusAction();
 
         $request = new BinaryMaskStatusRequest(array(
             'PAYMENTREQUEST_0_AMT' => 12,

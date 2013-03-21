@@ -12,7 +12,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetTransactionDetailsAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\SetExpressCheckoutAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\StatusAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\SyncAction;
 
 abstract class PaymentFactory
@@ -37,7 +37,7 @@ abstract class PaymentFactory
         $payment->addAction(new CreateRecurringPaymentProfileAction);
 
         $payment->addAction(new CaptureAction);
-        $payment->addAction(new StatusAction);
+        $payment->addAction(new PaymentDetailsStatusAction);
         $payment->addAction(new SyncAction);
 
         $payment->addAction(new CapturePaymentInstructionAggregateAction);

@@ -33,11 +33,31 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportSyncRequestAndArrayAccessAsModel()
+    public function shouldSupportSyncRequestAndArrayAsModelWhichHasPaymentRequestAmountSet()
     {
         $action = new SyncAction();
 
-        $request = new SyncRequest($this->getMock('ArrayAccess'));
+        $paymentDetails = array(
+            'PAYMENTREQUEST_0_AMT' => 12
+        );
+        
+        $request = new SyncRequest($paymentDetails);
+
+        $this->assertTrue($action->supports($request));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSupportSyncRequestAndArrayAsModelWhichHasPaymentRequestAmountSetToZero()
+    {
+        $action = new SyncAction();
+
+        $paymentDetails = array(
+            'PAYMENTREQUEST_0_AMT' => 0
+        );
+
+        $request = new SyncRequest($paymentDetails);
 
         $this->assertTrue($action->supports($request));
     }
@@ -49,7 +69,10 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new SyncAction();
 
-        $this->assertTrue($action->supports(new SyncRequest(new PaymentDetails)));
+        $paymentDetails = new PaymentDetails;
+        $paymentDetails->setPaymentrequestAmt(0, 12);
+
+        $this->assertTrue($action->supports(new SyncRequest($paymentDetails)));
     }
 
     /**
@@ -88,7 +111,9 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new SyncAction();
         $action->setPayment($paymentMock);
 
-        $request = new SyncRequest(array());
+        $request = new SyncRequest(array(
+            'PAYMENTREQUEST_0_AMT' => 12
+        ));
         
         $action->execute($request);
     }
@@ -109,7 +134,8 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment($paymentMock);
 
         $action->execute(new SyncRequest(array(
-            'TOKEN' => 'aToken'
+            'PAYMENTREQUEST_0_AMT' => 12,
+            'TOKEN' => 'aToken',
         )));
     }
 
@@ -134,6 +160,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment($paymentMock);
 
         $action->execute(new SyncRequest(array(
+            'PAYMENTREQUEST_0_AMT' => 12,
             'TOKEN' => 'aToken',
             'PAYMENTREQUEST_0_TRANSACTIONID' => 'zeroTransId',
             'PAYMENTREQUEST_9_TRANSACTIONID' => 'nineTransId'
@@ -164,6 +191,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment($paymentMock);
 
         $action->execute($request = new SyncRequest(array(
+            'PAYMENTREQUEST_0_AMT' => 12,
             'TOKEN' => 'aToken',
             'PAYMENTREQUEST_0_TRANSACTIONID' => 'aTransId',
         )));
