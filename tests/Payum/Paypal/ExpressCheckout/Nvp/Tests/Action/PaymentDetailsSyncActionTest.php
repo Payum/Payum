@@ -6,18 +6,18 @@ use Buzz\Message\Form\FormRequest;
 use Payum\Request\SyncRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\SyncAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 
-class SyncActionTest extends \PHPUnit_Framework_TestCase
+class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfActionPaymentAware()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\SyncAction');
+        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction');
         
         $this->assertTrue($rc->isSubclassOf('Payum\Action\ActionPaymentAware'));
     }
@@ -27,7 +27,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()   
     {
-        new SyncAction();
+        new PaymentDetailsSyncAction();
     }
 
     /**
@@ -35,7 +35,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportSyncRequestAndArrayAsModelWhichHasPaymentRequestAmountSet()
     {
-        $action = new SyncAction();
+        $action = new PaymentDetailsSyncAction();
 
         $paymentDetails = array(
             'PAYMENTREQUEST_0_AMT' => 12
@@ -51,7 +51,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportSyncRequestAndArrayAsModelWhichHasPaymentRequestAmountSetToZero()
     {
-        $action = new SyncAction();
+        $action = new PaymentDetailsSyncAction();
 
         $paymentDetails = array(
             'PAYMENTREQUEST_0_AMT' => 0
@@ -67,7 +67,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportSyncRequestWithPaymentDetailsAsModel()
     {
-        $action = new SyncAction();
+        $action = new PaymentDetailsSyncAction();
 
         $paymentDetails = new PaymentDetails;
         $paymentDetails->setPaymentrequestAmt(0, 12);
@@ -80,7 +80,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotSyncRequest()
     {
-        $action = new SyncAction();
+        $action = new PaymentDetailsSyncAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -92,7 +92,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $action = new SyncAction();
+        $action = new PaymentDetailsSyncAction();
 
         $action->execute(new \stdClass());
     }
@@ -108,7 +108,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
         ;
         
-        $action = new SyncAction();
+        $action = new PaymentDetailsSyncAction();
         $action->setPayment($paymentMock);
 
         $request = new SyncRequest(array(
@@ -130,7 +130,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetailsRequest'))
         ;
 
-        $action = new SyncAction();
+        $action = new PaymentDetailsSyncAction();
         $action->setPayment($paymentMock);
 
         $action->execute(new SyncRequest(array(
@@ -156,7 +156,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetailsRequest'))
         ;
 
-        $action = new SyncAction();
+        $action = new PaymentDetailsSyncAction();
         $action->setPayment($paymentMock);
 
         $action->execute(new SyncRequest(array(
@@ -187,7 +187,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
             ->will($this->throwException($ackFailedException))
         ;
 
-        $action = new SyncAction();
+        $action = new PaymentDetailsSyncAction();
         $action->setPayment($paymentMock);
 
         $action->execute($request = new SyncRequest(array(

@@ -11,7 +11,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessExc
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetailsRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetailsRequest;
 
-class SyncAction extends ActionPaymentAware
+class PaymentDetailsSyncAction extends ActionPaymentAware
 {
     /**
      * {@inheritdoc}
