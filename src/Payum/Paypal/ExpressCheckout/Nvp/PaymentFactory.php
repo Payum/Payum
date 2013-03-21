@@ -6,13 +6,14 @@ use Payum\Extension\EndlessCycleDetectorExtension;
 use Payum\Action\CapturePaymentInstructionAggregateAction;
 use Payum\Action\StatusPaymentInstructionAggregateAction;
 use Payum\Action\SyncPaymentInstructionAggregateAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoExpressCheckoutPaymentAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetTransactionDetailsAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\SetExpressCheckoutAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\DoExpressCheckoutPaymentAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\GetExpressCheckoutDetailsAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\GetTransactionDetailsAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\StatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\SyncAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\SetExpressCheckoutAction;
 
 abstract class PaymentFactory
 {
@@ -33,7 +34,8 @@ abstract class PaymentFactory
         $payment->addAction(new GetExpressCheckoutDetailsAction);
         $payment->addAction(new GetTransactionDetailsAction);
         $payment->addAction(new DoExpressCheckoutPaymentAction);
-        
+        $payment->addAction(new CreateRecurringPaymentProfileAction);
+
         $payment->addAction(new CaptureAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new SyncAction);

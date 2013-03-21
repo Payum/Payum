@@ -7,9 +7,9 @@ use Payum\Request\SyncRequest;
 use Payum\Action\ActionPaymentAware;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\SetExpressCheckoutRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\AuthorizeTokenRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\DoExpressCheckoutPaymentRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckoutRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeTokenRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPaymentRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class CaptureAction extends ActionPaymentAware

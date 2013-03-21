@@ -1,7 +1,8 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
+namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
-use Payum\Paypal\ExpressCheckout\Nvp\Request\SetExpressCheckoutRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\SetExpressCheckoutAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckoutRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails;
 
@@ -12,9 +13,9 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfBaseActionApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\SetExpressCheckoutAction');
+        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\SetExpressCheckoutAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\BaseActionApiAware'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseActionApiAware'));
     }
 
     /**
@@ -40,7 +41,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportAuthorizeTokenRequestWithPaymentDetailsAsModel()
+    public function shouldSupportSetExpressCheckoutRequestWithPaymentDetailsAsModel()
     {
         $action = new SetExpressCheckoutAction();
 

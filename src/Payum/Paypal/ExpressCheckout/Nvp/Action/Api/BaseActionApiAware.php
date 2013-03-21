@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
+namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
 use Payum\Action\ActionApiAwareInterface;
 use Payum\Exception\UnsupportedApiException;

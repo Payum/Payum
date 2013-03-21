@@ -8,8 +8,8 @@ use Payum\Request\SyncRequest;
 use Payum\Action\ActionPaymentAware;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\GetExpressCheckoutDetailsRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\GetTransactionDetailsRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetailsRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetailsRequest;
 
 class SyncAction extends ActionPaymentAware
 {

@@ -1,12 +1,13 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
+namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
 use Buzz\Message\Form\FormRequest;
 
 use Payum\Bridge\Spl\ArrayObject;
 use Payum\Exception\LogicException;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseActionApiAware;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\GetTransactionDetailsRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetailsRequest;
 use Payum\Exception\RequestNotSupportedException;
 
 class GetTransactionDetailsAction extends BaseActionApiAware

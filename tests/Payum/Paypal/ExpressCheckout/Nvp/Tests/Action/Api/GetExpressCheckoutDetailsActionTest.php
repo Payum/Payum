@@ -1,10 +1,10 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
+namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\GetExpressCheckoutDetailsAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\GetExpressCheckoutDetailsRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetailsRequest;
 
 class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,9 +13,9 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfBaseActionApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\GetExpressCheckoutDetailsAction');
+        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\BaseActionApiAware'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseActionApiAware'));
     }
 
     /**
@@ -23,7 +23,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()   
     {
-        new GetExpressCheckoutDetailsAction();
+        new \Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction();
     }
 
     /**
@@ -31,7 +31,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportGetExpressCheckoutDetailsRequestAndArrayAccessAsModel()
     {
-        $action = new GetExpressCheckoutDetailsAction();
+        $action = new \Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction();
         
         $this->assertTrue(
             $action->supports(new GetExpressCheckoutDetailsRequest($this->getMock('ArrayAccess')))
@@ -41,7 +41,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportAuthorizeTokenRequestWithPaymentDetailsAsModel()
+    public function shouldSupportGetExpressCheckoutDetailsRequestWithPaymentDetailsAsModel()
     {
         $action = new GetExpressCheckoutDetailsAction();
 
@@ -65,7 +65,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $action = new GetExpressCheckoutDetailsAction();
+        $action = new \Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction();
 
         $action->execute(new \stdClass());
     }
@@ -78,7 +78,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfTokenNotSetInModel()
     {
-        $action = new GetExpressCheckoutDetailsAction();
+        $action = new \Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction();
         
         $request = new GetExpressCheckoutDetailsRequest(array());
 
@@ -103,7 +103,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
             }))
         ;
         
-        $action = new GetExpressCheckoutDetailsAction();
+        $action = new \Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction();
         $action->setApi($apiMock);
 
         $request = new GetExpressCheckoutDetailsRequest(array(

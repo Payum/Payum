@@ -1,10 +1,10 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
+namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Request\RedirectUrlInteractiveRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\AuthorizeTokenAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\AuthorizeTokenRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\AuthorizeTokenAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeTokenRequest;
 
 class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,9 +13,9 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfBaseActionApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\AuthorizeTokenAction');
+        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\AuthorizeTokenAction');
         
-        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\BaseActionApiAware'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseActionApiAware'));
     }
 
     /**

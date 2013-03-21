@@ -43,7 +43,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportAuthorizeTokenRequestWithPaymentDetailsAsModel()
+    public function shouldSupportStatusRequestWithPaymentDetailsAsModel()
     {
         $action = new StatusAction();
 

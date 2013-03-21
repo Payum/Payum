@@ -45,7 +45,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportAuthorizeTokenRequestWithPaymentDetailsAsModel()
+    public function shouldSupportSyncRequestWithPaymentDetailsAsModel()
     {
         $action = new SyncAction();
 
@@ -102,7 +102,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\GetExpressCheckoutDetailsRequest'))
+            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetailsRequest'))
         ;
 
         $action = new SyncAction();
@@ -122,12 +122,12 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\GetTransactionDetailsRequest'))
+            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetailsRequest'))
         ;
         $paymentMock
             ->expects($this->at(2))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\GetTransactionDetailsRequest'))
+            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetailsRequest'))
         ;
 
         $action = new SyncAction();

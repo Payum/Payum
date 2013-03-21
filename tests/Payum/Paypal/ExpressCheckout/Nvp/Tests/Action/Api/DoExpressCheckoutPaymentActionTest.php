@@ -1,10 +1,10 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
+namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\DoExpressCheckoutPaymentAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoExpressCheckoutPaymentAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\DoExpressCheckoutPaymentRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPaymentRequest;
 
 class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,9 +13,9 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfBaseActionApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\DoExpressCheckoutPaymentAction');
+        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoExpressCheckoutPaymentAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\BaseActionApiAware'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseActionApiAware'));
     }
 
     /**
@@ -23,7 +23,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()   
     {
-        new DoExpressCheckoutPaymentAction();
+        new \Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoExpressCheckoutPaymentAction();
     }
 
     /**
@@ -31,7 +31,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportDoExpressCheckoutPaymentRequestAndArrayAccessAsModel()
     {
-        $action = new DoExpressCheckoutPaymentAction();
+        $action = new \Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoExpressCheckoutPaymentAction();
         
         $this->assertTrue($action->supports(new DoExpressCheckoutPaymentRequest($this->getMock('ArrayAccess'))));
     }
@@ -89,7 +89,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfPayerIdNotSetInModel()
     {
-        $action = new DoExpressCheckoutPaymentAction();
+        $action = new \Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoExpressCheckoutPaymentAction();
 
         $request = new DoExpressCheckoutPaymentRequest(array(
             'TOKEN' => 'aToken'
@@ -106,7 +106,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfZeroPaymentRequestActionNotSet()
     {
-        $action = new DoExpressCheckoutPaymentAction();
+        $action = new \Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoExpressCheckoutPaymentAction();
 
         $request = new DoExpressCheckoutPaymentRequest(array(
             'TOKEN' => 'aToken',

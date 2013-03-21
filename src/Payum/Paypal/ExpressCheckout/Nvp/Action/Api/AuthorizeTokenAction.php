@@ -1,11 +1,12 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
+namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
 use Payum\Bridge\Spl\ArrayObject;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseActionApiAware;
 use Payum\Request\RedirectUrlInteractiveRequest;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Exception\LogicException;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\AuthorizeTokenRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeTokenRequest;
 
 class AuthorizeTokenAction extends BaseActionApiAware
 {
@@ -17,7 +18,7 @@ class AuthorizeTokenAction extends BaseActionApiAware
      */
     public function execute($request)
     {
-        /** @var $request AuthorizeTokenRequest */
+        /** @var $request \Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeTokenRequest */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
