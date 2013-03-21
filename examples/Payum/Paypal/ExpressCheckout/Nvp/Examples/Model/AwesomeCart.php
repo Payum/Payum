@@ -5,6 +5,8 @@ use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class AwesomeCart 
 {
+    protected $paymentDetails; 
+    
     public function getId()
     {
         return 1;
@@ -20,16 +22,13 @@ class AwesomeCart
         return 'USD';
     }
     
-    public function setPaymentDetails()
+    public function setPaymentDetails($paymentDetails)
     {
-        
+        $this->paymentDetails = $paymentDetails;
     }
     
     public function getPaymentDetails()
     {
-        return array(
-            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
-            'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED
-        );
+        return $this->paymentDetails;
     }
 }

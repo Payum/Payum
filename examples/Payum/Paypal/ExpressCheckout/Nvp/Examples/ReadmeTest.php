@@ -165,6 +165,9 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
             //@testo:end
         }
 
-        $this->assertTrue($status->isSuccess());
+        $this->assertTrue($status->isFailed());
+        
+        $paymentDetails = $status->getModel();
+        $this->assertEquals('Security header is not valid', $paymentDetails['L_LONGMESSAGE0']);
     }
 }
