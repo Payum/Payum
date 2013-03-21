@@ -10,14 +10,15 @@ use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 
 /**
- * Docs:
- *   L_ERRORCODE: https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_nvp_errorcodes
- *   ACK: https://www.x.com/content/paypal-nvp-api-overview
- *   CHECKOUTSTATUS: https://www.x.com/developers/paypal/documentation-tools/api/getexpresscheckoutdetails-api-operation-nvp
- *   PAYMENTSTATUS: https://www.x.com/developers/paypal/documentation-tools/api/doexpresscheckoutpayment-api-operation-nvp
- *
- *   https://www.x.com/developers/paypal/documentation-tools/api/setexpresscheckout-api-operation-nvp
- *   https://www.x.com/developers/paypal/documentation-tools/api/gettransactiondetails-api-operation-nvp *
+ * @link https://www.x.com/developers/paypal/documentation-tools/api/getexpresscheckoutdetails-api-operation-nvp
+ * @link https://www.x.com/developers/paypal/documentation-tools/api/doexpresscheckoutpayment-api-operation-nvp
+ * @link https://www.x.com/developers/paypal/documentation-tools/api/setexpresscheckout-api-operation-nvp
+ * @link https://www.x.com/developers/paypal/documentation-tools/api/gettransactiondetails-api-operation-nvp
+ * @link https://www.x.com/developers/paypal/documentation-tools/api/createrecurringpaymentsprofile-api-operation-nvp
+ * @link https://www.x.com/developers/paypal/documentation-tools/api/getrecurringpaymentsprofiledetails-api-operation-nvp
+ * 
+ * L_ERRORCODE: @link https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_nvp_errorcodes
+ * ACK: @link https://www.x.com/content/paypal-nvp-api-overview
  */
 class Api
 {
@@ -257,6 +258,16 @@ class Api
      * PayPal creates a single billing agreement for all transactions associated with buyer. Use this value unless you need per-transaction billing agreements. You must specify version 58.0 or higher to use this option.
      */
     const BILLINGTYPE_MERCHANTINITIATEDBILLINGSINGLEAGREEMENT = 'MerchantInitiatedBilling';
+    
+    const RECURRINGPAYMENTSTATUS_ACTIVE = 'Active';
+
+    const RECURRINGPAYMENTSTATUS_PENDING = 'Pending';
+
+    const RECURRINGPAYMENTSTATUS_CANCELLED = 'Cancelled';
+
+    const RECURRINGPAYMENTSTATUS_SUSPENDED = 'Suspended';
+
+    const RECURRINGPAYMENTSTATUS_EXPIRED = 'Expired';
 
     const VERSION = '65.1';
 
@@ -383,6 +394,21 @@ class Api
     public function createRecurringPaymentsProfile(FormRequest $request)
     {
         $request->setField('METHOD', 'CreateRecurringPaymentsProfile');
+
+        $this->addVersionField($request);
+        $this->addAuthorizeFields($request);
+
+        return $this->doRequest($request);
+    }
+
+    /**
+     * @param \Buzz\Message\Form\FormRequest $request
+     * 
+     * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
+     */
+    public function getRecurringPaymentsProfileDetails(FormRequest $request)
+    {
+        $request->setField('METHOD', 'GetRecurringPaymentsProfileDetails');
 
         $this->addVersionField($request);
         $this->addAuthorizeFields($request);

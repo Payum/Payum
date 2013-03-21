@@ -32,7 +32,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportGetTransactionDetailsRequestAndArrayAccessAsModel()
     {
-        $action = new \Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetTransactionDetailsAction();
+        $action = new GetTransactionDetailsAction();
         
         $request = new GetTransactionDetailsRequest($this->getMock('ArrayAccess'), $paymentRequestN = 5);
         
@@ -44,7 +44,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportGetTransactionDetailsRequestWithPaymentDetailsAsModel()
     {
-        $action = new \Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetTransactionDetailsAction();
+        $action = new GetTransactionDetailsAction();
 
         $this->assertTrue($action->supports(new GetTransactionDetailsRequest(new PaymentDetails, $paymentRequestN = 5)));
     }
@@ -66,7 +66,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $action = new \Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetTransactionDetailsAction();
+        $action = new GetTransactionDetailsAction();
 
         $action->execute(new \stdClass());
     }
@@ -79,7 +79,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfZeroPaymentRequestTransactionIdNotSetInModel()
     {
-        $action = new \Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetTransactionDetailsAction();
+        $action = new GetTransactionDetailsAction();
         
         $request = new GetTransactionDetailsRequest(array(), $paymentRequestN = 5);
 
@@ -140,7 +140,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $action = new \Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetTransactionDetailsAction();
+        $action = new GetTransactionDetailsAction();
         $action->setApi($apiMock);
 
         $request = new GetTransactionDetailsRequest(array(

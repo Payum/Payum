@@ -7,6 +7,8 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Model;
 class RecurringPaymentDetails extends BaseModel
 {
     protected $token;
+
+    protected $status;
     
     protected $subscribername;
     
@@ -118,6 +120,42 @@ class RecurringPaymentDetails extends BaseModel
 
     protected $ack;
 
+    protected $aggregateamount;
+    
+    protected $aggregateoptionalamount;
+    
+    protected $finalpaymentduedate;
+    
+    protected $addressstatus;
+
+    protected $regularbillingperiod;
+    
+    protected $regularbillingfrequency;
+
+    protected $regulartotalbillingcycles;
+    
+    protected $regularamt;
+    
+    protected $regularshippingamt;
+
+    protected $regulartaxamt;
+    
+    protected $regularcurrencycode;
+    
+    protected $nextbillingdate;
+    
+    protected $numcylescompleted;
+    
+    protected $numcyclesremaining;
+
+    protected $outstandingbalance;
+    
+    protected $failedpaymentcount;
+
+    protected $lastpaymentdate;
+
+    protected $lastpaymentamt;
+    
     protected $l_paymentrequest_nnn_itemcategorymmm = array();
     
     protected $l_paymentrequest_nnn_namemmm = array();
@@ -148,6 +186,16 @@ class RecurringPaymentDetails extends BaseModel
     public function setToken($token)
     {
         $this->token = $token;
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    public function setStatus($status)
+    {
+        $this->status = $status;
     }
 
     public function getSubscribername()
@@ -698,6 +746,186 @@ class RecurringPaymentDetails extends BaseModel
     public function setAck($ack)
     {
         $this->ack = $ack;
+    }
+
+    public function getAggregateamount()
+    {
+        return $this->aggregateamount;
+    }
+
+    public function setAggregateamount($aggregateamount)
+    {
+        $this->aggregateamount = $aggregateamount;
+    }
+
+    public function getAggregateoptionalamount()
+    {
+        return $this->aggregateoptionalamount;
+    }
+
+    public function setAggregateoptionalamount($aggregateoptionalamount)
+    {
+        $this->aggregateoptionalamount = $aggregateoptionalamount;
+    }
+
+    public function getFinalpaymentduedate()
+    {
+        return $this->finalpaymentduedate;
+    }
+
+    public function setFinalpaymentduedate($finalpaymentduedate)
+    {
+        $this->finalpaymentduedate = $finalpaymentduedate;
+    }
+
+    public function getAddressstatus()
+    {
+        return $this->addressstatus;
+    }
+
+    public function setAddressstatus($addressstatus)
+    {
+        $this->addressstatus = $addressstatus;
+    }
+
+    public function getRegularbillingperiod()
+    {
+        return $this->regularbillingperiod;
+    }
+
+    public function setRegularbillingperiod($regularbillingperiod)
+    {
+        $this->regularbillingperiod = $regularbillingperiod;
+    }
+
+    public function getRegularbillingfrequency()
+    {
+        return $this->regularbillingfrequency;
+    }
+
+    public function setRegularbillingfrequency($regularbillingfrequency)
+    {
+        $this->regularbillingfrequency = $regularbillingfrequency;
+    }
+
+    public function getRegulartotalbillingcycles()
+    {
+        return $this->regulartotalbillingcycles;
+    }
+
+    public function setRegulartotalbillingcycles($regulartotalbillingcycles)
+    {
+        $this->regulartotalbillingcycles = $regulartotalbillingcycles;
+    }
+
+    public function getRegularamt()
+    {
+        return $this->regularamt;
+    }
+
+    public function setRegularamt($regularamt)
+    {
+        $this->regularamt = $regularamt;
+    }
+
+    public function getRegularshippingamt()
+    {
+        return $this->regularshippingamt;
+    }
+
+    public function setRegularshippingamt($regularshippingamt)
+    {
+        $this->regularshippingamt = $regularshippingamt;
+    }
+
+    public function getRegulartaxamt()
+    {
+        return $this->regulartaxamt;
+    }
+
+    public function setRegulartaxamt($regulartaxamt)
+    {
+        $this->regulartaxamt = $regulartaxamt;
+    }
+
+    public function getRegularcurrencycode()
+    {
+        return $this->regularcurrencycode;
+    }
+
+    public function setRegularcurrencycode($regularcurrencycode)
+    {
+        $this->regularcurrencycode = $regularcurrencycode;
+    }
+
+    public function getNextbillingdate()
+    {
+        return $this->nextbillingdate;
+    }
+
+    public function setNextbillingdate($nextbillingdate)
+    {
+        $this->nextbillingdate = $nextbillingdate;
+    }
+
+    public function getNumcylescompleted()
+    {
+        return $this->numcylescompleted;
+    }
+
+    public function setNumcylescompleted($numcylescompleted)
+    {
+        $this->numcylescompleted = $numcylescompleted;
+    }
+
+    public function getNumcyclesremaining()
+    {
+        return $this->numcyclesremaining;
+    }
+
+    public function setNumcyclesremaining($numcyclesremaining)
+    {
+        $this->numcyclesremaining = $numcyclesremaining;
+    }
+
+    public function getOutstandingbalance()
+    {
+        return $this->outstandingbalance;
+    }
+
+    public function setOutstandingbalance($outstandingbalance)
+    {
+        $this->outstandingbalance = $outstandingbalance;
+    }
+
+    public function getFailedpaymentcount()
+    {
+        return $this->failedpaymentcount;
+    }
+
+    public function setFailedpaymentcount($failedpaymentcount)
+    {
+        $this->failedpaymentcount = $failedpaymentcount;
+    }
+
+    public function getLastpaymentdate()
+    {
+        return $this->lastpaymentdate;
+    }
+
+    public function setLastpaymentdate($lastpaymentdate)
+    {
+        $this->lastpaymentdate = $lastpaymentdate;
+    }
+
+    public function getLastpaymentamt()
+    {
+        return $this->lastpaymentamt;
+    }
+
+    public function setLastpaymentamt($lastpaymentamt)
+    {
+        $this->lastpaymentamt = $lastpaymentamt;
     }
 
     public function getLPaymentrequestItemcategory($n, $m)

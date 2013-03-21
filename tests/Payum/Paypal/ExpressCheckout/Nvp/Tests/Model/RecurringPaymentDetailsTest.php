@@ -27,6 +27,7 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array('getToken', 'setToken', 'theValue', 'TOKEN'),
+            array('getStatus', 'setStatus', 'theValue', 'STATUS'),
             array('getSubscribername', 'setSubscribername', 'theValue', 'SUBSCRIBERNAME'),
             array('getSubscribername', 'setSubscribername', 'theValue', 'SUBSCRIBERNAME'),
             array('getProfilereference', 'setProfilereference', 'theValue', 'PROFILEREFERENCE'),
@@ -82,6 +83,26 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
             array('getVersion', 'setVersion', 'theValue', 'VERSION'),
             array('getBuild', 'setBuild', 'theValue', 'BUILD'),
             array('getAck', 'setAck', 'theValue', 'ACK'),
+            array('getAggregateamount', 'setAggregateamount', 'theValue', 'AGGREGATEAMOUNT'),
+            array('getAggregateoptionalamount', 'setAggregateoptionalamount', 'theValue', 'AGGREGATEOPTIONALAMOUNT'),
+            array('getFinalpaymentduedate', 'setFinalpaymentduedate', 'theValue', 'FINALPAYMENTDUEDATE'),
+            array('getAddressstatus', 'setAddressstatus', 'theValue', 'ADDRESSSTATUS'),
+            array('getRegularbillingperiod', 'setRegularbillingperiod', 'theValue', 'REGULARBILLINGPERIOD'),
+            array('getRegularbillingfrequency', 'setRegularbillingfrequency', 'theValue', 'REGULARBILLINGFREQUENCY'),
+            array('getRegulartotalbillingcycles', 'setRegulartotalbillingcycles', 'theValue', 'REGULARTOTALBILLINGCYCLES'),
+            array('getRegularamt', 'setRegularamt', 'theValue', 'REGULARAMT'),
+            array('getRegularshippingamt', 'setRegularshippingamt', 'theValue', 'REGULARSHIPPINGAMT'),
+            array('getRegulartaxamt', 'setRegulartaxamt', 'theValue', 'REGULARTAXAMT'),
+            array('getRegularcurrencycode', 'setRegularcurrencycode', 'theValue', 'REGULARCURRENCYCODE'),
+            array('getNextbillingdate', 'setNextbillingdate', 'theValue', 'NEXTBILLINGDATE'),
+            array('getNumcylescompleted', 'setNumcylescompleted', 'theValue', 'NUMCYLESCOMPLETED'),
+            array('getNumcyclesremaining', 'setNumcyclesremaining', 'theValue', 'NUMCYCLESREMAINING'),
+            array('getOutstandingbalance', 'setOutstandingbalance', 'theValue', 'OUTSTANDINGBALANCE'),
+            array('getFailedpaymentcount', 'setFailedpaymentcount', 'theValue', 'FAILEDPAYMENTCOUNT'),
+            array('getLastpaymentdate', 'setLastpaymentdate', 'theValue', 'LASTPAYMENTDATE'),
+            array('getLastpaymentamt', 'setLastpaymentamt', 'theValue', 'LASTPAYMENTAMT'),
+            
+            
         );
     }
 
