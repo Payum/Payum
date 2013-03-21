@@ -1,12 +1,13 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
+namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Buzz\Message\Form\FormRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\CreateRecurringPaymentProfileAction;
+
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 use Payum\Paypal\ExpressCheckout\Nvp\Model\RecurringPaymentDetails;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\CreateRecurringPaymentProfileRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfileRequest;
 
 class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,7 +16,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
      */
     public function shouldBeSubClassOfBaseActionApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\CreateRecurringPaymentProfileAction');
+        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\BaseActionApiAware'));
     }

@@ -1,12 +1,13 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
+namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
 use Buzz\Message\Form\FormRequest;
+
 use Payum\Bridge\Spl\ArrayObject;
-use Payum\Exception\LogicException;
 use Payum\Exception\RequestNotSupportedException;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\BaseActionApiAware;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\CreateRecurringPaymentProfileRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfileRequest;
 
 class CreateRecurringPaymentProfileAction extends BaseActionApiAware
 {
@@ -30,11 +31,6 @@ class CreateRecurringPaymentProfileAction extends BaseActionApiAware
             'BILLINGFREQUENCY',
             'AMT',
             'CURRENCYCODE',
-            'EMAIL',
-            'STREET',
-            'CITY',
-            'COUNTRYCODE',
-            'ZIP',
         ));
 
         try {

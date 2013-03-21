@@ -47,6 +47,18 @@ class StatusAction implements ActionInterface
             return;
         }
         
+        //it is possible to set zero amount for create agreement request.
+        if (
+            $model['PAYERID'] && 
+            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $model['CHECKOUTSTATUS'] &&
+            $model['L_BILLINGTYPE0'] && 
+            $model['PAYMENTREQUEST_0_AMT'] == 0
+        ) {
+            $request->markSuccess();
+
+            return;
+        }
+        
         if (
             false == $model['CHECKOUTSTATUS'] || 
             Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $model['CHECKOUTSTATUS']
@@ -55,6 +67,7 @@ class StatusAction implements ActionInterface
 
             return;
         }
+        
         if (Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS == $model['CHECKOUTSTATUS']) {
             $request->markPending();
 

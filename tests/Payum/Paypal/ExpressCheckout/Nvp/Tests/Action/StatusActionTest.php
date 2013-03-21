@@ -136,13 +136,32 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldMarkSuccessIfCreateBillingAgreementRequestAndZeroAmount()
+    {
+        $action = new StatusAction();
+
+        $request = new BinaryMaskStatusRequest(array(
+            'PAYERID' => 'thePayerId',
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
+            'L_BILLINGTYPE0' => Api::BILLINGTYPE_RECURRING_PAYMENTS,
+            'PAYMENTREQUEST_0_AMT' => 0,
+        ));
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isSuccess());
+    }
+
+    /**
+     * @test
+     */
     public function shouldMarkNewIfPayerIdSetAndCheckoutStatusNotInitiated()
     {
         $action = new StatusAction();
 
         $request = new BinaryMaskStatusRequest(array(
             'PAYERID' => 'thePayerId',
-            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
         ));
 
         $action->execute($request);
