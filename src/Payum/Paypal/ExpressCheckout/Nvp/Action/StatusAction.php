@@ -137,9 +137,15 @@ class StatusAction implements ActionInterface
      */
     public function supports($request)
     {
-        return 
-            $request instanceof StatusRequestInterface &&
-            $request->getModel() instanceof \ArrayAccess
-        ;
+        if (false == $request instanceof StatusRequestInterface) {
+            return false;
+        }
+
+        $model = $request->getModel();
+        if (false == $model instanceof \ArrayAccess) {
+            return false;
+        }
+
+        return isset($model['PAYMENTREQUEST_0_AMT']) && null !== $model['PAYMENTREQUEST_0_AMT'];
     }
 }
