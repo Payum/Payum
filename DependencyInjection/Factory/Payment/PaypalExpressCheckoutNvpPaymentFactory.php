@@ -40,30 +40,35 @@ class PaypalExpressCheckoutNvpPaymentFactory implements PaymentFactoryInterface
         $paymentId = 'payum.context.'.$contextName.'.payment';
         $container->setDefinition($paymentId, $paymentDefinition);
 
-        $authorizeTokenDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.authorize_token');
+        $authorizeTokenDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.authorize_token');
         $authorizeTokenId = 'payum.context.'.$contextName.'.action.authorize_token';
         $container->setDefinition($authorizeTokenId, $authorizeTokenDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($authorizeTokenId)));
         
-        $doExpressCheckoutPaymentDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.do_express_checkout_payment');
+        $doExpressCheckoutPaymentDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.do_express_checkout_payment');
         $doExpressCheckoutPaymentId = 'payum.context.'.$contextName.'.action.do_express_checkout_payment';
         $container->setDefinition($doExpressCheckoutPaymentId, $doExpressCheckoutPaymentDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($doExpressCheckoutPaymentId)));
 
-        $getExpressCheckoutDetailsDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.get_express_checkout_details');
+        $getExpressCheckoutDetailsDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.get_express_checkout_details');
         $getExpressCheckoutDetailsId = 'payum.context.'.$contextName.'.action.get_express_checkout_details';
         $container->setDefinition($getExpressCheckoutDetailsId, $getExpressCheckoutDetailsDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($getExpressCheckoutDetailsId)));
 
-        $getTransactionDetailsDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.get_transaction_details');
+        $getTransactionDetailsDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.get_transaction_details');
         $getTransactionDetailsId = 'payum.context.'.$contextName.'.action.get_transaction_details';
         $container->setDefinition($getTransactionDetailsId, $getTransactionDetailsDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($getTransactionDetailsId)));
 
-        $setExpressCheckoutDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.set_express_checkout');
+        $setExpressCheckoutDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.set_express_checkout');
         $setExpressCheckoutId = 'payum.context.' . $contextName . '.action.set_express_checkout';
         $container->setDefinition($setExpressCheckoutId, $setExpressCheckoutDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($setExpressCheckoutId)));
+
+        $createRecurringPaymentProfileDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.create_recurring_payment_profile');
+        $createRecurringPaymentProfileId = 'payum.context.' . $contextName . '.action.create_recurring_payment_profile';
+        $container->setDefinition($createRecurringPaymentProfileId, $createRecurringPaymentProfileDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($createRecurringPaymentProfileId)));
 
         $captureDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.capture');
         $captureId = 'payum.context.' . $contextName . '.action.capture';
