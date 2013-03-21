@@ -75,12 +75,12 @@ class PaypalExpressCheckoutNvpPaymentFactory implements PaymentFactoryInterface
         $container->setDefinition($captureId, $captureDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($captureId)));
 
-        $statusDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.status');
+        $statusDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.payment_details_status');
         $statusId = 'payum.context.' . $contextName . '.action.status';
         $container->setDefinition($statusId, $statusDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($statusId)));
 
-        $syncDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.sync');
+        $syncDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.payment_details_sync');
         $syncId = 'payum.context.' . $contextName . '.action.sync';
         $container->setDefinition($syncId, $syncDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($syncId)));
