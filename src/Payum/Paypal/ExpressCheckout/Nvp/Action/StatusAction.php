@@ -56,7 +56,7 @@ class StatusAction implements ActionInterface
             return;
         }
         if (Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS == $model['CHECKOUTSTATUS']) {
-            $request->markInProgress();
+            $request->markPending();
 
             return;
         }
@@ -85,7 +85,7 @@ class StatusAction implements ActionInterface
                     Api::PAYMENTSTATUS_PENDING,
                 );
                 if (in_array($paymentStatus, $inProgress)) {
-                    $request->markInProgress();
+                    $request->markPending();
 
                     return;
                 }

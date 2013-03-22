@@ -153,7 +153,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldMarkInProgressIfCheckoutStatusInProgress()
+    public function shouldMarkPendingIfCheckoutStatusInProgress()
     {
         $action = new StatusAction();
 
@@ -163,7 +163,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
 
         $action->execute($request);
 
-        $this->assertTrue($request->isInProgress());
+        $this->assertTrue($request->isPending());
     }
 
     /**
@@ -185,7 +185,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldMarkInProgressIfAtLeastOnePaymentStatusInProgress()
+    public function shouldMarkPendingIfAtLeastOnePaymentStatusInProgress()
     {
         $action = new StatusAction();
 
@@ -197,7 +197,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
 
         $action->execute($request);
 
-        $this->assertTrue($request->isInProgress());
+        $this->assertTrue($request->isPending());
     }
 
     /**
