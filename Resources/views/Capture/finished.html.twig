@@ -7,9 +7,9 @@
         Payment was canceled!
     {% elseif status.failed %}
         Payment failed!
-    {% elseif status.inProgress %}
+    {% elseif status.pending %}
         Payment still in progress!
-    {% elseif status.inProgress %}
+    {% elseif status.pending %}
         Payment status unknown!
     {% endif %}
 {% endblock payum_content %}

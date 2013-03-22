@@ -19,6 +19,7 @@
         <parameter key="payum.paypal.express_checkout_nvp.action.capture.class">Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction</parameter>
         <parameter key="payum.paypal.express_checkout_nvp.action.payment_details_status.class">Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction</parameter>
         <parameter key="payum.paypal.express_checkout_nvp.action.payment_details_sync.class">Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction</parameter>
+        <parameter key="payum.paypal.express_checkout_nvp.action.recurring_payment_details_status.class">Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction</parameter>
     </parameters>
 
     <services>
@@ -91,6 +92,12 @@
         <service
             id="payum.paypal.express_checkout_nvp.action.payment_details_sync"
             class="%payum.paypal.express_checkout_nvp.action.payment_details_sync.class%"
+            public="false"
+        />
+
+        <service
+            id="payum.paypal.express_checkout_nvp.action.recurring_payment_details_status"
+            class="%payum.paypal.express_checkout_nvp.action.recurring_payment_details_status.class%"
             public="false"
         />
     </services>
