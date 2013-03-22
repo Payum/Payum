@@ -10,7 +10,11 @@
          stopOnFailure="false"
          syntaxCheck="false"
          bootstrap="tests/bootstrap.php"
->    
+>
+    <php>
+        <var name="__PAYUM_AUTHORIZE_NET_AIM_API_LOGIN_ID" value="54PB5egZ"/>
+        <var name="__PAYUM_AUTHORIZE_NET_AIM_API_TRANSACTION_KEY" value="48V258vr55AE8tcg"/>
+    </php>
     <testsuites>
         <testsuite name="Payum Authorize.Net AIM Tests">
             <directory>./tests</directory>
