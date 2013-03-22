@@ -39,7 +39,7 @@ class StatusAction implements ActionInterface
         }
 
         if (\AuthorizeNetAIM_Response::HELD == $model['response_code']) {
-            $request->markInProgress();
+            $request->markPending();
 
             return;
         }

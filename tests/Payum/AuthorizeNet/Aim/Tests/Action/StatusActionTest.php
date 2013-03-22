@@ -139,7 +139,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldMarkInProgressStatusIfArrayObjectHasResponseCodeHeld()
+    public function shouldMarkPendingStatusIfArrayObjectHasResponseCodeHeld()
     {
         $action = new StatusAction();
 
@@ -150,7 +150,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
 
         $action->execute($request);
 
-        $this->assertTrue($request->isInProgress());
+        $this->assertTrue($request->isPending());
     }
 
     /**
