@@ -51,12 +51,12 @@ interface StatusRequestInterface extends InteractiveRequestInterface
     /**
      * @return void
      */
-    function markInProgress();
+    function markPending();
 
     /**
      * @return boolean
      */
-    function isInProgress();
+    function isPending();
 
     /**
      * @return void

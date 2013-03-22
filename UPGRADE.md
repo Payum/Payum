@@ -1,3 +1,9 @@
+0.3 to 0.4
+==========
+
+* Method `StatusInterface::markInProgress` renamed to `StatusInterface::markPending`
+* Method `StatusInterface::isInProgress` renamed to `StatusInterface::isPending`
+
 0.2 to 0.3
 ==========
 

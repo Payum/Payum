@@ -78,7 +78,7 @@ class BinaryMaskStatusRequest extends BaseModelInteractiveRequest implements Sta
     /**
      * {@inheritdoc}
      */
-    public function markInProgress()
+    public function markPending()
     {
         $this->status = static::STATUS_IN_PROGRESS;
     }
@@ -86,7 +86,7 @@ class BinaryMaskStatusRequest extends BaseModelInteractiveRequest implements Sta
     /**
      * {@inheritdoc}
      */
-    public function isInProgress()
+    public function isPending()
     {
         return $this->isCurrentStatusEqualTo(static::STATUS_IN_PROGRESS);
     }

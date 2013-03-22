@@ -104,7 +104,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(method_exists($statusRequest, 'isSuccess'));
         $this->assertTrue(method_exists($statusRequest, 'isCanceled'));
         $this->assertTrue(method_exists($statusRequest, 'isFailed'));
-        $this->assertTrue(method_exists($statusRequest, 'isInProgress'));
+        $this->assertTrue(method_exists($statusRequest, 'isPending'));
         $this->assertTrue(method_exists($statusRequest, 'isUnknown'));
         $this->assertTrue(method_exists($statusRequest, 'isNew'));
         //@testo:start
