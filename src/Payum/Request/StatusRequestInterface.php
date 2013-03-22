@@ -41,6 +41,26 @@ interface StatusRequestInterface extends InteractiveRequestInterface
     /**
      * @return void
      */
+    function markSuspended();
+
+    /**
+     * @return boolean
+     */
+    function isSuspended();
+
+    /**
+     * @return void
+     */
+    function markExpired();
+
+    /**
+     * @return boolean
+     */
+    function isExpired();
+
+    /**
+     * @return void
+     */
     function markCanceled();
 
     /**

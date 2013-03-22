@@ -6,6 +6,10 @@ class BinaryMaskStatusRequest extends BaseModelInteractiveRequest implements Sta
     const STATUS_UNKNOWN = 2097152; //2^21
     
     const STATUS_FAILED = 1048576; //2^20
+
+    const STATUS_SUSPENDED = 524288; // 2^19
+    
+    const STATUS_EXPIRED = 262144; // 2^18
     
     const STATUS_SUCCESS = 32768; // 2^15
 
@@ -57,6 +61,38 @@ class BinaryMaskStatusRequest extends BaseModelInteractiveRequest implements Sta
     public function isSuccess()
     {
         return $this->isCurrentStatusEqualTo(static::STATUS_SUCCESS);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function markSuspended()
+    {
+        $this->status = static::STATUS_SUSPENDED;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isSuspended()
+    {
+        return $this->isCurrentStatusEqualTo(static::STATUS_SUSPENDED);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function markExpired()
+    {
+        $this->status = static::STATUS_EXPIRED;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isExpired()
+    {
+        return $this->isCurrentStatusEqualTo(static::STATUS_EXPIRED);
     }
 
     /**
