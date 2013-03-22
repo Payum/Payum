@@ -5,4 +5,4 @@ The lib implements [PayPal Pro Checkout](https://www.paypalobjects.com/webstatic
 
 ## How to use?
 
-[Example](tests/Payum/Paypal/ExpressCheckout/Nvp/Tests/Functional/ExecuteTestCase.php)
+[Example](tests/Payum/Paypal/ExpressCheckout/Nvp/Tests/Functional/ExecuteTest.php)
