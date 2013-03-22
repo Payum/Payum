@@ -6,12 +6,12 @@ use Payum\Request\BinaryMaskStatusRequest;
 use Payum\AuthorizeNet\Aim\PaymentFactory;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 
-class ExecuteTest extends \PHPUnit_Framework_TestCase
+class PaymentTest extends \PHPUnit_Framework_TestCase
 {
   /**
    * @test
    */
-  public function doCapture()
+  public function shouldAllowCaptureSuccessfullyAmount()
   {
     if (false == isset($GLOBALS['__PAYUM_AUTHORIZE_NET_AIM_API_LOGIN_ID'])) {
       $this->markTestSkipped('Please configure __PAYUM_AUTHORIZE_NET_AIM_API_LOGIN_ID in your phpunit.xml');
@@ -39,9 +39,8 @@ class ExecuteTest extends \PHPUnit_Framework_TestCase
     $payment->execute($statusRequest);
 
     $model = $statusRequest->getModel();
-    if (!$statusRequest->isSuccess()) {
-      $this->fail($model['response_reason_text']);
-    }
+
+    $this->assertTrue($statusRequest->isSuccess(), $model['response_reason_text']);
     $this->assertNotEmpty($model['transaction_id']);
   }
 }
