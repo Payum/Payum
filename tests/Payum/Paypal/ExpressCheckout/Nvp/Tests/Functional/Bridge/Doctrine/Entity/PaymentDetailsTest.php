@@ -23,37 +23,38 @@ class PaymentDetailsTest extends OrmTest
      */
     public function shouldAllowPersist()
     {
-        $request = new PaymentDetails;
+        $paymentDetails = new PaymentDetails;
+        $paymentDetails->setToken('foo');
         
         //guard
-        $this->assertNull($request->getId());
+        $this->assertNull($paymentDetails->getId());
         
-        $this->em->persist($request);
+        $this->em->persist($paymentDetails);
         $this->em->flush();
         
-        $this->assertNotEmpty($request->getId());
+        $this->assertGreaterThan(0, $paymentDetails->getId());
     }
 
     /**
      * @test
      */
-    public function shouldAllowFindPersistedRequest()
+    public function shouldAllowFindPersistedPaymentDetails()
     {
-        $instruction = new PaymentDetails;
-        $instruction->setToken($expectedToken = 'theToken');
-        $instruction->setPaymentrequestAmt(0, $expectedAmount = 123.15);
-        $instruction->setPaymentrequestPaymentaction(0, $expectedAction = 'thePaymentAction');
+        $paymentDetails = new PaymentDetails;
+        $paymentDetails->setToken($expectedToken = 'theToken');
+        $paymentDetails->setPaymentrequestAmt(0, $expectedAmount = 123.15);
+        $paymentDetails->setPaymentrequestPaymentaction(0, $expectedAction = 'thePaymentAction');
         
-        $this->em->persist($instruction);
+        $this->em->persist($paymentDetails);
         $this->em->flush();
         
-        $id = $instruction->getId();
+        $id = $paymentDetails->getId();
 
         $this->em->clear();
         
-        $foundInstruction = $this->em->find(get_class($instruction), $id);
+        $foundInstruction = $this->em->find(get_class($paymentDetails), $id);
         
-        $this->assertNotSame($instruction, $foundInstruction);
+        $this->assertNotSame($paymentDetails, $foundInstruction);
         
         $this->assertEquals($expectedToken, $foundInstruction->getToken());
         $this->assertEquals($expectedAmount, $foundInstruction->getPaymentrequestAmt(0));
