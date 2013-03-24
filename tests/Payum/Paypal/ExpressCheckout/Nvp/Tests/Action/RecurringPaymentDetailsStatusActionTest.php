@@ -96,6 +96,23 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCas
     /**
      * @test
      */
+    public function shouldMarkFailedIfErrorCodeSetToModel()
+    {
+        $action = new RecurringPaymentDetailsStatusAction();
+
+        $request = new BinaryMaskStatusRequest(array(
+            'BILLINGPERIOD' => 'foo',
+            'L_ERRORCODE9' => 'foo'
+        ));
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isFailed());
+    }
+
+    /**
+     * @test
+     */
     public function shouldMarkNewIfProfileStatusAndStatusNotSet()
     {
         $action = new RecurringPaymentDetailsStatusAction();

@@ -21,6 +21,14 @@ class RecurringPaymentDetailsStatusAction implements ActionInterface
         
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
+        foreach (range(0, 9) as $index) {
+            if ($model['L_ERRORCODE'.$index]) {
+                $request->markFailed();
+
+                return;
+            }
+        }
+
         if (false == $model['PROFILESTATUS'] && false == $model['STATUS']) {
             $request->markNew();
 
