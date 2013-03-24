@@ -87,7 +87,7 @@ if ($status->isSuccess()) {
 echo "Hmm. We are not. Let's check other possible statuses!";
 ```
 
-## Want to store payments somewhere?
+## Want to persist payments somewhere?
 
 There are two storage supported out of the box. [doctrine2](https://github.com/Payum/Payum/blob/master/src/Payum/Bridge/Doctrine/Storage/DoctrineStorage.php)([offsite](http://www.doctrine-project.org/)) and [filesystem](https://github.com/Payum/Payum/blob/master/src/Payum/Storage/FilesystemStorage.php).
 The filesystem storage is easy to setup, does not have any requirements. It is expected to be used more in tests. 
@@ -97,9 +97,72 @@ To use doctrine2 storage you have to follow several steps:
 * [Add](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/configuration.html#obtaining-an-entitymanager) mapping [schema](src/Payum/Paypal/ExpressCheckout/Nvp/Bridge/Doctrine/Resources/mapping/PaymentDetails.orm.xml) to doctrine configuration. 
 * Extend provided [model](src/Payum/src/Payum/Paypal/ExpressCheckout/Nvp/Bridge/Doctrine/Entity/PaymentDetails.php) and add `id` field.
 
-Want another storage? Contribute!
+_**Note:** Read payum's [how to persist payment details](https://github.com/Payum/Payum#how-to-persist-payment-details) chapter for more info._
 
-## Have your cart? Want to use it? No problem!
+## How about recurring payment?
+
+First you have to create billing agreement and capture it as described [above](#how-to-capture).
+
+```php
+<?php
+use Payum\Request\CaptureRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
+
+//Source: Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::createBillingAgrement()
+
+$captureBillingAgreement = new CaptureRequest(array(
+    'PAYMENTREQUEST_0_AMT' => 0,
+    'RETURNURL' => 'http://foo.com/finishPayment',
+    'CANCELURL' => 'http://foo.com/finishPayment',
+    'L_BILLINGTYPE0' => Api::BILLINGTYPE_RECURRING_PAYMENTS,
+    'L_BILLINGAGREEMENTDESCRIPTION0' => 'Subsribe for weather forecast',
+));
+
+// ...
+```
+
+After you are done with capture, [check billing agreement status](#was-the-payment-finished-successfully). If it has success status create recurring payment:
+
+```php
+<?php
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetRecurringPaymentsProfileDetailsRequest;
+
+//Source: Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::createRecurringPaymnt()
+
+// ...
+$billingAgreementDetails = $captureBillingAgreement->getModel();
+
+$recurringPaymentDetails = new \ArrayObject(array(
+    'TOKEN' => $billingAgreementDetails['TOKEN'],
+    'PROFILESTARTDATE' => date(DATE_ATOM),
+    'DESC' => $billingAgreementDetails['L_BILLINGAGREEMENTDESCRIPTION0'],
+    'AMT' => 1.45,
+    'CURRENCYCODE' => 'USD',
+    'BILLINGPERIOD' => Api::BILLINGPERIOD_DAY,
+    'BILLINGFREQUENCY' => 2,
+    'EMAIL' => $billingAgreementDetails['EMAIL'],
+));
+
+$payment->execute(
+    new CreateRecurringPaymentProfileRequest($recurringPaymentDetails)
+);
+$payment->execute(
+    new GetRecurringPaymentsProfileDetailsRequest($recurringPaymentDetails)
+);
+
+$recurringPaymentStatus = new BinaryMaskStatusRequest($recurringPaymentDetails);
+$payment->execute($recurringPaymentStatus);
+
+if ($recurringPaymentStatus->isSuccess()) {
+    echo 'We are done';
+}
+
+echo "Hmm. We are not. Let's check other possible statuses!";
+```
+
+## Have your cart? Want to use it?
 
 Write an action:
 
