@@ -269,6 +269,8 @@ class Api
 
     const RECURRINGPAYMENTSTATUS_EXPIRED = 'Expired';
 
+    const RECURRINGPAYMENTSTATUS_REACTIVATE = 'Reactivate';
+
     const VERSION = '65.1';
 
     protected $client;
@@ -417,6 +419,21 @@ class Api
     }
 
     /**
+     * @param FormRequest $request
+     * 
+     * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
+     */
+    public function manageRecurringPaymentsProfileStatus(FormRequest $request)
+    {
+        $request->setField('METHOD', 'ManageRecurringPaymentsProfileStatus');
+
+        $this->addVersionField($request);
+        $this->addAuthorizeFields($request);
+
+        return $this->doRequest($request);
+    }
+
+    /**
      * @param \Buzz\Message\Form\FormRequest $request
      *
      * @throws \Payum\Exception\Http\HttpResponseStatusNotSuccessfulException
@@ -440,6 +457,11 @@ class Api
         return $response;
     }
 
+    /**
+     * @param string $token
+     * 
+     * @return string
+     */
     public function getAuthorizeTokenUrl($token)
     {
         $host = $this->options['sandbox'] ? 'www.sandbox.paypal.com' : 'www.paypal.com';
@@ -451,6 +473,9 @@ class Api
         );
     }
 
+    /**
+     * @return string
+     */
     protected function getApiEndpoint()
     {
         return $this->options['sandbox'] ?
@@ -459,6 +484,9 @@ class Api
             ;
     }
 
+    /**
+     * @param FormRequest $request
+     */
     protected function addAuthorizeFields(FormRequest $request)
     {
         $request->setField('PWD', $this->options['password']);
@@ -466,6 +494,9 @@ class Api
         $request->setField('SIGNATURE', $this->options['signature']);
     }
 
+    /**
+     * @param FormRequest $request
+     */
     protected function addVersionField(FormRequest $request)
     {
         $request->setField('VERSION', self::VERSION);

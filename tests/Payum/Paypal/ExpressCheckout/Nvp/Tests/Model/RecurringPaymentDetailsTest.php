@@ -83,6 +83,8 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
             array('getVersion', 'setVersion', 'theValue', 'VERSION'),
             array('getBuild', 'setBuild', 'theValue', 'BUILD'),
             array('getAck', 'setAck', 'theValue', 'ACK'),
+            array('getAction', 'setAction', 'theValue', 'ACTION'),
+            array('getNote', 'setNote', 'theValue', 'NOTE'),
             array('getAggregateamount', 'setAggregateamount', 'theValue', 'AGGREGATEAMOUNT'),
             array('getAggregateoptionalamount', 'setAggregateoptionalamount', 'theValue', 'AGGREGATEOPTIONALAMOUNT'),
             array('getFinalpaymentduedate', 'setFinalpaymentduedate', 'theValue', 'FINALPAYMENTDUEDATE'),
@@ -101,8 +103,6 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
             array('getFailedpaymentcount', 'setFailedpaymentcount', 'theValue', 'FAILEDPAYMENTCOUNT'),
             array('getLastpaymentdate', 'setLastpaymentdate', 'theValue', 'LASTPAYMENTDATE'),
             array('getLastpaymentamt', 'setLastpaymentamt', 'theValue', 'LASTPAYMENTAMT'),
-            
-            
         );
     }
 

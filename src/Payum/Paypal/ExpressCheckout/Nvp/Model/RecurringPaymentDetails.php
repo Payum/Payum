@@ -156,6 +156,10 @@ class RecurringPaymentDetails extends BaseModel
 
     protected $lastpaymentamt;
     
+    protected $action;
+    
+    protected $note;
+    
     protected $l_paymentrequest_nnn_itemcategorymmm = array();
     
     protected $l_paymentrequest_nnn_namemmm = array();
@@ -926,6 +930,26 @@ class RecurringPaymentDetails extends BaseModel
     public function setLastpaymentamt($lastpaymentamt)
     {
         $this->lastpaymentamt = $lastpaymentamt;
+    }
+
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    public function setAction($action)
+    {
+        $this->action = $action;
+    }
+
+    public function getNote()
+    {
+        return $this->note;
+    }
+
+    public function setNote($note)
+    {
+        $this->note = $note;
     }
 
     public function getLPaymentrequestItemcategory($n, $m)

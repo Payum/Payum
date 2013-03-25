@@ -31,7 +31,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportSetExpressCheckoutRequestAndArrayAccessAsModel()
     {
-        $action = new SetExpressCheckoutAction($this->createApiMock());
+        $action = new SetExpressCheckoutAction();
         
         $request = new SetExpressCheckoutRequest($this->getMock('ArrayAccess'));
         
