@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
+>
+    <mapped-superclass name="Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity\RecurringPaymentDetails">
+        
+        <field name="token" column="token" type="string" length="255" nullable="false" />
+
+        <field name="desc" column="desc" type="string" length="255" nullable="false" />
+        
+        <field name="amt" column="amt" type="string" length="255" nullable="false" />
+
+        <field name="email" column="email" type="string" length="255" nullable="true" />
+        
+        <field name="currencycode" column="currency_code" type="string" length="255" nullable="true" />
+        
+        <field name="profileid" column="profile_id" type="string" length="255" nullable="true" />
+
+        <field name="profilestartdate" column="profile_start_date" type="string" length="255" nullable="true" />
+
+        <field name="billingperiod" column="billing_period" type="string" length="255" nullable="true" />
+
+        <field name="billingfrequency" column="billing_frequency" type="string" length="255" nullable="true" />
+
+    </mapped-superclass>
+</doctrine-mapping>

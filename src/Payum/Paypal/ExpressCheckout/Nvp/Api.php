@@ -10,14 +10,15 @@ use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 
 /**
- * Docs:
- *   L_ERRORCODE: https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_nvp_errorcodes
- *   ACK: https://www.x.com/content/paypal-nvp-api-overview
- *   CHECKOUTSTATUS: https://www.x.com/developers/paypal/documentation-tools/api/getexpresscheckoutdetails-api-operation-nvp
- *   PAYMENTSTATUS: https://www.x.com/developers/paypal/documentation-tools/api/doexpresscheckoutpayment-api-operation-nvp
- *
- *   https://www.x.com/developers/paypal/documentation-tools/api/setexpresscheckout-api-operation-nvp
- *   https://www.x.com/developers/paypal/documentation-tools/api/gettransactiondetails-api-operation-nvp *
+ * @link https://www.x.com/developers/paypal/documentation-tools/api/getexpresscheckoutdetails-api-operation-nvp
+ * @link https://www.x.com/developers/paypal/documentation-tools/api/doexpresscheckoutpayment-api-operation-nvp
+ * @link https://www.x.com/developers/paypal/documentation-tools/api/setexpresscheckout-api-operation-nvp
+ * @link https://www.x.com/developers/paypal/documentation-tools/api/gettransactiondetails-api-operation-nvp
+ * @link https://www.x.com/developers/paypal/documentation-tools/api/createrecurringpaymentsprofile-api-operation-nvp
+ * @link https://www.x.com/developers/paypal/documentation-tools/api/getrecurringpaymentsprofiledetails-api-operation-nvp
+ * 
+ * L_ERRORCODE: @link https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_nvp_errorcodes
+ * ACK: @link https://www.x.com/content/paypal-nvp-api-overview
  */
 class Api
 {
@@ -175,6 +176,101 @@ class Api
      */
     const PAYMENTREQUEST_ITERMCATEGORY_PHYSICAL = 'Physical';
 
+    /**
+     * Indicates whether you would like PayPal to automatically bill the outstanding balance amount in the next billing cycle.
+     * 
+     * PayPal does not automatically bill the outstanding balance.
+     */
+    const AUTOBILLOUTAMT_NOAUTOBILL = 'NoAutoBill';
+
+    /**
+     * Indicates whether you would like PayPal to automatically bill the outstanding balance amount in the next billing cycle.
+     *
+     * PayPal automatically bills the outstanding balance.
+     */
+    const AUTOBILLOUTAMT_ADDTONEXTBILLING = 'AddToNextBilling';
+
+    const BILLINGPERIOD_DAY = 'Day';
+
+    const BILLINGPERIOD_WEEK = 'Week';
+
+    /**
+     * For SemiMonth, billing is done on the 1st and 15th of each month.
+     */
+    const BILLINGPERIOD_SEMIMONTH = 'SemiMonth';
+
+    const BILLINGPERIOD_MONTH = 'Month';
+
+    const BILLINGPERIOD_YEAR = 'Year';
+
+    /**
+     * By default, PayPal suspends the pending profile in the event that the initial payment amount fails. You can override this default behavior by setting this field to ContinueOnFailure. Then, if the initial payment amount fails, PayPal adds the failed payment amount to the outstanding balance for this recurring payment profile.
+     */
+    const FAILEDINITAMTACTION_CONTINUEONFAILURE = 'ContinueOnFailure';
+
+    /**
+     * If this field is not set or you set it to CancelOnFailure, PayPal creates the recurring payment profile, but places it into a pending status until the initial payment completes. If the initial payment clears, PayPal notifies you by IPN that the pending profile has been activated. If the payment fails, PayPal notifies you by IPN that the pending profile has been canceled.
+     */
+    const FAILEDINITAMTACTION_CANCELONFAILURE = 'CancelOnFailure';
+    
+    const CREDITCARDTYPE_VISA = 'Visa';
+
+    const CREDITCARDTYPE_MASTERCARD = 'MasterCard';
+
+    const CREDITCARDTYPE_DISCOVER = 'Discover';
+
+    const CREDITCARDTYPE_AMEX = 'Amex';
+
+    /**
+     * If the credit card type is Maestro, you must set CURRENCYCODE to GBP. In addition, you must specify either STARTDATE or ISSUENUMBER.
+     */
+    const CREDITCARDTYPE_MAESTRO = 'Maestro';
+    
+    const PAYERSTATUS_VERIFIED = 'verified';
+
+    const PAYERSTATUS_UNVERIFIED = 'unverified';
+
+    /**
+     * The recurring payment profile has been successfully created and activated for scheduled payments according the billing instructions from the recurring payments profile.
+     */
+    const PROFILESTATUS_ACTIVEPROFILE = 'ActiveProfile';
+
+    /**
+     * The system is in the process of creating the recurring payment profile. Please check your IPN messages for an update.
+     */
+    const PROFILESTATUS_PENDINGPROFILE = 'PendingProfile';
+
+    /**
+     * Type of billing agreement. For recurring payments, this field must be set to RecurringPayments. In this case, you can specify up to ten billing agreements. Other defined values are not valid.
+     */
+    const BILLINGTYPE_RECURRING_PAYMENTS = 'RecurringPayments';
+
+    /**
+     * Type of billing agreement for reference transactions. You must have permission from PayPal to use this field. This field must be set to one of the following values:
+     * 
+     * PayPal creates a billing agreement for each transaction associated with buyer. You must specify version 54.0 or higher to use this option.
+     */
+    const BILLINGTYPE_MERCHANTINITIATEDBILLING = 'MerchantInitiatedBilling';
+
+    /**
+     * Type of billing agreement for reference transactions. You must have permission from PayPal to use this field. This field must be set to one of the following values:
+     * 
+     * PayPal creates a single billing agreement for all transactions associated with buyer. Use this value unless you need per-transaction billing agreements. You must specify version 58.0 or higher to use this option.
+     */
+    const BILLINGTYPE_MERCHANTINITIATEDBILLINGSINGLEAGREEMENT = 'MerchantInitiatedBilling';
+    
+    const RECURRINGPAYMENTSTATUS_ACTIVE = 'Active';
+
+    const RECURRINGPAYMENTSTATUS_PENDING = 'Pending';
+
+    const RECURRINGPAYMENTSTATUS_CANCELLED = 'Cancelled';
+
+    const RECURRINGPAYMENTSTATUS_SUSPENDED = 'Suspended';
+
+    const RECURRINGPAYMENTSTATUS_EXPIRED = 'Expired';
+
+    const RECURRINGPAYMENTSTATUS_REACTIVATE = 'Reactivate';
+
     const VERSION = '65.1';
 
     protected $client;
@@ -295,6 +391,51 @@ class Api
     /**
      * @param \Buzz\Message\Form\FormRequest $request
      *
+     * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
+     */
+    public function createRecurringPaymentsProfile(FormRequest $request)
+    {
+        $request->setField('METHOD', 'CreateRecurringPaymentsProfile');
+
+        $this->addVersionField($request);
+        $this->addAuthorizeFields($request);
+
+        return $this->doRequest($request);
+    }
+
+    /**
+     * @param \Buzz\Message\Form\FormRequest $request
+     * 
+     * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
+     */
+    public function getRecurringPaymentsProfileDetails(FormRequest $request)
+    {
+        $request->setField('METHOD', 'GetRecurringPaymentsProfileDetails');
+
+        $this->addVersionField($request);
+        $this->addAuthorizeFields($request);
+
+        return $this->doRequest($request);
+    }
+
+    /**
+     * @param FormRequest $request
+     * 
+     * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
+     */
+    public function manageRecurringPaymentsProfileStatus(FormRequest $request)
+    {
+        $request->setField('METHOD', 'ManageRecurringPaymentsProfileStatus');
+
+        $this->addVersionField($request);
+        $this->addAuthorizeFields($request);
+
+        return $this->doRequest($request);
+    }
+
+    /**
+     * @param \Buzz\Message\Form\FormRequest $request
+     *
      * @throws \Payum\Exception\Http\HttpResponseStatusNotSuccessfulException
      *
      * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
@@ -316,6 +457,11 @@ class Api
         return $response;
     }
 
+    /**
+     * @param string $token
+     * 
+     * @return string
+     */
     public function getAuthorizeTokenUrl($token)
     {
         $host = $this->options['sandbox'] ? 'www.sandbox.paypal.com' : 'www.paypal.com';
@@ -327,6 +473,9 @@ class Api
         );
     }
 
+    /**
+     * @return string
+     */
     protected function getApiEndpoint()
     {
         return $this->options['sandbox'] ?
@@ -335,6 +484,9 @@ class Api
             ;
     }
 
+    /**
+     * @param FormRequest $request
+     */
     protected function addAuthorizeFields(FormRequest $request)
     {
         $request->setField('PWD', $this->options['password']);
@@ -342,6 +494,9 @@ class Api
         $request->setField('SIGNATURE', $this->options['signature']);
     }
 
+    /**
+     * @param FormRequest $request
+     */
     protected function addVersionField(FormRequest $request)
     {
         $request->setField('VERSION', self::VERSION);

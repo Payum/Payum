@@ -6,7 +6,7 @@ use Buzz\Message\Form\FormRequest;
 use Payum\Request\CaptureRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
-use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
+use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 
@@ -45,11 +45,11 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportAuthorizeTokenRequestWithPaymentInstructionAsModel()
+    public function shouldSupportAuthorizeTokenRequestWithPaymentDetailsAsModel()
     {
         $action = new CaptureAction();
 
-        $this->assertTrue($action->supports(new CaptureRequest(new PaymentInstruction)));
+        $this->assertTrue($action->supports(new CaptureRequest(new PaymentDetails)));
     }
 
     /**
@@ -111,12 +111,12 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\SetExpressCheckoutRequest'))
+            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckoutRequest'))
         ;
         $paymentMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\AuthorizeTokenRequest'))
+            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeTokenRequest'))
         ;
         
         $action = new CaptureAction();
@@ -154,7 +154,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\DoExpressCheckoutPaymentRequest'))
+            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPaymentRequest'))
         ;
         $paymentMock
             ->expects($this->at(2))
@@ -168,6 +168,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action->execute(new CaptureRequest(array(
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
+            'PAYMENTREQUEST_0_AMT' => 5,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED
         )));
     }
@@ -187,7 +188,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $model = new PaymentInstruction;
+        $model = new PaymentDetails;
         $model->setToken('aToken');
         $model->setPayerid(null);
         $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED);
@@ -210,11 +211,16 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
         ;
+        $paymentMock
+            ->expects($this->at(1))
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
+        ;
 
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $model = new PaymentInstruction;
+        $model = new PaymentDetails;
         $model->setToken('aToken');
         $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS);
 
@@ -222,6 +228,35 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             'TOKEN' => 'aToken',
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS
         )));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotRequestDoExpressCheckoutPaymentActionIfAmountZero()
+    {
+        $paymentMock = $this->createPaymentMock();
+        $paymentMock
+            ->expects($this->at(0))
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
+        ;
+        $paymentMock
+            ->expects($this->at(1))
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
+        ;
+
+        $action = new CaptureAction();
+        $action->setPayment($paymentMock);
+
+        $model = new PaymentDetails;
+        $model->setToken('aToken');
+        $model['CHECKOUTSTATUS'] = Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED;
+        $model->setPayerid('aPayerId');
+        $model->setPaymentrequestAmt(0, 0);
+
+        $action->execute(new CaptureRequest($model));
     }
 
     /**

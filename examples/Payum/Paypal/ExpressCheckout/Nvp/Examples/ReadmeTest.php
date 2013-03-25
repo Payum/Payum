@@ -5,6 +5,8 @@ use Buzz\Client\Curl;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Examples\Model\AwesomeCart;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfileRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetRecurringPaymentsProfileDetailsRequest;
 use Payum\Request\BinaryMaskStatusRequest;
 use Payum\Request\CaptureRequest;
 use Payum\Request\RedirectUrlInteractiveRequest;
@@ -122,6 +124,94 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function createBillingAgrement()
+    {
+        //@testo:start
+        $captureBillingAgreement = new CaptureRequest(array(
+            'PAYMENTREQUEST_0_AMT' => 0,
+            'RETURNURL' => 'http://foo.com/finishPayment',
+            'CANCELURL' => 'http://foo.com/finishPayment',
+            'L_BILLINGTYPE0' => Api::BILLINGTYPE_RECURRING_PAYMENTS,
+            'L_BILLINGAGREEMENTDESCRIPTION0' => 'Subsribe for weather forecast',
+        ));
+
+        // ...
+        //@testo:end
+
+        $billingAgreementDetails = $captureBillingAgreement->getModel();
+        $billingAgreementDetails['TOKEN'] = 'aToken';
+        $billingAgreementDetails['EMAIL'] = 'foo@example.com';
+
+        $captureBillingAgreement->setModel($billingAgreementDetails);
+        
+        return $captureBillingAgreement;
+    }
+
+    /**
+     * @test
+     * 
+     * @depends createBillingAgrement
+     */
+    public function createRecurringPaymnt($captureBillingAgreement)
+    {
+        $payment = PaymentFactory::create(new Api(new Curl, array(
+            'username' => 'a_username',
+            'password' => 'a_pasword',
+            'signature' => 'a_signature',
+            'sandbox' => true
+        )));
+        
+        //@testo:start
+        // ...
+        $billingAgreementDetails = $captureBillingAgreement->getModel();
+
+        $recurringPaymentDetails = new \ArrayObject(array(
+            'TOKEN' => $billingAgreementDetails['TOKEN'],
+            'PROFILESTARTDATE' => date(DATE_ATOM),
+            'DESC' => $billingAgreementDetails['L_BILLINGAGREEMENTDESCRIPTION0'],
+            'AMT' => 1.45,
+            'CURRENCYCODE' => 'USD',
+            'BILLINGPERIOD' => Api::BILLINGPERIOD_DAY,
+            'BILLINGFREQUENCY' => 2,
+            'EMAIL' => $billingAgreementDetails['EMAIL'],
+        ));
+        //@testo:end
+        $recurringPaymentDetails['PROFILEID'] = 'aProfileid';
+        //@testo:start
+
+        $payment->execute(
+            new CreateRecurringPaymentProfileRequest($recurringPaymentDetails)
+        );
+        $payment->execute(
+            new GetRecurringPaymentsProfileDetailsRequest($recurringPaymentDetails)
+        );
+
+        $recurringPaymentStatus = new BinaryMaskStatusRequest($recurringPaymentDetails);
+        $payment->execute($recurringPaymentStatus);
+
+        if ($recurringPaymentStatus->isSuccess()) {
+            //@testo:end
+            if (false) {
+            //@testo:start
+            echo 'We are done';
+            //@testo:end
+            }
+            //@testo:start
+        }
+
+        //@testo:end
+        if (false) {
+        //@testo:start
+        echo "Hmm. We are not. Let's check other possible statuses!";
+        //@testo:end
+        }
+        
+        $this->assertTrue($recurringPaymentStatus->isFailed());
+    }
+
+    /**
+     * @test
      *
      * @depends doCapture
      */
@@ -165,6 +255,9 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
             //@testo:end
         }
 
-        $this->assertTrue($status->isSuccess());
+        $this->assertTrue($status->isFailed());
+        
+        $paymentDetails = $status->getModel();
+        $this->assertEquals('Security header is not valid', $paymentDetails['L_LONGMESSAGE0']);
     }
 }

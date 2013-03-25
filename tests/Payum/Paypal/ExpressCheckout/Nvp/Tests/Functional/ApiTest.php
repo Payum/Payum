@@ -137,4 +137,98 @@ class ApiTest extends \PHPUnit_Framework_TestCase
 
         $this->fail('Expected `HttpResponseAckNotSuccessException` exception.');
     }
+
+    /**
+     * @test
+     */
+    public function shouldReturnFailedAckOnCreateRecurringPaymentsProfileWithoutToken()
+    {
+        //we cannot test success scenario of this request. So at least we can test the failure one.  
+        try {
+            $this->api->createRecurringPaymentsProfile(new FormRequest());
+        } catch (HttpResponseAckNotSuccessException $e) {
+            $response = $e->getResponse();
+
+            $this->assertEquals(Api::ACK_FAILURE, $response['ACK']);
+            $this->assertEquals('Missing Token or buyer credit card', $response['L_LONGMESSAGE0']);
+
+            return;
+        }
+
+        $this->fail('Expected `HttpResponseAckNotSuccessException` exception.');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnFailedAckOnCreateRecurringPaymentsProfileWithNotAuthenticatedToken()
+    {
+        //we cannot test success scenario of this request. So at least we can test the failure one.
+
+        $request = new FormRequest();
+        $request->setField('PAYMENTREQUEST_0_AMT', 1);
+
+        $setExpressCheckoutResponse = $this->api->setExpressCheckout($request);
+
+        //gurad
+        $this->assertEquals(Api::ACK_SUCCESS, $setExpressCheckoutResponse['ACK']);        
+        
+        try {
+            $request = new FormRequest();
+            $request->setField('TOKEN', $setExpressCheckoutResponse['TOKEN']);
+            
+            $this->api->createRecurringPaymentsProfile($request);
+        } catch (HttpResponseAckNotSuccessException $e) {
+            $response = $e->getResponse();
+
+            $this->assertEquals(Api::ACK_FAILURE, $response['ACK']);
+            $this->assertEquals('Billing period must be one of Day, Week, SemiMonth, or Year', $response['L_LONGMESSAGE0']);
+            $this->assertEquals('Billing frequency must be > 0 and be less than or equal to one year', $response['L_LONGMESSAGE1']);
+
+            return;
+        }
+
+        $this->fail('Expected `HttpResponseAckNotSuccessException` exception.');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnFailedAckOnGetRecurringPaymentsProfileDetailsWithoutProfileId()
+    {
+        try {
+            $this->api->getRecurringPaymentsProfileDetails(new FormRequest());
+        } catch (HttpResponseAckNotSuccessException $e) {
+            $response = $e->getResponse();
+
+            $this->assertEquals(Api::ACK_FAILURE, $response['ACK']);
+            $this->assertEquals('Profile Id is missing from the request', $response['L_LONGMESSAGE0']);
+
+            return;
+        }
+
+        $this->fail('Expected `HttpResponseAckNotSuccessException` exception.');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnFailedAckOnManageRecurringPaymentsProfileStatusWithoutProfileIdSet()
+    {
+        //we cannot test success scenario of this request. So at least we can test the failure one.
+
+        try {
+            $this->api->manageRecurringPaymentsProfileStatus(new FormRequest());
+        } catch (HttpResponseAckNotSuccessException $e) {
+            $response = $e->getResponse();
+
+            $this->assertEquals(Api::ACK_FAILURE, $response['ACK']);
+            $this->assertEquals('Profile Id is missing from the request', $response['L_LONGMESSAGE0']);
+            $this->assertEquals('Action is missing from the request', $response['L_LONGMESSAGE1']);
+
+            return;
+        }
+
+        $this->fail('Expected `HttpResponseAckNotSuccessException` exception.');
+    }
 }
