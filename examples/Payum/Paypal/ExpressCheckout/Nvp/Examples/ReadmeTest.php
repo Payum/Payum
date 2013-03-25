@@ -151,7 +151,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @depends createBillingAgreement
+     * @depends createBillingAgrement
      */
     public function createRecurringPaymnt($captureBillingAgreement)
     {
