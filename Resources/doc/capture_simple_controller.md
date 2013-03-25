@@ -58,9 +58,9 @@ _**Note:** You may want to adapt namespace._
         Canceled!
     {% elseif status.failed %}
         Failed!
-    {% elseif status.inProgress %}
+    {% elseif status.pending %}
         In progress!
-    {% elseif status.inProgress %}
+    {% elseif status.pending %}
         Status unknown!
     {% endif %}
 </div>
