@@ -7,13 +7,6 @@ The lib implements [Paypal Express Checkout](https://www.x.com/content/paypal-nv
 
 ```php
 <?php
-use Buzz\Client\Curl;
-
-use Payum\Paypal\ExpressCheckout\Nvp\Api;
-use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory;
-use Payum\Request\CaptureRequest;
-use Payum\Request\RedirectUrlInteractiveRequest;
-
 {{testo:Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::doCapture}}
 ```
 
@@ -28,8 +21,6 @@ You can also capture digital goods:
 
 ```php
 <?php
-use Payum\Request\BinaryMaskStatusRequest;
-
 {{testo:Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::doStatus}}
 ```
 
@@ -51,9 +42,6 @@ First you have to create billing agreement and capture it as described [above](#
 
 ```php
 <?php
-use Payum\Request\CaptureRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Api;
-
 {{testo:Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::createBillingAgrement}}
 ```
 
@@ -61,10 +49,6 @@ After you are done with capture, [check billing agreement status](#was-the-payme
 
 ```php
 <?php
-use Payum\Paypal\ExpressCheckout\Nvp\Api;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetRecurringPaymentsProfileDetailsRequest;
-
 {{testo:Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::createRecurringPaymnt}}
 ```
 
@@ -80,9 +64,6 @@ Use it:
 
 ```php
 <?php
-use Payum\Paypal\ExpressCheckout\Nvp\Examples\Model\AwesomeCart;
-use Payum\Paypal\ExpressCheckout\Nvp\Examples\Action\CaptureAwesomeCartAction;
-
 {{testo:Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::doCaptureAwesomeCart}}
 ```
 

@@ -20,6 +20,13 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
     public function doCapture()
     {
         //@testo:start
+        //@testo:source
+        //@testo:uncomment:use Buzz\Client\Curl;
+        //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Api;
+        //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory;
+        //@testo:uncomment:use Payum\Request\CaptureRequest;
+        //@testo:uncomment:use Payum\Request\RedirectUrlInteractiveRequest;
+        
         $payment = PaymentFactory::create(new Api(new Curl, array(
             'username' => 'a_username',
             'password' => 'a_pasword',
@@ -43,7 +50,6 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
             
             throw $interactiveRequest;
         }
-        // ...
         //@testo:end
         
         $this->assertArrayHasKey('L_LONGMESSAGE0', $capture->getModel());
@@ -60,9 +66,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
      */
     public function doDigitalGoodsCapture()
     {
-        $whatever ='doo';
-        //@testo:start
-        // ...
+        //@testo:source
         
         $capture = new CaptureRequest(array(
             
@@ -77,9 +81,6 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
             'L_PAYMENTREQUEST_0_QTY0' => 1,
             'L_PAYMENTREQUEST_0_TAXAMT0' => 2,
         ));
-
-        // ...
-        //@testo:end
     }
 
     /**
@@ -91,34 +92,24 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
     {
         $payment = $arguments[0];
         $capture = $arguments[1];
-        
+
         unset($capture->getModel()['L_ERRORCODE0']);
         $capture->getModel()['CHECKOUTSTATUS'] = Api::CHECKOUTSTATUS_PAYMENT_COMPLETED;
         $capture->getModel()['PAYMENTREQUEST_0_PAYMENTSTATUS'] = Api::PAYMENTSTATUS_COMPLETED;
-        
+
         //@testo:start
-        //...
+        //@testo:source
+        //@testo:uncomment:use Payum\Request\BinaryMaskStatusRequest;
         
         $status = new BinaryMaskStatusRequest($capture->getModel());
         $payment->execute($status);
         
         if ($status->isSuccess()) {
-            //@testo:end
-            if (false) {
-            //@testo:start
-            echo 'We are done';
-            //@testo:end
-            }
-            //@testo:start
+            //@testo:uncomment:echo 'We are done';
         }
 
+        //@testo:uncomment:echo "Hmm. We are not. Let's check other possible statuses!";
         //@testo:end
-        if (false) {
-        //@testo:start
-        echo "Hmm. We are not. Let's check other possible statuses!";
-        //@testo:end
-        }
-
         $this->assertTrue($status->isSuccess());
     }
 
@@ -128,6 +119,10 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
     public function createBillingAgrement()
     {
         //@testo:start
+        //@testo:source
+        //@testo:uncomment:use Payum\Request\CaptureRequest;
+        //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Api;
+        
         $captureBillingAgreement = new CaptureRequest(array(
             'PAYMENTREQUEST_0_AMT' => 0,
             'RETURNURL' => 'http://foo.com/finishPayment',
@@ -163,7 +158,11 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         )));
         
         //@testo:start
-        // ...
+        //@testo:source
+        //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Api;
+        //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileRequest;
+        //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetRecurringPaymentsProfileDetailsRequest;
+        
         $billingAgreementDetails = $captureBillingAgreement->getModel();
 
         $recurringPaymentDetails = new \ArrayObject(array(
@@ -191,21 +190,11 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         $payment->execute($recurringPaymentStatus);
 
         if ($recurringPaymentStatus->isSuccess()) {
-            //@testo:end
-            if (false) {
-            //@testo:start
-            echo 'We are done';
-            //@testo:end
-            }
-            //@testo:start
+            //@testo:uncomment:echo 'We are done';
         }
 
+        //@testo:uncomment:echo "Hmm. We are not. Let's check other possible statuses!";
         //@testo:end
-        if (false) {
-        //@testo:start
-        echo "Hmm. We are not. Let's check other possible statuses!";
-        //@testo:end
-        }
         
         $this->assertTrue($recurringPaymentStatus->isFailed());
     }
@@ -220,7 +209,12 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         $payment = $arguments[0];
 
         //@testo:start
+        //@testo:source
+        //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Examples\Model\AwesomeCart;
+        //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Examples\Action\CaptureAwesomeCartAction;
+        
         //...
+        
         $cart = new AwesomeCart;
 
         $payment->addAction(new CaptureAwesomeCartAction);
@@ -239,22 +233,11 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         $payment->execute($status);
 
         if ($status->isSuccess()) {
-            //@testo:end
-            if (false) {
-                //@testo:start
-            echo 'We are done';
-                //@testo:end
-            }
-            //@testo:start
+            //@testo:uncomment:echo 'We are done';
         }
 
+        //@testo:uncomment:echo "Hmm. We are not. Let's check other possible statuses!";
         //@testo:end
-        if (false) {
-            //@testo:start
-        echo "Hmm. We are not. Let's check other possible statuses!";
-            //@testo:end
-        }
-
         $this->assertTrue($status->isFailed());
         
         $paymentDetails = $status->getModel();

@@ -7,14 +7,12 @@ The lib implements [Paypal Express Checkout](https://www.x.com/content/paypal-nv
 
 ```php
 <?php
+//Source: Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::doCapture()
 use Buzz\Client\Curl;
-
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory;
 use Payum\Request\CaptureRequest;
 use Payum\Request\RedirectUrlInteractiveRequest;
-
-//Source: Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::doCapture()
 
 $payment = PaymentFactory::create(new Api(new Curl, array(
     'username' => 'a_username',
@@ -38,8 +36,6 @@ if ($interactiveRequest = $payment->execute($capture, $expectsInteractive = true
     }
     
     throw $interactiveRequest;
-}
-// ...
 ```
 
 You can also capture digital goods:
@@ -47,8 +43,6 @@ You can also capture digital goods:
 ```php
 <?php
 //Source: Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::doDigitalGoodsCapture()
-
-// ...
 
 $capture = new CaptureRequest(array(
     
@@ -63,19 +57,14 @@ $capture = new CaptureRequest(array(
     'L_PAYMENTREQUEST_0_QTY0' => 1,
     'L_PAYMENTREQUEST_0_TAXAMT0' => 2,
 ));
-
-// ...
 ```
 
 ## Was the payment finished successfully?
 
 ```php
 <?php
-use Payum\Request\BinaryMaskStatusRequest;
-
 //Source: Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::doStatus()
-
-//...
+use Payum\Request\BinaryMaskStatusRequest;
 
 $status = new BinaryMaskStatusRequest($capture->getModel());
 $payment->execute($status);
@@ -105,10 +94,9 @@ First you have to create billing agreement and capture it as described [above](#
 
 ```php
 <?php
+//Source: Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::createBillingAgrement()
 use Payum\Request\CaptureRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
-
-//Source: Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::createBillingAgrement()
 
 $captureBillingAgreement = new CaptureRequest(array(
     'PAYMENTREQUEST_0_AMT' => 0,
@@ -125,13 +113,11 @@ After you are done with capture, [check billing agreement status](#was-the-payme
 
 ```php
 <?php
+//Source: Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::createRecurringPaymnt()
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetRecurringPaymentsProfileDetailsRequest;
 
-//Source: Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::createRecurringPaymnt()
-
-// ...
 $billingAgreementDetails = $captureBillingAgreement->getModel();
 
 $recurringPaymentDetails = new \ArrayObject(array(
@@ -218,12 +204,12 @@ Use it:
 
 ```php
 <?php
+//Source: Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::doCaptureAwesomeCart()
 use Payum\Paypal\ExpressCheckout\Nvp\Examples\Model\AwesomeCart;
 use Payum\Paypal\ExpressCheckout\Nvp\Examples\Action\CaptureAwesomeCartAction;
 
-//Source: Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::doCaptureAwesomeCart()
-
 //...
+
 $cart = new AwesomeCart;
 
 $payment->addAction(new CaptureAwesomeCartAction);
