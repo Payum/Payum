@@ -22,10 +22,11 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         $this->expectOutputString('We are done!');
         
         //@testo:start
-        //use Payum\Examples\Action\CaptureAction;
-        //use Payum\Examples\Action\StatusAction;
-        //use Payum\Request\CaptureRequest;
-        //use Payum\Payment;
+        //@testo:source
+        //@testo:uncomment:use Payum\Examples\Action\CaptureAction;
+        //@testo:uncomment:use Payum\Examples\Action\StatusAction;
+        //@testo:uncomment:use Payum\Request\CaptureRequest;
+        //@testo:uncomment:use Payum\Payment;
         
         //Populate payment with actions.
         $payment = new Payment;
@@ -52,12 +53,13 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
 
         $model = array();
         
-        //@testo:start        
-        //use Payum\Examples\Request\AuthorizeRequest;
-        //use Payum\Examples\Action\AuthorizeAction;
-        //use Payum\Request\CaptureRequest;
-        //use Payum\Request\RedirectUrlInteractiveRequest;
-        //use Payum\Payment;
+        //@testo:start
+        //@testo:source
+        //@testo:uncomment:use Payum\Examples\Request\AuthorizeRequest;
+        //@testo:uncomment:use Payum\Examples\Action\AuthorizeAction;
+        //@testo:uncomment:use Payum\Request\CaptureRequest;
+        //@testo:uncomment:use Payum\Request\RedirectUrlInteractiveRequest;
+        //@testo:uncomment:use Payum\Payment;
 
         $payment = new Payment;
         $payment->addAction(new AuthorizeAction());
@@ -69,13 +71,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
                 echo 'User must be redirected to '.$interactiveRequest->getUrl();
             }
 
-            //@testo:end
-            else {
-                //@testo:start
-            throw $interactiveRequest;
-                //@testo:end
-            }
-            //@testo:start
+            //@testo:uncomment:throw $interactiveRequest;
         }
     }
 
@@ -89,9 +85,10 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         $model = array();
         
         //@testo:start
-        //use Payum\Examples\Action\StatusAction;
-        //use Payum\Request\BinaryMaskStatusRequest;
-        //use Payum\Payment;
+        //@testo:source
+        //@testo:uncomment:use Payum\Examples\Action\StatusAction;
+        //@testo:uncomment:use Payum\Request\BinaryMaskStatusRequest;
+        //@testo:uncomment:use Payum\Payment;
         
         //Populate payment with actions.
         $payment = new Payment;
@@ -121,9 +118,10 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
      */
     public function persistPaymentDetails()
     {
-        //use Payum\Payment;
-        //use Payum\Storage\FilesystemStorage;
-        //use Payum\Extension\StorageExtension;
+        //@testo:source
+        //@testo:uncomment:use Payum\Payment;
+        //@testo:uncomment:use Payum\Storage\FilesystemStorage;
+        //@testo:uncomment:use Payum\Extension\StorageExtension;
 
         $storage = new FilesystemStorage('path_to_storage_dir', 'YourModelClass', 'idProperty');
 

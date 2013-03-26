@@ -26,11 +26,10 @@ Also there is a [bundle](https://github.com/Payum/PayumBundle) for symfony2 deve
 ```php
 <?php
 //Source: Payum\Examples\ReadmeTest::bigPicture()
-
-//use Payum\Examples\Action\CaptureAction;
-//use Payum\Examples\Action\StatusAction;
-//use Payum\Request\CaptureRequest;
-//use Payum\Payment;
+use Payum\Examples\Action\CaptureAction;
+use Payum\Examples\Action\StatusAction;
+use Payum\Request\CaptureRequest;
+use Payum\Payment;
 
 //Populate payment with actions.
 $payment = new Payment;
@@ -46,6 +45,7 @@ $captureRequest = new CaptureRequest(array(
 $payment->execute($captureRequest);
 
 echo 'We are done!';
+echo 'We are done!';
 ```
 
 ### How to manage authorize redirect?
@@ -53,12 +53,11 @@ echo 'We are done!';
 ```php
 <?php
 //Source: Payum\Examples\ReadmeTest::interactiveRequests()
-
-//use Payum\Examples\Request\AuthorizeRequest;
-//use Payum\Examples\Action\AuthorizeAction;
-//use Payum\Request\CaptureRequest;
-//use Payum\Request\RedirectUrlInteractiveRequest;
-//use Payum\Payment;
+use Payum\Examples\Request\AuthorizeRequest;
+use Payum\Examples\Action\AuthorizeAction;
+use Payum\Request\CaptureRequest;
+use Payum\Request\RedirectUrlInteractiveRequest;
+use Payum\Payment;
 
 $payment = new Payment;
 $payment->addAction(new AuthorizeAction());
@@ -79,10 +78,9 @@ if ($interactiveRequest = $payment->execute($request, $catchInteractive = true))
 ```php
 <?php
 //Source: Payum\Examples\ReadmeTest::gettingRequestStatus()
-
-//use Payum\Examples\Action\StatusAction;
-//use Payum\Request\BinaryMaskStatusRequest;
-//use Payum\Payment;
+use Payum\Examples\Action\StatusAction;
+use Payum\Request\BinaryMaskStatusRequest;
+use Payum\Payment;
 
 //Populate payment with actions.
 $payment = new Payment;
@@ -97,6 +95,7 @@ if ($statusRequest->isSuccess()) {
 } 
 
 echo 'Uhh something wrong. Check other possible statuses!';
+echo 'Uhh something wrong. Check other possible statuses!';
 ```
 
 ### How to persist payment details?
@@ -104,10 +103,9 @@ echo 'Uhh something wrong. Check other possible statuses!';
 ```php
 <?php
 //Source: Payum\Examples\ReadmeTest::persistPaymentDetails()
-
-//use Payum\Payment;
-//use Payum\Storage\FilesystemStorage;
-//use Payum\Extension\StorageExtension;
+use Payum\Payment;
+use Payum\Storage\FilesystemStorage;
+use Payum\Extension\StorageExtension;
 
 $storage = new FilesystemStorage('path_to_storage_dir', 'YourModelClass', 'idProperty');
 
