@@ -2,14 +2,14 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Examples;
 
 use Buzz\Client\Curl;
+use Payum\Request\CaptureRequest;
+use Payum\Request\SyncRequest;
+use Payum\Request\BinaryMaskStatusRequest;
+use Payum\Request\RedirectUrlInteractiveRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Examples\Model\AwesomeCart;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfileRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetRecurringPaymentsProfileDetailsRequest;
-use Payum\Request\BinaryMaskStatusRequest;
-use Payum\Request\CaptureRequest;
-use Payum\Request\RedirectUrlInteractiveRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Examples\Action\CaptureAwesomeCartAction;
 
 class ReadmeTest extends \PHPUnit_Framework_TestCase
@@ -161,7 +161,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         //@testo:source
         //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Api;
         //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileRequest;
-        //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetRecurringPaymentsProfileDetailsRequest;
+        //@testo:uncomment:use Payum\Request\SyncRequest;
         
         $billingAgreementDetails = $captureBillingAgreement->getModel();
 
@@ -182,9 +182,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         $payment->execute(
             new CreateRecurringPaymentProfileRequest($recurringPaymentDetails)
         );
-        $payment->execute(
-            new GetRecurringPaymentsProfileDetailsRequest($recurringPaymentDetails)
-        );
+        $payment->execute(new SyncRequest($recurringPaymentDetails));
 
         $recurringPaymentStatus = new BinaryMaskStatusRequest($recurringPaymentDetails);
         $payment->execute($recurringPaymentStatus);

@@ -16,6 +16,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsSyncAction;
 
 abstract class PaymentFactory
 {
@@ -43,6 +44,7 @@ abstract class PaymentFactory
         $payment->addAction(new PaymentDetailsStatusAction);
         $payment->addAction(new PaymentDetailsSyncAction);
         $payment->addAction(new RecurringPaymentDetailsStatusAction);
+        $payment->addAction(new RecurringPaymentDetailsSyncAction);
 
         $payment->addAction(new CapturePaymentInstructionAggregateAction);
         $payment->addAction(new SyncPaymentInstructionAggregateAction);

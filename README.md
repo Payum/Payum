@@ -116,7 +116,7 @@ After you are done with capture, [check billing agreement status](#was-the-payme
 //Source: Payum\Paypal\ExpressCheckout\Nvp\Examples\ReadmeTest::createRecurringPaymnt()
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetRecurringPaymentsProfileDetailsRequest;
+use Payum\Request\SyncRequest;
 
 $billingAgreementDetails = $captureBillingAgreement->getModel();
 
@@ -134,9 +134,7 @@ $recurringPaymentDetails = new \ArrayObject(array(
 $payment->execute(
     new CreateRecurringPaymentProfileRequest($recurringPaymentDetails)
 );
-$payment->execute(
-    new GetRecurringPaymentsProfileDetailsRequest($recurringPaymentDetails)
-);
+$payment->execute(new SyncRequest($recurringPaymentDetails));
 
 $recurringPaymentStatus = new BinaryMaskStatusRequest($recurringPaymentDetails);
 $payment->execute($recurringPaymentStatus);
