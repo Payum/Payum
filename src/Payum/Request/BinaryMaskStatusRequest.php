@@ -13,7 +13,7 @@ class BinaryMaskStatusRequest extends BaseModelInteractiveRequest implements Sta
     
     const STATUS_SUCCESS = 32768; // 2^15
 
-    const STATUS_IN_PROGRESS = 1024; // 2^10
+    const STATUS_PENDING = 1024; // 2^10
 
     const STATUS_CANCELED = 32; //2^5
 
@@ -116,7 +116,7 @@ class BinaryMaskStatusRequest extends BaseModelInteractiveRequest implements Sta
      */
     public function markPending()
     {
-        $this->status = static::STATUS_IN_PROGRESS;
+        $this->status = static::STATUS_PENDING;
     }
 
     /**
@@ -124,7 +124,7 @@ class BinaryMaskStatusRequest extends BaseModelInteractiveRequest implements Sta
      */
     public function isPending()
     {
-        return $this->isCurrentStatusEqualTo(static::STATUS_IN_PROGRESS);
+        return $this->isCurrentStatusEqualTo(static::STATUS_PENDING);
     }
 
     /**
