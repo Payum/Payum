@@ -12,6 +12,10 @@
         
         <field name="amt" column="amt" type="string" length="255" nullable="false" />
 
+        <field name="status" column="status" type="string" length="255" nullable="true" />
+
+        <field name="profilestatus" column="profile_status" type="string" length="255" nullable="true" />
+
         <field name="email" column="email" type="string" length="255" nullable="true" />
         
         <field name="currencycode" column="currency_code" type="string" length="255" nullable="true" />
@@ -23,6 +27,14 @@
         <field name="billingperiod" column="billing_period" type="string" length="255" nullable="true" />
 
         <field name="billingfrequency" column="billing_frequency" type="string" length="255" nullable="true" />
+        
+        <field name="l_errorcodennn" column="l_errorcodes" type="array" nullable="true" />
+
+        <field name="l_shortmessagennn" column="l_shortmessages" type="array" nullable="true" />
+
+        <field name="l_longmessagennn" column="l_longmessages" type="array" nullable="true" />
+
+        <field name="l_severitycodennn" column="l_severitycodes" type="array" nullable="true" />
 
     </mapped-superclass>
 </doctrine-mapping>

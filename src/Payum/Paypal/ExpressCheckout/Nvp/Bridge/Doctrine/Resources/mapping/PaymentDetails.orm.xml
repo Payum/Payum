@@ -24,6 +24,10 @@
 
         <field name="paymentrequest_nnn_paymentaction" column="paymentrequest_paymentactions" type="array" nullable="true" />
 
+        <field name="l_billingtypennn" column="l_billingtypes" type="array" nullable="true" />
+
+        <field name="l_billingagreementdescriptionnnn" column="l_billingagreementdescriptions" type="array" nullable="true" />
+        
         <field name="l_errorcodennn" column="l_errorcodes" type="array" nullable="true" />
 
         <field name="l_shortmessagennn" column="l_shortmessages" type="array" nullable="true" />

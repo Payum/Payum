@@ -2,6 +2,7 @@
 ==========
 
 * `PaymentInstruction` was renamed to `PaymentDetails` and moved to `Model` namespace.
+* [Doctrine] `PaymentDetails` mapping schema was updated. Two fields added: `l_billingtypennn`, `l_billingagreementdescriptionnnn`
 
 0.2 to 0.3
 ==========
