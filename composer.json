@@ -2,7 +2,7 @@
     "name": "payum/payum-bundle",
     "type": "symfony-bundle",
     "description": "The payment bundle integrates payum libs into symfony2 framework",
-    "keywords": ["payment", "paypal", "be2bill", "authorize.net", "omnipay"],
+    "keywords": ["payment", "paypal", "be2bill", "authorize.net", "omnipay", "paypal express checkout", "paypal pro checkout", "paypal recurring payment"],
     "homepage": "https://github.com/Payum/PayumBundle",
     "license": "MIT",
     "authors": [
