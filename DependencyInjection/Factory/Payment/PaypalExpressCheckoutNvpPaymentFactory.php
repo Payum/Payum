@@ -95,6 +95,11 @@ class PaypalExpressCheckoutNvpPaymentFactory implements PaymentFactoryInterface
         $container->setDefinition($recurringPaymentDetailsStatusId, $recurringPaymentDetailsStatusDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($recurringPaymentDetailsStatusId)));
 
+        $recurringPaymentDetailsSyncDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.recurring_payment_details_sync');
+        $recurringPaymentDetailsSyncsId = 'payum.context.' . $contextName . '.action.recurring_payment_details_sync';
+        $container->setDefinition($recurringPaymentDetailsSyncsId, $recurringPaymentDetailsSyncDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($recurringPaymentDetailsSyncsId)));
+
         return $paymentId;
     }
 
