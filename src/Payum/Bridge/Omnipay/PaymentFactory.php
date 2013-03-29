@@ -5,9 +5,9 @@ use Omnipay\Common\GatewayInterface;
 
 use Payum\Payment;
 use Payum\Extension\EndlessCycleDetectorExtension;
-use Payum\Action\CapturePaymentInstructionAggregateAction;
-use Payum\Action\StatusPaymentInstructionAggregateAction;
-use Payum\Action\SyncPaymentInstructionAggregateAction;
+use Payum\Action\CaptureDetailsAggregatedModelAction;
+use Payum\Action\StatusDetailsAggregatedModelAction;
+use Payum\Action\SyncDetailsAggregatedModelAction;
 use Payum\Bridge\Omnipay\Action\CaptureAction;
 use Payum\Bridge\Omnipay\Action\StatusAction;
 
@@ -28,9 +28,9 @@ abstract class PaymentFactory
 
         $payment->addAction(new CaptureAction);
         $payment->addAction(new StatusAction);
-        $payment->addAction(new CapturePaymentInstructionAggregateAction);
-        $payment->addAction(new SyncPaymentInstructionAggregateAction);
-        $payment->addAction(new StatusPaymentInstructionAggregateAction);
+        $payment->addAction(new CaptureDetailsAggregatedModelAction);
+        $payment->addAction(new SyncDetailsAggregatedModelAction);
+        $payment->addAction(new StatusDetailsAggregatedModelAction);
 
         return $payment;
     }
