@@ -2,10 +2,10 @@
 namespace Payum\Action;
 
 use Payum\Exception\RequestNotSupportedException;
-use Payum\PaymentInstructionAggregateInterface;
+use Payum\Model\DetailsAggregateInterface;
 use Payum\Request\CaptureRequest;
 
-class CapturePaymentInstructionAggregateAction extends ActionPaymentAware
+class CaptureDetailsAggregatedModelAction extends ActionPaymentAware
 {
     /**
      * {@inheritdoc}
@@ -18,7 +18,7 @@ class CapturePaymentInstructionAggregateAction extends ActionPaymentAware
         }
         
         $this->payment->execute(
-            new CaptureRequest($request->getModel()->getPaymentInstruction())
+            new CaptureRequest($request->getModel()->getDetails())
         );
     }
 
@@ -29,8 +29,8 @@ class CapturePaymentInstructionAggregateAction extends ActionPaymentAware
     {
         return 
             $request instanceof CaptureRequest &&
-            $request->getModel() instanceof PaymentInstructionAggregateInterface && 
-            $request->getModel()->getPaymentInstruction()
+            $request->getModel() instanceof DetailsAggregateInterface && 
+            $request->getModel()->getDetails()
         ;
     }
 }

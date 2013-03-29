@@ -2,10 +2,10 @@
 namespace Payum\Action;
 
 use Payum\Exception\RequestNotSupportedException;
-use Payum\PaymentInstructionAggregateInterface;
+use Payum\Model\DetailsAggregateInterface;
 use Payum\Request\SyncRequest;
 
-class SyncPaymentInstructionAggregateAction extends ActionPaymentAware
+class SyncDetailsAggregatedModelAction extends ActionPaymentAware
 {
     /**
      * {@inheritdoc}
@@ -18,7 +18,7 @@ class SyncPaymentInstructionAggregateAction extends ActionPaymentAware
         }
         
         $this->payment->execute(
-            new SyncRequest($request->getModel()->getPaymentInstruction())
+            new SyncRequest($request->getModel()->getDetails())
         );
     }
 
@@ -29,8 +29,8 @@ class SyncPaymentInstructionAggregateAction extends ActionPaymentAware
     {
         return 
             $request instanceof SyncRequest &&
-            $request->getModel() instanceof PaymentInstructionAggregateInterface && 
-            $request->getModel()->getPaymentInstruction()
+            $request->getModel() instanceof DetailsAggregateInterface && 
+            $request->getModel()->getDetails()
         ;
     }
 }

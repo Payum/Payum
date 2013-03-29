@@ -1,17 +1,17 @@
 <?php
 namespace Payum\Tests\Action;
 
-use Payum\Action\SyncPaymentInstructionAggregateAction;
-use Payum\Request\SyncRequest;
+use Payum\Action\CaptureDetailsAggregatedModelAction;
+use Payum\Request\CaptureRequest;
 
-class SyncPaymentInstructionAggregateActionTest extends \PHPUnit_Framework_TestCase
+class CaptureDetailsAggregatedModelActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfActionPaymentAware()
     {
-        $rc = new \ReflectionClass('Payum\Action\SyncPaymentInstructionAggregateAction');
+        $rc = new \ReflectionClass('Payum\Action\CaptureDetailsAggregatedModelAction');
         
         $this->assertTrue($rc->isSubclassOf('Payum\Action\ActionPaymentAware'));
     }
@@ -21,49 +21,49 @@ class SyncPaymentInstructionAggregateActionTest extends \PHPUnit_Framework_TestC
      */
     public function couldBeConstructedWithoutAnyArguments()   
     {
-        new SyncPaymentInstructionAggregateAction();
+        new CaptureDetailsAggregatedModelAction();
     }
 
     /**
      * @test
      */
-    public function shouldSupportSyncRequestWithPaymentInstructionAggregateAsModel()
+    public function shouldSupportCaptureRequestWithPaymentInstructionAggregateAsModel()
     {
-        $modelMock = $this->getMock('Payum\PaymentInstructionAggregateInterface');
+        $modelMock = $this->getMock('Payum\Model\DetailsAggregateInterface');
         $modelMock
             ->expects($this->atLeastOnce())
-            ->method('getPaymentInstruction')
+            ->method('getDetails')
             ->will($this->returnValue(new \stdClass))
         ;
         
-        $action = new SyncPaymentInstructionAggregateAction();
+        $action = new CaptureDetailsAggregatedModelAction();
 
-        $this->assertTrue($action->supports(new SyncRequest($modelMock)));
+        $this->assertTrue($action->supports(new CaptureRequest($modelMock)));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportSyncRequestWithPaymentInstructionAggregateAsModelIfInstructionNotSet()
+    public function shouldNotSupportCaptureRequestWithPaymentInstructionAggregateAsModelIfInstructionNotSet()
     {
-        $modelMock = $this->getMock('Payum\PaymentInstructionAggregateInterface');
+        $modelMock = $this->getMock('Payum\Model\DetailsAggregateInterface');
         $modelMock
             ->expects($this->atLeastOnce())
-            ->method('getPaymentInstruction')
+            ->method('getDetails')
             ->will($this->returnValue(null))
         ;
 
-        $action = new SyncPaymentInstructionAggregateAction();
+        $action = new CaptureDetailsAggregatedModelAction();
 
-        $this->assertFalse($action->supports(new SyncRequest($modelMock)));
+        $this->assertFalse($action->supports(new CaptureRequest($modelMock)));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportNotSyncRequest()
+    public function shouldNotSupportNotCaptureRequest()
     {
-        $action = new SyncPaymentInstructionAggregateAction();
+        $action = new CaptureDetailsAggregatedModelAction();
         
         $request = new \stdClass();
 
@@ -73,11 +73,11 @@ class SyncPaymentInstructionAggregateActionTest extends \PHPUnit_Framework_TestC
     /**
      * @test
      */
-    public function shouldNotSupportSyncRequestAndNotPaymentInstructionAggregateAsModel()
+    public function shouldNotSupportCaptureRequestAndNotPaymentInstructionAggregateAsModel()
     {
-        $action = new SyncPaymentInstructionAggregateAction();
+        $action = new CaptureDetailsAggregatedModelAction();
         
-        $request = new SyncRequest(new \stdClass());
+        $request = new CaptureRequest(new \stdClass());
         
         $this->assertFalse($action->supports($request));
     }
@@ -89,7 +89,7 @@ class SyncPaymentInstructionAggregateActionTest extends \PHPUnit_Framework_TestC
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $action = new SyncPaymentInstructionAggregateAction();
+        $action = new CaptureDetailsAggregatedModelAction();
 
         $action->execute(new \stdClass());
     }
@@ -97,33 +97,33 @@ class SyncPaymentInstructionAggregateActionTest extends \PHPUnit_Framework_TestC
     /**
      * @test
      */
-    public function shouldCallPaymentExecuteWithSyncRequestAndInstructionSetAsModel()
+    public function shouldCallPaymentExecuteWithCaptureRequestAndInstructionSetAsModel()
     {
         $expectedInstruction = new \stdClass;
-
+        
         $testCase = $this;
         
         $paymentMock = $this->createPaymentMock();
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Request\CaptureRequest'))
             ->will($this->returnCallback(function($request) use ($expectedInstruction, $testCase) {
                 $testCase->assertSame($expectedInstruction, $request->getModel());
             }))
         ;
         
-        $action = new SyncPaymentInstructionAggregateAction();
+        $action = new CaptureDetailsAggregatedModelAction();
         $action->setPayment($paymentMock);
 
-        $modelMock = $this->getMock('Payum\PaymentInstructionAggregateInterface');
+        $modelMock = $this->getMock('Payum\Model\DetailsAggregateInterface');
         $modelMock
             ->expects($this->atLeastOnce())
-            ->method('getPaymentInstruction')
+            ->method('getDetails')
             ->will($this->returnValue($expectedInstruction))
         ;
         
-        $action->execute(new SyncRequest($modelMock));
+        $action->execute(new CaptureRequest($modelMock));
     }
     
     /**

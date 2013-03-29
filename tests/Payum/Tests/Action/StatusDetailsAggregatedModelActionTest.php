@@ -1,17 +1,17 @@
 <?php
 namespace Payum\Tests\Action;
 
-use Payum\Action\StatusPaymentInstructionAggregateAction;
+use Payum\Action\StatusDetailsAggregatedModelAction;
 use Payum\Request\BinaryMaskStatusRequest;
 
-class StatusPaymentInstructionAggregateActionTest extends \PHPUnit_Framework_TestCase
+class StatusDetailsAggregatedModelActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfActionPaymentAware()
     {
-        $rc = new \ReflectionClass('Payum\Action\StatusPaymentInstructionAggregateAction');
+        $rc = new \ReflectionClass('Payum\Action\StatusDetailsAggregatedModelAction');
         
         $this->assertTrue($rc->isSubclassOf('Payum\Action\ActionPaymentAware'));
     }
@@ -21,7 +21,7 @@ class StatusPaymentInstructionAggregateActionTest extends \PHPUnit_Framework_Tes
      */
     public function couldBeConstructedWithoutAnyArguments()   
     {
-        new StatusPaymentInstructionAggregateAction();
+        new StatusDetailsAggregatedModelAction();
     }
 
     /**
@@ -29,14 +29,14 @@ class StatusPaymentInstructionAggregateActionTest extends \PHPUnit_Framework_Tes
      */
     public function shouldSupportStatusRequestWithPaymentInstructionAggregateAsModel()
     {
-        $modelMock = $this->getMock('Payum\PaymentInstructionAggregateInterface');
+        $modelMock = $this->getMock('Payum\Model\DetailsAggregateInterface');
         $modelMock
             ->expects($this->atLeastOnce())
-            ->method('getPaymentInstruction')
+            ->method('getDetails')
             ->will($this->returnValue(new \stdClass))
         ;
         
-        $action = new StatusPaymentInstructionAggregateAction();
+        $action = new StatusDetailsAggregatedModelAction();
 
         $this->assertTrue($action->supports(new BinaryMaskStatusRequest($modelMock)));
     }
@@ -46,14 +46,14 @@ class StatusPaymentInstructionAggregateActionTest extends \PHPUnit_Framework_Tes
      */
     public function shouldNotSupportStatusRequestWithPaymentInstructionAggregateAsModelIfInstructionNotSet()
     {
-        $modelMock = $this->getMock('Payum\PaymentInstructionAggregateInterface');
+        $modelMock = $this->getMock('Payum\Model\DetailsAggregateInterface');
         $modelMock
             ->expects($this->atLeastOnce())
-            ->method('getPaymentInstruction')
+            ->method('getDetails')
             ->will($this->returnValue(null))
         ;
 
-        $action = new StatusPaymentInstructionAggregateAction();
+        $action = new StatusDetailsAggregatedModelAction();
 
         $this->assertFalse($action->supports(new BinaryMaskStatusRequest($modelMock)));
     }
@@ -63,7 +63,7 @@ class StatusPaymentInstructionAggregateActionTest extends \PHPUnit_Framework_Tes
      */
     public function shouldNotSupportNotStatusRequest()
     {
-        $action = new StatusPaymentInstructionAggregateAction();
+        $action = new StatusDetailsAggregatedModelAction();
         
         $request = new \stdClass();
 
@@ -75,7 +75,7 @@ class StatusPaymentInstructionAggregateActionTest extends \PHPUnit_Framework_Tes
      */
     public function shouldNotSupportStatusRequestAndNotPaymentInstructionAggregateAsModel()
     {
-        $action = new StatusPaymentInstructionAggregateAction();
+        $action = new StatusDetailsAggregatedModelAction();
         
         $request = new BinaryMaskStatusRequest(new \stdClass());
         
@@ -89,7 +89,7 @@ class StatusPaymentInstructionAggregateActionTest extends \PHPUnit_Framework_Tes
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $action = new StatusPaymentInstructionAggregateAction();
+        $action = new StatusDetailsAggregatedModelAction();
 
         $action->execute(new \stdClass());
     }
@@ -101,10 +101,10 @@ class StatusPaymentInstructionAggregateActionTest extends \PHPUnit_Framework_Tes
     {
         $expectedInstruction = new \stdClass;
 
-        $modelMock = $this->getMock('Payum\PaymentInstructionAggregateInterface');
+        $modelMock = $this->getMock('Payum\Model\DetailsAggregateInterface');
         $modelMock
             ->expects($this->atLeastOnce())
-            ->method('getPaymentInstruction')
+            ->method('getDetails')
             ->will($this->returnValue($expectedInstruction))
         ;
         
@@ -122,7 +122,7 @@ class StatusPaymentInstructionAggregateActionTest extends \PHPUnit_Framework_Tes
             }))
         ;
         
-        $action = new StatusPaymentInstructionAggregateAction();
+        $action = new StatusDetailsAggregatedModelAction();
         $action->setPayment($paymentMock);
         
         $action->execute($request);

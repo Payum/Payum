@@ -5,6 +5,12 @@
 * Method `StatusInterface::isInProgress` renamed to `StatusInterface::isPending`
 * `StatusInterface` introduce two new statuses: `expired` and `suspended`.
 * `BinaryMaskStatusRequest::STATUS_IN_PROGRESS` renamed to `BinaryMaskStatusRequest::STATUS_PENDING`
+* `PaymentInstructionAggregateInterface` class renamed to `DetailsAggregateInterface`
+* `DetailsAggregateInterface` class moved to `Payum\Model` namespace
+* `DetailsAggregateInterface::getPaymentInstruction` renamed to `DetailsAggregateInterface::getDetails`
+* `PaymentInstructionAwareInterface` class renamed to `DetailsAwareInterface`
+* `DetailsAwareInterface` class moved to `Payum\Model` namespace
+* `DetailsAwareInterface::setPaymentInstruction` renamed to `DetailsAwareInterface::setDetails`
 
 0.2 to 0.3
 ==========
