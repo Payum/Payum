@@ -63,6 +63,6 @@ class ExecuteTest extends \PHPUnit_Framework_TestCase
     //@testo:end
     $this->assertNotEmpty($response);
     $this->assertArrayHasKey('RESULT', $response);
-    $this->assertEquals('0', $response['RESULT']);
+    $this->assertEquals(Api::RESULT_SUCCESS, $response['RESULT']);
   }
 }
