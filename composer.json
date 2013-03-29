@@ -14,7 +14,7 @@
     "require": {
         "php": ">=5.3.3",
         "payum/payum": "0.4.x-dev",
-        "kriswallsmith/buzz": "0.7.*"
+        "kriswallsmith/buzz": "*"
     },
     "require-dev": {
         "ext-curl": "*"
