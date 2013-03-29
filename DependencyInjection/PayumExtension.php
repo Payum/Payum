@@ -48,17 +48,17 @@ class PayumExtension extends Extension
 
                     $paymentService->addMethodCall(
                         'addAction', 
-                        array(new Reference('payum.action.capture_payment_instruction_aggregate'))
+                        array(new Reference('payum.action.capture_details_aggregated_model'))
                     );
 
                     $paymentService->addMethodCall(
                         'addAction',
-                        array(new Reference('payum.action.sync_payment_instruction_aggregate'))
+                        array(new Reference('payum.action.sync_details_aggregated_model'))
                     );
 
                     $paymentService->addMethodCall(
                         'addAction',
-                        array(new Reference('payum.action.status_payment_instruction_aggregate'))
+                        array(new Reference('payum.action.status_details_aggregated_model'))
                     );
 
                     if (false == empty($config[$contextName][$paymentFactory->getName()]['actions'])) {

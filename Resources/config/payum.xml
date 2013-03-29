@@ -11,9 +11,9 @@
         <parameter key="payum.buzz.client.class">Buzz\Client\Curl</parameter>
         <parameter key="payum.listener.interactive_request.class">Payum\Bundle\PayumBundle\EventListener\InteractiveRequestListener</parameter>
 
-        <parameter key="payum.action.capture_payment_instruction_aggregate.class">Payum\Action\CapturePaymentInstructionAggregateAction</parameter>
-        <parameter key="payum.action.sync_payment_instruction_aggregate.class">Payum\Action\SyncPaymentInstructionAggregateAction</parameter>
-        <parameter key="payum.action.status_payment_instruction_aggregate.class">Payum\Action\StatusPaymentInstructionAggregateAction</parameter>
+        <parameter key="payum.action.capture_details_aggregated_model.class">Payum\Action\CaptureDetailsAggregatedModelAction</parameter>
+        <parameter key="payum.action.sync_details_aggregated_model.class">Payum\Action\SyncDetailsAggregatedModelAction</parameter>
+        <parameter key="payum.action.status_details_aggregated_model.class">Payum\Action\StatusDetailsAggregatedModelAction</parameter>
     </parameters>
 
     <services>
@@ -46,18 +46,18 @@
         </service>
 
         <service 
-            id="payum.action.capture_payment_instruction_aggregate" 
-            class="%payum.action.capture_payment_instruction_aggregate.class%"
+            id="payum.action.capture_details_aggregated_model" 
+            class="%payum.action.capture_details_aggregated_model.class%"
         />
 
         <service
-            id="payum.action.sync_payment_instruction_aggregate"
-            class="%payum.action.sync_payment_instruction_aggregate.class%"
+            id="payum.action.sync_details_aggregated_model"
+            class="%payum.action.sync_details_aggregated_model.class%"
         />
 
         <service
-            id="payum.action.status_payment_instruction_aggregate"
-            class="%payum.action.status_payment_instruction_aggregate.class%"
+            id="payum.action.status_details_aggregated_model"
+            class="%payum.action.status_details_aggregated_model.class%"
         />
     </services>
 </container>
