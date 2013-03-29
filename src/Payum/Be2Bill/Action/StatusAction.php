@@ -4,9 +4,7 @@ namespace Payum\Be2Bill\Action;
 use Payum\Action\ActionInterface;
 use Payum\Bridge\Spl\ArrayObject;
 use Payum\Request\StatusRequestInterface;
-use Payum\PaymentInstructionAggregateInterface;
 use Payum\Exception\RequestNotSupportedException;
-use Payum\Be2Bill\PaymentInstruction;
 use Payum\Be2Bill\Api;
 
 class StatusAction implements ActionInterface
