@@ -1,7 +1,8 @@
 <?php
 namespace Payum\Be2Bill\Action;
 
-use Payum\Action\ActionApiAwareInterface;
+use Payum\Action\ActionInterface;
+use Payum\ApiAwareInterface;
 use Payum\Bridge\Spl\ArrayObject;
 use Payum\Request\CaptureRequest;
 use Payum\Request\UserInputRequiredInteractiveRequest;
@@ -9,7 +10,7 @@ use Payum\Exception\UnsupportedApiException;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Be2Bill\Api;
 
-class CaptureAction implements ActionApiAwareInterface
+class CaptureAction implements ActionInterface, ApiAwareInterface
 {
     /**
      * @var Api
