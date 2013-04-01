@@ -1,13 +1,11 @@
 <?php
-namespace Payum\Action;
+namespace Payum;
 
-use Payum\PaymentInterface;
-
-interface ActionPaymentAwareInterface extends ActionInterface
+interface PaymentAwareInterface
 {
     /**
      * @param \Payum\PaymentInterface $payment
-     * 
+     *
      * @return void
      */
     function setPayment(PaymentInterface $payment);

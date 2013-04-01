@@ -1,16 +1,13 @@
 <?php
 namespace Payum;
 
-use Payum\Action\ActionApiAwareInterface;
 use Payum\Exception\LogicException;
 use Payum\Exception\UnsupportedApiException;
 use Payum\Extension\ExtensionCollection;
 use Payum\Extension\ExtensionInterface;
 use Payum\Request\InteractiveRequestInterface;
-use Payum\Action\ActionPaymentAwareInterface;
 use Payum\Action\ActionInterface;
 use Payum\Exception\RequestNotSupportedException;
-use Payum\Exception\CycleRequestsException;
 
 class Payment implements PaymentInterface
 {
@@ -49,11 +46,11 @@ class Payment implements PaymentInterface
      */
     public function addAction(ActionInterface $action, $forcePrepend = false)
     {
-        if ($action instanceof ActionPaymentAwareInterface) {
+        if ($action instanceof PaymentAwareInterface) {
             $action->setPayment($this);
         }
         
-        if ($action instanceof ActionApiAwareInterface) {
+        if ($action instanceof ApiAwareInterface) {
             $apiSet = false;
             foreach ($this->apis as $api) {
                 try {

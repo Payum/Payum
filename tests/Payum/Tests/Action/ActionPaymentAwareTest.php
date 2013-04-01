@@ -6,11 +6,21 @@ class ActionPaymentAwareTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementActionPaymentAwareInterface()
+    public function shouldImplementActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Action\ActionPaymentAware');
         
-        $this->assertTrue($rc->implementsInterface('Payum\Action\ActionPaymentAwareInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Action\ActionInterface'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldImplementPaymentAwareInterface()
+    {
+        $rc = new \ReflectionClass('Payum\Action\ActionPaymentAware');
+
+        $this->assertTrue($rc->implementsInterface('Payum\PaymentAwareInterface'));
     }
 
     /**
