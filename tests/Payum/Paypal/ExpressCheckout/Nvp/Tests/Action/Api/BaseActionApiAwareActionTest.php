@@ -6,13 +6,23 @@ class BaseActionApiAwareActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementActionApiAwareInterface()
+    public function shouldImplementActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseActionApiAware');
         
-        $this->assertTrue($rc->isSubclassOf('Payum\Action\ActionApiAwareInterface'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Action\ActionInterface'));
     }
 
+    /**
+     * @test
+     */
+    public function shouldImplementApiAwareInterface()
+    {
+        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseActionApiAware');
+        
+        $this->assertTrue($rc->isSubclassOf('Payum\ApiAwareInterface'));
+    }
+    
     /**
      * @test
      */
