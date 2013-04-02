@@ -1,14 +1,14 @@
 <?php
 namespace Payum\Bridge\Omnipay\Tests\Action;
 
-class BaseActionApiAwareTest extends \PHPUnit_Framework_TestCase
+class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Bridge\Omnipay\Action\BaseActionApiAware');
+        $rc = new \ReflectionClass('Payum\Bridge\Omnipay\Action\BaseApiAwareAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Action\ActionInterface'));
     }
@@ -18,7 +18,7 @@ class BaseActionApiAwareTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Bridge\Omnipay\Action\BaseActionApiAware');
+        $rc = new \ReflectionClass('Payum\Bridge\Omnipay\Action\BaseApiAwareAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\ApiAwareInterface'));
     }
@@ -28,7 +28,7 @@ class BaseActionApiAwareTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeAbstract()
     {
-        $rc = new \ReflectionClass('Payum\Bridge\Omnipay\Action\BaseActionApiAware');
+        $rc = new \ReflectionClass('Payum\Bridge\Omnipay\Action\BaseApiAwareAction');
 
         $this->assertTrue($rc->isAbstract());
     }
@@ -40,7 +40,7 @@ class BaseActionApiAwareTest extends \PHPUnit_Framework_TestCase
     {
         $expectedApi = $this->createGatewayMock();
 
-        $action = $this->getMockForAbstractClass('Payum\Bridge\Omnipay\Action\BaseActionApiAware');
+        $action = $this->getMockForAbstractClass('Payum\Bridge\Omnipay\Action\BaseApiAwareAction');
 
         $action->setApi($expectedApi);
 
@@ -54,7 +54,7 @@ class BaseActionApiAwareTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfUnsupportedApiGiven()
     {
-        $action = $this->getMockForAbstractClass('Payum\Bridge\Omnipay\Action\BaseActionApiAware');
+        $action = $this->getMockForAbstractClass('Payum\Bridge\Omnipay\Action\BaseApiAwareAction');
 
         $action->setApi(new \stdClass);
     }

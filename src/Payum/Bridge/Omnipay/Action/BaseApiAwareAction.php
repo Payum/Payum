@@ -7,7 +7,7 @@ use Payum\Action\ActionInterface;
 use Payum\ApiAwareInterface;
 use Payum\Exception\UnsupportedApiException;
 
-abstract class BaseActionApiAware implements ActionInterface, ApiAwareInterface
+abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
 {
     /**
      * @var \Omnipay\Common\GatewayInterface

@@ -12,7 +12,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Bridge\Omnipay\Action\CaptureAction');
         
-        $this->assertTrue($rc->isSubclassOf('Payum\Bridge\Omnipay\Action\BaseActionApiAware'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Bridge\Omnipay\Action\BaseApiAwareAction'));
     }
 
     /**

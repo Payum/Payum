@@ -9,7 +9,7 @@ use Payum\Request\CaptureRequest;
 use Payum\Request\InteractiveRequestInterface;
 use Payum\Request\RedirectUrlInteractiveRequest;
 
-class CaptureAction extends BaseActionApiAware
+class CaptureAction extends BaseApiAwareAction
 {
     /**
      * {@inheritdoc}
