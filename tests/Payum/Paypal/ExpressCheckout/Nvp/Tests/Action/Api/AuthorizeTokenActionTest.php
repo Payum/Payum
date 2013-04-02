@@ -11,11 +11,11 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfBaseActionApiAwareAction()
+    public function shouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\AuthorizeTokenAction');
         
-        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseActionApiAware'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction'));
     }
 
     /**

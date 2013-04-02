@@ -6,10 +6,10 @@ use Buzz\Message\Form\FormRequest;
 use Payum\Bridge\Spl\ArrayObject;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Exception\LogicException;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseActionApiAware;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetailsRequest;
 
-class GetExpressCheckoutDetailsAction extends  BaseActionApiAware
+class GetExpressCheckoutDetailsAction extends  BaseApiAwareAction
 {
     /**
      * {@inheritdoc}

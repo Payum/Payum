@@ -8,7 +8,7 @@ use Payum\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ManageRecurringPaymentsProfileStatusRequest;
 
-class ManageRecurringPaymentsProfileStatusAction extends BaseActionApiAware 
+class ManageRecurringPaymentsProfileStatusAction extends BaseApiAwareAction 
 {
     /**
      * [@inheritdoc}

@@ -11,11 +11,11 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_
     /**
      * @test
      */
-    public function shouldBeSubClassOfBaseActionApiAwareAction()
+    public function shouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\ManageRecurringPaymentsProfileStatusAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseActionApiAware'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction'));
     }
 
     /**

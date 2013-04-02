@@ -5,12 +5,12 @@ use Buzz\Message\Form\FormRequest;
 
 use Payum\Bridge\Spl\ArrayObject;
 use Payum\Exception\RequestNotSupportedException;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseActionApiAware;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfileRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetRecurringPaymentsProfileDetailsRequest;
 
-class GetRecurringPaymentsProfileDetailsAction extends BaseActionApiAware
+class GetRecurringPaymentsProfileDetailsAction extends BaseApiAwareAction
 {
     /**
      * {@inheritdoc}
