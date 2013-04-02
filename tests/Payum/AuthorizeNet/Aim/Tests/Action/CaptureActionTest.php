@@ -3,7 +3,7 @@ namespace Payum\AuthorizeNet\Aim\Tests\Action;
 
 use Payum\Request\CaptureRequest;
 use Payum\AuthorizeNet\Aim\Action\CaptureAction;
-use Payum\AuthorizeNet\Aim\PaymentInstruction;
+use Payum\AuthorizeNet\Aim\Model\PaymentDetails;
 
 class CaptureActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,11 +50,11 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestWithPaymentInstructionAsModel()
+    public function shouldSupportCaptureRequestWithPaymentDetailsAsModel()
     {
         $action = new CaptureAction();
 
-        $request = new CaptureRequest(new PaymentInstruction);
+        $request = new CaptureRequest(new PaymentDetails);
 
         $this->assertTrue($action->supports($request));
     }

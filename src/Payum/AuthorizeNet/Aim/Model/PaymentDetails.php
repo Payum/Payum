@@ -1,9 +1,9 @@
 <?php
-namespace Payum\AuthorizeNet\Aim;
+namespace Payum\AuthorizeNet\Aim\Model;
 
 use Payum\Exception\InvalidArgumentException;
 
-class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
+class PaymentDetails implements \ArrayAccess, \IteratorAggregate
 {
     protected $address;
     

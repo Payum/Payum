@@ -1,3 +1,8 @@
+0.3 to 0.4
+==========
+
+* `PaymentInstruction` was renamed to `PaymentDetails` and moved to `Model` namespace.
+
 0.2 to 0.3
 ==========
 
