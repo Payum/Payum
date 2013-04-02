@@ -1,16 +1,16 @@
 <?php
-namespace Payum\Be2Bill\Tests;
+namespace Payum\Be2Bill\Tests\Model;
 
-use Payum\Be2Bill\PaymentInstruction;
+use Payum\Be2Bill\Model\PaymentDetails;
 
-class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
+class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldImplementArrayAccessInterface()
     {
-        $rc = new \ReflectionClass('Payum\Be2Bill\PaymentInstruction');
+        $rc = new \ReflectionClass('Payum\Be2Bill\Model\PaymentDetails');
         
         $this->assertTrue($rc->implementsInterface('ArrayAccess'));
     }
@@ -20,7 +20,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementIteratorAggregateInterface()
     {
-        $rc = new \ReflectionClass('Payum\Be2Bill\PaymentInstruction');
+        $rc = new \ReflectionClass('Payum\Be2Bill\Model\PaymentDetails');
 
         $this->assertTrue($rc->implementsInterface('IteratorAggregate'));
     }
@@ -30,7 +30,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new PaymentInstruction;
+        new PaymentDetails;
     }
 
     /**
@@ -38,7 +38,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowUseAsArray()
     {
-        $instruction = new PaymentInstruction;
+        $instruction = new PaymentDetails;
 
         $instruction['EXECCODE'] = 'foo';
         $this->assertEquals('foo', $instruction['EXECCODE']);
@@ -57,7 +57,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfSetNotBe2billArrayField()
     {
-        $instruction = new PaymentInstruction;
+        $instruction = new PaymentDetails;
 
         $instruction['FOO'] = 'foo';
     }
@@ -67,7 +67,7 @@ class PaymentInstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowIterateOverSetFields()
     {
-        $instruction = new PaymentInstruction;
+        $instruction = new PaymentDetails;
 
         $instruction['EXECCODE'] = 'foo';
         $instruction->setAmount('baz');

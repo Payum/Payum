@@ -5,7 +5,7 @@ use Payum\Be2Bill\Api;
 use Payum\Be2Bill\Payment;
 use Payum\Request\CaptureRequest;
 use Payum\Be2Bill\Action\CaptureAction;
-use Payum\Be2Bill\PaymentInstruction;
+use Payum\Be2Bill\Model\PaymentDetails;
 
 class CaptureActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -40,11 +40,11 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestWithPaymentInstructionAsModel()
+    public function shouldSupportCaptureRequestWithPaymentDetailsAsModel()
     {
         $action = new CaptureAction();
 
-        $request = new CaptureRequest(new PaymentInstruction);
+        $request = new CaptureRequest(new PaymentDetails);
 
         $this->assertTrue($action->supports($request));
     }

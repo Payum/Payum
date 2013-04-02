@@ -58,8 +58,8 @@ The filesystem storage is easy to setup, does not have any requirements. It is e
 To use doctrine2 storage you have to follow several steps:
 
 * [Install](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/installation.html) doctrine2 lib. 
-* [Add](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/configuration.html#obtaining-an-entitymanager) mapping [schema](src/Payum/Be2Bill/Bridge/Doctrine/Resources/mapping/PaymentInstruction.orm.xml) to doctrine configuration. 
-* Extend provided [model](src/Payum/Be2Bill/Bridge/Doctrine/Entity/PaymentInstruction.php) and add `id` field.
+* [Add](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/configuration.html#obtaining-an-entitymanager) mapping [schema](src/Payum/Be2Bill/Bridge/Doctrine/Resources/mapping/PaymentDetails.orm.xml) to doctrine configuration. 
+* Extend provided [model](src/Payum/Be2Bill/Bridge/Doctrine/Entity/PaymentDetails.php) and add `id` field.
 
 Want another storage? Contribute!
 

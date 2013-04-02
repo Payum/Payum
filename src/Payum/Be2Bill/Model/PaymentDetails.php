@@ -1,9 +1,9 @@
 <?php
-namespace Payum\Be2Bill;
+namespace Payum\Be2Bill\Model;
 
 use Payum\Exception\InvalidArgumentException;
 
-class PaymentInstruction implements \ArrayAccess, \IteratorAggregate
+class PaymentDetails implements \ArrayAccess, \IteratorAggregate
 {
     /**
      * Description: Action to be carried out

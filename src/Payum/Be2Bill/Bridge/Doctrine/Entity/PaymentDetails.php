@@ -1,9 +1,9 @@
 <?php
 namespace Payum\Be2Bill\Bridge\Doctrine\Entity;
 
-use Payum\Be2Bill\PaymentInstruction as BasePaymentInstruction;
+use Payum\Be2Bill\Model\PaymentDetails as BasePaymentDetails;
 
-class PaymentInstruction extends BasePaymentInstruction
+class PaymentDetails extends BasePaymentDetails
 {
     protected $id;
     

@@ -3,7 +3,7 @@ namespace Payum\Be2Bill\Tests\Action;
 
 use Payum\Request\StatusRequestInterface;
 use Payum\Be2Bill\Action\StatusAction;
-use Payum\Be2Bill\PaymentInstruction;
+use Payum\Be2Bill\Model\PaymentDetails;
 
 class StatusActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -40,11 +40,11 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestWithPaymentInstructionAsModel()
+    public function shouldSupportCaptureRequestWithPaymentDetailsAsModel()
     {
         $action = new StatusAction();
 
-        $request = $this->createStatusRequestStub(new PaymentInstruction);
+        $request = $this->createStatusRequestStub(new PaymentDetails);
 
         $this->assertTrue($action->supports($request));
     }
