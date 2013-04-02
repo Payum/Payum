@@ -5,14 +5,14 @@ use Payum\Exception\RequestNotSupportedException;
 use Payum\Model\DetailsAggregateInterface;
 use Payum\Request\SyncRequest;
 
-class SyncDetailsAggregatedModelAction extends ActionPaymentAware
+class SyncDetailsAggregatedModelAction extends PaymentAwareAction
 {
     /**
      * {@inheritdoc}
      */
     public function execute($request)
     {
-        /** @var $request CaptureRequest */
+        /** @var $request SyncRequest */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }

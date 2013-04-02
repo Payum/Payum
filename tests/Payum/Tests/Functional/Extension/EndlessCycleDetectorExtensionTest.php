@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Tests\Functional\Extension;
 
-use Payum\Action\ActionPaymentAware;
+use Payum\Action\PaymentAwareAction;
 use Payum\Extension\EndlessCycleDetectorExtension;
 use Payum\Payment;
 
@@ -29,7 +29,7 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-class RequireOtherRequestAction extends ActionPaymentAware
+class RequireOtherRequestAction extends PaymentAwareAction
 {
     protected $supportedRequest;
 

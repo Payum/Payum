@@ -9,11 +9,11 @@ class CaptureDetailsAggregatedModelActionTest extends \PHPUnit_Framework_TestCas
     /**
      * @test
      */
-    public function shouldBeSubClassOfActionPaymentAware()
+    public function shouldBeSubClassOfPaymentAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Action\CaptureDetailsAggregatedModelAction');
         
-        $this->assertTrue($rc->isSubclassOf('Payum\Action\ActionPaymentAware'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Action\PaymentAwareAction'));
     }
 
     /**

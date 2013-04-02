@@ -5,14 +5,14 @@ use Payum\Exception\RequestNotSupportedException;
 use Payum\Model\DetailsAggregateInterface;
 use Payum\Request\StatusRequestInterface;
 
-class StatusDetailsAggregatedModelAction extends ActionPaymentAware
+class StatusDetailsAggregatedModelAction extends PaymentAwareAction
 {
     /**
      * {@inheritdoc}
      */
     public function execute($request)
     {
-        /** @var $request CaptureRequest */
+        /** @var $request StatusRequestInterface */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }

@@ -5,7 +5,7 @@ use Payum\Exception\RequestNotSupportedException;
 use Payum\Model\DetailsAggregateInterface;
 use Payum\Request\CaptureRequest;
 
-class CaptureDetailsAggregatedModelAction extends ActionPaymentAware
+class CaptureDetailsAggregatedModelAction extends PaymentAwareAction
 {
     /**
      * {@inheritdoc}

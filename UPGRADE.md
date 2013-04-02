@@ -13,6 +13,7 @@
 * `DetailsAwareInterface::setPaymentInstruction` renamed to `DetailsAwareInterface::setDetails`
 * `ActionApiAwareInterface` interface was deleted. Use combination of `ActionInterface` and `ApiAwareInterface` instead.
 * `ActionPaymentAwareInterface` interface was deleted. Use combination og `ActionInterface` and `PaymentAwareInterface` instead.
+* Action `ActionPaymentAware` was renamed to `PaymentAwareAction`.
 
 0.2 to 0.3
 ==========

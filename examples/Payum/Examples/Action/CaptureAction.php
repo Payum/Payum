@@ -1,12 +1,12 @@
 <?php
 namespace Payum\Examples\Action;
 
-use Payum\Action\ActionPaymentAware;
+use Payum\Action\PaymentAwareAction;
 use Payum\Examples\Model\AuthorizeRequiredModel;
 use Payum\Request\CaptureRequest;
 use Payum\Examples\Request\AuthorizeRequest;
 
-class CaptureAction extends  ActionPaymentAware
+class CaptureAction extends  PaymentAwareAction
 {
     /**
      * {@inheritdoc}

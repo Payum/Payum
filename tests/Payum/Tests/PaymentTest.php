@@ -4,9 +4,8 @@ namespace Payum\Tests;
 use Payum\ApiAwareInterface;
 use Payum\Exception\UnsupportedApiException;
 use Payum\Payment;
-use Payum\Action\ActionPaymentAware;
 use Payum\Action\ActionInterface;
-use Payum\PaymentAwareInterface;
+use Payum\Action\PaymentAwareAction;
 use Payum\Request\InteractiveRequestInterface;
 
 class PaymentTest extends \PHPUnit_Framework_TestCase
@@ -285,11 +284,11 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     {
         $payment = new Payment();
 
-        $actionMock = $this->getMockForAbstractClass('Payum\Tests\PaymentAwareAction');
+        $actionMock = $this->getMock('Payum\Action\PaymentAwareAction');
         $actionMock
             ->expects($this->once())
             ->method('setPayment')
-            ->with($this->isInstanceOf('Payum\Payment'))
+            ->with($this->identicalTo($payment))
         ;
         
         $payment->addAction($actionMock);
@@ -559,7 +558,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-class RequireOtherRequestAction extends ActionPaymentAware
+class RequireOtherRequestAction extends PaymentAwareAction
 {
     protected $supportedRequest;
 
@@ -628,9 +627,4 @@ class ThrowInteractiveAction implements ActionInterface
 abstract class ApiAwareAction implements ActionInterface, ApiAwareInterface
 {
     
-}
-
-abstract class PaymentAwareAction implements ActionInterface, PaymentAwareInterface
-{
-
 }
