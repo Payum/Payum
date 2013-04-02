@@ -1,12 +1,12 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Examples\Action;
 
-use Payum\Action\ActionPaymentAware;
+use Payum\Action\PaymentAwareAction;
 use Payum\Request\CaptureRequest;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Examples\Model\AwesomeCart; 
 
-class CaptureAwesomeCartAction extends ActionPaymentAware
+class CaptureAwesomeCartAction extends PaymentAwareAction
 {
     /**
      * {@inheritdoc}

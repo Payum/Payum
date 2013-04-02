@@ -5,13 +5,13 @@ use Buzz\Message\Form\FormRequest;
 
 use Payum\Bridge\Spl\ArrayObject;
 use Payum\Request\SyncRequest;
-use Payum\Action\ActionPaymentAware;
+use Payum\Action\PaymentAwareAction;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetailsRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetailsRequest;
 
-class PaymentDetailsSyncAction extends ActionPaymentAware
+class PaymentDetailsSyncAction extends PaymentAwareAction
 {
     /**
      * {@inheritdoc}

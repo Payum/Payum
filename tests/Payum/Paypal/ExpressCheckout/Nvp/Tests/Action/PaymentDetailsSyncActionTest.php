@@ -15,11 +15,11 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfActionPaymentAware()
+    public function shouldBeSubClassOfPaymentAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction');
         
-        $this->assertTrue($rc->isSubclassOf('Payum\Action\ActionPaymentAware'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Action\PaymentAwareAction'));
     }
 
     /**

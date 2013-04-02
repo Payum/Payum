@@ -6,13 +6,13 @@ use Buzz\Message\Form\FormRequest;
 use Payum\Bridge\Spl\ArrayObject;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetRecurringPaymentsProfileDetailsRequest;
 use Payum\Request\SyncRequest;
-use Payum\Action\ActionPaymentAware;
+use Payum\Action\PaymentAwareAction;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetailsRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetailsRequest;
 
-class RecurringPaymentDetailsSyncAction extends ActionPaymentAware
+class RecurringPaymentDetailsSyncAction extends PaymentAwareAction
 {
     /**
      * {@inheritdoc}
