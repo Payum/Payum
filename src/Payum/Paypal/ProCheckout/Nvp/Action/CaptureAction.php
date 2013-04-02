@@ -9,7 +9,7 @@ use Payum\Exception\UnsupportedApiException;
 use Payum\Exception\LogicException;
 use Payum\Paypal\ProCheckout\Nvp\Api;
 use Payum\Paypal\ProCheckout\Nvp\Bridge\Buzz\Request;
-use Payum\Paypal\ProCheckout\Nvp\PaymentInstruction;
+use Payum\Paypal\ProCheckout\Nvp\Model\PaymentDetails;
 use Payum\Request\CaptureRequest;
 
 /**
@@ -44,10 +44,10 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        /** @var $instruction PaymentInstruction */
-        $instruction = $request->getModel();
+        /** @var $model \Payum\Paypal\ProCheckout\Nvp\Model\PaymentDetails */
+        $model = $request->getModel();
         $buzzRequest = new Request();
-        $buzzRequest->setFields($instruction->toNvp());
+        $buzzRequest->setFields($model->toNvp());
         $exception = null;
         try {
             $response = $this->api->doPayment($buzzRequest);
@@ -56,7 +56,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
             $exception = $e;
         }
 
-        $instruction->fromNvp($response);
+        $model->fromNvp($response);
 
         if ($exception) {
             throw $exception;
@@ -70,7 +70,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
     {
         return
             $request instanceof CaptureRequest &&
-            $request->getModel() instanceof PaymentInstruction
+            $request->getModel() instanceof PaymentDetails
         ;
     }
 }

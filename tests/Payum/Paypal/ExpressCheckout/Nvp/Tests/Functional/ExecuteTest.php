@@ -4,7 +4,7 @@ namespace Payum\Paypal\ProCheckout\Nvp\Examples;
 use Buzz\Client\Curl;
 use Payum\Paypal\ProCheckout\Nvp\Api;
 use Payum\Paypal\ProCheckout\Nvp\PaymentFactory;
-use Payum\Paypal\ProCheckout\Nvp\PaymentInstruction;
+use Payum\Paypal\ProCheckout\Nvp\Model\PaymentDetails;
 use Payum\Request\BinaryMaskStatusRequest;
 use Payum\Request\CaptureRequest;
 
@@ -38,7 +38,7 @@ class ExecuteTest extends \PHPUnit_Framework_TestCase
         'sandbox' => true
     )));
 
-    $instruction = new PaymentInstruction();
+    $instruction = new PaymentDetails();
     $instruction->setCurrency('USD');
     $instruction->setAmt('1.00');
     $instruction->setAcct('5105105105105100');
