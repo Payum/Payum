@@ -1,4 +1,4 @@
-Payum Paypal Ipn
+Payum Paypal Ipn [![Build Status](https://travis-ci.org/Payum/PaypalIpn.png?branch=master)](https://travis-ci.org/Payum/PaypalIpn)
 ================
 
 The lib implements [Paypal Instant payment notifications](https://www.x.com/developers/paypal/documentation-tools/ipn/integration-guide/IPNIntro) client.
