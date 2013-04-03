@@ -5,7 +5,7 @@ The lib implements [Paypal Instant payment notifications](https://www.x.com/deve
 
 ## How to Api?
 
-```
+```php
 <?php
 use Buzz\Client\Curl;
 use Payum\Paypal\Ipn\Api;
