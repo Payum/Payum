@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "payum/payum": "0.4.x-dev",
+        "payum/payum": "0.4.*",
         "kriswallsmith/buzz": "*"
     },
     "require-dev": {
