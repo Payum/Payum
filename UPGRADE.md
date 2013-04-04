@@ -14,6 +14,8 @@
 * `ActionApiAwareInterface` interface was deleted. Use combination of `ActionInterface` and `ApiAwareInterface` instead.
 * `ActionPaymentAwareInterface` interface was deleted. Use combination og `ActionInterface` and `PaymentAwareInterface` instead.
 * Action `ActionPaymentAware` was renamed to `PaymentAwareAction`.
+* Exception `HttpResponseStatusNotSuccessfulException` was removed. Use `HttpException` instead.
+* `HttpException` constructor signature changed. Now it is like any other basic exception. 
 
 0.2 to 0.3
 ==========
