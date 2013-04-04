@@ -14,7 +14,7 @@
     "require": {
         "php": ">=5.3.2",
         "kriswallsmith/buzz": "*",
-        "payum/payum": "0.4.x-dev"
+        "payum/payum": "0.4.*"
     },
     "require-dev": {
         "doctrine/orm": "2.2.*",
