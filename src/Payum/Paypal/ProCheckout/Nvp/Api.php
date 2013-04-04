@@ -2,7 +2,7 @@
 namespace Payum\Paypal\ProCheckout\Nvp;
 
 use Buzz\Client\ClientInterface;
-use Payum\Exception\Http\HttpResponseStatusNotSuccessfulException;
+use Payum\Exception\Http\HttpException;
 use Payum\Paypal\ProCheckout\Nvp\Bridge\Buzz\Request;
 use Payum\Paypal\ProCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ProCheckout\Nvp\Exception\Http\HttpResponseNotSuccessException;
@@ -195,8 +195,7 @@ class Api
     /**
      * @param Request $request
      *
-     * @throws HttpResponseStatusNotSuccessfulException
-     * @throws HttpResponseNotSuccessException
+     * @throws HttpException
      *
      * @return Response
      */
@@ -208,7 +207,7 @@ class Api
 
 
         if (false == $response->isSuccessful()) {
-            throw new HttpResponseStatusNotSuccessfulException($request, $response);
+            throw HttpException::factory($request, $response);
         }
 
         if (self::RESULT_SUCCESS != $response['RESULT']) {
