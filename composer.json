@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "payum/payum": "0.4.*",
+        "payum/payum": "0.5.x-dev",
         "kriswallsmith/buzz": "*"
     },
     "require-dev": {
@@ -27,7 +27,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.4-dev"
+            "dev-master": "0.5-dev"
         }
     }
 }
