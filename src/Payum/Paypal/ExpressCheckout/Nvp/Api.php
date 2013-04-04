@@ -4,7 +4,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp;
 use Buzz\Client\ClientInterface;
 use Buzz\Message\Form\FormRequest;
 
-use Payum\Exception\Http\HttpResponseStatusNotSuccessfulException;
+use Payum\Exception\Http\HttpException;
 use Payum\Exception\InvalidArgumentException;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
@@ -436,7 +436,7 @@ class Api
     /**
      * @param \Buzz\Message\Form\FormRequest $request
      *
-     * @throws \Payum\Exception\Http\HttpResponseStatusNotSuccessfulException
+     * @throws \Payum\Exception\Http\HttpException
      *
      * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
      */
@@ -448,10 +448,14 @@ class Api
         $this->client->send($request, $response = $this->createResponse());
 
         if (false == $response->isSuccessful()) {
-            throw new HttpResponseStatusNotSuccessfulException($request, $response);
+            throw HttpException::factory($request, $response);
         }
         if (false == ($response['ACK'] == self::ACK_SUCCESS || $response['ACK'] ==  self::ACK_SUCCESS_WITH_WARNING)) {
-            throw new HttpResponseAckNotSuccessException($request, $response);
+            $e = new HttpResponseAckNotSuccessException('The response ACK is not success.');
+            $e->setRequest($request);
+            $e->setResponse($response);
+            
+            throw $e;
         }
 
         return $response;
@@ -481,7 +485,7 @@ class Api
         return $this->options['sandbox'] ?
             'https://api-3t.sandbox.paypal.com/nvp' :
             'https://api-3t.paypal.com/nvp'
-            ;
+        ;
     }
 
     /**

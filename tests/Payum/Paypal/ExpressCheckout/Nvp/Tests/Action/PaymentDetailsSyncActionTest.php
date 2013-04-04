@@ -178,7 +178,9 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
             'L_ERRORCODE1' => 'bar_error',
         )));
         
-        $ackFailedException = new HttpResponseAckNotSuccessException(new FormRequest(), $response);
+        $ackFailedException = new HttpResponseAckNotSuccessException;
+        $ackFailedException->setRequest(new FormRequest());
+        $ackFailedException->setResponse($response);
         
         $paymentMock = $this->createPaymentMock();
         $paymentMock

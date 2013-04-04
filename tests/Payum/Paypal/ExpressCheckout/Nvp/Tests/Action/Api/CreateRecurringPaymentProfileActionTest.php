@@ -236,7 +236,9 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
             'L_ERRORCODE1' => 'bar_error',
         )));
 
-        $ackFailedException = new HttpResponseAckNotSuccessException(new FormRequest(), $response);
+        $ackFailedException = new HttpResponseAckNotSuccessException;
+        $ackFailedException->setRequest(new FormRequest());
+        $ackFailedException->setResponse($response);
 
         $apiMock = $this->createApiMock();
         $apiMock
