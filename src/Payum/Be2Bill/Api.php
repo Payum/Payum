@@ -5,7 +5,7 @@ use Buzz\Client\ClientInterface;
 use Buzz\Message\Form\FormRequest;
 
 use Payum\Exception\InvalidArgumentException;
-use Payum\Exception\Http\HttpResponseStatusNotSuccessfulException;
+use Payum\Exception\Http\HttpException;
 use Payum\Bridge\Buzz\JsonResponse;
 
 class Api
@@ -161,7 +161,7 @@ class Api
     /**
      * @param \Buzz\Message\Form\FormRequest $request
      *
-     * @throws \Payum\Exception\Http\HttpResponseStatusNotSuccessfulException
+     * @throws \Payum\Exception\Http\HttpException
      *
      * @return JsonResponse
      */
@@ -173,7 +173,7 @@ class Api
         $this->client->send($request, $response = new JsonResponse());
 
         if (false == $response->isSuccessful()) {
-            throw new HttpResponseStatusNotSuccessfulException($request, $response);
+            throw HttpException::factory($request, $response);
         }
 
         return $response;
