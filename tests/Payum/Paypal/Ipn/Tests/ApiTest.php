@@ -55,8 +55,8 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Exception\Http\HttpResponseStatusNotSuccessfulException
-     * @expectedExceptionMessage The response `404` status is not success.
+     * @expectedException \Payum\Exception\Http\HttpException
+     * @expectedExceptionMessage Client error response
      */
     public function throwIfResponseStatusNotOk()
     {

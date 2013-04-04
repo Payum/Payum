@@ -4,7 +4,7 @@ namespace Payum\Paypal\Ipn;
 use Buzz\Client\ClientInterface;
 use Buzz\Message\Form\FormRequest;
 use Buzz\Message\Response;
-use Payum\Exception\Http\HttpResponseStatusNotSuccessfulException;
+use Payum\Exception\Http\HttpException;
 use Payum\Exception\InvalidArgumentException;
 
 /**
@@ -67,7 +67,7 @@ class Api
         $this->client->send($request, $response);
 
         if (false == $response->isSuccessful()) {
-            throw new HttpResponseStatusNotSuccessfulException($request, $response);
+            throw HttpException::factory($request, $response);
         }
         
         if (self::NOTIFY_VERIFIED === $response->getContent()) {
