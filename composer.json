@@ -24,11 +24,11 @@
         "phpunit/phpunit": "*",
         "fp/testo": "@dev",
         "doctrine/orm": "*",
-        "payum/paypal-express-checkout-nvp": "0.4.x-dev",
-        "payum/paypal-pro-checkout-nvp": "0.4.x-dev",
-        "payum/be2bill": "0.4.x-dev",
-        "payum/authorize-net-aim": "0.4.x-dev",
-        "payum/omnipay-bridge": "0.4.x-dev"
+        "payum/paypal-express-checkout-nvp": "0.5.x-dev",
+        "payum/paypal-pro-checkout-nvp": "0.5.x-dev",
+        "payum/be2bill": "0.5.x-dev",
+        "payum/authorize-net-aim": "0.5.x-dev",
+        "payum/omnipay-bridge": "0.5.x-dev"
     },
     "suggest": {
         "payum/paypal-express-checkout-nvp": "If you want to use paypal express checkout nvp gateway",
