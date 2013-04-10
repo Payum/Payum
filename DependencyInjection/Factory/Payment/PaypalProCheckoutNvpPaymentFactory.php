@@ -15,7 +15,7 @@ use Payum\Exception\RuntimeException;
 /**
  * @author Ton Sharp <Forma-PRO@66ton99.org.ua>
  */
-class PaypalProCheckoutNvpPaymentFactory implements PaymentFactoryInterface
+class PaypalProCheckoutNvpPaymentFactory extends AbstractPaymentFactory
 {
     /**
      * {@inheritdoc}
@@ -28,6 +28,9 @@ class PaypalProCheckoutNvpPaymentFactory implements PaymentFactoryInterface
             );
         }
 
+        $paymentId = parent::create($container, $contextName, $config);
+        $paymentDefinition = $container->getDefinition($paymentId);
+
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/payment'));
         $loader->load('paypal_pro_checkout_nvp.xml');
 
@@ -37,13 +40,7 @@ class PaypalProCheckoutNvpPaymentFactory implements PaymentFactoryInterface
         $apiDefinition->setPublic(true);
         $apiId = 'payum.context.'.$contextName.'.api';
         $container->setDefinition($apiId, $apiDefinition);
-
-        $paymentDefinition = new Definition();
-        $paymentDefinition->setClass(new Parameter('payum.paypal.pro_checkout_nvp.payment.class'));
-        $paymentDefinition->setPublic('false');
         $paymentDefinition->addMethodCall('addApi', array(new Reference($apiId)));
-        $paymentId = 'payum.context.'.$contextName.'.payment';
-        $container->setDefinition($paymentId, $paymentDefinition);
 
         $captureDefinition = new DefinitionDecorator('payum.paypal.pro_checkout_nvp.action.capture');
         $captureId = 'payum.context.' . $contextName . '.action.capture';
@@ -71,11 +68,12 @@ class PaypalProCheckoutNvpPaymentFactory implements PaymentFactoryInterface
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
+        parent::addConfiguration($builder);
+        
         $builder->children()
-            ->scalarNode('create_instruction_from_model_action')->defaultNull()->end()
-            ->arrayNode('api')->children()
+            ->arrayNode('api')->isRequired()->children()
                 ->scalarNode('client')->defaultValue('payum.buzz.client')->cannotBeEmpty()->end()
-                ->arrayNode('options')->children()
+                ->arrayNode('options')->isRequired()->children()
                     ->scalarNode('username')->isRequired()->cannotBeEmpty()->end()
                     ->scalarNode('password')->isRequired()->cannotBeEmpty()->end()
                     ->scalarNode('partner')->isRequired()->cannotBeEmpty()->end()

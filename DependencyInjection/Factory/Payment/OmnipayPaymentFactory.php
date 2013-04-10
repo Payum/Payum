@@ -14,7 +14,7 @@ use Symfony\Component\Config\FileLocator;
 use Payum\Exception\RuntimeException;
 use Payum\Exception\LogicException;
 
-class OmnipayPaymentFactory implements PaymentFactoryInterface
+class OmnipayPaymentFactory extends AbstractPaymentFactory
 {
     /**
      * {@inheritdoc}
@@ -28,6 +28,9 @@ class OmnipayPaymentFactory implements PaymentFactoryInterface
             throw new RuntimeException('Cannot find GatewayInterface interface. Have you installed omnipay/omnipay package?');
         }
 
+        $paymentId = parent::create($container, $contextName, $config);
+        $paymentDefinition = $container->getDefinition($paymentId);
+
         $gatewayDefinition = new Definition();
         $gatewayDefinition->setClass('Omnipay\Common\GatewayInterface');
         $gatewayDefinition->setFactoryClass('Omnipay\Common\GatewayFactory');
@@ -39,13 +42,7 @@ class OmnipayPaymentFactory implements PaymentFactoryInterface
         }
         $gatewayId = 'payum.context.'.$contextName.'.gateway';
         $container->setDefinition($gatewayId, $gatewayDefinition);
-
-        $paymentDefinition = new Definition();
-        $paymentDefinition->setClass('Payum\Payment');
-        $paymentDefinition->setPublic('false');
         $paymentDefinition->addMethodCall('addApi', array(new Reference($gatewayId)));
-        $paymentId = 'payum.context.'.$contextName.'.payment';
-        $container->setDefinition($paymentId, $paymentDefinition);
 
         $captureActionDefinition = new Definition('Payum\Bridge\Omnipay\Action\CaptureAction');
         $captureActionId = 'payum.context.'.$contextName.'.action.capture';
@@ -73,9 +70,11 @@ class OmnipayPaymentFactory implements PaymentFactoryInterface
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
+        parent::addConfiguration($builder);
+        
         $builder->children()
             ->scalarNode('type')->isRequired()->cannotBeEmpty()->end()
-            ->arrayNode('options')
+            ->arrayNode('options')->isRequired()
                 ->useAttributeAsKey('key')
                 ->prototype('scalar')->end()
             ->end()

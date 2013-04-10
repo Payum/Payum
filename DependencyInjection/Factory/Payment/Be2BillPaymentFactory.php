@@ -12,7 +12,7 @@ use Symfony\Component\Config\FileLocator;
 
 use Payum\Exception\RuntimeException;
 
-class Be2BillPaymentFactory implements PaymentFactoryInterface
+class Be2BillPaymentFactory extends AbstractPaymentFactory
 {
     /**
      * {@inheritdoc}
@@ -23,6 +23,9 @@ class Be2BillPaymentFactory implements PaymentFactoryInterface
             throw new RuntimeException('Cannot find be2bill payment factory class. Have you installed payum/be2bill package?');
         }
 
+        $paymentId = parent::create($container, $contextName, $config);
+        $paymentDefinition = $container->getDefinition($paymentId);
+
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/payment'));
         $loader->load('be2bill.xml');
 
@@ -32,13 +35,7 @@ class Be2BillPaymentFactory implements PaymentFactoryInterface
         $apiDefinition->setPublic(true);
         $apiId = 'payum.context.'.$contextName.'.api';
         $container->setDefinition($apiId, $apiDefinition);
-
-        $paymentDefinition = new Definition();
-        $paymentDefinition->setClass(new Parameter('payum.be2bill.payment.class'));
-        $paymentDefinition->setPublic('false');
         $paymentDefinition->addMethodCall('addApi', array(new Reference($apiId)));
-        $paymentId = 'payum.context.'.$contextName.'.payment';
-        $container->setDefinition($paymentId, $paymentDefinition);
         
         $captureActionDefinition = new DefinitionDecorator('payum.be2bill.action.capture');
         $captureActionId = 'payum.context.'.$contextName.'.action.capture';
@@ -66,10 +63,12 @@ class Be2BillPaymentFactory implements PaymentFactoryInterface
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
+        parent::addConfiguration($builder);
+        
         $builder->children()
-            ->arrayNode('api')->children()
+            ->arrayNode('api')->isRequired()->children()
                 ->scalarNode('client')->defaultValue('payum.buzz.client')->cannotBeEmpty()->end()
-                ->arrayNode('options')->children()
+                ->arrayNode('options')->isRequired()->children()
                     ->scalarNode('identifier')->isRequired()->cannotBeEmpty()->end()
                     ->scalarNode('password')->isRequired()->cannotBeEmpty()->end()
                     ->booleanNode('sandbox')->defaultTrue()->end()
