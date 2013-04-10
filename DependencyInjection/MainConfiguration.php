@@ -103,23 +103,6 @@ class MainConfiguration implements ConfigurationInterface
             $paymentSection = $contextsPrototypeNode->children()->arrayNode($paymentName);
             
             $factory->addConfiguration($paymentSection);
-
-            $paymentSection
-                ->children()
-                    ->arrayNode('actions')
-                        ->useAttributeAsKey('key')
-                        ->prototype('scalar')->end()
-                    ->end()
-                    ->arrayNode('apis')
-                        ->useAttributeAsKey('key')
-                        ->prototype('scalar')->end()
-                    ->end()
-                    ->arrayNode('extensions')
-                        ->useAttributeAsKey('key')
-                        ->prototype('scalar')->end()
-                    ->end()
-                ->end()
-            ;
         }
     }
 

@@ -60,33 +60,6 @@ class PayumExtension extends Extension
                         'addAction',
                         array(new Reference('payum.action.status_details_aggregated_model'))
                     );
-
-                    if (false == empty($config[$contextName][$paymentFactory->getName()]['actions'])) {
-                        foreach ($config[$contextName][$paymentFactory->getName()]['actions'] as $actionId) {
-                            $paymentService->addMethodCall(
-                                'addAction', 
-                                array(new Reference($actionId), $forcePrepend = true)
-                            );
-                        }
-                    }
-
-                    if (false == empty($config[$contextName][$paymentFactory->getName()]['apis'])) {
-                        foreach ($config[$contextName][$paymentFactory->getName()]['apis'] as $actionId) {
-                            $paymentService->addMethodCall(
-                                'addApi',
-                                array(new Reference($actionId), $forcePrepend = true)
-                            );
-                        }
-                    }
-
-                    if (false == empty($config[$contextName][$paymentFactory->getName()]['extensions'])) {
-                        foreach ($config[$contextName][$paymentFactory->getName()]['extensions'] as $actionId) {
-                            $paymentService->addMethodCall(
-                                'addExtension',
-                                array(new Reference($actionId), $forcePrepend = true)
-                            );
-                        }
-                    }
                 }
                 if (isset($this->storageFactories[$serviceName])) {
                     $storageServiceId = $this->storageFactories[$serviceName]->create($container, $contextName, $service);
