@@ -70,24 +70,6 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
         ;
     }
 
-//    /**
-//     * @param ContainerBuilder $container
-//     * @param string $contextName
-//     * @param string $definitionId
-//     * @param string $contextDefinitionId
-//     * 
-//     * @return string
-//     */
-//    protected function createContextDefinition(ContainerBuilder $container, $contextName, $definitionId, $contextDefinitionId)
-//    {
-//        $contextDefinition = new DefinitionDecorator($definitionId);
-//        $contextDefinitionId =  sprintf('payum.context.%s.%s', $contextName, $contextDefinitionId);
-//        
-//        $container->setDefinition($contextDefinitionId, $contextDefinition);
-//
-//        return $contextDefinitionId;
-//    }
-
     /**
      * @param ContainerBuilder $container
      * @param string $contextName
