@@ -33,7 +33,7 @@ class FilesystemStorageFactory implements StorageFactoryInterface
      */
     public function getName()
     {
-        return 'filesystem_storage';
+        return 'filesystem';
     }
 
     /**

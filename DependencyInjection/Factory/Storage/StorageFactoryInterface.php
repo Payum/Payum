@@ -16,7 +16,7 @@ interface StorageFactoryInterface
     function create(ContainerBuilder $container, $contextName, array $config);
 
     /**
-     * The payment name, 
+     * The storage name, 
      * For example filesystem, doctrine, propel etc.
      * 
      * @return string

@@ -31,7 +31,7 @@ class DoctrineStorageFactory implements StorageFactoryInterface
      */
     public function getName()
     {
-        return 'doctrine_storage';
+        return 'doctrine';
     }
 
     /**

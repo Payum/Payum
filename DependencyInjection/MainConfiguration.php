@@ -53,12 +53,9 @@ class MainConfiguration implements ConfigurationInterface
                     ->validate()
                     ->ifTrue(function($v) {
                         $payments = array();
-                        $storages = array();
                         foreach ($v as $name => $value) {
                             if (substr($name, -strlen('_payment')) === '_payment') {
                                 $payments[$name] = $value;
-                            } else if (substr($name, -strlen('_storage')) === '_storage') {
-                                $storages[$name] = $value;
                             }
                         }
                 
@@ -70,10 +67,6 @@ class MainConfiguration implements ConfigurationInterface
                         }
                         if (count($payments) > 1) {
                             throw new LogicException('Only one payment per context could be selected');
-                        }
-
-                        if (count($storages) > 1) {
-                            throw new LogicException('Only one storage per context could be selected');
                         }
                 
                         return false;
@@ -108,21 +101,35 @@ class MainConfiguration implements ConfigurationInterface
 
     protected function addStoragesSection(ArrayNodeDefinition $contextsPrototypeNode, array $factories)
     {
-        foreach ($factories as $factory) {
-            $storageNode = $contextsPrototypeNode->children()->arrayNode($factory->getName());
+        $storageNode = $contextsPrototypeNode->children()
+            ->arrayNode('storages')
+                ->useAttributeAsKey('key')
+                ->prototype('array')
+        ;
 
+        $storageNode
+            ->validate()
+                ->ifTrue(function($v) {
+                    if (count($v) == 0) {
+                        throw new LogicException('At least one storage must be configured.');
+                    }
+                    if (count($v) > 1) {
+                        throw new LogicException('Only one storage per entry could be selected');
+                    }
+                    
+                    return false;
+                })
+                ->thenInvalid('A message')
+            ->end()
+        ;
+        
+        foreach ($factories as $factory) {
             $storageName = $factory->getName();
             if (empty($storageName)) {
                 throw new LogicException('The storage name must not be empty');
             }
-            if (substr($storageName, -strlen('_storage')) !== '_storage') {
-                throw new LogicException(sprintf(
-                    'The storage name must ended with `_storage` but given name is %s',
-                    $storageName
-                ));
-            }
-
-            $factory->addConfiguration($contextsPrototypeNode->children()->arrayNode($storageName));
+            
+            $factory->addConfiguration($storageNode->children()->arrayNode($storageName));
         }
     }
 }

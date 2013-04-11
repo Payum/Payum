@@ -32,6 +32,16 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldAllowGetName()
+    {
+        $factory = new PaypalProCheckoutNvpPaymentFactory;
+
+        $this->assertEquals('paypal_pro_checkout_nvp_payment', $factory->getName());
+    }
+
+    /**
+     * @test
+     */
     public function shouldAllowAddConfiguration()
     {
         $factory = new PaypalProCheckoutNvpPaymentFactory;

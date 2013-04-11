@@ -39,6 +39,16 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldAllowGetName()
+    {
+        $factory = new OmnipayPaymentFactory;
+
+        $this->assertEquals('omnipay_payment', $factory->getName());
+    }
+
+    /**
+     * @test
+     */
     public function shouldAllowAddConfiguration()
     {
         $factory = new OmnipayPaymentFactory;

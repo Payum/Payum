@@ -1,3 +1,7 @@
+0.3 to 0.5
+
+* Storage factory names changed. Was `doctrine_storage` now just `doctrine`.
+
 0.2 to 0.3
 ==========
 

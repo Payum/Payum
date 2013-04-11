@@ -11,7 +11,6 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCh
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\DoctrineStorageFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\FilesystemStorageFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentFactory;
 
 class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 {
@@ -21,15 +20,14 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $fooPaymentFactory = new FooPaymentFactory();
-        $barPaymentFactory = new BarPaymentFactory();
-        $this->paymentFactories[$fooPaymentFactory->getName()] = $fooPaymentFactory;
-        $this->paymentFactories[$barPaymentFactory->getName()] = $barPaymentFactory;
-        
-        $fooStorageFactory = new FooStorageFactory();
-        $barStorageFactory = new BarStorageFactory();
-        $this->storageFactories[$fooStorageFactory->getName()] = $fooStorageFactory;
-        $this->storageFactories[$barStorageFactory->getName()] = $barStorageFactory;
+        $this->paymentFactories = array(
+            new FooPaymentFactory(),
+            new BarPaymentFactory()
+        );
+        $this->storageFactories = array(
+            new FooStorageFactory(),
+            new BarStorageFactory()
+        );
     }
     
     /**
@@ -53,11 +51,83 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'contexts' => array(
                     'a_context' => array(
-                        'bar_storage' => array(
-                            'bar_opt' => 'bar'
-                        ),
                         'foo_payment' => array( 
                             'foo_opt' => 'foo'
+                        ),
+                        'storages' => array(
+                            'bar' => array(
+                                'bar_storage' => array(
+                                    'bar_opt' => 'bar'
+                                ),
+                            ),
+                            'foo' => array(
+                                'bar_storage' => array(
+                                    'bar_opt' => 'bar'
+                                ),
+                            )
+                        )
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     * 
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Invalid configuration for path "payum.contexts.a_context.storages.bar": Only one storage per entry could be selected
+     */
+    public function throwIfTryToAddMoreThenOneStorageForOneEntry()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'contexts' => array(
+                    'a_context' => array(
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo'
+                        ),
+                        'storages' => array(
+                            'bar' => array(
+                                'foo_storage' => array(
+                                    'foo_opt' => 'bar'
+                                ),
+                                'bar_storage' => array(
+                                    'bar_opt' => 'bar'
+                                )
+                            ),
+                        )
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Invalid configuration for path "payum.contexts.a_context.storages.bar": At least one storage must be configured.
+     */
+    public function throwIfStorageEntryDefinedWithoutConcreteStorage()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'contexts' => array(
+                    'a_context' => array(
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo'
+                        ),
+                        'storages' => array(
+                            'bar' => array(),
                         )
                     )
                 )
@@ -80,11 +150,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $processor->processConfiguration($configuration, array(
             'payum' => array(
                 'contexts' => array(
-                    'a_context' => array(
-                        'bar_storage' => array(
-                            'bar_opt' => 'bar'
-                        )
-                    )
+                    'a_context' => array()
                 )
             )
         ));
@@ -116,37 +182,6 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "payum.contexts.a_context": Only one storage per context could be selected
-     */
-    public function throwIfMoreThenOneStorageSelected()
-    {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
-
-        $processor = new Processor();
-
-        $processor->processConfiguration($configuration, array(
-            'payum' => array(
-                'contexts' => array(
-                    'a_context' => array(
-                        'foo_storage' => array(
-                            'foo_opt' => 'foo'
-                        ),
-                        'bar_storage' => array(
-                            'bar_opt' => 'bar'
-                        ),
-                        'foo_payment' => array(
-                            'foo_opt' => 'foo'
-                        )
-                    )
-                )
-            )
-        ));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage Invalid configuration for path "payum.contexts.a_context": Only one payment per context could be selected
      */
     public function throwIfMoreThenOnePaymentSelected()
@@ -159,9 +194,6 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'contexts' => array(
                     'a_context' => array(
-                        'foo_storage' => array(
-                            'foo_opt' => 'foo'
-                        ),
                         'bar_payment' => array(
                             'bar_opt' => 'bar'
                         ),
@@ -195,9 +227,6 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'contexts' => array(
                     'a_context' => array(
-                        'bar_storage' => array(
-                            'bar_opt' => 'bar'
-                        ),
                         'paypal_express_checkout_nvp_payment' => array(
                             'api' => array(
                                 'options' => array(
@@ -235,9 +264,13 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'contexts' => array(
                     'a_context' => array(
-                        'doctrine_storage' => array(
-                            'driver' => 'aDriver',
-                            'model_class' => 'aClass'
+                        'storages' => array(
+                            'foo' => array(
+                                'doctrine' => array(
+                                    'driver' => 'aDriver',
+                                    'model_class' => 'aClass'
+                                ) 
+                            ),
                         ),
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
@@ -265,10 +298,14 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'contexts' => array(
                     'a_context' => array(
-                        'filesystem_storage' => array(
-                            'storage_dir' => 'a_dir',
-                            'model_class' => 'aClass',
-                            'id_property' => 'aProp',
+                        'storages' => array(
+                            'foo' => array(
+                                'filesystem' => array(
+                                    'storage_dir' => 'a_dir',
+                                    'model_class' => 'aClass',
+                                    'id_property' => 'aProp',
+                                ),
+                            ),
                         ),
                         'foo_payment' => array(
                             'foo_opt' => 'foo'

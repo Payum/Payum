@@ -32,6 +32,16 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldAllowGetName()
+    {
+        $factory = new Be2BillPaymentFactory;
+
+        $this->assertEquals('be2bill_payment', $factory->getName());
+    }
+
+    /**
+     * @test
+     */
     public function shouldAllowAddConfiguration()
     {
         $factory = new Be2BillPaymentFactory;
