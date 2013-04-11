@@ -9,8 +9,11 @@ payum:
             xxx_payment:
                 # payment specific options
 
-            xxx_storage:
-                # storage specific options
+            storages:
+                an_entry:
+                    # storage specific options
+                other_entry:
+                    # storage specific options
                 
         bar_payment_context:
             xxx_payment:
@@ -27,15 +30,12 @@ payum:
                 extensions:
                     - extension.foo
                     - extension.bar
-                
-            xxx_storage:
-                # storage specific options
 ```
 
 ### Doctrine storage:
 
 ```yaml
-doctrine_storage:
+doctrine:
     driver: 'required' # orm only supported atm
     model_class: 'required'
 ```
@@ -43,7 +43,7 @@ doctrine_storage:
 ### Filesystem storage:
 
 ```yaml
-filesystem_storage:
+filesystem:
     model_class: 'required'
     storage_dir: 'required'
     id_property: 'required'

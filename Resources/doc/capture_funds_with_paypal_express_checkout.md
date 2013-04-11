@@ -80,9 +80,11 @@ and configure storage to use this model:
 payum:
     contexts:
         your_context_name:
-            doctrine_storage:
-                driver: orm
-                model_class: AcmeDemoBundle\Entity\PaypalPaymentInstruction
+            storages:
+                AcmeDemoBundle\Entity\PaypalPaymentInstruction:
+                    doctrine:
+                        driver: orm
+                        model_class: AcmeDemoBundle\Entity\PaypalPaymentInstruction
 
 doctrine:
     orm:
@@ -127,10 +129,12 @@ and configure storage to use this model:
 payum:
     contexts:
         your_name_here:
-            filesystem_storage:
-                model_class: Acme\DemoBundle\Model\PaypalPaymentInstruction
-                storage_dir: %kernel.root_dir%/Resources/payments
-                id_property: id
+            storages:
+                Acme\DemoBundle\Model\PaypalPaymentInstruction:
+                    filesystem:
+                        model_class: Acme\DemoBundle\Model\PaypalPaymentInstruction
+                        storage_dir: %kernel.root_dir%/Resources/payments
+                        id_property: id
 ```
 
 ### Step 3. Capture payment: 

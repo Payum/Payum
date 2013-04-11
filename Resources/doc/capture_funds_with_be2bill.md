@@ -78,9 +78,11 @@ and configure storage to use this model:
 payum:
     contexts:
         your_context_name:
-            doctrine_storage:
-                driver: orm
-                model_class: AcmeDemoBundle\Entity\Be2BillPaymentInstruction
+            storages:
+                AcmeDemoBundle\Entity\Be2BillPaymentInstruction:
+                    doctrine:
+                        driver: orm
+                        model_class: AcmeDemoBundle\Entity\Be2BillPaymentInstruction
 
 doctrine:
     orm:
@@ -125,10 +127,12 @@ and configure storage to use this model:
 payum:
     contexts:
         your_name_here:
-            filesystem_storage:
-                model_class: Acme\DemoBundle\Model\Be2BillPaymentInstruction
-                storage_dir: %kernel.root_dir%/Resources/payments
-                id_property: id
+            storages:
+                Acme\DemoBundle\Model\Be2BillPaymentInstruction:
+                    filesystem:
+                        model_class: Acme\DemoBundle\Model\Be2BillPaymentInstruction
+                        storage_dir: %kernel.root_dir%/Resources/payments
+                        id_property: id
 ```
 
 ### Step 3. Capture payment: 
