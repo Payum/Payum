@@ -46,6 +46,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
         
         $processor = new Processor();
+        
+        $fooModelClass = get_class($this->getMock('stdClass'));
+        $barModelClass = get_class($this->getMock('stdClass'));
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
@@ -55,12 +58,12 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                             'foo_opt' => 'foo'
                         ),
                         'storages' => array(
-                            'bar' => array(
+                            $fooModelClass => array(
                                 'bar_storage' => array(
                                     'bar_opt' => 'bar'
                                 ),
                             ),
-                            'foo' => array(
+                            $barModelClass => array(
                                 'bar_storage' => array(
                                     'bar_opt' => 'bar'
                                 ),
@@ -76,7 +79,39 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @test
      * 
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "payum.contexts.a_context.storages.bar": Only one storage per entry could be selected
+     * @expectedExceptionMessage Invalid configuration for path "payum.contexts.a_context.storages": The storage entry must be a valid model class. It is set notExistClass
+     */
+    public function throwIfTryToUseNotValidClassAsStorageEntry()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'contexts' => array(
+                    'a_context' => array(
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo'
+                        ),
+                        'storages' => array(
+                            'notExistClass' => array(
+                                'foo_storage' => array(
+                                    'foo_opt' => 'bar'
+                                ),
+                            ),
+                        )
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     * 
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Invalid configuration for path "payum.contexts.a_context.storages.stdClass": Only one storage per entry could be selected
      */
     public function throwIfTryToAddMoreThenOneStorageForOneEntry()
     {
@@ -92,7 +127,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                             'foo_opt' => 'foo'
                         ),
                         'storages' => array(
-                            'bar' => array(
+                            'stdClass' => array(
                                 'foo_storage' => array(
                                     'foo_opt' => 'bar'
                                 ),
@@ -111,7 +146,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "payum.contexts.a_context.storages.bar": At least one storage must be configured.
+     * @expectedExceptionMessage Invalid configuration for path "payum.contexts.a_context.storages.stdClass": At least one storage must be configured.
      */
     public function throwIfStorageEntryDefinedWithoutConcreteStorage()
     {
@@ -127,7 +162,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                             'foo_opt' => 'foo'
                         ),
                         'storages' => array(
-                            'bar' => array(),
+                            'stdClass' => array(),
                         )
                     )
                 )
@@ -265,7 +300,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                 'contexts' => array(
                     'a_context' => array(
                         'storages' => array(
-                            'foo' => array(
+                            'stdClass' => array(
                                 'doctrine' => array(
                                     'driver' => 'aDriver',
                                     'model_class' => 'aClass'
@@ -299,7 +334,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                 'contexts' => array(
                     'a_context' => array(
                         'storages' => array(
-                            'foo' => array(
+                            'stdClass' => array(
                                 'filesystem' => array(
                                     'storage_dir' => 'a_dir',
                                     'model_class' => 'aClass',

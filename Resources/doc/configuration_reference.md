@@ -10,9 +10,9 @@ payum:
                 # payment specific options
 
             storages:
-                an_entry:
+                A\Model\Class:
                     # storage specific options
-                other_entry:
+                Another\Model\Class:
                     # storage specific options
                 
         bar_payment_context:

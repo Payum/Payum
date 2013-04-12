@@ -102,7 +102,22 @@ class MainConfiguration implements ConfigurationInterface
     protected function addStoragesSection(ArrayNodeDefinition $contextsPrototypeNode, array $factories)
     {
         $storageNode = $contextsPrototypeNode->children()
-            ->arrayNode('storages')
+                ->arrayNode('storages')
+                ->validate()
+                    ->ifTrue(function($v) {
+                        foreach($v as $key => $value) {
+                            if (false == class_exists($key)) {
+                                throw new LogicException(sprintf(
+                                    'The storage entry must be a valid model class. It is set %s',
+                                    $key
+                                ));
+                            }
+                        }
+                    
+                        return false;
+                    })
+                    ->thenInvalid('A message')
+                ->end()
                 ->useAttributeAsKey('key')
                 ->prototype('array')
         ;
