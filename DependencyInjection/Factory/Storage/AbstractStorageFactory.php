@@ -20,7 +20,7 @@ abstract class AbstractStorageFactory implements StorageFactoryInterface
             strtolower(str_replace('\\', '', $modelClass))
         );
         $storageDefinition = $this->createStorage($container, $contextName, $modelClass, $paymentId, $config);
-
+        
         $container->setDefinition($storageId, $storageDefinition);
         
         if ($config['payment_extension']['enabled']) {

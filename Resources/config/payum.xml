@@ -23,6 +23,10 @@
             <argument type="collection" /> <!-- storages services. this should be replaced while container is built -->
             <argument /> <!-- payment default name. this should be replaced while container is built -->
             <argument /> <!-- storage default name. this should be replaced while container is built -->
+
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
         </service>
         
         <service id="payum.buzz.client" class="%payum.buzz.client.class%" public="false">
