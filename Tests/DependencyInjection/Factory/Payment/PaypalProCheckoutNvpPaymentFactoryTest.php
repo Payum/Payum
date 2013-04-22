@@ -36,7 +36,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new PaypalProCheckoutNvpPaymentFactory;
 
-        $this->assertEquals('paypal_pro_checkout_nvp_payment', $factory->getName());
+        $this->assertEquals('paypal_pro_checkout_nvp', $factory->getName());
     }
 
     /**

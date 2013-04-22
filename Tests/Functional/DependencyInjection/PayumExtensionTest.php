@@ -72,7 +72,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $config = array(
             'contexts' => array(
                 'a_context' => array(
-                    'paypal_pro_checkout_nvp_payment' => array(
+                    'paypal_pro_checkout_nvp' => array(
                         'api' => array(
                             'options' => array(
                                 'username' => 'a_username',

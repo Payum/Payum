@@ -60,7 +60,7 @@ class PaypalProCheckoutNvpPaymentFactory extends AbstractPaymentFactory
      */
     public function getName()
     {
-        return 'paypal_pro_checkout_nvp_payment';
+        return 'paypal_pro_checkout_nvp';
     }
 
     /**
