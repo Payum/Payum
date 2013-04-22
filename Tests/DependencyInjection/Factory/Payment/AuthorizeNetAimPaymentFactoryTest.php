@@ -36,7 +36,7 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new AuthorizeNetAimPaymentFactory;
 
-        $this->assertEquals('authorize_net_aim_payment', $factory->getName());
+        $this->assertEquals('authorize_net_aim', $factory->getName());
     }
 
     /**

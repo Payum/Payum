@@ -43,7 +43,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new OmnipayPaymentFactory;
 
-        $this->assertEquals('omnipay_payment', $factory->getName());
+        $this->assertEquals('omnipay', $factory->getName());
     }
 
     /**

@@ -23,30 +23,33 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
         $paymentId = 'payum.context.'.$contextName.'.payment';
         $container->setDefinition($paymentId, $paymentDefinition);
 
-        foreach ($config['actions'] as $actionId) {
+        foreach (array_reverse($config['actions']) as $actionId) {
             $paymentDefinition->addMethodCall(
                 'addAction',
                 array(new Reference($actionId), $forcePrepend = true)
             );
         }
 
-        foreach ($config['apis'] as $apiId) {
+        foreach (array_reverse($config['apis']) as $apiId) {
             $paymentDefinition->addMethodCall(
                 'addApi',
                 array(new Reference($apiId), $forcePrepend = true)
             );
         }
 
-        foreach ($config['extensions'] as $extensionId) {
+        foreach (array_reverse($config['extensions']) as $extensionId) {
             $paymentDefinition->addMethodCall(
                 'addExtension',
                 array(new Reference($extensionId), $forcePrepend = true)
             );
         }
+        
+        $this->addCommonActions($paymentDefinition);
+        $this->addCommonExtensions($paymentDefinition);
 
         return $paymentId;
     }
-
+    
     /**
      * {@inheritdoc}
      */
@@ -85,5 +88,37 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
         $container->setParameter($contextParameter, new Parameter($parameter));
         
         return $contextParameter;
+    }
+
+    /**
+     * @param Definition $paymentDefinition
+     */
+    protected function addCommonActions(Definition $paymentDefinition)
+    {
+        $paymentDefinition->addMethodCall(
+            'addAction',
+            array(new Reference('payum.action.capture_details_aggregated_model'))
+        );
+
+        $paymentDefinition->addMethodCall(
+            'addAction',
+            array(new Reference('payum.action.sync_details_aggregated_model'))
+        );
+
+        $paymentDefinition->addMethodCall(
+            'addAction',
+            array(new Reference('payum.action.status_details_aggregated_model'))
+        );
+    }
+
+    /**
+     * @param Definition $paymentDefinition
+     */
+    protected function addCommonExtensions(Definition $paymentDefinition)
+    {
+        $paymentDefinition->addMethodCall(
+            'addExtension', 
+            array(new Reference('payum.extension.endless_cycle_detector'))
+        );
     }
 }

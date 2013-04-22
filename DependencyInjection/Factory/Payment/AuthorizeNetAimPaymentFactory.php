@@ -55,7 +55,7 @@ class AuthorizeNetAimPaymentFactory extends AbstractPaymentFactory
      */
     public function getName()
     {
-        return 'authorize_net_aim_payment';
+        return 'authorize_net_aim';
     }
 
     /**

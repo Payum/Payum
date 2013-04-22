@@ -31,7 +31,7 @@ _**Note:** You can immediately start using it. The autoloading files have been g
 payum:
     contexts:
         your_context_here:
-            authorize_net_aim_payment:
+            authorize_net_aim:
                 api:
                     options:
                         login_id: 'get it from gateway'
@@ -83,7 +83,6 @@ payum:
                 AcmeDemoBundle\Entity\AuthorizeNetPaymentInstruction:
                     doctrine:
                         driver: orm
-                        model_class: AcmeDemoBundle\Entity\AuthorizeNetPaymentInstruction
 
 doctrine:
     orm:
@@ -131,7 +130,6 @@ payum:
             storages:
                 Acme\DemoBundle\Model\AuthorizeNetPaymentInstruction:
                     filesystem:
-                        model_class: Acme\DemoBundle\Model\AuthorizeNetPaymentInstruction
                         storage_dir: %kernel.root_dir%/Resources/payments
                         id_property: id
 ```

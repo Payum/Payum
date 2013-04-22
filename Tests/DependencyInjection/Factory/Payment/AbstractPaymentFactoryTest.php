@@ -186,6 +186,60 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldAddCommonActions()
+    {
+        $factory = $this->createAbstractPaymentFactory();
+
+        $container = new ContainerBuilder;
+
+        $paymentId = $factory->create($container, 'aContextName', array(
+            'actions' => array(),
+            'apis' => array(),
+            'extensions' => array(),
+        ));
+
+        $this->assertDefinitionContainsMethodCall(
+            $container->getDefinition($paymentId),
+            'addAction',
+            new Reference('payum.action.capture_details_aggregated_model')
+        );
+        $this->assertDefinitionContainsMethodCall(
+            $container->getDefinition($paymentId),
+            'addAction',
+            new Reference('payum.action.sync_details_aggregated_model')
+        );
+        $this->assertDefinitionContainsMethodCall(
+            $container->getDefinition($paymentId),
+            'addAction',
+            new Reference('payum.action.status_details_aggregated_model')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAddCommonExtensions()
+    {
+        $factory = $this->createAbstractPaymentFactory();
+
+        $container = new ContainerBuilder;
+
+        $paymentId = $factory->create($container, 'aContextName', array(
+            'actions' => array(),
+            'apis' => array(),
+            'extensions' => array(),
+        ));
+
+        $this->assertDefinitionContainsMethodCall(
+            $container->getDefinition($paymentId),
+            'addExtension',
+            new Reference('payum.extension.endless_cycle_detector')
+        );
+    }
+
+    /**
+     * @test
+     */
     public function shouldAddCustomApis()
     {
         $factory = $this->createAbstractPaymentFactory();

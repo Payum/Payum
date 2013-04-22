@@ -240,116 +240,6 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             )
         ));
     }
-
-    /**
-     * @test
-     */
-    public function shouldPassConfigurationProcessingWithPaypalExpressCheckoutNvpPaymentFactory()
-    {
-        if (false == class_exists('Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory')) {
-            $this->markTestSkipped('Skipped because payment library is not installed.');
-        }
-        
-        $paymentFactories = array(
-            new PaypalExpressCheckoutNvpPaymentFactory()
-        );
-        
-        $configuration = new MainConfiguration($paymentFactories, $this->storageFactories);
-
-        $processor = new Processor();
-
-        $processor->processConfiguration($configuration, array(
-            'payum' => array(
-                'contexts' => array(
-                    'a_context' => array(
-                        'paypal_express_checkout_nvp_payment' => array(
-                            'api' => array(
-                                'options' => array(
-                                    'username' => 'aUsername',
-                                    'password' => 'aPassword',
-                                    'signature' => 'aSignature',
-                                    'sandbox' => true
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        ));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldPassConfigurationProcessingWithDoctrineStorageFactory()
-    {
-        if (false == class_exists('Doctrine\ORM\Configuration')) {
-            $this->markTestSkipped('Skipped because payment library is not installed.');
-        }
-        
-        $storageFactories = array(
-            new DoctrineStorageFactory()
-        );
-
-        $configuration = new MainConfiguration($this->paymentFactories, $storageFactories);
-
-        $processor = new Processor();
-
-        $processor->processConfiguration($configuration, array(
-            'payum' => array(
-                'contexts' => array(
-                    'a_context' => array(
-                        'storages' => array(
-                            'stdClass' => array(
-                                'doctrine' => array(
-                                    'driver' => 'aDriver',
-                                    'model_class' => 'aClass'
-                                ) 
-                            ),
-                        ),
-                        'foo_payment' => array(
-                            'foo_opt' => 'foo'
-                        )
-                    )
-                )
-            )
-        ));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldPassConfigurationProcessingWithFilesystemStorageFactory()
-    {
-        $storageFactories = array(
-            new FilesystemStorageFactory()
-        );
-
-        $configuration = new MainConfiguration($this->paymentFactories, $storageFactories);
-
-        $processor = new Processor();
-
-        $processor->processConfiguration($configuration, array(
-            'payum' => array(
-                'contexts' => array(
-                    'a_context' => array(
-                        'storages' => array(
-                            'stdClass' => array(
-                                'filesystem' => array(
-                                    'storage_dir' => 'a_dir',
-                                    'model_class' => 'aClass',
-                                    'id_property' => 'aProp',
-                                ),
-                            ),
-                        ),
-                        'foo_payment' => array(
-                            'foo_opt' => 'foo'
-                        )
-                    )
-                )
-            )
-        ));
-    }
 }
 
 class FooPaymentFactory implements PaymentFactoryInterface
@@ -396,7 +286,7 @@ class BarPaymentFactory implements PaymentFactoryInterface
 
 class FooStorageFactory implements StorageFactoryInterface
 {
-    public function create(ContainerBuilder $container, $contextName, array $config)
+    public function create(ContainerBuilder $container, $contextName, $modelClass, $paymentId, array $config)
     {
     }
 
@@ -417,7 +307,7 @@ class FooStorageFactory implements StorageFactoryInterface
 
 class BarStorageFactory implements StorageFactoryInterface
 {
-    public function create(ContainerBuilder $container, $contextName, array $config)
+    public function create(ContainerBuilder $container, $contextName, $modelClass, $paymentId, array $config)
     {
     }
 

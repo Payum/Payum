@@ -31,7 +31,7 @@ _**Note:** You can immediately start using it. The autoloading files have been g
 payum:
     contexts:
         your_context_name:
-            be2bill_payment:
+            be2bill:
                 api:
                     options:
                         identifier: 'get this from gateway'
@@ -82,7 +82,6 @@ payum:
                 AcmeDemoBundle\Entity\Be2BillPaymentInstruction:
                     doctrine:
                         driver: orm
-                        model_class: AcmeDemoBundle\Entity\Be2BillPaymentInstruction
 
 doctrine:
     orm:
@@ -130,7 +129,6 @@ payum:
             storages:
                 Acme\DemoBundle\Model\Be2BillPaymentInstruction:
                     filesystem:
-                        model_class: Acme\DemoBundle\Model\Be2BillPaymentInstruction
                         storage_dir: %kernel.root_dir%/Resources/payments
                         id_property: id
 ```

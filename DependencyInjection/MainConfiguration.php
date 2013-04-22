@@ -28,8 +28,13 @@ class MainConfiguration implements ConfigurationInterface
      */
     public function __construct(array $paymentFactories, array $storageFactories)
     {
-        $this->paymentFactories = $paymentFactories;
-        $this->storageFactories = $storageFactories;
+        foreach ($paymentFactories as $paymentFactory) {
+            $this->paymentFactories[$paymentFactory->getName()] = $paymentFactory;
+        }
+
+        foreach ($storageFactories as $storageFactory) {
+            $this->storageFactories[$storageFactory->getName()] = $storageFactory;
+        }
     }
 
     /**
@@ -52,20 +57,20 @@ class MainConfiguration implements ConfigurationInterface
         $contextsPrototypeNode
                     ->validate()
                     ->ifTrue(function($v) {
-                        $payments = array();
+                        $selectedPayments = array();
                         foreach ($v as $name => $value) {
-                            if (substr($name, -strlen('_payment')) === '_payment') {
-                                $payments[$name] = $value;
+                            if (isset($this->paymentFactories[$name])) {
+                                $selectedPayments[$name] = $this->paymentFactories[$name];
                             }
                         }
                 
-                        if (0 == count($payments)) {
+                        if (0 == count($selectedPayments)) {
                             throw new LogicException(sprintf(
                                 'One payment from the %s payments available must be selected',
-                                implode(', ', array_keys($payments))
+                                implode(', ', array_keys($selectedPayments))
                             ));
                         }
-                        if (count($payments) > 1) {
+                        if (count($selectedPayments) > 1) {
                             throw new LogicException('Only one payment per context could be selected');
                         }
                 
@@ -82,20 +87,9 @@ class MainConfiguration implements ConfigurationInterface
     protected function addPaymentsSection(ArrayNodeDefinition $contextsPrototypeNode, array $factories)
     {
         foreach ($factories as $factory) {
-            $paymentName = $factory->getName();
-            if (empty($paymentName)) {
-                throw new LogicException('The payment name must not be empty');
-            }
-            if (substr($paymentName, -strlen('_payment')) !== '_payment') {
-                throw new LogicException(sprintf(
-                    'The payment name must ended with `_payment` but given name is %s',
-                    $paymentName
-                ));
-            }
-
-            $paymentSection = $contextsPrototypeNode->children()->arrayNode($paymentName);
-            
-            $factory->addConfiguration($paymentSection);
+            $factory->addConfiguration(
+                $contextsPrototypeNode->children()->arrayNode($factory->getName())
+            );
         }
     }
 
@@ -139,12 +133,9 @@ class MainConfiguration implements ConfigurationInterface
         ;
         
         foreach ($factories as $factory) {
-            $storageName = $factory->getName();
-            if (empty($storageName)) {
-                throw new LogicException('The storage name must not be empty');
-            }
-            
-            $factory->addConfiguration($storageNode->children()->arrayNode($storageName));
+            $factory->addConfiguration(
+                $storageNode->children()->arrayNode($factory->getName())
+            );
         }
     }
 }

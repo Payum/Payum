@@ -32,7 +32,7 @@ _**Note:** You can immediately start using it. The autoloading files have been g
 payum:
     contexts:
         your_context_name:
-            paypal_express_checkout_nvp_payment:
+            paypal_express_checkout_nvp:
                 api:
                     options:
                         username:  'get this from gateway side'
@@ -84,7 +84,6 @@ payum:
                 AcmeDemoBundle\Entity\PaypalPaymentInstruction:
                     doctrine:
                         driver: orm
-                        model_class: AcmeDemoBundle\Entity\PaypalPaymentInstruction
 
 doctrine:
     orm:
@@ -132,7 +131,6 @@ payum:
             storages:
                 Acme\DemoBundle\Model\PaypalPaymentInstruction:
                     filesystem:
-                        model_class: Acme\DemoBundle\Model\PaypalPaymentInstruction
                         storage_dir: %kernel.root_dir%/Resources/payments
                         id_property: id
 ```

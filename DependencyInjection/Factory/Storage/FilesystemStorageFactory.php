@@ -7,27 +7,8 @@ use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\Config\FileLocator;
 
-class FilesystemStorageFactory implements StorageFactoryInterface
+class FilesystemStorageFactory extends AbstractStorageFactory
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function create(ContainerBuilder $container, $contextName, array $config)
-    {
-        $this->load($container);
-        
-        $contextStorageDefinition = new DefinitionDecorator('payum.storage.filesystem.prototype');
-        $contextStorageDefinition->setPublic(true);
-        $contextStorageDefinition->replaceArgument(0, $config['storage_dir']);
-        $contextStorageDefinition->replaceArgument(1, $config['model_class']);
-        $contextStorageDefinition->replaceArgument(2, $config['id_property']);
-        
-        $contextStorageId = 'payum.context.'.$contextName.'.storage';
-        $container->setDefinition($contextStorageId, $contextStorageDefinition);
-        
-        return $contextStorageId;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -41,23 +22,28 @@ class FilesystemStorageFactory implements StorageFactoryInterface
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
+        parent::addConfiguration($builder);
+        
         $builder->children()
             ->scalarNode('storage_dir')->isRequired()->cannotBeEmpty()->end()
             ->scalarNode('id_property')->isRequired()->cannotBeEmpty()->end()
-            ->scalarNode('model_class')->isRequired()->cannotBeEmpty()->end()
         ->end();
     }
-    
-    protected function load(ContainerBuilder $container)
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function createStorage(ContainerBuilder $container, $contextName, $modelClass, $paymentId, array $config)
     {
-        static $loaded;
-        
-        if (false == $loaded) {
-            // load services
-            $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/storage'));
-            $loader->load('filesystem.xml');
-            
-            $loaded = true;
-        }
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/storage'));
+        $loader->load('filesystem.xml');
+
+        $contextStorageDefinition = new DefinitionDecorator('payum.storage.filesystem.prototype');
+        $contextStorageDefinition->setPublic(false);
+        $contextStorageDefinition->replaceArgument(0, $config['storage_dir']);
+        $contextStorageDefinition->replaceArgument(1, $modelClass);
+        $contextStorageDefinition->replaceArgument(2, $config['id_property']);
+
+        return $contextStorageDefinition;
     }
 }
