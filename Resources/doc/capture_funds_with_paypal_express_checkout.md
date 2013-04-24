@@ -32,7 +32,7 @@ _**Note:** You can immediately start using it. The autoloading files have been g
 payum:
     contexts:
         your_context_name:
-            paypal_express_checkout_nvp_payment:
+            paypal_express_checkout_nvp:
                 api:
                     options:
                         username:  'get this from gateway side'
@@ -80,9 +80,11 @@ and configure storage to use this model:
 payum:
     contexts:
         your_context_name:
-            doctrine_storage:
-                driver: orm
-                model_class: AcmeDemoBundle\Entity\PaypalPaymentInstruction
+            storages:
+                AcmeDemoBundle\Entity\PaypalPaymentInstruction:
+                    doctrine:
+                        driver: orm
+                        payment_extension: true
 
 doctrine:
     orm:
@@ -127,10 +129,12 @@ and configure storage to use this model:
 payum:
     contexts:
         your_name_here:
-            filesystem_storage:
-                model_class: Acme\DemoBundle\Model\PaypalPaymentInstruction
-                storage_dir: %kernel.root_dir%/Resources/payments
-                id_property: id
+            storages:
+                Acme\DemoBundle\Model\PaypalPaymentInstruction:
+                    filesystem:
+                        storage_dir: %kernel.root_dir%/Resources/payments
+                        id_property: id
+                        payment_extension: true
 ```
 
 ### Step 3. Capture payment: 
@@ -152,14 +156,17 @@ class PaymentController extends Controller
     {
         $contextName = 'your_context_name';
     
-        $paymentContext = $this->get('payum')->getContext($contextName);
+        $storage = $this->get('payum')->getStorageForClass(
+            'Acme\DemoBundle\Entity\PaypalPaymentInstruction',
+            $contextName
+        );
     
         /** @var PaypalPaymentInstruction */
-        $instruction = $paymentContext->getStorage()->createModel();
+        $instruction = $storage->createModel();
         $instruction->setPaymentrequestCurrencycode(0, 'USD');
         $instruction->setPaymentrequestAmt(0,  1.23));
         
-        $paymentContext->getStorage()->updateModel($instruction);
+        $storage->updateModel($instruction);
         $instruction->setInvnum($instruction->getId());
         
         $returnUrl = $this->generateUrl('acme_payment_capture_simple', array(
@@ -169,7 +176,7 @@ class PaymentController extends Controller
         $instruction->setReturnurl($returnUrl);
         $instruction->setCancelurl($returnUrl);
         
-        $paymentContext->getStorage()->updateModel($instruction);
+        $storage->updateModel($instruction);
         
         return $this->forward('AcmePaymentBundle:Capture:simpleCapture', array(
             'contextName' => $contextName,

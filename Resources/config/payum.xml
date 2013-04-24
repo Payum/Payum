@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="payum.class">Payum\Bundle\PayumBundle\Context\ContextRegistry</parameter>
+        <parameter key="payum.class">Payum\Bundle\PayumBundle\Registry\ContainerAwareRegistry</parameter>
         <parameter key="payum.payment.class">Payum\Payment</parameter>
         <parameter key="payum.extension.storage.class">Payum\Extension\StorageExtension</parameter>
         <parameter key="payum.extension.endless_cycle_detector.class">Payum\Extension\EndlessCycleDetectorExtension</parameter>
@@ -18,13 +18,21 @@
     </parameters>
 
     <services>
+        <service id="payum" class="%payum.class%">
+            <argument type="collection" /> <!-- payments services. this should be replaced while container is built -->
+            <argument type="collection" /> <!-- storages services. this should be replaced while container is built -->
+            <argument /> <!-- payment default name. this should be replaced while container is built -->
+            <argument /> <!-- storage default name. this should be replaced while container is built -->
+
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
         <service id="payum.buzz.client" class="%payum.buzz.client.class%" public="false">
             <call method="setTimeout">
                 <argument>200</argument>
             </call>
-        </service>
-
-        <service id="payum" class="%payum.class%">
         </service>
 
         <service

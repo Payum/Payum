@@ -31,7 +31,7 @@ _**Note:** You can immediately start using it. The autoloading files have been g
 payum:
     contexts:
         your_context_name:
-            be2bill_payment:
+            be2bill:
                 api:
                     options:
                         identifier: 'get this from gateway'
@@ -78,9 +78,11 @@ and configure storage to use this model:
 payum:
     contexts:
         your_context_name:
-            doctrine_storage:
-                driver: orm
-                model_class: AcmeDemoBundle\Entity\Be2BillPaymentInstruction
+            storages:
+                AcmeDemoBundle\Entity\Be2BillPaymentInstruction:
+                    doctrine:
+                        driver: orm
+                        payment_extension: true
 
 doctrine:
     orm:
@@ -125,10 +127,12 @@ and configure storage to use this model:
 payum:
     contexts:
         your_name_here:
-            filesystem_storage:
-                model_class: Acme\DemoBundle\Model\Be2BillPaymentInstruction
-                storage_dir: %kernel.root_dir%/Resources/payments
-                id_property: id
+            storages:
+                Acme\DemoBundle\Model\Be2BillPaymentInstruction:
+                    filesystem:
+                        storage_dir: %kernel.root_dir%/Resources/payments
+                        id_property: id
+                        payment_extension: true
 ```
 
 ### Step 3. Capture payment: 
@@ -150,11 +154,14 @@ class PaymentController extends Controller
     public function prepareBe2BillPaymentAction(Request $request)
     {
         $contextName = 'your_context_name';
-    
-        $paymentContext = $this->get('payum')->getContext($contextName);
+        
+        $storage = $this->get('payum')->getStorageForClass(
+            'Acme\DemoBundle\Entity\Be2billPaymentInstruction',
+            $contextName
+        );
     
         /** @var PaypalPaymentInstruction */
-        $instruction = $paymentContext->getStorage()->createModel();
+        $instruction = $storage->createModel();
         $instruction->setAmount(10005); //be2bill amount format is cents: for example:  100.05 (EUR). will be 10005.
         $instruction->setClientemail('user@email.com');
         $instruction->setClientuseragent($request->headers->get('User-Agent', 'Unknown'));

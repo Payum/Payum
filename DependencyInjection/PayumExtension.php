@@ -1,23 +1,30 @@
 <?php
 namespace Payum\Bundle\PayumBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
 
+use Payum\Exception\InvalidArgumentException;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface;
 
 class PayumExtension extends Extension
 {
+    /**
+     * @var StorageFactoryInterface[]
+     */
     protected $storageFactories = array();
 
+    /**
+     * @var PaymentFactoryInterface[]
+     */
     protected $paymentFactories = array();
-    
+
+    /**
+     * {@inheritdoc}
+     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $mainConfig = $this->getConfiguration($configs, $container);
@@ -33,73 +40,43 @@ class PayumExtension extends Extension
     
     protected function loadContexts(array $config, ContainerBuilder $container)
     {
-        foreach ($config as $contextName => $context) {
-            $storageServiceId = null;
-            foreach ($context as $serviceName => $service) {
-                if (isset($this->paymentFactories[$serviceName])) {
-                    $paymentServiceId = $this->paymentFactories[$serviceName]->create($container, $contextName, $service);
-                }
-                if (isset($this->paymentFactories[$serviceName])) {
-                    /** @var $paymentFactory PaymentFactoryInterface */
-                    $paymentFactory = $this->paymentFactories[$serviceName];
-
-                    $paymentServiceId = $paymentFactory->create($container, $contextName, $service);
-                    $paymentService = $container->getDefinition($paymentServiceId);
-
-                    $paymentService->addMethodCall(
-                        'addAction', 
-                        array(new Reference('payum.action.capture_details_aggregated_model'))
-                    );
-
-                    $paymentService->addMethodCall(
-                        'addAction',
-                        array(new Reference('payum.action.sync_details_aggregated_model'))
-                    );
-
-                    $paymentService->addMethodCall(
-                        'addAction',
-                        array(new Reference('payum.action.status_details_aggregated_model'))
-                    );
-                }
-                if (isset($this->storageFactories[$serviceName])) {
-                    $storageServiceId = $this->storageFactories[$serviceName]->create($container, $contextName, $service);
-                }
-            }
-            
-            if ($storageServiceId) {
-                $storageExtensionDefinition = new DefinitionDecorator('payum.extension.storage.prototype');
-                $storageExtensionDefinition->replaceArgument(0, new Reference($storageServiceId));
-                $storageExtensionDefinition->setPublic(false);
-                $storageExtensionId ='payum.context.'.$contextName.'.extension.storage';
-                
-                $container->setDefinition($storageExtensionId, $storageExtensionDefinition);
-
-                $paymentDefinition = $container->getDefinition($paymentServiceId);
-                $paymentDefinition->addMethodCall('addExtension', array(new Reference($storageExtensionId)));
+        $paymentsServicesIds = array();
+        $storagesServicesIds = array();
+        
+        $defaultName = null;
+        
+        foreach ($config as $contextName => $contextConfig) {
+            //use first defined context as default.
+            if (false == $defaultName) {
+                $defaultName = $contextName;
             }
 
-            $paymentDefinition = $container->getDefinition($paymentServiceId);
-            $paymentDefinition->addMethodCall('addExtension', array(new Reference('payum.extension.endless_cycle_detector')));
-
-            $contextDefinition = new Definition();
-            $contextDefinition->setClass('Payum\Bundle\PayumBundle\Context\LazyContext');
-            $contextDefinition->setPublic(false);
-            $contextDefinition->addMethodCall('setContainer', array(
-                new Reference('service_container')
-            ));
-            $contextDefinition->setArguments(array(
+            $paymentFactoryName = $this->findSelectedPaymentFactoryNameInContextConfig($contextConfig);
+            $paymentId = $this->paymentFactories[$paymentFactoryName]->create(
+                $container,
                 $contextName,
-                $paymentServiceId,
-                $storageServiceId,
-            ));
-            $contextId = 'payum.context.'.$contextName;
-            $container->setDefinition($contextId, $contextDefinition);
+                $contextConfig[$paymentFactoryName]
+            );
+            $paymentsServicesIds[$contextName] = $paymentId;
             
-            $payumPaymentDefinition = $container->getDefinition('payum');
-            $payumPaymentDefinition->addMethodCall('addContext', array(
-                new Reference($contextId)
-            ));
+            foreach ($contextConfig['storages'] as $modelClass => $storageConfig) {
+                $storageFactoryName = $this->findSelectedStorageFactoryNameInStorageConfig($storageConfig);
+                $storageId = $this->storageFactories[$storageFactoryName]->create(
+                    $container,
+                    $contextName,
+                    $modelClass,
+                    $paymentId,
+                    $storageConfig[$storageFactoryName]
+                );
+                $storagesServicesIds[$contextName][$modelClass] = $storageId;
+            }
         }
+        
+        $registryDefinition = $container->getDefinition('payum');
+        $registryDefinition->replaceArgument(0, $paymentsServicesIds);
+        $registryDefinition->replaceArgument(1, $storagesServicesIds);
+        $registryDefinition->replaceArgument(2, $defaultName);
+        $registryDefinition->replaceArgument(3, $defaultName);
     }
 
     /**
@@ -107,7 +84,15 @@ class PayumExtension extends Extension
      */
     public function addStorageFactory(StorageFactoryInterface $factory)
     {
-        $this->storageFactories[$factory->getName()] = $factory;
+        $factoryName = $factory->getName();
+        if (empty($factoryName)) {
+            throw new InvalidArgumentException(sprintf('The storage factory %s has empty name', get_class($factory)));
+        }
+        if (array_key_exists($factoryName, $this->storageFactories)) {
+            throw new InvalidArgumentException(sprintf('The storage factory with such name %s already registered', $factoryName));
+        }
+        
+        $this->storageFactories[$factoryName] = $factory;
     }
 
     /**
@@ -115,6 +100,14 @@ class PayumExtension extends Extension
      */
     public function addPaymentFactory(PaymentFactoryInterface $factory)
     {
+        $factoryName = $factory->getName();
+        if (empty($factoryName)) {
+            throw new InvalidArgumentException(sprintf('The payment factory %s has empty name', get_class($factory)));
+        }
+        if (isset($this->paymentFactories[$factoryName])) {
+            throw new InvalidArgumentException(sprintf('The payment factory with such name %s already registered', $factoryName));
+        }
+        
         $this->paymentFactories[$factory->getName()] = $factory;
     }
 
@@ -124,5 +117,33 @@ class PayumExtension extends Extension
     public function getConfiguration(array $config, ContainerBuilder $container)
     {
         return new MainConfiguration($this->paymentFactories, $this->storageFactories);
+    }
+
+    /**
+     * @param array $contextConfig
+     *
+     * @return string
+     */
+    protected function findSelectedPaymentFactoryNameInContextConfig($contextConfig)
+    {
+        foreach ($contextConfig as $name => $value) {
+            if (isset($this->paymentFactories[$name])) {
+                return $name;
+            }
+        }
+    }
+
+    /**
+     * @param array $storageConfig
+     *
+     * @return string
+     */
+    protected function findSelectedStorageFactoryNameInStorageConfig($storageConfig)
+    {
+        foreach ($storageConfig as $name => $value) {
+            if (isset($this->storageFactories[$name])) {
+                return $name;
+            }
+        }
     }
 }

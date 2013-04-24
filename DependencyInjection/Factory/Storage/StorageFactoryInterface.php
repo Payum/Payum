@@ -9,14 +9,16 @@ interface StorageFactoryInterface
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param string $contextName
+     * @param string $modelClass
+     * @param string $paymentServiceId
      * @param array $config
-     * 
+     *
      * @return string The context serviceId
      */
-    function create(ContainerBuilder $container, $contextName, array $config);
+    function create(ContainerBuilder $container, $contextName, $modelClass, $paymentId, array $config);
 
     /**
-     * The payment name, 
+     * The storage name, 
      * For example filesystem, doctrine, propel etc.
      * 
      * @return string

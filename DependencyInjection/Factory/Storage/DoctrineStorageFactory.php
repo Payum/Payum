@@ -7,31 +7,14 @@ use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\Config\FileLocator;
 
-class DoctrineStorageFactory implements StorageFactoryInterface
+class DoctrineStorageFactory extends AbstractStorageFactory
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function create(ContainerBuilder $container, $contextName, array $config)
-    {
-        $this->load($container, $config['driver']);
-        
-        $contextStorageDefinition = new DefinitionDecorator('payum.storage.doctrine.'.$config['driver']);
-        $contextStorageDefinition->setPublic(true);
-        $contextStorageDefinition->replaceArgument(1, $config['model_class']);
-        
-        $contextStorageId = 'payum.context.'.$contextName.'.storage';
-        $container->setDefinition($contextStorageId, $contextStorageDefinition);
-        
-        return $contextStorageId;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'doctrine_storage';
+        return 'doctrine';
     }
 
     /**
@@ -39,21 +22,25 @@ class DoctrineStorageFactory implements StorageFactoryInterface
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
+        parent::addConfiguration($builder);
+        
         $builder->children()
             ->scalarNode('driver')->isRequired()->cannotBeEmpty()->end()
-            ->scalarNode('model_class')->isRequired()->cannotBeEmpty()->end()
         ->end();
     }
-    
-    protected function load(ContainerBuilder $container, $dbDriver)
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function createStorage(ContainerBuilder $container, $contextName, $modelClass, $paymentId, array $config)
     {
-        static $loaded;
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/storage'));
+        $loader->load('doctrine.'.$config['driver'].'.xml');
+
+        $contextStorageDefinition = new DefinitionDecorator('payum.storage.doctrine.'.$config['driver']);
+        $contextStorageDefinition->setPublic(true);
+        $contextStorageDefinition->replaceArgument(1, $modelClass);
         
-        if (false == $loaded) {
-            $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/storage'));
-            $loader->load('doctrine.'.$dbDriver.'.xml');
-            
-            $loaded = true;
-        }
+        return $contextStorageDefinition;
     }
 }

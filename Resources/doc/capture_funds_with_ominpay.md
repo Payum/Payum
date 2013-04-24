@@ -62,8 +62,6 @@ class PaymentController extends Controller
     {
         $contextName = 'your_context_name';
     
-        $paymentContext = $this->get('payum')->getContext($contextName);
-    
         $model = array(
             'amount' => 10,
             'card' => array(

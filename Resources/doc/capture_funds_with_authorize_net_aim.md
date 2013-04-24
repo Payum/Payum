@@ -31,7 +31,7 @@ _**Note:** You can immediately start using it. The autoloading files have been g
 payum:
     contexts:
         your_context_here:
-            authorize_net_aim_payment:
+            authorize_net_aim:
                 api:
                     options:
                         login_id: 'get it from gateway'
@@ -79,9 +79,11 @@ and configure storage to use this model:
 payum:
     contexts:
         your_context_name:
-            doctrine_storage:
-                driver: orm
-                model_class: AcmeDemoBundle\Entity\AuthorizeNetPaymentInstruction
+            storages:
+                AcmeDemoBundle\Entity\AuthorizeNetPaymentInstruction:
+                    doctrine:
+                        driver: orm
+                        payment_extension: true
 
 doctrine:
     orm:
@@ -126,10 +128,12 @@ and configure storage to use this model:
 payum:
     contexts:
         your_name_here:
-            filesystem_storage:
-                model_class: Acme\DemoBundle\Model\AuthorizeNetPaymentInstruction
-                storage_dir: %kernel.root_dir%/Resources/payments
-                id_property: id
+            storages:
+                Acme\DemoBundle\Model\AuthorizeNetPaymentInstruction:
+                    filesystem:
+                        storage_dir: %kernel.root_dir%/Resources/payments
+                        id_property: id
+                        payment_extension: true
 ```
 
 ### Step 3. Capture payment: 
@@ -152,10 +156,13 @@ class PaymentController extends Controller
     {
         $contextName = 'your_context_name';
     
-        $paymentContext = $this->get('payum')->getContext($contextName);
+        $storage = $this->get('payum')->getStorageForClass(
+            'Acme\DemoBundle\Entity\Be2billPaymentInstruction',
+            $contextName
+        );
     
         /** @var AuthorizeNetPaymentInstruction */
-        $instruction = $paymentContext->getStorage()->createModel();
+        $instruction = $storage->createModel();
     
         $instruction->setAmount(1.23);
         $instruction->setClientemail('user@email.com');

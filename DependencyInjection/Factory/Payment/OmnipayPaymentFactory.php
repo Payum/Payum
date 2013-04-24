@@ -62,7 +62,7 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
      */
     public function getName()
     {
-        return 'omnipay_payment';
+        return 'omnipay';
     }
 
     /**

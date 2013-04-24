@@ -1,3 +1,12 @@
+0.3 to 0.5
+
+* Storage factory names has been changed. The `_storage` post fix removed. For example `doctrine_storage` now `doctrine`.
+* Payment factory names has been changed. The `_payment` post fix removed. For example `omnipay_payment` now `omnipay`.
+* `StorageFactoryInterface::create` method signature has been changed. Now it requires additional parameter `modelClass`. 
+* Doctrine storage configuration does not have `model_class` option any more.
+* Filesystem storage configuration does not have `model_class` option any more.
+* Storages are not added automatically as payment extension any more. Set `payment_extension.enabled` storage's option to true to enable it.  
+
 0.2 to 0.3
 ==========
 

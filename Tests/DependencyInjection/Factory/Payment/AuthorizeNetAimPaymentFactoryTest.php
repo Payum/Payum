@@ -32,6 +32,16 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldAllowGetName()
+    {
+        $factory = new AuthorizeNetAimPaymentFactory;
+
+        $this->assertEquals('authorize_net_aim', $factory->getName());
+    }
+
+    /**
+     * @test
+     */
     public function shouldAllowAddConfiguration()
     {
         $factory = new AuthorizeNetAimPaymentFactory;

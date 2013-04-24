@@ -105,7 +105,7 @@ class PaypalExpressCheckoutNvpPaymentFactory extends AbstractPaymentFactory
      */
     public function getName()
     {
-        return 'paypal_express_checkout_nvp_payment';
+        return 'paypal_express_checkout_nvp';
     }
 
     /**

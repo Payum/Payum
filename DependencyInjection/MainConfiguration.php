@@ -28,8 +28,13 @@ class MainConfiguration implements ConfigurationInterface
      */
     public function __construct(array $paymentFactories, array $storageFactories)
     {
-        $this->paymentFactories = $paymentFactories;
-        $this->storageFactories = $storageFactories;
+        foreach ($paymentFactories as $paymentFactory) {
+            $this->paymentFactories[$paymentFactory->getName()] = $paymentFactory;
+        }
+
+        foreach ($storageFactories as $storageFactory) {
+            $this->storageFactories[$storageFactory->getName()] = $storageFactory;
+        }
     }
 
     /**
@@ -52,28 +57,21 @@ class MainConfiguration implements ConfigurationInterface
         $contextsPrototypeNode
                     ->validate()
                     ->ifTrue(function($v) {
-                        $payments = array();
-                        $storages = array();
+                        $selectedPayments = array();
                         foreach ($v as $name => $value) {
-                            if (substr($name, -strlen('_payment')) === '_payment') {
-                                $payments[$name] = $value;
-                            } else if (substr($name, -strlen('_storage')) === '_storage') {
-                                $storages[$name] = $value;
+                            if (isset($this->paymentFactories[$name])) {
+                                $selectedPayments[$name] = $this->paymentFactories[$name];
                             }
                         }
                 
-                        if (0 == count($payments)) {
+                        if (0 == count($selectedPayments)) {
                             throw new LogicException(sprintf(
                                 'One payment from the %s payments available must be selected',
-                                implode(', ', array_keys($payments))
+                                implode(', ', array_keys($selectedPayments))
                             ));
                         }
-                        if (count($payments) > 1) {
+                        if (count($selectedPayments) > 1) {
                             throw new LogicException('Only one payment per context could be selected');
-                        }
-
-                        if (count($storages) > 1) {
-                            throw new LogicException('Only one storage per context could be selected');
                         }
                 
                         return false;
@@ -89,40 +87,55 @@ class MainConfiguration implements ConfigurationInterface
     protected function addPaymentsSection(ArrayNodeDefinition $contextsPrototypeNode, array $factories)
     {
         foreach ($factories as $factory) {
-            $paymentName = $factory->getName();
-            if (empty($paymentName)) {
-                throw new LogicException('The payment name must not be empty');
-            }
-            if (substr($paymentName, -strlen('_payment')) !== '_payment') {
-                throw new LogicException(sprintf(
-                    'The payment name must ended with `_payment` but given name is %s',
-                    $paymentName
-                ));
-            }
-
-            $paymentSection = $contextsPrototypeNode->children()->arrayNode($paymentName);
-            
-            $factory->addConfiguration($paymentSection);
+            $factory->addConfiguration(
+                $contextsPrototypeNode->children()->arrayNode($factory->getName())
+            );
         }
     }
 
     protected function addStoragesSection(ArrayNodeDefinition $contextsPrototypeNode, array $factories)
     {
+        $storageNode = $contextsPrototypeNode->children()
+                ->arrayNode('storages')
+                ->validate()
+                    ->ifTrue(function($v) {
+                        foreach($v as $key => $value) {
+                            if (false == class_exists($key)) {
+                                throw new LogicException(sprintf(
+                                    'The storage entry must be a valid model class. It is set %s',
+                                    $key
+                                ));
+                            }
+                        }
+                    
+                        return false;
+                    })
+                    ->thenInvalid('A message')
+                ->end()
+                ->useAttributeAsKey('key')
+                ->prototype('array')
+        ;
+
+        $storageNode
+            ->validate()
+                ->ifTrue(function($v) {
+                    if (count($v) == 0) {
+                        throw new LogicException('At least one storage must be configured.');
+                    }
+                    if (count($v) > 1) {
+                        throw new LogicException('Only one storage per entry could be selected');
+                    }
+                    
+                    return false;
+                })
+                ->thenInvalid('A message')
+            ->end()
+        ;
+        
         foreach ($factories as $factory) {
-            $storageNode = $contextsPrototypeNode->children()->arrayNode($factory->getName());
-
-            $storageName = $factory->getName();
-            if (empty($storageName)) {
-                throw new LogicException('The storage name must not be empty');
-            }
-            if (substr($storageName, -strlen('_storage')) !== '_storage') {
-                throw new LogicException(sprintf(
-                    'The storage name must ended with `_storage` but given name is %s',
-                    $storageName
-                ));
-            }
-
-            $factory->addConfiguration($contextsPrototypeNode->children()->arrayNode($storageName));
+            $factory->addConfiguration(
+                $storageNode->children()->arrayNode($factory->getName())
+            );
         }
     }
 }
