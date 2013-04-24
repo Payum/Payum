@@ -83,6 +83,7 @@ payum:
                 AcmeDemoBundle\Entity\AuthorizeNetPaymentInstruction:
                     doctrine:
                         driver: orm
+                        payment_extension: true
 
 doctrine:
     orm:
@@ -132,6 +133,7 @@ payum:
                     filesystem:
                         storage_dir: %kernel.root_dir%/Resources/payments
                         id_property: id
+                        payment_extension: true
 ```
 
 ### Step 3. Capture payment: 
@@ -154,10 +156,13 @@ class PaymentController extends Controller
     {
         $contextName = 'your_context_name';
     
-        $paymentContext = $this->get('payum')->getContext($contextName);
+        $storage = $this->get('payum')->getStorageForClass(
+            'Acme\DemoBundle\Entity\Be2billPaymentInstruction',
+            $contextName
+        );
     
         /** @var AuthorizeNetPaymentInstruction */
-        $instruction = $paymentContext->getStorage()->createModel();
+        $instruction = $storage->createModel();
     
         $instruction->setAmount(1.23);
         $instruction->setClientemail('user@email.com');

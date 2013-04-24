@@ -84,6 +84,7 @@ payum:
                 AcmeDemoBundle\Entity\PaypalPaymentInstruction:
                     doctrine:
                         driver: orm
+                        payment_extension: true
 
 doctrine:
     orm:
@@ -133,6 +134,7 @@ payum:
                     filesystem:
                         storage_dir: %kernel.root_dir%/Resources/payments
                         id_property: id
+                        payment_extension: true
 ```
 
 ### Step 3. Capture payment: 
@@ -154,14 +156,17 @@ class PaymentController extends Controller
     {
         $contextName = 'your_context_name';
     
-        $paymentContext = $this->get('payum')->getContext($contextName);
+        $storage = $this->get('payum')->getStorageForClass(
+            'Acme\DemoBundle\Entity\PaypalPaymentInstruction',
+            $contextName
+        );
     
         /** @var PaypalPaymentInstruction */
-        $instruction = $paymentContext->getStorage()->createModel();
+        $instruction = $storage->createModel();
         $instruction->setPaymentrequestCurrencycode(0, 'USD');
         $instruction->setPaymentrequestAmt(0,  1.23));
         
-        $paymentContext->getStorage()->updateModel($instruction);
+        $storage->updateModel($instruction);
         $instruction->setInvnum($instruction->getId());
         
         $returnUrl = $this->generateUrl('acme_payment_capture_simple', array(
@@ -171,7 +176,7 @@ class PaymentController extends Controller
         $instruction->setReturnurl($returnUrl);
         $instruction->setCancelurl($returnUrl);
         
-        $paymentContext->getStorage()->updateModel($instruction);
+        $storage->updateModel($instruction);
         
         return $this->forward('AcmePaymentBundle:Capture:simpleCapture', array(
             'contextName' => $contextName,

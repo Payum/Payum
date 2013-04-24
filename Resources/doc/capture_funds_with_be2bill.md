@@ -82,6 +82,7 @@ payum:
                 AcmeDemoBundle\Entity\Be2BillPaymentInstruction:
                     doctrine:
                         driver: orm
+                        payment_extension: true
 
 doctrine:
     orm:
@@ -131,6 +132,7 @@ payum:
                     filesystem:
                         storage_dir: %kernel.root_dir%/Resources/payments
                         id_property: id
+                        payment_extension: true
 ```
 
 ### Step 3. Capture payment: 
@@ -152,11 +154,14 @@ class PaymentController extends Controller
     public function prepareBe2BillPaymentAction(Request $request)
     {
         $contextName = 'your_context_name';
-    
-        $paymentContext = $this->get('payum')->getContext($contextName);
+        
+        $storage = $this->get('payum')->getStorageForClass(
+            'Acme\DemoBundle\Entity\Be2billPaymentInstruction',
+            $contextName
+        );
     
         /** @var PaypalPaymentInstruction */
-        $instruction = $paymentContext->getStorage()->createModel();
+        $instruction = $storage->createModel();
         $instruction->setAmount(10005); //be2bill amount format is cents: for example:  100.05 (EUR). will be 10005.
         $instruction->setClientemail('user@email.com');
         $instruction->setClientuseragent($request->headers->get('User-Agent', 'Unknown'));
