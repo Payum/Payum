@@ -2,7 +2,7 @@
     "name": "payum/payum",
     "type": "library",
     "description": "Payment lib",
-    "keywords": ["payment"],
+    "keywords": ["payment", "paypal", "paypal ipn", "paypal digital goods", "paypal recurring payments", "authorize.net", "be2bill", "omnipay gateways"],
     "homepage": "",
     "license": "MIT",
     "authors": [
@@ -17,6 +17,18 @@
     },
     "require-dev": {
         "ext-curl": "*",
+        "ext-pdo_sqlite": "*",
+        "doctrine/orm": "2.*",
+        "fp/testo": "dev-master",
+        "phpunit/phpunit": "3.7.*"
+    },
+    "suggest": {
+        "payum/paypal-express-checkout-nvp": "If you want to use paypal express checkout, digital goods or recurring payments",
+        "payum/paypal-pro-checkout-nvp": "If you want to use paypal pro checkout",
+        "payum/paypal-ipn": "If you want to use paypal instant payment notifications(Paypal IPN)",
+        "payum/authorize-net-aim": "If you want to use Authorize.Net AIM payment gateway",
+        "payum/be2bill": "If you want to use be2bill payment gateway",
+        "payum/omnipay-bridge": "If you want to use omnipay's gateways",
         "ext-pdo_sqlite": "*",
         "doctrine/orm": "2.*",
         "fp/testo": "dev-master",
