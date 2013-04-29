@@ -29,13 +29,7 @@
         "payum/authorize-net-aim": "If you want to use Authorize.Net AIM payment gateway",
         "payum/be2bill": "If you want to use be2bill payment gateway",
         "payum/omnipay-bridge": "If you want to use omnipay's gateways",
-        "ext-pdo_sqlite": "*",
-        "doctrine/orm": "2.*",
-        "fp/testo": "dev-master",
-        "phpunit/phpunit": "3.7.*"
-    },
-    "suggest": {
-        "doctrine/orm": "If you want to store to database."
+        "doctrine/orm": "If you want to store models to database using doctrin2 ORM"
     },
     "config": {
         "bin-dir": "bin"
