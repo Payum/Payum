@@ -16,11 +16,34 @@ class DoctrineStorageOrmTest extends OrmTest
             'Payum\Examples\Entity\TestModel'
         );
         
-        $request = $storage->createModel();
+        $model = $storage->createModel();
         
-        $storage->updateModel($request);
+        $storage->updateModel($model);
         
-        $this->assertNotNull($request->getId());
+        $this->assertNotNull($model->getId());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldGetModelIdentifier()
+    {
+        $storage = new DoctrineStorage(
+            $this->em,
+            'Payum\Examples\Entity\TestModel'
+        );
+
+        $model = $storage->createModel();
+
+        $storage->updateModel($model);
+
+        $this->assertNotNull($model->getId());
+        
+        $identificator = $storage->getIdentificator($model);
+        
+        $this->assertInstanceOf('Payum\Storage\Identificator', $identificator);
+        $this->assertEquals(get_class($model), $identificator->getClass());
+        $this->assertEquals($model->getId(), $identificator->getId());
     }
 
     /**
@@ -33,17 +56,17 @@ class DoctrineStorageOrmTest extends OrmTest
             'Payum\Examples\Entity\TestModel'
         );
 
-        $request = $storage->createModel();
+        $model = $storage->createModel();
 
-        $storage->updateModel($request);
+        $storage->updateModel($model);
         
-        $requestId = $request->getId();
+        $requestId = $model->getId();
         
         $this->em->clear();
 
-        $request = $storage->findModelById($requestId);
+        $model = $storage->findModelById($requestId);
         
-        $this->assertInstanceOf('Payum\Examples\Model\TestModel', $request);
-        $this->assertEquals($requestId, $request->getId());
+        $this->assertInstanceOf('Payum\Examples\Model\TestModel', $model);
+        $this->assertEquals($requestId, $model->getId());
     }
 }

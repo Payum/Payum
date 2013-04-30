@@ -2,8 +2,10 @@
 namespace Payum\Extension;
 
 use Payum\Action\ActionInterface;
+use Payum\Exception\LogicException;
 use Payum\Request\InteractiveRequestInterface;
 use Payum\Request\ModelRequestInterface;
+use Payum\Storage\Identificator;
 use Payum\Storage\StorageInterface;
 
 class StorageExtension implements ExtensionInterface 
@@ -12,11 +14,6 @@ class StorageExtension implements ExtensionInterface
      * @var \Payum\Storage\StorageInterface
      */
     protected $storage;
-
-    /**
-     * @var mixed
-     */
-    protected $firstRequest;
 
     /**
      * @param \Payum\Storage\StorageInterface $storage
@@ -31,22 +28,26 @@ class StorageExtension implements ExtensionInterface
      */
     public function onPreExecute($request)
     {
-        if ($this->firstRequest) {
-            return;
-        }
-
-        $this->firstRequest = $request;
-        
         if (false == $request instanceof ModelRequestInterface) {
             return;
         }
-        if (is_object($request->getModel())) {
+        
+        if (false == $request->getModel() instanceof Identificator) {
             return;
         }
-    
-        if ($model = $this->storage->findModelById($request->getModel())) {
-            $request->setModel($model);
+        
+        /** @var Identificator $identificator */
+        $identificator = $request->getModel();
+        
+        if (false == $this->storage->supportModel($identificator->getClass())) {
+            return;
         }
+        
+        if (false == $model = $this->storage->findModelById($identificator->getId())) {
+            throw new LogicException('Cannot find model by identifier: '.$identificator);
+        }
+
+        $request->setModel($model);
     }
 
     /**
@@ -85,12 +86,6 @@ class StorageExtension implements ExtensionInterface
      */
     protected function tryUpdateModel($request)
     {
-        if ($this->firstRequest !== $request) {
-            return;
-        }
-
-        $this->firstRequest = null;
-
         if ($request instanceof ModelRequestInterface && $this->storage->supportModel($request->getModel())) {
             $this->storage->updateModel($request->getModel());
         }

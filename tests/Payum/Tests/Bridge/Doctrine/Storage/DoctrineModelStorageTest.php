@@ -29,7 +29,7 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
     public function couldBeConstructedWithObjectManagerAndModelClassAsArguments()
     {
         new DoctrineStorage(
-            $this->createObjectManager(),
+            $this->createObjectManagerMock(),
             'Payum\Examples\Model\TestModel'
         );
     }
@@ -40,7 +40,7 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
     public function shouldReturnTrueIfSupportedModelGiven()
     {
         $storage = new DoctrineStorage(
-            $this->createObjectManager(),
+            $this->createObjectManagerMock(),
             'Payum\Examples\Model\TestModel'
         );
 
@@ -50,10 +50,23 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldReturnTrueIfSupportedModelClassGiven()
+    {
+        $storage = new DoctrineStorage(
+            $this->createObjectManagerMock(),
+            'Payum\Examples\Model\TestModel'
+        );
+
+        $this->assertTrue($storage->supportModel('Payum\Examples\Model\TestModel'));
+    }
+
+    /**
+     * @test
+     */
     public function shouldReturnFalseIfNotSupportedModelGiven()
     {
         $storage = new DoctrineStorage(
-            $this->createObjectManager(),
+            $this->createObjectManagerMock(),
             'Payum\Examples\Model\TestModel'
         );
 
@@ -68,7 +81,7 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
         $expectedModelClass = 'Payum\Examples\Model\TestModel';
 
         $storage = new DoctrineStorage(
-            $this->createObjectManager(),
+            $this->createObjectManagerMock(),
             $expectedModelClass
         );
 
@@ -83,7 +96,7 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallObjectManagerPersistAndFlushOnUpdateModel()
     {
-        $objectManagerMock = $this->createObjectManager();
+        $objectManagerMock = $this->createObjectManagerMock();
         $objectManagerMock
             ->expects($this->once())
             ->method('persist')
@@ -113,7 +126,7 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
         $expectedModelId = 123;
         $expectedFoundModel = new TestModel;
         
-        $objectManagerMock = $this->createObjectManager();
+        $objectManagerMock = $this->createObjectManagerMock();
         $objectManagerMock
             ->expects($this->once())
             ->method('find')
@@ -137,20 +150,46 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Payum\Exception\InvalidArgumentException
      * @expectedExceptionMessage Invalid model given. Should be instance of Payum\Tests\Bridge\Doctrine\Storage\TestModel
      */
-    public function throwIfTryUpdateModelNotInstanceOfModelClass()
+    public function throwIfTryUpdateNotSupportedModel()
     {
         $storage = new DoctrineStorage(
-            $this->createObjectManager(),
+            $this->createObjectManagerMock(),
             'Payum\Tests\Bridge\Doctrine\Storage\TestModel'
         );
 
-        $storage->updateModel(new \stdClass);
+        $notSupportedModel = new \stdClass;
+        
+        //guard
+        $this->assertFalse($storage->supportModel($notSupportedModel));
+
+        $storage->updateModel($notSupportedModel);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Invalid model given. Should be instance of Payum\Tests\Bridge\Doctrine\Storage\TestModel
+     */
+    public function throwIfTryGetIdentifierOfNotSupportedModel()
+    {
+        $storage = new DoctrineStorage(
+            $this->createObjectManagerMock(),
+            'Payum\Tests\Bridge\Doctrine\Storage\TestModel'
+        );
+
+        $notSupportedModel = new \stdClass;
+
+        //guard
+        $this->assertFalse($storage->supportModel($notSupportedModel));
+
+        $storage->getIdentificator($notSupportedModel);
     }
 
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|\Doctrine\Common\Persistence\ObjectManager
      */
-    protected function createObjectManager()
+    protected function createObjectManagerMock()
     {
         return $this->getMock('Doctrine\Common\Persistence\ObjectManager');    
     }
