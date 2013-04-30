@@ -1,3 +1,9 @@
+0.4 to 0.5
+==========
+
+* A method `getIdentificator` was added to `StorageInterface` interface.
+* `StorageExtension` not using scalar as model id any more. Use `Identificator` object instead.
+
 0.3 to 0.4
 ==========
 

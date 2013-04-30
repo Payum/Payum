@@ -2,6 +2,7 @@
 namespace Payum\Tests\Extension;
 
 use Payum\Extension\StorageExtension;
+use Payum\Storage\Identificator;
 use Payum\Storage\StorageInterface;
 
 class StorageExtensionTest extends \PHPUnit_Framework_TestCase 
@@ -27,41 +28,109 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSetFirstRequestOnPreExecute()
-    {
-        $extension = new StorageExtension($this->createStorageMock());
-
-        $expectedFirstRequest = new \stdClass;
-        
-        $extension->onPreExecute($expectedFirstRequest);
-        $this->assertAttributeSame($expectedFirstRequest, 'firstRequest', $extension);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotChangeFirstRequestIfAlreadySetOnPreExecute()
-    {
-        $extension = new StorageExtension($this->createStorageMock());
-
-        $expectedFirstRequest = new \stdClass;
-        $otherRequest = new \stdClass;
-
-        $extension->onPreExecute($expectedFirstRequest);
-        $extension->onPreExecute($otherRequest);
-        
-        $this->assertAttributeSame($expectedFirstRequest, 'firstRequest', $extension);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSetFoundModelOnFirstRequestIfIdGivenAsModelAndStorageSupportsIt()
+    public function shouldDoNothingOnPreExecuteIfStorageNotSupportModel()
     {
         $expectedModel = new \stdClass;
         $expectedId = 123;
+        $identificator = new Identificator($expectedId, $expectedModel);
 
         $storageMock = $this->createStorageMock();
+        $storageMock
+            ->expects($this->atLeastOnce())
+            ->method('supportModel')
+            ->with(get_class($expectedModel))
+            ->will($this->returnValue(false))
+        ;
+        $storageMock
+            ->expects($this->never())
+            ->method('findModelById')
+        ;
+
+        $modelRequestMock = $this->getMock('Payum\Request\ModelRequestInterface');
+        $modelRequestMock
+            ->expects($this->any())
+            ->method('getModel')
+            ->will($this->returnValue($identificator))
+        ;
+        $modelRequestMock
+            ->expects($this->never())
+            ->method('setModel')
+        ;
+
+        $extension = new StorageExtension($storageMock);
+
+        $extension->onPreExecute($modelRequestMock);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldDoNothingOnPreExecuteIfModelNotIdentificator()
+    {
+        $storageMock = $this->createStorageMock();
+        $storageMock
+            ->expects($this->never())
+            ->method('supportModel')
+        ;
+        $storageMock
+            ->expects($this->never())
+            ->method('findModelById')
+        ;
+
+        $modelRequestMock = $this->getMock('Payum\Request\ModelRequestInterface');
+        $modelRequestMock
+            ->expects($this->any())
+            ->method('getModel')
+            ->will($this->returnValue(new \stdClass))
+        ;
+        $modelRequestMock
+            ->expects($this->never())
+            ->method('setModel')
+        ;
+
+        $extension = new StorageExtension($storageMock);
+
+        $extension->onPreExecute($modelRequestMock);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldDoNothingOnPreExecuteIfRequestNotModelRequest()
+    {
+        $storageMock = $this->createStorageMock();
+        $storageMock
+            ->expects($this->never())
+            ->method('supportModel')
+        ;
+        $storageMock
+            ->expects($this->never())
+            ->method('findModelById')
+        ;
+
+        $notModelRequestMock = $this->getMock('Payum\Request\RequestInterface');
+
+        $extension = new StorageExtension($storageMock);
+
+        $extension->onPreExecute($notModelRequestMock);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSetFoundModelOnRequestIfIdentifierGivenAsModelAndStorageSupportsIt()
+    {
+        $expectedModel = new \stdClass;
+        $expectedId = 123; 
+        $identificator = new Identificator($expectedId, $expectedModel);
+
+        $storageMock = $this->createStorageMock();
+        $storageMock
+            ->expects($this->atLeastOnce())
+            ->method('supportModel')
+            ->with(get_class($expectedModel))
+            ->will($this->returnValue(true))
+        ;
         $storageMock
             ->expects($this->once())
             ->method('findModelById')
@@ -73,7 +142,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
         $modelRequestMock
             ->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue($expectedId))
+            ->will($this->returnValue($identificator))
         ;
         $modelRequestMock
             ->expects($this->any())
@@ -84,130 +153,6 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
         $extension = new StorageExtension($storageMock);
 
         $extension->onPreExecute($modelRequestMock);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldDoNothingIfNotFirstRequest()
-    {
-        $modelId = 123;
-
-        $storageMock = $this->createStorageMock();
-        $storageMock
-            ->expects($this->never())
-            ->method('findModelById')
-        ;
-
-        $modelRequestMock = $this->getMock('Payum\Request\ModelRequestInterface');
-        $modelRequestMock
-            ->expects($this->any())
-            ->method('getModel')
-            ->will($this->returnValue($modelId))
-        ;
-        $modelRequestMock
-            ->expects($this->never())
-            ->method('setModel')
-        ;
-
-        $extension = new StorageExtension($storageMock);
-
-        $extension->onPreExecute(new \stdClass);
-        $extension->onPreExecute($modelRequestMock);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSetFirstRequestToNullOnPostExecute()
-    {
-        $extension = new StorageExtension($this->createStorageMock());
-
-        $firstRequest = new \stdClass;
-
-        $extension->onPreExecute($firstRequest);
-
-        $extension->onPostExecute($firstRequest, $this->createActionMock());
-        $this->assertAttributeEquals(null, 'firstRequest', $extension);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotChangeFirstRequestIfRequestNotFirstOnPostExecute()
-    {
-        $extension = new StorageExtension($this->createStorageMock());
-
-        $firstRequest = new \stdClass;
-        $otherRequest = new \stdClass;
-
-        $extension->onPreExecute($firstRequest);
-        $extension->onPostExecute($otherRequest, $this->createActionMock());
-
-        $this->assertAttributeSame($firstRequest, 'firstRequest', $extension);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSetFirstRequestToNullOnInteractiveRequest()
-    {
-        $extension = new StorageExtension($this->createStorageMock());
-
-        $firstRequest = new \stdClass;
-
-        $extension->onPreExecute($firstRequest);
-
-        $extension->onInteractiveRequest($this->createInteractiveRequestMock(), $firstRequest, $this->createActionMock());
-        $this->assertAttributeEquals(null, 'firstRequest', $extension);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotChangeFirstRequestIfRequestNotFirstOnInteractiveRequest()
-    {
-        $extension = new StorageExtension($this->createStorageMock());
-
-        $firstRequest = new \stdClass;
-        $otherRequest = new \stdClass;
-
-        $extension->onPreExecute($firstRequest);
-        $extension->onInteractiveRequest($this->createInteractiveRequestMock(), $otherRequest, $this->createActionMock());
-
-        $this->assertAttributeSame($firstRequest, 'firstRequest', $extension);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSetFirstRequestToNullOnException()
-    {
-        $extension = new StorageExtension($this->createStorageMock());
-
-        $firstRequest = new \stdClass;
-
-        $extension->onPreExecute($firstRequest);
-
-        $extension->onException(new \Exception, $firstRequest);
-        
-        $this->assertAttributeEquals(null, 'firstRequest', $extension);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotChangeFirstRequestIfRequestNotFirstOnException()
-    {
-        $extension = new StorageExtension($this->createStorageMock());
-
-        $firstRequest = new \stdClass;
-        $otherRequest = new \stdClass;
-
-        $extension->onPreExecute($firstRequest);
-        $extension->onException(new \Exception, $otherRequest);
-
-        $this->assertAttributeSame($firstRequest, 'firstRequest', $extension);
     }
 
     /**
