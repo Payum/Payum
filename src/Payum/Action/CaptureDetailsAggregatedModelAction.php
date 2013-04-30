@@ -16,10 +16,10 @@ class CaptureDetailsAggregatedModelAction extends PaymentAwareAction
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
+
+        $request->setModel($request->getModel()->getDetails());
         
-        $this->payment->execute(
-            new CaptureRequest($request->getModel()->getDetails())
-        );
+        $this->payment->execute($request);
     }
 
     /**

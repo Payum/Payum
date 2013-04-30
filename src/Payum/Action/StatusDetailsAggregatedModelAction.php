@@ -16,13 +16,10 @@ class StatusDetailsAggregatedModelAction extends PaymentAwareAction
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
-        
-        $model = $request->getModel();
-        
-        $request->setModel($model->getDetails());
-        $this->payment->execute($request);
 
-        $request->setModel($model);
+        $request->setModel($request->getModel()->getDetails());
+        
+        $this->payment->execute($request);
     }
 
     /**
