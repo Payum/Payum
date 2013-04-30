@@ -64,6 +64,20 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldReturnTrueIfSupportedModelClassGiven()
+    {
+        $storage = new FilesystemStorage(
+            sys_get_temp_dir(),
+            'Payum\Examples\Model\TestModel',
+            'id'
+        );
+
+        $this->assertTrue($storage->supportModel('Payum\Examples\Model\TestModel'));
+    }
+
+    /**
+     * @test
+     */
     public function shouldReturnFalseIfNotSupportedModelGiven()
     {
         $storage = new FilesystemStorage(
@@ -161,7 +175,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Payum\Exception\InvalidArgumentException
      * @expectedExceptionMessage Invalid model given. Should be instance of Payum\Examples\Model\TestModel
      */
-    public function throwIfTryUpdateModelNotInstanceOfModelClass()
+    public function throwIfTryUpdateNotSupportedModel()
     {
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
@@ -169,7 +183,79 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
             'id'
         );
         
-        $storage->updateModel(new \stdClass);
+        $notSupportedModel = new \stdClass;
+        
+        //guard
+        $this->assertFalse($storage->supportModel($notSupportedModel));
+        
+        $storage->updateModel($notSupportedModel);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Invalid model given. Should be instance of Payum\Examples\Model\TestModel
+     */
+    public function throwIfTryGetIdentifierOfNotSupportedModel()
+    {
+        $storage = new FilesystemStorage(
+            sys_get_temp_dir(),
+            'Payum\Examples\Model\TestModel',
+            'id'
+        );
+
+        $notSupportedModel = new \stdClass;
+
+        //guard
+        $this->assertFalse($storage->supportModel($notSupportedModel));
+
+        $storage->getIdentificator($notSupportedModel);
+    }
+
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Exception\LogicException
+     * @expectedExceptionMessage The model must be persisted before usage of this method
+     */
+    public function throwIfTryGetIdentifierOfNotPersistedModel()
+    {
+        $storage = new FilesystemStorage(
+            sys_get_temp_dir(),
+            'Payum\Examples\Model\TestModel',
+            'id'
+        );
+
+        $model = $storage->createModel();
+
+        //guard
+        $this->assertNull($model->getId());
+
+        $storage->getIdentificator($model);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetModelIdentificator()
+    {
+        $storage = new FilesystemStorage(
+            sys_get_temp_dir(),
+            'Payum\Examples\Model\TestModel',
+            'id'
+        );
+
+        $model = $storage->createModel();
+
+        $storage->updateModel($model);
+        $firstId = $model->getId();
+
+        $storage->updateModel($model);
+        $secondId = $model->getId();
+
+        $this->assertSame($firstId, $secondId);
     }
 
     /**
@@ -186,10 +272,15 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
         $model = $storage->createModel();
         $storage->updateModel($model);
 
-        $foundModel = $storage->findModelById($model->getId());
         
-        $this->assertNotSame($model, $foundModel);
-        $this->assertEquals($model->getId(), $foundModel->getId());
+        //guard
+        $this->assertNotEmpty($model->getId());
+        
+        $identificator = $storage->getIdentificator($model);
+
+        $this->assertInstanceOf('Payum\Storage\Identificator', $identificator);
+        $this->assertEquals(get_class($model), $identificator->getClass());
+        $this->assertEquals($model->getId(), $identificator->getId());
     }
 
     /**
