@@ -68,6 +68,22 @@ class DoctrineStorage implements StorageInterface
     /**
      * {@inheritdoc}
      */
+    public function deleteModel($model)
+    {
+        if (false == $this->supportModel($model)) {
+            throw new InvalidArgumentException(sprintf(
+                'Invalid model given. Should be instance of %s',
+                $this->modelClass
+            ));
+        }
+
+        $this->objectManager->remove($model);
+        $this->objectManager->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findModelById($id)
     {
         return $this->objectManager->find($this->modelClass, $id);
