@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity;
+namespace Payum\Bridge\Doctrine\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 

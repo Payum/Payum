@@ -20,7 +20,12 @@ class TokenizedDetails implements DetailsAggregateInterface, DetailsAwareInterfa
     /**
      * @var string
      */
-    protected $redirectUri;
+    protected $afterUrl;
+
+    /**
+     * @var string
+     */
+    protected $targetUrl;
 
     /**
      * @var string
@@ -77,17 +82,33 @@ class TokenizedDetails implements DetailsAggregateInterface, DetailsAwareInterfa
     /**
      * @return string
      */
-    public function getRedirectUri()
+    public function getTargetUrl()
     {
-        return $this->redirectUri;
+        return $this->targetUrl;
     }
 
     /**
-     * @param string $redirectUri
+     * @param string $targetUrl
      */
-    public function setRedirectUri($redirectUri)
+    public function setTargetUrl($targetUrl)
     {
-        $this->redirectUri = $redirectUri;
+        $this->targetUrl = $targetUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAfterUrl()
+    {
+        return $this->afterUrl;
+    }
+
+    /**
+     * @param string $afterUrl
+     */
+    public function setAfterUrl($afterUrl)
+    {
+        $this->afterUrl = $afterUrl;
     }
 
     /**
