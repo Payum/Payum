@@ -35,6 +35,9 @@
         <field name="l_longmessagennn" column="l_longmessages" type="array" nullable="true" />
 
         <field name="l_severitycodennn" column="l_severitycodes" type="array" nullable="true" />
+
+        <field name="returnurl" column="returnurl" type="string" nullable="true" />
         
+        <field name="cancelurl" column="cancelurl" type="string" nullable="true" />
     </mapped-superclass>
 </doctrine-mapping>

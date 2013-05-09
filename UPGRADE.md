@@ -1,3 +1,8 @@
+0.4 to 0.5
+==========
+
+* [Doctrine] `PaymentDetails` mapping schema was updated. Two fields added: `returnurl`, `cancelurl`.
+
 0.3 to 0.4
 ==========
 
