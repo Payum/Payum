@@ -19,7 +19,7 @@ class StatusAction implements ActionInterface
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        $model = new ArrayObject($request->getModel());        
+        $model = new ArrayObject($request->getModel());
         
         if (null === $model['EXECCODE']) {
             $request->markNew();
