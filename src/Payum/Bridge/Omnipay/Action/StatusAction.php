@@ -2,6 +2,7 @@
 namespace Payum\Bridge\Omnipay\Action;
 
 use Payum\Action\ActionInterface;
+use Payum\Bridge\Spl\ArrayObject;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Request\StatusRequestInterface;
 
@@ -17,20 +18,21 @@ class StatusAction implements ActionInterface
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        $options = $request->getModel();
-        if (false == isset($options['_status'])) {
-            $request->markUnknown();
+        $model = new ArrayObject($request->getModel());
+
+        if (null === $model['_status']) {
+            $request->markNew();
             
             return;
         }
 
-        if ('success' === $options['_status']) {
+        if ('success' === $model['_status']) {
             $request->markSuccess();
             
             return;
         }
 
-        if ('failed' === $options['_status']) {
+        if ('failed' === $model['_status']) {
             $request->markFailed();
 
             return;
