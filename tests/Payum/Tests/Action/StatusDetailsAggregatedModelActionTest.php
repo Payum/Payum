@@ -97,15 +97,15 @@ class StatusDetailsAggregatedModelActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldCallPaymentExecuteWithStatusRequestAndInstructionSetAsModel()
+    public function shouldCallPaymentExecuteWithStatusRequestAndDetailsSetAsModel()
     {
-        $expectedInstruction = new \stdClass;
+        $expectedPaymentDetails = new \stdClass;
 
         $modelMock = $this->getMock('Payum\Model\DetailsAggregateInterface');
         $modelMock
             ->expects($this->atLeastOnce())
             ->method('getDetails')
-            ->will($this->returnValue($expectedInstruction))
+            ->will($this->returnValue($expectedPaymentDetails))
         ;
         
         $request = new BinaryMaskStatusRequest($modelMock);
@@ -117,8 +117,8 @@ class StatusDetailsAggregatedModelActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->identicalTo($request))
-            ->will($this->returnCallback(function($request) use ($expectedInstruction, $testCase) {
-                $testCase->assertSame($expectedInstruction, $request->getModel());
+            ->will($this->returnCallback(function($request) use ($expectedPaymentDetails, $testCase) {
+                $testCase->assertSame($expectedPaymentDetails, $request->getModel());
             }))
         ;
         
@@ -127,7 +127,7 @@ class StatusDetailsAggregatedModelActionTest extends \PHPUnit_Framework_TestCase
         
         $action->execute($request);
         
-        $this->assertSame($modelMock, $request->getModel());
+        $this->assertSame($expectedPaymentDetails, $request->getModel());
     }
     
     /**
