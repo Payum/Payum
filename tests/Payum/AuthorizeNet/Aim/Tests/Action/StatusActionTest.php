@@ -91,7 +91,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldMarkUnknownStatusIfEmptyArrayObjectSetAsModel()
+    public function shouldMarkNewIfResponseCodeNotSetInModel()
     {
         $action = new StatusAction();
 
@@ -99,6 +99,23 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
 
         $action->execute($request);
         
+        $this->assertTrue($request->isNew());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkUnknownIfResponseCodeUnknown()
+    {
+        $action = new StatusAction();
+
+        $model = new ArrayObject();
+        $model['response_code'] = 'foobarbaz';
+
+        $request = new BinaryMaskStatusRequest($model);
+
+        $action->execute($request);
+
         $this->assertTrue($request->isUnknown());
     }
 
