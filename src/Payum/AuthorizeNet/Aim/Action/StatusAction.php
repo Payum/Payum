@@ -19,6 +19,12 @@ class StatusAction implements ActionInterface
         }
         
         $model = ArrayObject::ensureArrayObject($request->getModel());
+
+        if (null === $model['response_code']) {
+            $request->markNew();
+
+            return;
+        }
         
         if (\AuthorizeNetAIM_Response::APPROVED == $model['response_code']) {
             $request->markSuccess();
