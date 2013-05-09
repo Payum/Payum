@@ -3,6 +3,7 @@ namespace Payum\Paypal\ProCheckout\Nvp\Action;
 
 use Payum\Action\ActionInterface;
 use Payum\ApiAwareInterface;
+use Payum\Bridge\Spl\ArrayObject;
 use Payum\Exception\Http\HttpException;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Exception\UnsupportedApiException;
@@ -43,24 +44,14 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
-
-        /** @var $model \Payum\Paypal\ProCheckout\Nvp\Model\PaymentDetails */
-        $model = $request->getModel();
+        
+        $model = new ArrayObject($request->getModel());
+        
         $buzzRequest = new Request();
-        $buzzRequest->setFields($model->toNvp());
-        $exception = null;
-        try {
-            $response = $this->api->doPayment($buzzRequest);
-        } catch (HttpException $e) {
-            $response = $e->getResponse();
-            $exception = $e;
-        }
-
-        $model->fromNvp($response);
-
-        if ($exception) {
-            throw $exception;
-        }
+        $buzzRequest->setFields((array) $model);    
+        $response = $this->api->doPayment($buzzRequest);
+        
+        $model->replace($response);
     }
 
     /**
@@ -70,7 +61,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
     {
         return
             $request instanceof CaptureRequest &&
-            $request->getModel() instanceof PaymentDetails
+            $request->getModel() instanceof \ArrayAccess
         ;
     }
 }

@@ -210,10 +210,6 @@ class Api
             throw HttpException::factory($request, $response);
         }
 
-        if (self::RESULT_SUCCESS != $response['RESULT']) {
-            throw new HttpResponseNotSuccessException($request, $response, "", $response['RESULT']);
-        }
-
         return $response;
     }
 

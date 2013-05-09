@@ -43,7 +43,6 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
     protected $response_correlationid;
     protected $response_amexid;
     protected $response_amexposdata;
-    protected $response_amt;
     protected $response_origamt;
     protected $response_cardtype;
     protected $response_emailmatch;
@@ -336,10 +335,14 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
             $this->$name = $value;
         } 
     }
-    
+
     public function toNvp()
     {
-        return array_filter($this->getRequest());
+        $nvp = array_replace($this->getRequest(),$this->getResponse());
+
+        return array_filter($nvp, function($value) {
+            return false === is_null($value);
+        });
     }
 
     /**

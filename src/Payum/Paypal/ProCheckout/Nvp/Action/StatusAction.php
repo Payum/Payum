@@ -2,6 +2,8 @@
 namespace Payum\Paypal\ProCheckout\Nvp\Action;
 
 use Payum\Action\ActionInterface;
+use Payum\Bridge\Spl\ArrayObject;
+use Payum\Paypal\ProCheckout\Nvp\Api;
 use Payum\Request\BinaryMaskStatusRequest;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Paypal\ProCheckout\Nvp\Model\PaymentDetails;
@@ -20,8 +22,22 @@ class StatusAction implements ActionInterface
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
+
+        $model = new ArrayObject($request->getModel());
         
-        $request->markSuccess();
+        if (null === $model['RESULT']) {
+            $request->markNew();
+            
+            return;
+        }
+
+        if (Api::RESULT_SUCCESS === (int) $model['RESULT']) {
+            $request->markSuccess();
+
+            return;
+        }
+
+        $request->markFailed();
     }
 
     /**
@@ -31,7 +47,7 @@ class StatusAction implements ActionInterface
     {
         return
             $request instanceof BinaryMaskStatusRequest &&
-            $request->getModel() instanceof PaymentDetails
+            $request->getModel() instanceof \ArrayAccess
         ;
     }
 }

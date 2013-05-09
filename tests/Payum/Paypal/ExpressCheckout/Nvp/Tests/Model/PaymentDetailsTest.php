@@ -80,7 +80,6 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
                 'CORRELATIONID' => null,
                 'AMEXID' => null,
                 'AMEXPOSDATA' => null,
-                'AMT' => null,
                 'ORIGAMT' => null,
                 'CARDTYPE' => null,
                 'EMAILMATCH' => null,
