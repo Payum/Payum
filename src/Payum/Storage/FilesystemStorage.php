@@ -67,6 +67,27 @@ class FilesystemStorage implements StorageInterface
     /**
      * {@inheritdoc}
      */
+    public function deleteModel($model)
+    {
+        if (false == $this->supportModel($model)) {
+            throw new InvalidArgumentException(sprintf(
+                'Invalid model given. Should be instance of %s',
+                $this->modelClass
+            ));
+        }
+
+        $rp = new \ReflectionProperty($model, $this->idProperty);
+        $rp->setAccessible(true);
+
+        
+        if ($id = $rp->getValue($model)) {
+            unlink($this->storageDir.'/payum-model-'.$id);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findModelById($id)
     {
         if (file_exists($this->storageDir.'/payum-model-'.$id)) {

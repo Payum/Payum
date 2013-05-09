@@ -17,9 +17,9 @@ class SyncDetailsAggregatedModelAction extends PaymentAwareAction
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        $this->payment->execute(
-            new SyncRequest($request->getModel()->getDetails())
-        );
+        $request->setModel($request->getModel()->getDetails());
+        
+        $this->payment->execute($request);
     }
 
     /**
