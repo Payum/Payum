@@ -7,6 +7,7 @@
     <parameters>
         <parameter key="payum.class">Payum\Bundle\PayumBundle\Registry\ContainerAwareRegistry</parameter>
         <parameter key="payum.payment.class">Payum\Payment</parameter>
+        <parameter key="payum.tokenized_details_service.class">Payum\Bundle\PayumBundle\Service\TokenizedTokenService</parameter>
         <parameter key="payum.extension.storage.class">Payum\Extension\StorageExtension</parameter>
         <parameter key="payum.extension.endless_cycle_detector.class">Payum\Extension\EndlessCycleDetectorExtension</parameter>
         <parameter key="payum.buzz.client.class">Buzz\Client\Curl</parameter>
@@ -33,6 +34,11 @@
             <call method="setTimeout">
                 <argument>200</argument>
             </call>
+        </service>
+
+        <service id="payum.tokenized_details_service" class="%payum.tokenized_details_service.class%">
+            <argument type="service" id="router"></argument>
+            <argument type="service" id="payum"></argument>
         </service>
 
         <service
