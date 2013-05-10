@@ -42,6 +42,8 @@ class MainConfiguration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
+        $paymentFactories = $this->paymentFactories;
+        
         $tb = new TreeBuilder();
         $rootNode = $tb->root('payum');
         
@@ -56,11 +58,11 @@ class MainConfiguration implements ConfigurationInterface
 
         $contextsPrototypeNode
                     ->validate()
-                    ->ifTrue(function($v) {
+                    ->ifTrue(function($v) use($paymentFactories) {
                         $selectedPayments = array();
                         foreach ($v as $name => $value) {
                             if (isset($this->paymentFactories[$name])) {
-                                $selectedPayments[$name] = $this->paymentFactories[$name];
+                                $selectedPayments[$name] = $paymentFactories[$name];
                             }
                         }
                 
