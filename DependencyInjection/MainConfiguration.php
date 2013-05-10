@@ -61,7 +61,7 @@ class MainConfiguration implements ConfigurationInterface
                     ->ifTrue(function($v) use($paymentFactories) {
                         $selectedPayments = array();
                         foreach ($v as $name => $value) {
-                            if (isset($this->paymentFactories[$name])) {
+                            if (isset($paymentFactories[$name])) {
                                 $selectedPayments[$name] = $paymentFactories[$name];
                             }
                         }
