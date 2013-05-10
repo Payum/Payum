@@ -137,9 +137,9 @@ payum:
 
 ### Step 3. Capture payment:
 
+_**Note** : We assume you [configured capture controller](basic_setup.md#step-3-configure-capture-controller-optional)_
+
 _**Note** : We assume you choose a storage._
- 
-_**Note** : We assume you use [simple capture controller](capture_simple_controller.md)._
 
 ```php
 <?php
@@ -178,5 +178,4 @@ class PaymentController extends Controller
 
 ### Next Step
 
-* [Simple capture controller (an example)](capture_simple_controller.md).
 * [Configuration reference](configuration_reference.md).

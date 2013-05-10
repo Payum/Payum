@@ -15,5 +15,4 @@ The installation has two steps:
 
 ### Other documents:
 
-* [Simple capture controller (an example)](capture_simple_controller.md).
 * [Configuration reference](configuration_reference.md).
