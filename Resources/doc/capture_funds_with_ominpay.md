@@ -98,16 +98,7 @@ use Symfony\Component\HttpFoundation\Request;
 class PaymentController extends Controller 
 {
     public function prepareStripePaymentAction(Request $request)
-    {
-        $paymentName = 'your_payment_name';
-    
-        
-        
-        return $this->forward('AcmePaymentBundle:Capture:simpleCapture', array(
-            'paymentName' => $paymentName,
-            'model' => $model
-        ));
-        
+    {        
         $paymentName = 'your_payment_name';
                 
         $storage = $this->get('payum')->getStorageForClass(
