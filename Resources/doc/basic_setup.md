@@ -44,6 +44,115 @@ public function registerBundles()
 }
 ```
 
+### Step 3: Configure capture controller (Optional).
+
+**Note:** Skipp this step if you do not want to use `CaptureController` distributed with the bundle.
+
+#### 3-a. Add routing
+
+First you have to add routing:
+
+In YAML:
+
+``` yaml
+# app/config/routing.yml
+payum_capture:
+    resource: "@PayumBundle/Resources/config/routing/capture.xml"
+```
+
+Or if you prefer XML:
+
+``` xml
+<!-- app/config/routing.xml -->
+<import resource="@PayumBundle/Resources/config/routing/capture.xml"/>
+```
+
+#### 3-b. Configure doctrine TokenizedDetails model.
+
+Extend `TokenizedDetails` class:
+
+```php
+<?php
+//src/Acme/DemoBundle/Entity
+
+namespace AcmeDemoBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Payum\Bridge\Doctrine\Entity\TokenizedDetails as BaseTokenizedDetails;
+
+/**
+ * @ORM\Entity
+ */
+class TokenizedDetails extends BaseTokenizedDetails
+{
+}
+```
+
+and configure storage to use this model:
+
+```yml
+#app/config/config.yml
+
+payum:
+    contexts:
+        your_context_name:
+            storages:
+                AcmeDemoBundle\Entity\TokenizedDetails:
+                    doctrine:
+                        driver: orm
+                        payment_extension: true
+
+doctrine:
+    orm:
+        entity_managers:
+            default:
+                mappings: 
+                    payum:
+                        is_bundle: false
+                        type: xml 
+                        dir: %kernel.root_dir%/../vendor/payum/payum/src/Payum/Bridge/Doctrine/Resources/mapping
+                        prefix: Payum\Bridge\Doctrine\Entity
+```
+
+#### 3-c. Configure filesystem TokenizedDetails model.
+
+Extend payment instruction class with added `id` property:
+
+```php
+<?php
+//src/Acme/DemoBundle/Model
+
+namespace AcmeDemoBundle\Model;
+
+use Payum\Model\TokenizedDetails as BaseTokenizedDetails;
+
+class TokenizedDetails extends BaseTokenizedDetails
+{
+    protected $id;
+    
+    public function getId()
+    {
+        return $this->id;
+    }
+}
+```
+
+and configure storage to use this model:
+
+```yaml
+#app/config/config.yml
+
+payum:
+    contexts:
+        your_name_here:
+            storages:
+                AcmeDemoBundle\Model\TokenizedDetails:
+                    filesystem:
+                        storage_dir: %kernel.root_dir%/Resources/payments
+                        id_property: id
+                        payment_extension: true
+```
+
 ### Next Step
 
 Now you are ready to configure desired payment. Proceed to [index](index.md) and choose payment specific document.
