@@ -167,21 +167,20 @@ class PaymentController extends Controller
         $paymentDetails->setPaymentrequestAmt(0,  1.23));
         
         $storage->updateModel($paymentDetails);
-        $paymentDetails->setInvnum($paymentDetails->getId());
         
-        $returnUrl = $this->generateUrl('acme_payment_capture_simple', array(
-            'paymentName' => $paymentName,
-            'model' => $paymentDetails->getId(),
-        ), $absolute = true);
-        $paymentDetails->setReturnurl($returnUrl);
-        $paymentDetails->setCancelurl($returnUrl);
+        $captureToken = $this->get('payum.tokenized_details_service')->createTokenForCaptureRoute(
+            $paymentName,
+            $paymentDetails,
+            'acme_payment_details_view' // the route to redirect after capture;
+        );
+        
+        $paymentDetails->setInvnum($paymentDetails->getId());
+        $paymentDetails->setReturnurl($captureToken->getTargetUrl());
+        $paymentDetails->setCancelurl($captureToken->getTargetUrl());
         
         $storage->updateModel($paymentDetails);
-        
-        return $this->forward('AcmePaymentBundle:Capture:simpleCapture', array(
-            'paymentName' => $paymentName,
-            'model' => $paymentDetails
-        ));
+
+        return $this->redirect($captureToken->getTargetUrl());
     }
 }
 ```

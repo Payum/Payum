@@ -174,9 +174,17 @@ class PaymentController extends Controller
         $paymentDetails->setCardfullname('John Doe');
         $paymentDetails->setCardvaliditydate('15-11');
         
-        return $this->forward('AcmePaymentBundle:Capture:simpleCapture', array(
+        $storage->updateModel($paymentDetails);
+        
+        $captureToken = $this->get('payum.tokenized_details_service')->createTokenForCaptureRoute(
+            $paymentName,
+            $paymentDetails,
+            'acme_payment_details_view' // the route to redirect after capture;
+        );
+
+        return $this->forward('PayumBundle:Capture:do', array(
             'paymentName' => $paymentName,
-            'model' => $paymentDetails
+            'token' => $captureToken,
         ));
     }
 }
