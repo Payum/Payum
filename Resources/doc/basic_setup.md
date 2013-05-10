@@ -116,7 +116,7 @@ doctrine:
 
 #### 3-c. Configure filesystem TokenizedDetails model.
 
-Extend payment instruction class with added `id` property:
+Extend TokenizedDetails class with added `id` property:
 
 ```php
 <?php

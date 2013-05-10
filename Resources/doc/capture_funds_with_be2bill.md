@@ -45,7 +45,7 @@ payum:
 
 #### 2-a. Configure doctrine storage
 
-Extend payment instruction class with added id property:
+Extend PaymentDetails class with added id property:
 
 ```php
 <?php
@@ -54,12 +54,12 @@ Extend payment instruction class with added id property:
 namespace AcmeDemoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Payum\Be2Bill\Bridge\Doctrine\Entity\PaymentInstruction;
+use Payum\Be2Bill\Bridge\Doctrine\Entity\PaymentDetails;
 
 /**
  * @ORM\Entity
  */
-class Be2BillPaymentInstruction extends PaymentInstruction
+class Be2BillPaymentDetails extends PaymentDetails
 {
     /**
      * @ORM\Column(name="id", type="integer")
@@ -79,7 +79,7 @@ payum:
     contexts:
         your_context_name:
             storages:
-                AcmeDemoBundle\Entity\Be2BillPaymentInstruction:
+                AcmeDemoBundle\Entity\Be2BillPaymentDetails:
                     doctrine:
                         driver: orm
                         payment_extension: true
@@ -98,7 +98,7 @@ doctrine:
 
 #### 2-b. Configure filesystem storage
 
-Extend payment instruction class with added `id` property:
+Extend PaymentDetails class with added `id` property:
 
 ```php
 <?php
@@ -106,9 +106,9 @@ Extend payment instruction class with added `id` property:
 
 namespace AcmeDemoBundle\Model;
 
-use Payum\Be2Bill\PaymentInstruction;
+use Payum\Be2Bill\Model\PaymentDetails;
 
-class Be2BillPaymentInstruction extends PaymentInstruction
+class Be2BillPaymentDetails extends PaymentDetails
 {
     protected $id;
     
@@ -128,7 +128,7 @@ payum:
     contexts:
         your_name_here:
             storages:
-                Acme\DemoBundle\Model\Be2BillPaymentInstruction:
+                Acme\DemoBundle\Model\Be2BillPaymentDetails:
                     filesystem:
                         storage_dir: %kernel.root_dir%/Resources/payments
                         id_property: id
@@ -147,7 +147,7 @@ _**Note** : We assume you use [simple capture controller](capture_simple_control
 namespace AcmeDemoBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Acme\DemoBundle\Entity\Be2billPaymentInstruction;
+use Acme\DemoBundle\Entity\Be2billPaymentDetails;
 
 class PaymentController extends Controller 
 {
@@ -156,27 +156,27 @@ class PaymentController extends Controller
         $contextName = 'your_context_name';
         
         $storage = $this->get('payum')->getStorageForClass(
-            'Acme\DemoBundle\Entity\Be2billPaymentInstruction',
+            'Acme\DemoBundle\Entity\Be2billPaymentDetails',
             $contextName
         );
     
-        /** @var PaypalPaymentInstruction */
-        $instruction = $storage->createModel();
-        $instruction->setAmount(10005); //be2bill amount format is cents: for example:  100.05 (EUR). will be 10005.
-        $instruction->setClientemail('user@email.com');
-        $instruction->setClientuseragent($request->headers->get('User-Agent', 'Unknown'));
-        $instruction->setClientip($request->getClientIp());
-        $instruction->setClientident('payerId');
-        $instruction->setDescription('Payment for digital stuff');
-        $instruction->setOrderid('orderId');
-        $instruction->setCardcode('5555 5567 7825 0000');
-        $instruction->setCardcvv(123);
-        $instruction->setCardfullname('John Doe');
-        $instruction->setCardvaliditydate('15-11');
+        /** @var Be2billPaymentDetails */
+        $paymentDetails = $storage->createModel();
+        $paymentDetails->setAmount(10005); //be2bill amount format is cents: for example:  100.05 (EUR). will be 10005.
+        $paymentDetails->setClientemail('user@email.com');
+        $paymentDetails->setClientuseragent($request->headers->get('User-Agent', 'Unknown'));
+        $paymentDetails->setClientip($request->getClientIp());
+        $paymentDetails->setClientident('payerId');
+        $paymentDetails->setDescription('Payment for digital stuff');
+        $paymentDetails->setOrderid('orderId');
+        $paymentDetails->setCardcode('5555 5567 7825 0000');
+        $paymentDetails->setCardcvv(123);
+        $paymentDetails->setCardfullname('John Doe');
+        $paymentDetails->setCardvaliditydate('15-11');
         
         return $this->forward('AcmePaymentBundle:Capture:simpleCapture', array(
             'contextName' => $contextName,
-            'model' => $instruction
+            'model' => $paymentDetails
         ));
     }
 }

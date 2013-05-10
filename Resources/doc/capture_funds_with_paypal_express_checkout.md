@@ -47,7 +47,7 @@ payum:
 
 #### 2-a. Configure doctrine storage
 
-Extend payment instruction class with added id property:
+Extend PaymentDetails class with added id property:
 
 ```php
 <?php
@@ -56,12 +56,12 @@ Extend payment instruction class with added id property:
 namespace AcmeDemoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity\PaymentInstruction;
+use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity\PaymentDetails;
 
 /**
  * @ORM\Entity
  */
-class PaypalPaymentInstruction extends PaymentInstruction
+class PaypalExpressPaymentDetails extends PaymentDetails
 {
     /**
      * @ORM\Column(name="id", type="integer")
@@ -81,7 +81,7 @@ payum:
     contexts:
         your_context_name:
             storages:
-                AcmeDemoBundle\Entity\PaypalPaymentInstruction:
+                AcmeDemoBundle\Entity\PaypalExpressPaymentDetails:
                     doctrine:
                         driver: orm
                         payment_extension: true
@@ -100,7 +100,7 @@ doctrine:
 
 #### 2-b. Configure filesystem storage
 
-Extend payment instruction class with added `id` property:
+Extend PaymentDetails class with added `id` property:
 
 ```php
 <?php
@@ -108,9 +108,9 @@ Extend payment instruction class with added `id` property:
 
 namespace AcmeDemoBundle\Model;
 
-use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
+use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails;
 
-class PaypalPaymentInstruction extends PaymentInstruction
+class PaypalExpressPaymentDetails extends PaymentDetails
 {
     protected $id;
     
@@ -130,7 +130,7 @@ payum:
     contexts:
         your_name_here:
             storages:
-                Acme\DemoBundle\Model\PaypalPaymentInstruction:
+                Acme\DemoBundle\Model\PaypalExpressPaymentDetails:
                     filesystem:
                         storage_dir: %kernel.root_dir%/Resources/payments
                         id_property: id
@@ -148,7 +148,7 @@ _**Note** : We assume you use [simple capture controller](capture_simple_control
 //src/Acme/DemoBundle/Controller
 namespace AcmeDemoBundle\Controller;
 
-use Acme\DemoBundle\Entity\PaypalPaymentInstruction;
+use Acme\DemoBundle\Entity\PaypalExpressPaymentDetails;
 
 class PaymentController extends Controller 
 {
@@ -157,30 +157,30 @@ class PaymentController extends Controller
         $contextName = 'your_context_name';
     
         $storage = $this->get('payum')->getStorageForClass(
-            'Acme\DemoBundle\Entity\PaypalPaymentInstruction',
+            'Acme\DemoBundle\Entity\PaypalExpressPaymentDetails',
             $contextName
         );
     
-        /** @var PaypalPaymentInstruction */
-        $instruction = $storage->createModel();
-        $instruction->setPaymentrequestCurrencycode(0, 'USD');
-        $instruction->setPaymentrequestAmt(0,  1.23));
+        /** @var PaypalExpressPaymentDetails */
+        $paymentDetails = $storage->createModel();
+        $paymentDetails->setPaymentrequestCurrencycode(0, 'USD');
+        $paymentDetails->setPaymentrequestAmt(0,  1.23));
         
-        $storage->updateModel($instruction);
-        $instruction->setInvnum($instruction->getId());
+        $storage->updateModel($paymentDetails);
+        $paymentDetails->setInvnum($paymentDetails->getId());
         
         $returnUrl = $this->generateUrl('acme_payment_capture_simple', array(
             'contextName' => 'your_context',
-            'model' => $instruction->getId(),
+            'model' => $paymentDetails->getId(),
         ), $absolute = true);
-        $instruction->setReturnurl($returnUrl);
-        $instruction->setCancelurl($returnUrl);
+        $paymentDetails->setReturnurl($returnUrl);
+        $paymentDetails->setCancelurl($returnUrl);
         
-        $storage->updateModel($instruction);
+        $storage->updateModel($paymentDetails);
         
         return $this->forward('AcmePaymentBundle:Capture:simpleCapture', array(
             'contextName' => $contextName,
-            'model' => $instruction
+            'model' => $paymentDetails
         ));
     }
 }
