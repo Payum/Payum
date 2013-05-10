@@ -9,7 +9,7 @@ matrix:
   allow_failures:
     - php: 5.5
 
-before_script: composer install --dev --no-interaction
+before_script: composer install --dev --no-interaction --prefer-source
 
 branches:
   only:

@@ -31,7 +31,7 @@ _**Note:** You can immediately start using it. The autoloading files have been g
 
 payum:
     contexts:
-        your_context_name:
+        your_payment_name:
             paypal_express_checkout_nvp:
                 api:
                     options:
@@ -43,11 +43,11 @@ payum:
 
 **Warning:**
 
-> You have to changed this name `your_context_name` to something related to your domain, for example `post_a_job_with_paypal`
+> You have to changed this name `your_payment_name` to something related to your domain, for example `post_a_job_with_paypal`
 
 #### 2-a. Configure doctrine storage
 
-Extend payment instruction class with added id property:
+Extend PaymentDetails class with added id property:
 
 ```php
 <?php
@@ -56,12 +56,12 @@ Extend payment instruction class with added id property:
 namespace AcmeDemoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity\PaymentInstruction;
+use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity\PaymentDetails;
 
 /**
  * @ORM\Entity
  */
-class PaypalPaymentInstruction extends PaymentInstruction
+class PaypalExpressPaymentDetails extends PaymentDetails
 {
     /**
      * @ORM\Column(name="id", type="integer")
@@ -79,9 +79,9 @@ and configure storage to use this model:
 
 payum:
     contexts:
-        your_context_name:
+        your_payment_name:
             storages:
-                AcmeDemoBundle\Entity\PaypalPaymentInstruction:
+                AcmeDemoBundle\Entity\PaypalExpressPaymentDetails:
                     doctrine:
                         driver: orm
                         payment_extension: true
@@ -100,7 +100,7 @@ doctrine:
 
 #### 2-b. Configure filesystem storage
 
-Extend payment instruction class with added `id` property:
+Extend PaymentDetails class with added `id` property:
 
 ```php
 <?php
@@ -108,9 +108,9 @@ Extend payment instruction class with added `id` property:
 
 namespace AcmeDemoBundle\Model;
 
-use Payum\Paypal\ExpressCheckout\Nvp\PaymentInstruction;
+use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails;
 
-class PaypalPaymentInstruction extends PaymentInstruction
+class PaypalExpressPaymentDetails extends PaymentDetails
 {
     protected $id;
     
@@ -128,9 +128,9 @@ and configure storage to use this model:
 
 payum:
     contexts:
-        your_name_here:
+        your_payment_name:
             storages:
-                Acme\DemoBundle\Model\PaypalPaymentInstruction:
+                Acme\DemoBundle\Model\PaypalExpressPaymentDetails:
                     filesystem:
                         storage_dir: %kernel.root_dir%/Resources/payments
                         id_property: id
@@ -139,54 +139,52 @@ payum:
 
 ### Step 3. Capture payment: 
 
+_**Note** : We assume you [configured capture controller](basic_setup.md#step-3-configure-capture-controller-optional)_
+
 _**Note** : We assume you choose a storage._
- 
-_**Note** : We assume you use [simple capture controller](capture_simple_controller.md)._
 
 ```php
 <?php
 //src/Acme/DemoBundle/Controller
 namespace AcmeDemoBundle\Controller;
 
-use Acme\DemoBundle\Entity\PaypalPaymentInstruction;
+use Acme\DemoBundle\Entity\PaypalExpressPaymentDetails;
 
 class PaymentController extends Controller 
 {
     public function preparePaypalPaymentAction()
     {
-        $contextName = 'your_context_name';
+        $paymentName = 'your_payment_name';
     
         $storage = $this->get('payum')->getStorageForClass(
-            'Acme\DemoBundle\Entity\PaypalPaymentInstruction',
-            $contextName
+            'Acme\DemoBundle\Entity\PaypalExpressPaymentDetails',
+            $paymentName
         );
     
-        /** @var PaypalPaymentInstruction */
-        $instruction = $storage->createModel();
-        $instruction->setPaymentrequestCurrencycode(0, 'USD');
-        $instruction->setPaymentrequestAmt(0,  1.23));
+        /** @var PaypalExpressPaymentDetails */
+        $paymentDetails = $storage->createModel();
+        $paymentDetails->setPaymentrequestCurrencycode(0, 'USD');
+        $paymentDetails->setPaymentrequestAmt(0,  1.23));
         
-        $storage->updateModel($instruction);
-        $instruction->setInvnum($instruction->getId());
+        $storage->updateModel($paymentDetails);
         
-        $returnUrl = $this->generateUrl('acme_payment_capture_simple', array(
-            'contextName' => 'your_context',
-            'model' => $instruction->getId(),
-        ), $absolute = true);
-        $instruction->setReturnurl($returnUrl);
-        $instruction->setCancelurl($returnUrl);
+        $captureToken = $this->get('payum.tokenized_details_service')->createTokenForCaptureRoute(
+            $paymentName,
+            $paymentDetails,
+            'acme_payment_details_view' // the route to redirect after capture;
+        );
         
-        $storage->updateModel($instruction);
+        $paymentDetails->setInvnum($paymentDetails->getId());
+        $paymentDetails->setReturnurl($captureToken->getTargetUrl());
+        $paymentDetails->setCancelurl($captureToken->getTargetUrl());
         
-        return $this->forward('AcmePaymentBundle:Capture:simpleCapture', array(
-            'contextName' => $contextName,
-            'model' => $instruction
-        ));
+        $storage->updateModel($paymentDetails);
+
+        return $this->redirect($captureToken->getTargetUrl());
     }
 }
 ```
 
 ### Next Step
 
-* [Simple capture controller (an example)](capture_simple_controller.md).
 * [Configuration reference](configuration_reference.md).
