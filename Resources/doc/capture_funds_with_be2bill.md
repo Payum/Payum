@@ -30,7 +30,7 @@ _**Note:** You can immediately start using it. The autoloading files have been g
 
 payum:
     contexts:
-        your_context_name:
+        your_payment_name:
             be2bill:
                 api:
                     options:
@@ -41,7 +41,7 @@ payum:
 
 **Warning:**
 
-> You have to changed this name `your_context_name` to something related to your domain, for example `post_a_job_with_be2bill`
+> You have to changed this name `your_payment_name` to something related to your domain, for example `post_a_job_with_be2bill`
 
 #### 2-a. Configure doctrine storage
 
@@ -77,7 +77,7 @@ and configure storage to use this model:
 
 payum:
     contexts:
-        your_context_name:
+        your_payment_name:
             storages:
                 AcmeDemoBundle\Entity\Be2BillPaymentDetails:
                     doctrine:
@@ -126,7 +126,7 @@ and configure storage to use this model:
 
 payum:
     contexts:
-        your_name_here:
+        your_payment_name:
             storages:
                 Acme\DemoBundle\Model\Be2BillPaymentDetails:
                     filesystem:
@@ -153,11 +153,11 @@ class PaymentController extends Controller
 {
     public function prepareBe2BillPaymentAction(Request $request)
     {
-        $contextName = 'your_context_name';
+        $paymentName = 'your_payment_name';
         
         $storage = $this->get('payum')->getStorageForClass(
             'Acme\DemoBundle\Entity\Be2billPaymentDetails',
-            $contextName
+            $paymentName
         );
     
         /** @var Be2billPaymentDetails */
@@ -175,7 +175,7 @@ class PaymentController extends Controller
         $paymentDetails->setCardvaliditydate('15-11');
         
         return $this->forward('AcmePaymentBundle:Capture:simpleCapture', array(
-            'contextName' => $contextName,
+            'paymentName' => $paymentName,
             'model' => $paymentDetails
         ));
     }

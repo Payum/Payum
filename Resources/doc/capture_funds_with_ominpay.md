@@ -41,7 +41,7 @@ payum:
 
 **Warning:**
 
-> You have to changed this name `your_context_name` to something related to your domain, for example `post_a_job_with_stripe` 
+> You have to changed this name `your_payment_name` to something related to your domain, for example `post_a_job_with_stripe` 
 
 ### Step 3. Capture payment:
 
@@ -60,7 +60,7 @@ class PaymentController extends Controller
 {
     public function prepareStripePaymentAction(Request $request)
     {
-        $contextName = 'your_context_name';
+        $paymentName = 'your_payment_name';
     
         $model = array(
             'amount' => 10,
@@ -75,7 +75,7 @@ class PaymentController extends Controller
         );
         
         return $this->forward('AcmePaymentBundle:Capture:simpleCapture', array(
-            'contextName' => $contextName,
+            'paymentName' => $paymentName,
             'model' => $model
         ));
     }

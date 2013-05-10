@@ -95,7 +95,7 @@ and configure storage to use this model:
 
 payum:
     contexts:
-        your_context_name:
+        your_payment_name:
             storages:
                 AcmeDemoBundle\Entity\TokenizedDetails:
                     doctrine:
@@ -144,7 +144,7 @@ and configure storage to use this model:
 
 payum:
     contexts:
-        your_name_here:
+        your_payment_name:
             storages:
                 AcmeDemoBundle\Model\TokenizedDetails:
                     filesystem:

@@ -41,7 +41,7 @@ payum:
 
 **Warning:**
 
-> You have to changed this name `your_context_name` to something related to your domain, for example `post_a_job_with_authorize_net` 
+> You have to changed this name `your_payment_name` to something related to your domain, for example `post_a_job_with_authorize_net` 
 
 #### 2-a. Configure doctrine storage
 
@@ -77,7 +77,7 @@ and configure storage to use this model:
 
 payum:
     contexts:
-        your_context_name:
+        your_payment_name:
             storages:
                 AcmeDemoBundle\Entity\AuthorizeNetPaymentDetails:
                     doctrine:
@@ -126,7 +126,7 @@ and configure storage to use this model:
 
 payum:
     contexts:
-        your_name_here:
+        your_payment_name:
             storages:
                 Acme\DemoBundle\Model\AuthorizeNetPaymentDetails:
                     filesystem:
@@ -153,11 +153,11 @@ class PaymentController extends Controller
 {
     public function prepareAuthorizeNetPaymentAction(Request $request)
     {
-        $contextName = 'your_context_name';
+        $paymentName = 'your_payment_name';
     
         $storage = $this->get('payum')->getStorageForClass(
             'Acme\DemoBundle\Entity\AuthorizeNetPaymentDetails',
-            $contextName
+            $paymentName
         );
     
         /** @var AuthorizeNetPaymentDetails */
@@ -169,7 +169,7 @@ class PaymentController extends Controller
         $paymentDetails->setExpDate('15-11');
         
         return $this->forward('AcmePaymentBundle:Capture:simpleCapture', array(
-            'contextName' => $contextName,
+            'paymentName' => $paymentName,
             'model' => $paymentDetails
         ));
     }

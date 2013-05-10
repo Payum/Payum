@@ -31,7 +31,7 @@ _**Note:** You can immediately start using it. The autoloading files have been g
 
 payum:
     contexts:
-        your_context_name:
+        your_payment_name:
             paypal_express_checkout_nvp:
                 api:
                     options:
@@ -43,7 +43,7 @@ payum:
 
 **Warning:**
 
-> You have to changed this name `your_context_name` to something related to your domain, for example `post_a_job_with_paypal`
+> You have to changed this name `your_payment_name` to something related to your domain, for example `post_a_job_with_paypal`
 
 #### 2-a. Configure doctrine storage
 
@@ -79,7 +79,7 @@ and configure storage to use this model:
 
 payum:
     contexts:
-        your_context_name:
+        your_payment_name:
             storages:
                 AcmeDemoBundle\Entity\PaypalExpressPaymentDetails:
                     doctrine:
@@ -128,7 +128,7 @@ and configure storage to use this model:
 
 payum:
     contexts:
-        your_name_here:
+        your_payment_name:
             storages:
                 Acme\DemoBundle\Model\PaypalExpressPaymentDetails:
                     filesystem:
@@ -154,11 +154,11 @@ class PaymentController extends Controller
 {
     public function preparePaypalPaymentAction()
     {
-        $contextName = 'your_context_name';
+        $paymentName = 'your_payment_name';
     
         $storage = $this->get('payum')->getStorageForClass(
             'Acme\DemoBundle\Entity\PaypalExpressPaymentDetails',
-            $contextName
+            $paymentName
         );
     
         /** @var PaypalExpressPaymentDetails */
@@ -170,7 +170,7 @@ class PaymentController extends Controller
         $paymentDetails->setInvnum($paymentDetails->getId());
         
         $returnUrl = $this->generateUrl('acme_payment_capture_simple', array(
-            'contextName' => 'your_context',
+            'paymentName' => $paymentName,
             'model' => $paymentDetails->getId(),
         ), $absolute = true);
         $paymentDetails->setReturnurl($returnUrl);
@@ -179,7 +179,7 @@ class PaymentController extends Controller
         $storage->updateModel($paymentDetails);
         
         return $this->forward('AcmePaymentBundle:Capture:simpleCapture', array(
-            'contextName' => $contextName,
+            'paymentName' => $paymentName,
             'model' => $paymentDetails
         ));
     }
