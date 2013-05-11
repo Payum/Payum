@@ -37,7 +37,14 @@ abstract class AbstractStorageFactory implements StorageFactoryInterface
     {
         $builder->children()
             ->arrayNode('payment_extension')
-                ->canBeEnabled()
+                ->addDefaultsIfNotSet()
+                ->treatNullLike(array('enabled' => true))
+                ->treatTrueLike(array('enabled' => true))
+                ->treatFalseLike(array('enabled' => false))
+                ->children()
+                    ->booleanNode('enabled')->defaultTrue()->end()
+                ->end()
+            ->end()
             ->end()
         ->end();
     }
