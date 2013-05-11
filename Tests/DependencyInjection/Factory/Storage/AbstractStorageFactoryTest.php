@@ -50,7 +50,27 @@ class AbstractStorageFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowEnabledPaymentExtension()
+    public function shouldEnabledPaymentExtensionByDefault()
+    {
+        $factory = $this->createAbstractStorageFactory();
+
+        $tb = new TreeBuilder();
+        $rootNode = $tb->root('foo');
+
+        $factory->addConfiguration($rootNode);
+
+        $processor = new Processor();
+
+        $config = $processor->process($tb->buildTree(), array());
+        $this->assertArrayHasKey('payment_extension', $config);
+        $this->assertArrayHasKey('enabled', $config['payment_extension']);
+        $this->assertTrue($config['payment_extension']['enabled']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowExplicitlyEnabledPaymentExtension()
     {
         $factory = $this->createAbstractStorageFactory();
 
@@ -93,9 +113,10 @@ class AbstractStorageFactoryTest extends \PHPUnit_Framework_TestCase
         $processor = new Processor();
 
         $config = $processor->process($tb->buildTree(), array());
+
         $this->assertArrayHasKey('payment_extension', $config);
         $this->assertArrayHasKey('enabled', $config['payment_extension']);
-        $this->assertFalse($config['payment_extension']['enabled']);
+        $this->assertTrue($config['payment_extension']['enabled']);
 
         $config = $processor->process($tb->buildTree(), array(array(
             'payment_extension' => false
@@ -113,8 +134,6 @@ class AbstractStorageFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('enabled', $config['payment_extension']);
         $this->assertFalse($config['payment_extension']['enabled']);
     }
-
-    
 
     /**
      * @test
