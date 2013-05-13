@@ -21,7 +21,7 @@
     <testsuites>
         <testsuite name="Payum Paypal Express Checkout Nvp Tests">
             <directory>./tests</directory>
-        </testsuite>2
+        </testsuite>
     </testsuites>
 
     <filter>
