@@ -78,7 +78,11 @@ class StorageExtension implements ExtensionInterface
      */
     public function onException(\Exception $exception, $request, ActionInterface $action = null)
     {
-        $this->tryUpdateModel($request);
+        try {
+            $this->tryUpdateModel($request);
+        } catch (\Exception $ignoredException) {
+            throw $exception;
+        }
     }
 
     /**
