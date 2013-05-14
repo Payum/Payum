@@ -16,6 +16,16 @@ class StorageExtension implements ExtensionInterface
     protected $storage;
 
     /**
+     * @var array
+     */
+    protected $requestStackLevel = 0;
+    
+    /**
+     * @var array
+     */
+    protected $trackedModels = array();
+
+    /**
      * @param \Payum\Storage\StorageInterface $storage
      */
     public function __construct(StorageInterface $storage)
@@ -28,26 +38,31 @@ class StorageExtension implements ExtensionInterface
      */
     public function onPreExecute($request)
     {
+        $this->requestStackLevel++;
+        
         if (false == $request instanceof ModelRequestInterface) {
             return;
         }
-        
-        if (false == $request->getModel() instanceof Identificator) {
-            return;
-        }
-        
-        /** @var Identificator $identificator */
-        $identificator = $request->getModel();
-        
-        if (false == $this->storage->supportModel($identificator->getClass())) {
-            return;
-        }
-        
-        if (false == $model = $this->storage->findModelById($identificator->getId())) {
-            throw new LogicException('Cannot find model by identifier: '.$identificator);
+
+        if ($request->getModel() instanceof Identificator) {
+            /** @var Identificator $identificator */
+            $identificator = $request->getModel();
+            if (false == $this->storage->supportModel($identificator->getClass())) {
+                return;
+            }
+
+            if (false == $model = $this->storage->findModelById($identificator->getId())) {
+                throw new LogicException('Cannot find model by identifier: '.$identificator);
+            }
+            
+            $request->setModel($model);
         }
 
-        $request->setModel($model);
+        if ($this->storage->supportModel($request->getModel())) {
+            $this->trackModel($request);
+
+            return;
+        }
     }
 
     /**
@@ -60,9 +75,18 @@ class StorageExtension implements ExtensionInterface
     /**
      * {@inheritdoc}
      */
+    public function onException(\Exception $exception, $request, ActionInterface $action = null)
+    {
+        $this->requestStackLevel = 0;
+        $this->trackedModels = array();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function onPostExecute($request, ActionInterface $action)
     {
-        $this->tryUpdateModel($request);
+        $this->updateTrackedModels();
     }
 
     /**
@@ -70,24 +94,37 @@ class StorageExtension implements ExtensionInterface
      */
     public function onInteractiveRequest(InteractiveRequestInterface $interactiveRequest, $request, ActionInterface $action)
     {
-        $this->tryUpdateModel($request);
+        $this->updateTrackedModels();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function onException(\Exception $exception, $request, ActionInterface $action = null)
+    protected function updateTrackedModels()
     {
-        $this->tryUpdateModel($request);
-    }
-
-    /**
-     * @param mixed $request
-     */
-    protected function tryUpdateModel($request)
-    {
-        if ($request instanceof ModelRequestInterface && $this->storage->supportModel($request->getModel())) {
-            $this->storage->updateModel($request->getModel());
+        $currentRequestStackLevel = $this->requestStackLevel--;
+        
+        foreach ($this->trackedModels as $modelHash => $trackedModelData) {
+            if ($currentRequestStackLevel != $trackedModelData['requestStackLevelModelIntroduced']) {
+                continue;
+            }
+            
+            $this->storage->updateModel($trackedModelData['model']);
+            unset($this->trackedModels[$modelHash]);
         }
+    }
+
+    /**
+     * @param \Payum\Request\ModelRequestInterface $request
+     */
+    protected function trackModel(ModelRequestInterface $request)
+    {
+        $model = $request->getModel();
+        $modelHash = spl_object_hash($model);
+        if (array_key_exists($modelHash, $this->trackedModels)) {
+            return;
+        }
+        
+        $this->trackedModels[$modelHash] = array(
+            'requestStackLevelModelIntroduced' => $this->requestStackLevel,
+            'model' => $model,
+        );
     }
 }
