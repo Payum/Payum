@@ -4,7 +4,7 @@ php:
   - 5.3
   - 5.4
 
-before_script: composer install --dev --no-interaction
+before_script: composer install --dev --no-interaction --prefer-source
 
 branches:
   only:
