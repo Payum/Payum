@@ -8,11 +8,11 @@
         
         <field name="token" column="token" type="string" length="255" nullable="false" />
 
-        <field name="desc" column="desc" type="string" length="255" nullable="false" />
+        <field name="desc" column="`desc`" type="string" length="255" nullable="false" />
         
         <field name="amt" column="amt" type="string" length="255" nullable="false" />
 
-        <field name="status" column="status" type="string" length="255" nullable="true" />
+        <field name="status" column="`status`" type="string" length="255" nullable="true" />
 
         <field name="profilestatus" column="profile_status" type="string" length="255" nullable="true" />
 
