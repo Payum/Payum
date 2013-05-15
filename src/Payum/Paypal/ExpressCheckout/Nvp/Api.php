@@ -271,6 +271,8 @@ class Api
 
     const RECURRINGPAYMENTSTATUS_REACTIVATE = 'Reactivate';
 
+    const RECURRINGPAYMENTACTION_CANCEL = 'Cancel';
+
     const VERSION = '65.1';
 
     protected $client;
