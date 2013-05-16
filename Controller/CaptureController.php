@@ -31,13 +31,13 @@ class CaptureController extends Controller
 //                throw new InvalidArgumentException(sprintf('The current url %s not match target url %s set in the token.', $request->getRequestUri(), $token->getTargetUrl()));
 //            }
             
-            $status = new BinaryMaskStatusRequest($token->getDetails());
+            $status = new BinaryMaskStatusRequest($token);
             $this->getPayum()->getPayment($paymentName)->execute($status);
             if (false == $status->isNew()) {
                 throw new HttpException(400, 'The model status must be new.');
             }
             
-            $capture = new CaptureRequest($status->getModel());
+            $capture = new CaptureRequest($token);
             $this->getPayum()->getPayment($paymentName)->execute($capture);
             
             $this->getPayum()->getStorageForClass($token, $paymentName)->deleteModel($token);
