@@ -67,7 +67,7 @@ class TokenizedTokenService
      * 
      * @return TokenizedDetails
      */
-    public function createTokenForRoute($paymentName, $model, $targetRoute, array $targetRouteParameters = array())
+    public function createTokenForRoute($paymentName, $model, $targetRoute, array $targetRouteParameters = array(), $afterRoute = null, array $afterRouteParameters = array())
     {
         $tokenizedDetailsStorage = $this->findTokenizedDetailsStorage($paymentName);
         $modelDetailsStorage = $this->payum->getStorageForClass($model, $paymentName);
@@ -80,6 +80,12 @@ class TokenizedTokenService
             'paymentName' => $paymentName,
             'token' => $tokenizedDetails->getToken()
         )), $absolute = true));
+
+        if ($afterRoute) {
+            $tokenizedDetails->setAfterUrl(
+                $this->router->generate($afterRoute, $afterRouteParameters, $absolute = true)
+            );
+        }
 
         $tokenizedDetailsStorage->updateModel($tokenizedDetails);
 
