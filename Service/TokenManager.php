@@ -8,7 +8,7 @@ use Payum\Exception\LogicException;
 use Payum\Model\TokenizedDetails;
 use Payum\Storage\StorageInterface;
 
-class TokenizedTokenService 
+class TokenManager 
 {
     /**
      * @var \Symfony\Component\Routing\RouterInterface
@@ -64,16 +64,18 @@ class TokenizedTokenService
      * @param object $model
      * @param string $targetRoute
      * @param array $targetRouteParameters
+     * @param string $afterRoute
+     * @param array $afterRouteParameters
      * 
      * @return TokenizedDetails
      */
     public function createTokenForRoute($paymentName, $model, $targetRoute, array $targetRouteParameters = array(), $afterRoute = null, array $afterRouteParameters = array())
     {
-        $tokenizedDetailsStorage = $this->findTokenizedDetailsStorage($paymentName);
+        $tokenStorage = $this->getStorage($paymentName);
         $modelDetailsStorage = $this->payum->getStorageForClass($model, $paymentName);
 
         /** @var TokenizedDetails $tokenizedDetails */
-        $tokenizedDetails = $tokenizedDetailsStorage->createModel();
+        $tokenizedDetails = $tokenStorage->createModel();
         $tokenizedDetails->setDetails($modelDetailsStorage->getIdentificator($model));
         $tokenizedDetails->setPaymentName($paymentName);
         $tokenizedDetails->setTargetUrl($this->router->generate($targetRoute, array_replace($targetRouteParameters, array(
@@ -87,7 +89,7 @@ class TokenizedTokenService
             );
         }
 
-        $tokenizedDetailsStorage->updateModel($tokenizedDetails);
+        $tokenStorage->updateModel($tokenizedDetails);
 
         return $tokenizedDetails;
     }
@@ -98,9 +100,9 @@ class TokenizedTokenService
      *
      * @return TokenizedDetails
      */
-    public function findTokenizedDetailsByToken($paymentName, $token)
+    public function findByToken($paymentName, $token)
     {
-        $storage = $this->findTokenizedDetailsStorage($paymentName);
+        $storage = $this->getStorage($paymentName);
         
         return $storage->findModelById($token);
     }
@@ -112,7 +114,7 @@ class TokenizedTokenService
      *
      * @return StorageInterface
      */
-    public function findTokenizedDetailsStorage($paymentName)
+    public function getStorage($paymentName)
     {
         foreach ($this->payum->getStorages($paymentName) as $modelClass => $storage) {
             if (is_subclass_of($modelClass, 'Payum\Model\TokenizedDetails')) {

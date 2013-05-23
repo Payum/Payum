@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Controller;
 
-use Payum\Bundle\PayumBundle\Service\TokenizedTokenService;
+use Payum\Bundle\PayumBundle\Service\TokenManager;
 use Payum\Model\TokenizedDetails;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +19,7 @@ class CaptureController extends Controller
     {
         try {
             if (false == $token instanceof TokenizedDetails) {
-                if (false == $token = $this->getTokenizedTokenService()->findTokenizedDetailsByToken($paymentName, $token)) {
+                if (false == $token = $this->getTokenManager()->findByToken($paymentName, $token)) {
                     throw $this->createNotFoundException('The TokenizedDetails with requested token not found.');
                 }
             }
@@ -59,10 +59,10 @@ class CaptureController extends Controller
     }
 
     /**
-     * @return TokenizedTokenService
+     * @return TokenManager
      */
-    protected function getTokenizedTokenService()
+    protected function getTokenManager()
     {
-        return $this->get('payum.tokenized_details_service');
+        return $this->get('payum.token_manager');
     }
 }
