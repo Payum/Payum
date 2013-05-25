@@ -28,12 +28,4 @@ class CaptureTokenizedDetailsRequest extends CaptureRequest
     {
         return $this->tokenizedDetails;
     }
-
-    /**
-     * @param \Payum\Model\TokenizedDetails
-     */
-    public function setTokenizedDetails($tokenizedDetails)
-    {
-        $this->tokenizedDetails = $tokenizedDetails;
-    }
 }
