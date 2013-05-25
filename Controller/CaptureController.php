@@ -1,16 +1,16 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Controller;
 
-use Payum\Bundle\PayumBundle\Service\TokenManager;
-use Payum\Model\TokenizedDetails;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 use Payum\Exception\InvalidArgumentException;
 use Payum\Exception\RequestNotSupportedException;
-use Payum\Request\CaptureRequest;
 use Payum\Request\BinaryMaskStatusRequest;
+use Payum\Bundle\PayumBundle\Request\CaptureTokenizedDetailsRequest;
+use Payum\Model\TokenizedDetails;
+use Payum\Bundle\PayumBundle\Service\TokenManager;
 use Payum\Bundle\PayumBundle\Registry\ContainerAwareRegistry;
 
 class CaptureController extends Controller 
@@ -37,7 +37,7 @@ class CaptureController extends Controller
                 throw new HttpException(400, 'The model status must be new.');
             }
             
-            $capture = new CaptureRequest($token);
+            $capture = new CaptureTokenizedDetailsRequest($token);
             $this->getPayum()->getPayment($paymentName)->execute($capture);
             
             $this->getPayum()->getStorageForClass($token, $paymentName)->deleteModel($token);
