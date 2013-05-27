@@ -1,6 +1,9 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Service;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 
 use Payum\Bundle\PayumBundle\Registry\ContainerAwareRegistry;
@@ -28,6 +31,43 @@ class TokenManager
     {
         $this->router = $router;
         $this->payum = $payum;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * 
+     * @return \Payum\Model\TokenizedDetails
+     */
+    public function getTokenFromRequest(Request $request)
+    {
+        if (false === $paymentName = $request->attributes->get('paymentName', $request->get('paymentName', false))) {
+            throw new HttpException(404, 'Payment name not set in request');
+        }
+        if (false === $token = $request->attributes->get('token', $request->get('token', false))) {
+            throw new HttpException(404, 'Token not set in request');
+        }
+
+        $isSubRequest = true;
+        if (false == $token instanceof TokenizedDetails) {
+            $isSubRequest = false;
+            if (false == $token = $this->findByToken($paymentName, $token)) {
+                throw new NotFoundHttpException('The TokenizedDetails with requested token not found.');
+            }
+        }
+
+        /** @var $token TokenizedDetails */
+
+        if ($paymentName !== $token->getPaymentName()) {
+            throw new HttpException(400, sprintf('The paymentName %s not match one %s set in the token.', $paymentName, $token->getPaymentName()));
+        }
+        
+        if (false === $isSubRequest && parse_url($request->getUri(), PHP_URL_PATH) != parse_url($token->getTargetUrl(), PHP_URL_PATH)) {
+            throw new HttpException(400, sprintf('The current url %s not match target url %s set in the token.', $request->getRequestUri(), $token->getTargetUrl()));
+        }
+        
+        return $token;
     }
 
     /**
@@ -105,6 +145,14 @@ class TokenManager
         $storage = $this->getStorage($paymentName);
         
         return $storage->findModelById($token);
+    }
+
+    /**
+     * @param TokenizedDetails $token
+     */
+    public function deleteToken(TokenizedDetails $token)
+    {
+        $this->payum->getStorageForClass($token, $token->getPaymentName())->deleteModel($token);
     }
 
     /**
