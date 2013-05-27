@@ -25,7 +25,7 @@ The bulk of the documentation is stored in the `Resources/doc/index.md` file in 
 
 [Read the Documentation for master](Resources/doc/index.md)
 
-[Basic Sandbox Example](https://github.com/Payum/PayumBundleSandbox)
+Basic Sandbox Example [online](http://sandbox.payum.forma-dev.com), [code](https://github.com/Payum/PayumBundleSandbox).
 
 Installation
 ------------
