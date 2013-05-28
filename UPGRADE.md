@@ -6,7 +6,10 @@
 * `StorageFactoryInterface::create` method signature has been changed. Now it requires additional parameter `modelClass`. 
 * Doctrine storage configuration does not have `model_class` option any more.
 * Filesystem storage configuration does not have `model_class` option any more.
-* Storages are not added automatically as payment extension any more. Set `payment_extension.enabled` storage's option to true to enable it.  
+* `LazyContext` was removed in favor of `ContainerAwareRegistry`.
+* `ContextInterface` was removed in favor of `ContainerAwareRegistry`.
+* `ContextRegistry` was removed in favor of `ContainerAwareRegistry`.
+* `payum` service now instance of `ContainerAwareRegistry` class. So the method `getContext` is not present any more.
 
 0.2 to 0.3
 ==========
