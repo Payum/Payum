@@ -1,4 +1,5 @@
 0.3 to 0.5
+==========
 
 * Storage factory names has been changed. The `_storage` post fix removed. For example `doctrine_storage` now `doctrine`.
 * Payment factory names has been changed. The `_payment` post fix removed. For example `omnipay_payment` now `omnipay`.
