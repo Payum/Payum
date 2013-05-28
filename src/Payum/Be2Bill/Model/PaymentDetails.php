@@ -765,7 +765,7 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
      */
     protected function getSupportedArrayFields()
     {
-        $rc = new \ReflectionClass(get_class($this));
+        $rc = new \ReflectionClass(__CLASS__);
 
         $fields = array();
         foreach ($rc->getProperties() as $rp) {
