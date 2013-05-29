@@ -3,7 +3,7 @@ namespace Payum\Registry;
 
 use Payum\Exception\InvalidArgumentException;
 
-abstract class AbstractRegistry implements PaymentRegistryInterface, StorageRegistryInterface 
+abstract class AbstractRegistry implements RegistryInterface
 {
     /**
      * @var array
