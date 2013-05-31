@@ -95,3 +95,11 @@ omnipay:
         foo: fooOpt
         bar: barOpt
 ```
+
+### Custom payment
+
+```yaml
+custom:
+    #if service not set an empty payment will be created. 
+    service: ~ 
+```
