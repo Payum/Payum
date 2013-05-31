@@ -3,7 +3,7 @@ namespace Payum\Registry;
 
 use Payum\Exception\InvalidArgumentException;
 
-abstract class AbstractRegistry implements PaymentRegistryInterface, StorageRegistryInterface 
+abstract class AbstractRegistry implements RegistryInterface
 {
     /**
      * @var array
@@ -78,6 +78,27 @@ abstract class AbstractRegistry implements PaymentRegistryInterface, StorageRegi
         }
 
         return $this->getService($this->storages[$name][$class]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getStorages($name = null)
+    {
+        if (null === $name) {
+            $name = $this->defaultStorage;
+        }
+
+        if (!isset($this->storages[$name])) {
+            throw new InvalidArgumentException(sprintf('Payum storages named %s do not exist.', $name));
+        }
+
+        $storages = array();
+        foreach ($this->storages[$name] as $modelClass => $storageId) {
+            $storages[$modelClass] = $this->getService($storageId);
+        }
+
+        return $storages;
     }
 
     /**
