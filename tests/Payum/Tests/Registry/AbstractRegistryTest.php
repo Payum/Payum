@@ -274,6 +274,93 @@ class AbstractRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
+     */
+    public function shouldAllowGetStoragesForDefaultName()
+    {
+        $payments = array('fooName' => 'fooPayment', 'barName' => 'barPayment');
+        $storages = array(
+            'barName' => array(
+                'stdClass' => 'barStorage', 'FooClass' => 'FooStorage'
+            ),
+            'fooName' => array(
+                'stdClass' => 'fooStorage', 'FooClass' => 'FooStorage'
+            )
+        );
+
+        $paymentName = 'fooName';
+        $storageName = 'barName';
+
+        $registry = $this->createAbstractRegistryMock(array(
+            $payments,
+            $storages,
+            $paymentName,
+            $storageName
+        ));
+
+        $this->assertEquals($storages['barName'], $registry->getStorages());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetStoragesForNameGiven()
+    {
+        $payments = array('fooName' => 'fooPayment', 'barName' => 'barPayment');
+        $storages = array(
+            'barName' => array(
+                'stdClass' => 'barStorage', 'FooClass' => 'FooStorage'
+            ),
+            'fooName' => array(
+                'stdClass' => 'fooStorage', 'FooClass' => 'FooStorage'
+            )
+        );
+
+        $paymentName = 'fooName';
+        $storageName = 'barName';
+
+        $registry = $this->createAbstractRegistryMock(array(
+            $payments,
+            $storages,
+            $paymentName,
+            $storageName
+        ));
+
+        $this->assertEquals($storages['barName'], $registry->getStorages('barName'));
+        $this->assertEquals($storages['fooName'], $registry->getStorages('fooName'));
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Payum storages named notExistName do not exist.
+     */
+    public function throwIfTryToGetStoragesWithNotExistName()
+    {
+        $payments = array('fooName' => 'fooPayment', 'barName' => 'barPayment');
+        $storages = array(
+            'barName' => array(
+                'stdClass' => 'barStorage', 'FooClass' => 'FooStorage'
+            ),
+        );
+
+        $paymentName = 'fooName';
+        $storageName = 'barName';
+
+        $registry = $this->createAbstractRegistryMock(array(
+            $payments,
+            $storages,
+            $paymentName,
+            $storageName
+        ));
+        
+        $registry->getStorages('notExistName');
+    }
+
+    /**
+     * @param array $constructorArguments
+     * 
      * @return \PHPUnit_Framework_MockObject_MockObject|AbstractRegistry
      */
     protected function createAbstractRegistryMock(array $constructorArguments)
