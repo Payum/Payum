@@ -10,14 +10,11 @@ use Symfony\Component\DependencyInjection\Reference;
 abstract class AbstractPaymentFactory implements PaymentFactoryInterface  
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function create(ContainerBuilder $container, $contextName, array $config)
     {
-        $paymentDefinition = new Definition();
-        $paymentDefinition->setClass(
-            $this->createContextParameter($container, $contextName, '%payum.payment.class%', 'payment.class')
-        );
+        $paymentDefinition = $this->createPaymentDefinition($container, $contextName, $config);
         $paymentDefinition->setPublic(true);
         $paymentId = 'payum.context.'.$contextName.'.payment';
         $container->setDefinition($paymentId, $paymentDefinition);
@@ -50,7 +47,7 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
     }
     
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
@@ -71,6 +68,24 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
             ->end()
         ;
     }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param $contextName
+     * @param array $config
+     * 
+     * @return Definition
+     */
+    protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
+    {
+        $paymentDefinition = new Definition();
+        $paymentDefinition->setClass(
+            $this->createContextParameter($container, $contextName, '%payum.payment.class%', 'payment.class')
+        );
+        
+        return $paymentDefinition;
+    }
+    
 
     /**
      * @param ContainerBuilder $container
