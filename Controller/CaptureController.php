@@ -7,9 +7,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Request\BinaryMaskStatusRequest;
+use Payum\Registry\RegistryInterface;
 use Payum\Bundle\PayumBundle\Request\CaptureTokenizedDetailsRequest;
 use Payum\Bundle\PayumBundle\Service\TokenManager;
-use Payum\Bundle\PayumBundle\Registry\ContainerAwareRegistry;
 
 class CaptureController extends Controller 
 {
@@ -34,7 +34,7 @@ class CaptureController extends Controller
     }
 
     /**
-     * @return ContainerAwareRegistry
+     * @return RegistryInterface
      */
     protected function getPayum()
     {

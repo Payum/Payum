@@ -6,7 +6,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 
-use Payum\Bundle\PayumBundle\Registry\ContainerAwareRegistry;
+use Payum\Registry\RegistryInterface;
 use Payum\Exception\LogicException;
 use Payum\Model\TokenizedDetails;
 use Payum\Storage\StorageInterface;
@@ -19,15 +19,15 @@ class TokenManager
     protected $router;
 
     /**
-     * @var \Payum\Bundle\PayumBundle\Registry\ContainerAwareRegistry
+     * @var RegistryInterface
      */
     protected $payum;
 
     /**
      * @param RouterInterface $router
-     * @param ContainerAwareRegistry $payum
+     * @param RegistryInterface $payum
      */
-    public function __construct(RouterInterface$router, ContainerAwareRegistry $payum)
+    public function __construct(RouterInterface $router, RegistryInterface $payum)
     {
         $this->router = $router;
         $this->payum = $payum;

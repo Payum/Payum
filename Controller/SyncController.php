@@ -5,9 +5,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 use Payum\Request\SyncRequest;
+use Payum\Registry\RegistryInterface;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Bundle\PayumBundle\Service\TokenManager;
-use Payum\Bundle\PayumBundle\Registry\ContainerAwareRegistry;
 
 class SyncController extends Controller 
 {
@@ -26,7 +26,7 @@ class SyncController extends Controller
     }
 
     /**
-     * @return ContainerAwareRegistry
+     * @return RegistryInterface
      */
     protected function getPayum()
     {
