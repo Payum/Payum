@@ -56,3 +56,4 @@ PayumBundle is released under the MIT License. For more information, see [Licens
 [storage-factories]: https://github.com/Payum/PayumBundle/tree/master/DependencyInjection/Factory/Storage
 [sandbox-online]: http://sandbox.payum.forma-dev.com
 [sandbox-code]: https://github.com/Payum/PayumBundleSandbox
+[payum-bundle]: https://github.com/Payum/PayumBundle/blob/master/PayumBundle.php
