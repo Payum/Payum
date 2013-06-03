@@ -50,3 +50,9 @@ License
 -------
 
 PayumBundle is released under the MIT License. For more information, see [License](Resources/meta/LICENSE).
+
+[capture-controller]: https://github.com/Payum/PayumBundle/blob/master/Controller/CaptureController.php
+[payment-factories]: https://github.com/Payum/PayumBundle/tree/master/DependencyInjection/Factory/Payment
+[storage-factories]: https://github.com/Payum/PayumBundle/tree/master/DependencyInjection/Factory/Storage
+[sandbox-online]: http://sandbox.payum.forma-dev.com
+[sandbox-code]: https://github.com/Payum/PayumBundleSandbox
