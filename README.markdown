@@ -3,12 +3,11 @@ PayumBundle [![Build Status](https://travis-ci.org/Payum/PayumBundle.png?branch=
 
 The PayumBundle adds support of [payum](https://github.com/Payum/Payum) lib to [symfony](symfony.com) framework.
 
-Features include:
+The bundle allows you easy configure payments, add storages, custom actions/extensions/apis. 
+Nothing is hardcoded: all payments and storages are added via _factories_ ([payment factories][payment-factories], [storage factories][storage-factories]) in the bundle [build method][payum-bundle].
+You can add your payment this way too!
 
-- Easy to setup ([sandbox](https://github.com/Payum/PayumBundleSandbox)).
-- Several payments at once.
-- Extremely extensible.
-- Support storage out of the box.
+Also, it provides a nice secured [capture controller][capture-controller]. It's extremely reusable. Check the [sandbox][sandbox-online] ([code][sandbox-code]) for more details.
 
 Supported Payments:
 -------------------
@@ -25,7 +24,10 @@ The bulk of the documentation is stored in the `Resources/doc/index.md` file in 
 
 [Read the Documentation for master](Resources/doc/index.md)
 
-Basic Sandbox Example [online](http://sandbox.payum.forma-dev.com), [code](https://github.com/Payum/PayumBundleSandbox).
+[Read the Documentation of payum ](https://github.com/Payum/Payum#payum-)
+
+Look at sandbox: [online](http://sandbox.payum.forma-dev.com), [code](https://github.com/Payum/PayumBundleSandbox).
+
 
 Installation
 ------------
