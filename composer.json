@@ -1,0 +1,31 @@
+{
+    "name": "payum/payex",
+    "type": "library",
+    "description": "Payex payment lib",
+    "keywords": ["payment", "payex"],
+    "homepage": "",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kotlyar Maksim",
+            "email": "kotlyar.maksim@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "payum/payum": "0.5.x-dev"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": {
+            "Payum\\Payex": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.5-dev"
+        }
+    }
+}
