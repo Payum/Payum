@@ -1,10 +1,10 @@
 <?php
 namespace Payum\Payex\Tests\Api;
 
-use Payum\Payex\Api\PxOrder;
+use Payum\Payex\Api\OrderApi;
 use Payum\Payex\Api\SoapClientFactory;
 
-class PxOrderTest extends \PHPUnit_Framework_TestCase 
+class OrderApiTest extends \PHPUnit_Framework_TestCase 
 {
     /**
      * @test 
@@ -14,7 +14,7 @@ class PxOrderTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfAccountNumberOptionNotSet()
     {
-        new PxOrder(new SoapClientFactory, array());
+        new OrderApi(new SoapClientFactory, array());
     }
 
     /**
@@ -25,7 +25,7 @@ class PxOrderTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfEncryptionKeyOptionNotSet()
     {
-        new PxOrder(
+        new OrderApi(
             new SoapClientFactory,
             array(
                 'accountNumber' => 'aNumber',
@@ -41,7 +41,7 @@ class PxOrderTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotBoolSandboxOptionGiven()
     {
-        new PxOrder(
+        new OrderApi(
             new SoapClientFactory,
             array(
                 'accountNumber' => 'aNumber',
@@ -56,7 +56,7 @@ class PxOrderTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithValidOptions()
     {
-        new PxOrder(
+        new OrderApi(
             new SoapClientFactory,
             array(
                 'encryptionKey' => 'aKey',
@@ -89,7 +89,7 @@ class PxOrderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($soapClientMock))
         ;
 
-        $pxOrder = new PxOrder(
+        $pxOrder = new OrderApi(
             $clientFactoryMock,
             array(
                 'encryptionKey' => 'aKey',
@@ -98,7 +98,7 @@ class PxOrderTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $result = $pxOrder->Initialize8(array());
+        $result = $pxOrder->initialize(array());
         
         $this->assertEquals(array('fooValue'),  $result);
     }
@@ -126,7 +126,7 @@ class PxOrderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($soapClientMock))
         ;
 
-        $pxOrder = new PxOrder(
+        $pxOrder = new OrderApi(
             $clientFactoryMock,
             array(
                 'encryptionKey' => 'aKey',
@@ -135,7 +135,7 @@ class PxOrderTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $result = $pxOrder->Complete(array());
+        $result = $pxOrder->complete(array());
 
         $this->assertEquals(array('fooValue'),  $result);
     }

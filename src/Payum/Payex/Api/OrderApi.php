@@ -3,7 +3,7 @@ namespace Payum\Payex\Api;
 
 use Payum\Exception\InvalidArgumentException;
 
-class PxOrder
+class OrderApi
 {
     /**
      * @var SoapClientFactory
@@ -44,9 +44,9 @@ class PxOrder
      * 
      * @var array $parameters
      * 
-     * @return \stdClass
+     * @return array
      */
-    public function Initialize8(array $parameters)
+    public function initialize(array $parameters)
     {
         $parameters['accountNumber'] = $this->options['accountNumber'];
         
@@ -83,9 +83,9 @@ class PxOrder
      * 
      * @param array $parameters
      * 
-     * @return \stdClass
+     * @return array
      */
-    public function Complete(array $parameters)
+    public function complete(array $parameters)
     {
         $parameters['accountNumber'] = $this->options['accountNumber'];
 
@@ -140,6 +140,9 @@ class PxOrder
      */
     protected function convertSimpleXmlToArray(\SimpleXMLElement $element)
     {
-        return json_decode(json_encode((array) $element));
+        return json_decode(
+            json_encode((array) $element), 
+            $assoc = true
+        );
     }
 }
