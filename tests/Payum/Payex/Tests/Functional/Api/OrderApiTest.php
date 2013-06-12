@@ -75,19 +75,19 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('sessionRef', $result);
         $this->assertArrayNotHasKey('redirectUrl', $result);
         
-        $this->assertInternalType('array', $result['status']);
+        $this->assertInternalType('array', $result);
 
-        $this->assertArrayHasKey('code', $result['status']);
-        $this->assertNotEmpty($result['status']['code']);
-        $this->assertNotEquals('OK', $result['status']['code']);
+        $this->assertArrayHasKey('errorCode', $result);
+        $this->assertNotEmpty($result['errorCode']);
+        $this->assertNotEquals('OK', $result['errorCode']);
 
-        $this->assertArrayHasKey('description', $result['status']);
-        $this->assertNotEmpty($result['status']['description']);
-        $this->assertNotEquals('OK', $result['status']['description']);
+        $this->assertArrayHasKey('errorDescription', $result);
+        $this->assertNotEmpty($result['errorDescription']);
+        $this->assertNotEquals('OK', $result['errorDescription']);
 
-        $this->assertArrayHasKey('errorCode', $result['status']);
-        $this->assertNotEmpty($result['status']['errorCode']);
-        $this->assertNotEquals('OK', $result['status']['errorCode']);
+        $this->assertArrayHasKey('errorCode', $result);
+        $this->assertNotEmpty($result['errorCode']);
+        $this->assertNotEquals('OK', $result['errorCode']);
     }
     
     /**
@@ -116,9 +116,6 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertInternalType('array', $result);
-        
-        $this->assertArrayHasKey('status', $result);
-        $this->assertNotEmpty($result['status']);
 
         $this->assertArrayHasKey('orderRef', $result);
         $this->assertNotEmpty($result['orderRef']);
@@ -129,16 +126,16 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('redirectUrl', $result);
         $this->assertNotEmpty($result['redirectUrl']);
 
-        $this->assertInternalType('array', $result['status']);
+        $this->assertInternalType('array', $result);
         
-        $this->assertArrayHasKey('code', $result['status']);
-        $this->assertSame('OK', $result['status']['code']);
+        $this->assertArrayHasKey('errorCode', $result);
+        $this->assertSame('OK', $result['errorCode']);
 
-        $this->assertArrayHasKey('description', $result['status']);
-        $this->assertSame('OK', $result['status']['description']);
+        $this->assertArrayHasKey('errorDescription', $result);
+        $this->assertSame('OK', $result['errorDescription']);
 
-        $this->assertArrayHasKey('errorCode', $result['status']);
-        $this->assertSame('OK', $result['status']['errorCode']);   
+        $this->assertArrayHasKey('errorCode', $result);
+        $this->assertSame('OK', $result['errorCode']);   
     }
 
     /**
@@ -153,18 +150,18 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('transactionNumber', $result);
         $this->assertArrayNotHasKey('orderStatus', $result);
 
-        $this->assertInternalType('array', $result['status']);
+        $this->assertInternalType('array', $result);
 
-        $this->assertArrayHasKey('code', $result['status']);
-        $this->assertNotEmpty($result['status']['code']);
-        $this->assertNotEquals('OK', $result['status']['code']);
+        $this->assertArrayHasKey('errorCode', $result);
+        $this->assertNotEmpty($result['errorCode']);
+        $this->assertNotEquals('OK', $result['errorCode']);
 
-        $this->assertArrayHasKey('description', $result['status']);
-        $this->assertNotEmpty($result['status']['description']);
-        $this->assertNotEquals('OK', $result['status']['description']);
+        $this->assertArrayHasKey('errorDescription', $result);
+        $this->assertNotEmpty($result['errorDescription']);
+        $this->assertNotEquals('OK', $result['errorDescription']);
 
-        $this->assertArrayHasKey('errorCode', $result['status']);
-        $this->assertNotEmpty($result['status']['errorCode']);
-        $this->assertNotEquals('OK', $result['status']['errorCode']);
+        $this->assertArrayHasKey('errorCode', $result);
+        $this->assertNotEmpty($result['errorCode']);
+        $this->assertNotEquals('OK', $result['errorCode']);
     }
 }

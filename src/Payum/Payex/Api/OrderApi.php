@@ -75,7 +75,11 @@ class OrderApi
 
         $response = @$client->Initialize8($parameters);
 
-        return $this->convertSimpleXmlToArray(new \SimpleXMLElement($response->Initialize8Result));
+        $result = $this->convertSimpleXmlToArray(new \SimpleXMLElement($response->Initialize8Result));
+        $result = $this->normalizeStatusFields($result);
+        $result = $this->removeHeader($result);
+        
+        return $result;
     }
 
     /**
@@ -98,7 +102,11 @@ class OrderApi
 
         $response = @$client->Complete($parameters);
 
-        return $this->convertSimpleXmlToArray(new \SimpleXMLElement($response->CompleteResult));
+        $result = $this->convertSimpleXmlToArray(new \SimpleXMLElement($response->CompleteResult));
+        $result = $this->normalizeStatusFields($result);
+        $result = $this->removeHeader($result);
+
+        return $result;
     }
 
     /**
@@ -144,5 +152,43 @@ class OrderApi
             json_encode((array) $element), 
             $assoc = true
         );
+    }
+
+    /**
+     * @param array $inputResult
+     * 
+     * @return array
+     */
+    protected function normalizeStatusFields(array $inputResult)
+    {
+        $result = $inputResult;
+        
+        unset($result['status']);
+        
+        foreach ($inputResult['status'] as $name => $value) {
+            $result[$name] = $value;
+        }
+        
+        if (array_key_exists('description', $result)) {
+            $result['errorDescription'] = $result['description'];
+            
+            unset($result['description']);
+        }
+        
+        return $result;
+    }
+
+    /**
+     * @param array $inputResult
+     * 
+     * @return array 
+     */
+    protected function removeHeader(array $inputResult)
+    {
+        $result = $inputResult;
+        
+        unset($result['header']);
+        
+        return $result;
     }
 }
