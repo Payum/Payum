@@ -270,6 +270,78 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($arrayObject->validatedNotEmpty(array('aRequiredField', 'otherRequiredField')));
     }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Exception\LogicException
+     * @expectedExceptionMessage The aRequiredField fields is not set.
+     */
+    public function throwIfRequiredFieldNotSetAndThrowOnInvalidTrue()
+    {
+        $arrayObject = new ArrayObject();
+
+        $arrayObject->validatedKeysSet(array('aRequiredField'), $throwOnInvalid = true);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Exception\LogicException
+     * @expectedExceptionMessage The otherRequiredField fields is not set.
+     */
+    public function throwIfSecondRequiredFieldNotSetAndThrowOnInvalidTrue()
+    {
+        $arrayObject = new ArrayObject();
+        $arrayObject['aRequiredField'] = 'foo';
+
+        $arrayObject->validatedKeysSet(array('aRequiredField', 'otherRequiredField'), $throwOnInvalid = true);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Exception\LogicException
+     * @expectedExceptionMessage The aRequiredField fields is not set.
+     */
+    public function throwByDefaultIfRequiredFieldNotSet()
+    {
+        $arrayObject = new ArrayObject();
+
+        $arrayObject->validatedKeysSet(array('aRequiredField'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnFalseIfRequiredFieldNotSetAndThrowOnInvalidFalse()
+    {
+        $arrayObject = new ArrayObject();
+
+        $this->assertFalse($arrayObject->validatedKeysSet(array('aRequiredField'), $throwOnInvalid = false));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowValidateScalarNotSet()
+    {
+        $arrayObject = new ArrayObject();
+
+        $this->assertFalse($arrayObject->validatedKeysSet('aRequiredField', $throwOnInvalid = false));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnTrueIfRequiredFieldsSet()
+    {
+        $arrayObject = new ArrayObject();
+        $arrayObject['aRequiredField'] = 'foo';
+        $arrayObject['otherRequiredField'] = 'bar';
+
+        $this->assertTrue($arrayObject->validatedKeysSet(array('aRequiredField', 'otherRequiredField')));
+    }
 }
 
 class CustomArrayObject implements \ArrayAccess, \IteratorAggregate

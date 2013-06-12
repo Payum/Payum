@@ -72,6 +72,31 @@ class ArrayObject extends \ArrayObject
     }
 
     /**
+     * @param array $required
+     * @param boolean $throwOnInvalid
+     *
+     * @throws LogicException when one of the required fields present
+     *
+     * @return void
+     */
+    public function validatedKeysSet($required, $throwOnInvalid = true)
+    {
+        $required = is_array($required) ? $required : array($required);
+
+        foreach ($required as $required) {
+            if (false == $this->offsetExists($required)) {
+                if ($throwOnInvalid) {
+                    throw new LogicException(sprintf('The %s fields is not set.', $required));
+                }
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function offsetSet($index, $value)
