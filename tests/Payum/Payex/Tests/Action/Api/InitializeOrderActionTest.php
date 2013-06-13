@@ -85,7 +85,7 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
      * @test
      * 
      * @expectedException \Payum\Exception\UnsupportedApiException
-     * @expectedExceptionMessage Expected api instance of OrderApi class.
+     * @expectedExceptionMessage Expected api must be instance of OrderApi.
      */
     public function throwOnTryingSetNotOrderApiAsApi()
     {

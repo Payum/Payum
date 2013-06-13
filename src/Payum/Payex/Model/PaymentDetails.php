@@ -6,7 +6,8 @@ use Payum\Exception\InvalidArgumentException;
 /**
  * TODO add one phase payment fields.
  * 
- * @link http://www.payexpim.com/quick-guide/initialize/
+ * @link http://www.payexpim.com/technical-reference/pxorder/initialize8/
+ * @link http://www.payexpim.com/technical-reference/pxorder/complete-2/
  */
 class PaymentDetails implements \ArrayAccess, \IteratorAggregate
 {
@@ -166,6 +167,163 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
      * @var string
      */
     protected $redirectUrl;
+
+    /**
+     * 0=Sale, 1=Initialize, 2=Credit, 3=Authorize, 4=Cancel,5=Failure,6=Capture (This field needs to be validated by the merchant to verify wether the transaction was successful or not).
+     * 
+     * @var int 
+     */
+    protected $transactionStatus;
+
+    /**
+     * Returns the transaction number if the transaction is successful. 
+     * This is useful for support reference as this is the number available in the merchant admin view and also the transaction number presented to the end user.
+     * 
+     * @var string
+     */
+    protected $transactionNumber;
+
+    /**
+     * This returns the productNumber supplied by the merchant when the order was created, enabling the merchant to link the return data from PayEx with their local orderID
+     * 
+     * @var string
+     */
+    protected $productId;
+
+    /**
+     * Returns the payment method used to pay for this transaction (PX, VISA, MC, DD, INVOICE etc)
+     * 
+     * @var string
+     */
+    protected $paymentMethod;
+
+    /**
+     * Returns the amount credited the merchant The value is returned as sent in. Example: 1000 = 10.00 NOK
+     * 
+     * @var int
+     */
+    protected $amount;
+
+    /**
+     * Returns false the first time complete is called successfully, but if complete is ever called with the same orderRef the returned value will be true
+     * 
+     * @var bool
+     */
+    protected $alreadyCompleted;
+
+    /**
+     * Returns the stopdate if the purchase is a subscription
+     * 
+     * @var string
+     */
+    protected $stopDate;
+
+    /**
+     * Returns the client’s GSM number, if the paymentmethod is CPA. Else the parameter is blank
+     * 
+     * @var string
+     */
+    protected $clientGsmNumber;
+
+    /**
+     * Returns the Status of the order0 = The order is completed (a purchase has been done, but check the transactionStatus to see the result).
+     * 1 = The order is processing. The customer has not started the purchase. PxOrder.Complete can return orderStatus 1 for 2 weeks after PxOrder.Initialize is called. Afterwards the orderStatus will be set to 2
+     * 2 = No order or transaction is found
+     * 
+     * @var string
+     */
+    protected $orderStatus;
+
+    /**
+     * Expire date of the agreement
+     *
+     * @var string
+     */
+    protected $paymentMethodExpireDate;
+
+    /**
+     * Returns a hash of the credit card number
+     *
+     * @var string
+     */
+    protected $BankHash;
+
+    /**
+     * Returns the masked credit card number. Only returned for Agreements where the Initialize parameter View is set to CC
+     * 
+     * @var string
+     */
+    protected $maskedNumber;
+
+    /**
+     * If a value is returned it will be either “None” or “3DSecure”
+     * 
+     * @var string
+     */
+    protected $AuthenticatedStatus;
+
+    /**
+     * If authenticatedStatus returns “3DSecure”, the following values is returned:Y = 3DSecure verification is OK and the cardholder is authenticated by the acquiring bank.
+     * 
+     * @var string
+     */
+    protected $AuthenticatedWith;
+
+    /**
+     * Returns true if the transaction has triggered the fraud detection module
+     * 
+     * @var bool
+     */
+    protected $fraudData;
+
+    /**
+     * Only used with Financing and PayPal payment methods. Returns true if we do not know the status of the transaction from third party, transactionStatus will be init
+     * 
+     * @var bool
+     */
+    protected $pending;
+
+    /**
+     * Returns a error code of why the transaction failed
+     * 
+     * @var string
+     */
+    protected $transactionErrorCode;
+
+    /**
+     * Returns a description of why the transaction failed
+     * 
+     * @var string
+     */
+    protected $transactionErrorDescription;
+
+    /**
+     * Returns the thirdPartyError of why the transaction failed. We recommend all merchants to log this error with your orders. This info is very useful when contacting our support team
+     * 
+     * @var string
+     */
+    protected $transactionThirdPartyError;
+
+    /**
+     * System Trace Authid Number
+     * 
+     * @var int
+     */
+    protected $stan;
+
+    /**
+     * Terminal Id
+     * 
+     * @var int
+     */
+    protected $terminalId;
+
+    /**
+     * Valid timestamp according to ISO 8601
+     * 
+     * @var string
+     */
+    protected $TransactionTime;
 
     /**
      * @return int
@@ -554,5 +712,357 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
         }
 
         return $fields;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTransactionStatus()
+    {
+        return $this->transactionStatus;
+    }
+
+    /**
+     * @param int $transactionStatus
+     */
+    public function setTransactionStatus($transactionStatus)
+    {
+        $this->transactionStatus = $transactionStatus;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTransactionNumber()
+    {
+        return $this->transactionNumber;
+    }
+
+    /**
+     * @param string $transactionNumber
+     */
+    public function setTransactionNumber($transactionNumber)
+    {
+        $this->transactionNumber = $transactionNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductId()
+    {
+        return $this->productId;
+    }
+
+    /**
+     * @param string $productId
+     */
+    public function setProductId($productId)
+    {
+        $this->productId = $productId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentMethod()
+    {
+        return $this->paymentMethod;
+    }
+
+    /**
+     * @param string $paymentMethod
+     */
+    public function setPaymentMethod($paymentMethod)
+    {
+        $this->paymentMethod = $paymentMethod;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
+     * @param int $amount
+     */
+    public function setAmount($amount)
+    {
+        $this->amount = $amount;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getAlreadyCompleted()
+    {
+        return $this->alreadyCompleted;
+    }
+
+    /**
+     * @param boolean $alreadyCompleted
+     */
+    public function setAlreadyCompleted($alreadyCompleted)
+    {
+        $this->alreadyCompleted = $alreadyCompleted;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStopDate()
+    {
+        return $this->stopDate;
+    }
+
+    /**
+     * @param string $stopDate
+     */
+    public function setStopDate($stopDate)
+    {
+        $this->stopDate = $stopDate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClientGsmNumber()
+    {
+        return $this->clientGsmNumber;
+    }
+
+    /**
+     * @param string $clientGsmNumber
+     */
+    public function setClientGsmNumber($clientGsmNumber)
+    {
+        $this->clientGsmNumber = $clientGsmNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrderStatus()
+    {
+        return $this->orderStatus;
+    }
+
+    /**
+     * @param string $orderStatus
+     */
+    public function setOrderStatus($orderStatus)
+    {
+        $this->orderStatus = $orderStatus;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentMethodExpireDate()
+    {
+        return $this->paymentMethodExpireDate;
+    }
+
+    /**
+     * @param string $paymentMethodExpireDate
+     */
+    public function setPaymentMethodExpireDate($paymentMethodExpireDate)
+    {
+        $this->paymentMethodExpireDate = $paymentMethodExpireDate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBankHash()
+    {
+        return $this->BankHash;
+    }
+
+    /**
+     * @param string $BankHash
+     */
+    public function setBankHash($BankHash)
+    {
+        $this->BankHash = $BankHash;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMaskedNumber()
+    {
+        return $this->maskedNumber;
+    }
+
+    /**
+     * @param string $maskedNumber
+     */
+    public function setMaskedNumber($maskedNumber)
+    {
+        $this->maskedNumber = $maskedNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthenticatedStatus()
+    {
+        return $this->AuthenticatedStatus;
+    }
+
+    /**
+     * @param string $AuthenticatedStatus
+     */
+    public function setAuthenticatedStatus($AuthenticatedStatus)
+    {
+        $this->AuthenticatedStatus = $AuthenticatedStatus;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthenticatedWith()
+    {
+        return $this->AuthenticatedWith;
+    }
+
+    /**
+     * @param string $AuthenticatedWith
+     */
+    public function setAuthenticatedWith($AuthenticatedWith)
+    {
+        $this->AuthenticatedWith = $AuthenticatedWith;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getFraudData()
+    {
+        return $this->fraudData;
+    }
+
+    /**
+     * @param boolean $fraudData
+     */
+    public function setFraudData($fraudData)
+    {
+        $this->fraudData = $fraudData;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getPending()
+    {
+        return $this->pending;
+    }
+
+    /**
+     * @param boolean $pending
+     */
+    public function setPending($pending)
+    {
+        $this->pending = $pending;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTransactionErrorCode()
+    {
+        return $this->transactionErrorCode;
+    }
+
+    /**
+     * @param string $transactionErrorCode
+     */
+    public function setTransactionErrorCode($transactionErrorCode)
+    {
+        $this->transactionErrorCode = $transactionErrorCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTransactionErrorDescription()
+    {
+        return $this->transactionErrorDescription;
+    }
+
+    /**
+     * @param string $transactionErrorDescription
+     */
+    public function setTransactionErrorDescription($transactionErrorDescription)
+    {
+        $this->transactionErrorDescription = $transactionErrorDescription;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTransactionThirdPartyError()
+    {
+        return $this->transactionThirdPartyError;
+    }
+
+    /**
+     * @param string $transactionThirdPartyError
+     */
+    public function setTransactionThirdPartyError($transactionThirdPartyError)
+    {
+        $this->transactionThirdPartyError = $transactionThirdPartyError;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStan()
+    {
+        return $this->stan;
+    }
+
+    /**
+     * @param int $stan
+     */
+    public function setStan($stan)
+    {
+        $this->stan = $stan;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTerminalId()
+    {
+        return $this->terminalId;
+    }
+
+    /**
+     * @param int $terminalId
+     */
+    public function setTerminalId($terminalId)
+    {
+        $this->terminalId = $terminalId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTransactionTime()
+    {
+        return $this->TransactionTime;
+    }
+
+    /**
+     * @param string $TransactionTime
+     */
+    public function setTransactionTime($TransactionTime)
+    {
+        $this->TransactionTime = $TransactionTime;
     }
 }

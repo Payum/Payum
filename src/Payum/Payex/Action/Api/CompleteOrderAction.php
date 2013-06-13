@@ -4,14 +4,14 @@ namespace Payum\Payex\Action\Api;
 use Payum\Action\ActionInterface;
 use Payum\ApiAwareInterface;
 use Payum\Bridge\Spl\ArrayObject;
+use Payum\Request\RedirectUrlInteractiveRequest;
 use Payum\Exception\LogicException;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Exception\UnsupportedApiException;
 use Payum\Payex\Api\OrderApi;
-use Payum\Payex\Request\Api\InitializeOrderRequest;
-use Payum\Request\RedirectUrlInteractiveRequest;
+use Payum\Payex\Request\Api\CompleteOrderRequest;
 
-class InitializeOrderAction implements ActionInterface, ApiAwareInterface
+class CompleteOrderAction implements ActionInterface, ApiAwareInterface
 {
     /**
      * @var OrderApi
@@ -35,44 +35,20 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
      */
     public function execute($request)
     {
-        /** @var $request InitializeOrderRequest */
+        /** @var $request CompleteOrderRequest */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        
-        if ($model['orderRef']) {
-            throw new LogicException('The order has already been initialized.');
-        }
 
-        $model->validatedKeysSet(array(
-            'price',
-            'priceArgList',
-            'vat',
-            'currency',
-            'orderID',
-            'productNumber',
-            'purchaseOperation',
-            'view',
-            'description',
-            'additionalValues',
-            'returnUrl',
-            'cancelUrl',
-            'externalID',
-            'clientIPAddress',
-            'clientIdentifier',
-            'agreementRef',
-            'clientLanguage',
+        $model->validatedNotEmpty(array(
+            'orderRef',
         ));
         
-        $result = $this->api->initialize((array) $model);
+        $result = $this->api->complete((array) $model);
 
         $model->replace($result);
-        
-        if ($model['redirectUrl']) {
-            throw new RedirectUrlInteractiveRequest($model['redirectUrl']);
-        }
     }
 
     /**
@@ -81,7 +57,7 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
     public function supports($request)
     {
         return 
-            $request instanceof InitializeOrderRequest &&
+            $request instanceof CompleteOrderRequest &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }
