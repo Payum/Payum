@@ -1,4 +1,4 @@
-Payex
+Payex Payum [![Build Status](https://travis-ci.org/Payum/Payex.png?branch=master)](https://travis-ci.org/Payum/Payex)
 =====
 
 The lib implements [Payex](http://www.payex.no/bedrift) payment.
