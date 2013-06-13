@@ -22,7 +22,7 @@ class StatusAction implements ActionInterface
         $model = ArrayObject::ensureArrayObject($request->getModel());
         
         //TODO: It may be not correct for all cases. This does NOT indicate wether the transaction requested was successful, only wether the request was carried out successfully.
-        if ($model['errorCode'] && OrderApi::ERRORCODE_OK != $model['orderRef']) {
+        if ($model['errorCode'] && OrderApi::ERRORCODE_OK != $model['errorCode']) {
             $request->markFailed();
             
             return;

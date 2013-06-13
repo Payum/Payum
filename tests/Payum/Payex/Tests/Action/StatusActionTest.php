@@ -296,7 +296,49 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($status->isExpired());
     }
-    
+
+    /**
+     * @test
+     */
+    public function shouldMarkFailedIfErrorCodeNotOk()
+    {
+        $action = new StatusAction();
+
+        $status = new BinaryMaskStatusRequest(array(
+            'errorCode' => 'not-ok'
+        ));
+
+        //guard
+        $status->markUnknown();
+
+        $action->execute($status);
+
+        $this->assertTrue($status->isFailed());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkSuccessIfErrorCodeOk()
+    {
+        $action = new StatusAction();
+
+        $status = new BinaryMaskStatusRequest(array(
+            'errorCode' => OrderApi::ERRORCODE_OK,
+            'purchaseOperation' => OrderApi::PURCHASEOPERATION_SALE,
+            'transactionStatus' => OrderApi::TRANSACTIONSTATUS_SALE,
+            'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED
+        ));
+
+        //guard
+        $status->markUnknown();
+
+        $action->execute($status);
+
+        $this->assertTrue($status->isSuccess());
+    }
+
+
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|PaymentInterface
      */
