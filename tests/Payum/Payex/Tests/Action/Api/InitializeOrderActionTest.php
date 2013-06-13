@@ -2,6 +2,7 @@
 namespace Payum\Payex\Tests\Action\Api;
 
 use Payum\Payex\Action\Api\InitializeOrderAction;
+use Payum\Payex\Api\OrderApi;
 use Payum\Payex\Model\PaymentDetails;
 use Payum\Payex\Request\Api\InitializeOrderRequest;
 use Payum\Request\RedirectUrlInteractiveRequest;
@@ -15,8 +16,8 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
         'currency' => 'NOK',
         'orderID' => 123,
         'productNumber' => 123,
-        'purchaseOperation' => 'AUTHORIZATION',
-        'view' => 'CC',
+        'purchaseOperation' => OrderApi::PURCHASEOPERATION_AUTHORIZATION,
+        'view' => OrderApi::VIEW_CREDITCARD,
         'description' => 'a description',
         'additionalValues' => '',
         'returnUrl' => 'http://example.com/a_return_url',

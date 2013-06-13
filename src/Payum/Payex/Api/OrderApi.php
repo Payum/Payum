@@ -5,6 +5,89 @@ use Payum\Exception\InvalidArgumentException;
 
 class OrderApi
 {
+    const PURCHASEOPERATION_SALE = 'SALE';
+
+    /**
+     * If AUTHORIZATION is submitted, this indicates that the order will be a 2-phased transaction if the payment method supports it.
+     */
+    const PURCHASEOPERATION_AUTHORIZATION = 'AUTHORIZATION';
+    
+    const VIEW_CREDITCARD = 'CREDITCARD';
+
+    const VIEW_MICROACCOUNT = 'MICROACCOUNT';
+
+    const VIEW_DIRECTDEBIT = 'DIRECTDEBIT';
+
+    /**
+     * Norwegian and Swedish overcharged SMS
+     */
+    const VIEW_CPA = 'CPA';
+
+    /**
+     * Overcharged call
+     */
+    const VIEW_IVR = 'IVR';
+
+    /**
+     * Value code
+     */
+    const VIEW_EVC = 'EVC';
+
+    const VIEW_INVOICE = 'INVOICE';
+
+    const VIEW_LOAN = 'LOAN';
+
+    /**
+     * Gift card / generic card
+     */
+    const VIEW_GC = 'GC';
+
+    /**
+     * Credit account
+     */
+    const VIEW_CA = 'GC';
+
+    /**
+     * PayPal transactions
+     */
+    const VIEW_PAYPAL = 'PAYPAL';
+
+    const VIEW_FINANCING = 'FINANCING';
+
+    /**
+     * Returns OK if request is successful.
+     */
+    const ERRORCODE_OK = 'OK';
+
+    const TRANSACTIONSTATUS_SALE = 0;
+
+    const TRANSACTIONSTATUS_INITIALIZE = 1;
+
+    const TRANSACTIONSTATUS_CREDIT = 2;
+
+    const TRANSACTIONSTATUS_AUTHORIZE = 3;
+
+    const TRANSACTIONSTATUS_CANCEL = 4;
+
+    const TRANSACTIONSTATUS_FAILURE = 5;
+
+    const TRANSACTIONSTATUS_CAPTURE = 6;
+
+    /**
+     * Returns the Status of the order0 = The order is completed (a purchase has been done, but check the transactionStatus to see the result).
+     */
+    const ORDERSTATUS_COMPLETED = 0;
+
+    /**
+     * 1 = The order is processing. The customer has not started the purchase. PxOrder.Complete can return orderStatus 1 for 2 weeks after PxOrder.Initialize is called. Afterwards the orderStatus will be set to 2
+     */
+    const ORDERSTATUS_PROCESSING = 1;
+
+    /**
+     * 2 = No order or transaction is found
+     */
+    const ORDERSTATUS_NOT_FOUND = 2;
+
     /**
      * @var SoapClientFactory
      */
