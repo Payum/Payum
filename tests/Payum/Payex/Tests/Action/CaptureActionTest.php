@@ -73,7 +73,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $action = new CaptureAction($this->createPaymentMock());
+        $action = new CaptureAction;
 
         $action->execute(new \stdClass());
     }
