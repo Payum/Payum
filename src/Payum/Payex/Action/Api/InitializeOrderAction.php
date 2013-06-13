@@ -43,7 +43,7 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
         $model = ArrayObject::ensureArrayObject($request->getModel());
         
         if ($model['orderRef']) {
-            return;
+            throw new LogicException('The order has already been initialized.');
         }
 
         $model->validatedKeysSet(array(

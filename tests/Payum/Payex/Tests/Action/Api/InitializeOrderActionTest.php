@@ -148,8 +148,11 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * 
+     * @expectedException \Payum\Exception\LogicException
+     * @expectedExceptionMessage The order has already been initialized.
      */
-    public function shouldDoNothingIfUserAlreadyAuthorizedToken()
+    public function throwIfTryInitializeAlreadyInitializedOrder()
     {
         $apiMock = $this->createApiMock();
         $apiMock
