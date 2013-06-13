@@ -13,10 +13,10 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
     
     public static function setUpBeforeClass()
     {
-        if (false == isset($GLOBALS['__PAYUM_PAYEX_ACCOUNT_NUMBER'])) {
+        if (empty($GLOBALS['__PAYUM_PAYEX_ACCOUNT_NUMBER'])) {
             throw new \PHPUnit_Framework_SkippedTestError('Please configure __PAYUM_PAYEX_ACCOUNT_NUMBER in your phpunit.xml');
         }
-        if (false == isset($GLOBALS['__PAYUM_PAYEX_ENCRYPTION_KEY'])) {
+        if (empty($GLOBALS['__PAYUM_PAYEX_ENCRYPTION_KEY'])) {
             throw new \PHPUnit_Framework_SkippedTestError('Please configure __PAYUM_PAYEX_ENCRYPTION_KEY in your phpunit.xml');
         }
     }
