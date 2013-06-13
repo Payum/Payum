@@ -162,11 +162,13 @@ class OrderApi
     protected function normalizeStatusFields(array $inputResult)
     {
         $result = $inputResult;
-        
-        unset($result['status']);
-        
-        foreach ($inputResult['status'] as $name => $value) {
-            $result[$name] = $value;
+
+        if (array_key_exists('status', $result) && is_array($result['status'])) {
+            unset($result['status']);
+            
+            foreach ($inputResult['status'] as $name => $value) {
+                $result[$name] = $value;
+            }
         }
         
         if (array_key_exists('description', $result)) {

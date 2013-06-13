@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
 if (!$loader = @include __DIR__.'/../vendor/autoload.php') {
     echo <<<EOM
 You must set up the project dependencies by running the following commands:
