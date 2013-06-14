@@ -8,6 +8,7 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
     public static function provideFields()
     {
         return array(
+            array('purchaseOperation', 'getPurchaseOperation', 'setPurchaseOperation'),
             array('price', 'getPrice', 'setPrice'),
             array('priceArgList', 'getPriceArgList', 'setPriceArgList'),
             array('currency', 'getCurrency', 'setCurrency'),

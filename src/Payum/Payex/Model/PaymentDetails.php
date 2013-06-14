@@ -12,6 +12,14 @@ use Payum\Exception\InvalidArgumentException;
 class PaymentDetails implements \ArrayAccess, \IteratorAggregate
 {
     /**
+     * SALE | AUTHORIZATION
+     * If AUTHORIZATION is submitted, this indicates that the order will be a 2-phased transaction if the payment method supports it.
+     * 
+     * @var string
+     */
+    protected $purchaseOperation;
+    
+    /**
      * This parameter determines the amount you would like to charge incl. VAT. 
      * The value is passed as an integer multiplied by 100. E.g. 100.00 NOK = 10000, 59.99 SEK = 5999, 400 ISK = 40000.
      * Set to 0 if priceArgList is used.
@@ -324,6 +332,22 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
      * @var string
      */
     protected $TransactionTime;
+
+    /**
+     * @return string
+     */
+    public function getPurchaseOperation()
+    {
+        return $this->purchaseOperation;
+    }
+
+    /**
+     * @param string $purchaseOperation
+     */
+    public function setPurchaseOperation($purchaseOperation)
+    {
+        $this->purchaseOperation = $purchaseOperation;
+    }
 
     /**
      * @return int
