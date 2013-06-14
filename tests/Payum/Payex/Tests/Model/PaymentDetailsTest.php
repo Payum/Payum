@@ -13,7 +13,7 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
             array('priceArgList', 'getPriceArgList', 'setPriceArgList'),
             array('currency', 'getCurrency', 'setCurrency'),
             array('vat', 'getVat', 'setVat'),
-            array('orderID', 'getOrderID', 'setOrderID'),
+            array('orderId', 'getOrderId', 'setOrderId'),
             array('productNumber', 'getProductNumber', 'setProductNumber'),
             array('description', 'getDescription', 'setDescription'),
             array('clientIPAddress', 'getClientIPAddress', 'setClientIPAddress'),
@@ -51,6 +51,7 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
             array('stan', 'getStan', 'setStan'),
             array('terminalId', 'getTerminalId', 'setTerminalId'),
             array('TransactionTime', 'getTransactionTime', 'setTransactionTime'),
+            array('paramName', 'getParamName', 'setParamName')
         );
     }
     
@@ -143,11 +144,27 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $details = new PaymentDetails;
 
-        $details['orderID'] = 'foo';
+        $details['orderId'] = 'foo';
         $details->setPrice('baz');
 
         $this->assertEquals(
-            array('orderID' => 'foo', 'price' => 'baz'), 
+            array('orderId' => 'foo', 'price' => 'baz'), 
+            iterator_to_array($details)
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldFilterNullFieldsWhileIterationeOverFields()
+    {
+        $details = new PaymentDetails;
+
+        $details->setOrderId('');
+        $details->setPrice(null);
+
+        $this->assertEquals(
+            array('orderId' => ''),
             iterator_to_array($details)
         );
     }

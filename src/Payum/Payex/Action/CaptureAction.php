@@ -3,6 +3,7 @@ namespace Payum\Payex\Action;
 
 use Payum\Action\PaymentAwareAction;
 use Payum\Bridge\Spl\ArrayObject;
+use Payum\Payex\Api\OrderApi;
 use Payum\Request\CaptureRequest;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Payex\Request\Api\InitializeOrderRequest;
@@ -25,8 +26,10 @@ class CaptureAction extends PaymentAwareAction
         if (false == $model['orderRef']) {
             $this->payment->execute(new InitializeOrderRequest($model));
         }
-        
-        $this->payment->execute(new CompleteOrderRequest($model));
+
+        if ($model['orderRef']) {
+            $this->payment->execute(new CompleteOrderRequest($model));
+        }
     }
 
     /**

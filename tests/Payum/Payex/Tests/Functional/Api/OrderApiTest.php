@@ -100,7 +100,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
             'priceArgList' => '',
             'vat' => 0,
             'currency' => 'NOK',
-            'orderID' => 123,
+            'orderId' => 123,
             'productNumber' => 123,
             'purchaseOperation' => OrderApi::PURCHASEOPERATION_AUTHORIZATION,
             'view' => OrderApi::VIEW_CREDITCARD,

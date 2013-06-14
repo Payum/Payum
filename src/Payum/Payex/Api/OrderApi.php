@@ -88,6 +88,8 @@ class OrderApi
      */
     const ORDERSTATUS_NOT_FOUND = 2;
 
+    const TRANSACTIONERRORCODE_OPERATIONCANCELLEDBYCUSTOMER = 'OperationCancelledbyCustomer';
+
     /**
      * @var SoapClientFactory
      */
@@ -132,6 +134,15 @@ class OrderApi
     public function initialize(array $parameters)
     {
         $parameters['accountNumber'] = $this->options['accountNumber'];
+
+        //DEPRICATED. Send in as empty string.
+        $parameters['externalID'] = '';
+        
+        if (isset($parameters['orderId'])) {
+            //On request it requires orderID fields when in response it is orderId.
+            $parameters['orderID'] = $parameters['orderId'];
+            unset($parameters['orderId']);
+        }
         
         $parameters['hash'] = $this->calculateHash($parameters, array(
             'accountNumber',
@@ -161,6 +172,7 @@ class OrderApi
         $result = $this->convertSimpleXmlToArray(new \SimpleXMLElement($response->Initialize8Result));
         $result = $this->normalizeStatusFields($result);
         $result = $this->removeHeader($result);
+        $result = $this->removeObsolete($result);
         
         return $result;
     }
@@ -188,6 +200,7 @@ class OrderApi
         $result = $this->convertSimpleXmlToArray(new \SimpleXMLElement($response->CompleteResult));
         $result = $this->normalizeStatusFields($result);
         $result = $this->removeHeader($result);
+        $result = $this->removeObsolete($result);
 
         return $result;
     }
@@ -273,6 +286,20 @@ class OrderApi
         $result = $inputResult;
         
         unset($result['header']);
+        
+        return $result;
+    }
+
+    /**
+     * @param array $inputResult
+     * @return array 
+     */
+    protected function removeObsolete(array $inputResult)
+    {
+        $result = $inputResult;
+
+        unset($result['code']);
+        unset($result['sessionRef']);
         
         return $result;
     }

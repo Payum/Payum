@@ -242,6 +242,29 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldMarkCanceledIfTransactionStatusFailedButErrorDetailsTellCanceled()
+    {
+        $action = new StatusAction();
+
+        $status = new BinaryMaskStatusRequest(array(
+            'transactionStatus' => OrderApi::TRANSACTIONSTATUS_CANCEL,
+            'errorDetails' => array(
+                'transactionErrorCode' => OrderApi::TRANSACTIONERRORCODE_OPERATIONCANCELLEDBYCUSTOMER
+            ),
+            'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED
+        ));
+
+        //guard
+        $status->markUnknown();
+
+        $action->execute($status);
+
+        $this->assertTrue($status->isCanceled());
+    }
+
+    /**
+     * @test
+     */
     public function shouldMarkFailedIfTransactionStatusFailed()
     {
         $action = new StatusAction();

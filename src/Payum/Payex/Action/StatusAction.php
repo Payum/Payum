@@ -43,6 +43,16 @@ class StatusAction implements ActionInterface
             }
 
             if (OrderApi::TRANSACTIONSTATUS_FAILURE == $model['transactionStatus']) {
+                $errorDetails = $model['errorDetails'];
+                if (
+                    isset($errorDetails['transactionErrorCode']) && 
+                    $errorDetails['transactionErrorCode'] == OrderApi::TRANSACTIONERRORCODE_OPERATIONCANCELLEDBYCUSTOMER
+                ) {
+                    $request->markCanceled();
+
+                    return;
+                }
+                
                 $request->markFailed();
 
                 return;

@@ -58,7 +58,7 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
      *
      * @var string
      */
-    protected $orderID;
+    protected $orderId;
 
     /**
      * Merchant product number/reference for this specific product. 
@@ -190,6 +190,13 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
      * @var string
      */
     protected $transactionNumber;
+
+    /**
+     * @deprecated Deprecated, do not store or use this response parameter. Use transactionNumber instead, We are keeping it because api still returns this value.
+     * 
+     * @var string
+     */
+    protected $transactionRef;
 
     /**
      * This returns the productNumber supplied by the merchant when the order was created, enabling the merchant to link the return data from PayEx with their local orderID
@@ -334,6 +341,38 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
     protected $TransactionTime;
 
     /**
+     * Returns the name of the parameter that contains invalid data.
+     * 
+     * @var string
+     */
+    protected $paramName;
+
+    /**
+     * @var string
+     */
+    protected $Csid;
+
+    /**
+     * @var string
+     */
+    protected $thirdPartySubError;
+
+    /**
+     * @var string
+     */
+    protected $clientAccount;
+
+    /**
+     * @var array
+     */
+    protected $errorDetails;
+
+    /**
+     * @var string
+     */
+    protected $transactionFailedReason;
+
+    /**
      * @return string
      */
     public function getPurchaseOperation()
@@ -416,17 +455,17 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
     /**
      * @return string
      */
-    public function getOrderID()
+    public function getOrderId()
     {
-        return $this->orderID;
+        return $this->orderId;
     }
 
     /**
-     * @param string $orderID
+     * @param string $orderId
      */
-    public function setOrderID($orderID)
+    public function setOrderId($orderId)
     {
-        $this->orderID = $orderID;
+        $this->orderId = $orderId;
     }
 
     /**
@@ -667,75 +706,6 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
     public function setRedirectUrl($redirectUrl)
     {
         $this->redirectUrl = $redirectUrl;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function offsetExists($offset)
-    {
-        return
-            in_array($offset, $this->getSupportedArrayFields()) &&
-            property_exists($this, $offset)
-        ;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function offsetGet($offset)
-    {
-        return $this->offsetExists($offset) ? $this->$offset : null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function offsetSet($offset, $value)
-    {
-        if (false == $this->offsetExists($offset)) {
-            throw new InvalidArgumentException(sprintf('Unsupported offset given %s.', $offset));
-        }
-
-        $this->$offset = $value;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function offsetUnset($offset)
-    {
-        if ($this->offsetExists($offset)) {
-            $this->$offset = null;
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
-    {
-        $array = array();
-        foreach ($this->getSupportedArrayFields() as $name) {
-            $array[$name] = $this[$name];
-        }
-
-        return new \ArrayIterator(array_filter($array));
-    }
-
-    /**
-     * @return array
-     */
-    protected function getSupportedArrayFields()
-    {
-        $rc = new \ReflectionClass(__CLASS__);
-
-        $fields = array();
-        foreach ($rc->getProperties() as $rp) {
-            $fields[] = $rp->getName();
-        }
-
-        return $fields;
     }
 
     /**
@@ -1088,5 +1058,92 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
     public function setTransactionTime($TransactionTime)
     {
         $this->TransactionTime = $TransactionTime;
+    }
+
+    /**
+     * @return string
+     */
+    public function getParamName()
+    {
+        return $this->paramName;
+    }
+
+    /**
+     * @param string $paramName
+     */
+    public function setParamName($paramName)
+    {
+        $this->paramName = $paramName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function offsetExists($offset)
+    {
+        return
+            in_array($offset, $this->getSupportedArrayFields()) &&
+            property_exists($this, $offset)
+        ;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function offsetGet($offset)
+    {
+        return $this->offsetExists($offset) ? $this->$offset : null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function offsetSet($offset, $value)
+    {
+        if (false == $this->offsetExists($offset)) {
+            throw new InvalidArgumentException(sprintf('Unsupported offset given %s.', $offset));
+        }
+
+        $this->$offset = $value;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function offsetUnset($offset)
+    {
+        if ($this->offsetExists($offset)) {
+            $this->$offset = null;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIterator()
+    {
+        $array = array();
+        foreach ($this->getSupportedArrayFields() as $name) {
+            $array[$name] = $this[$name];
+        }
+
+        return new \ArrayIterator(array_filter($array, function($value) {
+            return false === is_null($value);
+        }));
+    }
+
+    /**
+     * @return array
+     */
+    protected function getSupportedArrayFields()
+    {
+        $rc = new \ReflectionClass(__CLASS__);
+
+        $fields = array();
+        foreach ($rc->getProperties() as $rp) {
+            $fields[] = $rp->getName();
+        }
+
+        return $fields;
     }
 }

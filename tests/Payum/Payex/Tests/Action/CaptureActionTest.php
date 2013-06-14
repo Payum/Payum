@@ -85,14 +85,9 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $paymentMock = $this->createPaymentMock();
         $paymentMock
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Payex\Request\Api\InitializeOrderRequest'))
-        ;
-        $paymentMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\CompleteOrderRequest'))
         ;
 
         $action = new CaptureAction();
