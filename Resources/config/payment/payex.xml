@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="payum.payex.api.soap_client_factory.class">Payum\Payex\Api\SoapClientFactory</parameter>
+        <parameter key="payum.payex.api.order.class">Payum\Payex\Api\OrderApi</parameter>
+        <parameter key="payum.payex.action.api.initialize_order.class">Payum\Payex\Action\Api\InitializeOrderAction</parameter>
+        <parameter key="payum.payex.action.api.complete_order.class">Payum\Payex\Action\Api\CompleteOrderAction</parameter>
+        <parameter key="payum.payex.action.capture.class">Payum\Payex\Action\CaptureAction</parameter>
+        <parameter key="payum.payex.action.status.class">Payum\Payex\Action\StatusAction</parameter>
+    </parameters>
+
+    <services>
+        <service
+            id="payum.payex.api.soap_client_factory"
+            class="%payum.payex.api.soap_client_factory.class%"
+            public="false"
+        >
+        </service>
+        
+        <service
+            id="payum.payex.api.order.prototype"
+            class="%payum.payex.api.order.class%"
+            abstract="true"
+            public="false"
+        >
+            <argument type="service" id="payum.payex.api.soap_client_factory" />
+            <argument type="collection">
+                <!-- It is template service. The real service will be created by PayexPaymentFactory -->
+            </argument>
+        </service>
+
+        <service
+            id="payum.payex.action.api.initialize_order"
+            class="%payum.payex.action.api.initialize_order.class%"
+            public="false"
+        >
+        </service>
+
+        <service
+            id="payum.payex.action.api.complete_order"
+            class="%payum.payex.action.api.complete_order.class%"
+            public="false"
+        >
+        </service>
+
+        <service
+            id="payum.payex.action.capture"
+            class="%payum.payex.action.capture.class%"
+            public="false"
+        >
+        </service>
+
+        <service
+            id="payum.payex.action.status"
+            class="%payum.payex.action.status.class%"
+            public="false"
+        >
+        </service>
+    </services>
+</container>

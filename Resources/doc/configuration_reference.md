@@ -86,6 +86,17 @@ be2bill:
             sandbox: true
 ```
 
+### Payex payment
+
+```yml
+payex:
+    api:
+        options:
+            encryption_key: 'required'
+            account_number: 'required'
+            sandbox: true
+```
+
 ### Omnipay payment
 
 ```yml
