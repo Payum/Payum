@@ -11,6 +11,13 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PayexPaymentFac
 
 class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
+    public static function setUpBeforeClass() 
+    {
+        if (false == class_exists('Payum\Payex\PaymentFactory')) {
+            throw new \PHPUnit_Framework_SkippedTestError('Skipped because payment library is not installed.');
+        }
+    }
+    
     public static function provideDecoratedActions()
     {
         return array(
