@@ -1,17 +1,17 @@
 <?php
 namespace Payum\Payex\Tests\Api;
 
-use Payum\Payex\Api\OrderApi;
+use Payum\Payex\Api\AgreementApi;
 use Payum\Payex\Api\SoapClientFactory;
 
-class OrderApiTest extends \PHPUnit_Framework_TestCase 
+class AgreementApiTest extends \PHPUnit_Framework_TestCase 
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfBaseApi()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Api\OrderApi');
+        $rc = new \ReflectionClass('Payum\Payex\Api\AgreementApi');
         
         $this->assertTrue($rc->isSubclassOf('Payum\Payex\Api\BaseApi'));
     }
@@ -24,7 +24,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfAccountNumberOptionNotSet()
     {
-        new OrderApi(new SoapClientFactory, array());
+        new AgreementApi(new SoapClientFactory, array());
     }
 
     /**
@@ -35,7 +35,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfEncryptionKeyOptionNotSet()
     {
-        new OrderApi(
+        new AgreementApi(
             new SoapClientFactory,
             array(
                 'accountNumber' => 'aNumber',
@@ -51,7 +51,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotBoolSandboxOptionGiven()
     {
-        new OrderApi(
+        new AgreementApi(
             new SoapClientFactory,
             array(
                 'accountNumber' => 'aNumber',
@@ -66,7 +66,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithValidOptions()
     {
-        new OrderApi(
+        new AgreementApi(
             new SoapClientFactory,
             array(
                 'encryptionKey' => 'aKey',
@@ -79,15 +79,15 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldUseSoapClientOnInitialize8AndConvertItsResponse()
+    public function shouldUseSoapClientOnCreateAgreementAndConvertItsResponse()
     {
         $response = new \stdClass;
-        $response->Initialize8Result = '<foo>fooValue</foo>';
+        $response->CreateAgreement3Result = '<foo>fooValue</foo>';
         
-        $soapClientMock = $this->getMock('SoapClient', array('Initialize8'), array(), '', false);
+        $soapClientMock = $this->getMock('SoapClient', array('CreateAgreement3'), array(), '', false);
         $soapClientMock
             ->expects($this->once())
-            ->method('Initialize8')
+            ->method('CreateAgreement3')
             ->with($this->isType('array'))
             ->will($this->returnValue($response))
         ;
@@ -99,7 +99,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($soapClientMock))
         ;
 
-        $orderApi = new OrderApi(
+        $agreementApi = new AgreementApi(
             $clientFactoryMock,
             array(
                 'encryptionKey' => 'aKey',
@@ -108,45 +108,8 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $result = $orderApi->initialize(array());
+        $result = $agreementApi->create(array());
         
-        $this->assertEquals(array('fooValue'),  $result);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldUseSoapClientOnCompleteAndConvertItsResponse()
-    {
-        $response = new \stdClass;
-        $response->CompleteResult = '<foo>fooValue</foo>';
-
-        $soapClientMock = $this->getMock('SoapClient', array('Complete'), array(), '', false);
-        $soapClientMock
-            ->expects($this->once())
-            ->method('Complete')
-            ->with($this->isType('array'))
-            ->will($this->returnValue($response))
-        ;
-
-        $clientFactoryMock = $this->getMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
-        $clientFactoryMock
-            ->expects($this->atLeastOnce())
-            ->method('createWsdlClient')
-            ->will($this->returnValue($soapClientMock))
-        ;
-
-        $orderApi = new OrderApi(
-            $clientFactoryMock,
-            array(
-                'encryptionKey' => 'aKey',
-                'accountNumber' => 'aNumber',
-                'sandbox' => true,
-            )
-        );
-
-        $result = $orderApi->complete(array());
-
         $this->assertEquals(array('fooValue'),  $result);
     }
 }

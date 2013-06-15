@@ -9,7 +9,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @var OrderApi
      */
-    protected $pxOrder;
+    protected $orderApi;
     
     public static function setUpBeforeClass()
     {
@@ -23,7 +23,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        $this->pxOrder = new OrderApi(
+        $this->orderApi = new OrderApi(
             new SoapClientFactory,
             array(
                 'encryptionKey' => $GLOBALS['__PAYUM_PAYEX_ENCRYPTION_KEY'],
@@ -41,7 +41,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfTryInitializeWithoutPrice()
     {
-        $this->pxOrder->initialize(array());
+        $this->orderApi->initialize(array());
     }
 
 
@@ -53,7 +53,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfTryInitializeWithoutVat()
     {
-        $this->pxOrder->initialize(array(
+        $this->orderApi->initialize(array(
             'price' => 1000,
         ));
     }
@@ -63,7 +63,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldFailedInitializeIfRequiredParametersMissing()
     {
-        $result = $this->pxOrder->initialize(array(
+        $result = $this->orderApi->initialize(array(
             'price' => 1000,
             'priceArgList' => '',
             'vat' => 0,
@@ -95,7 +95,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSuccessfullyInitializeIfAllRequiredParametersSet()
     {
-        $result = $this->pxOrder->initialize(array(
+        $result = $this->orderApi->initialize(array(
             'price' => 1000,
             'priceArgList' => '',
             'vat' => 0,
@@ -120,9 +120,6 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('orderRef', $result);
         $this->assertNotEmpty($result['orderRef']);
 
-        $this->assertArrayHasKey('sessionRef', $result);
-        $this->assertNotEmpty($result['sessionRef']);
-
         $this->assertArrayHasKey('redirectUrl', $result);
         $this->assertNotEmpty($result['redirectUrl']);
 
@@ -143,7 +140,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldFailedCompleteIfRequiredParametersMissing()
     {
-        $result = $this->pxOrder->complete(array());
+        $result = $this->orderApi->complete(array());
 
         $this->assertInternalType('array', $result);
         $this->assertArrayNotHasKey('transactionStatus', $result);
