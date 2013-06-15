@@ -15,7 +15,8 @@
         <parameter key="payum.payex.action.api.delete_agreement.class">Payum\Payex\Action\Api\DeleteAgreementAction</parameter>
         <parameter key="payum.payex.action.api.autopay_agreement.class">Payum\Payex\Action\Api\AutoPayAgreementAction</parameter>
         <parameter key="payum.payex.action.capture.class">Payum\Payex\Action\CaptureAction</parameter>
-        <parameter key="payum.payex.action.status.class">Payum\Payex\Action\StatusAction</parameter>
+        <parameter key="payum.payex.action.payment_details_status.class">Payum\Payex\Action\PaymentDetailsStatusAction</parameter>
+        <parameter key="payum.payex.action.agreement_details_status.class">Payum\Payex\Action\AgreementDetailsStatusAction</parameter>
     </parameters>
 
     <services>
@@ -100,8 +101,15 @@
         </service>
 
         <service
-            id="payum.payex.action.status"
-            class="%payum.payex.action.status.class%"
+            id="payum.payex.action.payment_details_status"
+            class="%payum.payex.action.payment_details_status.class%"
+            public="false"
+        >
+        </service>
+
+        <service
+            id="payum.payex.action.agreement_details_status"
+            class="%payum.payex.action.agreement_details_status.class%"
             public="false"
         >
         </service>

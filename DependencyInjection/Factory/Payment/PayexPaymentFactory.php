@@ -86,10 +86,15 @@ class PayexPaymentFactory extends AbstractPaymentFactory
         $container->setDefinition($captureActionId, $captureActionDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($captureActionId)));
 
-        $statusActionDefinition = new DefinitionDecorator('payum.payex.action.status');
-        $statusActionId = 'payum.context.'.$contextName.'.action.status';
-        $container->setDefinition($statusActionId, $statusActionDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($statusActionId)));
+        $paymentDetailsStatusActionDefinition = new DefinitionDecorator('payum.payex.action.payment_details_status');
+        $paymentDetailsStatusActionActionId = 'payum.context.'.$contextName.'.action.payment_details_status';
+        $container->setDefinition($paymentDetailsStatusActionActionId, $paymentDetailsStatusActionDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($paymentDetailsStatusActionActionId)));
+
+        $agreementDetailsStatusActionDefinition = new DefinitionDecorator('payum.payex.action.agreement_details_status');
+        $agreementDetailsStatusActionActionId = 'payum.context.'.$contextName.'.action.agreement_details_status';
+        $container->setDefinition($agreementDetailsStatusActionActionId, $agreementDetailsStatusActionDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($agreementDetailsStatusActionActionId)));
 
         return $paymentId;
     }
