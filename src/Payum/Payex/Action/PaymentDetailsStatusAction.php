@@ -7,7 +7,7 @@ use Payum\Exception\RequestNotSupportedException;
 use Payum\Request\StatusRequestInterface;
 use Payum\Payex\Api\OrderApi;
 
-class StatusAction implements ActionInterface
+class PaymentDetailsStatusAction implements ActionInterface
 {
     /**
      * {@inheritDoc}
@@ -114,7 +114,9 @@ class StatusAction implements ActionInterface
     {
         return 
             $request instanceof StatusRequestInterface &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof \ArrayAccess &&
+            //Make sure it is payment. Apparently an agreement does not have this field.
+            $request->getModel()->offsetExists('orderId')
         ;
     }
 }

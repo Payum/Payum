@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Payex;
 
+use Payum\Payex\Action\AgreementDetailsStatusAction;
 use Payum\Payment;
 use Payum\Extension\EndlessCycleDetectorExtension;
 use Payum\Payex\Action\Api\AutoPayAgreementAction;
@@ -28,6 +29,8 @@ abstract class PaymentFactory
         
         if ($agreementApi) {
             $payment->addApi($agreementApi);
+            
+            $payment->addAction(new AgreementDetailsStatusAction);
             
             $payment->addAction(new CreateAgreementAction);
             $payment->addAction(new DeleteAgreementAction);
