@@ -7,8 +7,13 @@
     <parameters>
         <parameter key="payum.payex.api.soap_client_factory.class">Payum\Payex\Api\SoapClientFactory</parameter>
         <parameter key="payum.payex.api.order.class">Payum\Payex\Api\OrderApi</parameter>
+        <parameter key="payum.payex.api.agreement.class">Payum\Payex\Api\AgreementApi</parameter>
         <parameter key="payum.payex.action.api.initialize_order.class">Payum\Payex\Action\Api\InitializeOrderAction</parameter>
         <parameter key="payum.payex.action.api.complete_order.class">Payum\Payex\Action\Api\CompleteOrderAction</parameter>
+        <parameter key="payum.payex.action.api.create_agreement.class">Payum\Payex\Action\Api\CreateAgreementAction</parameter>
+        <parameter key="payum.payex.action.api.check_agreement.class">Payum\Payex\Action\Api\CheckAgreementAction</parameter>
+        <parameter key="payum.payex.action.api.delete_agreement.class">Payum\Payex\Action\Api\DeleteAgreementAction</parameter>
+        <parameter key="payum.payex.action.api.autopay_agreement.class">Payum\Payex\Action\Api\AutoPayAgreementAction</parameter>
         <parameter key="payum.payex.action.capture.class">Payum\Payex\Action\CaptureAction</parameter>
         <parameter key="payum.payex.action.status.class">Payum\Payex\Action\StatusAction</parameter>
     </parameters>
@@ -34,6 +39,18 @@
         </service>
 
         <service
+            id="payum.payex.api.agreement.prototype"
+            class="%payum.payex.api.agreement.class%"
+            abstract="true"
+            public="false"
+        >
+            <argument type="service" id="payum.payex.api.soap_client_factory" />
+            <argument type="collection">
+                <!-- It is template service. The real service will be created by PayexPaymentFactory -->
+            </argument>
+        </service>
+
+        <service
             id="payum.payex.action.api.initialize_order"
             class="%payum.payex.action.api.initialize_order.class%"
             public="false"
@@ -43,6 +60,34 @@
         <service
             id="payum.payex.action.api.complete_order"
             class="%payum.payex.action.api.complete_order.class%"
+            public="false"
+        >
+        </service>
+
+        <service
+            id="payum.payex.action.api.create_agreement"
+            class="%payum.payex.action.api.create_agreement.class%"
+            public="false"
+        >
+        </service>
+
+        <service
+            id="payum.payex.action.api.check_agreement"
+            class="%payum.payex.action.api.check_agreement.class%"
+            public="false"
+        >
+        </service>
+
+        <service
+            id="payum.payex.action.api.delete_agreement"
+            class="%payum.payex.action.api.delete_agreement.class%"
+            public="false"
+        >
+        </service>
+
+        <service
+            id="payum.payex.action.api.autopay_agreement"
+            class="%payum.payex.action.api.autopay_agreement.class%"
             public="false"
         >
         </service>

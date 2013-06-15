@@ -40,6 +40,17 @@ class PayexPaymentFactory extends AbstractPaymentFactory
         $container->setDefinition($orderApiId, $orderApiDefinition);
         $paymentDefinition->addMethodCall('addApi', array(new Reference($orderApiId)));
 
+        $agreementApiDefinition = new DefinitionDecorator('payum.payex.api.agreement.prototype');
+        $agreementApiDefinition->replaceArgument(1, array(
+            'encryptionKey' => $config['api']['options']['encryption_key'],
+            'accountNumber' => $config['api']['options']['account_number'],
+            'sandbox' => $config['api']['options']['sandbox']
+        ));
+        $agreementApiDefinition->setPublic(true);
+        $agreementApiId = 'payum.context.'.$contextName.'.api.agreement';
+        $container->setDefinition($agreementApiId, $agreementApiDefinition);
+        $paymentDefinition->addMethodCall('addApi', array(new Reference($agreementApiId)));
+
         $initializeOrderActionDefinition = new DefinitionDecorator('payum.payex.action.api.initialize_order');
         $initializeOrderActionId = 'payum.context.'.$contextName.'.action.api.initialize_order';
         $container->setDefinition($initializeOrderActionId, $initializeOrderActionDefinition);
@@ -49,6 +60,26 @@ class PayexPaymentFactory extends AbstractPaymentFactory
         $completeOrderActionId = 'payum.context.'.$contextName.'.action.api.complete_order';
         $container->setDefinition($completeOrderActionId, $completeOrderActionDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($completeOrderActionId)));
+
+        $createAgreementActionDefinition = new DefinitionDecorator('payum.payex.action.api.create_agreement');
+        $createAgreementActionId = 'payum.context.'.$contextName.'.action.api.create_agreement';
+        $container->setDefinition($createAgreementActionId, $createAgreementActionDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($createAgreementActionId)));
+
+        $deleteAgreementActionDefinition = new DefinitionDecorator('payum.payex.action.api.delete_agreement');
+        $deleteAgreementActionId = 'payum.context.'.$contextName.'.action.api.delete_agreement';
+        $container->setDefinition($deleteAgreementActionId, $deleteAgreementActionDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($deleteAgreementActionId)));
+
+        $checkAgreementActionDefinition = new DefinitionDecorator('payum.payex.action.api.check_agreement');
+        $checkAgreementActionId = 'payum.context.'.$contextName.'.action.api.check_agreement';
+        $container->setDefinition($checkAgreementActionId, $checkAgreementActionDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($checkAgreementActionId)));
+
+        $autoPayAgreementActionDefinition = new DefinitionDecorator('payum.payex.action.api.autopay_agreement');
+        $autoPayAgreementActionId = 'payum.context.'.$contextName.'.action.api.autopay_agreement';
+        $container->setDefinition($autoPayAgreementActionId, $autoPayAgreementActionDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($autoPayAgreementActionId)));
         
         $captureActionDefinition = new DefinitionDecorator('payum.payex.action.capture');
         $captureActionId = 'payum.context.'.$contextName.'.action.capture';
@@ -59,7 +90,7 @@ class PayexPaymentFactory extends AbstractPaymentFactory
         $statusActionId = 'payum.context.'.$contextName.'.action.status';
         $container->setDefinition($statusActionId, $statusActionDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($statusActionId)));
-//
+
         return $paymentId;
     }
 

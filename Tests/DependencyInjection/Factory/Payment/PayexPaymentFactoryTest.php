@@ -23,6 +23,10 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         return array(
             'api.initialize_order' => array('payum.context.aContextName.action.api.initialize_order'),
             'api.complete_order' => array('payum.context.aContextName.action.api.complete_order'),
+            'api.create_agreement' => array('payum.context.aContextName.action.api.create_agreement'),
+            'api.delete_agreement' => array('payum.context.aContextName.action.api.delete_agreement'),
+            'api.check_agreement' => array('payum.context.aContextName.action.api.check_agreement'),
+            'api.autopay_agreement' => array('payum.context.aContextName.action.api.autopay_agreement'),
             
             'capture' => array('payum.context.aContextName.action.capture'),
             'status' => array('payum.context.aContextName.action.status'),
@@ -245,6 +249,41 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             $container->getDefinition($paymentId),
             'addExtension',
             new Reference('payum.extension.ololo')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAddExpectedApisToPayment()
+    {
+        $factory = new PayexPaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $paymentId = $factory->create($container, 'aContextName', array(
+            'api' => array(
+                'options' => array(
+                    'encryption_key' => 'aKey',
+                    'account_number' => 'aNum',
+                    'sandbox' => true
+                ),
+            ),
+            'actions' => array(),
+            'apis' => array(),
+            'extensions' => array(),
+        ));
+
+        $this->assertDefinitionContainsMethodCall(
+            $container->getDefinition($paymentId),
+            'addApi',
+            new Reference('payum.context.aContextName.api.order')
+        );
+
+        $this->assertDefinitionContainsMethodCall(
+            $container->getDefinition($paymentId),
+            'addApi',
+            new Reference('payum.context.aContextName.api.agreement')
         );
     }
 
