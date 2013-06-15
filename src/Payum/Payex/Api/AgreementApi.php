@@ -3,6 +3,12 @@ namespace Payum\Payex\Api;
 
 class AgreementApi extends BaseApi
 {
+    const AGREEMENTSTATUS_NOTVERIFIED = 0;
+
+    const AGREEMENTSTATUS_VERIFIED = 1;
+
+    const AGREEMENTSTATUS_DELETED = 2;
+    
     /**
      * @param array $parameters
      * 
@@ -27,6 +33,23 @@ class AgreementApi extends BaseApi
         ));
 
         return $this->call('CreateAgreement3', $parameters, $this->getPxAgreementWsdl());
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return array
+     */
+    public function check(array $parameters)
+    {
+        $parameters['accountNumber'] = $this->options['accountNumber'];
+
+        $parameters['hash'] = $this->calculateHash($parameters, array(
+            'accountNumber',
+            'agreementRef'
+        ));
+
+        return $this->call('Check', $parameters, $this->getPxAgreementWsdl());
     }
     
     /**

@@ -112,4 +112,41 @@ class AgreementApiTest extends \PHPUnit_Framework_TestCase
         
         $this->assertEquals(array('fooValue'),  $result);
     }
+
+    /**
+     * @test
+     */
+    public function shouldUseSoapClientOnCheckAgreementAndConvertItsResponse()
+    {
+        $response = new \stdClass;
+        $response->CheckResult = '<foo>fooValue</foo>';
+
+        $soapClientMock = $this->getMock('SoapClient', array('Check'), array(), '', false);
+        $soapClientMock
+            ->expects($this->once())
+            ->method('Check')
+            ->with($this->isType('array'))
+            ->will($this->returnValue($response))
+        ;
+
+        $clientFactoryMock = $this->getMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
+        $clientFactoryMock
+            ->expects($this->atLeastOnce())
+            ->method('createWsdlClient')
+            ->will($this->returnValue($soapClientMock))
+        ;
+
+        $agreementApi = new AgreementApi(
+            $clientFactoryMock,
+            array(
+                'encryptionKey' => 'aKey',
+                'accountNumber' => 'aNumber',
+                'sandbox' => true,
+            )
+        );
+
+        $result = $agreementApi->check(array());
+
+        $this->assertEquals(array('fooValue'),  $result);
+    }
 }

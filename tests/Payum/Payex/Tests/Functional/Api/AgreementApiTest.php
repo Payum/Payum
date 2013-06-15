@@ -101,5 +101,35 @@ class AgreementApiTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('errorCode', $result);
         $this->assertSame('OK', $result['errorCode']);
+        
+        return $result['agreementRef'];
+    }
+
+    /**
+     * @test
+     * 
+     * @depends shouldSuccessfullyCreateAgreementIfAllRequiredParametersSet
+     */
+    public function shouldSuccessfullyCheckNewAgreement($agreementRef)
+    {
+        $result = $this->agreementApi->check(array(
+            'agreementRef' => $agreementRef,
+        ));
+
+        $this->assertInternalType('array', $result);
+
+        $this->assertArrayHasKey('agreementStatus', $result);
+        $this->assertEquals(AgreementApi::AGREEMENTSTATUS_NOTVERIFIED, $result['agreementStatus']);
+
+        $this->assertInternalType('array', $result);
+
+        $this->assertArrayHasKey('errorCode', $result);
+        $this->assertSame('OK', $result['errorCode']);
+
+        $this->assertArrayHasKey('errorDescription', $result);
+        $this->assertSame('OK', $result['errorDescription']);
+
+        $this->assertArrayHasKey('errorCode', $result);
+        $this->assertSame('OK', $result['errorCode']);
     }
 }
