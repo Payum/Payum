@@ -189,7 +189,7 @@ class CreateAgreementActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldCreateAgreementCompletePayment()
+    public function shouldCreateAgreementPayment()
     {
         $apiMock = $this->createApiMock();
         $apiMock
