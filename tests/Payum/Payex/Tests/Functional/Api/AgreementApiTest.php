@@ -101,25 +101,113 @@ class AgreementApiTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('errorCode', $result);
         $this->assertSame('OK', $result['errorCode']);
-        
-        return $result['agreementRef'];
     }
 
     /**
      * @test
-     * 
-     * @depends shouldSuccessfullyCreateAgreementIfAllRequiredParametersSet
      */
-    public function shouldSuccessfullyCheckNewAgreement($agreementRef)
+    public function shouldSuccessfullyCheckNewAgreement()
     {
+        $createResult = $this->agreementApi->create(array(
+            'maxAmount' => 10000,
+            'merchantRef' => 'aRef',
+            'description' => 'aDesc',
+            'startDate' => '',
+            'stopDate' => ''
+        ));
+
+        //guard
+        $this->assertInternalType('array', $createResult);
+        $this->assertArrayHasKey('agreementRef', $createResult);
+        
         $result = $this->agreementApi->check(array(
-            'agreementRef' => $agreementRef,
+            'agreementRef' => $createResult['agreementRef'],
         ));
 
         $this->assertInternalType('array', $result);
 
         $this->assertArrayHasKey('agreementStatus', $result);
         $this->assertEquals(AgreementApi::AGREEMENTSTATUS_NOTVERIFIED, $result['agreementStatus']);
+
+        $this->assertInternalType('array', $result);
+
+        $this->assertArrayHasKey('errorCode', $result);
+        $this->assertSame('OK', $result['errorCode']);
+
+        $this->assertArrayHasKey('errorDescription', $result);
+        $this->assertSame('OK', $result['errorDescription']);
+
+        $this->assertArrayHasKey('errorCode', $result);
+        $this->assertSame('OK', $result['errorCode']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowDeleteAgreement()
+    {
+        $createResult = $this->agreementApi->create(array(
+            'maxAmount' => 10000,
+            'merchantRef' => 'aRef',
+            'description' => 'aDesc',
+            'startDate' => '',
+            'stopDate' => ''
+        ));
+
+        //guard
+        $this->assertInternalType('array', $createResult);
+        $this->assertArrayHasKey('agreementRef', $createResult);
+
+        $result = $this->agreementApi->delete(array(
+            'agreementRef' => $createResult['agreementRef'],
+        ));
+
+        $this->assertInternalType('array', $result);
+
+        $this->assertArrayHasKey('errorCode', $result);
+        $this->assertSame('OK', $result['errorCode']);
+
+        $this->assertArrayHasKey('errorDescription', $result);
+        $this->assertSame('OK', $result['errorDescription']);
+
+        $this->assertArrayHasKey('errorCode', $result);
+        $this->assertSame('OK', $result['errorCode']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSuccessfullyCheckDeletedAgreement()
+    {
+        $createResult = $this->agreementApi->create(array(
+            'maxAmount' => 10000,
+            'merchantRef' => 'aRef',
+            'description' => 'aDesc',
+            'startDate' => '',
+            'stopDate' => ''
+        ));
+
+        //guard
+        $this->assertInternalType('array', $createResult);
+        $this->assertArrayHasKey('agreementRef', $createResult);
+
+        $deleteResult = $this->agreementApi->delete(array(
+            'agreementRef' => $createResult['agreementRef'],
+        ));
+
+        //guard
+        $this->assertInternalType('array', $deleteResult);
+        $this->assertArrayHasKey('errorCode', $deleteResult);
+        $this->assertSame('OK', $deleteResult['errorCode']);
+
+        $result = $this->agreementApi->check(array(
+            'agreementRef' => $createResult['agreementRef'],
+        ));
+
+        $this->assertInternalType('array', $result);
+
+        $this->assertArrayHasKey('agreementStatus', $result);
+        $this->assertEquals(AgreementApi::AGREEMENTSTATUS_DELETED, $result['agreementStatus']);
 
         $this->assertInternalType('array', $result);
 
