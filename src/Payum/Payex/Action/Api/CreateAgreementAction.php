@@ -4,15 +4,16 @@ namespace Payum\Payex\Action\Api;
 use Payum\Action\ActionInterface;
 use Payum\ApiAwareInterface;
 use Payum\Bridge\Spl\ArrayObject;
+use Payum\Payex\Api\AgreementApi;
+use Payum\Exception\LogicException;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Exception\UnsupportedApiException;
-use Payum\Payex\Api\OrderApi;
-use Payum\Payex\Request\Api\CompleteOrderRequest;
+use Payum\Payex\Request\Api\CreateAgreementRequest;
 
-class CompleteOrderAction implements ActionInterface, ApiAwareInterface
+class CreateAgreementAction implements ActionInterface, ApiAwareInterface
 {
     /**
-     * @var OrderApi
+     * @var AgreementApi
      */
     protected $api;
     
@@ -21,8 +22,8 @@ class CompleteOrderAction implements ActionInterface, ApiAwareInterface
      */
     public function setApi($api)
     {
-        if (false == $api instanceof OrderApi) {
-            throw new UnsupportedApiException('Expected api must be instance of OrderApi.');
+        if (false == $api instanceof AgreementApi) {
+            throw new UnsupportedApiException('Expected api must be instance of AgreementApi.');
         }
         
         $this->api = $api;
@@ -33,18 +34,33 @@ class CompleteOrderAction implements ActionInterface, ApiAwareInterface
      */
     public function execute($request)
     {
-        /** @var $request CompleteOrderRequest */
+        /** @var $request CreateAgreementRequest */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validatedNotEmpty(array(
-            'orderRef',
+        if ($model['agreementRef']) {
+            throw new LogicException('The agreement has already been created.');
+        }
+
+        $model->validatedKeysSet(array(
+            'merchantRef',
+            'description',
+            'purchaseOperation',
+            'maxAmount',
+            'startDate',
+            'stopDate'
         ));
-        
-        $result = $this->api->complete((array) $model);
+
+        $model->validatedNotEmpty(array(
+            'maxAmount',
+            'merchantRef',
+            'description',
+        ));
+
+        $result = $this->api->create((array) $model);
 
         $model->replace($result);
     }
@@ -55,7 +71,7 @@ class CompleteOrderAction implements ActionInterface, ApiAwareInterface
     public function supports($request)
     {
         return 
-            $request instanceof CompleteOrderRequest &&
+            $request instanceof CreateAgreementRequest &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }
