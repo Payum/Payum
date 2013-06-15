@@ -3,6 +3,7 @@ namespace Payum\Payex\Tests;
 
 use Payum\Payex\PaymentFactory;
 use Payum\Payex\Api\OrderApi;
+use Payum\Payex\Api\AgreementApi;
 
 class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +32,26 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $actions = $this->readAttribute($payment, 'actions');
         $this->assertInternalType('array', $actions);
-        $this->assertNotEmpty($actions);
+        $this->assertCount(4, $actions);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowCreatePaymentWithStandardActionsAddedPlusAgreementOnes()
+    {
+        $orderApiMock = $this->createOrderApiMock();
+        $agreementApiMock = $this->createAgreementApiMock();
+
+        $payment = PaymentFactory::create($orderApiMock, $agreementApiMock);
+
+        $this->assertInstanceOf('Payum\Payment', $payment);
+
+        $this->assertAttributeCount(2, 'apis', $payment);
+
+        $actions = $this->readAttribute($payment, 'actions');
+        $this->assertInternalType('array', $actions);
+        $this->assertCount(8, $actions);
     }
 
     /**
@@ -40,5 +60,13 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     protected function createOrderApiMock()
     {
         return $this->getMock('Payum\Payex\Api\OrderApi', array(), array(), '', false);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|AgreementApi
+     */
+    protected function createAgreementApiMock()
+    {
+        return $this->getMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
     }
 }
