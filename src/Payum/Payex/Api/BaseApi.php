@@ -12,6 +12,13 @@ abstract class BaseApi
 
     const TRANSACTIONERRORCODE_OPERATIONCANCELLEDBYCUSTOMER = 'OperationCancelledbyCustomer';
 
+    const PURCHASEOPERATION_SALE = 'SALE';
+
+    /**
+     * If AUTHORIZATION is submitted, this indicates that the order will be a 2-phased transaction if the payment method supports it.
+     */
+    const PURCHASEOPERATION_AUTHORIZATION = 'AUTHORIZATION';
+
     /**
      * @var SoapClientFactory
      */

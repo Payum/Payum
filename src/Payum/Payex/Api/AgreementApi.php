@@ -68,6 +68,29 @@ class AgreementApi extends BaseApi
 
         return $this->call('DeleteAgreement', $parameters, $this->getPxAgreementWsdl());
     }
+
+    /**
+     * @param array $parameters
+     *
+     * @return array
+     */
+    public function autoPay(array $parameters)
+    {
+        $parameters['accountNumber'] = $this->options['accountNumber'];
+
+        $parameters['hash'] = $this->calculateHash($parameters, array(
+            'accountNumber',
+            'agreementRef',
+            'price',
+            'productNumber',
+            'description',
+            'orderId',
+            'purchaseOperation',
+            'currency'
+        ));
+
+        return $this->call('AutoPay3', $parameters, $this->getPxAgreementWsdl());
+    }
     
     /**
      * {@inheritDoc}

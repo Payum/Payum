@@ -2,6 +2,7 @@
 namespace Payum\Payex\Tests\Functional\Api;
 
 use Payum\Payex\Api\AgreementApi;
+use Payum\Payex\Api\OrderApi;
 use Payum\Payex\Api\SoapClientFactory;
 
 class AgreementApiTest extends \PHPUnit_Framework_TestCase 
@@ -219,5 +220,38 @@ class AgreementApiTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('errorCode', $result);
         $this->assertSame('OK', $result['errorCode']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldFailToAutoPayNotVerifiedAgreement()
+    {
+        $createResult = $this->agreementApi->create(array(
+            'maxAmount' => 10000,
+            'merchantRef' => 'aRef',
+            'description' => 'aDesc',
+            'startDate' => '',
+            'stopDate' => ''
+        ));
+
+        //guard
+        $this->assertInternalType('array', $createResult);
+        $this->assertArrayHasKey('agreementRef', $createResult);
+
+        $autoPayResult = $this->agreementApi->autoPay(array(
+            'agreementRef' => $createResult['agreementRef'],
+            'price' => 1000,
+            'productNumber' => 'aNum',
+            'description' => 'aDesc',
+            'orderId' => 'anId',
+            'purchaseOperation' => AgreementApi::PURCHASEOPERATION_SALE,
+            'currency' => 'NOK'
+        ));
+
+        //guard
+        $this->assertInternalType('array', $autoPayResult);
+        $this->assertArrayHasKey('errorCode', $autoPayResult);
+        $this->assertSame('AgreementNotVerified', $autoPayResult['errorCode']);
     }
 }

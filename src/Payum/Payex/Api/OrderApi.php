@@ -3,13 +3,6 @@ namespace Payum\Payex\Api;
 
 class OrderApi extends BaseApi
 {
-    const PURCHASEOPERATION_SALE = 'SALE';
-
-    /**
-     * If AUTHORIZATION is submitted, this indicates that the order will be a 2-phased transaction if the payment method supports it.
-     */
-    const PURCHASEOPERATION_AUTHORIZATION = 'AUTHORIZATION';
-    
     const VIEW_CREDITCARD = 'CREDITCARD';
 
     const VIEW_MICROACCOUNT = 'MICROACCOUNT';
