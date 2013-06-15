@@ -32,16 +32,22 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportStatusRequestWithArrayAccessAsModelWithMerchantRefSet()
+    public function shouldSupportStatusRequestWithArrayAccessAsModelIfOrderIdNotSetAndAgreementRefSet()
     {
         $action = new AgreementDetailsStatusAction();
 
         $array = $this->getMock('ArrayAccess');
         $array
-            ->expects($this->once())
+            ->expects($this->at(0))
             ->method('offsetExists')
-            ->with('merchantRef')
+            ->with('agreementRef')
             ->will($this->returnValue(true))
+        ;
+        $array
+            ->expects($this->at(1))
+            ->method('offsetExists')
+            ->with('orderId')
+            ->will($this->returnValue(false))
         ;
         
         $this->assertTrue($action->supports(new BinaryMaskStatusRequest($array)));
@@ -50,16 +56,22 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportStatusRequestWithArrayAccessAsModelIfMerchantRefNotSet()
+    public function shouldNotSupportStatusRequestWithArrayAccessAsModelIfOrderIdAndAgreementRefSet()
     {
         $action = new AgreementDetailsStatusAction();
 
         $array = $this->getMock('ArrayAccess');
         $array
-            ->expects($this->once())
+            ->expects($this->at(0))
             ->method('offsetExists')
-            ->with('merchantRef')
-            ->will($this->returnValue(false))
+            ->with('agreementRef')
+            ->will($this->returnValue(true))
+        ;
+        $array
+            ->expects($this->at(1))
+            ->method('offsetExists')
+            ->with('orderId')
+            ->will($this->returnValue(true))
         ;
 
         $this->assertFalse($action->supports(new BinaryMaskStatusRequest($array)));
@@ -125,7 +137,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $action = new AgreementDetailsStatusAction();
 
         $status = new BinaryMaskStatusRequest(array(
-            'merchantRef' => 'aRef',
+            'agreementRef' => 'aRef',
         ));
 
         //guard
@@ -144,7 +156,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $action = new AgreementDetailsStatusAction();
 
         $status = new BinaryMaskStatusRequest(array(
-            'merchantRef' => 'aRef',
+            'agreementRef' => 'aRef',
             'agreementStatus' => AgreementApi::AGREEMENTSTATUS_NOTVERIFIED,
         ));
 
@@ -164,7 +176,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $action = new AgreementDetailsStatusAction();
 
         $status = new BinaryMaskStatusRequest(array(
-            'merchantRef' => 'aRef',
+            'agreementRef' => 'aRef',
             'agreementStatus' => AgreementApi::AGREEMENTSTATUS_VERIFIED,
         ));
 
@@ -184,7 +196,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $action = new AgreementDetailsStatusAction();
 
         $status = new BinaryMaskStatusRequest(array(
-            'merchantRef' => 'aRef',
+            'agreementRef' => 'aRef',
             'agreementStatus' => AgreementApi::AGREEMENTSTATUS_DELETED,
         ));
 
@@ -204,8 +216,8 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $action = new AgreementDetailsStatusAction();
 
         $status = new BinaryMaskStatusRequest(array(
+            'agreementRef' => 'aRef',
             'errorCode' => 'not-ok',
-            'merchantRef' => 'aRef',
         ));
 
         //guard
