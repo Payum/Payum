@@ -51,7 +51,8 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
             array('stan', 'getStan', 'setStan'),
             array('terminalId', 'getTerminalId', 'setTerminalId'),
             array('TransactionTime', 'getTransactionTime', 'setTransactionTime'),
-            array('paramName', 'getParamName', 'setParamName')
+            array('paramName', 'getParamName', 'setParamName'),
+            array('autoPay', 'getAutoPay', 'setAutoPay')
         );
     }
     

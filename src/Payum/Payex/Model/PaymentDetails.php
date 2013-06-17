@@ -373,6 +373,13 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
     protected $transactionFailedReason;
 
     /**
+     * This field is not come from the api. we add it to diff ordinary payment and autopay.
+     * 
+     * @var bool
+     */
+    protected $autoPay;
+
+    /**
      * @return string
      */
     public function getPurchaseOperation()
@@ -1074,6 +1081,22 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
     public function setParamName($paramName)
     {
         $this->paramName = $paramName;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getAutoPay()
+    {
+        return $this->autoPay;
+    }
+
+    /**
+     * @param boolean $autoPay
+     */
+    public function setAutoPay($autoPay)
+    {
+        $this->autoPay = $autoPay;
     }
 
     /**

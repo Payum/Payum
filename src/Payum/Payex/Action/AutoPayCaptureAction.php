@@ -2,14 +2,11 @@
 namespace Payum\Payex\Action;
 
 use Payum\Action\PaymentAwareAction;
-use Payum\Bridge\Spl\ArrayObject;
-use Payum\Payex\Api\OrderApi;
 use Payum\Request\CaptureRequest;
 use Payum\Exception\RequestNotSupportedException;
-use Payum\Payex\Request\Api\InitializeOrderRequest;
-use Payum\Payex\Request\Api\CompleteOrderRequest;
+use Payum\Payex\Request\Api\AutoPayAgreementRequest;
 
-class CaptureAction extends PaymentAwareAction
+class AutoPayCaptureAction extends PaymentAwareAction
 {
     /**
      * {@inheritDoc}
@@ -20,16 +17,8 @@ class CaptureAction extends PaymentAwareAction
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
-
-        $model = ArrayObject::ensureArrayObject($request->getModel());
         
-        if (false == $model['orderRef']) {
-            $this->payment->execute(new InitializeOrderRequest($model));
-        }
-
-        if ($model['orderRef']) {
-            $this->payment->execute(new CompleteOrderRequest($model));
-        }
+        $this->payment->execute(new AutoPayAgreementRequest($request->getModel()));
     }
 
     /**
@@ -39,7 +28,10 @@ class CaptureAction extends PaymentAwareAction
     {
         return 
             $request instanceof CaptureRequest &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof \ArrayAccess &&
+            //Make sure it is auto pay payment.
+            $request->getModel()->offsetExists('autoPay') &&
+            $request->getModel()->offsetGet('autoPay')
         ;
     }
 }

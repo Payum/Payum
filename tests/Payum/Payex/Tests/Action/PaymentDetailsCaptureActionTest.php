@@ -3,17 +3,17 @@ namespace Payum\Payex\Tests\Action;
 
 use Payum\PaymentInterface;
 use Payum\Request\CaptureRequest;
-use Payum\Payex\Action\CaptureAction;
+use Payum\Payex\Action\PaymentDetailsCaptureAction;
 use Payum\Payex\Model\PaymentDetails;
 
-class CaptureActionTest extends \PHPUnit_Framework_TestCase
+class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfPaymentAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\CaptureAction');
+        $rc = new \ReflectionClass('Payum\Payex\Action\PaymentDetailsCaptureAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Action\PaymentAwareAction'));
     }
@@ -23,17 +23,73 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new CaptureAction;
+        new PaymentDetailsCaptureAction;
     }
 
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestWithArrayAccessAsModel()
+    public function shouldSupportCaptureRequestWithArrayAccessAsModelIfAutoPayNotSet()
     {
-        $action = new CaptureAction();
+        $action = new PaymentDetailsCaptureAction();
 
-        $this->assertTrue($action->supports(new CaptureRequest($this->getMock('ArrayAccess'))));
+        $array = $this->getMock('ArrayAccess');
+        $array
+            ->expects($this->once())
+            ->method('offsetExists')
+            ->with('autoPay')
+            ->will($this->returnValue(false))
+        ;
+
+        $this->assertTrue($action->supports(new CaptureRequest($array)));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotSupportCaptureRequestWithArrayAccessAsModelIfAutoPaySet()
+    {
+        $action = new PaymentDetailsCaptureAction();
+
+        $array = $this->getMock('ArrayAccess');
+        $array
+            ->expects($this->once())
+            ->method('offsetExists')
+            ->with('autoPay')
+            ->will($this->returnValue(true))
+        ;
+        $array
+            ->expects($this->once())
+            ->method('offsetGet')
+            ->with('autoPay')
+            ->will($this->returnValue(true))
+        ;
+
+        $this->assertFalse($action->supports(new CaptureRequest($array)));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSupportCaptureRequestWithArrayAccessAsModelIfAutoPaySetToFalse()
+    {
+        $action = new PaymentDetailsCaptureAction();
+
+        $array = $this->getMock('ArrayAccess');
+        $array
+            ->expects($this->once())
+            ->method('offsetExists')
+            ->with('autoPay')
+            ->will($this->returnValue(true))
+        ;
+        $array
+            ->expects($this->once())
+            ->method('offsetGet')
+            ->with('autoPay')
+            ->will($this->returnValue(false))
+        ;
+
+        $this->assertTrue($action->supports(new CaptureRequest($array)));
     }
 
     /**
@@ -41,7 +97,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportCaptureRequestWithPaymentDetailsAsModel()
     {
-        $action = new CaptureAction;
+        $action = new PaymentDetailsCaptureAction;
         
         $this->assertTrue($action->supports(new CaptureRequest(new PaymentDetails)));
     }
@@ -51,7 +107,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotCaptureRequest()
     {
-        $action = new CaptureAction;
+        $action = new PaymentDetailsCaptureAction;
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -61,7 +117,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportCaptureRequestWithNotArrayAccessModel()
     {
-        $action = new CaptureAction;
+        $action = new PaymentDetailsCaptureAction;
 
         $this->assertFalse($action->supports(new CaptureRequest(new \stdClass)));
     }
@@ -73,7 +129,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $action = new CaptureAction;
+        $action = new PaymentDetailsCaptureAction;
 
         $action->execute(new \stdClass());
     }
@@ -90,7 +146,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Payum\Payex\Request\Api\InitializeOrderRequest'))
         ;
 
-        $action = new CaptureAction();
+        $action = new PaymentDetailsCaptureAction();
         $action->setPayment($paymentMock);
 
         $request = new CaptureRequest(array());
@@ -110,7 +166,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Payum\Payex\Request\Api\CompleteOrderRequest'))
         ;
 
-        $action = new CaptureAction();
+        $action = new PaymentDetailsCaptureAction();
         $action->setPayment($paymentMock);
 
         $request = new CaptureRequest(array(
