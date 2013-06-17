@@ -72,6 +72,11 @@ class AgreementDetails implements \ArrayAccess, \IteratorAggregate
     protected $errorDescription;
 
     /**
+     * @var string
+     */
+    protected $thirdPartySubError;
+
+    /**
      * Returns the name of the parameter that contains invalid data.
      * 
      * @var string
