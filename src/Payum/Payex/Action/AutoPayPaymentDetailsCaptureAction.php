@@ -6,7 +6,7 @@ use Payum\Request\CaptureRequest;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Payex\Request\Api\AutoPayAgreementRequest;
 
-class AutoPayCaptureAction extends PaymentAwareAction
+class AutoPayPaymentDetailsCaptureAction extends PaymentAwareAction
 {
     /**
      * {@inheritDoc}

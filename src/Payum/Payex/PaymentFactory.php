@@ -12,7 +12,8 @@ use Payum\Payex\Action\Api\InitializeOrderAction;
 use Payum\Payex\Action\PaymentDetailsCaptureAction;
 use Payum\Payex\Action\PaymentDetailsStatusAction;
 use Payum\Payex\Action\AgreementDetailsStatusAction;
-use Payum\Payex\Action\AutoPayCaptureAction;
+use Payum\Payex\Action\AutoPayPaymentDetailsCaptureAction;
+use Payum\Payex\Action\AutoPayPaymentDetailsStatusAction;
 use Payum\Payex\Api\AgreementApi;
 use Payum\Payex\Api\OrderApi;
 
@@ -48,8 +49,8 @@ abstract class PaymentFactory
         
         $payment->addAction(new PaymentDetailsCaptureAction);
         $payment->addAction(new PaymentDetailsStatusAction);
-        $payment->addAction(new AutoPayCaptureAction);
-        $payment->addAction(new PaymentDetailsCaptureAction);
+        $payment->addAction(new AutoPayPaymentDetailsCaptureAction);
+        $payment->addAction(new AutoPayPaymentDetailsStatusAction);
 
         return $payment;
     }

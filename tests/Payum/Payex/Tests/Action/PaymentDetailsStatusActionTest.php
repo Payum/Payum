@@ -31,19 +31,55 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportStatusRequestWithArrayAccessAsModelWithOrderIdSet()
+    public function shouldSupportStatusRequestWithArrayAccessAsModelWithOrderIdSetAndAutoPayNotSet()
     {
         $action = new PaymentDetailsStatusAction();
 
         $array = $this->getMock('ArrayAccess');
         $array
-            ->expects($this->once())
+            ->expects($this->at(0))
             ->method('offsetExists')
             ->with('orderId')
             ->will($this->returnValue(true))
         ;
+        $array
+            ->expects($this->at(1))
+            ->method('offsetExists')
+            ->with('autoPay')
+            ->will($this->returnValue(false))
+        ;
         
         $this->assertTrue($action->supports(new BinaryMaskStatusRequest($array)));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotSupportStatusRequestWithArrayAccessAsModelWithOrderIdSetAndAutoPaySetToTrue()
+    {
+        $action = new PaymentDetailsStatusAction();
+
+        $array = $this->getMock('ArrayAccess');
+        $array
+            ->expects($this->at(0))
+            ->method('offsetExists')
+            ->with('orderId')
+            ->will($this->returnValue(true))
+        ;
+        $array
+            ->expects($this->at(1))
+            ->method('offsetExists')
+            ->with('autoPay')
+            ->will($this->returnValue(true))
+        ;
+        $array
+            ->expects($this->once())
+            ->method('offsetGet')
+            ->with('autoPay')
+            ->will($this->returnValue(true))
+        ;
+
+        $this->assertFalse($action->supports(new BinaryMaskStatusRequest($array)));
     }
     
     /**

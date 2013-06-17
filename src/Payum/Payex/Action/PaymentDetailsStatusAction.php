@@ -116,7 +116,12 @@ class PaymentDetailsStatusAction implements ActionInterface
             $request instanceof StatusRequestInterface &&
             $request->getModel() instanceof \ArrayAccess &&
             //Make sure it is payment. Apparently an agreement does not have this field.
-            $request->getModel()->offsetExists('orderId')
+            $request->getModel()->offsetExists('orderId') &&
+            //Make sure it is not auto pay payment. There is an other status action for auto pay payments;
+            false == (
+                $request->getModel()->offsetExists('autoPay') &&
+                $request->getModel()->offsetGet('autoPay')
+            )
         ;
     }
 }
