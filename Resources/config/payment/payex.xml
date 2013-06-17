@@ -14,7 +14,9 @@
         <parameter key="payum.payex.action.api.check_agreement.class">Payum\Payex\Action\Api\CheckAgreementAction</parameter>
         <parameter key="payum.payex.action.api.delete_agreement.class">Payum\Payex\Action\Api\DeleteAgreementAction</parameter>
         <parameter key="payum.payex.action.api.autopay_agreement.class">Payum\Payex\Action\Api\AutoPayAgreementAction</parameter>
-        <parameter key="payum.payex.action.capture.class">Payum\Payex\Action\CaptureAction</parameter>
+        <parameter key="payum.payex.action.payment_details_capture.class">Payum\Payex\Action\PaymentDetailsCaptureAction</parameter>
+        <parameter key="payum.payex.action.autopay_payment_details_capture.class">Payum\Payex\Action\AutoPayPaymentDetailsCaptureAction</parameter>
+        <parameter key="payum.payex.action.autopay_payment_details_status.class">Payum\Payex\Action\AutoPayPaymentDetailsStatusAction</parameter>
         <parameter key="payum.payex.action.payment_details_status.class">Payum\Payex\Action\PaymentDetailsStatusAction</parameter>
         <parameter key="payum.payex.action.agreement_details_status.class">Payum\Payex\Action\AgreementDetailsStatusAction</parameter>
     </parameters>
@@ -94,10 +96,24 @@
         </service>
 
         <service
-            id="payum.payex.action.capture"
-            class="%payum.payex.action.capture.class%"
+            id="payum.payex.action.payment_details_capture"
+            class="%payum.payex.action.payment_details_capture.class%"
             public="false"
         >
+        </service>
+
+        <service
+            id="payum.payex.action.autopay_payment_details_capture"
+            class="%payum.payex.action.autopay_payment_details_capture.class%"
+            public="false"
+        >
+        </service>
+
+        <service
+                id="payum.payex.action.autopay_payment_details_status"
+                class="%payum.payex.action.autopay_payment_details_status.class%"
+                public="false"
+                >
         </service>
 
         <service

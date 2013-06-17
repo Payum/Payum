@@ -28,8 +28,10 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'api.check_agreement' => array('payum.context.aContextName.action.api.check_agreement'),
             'api.autopay_agreement' => array('payum.context.aContextName.action.api.autopay_agreement'),
             
-            'capture' => array('payum.context.aContextName.action.capture'),
+            'payment_details_capture' => array('payum.context.aContextName.action.payment_details_capture'),
             'payment_details_status' => array('payum.context.aContextName.action.payment_details_status'),
+            'autopay_payment_details_capture' => array('payum.context.aContextName.action.autopay_payment_details_capture'),
+            'autopay_payment_details_status' => array('payum.context.aContextName.action.autopay_payment_details_status'),
             'agreement_details_status' => array('payum.context.aContextName.action.agreement_details_status'),
         );
     }

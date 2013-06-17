@@ -81,10 +81,20 @@ class PayexPaymentFactory extends AbstractPaymentFactory
         $container->setDefinition($autoPayAgreementActionId, $autoPayAgreementActionDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($autoPayAgreementActionId)));
         
-        $captureActionDefinition = new DefinitionDecorator('payum.payex.action.capture');
-        $captureActionId = 'payum.context.'.$contextName.'.action.capture';
-        $container->setDefinition($captureActionId, $captureActionDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($captureActionId)));
+        $paymentDetailsCaptureActionDefinition = new DefinitionDecorator('payum.payex.action.payment_details_capture');
+        $paymentDetailsCaptureActionId = 'payum.context.'.$contextName.'.action.payment_details_capture';
+        $container->setDefinition($paymentDetailsCaptureActionId, $paymentDetailsCaptureActionDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($paymentDetailsCaptureActionId)));
+
+        $autoPayPaymentDetailsCaptureActionDefinition = new DefinitionDecorator('payum.payex.action.autopay_payment_details_capture');
+        $autoPayPaymentDetailsCaptureActionId = 'payum.context.'.$contextName.'.action.autopay_payment_details_capture';
+        $container->setDefinition($autoPayPaymentDetailsCaptureActionId, $autoPayPaymentDetailsCaptureActionDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($autoPayPaymentDetailsCaptureActionId)));
+
+        $autoPayPaymentDetailsStatusActionDefinition = new DefinitionDecorator('payum.payex.action.autopay_payment_details_status');
+        $autoPayPaymentDetailsStatusActionId = 'payum.context.'.$contextName.'.action.autopay_payment_details_status';
+        $container->setDefinition($autoPayPaymentDetailsStatusActionId, $autoPayPaymentDetailsStatusActionDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($autoPayPaymentDetailsStatusActionId)));
 
         $paymentDetailsStatusActionDefinition = new DefinitionDecorator('payum.payex.action.payment_details_status');
         $paymentDetailsStatusActionActionId = 'payum.context.'.$contextName.'.action.payment_details_status';
