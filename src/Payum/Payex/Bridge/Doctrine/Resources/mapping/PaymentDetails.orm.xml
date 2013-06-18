@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
+>
+    <mapped-superclass name="Payum\Payex\Bridge\Doctrine\Entity\PaymentDetails">
+
+        <field name="purchaseOperation" column="purchase_operation" type="string" nullable="false" />
+
+        <field name="price" column="price" type="integer" nullable="false" />
+
+        <field name="currency" column="currency" type="string" nullable="false" />
+
+        <field name="vat" column="vat" type="integer" nullable="false" />
+
+        <field name="orderId" column="order_id" type="string" nullable="false" />
+
+        <field name="productNumber" column="product_number" type="string" nullable="false" />
+
+        <field name="description" column="description" type="string" nullable="false" />
+
+        <field name="returnUrl" column="return_url" type="string" nullable="true" />
+
+        <field name="agreementRef" column="agreement_ref" type="string" nullable="true" />
+
+        <field name="cancelUrl" column="cancel_url" type="string" nullable="true" />
+
+        <field name="errorCode" column="error_code" type="string" nullable="true" />
+
+        <field name="errorDescription" column="error_description" type="string" nullable="true" />
+
+        <field name="thirdPartyError" column="third_party_error" type="string" nullable="true" />
+
+        <field name="orderRef" column="order_ref" type="string" nullable="true" />
+
+        <field name="transactionStatus" column="transaction_status" type="string" nullable="true" />
+
+        <field name="transactionNumber" column="transaction_number" type="string" nullable="true" />
+
+        <field name="orderStatus" column="order_status" type="string" nullable="true" />
+
+        <field name="pending" column="pending" type="boolean" nullable="true" />
+
+        <field name="transactionErrorCode" column="transaction_error_code" type="string" nullable="true" />
+
+        <field name="transactionErrorDescription" column="transaction_error_description" type="string" nullable="true" />
+
+        <field name="transactionThirdPartyError" column="transaction_third_party_error" type="string" nullable="true" />
+
+        <field name="TransactionTime" column="transaction_time" type="integer" nullable="true" />
+
+        <field name="thirdPartySubError" column="third_party_sub_error" type="string" nullable="true" />
+
+        <field name="errorDetails" column="error_details" type="array" nullable="true" />
+
+        <field name="transactionFailedReason" column="transaction_failed_reason" type="array" nullable="true" />
+
+        <field name="autoPay" column="auto_pay" type="boolean" nullable="true" />
+
+    </mapped-superclass>
+</doctrine-mapping>

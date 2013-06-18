@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
+>
+    <mapped-superclass name="Payum\Payex\Bridge\Doctrine\Entity\AgreementDetails">
+
+        <field name="merchantRef" column="merchant_ref" type="string" nullable="false" />
+
+        <field name="description" column="description" type="string" nullable="false" />
+
+        <field name="purchaseOperation" column="purchase_operation" type="string" nullable="false" />
+
+        <field name="maxAmount" column="max_amount" type="integer" nullable="false" />
+
+        <field name="startDate" column="start_date" type="string" nullable="true" />
+
+        <field name="stopDate" column="stop_date" type="string" nullable="true" />
+
+        <field name="errorCode" column="error_code" type="string" nullable="true" />
+
+        <field name="errorDescription" column="error_description" type="string" nullable="true" />
+
+        <field name="thirdPartySubError" column="third_party_sub_error" type="string" nullable="true" />
+
+        <field name="thirdPartyError" column="third_party_error" type="string" nullable="true" />
+
+        <field name="agreementRef" column="agreement_ref" type="string" nullable="true" />
+
+        <field name="agreementStatus" column="agreement_status" type="integer" nullable="true" />
+    </mapped-superclass>
+</doctrine-mapping>
