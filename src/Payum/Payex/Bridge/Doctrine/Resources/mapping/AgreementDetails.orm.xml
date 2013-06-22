@@ -22,9 +22,9 @@
 
         <field name="errorDescription" column="error_description" type="string" nullable="true" />
 
-        <field name="thirdPartySubError" column="third_party_sub_error" type="string" nullable="true" />
+        <field name="thirdPartySubError" column="third_party_sub_error" type="object" nullable="true" />
 
-        <field name="thirdPartyError" column="third_party_error" type="string" nullable="true" />
+        <field name="thirdPartyError" column="third_party_error" type="object" nullable="true" />
 
         <field name="agreementRef" column="agreement_ref" type="string" nullable="true" />
 
