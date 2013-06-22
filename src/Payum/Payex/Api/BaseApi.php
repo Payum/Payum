@@ -67,7 +67,7 @@ abstract class BaseApi
         $response = @$client->$operation($parameters);
 
         $result = $this->convertSimpleXmlToArray(new \SimpleXMLElement($response->{$operation.'Result'}));
-        
+
         $result = $this->normalizeStatusFields($result);
         $result = $this->removeHeader($result);
         $result = $this->removeObsolete($result);
@@ -117,19 +117,25 @@ abstract class BaseApi
     protected function normalizeStatusFields(array $inputResult)
     {
         $result = $inputResult;
+        
+        unset($result['status']);
+        unset($result['description']);
 
-        if (array_key_exists('status', $result) && is_array($result['status'])) {
-            unset($result['status']);
-
-            foreach ($inputResult['status'] as $name => $value) {
+        if (array_key_exists('status', $inputResult) && is_array($inputResult['status'])) {
+            $statuses = $inputResult['status'];
+            
+            //agreement.autoPay seems has a bug. it returns two sub arrays inside status. Lets take the first as status.
+            if (is_array(current($statuses))) {
+                $statuses = array_shift($statuses);
+            }
+            
+            foreach ($statuses as $name => $value) {
                 $result[$name] = $value;
             }
         }
 
-        if (array_key_exists('description', $result)) {
-            $result['errorDescription'] = $result['description'];
-
-            unset($result['description']);
+        if (array_key_exists('description', $inputResult)) {
+            $result['errorDescription'] = $inputResult['description'];
         }
 
         return $result;
