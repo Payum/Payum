@@ -1,31 +1,11 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Request;
 
-use Payum\Model\TokenizedDetails;
-use Payum\Request\CaptureRequest;
+use Payum\Request\CaptureTokenizedDetailsRequest as BaseCaptureTokenizedDetailsRequest;
 
-class CaptureTokenizedDetailsRequest extends CaptureRequest
+/**
+ * @deprecated use Payum\Request\CaptureTokenizedDetailsRequest instead. The class will be removed in 0.6 version.
+ */
+class CaptureTokenizedDetailsRequest extends BaseCaptureTokenizedDetailsRequest
 {
-    /**
-     * @var \Payum\Model\TokenizedDetails
-     */
-    protected $tokenizedDetails;
-
-    /**
-     * @param \Payum\Model\TokenizedDetails $tokenizedDetails
-     */
-    public function __construct(TokenizedDetails $tokenizedDetails)
-    {
-        $this->tokenizedDetails = $tokenizedDetails;
-        
-        $this->setModel($tokenizedDetails);
-    }
-
-    /**
-     * @return \Payum\Model\TokenizedDetails
-     */
-    public function getTokenizedDetails()
-    {
-        return $this->tokenizedDetails;
-    }
 }
