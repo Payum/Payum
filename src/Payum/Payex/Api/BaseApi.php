@@ -119,8 +119,6 @@ abstract class BaseApi
         $result = $inputResult;
         
         unset($result['status']);
-        unset($result['description']);
-
         if (array_key_exists('status', $inputResult) && is_array($inputResult['status'])) {
             $statuses = $inputResult['status'];
             
@@ -134,6 +132,7 @@ abstract class BaseApi
             }
         }
 
+        unset($result['description']);
         if (array_key_exists('description', $inputResult)) {
             $result['errorDescription'] = $inputResult['description'];
         }
