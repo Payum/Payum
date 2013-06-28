@@ -14,6 +14,18 @@ class RecurringApi extends BaseApi
     const PERIODTYPE_QUARTERLY = 5;
 
     const PERIODTYPE_YEARLY = 6;
+
+    const RECURRINGSTATUS_RECURRING = 1;
+
+    const RECURRINGSTATUS_STOPPEDBYMERCHANT = 2;
+
+    const RECURRINGSTATUS_STOPPEDBYADMIN = 3;
+
+    const RECURRINGSTATUS_STOPPEDBYCLIENT = 4;
+
+    const RECURRINGSTATUS_STOPPEDBYSYSTEM = 5;
+
+    const RECURRINGSTATUS_FAILED = 6;
     
     /**
      * @link http://www.payexpim.com/technical-reference/pxrecurring/pxrecurring-start/
