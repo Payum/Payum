@@ -1,6 +1,9 @@
 <?php
 namespace Payum\Payex;
 
+use Payum\Action\SyncDetailsAggregatedModelAction;
+use Payum\Payex\Action\Api\CheckOrderAction;
+use Payum\Payex\Action\PaymentDetailsSyncAction;
 use Payum\Payment;
 use Payum\Extension\EndlessCycleDetectorExtension;
 use Payum\Payex\Action\Api\AutoPayAgreementAction;
@@ -38,6 +41,7 @@ abstract class PaymentFactory
             $payment->addApi($agreementApi);
             
             $payment->addAction(new AgreementDetailsStatusAction);
+            $payment->addAction(new SyncDetailsAggregatedModelAction);
             
             $payment->addAction(new CreateAgreementAction);
             $payment->addAction(new DeleteAgreementAction);
@@ -59,9 +63,11 @@ abstract class PaymentFactory
 
         $payment->addAction(new InitializeOrderAction);
         $payment->addAction(new CompleteOrderAction);
+        $payment->addAction(new CheckOrderAction);
         
         $payment->addAction(new PaymentDetailsCaptureAction);
         $payment->addAction(new PaymentDetailsStatusAction);
+        $payment->addAction(new PaymentDetailsSyncAction);
         $payment->addAction(new AutoPayPaymentDetailsCaptureAction);
         $payment->addAction(new AutoPayPaymentDetailsStatusAction);
 
