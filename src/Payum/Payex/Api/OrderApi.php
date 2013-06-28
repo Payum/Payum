@@ -138,6 +138,25 @@ class OrderApi extends BaseApi
     }
 
     /**
+     * @link http://www.payexpim.com/technical-reference/pxorder/check2/
+     *
+     * @param array $parameters
+     *
+     * @return array
+     */
+    public function check(array $parameters)
+    {
+        $parameters['accountNumber'] = $this->options['accountNumber'];
+
+        $parameters['hash'] = $this->calculateHash($parameters, array(
+            'accountNumber',
+            'transactionNumber',
+        ));
+
+        return $this->call('Check', $parameters, $this->getPxOrderWsdl());
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function getPxOrderWsdl()

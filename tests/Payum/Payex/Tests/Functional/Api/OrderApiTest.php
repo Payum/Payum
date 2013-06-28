@@ -79,15 +79,15 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('errorCode', $result);
         $this->assertNotEmpty($result['errorCode']);
-        $this->assertNotEquals('OK', $result['errorCode']);
+        $this->assertNotEquals(OrderApi::ERRORCODE_OK, $result['errorCode']);
 
         $this->assertArrayHasKey('errorDescription', $result);
         $this->assertNotEmpty($result['errorDescription']);
-        $this->assertNotEquals('OK', $result['errorDescription']);
+        $this->assertNotEquals(OrderApi::ERRORCODE_OK, $result['errorDescription']);
 
         $this->assertArrayHasKey('errorCode', $result);
         $this->assertNotEmpty($result['errorCode']);
-        $this->assertNotEquals('OK', $result['errorCode']);
+        $this->assertNotEquals(OrderApi::ERRORCODE_OK, $result['errorCode']);
     }
     
     /**
@@ -126,13 +126,13 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $result);
         
         $this->assertArrayHasKey('errorCode', $result);
-        $this->assertSame('OK', $result['errorCode']);
+        $this->assertSame(OrderApi::ERRORCODE_OK, $result['errorCode']);
 
         $this->assertArrayHasKey('errorDescription', $result);
-        $this->assertSame('OK', $result['errorDescription']);
+        $this->assertSame(OrderApi::ERRORCODE_OK, $result['errorDescription']);
 
         $this->assertArrayHasKey('errorCode', $result);
-        $this->assertSame('OK', $result['errorCode']);   
+        $this->assertSame(OrderApi::ERRORCODE_OK, $result['errorCode']);   
     }
 
     /**
@@ -151,14 +151,41 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('errorCode', $result);
         $this->assertNotEmpty($result['errorCode']);
-        $this->assertNotEquals('OK', $result['errorCode']);
+        $this->assertNotEquals(OrderApi::ERRORCODE_OK, $result['errorCode']);
 
         $this->assertArrayHasKey('errorDescription', $result);
         $this->assertNotEmpty($result['errorDescription']);
-        $this->assertNotEquals('OK', $result['errorDescription']);
+        $this->assertNotEquals(OrderApi::ERRORCODE_OK, $result['errorDescription']);
 
         $this->assertArrayHasKey('errorCode', $result);
         $this->assertNotEmpty($result['errorCode']);
-        $this->assertNotEquals('OK', $result['errorCode']);
+        $this->assertNotEquals(OrderApi::ERRORCODE_OK, $result['errorCode']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldFailedCheckIfRequiredParametersMissing()
+    {
+        $result = $this->orderApi->check(array());
+
+        $this->assertInternalType('array', $result);
+        $this->assertArrayNotHasKey('transactionStatus', $result);
+        $this->assertArrayNotHasKey('transactionNumber', $result);
+        $this->assertArrayNotHasKey('orderStatus', $result);
+
+        $this->assertInternalType('array', $result);
+
+        $this->assertArrayHasKey('errorCode', $result);
+        $this->assertNotEmpty($result['errorCode']);
+        $this->assertNotEquals(OrderApi::ERRORCODE_OK, $result['errorCode']);
+
+        $this->assertArrayHasKey('errorDescription', $result);
+        $this->assertNotEmpty($result['errorDescription']);
+        $this->assertNotEquals(OrderApi::ERRORCODE_OK, $result['errorDescription']);
+
+        $this->assertArrayHasKey('errorCode', $result);
+        $this->assertNotEmpty($result['errorCode']);
+        $this->assertNotEquals(OrderApi::ERRORCODE_OK, $result['errorCode']);
     }
 }
