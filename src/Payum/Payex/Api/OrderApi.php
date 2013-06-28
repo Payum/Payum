@@ -153,7 +153,7 @@ class OrderApi extends BaseApi
             'transactionNumber',
         ));
 
-        return $this->call('Check', $parameters, $this->getPxOrderWsdl());
+        return $this->call('Check2', $parameters, $this->getPxOrderWsdl());
     }
 
     /**

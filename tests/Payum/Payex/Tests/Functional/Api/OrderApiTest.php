@@ -164,10 +164,23 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * 
+     * @expectedException \SoapFault
+     * @expectedExceptionMessage SOAP-ERROR: Encoding: object has no 'transactionNumber' property
      */
-    public function shouldFailedCheckIfRequiredParametersMissing()
+    public function throwIfTryCheckWithoutTransactionNumber()
     {
-        $result = $this->orderApi->check(array());
+        $this->orderApi->check(array());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldFailedCheckIfTransactionNumberInvalid()
+    {
+        $result = $this->orderApi->check(array(
+            'transactionNumber' => 'invalidTransNumber'
+        ));
 
         $this->assertInternalType('array', $result);
         $this->assertArrayNotHasKey('transactionStatus', $result);

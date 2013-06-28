@@ -156,12 +156,12 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
     public function shouldUseSoapClientOnCheckAndConvertItsResponse()
     {
         $response = new \stdClass;
-        $response->CheckResult = '<foo>fooValue</foo>';
+        $response->Check2Result = '<foo>fooValue</foo>';
 
-        $soapClientMock = $this->getMock('SoapClient', array('Check'), array(), '', false);
+        $soapClientMock = $this->getMock('SoapClient', array('Check2'), array(), '', false);
         $soapClientMock
             ->expects($this->once())
-            ->method('Check')
+            ->method('Check2')
             ->with($this->isType('array'))
             ->will($this->returnValue($response))
         ;
