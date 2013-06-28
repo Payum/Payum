@@ -50,6 +50,44 @@ class RecurringApi extends BaseApi
 
         return $this->call('Start', $parameters, $this->getPxRecurringWsdl());
     }
+
+    /**
+     * @link http://www.payexpim.com/technical-reference/pxrecurring/pxrecurring-stop/
+     *
+     * @param array $parameters
+     *
+     * @return array
+     */
+    public function stop(array $parameters)
+    {
+        $parameters['accountNumber'] = $this->options['accountNumber'];
+
+        $parameters['hash'] = $this->calculateHash($parameters, array(
+            'accountNumber',
+            'agreementRef',
+        ));
+
+        return $this->call('Stop', $parameters, $this->getPxRecurringWsdl());
+    }
+
+    /**
+     * @link http://www.payexpim.com/technical-reference/pxrecurring/pxrecurring-stop/
+     *
+     * @param array $parameters
+     *
+     * @return array
+     */
+    public function check(array $parameters)
+    {
+        $parameters['accountNumber'] = $this->options['accountNumber'];
+
+        $parameters['hash'] = $this->calculateHash($parameters, array(
+            'accountNumber',
+            'agreementRef',
+        ));
+
+        return $this->call('Check', $parameters, $this->getPxRecurringWsdl());
+    }
     
     /**
      * {@inheritDoc}

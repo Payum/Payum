@@ -128,13 +128,12 @@ abstract class BaseApi
             }
             
             foreach ($statuses as $name => $value) {
+                if ('description' == $name) {
+                    $name = 'errorDescription';
+                }
+
                 $result[$name] = $value;
             }
-        }
-
-        unset($result['description']);
-        if (array_key_exists('description', $inputResult)) {
-            $result['errorDescription'] = $inputResult['description'];
         }
 
         return $result;

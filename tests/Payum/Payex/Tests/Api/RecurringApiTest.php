@@ -79,7 +79,7 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldUseSoapClientOnStartAgreementAndConvertItsResponse()
+    public function shouldUseSoapClientOnStartRecurringPaymentAndConvertItsResponse()
     {
         $response = new \stdClass;
         $response->StartResult = '<foo>fooValue</foo>';
@@ -110,6 +110,80 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
 
         $result = $recurringApi->start(array());
         
+        $this->assertEquals(array('fooValue'),  $result);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldUseSoapClientOnStopRecurringPaymentAndConvertItsResponse()
+    {
+        $response = new \stdClass;
+        $response->StopResult = '<foo>fooValue</foo>';
+
+        $soapClientMock = $this->getMock('SoapClient', array('Stop'), array(), '', false);
+        $soapClientMock
+            ->expects($this->once())
+            ->method('Stop')
+            ->with($this->isType('array'))
+            ->will($this->returnValue($response))
+        ;
+
+        $clientFactoryMock = $this->getMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
+        $clientFactoryMock
+            ->expects($this->atLeastOnce())
+            ->method('createWsdlClient')
+            ->will($this->returnValue($soapClientMock))
+        ;
+
+        $recurringApi = new RecurringApi(
+            $clientFactoryMock,
+            array(
+                'encryptionKey' => 'aKey',
+                'accountNumber' => 'aNumber',
+                'sandbox' => true,
+            )
+        );
+
+        $result = $recurringApi->stop(array());
+
+        $this->assertEquals(array('fooValue'),  $result);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldUseSoapClientOnCheckRecurringPaymentAndConvertItsResponse()
+    {
+        $response = new \stdClass;
+        $response->CheckResult = '<foo>fooValue</foo>';
+
+        $soapClientMock = $this->getMock('SoapClient', array('Check'), array(), '', false);
+        $soapClientMock
+            ->expects($this->once())
+            ->method('Check')
+            ->with($this->isType('array'))
+            ->will($this->returnValue($response))
+        ;
+
+        $clientFactoryMock = $this->getMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
+        $clientFactoryMock
+            ->expects($this->atLeastOnce())
+            ->method('createWsdlClient')
+            ->will($this->returnValue($soapClientMock))
+        ;
+
+        $recurringApi = new RecurringApi(
+            $clientFactoryMock,
+            array(
+                'encryptionKey' => 'aKey',
+                'accountNumber' => 'aNumber',
+                'sandbox' => true,
+            )
+        );
+
+        $result = $recurringApi->check(array());
+
         $this->assertEquals(array('fooValue'),  $result);
     }
 }

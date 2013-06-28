@@ -106,18 +106,10 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('errorCode', $result);
         $this->assertNotEmpty($result['errorCode']);
-        $this->assertNotEquals(RecurringApi::ERRORCODE_OK, $result['errorCode']);
+        $this->assertEquals('ValidationError_InvalidParameter', $result['errorCode']);
 
-        $this->assertArrayHasKey('errorDescription', $result);
-        $this->assertNotEmpty($result['errorDescription']);
-        $this->assertNotEquals(RecurringApi::ERRORCODE_OK, $result['errorDescription']);
-        $this->assertStringStartsWith(
-            'Invalid parameter:agreementRef, value:null',
-            $result['errorDescription']
-        );
-        $this->assertArrayHasKey('errorCode', $result);
-        $this->assertNotEmpty($result['errorCode']);
-        $this->assertNotEquals(RecurringApi::ERRORCODE_OK, $result['errorCode']);
+        $this->assertArrayHasKey('paramName', $result);
+        $this->assertEquals('agreementRef', $result['paramName']);
     }
 
     /**
@@ -132,13 +124,47 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
             'price' => 1000,
             'agreementRef' => 'aRef',
         ));
+        
+        $this->assertInternalType('array', $result);
+        $this->assertArrayNotHasKey('recurringRef', $result);
 
         $this->assertInternalType('array', $result);
 
         $this->assertArrayHasKey('errorCode', $result);
-        $this->assertNotEquals(RecurringApi::ERRORCODE_OK, $result['errorCode']);
-        
-        $this->assertArrayHasKey('errorDescription', $result);
-        $this->assertStringStartsWith('Invalid parameter:agreementRef', $result['errorDescription']);
+        $this->assertNotEmpty($result['errorCode']);
+        $this->assertEquals('ValidationError_InvalidParameter', $result['errorCode']);
+
+        $this->assertArrayHasKey('paramName', $result);
+        $this->assertEquals('agreementRef', $result['paramName']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldFailToStopRecurringPaymentWithInvalidParameters()
+    {
+        $result = $this->recurringApi->stop(array(
+            'agreementRef' => 'anInvalidRef',
+        ));
+
+        $this->assertInternalType('array', $result);
+
+        $this->assertArrayHasKey('errorCode', $result);
+        $this->assertEquals('ValidationError_InvalidParameter', $result['errorCode']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldFailToCheckRecurringPaymentWithInvalidParameters()
+    {
+        $result = $this->recurringApi->check(array(
+            'agreementRef' => 'anInvalidRef',
+        ));
+
+        $this->assertInternalType('array', $result);
+
+        $this->assertArrayHasKey('errorCode', $result);
+        $this->assertEquals('ValidationError_InvalidParameter', $result['errorCode']);
     }
 }
