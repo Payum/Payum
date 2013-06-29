@@ -1,13 +1,12 @@
 <?php
 namespace Payum\Payex\Model;
 
-use Payum\Exception\InvalidArgumentException;
-
 /**
- * TODO add one phase payment fields.
- * 
  * @link http://www.payexpim.com/technical-reference/pxorder/initialize8/
  * @link http://www.payexpim.com/technical-reference/pxorder/complete-2/
+ * @link http://www.payexpim.com/technical-reference/pxagreement/autopay/
+ * @link http://www.payexpim.com/technical-reference/pxrecurring/pxrecurring-check/
+ * @link http://www.payexpim.com/technical-reference/pxrecurring/pxrecurring-start/
  */
 class PaymentDetails implements \ArrayAccess, \IteratorAggregate
 {
@@ -379,6 +378,60 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
      */
     protected $autoPay;
 
+    /**
+     * This field is not come from the api. we add it to diff ordinary payment and recurring.
+     *
+     * @var bool
+     */
+    protected $recurring;
+
+    /**
+     * @var string
+     */
+    protected $recurringRef;
+
+    /**
+     * This is the start date of the recurring payment. This payment will not be started before the start date are older than current date. Can be left blank if current datetime are to be used.Format: (yyyy-MM-dd hh:mm:ss)
+     * 
+     * @var string 
+     */
+    protected $startDate;
+
+    /**
+     * Describes the length of the period. The following parameters are valid; 1 = Hours, 2 = Daily, 3 = Weekly, 4 = Monthly, 5 = Quarterly and 6 = Yearly. All parameters but Hours, where the agreement supports CPA, will be moved so it starts within 08:00 – 21:00 timeline. This is to prevent sending out CPA messages in the night.
+     * 
+     * @var int
+     */
+    protected $periodType;
+
+    /**
+     * This is the number of hours (minimum 24) if periodType are set to hours(1). For all other periodType settings, this field must be set to 0.
+     * 
+     * @var int
+     */
+    protected $period;
+
+    /**
+     * Desides how long in advance of the recurring payment the alert will be sent out. This period is given in hours. If this field is set to 0 no alert will be sent out.
+     * 
+     * @var int
+     */
+    protected $alertPeriod;
+
+    /**
+     * Returns the status of the recurring payment.
+     * 
+     * @var string
+     */
+    protected $recurringStatus;
+
+    /**
+     * Returns the renewal date of the agreement.
+     * 
+     * @var string
+     */
+    protected $renewalDate;
+    
     /**
      * @return string
      */
@@ -1097,6 +1150,134 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
     public function setAutoPay($autoPay)
     {
         $this->autoPay = $autoPay;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getRecurring()
+    {
+        return $this->recurring;
+    }
+
+    /**
+     * @param boolean $recurring
+     */
+    public function setRecurring($recurring)
+    {
+        $this->recurring = $recurring;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRecurringRef()
+    {
+        return $this->recurringRef;
+    }
+
+    /**
+     * @param string $recurringRef
+     */
+    public function setRecurringRef($recurringRef)
+    {
+        $this->recurringRef = $recurringRef;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStartDate()
+    {
+        return $this->startDate;
+    }
+
+    /**
+     * @param string $startDate
+     */
+    public function setStartDate($startDate)
+    {
+        $this->startDate = $startDate;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPeriodType()
+    {
+        return $this->periodType;
+    }
+
+    /**
+     * @param int $periodType
+     */
+    public function setPeriodType($periodType)
+    {
+        $this->periodType = $periodType;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPeriod()
+    {
+        return $this->period;
+    }
+
+    /**
+     * @param int $period
+     */
+    public function setPeriod($period)
+    {
+        $this->period = $period;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAlertPeriod()
+    {
+        return $this->alertPeriod;
+    }
+
+    /**
+     * @param int $alertPeriod
+     */
+    public function setAlertPeriod($alertPeriod)
+    {
+        $this->alertPeriod = $alertPeriod;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRecurringStatus()
+    {
+        return $this->recurringStatus;
+    }
+
+    /**
+     * @param string $recurringStatus
+     */
+    public function setRecurringStatus($recurringStatus)
+    {
+        $this->recurringStatus = $recurringStatus;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRenewalDate()
+    {
+        return $this->renewalDate;
+    }
+
+    /**
+     * @param string $renewalDate
+     */
+    public function setRenewalDate($renewalDate)
+    {
+        $this->renewalDate = $renewalDate;
     }
 
     /**

@@ -5,6 +5,7 @@ use Payum\Action\ActionInterface;
 use Payum\Bridge\Spl\ArrayObject;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Request\StatusRequestInterface;
+use Payum\Payex\Api\RecurringApi;
 use Payum\Payex\Api\OrderApi;
 
 class PaymentDetailsStatusAction implements ActionInterface
@@ -25,6 +26,30 @@ class PaymentDetailsStatusAction implements ActionInterface
         if ($model['errorCode'] && OrderApi::ERRORCODE_OK != $model['errorCode']) {
             $request->markFailed();
             
+            return;
+        }
+
+        $recurringCanceledStatuses = array(
+            RecurringApi::RECURRINGSTATUS_STOPPEDBYADMIN,
+            RecurringApi::RECURRINGSTATUS_STOPPEDBYCLIENT,
+            RecurringApi::RECURRINGSTATUS_STOPPEDBYMERCHANT,
+            RecurringApi::RECURRINGSTATUS_STOPPEDBYSYSTEM,
+        );
+        if (
+            is_numeric($model['recurringStatus']) &&
+            in_array($model['recurringStatus'], $recurringCanceledStatuses)
+        ) {
+            $request->markCanceled();
+
+            return;
+        }
+
+        if (
+            is_numeric($model['recurringStatus']) &&
+            RecurringApi::RECURRINGSTATUS_FAILED == $model['recurringStatus']
+        ) {
+            $request->markFailed();
+
             return;
         }
 

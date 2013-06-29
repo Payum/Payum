@@ -157,7 +157,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotDoSubExecuteInitializeOrderApiRequestIfOrderRefSet()
+    public function shouldDoSubExecuteCompleteOrderApiRequestIfOrderRefSet()
     {
         $paymentMock = $this->createPaymentMock();
         $paymentMock
@@ -171,6 +171,29 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
 
         $request = new CaptureRequest(array(
             'orderRef' => 'aRef',
+        ));
+
+        $action->execute($request);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldDoSubExecuteStartRecurringPaymentApiRequestIfRecurringSet()
+    {
+        $paymentMock = $this->createPaymentMock();
+        $paymentMock
+            ->expects($this->at(1))
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Payex\Request\Api\StartRecurringPaymentRequest'))
+        ;
+
+        $action = new PaymentDetailsCaptureAction();
+        $action->setPayment($paymentMock);
+
+        $request = new CaptureRequest(array(
+            'orderRef' => 'aRef',
+            'recurring' => true
         ));
 
         $action->execute($request);

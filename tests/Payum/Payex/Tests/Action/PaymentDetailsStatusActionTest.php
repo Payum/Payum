@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Payex\Tests\Action;
 
+use Payum\Payex\Api\RecurringApi;
 use Payum\PaymentInterface;
 use Payum\Request\BinaryMaskStatusRequest;
 use Payum\Payex\Action\PaymentDetailsStatusAction;
@@ -447,6 +448,106 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $action->execute($status);
 
         $this->assertTrue($status->isSuccess());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkCanceledIfRecurringStatusIsStoppedByMerchant()
+    {
+        $action = new PaymentDetailsStatusAction();
+
+        $status = new BinaryMaskStatusRequest(array(
+            'recurringStatus' => RecurringApi::RECURRINGSTATUS_STOPPEDBYMERCHANT,
+            'orderId' => 'anId',
+        ));
+
+        //guard
+        $status->markUnknown();
+
+        $action->execute($status);
+
+        $this->assertTrue($status->isCanceled());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkCanceledIfRecurringStatusIsStoppedByAdmin()
+    {
+        $action = new PaymentDetailsStatusAction();
+
+        $status = new BinaryMaskStatusRequest(array(
+            'recurringStatus' => RecurringApi::RECURRINGSTATUS_STOPPEDBYADMIN,
+            'orderId' => 'anId',
+        ));
+
+        //guard
+        $status->markUnknown();
+
+        $action->execute($status);
+
+        $this->assertTrue($status->isCanceled());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkCanceledIfRecurringStatusIsStoppedByClient()
+    {
+        $action = new PaymentDetailsStatusAction();
+
+        $status = new BinaryMaskStatusRequest(array(
+            'recurringStatus' => RecurringApi::RECURRINGSTATUS_STOPPEDBYCLIENT,
+            'orderId' => 'anId',
+        ));
+
+        //guard
+        $status->markUnknown();
+
+        $action->execute($status);
+
+        $this->assertTrue($status->isCanceled());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkCanceledIfRecurringStatusIsStoppedBySystem()
+    {
+        $action = new PaymentDetailsStatusAction();
+
+        $status = new BinaryMaskStatusRequest(array(
+            'recurringStatus' => RecurringApi::RECURRINGSTATUS_STOPPEDBYSYSTEM,
+            'orderId' => 'anId',
+        ));
+
+        //guard
+        $status->markUnknown();
+
+        $action->execute($status);
+
+        $this->assertTrue($status->isCanceled());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkFailedIfRecurringStatusIsFailed()
+    {
+        $action = new PaymentDetailsStatusAction();
+
+        $status = new BinaryMaskStatusRequest(array(
+            'recurringStatus' => RecurringApi::RECURRINGSTATUS_FAILED,
+            'orderId' => 'anId',
+        ));
+
+        //guard
+        $status->markUnknown();
+
+        $action->execute($status);
+
+        $this->assertTrue($status->isFailed());
     }
 
     /**

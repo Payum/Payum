@@ -1,8 +1,6 @@
 <?php
 namespace Payum\Payex\Model;
 
-use Payum\Exception\InvalidArgumentException;
-
 /**
  * @link http://www.payexpim.com/technical-reference/pxagreement/createagreement3/
  * @link http://www.payexpim.com/technical-reference/pxagreement/check/

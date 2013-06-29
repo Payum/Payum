@@ -3,9 +3,9 @@ namespace Payum\Payex\Action;
 
 use Payum\Action\PaymentAwareAction;
 use Payum\Bridge\Spl\ArrayObject;
-use Payum\Payex\Api\OrderApi;
 use Payum\Request\CaptureRequest;
 use Payum\Exception\RequestNotSupportedException;
+use Payum\Payex\Request\Api\StartRecurringPaymentRequest;
 use Payum\Payex\Request\Api\InitializeOrderRequest;
 use Payum\Payex\Request\Api\CompleteOrderRequest;
 
@@ -29,6 +29,10 @@ class PaymentDetailsCaptureAction extends PaymentAwareAction
 
         if ($model['orderRef']) {
             $this->payment->execute(new CompleteOrderRequest($model));
+            
+            if ($model['recurring']) {
+                $this->payment->execute(new StartRecurringPaymentRequest($model));
+            }
         }
     }
 

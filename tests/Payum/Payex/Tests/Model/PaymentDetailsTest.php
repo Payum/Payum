@@ -52,7 +52,14 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
             array('terminalId', 'getTerminalId', 'setTerminalId'),
             array('TransactionTime', 'getTransactionTime', 'setTransactionTime'),
             array('paramName', 'getParamName', 'setParamName'),
-            array('autoPay', 'getAutoPay', 'setAutoPay')
+            array('autoPay', 'getAutoPay', 'setAutoPay'),
+            array('recurringRef', 'getRecurringRef', 'setRecurringRef'),
+            array('startDate', 'getStartDate', 'setStartDate'),
+            array('periodType', 'getPeriodType', 'setPeriodType'),
+            array('period', 'getPeriod', 'setPeriod'),
+            array('alertPeriod', 'getAlertPeriod', 'setAlertPeriod'),
+            array('recurringStatus', 'getRecurringStatus', 'setRecurringStatus'),
+            array('renewalDate', 'getRenewalDate', 'setRenewalDate'),
         );
     }
     
