@@ -1123,10 +1123,6 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
      */
     public function offsetSet($offset, $value)
     {
-        if (false == $this->offsetExists($offset)) {
-            throw new InvalidArgumentException(sprintf('Unsupported offset given %s.', $offset));
-        }
-
         $this->$offset = $value;
     }
 

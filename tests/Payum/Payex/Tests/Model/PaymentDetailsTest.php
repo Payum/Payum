@@ -141,6 +141,19 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldAllowSetNotSupportedField()
+    {
+        $details = new PaymentDetails;
+
+        $details['someOtherField'] = 'theValue';
+
+        $this->assertNull($details['someOtherField']);
+        $this->assertEquals('theValue', $details->someOtherField);
+    }
+
+    /**
+     * @test
+     */
     public function shouldAllowIterateOverSetFields()
     {
         $details = new PaymentDetails;
@@ -157,7 +170,7 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldFilterNullFieldsWhileIterationeOverFields()
+    public function shouldFilterNullFieldsWhileIteratingOverFields()
     {
         $details = new PaymentDetails;
 

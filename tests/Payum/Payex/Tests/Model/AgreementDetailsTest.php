@@ -108,6 +108,19 @@ class AgreementDetailsTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldAllowSetNotSupportedField()
+    {
+        $details = new AgreementDetails;
+
+        $details['someOtherField'] = 'theValue';
+
+        $this->assertNull($details['someOtherField']);
+        $this->assertEquals('theValue', $details->someOtherField);
+    }
+
+    /**
+     * @test
+     */
     public function shouldAllowIterateOverSetFields()
     {
         $details = new AgreementDetails;
@@ -124,7 +137,7 @@ class AgreementDetailsTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldFilterNullFieldsWhileIterationeOverFields()
+    public function shouldFilterNullFieldsWhileIteratingOverFields()
     {
         $details = new AgreementDetails;
 
