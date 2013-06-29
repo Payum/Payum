@@ -58,5 +58,21 @@
 
         <field name="autoPay" column="auto_pay" type="boolean" nullable="true" />
 
+        <field name="recurring" column="recurring" type="boolean" nullable="true" />
+
+        <field name="recurringRef" column="recurring_ref" type="string" nullable="true" />
+
+        <field name="startDate" column="start_date" type="string" nullable="true" />
+
+        <field name="periodType" column="period_type" type="integer" nullable="true" />
+
+        <field name="period" column="period" type="integer" nullable="true" />
+
+        <field name="alertPeriod" column="alert_period" type="integer" nullable="true" />
+
+        <field name="recurringStatus" column="recurring_status" type="integer" nullable="true" />
+
+        <field name="renewalDate" column="renewal_date" type="string" nullable="true" />
+
     </mapped-superclass>
 </doctrine-mapping>
