@@ -2,6 +2,7 @@
 namespace Payum\Payex\Action;
 
 use Payum\Action\PaymentAwareAction;
+use Payum\Bridge\Spl\ArrayObject;
 use Payum\Request\CaptureRequest;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Payex\Request\Api\AutoPayAgreementRequest;
@@ -26,12 +27,24 @@ class AutoPayPaymentDetailsCaptureAction extends PaymentAwareAction
      */
     public function supports($request)
     {
-        return 
-            $request instanceof CaptureRequest &&
-            $request->getModel() instanceof \ArrayAccess &&
-            //Make sure it is auto pay payment.
-            $request->getModel()->offsetExists('autoPay') &&
-            $request->getModel()->offsetGet('autoPay')
-        ;
+        if (false == (
+                $request instanceof CaptureRequest &&
+                $request->getModel() instanceof \ArrayAccess
+            )) {
+            return false;
+        }
+
+        $model = ArrayObject::ensureArrayObject($request->getModel());
+
+        //Make sure it is not recurring payment. There is an other capture action for recurring payments;
+        if (true == $model['recurring']) {
+            return false;
+        }
+
+        if ($model['autoPay']) {
+            return true;
+        }
+
+        return false;
     }
 }

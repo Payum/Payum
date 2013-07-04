@@ -29,67 +29,48 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestWithArrayAccessAsModelIfAutoPaySetToTrue()
+    public function shouldSupportCaptureRequestWithArrayAsModelIfAutoPaySetToTrue()
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
-        $array = $this->getMock('ArrayAccess');
-        $array
-            ->expects($this->once())
-            ->method('offsetExists')
-            ->with('autoPay')
-            ->will($this->returnValue(true))
-        ;
-        $array
-            ->expects($this->once())
-            ->method('offsetGet')
-            ->with('autoPay')
-            ->will($this->returnValue(true))
-        ;
-
-        $this->assertTrue($action->supports(new CaptureRequest($array)));
+        $this->assertTrue($action->supports(new CaptureRequest(array(
+            'autoPay' => true
+        ))));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestWithArrayAccessAsModelIfAutoPayNotSet()
+    public function shouldNotSupportCaptureRequestWithArrayAsModelIfAutoPayNotSet()
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
-        $array = $this->getMock('ArrayAccess');
-        $array
-            ->expects($this->once())
-            ->method('offsetExists')
-            ->with('autoPay')
-            ->will($this->returnValue(false))
-        ;
-
-        $this->assertFalse($action->supports(new CaptureRequest($array)));
+        $this->assertFalse($action->supports(new CaptureRequest(array())));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestWithArrayAccessAsModelIfAutoPaySetToFalse()
+    public function shouldNotSupportCaptureRequestWithArrayAsModelIfAutoPaySetToTrueAndRecurringSetToTrue()
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
-        $array = $this->getMock('ArrayAccess');
-        $array
-            ->expects($this->once())
-            ->method('offsetExists')
-            ->with('autoPay')
-            ->will($this->returnValue(true))
-        ;
-        $array
-            ->expects($this->once())
-            ->method('offsetGet')
-            ->with('autoPay')
-            ->will($this->returnValue(false))
-        ;
+        $this->assertFalse($action->supports(new CaptureRequest(array(
+            'autoPay' => true,
+            'recurring' => true,
+        ))));
+    }
 
-        $this->assertFalse($action->supports(new CaptureRequest($array)));
+    /**
+     * @test
+     */
+    public function shouldNotSupportCaptureRequestWithArrayAsModelIfAutoPaySetToFalse()
+    {
+        $action = new AutoPayPaymentDetailsCaptureAction();
+
+        $this->assertFalse($action->supports(new CaptureRequest(array(
+            'autoPay' => false
+        ))));
     }
 
     /**
@@ -103,6 +84,20 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
         $details->setAutoPay(true);
         
         $this->assertTrue($action->supports(new CaptureRequest($details)));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotSupportCaptureRequestWithPaymentDetailsAsModelIfAutoPaySetToTrueAndRecurringSetToTrue()
+    {
+        $action = new AutoPayPaymentDetailsCaptureAction;
+
+        $details = new PaymentDetails;
+        $details->setAutoPay(true);
+        $details->setRecurring(true);
+
+        $this->assertFalse($action->supports(new CaptureRequest($details)));
     }
 
     /**
