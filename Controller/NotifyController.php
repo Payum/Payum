@@ -21,8 +21,6 @@ class NotifyController extends Controller
             $token
         ));
 
-        $this->getTokenManager()->deleteToken($token);
-
         return new Response('', 204);
     }
 
