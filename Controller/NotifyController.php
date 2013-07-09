@@ -3,33 +3,27 @@ namespace Payum\Bundle\PayumBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpFoundation\Response;
 
-use Payum\Request\BinaryMaskStatusRequest;
+use Payum\Request\NotifyTokenizedDetailsRequest;
 use Payum\Registry\RegistryInterface;
-use Payum\Bundle\PayumBundle\Request\CaptureTokenizedDetailsRequest;
 use Payum\Bundle\PayumBundle\Service\TokenManager;
 
-class CaptureController extends Controller 
+class NotifyController extends Controller 
 {
     public function doAction(Request $request)
     {
         $token = $this->getTokenManager()->getTokenFromRequest($request);
 
-        $payment = $this->getPayum()->getPayment($token->getPaymentName());
-        
-        $status = new BinaryMaskStatusRequest($token);
-        $payment->execute($status);
-        if (false == $status->isNew()) {
-            throw new HttpException(400, 'The model status must be new.');
-        }
-        
-        $capture = new CaptureTokenizedDetailsRequest($token);
-        $payment->execute($capture);
-        
+        $payment = $this->getPayum()->getPayment($token->getPaymentName()); 
+        $payment->execute(new NotifyTokenizedDetailsRequest(
+            array_replace($request->query->all(), $request->request->all()),
+            $token
+        ));
+
         $this->getTokenManager()->deleteToken($token);
-        
-        return $this->redirect($token->getAfterUrl());
+
+        return new Response('', 204);
     }
 
     /**

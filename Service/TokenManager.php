@@ -102,6 +102,25 @@ class TokenManager
     /**
      * @param string $paymentName
      * @param object $model
+     *
+     * @return TokenizedDetails
+     */
+    public function createTokenForNotifyRoute($paymentName, $model)
+    {
+        $notifyToken = $this->createTokenForRoute(
+            $paymentName,
+            $model,
+            'payum_notify_do'
+        );
+        
+        $this->payum->getStorageForClass($notifyToken, $paymentName)->updateModel($notifyToken);
+
+        return $notifyToken;
+    }
+
+    /**
+     * @param string $paymentName
+     * @param object $model
      * @param string $targetRoute
      * @param array $targetRouteParameters
      * @param string $afterRoute
