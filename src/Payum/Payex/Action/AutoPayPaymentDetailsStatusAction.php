@@ -61,11 +61,24 @@ class AutoPayPaymentDetailsStatusAction implements ActionInterface
      */
     public function supports($request)
     {
-        return 
+        if (false == (
             $request instanceof StatusRequestInterface &&
-            $request->getModel() instanceof \ArrayAccess &&
-            $request->getModel()->offsetExists('autoPay') &&
-            $request->getModel()->offsetGet('autoPay')
-        ;
+            $request->getModel() instanceof \ArrayAccess
+        )) {
+            return false;
+        }
+
+        $model = ArrayObject::ensureArrayObject($request->getModel());
+
+        //Make sure it is not recurring payment. There is an status action for recurring payments;
+        if (true == $model['recurring']) {
+            return false;
+        }
+
+        if ($model['autoPay']) {
+            return true;
+        }
+
+        return false;
     }
 }
