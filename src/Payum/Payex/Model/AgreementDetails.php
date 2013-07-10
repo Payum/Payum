@@ -105,6 +105,14 @@ class AgreementDetails implements \ArrayAccess, \IteratorAggregate
      */
     protected $agreementStatus;
 
+    public function __construct()
+    {
+        //set optional fields so the api will not fail.
+        $this->purchaseOperation = '';
+        $this->startDate = '';
+        $this->stopDate = '';
+    }
+
     /**
      * @return string
      */

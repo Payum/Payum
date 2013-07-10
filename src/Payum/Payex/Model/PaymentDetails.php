@@ -432,6 +432,20 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
      */
     protected $renewalDate;
     
+    public function __construct()
+    {
+        $this->priceArgList = '';
+        $this->vat = 0;
+        $this->clientIdentifier = '';
+        $this->additionalValues = '';
+        $this->agreementRef = '';
+        $this->cancelUrl = '';
+        $this->clientLanguage = '';
+        $this->recurring = false;
+        $this->autoPay = false;
+        $this->alertPeriod = 0;
+    }
+    
     /**
      * @return string
      */
