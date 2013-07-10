@@ -127,11 +127,14 @@ class AgreementDetailsTest extends \PHPUnit_Framework_TestCase
 
         $details['agreementRef'] = 'foo';
         $details->setDescription('baz');
+        
+        $detailsRaw = iterator_to_array($details);
 
-        $this->assertEquals(
-            array('agreementRef' => 'foo', 'description' => 'baz'), 
-            iterator_to_array($details)
-        );
+        $this->assertArrayHasKey('agreementRef', $detailsRaw);
+        $this->assertEquals('foo', $detailsRaw['agreementRef']);
+
+        $this->assertArrayHasKey('description', $detailsRaw);
+        $this->assertEquals('baz', $detailsRaw['description']);
     }
 
     /**
@@ -144,9 +147,26 @@ class AgreementDetailsTest extends \PHPUnit_Framework_TestCase
         $details->setAgreementRef('');
         $details->setDescription(null);
 
-        $this->assertEquals(
-            array('agreementRef' => ''),
-            iterator_to_array($details)
+        $detailsRaw = iterator_to_array($details);
+
+        $this->assertArrayHasKey('agreementRef', $detailsRaw);
+
+        $this->assertArrayNotHasKey('description', $detailsRaw);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowIterateOverSetFieldsAndAddDefaults()
+    {
+        $details = new AgreementDetails;
+
+        $expectedDefaults = array(
+            'startDate' => '',
+            'purchaseOperation' => '',
+            'stopDate' => '',
         );
+
+        $this->assertEquals($expectedDefaults, iterator_to_array($details));
     }
 }

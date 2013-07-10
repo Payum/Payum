@@ -31,80 +31,75 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportStatusRequestWithArrayAccessAsModelWithAutoPaySet()
+    public function shouldSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToTrue()
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $array = $this->getMock('ArrayAccess');
-        $array
-            ->expects($this->once())
-            ->method('offsetExists')
-            ->with('autoPay')
-            ->will($this->returnValue(true))
-        ;
-        $array
-            ->expects($this->once())
-            ->method('offsetGet')
-            ->with('autoPay')
-            ->will($this->returnValue(true))
-        ;
-        
-        $this->assertTrue($action->supports(new BinaryMaskStatusRequest($array)));
+        $this->assertTrue($action->supports(new BinaryMaskStatusRequest(array(
+            'autoPay' => true
+        ))));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportStatusRequestWithArrayAccessAsModelWithAutoPaySetToFalse()
+    public function shouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPayNotSet()
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $array = $this->getMock('ArrayAccess');
-        $array
-            ->expects($this->once())
-            ->method('offsetExists')
-            ->with('autoPay')
-            ->will($this->returnValue(true))
-        ;
-        $array
-            ->expects($this->once())
-            ->method('offsetGet')
-            ->with('autoPay')
-            ->will($this->returnValue(false))
-        ;
-
-        $this->assertFalse($action->supports(new BinaryMaskStatusRequest($array)));
+        $this->assertFalse($action->supports(new BinaryMaskStatusRequest(array())));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportStatusRequestWithArrayAccessAsModelWithAutoPayNotSet()
+    public function shouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToTrueAndRecurringSetToTrue()
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $array = $this->getMock('ArrayAccess');
-        $array
-            ->expects($this->once())
-            ->method('offsetExists')
-            ->with('autoPay')
-            ->will($this->returnValue(false))
-        ;
-
-        $this->assertFalse($action->supports(new BinaryMaskStatusRequest($array)));
+        $this->assertFalse($action->supports(new BinaryMaskStatusRequest(array(
+            'autoPay' => true,
+            'recurring' => true,
+        ))));
     }
 
     /**
      * @test
      */
-    public function shouldSupportBinaryMaskStatusRequestWithPaymentDetailsAsModel()
+    public function shouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToFalse()
+    {
+        $action = new AutoPayPaymentDetailsStatusAction();
+
+        $this->assertFalse($action->supports(new BinaryMaskStatusRequest(array(
+            'autoPay' => false
+        ))));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSupportBinaryMaskStatusRequestWithPaymentDetailsAsModelIfAutoPaySetToTrue()
     {
         $action = new AutoPayPaymentDetailsStatusAction;
 
         $details = new PaymentDetails;
         $details->setAutoPay(true);
-        
+
         $this->assertTrue($action->supports(new BinaryMaskStatusRequest($details)));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotSupportBinaryMaskStatusRequestWithPaymentDetailsAsModelIfAutoPaySetToTrueAndRecurringSetToTrue()
+    {
+        $action = new AutoPayPaymentDetailsStatusAction;
+
+        $details = new PaymentDetails;
+        $details->setAutoPay(true);
+        $details->setRecurring(true);
+
+        $this->assertFalse($action->supports(new BinaryMaskStatusRequest($details)));
     }
 
     /**
@@ -114,13 +109,15 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AutoPayPaymentDetailsStatusAction;
 
-        $this->assertFalse($action->supports(new BinaryMaskStatusRequest(new AgreementDetails)));
+        $details = new AgreementDetails;
+
+        $this->assertFalse($action->supports(new BinaryMaskStatusRequest($details)));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotStatusRequest()
+    public function shouldNotSupportAnythingNotBinaryMaskStatusRequest()
     {
         $action = new AutoPayPaymentDetailsStatusAction;
 
@@ -130,7 +127,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportStatusRequestWithNotArrayAccessModel()
+    public function shouldNotSupportBinaryMaskStatusRequestWithNotArrayAccessModel()
     {
         $action = new AutoPayPaymentDetailsStatusAction;
 

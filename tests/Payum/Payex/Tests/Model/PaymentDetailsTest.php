@@ -62,7 +62,7 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
             array('renewalDate', 'getRenewalDate', 'setRenewalDate'),
         );
     }
-    
+
     /**
      * @test
      */
@@ -93,7 +93,7 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @dataProvider provideFields
      */
     public function shouldAllowSetField($fieldName, $getter, $setter)
@@ -113,7 +113,7 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
         $details = new PaymentDetails;
 
         $details->$setter('theValue');
-        
+
         $this->assertEquals('theValue', $details->$getter());
     }
 
@@ -168,10 +168,13 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
         $details['orderId'] = 'foo';
         $details->setPrice('baz');
 
-        $this->assertEquals(
-            array('orderId' => 'foo', 'price' => 'baz'), 
-            iterator_to_array($details)
-        );
+        $detailsRaw = iterator_to_array($details);
+
+        $this->assertArrayHasKey('orderId', $detailsRaw);
+        $this->assertEquals('foo', $detailsRaw['orderId']);
+
+        $this->assertArrayHasKey('price', $detailsRaw);
+        $this->assertEquals('baz', $detailsRaw['price']);
     }
 
     /**
@@ -184,9 +187,32 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
         $details->setOrderId('');
         $details->setPrice(null);
 
-        $this->assertEquals(
-            array('orderId' => ''),
-            iterator_to_array($details)
+        $detailsRaw = iterator_to_array($details);
+
+        $this->assertArrayHasKey('orderId', $detailsRaw);
+        $this->assertArrayNotHasKey('price', $detailsRaw);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowIterateOverSetFieldsAndAddDefaults()
+    {
+        $details = new PaymentDetails;
+
+        $expectedDefaults = array(
+            'priceArgList' => '',
+            'vat' => 0,
+            'clientIdentifier' => '',
+            'additionalValues' => '',
+            'agreementRef' => '',
+            'cancelUrl' => '',
+            'clientLanguage' => '',
+            'autoPay' => '',
+            'recurring' => '',
+            'alertPeriod' => 0,
         );
+
+        $this->assertEquals($expectedDefaults, iterator_to_array($details));
     }
 }

@@ -151,7 +151,7 @@ class PaymentDetailsStatusAction implements ActionInterface
         }
 
         //Make sure it is not auto pay payment. There is an other capture action for auto pay payments;
-        if (false == $model['autoPay']) {
+        if (isset($model['autoPay']) && false == $model['autoPay']) {
             return true;
         }
 

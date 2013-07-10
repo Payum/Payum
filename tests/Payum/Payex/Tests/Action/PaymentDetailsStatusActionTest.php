@@ -32,73 +32,38 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportStatusRequestWithArrayAccessAsModelWithOrderIdSetAndAutoPayNotSet()
+    public function shouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySet()
     {
         $action = new PaymentDetailsStatusAction();
 
-        $array = $this->getMock('ArrayAccess');
-        $array
-            ->expects($this->at(0))
-            ->method('offsetExists')
-            ->with('orderId')
-            ->will($this->returnValue(true))
-        ;
-        $array
-            ->expects($this->at(1))
-            ->method('offsetExists')
-            ->with('autoPay')
-            ->will($this->returnValue(false))
-        ;
-        
-        $this->assertTrue($action->supports(new BinaryMaskStatusRequest($array)));
+        $this->assertFalse($action->supports(new BinaryMaskStatusRequest(array(
+            'autoPay' => true
+        ))));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportStatusRequestWithArrayAccessAsModelWithOrderIdSetAndAutoPaySetToTrue()
+    public function shouldSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToFalse()
     {
         $action = new PaymentDetailsStatusAction();
 
-        $array = $this->getMock('ArrayAccess');
-        $array
-            ->expects($this->at(0))
-            ->method('offsetExists')
-            ->with('orderId')
-            ->will($this->returnValue(true))
-        ;
-        $array
-            ->expects($this->at(1))
-            ->method('offsetExists')
-            ->with('autoPay')
-            ->will($this->returnValue(true))
-        ;
-        $array
-            ->expects($this->once())
-            ->method('offsetGet')
-            ->with('autoPay')
-            ->will($this->returnValue(true))
-        ;
-
-        $this->assertFalse($action->supports(new BinaryMaskStatusRequest($array)));
+        $this->assertTrue($action->supports(new BinaryMaskStatusRequest(array(
+            'autoPay' => false
+        ))));
     }
-    
+
     /**
      * @test
      */
-    public function shouldNotSupportStatusRequestWithArrayAccessAsModelIfOrderIdNotSet()
+    public function shouldSupportBinaryMaskStatusRequestWithArrayAsModelIfRecurringSetToTrueAndAutoPaySet()
     {
         $action = new PaymentDetailsStatusAction();
 
-        $array = $this->getMock('ArrayAccess');
-        $array
-            ->expects($this->once())
-            ->method('offsetExists')
-            ->with('orderId')
-            ->will($this->returnValue(false))
-        ;
-
-        $this->assertFalse($action->supports(new BinaryMaskStatusRequest($array)));
+        $this->assertTrue($action->supports(new BinaryMaskStatusRequest(array(
+            'autoPay' => true,
+            'recurring' => true
+        ))));
     }
 
     /**
@@ -107,8 +72,28 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     public function shouldSupportBinaryMaskStatusRequestWithPaymentDetailsAsModel()
     {
         $action = new PaymentDetailsStatusAction;
-        
+
         $this->assertTrue($action->supports(new BinaryMaskStatusRequest(new PaymentDetails)));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotSupportAnythingNotBinaryMaskStatusRequest()
+    {
+        $action = new PaymentDetailsStatusAction;
+
+        $this->assertFalse($action->supports(new \stdClass()));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotSupportBinaryMaskStatusRequestWithNotArrayAccessModel()
+    {
+        $action = new PaymentDetailsStatusAction;
+
+        $this->assertFalse($action->supports(new BinaryMaskStatusRequest(new \stdClass)));
     }
 
     /**
@@ -163,6 +148,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $status = new BinaryMaskStatusRequest(array(
             'orderStatus' => 'not-supported-status',
             'orderId' => 'anId',
+            'autoPay' => false,
         ));
         
         //guard
@@ -184,6 +170,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'transactionStatus' => 'not-supported-status',
             'orderId' => 'anId',
+            'autoPay' => false,
         ));
 
         //guard
@@ -203,6 +190,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
 
         $status = new BinaryMaskStatusRequest(array(
             'orderId' => 'anId',
+            'autoPay' => false,
         ));
 
         //guard
@@ -225,6 +213,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_AUTHORIZE,
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'orderId' => 'anId',
+            'autoPay' => false,
         ));
 
         //guard
@@ -247,6 +236,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
             'transactionStatus' => 'not-authorize-status',
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'orderId' => 'anId',
+            'autoPay' => false,
         ));
 
         //guard
@@ -269,6 +259,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_SALE,
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'orderId' => 'anId',
+            'autoPay' => false,
         ));
 
         //guard
@@ -291,6 +282,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
             'transactionStatus' => 'not-sale-status',
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'orderId' => 'anId',
+            'autoPay' => false,
         ));
 
         //guard
@@ -312,6 +304,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_CANCEL,
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'orderId' => 'anId',
+            'autoPay' => false,
         ));
 
         //guard
@@ -336,6 +329,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
             ),
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'orderId' => 'anId',
+            'autoPay' => false,
         ));
 
         //guard
@@ -357,6 +351,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_FAILURE,
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'orderId' => 'anId',
+            'autoPay' => false,
         ));
 
         //guard
@@ -377,6 +372,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $status = new BinaryMaskStatusRequest(array(
             'orderStatus' => OrderApi::ORDERSTATUS_PROCESSING,
             'orderId' => 'anId',
+            'autoPay' => false,
         ));
 
         //guard
@@ -397,6 +393,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $status = new BinaryMaskStatusRequest(array(
             'orderStatus' => OrderApi::ORDERSTATUS_NOT_FOUND,
             'orderId' => 'anId',
+            'autoPay' => false,
         ));
 
         //guard
@@ -417,6 +414,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $status = new BinaryMaskStatusRequest(array(
             'errorCode' => 'not-ok',
             'orderId' => 'anId',
+            'autoPay' => false,
         ));
 
         //guard
@@ -440,6 +438,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_SALE,
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'orderId' => 'anId',
+            'autoPay' => false,
         ));
 
         //guard
@@ -460,6 +459,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $status = new BinaryMaskStatusRequest(array(
             'recurringStatus' => RecurringApi::RECURRINGSTATUS_STOPPEDBYMERCHANT,
             'orderId' => 'anId',
+            'autoPay' => false,
         ));
 
         //guard
@@ -480,6 +480,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $status = new BinaryMaskStatusRequest(array(
             'recurringStatus' => RecurringApi::RECURRINGSTATUS_STOPPEDBYADMIN,
             'orderId' => 'anId',
+            'autoPay' => false,
         ));
 
         //guard
@@ -500,6 +501,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $status = new BinaryMaskStatusRequest(array(
             'recurringStatus' => RecurringApi::RECURRINGSTATUS_STOPPEDBYCLIENT,
             'orderId' => 'anId',
+            'autoPay' => false,
         ));
 
         //guard
@@ -520,6 +522,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $status = new BinaryMaskStatusRequest(array(
             'recurringStatus' => RecurringApi::RECURRINGSTATUS_STOPPEDBYSYSTEM,
             'orderId' => 'anId',
+            'autoPay' => false,
         ));
 
         //guard
@@ -540,6 +543,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $status = new BinaryMaskStatusRequest(array(
             'recurringStatus' => RecurringApi::RECURRINGSTATUS_FAILED,
             'orderId' => 'anId',
+            'autoPay' => false,
         ));
 
         //guard
