@@ -5,7 +5,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-use Payum\Exception\RequestNotSupportedException;
 use Payum\Request\BinaryMaskStatusRequest;
 use Payum\Registry\RegistryInterface;
 use Payum\Bundle\PayumBundle\Request\CaptureTokenizedDetailsRequest;

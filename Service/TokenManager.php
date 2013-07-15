@@ -4,6 +4,7 @@ namespace Payum\Bundle\PayumBundle\Service;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
 
 use Payum\Registry\RegistryInterface;
@@ -35,17 +36,23 @@ class TokenManager
 
     /**
      * @param Request $request
-     *
+     * @param array $options
+     * 
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * 
      * @return \Payum\Model\TokenizedDetails
      */
-    public function getTokenFromRequest(Request $request)
+    public function getTokenFromRequest(Request $request, array $options = array())
     {
-        if (false === $paymentName = $request->attributes->get('paymentName', $request->get('paymentName', false))) {
+        $options = $this->getOptionsResolver()->resolve($options);
+        
+        $paymentNameParameter = $options['paymentNameParameter'];        
+        if (false === $paymentName = $request->attributes->get($paymentNameParameter, $request->get($paymentNameParameter, false))) {
             throw new HttpException(404, 'Payment name not set in request');
         }
-        if (false === $token = $request->attributes->get('token', $request->get('token', false))) {
+
+        $tokenParameter = $options['tokenParameter'];
+        if (false === $token = $request->attributes->get($tokenParameter, $request->get($tokenParameter, false))) {
             throw new HttpException(404, 'Token not set in request');
         }
 
@@ -102,15 +109,44 @@ class TokenManager
     /**
      * @param string $paymentName
      * @param object $model
+     *
+     * @return TokenizedDetails
+     */
+    public function createTokenForNotifyRoute($paymentName, $model)
+    {
+        $notifyToken = $this->createTokenForRoute(
+            $paymentName,
+            $model,
+            $targetRouter = 'payum_notify_do',
+            $targetRouteParameters = array(),
+            $afterRoute = null,
+            $afterRouteParameters = array(),
+            array(
+                'paymentNameParameter' => 'payumPaymentName',
+                'tokenParameter' => 'payumToken',
+            )
+        );
+        
+        $this->payum->getStorageForClass($notifyToken, $paymentName)->updateModel($notifyToken);
+
+        return $notifyToken;
+    }
+
+    /**
+     * @param string $paymentName
+     * @param object $model
      * @param string $targetRoute
      * @param array $targetRouteParameters
      * @param string $afterRoute
      * @param array $afterRouteParameters
+     * @param array $options
      * 
      * @return TokenizedDetails
      */
-    public function createTokenForRoute($paymentName, $model, $targetRoute, array $targetRouteParameters = array(), $afterRoute = null, array $afterRouteParameters = array())
+    public function createTokenForRoute($paymentName, $model, $targetRoute, array $targetRouteParameters = array(), $afterRoute = null, array $afterRouteParameters = array(), array $options = array())
     {
+        $options = $this->getOptionsResolver()->resolve($options);
+        
         $tokenStorage = $this->getStorage($paymentName);
         $modelDetailsStorage = $this->payum->getStorageForClass($model, $paymentName);
 
@@ -119,8 +155,8 @@ class TokenManager
         $tokenizedDetails->setDetails($modelDetailsStorage->getIdentificator($model));
         $tokenizedDetails->setPaymentName($paymentName);
         $tokenizedDetails->setTargetUrl($this->router->generate($targetRoute, array_replace($targetRouteParameters, array(
-            'paymentName' => $paymentName,
-            'token' => $tokenizedDetails->getToken()
+            $options['paymentNameParameter'] => $paymentName,
+            $options['tokenParameter'] => $tokenizedDetails->getToken()
         )), $absolute = true));
 
         if ($afterRoute) {
@@ -175,5 +211,25 @@ class TokenManager
             'Payum\Model\TokenizedDetails',
             $paymentName
         ));
+    }
+
+    /**
+     * @return OptionsResolver
+     */
+    protected function getOptionsResolver()
+    {
+        $resolver = new OptionsResolver;
+        
+        $resolver->setDefaults(array(
+            'paymentNameParameter' => 'paymentName', 
+            'tokenParameter' => 'token'
+        ));
+        
+        $resolver->setRequired(array(
+            'paymentNameParameter', 
+            'tokenParameter'
+        ));
+        
+        return $resolver;
     }
 }
