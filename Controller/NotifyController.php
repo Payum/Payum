@@ -13,7 +13,10 @@ class NotifyController extends Controller
 {
     public function doAction(Request $request)
     {
-        $token = $this->getTokenManager()->getTokenFromRequest($request);
+        $token = $this->getTokenManager()->getTokenFromRequest($request, array(
+            'paymentNameParameter' => 'payumPaymentName',
+            'tokenParameter' => 'payumToken',
+        ));
 
         $payment = $this->getPayum()->getPayment($token->getPaymentName()); 
         $payment->execute(new NotifyTokenizedDetailsRequest(
