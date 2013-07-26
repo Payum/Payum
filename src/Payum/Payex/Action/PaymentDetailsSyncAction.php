@@ -22,7 +22,11 @@ class PaymentDetailsSyncAction extends PaymentAwareAction
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        $this->payment->execute(new CheckOrderRequest($request->getModel()));
+        $model = ArrayObject::ensureArrayObject($request->getModel());
+        
+        if ($model['transactionNumber']) {
+            $this->payment->execute(new CheckOrderRequest($request->getModel()));
+        }
     }
 
     /**
