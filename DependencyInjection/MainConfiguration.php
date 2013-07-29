@@ -50,6 +50,7 @@ class MainConfiguration implements ConfigurationInterface
         $contextsPrototypeNode = $rootNode
             ->children()
                 ->arrayNode('contexts')
+                    ->useAttributeAsKey('name')
                     ->prototype('array')
         ;
 
