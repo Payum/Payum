@@ -17,9 +17,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $payment = PaymentFactory::create(new Gateway());
 
         $date = new \DateTime('now + 2 year');
-        
+
         $captureRequest = new CaptureRequest(array(
-            'amount' => 1000,
+            'amount' => '1000.00',
             'card' => array(
                 'number' => '4242424242424242', // must be authorized
                 'cvv' => 123,
@@ -29,12 +29,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 'lastName' => 'bar',
             )
         ));
-        
+
         $payment->execute($captureRequest);
-        
+
         $statusRequest = new BinaryMaskStatusRequest($captureRequest->getModel());
         $payment->execute($statusRequest);
-        
+
         $this->assertTrue($statusRequest->isSuccess());
     }
 
@@ -48,7 +48,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $date = new \DateTime('now + 2 year');
 
         $captureRequest = new CaptureRequest(array(
-            'amount' => 1000,
+            'amount' => '1000.00',
             'card' => array(
                 'number' => '4111111111111111', //must be declined,
                 'cvv' => 123,
