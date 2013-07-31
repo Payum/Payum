@@ -40,9 +40,14 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
         foreach ($config['options'] as $name => $value) {
             $gatewayDefinition->addMethodCall('set'.strtoupper($name), array($value));
         }
+
         $gatewayId = 'payum.context.'.$contextName.'.gateway';
         $container->setDefinition($gatewayId, $gatewayDefinition);
-        $paymentDefinition->addMethodCall('addApi', array(new Reference($gatewayId)));
+        
+        //TODO: work around for current version. Do better fix in 0.6.x
+        $methodCalls = $paymentDefinition->getMethodCalls();
+        array_unshift($methodCalls, array('addApi', array(new Reference($gatewayId))));
+        $paymentDefinition->setMethodCalls($methodCalls);
 
         $captureActionDefinition = new Definition('Payum\Bridge\Omnipay\Action\CaptureAction');
         $captureActionId = 'payum.context.'.$contextName.'.action.capture';
