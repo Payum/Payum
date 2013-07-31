@@ -19,10 +19,10 @@ class CaptureAction extends BaseApiAwareAction
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
-        
+
         try {
             $options = $request->getModel();
-            
+
             if (isset($options['_completeCaptureRequired'])) {
                 unset($options['_completeCaptureRequired']);
                 $response = $this->gateway->completePurchase((array) $options)->send();
@@ -32,24 +32,22 @@ class CaptureAction extends BaseApiAwareAction
 
             $options['_reference'] = $response->getTransactionReference();
             $options['_status_message'] = '';
-            
-            if ($response instanceof RedirectResponseInterface) {                
-                throw new RedirectUrlInteractiveRequest($response->getRedirectUrl());
-            }
-            
+
             if ($response->isSuccessful()) {
                 $options['_status'] = 'success';
+            } elseif ($response->isRedirect()) {
+                throw new RedirectUrlInteractiveRequest($response->getRedirectUrl());
             } else {
                 $options['_status'] = 'failed';
                 $options['_status_message'] = $response->getMessage();
             }
         } catch (InteractiveRequestInterface $e) {
             $options['_completeCaptureRequired'] = 1;
-            
+
             throw $e;
         } catch (\Exception $e) {
             $options['_status'] = 'failed';
-            
+
             throw new LogicException('Omnipay unexpected exception', null, $e);
         }
     }
@@ -59,7 +57,7 @@ class CaptureAction extends BaseApiAwareAction
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof CaptureRequest &&
             $request->getModel() instanceof \ArrayObject
         ;
