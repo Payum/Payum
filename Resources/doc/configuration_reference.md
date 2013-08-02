@@ -86,6 +86,17 @@ be2bill:
             sandbox: true
 ```
 
+### Payex payment
+
+```yml
+payex:
+    api:
+        options:
+            encryption_key: 'required'
+            account_number: 'required'
+            sandbox: true
+```
+
 ### Omnipay payment
 
 ```yml
@@ -103,3 +114,7 @@ custom:
     #if service not set an empty payment will be created. 
     service: ~ 
 ```
+
+### Next Step
+
+* [Back to index](index.md).

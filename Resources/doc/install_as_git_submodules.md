@@ -27,3 +27,7 @@ $loader->registerNamespaces(array(
 
 $loader->register();
 ```
+
+### Next Step
+
+* [Back to index](index.md).

@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AuthorizeNetAimPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PayexPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCheckoutNvpPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory;
@@ -226,6 +227,49 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
             $containerBuilder->getDefinition('payum.context.a_context.payment'),
             'addApi',
             new Reference('payum.context.a_context.gateway')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLoadExtensionWithPayexConfiguredPayment()
+    {
+        if (false == class_exists('Payum\Payex\PaymentFactory')) {
+            $this->markTestSkipped('Skipped because payment library is not installed.');
+        }
+
+        $config = array(
+            'contexts' => array(
+                'a_context' => array(
+                    'payex' => array(
+                        'api' => array(
+                            'options' => array(
+                                'encryption_key' => 'aKey',
+                                'account_number' => 'aNum'
+                            )
+                        )
+                    ),
+                )
+            )
+        );
+
+        $configs = array($config);
+
+        $containerBuilder = new ContainerBuilder(new ParameterBag);
+
+        $extension = new PayumExtension;
+        $extension->addPaymentFactory(new PayexPaymentFactory);
+
+        $extension->load($configs, $containerBuilder);
+
+        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.api.order'));
+        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
+
+        $this->assertDefinitionContainsMethodCall(
+            $containerBuilder->getDefinition('payum.context.a_context.payment'),
+            'addApi',
+            new Reference('payum.context.a_context.api.order')
         );
     }
 
