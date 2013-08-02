@@ -1,11 +1,11 @@
-How payment dome action could look like?
+How payment done action could look like?
 ========================================
 
 We assume you already know how to prepare payment details and how to capture them.
 The last thing in this store what to do after?
-This chapter should answer this question.
+This chapter should cover these questions.
 
-Well, let's assume you created capture token this way:
+Well, let's assume you created capture token this way while preparing payment:
 
 ```php
 <?php
@@ -17,7 +17,7 @@ $captureToken = $this->get('payum.token_manager')->createTokenForCaptureRoute(
 ```
 
 Pay attention to third parameter `acme_payment_done`.
-It is the url you will be redirected after capture done its job. Let's look at an example of how this action may look like:
+It is the route of url you will be redirected after capture done its job. Let's look at an example of how this action may look like:
 
 ```php
     public function captureDoneAction(Request $request)
@@ -48,9 +48,9 @@ It is the url you will be redirected after capture done its job. Let's look at a
     }
 ```
 
-In general you have to check status of the payment and do whatever you want depending on the status.
+In general you have to check status of the payment and do whatever you want depending on it.
 For example if payment success you  would add a user some credits or update expiration date.
-If not you redirect him to homepage and show a flash message "payment failed. try again later".
+If not you redirect him to homepage and show a flash message with a bad news.
 
 ### Next Step
 
