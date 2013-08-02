@@ -15,4 +15,6 @@ The installation has two steps:
 
 ### Other documents:
 
+* [How payment dome action could look like?](how_payment_done_action_could_look_like.md).
 * [Configuration reference](configuration_reference.md).
+* [Sandbox](configuration_reference.md).

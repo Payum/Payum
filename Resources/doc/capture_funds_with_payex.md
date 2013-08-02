@@ -182,7 +182,7 @@ class PaymentController extends Controller
         $captureToken = $this->get('payum.token_manager')->createTokenForCaptureRoute(
             $paymentName,
             $paymentDetails,
-            'acme_payment_details_view'
+            'acme_payment_done' // the route to redirect after capture;
         );
 
         $paymentDetails->setReturnurl($captureToken->getTargetUrl());
@@ -196,4 +196,7 @@ class PaymentController extends Controller
 
 ### Next Step
 
+* [How payment dome action could look like?](how_payment_done_action_could_look_like.md).
 * [Configuration reference](configuration_reference.md).
+* [Sandbox](sandbox.md).
+* [Back to index](index.md).
