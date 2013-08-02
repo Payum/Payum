@@ -27,7 +27,7 @@
         "payum/paypal-express-checkout-nvp": "0.5.*",
         "payum/paypal-pro-checkout-nvp": "0.5.*",
         "payum/be2bill": "0.5.*",
-        "payum/payex": "0.5.x-dev",
+        "payum/payex": "0.5.*",
         "payum/authorize-net-aim": "0.5.*",
         "payum/omnipay-bridge": "0.5.*"
     },
