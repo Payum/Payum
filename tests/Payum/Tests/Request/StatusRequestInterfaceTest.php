@@ -12,4 +12,14 @@ class StatusRequestInterfaceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($rc->implementsInterface('Payum\Request\InteractiveRequestInterface'));
     }
+
+    /**
+     * @test
+     */
+    public function shouldImplementModelRequestInterface()
+    {
+        $rc = new \ReflectionClass('Payum\Request\StatusRequestInterface');
+
+        $this->assertTrue($rc->implementsInterface('Payum\Request\ModelRequestInterface'));
+    }
 }
