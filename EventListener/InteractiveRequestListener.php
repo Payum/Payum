@@ -23,20 +23,19 @@ class InteractiveRequestListener
             
         if ($interactiveRequest instanceof ResponseInteractiveRequest) {
             $event->setResponse($interactiveRequest->getResponse());
-            $event->stopPropagation();
-            
-            return;
-        }
-        
-        if ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {
+        } else if ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {
             $event->setResponse(new RedirectResponse($interactiveRequest->getUrl()));
-            $event->stopPropagation();
-            
+        }
+
+        if ($event->getResponse()) {
+            if (false == $event->getResponse()->headers->has('X-Status-Code')) {
+                $event->getResponse()->headers->set('X-Status-Code', $event->getResponse()->getStatusCode());
+            }
+
             return;
         }
         
         $ro = new \ReflectionObject($interactiveRequest);
-        
         $event->setException(new LogicException(
             sprintf('Cannot convert interactive request %s to symfony response.', $ro->getShortName()), 
             null, 
