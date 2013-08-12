@@ -160,7 +160,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         //@testo:start
         //@testo:source
         //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Api;
-        //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileRequest;
+        //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfileRequest;
         //@testo:uncomment:use Payum\Request\SyncRequest;
         
         $billingAgreementDetails = $captureBillingAgreement->getModel();
@@ -173,7 +173,6 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
             'CURRENCYCODE' => 'USD',
             'BILLINGPERIOD' => Api::BILLINGPERIOD_DAY,
             'BILLINGFREQUENCY' => 2,
-            'EMAIL' => $billingAgreementDetails['EMAIL'],
         ));
         //@testo:end
         $recurringPaymentDetails['PROFILEID'] = 'aProfileid';
