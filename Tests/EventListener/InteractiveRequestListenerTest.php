@@ -72,6 +72,29 @@ class InteractiveRequestListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldSetXStatusCodeWhenExceptionInstanceOfRedirectUrlInteractiveRequest()
+    {
+        $interactiveRequest = new RedirectUrlInteractiveRequest('/foo/bar');
+
+        $event = new GetResponseForExceptionEvent(
+            $this->createHttpKernelMock(),
+            new Request,
+            'requestType',
+            $interactiveRequest
+        );
+
+        $listener = new InteractiveRequestListener;
+
+        $listener->onKernelException($event);
+
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $event->getResponse());
+        $this->assertTrue($event->getResponse()->headers->has('X-Status-Code'));
+        $this->assertEquals(302, $event->getResponse()->headers->get('X-Status-Code'));
+    }
+
+    /**
+     * @test
+     */
     public function shouldSetResponseIfExceptionInstanceOfResponseInteractiveRequest()
     {
         $expectedResponse = new Response('foobar');
@@ -96,17 +119,74 @@ class InteractiveRequestListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldChangeInteractiveRequestToLogicExceptionIfNotSupported()
+    public function shouldSetXStatusCodeWhenExceptionInstanceOfResponseInteractiveRequest()
     {
-        $expectedResponse = new Response('foobar');
+        $expectedStatus = 555;
 
-        $interactiveRequest = $this->getMock('Payum\Request\BaseInteractiveRequest');
+        $response = new Response('foobar', $expectedStatus);
+
+        $interactiveRequest = new ResponseInteractiveRequest($response);
 
         $event = new GetResponseForExceptionEvent(
             $this->createHttpKernelMock(),
             new Request,
             'requestType',
             $interactiveRequest
+        );
+
+        $listener = new InteractiveRequestListener;
+
+        $listener->onKernelException($event);
+
+        //guard
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $event->getResponse());
+
+        $this->assertTrue($event->getResponse()->headers->has('X-Status-Code'));
+        $this->assertEquals(555, $event->getResponse()->headers->get('X-Status-Code'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotSetXStatusCodeIfAlreadySetWhenExceptionInstanceOfResponseInteractiveRequest()
+    {
+        $expectedStatus = 555;
+
+        $response = new Response('foobar', $expectedStatus);
+        $response->headers->set('X-Status-Code', 666);
+
+        $interactiveRequest = new ResponseInteractiveRequest($response);
+
+        $event = new GetResponseForExceptionEvent(
+            $this->createHttpKernelMock(),
+            new Request,
+            'requestType',
+            $interactiveRequest
+        );
+
+        $listener = new InteractiveRequestListener;
+
+        $listener->onKernelException($event);
+
+        //guard
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $event->getResponse());
+
+        $this->assertTrue($event->getResponse()->headers->has('X-Status-Code'));
+        $this->assertEquals(666, $event->getResponse()->headers->get('X-Status-Code'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldChangeInteractiveRequestToLogicExceptionIfNotSupported()
+    {
+        $notSupportedInteractiveRequest = $this->getMock('Payum\Request\BaseInteractiveRequest');
+
+        $event = new GetResponseForExceptionEvent(
+            $this->createHttpKernelMock(),
+            new Request,
+            'requestType',
+            $notSupportedInteractiveRequest
         );
 
         $listener = new InteractiveRequestListener;
