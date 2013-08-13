@@ -19,17 +19,17 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
         $paymentId = 'payum.context.'.$contextName.'.payment';
         $container->setDefinition($paymentId, $paymentDefinition);
 
-        foreach (array_reverse($config['actions']) as $actionId) {
-            $paymentDefinition->addMethodCall(
-                'addAction',
-                array(new Reference($actionId), $forcePrepend = true)
-            );
-        }
-
         foreach (array_reverse($config['apis']) as $apiId) {
             $paymentDefinition->addMethodCall(
                 'addApi',
                 array(new Reference($apiId), $forcePrepend = true)
+            );
+        }
+
+        foreach (array_reverse($config['actions']) as $actionId) {
+            $paymentDefinition->addMethodCall(
+                'addAction',
+                array(new Reference($actionId), $forcePrepend = true)
             );
         }
 
