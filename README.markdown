@@ -16,6 +16,7 @@ Supported Payments:
 - [Authorize.Net AIM](https://github.com/Payum/AuthorizeNetAim).
 - [Be2Bill](https://github.com/Payum/Be2Bill).
 - [Omnipay](https://github.com/adrianmacneil/omnipay) gateways via [bridge](https://github.com/Payum/OmnipayBridge). 
+- [JMS payment bundles](http://jmsyst.com/bundles/JMSPaymentCoreBundle/master/payment_backends) via [bridge](https://github.com/Payum/JMSPaymentBridge). 
 
 Documentation
 -------------
