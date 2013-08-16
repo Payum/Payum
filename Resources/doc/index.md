@@ -12,6 +12,7 @@ The installation has two steps:
     * [Authorize.Net AIM](capture_funds_with_authorize_net_aim.md).
     * [Be2Bill](capture_funds_with_be2bill.md).
     * [Omnipay](capture_funds_with_ominpay.md).
+    * [JMS payment bundle](https://github.com/Payum/JMSPaymentBridge). 
 
 ### Other documents:
 
