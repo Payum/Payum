@@ -28,38 +28,7 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
             throw new RuntimeException('Cannot find GatewayInterface interface. Have you installed omnipay/omnipay package?');
         }
 
-        $paymentId = parent::create($container, $contextName, $config);
-        $paymentDefinition = $container->getDefinition($paymentId);
-
-        $gatewayDefinition = new Definition();
-        $gatewayDefinition->setClass('Omnipay\Common\GatewayInterface');
-        $gatewayDefinition->setFactoryClass('Omnipay\Common\GatewayFactory');
-        $gatewayDefinition->setFactoryMethod('create');
-        $gatewayDefinition->addArgument($config['type']);
-        $gatewayDefinition->setPublic(true);
-        foreach ($config['options'] as $name => $value) {
-            $gatewayDefinition->addMethodCall('set'.strtoupper($name), array($value));
-        }
-
-        $gatewayId = 'payum.context.'.$contextName.'.gateway';
-        $container->setDefinition($gatewayId, $gatewayDefinition);
-        
-        //TODO: work around for current version. Do better fix in 0.6.x
-        $methodCalls = $paymentDefinition->getMethodCalls();
-        array_unshift($methodCalls, array('addApi', array(new Reference($gatewayId))));
-        $paymentDefinition->setMethodCalls($methodCalls);
-
-        $captureActionDefinition = new Definition('Payum\Bridge\Omnipay\Action\CaptureAction');
-        $captureActionId = 'payum.context.'.$contextName.'.action.capture';
-        $container->setDefinition($captureActionId, $captureActionDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($captureActionId)));
-
-        $statusActionDefinition = new Definition('Payum\Bridge\Omnipay\Action\StatusAction');
-        $statusActionId = 'payum.context.'.$contextName.'.action.status';
-        $container->setDefinition($statusActionId, $statusActionDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($statusActionId)));
-        
-        return $paymentId;
+        return parent::create($container, $contextName, $config);
     }
 
     /**
@@ -101,5 +70,42 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
             })
             ->thenInvalid('A message')
         ;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    {
+        $gatewayDefinition = new Definition();
+        $gatewayDefinition->setClass('Omnipay\Common\GatewayInterface');
+        $gatewayDefinition->setFactoryClass('Omnipay\Common\GatewayFactory');
+        $gatewayDefinition->setFactoryMethod('create');
+        $gatewayDefinition->addArgument($config['type']);
+        $gatewayDefinition->setPublic(true);
+        foreach ($config['options'] as $name => $value) {
+            $gatewayDefinition->addMethodCall('set'.strtoupper($name), array($value));
+        }
+
+        $gatewayId = 'payum.context.'.$contextName.'.gateway';
+        $container->setDefinition($gatewayId, $gatewayDefinition);
+
+        $paymentDefinition->addMethodCall('addApi', array(new Reference($gatewayId)));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function addActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    {
+        $captureActionDefinition = new Definition('Payum\Bridge\Omnipay\Action\CaptureAction');
+        $captureActionId = 'payum.context.'.$contextName.'.action.capture';
+        $container->setDefinition($captureActionId, $captureActionDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($captureActionId)));
+
+        $statusActionDefinition = new Definition('Payum\Bridge\Omnipay\Action\StatusAction');
+        $statusActionId = 'payum.context.'.$contextName.'.action.status';
+        $container->setDefinition($statusActionId, $statusActionDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($statusActionId)));
     }
 }

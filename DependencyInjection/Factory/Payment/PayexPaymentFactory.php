@@ -23,12 +23,43 @@ class PayexPaymentFactory extends AbstractPaymentFactory
             throw new RuntimeException('Cannot find payex payment factory class. Have you installed payum/payex package?');
         }
 
-        $paymentId = parent::create($container, $contextName, $config);
-        $paymentDefinition = $container->getDefinition($paymentId);
-
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/payment'));
         $loader->load('payex.xml');
 
+        return parent::create($container, $contextName, $config);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getName()
+    {
+        return 'payex';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addConfiguration(ArrayNodeDefinition $builder)
+    {
+        parent::addConfiguration($builder);
+        
+        $builder->children()
+            ->arrayNode('api')->isRequired()->children()
+                ->arrayNode('options')->isRequired()->children()
+                    ->scalarNode('encryption_key')->isRequired()->cannotBeEmpty()->end()
+                    ->scalarNode('account_number')->isRequired()->cannotBeEmpty()->end()
+                    ->booleanNode('sandbox')->defaultTrue()->end()
+                ->end()
+            ->end()
+        ->end();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    {
         $orderApiDefinition = new DefinitionDecorator('payum.payex.api.order.prototype');
         $orderApiDefinition->replaceArgument(1, array(
             'encryptionKey' => $config['api']['options']['encryption_key'],
@@ -61,7 +92,13 @@ class PayexPaymentFactory extends AbstractPaymentFactory
         $recurringApiId = 'payum.context.'.$contextName.'.api.recurring';
         $container->setDefinition($recurringApiId, $recurringApiDefinition);
         $paymentDefinition->addMethodCall('addApi', array(new Reference($recurringApiId)));
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    protected function addActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    {
         $initializeOrderActionDefinition = new DefinitionDecorator('payum.payex.action.api.initialize_order');
         $initializeOrderActionId = 'payum.context.'.$contextName.'.action.api.initialize_order';
         $container->setDefinition($initializeOrderActionId, $initializeOrderActionDefinition);
@@ -111,7 +148,7 @@ class PayexPaymentFactory extends AbstractPaymentFactory
         $checkRecurringPaymentsActionId = 'payum.context.'.$contextName.'.action.api.check_recurring_payment';
         $container->setDefinition($checkRecurringPaymentsActionId, $checkRecurringPaymentsActionDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($checkRecurringPaymentsActionId)));
-        
+
         $paymentDetailsCaptureActionDefinition = new DefinitionDecorator('payum.payex.action.payment_details_capture');
         $paymentDetailsCaptureActionId = 'payum.context.'.$contextName.'.action.payment_details_capture';
         $container->setDefinition($paymentDetailsCaptureActionId, $paymentDetailsCaptureActionDefinition);
@@ -146,33 +183,5 @@ class PayexPaymentFactory extends AbstractPaymentFactory
         $agreementDetailsSyncActionActionId = 'payum.context.'.$contextName.'.action.agreement_details_sync';
         $container->setDefinition($agreementDetailsSyncActionActionId, $agreementDetailsSyncActionDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($agreementDetailsSyncActionActionId)));
-
-        return $paymentId;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getName()
-    {
-        return 'payex';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function addConfiguration(ArrayNodeDefinition $builder)
-    {
-        parent::addConfiguration($builder);
-        
-        $builder->children()
-            ->arrayNode('api')->isRequired()->children()
-                ->arrayNode('options')->isRequired()->children()
-                    ->scalarNode('encryption_key')->isRequired()->cannotBeEmpty()->end()
-                    ->scalarNode('account_number')->isRequired()->cannotBeEmpty()->end()
-                    ->booleanNode('sandbox')->defaultTrue()->end()
-                ->end()
-            ->end()
-        ->end();
     }
 }
