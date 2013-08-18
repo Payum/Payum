@@ -23,12 +23,45 @@ class PaypalExpressCheckoutNvpPaymentFactory extends AbstractPaymentFactory
             throw new RuntimeException('Cannot find paypal express checkout payment factory class. Have you installed payum/paypal-express-checkout-nvp package?');
         }
 
-        $paymentId = parent::create($container, $contextName, $config);
-        $paymentDefinition = $container->getDefinition($paymentId);
-
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/payment'));
         $loader->load('paypal_express_checkout_nvp.xml');
 
+        return parent::create($container, $contextName, $config);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'paypal_express_checkout_nvp';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addConfiguration(ArrayNodeDefinition $builder)
+    {
+        parent::addConfiguration($builder);
+        
+        $builder->children()
+            ->arrayNode('api')->isRequired()->children()
+                ->scalarNode('client')->defaultValue('payum.buzz.client')->cannotBeEmpty()->end()
+                ->arrayNode('options')->isRequired()->children()
+                    ->scalarNode('username')->isRequired()->cannotBeEmpty()->end()
+                    ->scalarNode('password')->isRequired()->cannotBeEmpty()->end()
+                    ->scalarNode('signature')->isRequired()->cannotBeEmpty()->end()
+                    ->booleanNode('sandbox')->defaultTrue()->end()
+                ->end()
+            ->end()
+        ->end();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    {
         $apiDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.api');
         $apiDefinition->replaceArgument(0, new Reference($config['api']['client']));
         $apiDefinition->replaceArgument(1, $config['api']['options']);
@@ -36,12 +69,18 @@ class PaypalExpressCheckoutNvpPaymentFactory extends AbstractPaymentFactory
         $apiId = 'payum.context.'.$contextName.'.api';
         $container->setDefinition($apiId, $apiDefinition);
         $paymentDefinition->addMethodCall('addApi', array(new Reference($apiId)));
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    protected function addActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    {
         $authorizeTokenDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.authorize_token');
         $authorizeTokenId = 'payum.context.'.$contextName.'.action.api.authorize_token';
         $container->setDefinition($authorizeTokenId, $authorizeTokenDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($authorizeTokenId)));
-        
+
         $doExpressCheckoutPaymentDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.do_express_checkout_payment');
         $doExpressCheckoutPaymentId = 'payum.context.'.$contextName.'.action.api.do_express_checkout_payment';
         $container->setDefinition($doExpressCheckoutPaymentId, $doExpressCheckoutPaymentDefinition);
@@ -101,35 +140,5 @@ class PaypalExpressCheckoutNvpPaymentFactory extends AbstractPaymentFactory
         $recurringPaymentDetailsSyncsId = 'payum.context.' . $contextName . '.action.recurring_payment_details_sync';
         $container->setDefinition($recurringPaymentDetailsSyncsId, $recurringPaymentDetailsSyncDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($recurringPaymentDetailsSyncsId)));
-
-        return $paymentId;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'paypal_express_checkout_nvp';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addConfiguration(ArrayNodeDefinition $builder)
-    {
-        parent::addConfiguration($builder);
-        
-        $builder->children()
-            ->arrayNode('api')->isRequired()->children()
-                ->scalarNode('client')->defaultValue('payum.buzz.client')->cannotBeEmpty()->end()
-                ->arrayNode('options')->isRequired()->children()
-                    ->scalarNode('username')->isRequired()->cannotBeEmpty()->end()
-                    ->scalarNode('password')->isRequired()->cannotBeEmpty()->end()
-                    ->scalarNode('signature')->isRequired()->cannotBeEmpty()->end()
-                    ->booleanNode('sandbox')->defaultTrue()->end()
-                ->end()
-            ->end()
-        ->end();
     }
 }
