@@ -19,29 +19,17 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
         $paymentId = 'payum.context.'.$contextName.'.payment';
         $container->setDefinition($paymentId, $paymentDefinition);
 
-        foreach (array_reverse($config['apis']) as $apiId) {
-            $paymentDefinition->addMethodCall(
-                'addApi',
-                array(new Reference($apiId), $forcePrepend = true)
-            );
-        }
+        $this->addCommonApis($paymentDefinition, $container, $contextName, $config);
+        $this->addApis($paymentDefinition, $container, $contextName, $config);
+        $this->addCustomApis($paymentDefinition, $container, $contextName, $config);
 
-        foreach (array_reverse($config['actions']) as $actionId) {
-            $paymentDefinition->addMethodCall(
-                'addAction',
-                array(new Reference($actionId), $forcePrepend = true)
-            );
-        }
-
-        foreach (array_reverse($config['extensions']) as $extensionId) {
-            $paymentDefinition->addMethodCall(
-                'addExtension',
-                array(new Reference($extensionId), $forcePrepend = true)
-            );
-        }
-        
         $this->addCommonActions($paymentDefinition);
+        $this->addActions($paymentDefinition, $container, $contextName, $config);
+        $this->addCustomActions($paymentDefinition, $container, $contextName, $config);
+
         $this->addCommonExtensions($paymentDefinition);
+        $this->addExtensions($paymentDefinition, $container, $contextName, $config);
+        $this->addCustomExtensions($paymentDefinition, $container, $contextName, $config);
 
         return $paymentId;
     }
@@ -102,6 +90,94 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
         $container->setParameter($contextParameter, $parameter);
         
         return "%{$contextParameter}%";
+    }
+
+    /**
+     * @param Definition $paymentDefinition
+     * @param ContainerBuilder $container
+     * @param $contextName
+     * @param array $config
+     */
+    protected function addCustomApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    {
+        foreach (array_reverse($config['apis']) as $apiId) {
+            $paymentDefinition->addMethodCall(
+                'addApi',
+                array(new Reference($apiId), $forcePrepend = true)
+            );
+        }
+    }
+
+    /**
+     * @param Definition $paymentDefinition
+     * @param ContainerBuilder $container
+     * @param $contextName
+     * @param array $config
+     */
+    protected function addCustomActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    {
+        foreach (array_reverse($config['actions']) as $actionId) {
+            $paymentDefinition->addMethodCall(
+                'addAction',
+                array(new Reference($actionId), $forcePrepend = true)
+            );
+        }
+    }
+
+    /**
+     * @param Definition $paymentDefinition
+     * @param ContainerBuilder $container
+     * @param $contextName
+     * @param array $config
+     */
+    protected function addCustomExtensions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    {
+        foreach (array_reverse($config['extensions']) as $extensionId) {
+            $paymentDefinition->addMethodCall(
+                'addExtension',
+                array(new Reference($extensionId), $forcePrepend = true)
+            );
+        }
+    }
+
+    /**
+     * @param Definition $paymentDefinition
+     * @param ContainerBuilder $container
+     * @param $contextName
+     * @param array $config
+     */
+    protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    {
+    }
+
+    /**
+     * @param Definition $paymentDefinition
+     * @param ContainerBuilder $container
+     * @param $contextName
+     * @param array $config
+     */
+    protected function addActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    {
+    }
+
+    /**
+     * @param Definition $paymentDefinition
+     * @param ContainerBuilder $container
+     * @param $contextName
+     * @param array $config
+     */
+    protected function addExtensions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    {
+    }
+
+    /**
+     * @param Definition $paymentDefinition
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param $contextName
+     * @param array $config
+     */
+    protected function addCommonApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    {
     }
 
     /**
