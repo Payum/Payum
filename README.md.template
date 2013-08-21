@@ -269,6 +269,12 @@ What's inside?
 * The extension will try to find model on `onPreExecute` if an id given.
 * Second, It saves the model after execute, on `onInteractiveRequest` and `postRequestExecute`.
 
+### Logging
+
+You can use any PSR-3 compatible logger. There are two log extension out of the box.
+First one `LoggerExtension` check if an action implements `LoggerAwareInterface` and set the logger to the action if so.
+Second `LogActionsStackExtension` is handy while debugging or understanding payum internals. It logs each request and sub request.
+
 ### Like it? Spread the world!
 
 You can star the lib on [github](https://github.com/Payum/Payum) or [packagist](https://packagist.org/packages/payum/payum). You may also drop a message on Twitter.  

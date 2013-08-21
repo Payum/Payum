@@ -98,7 +98,7 @@ class FilesystemStorage implements StorageInterface
     /**
      * {@inheritdoc}
      */
-    function getIdentificator($model)
+    public function getIdentificator($model)
     {
         if (false == $this->supportModel($model)) {
             throw new InvalidArgumentException(sprintf(
