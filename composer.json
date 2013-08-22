@@ -21,7 +21,7 @@
         "doctrine/orm": "2.*",
         "fp/testo": "dev-master",
         "phpunit/phpunit": "3.7.*",
-        "psr-log": "~1.0"
+        "psr/log": "~1.0"
     },
     "suggest": {
         "payum/paypal-express-checkout-nvp": "If you want to use paypal express checkout, digital goods or recurring payments",
