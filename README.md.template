@@ -10,11 +10,15 @@ It is a full-fledged payments library.
 * [Authorize.Net AIM](https://github.com/Payum/AuthorizeNetAim)
 * [Be2Bill](https://github.com/Payum/Be2Bill)
 * All gateways supported by [omnipay](https://github.com/adrianmacneil/omnipay) lib via [bridge](https://github.com/Payum/OmnipayBridge).
+* [JMS payment bundles](http://jmsyst.com/bundles/JMSPaymentCoreBundle/master/payment_backends) via [bridge](https://github.com/Payum/JMSPaymentBridge).
+* _Add your payment here_.
 
 #### Frameworks supported.
 
 * Symfony2 [bundle][payum-bundle] and sandbox: [code][sandbox-code], [online][sandbox-online].
-* Zend2 module to be implemented.
+* Zend2 module under development.
+* [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md) compliant loggers.
+* _Add your framework here_.
 
 #### The architecture
 
@@ -273,7 +277,15 @@ What's inside?
 
 You can use any PSR-3 compatible logger. There are two log extension out of the box.
 First one `LoggerExtension` check if an action implements `LoggerAwareInterface` and set the logger to the action if so.
-Second `LogActionsStackExtension` is handy while debugging or understanding payum internals. It logs each request and sub request.
+
+```php
+<?php
+{{testo:Payum\Examples\ReadmeTest::loggerExtension}}
+```
+
+```php
+{{testo:examples/Payum/Examples/Action/LoggerAwareAction.php}}
+```
 
 ### Like it? Spread the world!
 

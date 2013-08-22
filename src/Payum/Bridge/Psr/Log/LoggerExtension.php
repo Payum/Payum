@@ -1,7 +1,8 @@
 <?php
-namespace Payum\Extension;
+namespace Payum\Bridge\Psr\Log;
 
 use Payum\Action\ActionInterface;
+use Payum\Extension\ExtensionInterface;
 use Payum\Request\InteractiveRequestInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
