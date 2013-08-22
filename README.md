@@ -10,11 +10,15 @@ It is a full-fledged payments library.
 * [Authorize.Net AIM](https://github.com/Payum/AuthorizeNetAim)
 * [Be2Bill](https://github.com/Payum/Be2Bill)
 * All gateways supported by [omnipay](https://github.com/adrianmacneil/omnipay) lib via [bridge](https://github.com/Payum/OmnipayBridge).
+* [JMS payment bundles](http://jmsyst.com/bundles/JMSPaymentCoreBundle/master/payment_backends) via [bridge](https://github.com/Payum/JMSPaymentBridge).
+* _Add your payment here_.
 
 #### Frameworks supported.
 
 * Symfony2 [bundle][payum-bundle] and sandbox: [code][sandbox-code], [online][sandbox-online].
-* Zend2 module to be implemented.
+* Zend2 module under development.
+* [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md) compliant loggers.
+* _Add your framework here_.
 
 #### The architecture
 
@@ -334,6 +338,66 @@ What's inside?
 
 * The extension will try to find model on `onPreExecute` if an id given.
 * Second, It saves the model after execute, on `onInteractiveRequest` and `postRequestExecute`.
+
+### Logging
+
+You can use any PSR-3 compatible logger inside an action.
+Two rules should be completed. First add `LoggerExtension` and second an action must implement `LoggerAwareInterface` interface.
+
+```php
+<?php
+//Source: Payum\Examples\ReadmeTest::loggerExtension()
+use Payum\Bridge\Psr\Log\LoggerExtension;
+use Payum\Examples\Action\LoggerAwareAction;
+use Payum\Payment;
+
+
+$payment = new Payment;
+$payment->addExtension(new LoggerExtension($logger));
+$payment->addAction(new LoggerAwareAction);
+
+$payment->execute('a request');
+```
+
+```php
+<?php
+namespace Payum\Examples\Action;
+
+use Payum\Action\ActionInterface;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
+
+class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
+{
+    protected $logger;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function execute($request)
+    {   
+        if ($this->logger) {
+            $this->logger->debug('I can log something here');
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supports($request)
+    {
+        return $request == 'a request';
+    }
+}
+```
 
 ### Like it? Spread the world!
 

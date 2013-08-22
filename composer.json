@@ -20,7 +20,8 @@
         "ext-pdo_sqlite": "*",
         "doctrine/orm": "2.*",
         "fp/testo": "dev-master",
-        "phpunit/phpunit": "3.7.*"
+        "phpunit/phpunit": "3.7.*",
+        "psr/log": "~1.0"
     },
     "suggest": {
         "payum/paypal-express-checkout-nvp": "If you want to use paypal express checkout, digital goods or recurring payments",
@@ -29,7 +30,8 @@
         "payum/authorize-net-aim": "If you want to use Authorize.Net AIM payment gateway",
         "payum/be2bill": "If you want to use be2bill payment gateway",
         "payum/omnipay-bridge": "If you want to use omnipay's gateways",
-        "doctrine/orm": "If you want to store models to database using doctrin2 ORM"
+        "doctrine/orm": "If you want to store models to database using doctrin2 ORM",
+        "psr/log": "In case you want to use logger"
     },
     "config": {
         "bin-dir": "bin"

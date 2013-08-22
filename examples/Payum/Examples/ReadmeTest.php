@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Examples;
 
+use Payum\Bridge\Psr\Log\LoggerExtension;
 use Payum\Examples\Request\AuthorizeRequest;
 use Payum\Examples\Action\CaptureAction;
 use Payum\Extension\StorageExtension;
@@ -11,6 +12,7 @@ use Payum\Request\CaptureRequest;
 use Payum\Request\RedirectUrlInteractiveRequest;
 use Payum\Payment;
 use Payum\Storage\FilesystemStorage;
+use Payum\Examples\Action\LoggerAwareAction;
 
 class ReadmeTest extends \PHPUnit_Framework_TestCase
 {   
@@ -129,5 +131,33 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         $payment->addExtension(new StorageExtension($storage));
         
         //do capture for example.
+    }
+
+    /**
+     * @test
+     */
+    public function loggerExtension()
+    {
+        //@testo:start
+        //@testo:source
+        //@testo:uncomment:use Payum\Bridge\Psr\Log\LoggerExtension;
+        //@testo:uncomment:use Payum\Examples\Action\LoggerAwareAction;
+        //@testo:uncomment:use Payum\Payment;
+
+        //@testo:end
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger
+            ->expects($this->once())
+            ->method('debug')
+            ->with('I can log something here')
+        ;
+        //@testo:start
+
+        $payment = new Payment;
+        $payment->addExtension(new LoggerExtension($logger));
+        $payment->addAction(new LoggerAwareAction);
+
+        $payment->execute('a request');
+        //@testo:end
     }
 }
