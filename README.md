@@ -341,8 +341,8 @@ What's inside?
 
 ### Logging
 
-You can use any PSR-3 compatible logger. There are two log extension out of the box.
-First one `LoggerExtension` check if an action implements `LoggerAwareInterface` and set the logger to the action if so.
+You can use any PSR-3 compatible logger inside an action.
+Two rules should be completed. First add `LoggerExtension` and second an action must implement `LoggerAwareInterface` interface.
 
 ```php
 <?php
