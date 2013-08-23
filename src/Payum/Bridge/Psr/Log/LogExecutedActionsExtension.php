@@ -52,6 +52,12 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
      */
     public function onExecute($request, ActionInterface $action)
     {
+        $this->logger->debug(sprintf(
+            '[Payum] %d# %s::execute(%s)',
+            $this->stackLevel,
+            $this->toString($action, false),
+            $this->toStringRequest($request)
+        ));
     }
 
     /**
@@ -59,13 +65,6 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
      */
     public function onPostExecute($request, ActionInterface $action)
     {
-        $this->logger->debug(sprintf(
-            '[Payum] %d. %s::execute(%s)',
-            $this->stackLevel,
-            $this->toString($action),
-            $this->toStringRequest($request)
-        ));
-
         $this->stackLevel--;
     }
 
@@ -74,7 +73,7 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
      */
     public function onInteractiveRequest(InteractiveRequestInterface $interactiveRequest, $request, ActionInterface $action)
     {
-        $this->logger->debug(sprintf('[Payum] %d. %s::execute(%s) throws interactive %s',
+        $this->logger->debug(sprintf('[Payum] %d# %s::execute(%s) throws interactive %s',
             $this->stackLevel,
             $this->toString($action),
             $this->toStringRequest($request),
@@ -89,7 +88,7 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
      */
     public function onException(\Exception $exception, $request, ActionInterface $action = null)
     {
-        $this->logger->debug(sprintf('[Payum] %d. %s::execute(%s) throws exception %s',
+        $this->logger->debug(sprintf('[Payum] %d# %s::execute(%s) throws exception %s',
             $this->stackLevel,
             $action ? $this->toString($action) : 'Payment',
             $this->toStringRequest($request),
@@ -107,14 +106,10 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
     {
         $message = $this->toString($request);
         if ($request instanceof ModelRequestInterface) {
-            $message .= sprintf(
-                "{%s@%s}",
-                $this->toString($request->getModel()),
-                spl_object_hash($request->getModel())
-            );
+            $message .= sprintf("{model: %s}", $this->toString($request->getModel()));
         }
         if ($request instanceof RedirectUrlInteractiveRequest) {
-            $message .= sprintf('(%s)', $request->getUrl());
+            $message .= sprintf('{url: %s}', $request->getUrl());
         }
 
         return $message;
@@ -122,15 +117,20 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
 
     /**
      * @param mixed $value
+     * @param bool $shortClass
      *
      * @return string
      */
-    protected function toString($value)
+    protected function toString($value, $shortClass = true)
     {
         if (is_object($value)) {
-            $ro = new \ReflectionObject($value);
+            if ($shortClass) {
+                $ro = new \ReflectionObject($value);
 
-            return $ro->getShortName();
+                return $ro->getShortName();
+            }
+
+            return get_class($value);
         }
 
         return gettype($value);
