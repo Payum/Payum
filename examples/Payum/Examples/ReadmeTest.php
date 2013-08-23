@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Examples;
 
+use Payum\Bridge\Psr\Log\LogExecutedActionsExtension;
 use Payum\Bridge\Psr\Log\LoggerExtension;
 use Payum\Examples\Request\AuthorizeRequest;
 use Payum\Examples\Action\CaptureAction;
@@ -158,6 +159,32 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         $payment->addAction(new LoggerAwareAction);
 
         $payment->execute('a request');
+        //@testo:end
+    }
+
+    /**
+     * @test
+     */
+    public function logExecutedActions()
+    {
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger
+            ->expects($this->at(0))
+            ->method('debug')
+            ->with($this->stringStartsWith('[Payum] 1# '.get_class(new CaptureAction).'::execute(CaptureRequest{model: stdClass})'))
+        ;
+
+        //@testo:start
+        //@testo:source
+        //@testo:uncomment:use Payum\Bridge\Psr\Log\LogExecutedActionsExtension;
+        //@testo:uncomment:use Payum\Payment;
+        //@testo:uncomment:use Payum\Request\CaptureRequest;
+
+        $payment = new Payment;
+        $payment->addExtension(new LogExecutedActionsExtension($logger));
+        $payment->addAction(new CaptureAction);
+
+        $payment->execute(new CaptureRequest($model = new \stdClass));
         //@testo:end
     }
 }
