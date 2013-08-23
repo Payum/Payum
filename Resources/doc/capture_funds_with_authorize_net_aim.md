@@ -189,4 +189,5 @@ class PaymentController extends Controller
 * [How payment dome action could look like?](how_payment_done_action_could_look_like.md).
 * [Configuration reference](configuration_reference.md).
 * [Sandbox](sandbox.md).
+* [Debugging](debugging.md).
 * [Back to index](index.md).
