@@ -1,3 +1,9 @@
+0.5 to 0.6
+==========
+
+* AbstractPaymentFactory::addCommonExtensions method signature has been changed.
+* AbstractPaymentFactory::addCommonActions method signature has been changed.
+
 0.3 to 0.5
 ==========
 
