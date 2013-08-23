@@ -6,6 +6,7 @@ use Payum\Bridge\Psr\Log\LogExecutedActionsExtension;
 use Payum\Request\CaptureRequest;
 use Payum\Request\CaptureTokenizedDetailsRequest;
 use Payum\Request\InteractiveRequestInterface;
+use Payum\Request\RedirectUrlInteractiveRequest;
 use Psr\Log\LoggerInterface;
 
 class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
@@ -79,7 +80,133 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldLogNotObjectActionAndRequestOnExecute()
+    public function shouldNotLogAnythingOnPreExecute()
+    {
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->never())
+            ->method('debug')
+        ;
+
+        $extension = new LogExecutedActionsExtension($logger);
+
+        $extension->onPreExecute(new \stdClass);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotLogAnythingOnExecute()
+    {
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->never())
+            ->method('debug')
+        ;
+
+        $extension = new LogExecutedActionsExtension($logger);
+
+        $extension->onExecute(new \stdClass, $this->createActionMock());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldIncrementStackOnPreExecute()
+    {
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->at(0))
+            ->method('debug')
+            ->with($this->stringStartsWith('[Payum] 2. '))
+        ;
+
+        $extension = new LogExecutedActionsExtension($logger);
+
+        $extension->onPreExecute('string');
+        $extension->onPreExecute('string');
+        $extension->onPostExecute(new \stdClass, $this->createActionMock());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldDecrementStackOnPostExecute()
+    {
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->at(0))
+            ->method('debug')
+            ->with($this->stringStartsWith('[Payum] 2. '))
+        ;
+        $logger
+            ->expects($this->at(1))
+            ->method('debug')
+            ->with($this->stringStartsWith('[Payum] 1. '))
+        ;
+
+        $extension = new LogExecutedActionsExtension($logger);
+
+        $extension->onPreExecute('string');
+        $extension->onPreExecute('string');
+        $extension->onPostExecute(new \stdClass, $this->createActionMock());
+        $extension->onPostExecute(new \stdClass, $this->createActionMock());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldDecrementStackOnException()
+    {
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->at(0))
+            ->method('debug')
+            ->with($this->stringStartsWith('[Payum] 2. '))
+        ;
+        $logger
+            ->expects($this->at(1))
+            ->method('debug')
+            ->with($this->stringStartsWith('[Payum] 1. '))
+        ;
+
+        $extension = new LogExecutedActionsExtension($logger);
+
+        $extension->onPreExecute('string');
+        $extension->onPreExecute('string');
+        $extension->onException(new \Exception, new \stdClass);
+        $extension->onException(new \Exception, new \stdClass, $this->createActionMock());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldDecrementStackOnInteractiveRequest()
+    {
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->at(0))
+            ->method('debug')
+            ->with($this->stringStartsWith('[Payum] 2. '))
+        ;
+        $logger
+            ->expects($this->at(1))
+            ->method('debug')
+            ->with($this->stringStartsWith('[Payum] 1. '))
+        ;
+
+        $extension = new LogExecutedActionsExtension($logger);
+
+        $extension->onPreExecute('string');
+        $extension->onPreExecute('string');
+        $extension->onInteractiveRequest($this->createInteractiveRequestMock(), new \stdClass, $this->createActionMock());
+        $extension->onInteractiveRequest($this->createInteractiveRequestMock(), new \stdClass, $this->createActionMock());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLogNotObjectActionAndRequestOnPostExecute()
     {
         $action = new FooAction;
 
@@ -87,54 +214,27 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
         $logger
             ->expects($this->at(0))
             ->method('debug')
-            ->with('[Payum][0] FooAction@'.spl_object_hash($action).'::execute(string)')
+            ->with('[Payum] 1. FooAction::execute(string)')
         ;
         $logger
             ->expects($this->at(1))
             ->method('debug')
-            ->with('[Payum][0] FooAction@'.spl_object_hash($action).'::execute(array)')
-        ;
-
-        $extension = new LogExecutedActionsExtension($logger);
-
-        $extension->onExecute('string', $action);
-        $extension->onExecute(array(), $action);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldLogWithIncrementedStacklLevelOnExecute()
-    {
-        $action = new FooAction;
-
-        $logger = $this->createLoggerMock();
-        $logger
-            ->expects($this->at(0))
-            ->method('debug')
-            ->with('[Payum][2] FooAction@'.spl_object_hash($action).'::execute(string)')
-        ;
-        $logger
-            ->expects($this->at(1))
-            ->method('debug')
-            ->with('[Payum][4] FooAction@'.spl_object_hash($action).'::execute(string)')
+            ->with('[Payum] 1. FooAction::execute(array)')
         ;
 
         $extension = new LogExecutedActionsExtension($logger);
 
         $extension->onPreExecute('string');
-        $extension->onPreExecute('string');
-        $extension->onExecute('string', $action);
+        $extension->onPostExecute('string', $action);
 
-        $extension->onPreExecute('string');
-        $extension->onPreExecute('string');
-        $extension->onExecute('string', $action);
+        $extension->onPreExecute(array());
+        $extension->onPostExecute(array(), $action);
     }
 
     /**
      * @test
      */
-    public function shouldLogActionAndObjectRequestOnExecute()
+    public function shouldLogActionAndObjectRequestOnPostExecute()
     {
         $action = new FooAction;
         $stdRequest = new \stdClass;
@@ -144,24 +244,27 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
         $logger
             ->expects($this->at(0))
             ->method('debug')
-            ->with('[Payum][0] FooActio1n@'.spl_object_hash($action).'::execute(stdClass@'.spl_object_hash($stdRequest).')')
+            ->with('[Payum] 1. FooAction::execute(stdClass)')
         ;
         $logger
             ->expects($this->at(1))
             ->method('debug')
-            ->with('[Payum][0] FooAction@'.spl_object_hash($action).'::execute(NamespacedRequest@'.spl_object_hash($namespacedRequest).')')
+            ->with('[Payum] 1. FooAction::execute(NamespacedRequest)')
         ;
 
         $extension = new LogExecutedActionsExtension($logger);
 
-        $extension->onExecute($stdRequest, $action);
-        $extension->onExecute($namespacedRequest, $action);
+        $extension->onPreExecute($stdRequest);
+        $extension->onPostExecute($stdRequest, $action);
+
+        $extension->onPreExecute($namespacedRequest);
+        $extension->onPostExecute($namespacedRequest, $action);
     }
 
     /**
      * @test
      */
-    public function shouldLogActionAndModelRequestWithModelNoObjectOnExecute()
+    public function shouldLogActionAndModelRequestWithModelNoObjectOnPostExecute()
     {
         $action = new FooAction;
         $model = array();
@@ -171,35 +274,115 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
         $logger
             ->expects($this->at(0))
             ->method('debug')
-            ->with($this->stringStartsWith('[Payum][0] FooAction@'.spl_object_hash($action).'::execute(CaptureRequest@'.spl_object_hash($modelRequest).'{ArrayObject@'))
+            ->with($this->stringStartsWith('[Payum] 1. FooAction::execute(CaptureRequest{ArrayObject@'))
         ;
 
         $extension = new LogExecutedActionsExtension($logger);
 
-        $extension->onExecute($modelRequest, $action);
+        $extension->onPreExecute($modelRequest);
+        $extension->onPostExecute($modelRequest, $action);
     }
 
     /**
      * @test
      */
-    public function shouldLogActionAndModelRequestWithObjectModelOnExecute()
+    public function shouldLogActionAndModelRequestWithObjectModelOnPostExecute()
+    {
+        $action = new FooAction;
+        $stdModel = new \stdClass;
+        $stdModelRequest = new CaptureRequest($stdModel);
+
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->at(0))
+            ->method('debug')
+            ->with('[Payum] 1. FooAction::execute(CaptureRequest{stdClass@'.spl_object_hash($stdModel).'})')
+        ;
+
+        $extension = new LogExecutedActionsExtension($logger);
+
+        $extension->onPreExecute($stdModelRequest);
+        $extension->onPostExecute($stdModelRequest, $action);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLogOnInteractiveRequest()
+    {
+        $action = new FooAction;
+        $interactiveRequest = $this->createInteractiveRequestMock();
+
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->at(0))
+            ->method('debug')
+            ->with('[Payum] 1. FooAction::execute(string) throws interactive '.get_class($interactiveRequest))
+        ;
+
+        $extension = new LogExecutedActionsExtension($logger);
+
+        $extension->onPreExecute('string');
+        $extension->onInteractiveRequest($interactiveRequest, 'string', $action);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLogRedirectUrlInteractiveRequestWithUrlIncludedOnInteractiveRequest()
+    {
+        $action = new FooAction;
+        $interactiveRequest = new RedirectUrlInteractiveRequest('http://example.com');
+
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->at(0))
+            ->method('debug')
+            ->with('[Payum] 1. FooAction::execute(string) throws interactive RedirectUrlInteractiveRequest('.$interactiveRequest->getUrl().')')
+        ;
+
+        $extension = new LogExecutedActionsExtension($logger);
+
+        $extension->onPreExecute('string');
+        $extension->onInteractiveRequest($interactiveRequest, 'string', $action);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLogOnExceptionWhenActionPassed()
+    {
+        $action = new FooAction;
+
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->at(0))
+            ->method('debug')
+            ->with('[Payum] 1. FooAction::execute(string) throws exception LogicException')
+        ;
+
+        $extension = new LogExecutedActionsExtension($logger);
+
+        $extension->onPreExecute('string');
+        $extension->onException(new \LogicException, 'string', $action);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLogOnExceptionWhenActionNotPassed()
     {
         $logger = $this->createLoggerMock();
         $logger
             ->expects($this->at(0))
             ->method('debug')
-            ->with('[Payum][0][PreExecute] CaptureRequest{stdClass}')
+            ->with('[Payum] 1. Payment::execute(string) throws exception LogicException')
         ;
 
         $extension = new LogExecutedActionsExtension($logger);
 
-
-        $capture = new CaptureRequest(new \stdClass);
-
-        //guard
-        $this->assertInstanceOf('Payum\Request\ModelRequestInterface', $capture);
-
-        $extension->onPreExecute($capture);
+        $extension->onPreExecute('string');
+        $extension->onException(new \LogicException, 'string');
     }
 
     /**

@@ -5,6 +5,7 @@ use Payum\Action\ActionInterface;
 use Payum\Extension\ExtensionInterface;
 use Payum\Request\InteractiveRequestInterface;
 use Payum\Request\ModelRequestInterface;
+use Payum\Request\RedirectUrlInteractiveRequest;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -51,12 +52,6 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
      */
     public function onExecute($request, ActionInterface $action)
     {
-        $this->logger->debug(sprintf(
-            '[Payum][%d] %s::execute(%s)',
-            $this->stackLevel,
-            $this->toString($action),
-            $this->toStringRequest($request)
-        ));
     }
 
     /**
@@ -64,6 +59,13 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
      */
     public function onPostExecute($request, ActionInterface $action)
     {
+        $this->logger->debug(sprintf(
+            '[Payum] %d. %s::execute(%s)',
+            $this->stackLevel,
+            $this->toString($action),
+            $this->toStringRequest($request)
+        ));
+
         $this->stackLevel--;
     }
 
@@ -72,10 +74,11 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
      */
     public function onInteractiveRequest(InteractiveRequestInterface $interactiveRequest, $request, ActionInterface $action)
     {
-        $this->logger->debug('[Payum][%d] %s::execute() throws interactive request %s', array(
+        $this->logger->debug(sprintf('[Payum] %d. %s::execute(%s) throws interactive %s',
             $this->stackLevel,
             $this->toString($action),
-            $this->toString($interactiveRequest)
+            $this->toStringRequest($request),
+            $this->toStringRequest($interactiveRequest)
         ));
 
         $this->stackLevel--;
@@ -86,21 +89,14 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
      */
     public function onException(\Exception $exception, $request, ActionInterface $action = null)
     {
-        $this->stackLevel--;
+        $this->logger->debug(sprintf('[Payum] %d. %s::execute(%s) throws exception %s',
+            $this->stackLevel,
+            $action ? $this->toString($action) : 'Payment',
+            $this->toStringRequest($request),
+            $this->toString($exception)
+        ));
 
-        if ($action) {
-            $this->logger->debug('[Payum][%d] %s::execute() throws exception %s', array(
-                $this->stackLevel,
-                $this->toString($action),
-                $this->toString($exception)
-            ));
-        } else {
-            $this->logger->debug('[Payum][%d] An exception %s is thrown. Request %s', array(
-                $this->stackLevel,
-                $this->toString($exception),
-                $this->toString($request)
-            ));
-        }
+        $this->stackLevel--;
     }
 
     /**
@@ -111,7 +107,14 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
     {
         $message = $this->toString($request);
         if ($request instanceof ModelRequestInterface) {
-            $message .= sprintf("{%s}", $this->toString($request->getModel()));
+            $message .= sprintf(
+                "{%s@%s}",
+                $this->toString($request->getModel()),
+                spl_object_hash($request->getModel())
+            );
+        }
+        if ($request instanceof RedirectUrlInteractiveRequest) {
+            $message .= sprintf('(%s)', $request->getUrl());
         }
 
         return $message;
@@ -127,7 +130,7 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
         if (is_object($value)) {
             $ro = new \ReflectionObject($value);
 
-            return $ro->getShortName().'@'.spl_object_hash($value);
+            return $ro->getShortName();
         }
 
         return gettype($value);
