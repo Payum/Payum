@@ -8,6 +8,8 @@
         <parameter key="payum.class">Payum\Bundle\PayumBundle\Registry\ContainerAwareRegistry</parameter>
         <parameter key="payum.payment.class">Payum\Payment</parameter>
         <parameter key="payum.token_manager.class">Payum\Bundle\PayumBundle\Service\TokenManager</parameter>
+        <parameter key="payum.extension.log_executed_actions.class">Payum\Bridge\Psr\Log\LogExecutedActionsExtension</parameter>
+        <parameter key="payum.extension.logger.class">Payum\Bridge\Psr\Log\LoggerExtension</parameter>
         <parameter key="payum.extension.storage.class">Payum\Extension\StorageExtension</parameter>
         <parameter key="payum.extension.endless_cycle_detector.class">Payum\Extension\EndlessCycleDetectorExtension</parameter>
         <parameter key="payum.buzz.client.class">Buzz\Client\Curl</parameter>
@@ -54,6 +56,20 @@
             public="false"
         >
             <argument/> <!-- this should be replaced with real storage service -->
+        </service>
+
+        <service
+            id="payum.extension.log_executed_actions"
+            class="%payum.extension.log_executed_actions.class%"
+        >
+            <argument type="service" id="logger"></argument>
+        </service>
+
+        <service
+            id="payum.extension.logger"
+            class="%payum.extension.logger.class%"
+        >
+            <argument type="service" id="logger"></argument>
         </service>
 
         <service id="payum.listener.interactive_request" class="%payum.listener.interactive_request.class%">

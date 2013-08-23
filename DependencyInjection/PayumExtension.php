@@ -9,6 +9,7 @@ use Symfony\Component\Config\FileLocator;
 use Payum\Exception\InvalidArgumentException;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 class PayumExtension extends Extension
 {
@@ -34,7 +35,12 @@ class PayumExtension extends Extension
         // load services
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('payum.xml');
-        
+
+        if (version_compare(Kernel::VERSION, '2.2.0', '<')) {
+            $container->removeDefinition('payum.extension.log_executed_actions');
+            $container->removeDefinition('payum.extension.logger');
+        }
+
         $this->loadContexts($config['contexts'], $container);
     }
     
