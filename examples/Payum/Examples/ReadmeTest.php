@@ -177,6 +177,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         //@testo:start
         //@testo:source
         //@testo:uncomment:use Payum\Bridge\Psr\Log\LogExecutedActionsExtension;
+        //@testo:uncomment:use Payum\Examples\Action\CaptureAction;
         //@testo:uncomment:use Payum\Payment;
         //@testo:uncomment:use Payum\Request\CaptureRequest;
 

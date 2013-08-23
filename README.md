@@ -402,14 +402,15 @@ class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
 ### Debug
 
 I must admit the architecture of payum is hard to debug (Each action decide whether it supports request or not, an action can delegate some job to another action, etc).
-To solve this problem we implement `LogExecutedActionsExtension`. It logs all executed actions with details.
-To make it work add the extension with configured PSR-3 logger and check the log after.
-You can filter log by `[Payum]`.
+To solve this problem we implement `LogExecutedActionsExtension`. It logs all executed actions with some details.
+Just add the extension with PSR-3 logger and check the log after.
+Tip: You can filter log by `[Payum]`.
 
 ```php
 <?php
 //Source: Payum\Examples\ReadmeTest::logExecutedActions()
 use Payum\Bridge\Psr\Log\LogExecutedActionsExtension;
+use Payum\Examples\Action\CaptureAction;
 use Payum\Payment;
 use Payum\Request\CaptureRequest;
 
