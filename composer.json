@@ -31,7 +31,7 @@
         "payum/be2bill": "If you want to use be2bill payment gateway",
         "payum/omnipay-bridge": "If you want to use omnipay's gateways",
         "doctrine/orm": "If you want to store models to database using doctrin2 ORM",
-        "psr/log": "In case you want to use logger"
+        "monolog/monolog": "In case you want to use logger"
     },
     "config": {
         "bin-dir": "bin"
