@@ -1,7 +1,8 @@
 <?php
-namespace Payum\Extension;
+namespace Payum\Bridge\Psr\Log;
 
 use Payum\Action\ActionInterface;
+use Payum\Extension\ExtensionInterface;
 use Payum\Request\InteractiveRequestInterface;
 use Payum\Request\ModelRequestInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -42,11 +43,6 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
      */
     public function onPreExecute($request)
     {
-        $this->logger->debug('[Payum][Stack %d] Pre execute: %s', array(
-            $this->stackLevel,
-            $this->convertRequestToLogMessage($request)
-        ));
-
         $this->stackLevel++;
     }
 
@@ -55,12 +51,11 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
      */
     public function onExecute($request, ActionInterface $action)
     {
-        $ro = new \ReflectionObject($action);
-
-        $this->logger->debug('[Payum][Stack %d] Execute: %s(%s)', array(
+        $this->logger->debug(sprintf(
+            '[Payum][%d] %s::execute(%s)',
             $this->stackLevel,
-            $ro->getShortName(),
-            $this->convertRequestToLogMessage($request)
+            $this->toString($action),
+            $this->toStringRequest($request)
         ));
     }
 
@@ -69,14 +64,6 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
      */
     public function onPostExecute($request, ActionInterface $action)
     {
-        $ro = new \ReflectionObject($action);
-
-        $this->logger->debug('[Payum][Stack %d] Post execute: %s(%s)', array(
-            $this->stackLevel,
-            $ro->getShortName(),
-            $this->convertRequestToLogMessage($request)
-        ));
-
         $this->stackLevel--;
     }
 
@@ -85,12 +72,10 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
      */
     public function onInteractiveRequest(InteractiveRequestInterface $interactiveRequest, $request, ActionInterface $action)
     {
-        $ro = new \ReflectionObject($action);
-
-        $this->logger->debug('[Payum][Stack %d] Action %s throws interactive %s request', array(
+        $this->logger->debug('[Payum][%d] %s::execute() throws interactive request %s', array(
             $this->stackLevel,
-            $ro->getShortName(),
-            $this->convertRequestToLogMessage($request)
+            $this->toString($action),
+            $this->toString($interactiveRequest)
         ));
 
         $this->stackLevel--;
@@ -103,33 +88,48 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
     {
         $this->stackLevel--;
 
-        $this->logger->error('[Payum][Stack %d] An exception %s was thrown on line: %s in file: ', array(
-            $this->stackLevel,
-            get_class($exception),
-            $exception->getLine(),
-            $exception->getFile(),
-        ));
+        if ($action) {
+            $this->logger->debug('[Payum][%d] %s::execute() throws exception %s', array(
+                $this->stackLevel,
+                $this->toString($action),
+                $this->toString($exception)
+            ));
+        } else {
+            $this->logger->debug('[Payum][%d] An exception %s is thrown. Request %s', array(
+                $this->stackLevel,
+                $this->toString($exception),
+                $this->toString($request)
+            ));
+        }
     }
 
     /**
      * @param mixed $request
      * @return string
      */
-    protected function convertRequestToLogMessage($request)
+    protected function toStringRequest($request)
     {
-        if (false == is_object($request)) {
-            return gettype($request);
-        }
-
-        $ro = new \ReflectionObject($request);
-
-        $message = $ro->getShortName();
+        $message = $this->toString($request);
         if ($request instanceof ModelRequestInterface) {
-            $model = $request->getModel();
-
-            $message .= sprintf("{%s}", is_object($model) ? get_class($model) : gettype($model));
+            $message .= sprintf("{%s}", $this->toString($request->getModel()));
         }
 
         return $message;
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return string
+     */
+    protected function toString($value)
+    {
+        if (is_object($value)) {
+            $ro = new \ReflectionObject($value);
+
+            return $ro->getShortName().'@'.spl_object_hash($value);
+        }
+
+        return gettype($value);
     }
 }
