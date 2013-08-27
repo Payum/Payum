@@ -23,11 +23,11 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
         $this->addApis($paymentDefinition, $container, $contextName, $config);
         $this->addCustomApis($paymentDefinition, $container, $contextName, $config);
 
-        $this->addCommonActions($paymentDefinition);
+        $this->addCommonActions($paymentDefinition, $container, $contextName, $config);
         $this->addActions($paymentDefinition, $container, $contextName, $config);
         $this->addCustomActions($paymentDefinition, $container, $contextName, $config);
 
-        $this->addCommonExtensions($paymentDefinition);
+        $this->addCommonExtensions($paymentDefinition, $container, $contextName, $config);
         $this->addExtensions($paymentDefinition, $container, $contextName, $config);
         $this->addCustomExtensions($paymentDefinition, $container, $contextName, $config);
 
@@ -182,8 +182,11 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
 
     /**
      * @param Definition $paymentDefinition
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param string $contextName
+     * @param array $config
      */
-    protected function addCommonActions(Definition $paymentDefinition)
+    protected function addCommonActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
     {
         $paymentDefinition->addMethodCall(
             'addAction',
@@ -203,8 +206,11 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
 
     /**
      * @param Definition $paymentDefinition
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param string $contextName
+     * @param array $config
      */
-    protected function addCommonExtensions(Definition $paymentDefinition)
+    protected function addCommonExtensions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
     {
         $paymentDefinition->addMethodCall(
             'addExtension', 
