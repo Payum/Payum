@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpKernel\Kernel;
 
 abstract class AbstractPaymentFactory implements PaymentFactoryInterface  
 {
@@ -216,5 +217,16 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
             'addExtension', 
             array(new Reference('payum.extension.endless_cycle_detector'))
         );
+
+        if (version_compare(Kernel::VERSION, '2.2.0', '>=')) {
+            $paymentDefinition->addMethodCall(
+                'addExtension',
+                array(new Reference('payum.extension.log_executed_actions'))
+            );
+            $paymentDefinition->addMethodCall(
+                'addExtension',
+                array(new Reference('payum.extension.logger'))
+            );
+        }
     }
 }

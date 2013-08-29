@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory;
+use Symfony\Component\HttpKernel\Kernel;
 
 class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -234,6 +235,38 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             $container->getDefinition($paymentId),
             'addExtension',
             new Reference('payum.extension.endless_cycle_detector')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAddCommonLogExtensions()
+    {
+        if (version_compare(Kernel::VERSION, '2.2.0', '<')) {
+            $this->markTestSkipped('Feature avaliable for symfony since 2.2 only.');
+        }
+
+        $factory = $this->createAbstractPaymentFactory();
+
+        $container = new ContainerBuilder;
+
+        $paymentId = $factory->create($container, 'aContextName', array(
+            'actions' => array(),
+            'apis' => array(),
+            'extensions' => array(),
+        ));
+
+        $this->assertDefinitionContainsMethodCall(
+            $container->getDefinition($paymentId),
+            'addExtension',
+            new Reference('payum.extension.log_executed_actions')
+        );
+
+        $this->assertDefinitionContainsMethodCall(
+            $container->getDefinition($paymentId),
+            'addExtension',
+            new Reference('payum.extension.logger')
         );
     }
 
