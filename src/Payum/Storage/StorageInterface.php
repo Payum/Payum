@@ -9,6 +9,8 @@ interface StorageInterface
     function createModel();
 
     /**
+     * @deprecated since 0.5
+     * 
      * @param object|string $model
      * 
      * @return boolean
