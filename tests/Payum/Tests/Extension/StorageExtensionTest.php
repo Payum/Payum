@@ -50,7 +50,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldDoNothingOnPreExecuteIfStorageNotSupportModel()
+    public function shouldDoNothingOnPreExecuteIfFindModelByIdentificatorReturnNull()
     {
         $expectedModel = new \stdClass;
         $expectedId = 123;
@@ -59,13 +59,9 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
         $storageMock = $this->createStorageMock();
         $storageMock
             ->expects($this->atLeastOnce())
-            ->method('supportModel')
-            ->with(get_class($expectedModel))
-            ->will($this->returnValue(false))
-        ;
-        $storageMock
-            ->expects($this->never())
-            ->method('findModelById')
+            ->method('findModelByIdentificator')
+            ->with($identificator)
+            ->will($this->returnValue(null))
         ;
 
         $modelRequestMock = $this->getMock('Payum\Request\ModelRequestInterface');
@@ -149,14 +145,9 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
 
         $storageMock = $this->createStorageMock();
         $storageMock
-            ->expects($this->atLeastOnce())
-            ->method('supportModel')
-            ->will($this->returnValue(true))
-        ;
-        $storageMock
             ->expects($this->once())
-            ->method('findModelById')
-            ->with($expectedId)
+            ->method('FindModelByIdentificator')
+            ->with($identificator)
             ->will($this->returnValue($expectedModel))
         ;
         
