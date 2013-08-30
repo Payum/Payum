@@ -2,6 +2,8 @@
 ==========
 
 * [Doctrine] `TokenizedDetails` mapping schema was updated. details field is now accept `NULL`.
+* [Storage] The method `Storage::supportModel` accepts only model object. Support of model class was removed.
+* [Storage] The method `Storage::findModelByIdentificator` was added to storage interface.
 
 0.4 to 0.5
 ==========

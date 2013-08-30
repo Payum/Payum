@@ -9,10 +9,8 @@ interface StorageInterface
     function createModel();
 
     /**
-     * @deprecated since 0.5
-     * 
-     * @param object|string $model
-     * 
+     * @param object $model
+     *
      * @return boolean
      */
     function supportModel($model);
@@ -41,6 +39,13 @@ interface StorageInterface
      * @return object|null
      */
     function findModelById($id);
+
+    /**
+     * @param Identificator $identificator
+     *
+     * @return object|null
+     */
+    function findModelByIdentificator(Identificator $identificator);
 
     /**
      * @param object $model
