@@ -16,11 +16,11 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementStorageInterface()    
+    public function shouldBeSubClassOfAbstractStorage()
     {
         $rc = new \ReflectionClass('Payum\Bridge\Doctrine\Storage\DoctrineStorage');
         
-        $this->assertTrue($rc->implementsInterface('Payum\Storage\StorageInterface'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Storage\AbstractStorage'));
     }
 
     /**
@@ -32,45 +32,6 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
             $this->createObjectManagerMock(),
             'Payum\Examples\Model\TestModel'
         );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldReturnTrueIfSupportedModelGiven()
-    {
-        $storage = new DoctrineStorage(
-            $this->createObjectManagerMock(),
-            'Payum\Examples\Model\TestModel'
-        );
-
-        $this->assertTrue($storage->supportModel(new TestModel));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldReturnTrueIfSupportedModelClassGiven()
-    {
-        $storage = new DoctrineStorage(
-            $this->createObjectManagerMock(),
-            'Payum\Examples\Model\TestModel'
-        );
-
-        $this->assertTrue($storage->supportModel('Payum\Examples\Model\TestModel'));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldReturnFalseIfNotSupportedModelGiven()
-    {
-        $storage = new DoctrineStorage(
-            $this->createObjectManagerMock(),
-            'Payum\Examples\Model\TestModel'
-        );
-
-        $this->assertFalse($storage->supportModel(new \stdClass));
     }
 
     /**
@@ -142,48 +103,6 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
         $actualModel = $storage->findModelById($expectedModelId);
     
         $this->assertSame($expectedFoundModel, $actualModel);
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid model given. Should be instance of Payum\Tests\Bridge\Doctrine\Storage\TestModel
-     */
-    public function throwIfTryUpdateNotSupportedModel()
-    {
-        $storage = new DoctrineStorage(
-            $this->createObjectManagerMock(),
-            'Payum\Tests\Bridge\Doctrine\Storage\TestModel'
-        );
-
-        $notSupportedModel = new \stdClass;
-        
-        //guard
-        $this->assertFalse($storage->supportModel($notSupportedModel));
-
-        $storage->updateModel($notSupportedModel);
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid model given. Should be instance of Payum\Tests\Bridge\Doctrine\Storage\TestModel
-     */
-    public function throwIfTryGetIdentifierOfNotSupportedModel()
-    {
-        $storage = new DoctrineStorage(
-            $this->createObjectManagerMock(),
-            'Payum\Tests\Bridge\Doctrine\Storage\TestModel'
-        );
-
-        $notSupportedModel = new \stdClass;
-
-        //guard
-        $this->assertFalse($storage->supportModel($notSupportedModel));
-
-        $storage->getIdentificator($notSupportedModel);
     }
 
     /**

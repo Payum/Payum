@@ -16,7 +16,7 @@ class StorageExtension implements ExtensionInterface
     protected $storage;
 
     /**
-     * @var array
+     * @var int
      */
     protected $requestStackLevel = 0;
     
@@ -34,7 +34,7 @@ class StorageExtension implements ExtensionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function onPreExecute($request)
     {
@@ -47,14 +47,10 @@ class StorageExtension implements ExtensionInterface
         if ($request->getModel() instanceof Identificator) {
             /** @var Identificator $identificator */
             $identificator = $request->getModel();
-            if (false == $this->storage->supportModel($identificator->getClass())) {
+            if (false == $model = $this->storage->findModelByIdentificator($identificator)) {
                 return;
             }
 
-            if (false == $model = $this->storage->findModelById($identificator->getId())) {
-                throw new LogicException('Cannot find model by identifier: '.$identificator);
-            }
-            
             $request->setModel($model);
         }
 
@@ -66,14 +62,14 @@ class StorageExtension implements ExtensionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function onExecute($request, ActionInterface $action)
     {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function onException(\Exception $exception, $request, ActionInterface $action = null)
     {
@@ -82,7 +78,7 @@ class StorageExtension implements ExtensionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function onPostExecute($request, ActionInterface $action)
     {
@@ -90,7 +86,7 @@ class StorageExtension implements ExtensionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function onInteractiveRequest(InteractiveRequestInterface $interactiveRequest, $request, ActionInterface $action)
     {

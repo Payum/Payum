@@ -31,6 +31,14 @@ abstract class AbstractStorage implements StorageInterface
     /**
      * {@inheritDoc}
      */
+    public function supportModel($model)
+    {
+        return $model instanceof $this->modelClass;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function updateModel($model)
     {
         $this->assertModelSupported($model);
@@ -61,7 +69,7 @@ abstract class AbstractStorage implements StorageInterface
             ));
         }
 
-        return $this->doFindModelByIdentificator($identificator);
+        return $this->findModelById($identificator->getId());
     }
 
     /**
@@ -96,20 +104,13 @@ abstract class AbstractStorage implements StorageInterface
     abstract protected function doGetIdentificator($model);
 
     /**
-     * @param Identificator $identificator
-     *
-     * @return object|null
-     */
-    abstract protected function doFindModelByIdentificator(Identificator $identificator);
-
-    /**
-     * @param mixed $model
+     * @param object $model
      *
      * @throws \Payum\Exception\InvalidArgumentException
      */
     protected function assertModelSupported($model)
     {
-        if (false == $model instanceof $this->modelClass) {
+        if (false == $this->supportModel($model)) {
             throw new InvalidArgumentException(sprintf(
                 'Invalid model given. Should be instance of %s but it is %s',
                 $this->modelClass,

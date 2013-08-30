@@ -1,9 +1,6 @@
 <?php
 namespace Payum\Tests\Storage;
 
-use MyProject\Proxies\__CG__\OtherProject\Proxies\__CG__\stdClass;
-use Payum\Examples\Model\TestModel;
-use \Payum\Storage\FilesystemStorage;
 use Payum\Storage\Identificator;
 
 class AbstractStorageTest extends \PHPUnit_Framework_TestCase
@@ -163,17 +160,69 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldCallDoFindModelByIdentificatorOnFindModelByIdentificator()
+    public function shouldCallFindModelByIdOnFindModelByIdentificatorWithIdFromIdentificator()
     {
-        $identificator = new Identificator('anId', new \stdClass);
+        $identificator = new Identificator('theId', new \stdClass);
 
         $storage = $this->getMockForAbstractClass('Payum\Storage\AbstractStorage', array('stdClass'));
         $storage
             ->expects($this->once())
-            ->method('doFindModelByIdentificator')
-            ->with($this->identicalTo($identificator))
+            ->method('findModelById')
+            ->with('theId')
         ;
 
         $storage->findModelByIdentificator($identificator);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldProxyFindModelByIdResultOnFindModelByIdentificator()
+    {
+        $expectedModel = new \stdClass;
+        $identificator = new Identificator('aId', $expectedModel);
+
+        $storage = $this->getMockForAbstractClass('Payum\Storage\AbstractStorage', array('stdClass'));
+        $storage
+            ->expects($this->once())
+            ->method('findModelById')
+            ->will($this->returnValue($expectedModel))
+        ;
+
+        $this->assertSame($expectedModel, $storage->findModelByIdentificator($identificator));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnTrueIfModelSupportedOnSupportModel()
+    {
+        $model = $this->getMock('stdClass');
+
+        $storage = $this->getMockForAbstractClass('Payum\Storage\AbstractStorage', array(get_class($model)));
+
+        $this->assertTrue($storage->supportModel($model));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnFalseIfModelNotSupportedOnSupportModel()
+    {
+        $modelClass = get_class($this->getMock('stdClass'));
+
+        $storage = $this->getMockForAbstractClass('Payum\Storage\AbstractStorage', array($modelClass));
+
+        $this->assertFalse($storage->supportModel(new \stdClass));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnFalseIfModelNotObjectOnSupportModel()
+    {
+        $storage = $this->getMockForAbstractClass('Payum\Storage\AbstractStorage', array('stdClass'));
+
+        $this->assertFalse($storage->supportModel('notObject'));
     }
 }
