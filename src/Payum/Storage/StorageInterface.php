@@ -10,7 +10,7 @@ interface StorageInterface
 
     /**
      * @param object $model
-     *
+     * 
      * @return boolean
      */
     function supportModel($model);
