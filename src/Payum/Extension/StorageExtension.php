@@ -73,8 +73,7 @@ class StorageExtension implements ExtensionInterface
      */
     public function onException(\Exception $exception, $request, ActionInterface $action = null)
     {
-        $this->requestStackLevel = 0;
-        $this->trackedModels = array();
+        $this->updateTrackedModels();
     }
 
     /**
