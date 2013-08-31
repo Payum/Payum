@@ -171,26 +171,26 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldIncreaseRequestStackLevelOnEveryOnPreExecuteCall()
+    public function shouldIncreaseStackLevelOnEveryOnPreExecuteCall()
     {
         $extension = new StorageExtension($this->createStorageMock());
 
-        $this->assertAttributeEquals(0, 'requestStackLevel', $extension);
+        $this->assertAttributeEquals(0, 'stackLevel', $extension);
         
         $extension->onPreExecute(new \stdClass);
-        $this->assertAttributeEquals(1, 'requestStackLevel', $extension);
+        $this->assertAttributeEquals(1, 'stackLevel', $extension);
 
         $extension->onPreExecute(new \stdClass);
-        $this->assertAttributeEquals(2, 'requestStackLevel', $extension);
+        $this->assertAttributeEquals(2, 'stackLevel', $extension);
 
         $extension->onPreExecute(new \stdClass);
-        $this->assertAttributeEquals(3, 'requestStackLevel', $extension);
+        $this->assertAttributeEquals(3, 'stackLevel', $extension);
     }
 
     /**
      * @test
      */
-    public function shouldDecreaseRequestStackLevelOnEveryOnPostExecuteCall()
+    public function shouldDecreaseStackLevelOnEveryOnPostExecuteCall()
     {
         $extension = new StorageExtension($this->createStorageMock());
 
@@ -199,19 +199,19 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
         $extension->onPreExecute(new \stdClass);
         
         //guard
-        $this->assertAttributeEquals(3, 'requestStackLevel', $extension);
+        $this->assertAttributeEquals(3, 'stackLevel', $extension);
 
         $extension->onPostExecute(new \stdClass, $this->createActionMock());
-        $this->assertAttributeEquals(2, 'requestStackLevel', $extension);
+        $this->assertAttributeEquals(2, 'stackLevel', $extension);
         
         $extension->onPostExecute(new \stdClass, $this->createActionMock());
-        $this->assertAttributeEquals(1, 'requestStackLevel', $extension);
+        $this->assertAttributeEquals(1, 'stackLevel', $extension);
     }
 
     /**
      * @test
      */
-    public function shouldDecreaseRequestStackLevelOnEveryOnInteractiveRequestCall()
+    public function shouldDecreaseStackLevelOnEveryOnInteractiveRequestCall()
     {
         $extension = new StorageExtension($this->createStorageMock());
 
@@ -220,19 +220,19 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
         $extension->onPreExecute(new \stdClass);
 
         //guard
-        $this->assertAttributeEquals(3, 'requestStackLevel', $extension);
+        $this->assertAttributeEquals(3, 'stackLevel', $extension);
 
         $extension->onInteractiveRequest($this->createInteractiveRequestMock(), new \stdClass, $this->createActionMock());
-        $this->assertAttributeEquals(2, 'requestStackLevel', $extension);
+        $this->assertAttributeEquals(2, 'stackLevel', $extension);
 
         $extension->onInteractiveRequest($this->createInteractiveRequestMock(), new \stdClass, $this->createActionMock());
-        $this->assertAttributeEquals(1, 'requestStackLevel', $extension);
+        $this->assertAttributeEquals(1, 'stackLevel', $extension);
     }
 
     /**
      * @test
      */
-    public function shouldDecreaseRequestStackLevelOnEveryOnExceptionCall()
+    public function shouldDecreaseStackLevelOnEveryOnExceptionCall()
     {
         $extension = new StorageExtension($this->createStorageMock());
 
@@ -241,19 +241,19 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
         $extension->onPreExecute(new \stdClass);
 
         //guard
-        $this->assertAttributeEquals(3, 'requestStackLevel', $extension);
+        $this->assertAttributeEquals(3, 'stackLevel', $extension);
 
         $extension->onException(new \Exception, new \stdClass);
-        $this->assertAttributeEquals(2, 'requestStackLevel', $extension);
+        $this->assertAttributeEquals(2, 'stackLevel', $extension);
 
         $extension->onException(new \Exception, new \stdClass, $this->createActionMock());
-        $this->assertAttributeEquals(1, 'requestStackLevel', $extension);
+        $this->assertAttributeEquals(1, 'stackLevel', $extension);
     }
 
     /**
      * @test
      */
-    public function shouldUpdateModelOneTimeOnSameLevelItIntroducedOnPostExecute()
+    public function shouldUpdateModelOneTimeOnLastStackLevelOnPostExecute()
     {
         $expectedModel = new \stdClass;
 
@@ -284,23 +284,23 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
         $extension->onPreExecute($modelRequestMock);
 
         //guard
-        $this->assertAttributeEquals(3, 'requestStackLevel', $extension);
-        $this->assertAttributeNotEmpty('trackedModels', $extension);
+        $this->assertAttributeEquals(3, 'stackLevel', $extension);
+        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
 
         $extension->onPostExecute(new \stdClass, $this->createActionMock());
-        $this->assertAttributeNotEmpty('trackedModels', $extension);
+        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
 
         $extension->onPostExecute(new \stdClass, $this->createActionMock());
-        $this->assertAttributeNotEmpty('trackedModels', $extension);
+        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
 
         $extension->onPostExecute(new \stdClass, $this->createActionMock());
-        $this->assertAttributeEmpty('trackedModels', $extension);
+        $this->assertAttributeEmpty('scheduledForUpdateModels', $extension);
     }
 
     /**
      * @test
      */
-    public function shouldUpdateModelOneTimeOnSameLevelItIntroducedOnInteractiveRequest()
+    public function shouldUpdateModelOneTimeOnLastStackLevelOnInteractiveRequest()
     {
         $expectedModel = new \stdClass;
 
@@ -331,23 +331,23 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
         $extension->onPreExecute($modelRequestMock);
 
         //guard
-        $this->assertAttributeEquals(3, 'requestStackLevel', $extension);
-        $this->assertAttributeNotEmpty('trackedModels', $extension);
+        $this->assertAttributeEquals(3, 'stackLevel', $extension);
+        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
 
         $extension->onInteractiveRequest($this->createInteractiveRequestMock(), $modelRequestMock, $this->createActionMock());
-        $this->assertAttributeNotEmpty('trackedModels', $extension);
+        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
 
         $extension->onInteractiveRequest($this->createInteractiveRequestMock(), $modelRequestMock, $this->createActionMock());
-        $this->assertAttributeNotEmpty('trackedModels', $extension);
+        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
 
         $extension->onInteractiveRequest($this->createInteractiveRequestMock(), $modelRequestMock, $this->createActionMock());
-        $this->assertAttributeEmpty('trackedModels', $extension);
+        $this->assertAttributeEmpty('scheduledForUpdateModels', $extension);
     }
 
     /**
      * @test
      */
-    public function shouldUpdateModelOneTimeOnSameLevelItIntroducedOnException()
+    public function shouldUpdateModelOneTimeOnLastStackLevelOnException()
     {
         $expectedModel = new \stdClass;
 
@@ -378,17 +378,17 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
         $extension->onPreExecute($modelRequestMock);
 
         //guard
-        $this->assertAttributeEquals(3, 'requestStackLevel', $extension);
-        $this->assertAttributeNotEmpty('trackedModels', $extension);
+        $this->assertAttributeEquals(3, 'stackLevel', $extension);
+        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
 
         $extension->onException(new \Exception, new \stdClass, $this->createActionMock());
-        $this->assertAttributeNotEmpty('trackedModels', $extension);
+        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
 
         $extension->onException(new \Exception, new \stdClass, $this->createActionMock());
-        $this->assertAttributeNotEmpty('trackedModels', $extension);
+        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
 
         $extension->onException(new \Exception, new \stdClass, $this->createActionMock());
-        $this->assertAttributeEmpty('trackedModels', $extension);
+        $this->assertAttributeEmpty('scheduledForUpdateModels', $extension);
     }
 
     protected function createModelRequestWithModel($model)

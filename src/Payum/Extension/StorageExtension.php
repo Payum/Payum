@@ -18,12 +18,12 @@ class StorageExtension implements ExtensionInterface
     /**
      * @var int
      */
-    protected $requestStackLevel = 0;
+    protected $stackLevel = 0;
     
     /**
-     * @var array
+     * @var object[]
      */
-    protected $trackedModels = array();
+    protected $scheduledForUpdateModels = array();
 
     /**
      * @param \Payum\Storage\StorageInterface $storage
@@ -38,7 +38,7 @@ class StorageExtension implements ExtensionInterface
      */
     public function onPreExecute($request)
     {
-        $this->requestStackLevel++;
+        $this->stackLevel++;
         
         if (false == $request instanceof ModelRequestInterface) {
             return;
@@ -55,9 +55,12 @@ class StorageExtension implements ExtensionInterface
         }
 
         if ($this->storage->supportModel($request->getModel())) {
-            $this->trackModel($request);
+            $modelHash = spl_object_hash($request->getModel());
+            if (array_key_exists($modelHash, $this->scheduledForUpdateModels)) {
+                return;
+            }
 
-            return;
+            $this->scheduledForUpdateModels[$modelHash] = $request->getModel();
         }
     }
 
@@ -73,7 +76,11 @@ class StorageExtension implements ExtensionInterface
      */
     public function onException(\Exception $exception, $request, ActionInterface $action = null)
     {
-        $this->updateTrackedModels();
+        $this->stackLevel--;
+
+        if (0 === $this->stackLevel) {
+            $this->updateScheduledModels();
+        }
     }
 
     /**
@@ -81,7 +88,11 @@ class StorageExtension implements ExtensionInterface
      */
     public function onPostExecute($request, ActionInterface $action)
     {
-        $this->updateTrackedModels();
+        $this->stackLevel--;
+
+        if (0 === $this->stackLevel) {
+            $this->updateScheduledModels();
+        }
     }
 
     /**
@@ -89,37 +100,18 @@ class StorageExtension implements ExtensionInterface
      */
     public function onInteractiveRequest(InteractiveRequestInterface $interactiveRequest, $request, ActionInterface $action)
     {
-        $this->updateTrackedModels();
-    }
+        $this->stackLevel--;
 
-    protected function updateTrackedModels()
-    {
-        $currentRequestStackLevel = $this->requestStackLevel--;
-        
-        foreach ($this->trackedModels as $modelHash => $trackedModelData) {
-            if ($currentRequestStackLevel != $trackedModelData['requestStackLevelModelIntroduced']) {
-                continue;
-            }
-            
-            $this->storage->updateModel($trackedModelData['model']);
-            unset($this->trackedModels[$modelHash]);
+        if (0 === $this->stackLevel) {
+            $this->updateScheduledModels();
         }
     }
 
-    /**
-     * @param \Payum\Request\ModelRequestInterface $request
-     */
-    protected function trackModel(ModelRequestInterface $request)
+    protected function updateScheduledModels()
     {
-        $model = $request->getModel();
-        $modelHash = spl_object_hash($model);
-        if (array_key_exists($modelHash, $this->trackedModels)) {
-            return;
+        foreach ($this->scheduledForUpdateModels as $modelHash => $model) {
+            $this->storage->updateModel($model);
+            unset($this->scheduledForUpdateModels[$modelHash]);
         }
-        
-        $this->trackedModels[$modelHash] = array(
-            'requestStackLevelModelIntroduced' => $this->requestStackLevel,
-            'model' => $model,
-        );
     }
 }
