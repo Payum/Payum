@@ -4,7 +4,6 @@ namespace Payum\Tests\Bridge\Psr\Log;
 use Payum\Action\ActionInterface;
 use Payum\Bridge\Psr\Log\LogExecutedActionsExtension;
 use Payum\Request\CaptureRequest;
-use Payum\Request\CaptureTokenizedDetailsRequest;
 use Payum\Request\InteractiveRequestInterface;
 use Payum\Request\RedirectUrlInteractiveRequest;
 use Psr\Log\LoggerInterface;

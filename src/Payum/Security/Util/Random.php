@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Payum\Util;
+namespace Payum\Security\Util;
 
 class Random
 {
