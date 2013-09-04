@@ -3,6 +3,7 @@
 
 * AbstractPaymentFactory::addCommonExtensions method signature has been changed.
 * AbstractPaymentFactory::addCommonActions method signature has been changed.
+* `TokenManager` was removed. Its work was partially moved to `TokenFactory` and `HttpRequestVerifier`.
 
 0.3 to 0.5
 ==========

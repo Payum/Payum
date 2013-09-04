@@ -9,7 +9,7 @@ Well, let's assume you created capture token this way while preparing payment:
 
 ```php
 <?php
-$captureToken = $this->get('payum.token_manager')->createTokenForCaptureRoute(
+$captureToken = $this->get('payum.security.token_factory')->createTokenForCaptureRoute(
     $paymentName,
     $paymentDetails,
     'acme_payment_done'
@@ -22,7 +22,7 @@ It is the route of url you will be redirected after capture done its job. Let's 
 ```php
     public function captureDoneAction(Request $request)
     {
-        $token = $this->get('payum.token_manager')->getTokenFromRequest($request);
+        $token = $this->get('payum.security.http_request_verifier')->verify($request);
 
         $payment = $this->get('payum')->getPayment($token->getPaymentName());
 

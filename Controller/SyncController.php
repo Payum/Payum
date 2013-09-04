@@ -1,43 +1,22 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Payum\Request\SyncRequest;
+use Payum\Exception\RequestNotSupportedException;
 use Symfony\Component\HttpFoundation\Request;
 
-use Payum\Request\SyncRequest;
-use Payum\Registry\RegistryInterface;
-use Payum\Exception\RequestNotSupportedException;
-use Payum\Bundle\PayumBundle\Service\TokenManager;
-
-class SyncController extends Controller 
+class SyncController extends PayumController
 {
     public function doAction(Request $request)
     {
-        $token = $this->getTokenManager()->getTokenFromRequest($request);
+        $token = $this->getHttpRequestVerifier()->verify($request);
 
         $payment = $this->getPayum()->getPayment($token->getPaymentName());
+
+        $payment->execute(new SyncRequest($token));
         
-        $sync = new SyncRequest($token);
-        $payment->execute($sync);
-        
-        $this->getTokenManager()->deleteToken($token);
+        $this->getHttpRequestVerifier()->invalidate($token);
         
         return $this->redirect($token->getAfterUrl());
-    }
-
-    /**
-     * @return RegistryInterface
-     */
-    protected function getPayum()
-    {
-        return $this->get('payum');
-    }
-
-    /**
-     * @return TokenManager
-     */
-    protected function getTokenManager()
-    {
-        return $this->get('payum.token_manager');
     }
 }

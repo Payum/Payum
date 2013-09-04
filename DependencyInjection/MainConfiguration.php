@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\ArrayNode;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -38,7 +39,7 @@ class MainConfiguration implements ConfigurationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getConfigTreeBuilder()
     {
@@ -46,6 +47,14 @@ class MainConfiguration implements ConfigurationInterface
         
         $tb = new TreeBuilder();
         $rootNode = $tb->root('payum');
+
+        $securityNode = $rootNode
+            ->children()
+                ->arrayNode('security')
+                    ->isRequired()
+        ;
+
+        $this->addSecuritySection($securityNode);
         
         $contextsPrototypeNode = $rootNode
             ->children()
@@ -86,17 +95,23 @@ class MainConfiguration implements ConfigurationInterface
         
         return $tb;
     }
-    
-    protected function addPaymentsSection(ArrayNodeDefinition $contextsPrototypeNode, array $factories)
+
+    /**
+     * @param ArrayNodeDefinition $contextsPrototypeNode
+     */
+    protected function addPaymentsSection(ArrayNodeDefinition $contextsPrototypeNode)
     {
-        foreach ($factories as $factory) {
+        foreach ($this->paymentFactories as $factory) {
             $factory->addConfiguration(
                 $contextsPrototypeNode->children()->arrayNode($factory->getName())
             );
         }
     }
 
-    protected function addStoragesSection(ArrayNodeDefinition $contextsPrototypeNode, array $factories)
+    /**
+     * @param ArrayNodeDefinition $contextsPrototypeNode
+     */
+    protected function addStoragesSection(ArrayNodeDefinition $contextsPrototypeNode)
     {
         $storageNode = $contextsPrototypeNode->children()
                 ->arrayNode('storages')
@@ -135,7 +150,65 @@ class MainConfiguration implements ConfigurationInterface
             ->end()
         ;
         
-        foreach ($factories as $factory) {
+        foreach ($this->storageFactories as $factory) {
+            $factory->addConfiguration(
+                $storageNode->children()->arrayNode($factory->getName())
+            );
+        }
+    }
+
+    /**
+     * @param ArrayNodeDefinition $securityNode
+     */
+    protected function addSecuritySection(ArrayNodeDefinition $securityNode)
+    {
+        $storageNode = $securityNode->children()
+            ->arrayNode('token_storage')
+            ->isRequired()
+            ->validate()
+            ->ifTrue(function($v) {
+                foreach($v as $key => $value) {
+                    if (false == class_exists($key)) {
+                        throw new LogicException(sprintf(
+                            'The storage entry must be a valid model class. It is set %s',
+                            $key
+                        ));
+                    }
+
+                    if (false == is_a($key, 'Payum\Security\TokenInterface', true)) {
+                        throw new LogicException('The token class must implement `Payum\Security\TokenInterface` interface');
+                    }
+
+                    if (count($v) > 1) {
+                        throw new LogicException('Only one token storage could be configured.');
+                    }
+                }
+
+                return false;
+            })
+            ->thenInvalid('A message')
+            ->end()
+            ->useAttributeAsKey('key')
+            ->prototype('array')
+        ;
+
+        $storageNode
+            ->validate()
+            ->ifTrue(function($v) {
+                if (count($v) == 0) {
+                    throw new LogicException('At least one storage must be configured.');
+                }
+                if (count($v) > 1) {
+                    throw new LogicException('Only one storage per entry could be selected');
+                }
+
+                return false;
+            })
+            ->thenInvalid('A message')
+            ->end()
+        ;
+
+        foreach ($this->storageFactories as $factory) {
             $factory->addConfiguration(
                 $storageNode->children()->arrayNode($factory->getName())
             );

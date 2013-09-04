@@ -179,7 +179,7 @@ class PaymentController extends Controller
 
         $storage->updateModel($paymentDetails);
 
-        $captureToken = $this->get('payum.token_manager')->createTokenForCaptureRoute(
+        $captureToken = $this->get('payum.security.token_factory')->createTokenForCaptureRoute(
             $paymentName,
             $paymentDetails,
             'acme_payment_done' // the route to redirect after capture;

@@ -53,6 +53,16 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Security\Token' => array(
+                            'filesystem' => array(
+                                'storage_dir' => sys_get_temp_dir(),
+                                'id_property' => 'hash'
+                            )
+                        )
+                    )
+                ),
                 'contexts' => array(
                     'a_context' => array(
                         'paypal_express_checkout_nvp' => array(
@@ -86,6 +96,16 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Security\Token' => array(
+                            'filesystem' => array(
+                                'storage_dir' => sys_get_temp_dir(),
+                                'id_property' => 'hash'
+                            )
+                        )
+                    )
+                ),
                 'contexts' => array(
                     'a_context' => array(
                         'storages' => array(
@@ -116,6 +136,16 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Security\Token' => array(
+                            'filesystem' => array(
+                                'storage_dir' => sys_get_temp_dir(),
+                                'id_property' => 'hash'
+                            )
+                        )
+                    )
+                ),
                 'contexts' => array(
                     'a_context' => array(
                         'storages' => array(
