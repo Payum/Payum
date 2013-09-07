@@ -143,18 +143,15 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid model given. Should be instance of Mock_stdClass_
      */
-    public function throwIfInvalidIdentificatorGivenOnFindModelByIdentificator()
+    public function shouldReturnNullIfNotSupportedIdentificatorGivenOnFindModelByIdentificator()
     {
         $modelClass = get_class($this->getMock('stdClass'));
         $identificator = new Identificator('anId', new \stdClass);
 
         $storage = $this->getMockForAbstractClass('Payum\Storage\AbstractStorage', array($modelClass));
 
-        $storage->findModelByIdentificator($identificator);
+        $this->assertNull($storage->findModelByIdentificator($identificator));
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Request;
 
-class NotifyRequest
+class NotifyRequest extends BaseModelRequest
 {
     /**
      * @var array
@@ -11,9 +11,11 @@ class NotifyRequest
     /**
      * @param array $notification
      */
-    public function __construct(array $notification)
+    public function __construct(array $notification, $model = null)
     {
         $this->notification = $notification;
+
+        parent::__construct($model);
     }
 
     /**

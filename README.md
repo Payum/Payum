@@ -426,12 +426,12 @@ Here's an example of what the log may contain:
 ```
 DEBUG - [Payum] 1# Payum\Action\StatusDetailsAggregatedModelAction::execute(BinaryMaskStatusRequest{model: TokenizedDetails})
 DEBUG - [Payum] 2# Payum\Payex\Action\PaymentDetailsStatusAction::execute(BinaryMaskStatusRequest{model: PaymentDetails})
-DEBUG - [Payum] 1# Payum\Action\CaptureDetailsAggregatedModelAction::execute(CaptureTokenizedDetailsRequest{model: TokenizedDetails})
-DEBUG - [Payum] 2# Payum\Payex\Action\PaymentDetailsCaptureAction::execute(CaptureTokenizedDetailsRequest{model: PaymentDetails})
+DEBUG - [Payum] 1# Payum\Action\CaptureDetailsAggregatedModelAction::execute(SecuredCaptureRequest{model: TokenizedDetails})
+DEBUG - [Payum] 2# Payum\Payex\Action\PaymentDetailsCaptureAction::execute(SecuredCaptureRequest{model: PaymentDetails})
 DEBUG - [Payum] 3# Payum\Payex\Action\Api\InitializeOrderAction::execute(InitializeOrderRequest{model: ArrayObject})
 DEBUG - [Payum] 3# InitializeOrderAction::execute(InitializeOrderRequest{model: ArrayObject}) throws interactive RedirectUrlInteractiveRequest{url: https://test-confined.payex.com/PxOrderCC.aspx?orderRef=7cbefc70ff294fd194d2411f457423d6}
-DEBUG - [Payum] 2# PaymentDetailsCaptureAction::execute(CaptureTokenizedDetailsRequest{model: PaymentDetails}) throws interactive RedirectUrlInteractiveRequest{url: https://test-confined.payex.com/PxOrderCC.aspx?orderRef=7cbefc70ff294fd194d2411f457423d6}
-DEBUG - [Payum] 1# CaptureDetailsAggregatedModelAction::execute(CaptureTokenizedDetailsRequest{model: PaymentDetails}) throws interactive RedirectUrlInteractiveRequest{url: https://test-confined.payex.com/PxOrderCC.aspx?orderRef=7cbefc70ff294fd194d2411f457423d6}
+DEBUG - [Payum] 2# PaymentDetailsCaptureAction::execute(SecuredCaptureRequest{model: PaymentDetails}) throws interactive RedirectUrlInteractiveRequest{url: https://test-confined.payex.com/PxOrderCC.aspx?orderRef=7cbefc70ff294fd194d2411f457423d6}
+DEBUG - [Payum] 1# CaptureDetailsAggregatedModelAction::execute(SecuredCaptureRequest{model: PaymentDetails}) throws interactive RedirectUrlInteractiveRequest{url: https://test-confined.payex.com/PxOrderCC.aspx?orderRef=7cbefc70ff294fd194d2411f457423d6}
 ```
 
 ### Like it? Spread the world!
