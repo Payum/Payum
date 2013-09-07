@@ -98,10 +98,11 @@ class PayumExtension extends Extension
     protected function loadSecurity(array $securityConfig, ContainerBuilder $container)
     {
         foreach ($securityConfig['token_storage'] as $tokenClass => $tokenStorageConfig) {
-            //force not to use payment extension because we are out of payment scope.
-            $tokenStorageConfig['payment_extension'] = false;
-
             $storageFactoryName = $this->findSelectedStorageFactoryNameInStorageConfig($tokenStorageConfig);
+
+            //force not to use payment extension because we are out of payment scope.
+            $tokenStorageConfig[$storageFactoryName]['payment_extension']['enabled'] = false;
+
             $storageId = $this->storageFactories[$storageFactoryName]->create(
                 $container,
                 '_security_token',

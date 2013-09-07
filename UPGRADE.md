@@ -4,6 +4,36 @@
 * AbstractPaymentFactory::addCommonExtensions method signature has been changed.
 * AbstractPaymentFactory::addCommonActions method signature has been changed.
 * `TokenManager` was removed. Its work was partially moved to `TokenFactory` and `HttpRequestVerifier`.
+* `CaptureTokenizedDetailsRequest` was removed, use `Payum\Request\SecuredCaptureRequest` instead.
+* `capture` url was changed if you still want use old one add `payum_deprecated_capture_do`.
+* `notify` url was changed if you still want use old one add `payum_deprecated_notify_do`.
+* `sync` url was changed if you still want use old one add `payum_deprecated_sync_do`.
+* bundle configuration was changed. Now you have to configure `payum.security` section.
+
+before:
+
+```yml
+payum:
+    contexts:
+        foo:
+            storages:
+                Acme\PaymentBundle\Entity\TokenizedDetails:
+                    filesystem:
+                        storage_dir: %kernel.root_dir%/Resources/payments
+                        id_property: token
+```
+
+after:
+
+```yml
+payum:
+    security:
+        token_storage:
+            Acme\PaymentBundle\Entity\PayumSecurityToken:
+                filesystem:
+                    storage_dir: %kernel.root_dir%/Resources/payments
+                    id_property: hash
+```
 
 0.3 to 0.5
 ==========

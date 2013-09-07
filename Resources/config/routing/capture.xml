@@ -4,7 +4,11 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="payum_capture_do" pattern="/payment/{paymentName}/capture/{token}">
+    <route id="payum_deprecated_capture_do" pattern="/payment/{paymentName}/capture/{token}">
+        <default key="_controller">PayumBundle:Capture:doDeprecated</default>
+    </route>
+
+    <route id="payum_capture_do" pattern="/payment/capture/{payum_token}">
         <default key="_controller">PayumBundle:Capture:do</default>
     </route>
 </routes>

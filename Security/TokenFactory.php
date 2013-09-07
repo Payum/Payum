@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Bundle\PayumBundle\Service;
+namespace Payum\Bundle\PayumBundle\Security;
 
 use Payum\Registry\RegistryInterface;
 use Payum\Security\TokenInterface;
@@ -44,7 +44,7 @@ class TokenFactory
      * 
      * @return TokenInterface
      */
-    public function createTokenForCaptureRoute($paymentName, $model, $afterRoute, array $afterRouteParameters = array())
+    public function createCaptureToken($paymentName, $model, $afterRoute, array $afterRouteParameters = array())
     {
         $afterToken = $this->createTokenForRoute($paymentName, $model, $afterRoute, $afterRouteParameters);
         
@@ -62,7 +62,7 @@ class TokenFactory
      *
      * @return TokenInterface
      */
-    public function createTokenForNotifyRoute($paymentName, $model)
+    public function createNotifyToken($paymentName, $model)
     {
         return $this->createTokenForRoute($paymentName, $model, 'payum_notify_do');
     }
@@ -86,7 +86,7 @@ class TokenFactory
         $token->setDetails($modelStorage->getIdentificator($model));
         $token->setPaymentName($paymentName);
         $token->setTargetUrl($this->router->generate($targetRoute, array_replace($targetRouteParameters, array(
-            'payum_token' => $token->getToken()
+            'payum_token' => $token->getHash()
         )), $absolute = true));
 
         if ($afterRoute) {

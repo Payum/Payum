@@ -26,4 +26,14 @@ class CaptureController extends PayumController
         
         return $this->redirect($token->getAfterUrl());
     }
+
+    /**
+     * @deprecated since 0.6 will be removed in 0.7. This route present for easy migration from 0.5 version.
+     */
+    public function doDeprecatedAction(Request $request)
+    {
+        return $this->forward('Payum:Capture:do', array(
+            'payum_token' => $request->attributes->get('token', $request->get('token'))
+        ));
+    }
 }

@@ -29,7 +29,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $config = array(
             'security' => array(
                 'token_storage' => array(
-                    'Payum\Security\Token' => array(
+                    'Payum\Model\Token' => array(
                         'filesystem' => array(
                             'storage_dir' => sys_get_temp_dir(),
                             'id_property' => 'hash'
@@ -85,7 +85,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $config = array(
             'security' => array(
                 'token_storage' => array(
-                    'Payum\Security\Token' => array(
+                    'Payum\Model\Token' => array(
                         'filesystem' => array(
                             'storage_dir' => sys_get_temp_dir(),
                             'id_property' => 'hash'
@@ -136,7 +136,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $config = array(
             'security' => array(
                 'token_storage' => array(
-                    'Payum\Security\Token' => array(
+                    'Payum\Model\Token' => array(
                         'filesystem' => array(
                             'storage_dir' => sys_get_temp_dir(),
                             'id_property' => 'hash'
@@ -191,7 +191,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $config = array(
             'security' => array(
                 'token_storage' => array(
-                    'Payum\Security\Token' => array(
+                    'Payum\Model\Token' => array(
                         'filesystem' => array(
                             'storage_dir' => sys_get_temp_dir(),
                             'id_property' => 'hash'
@@ -246,7 +246,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $config = array(
             'security' => array(
                 'token_storage' => array(
-                    'Payum\Security\Token' => array(
+                    'Payum\Model\Token' => array(
                         'filesystem' => array(
                             'storage_dir' => sys_get_temp_dir(),
                             'id_property' => 'hash'
@@ -298,7 +298,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $config = array(
             'security' => array(
                 'token_storage' => array(
-                    'Payum\Security\Token' => array(
+                    'Payum\Model\Token' => array(
                         'filesystem' => array(
                             'storage_dir' => sys_get_temp_dir(),
                             'id_property' => 'hash'

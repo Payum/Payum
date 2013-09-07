@@ -54,7 +54,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                     'token_storage' => array(
-                        'Payum\Security\Token' => array(
+                        'Payum\Model\Token' => array(
                             'foo_storage' => array(
                                 'foo_opt' => 'foo'
                             )
@@ -100,7 +100,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                     'token_storage' => array(
-                        'Payum\Security\Token' => array(
+                        'Payum\Model\Token' => array(
                             'foo_storage' => array(
                                 'foo_opt' => 'foo'
                             )
@@ -141,7 +141,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                     'token_storage' => array(
-                        'Payum\Security\Token' => array(
+                        'Payum\Model\Token' => array(
                             'foo_storage' => array(
                                 'foo_opt' => 'foo'
                             )
@@ -185,7 +185,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                     'token_storage' => array(
-                        'Payum\Security\Token' => array(
+                        'Payum\Model\Token' => array(
                             'foo_storage' => array(
                                 'foo_opt' => 'foo'
                             )
@@ -222,7 +222,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                     'token_storage' => array(
-                        'Payum\Security\Token' => array(
+                        'Payum\Model\Token' => array(
                             'foo_storage' => array(
                                 'foo_opt' => 'foo'
                             )
@@ -249,7 +249,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                     'token_storage' => array(
-                        'Payum\Security\Token' => array(
+                        'Payum\Model\Token' => array(
                             'foo_storage' => array(
                                 'foo_opt' => 'foo'
                             )
@@ -283,7 +283,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                     'token_storage' => array(
-                        'Payum\Security\Token' => array(
+                        'Payum\Model\Token' => array(
                             'foo_storage' => array(
                                 'foo_opt' => 'foo'
                             )
@@ -320,7 +320,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                     'token_storage' => array(
-                        'Payum\Security\Token' => array(
+                        'Payum\Model\Token' => array(
                             'foo_storage' => array(
                                 'foo_opt' => 'foo'
                             )
