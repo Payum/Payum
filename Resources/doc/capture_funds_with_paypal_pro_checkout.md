@@ -125,8 +125,7 @@ class PaymentController extends Controller
         );
 
         return $this->forward('PayumBundle:Capture:do', array(
-            'paymentName' => $paymentName,
-            'token' => $captureToken,
+            'payum_token' => $captureToken,
         ));
     }
 }
