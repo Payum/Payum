@@ -9,7 +9,7 @@ interface HttpRequestVerifierInterface
      * @throws \InvalidArgumentException if request not supported
      * @throws \Exception if token verification failed.
      *
-     * @return Token
+     * @return TokenInterface
      */
     function verify($httpRequest);
 
