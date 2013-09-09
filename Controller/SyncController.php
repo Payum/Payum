@@ -1,43 +1,32 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Payum\Request\SyncRequest;
+use Payum\Exception\RequestNotSupportedException;
 use Symfony\Component\HttpFoundation\Request;
 
-use Payum\Request\SyncRequest;
-use Payum\Registry\RegistryInterface;
-use Payum\Exception\RequestNotSupportedException;
-use Payum\Bundle\PayumBundle\Service\TokenManager;
-
-class SyncController extends Controller 
+class SyncController extends PayumController
 {
     public function doAction(Request $request)
     {
-        $token = $this->getTokenManager()->getTokenFromRequest($request);
+        $token = $this->getHttpRequestVerifier()->verify($request);
 
         $payment = $this->getPayum()->getPayment($token->getPaymentName());
+
+        $payment->execute(new SyncRequest($token));
         
-        $sync = new SyncRequest($token);
-        $payment->execute($sync);
-        
-        $this->getTokenManager()->deleteToken($token);
+        $this->getHttpRequestVerifier()->invalidate($token);
         
         return $this->redirect($token->getAfterUrl());
     }
 
     /**
-     * @return RegistryInterface
+     * @deprecated since 0.6 will be removed in 0.7. This route present for easy migration from 0.5 version.
      */
-    protected function getPayum()
+    public function doDeprecatedAction(Request $request)
     {
-        return $this->get('payum');
-    }
-
-    /**
-     * @return TokenManager
-     */
-    protected function getTokenManager()
-    {
-        return $this->get('payum.token_manager');
+        return $this->forward('Payum:Sync:do', array(
+            'payum_token' => $request->attributes->get('token', $request->get('token'))
+        ));
     }
 }

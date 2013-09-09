@@ -2,6 +2,7 @@
 namespace Payum\Bundle\PayumBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Config\FileLocator;
@@ -24,7 +25,7 @@ class PayumExtension extends Extension
     protected $paymentFactories = array();
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -41,9 +42,14 @@ class PayumExtension extends Extension
             $container->removeDefinition('payum.extension.logger');
         }
 
+        $this->loadSecurity($config['security'], $container);
         $this->loadContexts($config['contexts'], $container);
     }
-    
+
+    /**
+     * @param array $config
+     * @param ContainerBuilder $container
+     */
     protected function loadContexts(array $config, ContainerBuilder $container)
     {
         $paymentsServicesIds = array();
@@ -86,7 +92,33 @@ class PayumExtension extends Extension
     }
 
     /**
+     * @param array $securityConfig
+     * @param ContainerBuilder $container
+     */
+    protected function loadSecurity(array $securityConfig, ContainerBuilder $container)
+    {
+        foreach ($securityConfig['token_storage'] as $tokenClass => $tokenStorageConfig) {
+            $storageFactoryName = $this->findSelectedStorageFactoryNameInStorageConfig($tokenStorageConfig);
+
+            //force not to use payment extension because we are out of payment scope.
+            $tokenStorageConfig[$storageFactoryName]['payment_extension']['enabled'] = false;
+
+            $storageId = $this->storageFactories[$storageFactoryName]->create(
+                $container,
+                '_security_token',
+                $tokenClass,
+                null,
+                $tokenStorageConfig[$storageFactoryName]
+            );
+
+            $container->setDefinition('payum.security.token_storage', new DefinitionDecorator($storageId));
+        }
+    }
+
+    /**
      * @param Factory\Storage\StorageFactoryInterface $factory
+     *
+     * @throws \Payum\Exception\InvalidArgumentException
      */
     public function addStorageFactory(StorageFactoryInterface $factory)
     {
@@ -103,6 +135,8 @@ class PayumExtension extends Extension
 
     /**
      * @param Factory\Payment\PaymentFactoryInterface $factory
+     *
+     * @throws \Payum\Exception\InvalidArgumentException
      */
     public function addPaymentFactory(PaymentFactoryInterface $factory)
     {

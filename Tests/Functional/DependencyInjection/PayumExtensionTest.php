@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Tests\Functional\DependencyInjection;
 
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\FilesystemStorageFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
@@ -26,6 +27,16 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         }
         
         $config = array(
+            'security' => array(
+                'token_storage' => array(
+                    'Payum\Model\Token' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
             'contexts' => array(
                 'a_context' => array(
                     'paypal_express_checkout_nvp' => array(
@@ -48,6 +59,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new PaypalExpressCheckoutNvpPaymentFactory);
+        $extension->addStorageFactory(new FilesystemStorageFactory);
         
         $extension->load($configs, $containerBuilder);
         
@@ -71,6 +83,16 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         }
         
         $config = array(
+            'security' => array(
+                'token_storage' => array(
+                    'Payum\Model\Token' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
             'contexts' => array(
                 'a_context' => array(
                     'paypal_pro_checkout_nvp' => array(
@@ -94,6 +116,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new PaypalProCheckoutNvpPaymentFactory);
+        $extension->addStorageFactory(new FilesystemStorageFactory);
 
         $extension->load($configs, $containerBuilder);
 
@@ -111,6 +134,16 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         }
         
         $config = array(
+            'security' => array(
+                'token_storage' => array(
+                    'Payum\Model\Token' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
             'contexts' => array(
                 'a_context' => array(
                     'be2bill' => array(
@@ -132,6 +165,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new Be2BillPaymentFactory);
+        $extension->addStorageFactory(new FilesystemStorageFactory);
 
         $extension->load($configs, $containerBuilder);
 
@@ -155,6 +189,16 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         }
         
         $config = array(
+            'security' => array(
+                'token_storage' => array(
+                    'Payum\Model\Token' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
             'contexts' => array(
                 'a_context' => array(
                     'authorize_net_aim' => array(
@@ -176,6 +220,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new AuthorizeNetAimPaymentFactory);
+        $extension->addStorageFactory(new FilesystemStorageFactory);
 
         $extension->load($configs, $containerBuilder);
 
@@ -199,6 +244,16 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         }
         
         $config = array(
+            'security' => array(
+                'token_storage' => array(
+                    'Payum\Model\Token' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
             'contexts' => array(
                 'a_context' => array(
                     'omnipay' => array(
@@ -217,6 +272,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new OmnipayPaymentFactory);
+        $extension->addStorageFactory(new FilesystemStorageFactory);
 
         $extension->load($configs, $containerBuilder);
 
@@ -240,6 +296,16 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         }
 
         $config = array(
+            'security' => array(
+                'token_storage' => array(
+                    'Payum\Model\Token' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
             'contexts' => array(
                 'a_context' => array(
                     'payex' => array(
@@ -260,6 +326,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new PayexPaymentFactory);
+        $extension->addStorageFactory(new FilesystemStorageFactory);
 
         $extension->load($configs, $containerBuilder);
 

@@ -52,6 +52,15 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Model\Token' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
                 'contexts' => array(
                     'a_context' => array(
                         'foo_payment' => array( 
@@ -89,6 +98,15 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Model\Token' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
                 'contexts' => array(
                     'a_context' => array(
                         'foo_payment' => array(
@@ -121,6 +139,15 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Model\Token' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
                 'contexts' => array(
                     'a_context' => array(
                         'foo_payment' => array(
@@ -156,6 +183,15 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Model\Token' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
                 'contexts' => array(
                     'a_context' => array(
                         'foo_payment' => array(
@@ -184,6 +220,15 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Model\Token' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
                 'contexts' => array(
                     'a_context' => array()
                 )
@@ -202,6 +247,15 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Model\Token' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
                 'contexts' => array(
                     'a_context' => array(
                         'foo_payment' => array(
@@ -227,6 +281,15 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Model\Token' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
                 'contexts' => array(
                     'a_context' => array(
                         'bar_payment' => array(
@@ -235,6 +298,165 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         )
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Invalid configuration for path "payum.security.token_storage": Only one token storage could be configured.
+     */
+    public function throwIfMoreThenOneTokenStorageConfigured()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Model\Token' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        ),
+                        'stdClass' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
+                'contexts' => array(
+                    'a_context' => array(
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo'
+                        ),
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Invalid configuration for path "payum.security.token_storage": The token class must implement `Payum\Security\TokenInterface` interface
+     */
+    public function throwIfTokenStorageConfiguredWithModelNotImplementingTokenInterface()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'security' => array(
+                    'token_storage' => array(
+                        'stdClass' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
+                'contexts' => array(
+                    'a_context' => array(
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo'
+                        ),
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Invalid configuration for path "payum.security.token_storage": The storage entry must be a valid model class.
+     */
+    public function throwIfTokenStorageConfiguredWithNotModelClass()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'security' => array(
+                    'token_storage' => array(
+                        'foo' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
+                'contexts' => array(
+                    'a_context' => array(
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo'
+                        ),
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The child node "security" at path "payum" must be configured.
+     */
+    public function throwIfSecurityNotConfigured()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'contexts' => array(
+                    'a_context' => array(
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo'
+                        ),
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The child node "token_storage" at path "payum.security" must be configured.
+     */
+    public function throwIfTokenStorageNotConfigured()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'security' => array(
+                ),
+                'contexts' => array(
+                    'a_context' => array(
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo'
+                        ),
                     )
                 )
             )

@@ -67,73 +67,63 @@ Or if you prefer XML:
 <import resource="@PayumBundle/Resources/config/routing/capture.xml"/>
 ```
 
-#### 3-b. Configure doctrine TokenizedDetails model.
+#### 3-b. Configure security token (Doctrine ORM).
 
-Extend `TokenizedDetails` class:
+First you have to extend `Token` entity:
 
 ```php
 <?php
-//src/Acme/DemoBundle/Entity
-
-namespace AcmeDemoBundle\Entity;
+namespace Acme\PaymentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Payum\Bridge\Doctrine\Entity\TokenizedDetails as BaseTokenizedDetails;
+
+use Payum\Bridge\Doctrine\Entity\Token;
 
 /**
+ * @ORM\Table(name="payum_security_token")
  * @ORM\Entity
  */
-class TokenizedDetails extends BaseTokenizedDetails
+class PayumSecurityToken extends Token
 {
 }
 ```
 
-and configure storage to use this model:
+next, you have to add mapping of extended token and configure token storage:
 
 ```yml
 #app/config/config.yml
-
-payum:
-    contexts:
-        your_payment_name:
-            storages:
-                AcmeDemoBundle\Entity\TokenizedDetails:
-                    doctrine:
-                        driver: orm
-                        payment_extension: true
 
 doctrine:
     orm:
         entity_managers:
             default:
-                mappings: 
+                mappings:
                     payum:
                         is_bundle: false
-                        type: xml 
+                        type: xml
                         dir: %kernel.root_dir%/../vendor/payum/payum/src/Payum/Bridge/Doctrine/Resources/mapping
                         prefix: Payum\Bridge\Doctrine\Entity
+
+payum:
+    security:
+        token_storage:
+            Acme\PaymentBundle\Entity\PayumSecurityToken:
+                doctrine:
+                    driver: orm
 ```
 
-#### 3-c. Configure filesystem TokenizedDetails model.
+#### 3-c. Configure security token (Filesystem).
 
-Extend TokenizedDetails class with added `id` property:
+next, you have to configure token storage:
 
 ```php
 <?php
-//src/Acme/DemoBundle/Model
+namespace Acme\PaymentBundle\Model;
 
-namespace AcmeDemoBundle\Model;
+use Payum\Model\Token;
 
-use Payum\Model\TokenizedDetails as BaseTokenizedDetails;
-
-class TokenizedDetails extends BaseTokenizedDetails
+class PayumSecurityToken extends Token
 {
-    protected $id;
-    
-    public function getId()
-    {
-        return $this->id;
-    }
 }
 ```
 
@@ -143,14 +133,12 @@ and configure storage to use this model:
 #app/config/config.yml
 
 payum:
-    contexts:
-        your_payment_name:
-            storages:
-                AcmeDemoBundle\Model\TokenizedDetails:
-                    filesystem:
-                        storage_dir: %kernel.root_dir%/Resources/payments
-                        id_property: id
-                        payment_extension: true
+    security:
+        token_storage:
+            Acme\PaymentBundle\Entity\PayumSecurityToken:
+                filesystem:
+                    storage_dir: %kernel.root_dir%/Resources/payments
+                    id_property: hash
 ```
 
 ### Next Step

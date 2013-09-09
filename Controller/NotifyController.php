@@ -1,25 +1,19 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Payum\Request\SecuredNotifyRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-use Payum\Request\NotifyTokenizedDetailsRequest;
-use Payum\Registry\RegistryInterface;
-use Payum\Bundle\PayumBundle\Service\TokenManager;
-
-class NotifyController extends Controller 
+class NotifyController extends PayumController
 {
     public function doAction(Request $request)
     {
-        $token = $this->getTokenManager()->getTokenFromRequest($request, array(
-            'paymentNameParameter' => 'payumPaymentName',
-            'tokenParameter' => 'payumToken',
-        ));
+        $token = $this->getHttpRequestVerifier()->verify($request);
 
-        $payment = $this->getPayum()->getPayment($token->getPaymentName()); 
-        $payment->execute(new NotifyTokenizedDetailsRequest(
+        $payment = $this->getPayum()->getPayment($token->getPaymentName());
+
+        $payment->execute(new SecuredNotifyRequest(
             array_replace($request->query->all(), $request->request->all()),
             $token
         ));
@@ -28,18 +22,12 @@ class NotifyController extends Controller
     }
 
     /**
-     * @return RegistryInterface
+     * @deprecated since 0.6 will be removed in 0.7. This route present for easy migration from 0.5 version.
      */
-    protected function getPayum()
+    public function doDeprecatedAction(Request $request)
     {
-        return $this->get('payum');
-    }
-
-    /**
-     * @return TokenManager
-     */
-    protected function getTokenManager()
-    {
-        return $this->get('payum.token_manager');
+        return $this->forward('Payum:Notify:do', array(
+            'payum_token' => $request->attributes->get('payumToken', $request->get('payumToken'))
+        ));
     }
 }

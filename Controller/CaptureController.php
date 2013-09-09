@@ -1,20 +1,16 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Payum\Request\BinaryMaskStatusRequest;
+use Payum\Request\SecuredCaptureRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-use Payum\Request\BinaryMaskStatusRequest;
-use Payum\Registry\RegistryInterface;
-use Payum\Bundle\PayumBundle\Request\CaptureTokenizedDetailsRequest;
-use Payum\Bundle\PayumBundle\Service\TokenManager;
-
-class CaptureController extends Controller 
+class CaptureController extends PayumController
 {
     public function doAction(Request $request)
     {
-        $token = $this->getTokenManager()->getTokenFromRequest($request);
+        $token = $this->getHttpRequestVerifier()->verify($request);
 
         $payment = $this->getPayum()->getPayment($token->getPaymentName());
         
@@ -24,27 +20,20 @@ class CaptureController extends Controller
             throw new HttpException(400, 'The model status must be new.');
         }
         
-        $capture = new CaptureTokenizedDetailsRequest($token);
-        $payment->execute($capture);
+        $payment->execute(new SecuredCaptureRequest($token));
         
-        $this->getTokenManager()->deleteToken($token);
+        $this->getHttpRequestVerifier()->invalidate($token);
         
         return $this->redirect($token->getAfterUrl());
     }
 
     /**
-     * @return RegistryInterface
+     * @deprecated since 0.6 will be removed in 0.7. This route present for easy migration from 0.5 version.
      */
-    protected function getPayum()
+    public function doDeprecatedAction(Request $request)
     {
-        return $this->get('payum');
-    }
-
-    /**
-     * @return TokenManager
-     */
-    protected function getTokenManager()
-    {
-        return $this->get('payum.token_manager');
+        return $this->forward('Payum:Capture:do', array(
+            'payum_token' => $request->attributes->get('token', $request->get('token'))
+        ));
     }
 }
