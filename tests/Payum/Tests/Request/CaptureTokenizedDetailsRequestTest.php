@@ -4,6 +4,9 @@ namespace Payum\Tests\Request;
 use Payum\Request\CaptureTokenizedDetailsRequest;
 use Payum\Model\TokenizedDetails;
 
+/**
+ * @deprecated since 0.6 will be removed in 0.7
+ */
 class CaptureTokenizedDetailsRequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -30,9 +33,9 @@ class CaptureTokenizedDetailsRequestTest extends \PHPUnit_Framework_TestCase
     public function shouldAllowGetTokenizedDetailsSetInConstructor()
     {
         $expectedTokenizedDetails = new TokenizedDetails;
-        
+
         $request = new CaptureTokenizedDetailsRequest($expectedTokenizedDetails);
-        
+
         $this->assertSame($expectedTokenizedDetails, $request->getTokenizedDetails());
         $this->assertSame($expectedTokenizedDetails, $request->getModel());
     }
@@ -51,7 +54,7 @@ class CaptureTokenizedDetailsRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($tokenizedDetails, $request->getModel());
 
         $newModel = new \stdClass;
-            
+
         $request->setModel($newModel);
 
         $this->assertSame($tokenizedDetails, $request->getTokenizedDetails());

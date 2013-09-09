@@ -2,8 +2,16 @@
 ==========
 
 * [Doctrine] `TokenizedDetails` mapping schema was updated. details field is now accept `NULL`.
+* [Doctrine] `TokenizedDetails` entity was deprecated use `Token` instead.
+* [Doctrine] `TokenizedDetails` mapping changed. The field `token` was renamed to `hash`.
+* [Model] `TokenizedDetails::token` property was removed use `hash` one instead.
+* [Security] `Random` class was moved to `Payum\Security` namespace.
+* [Security] `TokenizedDetails` model was deprecated use `Token` instead.
+* [Security] The default token generated in `TokenizedDetails::__constructor` not include `time()` any more.
 * [Storage] The method `Storage::supportModel` accepts only model object. Support of model class was removed.
 * [Storage] The method `Storage::findModelByIdentificator` was added to storage interface.
+* [Request] `CaptureTokenizedDetailsRequest` was deprecated use `SecuredCaptureRequest` instead.
+* [Request] `NotifyTokenizedDetailsRequest` was deprecated use `SecuredNotifyRequest` instead.
 
 0.4 to 0.5
 ==========

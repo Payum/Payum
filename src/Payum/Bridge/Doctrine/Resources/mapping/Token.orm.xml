@@ -3,10 +3,8 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                   http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
-        >
-    <!-- @deprecated since 0.6 will be removed in 0.7 -->
-
-    <mapped-superclass name="Payum\Bridge\Doctrine\Entity\TokenizedDetails">
+>
+    <mapped-superclass name="Payum\Bridge\Doctrine\Entity\Token">
 
         <id name="hash" column="hash" type="string" />
 

@@ -1,66 +1,16 @@
 <?php
 namespace Payum\Request;
 
-use Payum\Model\TokenizedDetails;
-
-class NotifyTokenizedDetailsRequest extends NotifyRequest implements ModelRequestInterface
+/**
+ * @deprecated since 0.6 will be removed in 0.7
+ */
+class NotifyTokenizedDetailsRequest extends SecuredNotifyRequest
 {
     /**
-     * @var array
-     */
-    protected $notification;
-
-    /**
-     * @var mixed
-     */
-    protected $model;
-
-    /**
-     * @var TokenizedDetails
-     */
-    protected $tokenizedDetails;
-
-    /**
-     * @param array $notification
-     * @param TokenizedDetails $tokenizedDetails
-     */
-    public function __construct(array $notification, TokenizedDetails $tokenizedDetails)
-    {
-        parent::__construct($notification);
-        
-        $this->tokenizedDetails = $tokenizedDetails;
-        $this->model = $tokenizedDetails;
-    }
-
-    /**
-     * @return array
-     */
-    public function getNotification()
-    {
-        return $this->notification;
-    }
-
-    /**
-     * @return TokenizedDetails
+     * @return \Payum\Model\TokenizedDetails
      */
     public function getTokenizedDetails()
     {
-        return $this->tokenizedDetails;
-    }
-
-    /** 
-     * {@inheritDoc}  
-     */
-    public function setModel($model)
-    {
-        $this->model = $model;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getModel()
-    {
-        return $this->model;
+        return $this->getToken();
     }
 }

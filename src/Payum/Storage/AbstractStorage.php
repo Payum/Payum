@@ -61,15 +61,9 @@ abstract class AbstractStorage implements StorageInterface
      */
     public function findModelByIdentificator(Identificator $identificator)
     {
-        if (false == is_a($identificator->getClass(), $this->modelClass, $allowClass = true)) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid model given. Should be instance of %s but it is %s',
-                $this->modelClass,
-                $identificator->getClass()
-            ));
+        if (is_a($identificator->getClass(), $this->modelClass, $allowClass = true)) {
+            return $this->findModelById($identificator->getId());
         }
-
-        return $this->findModelById($identificator->getId());
     }
 
     /**

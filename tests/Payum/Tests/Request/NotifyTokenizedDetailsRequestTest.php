@@ -4,6 +4,9 @@ namespace Payum\Tests\Request;
 use Payum\Request\NotifyTokenizedDetailsRequest;
 use Payum\Model\TokenizedDetails;
 
+/**
+ * @deprecated since 0.6 will be removed in 0.7
+ */
 class NotifyTokenizedDetailsRequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -56,9 +59,9 @@ class NotifyTokenizedDetailsRequestTest extends \PHPUnit_Framework_TestCase
     public function shouldAllowGetTokenizedDetailsSetInConstructor()
     {
         $expectedTokenizedDetails = new TokenizedDetails;
-        
+
         $request = new NotifyTokenizedDetailsRequest($notification = array(), $expectedTokenizedDetails);
-        
+
         $this->assertSame($expectedTokenizedDetails, $request->getTokenizedDetails());
         $this->assertSame($expectedTokenizedDetails, $request->getModel());
     }
@@ -77,7 +80,7 @@ class NotifyTokenizedDetailsRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($tokenizedDetails, $request->getModel());
 
         $newModel = new \stdClass;
-            
+
         $request->setModel($newModel);
 
         $this->assertSame($tokenizedDetails, $request->getTokenizedDetails());
