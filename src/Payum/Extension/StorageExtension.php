@@ -54,14 +54,7 @@ class StorageExtension implements ExtensionInterface
             $request->setModel($model);
         }
 
-        if ($this->storage->supportModel($request->getModel())) {
-            $modelHash = spl_object_hash($request->getModel());
-            if (array_key_exists($modelHash, $this->scheduledForUpdateModels)) {
-                return;
-            }
-
-            $this->scheduledForUpdateModels[$modelHash] = $request->getModel();
-        }
+        $this->scheduleForUpdateIfSupported($request->getModel());
     }
 
     /**
@@ -76,11 +69,7 @@ class StorageExtension implements ExtensionInterface
      */
     public function onException(\Exception $exception, $request, ActionInterface $action = null)
     {
-        $this->stackLevel--;
-
-        if (0 === $this->stackLevel) {
-            $this->updateScheduledModels();
-        }
+        $this->onPostXXX($request);
     }
 
     /**
@@ -88,11 +77,7 @@ class StorageExtension implements ExtensionInterface
      */
     public function onPostExecute($request, ActionInterface $action)
     {
-        $this->stackLevel--;
-
-        if (0 === $this->stackLevel) {
-            $this->updateScheduledModels();
-        }
+        $this->onPostXXX($request);
     }
 
     /**
@@ -100,18 +85,37 @@ class StorageExtension implements ExtensionInterface
      */
     public function onInteractiveRequest(InteractiveRequestInterface $interactiveRequest, $request, ActionInterface $action)
     {
+        $this->onPostXXX($request);
+    }
+
+    protected function onPostXXX($request)
+    {
         $this->stackLevel--;
 
+        if ($request instanceof ModelRequestInterface) {
+            $this->scheduleForUpdateIfSupported($request->getModel());
+        }
+
         if (0 === $this->stackLevel) {
-            $this->updateScheduledModels();
+            foreach ($this->scheduledForUpdateModels as $modelHash => $model) {
+                $this->storage->updateModel($model);
+                unset($this->scheduledForUpdateModels[$modelHash]);
+            }
         }
     }
 
-    protected function updateScheduledModels()
+    /**
+     * @param mixed $model
+     */
+    protected function scheduleForUpdateIfSupported($model)
     {
-        foreach ($this->scheduledForUpdateModels as $modelHash => $model) {
-            $this->storage->updateModel($model);
-            unset($this->scheduledForUpdateModels[$modelHash]);
+        if ($this->storage->supportModel($model)) {
+            $modelHash = spl_object_hash($model);
+            if (array_key_exists($modelHash, $this->scheduledForUpdateModels)) {
+                return;
+            }
+
+            $this->scheduledForUpdateModels[$modelHash] = $model;
         }
     }
 }
