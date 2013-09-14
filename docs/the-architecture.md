@@ -220,3 +220,29 @@ Also, it provides a nice secured [capture controller][capture-controller]. It's 
 The bundle supports [omnipay][omnipay] gateways (up to 25) out of the box. They could be configured the same way as native payments. The capture controller works [here][omnipay-example] too.
 
 Back to [index](index.md).
+
+[sandbox-online]: http://sandbox.payum.forma-dev.com
+[sandbox-code]: https://github.com/Payum/PayumBundleSandbox
+[base-request]: https://github.com/Payum/Payum/blob/master/src/Payum/Request/BaseModelRequest.php
+[status-request-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Request/StatusRequestInterface.php
+[status-request]: https://github.com/Payum/Payum/blob/master/src/Payum/Request/BinaryMaskStatusRequest.php
+[base-interactive-request]: https://github.com/Payum/Payum/blob/master/src/Payum/Request/BaseInteractiveRequest.php
+[action-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Action/ActionInterface.php
+[extension-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Extension/ExtensionInterface.php
+[storage-extension-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Extension/StorageExtension.php
+[storage-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Storage/StorageInterface.php
+[doctrine-storage]: https://github.com/Payum/Payum/blob/master/src/Payum/Bridge/Doctrine/Storage/DoctrineStorage.php
+[filesystem-storage]: https://github.com/Payum/Payum/blob/master/src/Payum/Storage/FilesystemStorage.php
+[payment-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/PaymentInterface.php
+[capture-controller]: https://github.com/Payum/PayumBundle/blob/master/Controller/CaptureController.php
+[paypal-capture-action]: https://github.com/Payum/PaypalExpressCheckoutNvp/blob/master/src/Payum/Paypal/ExpressCheckout/Nvp/Action/CaptureAction.php
+[paypal-authorize-token-action]: https://github.com/Payum/PaypalExpressCheckoutNvp/blob/master/src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/AuthorizeTokenAction.php
+[paypal-status-action]: https://github.com/Payum/PaypalExpressCheckoutNvp/blob/master/src/Payum/Paypal/ExpressCheckout/Nvp/Action/PaymentDetailsStatusAction.php
+[authorize-capture-action]: https://github.com/Payum/AuthorizeNetAim/blob/master/src/Payum/AuthorizeNet/Aim/Action/CaptureAction.php
+[authorize-status-action]: https://github.com/Payum/AuthorizeNetAim/blob/master/src/Payum/AuthorizeNet/Aim/Action/StatusAction.php
+[omnipay]: https://github.com/adrianmacneil/omnipay
+[omnipay-example]: https://github.com/Payum/PayumBundleSandbox/blob/master/src/Acme/PaymentBundle/Controller/SimplePurchasePaypalExpressViaOmnipayController.php
+[bundle-doc]: https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md
+[payment-factories]: https://github.com/Payum/PayumBundle/tree/master/DependencyInjection/Factory/Payment
+[storage-factories]: https://github.com/Payum/PayumBundle/tree/master/DependencyInjection/Factory/Storage
+[payum-bundle]: https://github.com/Payum/PayumBundle/blob/master/PayumBundle.php

@@ -57,3 +57,5 @@ class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
     }
 }
 ```
+
+Back to [index](index.md).

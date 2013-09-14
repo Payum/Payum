@@ -22,3 +22,5 @@ if ($interactiveRequest = $payment->execute($request, $catchInteractive = true))
     throw $interactiveRequest;
 }
 ```
+
+Back to [index](index.md).

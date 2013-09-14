@@ -59,3 +59,5 @@
 
 * [PSR-3 Logger](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md)
 * [Doctrine2](http://www.doctrine-project.org/)
+
+Back to [index](index.md).

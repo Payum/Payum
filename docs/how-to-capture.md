@@ -24,3 +24,5 @@ $payment->execute($captureRequest);
 echo 'We are done!';
 echo 'We are done!';
 ```
+
+Back to [index](index.md).

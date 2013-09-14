@@ -22,3 +22,5 @@ if ($statusRequest->isSuccess()) {
 echo 'Uhh something wrong. Check other possible statuses!';
 echo 'Uhh something wrong. Check other possible statuses!';
 ```
+
+Back to [index](index.md).

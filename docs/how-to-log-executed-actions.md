@@ -32,3 +32,5 @@ DEBUG - [Payum] 3# InitializeOrderAction::execute(InitializeOrderRequest{model: 
 DEBUG - [Payum] 2# PaymentDetailsCaptureAction::execute(SecuredCaptureRequest{model: PaymentDetails}) throws interactive RedirectUrlInteractiveRequest{url: https://test-confined.payex.com/PxOrderCC.aspx?orderRef=7cbefc70ff294fd194d2411f457423d6}
 DEBUG - [Payum] 1# CaptureDetailsAggregatedModelAction::execute(SecuredCaptureRequest{model: PaymentDetails}) throws interactive RedirectUrlInteractiveRequest{url: https://test-confined.payex.com/PxOrderCC.aspx?orderRef=7cbefc70ff294fd194d2411f457423d6}
 ```
+
+Back to [index](index.md).
