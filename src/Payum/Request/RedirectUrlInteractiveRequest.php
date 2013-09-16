@@ -1,8 +1,6 @@
 <?php
 namespace Payum\Request;
 
-use Payum\Request\BaseInteractiveRequest;
-
 class RedirectUrlInteractiveRequest extends BaseInteractiveRequest
 {
     protected $url;
