@@ -40,7 +40,7 @@ include 'config.php';
 $token = $requestVerifier->verify($_REQUEST);
 $payment = $registry->getPayment($token->getPaymentName());
 
-$payment->execute($status = new BinaryMaskStatusRequest($token);)) {
+$payment->execute($status = new BinaryMaskStatusRequest($token));
 if (false == $status->isNew()) {
     header('HTTP/1.1 400 Bad Request', true, 400);
     exit;
