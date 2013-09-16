@@ -11,6 +11,7 @@
          syntaxCheck="false"
          bootstrap="tests/bootstrap.php"
 >
+    <!--
     <listeners>
         <listener class="Testo\Phpunit\ReGenerateDocsOnSuccessListener" file="vendor/fp/testo/src/Testo/Phpunit/ReGenerateDocsOnSuccessListener.php">
             <arguments>
@@ -22,7 +23,7 @@
             </arguments>
         </listener>
     </listeners>
-    
+    -->
     <testsuites>
         <testsuite name="Payum Tests">
             <directory>./tests</directory>
