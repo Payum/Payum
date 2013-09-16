@@ -57,7 +57,7 @@ if ($interactiveRequest = $payment->execute(new SecuredCaptureRequest($token), t
 
 $this->getHttpRequestVerifier()->invalidate($token);
 
-header("Location: ".$interactiveRequest->getUrl());
+header("Location: ".$token->getAfterUrl()f);
 die();
 ```
 
