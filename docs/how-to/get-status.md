@@ -1,4 +1,4 @@
-### How to check payment status
+# How to get status
 
 ```php
 <?php
@@ -23,4 +23,4 @@ echo 'Uhh something wrong. Check other possible statuses!';
 echo 'Uhh something wrong. Check other possible statuses!';
 ```
 
-Back to [index](index.md).
+Back to [index](../index.md).

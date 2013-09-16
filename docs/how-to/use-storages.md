@@ -1,4 +1,4 @@
-### How to persist payment details?
+# How to use storages?
 
 ```php
 <?php
@@ -19,4 +19,4 @@ What's inside?
 * The extension will try to find model on `onPreExecute` if an id given.
 * Second, It saves the model after execute, on `onInteractiveRequest` and `postRequestExecute`.
 
-Back to [index](index.md).
+Back to [index](../index.md).

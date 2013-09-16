@@ -1,4 +1,4 @@
-### How to manage authorize redirect?
+# How to manage authorize redirect?
 
 ```php
 <?php
@@ -23,4 +23,4 @@ if ($interactiveRequest = $payment->execute($request, $catchInteractive = true))
 }
 ```
 
-Back to [index](index.md).
+Back to [index](../index.md).

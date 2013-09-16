@@ -1,4 +1,4 @@
-### Debug
+# Debug
 
 I must admit the architecture of payum is hard to debug (Each action decide whether it supports request or not, an action can delegate some job to another action, etc).
 To solve this problem we implement `LogExecutedActionsExtension`. It logs all executed actions with some details.
@@ -33,4 +33,4 @@ DEBUG - [Payum] 2# PaymentDetailsCaptureAction::execute(SecuredCaptureRequest{mo
 DEBUG - [Payum] 1# CaptureDetailsAggregatedModelAction::execute(SecuredCaptureRequest{model: PaymentDetails}) throws interactive RedirectUrlInteractiveRequest{url: https://test-confined.payex.com/PxOrderCC.aspx?orderRef=7cbefc70ff294fd194d2411f457423d6}
 ```
 
-Back to [index](index.md).
+Back to [index](../index.md).

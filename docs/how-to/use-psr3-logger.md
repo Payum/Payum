@@ -1,4 +1,4 @@
-### Logging
+# How to use PSR-3 Logger
 
 You can use any PSR-3 compatible logger inside an action.
 Two rules should be completed. First add `LoggerExtension` and second an action must implement `LoggerAwareInterface` interface.
@@ -58,4 +58,4 @@ class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
 }
 ```
 
-Back to [index](index.md).
+Back to [index](../index.md).
