@@ -37,7 +37,7 @@ use Payum\Request\RedirectUrlInteractiveRequest;
 
 include 'config.php';
 
-$token = $this->getHttpRequestVerifier()->verify($_REQUEST);
+$token = $requestVerifier->verify($_REQUEST);
 $payment = $registry->getPayment($token->getPaymentName());
 
 $payment->execute($status = new BinaryMaskStatusRequest($token);)) {
