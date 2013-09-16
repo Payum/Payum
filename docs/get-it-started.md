@@ -29,7 +29,6 @@ Let's move on and see how the `capture.php` could look like? We would reuse it f
 
 ```php
 <?php
-<?php
 //capture.php
 
 use Payum\Request\BinaryMaskStatusRequest;
