@@ -39,20 +39,20 @@ abstract class AbstractRegistry implements RegistryInterface
         $this->defaultPayment = $defaultPayment;
         $this->defaultStorage = $defaultStorage;
     }
-    
+
     /**
      * Fetches/creates the given services
      *
      * A service in this context is a storage or a payment instance
      *
-     * @param string $name name of the service
-     * 
+     * @param string $id name of the service
+     *
      * @return object instance of the given service
      */
     abstract protected function getService($id);
     
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getDefaultStorageName()
     {
@@ -60,7 +60,7 @@ abstract class AbstractRegistry implements RegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getStorageForClass($class, $name = null)
     {
@@ -110,7 +110,7 @@ abstract class AbstractRegistry implements RegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getPayment($name = null)
     {
@@ -126,7 +126,7 @@ abstract class AbstractRegistry implements RegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getPayments()
     {
