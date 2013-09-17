@@ -1,6 +1,6 @@
 # Get it started.
 
-In this chapter we would talk about payum configuration using only php (not frameworks).
+In this chapter we are going to talk about payum configuration using only php (no frameworks).
 This is the minimal code you need to write to get benefits from payum.
 All other examples will be based on the `config.php` described here.
 
@@ -21,11 +21,11 @@ $payments = array();
 $registry = new SimpleRegistry($payments, $storages, null, null);
 ```
 
-_**Note**: You may notice that `$payments` and `$storages` vars are empty? We come back to them when we talk about a real payment gateway._
+_**Note**: You may notice that `$payments` and `$storages` vars are empty? We will come back to them when we talk about a real payment gateway._
 
-_**Note**: Consider using something other then `FilesystemStorage` in production. `DoctrineStorage` could be a good alternative._
+_**Note**: Consider using something other than `FilesystemStorage` in production. `DoctrineStorage` could be a good alternative._
 
-Let's move on and see how the `capture.php` could look like? We would reuse it for all our payments.
+Let's move on and see how the `capture.php` file could look like? We are going to reuse it for all our payments.
 
 ```php
 <?php
