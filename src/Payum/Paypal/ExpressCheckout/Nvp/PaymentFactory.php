@@ -29,7 +29,7 @@ abstract class PaymentFactory
      */
     public static function create(Api $api)
     {
-        $payment = new Payment($api);
+        $payment = new Payment;
 
         $payment->addApi($api);
 
