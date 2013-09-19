@@ -39,7 +39,8 @@ $payments = array(
        'username' => 'REPLACE WITH YOURS',
        'password' => 'REPLACE WITH YOURS',
        'signature' => 'REPLACE WITH YOURS',
-))));
+    )
+)));
 
 $payments['paypal']->addExtension(new StorageExtension($storages['paypal'][$paypalPaymentDetailsClass]));
 
