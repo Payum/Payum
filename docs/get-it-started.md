@@ -1,13 +1,24 @@
 # Get it started.
+In this chapter we are going to talk about the most common task: purchasing a product.
+I would use paypal express checkout for example because it is popular.
+All examples are written in plain php code (no frameworks).
 
-In this chapter we are going to talk about payum configuration using only php (no frameworks).
-This is the minimal code you need to write to get benefits from payum.
-All other examples will be based on the `config.php` described here.
+_**Note**: If you are working with [symfony2]() framework check the payum bundle documentation instead._
+
+![How payum works](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=cGFydGljaXBhbnQgcGF5cGFsLmNvbQoACwxVc2VyAAQNcHJlcGFyZS5waHAAHA1jYXB0dQAFE2RvbgAnBgpVc2VyLT4ANQs6AEUIIGEgcGF5bWVudAoAVAstLT4rAEsLOgBbCCB0b2tlbgoKAGcLLS0-AIE2CjogcmVxdWVzdCBhdXRoZW50aWNhdGlvbgoAgVkKLS0-AE0NZ2l2ZSBjb250cm9sIGJhY2sATg8tAIE-CDoAgUsFAHsHAIFTCC0-VXNlcjogc2hvdwCBQQggcmVzdWx0Cg&s=default)
+
+## Configuration.
+
+Before we look at `prepare.php` we have to configure payum:
 
 ```php
 <?php
 //config.php
 
+use Buzz\Client\Curl;
+use Payum\Extension\StorageExtension;
+use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory;
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Registry\SimpleRegistry;
 use Payum\Storage\FilesystemStorage;
 use Payum\Security\PlainHttpRequestVerifier;
@@ -15,133 +26,90 @@ use Payum\Security\PlainHttpRequestVerifier;
 $tokenStorage = new FilesystemStorage('/path/to/storage', 'Payum/Model/Token', 'hash');
 $requestVerifier = new PlainHttpRequestVerifier($tokenStorage);
 
-$storages = array();
-$payments = array();
+// You way want to modify it to suite your needs
+$paypalPayment = PaymentFactory::create(new Api(new Curl, array(
+   'username' => 'REPLACE WITH YOURS',
+   'password' => 'REPLACE WITH YOURS',
+   'signature' => 'REPLACE WITH YOURS',
+)));
 
-$registry = new SimpleRegistry($payments, $storages, null, null);
-```
-
-_**Note**: You may notice that `$payments` and `$storages` vars are empty? We will come back to them when we talk about a real payment gateway._
-
-_**Note**: Consider using something other than `FilesystemStorage` in production. `DoctrineStorage` could be a good alternative._
-
-Now I would show you paypal express checkout specific code. You have to modify it in case you use something other then paypal.
-
-```php
-<?php
-//config.php
-
-use Buzz\Client\Curl;
-use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory;
-use Payum\Paypal\ExpressCheckout\Nvp\Api;
-
-$payments = array(
-    'paypal_express_checkout' => PaymentFactory::create(new Api(new Curl, array(
-        'username' => 'REPLACE WITH YOURS',
-        'password' => 'REPLACE WITH YOURS',
-        'signature' => 'REPLACE WITH YOURS',
-    )))
+$paypalPaymentDetailsClass = 'Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails';
+$paypalPaymentDetailsStorage = new FilesystemStorage(
+    '/path/to/storage',
+    $paypalPaymentDetailsClass,
+    'id'
 );
+$paypalPayment->addExtension(new StorageExtension($paypalPaymentDetailsStorage));
 
-$storages = array(
-    'paypal_express_checkout' => array(
-        'Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails' => new FilesystemStorage(
-            '/path/to/storage',
-            'Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails',
-            'id'
+$registry = new SimpleRegistry(
+    array(
+        'paypal_express_checkout' =>$paypalPayment
+    ),
+    array(
+        'paypal_express_checkout' => array(
+            $paypalPaymentDetailsClass => $paypalPaymentDetailsStorage
         )
-    )
-)
+    ),
+    null,
+    null
+);
 ```
 
-First we created payment with factory.
-The factory is just shortcut.
-Inside it creates a payment object and fill it with paypal actions, and its api.
+TODO: add some words about code above.
 
-After we created a storage for `PaymentDetails` model.
-This model will hold all information about the payment.
+_**Note**: Consider using something other than `FilesystemStorage` in production. `DoctrineStorage` may be a good alternative._
 
-_**Note**: You are not required to use this model. Payum is designed to work with array or ArrayAccess._
+_**Note**: You are not required to use this PaymentDetails. Payum is designed to work with array or ArrayAccess._
 
-Now, it is time to see how we can create a payment:
+## Prepare payment.
 
 ```php
 <?php
-// prepare_paypal_payment.php
+// prepare.php
 
 include 'config.php';
 
-$storage = $registry->getStorageForClass(
-    'Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails',
-    'paypal_express_checkout'
-);
+$storage = $registry->getStorageForClass($paypalPaymentDetailsClass, 'paypal_express_checkout');
 
 $paymentDetails = $storage->createModel();
 $paymentDetails['PAYMENTREQUEST_0_CURRENCYCODE'] = 'EUR';
 $paymentDetails['PAYMENTREQUEST_0_AMT'] = 1.23;
 $storage->updateModel($paymentDetails);
 
-$captureDoneToken = $tokenStorage->createModel();
-$captureDoneToken->setPaymentName('paypal_express_checkout');
-$captureDoneToken->setDetails($storage->getIdentifier($paymentDetails));
-$captureDoneToken->setTargetUrl('capture_done.php?payum_token'.$captureDoneToken->getHash());
-$tokenStorage->updateModel($captureDoneToken);
+$doneToken = $tokenStorage->createModel();
+$doneToken->setPaymentName('paypal_express_checkout');
+$doneToken->setDetails($storage->getIdentifier($paymentDetails));
+$doneToken->setTargetUrl($_SERVER['HTTP_HOST'].'done.php?payum_token'.$doneToken->getHash());
+$tokenStorage->updateModel($doneToken);
 
 $captureToken = $tokenStorage->createModel();
 $captureToken->setPaymentName('paypal_express_checkout');
 $captureToken->setDetails($storage->getIdentifier($paymentDetails));
-$captureToken->setTargetUrl('capture.php?payum_token'.$captureToken->getHash());
-$captureToken->setAfterUrl($captureDoneToken->getTargetUrl());
+$captureToken->setTargetUrl($_SERVER['HTTP_HOST'].'capture.php?payum_token'.$captureToken->getHash());
+$captureToken->setAfterUrl($doneToken->getTargetUrl());
 $tokenStorage->updateModel($captureToken);
 
 header("Location: ".$captureToken->getTargetUrl());
 die();
 ```
 
-If you read the code carefully you may notice `capture.php` we set as target url of capture token.
-We do not show user any sensative information or guessable information. What user will see is the random hash.
-All the payment information was related to this token.
+TODO: add some words about code above.
 
-Let's move on and see how that `capture.php` file could look like? By the way we are going to reuse it for all our payments.
+The main purpose of using tokens to hide any sensitive\guessable information from a user.
+A user see is the random hash so it would be a bit hard to hack your payment.
 
-```php
-<?php
-//capture.php
+## Capture payment.
 
-use Payum\Request\BinaryMaskStatusRequest;
-use Payum\Request\SecuredCaptureRequest;
-use Payum\Request\RedirectUrlInteractiveRequest;
+If you read the previous chapter carefully you may notice `capture.php` script we set it as the target url of capture token.
+At the last lines of `prepare.php` we delegated the job to `capture.php` script.
+This file is designed to be reused by any possible payment.
+So if you don`t want dive into details just [copy\past it](capture-action.md).
 
-include 'config.php';
+## Show payment status (done.php).
 
-$token = $requestVerifier->verify($_REQUEST);
-$payment = $registry->getPayment($token->getPaymentName());
-
-$payment->execute($status = new BinaryMaskStatusRequest($token));
-if (false == $status->isNew()) {
-    header('HTTP/1.1 400 Bad Request', true, 400);
-    exit;
-}
-
-if ($interactiveRequest = $payment->execute(new SecuredCaptureRequest($token), true)) {
-    if ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {
-        header("Location: ".$interactiveRequest->getUrl());
-        die();
-    }
-
-    throw \LogicException('Unsupported interactive request', null $interactiveRequest);
-}
-
-$requestVerifier->invalidate($token);
-
-header("Location: ".$token->getAfterUrl());
-die();
-```
-
-The last line of capture request does redirect to `capture_done.php`.
-You are always redirected there no matter what payment status.
-The good question here: What should you do there?
-Well, In most cases you have to check status and do what ever you want, for example print message:
+After the capture did its job you will be redirected to `done.php`.
+The `capture.php` script always redirects you to `done.php` no matter payment was success or not.
+In `done.php` we should check payment status and act on it result.
 
 ```php
 <?php
@@ -158,6 +126,6 @@ if ($status->isSuccess()) {
 }
 ```
 
-_**Note**: Pay attention to there are other statuses present like pending, suspended, failure, canceled._
+_**Note**: Success is not only one status available. There are other statuses present: pending, failure, canceled etc._
 
 Back to [index](index.md).
