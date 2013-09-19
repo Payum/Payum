@@ -33,7 +33,6 @@ if ($interactiveRequest = $payment->execute(new SecuredCaptureRequest($token), t
 $requestVerifier->invalidate($token);
 
 header("Location: ".$token->getAfterUrl());
-die();
 ```
 
 Back to [index](index.md).

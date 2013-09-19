@@ -27,32 +27,23 @@ $tokenStorage = new FilesystemStorage('/path/to/storage', 'Payum/Model/Token', '
 $requestVerifier = new PlainHttpRequestVerifier($tokenStorage);
 
 // You way want to modify it to suite your needs
-$paypalPayment = PaymentFactory::create(new Api(new Curl, array(
-   'username' => 'REPLACE WITH YOURS',
-   'password' => 'REPLACE WITH YOURS',
-   'signature' => 'REPLACE WITH YOURS',
-)));
-
 $paypalPaymentDetailsClass = 'Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails';
-$paypalPaymentDetailsStorage = new FilesystemStorage(
-    '/path/to/storage',
-    $paypalPaymentDetailsClass,
-    'id'
+$storages = array(
+    'paypal' => array(
+        $paypalPaymentDetailsClass => new FilesystemStorage('/path/to/storage', $paypalPaymentDetailsClass, 'id')
+    )
 );
-$paypalPayment->addExtension(new StorageExtension($paypalPaymentDetailsStorage));
 
-$registry = new SimpleRegistry(
-    array(
-        'paypal_express_checkout' =>$paypalPayment
-    ),
-    array(
-        'paypal_express_checkout' => array(
-            $paypalPaymentDetailsClass => $paypalPaymentDetailsStorage
-        )
-    ),
-    null,
-    null
-);
+$payments = array(
+    'paypal' => PaymentFactory::create(new Api(new Curl, array(
+       'username' => 'REPLACE WITH YOURS',
+       'password' => 'REPLACE WITH YOURS',
+       'signature' => 'REPLACE WITH YOURS',
+))));
+
+$payments['paypal']->addExtension(new StorageExtension($storages['paypal'][$paypalPaymentDetailsClass]));
+
+$registry = new SimpleRegistry($payments, $storages, null, null);
 ```
 
 TODO: add some words about code above.
@@ -90,7 +81,6 @@ $captureToken->setAfterUrl($doneToken->getTargetUrl());
 $tokenStorage->updateModel($captureToken);
 
 header("Location: ".$captureToken->getTargetUrl());
-die();
 ```
 
 TODO: add some words about code above.
