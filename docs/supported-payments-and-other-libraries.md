@@ -1,7 +1,7 @@
 # Payments.
 
-* [Paypal express checkout](https://github.com/Payum/PaypalExpressCheckoutNvp)
-* [Paypal Pro Checkout Nvp](https://github.com/Payum/PaypalProCheckoutNvp)
+* [Paypal Express Checkout](https://github.com/Payum/PaypalExpressCheckoutNvp)
+* [Paypal Pro Checkout](https://github.com/Payum/PaypalProCheckoutNvp)
 * [Authorize.Net AIM](https://github.com/Payum/AuthorizeNetAim)
 * [Be2Bill](https://github.com/Payum/Be2Bill)
 * [Payex](https://github.com/Payum/Payex)
