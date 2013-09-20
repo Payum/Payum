@@ -61,7 +61,7 @@ _**Note**: You are not required to use this PaymentDetails. Payum is designed to
 
 include 'config.php';
 
-$storage = $registry->getStorageForClass($paypalPaymentDetailsClass, 'paypal_express_checkout');
+$storage = $registry->getStorageForClass($paypalPaymentDetailsClass, 'paypal');
 
 $paymentDetails = $storage->createModel();
 $paymentDetails['PAYMENTREQUEST_0_CURRENCYCODE'] = 'EUR';
@@ -69,15 +69,15 @@ $paymentDetails['PAYMENTREQUEST_0_AMT'] = 1.23;
 $storage->updateModel($paymentDetails);
 
 $doneToken = $tokenStorage->createModel();
-$doneToken->setPaymentName('paypal_express_checkout');
+$doneToken->setPaymentName('paypal');
 $doneToken->setDetails($storage->getIdentifier($paymentDetails));
-$doneToken->setTargetUrl($_SERVER['HTTP_HOST'].'done.php?payum_token'.$doneToken->getHash());
+$doneToken->setTargetUrl($_SERVER['HTTP_HOST'].'/done.php?payum_token='.$doneToken->getHash());
 $tokenStorage->updateModel($doneToken);
 
 $captureToken = $tokenStorage->createModel();
-$captureToken->setPaymentName('paypal_express_checkout');
+$captureToken->setPaymentName('paypal');
 $captureToken->setDetails($storage->getIdentifier($paymentDetails));
-$captureToken->setTargetUrl($_SERVER['HTTP_HOST'].'capture.php?payum_token'.$captureToken->getHash());
+$captureToken->setTargetUrl($_SERVER['HTTP_HOST'].'/capture.php?payum_token='.$captureToken->getHash());
 $captureToken->setAfterUrl($doneToken->getTargetUrl());
 $tokenStorage->updateModel($captureToken);
 
