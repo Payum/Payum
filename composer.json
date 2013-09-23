@@ -1,16 +1,5 @@
 {
-    "name": "payum/paypal-rest",
-    "type": "library",
-    "description": "Rest",
-    "keywords": ["payment", "paypal", "rest", "digital goods", "recurring payment"],
-    "homepage": "",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Vladimir Polyakov",
-            "email": "poljakov.ws@gmail.com"
-        }
-    ],
+
     "require": {
         "php": ">=5.3.2",
         "kriswallsmith/buzz": "*",
