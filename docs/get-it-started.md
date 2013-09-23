@@ -82,6 +82,10 @@ $captureToken->setTargetUrl($_SERVER['HTTP_HOST'].'/capture.php?payum_token='.$c
 $captureToken->setAfterUrl($doneToken->getTargetUrl());
 $tokenStorage->updateModel($captureToken);
 
+$paymentDetails['RETURNURL'] = $captureToken->getTargetUrl();
+$paymentDetails['CANCELURL'] = $captureToken->getTargetUrl();
+$storage->updateModel($paymentDetails);
+
 header("Location: ".$captureToken->getTargetUrl());
 ```
 
