@@ -12,7 +12,7 @@ use Payum\Security\PlainHttpRequestVerifier;
 $tokenStorage = new FilesystemStorage('storages/', 'Payum/Model/Token', 'hash');
 $requestVerifier = new PlainHttpRequestVerifier($tokenStorage);
 
-$paypalPaymentDetailsClass = 'Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails';
+$paypalPaymentDetailsClass = 'PaymentDetails';
 $storages = array(
     'paypal' => array(
         $paypalPaymentDetailsClass => new FilesystemStorage('storages/', $paypalPaymentDetailsClass, 'id')
@@ -24,6 +24,7 @@ $payments = array(
             'username' => 'poljakov.ws-facilitator_api1.gmail.com',
             'password' => '1379924240',
             'signature' => 'ASzjWrCiwL7ehuXZv-A7NnZMOYstAS5vaZDeqCN0V2cTaIVDCMirUNbn',
+            'sandbox' => true,
         )
     )));
 
