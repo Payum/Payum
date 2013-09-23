@@ -27,7 +27,7 @@ if ($interactiveRequest = $payment->execute(new SecuredCaptureRequest($token), t
         die();
     }
 
-    throw \LogicException('Unsupported interactive request', null $interactiveRequest);
+    throw new \LogicException('Unsupported interactive request', null, $interactiveRequest);
 }
 
 $requestVerifier->invalidate($token);
