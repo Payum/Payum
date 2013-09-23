@@ -12,7 +12,7 @@ use Payum\Security\PlainHttpRequestVerifier;
 $tokenStorage = new FilesystemStorage('storages/', 'Payum/Model/Token', 'hash');
 $requestVerifier = new PlainHttpRequestVerifier($tokenStorage);
 
-$paypalPaymentDetailsClass = 'PayumStart/Model/PaymentDetails';
+$paypalPaymentDetailsClass = 'PayumStart/Model/PaypalPaymentDetails';
 $storages = array(
     'paypal' => array(
         $paypalPaymentDetailsClass => new FilesystemStorage('storages/', $paypalPaymentDetailsClass, 'id')
