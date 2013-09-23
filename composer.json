@@ -1,0 +1,38 @@
+{
+    "name": "payum/paypal-rest",
+    "type": "library",
+    "description": "Rest",
+    "keywords": ["payment", "paypal", "rest", "digital goods", "recurring payment"],
+    "homepage": "",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vladimir Polyakov",
+            "email": "poljakov.ws@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "kriswallsmith/buzz": "*",
+        "payum/payum": "0.6.x-dev"
+    },
+    "require-dev": {
+        "doctrine/orm": "2.2.*",
+        "phpunit/phpunit": "3.7.*",
+        "fp/testo": "dev-master",
+        "ext-curl": "*",
+        "ext-pdo_sqlite": "*",
+        "payum/paypal-express-checkout-nvp": "0.6.x-dev"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": { "": "src/" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.6-dev"
+        }
+    }
+}
