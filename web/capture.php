@@ -5,7 +5,7 @@ use Payum\Request\BinaryMaskStatusRequest;
 use Payum\Request\SecuredCaptureRequest;
 use Payum\Request\RedirectUrlInteractiveRequest;
 
-include 'config.php';
+include '../src/Start/config.php';
 
 $token = $requestVerifier->verify($_REQUEST);
 $payment = $registry->getPayment($token->getPaymentName());

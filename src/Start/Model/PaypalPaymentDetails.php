@@ -6,7 +6,7 @@
  * Time: 4:19 PM
  */
 
-namespace Payum\Paypal\ExpressCheckout\Nvp\Model;
+namespace Start\Model;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails as BasePaymentDetails;
 

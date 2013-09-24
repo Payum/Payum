@@ -1,6 +1,6 @@
 <?php
 
-include 'config.php';
+include '../src/Start/config.php';
 
 $storage = $registry->getStorageForClass($paypalPaymentDetailsClass, 'paypal');
 
