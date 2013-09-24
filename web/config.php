@@ -1,6 +1,8 @@
 <?php
 //config.php
 
+require '../vendor/autoload.php';
+
 use Buzz\Client\Curl;
 use Payum\Extension\StorageExtension;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory;
@@ -9,13 +11,13 @@ use Payum\Registry\SimpleRegistry;
 use Payum\Storage\FilesystemStorage;
 use Payum\Security\PlainHttpRequestVerifier;
 
-$tokenStorage = new FilesystemStorage('storages/', 'Payum/Model/Token', 'hash');
+$tokenStorage = new FilesystemStorage(__DIR__.'/storage', 'Payum\Model\Token', 'hash');
 $requestVerifier = new PlainHttpRequestVerifier($tokenStorage);
 
-$paypalPaymentDetailsClass = 'PayumStart/Model/PaypalPaymentDetails';
+$paypalPaymentDetailsClass = 'Payum\Paypal\ExpressCheckout\Nvp\Model\PaypalPaymentDetails';
 $storages = array(
     'paypal' => array(
-        $paypalPaymentDetailsClass => new FilesystemStorage('storages/', $paypalPaymentDetailsClass, 'id')
+        $paypalPaymentDetailsClass => new FilesystemStorage(__DIR__.'/storage', $paypalPaymentDetailsClass, 'id')
     )
 );
 
