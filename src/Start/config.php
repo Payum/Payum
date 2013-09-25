@@ -1,7 +1,7 @@
 <?php
 //config.php
 
-require '../vendor/autoload.php';
+require '../../vendor/autoload.php';
 
 use Buzz\Client\Curl;
 use Payum\Extension\StorageExtension;

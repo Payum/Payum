@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="en"><head><title>CreatePaymentUsingPayPal</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="CreatePaymentUsingPayPal"><meta name="groc-project-path" content="CreatePaymentUsingPayPal.php"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><body><div id="document"><div class="segment"><a id="segment-0" name="segment-0" class="section_anchor"></a><div class="code"><div class="wrapper"><span class="cp">&lt;?php</span></div></div></div><div class="segment"><a id="segment-1" name="segment-1" class="section_anchor"></a><div class="comments"><div class="pilwrap"><a href="#segment-1" class="pilcrow">¶</a></div><div class="wrapper"><h1 id="create-payment-using-paypal-as-payment-method">Create Payment using PayPal as payment method</h1>
+
+<p>This sample code demonstrates how you can process a 
+PayPal Account based Payment.
+API used: /v1/payments/payment</p></div></div><div class="code"><div class="wrapper"><span class="k">require</span> <span class="nx">__DIR__</span> <span class="o">.</span> <span class="s1">&#39;/../bootstrap.php&#39;</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">PayPal\Api\Address</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">PayPal\Api\Amount</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">PayPal\Api\Payer</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">PayPal\Api\Payment</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">PayPal\Api\FundingInstrument</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">PayPal\Api\RedirectUrls</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">PayPal\Api\Transaction</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">PayPal\Rest\ApiContext</span><span class="p">;</span>
+<span class="nb">session_start</span><span class="p">();</span></div></div></div><div class="segment"><a id="segment-2" name="segment-2" class="section_anchor"></a><div class="comments"><div class="pilwrap"><a href="#segment-2" class="pilcrow">¶</a></div><div class="wrapper"><h3 id="payer">Payer</h3>
+
+<p>A resource representing a Payer that funds a payment
+Use the List of <code>FundingInstrument</code> and the Payment Method
+as 'credit_card'</p></div></div><div class="code"><div class="wrapper"><span class="nv">$payer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Payer</span><span class="p">();</span>
+<span class="nv">$payer</span><span class="o">-&gt;</span><span class="na">setPayment_method</span><span class="p">(</span><span class="s2">&quot;paypal&quot;</span><span class="p">);</span></div></div></div><div class="segment"><a id="segment-3" name="segment-3" class="section_anchor"></a><div class="comments"><div class="pilwrap"><a href="#segment-3" class="pilcrow">¶</a></div><div class="wrapper"><h3 id="amount">Amount</h3>
+
+<p>Let's you specify a payment amount.</p></div></div><div class="code"><div class="wrapper"><span class="nv">$amount</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Amount</span><span class="p">();</span>
+<span class="nv">$amount</span><span class="o">-&gt;</span><span class="na">setCurrency</span><span class="p">(</span><span class="s2">&quot;USD&quot;</span><span class="p">);</span>
+<span class="nv">$amount</span><span class="o">-&gt;</span><span class="na">setTotal</span><span class="p">(</span><span class="s2">&quot;1.00&quot;</span><span class="p">);</span></div></div></div><div class="segment"><a id="segment-4" name="segment-4" class="section_anchor"></a><div class="comments"><div class="pilwrap"><a href="#segment-4" class="pilcrow">¶</a></div><div class="wrapper"><h3 id="transaction">Transaction</h3>
+
+<p>A transaction defines the contract of a
+payment - what is the payment for and who
+is fulfilling it. Transaction is created with
+a <code>Payee</code> and <code>Amount</code> types</p></div></div><div class="code"><div class="wrapper"><span class="nv">$transaction</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Transaction</span><span class="p">();</span>
+<span class="nv">$transaction</span><span class="o">-&gt;</span><span class="na">setAmount</span><span class="p">(</span><span class="nv">$amount</span><span class="p">);</span>
+<span class="nv">$transaction</span><span class="o">-&gt;</span><span class="na">setDescription</span><span class="p">(</span><span class="s2">&quot;This is the payment description.&quot;</span><span class="p">);</span></div></div></div><div class="segment"><a id="segment-5" name="segment-5" class="section_anchor"></a><div class="comments"><div class="pilwrap"><a href="#segment-5" class="pilcrow">¶</a></div><div class="wrapper"><h3 id="redirect-urls">Redirect urls</h3>
+
+<p>Set the urls that the buyer must be redirected to after 
+payment approval/ cancellation.</p></div></div><div class="code"><div class="wrapper"><span class="nv">$baseUrl</span> <span class="o">=</span> <span class="nx">getBaseUrl</span><span class="p">();</span>
+<span class="nv">$redirectUrls</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RedirectUrls</span><span class="p">();</span>
+<span class="nv">$redirectUrls</span><span class="o">-&gt;</span><span class="na">setReturn_url</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">$baseUrl</span><span class="s2">/ExecutePayment.php?success=true&quot;</span><span class="p">);</span>
+<span class="nv">$redirectUrls</span><span class="o">-&gt;</span><span class="na">setCancel_url</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">$baseUrl</span><span class="s2">/ExecutePayment.php?success=false&quot;</span><span class="p">);</span></div></div></div><div class="segment"><a id="segment-6" name="segment-6" class="section_anchor"></a><div class="comments"><div class="pilwrap"><a href="#segment-6" class="pilcrow">¶</a></div><div class="wrapper"><h3 id="payment">Payment</h3>
+
+<p>A Payment Resource; create one using
+the above types and intent as 'sale'</p></div></div><div class="code"><div class="wrapper"><span class="nv">$payment</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Payment</span><span class="p">();</span>
+<span class="nv">$payment</span><span class="o">-&gt;</span><span class="na">setIntent</span><span class="p">(</span><span class="s2">&quot;sale&quot;</span><span class="p">);</span>
+<span class="nv">$payment</span><span class="o">-&gt;</span><span class="na">setPayer</span><span class="p">(</span><span class="nv">$payer</span><span class="p">);</span>
+<span class="nv">$payment</span><span class="o">-&gt;</span><span class="na">setRedirect_urls</span><span class="p">(</span><span class="nv">$redirectUrls</span><span class="p">);</span>
+<span class="nv">$payment</span><span class="o">-&gt;</span><span class="na">setTransactions</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="nv">$transaction</span><span class="p">));</span></div></div></div><div class="segment"><a id="segment-7" name="segment-7" class="section_anchor"></a><div class="comments"><div class="pilwrap"><a href="#segment-7" class="pilcrow">¶</a></div><div class="wrapper"><h3 id="api-context">Api Context</h3>
+
+<p>Pass in a <code>ApiContext</code> object to authenticate 
+the call and to send a unique request id 
+(that ensures idempotency). The SDK generates
+a request id if you do not pass one explicitly. </p></div></div><div class="code"><div class="wrapper"><span class="nv">$apiContext</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ApiContext</span><span class="p">(</span><span class="nv">$cred</span><span class="p">,</span> <span class="s1">&#39;Request&#39;</span> <span class="o">.</span> <span class="nb">time</span><span class="p">());</span></div></div></div><div class="segment"><a id="segment-8" name="segment-8" class="section_anchor"></a><div class="comments"><div class="pilwrap"><a href="#segment-8" class="pilcrow">¶</a></div><div class="wrapper"><h3 id="create-payment">Create Payment</h3>
+
+<p>Create a payment by posting to the APIService
+using a valid apiContext
+The return object contains the status and the
+url to which the buyer must be redirected to
+for payment approval</p></div></div><div class="code"><div class="wrapper"><span class="k">try</span> <span class="p">{</span>
+  <span class="nv">$payment</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">(</span><span class="nv">$apiContext</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">\PPConnectionException</span> <span class="nv">$ex</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">echo</span> <span class="s2">&quot;Exception: &quot;</span> <span class="o">.</span> <span class="nv">$ex</span><span class="o">-&gt;</span><span class="na">getMessage</span><span class="p">()</span> <span class="o">.</span> <span class="nx">PHP_EOL</span><span class="p">;</span>
+  <span class="nb">var_dump</span><span class="p">(</span><span class="nv">$ex</span><span class="o">-&gt;</span><span class="na">getData</span><span class="p">());</span> 
+  <span class="k">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span></div></div></div><div class="segment"><a id="segment-9" name="segment-9" class="section_anchor"></a><div class="comments"><div class="pilwrap"><a href="#segment-9" class="pilcrow">¶</a></div><div class="wrapper"><h3 id="redirect-buyer-to-paypal">Redirect buyer to paypal</h3>
+
+<p>Retrieve buyer approval url from the <code>payment</code> object.</p></div></div><div class="code"><div class="wrapper"><span class="k">foreach</span><span class="p">(</span><span class="nv">$payment</span><span class="o">-&gt;</span><span class="na">getLinks</span><span class="p">()</span> <span class="k">as</span> <span class="nv">$link</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nv">$link</span><span class="o">-&gt;</span><span class="na">getRel</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;approval_url&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$redirectUrl</span> <span class="o">=</span> <span class="nv">$link</span><span class="o">-&gt;</span><span class="na">getHref</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span></div></div></div><div class="segment"><a id="segment-10" name="segment-10" class="section_anchor"></a><div class="comments"><div class="pilwrap"><a href="#segment-10" class="pilcrow">¶</a></div><div class="wrapper"><p>It is not really a great idea to store the payment id
+in the session. In a real world app, please store the
+payment id in a database.</p></div></div><div class="code"><div class="wrapper"><span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;paymentId&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$payment</span><span class="o">-&gt;</span><span class="na">getId</span><span class="p">();</span>
+<span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$redirectUrl</span><span class="p">))</span> <span class="p">{</span>
+  <span class="nx">header</span><span class="p">(</span><span class="s2">&quot;Location: </span><span class="si">$redirectUrl</span><span class="s2">&quot;</span><span class="p">);</span>
+  <span class="k">exit</span><span class="p">;</span>
+<span class="p">}</span></div></div></div><div class="segment"><div class="comments"><a href="../">Back</a></div></div></div><script type="text/javascript" src="assets/jquery.min.js"></script><script type="text/javascript" src="assets/docs.js"></script></body></html>

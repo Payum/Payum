@@ -1,0 +1,14 @@
+{
+    "name": "paypal/rest-api-sdk-sample-php",
+    "description": "Samples using PayPal's REST API SDK for PHP",
+    "homepage": "https://github.com/paypal/rest-api-sdk-php",
+    "config": {
+        "require-all": true
+    },
+    "require": {
+        "php": ">=5.3.0",
+        "ext-curl": "*",
+        "ext-json": "*",
+		"paypal/rest-api-sdk-php" : "0.5.*"
+    }
+}

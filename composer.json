@@ -3,7 +3,8 @@
     "require": {
         "php": ">=5.3.2",
         "kriswallsmith/buzz": "*",
-        "payum/payum": "0.6.x-dev"
+        "payum/payum": "0.6.x-dev",
+        "paypal/rest-api-sdk-php" : "0.5.*"
     },
     "require-dev": {
         "doctrine/orm": "2.2.*",
