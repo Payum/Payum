@@ -99,7 +99,7 @@ A user see is the random hash so it would be a bit hard to hack your payment.
 If you read the previous chapter carefully you may notice `capture.php` script we set it as the target url of capture token.
 At the last lines of `prepare.php` we delegated the job to `capture.php` script.
 This file is designed to be reused by any possible payment.
-So if you don`t want dive into details just [copy\past it](capture-action.md).
+So if you don`t want dive into details just [copy\past it](capture-script.md).
 
 ## Show payment status (done.php).
 
