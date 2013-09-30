@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mongo-mapping xmlns="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping"
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
+                        http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
+
+    <mapped-superclass name="Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Document\PaymentDetails">
+
+        <field name="token" fieldName="token" type="string" />
+
+        <field name="payerid" fieldName="payerid" type="string" />
+
+        <field name="correlationid" fieldName="correlationid" type="string" />
+
+        <field name="checkoutstatus" fieldName="checkoutstatus" type="string" />
+
+        <field name="paymentrequest_nnn_amt" fieldName="paymentrequest_amts" type="hash" />
+
+        <field name="paymentrequest_nnn_currencycode" fieldName="paymentrequest_currencycodes" type="hash" />
+
+        <field name="paymentrequest_nnn_transactionid" fieldName="paymentrequest_transactionids" type="hash" />
+
+        <field name="paymentrequest_nnn_paymentstatus" fieldName="paymentrequest_paymentstatuses" type="hash" />
+
+        <field name="paymentrequest_nnn_paymentaction" fieldName="paymentrequest_paymentactions" type="hash" />
+
+        <field name="l_billingtypennn" fieldName="l_billingtypes" type="hash" />
+
+        <field name="l_billingagreementdescriptionnnn" fieldName="l_billingagreementdescriptions" type="hash" />
+
+        <field name="l_errorcodennn" fieldName="l_errorcodes" type="hash" />
+
+        <field name="l_shortmessagennn" fieldName="l_shortmessages" type="hash" />
+
+        <field name="l_longmessagennn" fieldName="l_longmessages" type="hash" />
+
+        <field name="l_severitycodennn" fieldName="l_severitycodes" type="hash" />
+
+        <field name="returnurl" fieldName="returnurl" type="string" />
+
+        <field name="cancelurl" fieldName="cancelurl" type="string" />
+    </mapped-superclass>
+</doctrine-mongo-mapping>
