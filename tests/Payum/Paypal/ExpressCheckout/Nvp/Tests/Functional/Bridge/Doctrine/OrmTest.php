@@ -2,6 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Functional\Bridge\Doctrine;
 
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -12,7 +13,7 @@ use Payum\Tests\Functional\Bridge\Doctrine\BaseOrmTest;
 abstract class OrmTest extends BaseOrmTest
 {
     /**
-     * @return array
+     * {@inheritDoc}
      */
     protected function getMetadataDriverImpl()
     {   
