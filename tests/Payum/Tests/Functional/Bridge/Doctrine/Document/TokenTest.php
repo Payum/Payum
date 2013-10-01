@@ -1,24 +1,12 @@
 <?php
-namespace Payum\Tests\Functional\Bridge\Doctrine\Entity;
-
-use Doctrine\ORM\Tools\SchemaValidator;
+namespace Payum\Tests\Functional\Bridge\Doctrine\Document;
 
 use Payum\Storage\Identificator;
-use Payum\Tests\Functional\Bridge\Doctrine\OrmTest;
-use Payum\Examples\Entity\Token;
+use Payum\Tests\Functional\Bridge\Doctrine\MongoTest;
+use Payum\Examples\Document\Token;
 
-class PaymentDetailsTest extends OrmTest
+class PaymentDetailsTest extends MongoTest
 {
-    /**
-     * @test
-     */
-    public function shouldAllSchemasBeValid()
-    {
-        $schemaValidator = new SchemaValidator($this->em);
-
-        $this->assertEmpty($schemaValidator->validateMapping());
-    }
-    
     /**
      * @test
      */
@@ -28,8 +16,8 @@ class PaymentDetailsTest extends OrmTest
         $token->setTargetUrl('anUrl');
         $token->setPaymentName('aName');
         
-        $this->em->persist($token);
-        $this->em->flush();
+        $this->dm->persist($token);
+        $this->dm->flush();
     }
 
     /**
@@ -43,14 +31,14 @@ class PaymentDetailsTest extends OrmTest
         $token->setAfterUrl('anAfterUrl');
         $token->setDetails(new Identificator('anId', 'stdClass'));
 
-        $this->em->persist($token);
-        $this->em->flush();
+        $this->dm->persist($token);
+        $this->dm->flush();
         
         $hash = $token->getHash();
 
-        $this->em->clear();
+        $this->dm->clear();
         
-        $foundToken = $this->em->find(get_class($token), $hash);
+        $foundToken = $this->dm->find(get_class($token), $hash);
         
         $this->assertNotSame($token, $foundToken);
         
