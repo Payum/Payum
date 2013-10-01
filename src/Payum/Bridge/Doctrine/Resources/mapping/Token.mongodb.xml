@@ -4,11 +4,12 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <mapped-superclass name="Payum\Bridge\Doctrine\Document\TokenizedDetails">
+    <mapped-superclass name="Payum\Bridge\Doctrine\Document\Token">
 
       <field name="hash" type="string" id="true" strategy="NONE" />
 
-      <field name="details" type="hash" />
+      <!-- Is doctrine mongo odm can serialize objects like ORM? Point me how to do it -->
+      <field name="detailsSerialized" type="string" />
 
       <field name="afterUrl" type="string" />
 
