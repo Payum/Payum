@@ -6,7 +6,7 @@
 
     <mapped-superclass name="Payum\Bridge\Doctrine\Document\TokenizedDetails">
 
-      <field name="token" type="string" id="true" strategy="NONE" />
+      <field name="hash" type="string" id="true" strategy="NONE" />
 
       <field name="details" type="hash" />
 
