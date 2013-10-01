@@ -1,9 +1,16 @@
 # Managing notifications.
 
-The notification it is a callback a payment can send back to use to let us know about changes.
+The notification is a callback. A payment can send it back to us to let us know about changes.
 It could be [Paypal Instant Payment Notification (IPN)](https://developer.paypal.com/webapps/developer/docs/classic/products/instant-payment-notification/) or [Payex Transaction Callback](http://www.payexpim.com/quick-guide/9-transaction-callback/) for example.
-Let's say we want to store it somewhere and process it later (with a cron script for example).
-First we have to create a notification model.
+Here in this chapter we show you how to store it somewhere and process it later (with a cron script for example).
+
+The diagram shows two examples where notification could be very handy:
+
+![notifiaction](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=cGFydGljaXBhbnQgUGF5cGFsCgAHDGNhcHR1cmUucGhwAAsNbm90aWZ5ABIFCgAZCy0-KwA_BjogYSBwdXJjYWhzZQoAUgYtPi0AQws6IHBlbmRpbmcAFggtPgBKCjogc3VjY2VzcwBiBmljYXRpb24AMTkARgcAVBZjYW5jZWxlZCAodXNlciB2b2lkIG9uIHAAggcFIHNpZGUp&s=default)
+
+## Preparations
+
+First we have to create a model where we would store all the info:
 
 ```php
 <?php
@@ -18,7 +25,7 @@ class Notification extends \ArrayObject
 }
 ```
 
-Then our notification action which would actually do all the job:
+Then we have to do our notification action which would actually do all the job:
 
 ```php
 <?php
@@ -49,6 +56,7 @@ class StoreNotificationAction implements ActionInterface
         return $request instanceof SecuredNotifyRequest;
     }
 }
+```
 
 In the code above we created payum custom action.
 The main purpose of the action to store notification that with a request.
@@ -69,7 +77,7 @@ $storeNotificationAction = new StoreNotificationAction(
 $registry->getPayment('paypal')->addAction($storeNotificationAction);
 ```
 
-Now we have to implement `notify.php` script which is accessible from the internet.
+Now we have to implement `notify.php` script which must be accessible from the internet.
 
 ```php
 <?php
@@ -84,6 +92,8 @@ $payment = $registry->getPayment($token->getPaymentName());
 
 $payment->execute(new SecuredNotifyRequest($_REQUEST, $token));
 ```
+
+## Setup Paypal IPN.
 
 The code above could be reused by any payment.
 Now I want to show changes need to enable Paypal IPN. To do so we have to mofiy `prepare.php` a bit:
@@ -100,5 +110,7 @@ $tokenStorage->updateModel($notifyToken);
 $paymentDetails['NOTIFYURL'] = $notifyToken->getTargetUrl();
 $storage->updateModel($paymentDetails);
 ```
+
+Here we created one more token: `notify` and tell paypal to use its target url for notifications.
 
 Back to [index](index.md).
