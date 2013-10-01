@@ -2,6 +2,7 @@
 
 * [Get it started](get-it-started.md)
 * [The architecture](the-architecture.md)
+* [Managing notifications](managing-notifications.md)
 * [Supported payments and other libraries](supported-payments-and-other-libraries.md)
 * [Capture script](capture-script.md)
 
