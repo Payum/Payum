@@ -8,7 +8,8 @@
 
       <field name="hash" type="string" id="true" strategy="NONE" />
 
-      <field name="details" type="hash" />
+      <!-- Is doctrine mongo odm can serialize objects like ORM? Point me how to do it -->
+      <field name="detailsSerialized" type="string" />
 
       <field name="afterUrl" type="string" />
 

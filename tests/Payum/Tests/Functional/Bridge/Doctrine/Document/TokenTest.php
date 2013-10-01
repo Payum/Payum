@@ -23,7 +23,7 @@ class PaymentDetailsTest extends MongoTest
     /**
      * @test
      */
-    public function shouldAllowFindPersistedPaymentDetails()
+    public function shouldAllowFindPersistedToken()
     {
         $token = new Token;
         $token->setTargetUrl('anUrl');

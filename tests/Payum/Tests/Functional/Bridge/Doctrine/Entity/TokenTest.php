@@ -35,7 +35,7 @@ class PaymentDetailsTest extends OrmTest
     /**
      * @test
      */
-    public function shouldAllowFindPersistedPaymentDetails()
+    public function shouldAllowFindPersistedToken()
     {
         $token = new Token;
         $token->setTargetUrl('anUrl');
