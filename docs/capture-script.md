@@ -1,6 +1,7 @@
-# Capture action.
+# Capture script.
 
-Let's move on and see how that `capture.php` file could look like? By the way we are going to reuse it for all our payments.
+Let's move on and see how that `capture.php` script could look like?
+By the way we are going to reuse it for all our payments.
 
 ```php
 <?php
