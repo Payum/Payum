@@ -16,12 +16,6 @@ First we have to create a model where we would store all the info:
 <?php
 class Notification extends \ArrayObject
 {
-    protected $id;
-
-    public function getId()
-    {
-        return $this->id;
-    }
 }
 ```
 
@@ -71,7 +65,7 @@ use Payum\Extension\StorageExtension;
 use Payum\Storage\FilesystemStorage;
 
 $storeNotificationAction = new StoreNotificationAction(
-    new FilesystemStorage('/path/to/storage', 'Notification', 'id')
+    new FilesystemStorage('/path/to/storage', 'Notification')
 );
 
 $registry->getPayment('paypal')->addAction($storeNotificationAction);
