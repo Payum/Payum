@@ -7,6 +7,9 @@
  */
 namespace Payum\Paypal\Rest;
 
+use Payum\Action\CaptureDetailsAggregatedModelAction;
+use Payum\Action\StatusDetailsAggregatedModelAction;
+use Payum\Action\SyncDetailsAggregatedModelAction;
 use Payum\Payment;
 use Payum\Extension\EndlessCycleDetectorExtension;
 use Payum\Paypal\Rest\Action\CaptureAction;
@@ -28,8 +31,12 @@ abstract class PaymentFactory
 
         $payment->addExtension(new EndlessCycleDetectorExtension);
 
-        //$payment->addAction(new CaptureAction);
-        //$payment->addAction(new StatusAction);
+        $payment->addAction(new CaptureAction);
+        $payment->addAction(new StatusAction);
+
+        $payment->addAction(new CaptureDetailsAggregatedModelAction);
+        $payment->addAction(new SyncDetailsAggregatedModelAction);
+        $payment->addAction(new StatusDetailsAggregatedModelAction);
 
         return $payment;
     }

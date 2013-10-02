@@ -10,6 +10,7 @@ use PayPal\Api\Transaction;
 $storage = $registry->getStorageForClass($paypalRestPaymentDetailsClass, 'paypalRest');
 
 $paymentDetails = $storage->createModel();
+$storage->updateModel($paymentDetails);
 
 $payer = new Payer();
 $payer->setPayment_method("paypal");
@@ -23,13 +24,13 @@ $transaction->setAmount($amount);
 $transaction->setDescription("This is the payment description.");
 
 $doneToken = $tokenStorage->createModel();
-$doneToken->setPaymentName('paypal');
+$doneToken->setPaymentName('paypalRest');
 $doneToken->setDetails($storage->getIdentificator($paymentDetails));
 $doneToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/Start/done.php?payum_token='.$doneToken->getHash());
 $tokenStorage->updateModel($doneToken);
 
 $captureToken = $tokenStorage->createModel();
-$captureToken->setPaymentName('paypal');
+$captureToken->setPaymentName('paypalRest');
 $captureToken->setDetails($storage->getIdentificator($paymentDetails));
 $captureToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/Start/capture.php?payum_token='.$captureToken->getHash());
 $captureToken->setAfterUrl($doneToken->getTargetUrl());
