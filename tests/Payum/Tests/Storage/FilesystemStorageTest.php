@@ -19,6 +19,16 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function couldBeConstructedWithStorageDirModelClassAndDefaultIdPropertyArguments()
+    {
+        $storage = new FilesystemStorage(sys_get_temp_dir(), 'Payum\Examples\Model\TestModel');
+
+        $this->assertAttributeEquals('payum_id', 'idProperty', $storage);
+    }
+
+    /**
+     * @test
+     */
     public function couldBeConstructedWithStorageDirModelClassAndIdPropertyArguments()
     {
         new FilesystemStorage(
@@ -66,6 +76,25 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf($expectedModelClass, $model);
         $this->assertNotEmpty($model->getId());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldUpdateModelAndSetIdToModelEvenIfModelNotHaveIdDefinied()
+    {
+        $storage = new FilesystemStorage(
+            sys_get_temp_dir(),
+            'stdClass',
+            'notExistProperty'
+        );
+
+        $model = $storage->createModel();
+
+        $storage->updateModel($model);
+
+        $this->assertInstanceOf('stdClass', $model);
+        $this->assertObjectHasAttribute('notExistProperty', $model);
     }
 
     /**
@@ -174,6 +203,24 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldAllowGetModelIdentificatorWhenDynamicIdUsed()
+    {
+        $storage = new FilesystemStorage(sys_get_temp_dir(), 'stdClass');
+
+        $model = $storage->createModel();
+
+        $storage->updateModel($model);
+
+        $identificator = $storage->getIdentificator($model);
+
+        $this->assertInstanceOf('Payum\Storage\Identificator', $identificator);
+        $this->assertEquals('stdClass', $identificator->getClass());
+        $this->assertEquals($model->payum_id, $identificator->getId());
+    }
+
+    /**
+     * @test
+     */
     public function shouldFindModelById()
     {
         $storage = new FilesystemStorage(
@@ -217,5 +264,32 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($model, $foundModel);
         $this->assertEquals($expectedPrice, $foundModel->getPrice());
         $this->assertEquals($expectedCurrency, $foundModel->getCurrency());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldStoreInfoBetweenUpdateAndFindWithDefaultId()
+    {
+        $storage = new FilesystemStorage(sys_get_temp_dir(), 'Payum\Examples\Model\TestModel');
+
+        $model = $storage->createModel();
+        $model->setPrice($expectedPrice = 123);
+        $model->setCurrency($expectedCurrency = 'FOO');
+
+        $storage->updateModel($model);
+
+        //guard
+        $this->assertObjectHasAttribute('payum_id', $model);
+        $this->assertNotEmpty($model->payum_id);
+
+        $foundModel = $storage->findModelById($model->payum_id);
+
+        $this->assertNotSame($model, $foundModel);
+        $this->assertEquals($expectedPrice, $foundModel->getPrice());
+        $this->assertEquals($expectedCurrency, $foundModel->getCurrency());
+
+        $this->assertObjectHasAttribute('payum_id', $foundModel);
+        $this->assertNotEmpty($foundModel->payum_id);
     }
 }

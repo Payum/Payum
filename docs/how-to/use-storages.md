@@ -7,7 +7,7 @@ use Payum\Payment;
 use Payum\Storage\FilesystemStorage;
 use Payum\Extension\StorageExtension;
 
-$storage = new FilesystemStorage('path_to_storage_dir', 'YourModelClass', 'idProperty');
+$storage = new FilesystemStorage('path_to_storage_dir', 'YourModelClass');
 
 $payment = new Payment;
 $payment->addExtension(new StorageExtension($storage));
