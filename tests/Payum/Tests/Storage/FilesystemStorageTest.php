@@ -203,6 +203,24 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldAllowGetModelIdentificatorWhenDynamicIdUsed()
+    {
+        $storage = new FilesystemStorage(sys_get_temp_dir(), 'stdClass');
+
+        $model = $storage->createModel();
+
+        $storage->updateModel($model);
+
+        $identificator = $storage->getIdentificator($model);
+
+        $this->assertInstanceOf('Payum\Storage\Identificator', $identificator);
+        $this->assertEquals('stdClass', $identificator->getClass());
+        $this->assertEquals($model->payum_id, $identificator->getId());
+    }
+
+    /**
+     * @test
+     */
     public function shouldFindModelById()
     {
         $storage = new FilesystemStorage(

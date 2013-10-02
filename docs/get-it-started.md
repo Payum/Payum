@@ -23,14 +23,14 @@ use Payum\Registry\SimpleRegistry;
 use Payum\Storage\FilesystemStorage;
 use Payum\Security\PlainHttpRequestVerifier;
 
-$tokenStorage = new FilesystemStorage('/path/to/storage', 'Payum/Model/Token', 'hash');
+$tokenStorage = new FilesystemStorage('/path/to/storage', 'Payum/Model/Token');
 $requestVerifier = new PlainHttpRequestVerifier($tokenStorage);
 
 // You way want to modify it to suite your needs
 $paypalPaymentDetailsClass = 'Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails';
 $storages = array(
     'paypal' => array(
-        $paypalPaymentDetailsClass => new FilesystemStorage('/path/to/storage', $paypalPaymentDetailsClass, 'id')
+        $paypalPaymentDetailsClass => new FilesystemStorage('/path/to/storage', $paypalPaymentDetailsClass)
     )
 );
 
