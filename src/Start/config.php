@@ -25,7 +25,7 @@ $storages = array(
         $paypalPaymentDetailsClass => new FilesystemStorage(__DIR__.'/storage', $paypalPaymentDetailsClass, 'id')
     ),
     'paypalRest' => array(
-        $paypalRestPaymentDetailsClass => new FilesystemStorage(__DIR__.'/storage', $paypalRestPaymentDetailsClass, 'id')
+        $paypalRestPaymentDetailsClass => new FilesystemStorage(__DIR__.'/storage', $paypalRestPaymentDetailsClass, 'idStorage')
     )
 );
 

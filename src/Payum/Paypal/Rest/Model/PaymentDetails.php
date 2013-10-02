@@ -11,10 +11,30 @@ use PayPal\Api\Payment as BasePaymentDetails;
 
 class PaymentDetails extends BasePaymentDetails
 {
-    protected $id;
+    protected $idStorage;
 
-    public function getId()
+    protected $state;
+
+
+
+    public function getIdStorage()
     {
-        return $this->id;
+        return $this->idStorage;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param mixed $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
     }
 }

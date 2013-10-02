@@ -23,8 +23,37 @@ class StatusAction implements ActionInterface
      */
     function execute($request)
     {
+        /** @var $request \Payum\Request\StatusRequestInterface */
+        if (false == $this->supports($request)) {
+            throw RequestNotSupportedException::createActionNotSupported($this, $request);
+        }
+
+
+        if (null == $request->getModel()->getState()) {
+            $request->markNew();
+        }
+
+        if ($request->getModel()->getState() == 'created') {
+            $request->markNew();
+        }
+
+        if ($request->getModel()->getState() == 'approved') {
+            $request->markSuccess();
+        }
+/*        if (null === $model['RESULT']) {
+
+            return;
+        }*/
         //todo manage status
-        $request->markNew();
+
+/*        if (Api::RESULT_SUCCESS === (int) $model['RESULT']) {
+            $request->markSuccess();
+
+            return;
+        }
+
+        $request->markFailed();*/
+
     }
 
     /**

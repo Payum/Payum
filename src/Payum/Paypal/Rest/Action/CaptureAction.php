@@ -34,7 +34,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
 
         /** @var $payment Payment */
 
-        if ($_GET['PayerID'] == null) {
+        if (false == $request->getModel()->getState()) {
             $payment = $request->getModel();
             $payment->create($this->api);
 
@@ -46,30 +46,19 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
             }
         } else {
 
-            // ### Api Context
-            // Pass in a `ApiContext` object to authenticate
-            // the call and to send a unique request id
-            // (that ensures idempotency). The SDK generates
-            // a request id if you do not pass one explicitly.
-            $apiContext = $this->api;
-
-            $paymentId = $payment->getId();
+            $paymentId = $request->getModel()->getId();
             $payment = Payment::get($paymentId);
-            // PaymentExecution object includes information necessary
-            // to execute a PayPal account payment.
-            // The payer_id is added to the request query parameters
-            // when the user is redirected from paypal back to your site
+
+
             $execution = new PaymentExecution();
             $execution->setPayer_id($_GET['PayerID']);
 
             //Execute the payment
-            $payment->execute($execution, $apiContext);
+            $payment->execute($execution, $this->api);
+            $request->getModel()->fromArray($payment->toArray());
+
+           // $this->sincModel($request, $payment);
         }
-
-
-
-
-        //todo check create model
     }
 
     /**
@@ -97,5 +86,12 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         }
 
         $this->api = $api;
+    }
+
+    protected function sincModel($request, $payment)
+    {
+        $request->getModel()->setState($payment->getState());
+        $request->getId()->setId($payment->getId());
+        $request->getLinks()->setLinks($payment->getLinks());
     }
 }
