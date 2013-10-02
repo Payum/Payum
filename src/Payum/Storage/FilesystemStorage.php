@@ -20,7 +20,7 @@ class FilesystemStorage extends AbstractStorage
      * @param string $modelClass
      * @param string $idProperty
      */
-    public function __construct($storageDir, $modelClass, $idProperty)
+    public function __construct($storageDir, $modelClass, $idProperty = 'payum_id')
     {
         parent::__construct($modelClass);
 
@@ -43,6 +43,12 @@ class FilesystemStorage extends AbstractStorage
      */
     protected function doUpdateModel($model)
     {
+        $ro = new \ReflectionObject($model);
+
+        if (false == $ro->hasProperty($this->idProperty)) {
+            $model->{$this->idProperty} = null;
+        }
+
         $rp = new \ReflectionProperty($model, $this->idProperty);
         $rp->setAccessible(true);
 
@@ -63,7 +69,6 @@ class FilesystemStorage extends AbstractStorage
     {
         $rp = new \ReflectionProperty($model, $this->idProperty);
         $rp->setAccessible(true);
-
 
         if ($id = $rp->getValue($model)) {
             unlink($this->storageDir.'/payum-model-'.$id);
