@@ -22,7 +22,10 @@ abstract class MongoTest extends BaseMongoTest
 
         $driver = new MappingDriverChain;
         $xmlDriver = new XmlDriver(
-            new SymfonyFileLocator(array($rootDir.'/src/Payum/Paypal/ExpressCheckout/Nvp/Bridge/Doctrine/Resources/mapping' => 'Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Document'), '.mongodb.xml'),
+            new SymfonyFileLocator(
+                array($rootDir.'/src/Payum/Paypal/ExpressCheckout/Nvp/Bridge/Doctrine/Resources/mapping' => 'Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Document'),
+                '.mongodb.xml'
+            ),
             '.mongodb.xml'
         );
         $driver->addDriver($xmlDriver, 'Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Document');
@@ -30,7 +33,7 @@ abstract class MongoTest extends BaseMongoTest
         \Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver::registerAnnotationClasses();
 
         $annotationDriver = new AnnotationDriver(new AnnotationReader(), array(
-            $rootDir.'/examples/Payum/Paypal/ExpressCheckout/Nvp/ExamplesDocument'
+            $rootDir.'/examples/Payum/Paypal/ExpressCheckout/Nvp/Examples/Document'
         ));
         $driver->addDriver($annotationDriver, 'Payum\Paypal\ExpressCheckout\Nvp\Examples\Document');
 
