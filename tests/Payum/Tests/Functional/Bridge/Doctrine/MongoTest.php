@@ -2,7 +2,6 @@
 namespace Payum\Tests\Functional\Bridge\Doctrine;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator;
 use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
@@ -11,7 +10,9 @@ use Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver;
 abstract class MongoTest extends BaseMongoTest
 {
     /**
-     * @return MappingDriver
+     * @throws \RuntimeException
+     *
+     * @return MappingDriverChain
      */
     protected function getMetadataDriverImpl()
     {
@@ -22,7 +23,10 @@ abstract class MongoTest extends BaseMongoTest
 
         $driver = new MappingDriverChain;
         $xmlDriver = new XmlDriver(
-            new SymfonyFileLocator(array_flip(array('Payum\Bridge\Doctrine\Document' => $rootDir.'/src/Payum/Bridge/Doctrine/Resources/mapping')), '.mongodb.xml'),
+            new SymfonyFileLocator(
+                array($rootDir.'/src/Payum/Bridge/Doctrine/Resources/mapping' => 'Payum\Bridge\Doctrine\Document'),
+                '.mongodb.xml'
+            ),
             '.mongodb.xml'
         );
         $driver->addDriver($xmlDriver, 'Payum\Bridge\Doctrine\Document');
