@@ -49,15 +49,13 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
             $paymentId = $request->getModel()->getId();
             $payment = Payment::get($paymentId);
 
-
             $execution = new PaymentExecution();
             $execution->setPayer_id($_GET['PayerID']);
 
             //Execute the payment
             $payment->execute($execution, $this->api);
-            $request->getModel()->fromArray($payment->toArray());
 
-           // $this->sincModel($request, $payment);
+            $request->getModel()->fromArray($payment->toArray());
         }
     }
 

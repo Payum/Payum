@@ -28,32 +28,33 @@ class StatusAction implements ActionInterface
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-
-        if (null == $request->getModel()->getState()) {
-            $request->markNew();
-        }
-
-        if ($request->getModel()->getState() == 'created') {
-            $request->markNew();
-        }
-
-        if ($request->getModel()->getState() == 'approved') {
-            $request->markSuccess();
-        }
-/*        if (null === $model['RESULT']) {
-
-            return;
-        }*/
-        //todo manage status
-
-/*        if (Api::RESULT_SUCCESS === (int) $model['RESULT']) {
+        if (
+            isset($request->getModel()->state) &&
+            'approved' == $request->getModel()->state
+        ) {
             $request->markSuccess();
 
             return;
         }
 
-        $request->markFailed();*/
+        if (
+            isset($request->getModel()->state) &&
+            'created' == $request->getModel()->state
+        ) {
+            $request->markNew();
 
+            return;
+        }
+
+        if (
+            false == isset($request->getModel()->id)
+        ) {
+            $request->markNew();
+
+            return;
+        }
+
+        $request->markUnknown();
     }
 
     /**
