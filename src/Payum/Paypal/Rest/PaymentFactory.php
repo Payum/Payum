@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: skadabr
- * Date: 9/25/13
- * Time: 4:29 PM
- */
+
 namespace Payum\Paypal\Rest;
 
 use Payum\Action\CaptureDetailsAggregatedModelAction;

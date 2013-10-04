@@ -1,11 +1,7 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: skadabr
- * Date: 9/25/13
- * Time: 4:27 PM
- */
+
 namespace Payum\Paypal\Rest\Action;
+
 use PayPal\Api\Payment;
 use Payum\Action\ActionInterface;
 use Payum\Request\StatusRequestInterface;
@@ -23,7 +19,9 @@ class StatusAction implements ActionInterface
      */
     function execute($request)
     {
-        /** @var $request \Payum\Request\StatusRequestInterface */
+        /**
+         * @var $request \Payum\Request\StatusRequestInterface
+         */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }

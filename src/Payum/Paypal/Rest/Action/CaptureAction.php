@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: skadabr
- * Date: 9/25/13
- * Time: 4:27 PM
- */
+
 namespace Payum\Paypal\Rest\Action;
 
 use PayPal\Api\Payment;
@@ -18,21 +13,28 @@ use Payum\Request\RedirectUrlInteractiveRequest;
 
 class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
 {
-    /** @param ApiContext */
+    /**
+     * @param ApiContext
+     */
     protected $api;
+
     /**
      * {@inheritdoc}
      */
     public function execute($request)
     {
-        /** @var $request CaptureRequest */
+        /**
+         * @var $request CaptureRequest
+         */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
 
 
-        /** @var $payment Payment */
+        /**
+         * @var $payment Payment
+         */
 
         if (false == $request->getModel()->getState()) {
             $payment = $request->getModel();
