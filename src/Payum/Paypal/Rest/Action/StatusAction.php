@@ -6,10 +6,8 @@ use PayPal\Api\Payment;
 use Payum\Action\ActionInterface;
 use Payum\Request\StatusRequestInterface;
 
-
 class StatusAction implements ActionInterface
 {
-
     /**
      * @param mixed $request
      *

@@ -30,12 +30,9 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-
-
         /**
          * @var $payment Payment
          */
-
         if (false == $request->getModel()->getState()) {
             $payment = $request->getModel();
             $payment->create($this->api);
@@ -47,7 +44,6 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
                 }
             }
         } else {
-
             $paymentId = $request->getModel()->getId();
             $payment = Payment::get($paymentId);
 
