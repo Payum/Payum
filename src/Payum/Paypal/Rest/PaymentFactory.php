@@ -39,7 +39,6 @@ abstract class PaymentFactory
         $payment->addAction(new StatusDetailsAggregatedModelAction);
 
         return $payment;
-
     }
 
     /**
