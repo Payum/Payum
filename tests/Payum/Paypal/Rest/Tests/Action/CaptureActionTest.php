@@ -14,4 +14,6 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         new CaptureAction();
     }
+
+
 }
