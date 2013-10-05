@@ -50,19 +50,9 @@ class Token implements TokenInterface
 
     /**
      * {@inheritDoc}
-     *
-     * @param Identificator $details
-     * 
-     * @throws InvalidArgumentException if $details is not instance of Identificator
-     *
-     * @return void
      */
     public function setDetails($details)
     {
-        if (false == $details instanceof Identificator) {
-            throw new InvalidArgumentException('Details must be instance of `Identificator`.');
-        }
-
         $this->details = $details;
     }
 
