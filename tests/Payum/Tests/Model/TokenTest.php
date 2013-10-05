@@ -148,7 +148,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetDetails()
     {
-        $expectedIdentificator = new Identificator('anId', 'stdClass');
+        $expectedIdentificator = 'theDetails';
 
         $token = new Token;
 
@@ -159,14 +159,15 @@ class TokenTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Details must be instance of `Identificator`.
      */
-    public function throwIfTrySetNotIdentificatorAsDetails()
+    public function shouldAllowGetIdentificatorPreviouslySetAsDetails()
     {
+        $expectedIdentificator = new Identificator('anId', 'stdClass');
+
         $token = new Token;
 
-        $token->setDetails(new \stdClass);
+        $token->setDetails($expectedIdentificator);
+
+        $this->assertSame($expectedIdentificator, $token->getDetails());
     }
 }
