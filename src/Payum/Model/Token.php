@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Model;
 
-use Payum\Exception\InvalidArgumentException;
 use Payum\Security\TokenInterface;
 use Payum\Storage\Identificator;
 use Payum\Security\Util\Random;
