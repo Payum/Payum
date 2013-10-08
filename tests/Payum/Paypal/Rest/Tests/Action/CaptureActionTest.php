@@ -11,16 +11,6 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfPaymentAwareAction()
-    {
-        $rc = new \ReflectionClass('Payum\Paypal\Rest\Action\CaptureAction');
-
-        $this->assertTrue($rc->isSubclassOf('Payum\Action\PaymentAwareAction'));
-    }
-
-    /**
-     * @test
-     */
     public function couldBeConstructedWithoutAnyArguments()
     {
         new CaptureAction();
