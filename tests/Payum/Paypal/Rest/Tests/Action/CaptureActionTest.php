@@ -3,6 +3,7 @@
 namespace Payum\Paypal\Rest\Tests\Action;
 
 use Payum\Paypal\Rest\Action\CaptureAction;
+use Payum\Paypal\Rest\Model\PaymentDetails;
 use Payum\Request\CaptureRequest;
 
 class CaptureActionTest extends \PHPUnit_Framework_TestCase
@@ -28,7 +29,21 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestAndNotArrayAccessAsModel()
+    public function shouldSupportCaptureRequestWithPaymentSdkModel()
+    {
+        $action = new CaptureAction();
+
+        $model = new PaymentDetails();
+
+        $request = new CaptureRequest($model);
+
+        $this->assertTrue($action->supports($request));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotSupportCaptureRequestWithNotPaymentSdkModel()
     {
         $action = new CaptureAction();
 

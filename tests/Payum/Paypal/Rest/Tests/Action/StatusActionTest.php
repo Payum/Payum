@@ -96,7 +96,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldMarkSuccessIfStateIsSetAndApproved()
+    public function shouldMarkSuccessIfStateApproved()
     {
         $action = new StatusAction();
 
