@@ -4,6 +4,7 @@ namespace Payum\Paypal\Rest\Action;
 
 use PayPal\Api\Payment;
 use Payum\Action\ActionInterface;
+use Payum\Exception\RequestNotSupportedException;
 use Payum\Request\StatusRequestInterface;
 
 class StatusAction implements ActionInterface
@@ -43,7 +44,7 @@ class StatusAction implements ActionInterface
         }
 
         if (
-            false == isset($request->getModel()->id)
+            false == isset($request->getModel()->state)
         ) {
             $request->markNew();
 

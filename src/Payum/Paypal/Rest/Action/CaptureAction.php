@@ -7,6 +7,7 @@ use PayPal\Api\PaymentExecution;
 use PayPal\Rest\ApiContext;
 use Payum\Action\PaymentAwareAction;
 use Payum\ApiAwareInterface;
+use Payum\Exception\RequestNotSupportedException;
 use Payum\Exception\UnsupportedApiException;
 use Payum\Request\CaptureRequest;
 use Payum\Request\RedirectUrlInteractiveRequest;
