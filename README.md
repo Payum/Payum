@@ -6,7 +6,7 @@ Provide integration of paypal rest api to payum.
 
 * [Documentation](docs/index.md)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
-* [Issue Tracker](https://github.com/Payum/Payum/issues)
+* [Issue Tracker](https://github.com/Payum/PaypalRest/issues)
 
 ## Contributing
 
