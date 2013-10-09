@@ -177,8 +177,10 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_
 
         $action->execute($request);
 
-        $this->assertArrayHasKey('PROFILEID', $request->getModel());
-        $this->assertEquals('theResponseProfileId', $request->getModel()['PROFILEID']);
+        $model = $request->getModel();
+
+        $this->assertArrayHasKey('PROFILEID', $model);
+        $this->assertEquals('theResponseProfileId', $model['PROFILEID']);
     }
 
     /**

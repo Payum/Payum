@@ -148,12 +148,11 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
         ), $paymentRequestN = 5);
 
         $action->execute($request);
+
+        $model = $request->getModel();
         
-        $this->assertArrayHasKey('PAYMENTREQUEST_5_PAYMENTSTATUS', $request->getModel());
-        $this->assertEquals(
-            'theStatus',
-            $request->getModel()['PAYMENTREQUEST_5_PAYMENTSTATUS']
-        );
+        $this->assertArrayHasKey('PAYMENTREQUEST_5_PAYMENTSTATUS', $model);
+        $this->assertEquals('theStatus', $model['PAYMENTREQUEST_5_PAYMENTSTATUS']);
     }
 
     /**

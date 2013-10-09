@@ -198,10 +198,13 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
             'PAYMENTREQUEST_0_TRANSACTIONID' => 'aTransId',
         )));
 
-        $this->assertArrayHasKey('L_ERRORCODE0', $request->getModel());
-        $this->assertEquals('foo_error', $request->getModel()['L_ERRORCODE0']);
-        $this->assertArrayHasKey('L_ERRORCODE1', $request->getModel());
-        $this->assertEquals('bar_error', $request->getModel()['L_ERRORCODE1']);
+        $model = $request->getModel();
+
+        $this->assertArrayHasKey('L_ERRORCODE0', $model);
+        $this->assertEquals('foo_error', $model['L_ERRORCODE0']);
+
+        $this->assertArrayHasKey('L_ERRORCODE1', $model);
+        $this->assertEquals('bar_error', $model['L_ERRORCODE1']);
     }
     
     /**

@@ -97,9 +97,10 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment($this->createPaymentMock());
         
         $action->execute($request = new CaptureRequest(array()));
-        
-        $this->assertArrayHasKey('PAYMENTREQUEST_0_PAYMENTACTION', $request->getModel());
-        $this->assertEquals(Api::PAYMENTACTION_SALE, $request->getModel()['PAYMENTREQUEST_0_PAYMENTACTION']);
+
+        $model = $request->getModel();
+        $this->assertArrayHasKey('PAYMENTREQUEST_0_PAYMENTACTION', $model);
+        $this->assertEquals(Api::PAYMENTACTION_SALE, $model['PAYMENTREQUEST_0_PAYMENTACTION']);
     }
 
     /**
@@ -292,10 +293,13 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS
         )));
 
-        $this->assertArrayHasKey('L_ERRORCODE0', $request->getModel());
-        $this->assertEquals('foo_error', $request->getModel()['L_ERRORCODE0']);
-        $this->assertArrayHasKey('L_ERRORCODE1', $request->getModel());
-        $this->assertEquals('bar_error', $request->getModel()['L_ERRORCODE1']);
+        $model = $request->getModel();
+
+        $this->assertArrayHasKey('L_ERRORCODE0', $model);
+        $this->assertEquals('foo_error', $model['L_ERRORCODE0']);
+
+        $this->assertArrayHasKey('L_ERRORCODE1', $model);
+        $this->assertEquals('bar_error', $model['L_ERRORCODE1']);
     }
     
     /**
