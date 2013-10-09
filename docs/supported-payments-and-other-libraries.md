@@ -2,6 +2,7 @@
 
 * [Paypal Express Checkout](https://github.com/Payum/PaypalExpressCheckoutNvp)
 * [Paypal Pro Checkout](https://github.com/Payum/PaypalProCheckoutNvp)
+* [Paypal Rest](https://github.com/Payum/PaypalRest)
 * [Authorize.Net AIM](https://github.com/Payum/AuthorizeNetAim)
 * [Be2Bill](https://github.com/Payum/Be2Bill)
 * [Payex](https://github.com/Payum/Payex)
@@ -54,10 +55,12 @@
 
 * [PayumBundle](https://github.com/Payum/PayumBundle) for [Symfony2](http://symfony.com/). Check the sandbox [web](http://sandbox.payum.forma-dev.com/)|[code](https://github.com/Payum/PayumBundleSandbox)
 * [PayumModule](https://github.com/Payum/PayumModule) for [Zend2](http://framework.zend.com/)
+* [PayumYiiExtension](https://github.com/Payum/PayumYiiExtension) for [Yii](http://www.yiiframework.com/)
 
 # Others
 
 * [PSR-3 Logger](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md)
-* [Doctrine2](http://www.doctrine-project.org/)
+* [Doctrine2 ORM](http://www.doctrine-project.org/)
+* [Doctrine2 Mongo ODM](http://www.doctrine-project.org/)
 
 Back to [index](index.md).
