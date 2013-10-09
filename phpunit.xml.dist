@@ -17,18 +17,6 @@
         <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_PASSWORD" value="1351171022"/>
         <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_SIGNATURE" value="Adt647eR0NhYG68dAfVYPGquxlvuAwSJBMEy12p4k4mO2p8oEz8t95gU"/>
     </php>
-
-    <listeners>
-        <listener class="Testo\Phpunit\ReGenerateDocsOnSuccessListener" file="vendor/fp/testo/src/Testo/Phpunit/ReGenerateDocsOnSuccessListener.php">
-            <arguments>
-                <array>
-                    <element key="README.md.template">
-                        <string>README.md</string>
-                    </element>
-                </array>
-            </arguments>
-        </listener>
-    </listeners>
     
     <testsuites>
         <testsuite name="Payum Paypal Express Checkout Nvp Tests">
