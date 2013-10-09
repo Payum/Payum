@@ -148,8 +148,10 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_Te
 
         $action->execute($request);
 
-        $this->assertArrayHasKey('STATUS', $request->getModel());
-        $this->assertEquals('theStatus', $request->getModel()['STATUS']);
+        $model = $request->getModel();
+
+        $this->assertArrayHasKey('STATUS', $model);
+        $this->assertEquals('theStatus', $model['STATUS']);
     }
 
     /**

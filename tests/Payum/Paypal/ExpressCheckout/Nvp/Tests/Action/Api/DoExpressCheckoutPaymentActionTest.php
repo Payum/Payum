@@ -213,11 +213,14 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
         ));
 
         $action->execute($request);
+
+        $model = $request->getModel();
         
-        $this->assertArrayHasKey('FIRSTNAME', $request->getModel());
-        $this->assertEquals('theFirstname', $request->getModel()['FIRSTNAME']);
-        $this->assertArrayHasKey('EMAIL', $request->getModel());
-        $this->assertEquals('the@example.com', $request->getModel()['EMAIL']);
+        $this->assertArrayHasKey('FIRSTNAME', $model);
+        $this->assertEquals('theFirstname', $model['FIRSTNAME']);
+
+        $this->assertArrayHasKey('EMAIL', $model);
+        $this->assertEquals('the@example.com', $model['EMAIL']);
     }
 
     /**

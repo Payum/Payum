@@ -148,9 +148,11 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
         ));
 
         $action->execute($request);
+
+        $model = $request->getModel();
         
-        $this->assertEquals('theFirstname', $request->getModel()['FIRSTNAME']);
-        $this->assertEquals('the@example.com', $request->getModel()['EMAIL']);
+        $this->assertEquals('theFirstname', $model['FIRSTNAME']);
+        $this->assertEquals('the@example.com', $model['EMAIL']);
     }
 
     /**

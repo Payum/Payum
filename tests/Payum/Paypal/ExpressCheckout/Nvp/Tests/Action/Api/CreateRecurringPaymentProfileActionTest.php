@@ -218,11 +218,12 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
 
         $action->execute($request);
 
-        $this->assertArrayHasKey('PROFILEID', $request->getModel());
-        $this->assertEquals('theId', $request->getModel()['PROFILEID']);
+        $model = $request->getModel();
+        $this->assertArrayHasKey('PROFILEID', $model);
+        $this->assertEquals('theId', $model['PROFILEID']);
         
-        $this->assertArrayHasKey('PROFILESTATUS', $request->getModel());
-        $this->assertEquals('theStatus', $request->getModel()['PROFILESTATUS']);
+        $this->assertArrayHasKey('PROFILESTATUS', $model);
+        $this->assertEquals('theStatus', $model['PROFILESTATUS']);
     }
 
     /**
@@ -267,10 +268,12 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
 
         $action->execute($request);
 
-        $this->assertArrayHasKey('L_ERRORCODE0', $request->getModel());
-        $this->assertEquals('foo_error', $request->getModel()['L_ERRORCODE0']);
-        $this->assertArrayHasKey('L_ERRORCODE1', $request->getModel());
-        $this->assertEquals('bar_error', $request->getModel()['L_ERRORCODE1']);
+        $model = $request->getModel();
+
+        $this->assertArrayHasKey('L_ERRORCODE0', $model);
+        $this->assertEquals('foo_error', $model['L_ERRORCODE0']);
+        $this->assertArrayHasKey('L_ERRORCODE1', $model);
+        $this->assertEquals('bar_error', $model['L_ERRORCODE1']);
     }
 
     /**

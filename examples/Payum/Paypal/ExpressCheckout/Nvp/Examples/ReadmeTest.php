@@ -51,9 +51,11 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
             throw $interactiveRequest;
         }
         //@testo:end
-        
-        $this->assertArrayHasKey('L_LONGMESSAGE0', $capture->getModel());
-        $this->assertEquals('Security header is not valid', $capture->getModel()['L_LONGMESSAGE0']);
+
+        $model = $capture->getModel();
+
+        $this->assertArrayHasKey('L_LONGMESSAGE0', $model);
+        $this->assertEquals('Security header is not valid', $model['L_LONGMESSAGE0']);
         
         return array(
             $payment,
@@ -93,9 +95,11 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         $payment = $arguments[0];
         $capture = $arguments[1];
 
-        unset($capture->getModel()['L_ERRORCODE0']);
-        $capture->getModel()['CHECKOUTSTATUS'] = Api::CHECKOUTSTATUS_PAYMENT_COMPLETED;
-        $capture->getModel()['PAYMENTREQUEST_0_PAYMENTSTATUS'] = Api::PAYMENTSTATUS_COMPLETED;
+        $model = $capture->getModel();
+
+        unset($model['L_ERRORCODE0']);
+        $model['CHECKOUTSTATUS'] = Api::CHECKOUTSTATUS_PAYMENT_COMPLETED;
+        $model['PAYMENTREQUEST_0_PAYMENTSTATUS'] = Api::PAYMENTSTATUS_COMPLETED;
 
         //@testo:start
         //@testo:source
