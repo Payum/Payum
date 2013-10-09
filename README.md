@@ -1,4 +1,4 @@
-# PaypalRest [![Build Status](https://travis-ci.org/Payum/PaypalRest.png?branch=master)](https://travis-ci.org/Payum/Payum) [![Total Downloads](https://poser.pugx.org/payum/payum/d/total.png)](https://packagist.org/packages/payum/payum) [![Latest Stable Version](https://poser.pugx.org/payum/paypal-rest/version.png)](https://packagist.org/packages/payum/paypal-rest)
+# PaypalRest [![Build Status](https://travis-ci.org/Payum/PaypalRest.png?branch=master)](https://travis-ci.org/Payum/PaypalRest) [![Total Downloads](https://poser.pugx.org/payum/paypal-rest/d/total.png)](https://packagist.org/packages/payum/paypal-rest) [![Latest Stable Version](https://poser.pugx.org/payum/paypal-rest/version.png)](https://packagist.org/packages/payum/paypal-rest)
 
 Provide integration of paypal rest api to payum.
 
