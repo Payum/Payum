@@ -36,21 +36,11 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementStatusRequestInterface()
+    public function shouldBeSubClassOfBaseStatusRequest()
     {
         $rc = new \ReflectionClass('Payum\Request\BinaryMaskStatusRequest');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Request\StatusRequestInterface'));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseModelInteractiveRequest()
-    {
-        $rc = new \ReflectionClass('Payum\Request\BinaryMaskStatusRequest');
-
-        $this->assertTrue($rc->isSubclassOf('Payum\Request\BaseModelInteractiveRequest'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Request\BaseStatusRequest'));
     }
 
     /**

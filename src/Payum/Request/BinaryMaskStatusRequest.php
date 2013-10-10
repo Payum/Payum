@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Request;
 
-class BinaryMaskStatusRequest extends BaseModelInteractiveRequest implements StatusRequestInterface 
+class BinaryMaskStatusRequest extends BaseStatusRequest
 {
     const STATUS_UNKNOWN = 2097152; //2^21
     
@@ -18,34 +18,6 @@ class BinaryMaskStatusRequest extends BaseModelInteractiveRequest implements Sta
     const STATUS_CANCELED = 32; //2^5
 
     const STATUS_NEW = 2; //2^1
-    
-    /**
-     * @var mixed
-     */
-    protected $model;
-
-    /**
-     * @var int
-     */
-    protected $status;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct($model)
-    {
-        parent::__construct($model);
-
-        $this->markUnknown();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
 
     /**
      * {@inheritdoc}
