@@ -14,27 +14,27 @@
 
         <field name="checkoutstatus" fieldName="checkoutstatus" type="string" />
 
-        <field name="paymentrequest_nnn_amt" fieldName="paymentrequest_amts" type="hash" />
+        <field name="paymentrequest_amts" fieldName="paymentrequest_nnn_amt" type="hash" />
 
-        <field name="paymentrequest_nnn_currencycode" fieldName="paymentrequest_currencycodes" type="hash" />
+        <field name="paymentrequest_currencycodes" fieldName="paymentrequest_nnn_currencycode" type="hash" />
 
-        <field name="paymentrequest_nnn_transactionid" fieldName="paymentrequest_transactionids" type="hash" />
+        <field name="paymentrequest_transactionids" fieldName="paymentrequest_nnn_transactionid" type="hash" />
 
-        <field name="paymentrequest_nnn_paymentstatus" fieldName="paymentrequest_paymentstatuses" type="hash" />
+        <field name="paymentrequest_paymentstatuses" fieldName="paymentrequest_nnn_paymentstatus" type="hash" />
 
-        <field name="paymentrequest_nnn_paymentaction" fieldName="paymentrequest_paymentactions" type="hash" />
+        <field name="paymentrequest_paymentactions" fieldName="paymentrequest_nnn_paymentaction" type="hash" />
 
-        <field name="l_billingtypennn" fieldName="l_billingtypes" type="hash" />
+        <field name="l_billingtypes" fieldName="l_billingtypennn" type="hash" />
 
-        <field name="l_billingagreementdescriptionnnn" fieldName="l_billingagreementdescriptions" type="hash" />
+        <field name="l_billingagreementdescriptions" fieldName="l_billingagreementdescriptionnnn" type="hash" />
 
-        <field name="l_errorcodennn" fieldName="l_errorcodes" type="hash" />
+        <field name="l_errorcodes" fieldName="l_errorcodennn" type="hash" />
 
-        <field name="l_shortmessagennn" fieldName="l_shortmessages" type="hash" />
+        <field name="l_shortmessages" fieldName="l_shortmessagennn" type="hash" />
 
-        <field name="l_longmessagennn" fieldName="l_longmessages" type="hash" />
+        <field name="l_longmessages" fieldName="l_longmessagennn" type="hash" />
 
-        <field name="l_severitycodennn" fieldName="l_severitycodes" type="hash" />
+        <field name="l_severitycodes" fieldName="l_severitycodennn" type="hash" />
 
         <field name="returnurl" fieldName="returnurl" type="string" />
 

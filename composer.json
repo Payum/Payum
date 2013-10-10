@@ -17,7 +17,8 @@
         "payum/payum": "0.6.x-dev"
     },
     "require-dev": {
-        "doctrine/orm": ">=2.2.3,<2.4-dev",
+        "doctrine/orm": ">=2.3,<2.4-dev",
+        "doctrine/mongodb-odm": "~1.0@dev",
         "phpunit/phpunit": "3.7.*",
         "fp/testo": "dev-master",
         "ext-curl": "*",
