@@ -103,7 +103,7 @@ class Payment implements PaymentInterface
         } catch (InteractiveRequestInterface $interactiveRequest) {
             $interactiveRequest =
                 $this->extensions->onInteractiveRequest($interactiveRequest, $request, $action) ?:
-                    $interactiveRequest
+                $interactiveRequest
             ;
 
             if ($catchInteractive) {
