@@ -5,7 +5,7 @@ use Payum\Storage\Identificator;
 use Payum\Tests\Functional\Bridge\Doctrine\MongoTest;
 use Payum\Examples\Document\Token;
 
-class PaymentDetailsTest extends MongoTest
+class TokenTest extends MongoTest
 {
     /**
      * @test

@@ -7,7 +7,7 @@ use Payum\Storage\Identificator;
 use Payum\Tests\Functional\Bridge\Doctrine\OrmTest;
 use Payum\Examples\Entity\Token;
 
-class PaymentDetailsTest extends OrmTest
+class TokenTest extends OrmTest
 {
     /**
      * @test
