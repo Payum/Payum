@@ -8,33 +8,33 @@
         
         <field name="token" fieldName="token" type="string" />
 
-        <field name="desc" fieldName="`desc`" type="string" />
+        <field name="desc" fieldName="desc" type="string" />
         
         <field name="amt" fieldName="amt" type="string" />
 
-        <field name="status" fieldName="`status`" type="string" />
+        <field name="status" fieldName="status" type="string" />
 
-        <field name="profilestatus" fieldName="profile_status" type="string" />
+        <field name="profile_status" fieldName="profilestatus" type="string" />
 
         <field name="email" fieldName="email" type="string" />
         
-        <field name="currencycode" fieldName="currency_code" type="string" />
+        <field name="currency_code" fieldName="currencycode" type="string" />
         
-        <field name="profileid" fieldName="profile_id" type="string" />
+        <field name="profile_id" fieldName="profileid" type="string" />
 
-        <field name="profilestartdate" fieldName="profile_start_date" type="string" />
+        <field name="profile_start_date" fieldName="profilestartdate" type="string" />
 
-        <field name="billingperiod" fieldName="billing_period" type="string" />
+        <field name="billing_period" fieldName="billingperiod" type="string" />
 
-        <field name="billingfrequency" fieldName="billing_frequency" type="string" />
+        <field name="billing_frequency" fieldName="billingfrequency" type="string" />
         
-        <field name="l_errorcodennn" fieldName="l_errorcodes" type="object"  />
+        <field name="l_errorcodes" fieldName="l_errorcodennn" type="hash"  />
 
-        <field name="l_shortmessagennn" fieldName="l_shortmessages" type="object"  />
+        <field name="l_shortmessages" fieldName="l_shortmessagennn" type="hash"  />
 
-        <field name="l_longmessagennn" fieldName="l_longmessages" type="object"  />
+        <field name="l_longmessages" fieldName="l_longmessagennn" type="hash"  />
 
-        <field name="l_severitycodennn" fieldName="l_severitycodes" type="object"  />
+        <field name="l_severitycodes" fieldName="l_severitycodennn" type="hash"  />
 
     </mapped-superclass>
 </doctrine-mongo-mapping>

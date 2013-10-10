@@ -35,6 +35,7 @@ class RecurringPaymentDetailsTest extends MongoTest
         $recurringPaymentDetails->setAmt($expectedAmount = 10);
         $recurringPaymentDetails->setDesc($expectedDescription = 'aDesc');
         $recurringPaymentDetails->setProfileid($expectedProfileid = 123);
+        $recurringPaymentDetails->setLErrorcoden(0, $expectedError = 'theError');
         
         $this->dm->persist($recurringPaymentDetails);
         $this->dm->flush();
@@ -51,5 +52,6 @@ class RecurringPaymentDetailsTest extends MongoTest
         $this->assertEquals($expectedProfileid, $foundInstruction->getProfileid());
         $this->assertEquals($expectedAmount, $foundInstruction->getAmt());
         $this->assertEquals($expectedDescription, $foundInstruction->getDesc());
+        $this->assertEquals($expectedError, $foundInstruction->getLErrorcoden(0));
     }
 }
