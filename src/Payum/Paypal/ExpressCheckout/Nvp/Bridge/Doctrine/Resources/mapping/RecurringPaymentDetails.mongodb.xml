@@ -28,13 +28,13 @@
 
         <field name="billingfrequency" fieldName="billing_frequency" type="string" />
         
-        <field name="l_errorcodennn" fieldName="l_errorcodes" type="hash"  />
+        <field name="l_errorcodennn" fieldName="l_errorcodes" type="object"  />
 
-        <field name="l_shortmessagennn" fieldName="l_shortmessages" type="hash"  />
+        <field name="l_shortmessagennn" fieldName="l_shortmessages" type="object"  />
 
-        <field name="l_longmessagennn" fieldName="l_longmessages" type="hash"  />
+        <field name="l_longmessagennn" fieldName="l_longmessages" type="object"  />
 
-        <field name="l_severitycodennn" fieldName="l_severitycodes" type="hash"  />
+        <field name="l_severitycodennn" fieldName="l_severitycodes" type="object"  />
 
     </mapped-superclass>
 </doctrine-mongo-mapping>
