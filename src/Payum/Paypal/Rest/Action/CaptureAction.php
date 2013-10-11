@@ -34,17 +34,32 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         /**
          * @var $payment Payment
          */
-        if (false == $request->getModel()->getState()) {
+        if (
+            false == isset($request->getModel()->state) &&
+            'paypal' == $request->getModel()->getPayer()->getPayment_method()
+        ) {
             $payment = $request->getModel();
             $payment->create($this->api);
 
             foreach($payment->getLinks() as $link) {
                 if($link->getRel() == 'approval_url') {
                     throw new RedirectUrlInteractiveRequest($link->getHref());
-
                 }
             }
-        } else {
+        }
+
+        if (
+            false == isset($request->getModel()->state) &&
+            'credit_card' == $request->getModel()->getPayer()->getPayment_method()
+        ) {
+            $payment = $request->getModel();
+            $payment->create($this->api);
+        }
+
+        if (
+            false == isset($request->getModel()->state) &&
+            'paypal' == $request->getModel()->getPayer()->getPayment_method()
+        ) {
             $paymentId = $request->getModel()->getId();
             $payment = Payment::get($paymentId);
 
@@ -79,16 +94,9 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
     public function setApi($api)
     {
         if(false == $api instanceof ApiContext) {
-            throw new UnsupportedApiException('asdfasdfasdfasd');
+            throw new UnsupportedApiException('Api is not supported %s');
         }
 
         $this->api = $api;
-    }
-
-    protected function sincModel($request, $payment)
-    {
-        $request->getModel()->setState($payment->getState());
-        $request->getId()->setId($payment->getId());
-        $request->getLinks()->setLinks($payment->getLinks());
     }
 }

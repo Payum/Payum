@@ -2,6 +2,8 @@
 
 namespace Payum\Paypal\Rest\Tests\Action;
 
+use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Rest\ApiContext;
 use Payum\Paypal\Rest\Action\CaptureAction;
 use Payum\Paypal\Rest\Model\PaymentDetails;
 use Payum\Request\CaptureRequest;
