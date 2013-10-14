@@ -4,7 +4,7 @@ _**Note**: The code snippets presented below are only for demonstration purposes
 
 _**Note**: If you'd like to see real world examples we have provided you with a sandbox: [online][sandbox-online], [code][sandbox-code]._
 
-In general, you have to create a _[request][base-request]_ , implement _[action][action-interface]_ in order to know what to do with such request. And also implement _[payment][payment-interface]_ on an object where things get processed. This interface forces you to specify route to possible actions and can execute the request. So, payment is the place where a request and an action meet together.
+In general, you have to create a _[request][base-request]_ , implement _[action][action-interface]_ in order to know what to do with such request. And use _[payment] that implements [payment-interface]_. This is where things get processed. This interface forces us to specify route to possible actions and can execute the request. So, payment is the place where a request and an action meet together.
 
 ```php
 <?php
