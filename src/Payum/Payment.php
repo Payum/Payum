@@ -40,7 +40,7 @@ class Payment implements PaymentInterface
     {
         $this->apis[] = $api;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -49,7 +49,7 @@ class Payment implements PaymentInterface
         if ($action instanceof PaymentAwareInterface) {
             $action->setPayment($this);
         }
-        
+
         if ($action instanceof ApiAwareInterface) {
             $apiSet = false;
             foreach ($this->apis as $api) {
@@ -59,7 +59,7 @@ class Payment implements PaymentInterface
                     break;
                 } catch (UnsupportedApiException $e) {}
             }
-            
+
             if (false == $apiSet) {
                 throw new LogicException(sprintf(
                     'Cannot find right api supported by %s',
@@ -90,30 +90,30 @@ class Payment implements PaymentInterface
         $action = null;
         try {
             $this->extensions->onPreExecute($request);
-            
+
             if (false == $action = $this->findActionSupported($request)) {
                 throw RequestNotSupportedException::create($request);
             }
-            
+
             $this->extensions->onExecute($request, $action);
-        
+
             $action->execute($request);
-            
+
             $this->extensions->onPostExecute($request, $action);
         } catch (InteractiveRequestInterface $interactiveRequest) {
-            $interactiveRequest = 
+            $interactiveRequest =
                 $this->extensions->onInteractiveRequest($interactiveRequest, $request, $action) ?:
                 $interactiveRequest
             ;
-            
-            if ($catchInteractive) {                
+
+            if ($catchInteractive) {
                 return $interactiveRequest;
             }
-            
+
             throw $interactiveRequest;
         } catch (\Exception $e) {
             $this->extensions->onException($e, $request, $action);
-            
+
             throw $e;
         }
     }
