@@ -41,9 +41,9 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         ) {
             $model->create($this->api);
 
-            foreach($model->getLinks() as $link) {
-                if($link->getRel() == 'approval_url') {
-                    throw new RedirectUrlInteractiveRequest($link->getHref());
+            foreach($model->links as $link) {
+                if($link->rel == 'approval_url') {
+                    throw new RedirectUrlInteractiveRequest($link->href);
                 }
             }
         }

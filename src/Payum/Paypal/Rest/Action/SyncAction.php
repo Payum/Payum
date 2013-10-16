@@ -23,8 +23,7 @@ class SyncAction extends PaymentAwareAction
         /** @var Payment $model */
         $model = $request->getModel();
 
-        $paymentId = $model->getId();
-        $payment = Payment::get($paymentId);
+        $payment = Payment::get($model->id);
 
         $model->fromArray($payment->toArray());
     }
