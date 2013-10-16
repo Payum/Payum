@@ -4,7 +4,6 @@
 namespace Payum\Paypal\Rest\Action;
 
 use PayPal\Api\Payment;
-use PayPal\Api\PaymentExecution;
 use Payum\Action\PaymentAwareAction;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Request\SyncRequest;
@@ -21,19 +20,10 @@ class SyncAction extends PaymentAwareAction
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        if (
-            true == isset($request->getModel()->state) &&
-            'approved' == $request->getModel()->getState()
-        ) {
-            $request->getModel()->fromArray($request->getModel()->toArray());
-            return;
-        }
+        $paymentId = $request->getModel()->getId();
+        $payment = Payment::get($paymentId);
 
-
-        //$paymentId = $request->getModel()->getId();
-        //$payment = Payment::get($paymentId);
-        $payment = $request->getModel();
-
+        $request->getModel()->fromArray($payment->toArray());
     }
 
     /**
