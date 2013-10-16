@@ -71,6 +71,18 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldSupportCaptureRequest()
+    {
+        $action = new CaptureAction();
+
+        $request = new CaptureRequest($this->getMock('PayPal\Api\Payment'));
+
+        $this->assertTrue($action->supports($request));
+    }
+
+    /**
+     * @test
+     */
     public function shouldSupportApiContext()
     {
         $action = new CaptureAction();
