@@ -36,8 +36,8 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
 
         if (
             false == isset($model->state) &&
-            isset($model->getPayer()->payment_method) &&
-            'paypal' == $model->getPayer()->payment_method
+            isset($model->payer->payment_method) &&
+            'paypal' == $model->payer->payment_method
         ) {
             $model->create($this->api);
 
@@ -50,19 +50,19 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
 
         if (
             false == isset($model->state) &&
-            isset($model->getPayer()->payment_method) &&
-            'credit_card' == $model->getPayer()->payment_method
+            isset($model->payer->payment_method) &&
+            'credit_card' == $model->payer->payment_method
         ) {
             $model->create($this->api);
         }
 
         if (
             true == isset($model->state) &&
-            isset($model->getPayer()->payment_method) &&
-            'paypal' == $model->getPayer()->payment_method
+            isset($model->payer->payment_method) &&
+            'paypal' == $model->payer->payment_method
         ) {
             $execution = new PaymentExecution();
-            $execution->setPayer_id($_GET['PayerID']);
+            $execution->payer_id = $_GET['PayerID'];
 
             //Execute the payment
             $model->execute($execution, $this->api);
