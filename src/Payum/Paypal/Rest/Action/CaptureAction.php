@@ -7,6 +7,7 @@ use PayPal\Api\PaymentExecution;
 use PayPal\Rest\ApiContext;
 use Payum\Action\PaymentAwareAction;
 use Payum\ApiAwareInterface;
+use Payum\Exception\RequestNotSupportedException;
 use Payum\Exception\UnsupportedApiException;
 use Payum\Request\CaptureRequest;
 use Payum\Request\RedirectUrlInteractiveRequest;
@@ -30,30 +31,41 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        /**
-         * @var $payment Payment
-         */
-        if (false == $request->getModel()->getState()) {
-            $payment = $request->getModel();
-            $payment->create($this->api);
+        /** @var Payment $model */
+        $model = $request->getModel();
 
-            foreach($payment->getLinks() as $link) {
-                if($link->getRel() == 'approval_url') {
-                    throw new RedirectUrlInteractiveRequest($link->getHref());
+        if (
+            false == isset($model->state) &&
+            isset($model->payer->payment_method) &&
+            'paypal' == $model->payer->payment_method
+        ) {
+            $model->create($this->api);
 
+            foreach($model->links as $link) {
+                if($link->rel == 'approval_url') {
+                    throw new RedirectUrlInteractiveRequest($link->href);
                 }
             }
-        } else {
-            $paymentId = $request->getModel()->getId();
-            $payment = Payment::get($paymentId);
+        }
 
+        if (
+            false == isset($model->state) &&
+            isset($model->payer->payment_method) &&
+            'credit_card' == $model->payer->payment_method
+        ) {
+            $model->create($this->api);
+        }
+
+        if (
+            true == isset($model->state) &&
+            isset($model->payer->payment_method) &&
+            'paypal' == $model->payer->payment_method
+        ) {
             $execution = new PaymentExecution();
-            $execution->setPayer_id($_GET['PayerID']);
+            $execution->payer_id = $_GET['PayerID'];
 
             //Execute the payment
-            $payment->execute($execution, $this->api);
-
-            $request->getModel()->fromArray($payment->toArray());
+            $model->execute($execution, $this->api);
         }
     }
 
@@ -65,7 +77,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         return
             $request instanceof CaptureRequest &&
             $request->getModel() instanceof Payment
-            ;
+        ;
     }
 
     /**
@@ -78,16 +90,9 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
     public function setApi($api)
     {
         if(false == $api instanceof ApiContext) {
-            throw new UnsupportedApiException('asdfasdfasdfasd');
+            throw new UnsupportedApiException('Given api is not supported. Supported api is instance of ApiContext');
         }
 
         $this->api = $api;
-    }
-
-    protected function sincModel($request, $payment)
-    {
-        $request->getModel()->setState($payment->getState());
-        $request->getId()->setId($payment->getId());
-        $request->getLinks()->setLinks($payment->getLinks());
     }
 }
