@@ -31,18 +31,17 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        /**
-         * @var $payment Payment
-         */
-        if (
-            false == isset($request->getModel()->state) &&
-            isset($request->getModel()->getPayer()->payment_method) &&
-            'paypal' == $request->getModel()->getPayer()->payment_method
-        ) {
-            $payment = $request->getModel();
-            $payment->create($this->api);
+        /** @var Payment $model */
+        $model = $request->getModel();
 
-            foreach($payment->getLinks() as $link) {
+        if (
+            false == isset($model->state) &&
+            isset($model->getPayer()->payment_method) &&
+            'paypal' == $model->getPayer()->payment_method
+        ) {
+            $model->create($this->api);
+
+            foreach($model->getLinks() as $link) {
                 if($link->getRel() == 'approval_url') {
                     throw new RedirectUrlInteractiveRequest($link->getHref());
                 }
@@ -50,26 +49,23 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         }
 
         if (
-            false == isset($request->getModel()->state) &&
-            isset($request->getModel()->getPayer()->payment_method) &&
-            'credit_card' == $request->getModel()->getPayer()->payment_method
+            false == isset($model->state) &&
+            isset($model->getPayer()->payment_method) &&
+            'credit_card' == $model->getPayer()->payment_method
         ) {
-            $payment = $request->getModel();
-            $payment->create($this->api);
+            $model->create($this->api);
         }
 
         if (
-            true == isset($request->getModel()->state) &&
-            isset($request->getModel()->getPayer()->payment_method) &&
-            'paypal' == $request->getModel()->getPayer()->payment_method
+            true == isset($model->state) &&
+            isset($model->getPayer()->payment_method) &&
+            'paypal' == $model->getPayer()->payment_method
         ) {
-            $payment = $request->getModel();
-
             $execution = new PaymentExecution();
             $execution->setPayer_id($_GET['PayerID']);
 
             //Execute the payment
-            $payment->execute($execution, $this->api);
+            $model->execute($execution, $this->api);
         }
     }
 

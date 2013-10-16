@@ -20,10 +20,13 @@ class SyncAction extends PaymentAwareAction
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        $paymentId = $request->getModel()->getId();
+        /** @var Payment $model */
+        $model = $request->getModel();
+
+        $paymentId = $model->getId();
         $payment = Payment::get($paymentId);
 
-        $request->getModel()->fromArray($payment->toArray());
+        $model->fromArray($payment->toArray());
     }
 
     /**

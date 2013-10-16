@@ -25,9 +25,12 @@ class StatusAction implements ActionInterface
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
+        /** @var Payment $model */
+        $model = $request->getModel();
+
         if (
-            isset($request->getModel()->state) &&
-            'approved' == $request->getModel()->state
+            isset($model->state) &&
+            'approved' == $model->state
         ) {
             $request->markSuccess();
 
@@ -35,8 +38,8 @@ class StatusAction implements ActionInterface
         }
 
         if (
-            isset($request->getModel()->state) &&
-            'created' == $request->getModel()->state
+            isset($model->state) &&
+            'created' == $model->state
         ) {
             $request->markNew();
 
@@ -44,7 +47,7 @@ class StatusAction implements ActionInterface
         }
 
         if (
-            false == isset($request->getModel()->state)
+            false == isset($model->state)
         ) {
             $request->markNew();
 
@@ -65,6 +68,7 @@ class StatusAction implements ActionInterface
             return false;
         }
 
+        /** @var Payment $model */
         $model = $request->getModel();
         if (false == $model instanceof Payment) {
             return false;
