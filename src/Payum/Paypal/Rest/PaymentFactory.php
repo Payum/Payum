@@ -10,6 +10,7 @@ use Payum\Extension\EndlessCycleDetectorExtension;
 use Payum\Paypal\Rest\Action\CaptureAction;
 use Payum\Paypal\Rest\Action\StatusAction;
 use PayPal\Rest\ApiContext;
+use Payum\Paypal\Rest\Action\SyncAction;
 
 abstract class PaymentFactory
 {
@@ -28,6 +29,7 @@ abstract class PaymentFactory
 
         $payment->addAction(new CaptureAction);
         $payment->addAction(new StatusAction);
+        $payment->addAction(new SyncAction);
 
         $payment->addAction(new CaptureDetailsAggregatedModelAction);
         $payment->addAction(new SyncDetailsAggregatedModelAction);

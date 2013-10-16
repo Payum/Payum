@@ -70,6 +70,22 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function shouldSupportApiContext()
+    {
+        $action = new CaptureAction();
+
+        $tokenMock = $this->getMockBuilder('PayPal\Auth\OAuthTokenCredential')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $apiContext = new ApiContext($tokenMock);
+
+        $action->setApi($apiContext);
+    }
+
+    /**
+     * @test
      *
      * @expectedException \Payum\Exception\UnsupportedApiException
      */

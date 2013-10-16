@@ -11,6 +11,7 @@ use Payum\Exception\RequestNotSupportedException;
 use Payum\Exception\UnsupportedApiException;
 use Payum\Request\CaptureRequest;
 use Payum\Request\RedirectUrlInteractiveRequest;
+use Payum\Request\SyncRequest;
 
 class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
 {
@@ -36,6 +37,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
          */
         if (
             false == isset($request->getModel()->state) &&
+            true == isset($request->getModel()->getPayer()->payment_method) &&
             'paypal' == $request->getModel()->getPayer()->getPayment_method()
         ) {
             $payment = $request->getModel();
@@ -50,6 +52,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
 
         if (
             false == isset($request->getModel()->state) &&
+            true == isset($request->getModel()->getPayer()->payment_method) &&
             'credit_card' == $request->getModel()->getPayer()->getPayment_method()
         ) {
             $payment = $request->getModel();
@@ -57,19 +60,25 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         }
 
         if (
-            false == isset($request->getModel()->state) &&
+            true == isset($request->getModel()->state) &&
+            true == isset($request->getModel()->getPayer()->payment_method) &&
             'paypal' == $request->getModel()->getPayer()->getPayment_method()
         ) {
-            $paymentId = $request->getModel()->getId();
-            $payment = Payment::get($paymentId);
+            $model = $request->getModel();
+            //$this->payment->execute(new SyncRequest($model));
+            //$paymentId = $request->getModel()->getId();
+            //$model = Payment::get($paymentId);
+            //$payment = $request->getModel();
 
             $execution = new PaymentExecution();
             $execution->setPayer_id($_GET['PayerID']);
 
             //Execute the payment
-            $payment->execute($execution, $this->api);
+            $model->execute($execution, $this->api);
 
-            $request->getModel()->fromArray($payment->toArray());
+            //$this->payment->execute(new SyncRequest($model));
+
+            //$request->getModel()->fromArray($payment->toArray());
         }
     }
 
@@ -81,7 +90,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         return
             $request instanceof CaptureRequest &&
             $request->getModel() instanceof Payment
-            ;
+        ;
     }
 
     /**
@@ -94,7 +103,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
     public function setApi($api)
     {
         if(false == $api instanceof ApiContext) {
-            throw new UnsupportedApiException('Api is not supported %s');
+            throw new UnsupportedApiException('Api is not supported');
         }
 
         $this->api = $api;
