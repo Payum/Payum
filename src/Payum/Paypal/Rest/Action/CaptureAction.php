@@ -66,8 +66,6 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         ) {
             $model = $request->getModel();
 
-            $this->payment->execute(new SyncRequest($model));
-
             $execution = new PaymentExecution();
             $execution->setPayer_id($_GET['PayerID']);
 

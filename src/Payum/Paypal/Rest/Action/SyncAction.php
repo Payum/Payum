@@ -31,15 +31,9 @@ class SyncAction extends PaymentAwareAction
      */
     public function supports($request)
     {
-        if (false == $request instanceof SyncRequest) {
-            return false;
-        }
-
-        $model = $request->getModel();
-        if (false == $model instanceof Payment) {
-            return false;
-        }
-
-        return isset($model->id) && null !== $model->id;
+        return
+            $request instanceof SyncRequest &&
+            $request->getModel() instanceof Payment
+        ;
     }
 }
