@@ -1,4 +1,4 @@
-#### The architecture
+# The architecture
 
 _**Note**: The code snippets presented below are only for demonstration purposes (pseudo code). Their goal is to illustrate the general approach to various tasks. To see real life examples please follow the links provided when appropriate._
 
@@ -75,6 +75,7 @@ That's the big picture. Now let's talk about the details:
         }
     }
     ```
+
     ```php
     <?php
     try {
@@ -112,6 +113,7 @@ That's the big picture. Now let's talk about the details:
         }
     }
     ```
+
     ```php
     <?php
 
@@ -145,6 +147,7 @@ That's the big picture. Now let's talk about the details:
         }
     }
     ```
+
     ```php
     <?php
     $payment->addExtension(new PermissionExtension);
@@ -192,6 +195,7 @@ That's the big picture. Now let's talk about the details:
         }
     }
     ```
+
     ```php
     <?php
     $payment = new Payment;
