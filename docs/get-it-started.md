@@ -3,7 +3,7 @@ In this chapter we are going to talk about the most common task: purchasing a pr
 I would use paypal express checkout for example because it is popular.
 All examples are written in plain php code (no frameworks).
 
-_**Note**: If you are working with [symfony2 framework check out the payum bundle documentation instead](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md).
+_**Note**: If you are working with [symfony2 framework check out the payum bundle documentation instead](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md)._
 
 ![How payum works](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=cGFydGljaXBhbnQgcGF5cGFsLmNvbQoACwxVc2VyAAQNcHJlcGFyZS5waHAAHA1jYXB0dQAFE2RvbgAnBgpVc2VyLT4ANQs6AEUIIGEgcGF5bWVudAoAVAstLT4rAEsLOgBbCCB0b2tlbgoKAGcLLS0-AIE2CjogcmVxdWVzdCBhdXRoZW50aWNhdGlvbgoAgVkKLS0-AE0NZ2l2ZSBjb250cm9sIGJhY2sATg8tAIE-CDoAgUsFAHsHAIFTCC0-VXNlcjogc2hvdwCBQQggcmVzdWx0Cg&s=default)
 
