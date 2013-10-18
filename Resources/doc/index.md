@@ -1,4 +1,4 @@
-# Getting Started With PayumBundle
+# PayumBundle
 
 
 * [The basic bundle setup](basic_setup.md)
