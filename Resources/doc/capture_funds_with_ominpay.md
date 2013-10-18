@@ -9,7 +9,7 @@ Add the following lines in your `composer.json` file:
 ```json
 {
     "require": {
-        "payum/ominpay-bridge": "dev-master"
+        "payum/omnipay-bridge": "dev-master"
     }
 }
 ```
