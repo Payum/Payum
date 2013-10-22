@@ -46,7 +46,7 @@ public function registerBundles()
 
 ### Step 3: Configure capture controller (Optional).
 
-_**Note:** Skipp this step if you do not want to use `CaptureController` distributed with the bundle._
+_**Note:** Skip this step if you do not want to use `CaptureController` distributed with the bundle._
 
 #### 3-a. Add routing
 
