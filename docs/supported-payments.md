@@ -1,11 +1,14 @@
 # Payments.
 
-* [Paypal Express Checkout](https://github.com/Payum/PaypalExpressCheckoutNvp)
-* [Paypal Pro Checkout](https://github.com/Payum/PaypalProCheckoutNvp)
-* [Paypal Rest](https://github.com/Payum/PaypalRest)
-* [Authorize.Net AIM](https://github.com/Payum/AuthorizeNetAim)
-* [Be2Bill](https://github.com/Payum/Be2Bill)
-* [Payex](https://github.com/Payum/Payex)
+* [Paypal Express Checkout](https://github.com/Payum/PaypalExpressCheckoutNvp/blob/master/docs/index.md)
+
+The lib supports next paypal features: basic purchase, sync previous payments, recurring payments, digital goods.
+
+* [Paypal Pro Checkout](https://github.com/Payum/PaypalProCheckoutNvp/blob/master/docs/index.md)
+* [Paypal Rest](https://github.com/Payum/PaypalRest/blob/master/docs/index.md)
+* [Authorize.Net AIM](https://github.com/Payum/AuthorizeNetAim/blob/master/docs/index.md)
+* [Be2Bill](https://github.com/Payum/Be2Bill/blob/master/docs/index.md)
+* [Payex](https://github.com/Payum/Payex/blob/master/docs/index.md)
 
 ## [Omnipay gateways](https://github.com/adrianmacneil/omnipay) via [bridge](https://github.com/Payum/OmnipayBridge).
 
@@ -49,18 +52,5 @@
 * [Atos SIPS](https://github.com/cariboo/CaribooPaymentSipsBundle)
 * [Atos SIPS](https://github.com/cariboo/CaribooPaymentSipsBundle)
 * [Dotpay](https://github.com/ETSGlobal/ETSPaymentDotpayBundle)
-
-
-# Web Frameworks.
-
-* [PayumBundle](https://github.com/Payum/PayumBundle) for [Symfony2](http://symfony.com/). Check the sandbox [web](http://sandbox.payum.forma-dev.com/)|[code](https://github.com/Payum/PayumBundleSandbox)
-* [PayumModule](https://github.com/Payum/PayumModule) for [Zend2](http://framework.zend.com/)
-* [PayumYiiExtension](https://github.com/Payum/PayumYiiExtension) for [Yii](http://www.yiiframework.com/)
-
-# Others
-
-* [PSR-3 Logger](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md)
-* [Doctrine2 ORM](http://www.doctrine-project.org/)
-* [Doctrine2 Mongo ODM](http://www.doctrine-project.org/)
 
 Back to [index](index.md).

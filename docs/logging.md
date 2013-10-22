@@ -1,11 +1,11 @@
-# How to use PSR-3 Logger
+# Logging
 
-You can use any PSR-3 compatible logger inside an action.
-Two rules should be completed. First add `LoggerExtension` and second an action must implement `LoggerAwareInterface` interface.
+Since we are dealing with payments it is required to log sensitive details. if the problem appear it would be easy to find out the problem when you have a good log file. This lib provide support of [PSR-3 compatible loggers](http://www.php-fig.org/psr/psr-3/).
+
+To inject a logger you have to create a logger itself, and add an extension with that logger to a payment.
 
 ```php
 <?php
-//Source: Payum\Examples\ReadmeTest::loggerExtension()
 use Payum\Bridge\Psr\Log\LoggerExtension;
 use Payum\Examples\Action\LoggerAwareAction;
 use Payum\Payment;
@@ -17,6 +17,8 @@ $payment->addAction(new LoggerAwareAction);
 
 $payment->execute('a request');
 ```
+
+After you are done you can simply implement `LoggerAwareInterface` interface to an action where you want log something. It will be injected by the extension.
 
 ```php
 <?php
@@ -58,4 +60,4 @@ class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
 }
 ```
 
-Back to [index](../index.md).
+Back to [index](index.md).
