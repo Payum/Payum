@@ -18,7 +18,11 @@ $storages = array(
     // other storages here
 
     'paypal' => array(
-        $paypalRecurringPaymentDetailsClass => new FilesystemStorage(__DIR__.'/storage', $paypalRecurringPaymentDetailsClass, 'idStorage')
+        $paypalRecurringPaymentDetailsClass => new FilesystemStorage(
+            __DIR__.'/storage',
+            $paypalRecurringPaymentDetailsClass,
+            'idStorage'
+        )
     )
 );
 ```
@@ -47,13 +51,17 @@ $storage->updateModel($agreementDetails);
 $createRecurringPaymentToken = $tokenStorage->createModel();
 $createRecurringPaymentToken->setPaymentName('paypal');
 $createRecurringPaymentToken->setDetails($storage->getIdentificator($paymentDetails));
-$createRecurringPaymentToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/create_recurring_payment.php?payum_token='.$doneToken->getHash());
+$createRecurringPaymentToken->setTargetUrl(
+    'http://'.$_SERVER['HTTP_HOST'].'/create_recurring_payment.php?payum_token='.$doneToken->getHash()
+);
 $tokenStorage->updateModel($createRecurringPaymentToken);
 
 $captureToken = $tokenStorage->createModel();
 $captureToken->setPaymentName('paypal');
 $captureToken->setDetails($storage->getIdentificator($paymentDetails));
-$captureToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/capture.php?payum_token='.$captureToken->getHash());
+$captureToken->setTargetUrl(
+    'http://'.$_SERVER['HTTP_HOST'].'/capture.php?payum_token='.$captureToken->getHash()
+);
 $captureToken->setAfterUrl($createRecurringPaymentToken->getTargetUrl());
 $tokenStorage->updateModel($captureToken);
 
@@ -64,9 +72,15 @@ $storage->updateModel($agreementDetails);
 header("Location: ".$captureToken->getTargetUrl());
 ```
 
+The script is pretty similar to ordinary purchase.
+The only difference here we set some special options to agreementDetails.
+The rest is same. Create capture token.
+Done token in this example renamed to `createRecurringPaymentToken`.
+This is because we have one more step to do before we can go to `done.php`.
+
 ## Create recurring payment
 
-After capture does its job and agreement will be created.
+After capture did its job and agreement is created.
 We are redirected back to `create_recurring_payment.php` script.
 Here we have to check status of agreement and if it is good: create recurring payment.
 After all we have to redirect user to some safe page.
