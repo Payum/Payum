@@ -112,7 +112,10 @@ if (false == $agreementStatus->isSuccess()) {
 
 $agreementDetails = $agreementStatus->getModel();
 
-$recurringPaymentStorage = $registry->getStorageForClass($paypalRecurringPaymentDetailsClass, $token->getPaymentName());
+$recurringPaymentStorage = $registry->getStorageForClass(
+    $paypalRecurringPaymentDetailsClass,
+    $token->getPaymentName()
+);
 
 $recurringPaymentDetails = $recurringPaymentStorage->createModel();
 $recurringPaymentDetails['TOKEN'] = $agreementDetails->getToken();
@@ -132,7 +135,9 @@ $doneToken->setPaymentName('paypal');
 $doneToken->setDetails(
     $recurringPaymentStorage->getIdentificator($recurringPaymentDetails)
 );
-$doneToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/done.php?payum_token='.$captureToken->getHash());
+$doneToken->setTargetUrl(
+    'http://'.$_SERVER['HTTP_HOST'].'/done.php?payum_token='.$doneToken->getHash()
+);
 $tokenStorage->updateModel($doneToken);
 
 header("Location: ".$doneToken->getTargetUrl());
