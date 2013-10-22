@@ -27,7 +27,7 @@ $storages = array(
 );
 ```
 
-## Create agreement (prepare.php)
+## Establish agreement (prepare.php)
 
 A user has to agree to be charged periodically.
 For this we have to create an agreement with him.
