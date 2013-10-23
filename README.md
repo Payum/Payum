@@ -4,7 +4,7 @@ Provide integration of paypal rest api to payum.
 
 ## Resources
 
-* [Documentation](docs/index.md)
+* [Documentation](http://payum.forma-dev.com/documentation#PaypalRest)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/PaypalRest/issues)
 * [Sandbox](https://github.com/Skadabr/startPayum)
