@@ -1,6 +1,6 @@
-## Configuration Reference
+# Configuration Reference
 
-### Payum extension:
+## Payum extension:
 
 ```yaml
 payum:
@@ -32,7 +32,7 @@ payum:
                     - extension.bar
 ```
 
-### Doctrine storage:
+## Doctrine storage:
 
 ```yaml
 doctrine:
@@ -41,7 +41,7 @@ doctrine:
         enabled: false
 ```
 
-### Filesystem storage:
+## Filesystem storage:
 
 ```yaml
 filesystem:
@@ -51,7 +51,7 @@ filesystem:
         enabled: false
 ```
 
-### Paypal express checkout payment
+## Paypal express checkout payment
 
 ```yaml
 paypal_express_checkout_nvp:
@@ -64,7 +64,7 @@ paypal_express_checkout_nvp:
             sandbox: true
 ```
 
-### Authorize.Net AIM payment
+## Authorize.Net AIM payment
 
 ```yaml
 authorize_net_aim:
@@ -75,7 +75,7 @@ authorize_net_aim:
             sandbox: true
 ```
 
-### Be2Bill payment
+## Be2Bill payment
 
 ```yml
 be2bill:
@@ -86,7 +86,7 @@ be2bill:
             sandbox: true
 ```
 
-### Payex payment
+## Payex payment
 
 ```yml
 payex:
@@ -97,7 +97,7 @@ payex:
             sandbox: true
 ```
 
-### Omnipay payment
+## Omnipay payment
 
 ```yml
 omnipay:
@@ -107,7 +107,7 @@ omnipay:
         bar: barOpt
 ```
 
-### Custom payment
+## Custom payment
 
 ```yaml
 custom:
@@ -115,6 +115,6 @@ custom:
     service: ~ 
 ```
 
-### Next Step
+## Next Step
 
 * [Back to index](index.md).

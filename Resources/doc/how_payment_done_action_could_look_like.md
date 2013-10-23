@@ -1,5 +1,4 @@
-How payment done action could look like?
-========================================
+# Simple purchase done action
 
 We assume you already know how to prepare payment details and how to capture them.
 The last thing in this store what to do after?
@@ -52,6 +51,6 @@ In general you have to check status of the payment and do whatever you want depe
 For example if payment success you  would add a user some credits or update expiration date.
 If not you redirect him to homepage and show a flash message with a bad news.
 
-### Next Step
+## Next Step
 
 * [Back to index](index.md).

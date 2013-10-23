@@ -1,14 +1,13 @@
-Install as git submodules
-=========================
+# Install as git submodules
 
-### Step 1. Add submodules
+## Step 1. Add submodules
 
 ``` bash
 $ git submodule add git://github.com/Payum/PayumBundle.git vendor/payum/payum-bundle/Payum/PayumBundle
 $ git submodule update --init
 ```
 
-### Step 2: Configure the Autoloader
+## Step 2: Configure the Autoloader
 
 You have to add the `Payum\PayumBundle` namespace to your autoloader:
 
@@ -28,6 +27,6 @@ $loader->registerNamespaces(array(
 $loader->register();
 ```
 
-### Next Step
+## Next Step
 
 * [Back to index](index.md).
