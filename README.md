@@ -5,7 +5,7 @@ The lib implements [PayPal Pro Checkout](https://www.paypalobjects.com/webstatic
 
 ## Resources
 
-* [Documentation](docs/index.md)
+* [Documentation](http://payum.forma-dev.com/documentation#PaypalProCheckoutNvp)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/PaypalProCheckoutNvp/issues)
 
