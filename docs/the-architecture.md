@@ -46,7 +46,7 @@ class CaptureAction implements ActionInterface
 
 That's the big picture. Now let's talk about the details:
 
-_**Link**: See a real world example: (CaptureController)[capture-controller]._
+_**Link**: See a real world example: [CaptureController][capture-controller]._
 
 ## Sub Requests
 
