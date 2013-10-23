@@ -1,4 +1,5 @@
 # Get it started.
+
 In this chapter we are going to talk about the most common task: purchasing a product.
 I would use paypal express checkout for example because it is popular.
 All examples are written in plain php code (no frameworks).
@@ -130,5 +131,7 @@ if ($status->isSuccess()) {
 ```
 
 _**Note**: Success is not the only one status available. There are other statuses possible: pending, failure, canceled etc._
+
+Next [The architecture](the-architecture.md).
 
 Back to [index](index.md).
