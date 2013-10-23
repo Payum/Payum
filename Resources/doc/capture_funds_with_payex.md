@@ -40,9 +40,7 @@ payum:
                         sandbox: true
 ```
 
-**Warning:**
-
-> You have to changed this name `your_payment_name` to something related to your domain, for example `post_a_job_with_payex`
+_**Attention**: You have to changed this name `your_payment_name` to something related to your domain, for example `post_a_job_with_payex`._
 
 ### 2-a. Configure doctrine storage
 

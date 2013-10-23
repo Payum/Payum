@@ -59,7 +59,7 @@ Payum asks for token storage.
 The storages has to be able to create\update\find a model that implements `TokenInterface`.
 Doctine ORM\MongoODM supported out of the box as well as filesystem storage.
 
-_**Warning**: Use filesystem storage only for testing and never in production._
+_**Attention**: Use filesystem storage only for testing and never in production._
 
 ### Doctrine ORM token storage.
 
