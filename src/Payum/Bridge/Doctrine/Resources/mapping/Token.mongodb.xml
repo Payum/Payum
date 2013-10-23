@@ -8,7 +8,7 @@
 
       <field name="hash" type="string" id="true" strategy="NONE" />
 
-      <field name="details" type="object" />
+      <field name="details" type="serialized" />
 
       <field name="afterUrl" type="string" />
 

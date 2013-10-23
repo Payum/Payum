@@ -17,11 +17,6 @@ abstract class BaseMongoTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        Type::hasType('object') ?
-            Type::overrideType('object', 'Payum\Bridge\Doctrine\Types\ObjectType') :
-            Type::addType('object', 'Payum\Bridge\Doctrine\Types\ObjectType')
-        ;
-
         $conf = new Configuration();
         $conf->setProxyDir(\sys_get_temp_dir());
         $conf->setProxyNamespace('PayumTestsProxies');
