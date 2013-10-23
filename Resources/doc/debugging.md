@@ -1,5 +1,4 @@
-Debugging
-=========
+# Debugging
 
 Whenever you have problems, want understand payum internals: _check the log file_.
 It contains the whole stack of called actions including details about a request and a model.
@@ -37,6 +36,6 @@ DEBUG - [Payum] 4# Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckou
 DEBUG - [Payum] 4# Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetTransactionDetailsAction::execute(GetTransactionDetailsRequest{model: ArrayObject})
 ```
 
-### Next Step
+## Next Step
 
 * [Back to index](index.md).
