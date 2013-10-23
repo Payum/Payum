@@ -5,7 +5,7 @@ It would be handy tool not only for basic tasks like capture or refund but for r
 
 ## Resources
 
-* [Documentation](docs/index.md)
+* [Documentation](http://payum.forma-dev.com/documentation#Payum)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 
