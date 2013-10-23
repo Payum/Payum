@@ -5,7 +5,7 @@ Provide integration of paypal express checkout api to payum.
 
 ## Resources
 
-* [Documentation](docs/index.md)
+* [Documentation](http://payum.forma-dev.com/documentation#PaypalExpressCheckoutNvp)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/PaypalExpressCheckoutNvp/issues)
 
