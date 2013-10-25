@@ -8,6 +8,7 @@ It is client side for [paypal instant payment notifications](https://www.x.com/d
 * [Documentation](http://payum.forma-dev.com/documentation#PaypalIpn)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/PaypalIpn/issues)
+* [Twitter](https://twitter.com/payumphp)
 
 ## Contributing
 
@@ -16,7 +17,6 @@ PaypalIpn is an open source, community-driven project. Pull requests are very we
 ## Like it? Spread the world!
 
 Star payum on [github](https://github.com/Payum/PaypalIpn) or [packagist](https://packagist.org/packages/payum/paypal-ipn).
-You may also drop a message on Twitter.
 
 ## License
 
