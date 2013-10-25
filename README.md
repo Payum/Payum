@@ -8,6 +8,7 @@ The lib implements [PayPal Pro Checkout](https://www.paypalobjects.com/webstatic
 * [Documentation](http://payum.forma-dev.com/documentation#PaypalProCheckoutNvp)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/PaypalProCheckoutNvp/issues)
+* [Twitter](https://twitter.com/payumphp)
 
 ## Contributing
 
@@ -16,7 +17,6 @@ PaypalProCheckoutNvp is an open source, community-driven project. Pull requests 
 ## Like it? Spread the world!
 
 Star payum on [github](https://github.com/Payum/PaypalProCheckoutNvp) or [packagist](https://packagist.org/packages/payum/paypal-pro-checkout-nvp).
-You may also drop a message on Twitter.
 
 ## License
 
