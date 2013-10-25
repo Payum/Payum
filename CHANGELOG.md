@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.6.0 (2013-10-25)
+
+* [mongo] add custom type `ObjectType` to avoid probmels with mongo.
+* [request] add base status request.
+* [security] allow set any details to token.
+* [storage] better handling of id property in filesystem storage.
+* [storage][mongo] add mongodb support
+* [doc] add managing notifications doc
+* [doc] add get it started doc
+* [registry] add simple registry
+* [storage] schedule for update models set in action
+* [storage] do not throw on not supported identifier
+* [security] introduce security layer. added `HttpRequestInterface`, `TokenInterface`
+* [storage][extension] update model after last request is executed
+* [storage][extension] update model on exception as well.
+* [storage] add `StorageInterface::findModelByIdentifier` method. update abstract storage
+* [storage] add abstract storage
+* [storage] mark deprecated `Storage::supportModel`
+* [log] add documentation.
+* [log] adjust log messages.
+* [log] suggest monolog as logger.
+* [extension] add debug extension that wrtite call stack to log
+* [extension] add PSR-3 log extensions
+* [request] `StatusRequestInterface` now extends `ModelRequestInterface`
+* [spl] add `ArrayObject::validatedKeysSet` to check array key present or not
+
 ## 0.5.4 (2013-07-15)
 
 * [security] make details property optional in `TokenizedDetails` model
