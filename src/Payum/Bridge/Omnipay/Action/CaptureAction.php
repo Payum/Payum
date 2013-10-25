@@ -1,8 +1,8 @@
 <?php
+
 namespace Payum\Bridge\Omnipay\Action;
 
 use Omnipay\Common\Message\RedirectResponseInterface;
-
 use Payum\Exception\LogicException;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Request\CaptureRequest;
@@ -16,7 +16,7 @@ class CaptureAction extends BaseApiAwareAction
      */
     public function execute($request)
     {
-        if (false == $this->supports($request)) {
+        if (!$this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
@@ -30,17 +30,14 @@ class CaptureAction extends BaseApiAwareAction
                 $response = $this->gateway->purchase((array) $options)->send();
             }
 
-            $options['_reference'] = $response->getTransactionReference();
-            $options['_status_message'] = '';
-
-            if ($response->isSuccessful()) {
-                $options['_status'] = 'success';
-            } elseif ($response->isRedirect()) {
+            if ($response->isRedirect()) {
                 throw new RedirectUrlInteractiveRequest($response->getRedirectUrl());
-            } else {
-                $options['_status'] = 'failed';
-                $options['_status_message'] = $response->getMessage();
             }
+
+            $options['_reference']      = $response->getTransactionReference();
+            $options['_status']         = $response->isSuccessful() ? 'success' : 'failed';
+            $options['_status_code']    = $response->getCode();
+            $options['_status_message'] = $response->isSuccessful() ? '' : $response->getMessage();
         } catch (InteractiveRequestInterface $e) {
             $options['_completeCaptureRequired'] = 1;
 
