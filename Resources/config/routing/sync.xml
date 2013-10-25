@@ -4,10 +4,6 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="payum_deprecated_sync_do" pattern="/payment/{paymentName}/sync/{token}">
-        <default key="_controller">PayumBundle:Sync:doDeprecated</default>
-    </route>
-
     <route id="payum_sync_do" pattern="/payment/sync/{payum_token}">
         <default key="_controller">PayumBundle:Sync:do</default>
     </route>
