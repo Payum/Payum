@@ -8,6 +8,7 @@ Provide integration of paypal express checkout api to payum.
 * [Documentation](http://payum.forma-dev.com/documentation#PaypalExpressCheckoutNvp)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/PaypalExpressCheckoutNvp/issues)
+* [Twitter](https://twitter.com/payumphp)
 
 ## Contributing
 
@@ -16,7 +17,6 @@ PaypalExpressCheckoutNvp is an open source, community-driven project. Pull reque
 ## Like it? Spread the world!
 
 Star payum on [github](https://github.com/Payum/PaypalExpressCheckoutNvp) or [packagist](https://packagist.org/packages/payum/paypal-express-checkout-nvp).
-You may also drop a message on Twitter.
 
 ## License
 
