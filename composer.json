@@ -9,11 +9,23 @@
         {
             "name": "Ton Sharp",
             "email": "Forma-PRO@66ton99.org.ua"
+        },
+        {
+            "name": "Kotlyar Maksim",
+            "email": "kotlyar.maksim@gmail.com"
+        },
+        {
+            "name":     "Payum project",
+            "homepage": "http://payum.forma-dev.com/"
+        },
+        {
+            "name":     "Community contributions",
+            "homepage": "https://github.com/Payum/PaypalProCheckoutNvp/contributors"
         }
     ],
     "require": {
         "php": ">=5.3.3",
-        "payum/payum": "0.6.x-dev",
+        "payum/payum": "0.6.*",
         "kriswallsmith/buzz": "*"
     },
     "require-dev": {
