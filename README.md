@@ -8,6 +8,7 @@ It would be handy tool not only for basic tasks like capture or refund but for r
 * [Documentation](http://payum.forma-dev.com/documentation#Payum)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
+* [Twitter](https://twitter.com/payumphp)
 
 ## Contributing
 
@@ -15,7 +16,7 @@ Payum is an open source, community-driven project. Pull requests are very welcom
 
 ## Like it? Spread the world!
 
-Star payum on [github](https://github.com/Payum/Payum) or [packagist](https://packagist.org/packages/payum/payum). You may also drop a message on Twitter.
+Star payum on [github](https://github.com/Payum/Payum) or [packagist](https://packagist.org/packages/payum/payum).
 
 ## License
 
