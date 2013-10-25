@@ -8,6 +8,7 @@ The lib implements [Payex](http://www.payexpim.com/) payment.
 * [Documentation](http://payum.forma-dev.com/documentation#Payex)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payex/issues)
+* [Twitter](https://twitter.com/payumphp)
 
 ## Contributing
 
@@ -16,7 +17,6 @@ Payex is an open source, community-driven project. Pull requests are very welcom
 ## Like it? Spread the world!
 
 Star payum on [github](https://github.com/Payum/Payex) or [packagist](https://packagist.org/packages/payum/payex).
-You may also drop a message on Twitter.
 
 ## License
 
