@@ -21,7 +21,7 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "payum/payum": "0.6.*"
+        "payum/payum": "0.7.x-dev"
     },
     "config": {
         "bin-dir": "bin"
@@ -33,7 +33,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.6-dev"
+            "dev-master": "0.7-dev"
         }
     }
 }
