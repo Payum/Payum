@@ -1,3 +1,8 @@
+0.5 to 0.6
+==========
+
+* [Doctrine] `TokenizedDetails` mapping schema was updated. details field is now accept `NULL`.
+
 0.4 to 0.5
 ==========
 
