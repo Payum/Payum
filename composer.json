@@ -22,7 +22,7 @@
     "require": {
         "php": ">=5.3.2",
         "kriswallsmith/buzz": "*",
-        "payum/payum": "0.6.*"
+        "payum/payum": "0.7.x-dev"
     },
     "require-dev": {
         "doctrine/orm": ">=2.3,<2.4-dev",
@@ -40,7 +40,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.6-dev"
+            "dev-master": "0.7-dev"
         }
     }
 }
