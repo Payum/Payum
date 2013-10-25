@@ -9,6 +9,7 @@ This bridge allows you to use omnipay gateways but in payum like way.
 * [Documentation](http://payum.forma-dev.com/documentation#OmnipayBridge)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/OmnipayBridge/issues)
+* [Twitter](https://twitter.com/payumphp)
 
 ## Contributing
 
@@ -17,7 +18,6 @@ OmnipayBridge is an open source, community-driven project. Pull requests are ver
 ## Like it? Spread the world!
 
 Star payum on [github](https://github.com/Payum/OmnipayBridge) or [packagist](https://packagist.org/packages/payum/omnipay-bridge).
-You may also drop a message on Twitter.
 
 ## License
 
