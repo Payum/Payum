@@ -2,13 +2,36 @@
     "name": "payum/payum",
     "type": "library",
     "description": "Payment lib",
-    "keywords": ["payment", "paypal", "paypal ipn", "paypal digital goods", "paypal recurring payments", "authorize.net", "be2bill", "omnipay gateways"],
-    "homepage": "",
+    "keywords": [
+        "payment",
+        "recurring payment",
+        "instant payment notification",
+        "ipn",
+        "paypal",
+        "paypal express",
+        "paypal pro",
+        "paypal rest",
+        "paypal digital goods",
+        "authorize.net",
+        "be2bill",
+        "payex",
+        "omnipay",
+        "jms payment"
+    ],
+    "homepage": "http://payum.forma-dev.com",
     "license": "MIT",
     "authors": [
         {
             "name": "Kotlyar Maksim",
             "email": "kotlyar.maksim@gmail.com"
+        },
+        {
+            "name":     "Payum project",
+            "homepage": "http://payum.forma-dev.com/"
+        },
+        {
+            "name":     "Community contributions",
+            "homepage": "https://github.com/Payum/Payum/contributors"
         }
     ],
     "require": {
