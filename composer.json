@@ -9,12 +9,20 @@
         {
             "name": "Kotlyar Maksim",
             "email": "kotlyar.maksim@gmail.com"
+        },
+        {
+            "name":     "Payum project",
+            "homepage": "http://payum.forma-dev.com/"
+        },
+        {
+            "name":     "Community contributions",
+            "homepage": "https://github.com/Payum/PaypalExpressCheckoutNvp/contributors"
         }
     ],
     "require": {
         "php": ">=5.3.2",
         "kriswallsmith/buzz": "*",
-        "payum/payum": "0.6.x-dev"
+        "payum/payum": "0.6.*"
     },
     "require-dev": {
         "doctrine/orm": ">=2.3,<2.4-dev",
