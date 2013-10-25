@@ -36,6 +36,7 @@ class CaptureAction extends BaseApiAwareAction
 
             $options['_reference']      = $response->getTransactionReference();
             $options['_status']         = $response->isSuccessful() ? 'success' : 'failed';
+            $options['_status_code']    = $response->getCode();
             $options['_status_message'] = $response->isSuccessful() ? '' : $response->getMessage();
         } catch (InteractiveRequestInterface $e) {
             $options['_completeCaptureRequired'] = 1;
