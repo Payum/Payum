@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.5.4 (2013-07-15)
+
+* [security] make details property optional in `TokenizedDetails` model
+* [request] add instant payment notifications request
+
+## 0.5.3 (2013-06-24)
+
+* No changes 
+
+## 0.5.2 (2013-06-24)
+
+* [request] move `CaptureTokenizedDetails` request from the bundle
+
+## 0.5.1 (2013-06-12)
+
+* [spl] add `ArrayObject::validatedKeysSet` to check array key present or not.
+
 ## 0.5.0 (2013-06-03)
 
 * add the architecture doc
