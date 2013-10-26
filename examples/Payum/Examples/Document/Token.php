@@ -2,7 +2,7 @@
 namespace Payum\Examples\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as Mongo;
-use Payum\Bridge\Doctrine\Document\Token as BaseToken;
+use Payum\Model\Token as BaseToken;
 
 /**
  * @Mongo\Document

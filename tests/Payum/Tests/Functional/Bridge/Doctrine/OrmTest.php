@@ -24,9 +24,9 @@ class OrmTest extends BaseOrmTest
         $driver = new MappingDriverChain;
         
         $xmlDriver = new SimplifiedXmlDriver(array(
-            $rootDir.'/src/Payum/Bridge/Doctrine/Resources/mapping' => 'Payum\Bridge\Doctrine\Entity'
+            $rootDir.'/src/Payum/Bridge/Doctrine/Resources/mapping' => 'Payum\Model'
         ));
-        $driver->addDriver($xmlDriver, 'Payum\Bridge\Doctrine\Entity');
+        $driver->addDriver($xmlDriver, 'Payum\Model');
 
         $rc = new \ReflectionClass('\Doctrine\ORM\Mapping\Driver\AnnotationDriver');
         AnnotationRegistry::registerFile(dirname($rc->getFileName()) . '/DoctrineAnnotations.php');

@@ -4,7 +4,7 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <mapped-superclass name="Payum\Bridge\Doctrine\Document\Token">
+    <mapped-superclass name="Payum\Model\Token">
 
       <field name="hash" type="string" id="true" strategy="NONE" />
 
