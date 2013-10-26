@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.1 (2013-10-26)
+
+* [doctrine] deprecate bridge models. provide mappings for basic ones
+
 ## 0.6.0 (2013-10-25)
 
 * [mongo] add custom type `ObjectType` to avoid probmels with mongo.
