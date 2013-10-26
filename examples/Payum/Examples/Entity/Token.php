@@ -3,7 +3,7 @@ namespace Payum\Examples\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Payum\Bridge\Doctrine\Entity\Token as BaseToken;
+use Payum\Model\Token as BaseToken;
 
 /**
  * @ORM\Entity
