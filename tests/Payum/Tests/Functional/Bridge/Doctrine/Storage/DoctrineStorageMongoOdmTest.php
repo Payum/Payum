@@ -1,10 +1,10 @@
 <?php
 namespace Payum\Tests\Functional\Bridge\Doctrine\Request\Storage;
 
-use Payum\Tests\Functional\Bridge\Doctrine\OrmTest;
+use Payum\Tests\Functional\Bridge\Doctrine\MongoTest;
 use Payum\Bridge\Doctrine\Storage\DoctrineStorage;
 
-class DoctrineStorageOrmTest extends OrmTest
+class DoctrineStorageMongoOdmTest extends MongoTest
 {
     /**
      * @test
@@ -12,8 +12,8 @@ class DoctrineStorageOrmTest extends OrmTest
     public function shouldUpdateModelAndSetId()
     {
         $storage = new DoctrineStorage(
-            $this->em,
-            'Payum\Examples\Entity\TestModel'
+            $this->dm,
+            'Payum\Examples\Document\TestModel'
         );
         
         $model = $storage->createModel();
@@ -29,8 +29,8 @@ class DoctrineStorageOrmTest extends OrmTest
     public function shouldGetModelIdentifier()
     {
         $storage = new DoctrineStorage(
-            $this->em,
-            'Payum\Examples\Entity\TestModel'
+            $this->dm,
+            'Payum\Examples\Document\TestModel'
         );
 
         $model = $storage->createModel();
@@ -52,8 +52,8 @@ class DoctrineStorageOrmTest extends OrmTest
     public function shouldFindModelById()
     {
         $storage = new DoctrineStorage(
-            $this->em,
-            'Payum\Examples\Entity\TestModel'
+            $this->dm,
+            'Payum\Examples\Document\TestModel'
         );
 
         $model = $storage->createModel();
@@ -62,11 +62,11 @@ class DoctrineStorageOrmTest extends OrmTest
         
         $requestId = $model->getId();
         
-        $this->em->clear();
+        $this->dm->clear();
 
         $model = $storage->findModelById($requestId);
         
-        $this->assertInstanceOf('Payum\Examples\Entity\TestModel', $model);
+        $this->assertInstanceOf('Payum\Examples\Document\TestModel', $model);
         $this->assertEquals($requestId, $model->getId());
     }
 
@@ -76,8 +76,8 @@ class DoctrineStorageOrmTest extends OrmTest
     public function shouldFindModelByIdentificator()
     {
         $storage = new DoctrineStorage(
-            $this->em,
-            'Payum\Examples\Entity\TestModel'
+            $this->dm,
+            'Payum\Examples\Document\TestModel'
         );
 
         $model = $storage->createModel();
@@ -86,13 +86,13 @@ class DoctrineStorageOrmTest extends OrmTest
 
         $requestId = $model->getId();
 
-        $this->em->clear();
+        $this->dm->clear();
 
         $identificator = $storage->getIdentificator($model);
 
         $foundModel = $storage->findModelByIdentificator($identificator);
 
-        $this->assertInstanceOf('Payum\Examples\Entity\TestModel', $foundModel);
+        $this->assertInstanceOf('Payum\Examples\Document\TestModel', $foundModel);
         $this->assertEquals($requestId, $foundModel->getId());
     }
 }
