@@ -2,7 +2,7 @@
 namespace Payum\Model;
 
 use Payum\Security\TokenInterface;
-use Payum\Storage\Identificator;
+use Payum\Model\Identificator;
 use Payum\Security\Util\Random;
 
 class Token implements TokenInterface

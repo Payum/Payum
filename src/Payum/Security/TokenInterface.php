@@ -4,7 +4,7 @@ namespace Payum\Security;
 use Payum\Exception\InvalidArgumentException;
 use Payum\Model\DetailsAggregateInterface;
 use Payum\Model\DetailsAwareInterface;
-use Payum\Storage\Identificator;
+use Payum\Model\Identificator;
 use Payum\Security\Util\Random;
 
 interface TokenInterface extends DetailsAggregateInterface, DetailsAwareInterface

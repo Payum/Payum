@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Tests\Storage;
 
-use Payum\Storage\Identificator;
+use Payum\Model\Identificator;
 
 class AbstractStorageTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Tests\Functional\Bridge\Doctrine\Document;
 
-use Payum\Storage\Identificator;
+use Payum\Model\Identificator;
 use Payum\Tests\Functional\Bridge\Doctrine\MongoTest;
 use Payum\Examples\Document\Token;
 

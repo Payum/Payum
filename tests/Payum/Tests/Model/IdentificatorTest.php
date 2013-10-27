@@ -1,7 +1,7 @@
 <?php
-namespace Payum\Tests\Storage;
+namespace Payum\Tests\Model;
 
-use Payum\Storage\Identificator;
+use Payum\Model\Identificator;
 
 class IdentificatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -10,7 +10,7 @@ class IdentificatorTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementSerializableInterface()
     {
-        $rc = new \ReflectionClass('Payum\Storage\Identificator');
+        $rc = new \ReflectionClass('Payum\Model\Identificator');
         
         $this->assertTrue($rc->implementsInterface('Serializable'));
     }
