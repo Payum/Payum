@@ -2,7 +2,6 @@
 namespace Payum\Model;
 
 use Payum\Exception\InvalidArgumentException;
-use Payum\Storage\Identificator;
 
 /**
  * @deprecated since 0.6 will be removed in 0.7

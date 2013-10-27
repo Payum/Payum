@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Storage;
 
+use Payum\Model\Identificator;
+
 interface StorageInterface
 {
     /**

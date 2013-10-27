@@ -2,7 +2,7 @@
 namespace Payum\Tests\Extension;
 
 use Payum\Extension\StorageExtension;
-use Payum\Storage\Identificator;
+use Payum\Model\Identificator;
 
 class StorageExtensionTest extends \PHPUnit_Framework_TestCase 
 {

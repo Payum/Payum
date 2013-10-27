@@ -41,7 +41,7 @@ class DoctrineStorageOrmTest extends OrmTest
         
         $identificator = $storage->getIdentificator($model);
         
-        $this->assertInstanceOf('Payum\Storage\Identificator', $identificator);
+        $this->assertInstanceOf('Payum\Model\Identificator', $identificator);
         $this->assertEquals(get_class($model), $identificator->getClass());
         $this->assertEquals($model->getId(), $identificator->getId());
     }

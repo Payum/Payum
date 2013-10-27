@@ -2,8 +2,7 @@
 namespace Payum\Storage;
 
 use Payum\Exception\InvalidArgumentException;
-use Payum\Exception\LogicException;
-use Payum\Storage\StorageInterface;
+use Payum\Model\Identificator;
 
 abstract class AbstractStorage implements StorageInterface
 {

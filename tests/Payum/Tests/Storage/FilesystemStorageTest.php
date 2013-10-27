@@ -1,8 +1,7 @@
 <?php
 namespace Payum\Tests\Storage;
 
-use Payum\Examples\Model\TestModel;
-use \Payum\Storage\FilesystemStorage;
+use Payum\Storage\FilesystemStorage;
 
 class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
 {
@@ -213,7 +212,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
 
         $identificator = $storage->getIdentificator($model);
 
-        $this->assertInstanceOf('Payum\Storage\Identificator', $identificator);
+        $this->assertInstanceOf('Payum\Model\Identificator', $identificator);
         $this->assertEquals('stdClass', $identificator->getClass());
         $this->assertEquals($model->payum_id, $identificator->getId());
     }
@@ -235,11 +234,39 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
         //guard
         $this->assertNotEmpty($model->getId());
         
+        $foundModel = $storage->findModelById($model->getId());
+
+        $this->assertInstanceOf('Payum\Examples\Model\TestModel', $foundModel);
+        $this->assertEquals($model->getId(), $foundModel->getId());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldFindModelByIdentificator()
+    {
+        $storage = new FilesystemStorage(
+            sys_get_temp_dir(),
+            'Payum\Examples\Model\TestModel',
+            'id'
+        );
+
+        $model = $storage->createModel();
+        $storage->updateModel($model);
+
+        //guard
+        $this->assertNotEmpty($model->getId());
+
         $identificator = $storage->getIdentificator($model);
 
-        $this->assertInstanceOf('Payum\Storage\Identificator', $identificator);
-        $this->assertEquals(get_class($model), $identificator->getClass());
-        $this->assertEquals($model->getId(), $identificator->getId());
+        //guard
+        $this->assertInstanceOf('Payum\Model\Identificator', $identificator);
+
+
+        $foundModel = $storage->findModelByIdentificator($identificator);
+
+        $this->assertInstanceOf('Payum\Examples\Model\TestModel', $foundModel);
+        $this->assertEquals($model->getId(), $foundModel->getId());
     }
 
     /**
