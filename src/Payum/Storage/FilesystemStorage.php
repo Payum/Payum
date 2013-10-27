@@ -2,6 +2,7 @@
 namespace Payum\Storage;
 
 use Payum\Exception\LogicException;
+use Payum\Model\Identificator as ModelIdentificator;
 
 class FilesystemStorage extends AbstractStorage
 {
@@ -87,6 +88,6 @@ class FilesystemStorage extends AbstractStorage
             throw new LogicException('The model must be persisted before usage of this method');
         }
 
-        return new Identificator($id, $model);
+        return new ModelIdentificator($id, $model);
     }
 }

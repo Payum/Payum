@@ -3,7 +3,7 @@ namespace Payum\Tests\Functional\Bridge\Doctrine\Entity;
 
 use Doctrine\ORM\Tools\SchemaValidator;
 
-use Payum\Storage\Identificator;
+use Payum\Model\Identificator;
 use Payum\Tests\Functional\Bridge\Doctrine\OrmTest;
 use Payum\Examples\Entity\Token;
 

@@ -2,7 +2,7 @@
 namespace Payum\Tests\Model;
 
 use Payum\Model\Token;
-use Payum\Storage\Identificator;
+use Payum\Model\Identificator;
 
 class TokenTest extends \PHPUnit_Framework_TestCase
 {

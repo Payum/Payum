@@ -2,10 +2,9 @@
 namespace Payum\Extension;
 
 use Payum\Action\ActionInterface;
-use Payum\Exception\LogicException;
 use Payum\Request\InteractiveRequestInterface;
 use Payum\Request\ModelRequestInterface;
-use Payum\Storage\Identificator;
+use Payum\Model\Identificator;
 use Payum\Storage\StorageInterface;
 
 class StorageExtension implements ExtensionInterface 

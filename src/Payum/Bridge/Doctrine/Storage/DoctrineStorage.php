@@ -3,7 +3,7 @@ namespace Payum\Bridge\Doctrine\Storage;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Payum\Storage\AbstractStorage;
-use Payum\Storage\Identificator;
+use Payum\Model\Identificator;
 
 class DoctrineStorage extends AbstractStorage
 {
