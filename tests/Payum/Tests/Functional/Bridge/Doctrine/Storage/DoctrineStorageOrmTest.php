@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Functional\Bridge\Doctrine\Request\Storage;
+namespace Payum\Tests\Functional\Bridge\Doctrine\Storage;
 
 use Payum\Tests\Functional\Bridge\Doctrine\OrmTest;
 use Payum\Bridge\Doctrine\Storage\DoctrineStorage;

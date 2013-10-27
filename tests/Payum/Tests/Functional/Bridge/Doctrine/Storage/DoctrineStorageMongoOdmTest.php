@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Functional\Bridge\Doctrine\Request\Storage;
+namespace Payum\Tests\Functional\Bridge\Doctrine\Storage;
 
 use Payum\Tests\Functional\Bridge\Doctrine\MongoTest;
 use Payum\Bridge\Doctrine\Storage\DoctrineStorage;
@@ -41,7 +41,7 @@ class DoctrineStorageMongoOdmTest extends MongoTest
         
         $identificator = $storage->getIdentificator($model);
         
-        $this->assertInstanceOf('Payum\Storage\Identificator', $identificator);
+        $this->assertInstanceOf('Payum\Model\Identificator', $identificator);
         $this->assertEquals(get_class($model), $identificator->getClass());
         $this->assertEquals($model->getId(), $identificator->getId());
     }
