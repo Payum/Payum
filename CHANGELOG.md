@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.2 (2013-10-27)
+
+* [doctrine] add functional tests for doctrine storage and mongo manager
+* [storage] move identificator to model namespace. deprecate storage one
+
 ## 0.6.1 (2013-10-26)
 
 * [doctrine] deprecate bridge models. provide mappings for basic ones
