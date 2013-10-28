@@ -1,4 +1,4 @@
-# Simple purchase done action
+# Purchase done action
 
 We assume you already know how to prepare payment details and how to capture them.
 The last thing in this store what to do after?
