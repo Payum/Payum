@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.2 (2013-10-31)
+
+* [composer] lower required php version from 5.3.9 to 5.3.3. remove usages of is_a() newer feature.
+
 ## 0.6.1 (2013-10-31)
 
 * [payment-factory] added support of offline payments.
