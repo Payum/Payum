@@ -1,3 +1,8 @@
+0.6.2 to 0.6.3
+==============
+
+* [Storage] `AbstractStorage::findModelByIdentificator` does more strict model class comparison. Now only same same classes are allowed.
+
 0.5 to 0.6
 ==========
 

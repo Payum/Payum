@@ -174,6 +174,23 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldCallFindModelByIdOnFindModelByEvenIfModelClassPrependWithSlash()
+    {
+        $identificator = new Identificator('theId', new \stdClass);
+
+        $storage = $this->getMockForAbstractClass('Payum\Storage\AbstractStorage', array('\stdClass'));
+        $storage
+            ->expects($this->once())
+            ->method('findModelById')
+            ->with('theId')
+        ;
+
+        $storage->findModelByIdentificator($identificator);
+    }
+
+    /**
+     * @test
+     */
     public function shouldProxyFindModelByIdResultOnFindModelByIdentificator()
     {
         $expectedModel = new \stdClass;

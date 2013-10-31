@@ -60,7 +60,7 @@ abstract class AbstractStorage implements StorageInterface
      */
     public function findModelByIdentificator(Identificator $identificator)
     {
-        if (is_a($identificator->getClass(), $this->modelClass, $allowClass = true)) {
+        if (ltrim($identificator->getClass(), '\\') === ltrim($this->modelClass, '\\')) {
             return $this->findModelById($identificator->getId());
         }
     }
