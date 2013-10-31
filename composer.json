@@ -2,7 +2,18 @@
     "name": "payum/payum-bundle",
     "type": "symfony-bundle",
     "description": "The payment bundle integrates payum libs into symfony2 framework",
-    "keywords": ["payment", "paypal", "be2bill", "authorize.net", "omnipay", "paypal express checkout", "paypal pro checkout", "paypal recurring payment", "payex"],
+    "keywords": [
+        "payment",
+        "paypal",
+        "be2bill",
+        "authorize.net",
+        "omnipay",
+        "paypal express checkout",
+        "paypal pro checkout",
+        "recurring payment",
+        "payex",
+        "offline"
+    ],
     "homepage": "http://payum.forma-dev.com",
     "license": "MIT",
     "authors": [
@@ -33,7 +44,8 @@
         "payum/be2bill": "0.7.x-dev",
         "payum/payex": "0.7.x-dev",
         "payum/authorize-net-aim": "0.7.x-dev",
-        "payum/omnipay-bridge": "0.7.x-dev"
+        "payum/omnipay-bridge": "0.7.x-dev",
+        "payum/offline": "0.7.x-dev"
     },
     "suggest": {
         "payum/paypal-express-checkout-nvp": "If you want to use paypal express checkout nvp gateway",
@@ -41,7 +53,8 @@
         "payum/authorize-net-aim": "If you want to use authorize.net gateway",
         "payum/be2bill": "If you want to use be2bill gateway",
         "payum/payex": "If you want to use payex gateway",
-        "payum/omnipay-bridge": "If you want to use omnipay provided gateways"
+        "payum/omnipay-bridge": "If you want to use omnipay provided gateways",
+        "payum/offline": "If you want to manage offline payments"
     },
     "autoload": {
         "psr-0": { "Payum\\Bundle\\PayumBundle": "" }

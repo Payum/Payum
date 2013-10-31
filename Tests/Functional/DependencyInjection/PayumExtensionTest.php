@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Tests\Functional\DependencyInjection;
 
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OfflinePaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\FilesystemStorageFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -177,6 +178,46 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
             'addApi',
             new Reference('payum.context.a_context.api')
         );
+    }
+
+        /**
+     * @test
+     */
+    public function shouldLoadExtensionWithOfflineConfiguredPayment()
+    {
+        if (false == class_exists('Payum\Offline\PaymentFactory')) {
+            $this->markTestSkipped('Skipped because payment library is not installed.');
+        }
+
+        $config = array(
+            'security' => array(
+                'token_storage' => array(
+                    'Payum\Model\Token' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
+            'contexts' => array(
+                'a_context' => array(
+                    'offline' => true
+                )
+            )
+        );
+
+        $configs = array($config);
+
+        $containerBuilder = new ContainerBuilder(new ParameterBag);
+
+        $extension = new PayumExtension;
+        $extension->addPaymentFactory(new OfflinePaymentFactory);
+        $extension->addStorageFactory(new FilesystemStorageFactory);
+
+        $extension->load($configs, $containerBuilder);
+
+        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
     }
 
     /**
