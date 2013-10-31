@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.3 (2013-10-27)
+
+* [composer] lower required php version from 5.3.9 to 5.3.3
+
 ## 0.6.2 (2013-10-27)
 
 * [doctrine] add functional tests for doctrine storage and mongo manager
