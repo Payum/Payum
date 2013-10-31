@@ -175,7 +175,8 @@ class MainConfiguration implements ConfigurationInterface
                         ));
                     }
 
-                    if (false == is_a($key, 'Payum\Security\TokenInterface', true)) {
+                    $rc = new \ReflectionClass($key);
+                    if (false == $rc->isSubclassOf('Payum\Security\TokenInterface')) {
                         throw new LogicException('The token class must implement `Payum\Security\TokenInterface` interface');
                     }
 
