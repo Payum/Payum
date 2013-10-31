@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.1 (2013-10-31)
+
+* [payment-factory] added support of offline payments.
+
 ## 0.6.0 (2013-10-25)
 
 * security reworked. added HttpRequestVerifier and TokenFactory
