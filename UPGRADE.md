@@ -1,3 +1,11 @@
+0.6 to 0.7
+==========
+
+* [Doctrine] `Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity\PaymentDetails` is deprecated. Use `Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails` model.
+* [Doctrine] `Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity\RecurringPaymentDetails` is deprecated. Use `Payum\Paypal\ExpressCheckout\Nvp\Model\RecurringPaymentDetails` model.
+* [Doctrine] `Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Document\PaymentDetails` is deprecated. Use `Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails` model.
+* [Doctrine] `Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Document\RecurringPaymentDetails` is deprecated. Use `Payum\Paypal\ExpressCheckout\Nvp\Model\RecurringPaymentDetails` model.
+
 0.4 to 0.5
 ==========
 
