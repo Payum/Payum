@@ -5,6 +5,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Model\RecurringPaymentDetails as BaseRecurringPaymentDetails;
 
+/**
+ * @deprecated since 0.6.1 will be removed in 0.7
+ */
 class RecurringPaymentDetails extends BaseRecurringPaymentDetails
 {
     /**
