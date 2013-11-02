@@ -3,7 +3,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Examples\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity\PaymentDetails as BasePaymentDetails;
+use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails as BasePaymentDetails;
 
 /**
  * @ORM\Entity
@@ -17,5 +17,10 @@ class PaymentDetails extends BasePaymentDetails
      *
      * @var integer $id
      */
-    protected $id; 
+    protected $id;
+
+    public function getId()
+    {
+        return $this->id;
+    }
 }

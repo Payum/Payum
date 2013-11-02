@@ -3,7 +3,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Examples\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity\RecurringPaymentDetails as BaseRecurringPaymentDetails;
+use Payum\Paypal\ExpressCheckout\Nvp\Model\RecurringPaymentDetails as BaseRecurringPaymentDetails;
 
 /**
  * @ORM\Entity
@@ -18,4 +18,9 @@ class RecurringPaymentDetails extends BaseRecurringPaymentDetails
      * @var integer $id
      */
     protected $id;
+
+    public function getId()
+    {
+        return $this->id;
+    }
 }
