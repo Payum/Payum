@@ -7,107 +7,14 @@ use Payum\Exception\LogicException;
 abstract class BaseModel implements \ArrayAccess, \IteratorAggregate
 {
     /**
-     * @return array 
+     * @var array
      */
-    abstract protected function getSupportedToNvpProperties();
-    
-    /**
-     * @deprecated since 0.3 move the logic to offsetSet
-     *
-     * @param $nvp array|\Traversable
-     */
-    protected function fromNvp($nvp)
-    {
-        if (false == (is_array($nvp) || $nvp instanceof \Traversable)) {
-            throw new InvalidArgumentException('Invalid nvp argument. Should be an array of an object implemented \Traversable interface.');
-        }
-        
-        $supportedFields = $this->getSupportedToNvpProperties();
-
-        foreach ($nvp as $name => $value) {
-            $property = $name;
-            $property = strtolower($property);
-
-            if ('shiptostreet2' === $property && in_array($property, $supportedFields)) {
-                $this->$property = $value;
-                
-                continue;
-            }
-
-            if ('cvv2' === $property && in_array($property, $supportedFields)) {
-                $this->$property = $value;
-
-                continue;
-            }
-
-            if ('street2' === $property && in_array($property, $supportedFields)) {
-                $this->$property = $value;
-
-                continue;
-            }
-            
-            $property = preg_replace('/\d/', 'nnn', $property, 1);
-            
-            
-
-            if (false === strpos($name, 'SHIPTOSTREET2')) {
-                $property = preg_replace('/\d/', 'mmm', $property, 1);
-            }
-
-            $property = strtolower($property);
-
-            if (false == in_array($property, $supportedFields)) {
-                continue;
-            }
-
-            $matches = array();
-            preg_match_all('/\d/', $name, $matches);
-            if (array_key_exists(0, $matches) && array_key_exists(0, $matches[0])) {
-                if (array_key_exists(1, $matches[0]) && false === strpos($name, 'SHIPTOSTREET2')) {
-                    $this->set($property, $value, $matches[0][1], $matches[0][1]);
-                } else {
-                    $this->set($property, $value, $matches[0][0]);
-                }
-            } else {
-                $this->$property = $value;
-            }
-        }
-    }
+    protected $others = array();
 
     /**
-     * @deprecated since 0.3 move the logic to offsetGet
-     *
      * @return array
      */
-    protected function toNvp()
-    {
-        $nvp = array();
-        foreach ($this->getSupportedToNvpProperties() as $property) {
-            $value = $this->$property;
-            $name = strtoupper($property);
-
-            if (is_array($value)) {
-                foreach ($value as $indexN => $valueN) {
-                    //This fixes L_BILLINGAGREEMENTDESCRIPTIONNNN
-                    $nameN = strrev(str_replace('NNN', $indexN, strrev($name)));
-                    if (is_array($valueN)) {
-                        foreach ($valueN as $indexM => $valueM) {
-                            $nameM = str_replace('MMM', $indexM, $nameN);
-                            $nvp[$nameM] = $valueM;
-                        }
-                    } else {
-                        $nvp[$nameN] = $valueN;
-                    }
-                }
-            } else {
-                $nvp[$name] = $value;
-            }
-        }
-
-        return array_filter($nvp, function($value) {
-            return false === is_null($value);
-        });
-    }
+    abstract protected function getSupportedToNvpProperties();
 
     /**
      * @param string $property
@@ -162,7 +69,34 @@ abstract class BaseModel implements \ArrayAccess, \IteratorAggregate
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->toNvp());
+        $nvp = array();
+        foreach ($this->getSupportedToNvpProperties() as $property) {
+            $value = $this->$property;
+            $name = strtoupper($property);
+
+            if (is_array($value)) {
+                foreach ($value as $indexN => $valueN) {
+                    //This fixes L_BILLINGAGREEMENTDESCRIPTIONNNN
+                    $nameN = strrev(str_replace('NNN', $indexN, strrev($name)));
+                    if (is_array($valueN)) {
+                        foreach ($valueN as $indexM => $valueM) {
+                            $nameM = str_replace('MMM', $indexM, $nameN);
+                            $nvp[$nameM] = $valueM;
+                        }
+                    } else {
+                        $nvp[$nameN] = $valueN;
+                    }
+                }
+            } else {
+                $nvp[$name] = $value;
+            }
+        }
+
+        $nvp = array_replace($this->others, $nvp);
+
+        return new \ArrayIterator(array_filter($nvp, function($value) {
+            return false === is_null($value);
+        }));
     }
 
     /**
@@ -170,7 +104,7 @@ abstract class BaseModel implements \ArrayAccess, \IteratorAggregate
      */
     public function offsetExists($offset)
     {
-        return array_key_exists($offset, $this->toNvp());
+        return array_key_exists($offset, iterator_to_array($this->getIterator()));
     }
 
     /**
@@ -178,7 +112,7 @@ abstract class BaseModel implements \ArrayAccess, \IteratorAggregate
      */
     public function offsetGet($offset)
     {
-        $nvp = $this->toNvp();
+        $nvp = iterator_to_array($this->getIterator());
 
         return array_key_exists($offset, $nvp) ?
             $nvp[$offset] :
@@ -191,7 +125,50 @@ abstract class BaseModel implements \ArrayAccess, \IteratorAggregate
      */
     public function offsetSet($offset, $value)
     {
-        $this->fromNvp(array($offset => $value));
+        $supportedFields = $this->getSupportedToNvpProperties();
+
+        $property = $offset;
+        $property = strtolower($property);
+
+        if ('shiptostreet2' === $property && in_array($property, $supportedFields)) {
+            $this->$property = $value;
+
+            return;
+        }
+
+        if ('cvv2' === $property && in_array($property, $supportedFields)) {
+            $this->$property = $value;
+
+            return;
+        }
+
+        if ('street2' === $property && in_array($property, $supportedFields)) {
+            $this->$property = $value;
+
+            return;
+        }
+
+        $property = preg_replace('/\d/', 'nnn', $property, 1);
+
+        if (false === strpos($offset, 'SHIPTOSTREET2')) {
+            $property = preg_replace('/\d/', 'mmm', $property, 1);
+        }
+
+        $property = strtolower($property);
+
+        $matches = array();
+        preg_match_all('/\d/', $offset, $matches);
+        if (array_key_exists(0, $matches) && array_key_exists(0, $matches[0])) {
+            if (array_key_exists(1, $matches[0]) && false === strpos($offset, 'SHIPTOSTREET2')) {
+                $this->set($property, $value, $matches[0][1], $matches[0][1]);
+            } else {
+                $this->set($property, $value, $matches[0][0]);
+            }
+        } else if (property_exists(get_class($this), $property)) {
+            $this->$property = $value;
+        } else {
+            $this->others[$offset] = $value;
+        }
     }
 
     /**
@@ -199,6 +176,6 @@ abstract class BaseModel implements \ArrayAccess, \IteratorAggregate
      */
     public function offsetUnset($offset)
     {
-        throw new LogicException('Not implemented');
+        $this->offsetSet($offset, null);
     }
 }

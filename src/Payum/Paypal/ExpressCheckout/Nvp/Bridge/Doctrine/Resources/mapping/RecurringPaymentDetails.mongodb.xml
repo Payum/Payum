@@ -36,5 +36,7 @@
 
         <field name="l_severitycodes" fieldName="l_severitycodennn" type="hash"  />
 
+        <field name="others" fieldName="others" type="hash" />
+
     </mapped-superclass>
 </doctrine-mongo-mapping>

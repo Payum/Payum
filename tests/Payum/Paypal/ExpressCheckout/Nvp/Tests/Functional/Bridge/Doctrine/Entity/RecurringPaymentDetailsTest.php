@@ -64,4 +64,25 @@ class RecurringPaymentDetailsTest extends OrmTest
         $this->assertEquals($expectedAmount, $foundInstruction->getAmt());
         $this->assertEquals($expectedDescription, $foundInstruction->getDesc());
     }
+
+    /**
+     * @test
+     */
+    public function shouldSaveOthersField()
+    {
+        $recurringPaymentDetails = new RecurringPaymentDetails;
+        $recurringPaymentDetails->setToken('aToken');
+        $recurringPaymentDetails->setAmt(10);
+        $recurringPaymentDetails->setDesc('aDesc');
+        $recurringPaymentDetails->setProfileid(123);
+        $recurringPaymentDetails['foo'] = $expect = 'theFoo';
+
+        $this->em->persist($recurringPaymentDetails);
+        $this->em->flush();
+        $this->em->clear();
+
+        $foundDetails = $this->em->find(get_class($recurringPaymentDetails), $recurringPaymentDetails->getId());
+
+        $this->assertEquals($expect, $foundDetails['foo']);
+    }
 }

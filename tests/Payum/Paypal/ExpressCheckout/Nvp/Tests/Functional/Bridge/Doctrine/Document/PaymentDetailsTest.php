@@ -48,4 +48,21 @@ class PaymentDetailsTest extends MongoTest
         $this->assertEquals($expectedAmount, $foundInstruction->getPaymentrequestAmt(0));
         $this->assertEquals($expectedAction, $foundInstruction->getPaymentrequestPaymentaction(0));
     }
+
+    /**
+     * @test
+     */
+    public function shouldSaveOthersField()
+    {
+        $paymentDetails = new PaymentDetails;
+        $paymentDetails['foo'] = $expect = 'theFoo';
+
+        $this->dm->persist($paymentDetails);
+        $this->dm->flush();
+        $this->dm->clear();
+
+        $foundDetails = $this->dm->find(get_class($paymentDetails), $paymentDetails->getId());
+
+        $this->assertEquals($expect, $foundDetails['foo']);
+    }
 }

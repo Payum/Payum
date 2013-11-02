@@ -136,9 +136,9 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetStringValue($getter, $setter, $value, $paypalName)
     {
-        $instruction = new RecurringPaymentDetails();
+        $details = new RecurringPaymentDetails();
 
-        $instruction->$setter($value);
+        $details->$setter($value);
     }
 
     /**
@@ -148,11 +148,11 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetStringValue($getter, $setter, $value, $paypalName)
     {
-        $instruction = new RecurringPaymentDetails();
+        $details = new RecurringPaymentDetails();
 
-        $instruction->$setter($value);
+        $details->$setter($value);
 
-        $this->assertEquals($value, $instruction->$getter());
+        $this->assertEquals($value, $details->$getter());
     }
 
     /**
@@ -162,11 +162,11 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetStringValueInArrayWay($getter, $setter, $value, $paypalName)
     {
-        $instruction = new RecurringPaymentDetails();
+        $details = new RecurringPaymentDetails();
 
-        $instruction[$paypalName] = $value;
+        $details[$paypalName] = $value;
 
-        $this->assertEquals($value, $instruction->$getter());
+        $this->assertEquals($value, $details->$getter());
     }
 
     /**
@@ -176,12 +176,12 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetStringValueInArrayWay($getter, $setter, $value, $paypalName)
     {
-        $instruction = new RecurringPaymentDetails();
+        $details = new RecurringPaymentDetails();
 
-        $instruction->$setter($value);
+        $details->$setter($value);
 
-        $this->assertTrue(isset($instruction[$paypalName]));
-        $this->assertEquals($value, $instruction[$paypalName]);
+        $this->assertTrue(isset($details[$paypalName]));
+        $this->assertEquals($value, $details[$paypalName]);
     }
 
     /**
@@ -191,12 +191,12 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetAndGetStringValueInArrayWay($getter, $setter, $value, $paypalName)
     {
-        $instruction = new RecurringPaymentDetails();
+        $details = new RecurringPaymentDetails();
 
-        $instruction[$paypalName] = $value;
+        $details[$paypalName] = $value;
 
-        $this->assertTrue(isset($instruction[$paypalName]));
-        $this->assertEquals($value, $instruction[$paypalName]);
+        $this->assertTrue(isset($details[$paypalName]));
+        $this->assertEquals($value, $details[$paypalName]);
     }
 
     /**
@@ -208,10 +208,10 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new RecurringPaymentDetails();
+        $details = new RecurringPaymentDetails();
 
-        $instruction->$setter(0, $value);
-        $instruction->$setter(9, $value);
+        $details->$setter(0, $value);
+        $details->$setter(9, $value);
     }
 
     /**
@@ -223,13 +223,13 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new RecurringPaymentDetails();
+        $details = new RecurringPaymentDetails();
 
-        $instruction->$setter(0, $value);
-        $instruction->$setter(9, $value);
+        $details->$setter(0, $value);
+        $details->$setter(9, $value);
 
-        $this->assertEquals($value, $instruction->$getter(0));
-        $this->assertEquals($value, $instruction->$getter(9));
+        $this->assertEquals($value, $details->$getter(0));
+        $this->assertEquals($value, $details->$getter(9));
     }
 
     /**
@@ -239,10 +239,10 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldGetNullIfNotSetArrayValue($getter, $setter, $paypalName0, $paypalName9)
     {
-        $instruction = new RecurringPaymentDetails();
+        $details = new RecurringPaymentDetails();
 
-        $this->assertNull($instruction->$getter(0));
-        $this->assertNull($instruction->$getter(9));
+        $this->assertNull($details->$getter(0));
+        $this->assertNull($details->$getter(9));
     }
 
     /**
@@ -258,12 +258,12 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
             9 => $value
         );
 
-        $instruction = new RecurringPaymentDetails();
+        $details = new RecurringPaymentDetails();
 
-        $instruction->$setter(0, $value);
-        $instruction->$setter(9, $value);
+        $details->$setter(0, $value);
+        $details->$setter(9, $value);
 
-        $this->assertEquals($expectedResult, $instruction->$getter());
+        $this->assertEquals($expectedResult, $details->$getter());
     }
 
     /**
@@ -275,13 +275,13 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new RecurringPaymentDetails();
+        $details = new RecurringPaymentDetails();
 
-        $instruction[$paypalName0] = $value;
-        $instruction[$paypalName9] = $value;
+        $details[$paypalName0] = $value;
+        $details[$paypalName9] = $value;
 
-        $this->assertEquals($value, $instruction->$getter(0));
-        $this->assertEquals($value, $instruction->$getter(9));
+        $this->assertEquals($value, $details->$getter(0));
+        $this->assertEquals($value, $details->$getter(9));
     }
 
     /**
@@ -293,16 +293,16 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new RecurringPaymentDetails();
+        $details = new RecurringPaymentDetails();
 
-        $instruction->$setter(0, $value);
-        $instruction->$setter(9, $value);
+        $details->$setter(0, $value);
+        $details->$setter(9, $value);
 
-        $this->assertTrue(isset($instruction[$paypalName0]));
-        $this->assertEquals($value, $instruction[$paypalName0]);
+        $this->assertTrue(isset($details[$paypalName0]));
+        $this->assertEquals($value, $details[$paypalName0]);
 
-        $this->assertTrue(isset($instruction[$paypalName9]));
-        $this->assertEquals($value, $instruction[$paypalName9]);
+        $this->assertTrue(isset($details[$paypalName9]));
+        $this->assertEquals($value, $details[$paypalName9]);
     }
 
     /**
@@ -314,16 +314,16 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new RecurringPaymentDetails();
+        $details = new RecurringPaymentDetails();
 
-        $instruction[$paypalName0] = $value;
-        $instruction[$paypalName9] = $value;
+        $details[$paypalName0] = $value;
+        $details[$paypalName9] = $value;
 
-        $this->assertTrue(isset($instruction[$paypalName0]));
-        $this->assertEquals($value, $instruction[$paypalName0]);
+        $this->assertTrue(isset($details[$paypalName0]));
+        $this->assertEquals($value, $details[$paypalName0]);
 
-        $this->assertTrue(isset($instruction[$paypalName9]));
-        $this->assertEquals($value, $instruction[$paypalName9]);
+        $this->assertTrue(isset($details[$paypalName9]));
+        $this->assertEquals($value, $details[$paypalName9]);
     }
 
     /**
@@ -335,10 +335,10 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new RecurringPaymentDetails();
+        $details = new RecurringPaymentDetails();
 
-        $instruction->$setter(0, 0, $value);
-        $instruction->$setter(9, 9, $value);
+        $details->$setter(0, 0, $value);
+        $details->$setter(9, 9, $value);
     }
 
     /**
@@ -350,13 +350,13 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new RecurringPaymentDetails();
+        $details = new RecurringPaymentDetails();
 
-        $instruction->$setter(0, 0, $value);
-        $instruction->$setter(9, 9, $value);
+        $details->$setter(0, 0, $value);
+        $details->$setter(9, 9, $value);
 
-        $this->assertEquals($value, $instruction->$getter(0, 0));
-        $this->assertEquals($value, $instruction->$getter(9, 9));
+        $this->assertEquals($value, $details->$getter(0, 0));
+        $this->assertEquals($value, $details->$getter(9, 9));
     }
 
     /**
@@ -366,10 +366,10 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldGetNullIfNotSetMultiArrayValue($getter, $setter, $paypalName0, $paypalName9)
     {
-        $instruction = new RecurringPaymentDetails();
+        $details = new RecurringPaymentDetails();
 
-        $this->assertNull($instruction->$getter(0, 0));
-        $this->assertNull($instruction->$getter(9, 9));
+        $this->assertNull($details->$getter(0, 0));
+        $this->assertNull($details->$getter(9, 9));
     }
 
     /**
@@ -381,13 +381,13 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new RecurringPaymentDetails();
+        $details = new RecurringPaymentDetails();
 
-        $instruction[$paypalName0] = $value;
-        $instruction[$paypalName9] = $value;
+        $details[$paypalName0] = $value;
+        $details[$paypalName9] = $value;
 
-        $this->assertEquals($value, $instruction->$getter(0, 0));
-        $this->assertEquals($value, $instruction->$getter(9, 9));
+        $this->assertEquals($value, $details->$getter(0, 0));
+        $this->assertEquals($value, $details->$getter(9, 9));
     }
 
 
@@ -400,16 +400,16 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new RecurringPaymentDetails();
+        $details = new RecurringPaymentDetails();
 
-        $instruction->$setter(0, 0, $value);
-        $instruction->$setter(9, 9, $value);
+        $details->$setter(0, 0, $value);
+        $details->$setter(9, 9, $value);
 
-        $this->assertTrue(isset($instruction[$paypalName0]));
-        $this->assertEquals($value, $instruction[$paypalName0]);
+        $this->assertTrue(isset($details[$paypalName0]));
+        $this->assertEquals($value, $details[$paypalName0]);
 
-        $this->assertTrue(isset($instruction[$paypalName9]));
-        $this->assertEquals($value, $instruction[$paypalName9]);
+        $this->assertTrue(isset($details[$paypalName9]));
+        $this->assertEquals($value, $details[$paypalName9]);
     }
 
     /**
@@ -421,15 +421,34 @@ class RecurringPaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new RecurringPaymentDetails();
+        $details = new RecurringPaymentDetails();
 
-        $instruction[$paypalName0] = $value;
-        $instruction[$paypalName9] = $value;
+        $details[$paypalName0] = $value;
+        $details[$paypalName9] = $value;
 
-        $this->assertTrue(isset($instruction[$paypalName0]));
-        $this->assertEquals($value, $instruction[$paypalName0]);
+        $this->assertTrue(isset($details[$paypalName0]));
+        $this->assertEquals($value, $details[$paypalName0]);
 
-        $this->assertTrue(isset($instruction[$paypalName9]));
-        $this->assertEquals($value, $instruction[$paypalName9]);
+        $this->assertTrue(isset($details[$paypalName9]));
+        $this->assertEquals($value, $details[$paypalName9]);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowSetCustomValue()
+    {
+        $value = 'theValue';
+
+        $details = new RecurringPaymentDetails();
+        $details['foo'] = $value;
+
+        $this->assertTrue(isset($details['foo']));
+        $this->assertEquals($value, $details['foo']);
+
+        unset($details['foo']);
+
+        $this->assertFalse(isset($details['foo']));
+        $this->assertNull($details['foo']);
     }
 }
