@@ -25,9 +25,9 @@ abstract class OrmTest extends BaseOrmTest
         $driver = new MappingDriverChain;
         
         $xmlDriver = new SimplifiedXmlDriver(array(
-            $rootDir.'/src/Payum/Paypal/ExpressCheckout/Nvp/Bridge/Doctrine/Resources/mapping' => 'Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity'
+            $rootDir.'/src/Payum/Paypal/ExpressCheckout/Nvp/Bridge/Doctrine/Resources/mapping' => 'Payum\Paypal\ExpressCheckout\Nvp\Model'
         ));        
-        $driver->addDriver($xmlDriver, 'Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity');
+        $driver->addDriver($xmlDriver, 'Payum\Paypal\ExpressCheckout\Nvp\Model');
 
         $rc = new \ReflectionClass('\Doctrine\ORM\Mapping\Driver\AnnotationDriver');
         AnnotationRegistry::registerFile(dirname($rc->getFileName()) . '/DoctrineAnnotations.php');

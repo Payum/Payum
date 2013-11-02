@@ -4,7 +4,7 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <mapped-superclass name="Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Document\PaymentDetails">
+    <mapped-superclass name="Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails">
 
         <field name="token" fieldName="token" type="string" />
 
