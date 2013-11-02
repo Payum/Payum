@@ -4,7 +4,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                   http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
         >
-    <mapped-superclass name="Payum\Be2Bill\Bridge\Doctrine\Entity\PaymentDetails">
+    <mapped-superclass name="Payum\Be2Bill\Model\PaymentDetails">
 
         <field name="operationtype" column="operationtype" type="string" length="255" nullable="true" />
 
