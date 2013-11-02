@@ -14,4 +14,6 @@ EOM;
     exit(1);
 }
 
+$loader->add('Payum\Be2Bill\Examples', __DIR__.'/../examples');
 $loader->add('Payum\Be2Bill\Tests', __DIR__);
+$loader->add('Payum\Tests', __DIR__.'/../vendor/payum/payum/tests');
