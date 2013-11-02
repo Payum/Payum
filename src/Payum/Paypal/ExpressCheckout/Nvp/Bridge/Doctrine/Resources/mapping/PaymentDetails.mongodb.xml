@@ -39,5 +39,7 @@
         <field name="returnurl" fieldName="returnurl" type="string" />
 
         <field name="cancelurl" fieldName="cancelurl" type="string" />
+
+        <field name="others" fieldName="others" type="hash" />
     </mapped-superclass>
 </doctrine-mongo-mapping>

@@ -129,9 +129,9 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetStringValue($getter, $setter, $value, $paypalName)
     {
-        $instruction = new PaymentDetails();
+        $details = new PaymentDetails();
 
-        $instruction->$setter($value);
+        $details->$setter($value);
     }
 
     /**
@@ -141,11 +141,11 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetStringValue($getter, $setter, $value, $paypalName)
     {
-        $instruction = new PaymentDetails();
+        $details = new PaymentDetails();
 
-        $instruction->$setter($value);
+        $details->$setter($value);
 
-        $this->assertEquals($value, $instruction->$getter());
+        $this->assertEquals($value, $details->$getter());
     }
 
     /**
@@ -155,11 +155,11 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetStringValueInArrayWay($getter, $setter, $value, $paypalName)
     {
-        $instruction = new PaymentDetails();
+        $details = new PaymentDetails();
 
-        $instruction[$paypalName] = $value;
+        $details[$paypalName] = $value;
 
-        $this->assertEquals($value, $instruction->$getter());
+        $this->assertEquals($value, $details->$getter());
     }
 
     /**
@@ -169,12 +169,12 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetStringValueInArrayWay($getter, $setter, $value, $paypalName)
     {
-        $instruction = new PaymentDetails();
+        $details = new PaymentDetails();
 
-        $instruction->$setter($value);
+        $details->$setter($value);
 
-        $this->assertTrue(isset($instruction[$paypalName]));
-        $this->assertEquals($value, $instruction[$paypalName]);
+        $this->assertTrue(isset($details[$paypalName]));
+        $this->assertEquals($value, $details[$paypalName]);
     }
 
     /**
@@ -184,12 +184,12 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetAndGetStringValueInArrayWay($getter, $setter, $value, $paypalName)
     {
-        $instruction = new PaymentDetails();
+        $details = new PaymentDetails();
 
-        $instruction[$paypalName] = $value;
+        $details[$paypalName] = $value;
 
-        $this->assertTrue(isset($instruction[$paypalName]));
-        $this->assertEquals($value, $instruction[$paypalName]);
+        $this->assertTrue(isset($details[$paypalName]));
+        $this->assertEquals($value, $details[$paypalName]);
     }
 
     /**
@@ -201,10 +201,10 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new PaymentDetails();
+        $details = new PaymentDetails();
 
-        $instruction->$setter(0, $value);
-        $instruction->$setter(9, $value);
+        $details->$setter(0, $value);
+        $details->$setter(9, $value);
     }
 
     /**
@@ -216,13 +216,13 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new PaymentDetails();
+        $details = new PaymentDetails();
 
-        $instruction->$setter(0, $value);
-        $instruction->$setter(9, $value);
+        $details->$setter(0, $value);
+        $details->$setter(9, $value);
 
-        $this->assertEquals($value, $instruction->$getter(0));
-        $this->assertEquals($value, $instruction->$getter(9));
+        $this->assertEquals($value, $details->$getter(0));
+        $this->assertEquals($value, $details->$getter(9));
     }
 
     /**
@@ -232,10 +232,10 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldGetNullIfNotSetArrayValue($getter, $setter, $paypalName0, $paypalName9)
     {
-        $instruction = new PaymentDetails();
+        $details = new PaymentDetails();
 
-        $this->assertNull($instruction->$getter(0));
-        $this->assertNull($instruction->$getter(9));
+        $this->assertNull($details->$getter(0));
+        $this->assertNull($details->$getter(9));
     }
 
     /**
@@ -251,12 +251,12 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
             9 => $value
         );
 
-        $instruction = new PaymentDetails();
+        $details = new PaymentDetails();
 
-        $instruction->$setter(0, $value);
-        $instruction->$setter(9, $value);
+        $details->$setter(0, $value);
+        $details->$setter(9, $value);
 
-        $this->assertEquals($expectedResult, $instruction->$getter());
+        $this->assertEquals($expectedResult, $details->$getter());
     }
 
     /**
@@ -268,13 +268,13 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new PaymentDetails();
+        $details = new PaymentDetails();
 
-        $instruction[$paypalName0] = $value;
-        $instruction[$paypalName9] = $value;
+        $details[$paypalName0] = $value;
+        $details[$paypalName9] = $value;
 
-        $this->assertEquals($value, $instruction->$getter(0));
-        $this->assertEquals($value, $instruction->$getter(9));
+        $this->assertEquals($value, $details->$getter(0));
+        $this->assertEquals($value, $details->$getter(9));
     }
 
     /**
@@ -286,16 +286,16 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new PaymentDetails();
+        $details = new PaymentDetails();
 
-        $instruction->$setter(0, $value);
-        $instruction->$setter(9, $value);
+        $details->$setter(0, $value);
+        $details->$setter(9, $value);
 
-        $this->assertTrue(isset($instruction[$paypalName0]));
-        $this->assertEquals($value, $instruction[$paypalName0]);
+        $this->assertTrue(isset($details[$paypalName0]));
+        $this->assertEquals($value, $details[$paypalName0]);
 
-        $this->assertTrue(isset($instruction[$paypalName9]));
-        $this->assertEquals($value, $instruction[$paypalName9]);
+        $this->assertTrue(isset($details[$paypalName9]));
+        $this->assertEquals($value, $details[$paypalName9]);
     }
 
     /**
@@ -307,16 +307,16 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new PaymentDetails();
+        $details = new PaymentDetails();
 
-        $instruction[$paypalName0] = $value;
-        $instruction[$paypalName9] = $value;
+        $details[$paypalName0] = $value;
+        $details[$paypalName9] = $value;
 
-        $this->assertTrue(isset($instruction[$paypalName0]));
-        $this->assertEquals($value, $instruction[$paypalName0]);
+        $this->assertTrue(isset($details[$paypalName0]));
+        $this->assertEquals($value, $details[$paypalName0]);
 
-        $this->assertTrue(isset($instruction[$paypalName9]));
-        $this->assertEquals($value, $instruction[$paypalName9]);
+        $this->assertTrue(isset($details[$paypalName9]));
+        $this->assertEquals($value, $details[$paypalName9]);
     }
 
     /**
@@ -328,10 +328,10 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new PaymentDetails();
+        $details = new PaymentDetails();
 
-        $instruction->$setter(0, 0, $value);
-        $instruction->$setter(9, 9, $value);
+        $details->$setter(0, 0, $value);
+        $details->$setter(9, 9, $value);
     }
 
     /**
@@ -343,13 +343,13 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new PaymentDetails();
+        $details = new PaymentDetails();
 
-        $instruction->$setter(0, 0, $value);
-        $instruction->$setter(9, 9, $value);
+        $details->$setter(0, 0, $value);
+        $details->$setter(9, 9, $value);
 
-        $this->assertEquals($value, $instruction->$getter(0, 0));
-        $this->assertEquals($value, $instruction->$getter(9, 9));
+        $this->assertEquals($value, $details->$getter(0, 0));
+        $this->assertEquals($value, $details->$getter(9, 9));
     }
 
     /**
@@ -359,10 +359,10 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldGetNullIfNotSetMultiArrayValue($getter, $setter, $paypalName0, $paypalName9)
     {
-        $instruction = new PaymentDetails();
+        $details = new PaymentDetails();
 
-        $this->assertNull($instruction->$getter(0, 0));
-        $this->assertNull($instruction->$getter(9, 9));
+        $this->assertNull($details->$getter(0, 0));
+        $this->assertNull($details->$getter(9, 9));
     }
 
     /**
@@ -374,13 +374,13 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new PaymentDetails();
+        $details = new PaymentDetails();
 
-        $instruction[$paypalName0] = $value;
-        $instruction[$paypalName9] = $value;
+        $details[$paypalName0] = $value;
+        $details[$paypalName9] = $value;
 
-        $this->assertEquals($value, $instruction->$getter(0, 0));
-        $this->assertEquals($value, $instruction->$getter(9, 9));
+        $this->assertEquals($value, $details->$getter(0, 0));
+        $this->assertEquals($value, $details->$getter(9, 9));
     }
 
     /**
@@ -390,19 +390,18 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 0;
 
-        $instruction = new PaymentDetails;
+        $details = new PaymentDetails;
 
-        $instruction['PAYMENTREQUEST_0_AMT'] = $value;
+        $details['PAYMENTREQUEST_0_AMT'] = $value;
 
-        $this->assertEquals($value, $instruction->getPaymentrequestAmt(0));
-        $this->assertEquals($value, $instruction['PAYMENTREQUEST_0_AMT']);
+        $this->assertEquals($value, $details->getPaymentrequestAmt(0));
+        $this->assertEquals($value, $details['PAYMENTREQUEST_0_AMT']);
         
-        $instructionAsArray = iterator_to_array($instruction);
+        $detailsAsArray = iterator_to_array($details);
         
-        $this->assertArrayHasKey('PAYMENTREQUEST_0_AMT', $instructionAsArray);
-        $this->assertEquals($value, $instructionAsArray['PAYMENTREQUEST_0_AMT']);
+        $this->assertArrayHasKey('PAYMENTREQUEST_0_AMT', $detailsAsArray);
+        $this->assertEquals($value, $detailsAsArray['PAYMENTREQUEST_0_AMT']);
     }
-
 
     /**
      * @test
@@ -413,16 +412,16 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new PaymentDetails();
+        $details = new PaymentDetails();
 
-        $instruction->$setter(0, 0, $value);
-        $instruction->$setter(9, 9, $value);
+        $details->$setter(0, 0, $value);
+        $details->$setter(9, 9, $value);
 
-        $this->assertTrue(isset($instruction[$paypalName0]));
-        $this->assertEquals($value, $instruction[$paypalName0]);
+        $this->assertTrue(isset($details[$paypalName0]));
+        $this->assertEquals($value, $details[$paypalName0]);
 
-        $this->assertTrue(isset($instruction[$paypalName9]));
-        $this->assertEquals($value, $instruction[$paypalName9]);
+        $this->assertTrue(isset($details[$paypalName9]));
+        $this->assertEquals($value, $details[$paypalName9]);
     }
 
     /**
@@ -434,15 +433,34 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'theValue';
 
-        $instruction = new PaymentDetails();
+        $details = new PaymentDetails();
 
-        $instruction[$paypalName0] = $value;
-        $instruction[$paypalName9] = $value;
+        $details[$paypalName0] = $value;
+        $details[$paypalName9] = $value;
 
-        $this->assertTrue(isset($instruction[$paypalName0]));
-        $this->assertEquals($value, $instruction[$paypalName0]);
+        $this->assertTrue(isset($details[$paypalName0]));
+        $this->assertEquals($value, $details[$paypalName0]);
 
-        $this->assertTrue(isset($instruction[$paypalName9]));
-        $this->assertEquals($value, $instruction[$paypalName9]);
+        $this->assertTrue(isset($details[$paypalName9]));
+        $this->assertEquals($value, $details[$paypalName9]);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowSetCustomValue()
+    {
+        $value = 'theValue';
+
+        $details = new PaymentDetails();
+        $details['foo'] = $value;
+
+        $this->assertTrue(isset($details['foo']));
+        $this->assertEquals($value, $details['foo']);
+
+        unset($details['foo']);
+
+        $this->assertFalse(isset($details['foo']));
+        $this->assertNull($details['foo']);
     }
 }

@@ -60,4 +60,21 @@ class PaymentDetailsTest extends OrmTest
         $this->assertEquals($expectedAmount, $foundInstruction->getPaymentrequestAmt(0));
         $this->assertEquals($expectedAction, $foundInstruction->getPaymentrequestPaymentaction(0));
     }
+
+    /**
+     * @test
+     */
+    public function shouldSaveOthersField()
+    {
+        $paymentDetails = new PaymentDetails;
+        $paymentDetails['foo'] = $expect = 'theFoo';
+
+        $this->em->persist($paymentDetails);
+        $this->em->flush();
+        $this->em->clear();
+
+        $foundDetails = $this->em->find(get_class($paymentDetails), $paymentDetails->getId());
+
+        $this->assertEquals($expect, $foundDetails['foo']);
+    }
 }

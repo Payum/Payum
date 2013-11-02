@@ -36,5 +36,7 @@
 
         <field name="l_severitycodennn" column="l_severitycodes" type="array" nullable="true" />
 
+        <field name="others" column="others" type="json_array" nullable="false" />
+
     </mapped-superclass>
 </doctrine-mapping>

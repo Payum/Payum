@@ -54,4 +54,25 @@ class RecurringPaymentDetailsTest extends MongoTest
         $this->assertEquals($expectedDescription, $foundInstruction->getDesc());
         $this->assertEquals($expectedError, $foundInstruction->getLErrorcoden(0));
     }
+
+    /**
+     * @test
+     */
+    public function shouldSaveOthersField()
+    {
+        $recurringPaymentDetails = new RecurringPaymentDetails;
+        $recurringPaymentDetails->setToken('aToken');
+        $recurringPaymentDetails->setAmt(10);
+        $recurringPaymentDetails->setDesc('aDesc');
+        $recurringPaymentDetails->setProfileid(123);
+        $recurringPaymentDetails['foo'] = $expect = 'theFoo';
+
+        $this->dm->persist($recurringPaymentDetails);
+        $this->dm->flush();
+        $this->dm->clear();
+
+        $foundDetails = $this->dm->find(get_class($recurringPaymentDetails), $recurringPaymentDetails->getId());
+
+        $this->assertEquals($expect, $foundDetails['foo']);
+    }
 }

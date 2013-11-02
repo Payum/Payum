@@ -39,5 +39,7 @@
         <field name="returnurl" column="returnurl" type="string" nullable="true" />
         
         <field name="cancelurl" column="cancelurl" type="string" nullable="true" />
+
+        <field name="others" column="others" type="json_array" nullable="false" />
     </mapped-superclass>
 </doctrine-mapping>
