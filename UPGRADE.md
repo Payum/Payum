@@ -1,3 +1,8 @@
+0.6 to 0.7
+==========
+
+* `PaymentRegistryInterface::getPayments` method is added.
+
 0.6.2 to 0.6.3
 ==============
 
