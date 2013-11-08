@@ -17,19 +17,7 @@ Now you have all required code downloaded, autoload configured.
 
 ## Configuration
 
-First lets create a payment details model:
-
-```php
-<?php
-
-class OfflinePaymentDetails extends \ArrayObject
-{
-
-}
-```
-
-Now we have to modify `config.php` a bit.
-At last setup the model storage.
+Let's modify `config.php` a bit.
 
 ```php
 <?php
@@ -39,14 +27,12 @@ use Payum\Offline\PaymentFactory as OfflinePaymentFactory;
 
 // ...
 
-// You way want to modify it to suite your needs
-$offlinePaymentDetailsClass = 'OfflinePaymentDetails';
 $storages = array(
 
     // other storages here
 
     'offline' => array(
-        $offlinePaymentDetailsClass => new FilesystemStorage(__DIR__.'/storage', $offlinePaymentDetailsClass)
+        $detailsClass => new FilesystemStorage(__DIR__.'/storage', $detailsClass)
     )
 );
 
@@ -56,8 +42,6 @@ $payments = array(
 
     'offline' => OfflinePaymentFactory::create()
 );
-
-$payments['offline']->addExtension(new StorageExtension($storages['offline'][$offlinePaymentDetailsClass]));
 ```
 
 ## Prepare payment
@@ -70,7 +54,7 @@ use Payum\Offline\Constants;
 
 include 'config.php';
 
-$storage = $registry->getStorageForClass($offlinePaymentDetailsClass, 'offline');
+$storage = $registry->getStorageForClass($detailsClass, 'offline');
 
 $paymentDetails = $storage->createModel();
 
