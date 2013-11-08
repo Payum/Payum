@@ -1,9 +1,6 @@
 # Payments.
 
 * [Paypal Express Checkout](https://github.com/Payum/PaypalExpressCheckoutNvp/blob/master/docs/index.md)
-
-The lib supports next paypal features: basic purchase, sync previous payments, recurring payments, digital goods.
-
 * [Paypal Pro Checkout](https://github.com/Payum/PaypalProCheckoutNvp/blob/master/docs/index.md)
 * [Paypal Rest](https://github.com/Payum/PaypalRest/blob/master/docs/index.md)
 * [Authorize.Net AIM](https://github.com/Payum/AuthorizeNetAim/blob/master/docs/index.md)

@@ -10,7 +10,38 @@ _**Note**: If you are working with [symfony2 framework check out the payum bundl
 
 ## Configuration
 
-Before we look at `prepare.php` we have to configure payum:
+Let`s  start from defining some models.
+First one is a `PaymentDetails`.
+It will storage all the information related to the payment:
+
+```php
+<?php
+namespace App\Model;
+
+use Payum\Model\ArrayObject;
+
+class PaymentDetails extends \ArrayObject
+{
+}
+```
+
+The other one is `PaymentSecurityToken`.
+We will use it to secure our payment operations:
+
+```php
+<?php
+namespace App\Model;
+
+use Payum\Model\Token;
+
+class PaymentSecurityToken extends Token
+{
+}
+```
+
+_**Note**: We provide Doctrine ORM\MognoODM mapping for these models to ease usage with doctrine storage._
+
+Now we are ready to configure all the stuff:
 
 ```php
 <?php
@@ -24,14 +55,14 @@ use Payum\Registry\SimpleRegistry;
 use Payum\Storage\FilesystemStorage;
 use Payum\Security\PlainHttpRequestVerifier;
 
-$tokenStorage = new FilesystemStorage('/path/to/storage', 'Payum/Model/Token');
+$tokenStorage = new FilesystemStorage('/path/to/storage', 'App\Model\PaymentSecurityToken');
 $requestVerifier = new PlainHttpRequestVerifier($tokenStorage);
 
-// You way want to modify it to suite your needs
-$paypalPaymentDetailsClass = 'Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails';
+$detailsClass = 'App\Model\PaymentDetails';
+
 $storages = array(
     'paypal' => array(
-        $paypalPaymentDetailsClass => new FilesystemStorage('/path/to/storage', $paypalPaymentDetailsClass)
+        $detailsClass => new FilesystemStorage('/path/to/storage', $detailsClass)
     )
 );
 
@@ -44,9 +75,8 @@ $payments = array(
     )
 )));
 
-$payments['paypal']->addExtension(new StorageExtension($storages['paypal'][$paypalPaymentDetailsClass]));
-
 $registry = new SimpleRegistry($payments, $storages, null, null);
+$registry->registerStorageExtensions();
 ```
 
 An initial configuration for payum basically wants to ensure we have things ready to be stored such as
@@ -66,7 +96,7 @@ _**Note**: You are not required to use this PaymentDetails. Payum is designed to
 
 include 'config.php';
 
-$storage = $registry->getStorageForClass($paypalPaymentDetailsClass, 'paypal');
+$storage = $registry->getStorageForClass($detailsClass, 'paypal');
 
 $paymentDetails = $storage->createModel();
 $paymentDetails['PAYMENTREQUEST_0_CURRENCYCODE'] = 'EUR';
@@ -124,6 +154,8 @@ $payment = $registry->getPayment($token->getPaymentName());
 
 $payment->execute($status = new BinaryMaskStatusRequest($token));
 if ($status->isSuccess()) {
+    //Do your business tasks here
+
     echo 'payment captured successfully';
 } else {
     echo 'payment captured not successfully';
