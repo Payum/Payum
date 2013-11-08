@@ -1,5 +1,7 @@
 # Get it started
 
+In this chapter we would show basic setup and usage of payum bundle for [symfony2](http://symfony.com/).
+
 Steps:
 
 * [Installation](#installation)
