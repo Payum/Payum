@@ -186,7 +186,7 @@ payum:
                     driver: mongodb
 ```
 
-## Filesystem token storage.
+### Filesystem token storage.
 
 First you have to extend `Token` model:
 
