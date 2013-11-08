@@ -317,8 +317,7 @@ class PaymentController extends Controller
 
 ## Next Step
 
-* [Simple purchase done action](simple_purchase_done_action.md).
-* [Configuration reference](configuration_reference.md).
-* [Sandbox](sandbox.md).
-* [Debugging](debugging.md).
-* [Back to index](index.md).
+* [Purchase done action](../purchase_done_action.md).
+* [Configuration reference](../configuration_reference.md).
+* [Back to examples list](../simple_purchase_examples.md).
+* [Back to index](../index.md).
