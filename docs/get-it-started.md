@@ -1,16 +1,28 @@
 # Get it started.
 
-In this chapter we are going to talk about the most common task: purchasing a product.
-I would use paypal express checkout for example because it is popular.
+In this chapter we are going to talk about the most common task: purchasing a product using [Paypal Express Checkout](https://developer.paypal.com/webapps/developer/docs/classic/express-checkout/integration-guide/ECGettingStarted/).
+I would use paypal express checkout for example because it is the most popular as I see.
 All examples are written in plain php code (no frameworks).
 
-_**Note**: If you are working with [symfony2 framework check out the payum bundle documentation instead](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md)._
+_**Note**: If you are working with symfony2 framework look at the bundle [documentation instead](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md)._
 
-![How payum works](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=cGFydGljaXBhbnQgcGF5cGFsLmNvbQoACwxVc2VyAAQNcHJlcGFyZS5waHAAHA1jYXB0dQAFE2RvbgAnBgpVc2VyLT4ANQs6AEUIIGEgcGF5bWVudAoAVAstLT4rAEsLOgBbCCB0b2tlbgoKAGcLLS0-AIE2CjogcmVxdWVzdCBhdXRoZW50aWNhdGlvbgoAgVkKLS0-AE0NZ2l2ZSBjb250cm9sIGJhY2sATg8tAIE-CDoAgUsFAHsHAIFTCC0-VXNlcjogc2hvdwCBQQggcmVzdWx0Cg&s=default)
+## Installation
+
+The preferred way to install the library is using [composer](http://getcomposer.org/).
+Run composer require to add dependencies to _composer.json_:
+
+```bash
+php composer.phar require "payum/paypal-express-checkout-nvp:*@stable"
+```
 
 ## Configuration
 
-Let`s  start from defining some models.
+Before we configure the payum let's look at the flow diagram.
+This flow is same all payments so once you familiar with it any other payments could be added easily.
+
+![How payum works](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=cGFydGljaXBhbnQgcGF5cGFsLmNvbQoACwxVc2VyAAQNcHJlcGFyZS5waHAAHA1jYXB0dQAFE2RvbgAnBgpVc2VyLT4ANQs6AEUIIGEgcGF5bWVudAoAVAstLT4rAEsLOgBbCCB0b2tlbgoKAGcLLS0-AIE2CjogcmVxdWVzdCBhdXRoZW50aWNhdGlvbgoAgVkKLS0-AE0NZ2l2ZSBjb250cm9sIGJhY2sATg8tAIE-CDoAgUsFAHsHAIFTCC0-VXNlcjogc2hvdwCBQQggcmVzdWx0Cg&s=default)
+
+Now configuration. Let`s  start from defining some models.
 First one is a `PaymentDetails`.
 It will storage all the information related to the payment:
 
