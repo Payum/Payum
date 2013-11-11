@@ -1,3 +1,3 @@
 # Payum Paypal ProCheckout Nvp
 
-* [How to use?](how-to-use.md)
+* [Get it started](get-it-started.md)
