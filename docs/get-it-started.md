@@ -5,7 +5,7 @@ We assume you already read [payum's get it started documentation](https://github
 Here we just extend it and describe [Paypal Pro Checkout](https://www.paypal.com/webapps/mpp/paypal-payments-pro) specific details.
 
 ## Installation
-
+
 The preferred way to install the library is using [composer](http://getcomposer.org/).
 Run composer require to add dependencies to _composer.json_:
 
@@ -69,7 +69,7 @@ $paymentDetails['cvv2'] = '123';
 $paymentDetails['billToFirstName'] = 'John';
 $paymentDetails['billToLastName'] = 'Doe';
 $paymentDetails['billToStreet'] = '123 Main St.';
-$paymentDetails['billToCity] = 'San Jose';
+$paymentDetails['billToCity'] = 'San Jose';
 $paymentDetails['billToState'] = 'CA';
 $paymentDetails['billToZip'] = '95101';
 $paymentDetails['billToCountry'] = 'US';
