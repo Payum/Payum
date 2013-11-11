@@ -19,4 +19,9 @@ interface PaymentRegistryInterface
      * @return PaymentInterface
      */
     function getPayment($name = null);
+
+    /**
+     * @return PaymentInterface[]
+     */
+    function getPayments();
 }

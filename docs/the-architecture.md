@@ -253,6 +253,8 @@ As a result of the architecture described above we end up with a well decoupled,
 For example, you can add your domain specific actions or a logger extension.
 Thanks to its flexibility any task could be achieved.
 
+Next [Your order integration](your-order-integration.md).
+
 Back to [index](index.md).
 
 [sandbox-online]: http://sandbox.payum.forma-dev.com

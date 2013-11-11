@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Tests\Registry;
 
+use Payum\Extension\StorageExtension;
 use Payum\Registry\SimpleRegistry;
 
 class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
@@ -159,5 +160,74 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals('foo', $registry->getDefaultStorageName());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowRegisterStorageExtensions()
+    {
+        $storageMock = $this->getMock('Payum\Storage\StorageInterface');
+
+        $testCase = $this;
+
+        $paymentMock = $this->getMock('Payum\PaymentInterface');
+        $paymentMock
+            ->expects($this->once())
+            ->method('addExtension')
+            ->with($this->isInstanceOf('Payum\Extension\StorageExtension'))
+            ->will($this->returnCallback(function(StorageExtension $extension) use ($storageMock, $testCase) {
+                $testCase->assertAttributeSame($storageMock, 'storage', $extension);
+            }))
+        ;
+
+        $registry = new SimpleRegistry(
+            array('foo' => $paymentMock),
+            array('foo' => array('stdClass' => $storageMock)),
+            'foo',
+            'foo'
+        );
+
+        $registry->registerStorageExtensions();
+    }
+
+    /**
+     * @test
+     */
+    public function shouldRegisterStorageExtensionsForEachStorageInRegistry()
+    {
+        $storageOneMock = $this->getMock('Payum\Storage\StorageInterface');
+        $storageTwoMock = $this->getMock('Payum\Storage\StorageInterface');
+        $storageThreeMock = $this->getMock('Payum\Storage\StorageInterface');
+
+        $paymentFooMock = $this->getMock('Payum\PaymentInterface');
+        $paymentFooMock
+            ->expects($this->exactly(3))
+            ->method('addExtension')
+        ;
+
+        $paymentBarMock = $this->getMock('Payum\PaymentInterface');
+        $paymentBarMock
+            ->expects($this->exactly(1))
+            ->method('addExtension')
+        ;
+
+        $registry = new SimpleRegistry(
+            array('foo' => $paymentFooMock, 'bar' => $paymentBarMock),
+            array(
+                'foo' => array(
+                    'fooClass' => $storageOneMock,
+                    'barClass' => $storageTwoMock,
+                    'ololClass' => $storageThreeMock,
+                ),
+                'bar' => array(
+                    'fooClass' => $storageOneMock,
+                )
+            ),
+            'foo',
+            'foo'
+        );
+
+        $registry->registerStorageExtensions();
     }
 }
