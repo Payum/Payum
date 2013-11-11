@@ -169,13 +169,15 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
     {
         $storageMock = $this->getMock('Payum\Storage\StorageInterface');
 
+        $testCase = $this;
+
         $paymentMock = $this->getMock('Payum\PaymentInterface');
         $paymentMock
             ->expects($this->once())
             ->method('addExtension')
             ->with($this->isInstanceOf('Payum\Extension\StorageExtension'))
-            ->will($this->returnCallback(function(StorageExtension $extension) use ($storageMock) {
-                $this->assertAttributeSame($storageMock, 'storage', $extension);
+            ->will($this->returnCallback(function(StorageExtension $extension) use ($storageMock, $testCase) {
+                $testCase->assertAttributeSame($storageMock, 'storage', $extension);
             }))
         ;
 
