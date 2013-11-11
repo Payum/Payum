@@ -1,7 +1,7 @@
 {
     "name": "payum/payum-bundle",
     "type": "symfony-bundle",
-    "description": "The payment bundle integrates payum libs into symfony2 framework",
+    "description": "Rich payment solutions for symfony2. Paypal, payex, authorize.net, be2bill, omnipay, recurring paymens, instant notifications and many more",
     "keywords": [
         "payment",
         "paypal",
@@ -11,6 +11,7 @@
         "paypal express checkout",
         "paypal pro checkout",
         "recurring payment",
+        "instant notifications",
         "payex",
         "offline"
     ],
