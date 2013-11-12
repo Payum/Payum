@@ -1,6 +1,8 @@
 0.6 to 0.7
 ==========
 
+* [Request] Meaning of `CaptureRequest` was changed. Replace all `CaptureRequest` usages with `PurchaseRequest` one.
+* [Doctrine] Entities and Documents classes were removed. Mapping provided for basic models.
 * `PaymentRegistryInterface::getPayments` method is added.
 
 0.6.2 to 0.6.3
