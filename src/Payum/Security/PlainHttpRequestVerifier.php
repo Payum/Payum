@@ -12,11 +12,18 @@ class PlainHttpRequestVerifier implements HttpRequestVerifierInterface
     protected $tokenStorage;
 
     /**
-     * @param StorageInterface $tokenStorage
+     * @var string
      */
-    public function __construct(StorageInterface $tokenStorage)
+    protected $tokenParameter;
+
+    /**
+     * @param StorageInterface $tokenStorage
+     * @param string $tokenParameter
+     */
+    public function __construct(StorageInterface $tokenStorage, $tokenParameter = 'payum_token')
     {
         $this->tokenStorage = $tokenStorage;
+        $this->tokenParameter = (string) $tokenParameter;
     }
 
     /**
@@ -28,16 +35,19 @@ class PlainHttpRequestVerifier implements HttpRequestVerifierInterface
             throw new InvalidArgumentException('Invalid request given. In most cases you have to pass $_REQUEST array.');
         }
 
-        $tokenParameter = 'payum_token';
-        if (false == isset($httpRequest[$tokenParameter])) {
-            throw new InvalidArgumentException(sprintf('Token parameter `%s` not set in request.', $tokenParameter));
+        if (false == isset($httpRequest[$this->tokenParameter])) {
+            throw new InvalidArgumentException(sprintf('Token parameter `%s` was not found in in the http request.', $this->tokenParameter));
         }
 
-        if (false == $token = $this->tokenStorage->findModelById($httpRequest[$tokenParameter])) {
-            throw new InvalidArgumentException(sprintf('A token with hash `%s` could not be found.', $httpRequest[$tokenParameter]));
+        if ($httpRequest[$this->tokenParameter] instanceof TokenInterface) {
+            return $httpRequest[$this->tokenParameter];
         }
 
-        /** @var $token Token */
+        if (false == $token = $this->tokenStorage->findModelById($httpRequest[$this->tokenParameter])) {
+            throw new InvalidArgumentException(sprintf('A token with hash `%s` could not be found.', $httpRequest[$this->tokenParameter]));
+        }
+
+        /** @var $token TokenInterface */
 
         if (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) != parse_url($token->getTargetUrl(), PHP_URL_PATH)) {
             throw new InvalidArgumentException(sprintf('The current url %s not match target url %s set in the token.', $_SERVER['REQUEST_URI'], $token->getTargetUrl()));
