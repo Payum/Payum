@@ -49,6 +49,9 @@ $payments = array(
 
 ```php
 <?php
+
+use Payum\Security\SensitiveValue;
+
 // prepare.php
 
 include 'config.php';
@@ -56,17 +59,17 @@ include 'config.php';
 $storage = $registry->getStorageForClass($detailsClass, 'be2bill');
 
 $paymentDetails = $storage->createModel();
-$paymentDetails['amount'] = 100; //1$
-$paymentDetails['clientemail'] = 'buyer@example.com';
-$paymentDetails['clientuseragent'] = 'Firefox';
-$paymentDetails['clientip'] = 192.168.0.1;
-$paymentDetails['clientident'] = 'payerId';
-$paymentDetails['description'] = 'Payment for digital stuff';
-$paymentDetails['orderid'] = 'orderId';
-$paymentDetails['setCardcode'] = '4111111111111111';
-$paymentDetails['cardcvv'] = 123;
-$paymentDetails['cardfullname'] = 'John Doe';
-$paymentDetails['cardvaliditydate'] = $data['card_expiration_date']);
+$paymentDetails['AMOUNT'] = 100; //1$
+$paymentDetails['CLIENTEMAIL'] = 'buyer@example.com';
+$paymentDetails['CLIENTUSERAGENT'] = 'Firefox';
+$paymentDetails['CLIENTIP'] = 192.168.0.1;
+$paymentDetails['CLIENTIDENT'] = 'payerId';
+$paymentDetails['DESCRIPTION'] = 'Payment for digital stuff';
+$paymentDetails['ORDERID'] = 'orderId';
+$paymentDetails['CARDCODE'] = new SensitiveValue('4111111111111111');
+$paymentDetails['CARDCVV'] = new SensitiveValue(123);
+$paymentDetails['CARDFULLNAME'] = new SensitiveValue('John Doe');
+$paymentDetails['CARDVALIDITYDATE'] = new SensitiveValue('10-16');
 $storage->updateModel($paymentDetails);
 
 $doneToken = $tokenStorage->createModel();
@@ -82,7 +85,9 @@ $captureToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/capture.php?payum_
 $captureToken->setAfterUrl($doneToken->getTargetUrl());
 $tokenStorage->updateModel($captureToken);
 
-header("Location: ".$captureToken->getTargetUrl());
+$_REQUEST['payum_token'] = $captureToken;
+
+include 'capture.php';
 ```
 
 That's it. As you see we configured be2bill payment `config.php` and set details `prepare.php`.
