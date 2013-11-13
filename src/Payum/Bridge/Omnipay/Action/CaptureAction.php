@@ -3,6 +3,7 @@
 namespace Payum\Bridge\Omnipay\Action;
 
 use Omnipay\Common\Message\RedirectResponseInterface;
+use Payum\Bridge\Spl\ArrayObject;
 use Payum\Exception\LogicException;
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Request\CaptureRequest;
@@ -21,13 +22,13 @@ class CaptureAction extends BaseApiAwareAction
         }
 
         try {
-            $options = $request->getModel();
+            $options = ArrayObject::ensureArrayObject($request->getModel());
 
             if (isset($options['_completeCaptureRequired'])) {
                 unset($options['_completeCaptureRequired']);
-                $response = $this->gateway->completePurchase((array) $options)->send();
+                $response = $this->gateway->completePurchase($options->toUnsafeArray())->send();
             } else {
-                $response = $this->gateway->purchase((array) $options)->send();
+                $response = $this->gateway->purchase($options->toUnsafeArray())->send();
             }
 
             if ($response->isRedirect()) {
@@ -56,7 +57,7 @@ class CaptureAction extends BaseApiAwareAction
     {
         return
             $request instanceof CaptureRequest &&
-            $request->getModel() instanceof \ArrayObject
+            $request->getModel() instanceof \ArrayAccess
         ;
     }
 }
