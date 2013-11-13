@@ -2,6 +2,7 @@
 namespace Payum\Tests\Bridge\Spl;
 
 use Payum\Bridge\Spl\ArrayObject;
+use Payum\Security\SensitiveValue;
 
 class ArrayObjectTest extends \PHPUnit_Framework_TestCase 
 {
@@ -342,6 +343,30 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($arrayObject->validatedKeysSet(array('aRequiredField', 'otherRequiredField')));
     }
+
+    /**
+     * @test
+     */
+    public function shouldConvertArrayObjectToPrimitiveArrayMakingSensitiveValueUnsafeAndEraseIt()
+    {
+        $sensitiveValue = new SensitiveValue('theCreditCard');
+
+        $arrayObject = new ArrayObject();
+        $arrayObject['creditCard'] = $sensitiveValue;
+        $arrayObject['email'] = 'bar@example.com';
+
+        $primitiveArray = $arrayObject->toUnsafeArray();
+
+        $this->assertInternalType('array', $primitiveArray);
+
+        $this->assertArrayHasKey('creditCard', $primitiveArray);
+        $this->assertEquals('theCreditCard', $primitiveArray['creditCard']);
+
+        $this->assertArrayHasKey('email', $primitiveArray);
+        $this->assertEquals('bar@example.com', $primitiveArray['email']);
+
+        $this->assertNull($sensitiveValue->peek());
+    }
 }
 
 class CustomArrayObject implements \ArrayAccess, \IteratorAggregate
@@ -375,3 +400,4 @@ class CustomArrayObject implements \ArrayAccess, \IteratorAggregate
         ));
     }
 }
+

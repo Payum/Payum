@@ -18,9 +18,21 @@ final class SensitiveValue implements \Serializable
     /**
      * @return mixed
      */
-    public function get()
+    public function peek()
     {
         return $this->value;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function get()
+    {
+        $value = $this->value;
+
+        $this->erase();
+
+        return $value;
     }
 
     public function erase()

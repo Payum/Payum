@@ -36,13 +36,28 @@ class SensitiveValueTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowGetValueSetInConstructor()
+    public function shouldAllowGetValueSetInConstructorAndErase()
     {
         $expectedValue = 'cardNumber';
 
         $sensitiveValue = new SensitiveValue($expectedValue);
 
         $this->assertEquals($expectedValue, $sensitiveValue->get());
+        $this->assertNull($sensitiveValue->get());
+    }
+
+
+    /**
+     * @test
+     */
+    public function shouldAllowPeekValueSetInConstructorAndNotErase()
+    {
+        $expectedValue = 'cardNumber';
+
+        $sensitiveValue = new SensitiveValue($expectedValue);
+
+        $this->assertEquals($expectedValue, $sensitiveValue->peek());
+        $this->assertEquals($expectedValue, $sensitiveValue->peek());
     }
 
     /**
