@@ -48,6 +48,9 @@ $payments = array(
 
 ```php
 <?php
+
+use Payum\Security\SensitiveValue;
+
 // prepare.php
 
 include 'config.php';
@@ -56,8 +59,8 @@ $storage = $registry->getStorageForClass($detailsClass, 'authorize-net-aim');
 
 $paymentDetails = $storage->createModel();
 $paymentDetails['amount'] = 2; // 2$
-$paymentDetails['cardNum'] = '4111111111111111';
-$paymentDetails['expDate'] = '10/16';
+$paymentDetails['cardNum'] = new SensitiveValue('4111111111111111');
+$paymentDetails['expDate'] = new SensitiveValue('10/16');
 $storage->updateModel($paymentDetails);
 
 $doneToken = $tokenStorage->createModel();
@@ -73,7 +76,9 @@ $captureToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/capture.php?payum_
 $captureToken->setAfterUrl($doneToken->getTargetUrl());
 $tokenStorage->updateModel($captureToken);
 
-header("Location: ".$captureToken->getTargetUrl());
+$_REQUEST['payum_token'] = $captureToken;
+
+include 'capture.php';
 ```
 
 That's it. As you see we configured Authorize.Net payment `config.php` and set details `prepare.php`.

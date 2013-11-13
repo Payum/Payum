@@ -51,7 +51,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
         
         $api = clone $this->api;
         $api->ignore_not_x_fields = true;
-        $api->setFields(array_filter((array) $model));
+        $api->setFields(array_filter($model->toUnsafeArray()));
 
         $response = $api->authorizeAndCapture();
 
