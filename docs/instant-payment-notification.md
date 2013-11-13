@@ -90,7 +90,7 @@ $payment->execute(new SecuredNotifyRequest($_REQUEST, $token));
 ## Setup Paypal IPN.
 
 The code above could be reused by any payment.
-Now I want to show changes need to enable Paypal IPN. To do so we have to mofiy `prepare.php` a bit:
+Now I want to show changes need to enable Paypal IPN. To do so we have to modify `prepare.php` a bit:
 
 ```php
 <?php

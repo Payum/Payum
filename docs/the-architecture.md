@@ -107,7 +107,7 @@ _**Link**: See paypal [AuthorizeTokenAction][paypal-authorize-token-action]._
 ## Managing status
 
 Good status handling is very important.
-Statuses must not be hard coded and should be easy to reuse, hence we use the _[interface][status-request-interface]_ to hanle this.
+Statuses must not be hard coded and should be easy to reuse, hence we use the _[interface][status-request-interface]_ to handle this.
 The [Status request][status-request] is provided by default by our library, however you are free to use your own and you can do so by implementing the status interface.
 
 ```php

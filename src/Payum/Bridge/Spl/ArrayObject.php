@@ -17,7 +17,7 @@ class ArrayObject extends \ArrayObject
             $this->input = $input;
 
             if (false ==$input instanceof \Traversable) {
-                throw new LogicException('Traversable interface must be implemented in case custom ArrayAccess instance given. It is becase some php limitations.');
+                throw new LogicException('Traversable interface must be implemented in case custom ArrayAccess instance given. It is because some php limitations.');
             }
 
             $input = iterator_to_array($input);
