@@ -288,7 +288,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
 
         $foundModel = $storage->findModelById($model->getId());
 
-        $this->assertNotSame($model, $foundModel);
+        $this->assertSame($model, $foundModel);
         $this->assertEquals($expectedPrice, $foundModel->getPrice());
         $this->assertEquals($expectedCurrency, $foundModel->getCurrency());
     }
@@ -312,11 +312,33 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
 
         $foundModel = $storage->findModelById($model->payum_id);
 
-        $this->assertNotSame($model, $foundModel);
+        $this->assertSame($model, $foundModel);
         $this->assertEquals($expectedPrice, $foundModel->getPrice());
         $this->assertEquals($expectedCurrency, $foundModel->getCurrency());
 
         $this->assertObjectHasAttribute('payum_id', $foundModel);
         $this->assertNotEmpty($foundModel->payum_id);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowDeleteModel()
+    {
+        $storage = new FilesystemStorage(sys_get_temp_dir(), 'Payum\Examples\Model\TestModel');
+
+        $model = $storage->createModel();
+        $model->setPrice($expectedPrice = 123);
+        $model->setCurrency($expectedCurrency = 'FOO');
+
+        $storage->updateModel($model);
+
+        //guard
+        $this->assertObjectHasAttribute('payum_id', $model);
+        $this->assertNotEmpty($model->payum_id);
+
+        $storage->deleteModel($model);
+
+        $this->assertNull($storage->findModelById($model->payum_id));
     }
 }
