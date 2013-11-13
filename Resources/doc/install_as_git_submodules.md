@@ -15,7 +15,7 @@ You have to add the `Payum\PayumBundle` namespace to your autoloader:
 <?php
 // app/autoload.php
 
-//uncomment this if you dont have universal class loader instance.
+//uncomment this if you don't have universal class loader instance.
 //require_once __DIR__.'/../vendor/symfony/symfony/src/Symfony/Component/ClassLoader/UniversalClassLoader.php';
 //$loader = new \Symfony\Component\ClassLoader\UniversalClassLoader();
 

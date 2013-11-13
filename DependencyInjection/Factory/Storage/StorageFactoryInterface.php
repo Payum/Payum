@@ -10,7 +10,7 @@ interface StorageFactoryInterface
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param string $contextName
      * @param string $modelClass
-     * @param string $paymentServiceId
+     * @param string $paymentId
      * @param array $config
      *
      * @return string The context serviceId

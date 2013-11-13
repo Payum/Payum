@@ -64,7 +64,7 @@ class PaymentController extends Controller
         /** @var \Acme\PaymentBundle\Entity\PaymentDetails */
         $paymentDetails = $storage->createModel();
         $paymentDetails['amount'] = 10005; //be2bill amount format is cents: for example:  100.05 (EUR). will be 10005.
-        $paymentDetails['lientemail'] = 'user@email.com';
+        $paymentDetails['clientemail'] = 'user@email.com';
         $paymentDetails['clientuseragent'] = $request->headers->get('User-Agent', 'Unknown');
         $paymentDetails['clientip'] = $request->getClientIp();
         $paymentDetails['clientident'] = 'payerId';
