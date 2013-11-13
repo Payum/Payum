@@ -5,7 +5,7 @@ We assume you already read [payum's get it started documentation](https://github
 Here we just extend it and describe [Paypal Pro Checkout](https://www.paypal.com/webapps/mpp/paypal-payments-pro) specific details.
 
 ## Installation
-
+
 The preferred way to install the library is using [composer](http://getcomposer.org/).
 Run composer require to add dependencies to _composer.json_:
 
@@ -54,6 +54,9 @@ $payments = array(
 
 ```php
 <?php
+
+use Payum\Security\SensitiveValue;
+
 // prepare.php
 
 include 'config.php';
@@ -63,16 +66,16 @@ $storage = $registry->getStorageForClass($detailsClass, 'paypal-pro');
 $paymentDetails = $storage->createModel();
 $paymentDetails['currency'] = 'USD';
 $paymentDetails['amt'] = '1.00';
-$paymentDetails['acct' = '5105105105105100';
-$paymentDetails['expDate'] = '1214';
-$paymentDetails['cvv2'] = '123';
-$paymentDetails['billToFirstName'] = 'John';
-$paymentDetails['billToLastName'] = 'Doe';
-$paymentDetails['billToStreet'] = '123 Main St.';
-$paymentDetails['billToCity'] = 'San Jose';
-$paymentDetails['billToState'] = 'CA';
-$paymentDetails['billToZip'] = '95101';
-$paymentDetails['billToCountry'] = 'US';
+$paymentDetails['acct' = new SensitiveValue('5105105105105100');
+$paymentDetails['exp_date'] = new SensitiveValue('1214');
+$paymentDetails['cvv2'] = new SensitiveValue('123');
+$paymentDetails['billtofirstname'] = 'John';
+$paymentDetails['billtolastname'] = 'Doe';
+$paymentDetails['billtostreet'] = '123 Main St.';
+$paymentDetails['billtocity'] = 'San Jose';
+$paymentDetails['billtostate'] = 'CA';
+$paymentDetails['billtozip'] = '95101';
+$paymentDetails['billtocountry'] = 'US';
 $storage->updateModel($paymentDetails);
 
 $doneToken = $tokenStorage->createModel();
@@ -88,7 +91,9 @@ $captureToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/capture.php?payum_
 $captureToken->setAfterUrl($doneToken->getTargetUrl());
 $tokenStorage->updateModel($captureToken);
 
-header("Location: ".$captureToken->getTargetUrl());
+$_REQUEST['payum_token'] = $captureToken;
+
+include 'capture.php';
 ```
 
 That's it. As you see we configured Paypal Pro payment `config.php` and set details `prepare.php`.
