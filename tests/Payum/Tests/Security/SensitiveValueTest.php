@@ -85,4 +85,27 @@ class SensitiveValueTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('', (string) $sensitiveValue);
     }
+
+    /**
+     * @test
+     */
+    public function shouldNotExposeValueWhileEncodingToJson()
+    {
+        $sensitiveValue = new SensitiveValue('cardNumber');
+
+        $this->assertEquals('{}', json_encode($sensitiveValue));
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Exception\LogicException
+     * @expectedExceptionMessage It is not permitted to close this object.
+     */
+    public function throwIfTryToCloneValue()
+    {
+        $sensitiveValue = new SensitiveValue('cardNumber');
+
+        clone $sensitiveValue;
+    }
 }

@@ -137,6 +137,8 @@ class ArrayObject extends \ArrayObject
     }
 
     /**
+     * @experimental
+     *
      * @return array
      */
     public function toUnsafeArray()
@@ -154,7 +156,6 @@ class ArrayObject extends \ArrayObject
 
         return $array;
     }
-
 
     /**
      * @param mixed $input
