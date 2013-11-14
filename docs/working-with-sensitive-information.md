@@ -8,7 +8,7 @@ Here we describe some practices that helps you not to accidentally store sensiti
 
 All info like credit cards have to be wrapped by `SensitiveValue` class.
 
- ```php
+```php
 <?php
 
 $cardNumber = new SensitiveValue('theCreditCardNumber');
