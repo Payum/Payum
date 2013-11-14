@@ -145,7 +145,7 @@ specific hashes from the tokens. After all is prepared, finally we start the cap
 The main purpose of using tokens is to hide any sensitive\guessable information from a spying user.
 All a spying user sees is the random hash so it would be a bit hard to hack your payment process.
 
-_**Attention**: All sensitive values must not be passed directly but wrapped by `SensitiveValue` class. That's required to ensure it would not saved anywhere accidentally. For more info read [dedicated chapter](working-with-sensitive-information.md)._
+_**Attention**: All sensitive values must not be passed directly but wrapped by `SensitiveValue` class. That's required to ensure it would not accidentally be saved anywhere. For more info read [dedicated chapter](working-with-sensitive-information.md)._
 
 ## Capture payment
 
