@@ -30,6 +30,9 @@ $cardNumber->peek();
 
 (string) $model['cardNumber'];
 // empty string
+
+json_encode($model['cardNumber']);
+// {}
 ```
 
 All supported payments are aware of this class and will handle it safely.
