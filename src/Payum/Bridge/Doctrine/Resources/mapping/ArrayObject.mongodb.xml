@@ -6,7 +6,7 @@
 
     <mapped-superclass name="Payum\Model\ArrayObject">
 
-      <field name="array" type="hash" />
+      <field name="array" type="object" />
 
     </mapped-superclass>
 

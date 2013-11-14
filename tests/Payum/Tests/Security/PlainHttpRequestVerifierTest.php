@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Security;
+namespace Payum\Tests\Security;
 
 use Payum\Model\Token;
 use Payum\Security\PlainHttpRequestVerifier;
@@ -41,7 +41,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Token parameter `payum_token` not set in request.
+     * @expectedExceptionMessage Token parameter `payum_token` was not found in in the http request.
      */
     public function throwIfRequestNotContainTokenParameterOnVerify()
     {
@@ -122,6 +122,34 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
         $verifier = new PlainHttpRequestVerifier($storageMock);
 
         $actualToken = $verifier->verify(array('payum_token' => 'theHash'));
+
+        $this->assertSame($expectedToken, $actualToken);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnTokenObjectSetToRequestGlobalArrayWithoutChecks()
+    {
+        $expectedToken = new Token;
+
+        $verifier = new PlainHttpRequestVerifier($this->createStorageMock());
+
+        $actualToken = $verifier->verify(array('payum_token' => $expectedToken));
+
+        $this->assertSame($expectedToken, $actualToken);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowCustomizeTokenParameterInConstructor()
+    {
+        $expectedToken = new Token;
+
+        $verifier = new PlainHttpRequestVerifier($this->createStorageMock(), 'custom_token');
+
+        $actualToken = $verifier->verify(array('custom_token' => $expectedToken));
 
         $this->assertSame($expectedToken, $actualToken);
     }

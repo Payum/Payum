@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Tests\Functional\Bridge\Doctrine\Entity;
 
+use Payum\Security\SensitiveValue;
 use Payum\Tests\Functional\Bridge\Doctrine\OrmTest;
 use Payum\Examples\Entity\ArrayObject;
 
@@ -50,5 +51,21 @@ class ArrayObjectTest extends OrmTest
         $this->assertNotSame($model, $foundModel);
         
         $this->assertEquals(iterator_to_array($model), iterator_to_array($foundModel));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotStoreSensitiveValue()
+    {
+        $model = new ArrayObject;
+        $model['cardNumber'] = new SensitiveValue('theCardNumber');
+
+        $this->em->persist($model);
+        $this->em->flush();
+
+        $this->em->refresh($model);
+
+        $this->assertEquals(array(), $model['cardNumber']);
     }
 }

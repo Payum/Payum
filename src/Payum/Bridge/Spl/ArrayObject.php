@@ -3,6 +3,7 @@ namespace Payum\Bridge\Spl;
 
 use Payum\Exception\InvalidArgumentException;
 use Payum\Exception\LogicException;
+use Payum\Security\SensitiveValue;
 
 class ArrayObject extends \ArrayObject
 {
@@ -133,6 +134,27 @@ class ArrayObject extends \ArrayObject
         }
 
         return null;
+    }
+
+    /**
+     * @experimental
+     *
+     * @return array
+     */
+    public function toUnsafeArray()
+    {
+        $array = array();
+        foreach ($this as $name => $value) {
+            if ($value instanceof SensitiveValue) {
+                $array[$name] = $value->get();
+
+                continue;
+            }
+
+            $array[$name] = $value;
+        }
+
+        return $array;
     }
 
     /**
