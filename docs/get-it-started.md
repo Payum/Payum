@@ -51,7 +51,7 @@ class PaymentSecurityToken extends Token
 }
 ```
 
-_**Note**: We provide Doctrine ORM\MognoODM mapping for these models to ease usage with doctrine storage._
+_**Note**: We provide Doctrine ORM\MongoODM mapping for these models to ease usage with doctrine storage._
 
 Now we are ready to configure all the stuff:
 

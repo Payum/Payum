@@ -32,7 +32,7 @@ class ObjectType extends Type
         $value = (is_resource($value)) ? stream_get_contents($value) : $value;
         $val = unserialize($value);
         if ($val === false && $value !== 'b:0;') {
-            throw new \LogicException('Conversion excpetion: ' . $value . '. ' . $this->getName());
+            throw new \LogicException('Conversion exception: ' . $value . '. ' . $this->getName());
         }
 
         return $val;

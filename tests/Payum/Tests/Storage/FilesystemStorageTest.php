@@ -80,7 +80,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldUpdateModelAndSetIdToModelEvenIfModelNotHaveIdDefinied()
+    public function shouldUpdateModelAndSetIdToModelEvenIfModelNotHaveIdDefined()
     {
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
