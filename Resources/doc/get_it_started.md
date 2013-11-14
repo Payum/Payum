@@ -61,7 +61,7 @@ payum_capture:
     resource: "@PayumBundle/Resources/config/routing/capture.xml"
 ```
 
-Set notification controller if you are going to setup instant payment notifactions:
+Set notification controller if you are going to setup instant payment notifications:
 
 ```yaml
 # app/config/routing.yml
