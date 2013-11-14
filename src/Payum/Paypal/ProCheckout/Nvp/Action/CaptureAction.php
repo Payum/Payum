@@ -44,11 +44,11 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
-        
+
         $model = new ArrayObject($request->getModel());
-        
+
         $buzzRequest = new Request();
-        $buzzRequest->setFields((array) $model);    
+        $buzzRequest->setFields($model->toUnsafeArray());
         $response = $this->api->doPayment($buzzRequest);
         
         $model->replace($response);
