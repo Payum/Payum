@@ -52,7 +52,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
             throw new UserInputRequiredInteractiveRequest($requiredCardFields);
         }
 
-        $response = $this->api->payment((array) $model);
+        $response = $this->api->payment($model->toUnsafeArray());
 
         $model->replace((array) $response->getContentJson());
     }
