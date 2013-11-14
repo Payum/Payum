@@ -18,7 +18,7 @@ class StatusAction implements ActionInterface
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        $model = new ArrayObject($request->getModel());
+        $model = ArrayObject::ensureArrayObject($request->getModel());
 
         if (null === $model['_status']) {
             $request->markNew();
@@ -48,7 +48,7 @@ class StatusAction implements ActionInterface
     {
         return 
             $request instanceof StatusRequestInterface &&
-            $request->getModel() instanceof \ArrayObject
+            $request->getModel() instanceof \ArrayAccess
         ;
     }
 }

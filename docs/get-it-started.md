@@ -49,6 +49,9 @@ $payments = array(
 
 ```php
 <?php
+
+use Payum\Security\SensitiveValue;
+
 // prepare.php
 
 include 'config.php';
@@ -57,14 +60,14 @@ $storage = $registry->getStorageForClass($detailsClass, 'stripe');
 
 $paymentDetails = $storage->createModel();
 $paymentDetails['amount'] = 10;
-$paymentDetails['card'] = array(
+$paymentDetails['card'] = new SensitiveValue(array(
     'number' => '5555556778250000', //end zero so will be accepted
     'cvv' => 123,
     'expiryMonth' => 6,
     'expiryYear' => 16,
     'firstName' => 'foo',
     'lastName' => 'bar',
-);
+));
 $storage->updateModel($paymentDetails);
 
 $doneToken = $tokenStorage->createModel();
@@ -80,7 +83,9 @@ $captureToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/capture.php?payum_
 $captureToken->setAfterUrl($doneToken->getTargetUrl());
 $tokenStorage->updateModel($captureToken);
 
-header("Location: ".$captureToken->getTargetUrl());
+$_REQUEST['payum_token'] = $captureToken;
+
+include 'capture.php';
 ```
 
 That's it. As you see we configured Stripe via Omnipay payment `config.php` and set details `prepare.php`.
