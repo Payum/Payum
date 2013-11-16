@@ -31,7 +31,7 @@ abstract class AbstractRegistry implements RegistryInterface
      * @param string $defaultPayment
      * @param string $defaultStorage
      */
-    public function __construct($payments, $storages, $defaultPayment, $defaultStorage)
+    public function __construct($payments, $storages, $defaultPayment = 'default', $defaultStorage = 'default')
     {
         $this->payments = $payments;
         $this->storages = $storages;
@@ -68,13 +68,23 @@ abstract class AbstractRegistry implements RegistryInterface
             $name = $this->defaultStorage;
         }
 
-        $class = is_object($class) ? get_class($class) : $class;
-        if (false == (is_string($class) && class_exists($class))) {
-            throw new InvalidArgumentException('Invalid class argument given. Must be string class or model instance.');
+        if (false == isset($this->storages[$name])) {
+            throw new InvalidArgumentException(sprintf(
+                'Any storages for payment %s were not registered. Registered payments: %s.',
+                $name,
+                implode(', ', array_keys($this->storages))
+            ));
         }
 
+        $class = is_object($class) ? get_class($class) : $class;
+
         if (!isset($this->storages[$name][$class])) {
-            throw new InvalidArgumentException(sprintf('Payum storage named %s for class "%s" does not exist.', $name, $class));
+            throw new InvalidArgumentException(sprintf(
+                'A storage for payment %s and model %s was not registered. The payment supports storages for next models: %s.',
+                $name,
+                $class,
+                implode(', ', array_keys($this->storages[$name]))
+            ));
         }
 
         return $this->getService($this->storages[$name][$class]);
