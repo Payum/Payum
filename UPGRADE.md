@@ -1,15 +1,14 @@
-0.6 to 0.7
-==========
+# Upgrades
+
+## 0.6 to 0.7
 
 * `PaymentRegistryInterface::getPayments` method is added.
 
-0.6.2 to 0.6.3
-==============
+## 0.6.2 to 0.6.3
 
 * [Storage] `AbstractStorage::findModelByIdentificator` does more strict model class comparison now. Only same classes are allowed. Subclasses not allowed any more.
 
-0.5 to 0.6
-==========
+## 0.5 to 0.6
 
 * [Doctrine] `TokenizedDetails` mapping schema was updated. details field is now accept `NULL`.
 * [Doctrine] `TokenizedDetails` entity was deprecated use `Token` instead.
@@ -23,14 +22,12 @@
 * [Request] `CaptureTokenizedDetailsRequest` was deprecated use `SecuredCaptureRequest` instead.
 * [Request] `NotifyTokenizedDetailsRequest` was deprecated use `SecuredNotifyRequest` instead.
 
-0.4 to 0.5
-==========
+## 0.4 to 0.5
 
 * A method `getIdentificator` was added to `StorageInterface` interface.
 * `StorageExtension` not using scalar as model id any more. Use `Identificator` object instead.
 
-0.3 to 0.4
-==========
+## 0.3 to 0.4
 
 * Method `StatusInterface::markInProgress` renamed to `StatusInterface::markPending`
 * Method `StatusInterface::isInProgress` renamed to `StatusInterface::isPending`
@@ -48,16 +45,14 @@
 * Exception `HttpResponseStatusNotSuccessfulException` was removed. Use `HttpException` instead.
 * `HttpException` constructor signature changed. Now it is like any other basic exception. 
 
-0.2 to 0.3
-==========
+## 0.2 to 0.3
 
 * The `Payment::execute` method signature changed. Now you have to explicitly set when to catch interactive requests or not.
 * `InteractiveRequest` renamed to `BaseInteractiveRequest`.
 * A method `supportModel` was added to `StorageInterface`.
 * `NullStorage` was removed.
 
-0.1 to 0.2
-==========
+## 0.1 to 0.2
 
 * `ModelInterface` interface was removed.
 * `PaymentInstructionInterface` interface was removed.
