@@ -21,6 +21,6 @@ Vespolina another one e-commerce solution. It's also built on top of symfony2 fr
 
 * [Speckcommerce](https://github.com/speckcommerce/speck).
 
-Speckcommerce is a shop solution for zend framework2 developers. They have [plans to integrate payum]((https://github.com/speckcommerce/SpeckPaypal/issues/8)).
+Speckcommerce is a shop solution for zend framework2 developers. They have [plans to integrate payum](https://github.com/speckcommerce/SpeckPaypal/issues/8).
 
 Back to [index](index.md).
