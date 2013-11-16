@@ -6,7 +6,7 @@ Steps:
 * [Configure context](#configure-context)
 * [Prepare payment](#prepare-payment)
 
-_**Note** : We assume you followed all steps in [get it started](../get_it_started.md) and your basic configuration same as described there._
+_**Note**: We assume you followed all steps in [get it started](../get_it_started.md) and your basic configuration same as described there._
 
 ## Download libraries
 
@@ -48,6 +48,7 @@ Please note that you have to set details in the payment gateway specific format.
 //src/Acme/PaymentBundle/Controller
 namespace AcmeDemoBundle\Controller;
 
+use Payum\Security\SensitiveValue;
 use Symfony\Component\HttpFoundation\Request;
 
 class PaymentController extends Controller
@@ -63,17 +64,17 @@ class PaymentController extends Controller
 
         /** @var \Acme\PaymentBundle\Entity\PaymentDetails */
         $paymentDetails = $storage->createModel();
-        $paymentDetails['amount'] = 10005; //be2bill amount format is cents: for example:  100.05 (EUR). will be 10005.
-        $paymentDetails['clientemail'] = 'user@email.com';
-        $paymentDetails['clientuseragent'] = $request->headers->get('User-Agent', 'Unknown');
-        $paymentDetails['clientip'] = $request->getClientIp();
-        $paymentDetails['clientident'] = 'payerId';
-        $paymentDetails['description'] = 'Payment for digital stuff';
-        $paymentDetails['orderid'] = 'orderId';
-        $paymentDetails['cardcode'] = '5555 5567 7825 0000';
-        $paymentDetails['cardcvv'] = 123;
-        $paymentDetails['cardfullname'] = 'John Doe';
-        $paymentDetails['cardvaliditydate'] = '15-11';
+        $paymentDetails['AMOUNT'] = 10005; //be2bill amount format is cents: for example:  100.05 (EUR). will be 10005.
+        $paymentDetails['CLIENTEMAIL'] = 'user@email.com';
+        $paymentDetails['CLIENTUSERAGENT'] = $request->headers->get('User-Agent', 'Unknown');
+        $paymentDetails['CLIENTIP'] = $request->getClientIp();
+        $paymentDetails['CLIENTIDENT'] = 'payerId';
+        $paymentDetails['DESCRIPTION'] = 'Payment for digital stuff';
+        $paymentDetails['ORDERID'] = 'orderId';
+        $paymentDetails['CARDCODE'] = new SensitiveValue('5555 5567 7825 0000');
+        $paymentDetails['CARDCVV'] = new SensitiveValue(123);
+        $paymentDetails['CARDFULLNAME'] = new SensitiveValue('John Doe');
+        $paymentDetails['CARDVALIDITYDATE'] = new SensitiveValue('15-11');
         $storage->updateModel($paymentDetails);
 
         $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
@@ -89,7 +90,7 @@ class PaymentController extends Controller
 }
 ```
 
-_**Attention**: The credit card is saved to database in this example. You should consider using custom model or take care of removing sensitive data after purchase._
+_**Note**: The sensitive value object ensures that any valuable info will not be saved accidentally somewhere._
 
 That's it. After the payment done you will be redirect to `acme_payment_done` action.
 Check [this chapter](../purchase_done_action.md) to find out how this done action could look like.
