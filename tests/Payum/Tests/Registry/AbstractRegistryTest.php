@@ -57,6 +57,20 @@ class AbstractRegistryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function couldConstructedWithPaymentsStoragesOnly()
+    {
+        $payments = array('fooName' => 'fooPayment');
+        $storages = array('bar' => array('stdClass' => 'barStorage'));
+
+        $this->createAbstractRegistryMock(array(
+            $payments,
+            $storages
+        ));
+    }
+
+    /**
+     * @test
+     */
     public function shouldAllowGetDefaultPaymentName()
     {
         $payments = array('fooName' => 'fooPayment');
@@ -78,6 +92,22 @@ class AbstractRegistryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldAllowGetDefaultPaymentNameSetInConstructor()
+    {
+        $payments = array('fooName' => 'fooPayment');
+        $storages = array('bar' => array('stdClass' => 'barStorage'));
+
+        $registry = $this->createAbstractRegistryMock(array(
+            $payments,
+            $storages,
+        ));
+
+        $this->assertEquals('default', $registry->getDefaultPaymentName());
+    }
+
+    /**
+     * @test
+     */
     public function shouldAllowGetDefaultStorageName()
     {
         $payments = array('fooName' => 'fooPayment');
@@ -94,6 +124,22 @@ class AbstractRegistryTest extends \PHPUnit_Framework_TestCase
             ));
 
         $this->assertEquals($storageName, $registry->getDefaultStorageName());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetDefaultStorageNameSetInConstructor()
+    {
+        $payments = array('fooName' => 'fooPayment');
+        $storages = array('bar' => array('stdClass' => 'barStorage'));
+
+        $registry = $this->createAbstractRegistryMock(array(
+            $payments,
+            $storages,
+        ));
+
+        $this->assertEquals('default', $registry->getDefaultStorageName());
     }
 
     /**
@@ -187,9 +233,9 @@ class AbstractRegistryTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid class argument given. Must be string class or model instance.
+     * @expectedExceptionMessage A storage for payment barName and model notRegisteredModelClass was not registered. The payment supports storages for next models: stdClass.
      */
-    public function throwIfTryToGetStorageWithNotExistModelClass()
+    public function throwIfTryToGetStorageWithNotRegisteredModelClass()
     {
         $payments = array('fooName' => 'fooPayment', 'barName' => 'barPayment');
         $storages = array('barName' => array('stdClass' => 'barStorage'));
@@ -204,19 +250,26 @@ class AbstractRegistryTest extends \PHPUnit_Framework_TestCase
             $storageName
         ));
 
-        $this->assertEquals('barStorage', $registry->getStorageForClass('notExistModelClass'));
+        $this->assertEquals('barStorage', $registry->getStorageForClass('notRegisteredModelClass'));
     }
 
     /**
      * @test
      *
      * @expectedException \Payum\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Payum storage named notExistName for class "stdClass" does not exist.
+     * @expectedExceptionMessage Any storages for payment notExistName were not registered. Registered payments: barName, fooName.
      */
-    public function throwIfTryToGetStorageWithNotExistName()
+    public function throwIfTryToGetStorageForNotExistPayment()
     {
         $payments = array('fooName' => 'fooPayment', 'barName' => 'barPayment');
-        $storages = array('barName' => array('stdClass' => 'barStorage'));
+        $storages = array(
+            'barName' => array(
+                'stdClass' => 'barStorage'
+            ),
+            'fooName' => array(
+                'stdClass' => 'fooStorage'
+            )
+        );
 
         $paymentName = 'fooName';
         $storageName = 'barName';
