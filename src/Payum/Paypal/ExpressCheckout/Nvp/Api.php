@@ -472,10 +472,14 @@ class Api
     {
         $host = $this->options['sandbox'] ? 'www.sandbox.paypal.com' : 'www.paypal.com';
 
+        //let user decide if they want useraction=commit
+        $useraction = isset($this->options['useraction']) ? '&useraction='.$this->options['useraction'] : '';
+
         return sprintf(
-            'https://%s/cgi-bin/webscr?cmd=_express-checkout&token=%s',
+            'https://%s/cgi-bin/webscr?cmd=_express-checkout&token=%s%s',
             $host,
-            $token
+            $token,
+            $useraction
         );
     }
 
