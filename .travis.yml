@@ -16,6 +16,7 @@ before_script:
 branches:
   only:
     - master
+    - 0.6
 
 notifications:
   email:
