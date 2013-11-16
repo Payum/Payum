@@ -6,7 +6,7 @@ Steps:
 * [Configure context](#configure-context)
 * [Prepare payment](#prepare-payment)
 
-_**Note** : We assume you followed all steps in [get it started](../get_it_started.md) and your basic configuration same as described there._
+_**Note**: We assume you followed all steps in [get it started](../get_it_started.md) and your basic configuration same as described there._
 
 ## Download libraries
 
@@ -47,6 +47,7 @@ Please note that you have to set details in the payment gateway specific format.
 //src/Acme/PaymentBundle/Controller
 namespace AcmeDemoBundle\Controller;
 
+use Payum\Security\SensitiveValue;
 use Symfony\Component\HttpFoundation\Request;
 
 class PaymentController extends Controller
@@ -63,14 +64,14 @@ class PaymentController extends Controller
         /** @var \Acme\PaymentBundle\Entity\PaymentDetails */
         $paymentDetails = $storage->createModel();
         $paymentDetails['amount'] = 10;
-        $paymentDetails['card'] = array(
+        $paymentDetails['card'] = new SensitiveValue(array(
             'number' => '5555556778250000',
             'cvv' => 123,
             'expiryMonth' => 6,
             'expiryYear' => 16,
             'firstName' => 'foo',
             'lastName' => 'bar',
-        );
+        ));
         $storage->updateModel($paymentDetails);
 
         $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
@@ -86,7 +87,7 @@ class PaymentController extends Controller
 }
 ```
 
-_**Attention**: The credit card is saved to database in this example. You should consider using custom model or take care of removing sensitive data after purchase._
+_**Note**: The sensitive value object ensures that any valuable info will not be saved accidentally somewhere._
 
 That's it. After the payment done you will be redirect to `acme_payment_done` action.
 Check [this chapter](../purchase_done_action.md) to find out how this done action could look like.
