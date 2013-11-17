@@ -50,7 +50,6 @@ The lib supports next paypal features: basic purchase, sync previous payments, r
 * [Saferpay](https://github.com/ibrows/PaymentSaferpayBundle)
 * [Virgopass](https://github.com/cariboo/CaribooPaymentVirgopassBundle)
 * [Atos SIPS](https://github.com/cariboo/CaribooPaymentSipsBundle)
-* [Atos SIPS](https://github.com/cariboo/CaribooPaymentSipsBundle)
 * [Dotpay](https://github.com/ETSGlobal/ETSPaymentDotpayBundle)
 
 Back to [index](index.md).
