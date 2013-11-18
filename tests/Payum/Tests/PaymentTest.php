@@ -110,6 +110,27 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldAllowAddApiWithPrependForced()
+    {
+        $expectedFirstApi = new \stdClass;
+        $expectedSecondApi = new \stdClass;
+
+        $payment = new Payment;
+
+        $payment->addApi($expectedSecondApi);
+        $payment->addApi($expectedFirstApi, $forcePrepend = true);
+
+        $actualApis = $this->readAttribute($payment, 'apis');
+
+        $this->assertInternalType('array', $actualApis);
+        $this->assertCount(2, $actualApis);
+        $this->assertSame($expectedFirstApi, $actualApis[0]);
+        $this->assertSame($expectedSecondApi, $actualApis[1]);
+    }
+
+    /**
+     * @test
+     */
     public function shouldSetFirstApiToActionApiAware()
     {
         $payment = new Payment();

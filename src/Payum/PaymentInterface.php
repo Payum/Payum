@@ -8,10 +8,11 @@ interface PaymentInterface
 {
     /**
      * @param mixed $api
+     * @param bool $forcePrepend
      *
      * @return void
      */
-    function addApi($api);
+    function addApi($api, $forcePrepend = false);
 
     /**
      * @param ActionInterface $action

@@ -34,15 +34,18 @@ class Payment implements PaymentInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function addApi($api)
+    public function addApi($api, $forcePrepend = false)
     {
-        $this->apis[] = $api;
+        $forcePrepend ?
+            array_unshift($this->apis, $api) :
+            array_push($this->apis, $api)
+        ;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function addAction(ActionInterface $action, $forcePrepend = false)
     {
@@ -75,7 +78,7 @@ class Payment implements PaymentInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function addExtension(ExtensionInterface $extension, $forcePrepend = false)
     {
@@ -83,7 +86,7 @@ class Payment implements PaymentInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function execute($request, $catchInteractive = false)
     {
