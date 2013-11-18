@@ -297,6 +297,26 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldAllowGetAuthorizeUrlWithCustomUserAction()
+    {
+        $api = new Api($this->createClientMock(), array(
+            'username' => 'a_username',
+            'password' => 'a_password',
+            'signature' => 'a_signature',
+            'sandbox' => true,
+            'useraction' => 'commit',
+        ));
+
+        $this->assertEquals(
+            'https://www.sandbox.paypal.com/cgi-bin/webscr?useraction=commit&cmd=_express-checkout&token=theToken',
+            $api->getAuthorizeTokenUrl('theToken')
+        );
+    }
+
+
+    /**
+     * @test
+     */
     public function shouldGetRealAuthorizeUrlIfSandboxFalse()
     {
         $api = new Api($this->createClientMock(), array(
