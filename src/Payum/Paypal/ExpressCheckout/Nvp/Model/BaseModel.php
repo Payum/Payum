@@ -4,6 +4,9 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Model;
 use Payum\Exception\InvalidArgumentException;
 use Payum\Exception\LogicException;
 
+/**
+ * @deprecated since 0.6.3 and will be removed in 0.7
+ */
 abstract class BaseModel implements \ArrayAccess, \IteratorAggregate
 {
     /**

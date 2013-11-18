@@ -3,6 +3,8 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Model;
 
 /**
  * @link https://www.x.com/developers/paypal/documentation-tools/api/createrecurringpaymentsprofile-api-operation-nvp
+ *
+ * @deprecated since 0.6.3 and will be removed in 0.7
  */
 class RecurringPaymentDetails extends BaseModel
 {

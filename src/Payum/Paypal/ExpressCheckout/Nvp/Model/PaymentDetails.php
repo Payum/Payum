@@ -7,6 +7,8 @@ use Payum\Paypal\ExpressCheckout\Nvp\Model\BaseModel;
 
 /**
  * @link https://www.x.com/developers/paypal/documentation-tools/api/setexpresscheckout-api-operation-nvp
+ *
+ * @deprecated since 0.6.3 and will be removed in 0.7
  */
 class PaymentDetails extends BaseModel
 {
