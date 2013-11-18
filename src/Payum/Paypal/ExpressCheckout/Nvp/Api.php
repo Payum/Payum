@@ -284,7 +284,6 @@ class Api
         'return_url' => null,
         'cancel_url' => null,
         'sandbox' => null,
-        'useraction' => null,
     );
 
     public function __construct(ClientInterface $client, array $options)
@@ -473,13 +472,11 @@ class Api
     {
         $host = $this->options['sandbox'] ? 'www.sandbox.paypal.com' : 'www.paypal.com';
 
-        $query = array_filter(array(
-            'useraction' => $this->options['useraction'],
-            'cmd' => '_express-checkout',
-            'token' => $token,
-        ));
-
-        return sprintf('https://%s/cgi-bin/webscr?%s', $host, http_build_query($query));
+        return sprintf(
+            'https://%s/cgi-bin/webscr?cmd=_express-checkout&token=%s',
+            $host,
+            $token
+        );
     }
 
     /**
