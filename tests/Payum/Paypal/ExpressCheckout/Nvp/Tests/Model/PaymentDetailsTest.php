@@ -122,7 +122,7 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public static function provideMultiArrayMultiItemValues()
+    public static function provideMultiArrayValuesAndMNotEqualsN()
     {
         return array(
             array('getLPaymentrequestName', 'setLPaymentrequestName', 'L_PAYMENTREQUEST_0_NAME0', 'L_PAYMENTREQUEST_0_NAME1'),
@@ -131,7 +131,7 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
             array('getLPaymentrequestAmt', 'setLPaymentrequestAmt', 'L_PAYMENTREQUEST_0_AMT0', 'L_PAYMENTREQUEST_1_AMT1'),
             array('getLPaymentrequestItemcategory', 'setLPaymentrequestItemcategory', 'L_PAYMENTREQUEST_0_ITEMCATEGORY0', 'L_PAYMENTREQUEST_0_ITEMCATEGORY1'),
         );
-    }
+     }
 
     /**
      * @test
@@ -460,9 +460,10 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
     /**
      * @group bugfix
      * @test
-     * @dataProvider provideMultiArrayMultiItemValues
+     * @dataProvider provideMultiArrayValuesAndMNotEqualsN
      */
-    public function shouldCorrectlySetOffsetMultiItemValues($getter, $setter, $paypalName00, $paypalName01){
+    public function shouldCorrectlySetOffsetMultiItemValues($getter, $setter, $paypalName00, $paypalName01)
+    {
         $value = 'theValue';
 
         $details = new PaymentDetails();
@@ -476,9 +477,10 @@ class PaymentDetailsTest extends \PHPUnit_Framework_TestCase
     /**
      * @group bugfix
      * @test
-     * @dataProvider provideMultiArrayMultiItemValues
+     * @dataProvider provideMultiArrayValuesAndMNotEqualsN
      */
-    public function shouldCorrectlySetOffsetMultiItemArrayWay($getter, $setter, $paypalName00, $paypalName01){
+    public function shouldCorrectlySetOffsetMultiItemArrayWay($getter, $setter, $paypalName00, $paypalName01)
+    {
         $value = 'theValue';
 
         $details = new PaymentDetails();
