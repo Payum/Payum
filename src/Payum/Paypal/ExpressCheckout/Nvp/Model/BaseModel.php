@@ -67,7 +67,7 @@ abstract class BaseModel implements \ArrayAccess, \IteratorAggregate
             preg_match_all('/\d/', $name, $matches);
             if (array_key_exists(0, $matches) && array_key_exists(0, $matches[0])) {
                 if (array_key_exists(1, $matches[0]) && false === strpos($name, 'SHIPTOSTREET2')) {
-                    $this->set($property, $value, $matches[0][1], $matches[0][1]);
+                    $this->set($property, $value, $matches[0][0], $matches[0][1]);
                 } else {
                     $this->set($property, $value, $matches[0][0]);
                 }
