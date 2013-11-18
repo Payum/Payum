@@ -3,6 +3,7 @@
 ## 0.6 to 0.7
 
 * `PaymentRegistryInterface::getPayments` method is added.
+* `PaymentInterface::addApi` method signature was changed. Now it takes second argument `forcePrepend`.
 
 ## 0.6.2 to 0.6.3
 
