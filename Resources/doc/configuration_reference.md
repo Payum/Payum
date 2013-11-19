@@ -4,6 +4,11 @@
 
 ```yaml
 payum:
+    security:
+        token_storage:
+            A\Model\TokenClass:
+                # storage specific options
+
     contexts:
         foo_payment_context:
             xxx_payment:
