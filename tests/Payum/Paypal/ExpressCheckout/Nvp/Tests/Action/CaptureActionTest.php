@@ -178,11 +178,6 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $model = new PaymentDetails;
-        $model->setToken('aToken');
-        $model->setPayerid(null);
-        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED);
-
         $action->execute(new CaptureRequest(array(
             'TOKEN' => 'aToken',
             'PAYERID' => null,
@@ -210,10 +205,6 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $model = new PaymentDetails;
-        $model->setToken('aToken');
-        $model->setCheckoutstatus(Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS);
-
         $action->execute(new CaptureRequest(array(
             'TOKEN' => 'aToken',
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS
@@ -240,13 +231,12 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $model = new PaymentDetails;
-        $model->setToken('aToken');
-        $model['CHECKOUTSTATUS'] = Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED;
-        $model->setPayerid('aPayerId');
-        $model->setPaymentrequestAmt(0, 0);
-
-        $action->execute(new CaptureRequest($model));
+        $action->execute(new CaptureRequest(array(
+            'TOKEN' => 'aToken',
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
+            'PAYERID' => 'aPayerId',
+            'PAYMENTREQUEST_0_AMT' => 0,
+        )));
     }
 
     /**
