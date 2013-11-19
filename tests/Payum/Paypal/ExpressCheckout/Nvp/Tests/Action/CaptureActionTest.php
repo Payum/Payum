@@ -6,7 +6,6 @@ use Buzz\Message\Form\FormRequest;
 use Payum\Request\CaptureRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
-use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 
@@ -40,16 +39,6 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $request = new CaptureRequest($this->getMock('ArrayAccess'));
         
         $this->assertTrue($action->supports($request));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportAuthorizeTokenRequestWithPaymentDetailsAsModel()
-    {
-        $action = new CaptureAction();
-
-        $this->assertTrue($action->supports(new CaptureRequest(new PaymentDetails)));
     }
 
     /**

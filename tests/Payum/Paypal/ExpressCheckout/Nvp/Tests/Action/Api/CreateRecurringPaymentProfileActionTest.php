@@ -6,7 +6,6 @@ use Buzz\Message\Form\FormRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
-use Payum\Paypal\ExpressCheckout\Nvp\Model\RecurringPaymentDetails;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfileRequest;
 
 class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCase
@@ -37,16 +36,6 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
         $action = new CreateRecurringPaymentProfileAction();
 
         $this->assertTrue($action->supports(new CreateRecurringPaymentProfileRequest($this->getMock('ArrayAccess'))));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCreateRecurringPaymentProfileRequestWithRecurringPaymentDetailsAsModel()
-    {
-        $action = new CreateRecurringPaymentProfileAction();
-
-        $this->assertTrue($action->supports(new CreateRecurringPaymentProfileRequest(new RecurringPaymentDetails)));
     }
 
     /**

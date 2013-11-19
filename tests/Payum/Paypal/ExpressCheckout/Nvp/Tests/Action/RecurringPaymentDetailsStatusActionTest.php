@@ -1,10 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
-use Buzz\Message\Form\FormRequest;
-
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Model\RecurringPaymentDetails;
 use Payum\Request\BinaryMaskStatusRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
@@ -41,21 +38,6 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCas
         
         $request = new BinaryMaskStatusRequest($recurringPaymentDetails);
         
-        $this->assertTrue($action->supports($request));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestWithRecurringPaymentDetailsAsModelWhichHasBillingPeriodSet()
-    {
-        $action = new RecurringPaymentDetailsStatusAction();
-
-        $recurringPaymentDetails = new RecurringPaymentDetails;
-        $recurringPaymentDetails->setBillingperiod('foo');
-
-        $request = new BinaryMaskStatusRequest($recurringPaymentDetails);
-
         $this->assertTrue($action->supports($request));
     }
 
