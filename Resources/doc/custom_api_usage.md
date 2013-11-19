@@ -1,18 +1,16 @@
 # Custom api usage
 
 Sometime you asked to store payment gateway credentials to database.
-An admin can change them quickly in the site backend.
-By default payum use container parameters to store such information.
-Here in this chapter we would show how you could teach payum to use custom api.
+That's required to allow an admin change them quickly in the site backend.
+By default payum use container parameters to store such information and
+here in this chapter we would show how to use custom api.
 
 ## Api factory
 
 First, we have to create an api factory.
-The factory would create the desired api using database or what ever else.
+The factory would create the desired api using database or what ever else you want.
 
 ```php
-<?php
-
 <?php
 // src/Acme/PaymentBundle/Payum/Api/Factory.php;
 namespace Acme\PaymentBundle\Payum\Api;
@@ -52,7 +50,7 @@ class Factory
 
 As you could see we use container to build paypal api.
 Feel free to change it to suit your needs.
-Now we have to create an api service that created by the factory:
+Now we have to create an api service which is created by the factory one:
 
 ```yaml
 # src/Acme/PaymentBundle/Resources/config/services.yml
@@ -60,6 +58,11 @@ Now we have to create an api service that created by the factory:
 services:
 
     # ...
+
+    acme.payment.payum.api.factory:
+        class: Acme\PaymentBundle\Payum\Api\Factory
+        arguments:
+            - @service_container
 
     acme.payment.payum.paypal_express_checkout_api:
         class: Payum\Paypal\ExpressCheckout\Nvp\Api
