@@ -4,7 +4,6 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetRecurringPaymentsProfileDetailsAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetRecurringPaymentsProfileDetailsRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Model\RecurringPaymentDetails;
 
 class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,16 +35,6 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_Te
         $this->assertTrue(
             $action->supports(new GetRecurringPaymentsProfileDetailsRequest($this->getMock('ArrayAccess')))
         );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportGetRecurringPaymentsProfileDetailsRequestWithRecurringPaymentDetailsDetailsAsModel()
-    {
-        $action = new GetRecurringPaymentsProfileDetailsAction();
-
-        $this->assertTrue($action->supports(new GetRecurringPaymentsProfileDetailsRequest(new RecurringPaymentDetails)));
     }
 
     /**

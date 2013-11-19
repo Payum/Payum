@@ -6,22 +6,52 @@ Subscription costs 0.05$ per day and would last for 7 days.
 
 ## Configuration
 
-To start using recurring payment you have to add one more storage to `config.php`.
+Recurring payments require two additional models.
+First one would contain agreement details and the second one recurring payment details.
+Let's define them:
+
+```php
+<?php
+namespace App\Model;
+
+use Payum\Model\ArrayObject;
+
+class AgreementDetails extends \ArrayObject
+{
+}
+```
+
+And recurring payment details model:
+
+
+```php
+<?php
+namespace App\Model;
+
+use Payum\Model\ArrayObject;
+
+class RecurringPaymentDetails extends \ArrayObject
+{
+}
+```
+
+Now we have to adjust `config.php` to support paypal recurring payments:
 
 ```php
 <?php
 //config.php
 
-$paypalRecurringPaymentDetailsClass = 'Payum\Paypal\ExpressCheckout\Nvp\Model\RecurringPaymentDetails';
+$agreementDetailsClass = 'App\Model\AgreementDetails';
+$recurringPaymentDetailsClass = 'App\Model\RecurringPaymentDetails';
 $storages = array(
-
-    // other storages here
-
     'paypal' => array(
-        $paypalRecurringPaymentDetailsClass => new FilesystemStorage(
+        $agreementDetailsClass => new FilesystemStorage(
             __DIR__.'/storage',
-            $paypalRecurringPaymentDetailsClass,
-            'idStorage'
+            $agreementDetailsClass
+        )
+        $recurringPaymentDetailsClass => new FilesystemStorage(
+            __DIR__.'/storage',
+            $recurringPaymentDetailsClass
         )
     )
 );
@@ -38,19 +68,18 @@ For this we have to create an agreement with him.
 
 include 'config.php';
 
-$storage = $registry->getStorageForClass($paypalPaymentDetailsClass, 'paypal');
+$storage = $registry->getStorageForClass($agreementDetailsClass, 'paypal');
 
 $agreementDetails = $storage->createModel();
 $agreementDetails['PAYMENTREQUEST_0_AMT'] = 0;
 $agreementDetails['L_BILLINGTYPE0'] = Api::BILLINGTYPE_RECURRING_PAYMENTS;
 $agreementDetails['L_BILLINGAGREEMENTDESCRIPTION0'] = $subscription['description'];
 $agreementDetails['NOSHIPPING'] = 1;
-
 $storage->updateModel($agreementDetails);
 
 $createRecurringPaymentToken = $tokenStorage->createModel();
 $createRecurringPaymentToken->setPaymentName('paypal');
-$createRecurringPaymentToken->setDetails($storage->getIdentificator($paymentDetails));
+$createRecurringPaymentToken->setDetails($storage->getIdentificator($agreementDetails));
 $createRecurringPaymentToken->setTargetUrl(
     'http://'.$_SERVER['HTTP_HOST'].'/create_recurring_payment.php?payum_token='.$doneToken->getHash()
 );
@@ -58,7 +87,7 @@ $tokenStorage->updateModel($createRecurringPaymentToken);
 
 $captureToken = $tokenStorage->createModel();
 $captureToken->setPaymentName('paypal');
-$captureToken->setDetails($storage->getIdentificator($paymentDetails));
+$captureToken->setDetails($storage->getIdentificator($agreementDetails));
 $captureToken->setTargetUrl(
     'http://'.$_SERVER['HTTP_HOST'].'/capture.php?payum_token='.$captureToken->getHash()
 );
@@ -112,10 +141,7 @@ if (false == $agreementStatus->isSuccess()) {
 
 $agreementDetails = $agreementStatus->getModel();
 
-$recurringPaymentStorage = $registry->getStorageForClass(
-    $paypalRecurringPaymentDetailsClass,
-    $token->getPaymentName()
-);
+$storage = $registry->getStorageForClass($recurringPaymentDetailsClass, $token->getPaymentName());
 
 $recurringPaymentDetails = $recurringPaymentStorage->createModel();
 $recurringPaymentDetails['TOKEN'] = $agreementDetails->getToken();
@@ -142,3 +168,5 @@ $tokenStorage->updateModel($doneToken);
 
 header("Location: ".$doneToken->getTargetUrl());
 ```
+
+Back to [index](index.md).

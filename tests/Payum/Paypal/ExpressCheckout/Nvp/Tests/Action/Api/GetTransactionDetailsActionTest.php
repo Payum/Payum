@@ -3,9 +3,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetTransactionDetailsAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetailsRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,16 +35,6 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
         $request = new GetTransactionDetailsRequest($this->getMock('ArrayAccess'), $paymentRequestN = 5);
         
         $this->assertTrue($action->supports($request));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportGetTransactionDetailsRequestWithPaymentDetailsAsModel()
-    {
-        $action = new GetTransactionDetailsAction();
-
-        $this->assertTrue($action->supports(new GetTransactionDetailsRequest(new PaymentDetails, $paymentRequestN = 5)));
     }
 
     /**

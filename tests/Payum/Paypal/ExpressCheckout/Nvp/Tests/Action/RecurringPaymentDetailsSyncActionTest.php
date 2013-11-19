@@ -48,19 +48,6 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportSyncRequestWithRecurringPaymentDetailsAsModel()
-    {
-        $action = new RecurringPaymentDetailsSyncAction();
-
-        $paymentDetails = new RecurringPaymentDetails();
-        $paymentDetails->setBillingperiod('foo');
-
-        $this->assertTrue($action->supports(new SyncRequest($paymentDetails)));
-    }
-
-    /**
-     * @test
-     */
     public function shouldNotSupportAnythingNotSyncRequest()
     {
         $action = new RecurringPaymentDetailsSyncAction();

@@ -2,7 +2,6 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Request\RedirectUrlInteractiveRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\AuthorizeTokenAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeTokenRequest;
 
@@ -34,16 +33,6 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
         $action = new AuthorizeTokenAction();
         
         $this->assertTrue($action->supports(new AuthorizeTokenRequest($this->getMock('ArrayAccess'))));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportAuthorizeTokenRequestWithPaymentDetailsAsModel()
-    {
-        $action = new AuthorizeTokenAction();
-
-        $this->assertTrue($action->supports(new AuthorizeTokenRequest(new PaymentDetails)));
     }
 
     /**

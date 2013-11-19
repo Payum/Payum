@@ -1,10 +1,9 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
+namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\ManageRecurringPaymentsProfileStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ManageRecurringPaymentsProfileStatusRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
-use Payum\Paypal\ExpressCheckout\Nvp\Model\RecurringPaymentDetails;
 
 class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,18 +34,6 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_
 
         $this->assertTrue(
             $action->supports(new ManageRecurringPaymentsProfileStatusRequest($this->getMock('ArrayAccess')))
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportManageRecurringPaymentsProfileStatusRequestWithRecurringPaymentDetailsDetailsAsModel()
-    {
-        $action = new ManageRecurringPaymentsProfileStatusAction();
-
-        $this->assertTrue($action->supports(
-            new ManageRecurringPaymentsProfileStatusRequest(new RecurringPaymentDetails))
         );
     }
 

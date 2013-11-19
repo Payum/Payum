@@ -5,7 +5,7 @@ use Buzz\Message\Form\FormRequest;
 
 use Payum\Request\BinaryMaskStatusRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails;
+
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
@@ -58,20 +58,6 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $request = new BinaryMaskStatusRequest($paymentDetails);
 
         $this->assertTrue($action->supports($request));
-    }
-
-
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestWithPaymentDetailsAsModelWhichHasPaymentRequestAmountSet()
-    {
-        $action = new PaymentDetailsStatusAction();
-
-        $paymentDetails = new PaymentDetails;
-        $paymentDetails->setPaymentrequestAmt(0, 12);
-
-        $this->assertTrue($action->supports(new BinaryMaskStatusRequest($paymentDetails)));
     }
 
     /**

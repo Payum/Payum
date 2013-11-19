@@ -2,14 +2,13 @@
 
 ## 0.6 to 0.7
 
-* [Model] `BaseModel::toNvp` was removed.
-* [Model] `BaseModel::fromNvp` was removed.
-* [Doctrine] `Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails` require migration. New field `others` is added.
-* [Doctrine] `Payum\Paypal\ExpressCheckout\Nvp\Model\RecurringPaymentDetails` require migration. New field `others` is added.
-* [Doctrine] `Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity\PaymentDetails` was deprecated and now removed. Use `Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails` instead.
-* [Doctrine] `Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity\RecurringPaymentDetails` was deprecated and now removed. Use `Payum\Paypal\ExpressCheckout\Nvp\Model\RecurringPaymentDetails` instead.
-* [Doctrine] `Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Document\PaymentDetails` was deprecated and now removed. Use `Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails` instead.
-* [Doctrine] `Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Document\RecurringPaymentDetails` was deprecated and now removed. Use `Payum\Paypal\ExpressCheckout\Nvp\Model\RecurringPaymentDetails` instead.
+* [Model] `BaseModel` was removed.
+* [Model] `Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails` was removed.
+* [Model] `Payum\Paypal\ExpressCheckout\Nvp\Model\RecurringPaymentDetails` was removed.
+* [Doctrine] `Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity\PaymentDetails` was removed.
+* [Doctrine] `Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity\RecurringPaymentDetails` was removed.
+* [Doctrine] `Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Document\PaymentDetails` was removed.
+* [Doctrine] `Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Document\RecurringPaymentDetails` was removed.
 
 ## 0.4 to 0.5
 

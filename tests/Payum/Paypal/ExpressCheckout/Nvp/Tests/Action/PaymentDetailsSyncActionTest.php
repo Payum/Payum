@@ -4,7 +4,6 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 use Buzz\Message\Form\FormRequest;
 
 use Payum\Request\SyncRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
@@ -60,19 +59,6 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
         $request = new SyncRequest($paymentDetails);
 
         $this->assertTrue($action->supports($request));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportSyncRequestWithPaymentDetailsAsModel()
-    {
-        $action = new PaymentDetailsSyncAction();
-
-        $paymentDetails = new PaymentDetails;
-        $paymentDetails->setPaymentrequestAmt(0, 12);
-
-        $this->assertTrue($action->supports(new SyncRequest($paymentDetails)));
     }
 
     /**
