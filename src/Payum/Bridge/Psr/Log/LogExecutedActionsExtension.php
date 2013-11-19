@@ -2,10 +2,9 @@
 namespace Payum\Bridge\Psr\Log;
 
 use Payum\Action\ActionInterface;
+use Payum\Debug\Humanify;
 use Payum\Extension\ExtensionInterface;
 use Payum\Request\InteractiveRequestInterface;
-use Payum\Request\ModelRequestInterface;
-use Payum\Request\RedirectUrlInteractiveRequest;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -55,8 +54,8 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
         $this->logger->debug(sprintf(
             '[Payum] %d# %s::execute(%s)',
             $this->stackLevel,
-            $this->toString($action, false),
-            $this->toStringRequest($request)
+            Humanify::value($action, false),
+            Humanify::request($request)
         ));
     }
 
@@ -75,9 +74,9 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
     {
         $this->logger->debug(sprintf('[Payum] %d# %s::execute(%s) throws interactive %s',
             $this->stackLevel,
-            $this->toString($action),
-            $this->toStringRequest($request),
-            $this->toStringRequest($interactiveRequest)
+            Humanify::value($action),
+            Humanify::request($request),
+            Humanify::request($interactiveRequest)
         ));
 
         $this->stackLevel--;
@@ -90,49 +89,11 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
     {
         $this->logger->debug(sprintf('[Payum] %d# %s::execute(%s) throws exception %s',
             $this->stackLevel,
-            $action ? $this->toString($action) : 'Payment',
-            $this->toStringRequest($request),
-            $this->toString($exception)
+            $action ? Humanify::value($action) : 'Payment',
+            Humanify::request($request),
+            Humanify::value($exception)
         ));
 
         $this->stackLevel--;
-    }
-
-    /**
-     * @param mixed $request
-     * @return string
-     */
-    protected function toStringRequest($request)
-    {
-        $message = $this->toString($request);
-        if ($request instanceof ModelRequestInterface) {
-            $message .= sprintf("{model: %s}", $this->toString($request->getModel()));
-        }
-        if ($request instanceof RedirectUrlInteractiveRequest) {
-            $message .= sprintf('{url: %s}', $request->getUrl());
-        }
-
-        return $message;
-    }
-
-    /**
-     * @param mixed $value
-     * @param bool $shortClass
-     *
-     * @return string
-     */
-    protected function toString($value, $shortClass = true)
-    {
-        if (is_object($value)) {
-            if ($shortClass) {
-                $ro = new \ReflectionObject($value);
-
-                return $ro->getShortName();
-            }
-
-            return get_class($value);
-        }
-
-        return gettype($value);
     }
 }
