@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.4 (2013-11-19)
+
+* [exception] improve message of request not supported exception.
+* [registry] improve exception messages for getStorageForClass method.
+
 ## 0.6.3 (2013-10-27)
 
 * [composer] lower required php version from 5.3.9 to 5.3.3
