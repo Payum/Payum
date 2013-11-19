@@ -142,23 +142,22 @@ class PayumSecurityToken extends BaseToken
 }
 ```
 
-Token use custom mongo type called `ObjectType`, so you have to add it:
+Token use custom mongo type called `ObjectType`, so you have to add it to the kernel boot method:
 
 ```php
 <?php
-namespace Acme\PaymentBundle;
+// app\AppKernel.php
 
 use Doctrine\ODM\MongoDB\Types\Type;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class AcmePaymentBundle extends Bundle
+class AppKernel extends Kernel
 {
-    public function build(ContainerBuilder $container)
+    public function boot()
     {
         Type::addType('object', 'Payum\Bridge\Doctrine\Types\ObjectType');
+
+        parent::boot();
     }
-}
 ```
 
 next, you have to add mapping of the extended token and finally configure token storage:
