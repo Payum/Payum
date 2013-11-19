@@ -304,15 +304,107 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-            'useraction' => 'commit',
+            'useraction' => 'aCustomUserAction',
         ));
 
         $this->assertEquals(
-            'https://www.sandbox.paypal.com/cgi-bin/webscr?useraction=commit&cmd=_express-checkout&token=theToken',
+            'https://www.sandbox.paypal.com/cgi-bin/webscr?useraction=aCustomUserAction&cmd=_express-checkout&token=theToken',
             $api->getAuthorizeTokenUrl('theToken')
         );
     }
 
+    /**
+     * @test
+     */
+    public function shouldAllowGetAuthorizeUrlWithCustomUserActionPassedAsQueryParameter()
+    {
+        $api = new Api($this->createClientMock(), array(
+            'username' => 'a_username',
+            'password' => 'a_password',
+            'signature' => 'a_signature',
+            'sandbox' => true,
+            'useraction' => 'notUsedUseraction',
+        ));
+
+        $this->assertEquals(
+            'https://www.sandbox.paypal.com/cgi-bin/webscr?useraction=theUseraction&cmd=_express-checkout&token=theToken',
+            $api->getAuthorizeTokenUrl('theToken', array('useraction' => 'theUseraction'))
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetAuthorizeUrlWithCustomCmd()
+    {
+        $api = new Api($this->createClientMock(), array(
+            'username' => 'a_username',
+            'password' => 'a_password',
+            'signature' => 'a_signature',
+            'sandbox' => true,
+            'cmd' => 'theCmd',
+        ));
+
+        $this->assertEquals(
+            'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=theCmd&token=theToken',
+            $api->getAuthorizeTokenUrl('theToken')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetAuthorizeUrlWithCustomCmdPassedAsQueryParameter()
+    {
+        $api = new Api($this->createClientMock(), array(
+            'username' => 'a_username',
+            'password' => 'a_password',
+            'signature' => 'a_signature',
+            'sandbox' => true,
+            'cmd' => 'thisCmdNotUsed',
+        ));
+
+        $this->assertEquals(
+            'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=theCmd&token=theToken',
+            $api->getAuthorizeTokenUrl('theToken', array('cmd' => 'theCmd'))
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetAuthorizeUrlWithCustomQueryParameter()
+    {
+        $api = new Api($this->createClientMock(), array(
+            'username' => 'a_username',
+            'password' => 'a_password',
+            'signature' => 'a_signature',
+            'sandbox' => true
+        ));
+
+        $this->assertEquals(
+            'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken&foo=fooVal',
+            $api->getAuthorizeTokenUrl('theToken', array('foo' => 'fooVal'))
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetAuthorizeUrlWithIgnoredEmptyCustomQueryParameter()
+    {
+        $api = new Api($this->createClientMock(), array(
+            'username' => 'a_username',
+            'password' => 'a_password',
+            'signature' => 'a_signature',
+            'sandbox' => true
+        ));
+
+        $this->assertEquals(
+            'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
+            $api->getAuthorizeTokenUrl('theToken', array('foo' => ''))
+        );
+    }
 
     /**
      * @test

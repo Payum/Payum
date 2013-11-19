@@ -121,6 +121,39 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldPassAuthorizeTokenCustomParametersToApi()
+    {
+        $apiMock = $this->createApiMock();
+        $apiMock
+            ->expects($this->once())
+            ->method('getAuthorizeTokenUrl')
+            ->with('aToken', array(
+                'USERACTION' => 'theUserAction',
+                'CMD' => 'theCmd'
+            ))
+        ;
+
+        $action = new AuthorizeTokenAction();
+        $action->setApi($apiMock);
+
+        $request = new AuthorizeTokenRequest(array(
+            'TOKEN' => 'aToken',
+            'AUTHORIZE_TOKEN_USERACTION' => 'theUserAction',
+            'AUTHORIZE_TOKEN_CMD' => 'theCmd',
+        ));
+
+        try {
+            $action->execute($request);
+        } catch (RedirectUrlInteractiveRequest $redirectUrlRequest) {
+            return;
+        }
+
+        $this->fail('RedirectUrlInteractiveRequest exception was expected.');
+    }
+
+    /**
+     * @test
+     */
     public function shouldDoNothingIfUserAlreadyAuthorizedToken()
     {
         $apiMock = $this->createApiMock();

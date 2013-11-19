@@ -30,7 +30,10 @@ class AuthorizeTokenAction extends BaseApiAwareAction
           
         if (false == $model['PAYERID'] || $request->isForced()) {
             throw new RedirectUrlInteractiveRequest(
-                $this->api->getAuthorizeTokenUrl($model['TOKEN'])
+                $this->api->getAuthorizeTokenUrl($model['TOKEN'], array(
+                    'USERACTION' => $model['AUTHORIZE_TOKEN_USERACTION'],
+                    'CMD' => $model['AUTHORIZE_TOKEN_CMD'],
+                ))
             );
         }
     }

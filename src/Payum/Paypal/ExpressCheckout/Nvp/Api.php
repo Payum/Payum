@@ -273,6 +273,12 @@ class Api
 
     const RECURRINGPAYMENTACTION_CANCEL = 'Cancel';
 
+    const USERACTION_COMMIT = 'commit';
+
+    const CMD_EXPRESS_CHECKOUT = '_express-checkout';
+
+    const CMD_EXPRESS_CHECKOUT_MOBILE = '_express-checkout-mobile';
+
     const VERSION = '65.1';
 
     protected $client;
@@ -285,6 +291,7 @@ class Api
         'cancel_url' => null,
         'sandbox' => null,
         'useraction' => null,
+        'cmd' => Api::CMD_EXPRESS_CHECKOUT,
     );
 
     public function __construct(ClientInterface $client, array $options)
@@ -469,17 +476,21 @@ class Api
      * 
      * @return string
      */
-    public function getAuthorizeTokenUrl($token)
+    public function getAuthorizeTokenUrl($token, array $query = array())
     {
-        $host = $this->options['sandbox'] ? 'www.sandbox.paypal.com' : 'www.paypal.com';
-
-        $query = array_filter(array(
+        $defaultQuery = array_filter(array(
             'useraction' => $this->options['useraction'],
-            'cmd' => '_express-checkout',
+            'cmd' => $this->options['cmd'],
             'token' => $token,
         ));
 
-        return sprintf('https://%s/cgi-bin/webscr?%s', $host, http_build_query($query));
+        $query = array_filter($query);
+
+        return sprintf(
+            'https://%s/cgi-bin/webscr?%s',
+            $this->options['sandbox'] ? 'www.sandbox.paypal.com' : 'www.paypal.com',
+            http_build_query(array_replace($defaultQuery, $query))
+        );
     }
 
     /**
