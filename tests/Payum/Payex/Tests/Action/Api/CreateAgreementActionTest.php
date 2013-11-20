@@ -4,7 +4,6 @@ namespace Payum\Payex\Tests\Action\Api;
 use Payum\Payex\Action\Api\CreateAgreementAction;
 use Payum\Payex\Api\AgreementApi;
 use Payum\Payex\Request\Api\CreateAgreementRequest;
-use Payum\Payex\Model\PaymentDetails;
 
 class CreateAgreementActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -108,16 +107,6 @@ class CreateAgreementActionTest extends \PHPUnit_Framework_TestCase
         $action = new CreateAgreementAction();
 
         $this->assertTrue($action->supports(new CreateAgreementRequest($this->getMock('ArrayAccess'))));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCreateAgreementRequestWithPaymentDetailsAsModel()
-    {
-        $action = new CreateAgreementAction;
-        
-        $this->assertTrue($action->supports(new CreateAgreementRequest(new PaymentDetails)));
     }
 
     /**

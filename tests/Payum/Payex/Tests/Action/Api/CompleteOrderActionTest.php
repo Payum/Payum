@@ -3,7 +3,6 @@ namespace Payum\Payex\Tests\Action\Api;
 
 use Payum\Payex\Action\Api\CompleteOrderAction;
 use Payum\Payex\Request\Api\CompleteOrderRequest;
-use Payum\Payex\Model\PaymentDetails;
 
 class CompleteOrderActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -85,16 +84,6 @@ class CompleteOrderActionTest extends \PHPUnit_Framework_TestCase
         $action = new CompleteOrderAction();
 
         $this->assertTrue($action->supports(new CompleteOrderRequest($this->getMock('ArrayAccess'))));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCompleteOrderRequestWithPaymentDetailsAsModel()
-    {
-        $action = new CompleteOrderAction;
-        
-        $this->assertTrue($action->supports(new CompleteOrderRequest(new PaymentDetails)));
     }
 
     /**

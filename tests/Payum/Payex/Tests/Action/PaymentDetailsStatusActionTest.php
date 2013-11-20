@@ -6,8 +6,6 @@ use Payum\PaymentInterface;
 use Payum\Request\BinaryMaskStatusRequest;
 use Payum\Payex\Action\PaymentDetailsStatusAction;
 use Payum\Payex\Api\OrderApi;
-use Payum\Payex\Model\PaymentDetails;
-use Payum\Payex\Model\AgreementDetails;
 
 class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -69,16 +67,6 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportBinaryMaskStatusRequestWithPaymentDetailsAsModel()
-    {
-        $action = new PaymentDetailsStatusAction;
-
-        $this->assertTrue($action->supports(new BinaryMaskStatusRequest(new PaymentDetails)));
-    }
-
-    /**
-     * @test
-     */
     public function shouldNotSupportAnythingNotBinaryMaskStatusRequest()
     {
         $action = new PaymentDetailsStatusAction;
@@ -94,16 +82,6 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $action = new PaymentDetailsStatusAction;
 
         $this->assertFalse($action->supports(new BinaryMaskStatusRequest(new \stdClass)));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportBinaryMaskStatusRequestWithAgreementDetailsAsModel()
-    {
-        $action = new PaymentDetailsStatusAction;
-
-        $this->assertFalse($action->supports(new BinaryMaskStatusRequest(new AgreementDetails)));
     }
 
     /**

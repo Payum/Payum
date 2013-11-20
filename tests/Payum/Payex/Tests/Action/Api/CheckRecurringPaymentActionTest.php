@@ -4,7 +4,6 @@ namespace Payum\Payex\Tests\Action\Api;
 use Payum\Payex\Action\Api\CheckRecurringPaymentAction;
 use Payum\Payex\Api\RecurringApi;
 use Payum\Payex\Request\Api\CheckRecurringPaymentRequest;
-use Payum\Payex\Model\PaymentDetails;
 
 class CheckRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -86,16 +85,6 @@ class CheckRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
         $action = new CheckRecurringPaymentAction();
 
         $this->assertTrue($action->supports(new CheckRecurringPaymentRequest($this->getMock('ArrayAccess'))));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCheckRecurringPaymentRequestWithPaymentDetailsAsModel()
-    {
-        $action = new CheckRecurringPaymentAction;
-        
-        $this->assertTrue($action->supports(new CheckRecurringPaymentRequest(new PaymentDetails)));
     }
 
     /**

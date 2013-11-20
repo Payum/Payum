@@ -4,7 +4,6 @@ namespace Payum\Payex\Tests\Action\Api;
 use Payum\Payex\Action\Api\AutoPayAgreementAction;
 use Payum\Payex\Api\AgreementApi;
 use Payum\Payex\Request\Api\AutoPayAgreementRequest;
-use Payum\Payex\Model\PaymentDetails;
 
 class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -92,16 +91,6 @@ class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
         $action = new AutoPayAgreementAction();
 
         $this->assertTrue($action->supports(new AutoPayAgreementRequest($this->getMock('ArrayAccess'))));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportAutoPayAgreementRequestWithPaymentDetailsAsModel()
-    {
-        $action = new AutoPayAgreementAction;
-        
-        $this->assertTrue($action->supports(new AutoPayAgreementRequest(new PaymentDetails)));
     }
 
     /**

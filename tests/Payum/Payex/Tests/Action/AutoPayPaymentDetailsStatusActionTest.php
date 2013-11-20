@@ -5,8 +5,6 @@ use Payum\PaymentInterface;
 use Payum\Request\BinaryMaskStatusRequest;
 use Payum\Payex\Action\AutoPayPaymentDetailsStatusAction;
 use Payum\Payex\Api\OrderApi;
-use Payum\Payex\Model\PaymentDetails;
-use Payum\Payex\Model\AgreementDetails;
 
 class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -73,45 +71,6 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($action->supports(new BinaryMaskStatusRequest(array(
             'autoPay' => false
         ))));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportBinaryMaskStatusRequestWithPaymentDetailsAsModelIfAutoPaySetToTrue()
-    {
-        $action = new AutoPayPaymentDetailsStatusAction;
-
-        $details = new PaymentDetails;
-        $details->setAutoPay(true);
-
-        $this->assertTrue($action->supports(new BinaryMaskStatusRequest($details)));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportBinaryMaskStatusRequestWithPaymentDetailsAsModelIfAutoPaySetToTrueAndRecurringSetToTrue()
-    {
-        $action = new AutoPayPaymentDetailsStatusAction;
-
-        $details = new PaymentDetails;
-        $details->setAutoPay(true);
-        $details->setRecurring(true);
-
-        $this->assertFalse($action->supports(new BinaryMaskStatusRequest($details)));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportBinaryMaskStatusRequestWithAgreementDetailsAsModel()
-    {
-        $action = new AutoPayPaymentDetailsStatusAction;
-
-        $details = new AgreementDetails;
-
-        $this->assertFalse($action->supports(new BinaryMaskStatusRequest($details)));
     }
 
     /**

@@ -3,7 +3,6 @@ namespace Payum\Payex\Tests\Action\Api;
 
 use Payum\Payex\Action\Api\CheckOrderAction;
 use Payum\Payex\Request\Api\CheckOrderRequest;
-use Payum\Payex\Model\PaymentDetails;
 
 class CheckOrderActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -85,16 +84,6 @@ class CheckOrderActionTest extends \PHPUnit_Framework_TestCase
         $action = new CheckOrderAction();
 
         $this->assertTrue($action->supports(new CheckOrderRequest($this->getMock('ArrayAccess'))));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCheckOrderRequestWithPaymentDetailsAsModel()
-    {
-        $action = new CheckOrderAction;
-        
-        $this->assertTrue($action->supports(new CheckOrderRequest(new PaymentDetails)));
     }
 
     /**

@@ -4,7 +4,6 @@ namespace Payum\Payex\Tests\Action;
 use Payum\PaymentInterface;
 use Payum\Request\CaptureRequest;
 use Payum\Payex\Action\PaymentDetailsCaptureAction;
-use Payum\Payex\Model\PaymentDetails;
 
 class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -71,16 +70,6 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
             'autoPay' => true,
             'recurring' => true
         ))));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureRequestWithPaymentDetailsAsModel()
-    {
-        $action = new PaymentDetailsCaptureAction;
-        
-        $this->assertTrue($action->supports(new CaptureRequest(new PaymentDetails)));
     }
 
     /**

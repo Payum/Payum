@@ -1,11 +1,9 @@
 <?php
 namespace Payum\Payex\Tests\Action;
 
-use Payum\Payex\Model\AgreementDetails;
 use Payum\PaymentInterface;
 use Payum\Request\SyncRequest;
 use Payum\Payex\Action\PaymentDetailsSyncAction;
-use Payum\Payex\Model\PaymentDetails;
 
 class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,26 +41,6 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $this->assertTrue($action->supports(new SyncRequest($array)));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportSyncRequestWithAgreementDetailsAsModel()
-    {
-        $action = new PaymentDetailsSyncAction;
-
-        $this->assertFalse($action->supports(new SyncRequest(new AgreementDetails)));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportSyncRequestWithPaymentDetailsAsModel()
-    {
-        $action = new PaymentDetailsSyncAction;
-
-        $this->assertTrue($action->supports(new SyncRequest(new PaymentDetails)));
     }
 
     /**

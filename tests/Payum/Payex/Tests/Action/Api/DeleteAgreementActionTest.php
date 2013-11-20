@@ -4,7 +4,6 @@ namespace Payum\Payex\Tests\Action\Api;
 use Payum\Payex\Action\Api\DeleteAgreementAction;
 use Payum\Payex\Api\AgreementApi;
 use Payum\Payex\Request\Api\DeleteAgreementRequest;
-use Payum\Payex\Model\PaymentDetails;
 
 class DeleteAgreementActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -86,16 +85,6 @@ class DeleteAgreementActionTest extends \PHPUnit_Framework_TestCase
         $action = new DeleteAgreementAction();
 
         $this->assertTrue($action->supports(new DeleteAgreementRequest($this->getMock('ArrayAccess'))));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportDeleteAgreementRequestWithPaymentDetailsAsModel()
-    {
-        $action = new DeleteAgreementAction;
-        
-        $this->assertTrue($action->supports(new DeleteAgreementRequest(new PaymentDetails)));
     }
 
     /**

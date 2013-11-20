@@ -3,7 +3,6 @@ namespace Payum\Payex\Tests\Action\Api;
 
 use Payum\Payex\Action\Api\InitializeOrderAction;
 use Payum\Payex\Api\OrderApi;
-use Payum\Payex\Model\PaymentDetails;
 use Payum\Payex\Request\Api\InitializeOrderRequest;
 use Payum\Request\RedirectUrlInteractiveRequest;
 
@@ -102,16 +101,6 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
         $action = new InitializeOrderAction();
 
         $this->assertTrue($action->supports(new InitializeOrderRequest($this->getMock('ArrayAccess'))));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportInitializeOrderRequestWithPaymentDetailsAsModel()
-    {
-        $action = new InitializeOrderAction;
-        
-        $this->assertTrue($action->supports(new InitializeOrderRequest(new PaymentDetails)));
     }
 
     /**

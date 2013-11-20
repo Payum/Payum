@@ -2,9 +2,7 @@
 namespace Payum\Payex\Tests\Action\Api;
 
 use Payum\Payex\Action\Api\StopRecurringPaymentAction;
-use Payum\Payex\Api\RecurringApi;
 use Payum\Payex\Request\Api\StopRecurringPaymentRequest;
-use Payum\Payex\Model\PaymentDetails;
 
 class StopRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -86,16 +84,6 @@ class StopRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
         $action = new StopRecurringPaymentAction();
 
         $this->assertTrue($action->supports(new StopRecurringPaymentRequest($this->getMock('ArrayAccess'))));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportStopRecurringPaymentRequestWithPaymentDetailsAsModel()
-    {
-        $action = new StopRecurringPaymentAction;
-        
-        $this->assertTrue($action->supports(new StopRecurringPaymentRequest(new PaymentDetails)));
     }
 
     /**
