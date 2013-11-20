@@ -3,6 +3,9 @@ namespace Payum\Be2Bill\Model;
 
 use Payum\Exception\InvalidArgumentException;
 
+/**
+ * @deprecated since 0.6.2 will be removed in 0.7
+ */
 class PaymentDetails implements \ArrayAccess, \IteratorAggregate
 {
     /**
