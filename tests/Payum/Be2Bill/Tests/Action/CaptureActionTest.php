@@ -2,10 +2,8 @@
 namespace Payum\Be2Bill\Tests\Action;
 
 use Payum\Be2Bill\Api;
-use Payum\Be2Bill\Payment;
 use Payum\Request\CaptureRequest;
 use Payum\Be2Bill\Action\CaptureAction;
-use Payum\Be2Bill\Model\PaymentDetails;
 
 class CaptureActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,18 +33,6 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     public function couldBeConstructedWithoutAnyArguments()   
     {
         new CaptureAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureRequestWithPaymentDetailsAsModel()
-    {
-        $action = new CaptureAction();
-
-        $request = new CaptureRequest(new PaymentDetails);
-
-        $this->assertTrue($action->supports($request));
     }
 
     /**

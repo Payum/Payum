@@ -3,6 +3,7 @@
 ## 0.6 to 0.7
 
 * [Doctrine] `Payum\Be2Bill\Bridge\Doctrine\Entity\PaymentDetails` is removed.
+* [Model] `Payum\Be2Bill\Model\PaymentDetails` is removed.
 
 ## 0.3 to 0.4
 
