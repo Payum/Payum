@@ -5,6 +5,9 @@ use Payum\Exception\RequestNotSupportedException;
 use Payum\Model\DetailsAggregateInterface;
 use Payum\Request\CaptureRequest;
 
+/**
+ * @deprecated since 0.6.4 will be replaced by ExecuteRequestWithDetailsAction action in 0.7
+ */
 class CaptureDetailsAggregatedModelAction extends PaymentAwareAction
 {
     /**
