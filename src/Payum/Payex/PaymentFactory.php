@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Payex;
 
-use Payum\Action\SyncDetailsAggregatedModelAction;
+use Payum\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Payex\Action\Api\CheckOrderAction;
 use Payum\Payex\Action\PaymentDetailsSyncAction;
 use Payum\Payment;
@@ -41,8 +41,6 @@ abstract class PaymentFactory
             $payment->addApi($agreementApi);
             
             $payment->addAction(new AgreementDetailsStatusAction);
-            $payment->addAction(new SyncDetailsAggregatedModelAction);
-            
             $payment->addAction(new CreateAgreementAction);
             $payment->addAction(new DeleteAgreementAction);
             $payment->addAction(new CheckAgreementAction);
@@ -70,6 +68,7 @@ abstract class PaymentFactory
         $payment->addAction(new PaymentDetailsSyncAction);
         $payment->addAction(new AutoPayPaymentDetailsCaptureAction);
         $payment->addAction(new AutoPayPaymentDetailsStatusAction);
+        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 
         return $payment;
     }
