@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Tests\Action;
 
-use Payum\Action\CaptureDetailsAggregatedModelAction;
 use Payum\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Request\CaptureRequest;
 
