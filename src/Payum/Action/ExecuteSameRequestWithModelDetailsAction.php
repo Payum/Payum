@@ -3,35 +3,32 @@ namespace Payum\Action;
 
 use Payum\Exception\RequestNotSupportedException;
 use Payum\Model\DetailsAggregateInterface;
-use Payum\Request\SyncRequest;
+use Payum\Request\ModelRequestInterface;
 
-/**
- * @deprecated since 0.6.4 will be replaced by ExecuteSameRequestWithModelDetailsAction action in 0.7
- */
-class SyncDetailsAggregatedModelAction extends PaymentAwareAction
+class ExecuteSameRequestWithModelDetailsAction extends PaymentAwareAction
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function execute($request)
     {
-        /** @var $request SyncRequest */
+        /** @var $request ModelRequestInterface */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
-        
+
         $request->setModel($request->getModel()->getDetails());
         
         $this->payment->execute($request);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {
         return 
-            $request instanceof SyncRequest &&
+            $request instanceof ModelRequestInterface &&
             $request->getModel() instanceof DetailsAggregateInterface && 
             $request->getModel()->getDetails()
         ;
