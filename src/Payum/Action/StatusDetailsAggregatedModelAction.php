@@ -5,6 +5,9 @@ use Payum\Exception\RequestNotSupportedException;
 use Payum\Model\DetailsAggregateInterface;
 use Payum\Request\StatusRequestInterface;
 
+/**
+ * @deprecated since 0.6.4 will be replaced by ExecuteSameRequestWithModelDetailsAction action in 0.7
+ */
 class StatusDetailsAggregatedModelAction extends PaymentAwareAction
 {
     /**
