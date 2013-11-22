@@ -202,17 +202,7 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertDefinitionContainsMethodCall(
             $container->getDefinition($paymentId),
             'addAction',
-            new Reference('payum.action.capture_details_aggregated_model')
-        );
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addAction',
-            new Reference('payum.action.sync_details_aggregated_model')
-        );
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addAction',
-            new Reference('payum.action.status_details_aggregated_model')
+            new Reference('payum.action.execute_same_request_with_model_details')
         );
     }
 

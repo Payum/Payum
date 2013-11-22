@@ -14,9 +14,7 @@
         <parameter key="payum.buzz.client.class">Buzz\Client\Curl</parameter>
         <parameter key="payum.listener.interactive_request.class">Payum\Bundle\PayumBundle\EventListener\InteractiveRequestListener</parameter>
 
-        <parameter key="payum.action.capture_details_aggregated_model.class">Payum\Action\CaptureDetailsAggregatedModelAction</parameter>
-        <parameter key="payum.action.sync_details_aggregated_model.class">Payum\Action\SyncDetailsAggregatedModelAction</parameter>
-        <parameter key="payum.action.status_details_aggregated_model.class">Payum\Action\StatusDetailsAggregatedModelAction</parameter>
+        <parameter key="payum.action.execute_same_request_with_model_details.class">Payum\Action\ExecuteSameRequestWithModelDetailsAction</parameter>
 
         <parameter key="payum.security.http_request_verifier.class">Payum\Bundle\PayumBundle\Security\HttpRequestVerifier</parameter>
         <parameter key="payum.security.token_factory.class">Payum\Bundle\PayumBundle\Security\TokenFactory</parameter>
@@ -74,18 +72,8 @@
         </service>
 
         <service 
-            id="payum.action.capture_details_aggregated_model" 
-            class="%payum.action.capture_details_aggregated_model.class%"
-        />
-
-        <service
-            id="payum.action.sync_details_aggregated_model"
-            class="%payum.action.sync_details_aggregated_model.class%"
-        />
-
-        <service
-            id="payum.action.status_details_aggregated_model"
-            class="%payum.action.status_details_aggregated_model.class%"
+            id="payum.action.execute_same_request_with_model_details"
+            class="%payum.action.execute_same_request_with_model_details.class%"
         />
 
         <!-- Should be replaced by PayumExtension -->

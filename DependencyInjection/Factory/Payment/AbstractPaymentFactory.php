@@ -191,17 +191,7 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
     {
         $paymentDefinition->addMethodCall(
             'addAction',
-            array(new Reference('payum.action.capture_details_aggregated_model'))
-        );
-
-        $paymentDefinition->addMethodCall(
-            'addAction',
-            array(new Reference('payum.action.sync_details_aggregated_model'))
-        );
-
-        $paymentDefinition->addMethodCall(
-            'addAction',
-            array(new Reference('payum.action.status_details_aggregated_model'))
+            array(new Reference('payum.action.execute_same_request_with_model_details'))
         );
     }
 
