@@ -1,11 +1,9 @@
 <?php
 namespace Payum\Be2Bill;
 
+use Payum\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Payment;
 use Payum\Extension\EndlessCycleDetectorExtension;
-use Payum\Action\CaptureDetailsAggregatedModelAction;
-use Payum\Action\StatusDetailsAggregatedModelAction;
-use Payum\Action\SyncDetailsAggregatedModelAction;
 use Payum\Be2Bill\Action\CaptureAction;
 use Payum\Be2Bill\Action\StatusAction;
 
@@ -26,9 +24,7 @@ abstract class PaymentFactory
 
         $payment->addAction(new CaptureAction);
         $payment->addAction(new StatusAction);
-        $payment->addAction(new CaptureDetailsAggregatedModelAction);
-        $payment->addAction(new SyncDetailsAggregatedModelAction);
-        $payment->addAction(new StatusDetailsAggregatedModelAction);
+        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
         
         return $payment;
     }
