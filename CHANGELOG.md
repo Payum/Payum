@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.5 (2013-11-22)
+
+* [request] CaptureDetailsAggregatedModelAction is deprecated.
+* [request] SyncDetailsAggregatedModelAction is deprecated.
+* [request] StatusDetailsAggregatedModelAction is deprecated.
+
 ## 0.6.4 (2013-11-19)
 
 * [exception] improve message of request not supported exception.
