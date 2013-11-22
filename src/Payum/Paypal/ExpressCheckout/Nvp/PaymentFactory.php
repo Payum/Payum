@@ -1,11 +1,9 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
+use Payum\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Payment;
 use Payum\Extension\EndlessCycleDetectorExtension;
-use Payum\Action\CaptureDetailsAggregatedModelAction;
-use Payum\Action\StatusDetailsAggregatedModelAction;
-use Payum\Action\SyncDetailsAggregatedModelAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoExpressCheckoutPaymentAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction;
@@ -49,10 +47,7 @@ abstract class PaymentFactory
         $payment->addAction(new RecurringPaymentDetailsSyncAction);
         $payment->addAction(new ManageRecurringPaymentsProfileStatusAction);
         $payment->addAction(new AuthorizeTokenAction);
-
-        $payment->addAction(new CaptureDetailsAggregatedModelAction);
-        $payment->addAction(new SyncDetailsAggregatedModelAction);
-        $payment->addAction(new StatusDetailsAggregatedModelAction);
+        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 
         return $payment;
     }
