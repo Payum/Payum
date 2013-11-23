@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the FOSOAuthServerBundle package.
+ * This file is part of the FOSUserBundle package.
  *
  * (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
  *
@@ -11,24 +11,39 @@
 
 namespace Payum\Security\Util;
 
+/**
+ * This is adopted version ot TokenGenerator class from FOSUserBundle
+ *
+ * @link https://github.com/FriendsOfSymfony/FOSUserBundle/blob/master/Util/TokenGenerator.php
+ */
 class Random
 {
-    static public function generateToken()
+    public static function generateToken()
     {
-        $bytes = false;
-        if (function_exists('openssl_random_pseudo_bytes') && 0 !== stripos(PHP_OS, 'win')) {
-            $bytes = openssl_random_pseudo_bytes(32, $strong);
+        return rtrim(strtr(base64_encode(self::getRandomNumber()), '+/', '-_'), '=');
+    }
 
-            if (true !== $strong) {
-                $bytes = false;
+    private static function getRandomNumber()
+    {
+        // determine whether to use OpenSSL
+        if (defined('PHP_WINDOWS_VERSION_BUILD') && version_compare(PHP_VERSION, '5.3.4', '<')) {
+            $useOpenSsl = false;
+        } elseif (!function_exists('openssl_random_pseudo_bytes')) {
+            $useOpenSsl = false;
+        } else {
+            $useOpenSsl = true;
+        }
+
+        $nbBytes = 32;
+
+        if ($useOpenSsl) {
+            $bytes = openssl_random_pseudo_bytes($nbBytes, $strong);
+
+            if (false !== $bytes && true === $strong) {
+                return $bytes;
             }
         }
 
-        // let's just hope we got a good seed
-        if (false === $bytes) {
-            $bytes = hash('sha256', uniqid(mt_rand(), true), true);
-        }
-
-        return base_convert(bin2hex($bytes), 16, 36);
+        return hash('sha256', uniqid(mt_rand(), true), true);
     }
 }
