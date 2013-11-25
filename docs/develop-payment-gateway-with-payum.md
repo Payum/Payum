@@ -5,7 +5,7 @@ Here we would briefly describe what you should start from.
 Let's assume you want to implement the most common task: purchase something and getting its status.
 For this you would send a request to a payment gateway using username and password provided.
 
-_**Note**: We would suggest to read (the architecture)[the-architecture.md] chapter before you proceed here._
+_**Note**: We would suggest to read [the architecture](the-architecture.md) chapter before you proceed here._
 
 ## Capture action.
 
