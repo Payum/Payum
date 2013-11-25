@@ -1,11 +1,11 @@
 # Develop payment gateway with payum
 
-This chapter could be useful for those developer who want create a gateway client using payum as base.
-Here we would briefly describe what you should start from.
-Let's assume you want to implement the most common task: purchase something and getting its status.
+This chapter could be useful for a developer who wants to create a gateway on top of payum.
+Here we would briefly describe general approaches, and things you should start from.
+Let's assume you want to implement the most common task: purchase a product and get payment status.
 For this you would send a request to a payment gateway using username and password provided.
 
-_**Note**: We would suggest to read [the architecture](the-architecture.md) chapter before you proceed here._
+_**Note**: Before you start we would suggest to read [the architecture](the-architecture.md) chapter._
 
 ## Capture action.
 
@@ -57,8 +57,8 @@ class CaptureAction implements ActionInterface
 
 ## Status action.
 
-`StatusAction` would contain all the rules of payment status.
-The action must make your decisions on the model you pass with request.
+`StatusAction` would contain all the rules of payment status calculation.
+The action must make its decisions using the model you pass with the request.
 Let's assume your model have `status` field and it can be either success or error.
 
 ```php
@@ -126,7 +126,7 @@ $payment->addAction(new StatusAction);
 
 $model = new ArrayObject(array(
     'amount' => 10,
-    'currency => 'USD',
+    'currency' => 'USD',
 ));
 
 $payment->execute(new CaptureRequest($model));
@@ -134,8 +134,8 @@ $payment->execute($status = new BinaryMaskStatusRequest($model));
 
 if ($status->isSuccess()) {
     echo 'We purchase staff successfully';
-} else if ($status->isFaild()) {
-    echo 'An error occured';
+} else if ($status->isFailed()) {
+    echo 'An error occurred';
 } else {
     echo 'Something went wrong but we don`t know the exact status';
 }
