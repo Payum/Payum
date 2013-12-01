@@ -1,22 +1,22 @@
 <?php
 namespace Payum\Paypal\ProCheckout\Nvp\Action;
 
-use Payum\Action\ActionInterface;
-use Payum\ApiAwareInterface;
-use Payum\Bridge\Spl\ArrayObject;
-use Payum\Exception\Http\HttpException;
-use Payum\Exception\RequestNotSupportedException;
-use Payum\Exception\UnsupportedApiException;
-use Payum\Exception\LogicException;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\Http\HttpException;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\Exception\LogicException;
 use Payum\Paypal\ProCheckout\Nvp\Api;
 use Payum\Paypal\ProCheckout\Nvp\Bridge\Buzz\Request;
 use Payum\Paypal\ProCheckout\Nvp\Model\PaymentDetails;
-use Payum\Request\CaptureRequest;
+use Payum\Core\Request\CaptureRequest;
 
 /**
  * @author Ton Sharp <Forma-PRO@66ton99.org.ua>
  */
-class CaptureAction implements ActionInterface, ApiAwareInterface
+class CaptureAction implements \Payum\Core\Action\ActionInterface, ApiAwareInterface
 {
     /**
      * @var Api

@@ -1,15 +1,15 @@
 <?php
 namespace Payum\Payex\Action\Api;
 
-use Payum\Action\ActionInterface;
-use Payum\ApiAwareInterface;
-use Payum\Bridge\Spl\ArrayObject;
-use Payum\Exception\LogicException;
-use Payum\Exception\RequestNotSupportedException;
-use Payum\Exception\UnsupportedApiException;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Payex\Api\OrderApi;
 use Payum\Payex\Request\Api\InitializeOrderRequest;
-use Payum\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\RedirectUrlInteractiveRequest;
 
 class InitializeOrderAction implements ActionInterface, ApiAwareInterface
 {

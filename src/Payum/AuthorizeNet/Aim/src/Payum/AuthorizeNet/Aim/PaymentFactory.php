@@ -1,11 +1,8 @@
 <?php
 namespace Payum\AuthorizeNet\Aim;
 
-use Payum\Payment;
-use Payum\Extension\EndlessCycleDetectorExtension;
-use Payum\Action\CaptureDetailsAggregatedModelAction;
-use Payum\Action\SyncDetailsAggregatedModelAction;
-use Payum\Action\StatusDetailsAggregatedModelAction;
+use Payum\Core\Payment;
+use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\AuthorizeNet\Aim\Action\CaptureAction;
 use Payum\AuthorizeNet\Aim\Action\StatusAction;

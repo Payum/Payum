@@ -1,7 +1,7 @@
 <?php
 namespace Payum\AuthorizeNet\Aim\Tests\Action;
 
-use Payum\Request\CaptureRequest;
+use Payum\Core\Request\CaptureRequest;
 use Payum\AuthorizeNet\Aim\Action\CaptureAction;
 use Payum\AuthorizeNet\Aim\Model\PaymentDetails;
 
@@ -14,7 +14,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\AuthorizeNet\Aim\Action\CaptureAction');
         
-        $this->assertTrue($rc->implementsInterface('Payum\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
     /**
@@ -86,7 +86,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
@@ -111,7 +111,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\UnsupportedApiException
+     * @expectedException \Payum\Core\Exception\UnsupportedApiException
      */
     public function throwIfUnsupportedApiGiven()
     {

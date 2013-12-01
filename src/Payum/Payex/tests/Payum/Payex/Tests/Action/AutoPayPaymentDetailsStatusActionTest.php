@@ -1,8 +1,8 @@
 <?php
 namespace Payum\Payex\Tests\Action;
 
-use Payum\PaymentInterface;
-use Payum\Request\BinaryMaskStatusRequest;
+use Payum\Core\PaymentInterface;
+use Payum\Core\Request\BinaryMaskStatusRequest;
 use Payum\Payex\Action\AutoPayPaymentDetailsStatusAction;
 use Payum\Payex\Api\OrderApi;
 
@@ -15,7 +15,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Payex\Action\AutoPayPaymentDetailsStatusAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
     }
 
     /**
@@ -96,7 +96,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {

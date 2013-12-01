@@ -35,7 +35,7 @@ class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Payex\Action\Api\AutoPayAgreementAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
     }
 
     /**
@@ -73,7 +73,7 @@ class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Exception\UnsupportedApiException
+     * @expectedException \Payum\Core\Exception\UnsupportedApiException
      * @expectedExceptionMessage Expected api must be instance of AgreementApi.
      */
     public function throwOnTryingSetNotAgreementApiAsApi()
@@ -116,7 +116,7 @@ class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
@@ -130,7 +130,7 @@ class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
      * 
      * @dataProvider provideRequiredFields
      * 
-     * @expectedException \Payum\Exception\LogicException
+     * @expectedException \Payum\Core\Exception\LogicException
      */
     public function throwIfTryInitializeWithRequiredFieldNotPresent($requiredField)
     {

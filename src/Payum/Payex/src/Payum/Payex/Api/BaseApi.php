@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Payex\Api;
 
-use Payum\Exception\InvalidArgumentException;
+use Payum\Core\Exception\InvalidArgumentException;
 
 abstract class BaseApi 
 {
@@ -33,7 +33,7 @@ abstract class BaseApi
      * @param SoapClientFactory $clientFactory
      * @param array $options
      *
-     * @throws \Payum\Exception\InvalidArgumentException if an option is invalid
+     * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
      */
     public function __construct(SoapClientFactory $clientFactory, array $options)
     {

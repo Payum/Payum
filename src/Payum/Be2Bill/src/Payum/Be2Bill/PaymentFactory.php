@@ -1,9 +1,9 @@
 <?php
 namespace Payum\Be2Bill;
 
-use Payum\Action\ExecuteSameRequestWithModelDetailsAction;
-use Payum\Payment;
-use Payum\Extension\EndlessCycleDetectorExtension;
+use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+use Payum\Core\Payment;
+use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Be2Bill\Action\CaptureAction;
 use Payum\Be2Bill\Action\StatusAction;
 

@@ -2,8 +2,8 @@
 namespace Payum\Payex\Tests\Action;
 
 use Payum\Payex\Api\AgreementApi;
-use Payum\PaymentInterface;
-use Payum\Request\BinaryMaskStatusRequest;
+use Payum\Core\PaymentInterface;
+use Payum\Core\Request\BinaryMaskStatusRequest;
 use Payum\Payex\Action\AgreementDetailsStatusAction;
 
 class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
@@ -15,7 +15,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Payex\Action\AgreementDetailsStatusAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
     }
 
     /**
@@ -97,7 +97,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {

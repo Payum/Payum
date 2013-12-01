@@ -1,8 +1,8 @@
 <?php
 namespace Payum\Payex\Tests\Action;
 
-use Payum\PaymentInterface;
-use Payum\Request\CaptureRequest;
+use Payum\Core\PaymentInterface;
+use Payum\Core\Request\CaptureRequest;
 use Payum\Payex\Action\PaymentDetailsCaptureAction;
 
 class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
@@ -14,7 +14,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Payex\Action\PaymentDetailsCaptureAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
     }
 
     /**
@@ -95,7 +95,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {

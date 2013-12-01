@@ -20,7 +20,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Exception\InvalidArgumentException
+     * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage The boolean sandbox option must be set.
      */
     public function throwIfSandboxOptionNotSetInConstructor()
@@ -55,7 +55,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Exception\Http\HttpException
+     * @expectedException \Payum\Core\Exception\Http\HttpException
      * @expectedExceptionMessage Client error response
      */
     public function throwIfResponseStatusNotOk()

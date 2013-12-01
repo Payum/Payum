@@ -1,14 +1,14 @@
 <?php
 namespace Payum\AuthorizeNet\Aim\Action;
 
-use Payum\Action\ActionInterface;
-use Payum\ApiAwareInterface;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
-use Payum\Bridge\Spl\ArrayObject;
-use Payum\Exception\UnsupportedApiException;
-use Payum\Request\CaptureRequest;
-use Payum\Request\UserInputRequiredInteractiveRequest;
-use Payum\Exception\RequestNotSupportedException;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\UserInputRequiredInteractiveRequest;
+use Payum\Core\Exception\RequestNotSupportedException;
 
 class CaptureAction implements ActionInterface, ApiAwareInterface
 {

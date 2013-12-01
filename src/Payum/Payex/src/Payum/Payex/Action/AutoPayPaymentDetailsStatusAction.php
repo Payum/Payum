@@ -1,11 +1,11 @@
 <?php
 namespace Payum\Payex\Action;
 
-use Payum\Action\ActionInterface;
-use Payum\Bridge\Spl\ArrayObject;
-use Payum\Exception\RequestNotSupportedException;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Payex\Api\AgreementApi;
-use Payum\Request\StatusRequestInterface;
+use Payum\Core\Request\StatusRequestInterface;
 use Payum\Payex\Api\OrderApi;
 
 class AutoPayPaymentDetailsStatusAction implements ActionInterface

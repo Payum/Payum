@@ -51,7 +51,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
@@ -63,7 +63,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\LogicException
+     * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage The TOKEN fields is required.
      */
     public function throwIfTokenNotSetInModel()
@@ -76,7 +76,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\LogicException
+     * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage The PROFILESTARTDATE fields is required.
      */
     public function throwIfRequiredFieldMissing()

@@ -1,0 +1,73 @@
+{
+    "name": "payum/core",
+    "type": "library",
+    "description": "Domain friendly payment framework. Paypal, payex, authorize.net, be2bill, omnipay, recurring paymens, instant notifications and many more",
+    "keywords": [
+        "payment",
+        "recurring payment",
+        "instant payment notification",
+        "ipn",
+        "paypal",
+        "paypal express",
+        "paypal pro",
+        "paypal rest",
+        "paypal digital goods",
+        "authorize.net",
+        "be2bill",
+        "payex",
+        "omnipay",
+        "jms payment"
+    ],
+    "homepage": "http://payum.forma-dev.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kotlyar Maksim",
+            "email": "kotlyar.maksim@gmail.com"
+        },
+        {
+            "name":     "Payum project",
+            "homepage": "http://payum.forma-dev.com/"
+        },
+        {
+            "name":     "Community contributions",
+            "homepage": "https://github.com/Payum/Payum/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "kriswallsmith/buzz": "*"
+    },
+    "require-dev": {
+        "ext-curl": "*",
+        "ext-pdo_sqlite": "*",
+        "doctrine/orm": "2.*",
+        "doctrine/mongodb": "1.0.*@dev",
+        "doctrine/mongodb-odm": "1.0.*@dev",
+        "phpunit/phpunit": "3.7.*",
+        "psr/log": "~1.0"
+    },
+    "suggest": {
+        "payum/paypal-express-checkout-nvp": "If you want to use paypal express checkout, digital goods or recurring payments",
+        "payum/paypal-pro-checkout-nvp": "If you want to use paypal pro checkout",
+        "payum/paypal-ipn": "If you want to use paypal instant payment notifications(Paypal IPN)",
+        "payum/authorize-net-aim": "If you want to use Authorize.Net AIM payment gateway",
+        "payum/be2bill": "If you want to use be2bill payment gateway",
+        "payum/omnipay-bridge": "If you want to use omnipay's gateways",
+        "doctrine/orm": "If you want to store models to database using doctrin2 ORM",
+        "doctrine/mongodb-odm": "If you want to store models to mongo doctrin2 ODM",
+        "monolog/monolog": "In case you want to use logger"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": { "Payum\\Core\\": "" }
+    },
+    "target-dir": "Payum/Core",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.7-dev"
+        }
+    }
+}

@@ -1,18 +1,18 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
-use Payum\Bridge\Spl\ArrayObject;
-use Payum\Request\CaptureRequest;
-use Payum\Request\SyncRequest;
-use Payum\Action\PaymentAwareAction;
-use Payum\Exception\RequestNotSupportedException;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\SyncRequest;
+use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckoutRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeTokenRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPaymentRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
-class CaptureAction extends PaymentAwareAction
+class CaptureAction extends \Payum\Core\Action\PaymentAwareAction
 {
     /**
      * {@inheritdoc}

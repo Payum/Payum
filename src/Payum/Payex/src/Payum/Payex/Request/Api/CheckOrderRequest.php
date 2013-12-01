@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Payex\Request\Api;
 
-use Payum\Request\BaseModelRequest;
+use Payum\Core\Request\BaseModelRequest;
 
 class CheckOrderRequest extends BaseModelRequest 
 {

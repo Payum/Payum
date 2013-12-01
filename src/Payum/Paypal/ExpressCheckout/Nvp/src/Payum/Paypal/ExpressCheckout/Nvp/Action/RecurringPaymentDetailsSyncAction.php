@@ -3,13 +3,13 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Buzz\Message\Form\FormRequest;
 
-use Payum\Bridge\Spl\ArrayObject;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetRecurringPaymentsProfileDetailsRequest;
-use Payum\Request\SyncRequest;
-use Payum\Action\PaymentAwareAction;
-use Payum\Exception\RequestNotSupportedException;
+use Payum\Core\Request\SyncRequest;
+use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Exception\RequestNotSupportedException;
 
-class RecurringPaymentDetailsSyncAction extends PaymentAwareAction
+class RecurringPaymentDetailsSyncAction extends \Payum\Core\Action\PaymentAwareAction
 {
     /**
      * {@inheritdoc}

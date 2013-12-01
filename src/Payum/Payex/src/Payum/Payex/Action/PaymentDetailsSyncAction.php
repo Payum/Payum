@@ -1,16 +1,16 @@
 <?php
 namespace Payum\Payex\Action;
 
-use Payum\Action\PaymentAwareAction;
-use Payum\Bridge\Spl\ArrayObject;
+use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Payex\Action\Api\CheckOrderAction;
 use Payum\Payex\Request\Api\CheckOrderRequest;
-use Payum\Request\StatusRequestInterface;
-use Payum\Request\SyncRequest;
-use Payum\Exception\RequestNotSupportedException;
+use Payum\Core\Request\StatusRequestInterface;
+use Payum\Core\Request\SyncRequest;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Payex\Request\Api\CheckAgreementRequest;
 
-class PaymentDetailsSyncAction extends PaymentAwareAction
+class PaymentDetailsSyncAction extends \Payum\Core\Action\PaymentAwareAction
 {
     /**
      * {@inheritDoc}

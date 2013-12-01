@@ -4,7 +4,7 @@ namespace Payum\Payex\Tests\Action\Api;
 use Payum\Payex\Action\Api\InitializeOrderAction;
 use Payum\Payex\Api\OrderApi;
 use Payum\Payex\Request\Api\InitializeOrderRequest;
-use Payum\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\RedirectUrlInteractiveRequest;
 
 class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,7 +45,7 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Payex\Action\Api\InitializeOrderAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
     }
 
     /**
@@ -83,7 +83,7 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Exception\UnsupportedApiException
+     * @expectedException \Payum\Core\Exception\UnsupportedApiException
      * @expectedExceptionMessage Expected api must be instance of OrderApi.
      */
     public function throwOnTryingSetNotOrderApiAsApi()
@@ -126,7 +126,7 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
@@ -138,7 +138,7 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Exception\LogicException
+     * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage The order has already been initialized.
      */
     public function throwIfTryInitializeAlreadyInitializedOrder()
@@ -162,7 +162,7 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
      * 
      * @dataProvider provideRequiredFields
      * 
-     * @expectedException \Payum\Exception\LogicException
+     * @expectedException \Payum\Core\Exception\LogicException
      */
     public function throwIfTryInitializeWithRequiredFieldNotPresent($requiredField)
     {

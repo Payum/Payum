@@ -2,8 +2,8 @@
 namespace Payum\Payex\Tests\Action;
 
 use Payum\Payex\Api\RecurringApi;
-use Payum\PaymentInterface;
-use Payum\Request\BinaryMaskStatusRequest;
+use Payum\Core\PaymentInterface;
+use Payum\Core\Request\BinaryMaskStatusRequest;
 use Payum\Payex\Action\PaymentDetailsStatusAction;
 use Payum\Payex\Api\OrderApi;
 
@@ -16,7 +16,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Payex\Action\PaymentDetailsStatusAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
     }
 
     /**
@@ -107,7 +107,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
@@ -533,7 +533,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\PaymentInterface
      */
     protected function createPaymentMock()
     {

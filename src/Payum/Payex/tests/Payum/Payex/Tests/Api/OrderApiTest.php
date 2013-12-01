@@ -19,7 +19,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test 
      * 
-     * @expectedException \Payum\Exception\InvalidArgumentException
+     * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage The accountNumber option must be set.
      */
     public function throwIfAccountNumberOptionNotSet()
@@ -30,7 +30,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\InvalidArgumentException
+     * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage The encryptionKey option must be set.
      */
     public function throwIfEncryptionKeyOptionNotSet()
@@ -46,7 +46,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\InvalidArgumentException
+     * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage The boolean sandbox option must be set.
      */
     public function throwIfNotBoolSandboxOptionGiven()

@@ -2,10 +2,10 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Examples;
 
 use Buzz\Client\Curl;
-use Payum\Request\CaptureRequest;
-use Payum\Request\SyncRequest;
-use Payum\Request\BinaryMaskStatusRequest;
-use Payum\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\SyncRequest;
+use Payum\Core\Request\BinaryMaskStatusRequest;
+use Payum\Core\Request\RedirectUrlInteractiveRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Examples\Model\AwesomeCart;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory;
@@ -24,8 +24,8 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         //@testo:uncomment:use Buzz\Client\Curl;
         //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Api;
         //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory;
-        //@testo:uncomment:use Payum\Request\CaptureRequest;
-        //@testo:uncomment:use Payum\Request\RedirectUrlInteractiveRequest;
+        //@testo:uncomment:use Payum\Core\Request\CaptureRequest;
+        //@testo:uncomment:use Payum\Core\Request\RedirectUrlInteractiveRequest;
         
         $payment = PaymentFactory::create(new Api(new Curl, array(
             'username' => 'a_username',
@@ -103,7 +103,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
 
         //@testo:start
         //@testo:source
-        //@testo:uncomment:use Payum\Request\BinaryMaskStatusRequest;
+        //@testo:uncomment:use Payum\Core\Request\BinaryMaskStatusRequest;
         
         $status = new BinaryMaskStatusRequest($capture->getModel());
         $payment->execute($status);
@@ -124,7 +124,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
     {
         //@testo:start
         //@testo:source
-        //@testo:uncomment:use Payum\Request\CaptureRequest;
+        //@testo:uncomment:use Payum\Core\Request\CaptureRequest;
         //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Api;
         
         $captureBillingAgreement = new CaptureRequest(array(
@@ -165,7 +165,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         //@testo:source
         //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Api;
         //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfileRequest;
-        //@testo:uncomment:use Payum\Request\SyncRequest;
+        //@testo:uncomment:use Payum\Core\Request\SyncRequest;
         
         $billingAgreementDetails = $captureBillingAgreement->getModel();
 

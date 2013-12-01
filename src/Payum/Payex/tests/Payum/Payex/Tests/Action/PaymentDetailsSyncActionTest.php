@@ -1,8 +1,8 @@
 <?php
 namespace Payum\Payex\Tests\Action;
 
-use Payum\PaymentInterface;
-use Payum\Request\SyncRequest;
+use Payum\Core\PaymentInterface;
+use Payum\Core\Request\SyncRequest;
 use Payum\Payex\Action\PaymentDetailsSyncAction;
 
 class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
@@ -14,7 +14,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Payex\Action\PaymentDetailsSyncAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
     }
 
     /**
@@ -66,7 +66,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {

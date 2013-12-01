@@ -1,10 +1,10 @@
 <?php
 namespace Payum\Payex\Action;
 
-use Payum\Action\PaymentAwareAction;
-use Payum\Bridge\Spl\ArrayObject;
-use Payum\Request\CaptureRequest;
-use Payum\Exception\RequestNotSupportedException;
+use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Payex\Request\Api\StartRecurringPaymentRequest;
 use Payum\Payex\Request\Api\InitializeOrderRequest;
 use Payum\Payex\Request\Api\CompleteOrderRequest;
@@ -16,7 +16,7 @@ class PaymentDetailsCaptureAction extends PaymentAwareAction
      */
     public function execute($request)
     {
-        /** @var $request CaptureRequest */
+        /** @var $request \Payum\Core\Request\CaptureRequest */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }

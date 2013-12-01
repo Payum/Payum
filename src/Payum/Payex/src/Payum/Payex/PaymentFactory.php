@@ -1,11 +1,11 @@
 <?php
 namespace Payum\Payex;
 
-use Payum\Action\ExecuteSameRequestWithModelDetailsAction;
+use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Payex\Action\Api\CheckOrderAction;
 use Payum\Payex\Action\PaymentDetailsSyncAction;
-use Payum\Payment;
-use Payum\Extension\EndlessCycleDetectorExtension;
+use Payum\Core\Payment;
+use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Payex\Action\Api\AutoPayAgreementAction;
 use Payum\Payex\Action\Api\CheckAgreementAction;
 use Payum\Payex\Action\Api\CompleteOrderAction;
@@ -31,7 +31,7 @@ abstract class PaymentFactory
      * @param Api\AgreementApi $agreementApi
      * @param Api\RecurringApi $recurringApi
      * 
-     * @return \Payum\Payment
+     * @return \Payum\Core\Payment
      */
     public static function create(OrderApi $orderApi, AgreementApi $agreementApi = null, RecurringApi $recurringApi = null)
     {

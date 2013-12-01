@@ -1,8 +1,8 @@
 <?php
 namespace Payum\Paypal\ProCheckout\Nvp\Model;
 
-use Payum\Exception\InvalidArgumentException;
-use Payum\Exception\LogicException;
+use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\Exception\LogicException;
 
 /**
  * @see https://www.x.com/sites/default/files/payflowgateway_guide.pdf

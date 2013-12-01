@@ -3,9 +3,9 @@ namespace Payum\Bridge\Omnipay\Action;
 
 use Omnipay\Common\GatewayInterface;
 
-use Payum\Action\ActionInterface;
-use Payum\ApiAwareInterface;
-use Payum\Exception\UnsupportedApiException;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\UnsupportedApiException;
 
 abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
 {

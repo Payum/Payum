@@ -1,11 +1,11 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
-use Payum\Bridge\Spl\ArrayObject;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction;
-use Payum\Request\RedirectUrlInteractiveRequest;
-use Payum\Exception\RequestNotSupportedException;
-use Payum\Exception\LogicException;
+use Payum\Core\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Exception\LogicException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeTokenRequest;
 
 class AuthorizeTokenAction extends BaseApiAwareAction
@@ -13,8 +13,8 @@ class AuthorizeTokenAction extends BaseApiAwareAction
     /**
      * {@inheritdoc}
      * 
-     * @throws \Payum\Exception\LogicException if the token not set in the instruction.
-     * @throws \Payum\Request\RedirectUrlInteractiveRequest if authorization required.
+     * @throws \Payum\Core\Exception\LogicException if the token not set in the instruction.
+     * @throws \Payum\Core\Request\RedirectUrlInteractiveRequest if authorization required.
      */
     public function execute($request)
     {

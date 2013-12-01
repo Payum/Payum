@@ -1,9 +1,9 @@
 <?php
 namespace Payum\Payex\Action;
 
-use Payum\Action\PaymentAwareAction;
-use Payum\Request\SyncRequest;
-use Payum\Exception\RequestNotSupportedException;
+use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Request\SyncRequest;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Payex\Request\Api\CheckAgreementRequest;
 
 class AgreementDetailsSyncAction extends PaymentAwareAction

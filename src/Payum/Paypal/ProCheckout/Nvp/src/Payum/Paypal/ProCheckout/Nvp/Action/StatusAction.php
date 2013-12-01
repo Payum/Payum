@@ -1,24 +1,24 @@
 <?php
 namespace Payum\Paypal\ProCheckout\Nvp\Action;
 
-use Payum\Action\ActionInterface;
-use Payum\Bridge\Spl\ArrayObject;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Paypal\ProCheckout\Nvp\Api;
-use Payum\Request\BinaryMaskStatusRequest;
-use Payum\Exception\RequestNotSupportedException;
+use Payum\Core\Request\BinaryMaskStatusRequest;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ProCheckout\Nvp\Model\PaymentDetails;
 
 /**
  * @author Ton Sharp <Forma-PRO@66ton99.org.ua>
  */
-class StatusAction implements ActionInterface
+class StatusAction implements \Payum\Core\Action\ActionInterface
 {
     /**
      * {@inheritdoc}
      */
     public function execute($request)
     {
-        /** @var $request \Payum\Request\StatusRequestInterface */
+        /** @var $request \Payum\Core\Request\StatusRequestInterface */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }

@@ -50,7 +50,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
@@ -62,7 +62,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\LogicException
+     * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage TOKEN must be set. Have you run SetExpressCheckoutAction?
      */
     public function throwIfTokenNotSetInModel()

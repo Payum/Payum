@@ -4,8 +4,8 @@ namespace Payum\Bridge\Omnipay\Tests\Integration;
 use Omnipay\Dummy\Gateway;
 
 use Payum\Bridge\Omnipay\PaymentFactory;
-use Payum\Request\BinaryMaskStatusRequest;
-use Payum\Request\CaptureRequest;
+use Payum\Core\Request\BinaryMaskStatusRequest;
+use Payum\Core\Request\CaptureRequest;
 
 class PaymentTest extends \PHPUnit_Framework_TestCase
 {

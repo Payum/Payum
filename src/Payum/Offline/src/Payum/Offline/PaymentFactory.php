@@ -1,16 +1,16 @@
 <?php
 namespace Payum\Offline;
 
-use Payum\Action\ExecuteSameRequestWithModelDetailsAction;
-use Payum\Extension\EndlessCycleDetectorExtension;
+use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Offline\Action\CaptureAction;
 use Payum\Offline\Action\StatusAction;
-use Payum\Payment;
+use Payum\Core\Payment;
 
 abstract class PaymentFactory
 {
     /**
-     * @return \Payum\Payment
+     * @return \Payum\Core\Payment
      */
     public static function create()
     {

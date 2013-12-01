@@ -50,7 +50,7 @@ $payments = array(
 ```php
 <?php
 
-use Payum\Security\SensitiveValue;
+use Payum\Core\Security\SensitiveValue;
 
 // prepare.php
 

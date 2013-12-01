@@ -5,8 +5,8 @@ use Buzz\Client\Curl;
 use Payum\Paypal\ProCheckout\Nvp\Api;
 use Payum\Paypal\ProCheckout\Nvp\PaymentFactory;
 use Payum\Paypal\ProCheckout\Nvp\Model\PaymentDetails;
-use Payum\Request\BinaryMaskStatusRequest;
-use Payum\Request\CaptureRequest;
+use Payum\Core\Request\BinaryMaskStatusRequest;
+use Payum\Core\Request\CaptureRequest;
 
 class ExecuteTest extends \PHPUnit_Framework_TestCase
 {

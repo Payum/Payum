@@ -4,9 +4,9 @@ namespace Payum\AuthorizeNet\Aim\Tests\Action;
 use Payum\AuthorizeNet\Aim\Action\StatusAction;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\AuthorizeNet\Aim\Model\PaymentDetails;
-use Payum\Bridge\Spl\ArrayObject;
-use Payum\Request\BinaryMaskStatusRequest;
-use Payum\Request\StatusRequestInterface;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Request\BinaryMaskStatusRequest;
+use Payum\Core\Request\StatusRequestInterface;
 
 class StatusActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,7 +17,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\AuthorizeNet\Aim\Action\StatusAction');
         
-        $this->assertTrue($rc->implementsInterface('Payum\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
     /**
@@ -79,7 +79,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
@@ -192,7 +192,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createStatusRequestStub($model)
     {
-        $status = $this->getMock('Payum\Request\StatusRequestInterface');
+        $status = $this->getMock('Payum\Core\Request\StatusRequestInterface');
 
         $status
             ->expects($this->any())

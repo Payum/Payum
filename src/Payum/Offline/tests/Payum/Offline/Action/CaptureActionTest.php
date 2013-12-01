@@ -1,10 +1,10 @@
 <?php
 namespace Payum\Offline\Tests\Action;
 
-use Payum\Bridge\Spl\ArrayObject;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Offline\Action\CaptureAction;
 use Payum\Offline\Constants;
-use Payum\Request\CaptureRequest;
+use Payum\Core\Request\CaptureRequest;
 
 class CaptureActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,7 +15,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Offline\Action\CaptureAction');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
     /**
@@ -65,7 +65,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {

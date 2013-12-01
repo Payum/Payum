@@ -2,11 +2,11 @@
 namespace Payum\Paypal\ProCheckout\Nvp;
 
 use Buzz\Client\ClientInterface;
-use Payum\Exception\Http\HttpException;
+use Payum\Core\Exception\Http\HttpException;
 use Payum\Paypal\ProCheckout\Nvp\Bridge\Buzz\Request;
 use Payum\Paypal\ProCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ProCheckout\Nvp\Exception\Http\HttpResponseNotSuccessException;
-use Payum\Exception\InvalidArgumentException;
+use Payum\Core\Exception\InvalidArgumentException;
 
 /**
  * @author Ton Sharp <Forma-PRO@66ton99.org.ua>
@@ -195,7 +195,7 @@ class Api
     /**
      * @param Request $request
      *
-     * @throws HttpException
+     * @throws \Payum\Core\Exception\Http\HttpException
      *
      * @return Response
      */

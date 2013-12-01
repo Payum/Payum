@@ -1,12 +1,12 @@
 <?php
 namespace Payum\AuthorizeNet\Aim\Action;
 
-use Payum\Action\ActionInterface;
-use Payum\Request\StatusRequestInterface;
-use Payum\Bridge\Spl\ArrayObject;
-use Payum\Exception\RequestNotSupportedException;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Request\StatusRequestInterface;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\RequestNotSupportedException;
 
-class StatusAction implements ActionInterface
+class StatusAction implements \Payum\Core\Action\ActionInterface
 {
     /**
      * {@inheritdoc}

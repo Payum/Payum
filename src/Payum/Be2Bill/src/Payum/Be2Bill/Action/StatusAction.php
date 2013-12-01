@@ -1,10 +1,10 @@
 <?php
 namespace Payum\Be2Bill\Action;
 
-use Payum\Action\ActionInterface;
-use Payum\Bridge\Spl\ArrayObject;
-use Payum\Request\StatusRequestInterface;
-use Payum\Exception\RequestNotSupportedException;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Request\StatusRequestInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Be2Bill\Api;
 
 class StatusAction implements ActionInterface

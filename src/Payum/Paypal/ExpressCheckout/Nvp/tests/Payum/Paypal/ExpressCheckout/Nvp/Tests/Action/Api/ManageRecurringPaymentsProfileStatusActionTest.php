@@ -50,7 +50,7 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
@@ -62,7 +62,7 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\LogicException
+     * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage The PROFILEID fields is required.
      */
     public function throwIfProfileIdNotSetInModel()
@@ -77,7 +77,7 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\LogicException
+     * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage The ACTION fields is required.
      */
     public function throwIfTokenNotSetInModel()

@@ -5,14 +5,14 @@ namespace Payum\Paypal\Rest\Action;
 use PayPal\Api\Payment;
 use PayPal\Api\PaymentExecution;
 use PayPal\Rest\ApiContext;
-use Payum\Action\PaymentAwareAction;
-use Payum\ApiAwareInterface;
-use Payum\Exception\RequestNotSupportedException;
-use Payum\Exception\UnsupportedApiException;
-use Payum\Request\CaptureRequest;
-use Payum\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\RedirectUrlInteractiveRequest;
 
-class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
+class CaptureAction extends \Payum\Core\Action\PaymentAwareAction implements ApiAwareInterface
 {
     /**
      * @param ApiContext
@@ -25,7 +25,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
     public function execute($request)
     {
         /**
-         * @var $request CaptureRequest
+         * @var $request \Payum\Core\Request\CaptureRequest
          */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
@@ -83,7 +83,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
     /**
      * @param mixed $api
      *
-     * @throws UnsupportedApiException if the given Api is not supported.
+     * @throws \Payum\Core\Exception\UnsupportedApiException if the given Api is not supported.
      *
      * @return void
      */

@@ -1,9 +1,9 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
-use Payum\Action\ExecuteSameRequestWithModelDetailsAction;
-use Payum\Payment;
-use Payum\Extension\EndlessCycleDetectorExtension;
+use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+use Payum\Core\Payment;
+use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoExpressCheckoutPaymentAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction;
@@ -23,7 +23,7 @@ abstract class PaymentFactory
     /**
      * @param Api $api
      *
-     * @return \Payum\Payment
+     * @return \Payum\Core\Payment
      */
     public static function create(Api $api)
     {

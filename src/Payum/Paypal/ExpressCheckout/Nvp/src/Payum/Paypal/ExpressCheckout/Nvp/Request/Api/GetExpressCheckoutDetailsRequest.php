@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Request\Api;
 
-use Payum\Request\BaseModelRequest;
+use Payum\Core\Request\BaseModelRequest;
 
 class GetExpressCheckoutDetailsRequest extends BaseModelRequest
 {

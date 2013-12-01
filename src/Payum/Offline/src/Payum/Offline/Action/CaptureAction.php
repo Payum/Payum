@@ -1,10 +1,10 @@
 <?php
 namespace Payum\Offline\Action;
 
-use Payum\Action\ActionInterface;
-use Payum\Exception\RequestNotSupportedException;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Offline\Constants;
-use Payum\Request\CaptureRequest;
+use Payum\Core\Request\CaptureRequest;
 
 class CaptureAction implements ActionInterface
 {
@@ -13,7 +13,7 @@ class CaptureAction implements ActionInterface
      */
     public function execute($request)
     {
-        /** @var $request CaptureRequest */
+        /** @var $request \Payum\Core\Request\CaptureRequest */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }

@@ -3,7 +3,7 @@ namespace Payum\Paypal\ProCheckout\Nvp\Exception\Http;
 
 use Payum\Paypal\ProCheckout\Nvp\Bridge\Buzz\Request;
 use Payum\Paypal\ProCheckout\Nvp\Bridge\Buzz\Response;
-use Payum\Exception\Http\HttpException;
+use Payum\Core\Exception\Http\HttpException;
 
 /**
  * @author Ton Sharp <Forma-PRO@66ton99.org.ua>

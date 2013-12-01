@@ -1,13 +1,13 @@
 <?php
 namespace Payum\Be2Bill\Action;
 
-use Payum\Action\ActionInterface;
-use Payum\ApiAwareInterface;
-use Payum\Bridge\Spl\ArrayObject;
-use Payum\Request\CaptureRequest;
-use Payum\Request\UserInputRequiredInteractiveRequest;
-use Payum\Exception\UnsupportedApiException;
-use Payum\Exception\RequestNotSupportedException;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\UserInputRequiredInteractiveRequest;
+use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Be2Bill\Api;
 
 class CaptureAction implements ActionInterface, ApiAwareInterface
@@ -34,7 +34,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
      */
     public function execute($request)
     {
-        /** @var $request CaptureRequest */
+        /** @var $request \Payum\Core\Request\CaptureRequest */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }

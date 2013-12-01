@@ -1,10 +1,10 @@
 <?php
 namespace Payum\Bridge\Omnipay\Action;
 
-use Payum\Action\ActionInterface;
-use Payum\Bridge\Spl\ArrayObject;
-use Payum\Exception\RequestNotSupportedException;
-use Payum\Request\StatusRequestInterface;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Request\StatusRequestInterface;
 
 class StatusAction implements ActionInterface
 {

@@ -4,9 +4,9 @@
 namespace Payum\Paypal\Rest\Action;
 
 use PayPal\Api\Payment;
-use Payum\Action\PaymentAwareAction;
-use Payum\Exception\RequestNotSupportedException;
-use Payum\Request\SyncRequest;
+use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Request\SyncRequest;
 
 class SyncAction extends PaymentAwareAction
 {
@@ -15,7 +15,7 @@ class SyncAction extends PaymentAwareAction
      */
     public function execute($request)
     {
-        /** @var $request SyncRequest */
+        /** @var $request \Payum\Core\Request\SyncRequest */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }

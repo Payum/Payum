@@ -4,8 +4,8 @@ namespace Payum\Paypal\Ipn;
 use Buzz\Client\ClientInterface;
 use Buzz\Message\Form\FormRequest;
 use Buzz\Message\Response;
-use Payum\Exception\Http\HttpException;
-use Payum\Exception\InvalidArgumentException;
+use Payum\Core\Exception\Http\HttpException;
+use Payum\Core\Exception\InvalidArgumentException;
 
 /**
  * @link https://www.x.com/developers/paypal/documentation-tools/ipn/integration-guide/IPNIntro

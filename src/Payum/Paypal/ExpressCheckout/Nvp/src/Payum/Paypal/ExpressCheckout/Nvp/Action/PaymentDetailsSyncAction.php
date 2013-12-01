@@ -3,15 +3,15 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Buzz\Message\Form\FormRequest;
 
-use Payum\Bridge\Spl\ArrayObject;
-use Payum\Request\SyncRequest;
-use Payum\Action\PaymentAwareAction;
-use Payum\Exception\RequestNotSupportedException;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Request\SyncRequest;
+use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetailsRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetailsRequest;
 
-class PaymentDetailsSyncAction extends PaymentAwareAction
+class PaymentDetailsSyncAction extends \Payum\Core\Action\PaymentAwareAction
 {
     /**
      * {@inheritdoc}

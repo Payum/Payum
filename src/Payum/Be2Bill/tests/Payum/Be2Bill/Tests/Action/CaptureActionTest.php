@@ -2,7 +2,7 @@
 namespace Payum\Be2Bill\Tests\Action;
 
 use Payum\Be2Bill\Api;
-use Payum\Request\CaptureRequest;
+use Payum\Core\Request\CaptureRequest;
 use Payum\Be2Bill\Action\CaptureAction;
 
 class CaptureActionTest extends \PHPUnit_Framework_TestCase
@@ -14,7 +14,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Be2Bill\Action\CaptureAction');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
     /**
@@ -74,7 +74,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
@@ -86,7 +86,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Request\UserInputRequiredInteractiveRequest
+     * @expectedException \Payum\Core\Request\UserInputRequiredInteractiveRequest
      */
     public function throwIfRequiredDataNotSet()
     {
@@ -116,7 +116,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Exception\UnsupportedApiException
+     * @expectedException \Payum\Core\Exception\UnsupportedApiException
      */
     public function throwIfUnsupportedApiGiven()
     {

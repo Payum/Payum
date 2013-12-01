@@ -3,7 +3,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Buzz\Message\Form\FormRequest;
 
-use Payum\Request\CaptureRequest;
+use Payum\Core\Request\CaptureRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
@@ -18,7 +18,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction');
         
-        $this->assertTrue($rc->isSubclassOf('Payum\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
     }
 
     /**
@@ -68,7 +68,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
@@ -124,7 +124,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\SyncRequest'))
         ;
 
         $action = new CaptureAction();
@@ -149,7 +149,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(2))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\SyncRequest'))
         ;
 
         $action = new CaptureAction();
@@ -172,7 +172,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\SyncRequest'))
         ;
 
         $action = new CaptureAction();
@@ -194,12 +194,12 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\SyncRequest'))
         ;
         $paymentMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\SyncRequest'))
         ;
 
         $action = new CaptureAction();
@@ -220,12 +220,12 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\SyncRequest'))
         ;
         $paymentMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\SyncRequest'))
         ;
 
         $action = new CaptureAction();
@@ -282,7 +282,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\PaymentInterface
      */
     protected function createPaymentMock()
     {

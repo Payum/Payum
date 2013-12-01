@@ -50,7 +50,7 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_Te
     /**
      * @test
      * 
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
@@ -62,7 +62,7 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_Te
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\LogicException
+     * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage The PROFILEID fields is required.
      */
     public function throwIfTokenNotSetInModel()

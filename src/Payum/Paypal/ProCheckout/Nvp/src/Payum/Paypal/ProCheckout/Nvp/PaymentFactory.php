@@ -1,9 +1,9 @@
 <?php
 namespace Payum\Paypal\ProCheckout\Nvp;
 
-use Payum\Action\ExecuteSameRequestWithModelDetailsAction;
-use Payum\Payment;
-use Payum\Extension\EndlessCycleDetectorExtension;
+use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+use Payum\Core\Payment;
+use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Paypal\ProCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ProCheckout\Nvp\Action\StatusAction;
 
@@ -12,7 +12,7 @@ abstract class PaymentFactory
     /**
      * @param Api $api
      *
-     * @return Payment
+     * @return \Payum\Core\Payment
      */
     public static function create(Api $api)
     {

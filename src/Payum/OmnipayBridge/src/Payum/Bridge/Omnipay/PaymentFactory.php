@@ -3,9 +3,9 @@ namespace Payum\Bridge\Omnipay;
 
 use Omnipay\Common\GatewayInterface;
 
-use Payum\Action\ExecuteSameRequestWithModelDetailsAction;
-use Payum\Payment;
-use Payum\Extension\EndlessCycleDetectorExtension;
+use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+use Payum\Core\Payment;
+use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Bridge\Omnipay\Action\CaptureAction;
 use Payum\Bridge\Omnipay\Action\StatusAction;
 

@@ -22,7 +22,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Exception\InvalidArgumentException
+     * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage The username option must be set.
      */
     public function throwIfUsernameOptionNotSetInConstructor()
@@ -33,7 +33,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\InvalidArgumentException
+     * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage The password option must be set.
      */
     public function throwIfPasswordOptionNotSetInConstructor()
@@ -46,7 +46,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\InvalidArgumentException
+     * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage The signature option must be set.
      */
     public function throwIfSignatureOptionNotSetInConstructor()
@@ -60,7 +60,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\InvalidArgumentException
+     * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage The boolean sandbox option must be set.
      */
     public function throwIfSandboxOptionNotSetInConstructor()
@@ -75,7 +75,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Exception\RuntimeException
+     * @expectedException \Payum\Core\Exception\RuntimeException
      * @expectedExceptionMessage The return_url must be set either to FormRequest or to options.
      */
     public function throwIfReturnUrlNeitherSetToFormRequestNorToOptions()
@@ -138,7 +138,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\RuntimeException
+     * @expectedException \Payum\Core\Exception\RuntimeException
      * @expectedExceptionMessage The return_url must be set either to FormRequest or to options.
      */
     public function throwIfCancelUrlNeitherSetToFormRequestNorToOptions()

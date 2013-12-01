@@ -4,9 +4,9 @@ namespace Payum\Be2Bill;
 use Buzz\Client\ClientInterface;
 use Buzz\Message\Form\FormRequest;
 
-use Payum\Exception\InvalidArgumentException;
-use Payum\Exception\Http\HttpException;
-use Payum\Bridge\Buzz\JsonResponse;
+use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\Exception\Http\HttpException;
+use Payum\Core\Bridge\Buzz\JsonResponse;
 
 class Api
 {
@@ -120,7 +120,7 @@ class Api
      * @param \Buzz\Client\ClientInterface $client
      * @param array $options
      * 
-     * @throws InvalidArgumentException if an option is invalid
+     * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
      */
     public function __construct(ClientInterface $client, array $options)
     {
@@ -141,7 +141,7 @@ class Api
     /**
      * @param array $params
      * 
-     * @return \Payum\Bridge\Buzz\JsonResponse
+     * @return \Payum\Core\Bridge\Buzz\JsonResponse
      */
     public function payment(array $params)
     {
@@ -161,9 +161,9 @@ class Api
     /**
      * @param \Buzz\Message\Form\FormRequest $request
      *
-     * @throws \Payum\Exception\Http\HttpException
+     * @throws \Payum\Core\Exception\Http\HttpException
      *
-     * @return JsonResponse
+     * @return \Payum\Core\Bridge\Buzz\JsonResponse
      */
     protected function doRequest(FormRequest $request)
     {

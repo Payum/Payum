@@ -10,6 +10,6 @@ class CheckRecurringPaymentRequestTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Payex\Request\Api\CheckRecurringPaymentRequest');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Request\BaseModelRequest'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelRequest'));
     }
 }

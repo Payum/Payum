@@ -2,8 +2,8 @@
 namespace Payum\Offline\Tests\Action;
 
 use Payum\Offline\Constants;
-use Payum\Request\BinaryMaskStatusRequest;
-use Payum\Request\StatusRequestInterface;
+use Payum\Core\Request\BinaryMaskStatusRequest;
+use Payum\Core\Request\StatusRequestInterface;
 use Payum\Offline\Action\StatusAction;
 
 class StatusActionTest extends \PHPUnit_Framework_TestCase
@@ -15,7 +15,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Offline\Action\StatusAction');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
     /**
@@ -65,7 +65,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
@@ -145,7 +145,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createStatusRequestStub($model)
     {
-        $status = $this->getMock('Payum\Request\StatusRequestInterface');
+        $status = $this->getMock('Payum\Core\Request\StatusRequestInterface');
 
         $status
             ->expects($this->any())

@@ -2,11 +2,9 @@
 
 namespace Payum\Paypal\Rest;
 
-use Payum\Action\CaptureDetailsAggregatedModelAction;
-use Payum\Action\StatusDetailsAggregatedModelAction;
-use Payum\Action\SyncDetailsAggregatedModelAction;
-use Payum\Payment;
-use Payum\Extension\EndlessCycleDetectorExtension;
+use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+use Payum\Core\Payment;
+use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Paypal\Rest\Action\CaptureAction;
 use Payum\Paypal\Rest\Action\StatusAction;
 use PayPal\Rest\ApiContext;
@@ -17,7 +15,7 @@ abstract class PaymentFactory
     /**
      * @param ApiContext $api
      *
-     * @return \Payum\Payment
+     * @return \Payum\Core\Payment
      */
     public static function create(ApiContext $api)
     {
@@ -30,10 +28,7 @@ abstract class PaymentFactory
         $payment->addAction(new CaptureAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new SyncAction);
-
-        $payment->addAction(new CaptureDetailsAggregatedModelAction);
-        $payment->addAction(new SyncDetailsAggregatedModelAction);
-        $payment->addAction(new StatusDetailsAggregatedModelAction);
+        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 
         return $payment;
     }

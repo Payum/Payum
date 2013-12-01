@@ -10,6 +10,6 @@ class CompleteOrderRequestTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Payex\Request\Api\CompleteOrderRequest');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Request\BaseModelRequest'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelRequest'));
     }
 }

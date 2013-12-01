@@ -1,8 +1,8 @@
 <?php
 namespace Payum\AuthorizeNet\Aim\Tests\Functional;
 
-use Payum\Request\CaptureRequest;
-use Payum\Request\BinaryMaskStatusRequest;
+use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\BinaryMaskStatusRequest;
 use Payum\AuthorizeNet\Aim\PaymentFactory;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 
