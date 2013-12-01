@@ -1,0 +1,46 @@
+{
+    "name": "payum/paypal-express-checkout-nvp",
+    "type": "library",
+    "description": "Paypal express checkout",
+    "keywords": ["payment", "paypal", "express checkout", "digital goods", "recurring payment"],
+    "homepage": "",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kotlyar Maksim",
+            "email": "kotlyar.maksim@gmail.com"
+        },
+        {
+            "name":     "Payum project",
+            "homepage": "http://payum.forma-dev.com/"
+        },
+        {
+            "name":     "Community contributions",
+            "homepage": "https://github.com/Payum/PaypalExpressCheckoutNvp/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "kriswallsmith/buzz": "*",
+        "payum/payum": "0.7.x-dev"
+    },
+    "require-dev": {
+        "doctrine/orm": ">=2.3,<2.4-dev",
+        "doctrine/mongodb-odm": "~1.0@dev",
+        "phpunit/phpunit": "3.7.*",
+        "fp/testo": "dev-master",
+        "ext-curl": "*",
+        "ext-pdo_sqlite": "*"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": { "Payum\\Paypal\\ExpressCheckout\\Nvp": "src/" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.7-dev"
+        }
+    }
+}
