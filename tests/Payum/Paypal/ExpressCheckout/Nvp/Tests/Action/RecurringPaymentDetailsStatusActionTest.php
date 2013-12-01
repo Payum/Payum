@@ -2,7 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction;
-use Payum\Request\BinaryMaskStatusRequest;
+use Payum\Core\Request\BinaryMaskStatusRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class RecurringPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
@@ -14,7 +14,7 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCas
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction');
         
-        $this->assertTrue($rc->implementsInterface('Payum\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
     /**
@@ -66,7 +66,7 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCas
     /**
      * @test
      * 
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {

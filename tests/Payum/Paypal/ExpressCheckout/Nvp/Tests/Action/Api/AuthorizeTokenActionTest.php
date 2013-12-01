@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
-use Payum\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\RedirectUrlInteractiveRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\AuthorizeTokenAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeTokenRequest;
 
@@ -48,7 +48,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
@@ -60,7 +60,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Exception\LogicException
+     * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage The TOKEN must be set. Have you executed SetExpressCheckoutAction?
      */
     public function throwIfModelNotHaveTokenSet()

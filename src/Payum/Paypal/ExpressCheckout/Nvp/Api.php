@@ -4,8 +4,8 @@ namespace Payum\Paypal\ExpressCheckout\Nvp;
 use Buzz\Client\ClientInterface;
 use Buzz\Message\Form\FormRequest;
 
-use Payum\Exception\Http\HttpException;
-use Payum\Exception\InvalidArgumentException;
+use Payum\Core\Exception\Http\HttpException;
+use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 
@@ -325,7 +325,7 @@ class Api
         $fields = $request->getFields();
         if (false == isset($fields['RETURNURL'])) {
             if (false == $this->options['return_url']) {
-                throw new \Payum\Exception\RuntimeException('The return_url must be set either to FormRequest or to options.');
+                throw new \Payum\Core\Exception\RuntimeException('The return_url must be set either to FormRequest or to options.');
             }
 
             $request->setField('RETURNURL', $this->options['return_url']);
@@ -333,7 +333,7 @@ class Api
 
         if (false == isset($fields['CANCELURL'])) {
             if (false == $this->options['cancel_url']) {
-                throw new \Payum\Exception\RuntimeException('The cancel_url must be set either to FormRequest or to options.');
+                throw new \Payum\Core\Exception\RuntimeException('The cancel_url must be set either to FormRequest or to options.');
             }
 
             $request->setField('CANCELURL', $this->options['cancel_url']);
@@ -446,7 +446,7 @@ class Api
     /**
      * @param \Buzz\Message\Form\FormRequest $request
      *
-     * @throws \Payum\Exception\Http\HttpException
+     * @throws \Payum\Core\Exception\Http\HttpException
      *
      * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
      */

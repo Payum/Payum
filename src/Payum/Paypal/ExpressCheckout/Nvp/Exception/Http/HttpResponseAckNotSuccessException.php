@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Exception\Http;
 
-use Payum\Exception\Http\HttpException;
+use Payum\Core\Exception\Http\HttpException;
 
 /**
  * @deprecated since 0.4

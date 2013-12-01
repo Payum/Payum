@@ -14,7 +14,7 @@ Let's define them:
 <?php
 namespace App\Model;
 
-use Payum\Model\ArrayObject;
+use Payum\Core\Model\ArrayObject;
 
 class AgreementDetails extends \ArrayObject
 {
@@ -28,7 +28,7 @@ And recurring payment details model:
 <?php
 namespace App\Model;
 
-use Payum\Model\ArrayObject;
+use Payum\Core\Model\ArrayObject;
 
 class RecurringPaymentDetails extends \ArrayObject
 {
@@ -119,8 +119,8 @@ The page that shows payment details could be a good starting place.
 <?php
 // create_recurring_payment.php
 
-use Payum\Request\SyncRequest;
-use Payum\Request\BinaryMaskStatusRequest;
+use Payum\Core\Request\SyncRequest;
+use Payum\Core\Request\BinaryMaskStatusRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfileRequest;
 
 include 'config.php';

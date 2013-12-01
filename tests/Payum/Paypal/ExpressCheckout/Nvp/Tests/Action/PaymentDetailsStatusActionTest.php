@@ -3,7 +3,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Buzz\Message\Form\FormRequest;
 
-use Payum\Request\BinaryMaskStatusRequest;
+use Payum\Core\Request\BinaryMaskStatusRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
@@ -17,7 +17,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction');
         
-        $this->assertTrue($rc->implementsInterface('Payum\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
     /**
@@ -85,7 +85,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {

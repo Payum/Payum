@@ -4,7 +4,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 use Buzz\Message\Form\FormRequest;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Examples\Entity\RecurringPaymentDetails;
-use Payum\Request\SyncRequest;
+use Payum\Core\Request\SyncRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsSyncAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
@@ -18,7 +18,7 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsSyncAction');
         
-        $this->assertTrue($rc->isSubclassOf('Payum\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
     }
 
     /**
@@ -58,7 +58,7 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Exception\RequestNotSupportedException
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
@@ -110,7 +110,7 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\PaymentInterface
      */
     protected function createPaymentMock()
     {

@@ -3,8 +3,8 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
 use Buzz\Message\Form\FormRequest;
 
-use Payum\Bridge\Spl\ArrayObject;
-use Payum\Exception\RequestNotSupportedException;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfileRequest;

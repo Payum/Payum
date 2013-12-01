@@ -1,9 +1,9 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
-use Payum\Action\ActionInterface;
-use Payum\ApiAwareInterface;
-use Payum\Exception\UnsupportedApiException;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
