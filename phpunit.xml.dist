@@ -14,6 +14,14 @@
     <php>
         <var name="__PAYUM_AUTHORIZE_NET_AIM_API_LOGIN_ID" value="54PB5egZ"/>
         <var name="__PAYUM_AUTHORIZE_NET_AIM_API_TRANSACTION_KEY" value="48V258vr55AE8tcg"/>
+        <var name="__PAYUM_PAYEX_ACCOUNT_NUMBER" value="60006520"/>
+        <var name="__PAYUM_PAYEX_ENCRYPTION_KEY" value="R7TR47M545XSchyt75vZ"/>
+        <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_ACCOUNT" value="sellr1_1351171001_biz@gmail.com"/>
+        <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_USERNAME" value="sellr1_1351171001_biz_api1.gmail.com"/>
+        <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_PASSWORD" value="1351171022"/>
+        <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_SIGNATURE" value="Adt647eR0NhYG68dAfVYPGquxlvuAwSJBMEy12p4k4mO2p8oEz8t95gU"/>
+
+        <ini name="soap.wsdl_cache_enabled" value="0" />
     </php>
 
     <testsuites>
@@ -32,6 +40,12 @@
         <testsuite name="Payum OmnipayBridge Component Test Suite">
             <directory>./src/Payum/OmnipayBridge/Tests</directory>
         </testsuite>
+        <testsuite name="Payum Payex Component Test Suite">
+            <directory>./src/Payum/Payex/Tests</directory>
+        </testsuite>
+        <testsuite name="Payum PaypalExpressCheckoutNvp Component Test Suite">
+            <directory>./src/Payum/Paypal/ExpressCheckout/Nvp/Tests</directory>
+        </testsuite>
     </testsuites>
 
     <filter>
@@ -46,6 +60,10 @@
                 <directory>./src/Payum/Be2Bill/Resources</directory>
                 <directory>./src/Payum/Offline/Tests</directory>
                 <directory>./src/Payum/Offline/Resources</directory>
+                <directory>./src/Payum/Payex/Tests</directory>
+                <directory>./src/Payum/Payex/Resources</directory>
+                <directory>./src/Payum/Paypal/ExpressCheckout/Nvp/Tests</directory>
+                <directory>./src/Payum/Paypal/ExpressCheckout/Nvp/Resources</directory>
             </exclude>
         </whitelist>
     </filter>

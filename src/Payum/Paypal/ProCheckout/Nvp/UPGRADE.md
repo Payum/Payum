@@ -1,4 +1,3 @@
-0.1 to 0.4
-==========
+# Upgrades
 
-* `PaymentInstruction` model was renamed to `PaymentDetails` and moved to `Model` namespace.
+See https://github.com/Payum/Payum/blob/master/UPGRADE.md

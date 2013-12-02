@@ -25,18 +25,15 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "payum/payum": "0.7.x-dev",
-        "kriswallsmith/buzz": "*"
-    },
-    "require-dev": {
-        "ext-curl": "*"
+        "payum/core": "0.7.x-dev"
     },
     "config": {
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-0": { "Payum\\Paypal\\ProCheckout\\Nvp": "src/" }
+        "psr-0": { "Payum\\Paypal\\ProCheckout\\Nvp": "" }
     },
+    "target-dir": "Payum/Paypal/ProCheckout/Nvp",
     "extra": {
         "branch-alias": {
             "dev-master": "0.7-dev"
