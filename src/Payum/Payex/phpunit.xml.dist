@@ -9,9 +9,8 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="tests/bootstrap.php"
-        >
-
+         bootstrap="Tests/bootstrap.php"
+>
     <php>
         <var name="__PAYUM_PAYEX_ACCOUNT_NUMBER" value="" />
         <var name="__PAYUM_PAYEX_ENCRYPTION_KEY" value="" />
@@ -19,17 +18,19 @@
         <ini name="soap.wsdl_cache_enabled" value="0" />
     </php>
 
-    
-
     <testsuites>
-        <testsuite name="Payum Payex Tests">
-            <directory>./tests</directory>
+        <testsuite name="Payum OmnipayBridge Component Test Suite">
+            <directory>./Tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory suffix=".php">./src</directory>
+            <directory>./</directory>
+            <exclude>
+                <directory>./Tests</directory>
+                <directory>./vendor</directory>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>
