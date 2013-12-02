@@ -1,13 +1,13 @@
 <?php
-namespace Payum\Bridge\Omnipay;
+namespace Payum\OmnipayBridge;
 
 use Omnipay\Common\GatewayInterface;
 
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Payment;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
-use Payum\Bridge\Omnipay\Action\CaptureAction;
-use Payum\Bridge\Omnipay\Action\StatusAction;
+use Payum\OmnipayBridge\Action\CaptureAction;
+use Payum\OmnipayBridge\Action\StatusAction;
 
 abstract class PaymentFactory
 {

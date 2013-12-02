@@ -37,7 +37,8 @@
     "require": {
         "php": ">=5.3.2",
         "kriswallsmith/buzz": "*",
-        "ajbdev/authorizenet-php-api": "1.1.*"
+        "ajbdev/authorizenet-php-api": "1.1.*",
+        "omnipay/omnipay": "~1.0"
     },
     "require-dev": {
         "ext-curl": "*",

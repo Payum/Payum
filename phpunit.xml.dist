@@ -29,6 +29,9 @@
         <testsuite name="Payum Offline Component Test Suite">
             <directory>./src/Payum/Offline/Tests</directory>
         </testsuite>
+        <testsuite name="Payum OmnipayBridge Component Test Suite">
+            <directory>./src/Payum/OmnipayBridge/Tests</directory>
+        </testsuite>
     </testsuites>
 
     <filter>
