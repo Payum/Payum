@@ -1,5 +1,4 @@
 <?php
-
 namespace Payum\Paypal\Rest;
 
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;

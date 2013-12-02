@@ -1,4 +1,7 @@
-# PaypalRest [![Build Status](https://travis-ci.org/Payum/PaypalRest.png?branch=master)](https://travis-ci.org/Payum/PaypalRest) [![Total Downloads](https://poser.pugx.org/payum/paypal-rest/d/total.png)](https://packagist.org/packages/payum/paypal-rest) [![Latest Stable Version](https://poser.pugx.org/payum/paypal-rest/version.png)](https://packagist.org/packages/payum/paypal-rest)
+# PaypalRest
+[![Build Status](https://travis-ci.org/Payum/PaypalRest.png?branch=master)](https://travis-ci.org/Payum/PaypalRest)
+[![Total Downloads](https://poser.pugx.org/payum/paypal-rest/d/total.png)](https://packagist.org/packages/payum/paypal-rest)
+[![Latest Stable Version](https://poser.pugx.org/payum/paypal-rest/version.png)](https://packagist.org/packages/payum/paypal-rest)
 
 Provide integration of paypal rest api to payum.
 
@@ -6,7 +9,8 @@ Provide integration of paypal rest api to payum.
 
 * [Documentation](http://payum.forma-dev.com/documentation#PaypalRest)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
-* [Issue Tracker](https://github.com/Payum/PaypalRest/issues)
+* [Issue Tracker](https://github.com/Payum/Payum/issues)
+* [Twitter](https://twitter.com/payumphp)
 * [Sandbox](https://github.com/Skadabr/startPayum)
 
 ## Contributing

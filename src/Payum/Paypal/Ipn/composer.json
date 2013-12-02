@@ -3,7 +3,7 @@
     "type": "library",
     "description": "Paypal instant payment notification",
     "keywords": ["payment", "paypal", "ipn", "instant payment notification"],
-    "homepage": "",
+    "homepage": "http://payum.forma-dev.com/",
     "license": "MIT",
     "authors": [
         {

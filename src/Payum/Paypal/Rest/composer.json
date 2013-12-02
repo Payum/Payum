@@ -3,37 +3,44 @@
     "type": "library",
     "description": "Paypal rest",
     "keywords": ["payment", "paypal", "rest"],
-    "homepage": "",
+    "homepage": "http://payum.forma-dev.com/",
     "license": "MIT",
     "authors": [
         {
             "name": "Vladimir Polyakov",
             "email": "poljakov.ws@gmail.com"
+        },
+        {
+            "name": "Kotlyar Maksim",
+            "email": "kotlyar.maksim@gmail.com"
+        },
+        {
+            "name":     "Payum project",
+            "homepage": "http://payum.forma-dev.com/"
+        },
+        {
+            "name":     "Community contributions",
+            "homepage": "https://github.com/Payum/PaypalRest/contributors"
         }
     ],
-
     "require": {
         "php": ">=5.3.2",
-        "kriswallsmith/buzz": "*",
-        "payum/payum": "0.6.x-dev",
+        "payum/core": "0.7.*@dev",
         "paypal/rest-api-sdk-php" : "0.5.*"
     },
-
     "require-dev": {
         "phpunit/phpunit": "3.7.*"
     },
-
     "autoload": {
-        "psr-0": { "Payum\\Paypal\\Rest": "src/" }
+        "psr-0": { "Payum\\Paypal\\Rest": "" }
     },
-
+    "target-dir": "Payum/Paypal/Rest",
     "config": {
         "bin-dir": "bin"
     },
-
     "extra": {
         "branch-alias": {
-            "dev-master": "0.6-dev"
+            "dev-master": "0.7-dev"
         }
     }
 }

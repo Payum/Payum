@@ -8,10 +8,6 @@ php:
 before_script:
   - composer install --dev --no-interaction --prefer-source
 
-branches:
-  only:
-    - master
-
 notifications:
   email:
     - kotlyar.maksim@gmail.com
