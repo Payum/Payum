@@ -8,7 +8,7 @@ This bridge allows you to use omnipay gateways but in payum like way.
 
 * [Documentation](http://payum.forma-dev.com/documentation#OmnipayBridge)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
-* [Issue Tracker](https://github.com/Payum/OmnipayBridge/issues)
+* [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)
 
 ## Contributing

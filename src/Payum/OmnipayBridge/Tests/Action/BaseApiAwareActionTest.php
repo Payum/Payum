@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Bridge\Omnipay\Tests\Action;
+namespace Payum\OmnipayBridge\Tests\Action;
 
 class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -8,7 +8,7 @@ class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Bridge\Omnipay\Action\BaseApiAwareAction');
+        $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\BaseApiAwareAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
     }
@@ -18,7 +18,7 @@ class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Bridge\Omnipay\Action\BaseApiAwareAction');
+        $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\BaseApiAwareAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
     }
@@ -28,7 +28,7 @@ class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeAbstract()
     {
-        $rc = new \ReflectionClass('Payum\Bridge\Omnipay\Action\BaseApiAwareAction');
+        $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\BaseApiAwareAction');
 
         $this->assertTrue($rc->isAbstract());
     }
@@ -40,7 +40,7 @@ class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
     {
         $expectedApi = $this->createGatewayMock();
 
-        $action = $this->getMockForAbstractClass('Payum\Bridge\Omnipay\Action\BaseApiAwareAction');
+        $action = $this->getMockForAbstractClass('Payum\OmnipayBridge\Action\BaseApiAwareAction');
 
         $action->setApi($expectedApi);
 
@@ -54,7 +54,7 @@ class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfUnsupportedApiGiven()
     {
-        $action = $this->getMockForAbstractClass('Payum\Bridge\Omnipay\Action\BaseApiAwareAction');
+        $action = $this->getMockForAbstractClass('Payum\OmnipayBridge\Action\BaseApiAwareAction');
 
         $action->setApi(new \stdClass);
     }

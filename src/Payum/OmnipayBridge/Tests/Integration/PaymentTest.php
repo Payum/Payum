@@ -1,9 +1,9 @@
 <?php
-namespace Payum\Bridge\Omnipay\Tests\Integration;
+namespace Payum\OmnipayBridge\Tests\Integration;
 
 use Omnipay\Dummy\Gateway;
 
-use Payum\Bridge\Omnipay\PaymentFactory;
+use Payum\OmnipayBridge\PaymentFactory;
 use Payum\Core\Request\BinaryMaskStatusRequest;
 use Payum\Core\Request\CaptureRequest;
 

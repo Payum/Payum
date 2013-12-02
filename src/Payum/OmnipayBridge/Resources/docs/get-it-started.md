@@ -24,7 +24,7 @@ We need to add payment factory and payment details storage.
 <?php
 
 use Omnipay\Common\GatewayFactory;
-use Payum\Bridge\Omnipay\PaymentFactory as OmnipayPaymentFactory;
+use Payum\OmnipayBridge\PaymentFactory as OmnipayPaymentFactory;
 
 //config.php
 

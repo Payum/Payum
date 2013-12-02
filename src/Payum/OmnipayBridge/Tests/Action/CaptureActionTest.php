@@ -1,7 +1,7 @@
 <?php
-namespace Payum\Bridge\Omnipay\Action;
+namespace Payum\OmnipayBridge\Action;
 
-use Payum\Bridge\Omnipay\Action\CaptureAction;
+use Payum\OmnipayBridge\Action\CaptureAction;
 
 class CaptureActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -10,9 +10,9 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Bridge\Omnipay\Action\CaptureAction');
+        $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\CaptureAction');
         
-        $this->assertTrue($rc->isSubclassOf('Payum\Bridge\Omnipay\Action\BaseApiAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\OmnipayBridge\Action\BaseApiAwareAction'));
     }
 
     /**
