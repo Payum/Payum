@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Registry;
+namespace Payum\Core\Tests\Registry;
 
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Registry\SimpleRegistry;
@@ -21,7 +21,7 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithExpectedSetOfArguments()
     {
-        new \Payum\Core\Registry\SimpleRegistry(
+        new SimpleRegistry(
             $payments = array(),
             $storages = array(),
             $defaultPayment = 'foo',
@@ -34,10 +34,10 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPaymentSetInConstructor()
     {
-        $paymentFooMock = $this->getMock('Payum\PaymentInterface');
-        $paymentBarMock = $this->getMock('Payum\PaymentInterface');
+        $paymentFooMock = $this->getMock('Payum\Core\PaymentInterface');
+        $paymentBarMock = $this->getMock('Payum\Core\PaymentInterface');
 
-        $registry = new \Payum\Core\Registry\SimpleRegistry(
+        $registry = new SimpleRegistry(
             $payments = array('foo' => $paymentFooMock, 'bar' => $paymentBarMock),
             array(),
             'foo',
@@ -56,8 +56,8 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPaymentsSetInConstructor()
     {
-        $paymentFooMock = $this->getMock('Payum\PaymentInterface');
-        $paymentBarMock = $this->getMock('Payum\PaymentInterface');
+        $paymentFooMock = $this->getMock('Payum\Core\PaymentInterface');
+        $paymentBarMock = $this->getMock('Payum\Core\PaymentInterface');
 
         $registry = new SimpleRegistry(
             $payments = array('foo' => $paymentFooMock, 'bar' => $paymentBarMock),
@@ -100,7 +100,7 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
             array(
                 'foo' => array(
                     'stdClass' => $storageFooMock,
-                    'Payum\Examples\Model\TestModel' => $storageBarMock
+                    'Payum\Core\Tests\Mocks\Model\TestModel' => $storageBarMock
                 ),
             ),
             'bar',
@@ -108,7 +108,7 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertSame($storageFooMock, $registry->getStorageForClass('stdClass', 'foo'));
-        $this->assertSame($storageBarMock, $registry->getStorageForClass('Payum\Examples\Model\TestModel', 'foo'));
+        $this->assertSame($storageBarMock, $registry->getStorageForClass('Payum\Core\Tests\Mocks\Model\TestModel', 'foo'));
 
         //default payment
         $this->assertSame($storageFooMock, $registry->getStorageForClass('stdClass'));
@@ -129,7 +129,7 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
                     'stdClass' => $storageFooMock,
                 ),
                 'bar' => array(
-                    'Payum\Examples\Model\TestModel' => $storageBarMock
+                    'Payum\Core\Tests\Mocks\Model\TestModel' => $storageBarMock
                 )
             ),
             'bar',
@@ -152,7 +152,7 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetDefaultStorageName()
     {
-        $registry = new \Payum\Core\Registry\SimpleRegistry(
+        $registry = new SimpleRegistry(
             array(),
             array(),
             'bar',
@@ -171,7 +171,7 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
 
         $testCase = $this;
 
-        $paymentMock = $this->getMock('Payum\PaymentInterface');
+        $paymentMock = $this->getMock('Payum\Core\PaymentInterface');
         $paymentMock
             ->expects($this->once())
             ->method('addExtension')
@@ -200,13 +200,13 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
         $storageTwoMock = $this->getMock('Payum\Core\Storage\StorageInterface');
         $storageThreeMock = $this->getMock('Payum\Core\Storage\StorageInterface');
 
-        $paymentFooMock = $this->getMock('Payum\PaymentInterface');
+        $paymentFooMock = $this->getMock('Payum\Core\PaymentInterface');
         $paymentFooMock
             ->expects($this->exactly(3))
             ->method('addExtension')
         ;
 
-        $paymentBarMock = $this->getMock('Payum\PaymentInterface');
+        $paymentBarMock = $this->getMock('Payum\Core\PaymentInterface');
         $paymentBarMock
             ->expects($this->exactly(1))
             ->method('addExtension')

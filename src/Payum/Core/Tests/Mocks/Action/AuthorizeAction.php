@@ -1,9 +1,9 @@
 <?php
-namespace Payum\Examples\Action;
+namespace Payum\Core\Tests\Mocks\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Request\RedirectUrlInteractiveRequest;
-use Payum\Examples\Request\AuthorizeRequest;
+use Payum\Core\Tests\Mocks\Request\AuthorizeRequest;
 
 class AuthorizeAction implements ActionInterface
 {

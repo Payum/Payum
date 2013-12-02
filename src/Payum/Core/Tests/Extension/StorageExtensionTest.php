@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Extension;
+namespace Payum\Core\Tests\Extension;
 
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Model\Identificator;
@@ -75,7 +75,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('setModel')
         ;
 
-        $extension = new \Payum\Core\Extension\StorageExtension($storageMock);
+        $extension = new StorageExtension($storageMock);
 
         $extension->onPreExecute($modelRequestMock);
     }
@@ -107,7 +107,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('setModel')
         ;
 
-        $extension = new \Payum\Core\Extension\StorageExtension($storageMock);
+        $extension = new StorageExtension($storageMock);
 
         $extension->onPreExecute($modelRequestMock);
     }
@@ -129,7 +129,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
 
         $notModelRequestMock = $this->getMock('Payum\Core\Request\RequestInterface');
 
-        $extension = new \Payum\Core\Extension\StorageExtension($storageMock);
+        $extension = new StorageExtension($storageMock);
 
         $extension->onPreExecute($notModelRequestMock);
     }
@@ -163,7 +163,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo($expectedModel))
         ;
 
-        $extension = new \Payum\Core\Extension\StorageExtension($storageMock);
+        $extension = new StorageExtension($storageMock);
 
         $extension->onPreExecute($modelRequestMock);
     }
@@ -230,7 +230,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($model))
         ;
 
-        $extension = new \Payum\Core\Extension\StorageExtension($storageMock);
+        $extension = new StorageExtension($storageMock);
 
         $this->assertAttributeCount(0, 'scheduledForUpdateModels', $extension);
 
@@ -302,7 +302,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($model))
         ;
 
-        $extension = new \Payum\Core\Extension\StorageExtension($storageMock);
+        $extension = new StorageExtension($storageMock);
 
         $this->assertAttributeCount(0, 'scheduledForUpdateModels', $extension);
 
@@ -357,7 +357,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldDecreaseStackLevelOnEveryOnInteractiveRequestCall()
     {
-        $extension = new \Payum\Core\Extension\StorageExtension($this->createStorageMock());
+        $extension = new StorageExtension($this->createStorageMock());
 
         $extension->onPreExecute(new \stdClass);
         $extension->onPreExecute(new \stdClass);

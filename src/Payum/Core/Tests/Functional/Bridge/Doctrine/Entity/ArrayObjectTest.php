@@ -1,9 +1,9 @@
 <?php
-namespace Payum\Tests\Functional\Bridge\Doctrine\Entity;
+namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Entity;
 
 use Payum\Core\Security\SensitiveValue;
-use Payum\Tests\Functional\Bridge\Doctrine\OrmTest;
-use Payum\Examples\Entity\ArrayObject;
+use Payum\Core\Tests\Functional\Bridge\Doctrine\OrmTest;
+use Payum\Core\Tests\Mocks\Entity\ArrayObject;
 
 class ArrayObjectTest extends OrmTest
 {

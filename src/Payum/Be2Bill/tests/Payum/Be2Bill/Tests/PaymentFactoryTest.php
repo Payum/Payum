@@ -25,7 +25,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $payment = PaymentFactory::create($apiMock);
 
-        $this->assertInstanceOf('Payum\Payment', $payment);
+        $this->assertInstanceOf('Payum\Core\Payment', $payment);
         
         $this->assertAttributeCount(1, 'apis', $payment);
         

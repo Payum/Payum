@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Model;
+namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\ArrayObject;
 
@@ -38,7 +38,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddElementToArray()
     {
-        $model = new \Payum\Core\Model\ArrayObject;
+        $model = new ArrayObject;
 
         $model['foo'] = 'theFoo';
 

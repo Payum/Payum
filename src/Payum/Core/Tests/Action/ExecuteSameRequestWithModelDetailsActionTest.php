@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Action;
+namespace Payum\Core\Tests\Action;
 
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Request\CaptureRequest;
@@ -134,7 +134,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends \PHPUnit_Framework_Te
 
         $testCase = $this;
         
-        $paymentMock = $this->getMock('Payum\PaymentInterface');
+        $paymentMock = $this->getMock('Payum\Core\PaymentInterface');
         $paymentMock
             ->expects($this->once())
             ->method('execute')

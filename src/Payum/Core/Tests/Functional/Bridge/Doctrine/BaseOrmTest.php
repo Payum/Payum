@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Functional\Bridge\Doctrine;
+namespace Payum\Core\Tests\Functional\Bridge\Doctrine;
 
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\ORM\Configuration;

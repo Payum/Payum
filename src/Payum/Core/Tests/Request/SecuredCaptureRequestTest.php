@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Request;
+namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\SecuredCaptureRequest;
 use Payum\Core\Model\Token;
@@ -54,7 +54,7 @@ class SecuredCaptureRequestTest extends \PHPUnit_Framework_TestCase
     {
         $token = new Token;
 
-        $request = new \Payum\Core\Request\SecuredCaptureRequest($token);
+        $request = new SecuredCaptureRequest($token);
 
         //guard
         $this->assertSame($token, $request->getToken());

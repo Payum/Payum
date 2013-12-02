@@ -1,10 +1,10 @@
 <?php
-namespace Payum\Examples\Action;
+namespace Payum\Core\Tests\Mocks\Action;
 
 use Payum\Core\Action\PaymentAwareAction;
-use Payum\Examples\Model\AuthorizeRequiredModel;
+use Payum\Core\Tests\Mocks\Model\AuthorizeRequiredModel;
 use Payum\Core\Request\CaptureRequest;
-use Payum\Examples\Request\AuthorizeRequest;
+use Payum\Core\Tests\Mocks\Request\AuthorizeRequest;
 
 class CaptureAction extends PaymentAwareAction
 {

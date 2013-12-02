@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Request;
+namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\NotifyRequest;
 
@@ -35,7 +35,7 @@ class NotifyRequestTest extends \PHPUnit_Framework_TestCase
             'bar' => 'aBarValue'
         );
         
-        $request = new \Payum\Core\Request\NotifyRequest($expectedNotification);
+        $request = new NotifyRequest($expectedNotification);
         
         $this->assertSame($expectedNotification, $request->getNotification());
     }
@@ -47,7 +47,7 @@ class NotifyRequestTest extends \PHPUnit_Framework_TestCase
     {
         $expectedModel = new \stdClass;
 
-        $request = new \Payum\Core\Request\NotifyRequest(array(), $expectedModel);
+        $request = new NotifyRequest(array(), $expectedModel);
 
         $this->assertSame($expectedModel, $request->getModel());
     }

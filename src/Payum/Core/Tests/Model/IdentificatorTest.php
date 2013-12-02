@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Model;
+namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\Identificator;
 

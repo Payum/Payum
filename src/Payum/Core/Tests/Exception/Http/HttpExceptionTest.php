@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Exception\Http;
+namespace Payum\Core\Tests\Exception\Http;
 
 use Buzz\Message\Request;
 use Buzz\Message\Response;
@@ -33,7 +33,7 @@ class HttpExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedSameAsStanrdException()
     {
-        new \Payum\Core\Exception\Http\HttpException('aMessage', 404);
+        new HttpException('aMessage', 404);
     }
 
     /**
@@ -41,7 +41,7 @@ class HttpExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetRequest()
     {
-        $exception = new \Payum\Core\Exception\Http\HttpException;
+        $exception = new HttpException;
 
         $exception->setRequest(new Request);
     }
@@ -51,7 +51,7 @@ class HttpExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetRequest()
     {
-        $exception = new \Payum\Core\Exception\Http\HttpException;
+        $exception = new HttpException;
 
         $exception->setRequest($expectedRequest = new Request);
         
@@ -63,7 +63,7 @@ class HttpExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetResponse()
     {
-        $exception = new \Payum\Core\Exception\Http\HttpException;
+        $exception = new HttpException;
 
         $exception->setResponse(new Response);
     }
@@ -73,7 +73,7 @@ class HttpExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetResponse()
     {
-        $exception = new \Payum\Core\Exception\Http\HttpException;
+        $exception = new HttpException;
 
         $exception->setResponse($expectedResponse = new Response);
 
@@ -92,7 +92,7 @@ class HttpExceptionTest extends \PHPUnit_Framework_TestCase
         $response = new Response;
         $response->setHeaders(array('HTTP/1.1 404 Not Found'));
 
-        $httpException = \Payum\Core\Exception\Http\HttpException::factory($request, $response);
+        $httpException = HttpException::factory($request, $response);
          
         $this->assertInstanceOf('Payum\Core\Exception\Http\HttpException', $httpException);
         $this->assertSame($request, $httpException->getRequest());

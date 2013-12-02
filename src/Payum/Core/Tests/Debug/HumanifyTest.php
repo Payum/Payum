@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Debug;
+namespace Payum\Core\Tests\Debug;
 
 use Payum\Core\Debug\Humanify;
 use Payum\Core\Request\CaptureRequest;
@@ -40,7 +40,7 @@ class HumanifyTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnObjectShortClassOnValueIfObjectPassedAndShortClassFlagSetTrue()
     {
-        $this->assertEquals('HumanifyTest', \Payum\Core\Debug\Humanify::value($this, true));
+        $this->assertEquals('HumanifyTest', Humanify::value($this, true));
     }
 
     /**
@@ -48,7 +48,7 @@ class HumanifyTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnObjectClassOnValueIfObjectPassedAndShortClassFlagSetFalse()
     {
-        $this->assertEquals(__CLASS__, \Payum\Core\Debug\Humanify::value($this, false));
+        $this->assertEquals(__CLASS__, Humanify::value($this, false));
     }
 
     /**
@@ -56,7 +56,7 @@ class HumanifyTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnValueTypeIfNotObjectValueGivenOnValue()
     {
-        $this->assertEquals('string', \Payum\Core\Debug\Humanify::value('foo'));
+        $this->assertEquals('string', Humanify::value('foo'));
     }
 
     /**
@@ -64,7 +64,7 @@ class HumanifyTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnRequestTypeIfRequestNotObjectOnRequest()
     {
-        $this->assertEquals('string', \Payum\Core\Debug\Humanify::request('foo'));
+        $this->assertEquals('string', Humanify::request('foo'));
     }
 
     /**
@@ -72,7 +72,7 @@ class HumanifyTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnRequestShortClassIfRequestObjectOnRequest()
     {
-        $this->assertEquals('HumanifyTest', \Payum\Core\Debug\Humanify::request($this));
+        $this->assertEquals('HumanifyTest', Humanify::request($this));
     }
 
     /**
@@ -82,7 +82,7 @@ class HumanifyTest extends \PHPUnit_Framework_TestCase
     {
         $request = new CaptureRequest($this);
 
-        $this->assertEquals('CaptureRequest{model: HumanifyTest}', \Payum\Core\Debug\Humanify::request($request));
+        $this->assertEquals('CaptureRequest{model: HumanifyTest}', Humanify::request($request));
     }
 
     /**

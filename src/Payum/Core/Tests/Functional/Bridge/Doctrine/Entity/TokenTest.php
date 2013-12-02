@@ -1,11 +1,11 @@
 <?php
-namespace Payum\Tests\Functional\Bridge\Doctrine\Entity;
+namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Entity;
 
 use Doctrine\ORM\Tools\SchemaValidator;
 
 use Payum\Core\Model\Identificator;
-use Payum\Tests\Functional\Bridge\Doctrine\OrmTest;
-use Payum\Examples\Entity\Token;
+use Payum\Core\Tests\Functional\Bridge\Doctrine\OrmTest;
+use Payum\Core\Tests\Mocks\Entity\Token;
 
 class TokenTest extends OrmTest
 {

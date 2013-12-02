@@ -1,9 +1,9 @@
 <?php
-namespace Payum\Tests\Functional\Bridge\Doctrine\Document;
+namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Document;
 
 use Payum\Core\Security\SensitiveValue;
-use Payum\Tests\Functional\Bridge\Doctrine\MongoTest;
-use Payum\Examples\Document\ArrayObject;
+use Payum\Core\Tests\Functional\Bridge\Doctrine\MongoTest;
+use Payum\Core\Tests\Mocks\Document\ArrayObject;
 
 class ArrayObjectTest extends MongoTest
 {

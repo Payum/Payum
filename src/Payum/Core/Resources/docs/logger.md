@@ -7,8 +7,8 @@ To inject a logger you have to create a logger itself, and add an extension with
 ```php
 <?php
 use Payum\Core\Bridge\Psr\Log\LoggerExtension;
-use Payum\Examples\Action\LoggerAwareAction;
-use Payum\Payment;
+use Payum\Core\Tests\Mocks\Action\LoggerAwareAction;
+use Payum\Core\Payment;
 
 
 $payment = new Payment;
@@ -22,7 +22,7 @@ After you are done you can simply implement `LoggerAwareInterface` interface to 
 
 ```php
 <?php
-namespace Payum\Examples\Action;
+namespace App\Payum\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Psr\Log\LoggerAwareInterface;

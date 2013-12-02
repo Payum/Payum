@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Registry;
+namespace Payum\Core\Tests\Registry;
 
 class RegistryInterfaceTest extends \PHPUnit_Framework_TestCase
 {

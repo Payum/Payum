@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Request;
+namespace Payum\Core\Tests\Request;
 
 class SyncRequestTest extends \PHPUnit_Framework_TestCase
 {

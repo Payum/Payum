@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Model;
+namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\Token;
 use Payum\Core\Model\Identificator;
@@ -29,7 +29,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetHashGeneratedInConstructor()
     {
-        $token = new \Payum\Core\Model\Token;
+        $token = new Token;
 
         $this->assertNotEmpty($token->getHash());
     }
@@ -50,7 +50,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetHash()
     {
-        $token = new \Payum\Core\Model\Token;
+        $token = new Token;
 
         $token->setHash('foo');
     }
@@ -72,7 +72,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetPaymentName()
     {
-        $token = new \Payum\Core\Model\Token;
+        $token = new Token;
 
         $token->setPaymentName('aName');
     }
@@ -116,7 +116,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetAfterUrl()
     {
-        $token = new \Payum\Core\Model\Token;
+        $token = new Token;
 
         $token->setAfterUrl('anUrl');
     }
@@ -162,7 +162,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetIdentificatorPreviouslySetAsDetails()
     {
-        $expectedIdentificator = new \Payum\Core\Model\Identificator('anId', 'stdClass');
+        $expectedIdentificator = new Identificator('anId', 'stdClass');
 
         $token = new Token;
 

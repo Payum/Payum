@@ -24,7 +24,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\AuthorizeNet\Aim\Action\CaptureAction');
 
-        $this->assertTrue($rc->implementsInterface('Payum\ApiAwareInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\ApiAwareInterface'));
     }
 
     /**

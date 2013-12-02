@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Functional\Bridge\Doctrine;
+namespace Payum\Core\Tests\Functional\Bridge\Doctrine;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
@@ -16,27 +16,28 @@ abstract class MongoTest extends BaseMongoTest
      */
     protected function getMetadataDriverImpl()
     {
-        $rootDir = realpath(__DIR__.'/../../../../../../');
-        if (false === $rootDir || false === is_dir($rootDir.'/src/Payum')) {
+        $rootDir = realpath(__DIR__.'/../../../..');
+        if (false === $rootDir || false === is_file($rootDir.'/Payment.php')) {
             throw new \RuntimeException('Cannot guess Payum root dir.');
         }
 
         $driver = new MappingDriverChain;
         $xmlDriver = new XmlDriver(
             new SymfonyFileLocator(
-                array($rootDir.'/src/Payum/Bridge/Doctrine/Resources/mapping' => 'Payum\Core\Model'),
+                array($rootDir.'/Bridge/Doctrine/Resources/mapping' => 'Payum\Core\Model'),
                 '.mongodb.xml'
             ),
             '.mongodb.xml'
         );
         $driver->addDriver($xmlDriver, 'Payum\Core\Model');
 
-        \Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver::registerAnnotationClasses();
+        AnnotationDriver::registerAnnotationClasses();
 
+        $rc = new \ReflectionClass('Payum\Core\Tests\Mocks\Document\TestModel');
         $annotationDriver = new AnnotationDriver(new AnnotationReader(), array(
-            $rootDir.'/examples/Payum/Examples/Document'
+            dirname($rc->getFileName())
         ));
-        $driver->addDriver($annotationDriver, 'Payum\Examples\Document');
+        $driver->addDriver($annotationDriver, 'Payum\Core\Tests\Mocks\Document');
 
         return $driver;
     }

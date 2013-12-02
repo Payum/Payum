@@ -16,4 +16,4 @@ EOM;
 
 $loader->add('Payum\Payex\Tests', __DIR__);
 $loader->add('Payum\Payex\Examples', __DIR__.'/../examples');
-$loader->add('Payum\Tests', __DIR__.'/../vendor/payum/payum/tests');
+$loader->add('Payum\Core\Tests', __DIR__.'/../vendor/payum/payum/tests');

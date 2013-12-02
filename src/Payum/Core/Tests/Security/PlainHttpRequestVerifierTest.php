@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Security;
+namespace Payum\Core\Tests\Security;
 
 use Payum\Core\Model\Token;
 use Payum\Core\Security\PlainHttpRequestVerifier;
@@ -32,7 +32,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfRequestIsNotArrayOnVerify()
     {
-        $verifier = new \Payum\Core\Security\PlainHttpRequestVerifier($this->createStorageMock());
+        $verifier = new PlainHttpRequestVerifier($this->createStorageMock());
 
         $verifier->verify('not array');
     }
@@ -119,7 +119,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($expectedToken))
         ;
 
-        $verifier = new \Payum\Core\Security\PlainHttpRequestVerifier($storageMock);
+        $verifier = new PlainHttpRequestVerifier($storageMock);
 
         $actualToken = $verifier->verify(array('payum_token' => 'theHash'));
 

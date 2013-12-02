@@ -9,20 +9,20 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="tests/bootstrap.php"
+         bootstrap="autoload.php.dist"
 >
     <testsuites>
-        <testsuite name="Payum Tests">
-            <directory>./tests</directory>
-        </testsuite>
-        <testsuite name="Payum Examples">
-            <directory>./examples</directory>
+        <testsuite name="Payum Core Component Test Suite">
+            <directory>./src/Payum/Core/Tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory suffix=".php">./src</directory>
+            <directory>./src/Payum/Core</directory>
+            <exclude>
+                <directory>./Tests</directory>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>

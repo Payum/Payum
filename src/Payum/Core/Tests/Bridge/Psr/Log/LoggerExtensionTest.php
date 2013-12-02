@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Bridge\Psr\Log;
+namespace Payum\Core\Tests\Bridge\Psr\Log;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Psr\Log\LoggerExtension;
@@ -53,7 +53,7 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $expectedLogger = $this->createLoggerMock();
 
-        $extension = new \Payum\Core\Bridge\Psr\Log\LoggerExtension($expectedLogger);
+        $extension = new LoggerExtension($expectedLogger);
 
         $this->assertAttributeSame($expectedLogger, 'logger', $extension);
     }
@@ -65,7 +65,7 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $expectedLogger = $this->createLoggerMock();
 
-        $extension = new \Payum\Core\Bridge\Psr\Log\LoggerExtension;
+        $extension = new LoggerExtension;
 
         //guard
         $this->assertAttributeInstanceOf('Psr\Log\NullLogger', 'logger', $extension);
@@ -82,7 +82,7 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $logger = $this->createLoggerMock();
 
-        $extension = new \Payum\Core\Bridge\Psr\Log\LoggerExtension($logger);
+        $extension = new LoggerExtension($logger);
 
         $action = new LoggerAwareAction;
 
@@ -98,7 +98,7 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $logger = $this->createLoggerMock();
 
-        $extension = new \Payum\Core\Bridge\Psr\Log\LoggerExtension($logger);
+        $extension = new LoggerExtension($logger);
 
         $extension->onExecute(new \stdClass, $this->createActionMock());
     }
@@ -126,7 +126,7 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $logger = $this->createLoggerMock();
 
-        $extension = new \Payum\Core\Bridge\Psr\Log\LoggerExtension($logger);
+        $extension = new LoggerExtension($logger);
 
         $action = new LoggerAwareAction;
 
@@ -142,7 +142,7 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $logger = $this->createLoggerMock();
 
-        $extension = new \Payum\Core\Bridge\Psr\Log\LoggerExtension($logger);
+        $extension = new LoggerExtension($logger);
 
         $action = new LoggerAwareAction;
 

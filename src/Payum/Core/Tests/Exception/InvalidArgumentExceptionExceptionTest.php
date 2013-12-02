@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Exception;
+namespace Payum\Core\Tests\Exception;
 
 use Payum\Core\Exception\InvalidArgumentException;
 
@@ -30,6 +30,6 @@ class InvalidArgumentExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new \Payum\Core\Exception\InvalidArgumentException;
+        new InvalidArgumentException;
     }
 }

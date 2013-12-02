@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Request;
+namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\UserInputRequiredInteractiveRequest;
 
@@ -34,7 +34,7 @@ class UserInputRequiredInteractiveRequestTest extends \PHPUnit_Framework_TestCas
             'a_field',
         );
 
-        $request = new \Payum\Core\Request\UserInputRequiredInteractiveRequest($expectedRequiredFields);
+        $request = new UserInputRequiredInteractiveRequest($expectedRequiredFields);
 
         $this->assertEquals($expectedRequiredFields, $request->getRequiredFields());
     }

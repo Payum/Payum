@@ -116,7 +116,7 @@ namespace App;
 
 App\Payum\Action\CaptureAction;
 App\Payum\Action\StatusAction;
-use Payum\Payment;
+use Payum\Core\Payment;
 use Payum\Core\Request\CaptureRequest;
 use Payum\Core\Request\BinaryMaskStatusRequest;
 

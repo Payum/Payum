@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests;
+namespace Payum\Core\Tests;
 
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\UnsupportedApiException;
@@ -15,9 +15,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementPaymentInterface()
     {
-        $rc = new \ReflectionClass('Payum\Payment');
+        $rc = new \ReflectionClass('Payum\Core\Payment');
         
-        $this->assertTrue($rc->implementsInterface('Payum\PaymentInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentInterface'));
     }
 
     /**
@@ -138,7 +138,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $payment->addApi($firstApi = new \stdClass());
         $payment->addApi($secondApi = new \stdClass());
         
-        $action = $this->getMockForAbstractClass('Payum\Tests\ApiAwareAction');
+        $action = $this->getMockForAbstractClass('Payum\Core\Tests\ApiAwareAction');
         $action
             ->expects($this->once())
             ->method('setApi')
@@ -158,7 +158,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $payment->addApi($firstApi = new \stdClass());
         $payment->addApi($secondApi = new \stdClass());
 
-        $action = $this->getMockForAbstractClass('Payum\Tests\ApiAwareAction');
+        $action = $this->getMockForAbstractClass('Payum\Core\Tests\ApiAwareAction');
         $action
             ->expects($this->at(0))
             ->method('setApi')
@@ -187,7 +187,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $payment->addApi($firstApi = new \stdClass());
         $payment->addApi($secondApi = new \stdClass());
 
-        $action = $this->getMockForAbstractClass('Payum\Tests\ApiAwareAction');
+        $action = $this->getMockForAbstractClass('Payum\Core\Tests\ApiAwareAction');
         $action
             ->expects($this->at(0))
             ->method('setApi')

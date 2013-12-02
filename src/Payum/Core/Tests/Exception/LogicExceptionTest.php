@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Exception;
+namespace Payum\Core\Tests\Exception;
 
 use Payum\Core\Exception\LogicException;
 
@@ -30,6 +30,6 @@ class LogicExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new \Payum\Core\Exception\LogicException;
+        new LogicException;
     }
 }

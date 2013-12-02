@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Bridge\Spl;
+namespace Payum\Core\Tests\Bridge\Spl;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Security\SensitiveValue;
@@ -64,7 +64,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
             'baz' => 'bazNew'
         );
         
-        $array = new \Payum\Core\Bridge\Spl\ArrayObject(array('foo' => 'valCurr', 'ololo' => 'valCurr'));
+        $array = new ArrayObject(array('foo' => 'valCurr', 'ololo' => 'valCurr'));
 
         $array->replace(array(
             'foo' => 'valNew',
@@ -208,7 +208,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfRequiredFieldEmptyAndThrowOnInvalidTrue()
     {
-        $arrayObject = new \Payum\Core\Bridge\Spl\ArrayObject();
+        $arrayObject = new ArrayObject();
 
         $arrayObject->validatedNotEmpty(array('aRequiredField'), $throwOnInvalid = true);
     }
@@ -265,7 +265,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnTrueIfRequiredFieldsNotEmpty()
     {
-        $arrayObject = new \Payum\Core\Bridge\Spl\ArrayObject();
+        $arrayObject = new ArrayObject();
         $arrayObject['aRequiredField'] = 'foo';
         $arrayObject['otherRequiredField'] = 'bar';
 

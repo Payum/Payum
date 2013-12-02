@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Security;
+namespace Payum\Core\Tests\Security;
 
 use Payum\Core\Security\SensitiveValue;
 
@@ -40,7 +40,7 @@ class SensitiveValueTest extends \PHPUnit_Framework_TestCase
     {
         $expectedValue = 'cardNumber';
 
-        $sensitiveValue = new \Payum\Core\Security\SensitiveValue($expectedValue);
+        $sensitiveValue = new SensitiveValue($expectedValue);
 
         $this->assertEquals($expectedValue, $sensitiveValue->get());
         $this->assertNull($sensitiveValue->get());
@@ -54,7 +54,7 @@ class SensitiveValueTest extends \PHPUnit_Framework_TestCase
     {
         $expectedValue = 'cardNumber';
 
-        $sensitiveValue = new \Payum\Core\Security\SensitiveValue($expectedValue);
+        $sensitiveValue = new SensitiveValue($expectedValue);
 
         $this->assertEquals($expectedValue, $sensitiveValue->peek());
         $this->assertEquals($expectedValue, $sensitiveValue->peek());
@@ -67,7 +67,7 @@ class SensitiveValueTest extends \PHPUnit_Framework_TestCase
     {
         $expectedValue = 'cardNumber';
 
-        $sensitiveValue = new \Payum\Core\Security\SensitiveValue($expectedValue);
+        $sensitiveValue = new SensitiveValue($expectedValue);
 
         //guard
         $this->assertEquals($expectedValue, $sensitiveValue->get());
@@ -96,7 +96,7 @@ class SensitiveValueTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnEmptyStringOnToString()
     {
-        $sensitiveValue = new \Payum\Core\Security\SensitiveValue('cardNumber');
+        $sensitiveValue = new SensitiveValue('cardNumber');
 
         $this->assertEquals('', (string) $sensitiveValue);
     }
@@ -106,7 +106,7 @@ class SensitiveValueTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotExposeValueWhileEncodingToJson()
     {
-        $sensitiveValue = new \Payum\Core\Security\SensitiveValue('cardNumber');
+        $sensitiveValue = new SensitiveValue('cardNumber');
 
         $this->assertEquals('{}', json_encode($sensitiveValue));
     }
@@ -119,7 +119,7 @@ class SensitiveValueTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfTryToCloneValue()
     {
-        $sensitiveValue = new \Payum\Core\Security\SensitiveValue('cardNumber');
+        $sensitiveValue = new SensitiveValue('cardNumber');
 
         clone $sensitiveValue;
     }

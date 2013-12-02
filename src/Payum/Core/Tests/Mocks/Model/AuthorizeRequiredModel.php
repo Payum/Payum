@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Examples\Model;
+namespace Payum\Core\Tests\Mocks\Model;
 
 class AuthorizeRequiredModel extends TestModel
 {

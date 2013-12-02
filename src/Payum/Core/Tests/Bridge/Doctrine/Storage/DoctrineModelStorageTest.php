@@ -1,8 +1,8 @@
 <?php
-namespace Payum\Tests\Bridge\Doctrine\Storage;
+namespace Payum\Core\Tests\Bridge\Doctrine\Storage;
 
 use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
-use Payum\Examples\Model\TestModel;
+use Payum\Core\Tests\Mocks\Model\TestModel;
 
 class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,7 +30,7 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
     {
         new DoctrineStorage(
             $this->createObjectManagerMock(),
-            'Payum\Examples\Model\TestModel'
+            'Payum\Core\Tests\Mocks\Model\TestModel'
         );
     }
 
@@ -39,7 +39,7 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCreateInstanceOfModelClassGivenInConstructor()
     {
-        $expectedModelClass = 'Payum\Examples\Model\TestModel';
+        $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
 
         $storage = new DoctrineStorage(
             $this->createObjectManagerMock(),
@@ -61,7 +61,7 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
         $objectManagerMock
             ->expects($this->once())
             ->method('persist')
-            ->with($this->isInstanceOf('Payum\Examples\Model\TestModel'))
+            ->with($this->isInstanceOf('Payum\Core\Tests\Mocks\Model\TestModel'))
         ;
         $objectManagerMock
             ->expects($this->once())
@@ -70,7 +70,7 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
         
         $storage = new DoctrineStorage(
             $objectManagerMock,
-            'Payum\Examples\Model\TestModel'
+            'Payum\Core\Tests\Mocks\Model\TestModel'
         );
 
         $model = $storage->createModel();
@@ -83,7 +83,7 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldFindModelById()
     {
-        $expectedModelClass = 'Payum\Examples\Model\TestModel';
+        $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
         $expectedModelId = 123;
         $expectedFoundModel = new TestModel;
         
@@ -97,7 +97,7 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
 
         $storage = new DoctrineStorage(
             $objectManagerMock,
-            'Payum\Examples\Model\TestModel'
+            'Payum\Core\Tests\Mocks\Model\TestModel'
         );
 
         $actualModel = $storage->findModelById($expectedModelId);

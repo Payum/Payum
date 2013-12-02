@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Security;
+namespace Payum\Core\Tests\Security;
 
 class TokenInterfaceTest extends \PHPUnit_Framework_TestCase
 {

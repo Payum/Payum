@@ -1,8 +1,8 @@
 <?php
-namespace Payum\Examples\Entity;
+namespace Payum\Core\Tests\Mocks\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Payum\Examples\Model\TestModel as BaseTestModel;
+use Payum\Core\Tests\Mocks\Model\TestModel as BaseTestModel;
 
 /**
  * @ORM\Entity

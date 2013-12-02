@@ -55,7 +55,7 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Payex\Action\Api\InitializeOrderAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\ApiAwareInterface'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
     }
 
     /**

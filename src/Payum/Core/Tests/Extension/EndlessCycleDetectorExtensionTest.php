@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Extension;
+namespace Payum\Core\Tests\Extension;
 
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 
@@ -20,7 +20,7 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new \Payum\Core\Extension\EndlessCycleDetectorExtension;
+        new EndlessCycleDetectorExtension;
     }
 
     /**
@@ -28,7 +28,7 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSetDefaultLimitInConstructor()
     {
-        $extension = new \Payum\Core\Extension\EndlessCycleDetectorExtension;
+        $extension = new EndlessCycleDetectorExtension;
 
         $this->assertAttributeEquals(100, 'limit', $extension);
     }
@@ -38,7 +38,7 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetLimitInInConstructor()
     {
-        $extension = new \Payum\Core\Extension\EndlessCycleDetectorExtension($expectedLimit = 55);
+        $extension = new EndlessCycleDetectorExtension($expectedLimit = 55);
 
         $this->assertAttributeEquals($expectedLimit, 'limit', $extension);
     }
@@ -50,7 +50,7 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $request = new \stdClass;
         
-        $extension = new \Payum\Core\Extension\EndlessCycleDetectorExtension;
+        $extension = new EndlessCycleDetectorExtension;
 
         $extension->onPreExecute($request);
         
@@ -103,7 +103,7 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $request = new \stdClass;
 
-        $extension = new \Payum\Core\Extension\EndlessCycleDetectorExtension;
+        $extension = new EndlessCycleDetectorExtension;
 
         $extension->onPreExecute($request);
 
@@ -123,7 +123,7 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
         $request = new \stdClass;
         $otherRequest = new \stdClass;
 
-        $extension = new \Payum\Core\Extension\EndlessCycleDetectorExtension;
+        $extension = new EndlessCycleDetectorExtension;
 
         $extension->onPreExecute($request);
 
@@ -142,7 +142,7 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $request = new \stdClass;
 
-        $extension = new \Payum\Core\Extension\EndlessCycleDetectorExtension;
+        $extension = new EndlessCycleDetectorExtension;
 
         $extension->onPreExecute($request);
 
@@ -162,7 +162,7 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
         $request = new \stdClass;
         $otherRequest = new \stdClass;
 
-        $extension = new \Payum\Core\Extension\EndlessCycleDetectorExtension;
+        $extension = new EndlessCycleDetectorExtension;
 
         $extension->onPreExecute($request);
 
@@ -179,7 +179,7 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldIncrementCounterOnPreExecute()
     {
-        $extension = new \Payum\Core\Extension\EndlessCycleDetectorExtension;
+        $extension = new EndlessCycleDetectorExtension;
         
         $extension->onPreExecute(new \stdClass);
         $this->assertAttributeEquals(1, 'cyclesCounter', $extension);
@@ -193,7 +193,7 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldResetCounterToZeroIfFirstRequestOnPreExecute()
     {
-        $extension = new \Payum\Core\Extension\EndlessCycleDetectorExtension;
+        $extension = new EndlessCycleDetectorExtension;
 
         $extension->onPreExecute($firstRequest = new \stdClass);
         $this->assertAttributeEquals(1, 'cyclesCounter', $extension);

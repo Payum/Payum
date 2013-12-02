@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Examples\Action;
+namespace Payum\Core\Tests\Mocks\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Request\StatusRequestInterface;

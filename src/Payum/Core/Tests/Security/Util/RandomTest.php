@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Security\Util;
+namespace Payum\Core\Tests\Security\Util;
 
 use Payum\Core\Security\Util\Random;
 
@@ -10,7 +10,7 @@ class RandomTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGenerateToken()
     {
-        $token = \Payum\Core\Security\Util\Random::generateToken();
+        $token = Random::generateToken();
 
         $this->assertInternalType('string', $token);
         $this->assertEquals(43, strlen($token));

@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Functional\Extension;
+namespace Payum\Core\Tests\Functional\Extension;
 
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
@@ -22,7 +22,7 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
         $action->setRequiredRequest($cycledRequest);
 
         $payment = new Payment();
-        $payment->addExtension(new \Payum\Core\Extension\EndlessCycleDetectorExtension($limit = 10));
+        $payment->addExtension(new EndlessCycleDetectorExtension($limit = 10));
         $payment->addAction($action);
 
         $payment->execute($cycledRequest);

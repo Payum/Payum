@@ -41,10 +41,9 @@
     "require-dev": {
         "ext-curl": "*",
         "ext-pdo_sqlite": "*",
-        "doctrine/orm": "2.*",
+        "doctrine/orm": "2.3.*",
         "doctrine/mongodb": "1.0.*@dev",
         "doctrine/mongodb-odm": "1.0.*@dev",
-        "fp/testo": "dev-master",
         "phpunit/phpunit": "3.7.*",
         "psr/log": "~1.0"
     },

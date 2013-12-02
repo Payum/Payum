@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Examples\Document;
+namespace Payum\Core\Tests\Mocks\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as Mongo;
 use Payum\Core\Model\ArrayObject as BaseArrayObject;

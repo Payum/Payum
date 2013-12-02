@@ -1,9 +1,9 @@
 <?php
-namespace Payum\Tests\Functional\Bridge\Doctrine\Document;
+namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Document;
 
 use Payum\Core\Model\Identificator;
-use Payum\Tests\Functional\Bridge\Doctrine\MongoTest;
-use Payum\Examples\Document\Token;
+use Payum\Core\Tests\Functional\Bridge\Doctrine\MongoTest;
+use Payum\Core\Tests\Mocks\Document\Token;
 
 class TokenTest extends MongoTest
 {

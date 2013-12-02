@@ -1,12 +1,11 @@
 <?php
-namespace Payum\Tests\Functional\Bridge\Doctrine;
+namespace Payum\Core\Tests\Functional\Bridge\Doctrine;
 
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
-use Doctrine\ORM\Tools\SchemaValidator;
+use Doctrine\ORM\Mapping\Driver\DriverChain;
 use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 
 class OrmTest extends BaseOrmTest
@@ -16,36 +15,27 @@ class OrmTest extends BaseOrmTest
      */
     protected function getMetadataDriverImpl()
     {   
-        $rootDir = realpath(__DIR__.'/../../../../../../');
-        if (false === $rootDir || false === is_dir($rootDir.'/src/Payum')) {
+        $rootDir = realpath(__DIR__.'/../../../..');
+        if (false === $rootDir || false === is_file($rootDir.'/Payment.php')) {
             throw new \RuntimeException('Cannot guess Payum root dir.');
         }
         
-        $driver = new MappingDriverChain;
+        $driver = new DriverChain;
         
         $xmlDriver = new SimplifiedXmlDriver(array(
-            $rootDir.'/src/Payum/Bridge/Doctrine/Resources/mapping' => 'Payum\Core\Model'
+            $rootDir.'/Bridge/Doctrine/Resources/mapping' => 'Payum\Core\Model'
         ));
         $driver->addDriver($xmlDriver, 'Payum\Core\Model');
 
         $rc = new \ReflectionClass('\Doctrine\ORM\Mapping\Driver\AnnotationDriver');
         AnnotationRegistry::registerFile(dirname($rc->getFileName()) . '/DoctrineAnnotations.php');
 
+        $rc = new \ReflectionClass('Payum\Core\Tests\Mocks\Entity\TestModel');
         $annotationDriver = new AnnotationDriver(new AnnotationReader(), array(
-            $rootDir.'/examples/Payum/Examples/Entity'
+            dirname($rc->getFileName())
         ));
-        $driver->addDriver($annotationDriver, 'Payum\Examples\Entity');
+        $driver->addDriver($annotationDriver, 'Payum\Core\Tests\Mocks\Entity');
         
         return $driver;
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllSchemasBeValid()
-    {
-        $schemaValidator = new SchemaValidator($this->em);
-
-        $this->assertEmpty($schemaValidator->validateMapping());
     }
 }

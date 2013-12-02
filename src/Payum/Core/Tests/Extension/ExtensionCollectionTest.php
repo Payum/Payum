@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Extension;
+namespace Payum\Core\Tests\Extension;
 
 use Payum\Core\Extension\ExtensionCollection;
 use Payum\Core\Extension\ExtensionInterface;
@@ -126,7 +126,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
             )
         ;
 
-        $collection = new \Payum\Core\Extension\ExtensionCollection;
+        $collection = new ExtensionCollection;
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
 
@@ -163,7 +163,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
             )
         ;
 
-        $collection = new \Payum\Core\Extension\ExtensionCollection;
+        $collection = new ExtensionCollection;
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
 

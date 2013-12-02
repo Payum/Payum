@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Registry;
+namespace Payum\Core\Tests\Registry;
 
 use Payum\Core\Registry\AbstractRegistry;
 

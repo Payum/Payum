@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Request;
+namespace Payum\Core\Tests\Request;
 
 class StatusRequestInterfaceTest extends \PHPUnit_Framework_TestCase
 {

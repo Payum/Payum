@@ -100,6 +100,6 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createPaymentMock()
     {
-        return $this->getMock('Payum\PaymentInterface');
+        return $this->getMock('Payum\Core\PaymentInterface');
     }
 }

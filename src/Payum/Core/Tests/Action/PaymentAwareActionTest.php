@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Action;
+namespace Payum\Core\Tests\Action;
 
 class PaymentAwareActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +20,7 @@ class PaymentAwareActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Core\Action\PaymentAwareAction');
 
-        $this->assertTrue($rc->implementsInterface('Payum\PaymentAwareInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentAwareInterface'));
     }
 
     /**
@@ -28,7 +28,7 @@ class PaymentAwareActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSetPaymentToProperty()
     {
-        $payment = $this->getMock('Payum\PaymentInterface');
+        $payment = $this->getMock('Payum\Core\PaymentInterface');
         
         $action = $this->getMockForAbstractClass('Payum\Core\Action\PaymentAwareAction');
         

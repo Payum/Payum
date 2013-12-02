@@ -15,4 +15,4 @@ EOM;
 }
 
 $loader->add('Payum\Paypal\ProCheckout\Nvp\Tests', __DIR__);
-$loader->add('Payum\Tests', __DIR__.'/../vendor/payum/payum/tests');
+$loader->add('Payum\Core\Tests', __DIR__.'/../vendor/payum/payum/tests');

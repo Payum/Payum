@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Bridge\Psr\Log;
+namespace Payum\Core\Tests\Bridge\Psr\Log;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension;
@@ -54,7 +54,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $expectedLogger = $this->createLoggerMock();
 
-        $extension = new \Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension($expectedLogger);
+        $extension = new LogExecutedActionsExtension($expectedLogger);
 
         $this->assertAttributeSame($expectedLogger, 'logger', $extension);
     }
@@ -66,7 +66,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $expectedLogger = $this->createLoggerMock();
 
-        $extension = new \Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension;
+        $extension = new LogExecutedActionsExtension;
 
         //guard
         $this->assertAttributeInstanceOf('Psr\Log\NullLogger', 'logger', $extension);
@@ -87,7 +87,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('debug')
         ;
 
-        $extension = new \Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension($logger);
+        $extension = new LogExecutedActionsExtension($logger);
 
         $extension->onPreExecute(new \stdClass);
     }
@@ -103,7 +103,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('debug')
         ;
 
-        $extension = new \Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension($logger);
+        $extension = new LogExecutedActionsExtension($logger);
 
         $extension->onPostExecute(new \stdClass, $this->createActionMock());
     }
@@ -120,7 +120,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
             ->with($this->stringStartsWith('[Payum] 2# '))
         ;
 
-        $extension = new \Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension($logger);
+        $extension = new LogExecutedActionsExtension($logger);
 
         $extension->onPreExecute('string');
         $extension->onPreExecute('string');
@@ -176,7 +176,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
             ->with($this->stringStartsWith('[Payum] 1# '))
         ;
 
-        $extension = new \Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension($logger);
+        $extension = new LogExecutedActionsExtension($logger);
 
         $extension->onPreExecute('string');
         $extension->onPreExecute('string');
@@ -201,7 +201,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
             ->with($this->stringStartsWith('[Payum] 1# '))
         ;
 
-        $extension = new \Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension($logger);
+        $extension = new LogExecutedActionsExtension($logger);
 
         $extension->onPreExecute('string');
         $extension->onPreExecute('string');
@@ -283,7 +283,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
             ->with('[Payum] 1# '.get_class($action).'::execute(CaptureRequest{model: ArrayObject})')
         ;
 
-        $extension = new \Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension($logger);
+        $extension = new LogExecutedActionsExtension($logger);
 
         $extension->onPreExecute($modelRequest);
         $extension->onExecute($modelRequest, $action);
@@ -305,7 +305,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
             ->with('[Payum] 1# '.get_class($action).'::execute(CaptureRequest{model: stdClass})')
         ;
 
-        $extension = new \Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension($logger);
+        $extension = new LogExecutedActionsExtension($logger);
 
         $extension->onPreExecute($stdModelRequest);
         $extension->onExecute($stdModelRequest, $action);
@@ -328,7 +328,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
             ->with('[Payum] 1# FooAction::execute(string) throws interactive '.$ro->getShortName())
         ;
 
-        $extension = new \Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension($logger);
+        $extension = new LogExecutedActionsExtension($logger);
 
         $extension->onPreExecute('string');
         $extension->onInteractiveRequest($interactiveRequest, 'string', $action);
@@ -369,7 +369,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
             ->with('[Payum] 1# FooAction::execute(string) throws exception LogicException')
         ;
 
-        $extension = new \Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension($logger);
+        $extension = new LogExecutedActionsExtension($logger);
 
         $extension->onPreExecute('string');
         $extension->onException(new \LogicException, 'string', $action);
@@ -387,7 +387,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
             ->with('[Payum] 1# Payment::execute(string) throws exception LogicException')
         ;
 
-        $extension = new \Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension($logger);
+        $extension = new LogExecutedActionsExtension($logger);
 
         $extension->onPreExecute('string');
         $extension->onException(new \LogicException, 'string');

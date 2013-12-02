@@ -47,7 +47,7 @@ class StartRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Payex\Action\Api\StartRecurringPaymentAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\ApiAwareInterface'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
     }
 
     /**

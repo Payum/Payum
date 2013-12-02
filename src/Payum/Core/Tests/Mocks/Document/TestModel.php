@@ -1,8 +1,8 @@
 <?php
-namespace Payum\Examples\Document;
+namespace Payum\Core\Tests\Mocks\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as Mongo;
-use Payum\Examples\Model\TestModel as BaseTestModel;
+use Payum\Core\Tests\Mocks\Model\TestModel as BaseTestModel;
 
 /**
  * @Mongo\Document

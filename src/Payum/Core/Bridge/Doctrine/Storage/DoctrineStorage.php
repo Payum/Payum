@@ -18,7 +18,7 @@ class DoctrineStorage extends AbstractStorage
      */
     public function __construct(ObjectManager $objectManager, $modelClass)
     {
-        \Payum\Core\Storage\parent::__construct($modelClass);
+        parent::__construct($modelClass);
 
         $this->objectManager = $objectManager;
     }

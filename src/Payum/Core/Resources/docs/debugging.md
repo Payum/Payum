@@ -7,8 +7,8 @@ _**Council**: You can filter log by `[Payum]`. For example using `grep` tool._
 ```php
 <?php
 use Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension;
-use Payum\Examples\Action\CaptureAction;
-use Payum\Payment;
+use Payum\Core\Tests\Mocks\Action\CaptureAction;
+use Payum\Core\Payment;
 use Payum\Core\Request\CaptureRequest;
 
 $payment = new Payment;

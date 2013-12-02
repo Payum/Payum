@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Request;
+namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\BinaryMaskStatusRequest;
 
@@ -84,7 +84,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenSuccessStatus()
     {
-        $statusRequest = new \Payum\Core\Request\BinaryMaskStatusRequest(new \stdClass);
+        $statusRequest = new BinaryMaskStatusRequest(new \stdClass);
 
         $statusRequest->markSuccess();
         
@@ -104,7 +104,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenFailedStatus()
     {
-        $statusRequest = new \Payum\Core\Request\BinaryMaskStatusRequest(new \stdClass);
+        $statusRequest = new BinaryMaskStatusRequest(new \stdClass);
 
         $statusRequest->markFailed();
 

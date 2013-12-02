@@ -27,7 +27,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $payment = PaymentFactory::create($orderApiMock);
 
-        $this->assertInstanceOf('Payum\Payment', $payment);
+        $this->assertInstanceOf('Payum\Core\Payment', $payment);
 
         $this->assertAttributeCount(1, 'apis', $payment);
 
@@ -46,7 +46,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $payment = PaymentFactory::create($orderApiMock, $agreementApiMock);
 
-        $this->assertInstanceOf('Payum\Payment', $payment);
+        $this->assertInstanceOf('Payum\Core\Payment', $payment);
 
         $this->assertAttributeCount(2, 'apis', $payment);
 
@@ -65,7 +65,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
         
         $payment = PaymentFactory::create($orderApiMock, null, $recurringApiMock);
 
-        $this->assertInstanceOf('Payum\Payment', $payment);
+        $this->assertInstanceOf('Payum\Core\Payment', $payment);
 
         $this->assertAttributeCount(2, 'apis', $payment);
 
@@ -85,7 +85,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $payment = PaymentFactory::create($orderApiMock, $agreementApiMock, $recurringApiMock);
 
-        $this->assertInstanceOf('Payum\Payment', $payment);
+        $this->assertInstanceOf('Payum\Core\Payment', $payment);
 
         $this->assertAttributeCount(3, 'apis', $payment);
 

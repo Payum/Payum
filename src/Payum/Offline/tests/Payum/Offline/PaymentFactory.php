@@ -22,7 +22,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $payment = PaymentFactory::create();
 
-        $this->assertInstanceOf('Payum\Payment', $payment);
+        $this->assertInstanceOf('Payum\Core\Payment', $payment);
 
         $actions = $this->readAttribute($payment, 'actions');
         $this->assertInternalType('array', $actions);

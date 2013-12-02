@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Tests\Storage;
+namespace Payum\Core\Tests\Storage;
 
 use Payum\Core\Storage\FilesystemStorage;
 
@@ -20,7 +20,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithStorageDirModelClassAndDefaultIdPropertyArguments()
     {
-        $storage = new FilesystemStorage(sys_get_temp_dir(), 'Payum\Examples\Model\TestModel');
+        $storage = new FilesystemStorage(sys_get_temp_dir(), 'Payum\Core\Tests\Mocks\Model\TestModel');
 
         $this->assertAttributeEquals('payum_id', 'idProperty', $storage);
     }
@@ -32,7 +32,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
     {
         new FilesystemStorage(
             sys_get_temp_dir(),
-            'Payum\Examples\Model\TestModel',
+            'Payum\Core\Tests\Mocks\Model\TestModel',
             'id'
         );
     }
@@ -42,7 +42,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCreateInstanceOfModelClassGivenInConstructor()
     {
-        $expectedModelClass = 'Payum\Examples\Model\TestModel';
+        $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
         
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
@@ -61,9 +61,9 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUpdateModelAndSetIdToModel()
     {
-        $expectedModelClass = 'Payum\Examples\Model\TestModel';
+        $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
 
-        $storage = new \Payum\Core\Storage\FilesystemStorage(
+        $storage = new FilesystemStorage(
             sys_get_temp_dir(),
             $expectedModelClass,
             'id'
@@ -103,7 +103,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
-            'Payum\Examples\Model\TestModel',
+            'Payum\Core\Tests\Mocks\Model\TestModel',
             'id'
         );
 
@@ -125,7 +125,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
-            'Payum\Examples\Model\TestModel',
+            'Payum\Core\Tests\Mocks\Model\TestModel',
             'id'
         );
 
@@ -142,7 +142,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
-            'Payum\Examples\Model\TestModel',
+            'Payum\Core\Tests\Mocks\Model\TestModel',
             'id'
         );
 
@@ -165,7 +165,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
-            'Payum\Examples\Model\TestModel',
+            'Payum\Core\Tests\Mocks\Model\TestModel',
             'id'
         );
 
@@ -182,9 +182,9 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetModelIdentificator()
     {
-        $storage = new \Payum\Core\Storage\FilesystemStorage(
+        $storage = new FilesystemStorage(
             sys_get_temp_dir(),
-            'Payum\Examples\Model\TestModel',
+            'Payum\Core\Tests\Mocks\Model\TestModel',
             'id'
         );
 
@@ -224,7 +224,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
-            'Payum\Examples\Model\TestModel',
+            'Payum\Core\Tests\Mocks\Model\TestModel',
             'id'
         );
         
@@ -236,7 +236,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
         
         $foundModel = $storage->findModelById($model->getId());
 
-        $this->assertInstanceOf('Payum\Examples\Model\TestModel', $foundModel);
+        $this->assertInstanceOf('Payum\Core\Tests\Mocks\Model\TestModel', $foundModel);
         $this->assertEquals($model->getId(), $foundModel->getId());
     }
 
@@ -247,7 +247,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
-            'Payum\Examples\Model\TestModel',
+            'Payum\Core\Tests\Mocks\Model\TestModel',
             'id'
         );
 
@@ -265,7 +265,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
 
         $foundModel = $storage->findModelByIdentificator($identificator);
 
-        $this->assertInstanceOf('Payum\Examples\Model\TestModel', $foundModel);
+        $this->assertInstanceOf('Payum\Core\Tests\Mocks\Model\TestModel', $foundModel);
         $this->assertEquals($model->getId(), $foundModel->getId());
     }
 
@@ -274,9 +274,9 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldStoreInfoBetweenUpdateAndFind()
     {
-        $storage = new \Payum\Core\Storage\FilesystemStorage(
+        $storage = new FilesystemStorage(
             sys_get_temp_dir(),
-            'Payum\Examples\Model\TestModel',
+            'Payum\Core\Tests\Mocks\Model\TestModel',
             'id'
         );
 
@@ -298,7 +298,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldStoreInfoBetweenUpdateAndFindWithDefaultId()
     {
-        $storage = new FilesystemStorage(sys_get_temp_dir(), 'Payum\Examples\Model\TestModel');
+        $storage = new FilesystemStorage(sys_get_temp_dir(), 'Payum\Core\Tests\Mocks\Model\TestModel');
 
         $model = $storage->createModel();
         $model->setPrice($expectedPrice = 123);
@@ -325,7 +325,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowDeleteModel()
     {
-        $storage = new FilesystemStorage(sys_get_temp_dir(), 'Payum\Examples\Model\TestModel');
+        $storage = new FilesystemStorage(sys_get_temp_dir(), 'Payum\Core\Tests\Mocks\Model\TestModel');
 
         $model = $storage->createModel();
         $model->setPrice($expectedPrice = 123);
