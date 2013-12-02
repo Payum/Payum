@@ -21,7 +21,7 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "payum/payum": "0.7.x-dev",
+        "payum/core": "0.7.x-dev",
         "ajbdev/authorizenet-php-api": "1.1.*"
     },
     "require-dev": {
@@ -31,8 +31,9 @@
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-0": { "Payum\\AuthorizeNet\\Aim": "src/" }
+        "psr-0": { "Payum\\AuthorizeNet\\Aim": "" }
     },
+    "target-dir": "Payum/AuthorizeNet/Aim",
     "extra": {
         "branch-alias": {
             "dev-master": "0.7-dev"

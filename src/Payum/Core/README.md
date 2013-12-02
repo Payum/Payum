@@ -1,7 +1,7 @@
-# Payum 
-[![Build Status](https://travis-ci.org/Payum/Payum.png?branch=master)](https://travis-ci.org/Payum/Payum) 
-[![Total Downloads](https://poser.pugx.org/payum/payum/d/total.png)](https://packagist.org/packages/payum/payum) 
-[![Latest Stable Version](https://poser.pugx.org/payum/payum/version.png)](https://packagist.org/packages/payum/payum)
+# Payum Core
+[![Build Status](https://travis-ci.org/Payum/Core.png?branch=master)](https://travis-ci.org/Payum/Core)
+[![Total Downloads](https://poser.pugx.org/payum/Core/d/total.png)](https://packagist.org/packages/payum/core)
+[![Latest Stable Version](https://poser.pugx.org/payum/core/version.png)](https://packagist.org/packages/payum/core)
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Payum/payum/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 It is all about payments. The vision is to provide end solution keeping high level of a customization.
@@ -20,7 +20,7 @@ Payum is an open source, community-driven project. Pull requests are very welcom
 
 ## Like it? Spread the world!
 
-Star payum on [github](https://github.com/Payum/Payum) or [packagist](https://packagist.org/packages/payum/payum).
+Star payum on [github](https://github.com/Payum/Core) or [packagist](https://packagist.org/packages/payum/core).
 
 ## License
 

@@ -15,9 +15,6 @@
         <testsuite name="Payum Core Component Test Suite">
             <directory>./tests</directory>
         </testsuite>
-        <testsuite name="Payum Examples">
-            <directory>./Resources/examples</directory>
-        </testsuite>
     </testsuites>
 
     <filter>

@@ -1,6 +1,7 @@
 <?php
 namespace Payum\AuthorizeNet\Aim;
 
+use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Payment;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
@@ -24,9 +25,7 @@ abstract class PaymentFactory
 
         $payment->addAction(new CaptureAction);
         $payment->addAction(new StatusAction);
-        $payment->addAction(new CaptureDetailsAggregatedModelAction);
-        $payment->addAction(new SyncDetailsAggregatedModelAction);
-        $payment->addAction(new StatusDetailsAggregatedModelAction);
+        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 
         return $payment;
     }

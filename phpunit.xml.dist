@@ -11,9 +11,17 @@
          syntaxCheck="false"
          bootstrap="autoload.php.dist"
 >
+    <php>
+        <var name="__PAYUM_AUTHORIZE_NET_AIM_API_LOGIN_ID" value="54PB5egZ"/>
+        <var name="__PAYUM_AUTHORIZE_NET_AIM_API_TRANSACTION_KEY" value="48V258vr55AE8tcg"/>
+    </php>
+
     <testsuites>
         <testsuite name="Payum Core Component Test Suite">
             <directory>./src/Payum/Core/Tests</directory>
+        </testsuite>
+        <testsuite name="Payum AuthorizeNetAim Component Test Suite">
+            <directory>./src/Payum/AuthorizeNet/Aim/Tests</directory>
         </testsuite>
     </testsuites>
 
