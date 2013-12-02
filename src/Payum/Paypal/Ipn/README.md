@@ -7,7 +7,7 @@ It is client side for [paypal instant payment notifications](https://www.x.com/d
 
 * [Documentation](http://payum.forma-dev.com/documentation#PaypalIpn)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
-* [Issue Tracker](https://github.com/Payum/PaypalIpn/issues)
+* [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)
 
 ## Contributing

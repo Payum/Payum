@@ -9,17 +9,21 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="tests/bootstrap.php"
+         bootstrap="Tests/bootstrap.php"
 >
     <testsuites>
-        <testsuite name="Payum Ipn Tests">
-            <directory>./tests</directory>
+        <testsuite name="Payum PaypalIpn Component Test Suite">
+            <directory>./Tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory suffix=".php">./src</directory>
+            <directory>./</directory>
+            <exclude>
+                <directory>./Tests</directory>
+                <directory>./vendor</directory>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>
