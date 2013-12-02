@@ -23,13 +23,26 @@
         <testsuite name="Payum AuthorizeNetAim Component Test Suite">
             <directory>./src/Payum/AuthorizeNet/Aim/Tests</directory>
         </testsuite>
+        <testsuite name="Payum Be2Bill Component Test Suite">
+            <directory>./src/Payum/Be2Bill/Tests</directory>
+        </testsuite>
+        <testsuite name="Payum Offline Component Test Suite">
+            <directory>./src/Payum/Offline/Tests</directory>
+        </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>./src/Payum/Core</directory>
+            <directory>./src/Payum</directory>
             <exclude>
-                <directory>./Tests</directory>
+                <directory>./src/Payum/Core/Tests</directory>
+                <directory>./src/Payum/Core/Resources</directory>
+                <directory>./src/Payum/AuthorizeNet/Aim/Tests</directory>
+                <directory>./src/Payum/AuthorizeNet/Aim/Resources</directory>
+                <directory>./src/Payum/Be2Bill/Tests</directory>
+                <directory>./src/Payum/Be2Bill/Resources</directory>
+                <directory>./src/Payum/Offline/Tests</directory>
+                <directory>./src/Payum/Offline/Resources</directory>
             </exclude>
         </whitelist>
     </filter>
