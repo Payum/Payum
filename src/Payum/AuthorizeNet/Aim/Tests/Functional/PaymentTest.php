@@ -29,7 +29,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     $payment = PaymentFactory::create($authorizeNet);
 
     $payment->execute($captureRequest = new CaptureRequest(array(
-        'amount' => 10,
+        'amount' => rand(1, 100),
         'card_num' => '4111111111111111',
         'exp_date' => date('Y') . '-' . date('n'),
         'duplicate_window' => 1, // prevents "A duplicate transaction has been submitted." error
