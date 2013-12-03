@@ -3,7 +3,7 @@
     "type": "library",
     "description": "Paypal express checkout",
     "keywords": ["payment", "paypal", "express checkout", "digital goods", "recurring payment"],
-    "homepage": "",
+    "homepage": "http://payum.forma-dev.com/",
     "license": "MIT",
     "authors": [
         {
