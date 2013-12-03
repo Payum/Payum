@@ -33,7 +33,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         'card_num' => '4111111111111111',
         'exp_date' => date('Y') . '-' . date('n'),
         'duplicate_window' => 1, // prevents "A duplicate transaction has been submitted." error
-      )));
+    )));
+
+    sleep(1);
 
     $statusRequest = new BinaryMaskStatusRequest($captureRequest->getModel());
     $payment->execute($statusRequest);
