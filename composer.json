@@ -52,6 +52,7 @@
         "psr/log": "~1.0"
     },
     "replace": {
+        "payum/core": "self.version",
         "payum/paypal-express-checkout-nvp": "self.version",
         "payum/paypal-pro-checkout-nvp": "self.version",
         "payum/paypal-rest": "self.version",
@@ -59,7 +60,8 @@
         "payum/authorize-net-aim": "self.version",
         "payum/be2bill": "self.version",
         "payum/payex": "self.version",
-        "payum/omnipay-bridge": "self.version"
+        "payum/omnipay-bridge": "self.version",
+        "payum/offline": "self.version"
     },
     "suggest": {
         "doctrine/orm": "If you want to store models to database using doctrin2 ORM",
