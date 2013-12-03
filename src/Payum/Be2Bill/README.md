@@ -1,5 +1,7 @@
 # Be2Bill
-[![Total Downloads](https://poser.pugx.org/payum/be2bill/d/total.png)](https://packagist.org/packages/payum/be2bill) [![Latest Stable Version](https://poser.pugx.org/payum/be2bill/version.png)](https://packagist.org/packages/payum/be2bill)
+[![Build Status](https://travis-ci.org/Payum/Be2Bill.png?branch=master)](https://travis-ci.org/Payum/Be2Bill)
+[![Total Downloads](https://poser.pugx.org/payum/be2bill/d/total.png)](https://packagist.org/packages/payum/be2bill)
+[![Latest Stable Version](https://poser.pugx.org/payum/be2bill/version.png)](https://packagist.org/packages/payum/be2bill)
 
 The lib implements [Be2Bill](http://www.be2bill.com/) payment.
 
