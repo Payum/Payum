@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="false"
+         bootstrap="Tests/bootstrap.php"
+>
+    <php>
+        <var name="__PAYUM_PAYPAL_PRO_CHECKOUT_NVP_API_USERNAME" value="palexanderpayflowtestapionly"/>
+        <var name="__PAYUM_PAYPAL_PRO_CHECKOUT_NVP_API_PASSWORD" value="demopass123"/>
+        <var name="__PAYUM_PAYPAL_PRO_CHECKOUT_NVP_API_PARTNER" value="PayPal"/>
+        <var name="__PAYUM_PAYPAL_PRO_CHECKOUT_NVP_API_VENDOR" value="palexanderpayflowtest"/>
+    </php>
+    
+    <testsuites>
+        <testsuite name="Payum PaypalProCheckoutNvp Component Test Suite">
+            <directory>./Tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./</directory>
+            <exclude>
+                <directory>./Tests</directory>
+                <directory>./vendor</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>

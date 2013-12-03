@@ -1,0 +1,48 @@
+{
+    "name": "payum/payex",
+    "type": "library",
+    "description": "Payex payment lib",
+    "keywords": ["payment", "payex"],
+    "homepage": "",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kotlyar Maksim",
+            "email": "kotlyar.maksim@gmail.com"
+        },
+        {
+            "name":     "Payum project",
+            "homepage": "http://payum.forma-dev.com/"
+        },
+        {
+            "name":     "Community contributions",
+            "homepage": "https://github.com/Payum/Payex/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "payum/core": "0.7.x-dev",
+        "ext-soap": "*"
+    },
+    "require-dev": {
+        "ext-curl": "*",
+        "ext-pdo_sqlite": "*",
+        "doctrine/orm": "2.*",
+        "phpunit/phpunit": "3.7.*"
+    },
+    "suggest": {
+        "doctrine/orm": "If you want store models to database using doctrin2 ORM"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": { "Payum\\Payex": "" }
+    },
+    "target-dir": "Payum/Payex",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.7-dev"
+        }
+    }
+}

@@ -1,0 +1,38 @@
+{
+    "name": "payum/be2bill",
+    "type": "library",
+    "description": "Be2Bill payment lib",
+    "keywords": ["payment", "be2bill"],
+    "homepage": "",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kotlyar Maksim",
+            "email": "kotlyar.maksim@gmail.com"
+        },
+        {
+            "name":     "Payum project",
+            "homepage": "http://payum.forma-dev.com/"
+        },
+        {
+            "name":     "Community contributions",
+            "homepage": "https://github.com/Payum/Be2Bill/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "payum/core": "0.7.x-dev"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": { "Payum\\Be2Bill": "" }
+    },
+    "target-dir": "Payum/Be2Bill",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.7-dev"
+        }
+    }
+}

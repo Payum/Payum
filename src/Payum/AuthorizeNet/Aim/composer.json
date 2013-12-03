@@ -1,0 +1,42 @@
+{
+    "name": "payum/authorize-net-aim",
+    "type": "library",
+    "description": "Authorize.net advanced integration method (AIM).",
+    "keywords": ["payment", "authorize.net", "authorizenet"],
+    "homepage": "",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kotlyar Maksim",
+            "email": "kotlyar.maksim@gmail.com"
+        },
+        {
+            "name":     "Payum project",
+            "homepage": "http://payum.forma-dev.com/"
+        },
+        {
+            "name":     "Community contributions",
+            "homepage": "https://github.com/Payum/AuthorizeNetAim/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "payum/core": "0.7.x-dev",
+        "ajbdev/authorizenet-php-api": "1.1.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": { "Payum\\AuthorizeNet\\Aim": "" }
+    },
+    "target-dir": "Payum/AuthorizeNet/Aim",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.7-dev"
+        }
+    }
+}

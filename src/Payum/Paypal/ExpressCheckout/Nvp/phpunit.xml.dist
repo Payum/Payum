@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="false"
+         bootstrap="Tests/bootstrap.php"
+>
+    <php>
+        <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_ACCOUNT" value="sellr1_1351171001_biz@gmail.com"/>
+        <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_USERNAME" value="sellr1_1351171001_biz_api1.gmail.com"/>
+        <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_PASSWORD" value="1351171022"/>
+        <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_SIGNATURE" value="Adt647eR0NhYG68dAfVYPGquxlvuAwSJBMEy12p4k4mO2p8oEz8t95gU"/>
+    </php>
+
+    <testsuites>
+        <testsuite name="Payum PaypalExpressCheckoutNvp Component Test Suite">
+            <directory>./Tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./</directory>
+            <exclude>
+                <directory>./Tests</directory>
+                <directory>./vendor</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>
