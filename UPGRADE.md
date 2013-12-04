@@ -4,6 +4,8 @@
 
 * `PaymentRegistryInterface::getPayments` method is added.
 * `PaymentInterface::addApi` method signature was changed. Now it takes second argument `forcePrepend`.
+* [Be2Bill][Doctrine] `Payum\Be2Bill\Bridge\Doctrine\Entity\PaymentDetails` is removed.
+* [Be2Bill][Model] `Payum\Be2Bill\Model\PaymentDetails` is removed.
 
 ## 0.6.2 to 0.6.3
 
@@ -46,6 +48,8 @@
 * Exception `HttpResponseStatusNotSuccessfulException` was removed. Use `HttpException` instead.
 * `HttpException` constructor signature changed. Now it is like any other basic exception.
 * [Authorize.Net AIM] `PaymentInstruction` was renamed to `PaymentDetails` and moved to `Model` namespace.
+* [Be2Bill] `PaymentInstruction` model was renamed to `PaymentDetails` and moved to `Model` namespace.
+* [Be2Bill][Doctrine]`PaymentInstruction` entity was renamed to `PaymentDetails`.
 
 ## 0.2 to 0.3
 
@@ -56,6 +60,8 @@
 * [Authorize.Net AIM] Remove `fillRequest` method from `PaymentInstruction`.
 * [Authorize.Net AIM] Remove `updateFromResponse` method from `PaymentInstruction`.
 * [Authorize.Net AIM] `Payment` class was removed use `Payum\Payment` instead.
+* [Be2Bill] Remove `toParams` and `fromParams` from `PaymentInstruction` class.
+* [Be2Bill] `Payment` class was removed use `Payum\Payment` instead.
 
 ## 0.1 to 0.2
 
@@ -73,3 +79,5 @@
 * Change `Storages` namespace. It was `Payum\Domain\Storage\XXX` now `Payum\Storage\XXX`.
 * [Authorize.Net AIM] `CaptureAction` now supports only `CaptureRequest` with the `PaymentInstruction` in it.
 * [Authorize.Net AIM] `StatusAction` now supports only `StatusAction` with the `PaymentInstruction` in it.
+* [Be2Bill] `CaptureAction` now supports only `CaptureRequest` with the `PaymentInstruction` in it.
+* [Be2Bill] `StatusAction` now supports only `StatusAction` with the `PaymentInstruction` in it.
