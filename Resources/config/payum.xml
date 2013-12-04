@@ -14,7 +14,7 @@
         <parameter key="payum.buzz.client.class">Buzz\Client\Curl</parameter>
         <parameter key="payum.listener.interactive_request.class">Payum\Bundle\PayumBundle\EventListener\InteractiveRequestListener</parameter>
 
-        <parameter key="payum.action.execute_same_request_with_model_details.class">Payum\Action\ExecuteSameRequestWithModelDetailsAction</parameter>
+        <parameter key="payum.action.execute_same_request_with_model_details.class">Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction</parameter>
 
         <parameter key="payum.security.http_request_verifier.class">Payum\Bundle\PayumBundle\Security\HttpRequestVerifier</parameter>
         <parameter key="payum.security.token_factory.class">Payum\Bundle\PayumBundle\Security\TokenFactory</parameter>
