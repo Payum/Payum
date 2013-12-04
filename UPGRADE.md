@@ -2,6 +2,8 @@
 
 ## 0.6 to 0.7
 
+* [Composer] IAll repositories were merged to `payum\payum` one. If you need only core change it to `payum\core`
+* All classes they were previously in `Payum` namespace moved to `Payum\Core` one.
 * `PaymentRegistryInterface::getPayments` method is added.
 * `PaymentInterface::addApi` method signature was changed. Now it takes second argument `forcePrepend`.
 * [Be2Bill][Doctrine] `Payum\Be2Bill\Bridge\Doctrine\Entity\PaymentDetails` is removed.
