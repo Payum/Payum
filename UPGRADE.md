@@ -10,6 +10,13 @@
 * [Payex][Doctrine] `Payum\Payex\Bridge\Doctrine\Entity\AgreementDetails` is removed.
 * [Payex][Model] `Payum\Payex\Model\PaymentDetails` is removed.
 * [Payex][Model] `Payum\Payex\Model\AgreementDetails` is removed.
+* [Paypal ExpressCheckout][Model] `BaseModel` was removed.
+* [Paypal ExpressCheckout][Model] `Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails` was removed.
+* [Paypal ExpressCheckout][Model] `Payum\Paypal\ExpressCheckout\Nvp\Model\RecurringPaymentDetails` was removed.
+* [Paypal ExpressCheckout][Doctrine] `Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity\PaymentDetails` was removed.
+* [Paypal ExpressCheckout][Doctrine] `Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Entity\RecurringPaymentDetails` was removed.
+* [Paypal ExpressCheckout][Doctrine] `Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Document\PaymentDetails` was removed.
+* [Paypal ExpressCheckout][Doctrine] `Payum\Paypal\ExpressCheckout\Nvp\Bridge\Doctrine\Document\RecurringPaymentDetails` was removed.
 
 ## 0.6.2 to 0.6.3
 
@@ -33,6 +40,7 @@
 
 * A method `getIdentificator` was added to `StorageInterface` interface.
 * `StorageExtension` not using scalar as model id any more. Use `Identificator` object instead.
+* [Paypal ExpressCheckout][Doctrine] `PaymentDetails` mapping schema was updated. Two fields added: `returnurl`, `cancelurl`.
 
 ## 0.3 to 0.4
 
@@ -54,6 +62,8 @@
 * [Authorize.Net AIM] `PaymentInstruction` was renamed to `PaymentDetails` and moved to `Model` namespace.
 * [Be2Bill] `PaymentInstruction` model was renamed to `PaymentDetails` and moved to `Model` namespace.
 * [Be2Bill][Doctrine]`PaymentInstruction` entity was renamed to `PaymentDetails`.
+* [Paypal ExpressCheckout] `PaymentInstruction` was renamed to `PaymentDetails` and moved to `Model` namespace.
+* [Paypal ExpressCheckout][Doctrine] `PaymentDetails` mapping schema was updated. Two fields added: `l_billingtypennn`, `l_billingagreementdescriptionnnn`
 
 ## 0.2 to 0.3
 
@@ -66,6 +76,8 @@
 * [Authorize.Net AIM] `Payment` class was removed use `Payum\Payment` instead.
 * [Be2Bill] Remove `toParams` and `fromParams` from `PaymentInstruction` class.
 * [Be2Bill] `Payment` class was removed use `Payum\Payment` instead.
+* [Paypal ExpressCheckout] Remove `toNvp` and `fromNvp` from `PaymentInstruction` class.
+* [Paypal ExpressCheckout] `Payment` class was removed use `Payum\Payment` instead.
 
 ## 0.1 to 0.2
 
@@ -85,3 +97,4 @@
 * [Authorize.Net AIM] `StatusAction` now supports only `StatusAction` with the `PaymentInstruction` in it.
 * [Be2Bill] `CaptureAction` now supports only `CaptureRequest` with the `PaymentInstruction` in it.
 * [Be2Bill] `StatusAction` now supports only `StatusAction` with the `PaymentInstruction` in it.
+* [Paypal ExpressCheckout] `SyncRequest` was moved to core lib.
