@@ -111,7 +111,7 @@ doctrine:
                     payum:
                         is_bundle: false
                         type: xml
-                        dir: %kernel.root_dir%/../vendor/payum/payum/src/Payum/Bridge/Doctrine/Resources/mapping
+                        dir: %kernel.root_dir%/../vendor/payum/payum/src/Payum/Core/Bridge/Doctrine/Resources/mapping
                         prefix: Payum\Core\Model
 
 payum:
@@ -173,7 +173,7 @@ doctrine_mongodb:
                 payum:
                     is_bundle: false
                     type: xml
-                    dir: %kernel.root_dir%/../vendor/payum/payum/src/Payum/Bridge/Doctrine/Resources/mapping
+                    dir: %kernel.root_dir%/../vendor/payum/payum/src/Payum/Core/Bridge/Doctrine/Resources/mapping
                     prefix: Payum\Core\Model
 
 payum:
@@ -263,7 +263,7 @@ doctrine:
                     payum:
                         is_bundle: false
                         type: xml
-                        dir: %kernel.root_dir%/../vendor/payum/payum/src/Payum/Bridge/Doctrine/Resources/mapping
+                        dir: %kernel.root_dir%/../vendor/payum/payum/src/Payum/Core/Bridge/Doctrine/Resources/mapping
                         prefix: Payum\Core\Model
 
 payum:
@@ -314,7 +314,7 @@ doctrine_mongodb:
                 payum:
                     is_bundle: false
                     type: xml
-                    dir: %kernel.root_dir%/../vendor/payum/payum/src/Payum/Bridge/Doctrine/Resources/mapping
+                    dir: %kernel.root_dir%/../vendor/payum/payum/src/Payum/Core/Bridge/Doctrine/Resources/mapping
                     prefix: Payum\Core\Model
 
 payum:
