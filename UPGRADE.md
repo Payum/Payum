@@ -44,7 +44,8 @@
 * `ActionPaymentAwareInterface` interface was deleted. Use combination og `ActionInterface` and `PaymentAwareInterface` instead.
 * Action `ActionPaymentAware` was renamed to `PaymentAwareAction`.
 * Exception `HttpResponseStatusNotSuccessfulException` was removed. Use `HttpException` instead.
-* `HttpException` constructor signature changed. Now it is like any other basic exception. 
+* `HttpException` constructor signature changed. Now it is like any other basic exception.
+* [Authorize.Net AIM] `PaymentInstruction` was renamed to `PaymentDetails` and moved to `Model` namespace.
 
 ## 0.2 to 0.3
 
@@ -52,6 +53,9 @@
 * `InteractiveRequest` renamed to `BaseInteractiveRequest`.
 * A method `supportModel` was added to `StorageInterface`.
 * `NullStorage` was removed.
+* [Authorize.Net AIM] Remove `fillRequest` method from `PaymentInstruction`.
+* [Authorize.Net AIM] Remove `updateFromResponse` method from `PaymentInstruction`.
+* [Authorize.Net AIM] `Payment` class was removed use `Payum\Payment` instead.
 
 ## 0.1 to 0.2
 
@@ -67,3 +71,5 @@
 * `SimpleSell` class was removed.
 * Remove Model prefix from `Storages`.
 * Change `Storages` namespace. It was `Payum\Domain\Storage\XXX` now `Payum\Storage\XXX`.
+* [Authorize.Net AIM] `CaptureAction` now supports only `CaptureRequest` with the `PaymentInstruction` in it.
+* [Authorize.Net AIM] `StatusAction` now supports only `StatusAction` with the `PaymentInstruction` in it.
