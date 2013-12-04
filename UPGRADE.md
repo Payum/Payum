@@ -6,6 +6,10 @@
 * `PaymentInterface::addApi` method signature was changed. Now it takes second argument `forcePrepend`.
 * [Be2Bill][Doctrine] `Payum\Be2Bill\Bridge\Doctrine\Entity\PaymentDetails` is removed.
 * [Be2Bill][Model] `Payum\Be2Bill\Model\PaymentDetails` is removed.
+* [Payex][Doctrine] `Payum\Payex\Bridge\Doctrine\Entity\PaymentDetails` is removed.
+* [Payex][Doctrine] `Payum\Payex\Bridge\Doctrine\Entity\AgreementDetails` is removed.
+* [Payex][Model] `Payum\Payex\Model\PaymentDetails` is removed.
+* [Payex][Model] `Payum\Payex\Model\AgreementDetails` is removed.
 
 ## 0.6.2 to 0.6.3
 
