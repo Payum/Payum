@@ -2,9 +2,9 @@
 namespace Payum\Bundle\PayumBundle\EventListener;
 
 use Payum\Bundle\PayumBundle\Request\ResponseInteractiveRequest;
-use Payum\Exception\LogicException;
-use Payum\Request\InteractiveRequestInterface;
-use Payum\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Request\InteractiveRequestInterface;
+use Payum\Core\Request\RedirectUrlInteractiveRequest;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 

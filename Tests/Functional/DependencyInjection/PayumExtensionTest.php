@@ -30,7 +30,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $config = array(
             'security' => array(
                 'token_storage' => array(
-                    'Payum\Model\Token' => array(
+                    'Payum\Core\Model\Token' => array(
                         'filesystem' => array(
                             'storage_dir' => sys_get_temp_dir(),
                             'id_property' => 'hash'
@@ -86,7 +86,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $config = array(
             'security' => array(
                 'token_storage' => array(
-                    'Payum\Model\Token' => array(
+                    'Payum\Core\Model\Token' => array(
                         'filesystem' => array(
                             'storage_dir' => sys_get_temp_dir(),
                             'id_property' => 'hash'
@@ -137,7 +137,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $config = array(
             'security' => array(
                 'token_storage' => array(
-                    'Payum\Model\Token' => array(
+                    'Payum\Core\Model\Token' => array(
                         'filesystem' => array(
                             'storage_dir' => sys_get_temp_dir(),
                             'id_property' => 'hash'
@@ -192,7 +192,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $config = array(
             'security' => array(
                 'token_storage' => array(
-                    'Payum\Model\Token' => array(
+                    'Payum\Core\Model\Token' => array(
                         'filesystem' => array(
                             'storage_dir' => sys_get_temp_dir(),
                             'id_property' => 'hash'
@@ -232,7 +232,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $config = array(
             'security' => array(
                 'token_storage' => array(
-                    'Payum\Model\Token' => array(
+                    'Payum\Core\Model\Token' => array(
                         'filesystem' => array(
                             'storage_dir' => sys_get_temp_dir(),
                             'id_property' => 'hash'
@@ -280,14 +280,14 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldLoadExtensionWithOmnipayConfiguredPayment()
     {
-        if (false == class_exists('Payum\Bridge\Omnipay\PaymentFactory')) {
+        if (false == class_exists('Payum\OmnipayBridge\PaymentFactory')) {
             $this->markTestSkipped('Skipped because payment library is not installed.');
         }
         
         $config = array(
             'security' => array(
                 'token_storage' => array(
-                    'Payum\Model\Token' => array(
+                    'Payum\Core\Model\Token' => array(
                         'filesystem' => array(
                             'storage_dir' => sys_get_temp_dir(),
                             'id_property' => 'hash'
@@ -339,7 +339,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $config = array(
             'security' => array(
                 'token_storage' => array(
-                    'Payum\Model\Token' => array(
+                    'Payum\Core\Model\Token' => array(
                         'filesystem' => array(
                             'storage_dir' => sys_get_temp_dir(),
                             'id_property' => 'hash'

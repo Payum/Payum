@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="payum.storage.doctrine.orm.class">Payum\Bridge\Doctrine\Storage\DoctrineStorage</parameter>
+        <parameter key="payum.storage.doctrine.orm.class">Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage</parameter>
     </parameters>
     
     <services>

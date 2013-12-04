@@ -50,7 +50,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                     'token_storage' => array(
-                        'Payum\Model\Token' => array(
+                        'Payum\Core\Model\Token' => array(
                             'foo_storage' => array(
                                 'foo_opt' => 'foo'
                             )
@@ -96,7 +96,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                     'token_storage' => array(
-                        'Payum\Model\Token' => array(
+                        'Payum\Core\Model\Token' => array(
                             'foo_storage' => array(
                                 'foo_opt' => 'foo'
                             )
@@ -137,7 +137,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                     'token_storage' => array(
-                        'Payum\Model\Token' => array(
+                        'Payum\Core\Model\Token' => array(
                             'foo_storage' => array(
                                 'foo_opt' => 'foo'
                             )
@@ -181,7 +181,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                     'token_storage' => array(
-                        'Payum\Model\Token' => array(
+                        'Payum\Core\Model\Token' => array(
                             'foo_storage' => array(
                                 'foo_opt' => 'foo'
                             )
@@ -218,7 +218,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                     'token_storage' => array(
-                        'Payum\Model\Token' => array(
+                        'Payum\Core\Model\Token' => array(
                             'foo_storage' => array(
                                 'foo_opt' => 'foo'
                             )
@@ -245,7 +245,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                     'token_storage' => array(
-                        'Payum\Model\Token' => array(
+                        'Payum\Core\Model\Token' => array(
                             'foo_storage' => array(
                                 'foo_opt' => 'foo'
                             )
@@ -279,7 +279,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                     'token_storage' => array(
-                        'Payum\Model\Token' => array(
+                        'Payum\Core\Model\Token' => array(
                             'foo_storage' => array(
                                 'foo_opt' => 'foo'
                             )
@@ -316,7 +316,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                     'token_storage' => array(
-                        'Payum\Model\Token' => array(
+                        'Payum\Core\Model\Token' => array(
                             'foo_storage' => array(
                                 'foo_opt' => 'foo'
                             )
@@ -343,7 +343,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "payum.security.token_storage": The token class must implement `Payum\Security\TokenInterface` interface
+     * @expectedExceptionMessage Invalid configuration for path "payum.security.token_storage": The token class must implement `Payum\Core\Security\TokenInterface` interface
      */
     public function throwIfTokenStorageConfiguredWithModelNotImplementingTokenInterface()
     {

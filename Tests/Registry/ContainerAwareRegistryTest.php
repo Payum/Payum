@@ -14,7 +14,7 @@ class ContainerAwareRegistryTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\Registry\ContainerAwareRegistry');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Registry\AbstractRegistry'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Registry\AbstractRegistry'));
     }
 
     /**
@@ -80,7 +80,7 @@ class ContainerAwareRegistryTest extends \PHPUnit_Framework_TestCase
         $storageName = 'barName';
 
         $container = new Container;
-        $container->set('fooStorageServiceId', $this->getMock('Payum\Storage\StorageInterface'));
+        $container->set('fooStorageServiceId', $this->getMock('Payum\Core\Storage\StorageInterface'));
 
         $registry = new ContainerAwareRegistry($payments, $storages, $paymentName, $storageName);
         $registry->setContainer($container);

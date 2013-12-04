@@ -1,8 +1,8 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Controller;
 
-use Payum\Registry\RegistryInterface;
-use Payum\Security\HttpRequestVerifierInterface;
+use Payum\Core\Registry\RegistryInterface;
+use Payum\Core\Security\HttpRequestVerifierInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 abstract class PayumController extends Controller

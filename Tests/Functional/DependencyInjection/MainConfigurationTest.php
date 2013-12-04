@@ -55,7 +55,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                     'token_storage' => array(
-                        'Payum\Model\Token' => array(
+                        'Payum\Core\Model\Token' => array(
                             'filesystem' => array(
                                 'storage_dir' => sys_get_temp_dir(),
                                 'id_property' => 'hash'
@@ -98,7 +98,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                     'token_storage' => array(
-                        'Payum\Model\Token' => array(
+                        'Payum\Core\Model\Token' => array(
                             'filesystem' => array(
                                 'storage_dir' => sys_get_temp_dir(),
                                 'id_property' => 'hash'
@@ -138,7 +138,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                     'token_storage' => array(
-                        'Payum\Model\Token' => array(
+                        'Payum\Core\Model\Token' => array(
                             'filesystem' => array(
                                 'storage_dir' => sys_get_temp_dir(),
                                 'id_property' => 'hash'

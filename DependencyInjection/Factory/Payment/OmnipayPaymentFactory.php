@@ -1,18 +1,13 @@
 <?php
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
+use Payum\Core\Exception\RuntimeException;
+use Payum\Core\Exception\LogicException;
 use Omnipay\Common\GatewayFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
-use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\FileLocator;
-
-use Payum\Exception\RuntimeException;
-use Payum\Exception\LogicException;
 
 class OmnipayPaymentFactory extends AbstractPaymentFactory
 {
@@ -21,7 +16,7 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
      */
     public function create(ContainerBuilder $container, $contextName, array $config)
     {
-        if (false == class_exists('Payum\Bridge\Omnipay\PaymentFactory')) {
+        if (false == class_exists('Payum\OmnipayBridge\PaymentFactory')) {
             throw new RuntimeException('Cannot find OmnipayBridge payment factory class. Have you installed payum/omnipay-bridge package?');
         }
         if (false == interface_exists('Omnipay\Common\GatewayInterface')) {
@@ -98,12 +93,12 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
      */
     protected function addActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
     {
-        $captureActionDefinition = new Definition('Payum\Bridge\Omnipay\Action\CaptureAction');
+        $captureActionDefinition = new Definition('Payum\OmnipayBridge\Action\CaptureAction');
         $captureActionId = 'payum.context.'.$contextName.'.action.capture';
         $container->setDefinition($captureActionId, $captureActionDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($captureActionId)));
 
-        $statusActionDefinition = new Definition('Payum\Bridge\Omnipay\Action\StatusAction');
+        $statusActionDefinition = new Definition('Payum\OmnipayBridge\Action\StatusAction');
         $statusActionId = 'payum.context.'.$contextName.'.action.status';
         $container->setDefinition($statusActionId, $statusActionDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($statusActionId)));

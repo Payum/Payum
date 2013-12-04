@@ -1,8 +1,8 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Controller;
 
-use Payum\Request\BinaryMaskStatusRequest;
-use Payum\Request\SecuredCaptureRequest;
+use Payum\Core\Request\BinaryMaskStatusRequest;
+use Payum\Core\Request\SecuredCaptureRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 

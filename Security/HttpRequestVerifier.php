@@ -1,12 +1,10 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Security;
 
-use Payum\Exception\InvalidArgumentException;
-use Payum\Model\TokenizedDetails;
-use Payum\Security\HttpRequestVerifierInterface;
-use Payum\Model\Token;
-use Payum\Security\TokenInterface;
-use Payum\Storage\StorageInterface;
+use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\Security\HttpRequestVerifierInterface;
+use Payum\Core\Security\TokenInterface;
+use Payum\Core\Storage\StorageInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 class HttpRequestVerifier implements HttpRequestVerifierInterface
 {
     /**
-     * @var \Payum\Storage\StorageInterface
+     * @var \Payum\Core\Storage\StorageInterface
      */
     protected $tokenStorage;
 
@@ -43,7 +41,7 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
             throw new NotFoundHttpException('Token parameter not set in request');
         }
 
-        if ($hash instanceof Token) {
+        if ($hash instanceof TokenInterface) {
             $token = $hash;
         } else {
             if (false == $token = $this->tokenStorage->findModelById($hash)) {
