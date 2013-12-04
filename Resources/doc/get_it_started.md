@@ -87,8 +87,7 @@ If you're persisting tokens via the Doctrine ORM, then your `Token` class should
 namespace Acme\PaymentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
-use Payum\Model\Token;
+use Payum\Core\Model\Token;
 
 /**
  * @ORM\Table(name="payum_security_token")
@@ -113,7 +112,7 @@ doctrine:
                         is_bundle: false
                         type: xml
                         dir: %kernel.root_dir%/../vendor/payum/payum/src/Payum/Bridge/Doctrine/Resources/mapping
-                        prefix: Payum\Model
+                        prefix: Payum\Core\Model
 
 payum:
     security:
@@ -132,7 +131,7 @@ If you're persisting tokens via the Doctrine MongoODM, then your `Token` class s
 namespace Acme\PaymentBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as Mongo;
-use Payum\Model\Token as BaseToken;
+use Payum\Core\Model\Token as BaseToken;
 
 /**
  * @Mongo\Document
@@ -154,7 +153,7 @@ class AppKernel extends Kernel
 {
     public function boot()
     {
-        Type::addType('object', 'Payum\Bridge\Doctrine\Types\ObjectType');
+        Type::addType('object', 'Payum\Core\Bridge\Doctrine\Types\ObjectType');
 
         parent::boot();
     }
@@ -175,7 +174,7 @@ doctrine_mongodb:
                     is_bundle: false
                     type: xml
                     dir: %kernel.root_dir%/../vendor/payum/payum/src/Payum/Bridge/Doctrine/Resources/mapping
-                    prefix: Payum\Model
+                    prefix: Payum\Core\Model
 
 payum:
     security:
@@ -193,7 +192,7 @@ First you have to extend `Token` model:
 <?php
 namespace Acme\PaymentBundle\Model;
 
-use Payum\Model\Token;
+use Payum\Core\Model\Token;
 
 class PayumSecurityToken extends Token
 {
@@ -232,7 +231,7 @@ namespace Acme\PaymentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Payum\Model\ArrayObject;
+use Payum\Core\Model\ArrayObject;
 
 /**
  * @ORM\Table(name="payum_payment_details")
@@ -265,7 +264,7 @@ doctrine:
                         is_bundle: false
                         type: xml
                         dir: %kernel.root_dir%/../vendor/payum/payum/src/Payum/Bridge/Doctrine/Resources/mapping
-                        prefix: Payum\Model
+                        prefix: Payum\Core\Model
 
 payum:
     contexts:
@@ -285,7 +284,7 @@ If you're persisting details via the Doctrine MongoODM, then your `PaymentDetail
 namespace Acme\PaymentBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as Mongo;
-use Payum\Model\ArrayObject;
+use Payum\Core\Model\ArrayObject;
 
 /**
  * @Mongo\Document
@@ -316,7 +315,7 @@ doctrine_mongodb:
                     is_bundle: false
                     type: xml
                     dir: %kernel.root_dir%/../vendor/payum/payum/src/Payum/Bridge/Doctrine/Resources/mapping
-                    prefix: Payum\Model
+                    prefix: Payum\Core\Model
 
 payum:
     contexts:
@@ -333,7 +332,7 @@ payum:
 <?php
 namespace Acme\PaymentBundle\Model;
 
-use Payum\Model\ArrayObject;
+use Payum\Core\Model\ArrayObject;
 
 class PaymentDetails extends ArrayObject
 {

@@ -45,7 +45,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Exception\InvalidArgumentException
+     * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage The payment factory Mock_PaymentFactoryInterface
      */
     public function throwIfTryToAddPaymentFactoryWithEmptyName()
@@ -64,7 +64,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\InvalidArgumentException
+     * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage The payment factory with such name theFoo already registered
      */
     public function throwIfTryToAddPaymentFactoryWithNameAlreadyAdded()
@@ -102,7 +102,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\InvalidArgumentException
+     * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage The storage factory Mock_StorageFactoryInterface_
      */
     public function throwIfTryToAddStorageFactoryWithEmptyName()
@@ -121,7 +121,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\InvalidArgumentException
+     * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage The storage factory with such name theFoo already registered
      */
     public function throwIfTryToAddStoragePaymentFactoryWithNameAlreadyAdded()

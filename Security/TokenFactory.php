@@ -1,10 +1,9 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Security;
 
-use Payum\Registry\RegistryInterface;
-use Payum\Security\TokenInterface;
-use Payum\Storage\StorageInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Payum\Core\Registry\RegistryInterface;
+use Payum\Core\Security\TokenInterface;
+use Payum\Core\Storage\StorageInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 class TokenFactory
@@ -15,19 +14,19 @@ class TokenFactory
     protected $router;
 
     /**
-     * @var \Payum\Storage\StorageInterface
+     * @var \Payum\Core\Storage\StorageInterface
      */
     protected $tokenStorage;
 
     /**
-     * @var \Payum\Registry\RegistryInterface
+     * @var \Payum\Core\Registry\RegistryInterface
      */
     protected $payum;
 
     /**
      * @param RouterInterface $router
-     * @param \Payum\Storage\StorageInterface $tokenStorage
-     * @param \Payum\Registry\RegistryInterface $payum
+     * @param \Payum\Core\Storage\StorageInterface $tokenStorage
+     * @param \Payum\Core\Registry\RegistryInterface $payum
      */
     public function __construct(RouterInterface $router, StorageInterface $tokenStorage, RegistryInterface $payum)
     {

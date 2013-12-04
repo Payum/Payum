@@ -1,8 +1,8 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Security;
 
-use Payum\Model\Token;
-use Payum\Storage\StorageInterface;
+use Payum\Core\Model\Token;
+use Payum\Core\Storage\StorageInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
@@ -14,7 +14,7 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\Security\HttpRequestVerifier');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Security\HttpRequestVerifierInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Security\HttpRequestVerifierInterface'));
     }
 
     /**
@@ -28,7 +28,7 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Exception\InvalidArgumentException
+     * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage Invalid request given. Expected Symfony\Component\HttpFoundation\Request but it is stdClass
      */
     public function throwIfNotSymfonyRequestGivenOnVerify()
@@ -85,7 +85,7 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfTargetUrlPathNotMatchServerRequestUriPathOnVerify()
     {
-        $token = new \Payum\Model\Token;
+        $token = new Token;
         $token->setHash('theHash');
         $token->setTargetUrl('http://target.com/foo');
 
@@ -164,7 +164,7 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnExpectedTokenIfTokenSetToRequestAttribute()
     {
-        $expectedToken = new \Payum\Model\Token;
+        $expectedToken = new Token;
         $expectedToken->setHash('theHash');
         $expectedToken->setTargetUrl('http://target.com/foo');
 
@@ -189,7 +189,7 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchUriIfTokenSetToRequestAttribute()
     {
-        $expectedToken = new \Payum\Model\Token;
+        $expectedToken = new Token;
         $expectedToken->setHash('theHash');
         $expectedToken->setTargetUrl('http://target.com/bar');
 
@@ -214,7 +214,7 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallStorageDeleteModelMethodOnInvalidate()
     {
-        $token = new \Payum\Model\Token;
+        $token = new Token;
 
         $storageMock = $this->createStorageMock();
         $storageMock
@@ -233,6 +233,6 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
      */
     protected function createStorageMock()
     {
-        return $this->getMock('Payum\Storage\StorageInterface');
+        return $this->getMock('Payum\Core\Storage\StorageInterface');
     }
 }

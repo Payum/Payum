@@ -1,15 +1,12 @@
 <?php
 namespace Payum\Bundle\PayumBundle\DependencyInjection;
 
-use Symfony\Component\Config\Definition\ArrayNode;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface;
+use Payum\Core\Exception\LogicException;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface;
-
-use Payum\Exception\LogicException;
 
 class MainConfiguration implements ConfigurationInterface
 {
@@ -176,8 +173,8 @@ class MainConfiguration implements ConfigurationInterface
                     }
 
                     $rc = new \ReflectionClass($key);
-                    if (false == $rc->isSubclassOf('Payum\Security\TokenInterface')) {
-                        throw new LogicException('The token class must implement `Payum\Security\TokenInterface` interface');
+                    if (false == $rc->isSubclassOf('Payum\Core\Security\TokenInterface')) {
+                        throw new LogicException('The token class must implement `Payum\Core\Security\TokenInterface` interface');
                     }
 
                     if (count($v) > 1) {

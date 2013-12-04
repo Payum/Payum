@@ -1,8 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Controller;
 
-use Payum\Request\SyncRequest;
-use Payum\Exception\RequestNotSupportedException;
+use Payum\Core\Request\SyncRequest;
 use Symfony\Component\HttpFoundation\Request;
 
 class SyncController extends PayumController

@@ -1,15 +1,14 @@
 <?php
 namespace Payum\Bundle\PayumBundle\DependencyInjection;
 
+use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Config\FileLocator;
-
-use Payum\Exception\InvalidArgumentException;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
 class PayumExtension extends Extension
@@ -118,7 +117,7 @@ class PayumExtension extends Extension
     /**
      * @param Factory\Storage\StorageFactoryInterface $factory
      *
-     * @throws \Payum\Exception\InvalidArgumentException
+     * @throws \Payum\Core\Exception\InvalidArgumentException
      */
     public function addStorageFactory(StorageFactoryInterface $factory)
     {
@@ -136,7 +135,7 @@ class PayumExtension extends Extension
     /**
      * @param Factory\Payment\PaymentFactoryInterface $factory
      *
-     * @throws \Payum\Exception\InvalidArgumentException
+     * @throws \Payum\Core\Exception\InvalidArgumentException
      */
     public function addPaymentFactory(PaymentFactoryInterface $factory)
     {

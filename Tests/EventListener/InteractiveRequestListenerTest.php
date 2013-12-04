@@ -1,15 +1,14 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Tests\EventListener;
 
+use Payum\Bundle\PayumBundle\EventListener\InteractiveRequestListener;
+use Payum\Bundle\PayumBundle\Request\ResponseInteractiveRequest;
+use Payum\Core\Request\RedirectUrlInteractiveRequest;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-
-use Payum\Bundle\PayumBundle\EventListener\InteractiveRequestListener;
-use Payum\Bundle\PayumBundle\Request\ResponseInteractiveRequest;
-use Payum\Request\RedirectUrlInteractiveRequest;
 
 class InteractiveRequestListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -180,7 +179,7 @@ class InteractiveRequestListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldChangeInteractiveRequestToLogicExceptionIfNotSupported()
     {
-        $notSupportedInteractiveRequest = $this->getMock('Payum\Request\BaseInteractiveRequest');
+        $notSupportedInteractiveRequest = $this->getMock('Payum\Core\Request\BaseInteractiveRequest');
 
         $event = new GetResponseForExceptionEvent(
             $this->createHttpKernelMock(),
@@ -194,7 +193,7 @@ class InteractiveRequestListenerTest extends \PHPUnit_Framework_TestCase
         $listener->onKernelException($event);
 
         $this->assertNull($event->getResponse());
-        $this->assertInstanceOf('Payum\Exception\LogicException', $event->getException());
+        $this->assertInstanceOf('Payum\Core\Exception\LogicException', $event->getException());
         $this->assertStringStartsWith(
             'Cannot convert interactive request Mock_BaseInteractiveRequest', 
             $event->getException()->getMessage()
