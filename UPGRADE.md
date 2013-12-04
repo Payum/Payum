@@ -64,6 +64,7 @@
 * [Be2Bill][Doctrine]`PaymentInstruction` entity was renamed to `PaymentDetails`.
 * [Paypal ExpressCheckout] `PaymentInstruction` was renamed to `PaymentDetails` and moved to `Model` namespace.
 * [Paypal ExpressCheckout][Doctrine] `PaymentDetails` mapping schema was updated. Two fields added: `l_billingtypennn`, `l_billingagreementdescriptionnnn`
+* [Paypal ProCheckout] `PaymentInstruction` model was renamed to `PaymentDetails` and moved to `Model` namespace.
 
 ## 0.2 to 0.3
 
