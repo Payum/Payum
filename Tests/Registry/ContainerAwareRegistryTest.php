@@ -53,7 +53,7 @@ class ContainerAwareRegistryTest extends \PHPUnit_Framework_TestCase
         $storageName = 'barName';
         
         $container = new Container;
-        $container->set('fooPaymentServiceId', $this->getMock('Payum\PaymentInterface'));
+        $container->set('fooPaymentServiceId', $this->getMock('Payum\Core\PaymentInterface'));
 
         $registry = new ContainerAwareRegistry($payments, $storages, $paymentName, $storageName);
         $registry->setContainer($container);

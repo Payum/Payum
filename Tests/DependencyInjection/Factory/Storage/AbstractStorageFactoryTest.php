@@ -211,7 +211,7 @@ class AbstractStorageFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
         $container->setDefinition('aPaymentId', new Definition);
-        $container->getDefinition('aPaymentId')->setClass('Payum\PaymentInterface');
+        $container->getDefinition('aPaymentId')->setClass('Payum\Core\PaymentInterface');
 
         $factory->create($container, 'aContextName', 'A\Model\Class', 'aPaymentId', array(
             'payment_extension' => array(

@@ -6,7 +6,7 @@
 
     <parameters>
         <parameter key="payum.class">Payum\Bundle\PayumBundle\Registry\ContainerAwareRegistry</parameter>
-        <parameter key="payum.payment.class">Payum\Payment</parameter>
+        <parameter key="payum.payment.class">Payum\Core\Payment</parameter>
         <parameter key="payum.extension.log_executed_actions.class">Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension</parameter>
         <parameter key="payum.extension.logger.class">Payum\Core\Bridge\Psr\Log\LoggerExtension</parameter>
         <parameter key="payum.extension.storage.class">Payum\Core\Extension\StorageExtension</parameter>
