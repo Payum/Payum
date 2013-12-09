@@ -5,8 +5,16 @@ php:
   - 5.4
   - 5.5
 
-before_script: composer install --dev --no-interaction --prefer-source
+env:
+  - SYMFONY_VERSION=2.1.*
+  - SYMFONY_VERSION=2.2.*
+  - SYMFONY_VERSION=2.3.*
+  - SYMFONY_VERSION=dev-master
+
+before_script:
+  - composer require symfony/framework-bundle:${SYMFONY_VERSION} --prefer-source
+  - composer install --dev --prefer-source
 
 notifications:
   email:
-    - kotlyar.maksim@gmail.com
+    - payum@forma-pro.com
