@@ -2,8 +2,6 @@
 namespace Payum\AuthorizeNet\Aim\Tests\Action;
 
 use Payum\AuthorizeNet\Aim\Action\StatusAction;
-use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
-use Payum\AuthorizeNet\Aim\Model\PaymentDetails;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\BinaryMaskStatusRequest;
 use Payum\Core\Request\StatusRequestInterface;
@@ -36,18 +34,6 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
         $action = new StatusAction();
 
         $request = $this->createStatusRequestStub($this->getMock('ArrayAccess'));
-
-        $this->assertTrue($action->supports($request));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestWithPaymentDetailsAsModel()
-    {
-        $action = new StatusAction();
-
-        $request = $this->createStatusRequestStub(new PaymentDetails);
 
         $this->assertTrue($action->supports($request));
     }

@@ -1,7 +1,7 @@
 <?php
 namespace Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet;
 
-//this is a fix of crappy auto loading in authorize.net lib. 
+// this is a fix of crappy auto loading in authorize.net lib.
 class_exists('AuthorizeNetException', true);
 
 class AuthorizeNetAIM extends \AuthorizeNetAIM
