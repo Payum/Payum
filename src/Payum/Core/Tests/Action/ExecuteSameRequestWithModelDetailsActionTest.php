@@ -21,7 +21,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends \PHPUnit_Framework_Te
      */
     public function couldBeConstructedWithoutAnyArguments()   
     {
-        new \Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+        new ExecuteSameRequestWithModelDetailsAction();
     }
 
     /**
@@ -43,7 +43,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends \PHPUnit_Framework_Te
             ->will($this->returnValue($modelMock))
         ;
 
-        $action = new \Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+        $action = new ExecuteSameRequestWithModelDetailsAction;
 
         $this->assertTrue($action->supports($requestMock));
     }
@@ -67,7 +67,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends \PHPUnit_Framework_Te
             ->will($this->returnValue($modelMock))
         ;
 
-        $action = new \Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+        $action = new ExecuteSameRequestWithModelDetailsAction;
 
         $this->assertFalse($action->supports($requestMock));
     }
@@ -77,7 +77,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends \PHPUnit_Framework_Te
      */
     public function shouldNotSupportNotModelRequest()
     {
-        $action = new \Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction();
+        $action = new ExecuteSameRequestWithModelDetailsAction();
         
         $request = new \stdClass();
 
@@ -129,7 +129,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends \PHPUnit_Framework_Te
 
         $request = new CaptureRequest($modelMock);
 
-        //guard
+        // guard
         $this->assertInstanceOf('Payum\Core\Request\ModelRequestInterface', $request);
 
         $testCase = $this;

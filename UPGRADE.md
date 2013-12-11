@@ -2,7 +2,7 @@
 
 ## 0.6 to 0.7
 
-* [Composer] IAll repositories were merged to `payum\payum` one. If you need only core change it to `payum\core`
+* [Composer] All repositories were merged to `payum\payum` one. If you need only core change it to `payum\core`
 * All classes they were previously in `Payum` namespace moved to `Payum\Core` one.
 * `PaymentRegistryInterface::getPayments` method is added.
 * `PaymentInterface::addApi` method signature was changed. Now it takes second argument `forcePrepend`.
@@ -12,6 +12,7 @@
 * [Payex][Doctrine] `Payum\Payex\Bridge\Doctrine\Entity\AgreementDetails` is removed.
 * [Payex][Model] `Payum\Payex\Model\PaymentDetails` is removed.
 * [Payex][Model] `Payum\Payex\Model\AgreementDetails` is removed.
+* [AuthorizeNet][Model] `Payum\AuthorizeNet\Aim\Model\PaymentDetails` is removed.
 * [Paypal ExpressCheckout][Model] `BaseModel` was removed.
 * [Paypal ExpressCheckout][Model] `Payum\Paypal\ExpressCheckout\Nvp\Model\PaymentDetails` was removed.
 * [Paypal ExpressCheckout][Model] `Payum\Paypal\ExpressCheckout\Nvp\Model\RecurringPaymentDetails` was removed.

@@ -6,7 +6,7 @@ use Payum\Core\Request\StatusRequestInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 
-class StatusAction implements \Payum\Core\Action\ActionInterface
+class StatusAction implements ActionInterface
 {
     /**
      * {@inheritdoc}

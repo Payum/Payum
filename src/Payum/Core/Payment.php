@@ -115,16 +115,18 @@ class Payment implements PaymentInterface
 
             throw $interactiveRequest;
         } catch (\Exception $e) {
-            $this->extensions->onException($e, $request, $action);
+            $this->extensions->onException($e, $request, $action ?: null);
 
             throw $e;
         }
+
+        return null;
     }
 
     /**
      * @param mixed $request
      *
-     * @return ActionInterface|null
+     * @return ActionInterface|false
      */
     protected function findActionSupported($request)
     {
@@ -133,5 +135,7 @@ class Payment implements PaymentInterface
                 return $action;
             }
         }
+
+        return false;
     }
 }
