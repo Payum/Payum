@@ -115,7 +115,7 @@ class Payment implements PaymentInterface
 
             throw $interactiveRequest;
         } catch (\Exception $e) {
-            $this->extensions->onException($e, $request, $action);
+            $this->extensions->onException($e, $request, $action ?: null);
 
             throw $e;
         }

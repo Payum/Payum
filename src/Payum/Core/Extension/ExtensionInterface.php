@@ -41,7 +41,7 @@ interface ExtensionInterface
     /**
      * @param \Exception $exception
      * @param mixed $request
-     * @param \Payum\Core\Action\ActionInterface|false $action
+     * @param \Payum\Core\Action\ActionInterface|null $action
      */
-    function onException(\Exception $exception, $request, ActionInterface $action = false);
+    function onException(\Exception $exception, $request, ActionInterface $action = null);
 }

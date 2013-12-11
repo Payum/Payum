@@ -73,7 +73,7 @@ class ExtensionCollection implements ExtensionInterface
     /**
      * {@inheritdoc}
      */
-    public function onException(\Exception $exception, $request, ActionInterface $action = false)
+    public function onException(\Exception $exception, $request, ActionInterface $action = null)
     {
         foreach ($this->extensions as $extension) {
             $extension->onException($exception, $request, $action);
