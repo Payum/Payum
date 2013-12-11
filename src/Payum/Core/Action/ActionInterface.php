@@ -7,8 +7,6 @@ interface ActionInterface
      * @param mixed $request
      * 
      * @throws \Payum\Core\Exception\RequestNotSupportedException if the action dose not support the request.
-     * 
-     * @return void
      */
     function execute($request);
 

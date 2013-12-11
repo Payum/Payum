@@ -4,7 +4,7 @@ namespace Payum\Core\Model;
 interface DetailsAggregateInterface
 {
     /**
-     * @return object
+     * @return object|null
      */
     function getDetails();
 }

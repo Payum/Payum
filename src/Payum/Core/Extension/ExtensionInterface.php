@@ -8,24 +8,18 @@ interface ExtensionInterface
 {
     /**
      * @param mixed $request
-     *
-     * @return void
      */
     function onPreExecute($request);
 
     /**
      * @param mixed $request
      * @param \Payum\Core\Action\ActionInterface $action
-     *
-     * @return void
      */
     function onExecute($request, ActionInterface $action);
 
     /**
      * @param mixed $request
      * @param \Payum\Core\Action\ActionInterface $action
-     *
-     * @return void
      */
     function onPostExecute($request, ActionInterface $action);
 
