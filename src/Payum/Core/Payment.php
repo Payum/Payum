@@ -119,12 +119,14 @@ class Payment implements PaymentInterface
 
             throw $e;
         }
+
+        return null;
     }
 
     /**
      * @param mixed $request
      *
-     * @return ActionInterface|null
+     * @return ActionInterface|false
      */
     protected function findActionSupported($request)
     {
@@ -133,5 +135,7 @@ class Payment implements PaymentInterface
                 return $action;
             }
         }
+
+        return false;
     }
 }
