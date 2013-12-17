@@ -20,7 +20,7 @@ If you prefer use git submodule [read this tutorial](install_as_git_submodules.m
 Run composer.phar to download the bundle:
 
 ```bash
-$ php ecomposer.phar require payum/payum-bundle:*@stable
+$ php ecomposer.phar require "payum/payum-bundle:*@stable"
 
 ```
 
