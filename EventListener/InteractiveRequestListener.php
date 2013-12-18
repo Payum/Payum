@@ -5,11 +5,29 @@ use Payum\Bundle\PayumBundle\Request\ResponseInteractiveRequest;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Request\InteractiveRequestInterface;
 use Payum\Core\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\RedirectPostInteractiveRequest;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 
 class InteractiveRequestListener
 {
+    /**
+     * @var \Twig_Environment
+     */
+    protected $twig;
+
+    /**
+     * @var string
+     */
+    protected $redirectPostTemplate;
+
+    public function __construct(\Twig_Environment $twig, $redirectPostTemplate)
+    {
+        $this->twig = $twig;
+        $this->redirectPostTemplate = $redirectPostTemplate;
+    }
+
     /**
      * @param GetResponseForExceptionEvent $event
      */
@@ -20,11 +38,13 @@ class InteractiveRequestListener
         }
 
         $interactiveRequest = $event->getException();
-            
+
         if ($interactiveRequest instanceof ResponseInteractiveRequest) {
             $event->setResponse($interactiveRequest->getResponse());
-        } else if ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {
-            $event->setResponse(new RedirectResponse($interactiveRequest->getUrl()));
+        } elseif ($interactiveRequest instanceof RedirectPostInteractiveRequest) {
+            $event->setResponse($this->createPostResponse($interactiveRequest));
+        } elseif ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {
+            $event->setResponse($this->createRedirectResponse($interactiveRequest));
         }
 
         if ($event->getResponse()) {
@@ -34,12 +54,25 @@ class InteractiveRequestListener
 
             return;
         }
-        
+
         $ro = new \ReflectionObject($interactiveRequest);
         $event->setException(new LogicException(
-            sprintf('Cannot convert interactive request %s to symfony response.', $ro->getShortName()), 
-            null, 
+            sprintf('Cannot convert interactive request %s to symfony response.', $ro->getShortName()),
+            null,
             $interactiveRequest
         ));
+    }
+
+    protected function createPostResponse(RedirectPostInteractiveRequest $interactiveRequest)
+    {
+        return new Response($this->twig->render($this->redirectPostTemplate, array(
+            'url'  => $interactiveRequest->getUrl(),
+            'data' => $interactiveRequest->getData()
+        )));
+    }
+
+    protected function createRedirectResponse(RedirectUrlInteractiveRequest $interactiveRequest)
+    {
+        return new RedirectResponse($interactiveRequest->getUrl());
     }
 }
