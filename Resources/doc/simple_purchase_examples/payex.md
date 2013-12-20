@@ -6,7 +6,7 @@ Steps:
 * [Configure context](#configure-context)
 * [Prepare payment](#prepare-payment)
 
-_**Note**: We assume you followed all steps in [get it started](../get_it_started.md) and your basic configuration same as described there._
+_**Note**: We assume you followed all steps in [get it started](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/get_it_started.md) and your basic configuration same as described there._
 
 ## Download libraries
 
@@ -95,11 +95,11 @@ class PaymentController extends Controller
 ```
 
 That's it. After the payment done you will be redirect to `acme_payment_done` action.
-Check [this chapter](../purchase_done_action.md) to find out how this done action could look like.
+Check [this chapter](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/purchase_done_action.md) to find out how this done action could look like.
 
 ## Next Step
 
-* [Purchase done action](../purchase_done_action.md).
-* [Configuration reference](../configuration_reference.md).
-* [Back to examples list](../simple_purchase_examples.md).
-* [Back to index](../index.md).
+* [Purchase done action](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/purchase_done_action.md).
+* [Configuration reference](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/configuration_reference.md).
+* [Back to examples list](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/simple_purchase_examples.md).
+* [Back to index](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md).
