@@ -3,6 +3,7 @@ namespace Payum\Bundle\PayumBundle\Tests\EventListener;
 
 use Payum\Bundle\PayumBundle\EventListener\InteractiveRequestListener;
 use Payum\Bundle\PayumBundle\Request\ResponseInteractiveRequest;
+use Payum\Core\Request\PostRedirectUrlInteractiveRequest;
 use Payum\Core\Request\RedirectUrlInteractiveRequest;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
@@ -198,6 +199,29 @@ class InteractiveRequestListenerTest extends \PHPUnit_Framework_TestCase
             'Cannot convert interactive request Mock_BaseInteractiveRequest', 
             $event->getException()->getMessage()
         );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSetResponseIfExceptionInstanceOfPostRedirectUrlInteractiveRequest()
+    {
+        $interactiveRequest = new PostRedirectUrlInteractiveRequest('anUrl', array('foo' => 'foo'));
+
+        $event = new GetResponseForExceptionEvent(
+            $this->createHttpKernelMock(),
+            new Request,
+            'requestType',
+            $interactiveRequest
+        );
+
+        $listener = new InteractiveRequestListener;
+
+        $listener->onKernelException($event);
+
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $event->getResponse());
+        $this->assertEquals(200, $event->getResponse()->getStatusCode());
+        $this->assertEquals($interactiveRequest->getContent(), $event->getResponse()->getContent());
     }
 
     /**

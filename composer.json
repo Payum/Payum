@@ -34,7 +34,8 @@
     "require": {
         "php": ">=5.3.2",
         "payum/core": "0.7.*@dev",
-        "symfony/framework-bundle": "2.*"
+        "symfony/framework-bundle": "2.*",
+        "twig/twig": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "*",
