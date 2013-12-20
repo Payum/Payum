@@ -55,7 +55,7 @@ class StoreNotificationAction implements ActionInterface
 In the code above we created payum custom action.
 The main purpose of the action to store notification that with a request.
 To do so it requires a storage.
-Now we can update `config.php` described in [get it started](get_it-started.md).
+Now we can update `config.php` described in [get it started](get-it-started.md).
 
 ```php
 <?php
