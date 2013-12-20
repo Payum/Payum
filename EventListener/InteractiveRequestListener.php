@@ -4,7 +4,10 @@ namespace Payum\Bundle\PayumBundle\EventListener;
 use Payum\Bundle\PayumBundle\Request\ResponseInteractiveRequest;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Request\InteractiveRequestInterface;
+use Payum\Core\Request\PostRedirectUrlInteractiveRequest;
 use Payum\Core\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\RedirectPostInteractiveRequest;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 
@@ -20,10 +23,12 @@ class InteractiveRequestListener
         }
 
         $interactiveRequest = $event->getException();
-            
+
         if ($interactiveRequest instanceof ResponseInteractiveRequest) {
             $event->setResponse($interactiveRequest->getResponse());
-        } else if ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {
+        } elseif ($interactiveRequest instanceof PostRedirectUrlInteractiveRequest) {
+            $event->setResponse(new Response($interactiveRequest->getContent()));
+        } elseif ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {
             $event->setResponse(new RedirectResponse($interactiveRequest->getUrl()));
         }
 
@@ -34,11 +39,11 @@ class InteractiveRequestListener
 
             return;
         }
-        
+
         $ro = new \ReflectionObject($interactiveRequest);
         $event->setException(new LogicException(
-            sprintf('Cannot convert interactive request %s to symfony response.', $ro->getShortName()), 
-            null, 
+            sprintf('Cannot convert interactive request %s to symfony response.', $ro->getShortName()),
+            null,
             $interactiveRequest
         ));
     }
