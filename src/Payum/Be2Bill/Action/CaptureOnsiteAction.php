@@ -7,7 +7,9 @@ use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\PostRedirectUrlInteractiveRequest;
 use Payum\Core\Request\RedirectPostInteractiveRequest;
 
 class CaptureOnsiteAction implements ActionInterface, ApiAwareInterface
@@ -32,21 +34,20 @@ class CaptureOnsiteAction implements ActionInterface, ApiAwareInterface
     /**
      * {@inheritdoc}
      *
-     * @throws LogicException if the token not set in the instruction.
-     * @throws RedirectPostInteractiveRequest if authorization required.
+     * @throws PostRedirectUrlInteractiveRequest if authorization required.
      */
     public function execute($request)
     {
-        /** @var $request AuthorizeTokenRequest */
+        /** @var $request CaptureRequest */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        throw new RedirectPostInteractiveRequest(
+        throw new PostRedirectUrlInteractiveRequest(
             $this->api->getOnsiteUrl(),
-            $this->api->getOnsiteData($model->toUnsafeArray())
+            $this->api->prepareOnsitePayment($model->toUnsafeArray())
         );
     }
 
@@ -55,9 +56,14 @@ class CaptureOnsiteAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof CaptureRequest &&
-            $request->getModel() instanceof \ArrayAccess
-        ;
+        if (false == $request instanceof CaptureRequest) {
+            return false;
+        }
+
+        if (false == $request->getModel() instanceof \ArrayAccess) {
+            return false;
+        }
+
+        return false == empty($model['CARDCODE']);
     }
 }
