@@ -68,8 +68,6 @@
         </service>
 
         <service id="payum.listener.interactive_request" class="%payum.listener.interactive_request.class%">
-            <argument type="service" id="twig"></argument>
-            <argument>PayumBundle:Response:RedirectPostResponse.html.twig</argument>
             <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" priority="128" />
         </service>
 

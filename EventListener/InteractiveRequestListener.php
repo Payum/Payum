@@ -4,6 +4,7 @@ namespace Payum\Bundle\PayumBundle\EventListener;
 use Payum\Bundle\PayumBundle\Request\ResponseInteractiveRequest;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Request\InteractiveRequestInterface;
+use Payum\Core\Request\PostRedirectUrlInteractiveRequest;
 use Payum\Core\Request\RedirectUrlInteractiveRequest;
 use Payum\Core\Request\RedirectPostInteractiveRequest;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,22 +13,6 @@ use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 
 class InteractiveRequestListener
 {
-    /**
-     * @var \Twig_Environment
-     */
-    protected $twig;
-
-    /**
-     * @var string
-     */
-    protected $redirectPostTemplate;
-
-    public function __construct(\Twig_Environment $twig, $redirectPostTemplate)
-    {
-        $this->twig = $twig;
-        $this->redirectPostTemplate = $redirectPostTemplate;
-    }
-
     /**
      * @param GetResponseForExceptionEvent $event
      */
@@ -41,10 +26,10 @@ class InteractiveRequestListener
 
         if ($interactiveRequest instanceof ResponseInteractiveRequest) {
             $event->setResponse($interactiveRequest->getResponse());
-        } elseif ($interactiveRequest instanceof RedirectPostInteractiveRequest) {
-            $event->setResponse($this->createPostResponse($interactiveRequest));
+        } elseif ($interactiveRequest instanceof PostRedirectUrlInteractiveRequest) {
+            $event->setResponse(new Response($interactiveRequest->getContent()));
         } elseif ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {
-            $event->setResponse($this->createRedirectResponse($interactiveRequest));
+            $event->setResponse(new RedirectResponse($interactiveRequest->getUrl()));
         }
 
         if ($event->getResponse()) {
@@ -61,18 +46,5 @@ class InteractiveRequestListener
             null,
             $interactiveRequest
         ));
-    }
-
-    protected function createPostResponse(RedirectPostInteractiveRequest $interactiveRequest)
-    {
-        return new Response($this->twig->render($this->redirectPostTemplate, array(
-            'url'  => $interactiveRequest->getUrl(),
-            'data' => $interactiveRequest->getData()
-        )));
-    }
-
-    protected function createRedirectResponse(RedirectUrlInteractiveRequest $interactiveRequest)
-    {
-        return new RedirectResponse($interactiveRequest->getUrl());
     }
 }
