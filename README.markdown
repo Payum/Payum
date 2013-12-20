@@ -5,7 +5,7 @@
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Payum/payumbundle/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 The bundle integrate [payum](https://github.com/Payum/Payum) into [symfony](symfony.com) framework.
-It already supports [+35 payments](http://payum.forma-dev.com/documentation/Payum/supported-payments).
+It already supports [+35 payments](http://payum.forma-dev.com/documentation/Core/supported-payments).
 Provide nice configuration layer, secured capture controller, storages integration and lots of more features.
 
 [Sylius e-commerce platform](http://sylius.com) base its payment solutions on top of the bundle.
