@@ -192,7 +192,7 @@ class Api
      * @param array $params
      * @return array
      */
-    public function getOnsiteData(array $params)
+    public function prepareOnsitePayment(array $params)
     {
         $params['OPERATIONTYPE'] = static::OPERATION_PAYMENT;
         $params = $this->appendGlobalParams($params);
@@ -224,7 +224,7 @@ class Api
     }
 
     /**
-     * @param array $fields
+     * @param array $params
      *
      * @return string
      */

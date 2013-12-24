@@ -24,7 +24,7 @@ abstract class PaymentFactory
         $payment->addExtension(new EndlessCycleDetectorExtension);
 
         $payment->addAction(new CaptureOnsiteAction);
-        //$payment->addAction(new CaptureAction);
+        $payment->addAction(new CaptureAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 
