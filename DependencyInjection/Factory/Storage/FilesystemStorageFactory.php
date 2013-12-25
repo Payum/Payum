@@ -26,7 +26,7 @@ class FilesystemStorageFactory extends AbstractStorageFactory
         
         $builder->children()
             ->scalarNode('storage_dir')->isRequired()->cannotBeEmpty()->end()
-            ->scalarNode('id_property')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('id_property')->defaultValue(null)->end()
         ->end();
     }
 

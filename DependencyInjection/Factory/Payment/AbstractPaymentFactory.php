@@ -193,6 +193,10 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
             'addAction',
             array(new Reference('payum.action.execute_same_request_with_model_details'))
         );
+        $paymentDefinition->addMethodCall(
+            'addAction',
+            array(new Reference('payum.action.get_http_query'))
+        );
     }
 
     /**

@@ -88,11 +88,8 @@ class FilesystemStorageFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "id_property" at path "foo" must be configured.
      */
-    public function shouldRequireIdPropertyOption()
+    public function shouldSetIdPropertyToNull()
     {
         $factory = new FilesystemStorageFactory;
 
@@ -102,8 +99,11 @@ class FilesystemStorageFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->addConfiguration($rootNode);
 
         $processor = new Processor();
-        $processor->process($tb->buildTree(), array(array(
+        $config = $processor->process($tb->buildTree(), array(array(
             'storage_dir' => '/the/path/to/store/models',
         )));
+
+        $this->assertArrayHasKey('id_property', $config);
+        $this->assertNull($config['id_property']);
     }
 }
