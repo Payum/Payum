@@ -11,6 +11,7 @@ use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Request\CaptureRequest;
 use Payum\Core\Request\PostRedirectUrlInteractiveRequest;
 use Payum\Core\Request\RedirectPostInteractiveRequest;
+use Payum\Core\Storage\StorageInterface;
 
 class CaptureOnsiteAction implements ActionInterface, ApiAwareInterface
 {
@@ -64,6 +65,8 @@ class CaptureOnsiteAction implements ActionInterface, ApiAwareInterface
             return false;
         }
 
-        return false == empty($model['CARDCODE']);
+        $model = $request->getModel();
+
+        return empty($model['CARDCODE']);
     }
 }
