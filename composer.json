@@ -40,7 +40,8 @@
     "require-dev": {
         "phpunit/phpunit": "*",
         "doctrine/orm": "*",
-        "payum/payum": "0.7.*@dev"
+        "payum/payum": "0.7.*@dev",
+        "symfony/browser-kit": "2.*"
     },
     "suggest": {
         "payum/paypal-express-checkout-nvp": "If you want to use paypal express checkout nvp gateway",
