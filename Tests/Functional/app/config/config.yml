@@ -6,9 +6,15 @@ framework:
     #esi:             ~
     #translator:      { fallback: %locale% }
     test: ~
-    templating:      { engines: ['twig'] }
     session:
         storage_id: session.storage.mock_file
     secret:          %secret%
     router:          { resource: "%kernel.root_dir%/config/routing.yml" }
     default_locale:  %locale%
+
+payum:
+    security:
+        token_storage:
+            Payum\Core\Model\Token:
+                filesystem:
+                    storage_dir: %kernel.cache_dir%/payum_tokens

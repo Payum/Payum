@@ -204,6 +204,11 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'addAction',
             new Reference('payum.action.execute_same_request_with_model_details')
         );
+        $this->assertDefinitionContainsMethodCall(
+            $container->getDefinition($paymentId),
+            'addAction',
+            new Reference('payum.action.get_http_query')
+        );
     }
 
     /**
