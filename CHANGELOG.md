@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.7.0 (2013-12-26)
+
+* [composer] add browser kit to dev requirments.
+* [action] add common action that can execute `GetHttpQueryRequest`.
+* [capture] add ability to store token to session and reuse it when come back.
+* [request] add support for POST redirection
+* [di] fix payment class parameter after moving classes to core namespace.
+* [travis] test on different symfony versions.
+* apply changes after repos merge and moving core stuff to its own namespace.
+* [request] use execute same request with model details action
+* remove previously deprecated code.
+
 ## 0.6.2 (2013-10-31)
 
 * [composer] lower required php version from 5.3.9 to 5.3.3. remove usages of is_a() newer feature.
