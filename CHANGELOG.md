@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.7.0 (2013-12-26)
+
+* merge all payment gateway into one payum repository and setup subtree split.
+* move all current root classes to core namespace.
+* [request] add `GetHttpQueryRequest` request
+* [request] add `PostRedirectUrlInteractiveRequest` request
+* [request] remove deprecated `XXXDetailsAggregatedModelsAction` actions.
+* [request] use execute same request with model details action
+* [payment] making `findSupport` method more specific on the return value. Now it returns false when not supported action.
+* [composer] add missed libs to replace section
+* [security] improve token hash generator
+* [security] prevent accidental storing of sensitive info
+* [security] wrapp sensitive values to prevent its saving somewhere
+* [security] use SensitiveValue to safely process card number etc.
+* [storage][filesystem] add identity map for filesystem storage.
+* [payment] add `forcePrepend` argument to `Payment::addApi` method.
+* [registry] add `SimpleRegistry::registerStorageExtensions` helper method.
+* [registry] add `PaymentRegistryInterface::getPayments` method.
+* [doctrine][orm] add mapping for simple model.
+* [doctrine][mongo] add mapping for simple model.
+* [model] add simple unified array model.
+* [authorize.net] remove payment details custom model. Use ArrayObject from core or your own.
+* [be2bill] add support of  be2bill onsite payments
+* [be2bill] fix. capture with credit card should support if `CARDCODE` provided.
+* [paypal express checkout][model] remove custom model and doctrine mapping for it.
+* [paypal] Allow set custom params to authorize token url
+* [payex][model] remove custom model and doctrine mapping for it.
+
 ## 0.6.5 (2013-11-22)
 
 * [request] CaptureDetailsAggregatedModelAction is deprecated.
