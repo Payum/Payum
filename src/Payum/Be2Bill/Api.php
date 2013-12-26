@@ -194,6 +194,31 @@ class Api
      */
     public function prepareOnsitePayment(array $params)
     {
+        $supportedParams = array(
+            'CLIENTIDENT' => null,
+            'DESCRIPTION' => null,
+            'ORDERID' => null,
+            'AMOUNT' => null,
+            'CARDTYPE' => null,
+            'CLIENTEMAIL' => null,
+            'CARDFULLNAME' => null,
+            'LANGUAGE' => null,
+            'EXTRADATA' => null,
+            'CLIENTDOB' => null,
+            'CLIENTADDRESS' => null,
+            'CREATEALIAS' => null,
+            '3DSECURE' => null,
+            '3DSECUREDISPLAYMODE' => null,
+            'USETEMPLATE' => null,
+            'HIDECLIENTEMAIL' => null,
+            'HIDEFULLNAME' => null,
+        );
+
+        $params = array_filter(array_replace(
+            $supportedParams,
+            array_intersect_key($params, $supportedParams)
+        ));
+
         $params['OPERATIONTYPE'] = static::OPERATION_PAYMENT;
         $params = $this->appendGlobalParams($params);
 
