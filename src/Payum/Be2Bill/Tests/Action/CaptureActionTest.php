@@ -38,13 +38,31 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestWithArrayAccessAsModel()
+    public function shouldSupportCaptureRequestWithArrayAccessAsModelWhichContainsCARDCODE()
     {
         $action = new CaptureAction();
 
-        $request = new CaptureRequest($this->getMock('ArrayAccess'));
+        $model = new \ArrayObject(array(
+            'CARDCODE' => '1234432112344321',
+        ));
+
+        $request = new CaptureRequest($model);
 
         $this->assertTrue($action->supports($request));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotSupportCaptureRequestWithArrayAccessAsModelWhichNotContainsCARDCODE()
+    {
+        $action = new CaptureAction();
+
+        $model = new \ArrayObject(array());
+
+        $request = new CaptureRequest($model);
+
+        $this->assertFalse($action->supports($request));
     }
 
     /**
@@ -92,7 +110,9 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CaptureAction();
 
-        $request = new CaptureRequest(array());
+        $request = new CaptureRequest(array(
+            'CARDCODE' => '1234432112344321',
+        ));
 
         //guard
         $this->assertTrue($action->supports($request));
@@ -139,7 +159,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setApi($apiMock);
 
-        $request = new CaptureRequest(array('EXECCODE' => 1));
+        $request = new CaptureRequest(array('EXECCODE' => 1, 'CARDCODE' => '1234432112344321',));
 
         //guard
         $this->assertTrue($action->supports($request));

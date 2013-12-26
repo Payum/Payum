@@ -62,9 +62,16 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof CaptureRequest &&
-            $request->getModel() instanceof \ArrayAccess
-        ;
+        if (false == $request instanceof CaptureRequest) {
+            return false;
+        }
+
+        if (false == $request->getModel() instanceof \ArrayAccess) {
+            return false;
+        }
+
+        $model = $request->getModel();
+
+        return false == empty($model['CARDCODE']);
     }
 }

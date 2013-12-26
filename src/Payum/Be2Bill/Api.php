@@ -11,7 +11,7 @@ use Payum\Core\Bridge\Buzz\JsonResponse;
 class Api
 {
     const VERSION = '2.0';
-    
+
     const EXECCODE_SUCCESSFUL = '0000';
 
     const EXECCODE_3DSECURE_IDENTIFICATION_REQUIRED = '0001';
@@ -51,7 +51,7 @@ class Api
     const EXECCODE_CARD_REFUSED_BY_THE_BANK = '4003';
 
     const EXECCODE_ABORTED_TRANSACTION = '4004';
-    
+
     const EXECCODE_SUSPECTED_FRAUD = '4005';
 
     const EXECCODE_CARD_LOST = '4006';
@@ -71,7 +71,7 @@ class Api
     const EXECCODE_TIME_OUT = '5004';
 
     /**
-     * The "payment" function is the basic function that allows collecting from a cardholder. 
+     * The "payment" function is the basic function that allows collecting from a cardholder.
      * This operation collects money directly.
      */
     const OPERATION_PAYMENT = 'payment';
@@ -119,7 +119,7 @@ class Api
     /**
      * @param \Buzz\Client\ClientInterface $client
      * @param array $options
-     * 
+     *
      * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
      */
     public function __construct(ClientInterface $client, array $options)
@@ -140,21 +140,19 @@ class Api
 
     /**
      * @param array $params
-     * 
+     *
      * @return \Payum\Core\Bridge\Buzz\JsonResponse
      */
     public function payment(array $params)
     {
         $request = new FormRequest();
 
-        $params['VERSION'] = self::VERSION;
-        $params['IDENTIFIER'] = $this->options['identifier'];
         $params['OPERATIONTYPE'] = static::OPERATION_PAYMENT;
-        $params['HASH'] = $this->calculateHash($params);
-        
+        $params = $this->appendGlobalParams($params);
+
         $request->setField('method', 'payment');
         $request->setField('params', $params);
-        
+
         return $this->doRequest($request);
     }
 
@@ -182,6 +180,66 @@ class Api
     /**
      * @return string
      */
+    public function getOnsiteUrl()
+    {
+        return $this->options['sandbox'] ?
+            'https://secure-test.be2bill.com/front/form/process' :
+            'https://secure-magenta1.be2bill.com/front/form/process'
+        ;
+    }
+
+    /**
+     * @param array $params
+     * @return array
+     */
+    public function prepareOnsitePayment(array $params)
+    {
+        $supportedParams = array(
+            'CLIENTIDENT' => null,
+            'DESCRIPTION' => null,
+            'ORDERID' => null,
+            'AMOUNT' => null,
+            'CARDTYPE' => null,
+            'CLIENTEMAIL' => null,
+            'CARDFULLNAME' => null,
+            'LANGUAGE' => null,
+            'EXTRADATA' => null,
+            'CLIENTDOB' => null,
+            'CLIENTADDRESS' => null,
+            'CREATEALIAS' => null,
+            '3DSECURE' => null,
+            '3DSECUREDISPLAYMODE' => null,
+            'USETEMPLATE' => null,
+            'HIDECLIENTEMAIL' => null,
+            'HIDEFULLNAME' => null,
+        );
+
+        $params = array_filter(array_replace(
+            $supportedParams,
+            array_intersect_key($params, $supportedParams)
+        ));
+
+        $params['OPERATIONTYPE'] = static::OPERATION_PAYMENT;
+        $params = $this->appendGlobalParams($params);
+
+        return $params;
+    }
+
+    /**
+     * @param array $params
+     * @return array
+     */
+    protected function appendGlobalParams(array $params = array())
+    {
+        $params['VERSION'] = self::VERSION;
+        $params['IDENTIFIER'] = $this->options['identifier'];
+        $params['HASH'] = $this->calculateHash($params);
+
+        return $params;
+    }
+    /**
+     * @return string
+     */
     protected function getApiEndpoint()
     {
         return $this->options['sandbox'] ?
@@ -189,17 +247,17 @@ class Api
             'https://secure-magenta1.be2bill.com/front/service/rest/process'
         ;
     }
-    
+
     /**
-     * @param array $fields
-     * 
+     * @param array $params
+     *
      * @return string
      */
     protected function calculateHash(array $params)
     {
         #Alpha sort
         ksort($params);
-        
+
         $clearString = $this->options['password'];
         foreach ($params as $key => $value) {
             $clearString .= $key . '=' . $value . $this->options['password'];
