@@ -4,7 +4,8 @@
 * [Paypal Pro Checkout](https://github.com/Payum/PaypalProCheckoutNvp/blob/master/docs/index.md)
 * [Paypal Rest](https://github.com/Payum/PaypalRest/blob/master/docs/index.md)
 * [Authorize.Net AIM](https://github.com/Payum/AuthorizeNetAim/blob/master/docs/index.md)
-* [Be2Bill](https://github.com/Payum/Be2Bill/blob/master/docs/index.md)
+* [Be2Bill CreditCard](https://github.com/Payum/Be2Bill/blob/master/docs/index.md)
+* [Be2Bill Onsite](https://github.com/Payum/Be2Bill/blob/master/docs/index.md)
 * [Payex](https://github.com/Payum/Payex/blob/master/docs/index.md)
 
 ## [Omnipay gateways](https://github.com/adrianmacneil/omnipay) via [bridge](https://github.com/Payum/OmnipayBridge).
