@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.1 (2013-12-28)
+
+* [be2bill] add missed capture onsite action to factory.
+
 ## 0.7.0 (2013-12-26)
 
 * [composer] add browser kit to dev requirments.
