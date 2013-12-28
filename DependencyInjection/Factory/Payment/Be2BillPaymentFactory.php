@@ -78,6 +78,11 @@ class Be2BillPaymentFactory extends AbstractPaymentFactory
         $container->setDefinition($captureActionId, $captureActionDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($captureActionId)));
 
+        $captureOnsiteActionDefinition = new DefinitionDecorator('payum.be2bill.action.capture_onsite');
+        $captureOnsiteActionId = 'payum.context.'.$contextName.'.action.capture_onsite';
+        $container->setDefinition($captureOnsiteActionId, $captureOnsiteActionDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($captureOnsiteActionId)));
+
         $statusActionDefinition = new DefinitionDecorator('payum.be2bill.action.status');
         $statusActionId = 'payum.context.'.$contextName.'.action.status';
         $container->setDefinition($statusActionId, $statusActionDefinition);
