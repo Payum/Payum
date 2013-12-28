@@ -299,6 +299,36 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldDecorateBasicCaptureOnsiteActionDefinitionAndAddItToPayment()
+    {
+        $factory = new Be2BillPaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $paymentId = $factory->create($container, 'aContextName', array(
+            'api' => array(
+                'client' => 'foo',
+                'options' => array(
+                    'identifier' => 'anIdentifier',
+                    'password' => 'aPassword',
+                    'sandbox' => true,
+                )
+            ),
+            'actions' => array(),
+            'apis' => array(),
+            'extensions' => array(),
+        ));
+
+        $this->assertDefinitionContainsMethodCall(
+            $container->getDefinition($paymentId),
+            'addAction',
+            new Reference('payum.context.aContextName.action.capture_onsite')
+        );
+    }
+
+    /**
+     * @test
+     */
     public function shouldDecorateBasicStatusActionDefinitionAndAddItToPayment()
     {
         $factory = new Be2BillPaymentFactory;
