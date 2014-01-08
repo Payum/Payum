@@ -63,7 +63,7 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
             $payments = array('foo' => $paymentFooMock, 'bar' => $paymentBarMock),
             array(),
             'foo',
-            'bar'
+            'foo'
         );
 
         $payments = $registry->getPayments();
@@ -165,7 +165,7 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowRegisterStorageExtensions()
+    public function shouldInitializeStorageExtensionOnlyOnFirstCallGetPayment()
     {
         $storageMock = $this->getMock('Payum\Core\Storage\StorageInterface');
 
@@ -188,13 +188,65 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
             'foo'
         );
 
-        $registry->registerStorageExtensions();
+        $this->assertSame($paymentMock, $registry->getPayment('foo'));
+        $this->assertSame($paymentMock, $registry->getPayment('foo'));
+        $this->assertSame($paymentMock, $registry->getPayment('foo'));
     }
 
     /**
      * @test
      */
-    public function shouldRegisterStorageExtensionsForEachStorageInRegistry()
+    public function shouldInitializeStorageExtensionForDefaultPayment()
+    {
+        $storageMock = $this->getMock('Payum\Core\Storage\StorageInterface');
+
+        $testCase = $this;
+
+        $paymentMock = $this->getMock('Payum\Core\PaymentInterface');
+        $paymentMock
+            ->expects($this->once())
+            ->method('addExtension')
+            ->with($this->isInstanceOf('Payum\Core\Extension\StorageExtension'))
+            ->will($this->returnCallback(function(StorageExtension $extension) use ($storageMock, $testCase) {
+                $testCase->assertAttributeSame($storageMock, 'storage', $extension);
+            }))
+        ;
+
+        $registry = new SimpleRegistry(
+            array('foo' => $paymentMock),
+            array('foo' => array('stdClass' => $storageMock)),
+            'foo',
+            'foo'
+        );
+
+        $this->assertSame($paymentMock, $registry->getPayment());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotInitializeStorageExtensionsIfAnyStoragesAssociatedWithPayment()
+    {
+        $paymentMock = $this->getMock('Payum\Core\PaymentInterface');
+        $paymentMock
+            ->expects($this->never())
+            ->method('addExtension')
+        ;
+
+        $registry = new SimpleRegistry(
+            array('foo' => $paymentMock),
+            array(),
+            'foo',
+            'foo'
+        );
+
+        $registry->getPayment('foo');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldInitializeStorageExtensionsForEachStorageInRegistry()
     {
         $storageOneMock = $this->getMock('Payum\Core\Storage\StorageInterface');
         $storageTwoMock = $this->getMock('Payum\Core\Storage\StorageInterface');
@@ -228,6 +280,40 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
             'foo'
         );
 
-        $registry->registerStorageExtensions();
+        $registry->getPayment('foo');
+        $registry->getPayment('bar');
+    }
+
+        /**
+     * @test
+     */
+    public function shouldInitializeStorageExtensionsOnGetPayments()
+    {
+        $storageOneMock = $this->getMock('Payum\Core\Storage\StorageInterface');
+
+        $paymentFooMock = $this->getMock('Payum\Core\PaymentInterface');
+        $paymentFooMock
+            ->expects($this->once())
+            ->method('addExtension')
+        ;
+
+        $paymentBarMock = $this->getMock('Payum\Core\PaymentInterface');
+        $paymentBarMock
+            ->expects($this->once())
+            ->method('addExtension')
+        ;
+
+        $registry = new SimpleRegistry(
+            array('foo' => $paymentFooMock, 'bar' => $paymentBarMock),
+            array(
+                'foo' => array('fooClass' => $storageOneMock),
+                'bar' => array('fooClass' => $storageOneMock)
+            ),
+            'foo',
+            'foo'
+        );
+
+        $registry->getPayments();
+        $registry->getPayments();
     }
 }

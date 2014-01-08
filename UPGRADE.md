@@ -1,5 +1,9 @@
 # Upgrades
 
+## 0.7 to 0.8
+
+* [Registry] `Registry::registerStorageExtensions` method was removed. the logic of the method is done internally.
+
 ## 0.6 to 0.7
 
 * [Composer] All repositories were merged to `payum\payum` one. If you need only core change it to `payum\core`

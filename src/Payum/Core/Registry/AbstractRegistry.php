@@ -140,11 +140,11 @@ abstract class AbstractRegistry implements RegistryInterface
      */
     public function getPayments()
     {
-        $connections = array();
+        $registeredPayments = array();
         foreach ($this->payments as $name => $id) {
-            $connections[$name] = $this->getService($id);
+            $registeredPayments[$name] = $this->getPayment($name);
         }
 
-        return $connections;
+        return $registeredPayments;
     }
 }
