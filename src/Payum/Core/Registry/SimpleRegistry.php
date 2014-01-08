@@ -5,6 +5,9 @@ use Payum\Core\Extension\StorageExtension;
 
 class SimpleRegistry extends AbstractRegistry
 {
+    /**
+     * @deprecated since 0.7.1 will be replaced with internal init method that adds extensions lazily.
+     */
     public function registerStorageExtensions()
     {
         foreach ($this->getPayments() as $name => $payment) {
