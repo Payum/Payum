@@ -4,7 +4,7 @@
 [![Latest Stable Version](https://poser.pugx.org/payum/payum-bundle/version.png)](https://packagist.org/packages/payum/payum-bundle)
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Payum/payumbundle/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
-The bundle integrate [payum](https://github.com/Payum/Payum) into [symfony](symfony.com) framework.
+The bundle integrate [payum](https://github.com/Payum/Payum) into [symfony](http://www.symfony.com) framework.
 It already supports [+35 payments](http://payum.forma-dev.com/documentation/Core/supported-payments).
 Provide nice configuration layer, secured capture controller, storages integration and lots of more features.
 
