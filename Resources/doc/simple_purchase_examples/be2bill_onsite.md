@@ -1,4 +1,4 @@
-# Be2bill credit card
+# Be2bill onsite
 
 Steps:
 
@@ -58,32 +58,34 @@ class PaymentController extends Controller
     {
         $paymentName = 'your_payment_name';
 
-        $storage = $this->get('payum')->getStorageForClass(
+        $storage = $this->getPayum()->getStorageForClass(
             'Acme\PaymentBundle\Entity\PaymentDetails',
             $paymentName
         );
 
-        /** @var \Acme\PaymentBundle\Entity\PaymentDetails */
+        /** @var PaymentDetails */
         $paymentDetails = $storage->createModel();
         //be2bill amount format is cents: for example:  100.05 (EUR). will be 10005.
         $paymentDetails['AMOUNT'] = 10005;
-        $paymentDetails['CLIENTEMAIL'] = 'user@email.com';
-        $paymentDetails['CLIENTUSERAGENT'] = $request->headers->get('User-Agent', 'Unknown');
-        $paymentDetails['CLIENTIP'] = $request->getClientIp();
         $paymentDetails['CLIENTIDENT'] = 'payerId';
         $paymentDetails['DESCRIPTION'] = 'Payment for digital stuff';
-        $paymentDetails['ORDERID'] = 'orderId';
-        $paymentDetails['CARDCODE'] = new SensitiveValue('5555 5567 7825 0000');
-        $paymentDetails['CARDCVV'] = new SensitiveValue(123);
-        $paymentDetails['CARDFULLNAME'] = new SensitiveValue('John Doe');
-        $paymentDetails['CARDVALIDITYDATE'] = new SensitiveValue('15-11');
+        $paymentDetails['ORDERID'] = 'orderId'.uniqid();
         $storage->updateModel($paymentDetails);
 
-        $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
+        $captureToken = $this->getTokenFactory()->createCaptureToken(
             $paymentName,
             $paymentDetails,
             'acme_payment_done' // the route to redirect after capture;
         );
+
+        /**
+         * This is the trick.
+         * You have also configure these urls in the account configuration section on be2bill site:
+         *
+         * return url: http://your-domain-here.dev/payment/capture/session-token
+         * cancel url: http://your-domain-here.dev/payment/capture/session-token
+         */
+        $request->getSession()->set('payum_token', $captureToken->getHash());
 
         return $this->forward('PayumBundle:Capture:do', array(
             'payum_token' => $captureToken,
@@ -91,8 +93,6 @@ class PaymentController extends Controller
     }
 }
 ```
-
-_**Note**: The sensitive value object ensures that any valuable info will not be saved accidentally somewhere._
 
 That's it. After the payment done you will be redirect to `acme_payment_done` action.
 Check [this chapter](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/purchase_done_action.md) to find out how this done action could look like.
