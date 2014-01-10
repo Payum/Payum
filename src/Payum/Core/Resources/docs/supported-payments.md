@@ -1,45 +1,53 @@
-# Payments.
+# Supported payments.
 
-* [Paypal Express Checkout](https://github.com/Payum/PaypalExpressCheckoutNvp/blob/master/docs/index.md)
-* [Paypal Pro Checkout](https://github.com/Payum/PaypalProCheckoutNvp/blob/master/docs/index.md)
-* [Paypal Rest](https://github.com/Payum/PaypalRest/blob/master/docs/index.md)
-* [Authorize.Net AIM](https://github.com/Payum/AuthorizeNetAim/blob/master/docs/index.md)
-* [Be2Bill CreditCard](https://github.com/Payum/Be2Bill/blob/master/docs/index.md)
-* [Be2Bill Onsite](https://github.com/Payum/Be2Bill/blob/master/docs/index.md)
-* [Payex](https://github.com/Payum/Payex/blob/master/docs/index.md)
+## Official
 
-## [Omnipay gateways](https://github.com/adrianmacneil/omnipay) via [bridge](https://github.com/Payum/OmnipayBridge).
+* [Paypal Express Checkout](https://github.com/Payum/PaypalExpressCheckoutNvp/blob/master/Resources/docs/index.md)
+* [Paypal Pro Checkout](https://github.com/Payum/PaypalProCheckoutNvp/blob/master/Resources/docs/index.md)
+* [Paypal Rest](https://github.com/Payum/PaypalRest/blob/master/Resources/docs/index.md)
+* [Authorize.Net AIM](https://github.com/Payum/AuthorizeNetAim/blob/master/Resources/docs/index.md)
+* [Be2Bill CreditCard](https://github.com/Payum/Be2Bill/blob/master/Resources/docs/index.md)
+* [Be2Bill Onsite](https://github.com/Payum/Be2Bill/blob/master/Resources/docs/index.md)
+* [Payex](https://github.com/Payum/Payex/blob/master/Resources/docs/index.md)
+* [Offline](https://github.com/Payum/Offline/blob/master/Resources/docs/index.md)
 
-* 2Checkout
-* Authorize.Net AIM
-* Authorize.Net SIM
-* Buckaroo
-* CardSave
-* Dummy
-* eWAY Rapid 3.0
-* GoCardless
-* Manual
-* Migs 2-Party
-* Migs 3-Party
-* Mollie
-* MultiSafepay
-* Netaxept (BBS)
-* Netbanx
-* PayFast
-* Payflow Pro
-* PaymentExpress (DPS) PxPay
-* PaymentExpress (DPS) PxPost
-* PayPal Express Checkout
-* PayPal Payments Pro
-* Pin Payments
-* Sage Pay Direct
-* Sage Pay Server
-* SecurePay Direct Post
-* Stripe
-* WorldPay
+## Community
 
-## [JMS plugins](http://jmsyst.com/bundles/JMSPaymentCoreBundle) via [bridge](https://github.com/Payum/JMSPaymentBridge)
+* [DineroMail](https://github.com/r3s7/PayumDineroMail)
+* [Paydollar](https://github.com/kayue/Paydollar)
 
+## Omnipay gateways.
+
+* [2Checkout](https://github.com/omnipay/2checkout)
+* [Authorize.Net](https://github.com/omnipay/authorizenet)
+* [Buckaroo](https://github.com/omnipay/buckaroo)
+* [CardSave](https://github.com/omnipay/cardsave)
+* [Dummy](https://github.com/omnipay/dummy)
+* [eWAY](https://github.com/omnipay/eway)
+* [First Data](https://github.com/omnipay/firstdata)
+* [GoCardless](https://github.com/omnipay/gocardless)
+* [Manual](https://github.com/omnipay/manual)
+* [Migs](https://github.com/omnipay/migs)
+* [Mollie](https://github.com/omnipay/mollie)
+* [MultiSafepay](https://github.com/omnipay/multisafepay)
+* [Netaxept (BBS)](https://github.com/omnipay/netaxept)
+* [Netbanx](https://github.com/omnipay/netbanx)
+* [Pacnet](https://github.com/mfauveau/omnipay-pacnet)
+* [PayFast](https://github.com/omnipay/payfast)
+* [Payflow](https://github.com/omnipay/payflow)
+* [PaymentExpress (DPS)](https://github.com/omnipay/paymentexpress)
+* [PayPal](https://github.com/omnipay/paypal)
+* [Pin Payments](https://github.com/omnipay/pin)
+* [Sage Pay](https://github.com/omnipay/sagepay)
+* [SecurePay](https://github.com/omnipay/securepay)
+* [Skrill](https://github.com/alfaproject/omnipay-skrill)
+* [Stripe](https://github.com/omnipay/stripe)
+* [TargetPay](https://github.com/omnipay/targetpay)
+* [WorldPay](https://github.com/omnipay/worldpay)
+
+## JMS payment plugins
+
+* [Paypal Express Checkout](http://jmsyst.com/bundles/JMSPaymentPaypalBundle)
 * [Slim CD](https://github.com/mpoplin/TPMPaymentSlimCDBundle)
 * [Be2bill](https://github.com/rezzza/PaymentBe2billBundle)
 * [Qiwi Wallet](https://github.com/chewbacco/ChewbaccoPaymentQiwiWalletBundle)
@@ -49,5 +57,11 @@
 * [Virgopass](https://github.com/cariboo/CaribooPaymentVirgopassBundle)
 * [Atos SIPS](https://github.com/cariboo/CaribooPaymentSipsBundle)
 * [Dotpay](https://github.com/ETSGlobal/ETSPaymentDotpayBundle)
+* [Ogone](https://github.com/ETSGlobal/ETSPaymentOgoneBundle)
+* [MeS](https://github.com/immersivelabs/PaymentMeSBundle)
+* [Adyen](https://github.com/ruudk/PaymentAdyenBundle)
+* [Mollie](https://github.com/ruudk/PaymentMollieBundle)
+* [Multisafepay](https://github.com/ruudk/PaymentMultisafepayBundle)
+* [Sips](https://github.com/KptiveStudio/KptivePaymentSipsBundle)
 
 Back to [index](index.md).
