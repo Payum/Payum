@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.1 (2014-01-12)
+
+* [registry] `SimpleRegistry::registerStorageExtensions` method is deprecated.
+
 ## 0.7.0 (2013-12-26)
 
 * merge all payment gateway into one payum repository and setup subtree split.
