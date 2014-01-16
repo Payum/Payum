@@ -155,6 +155,25 @@ class Api
 
         return $this->doRequest($request);
     }
+    
+    /**
+     * Verify if the hash of the given parameter is correct
+     * 
+     * @param array $params
+     * 
+     * @return bool
+     */
+    public function verifyHash(array $params)
+    {
+        if (empty($params['HASH'])) {
+            return false;
+        }
+        
+        $hash = $params['HASH'];
+        unset($params['HASH']);
+        
+        return $hash === $this->calculateHash($params);
+    }
 
     /**
      * @param \Buzz\Message\Form\FormRequest $request
