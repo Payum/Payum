@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.2 (2014-01-16)
+
+* [notify] add posiblity to track unsafe notifications (one without token).
+
 ## 0.7.1 (2013-12-28)
 
 * [be2bill] add missed capture onsite action to factory.
