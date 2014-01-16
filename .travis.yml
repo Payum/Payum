@@ -12,7 +12,7 @@ env:
   - SYMFONY_VERSION=2.4.*
 
 before_script:
-  - composer require symfony/framework-bundle:${SYMFONY_VERSION} --prefer-source
+  - composer require symfony/framework-bundle:${SYMFONY_VERSION} --prefer-source --no-update
   - composer install --dev --prefer-source
 
 notifications:

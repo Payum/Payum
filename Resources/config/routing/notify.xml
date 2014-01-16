@@ -4,6 +4,10 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
+    <route id="payum_notify_do_unsafe" pattern="/payment/notify/unsafe/{payment_name}">
+        <default key="_controller">PayumBundle:Notify:doUnsafe</default>
+    </route>
+
     <route id="payum_notify_do" pattern="/payment/notify/{payum_token}">
         <default key="_controller">PayumBundle:Notify:do</default>
     </route>
