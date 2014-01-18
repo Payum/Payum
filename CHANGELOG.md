@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.2 (2014-01-18)
+
+* [be2bill][api] add a method to verify params hash.
+
 ## 0.7.1 (2014-01-12)
 
 * [registry] `SimpleRegistry::registerStorageExtensions` method is deprecated.

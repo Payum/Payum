@@ -107,6 +107,66 @@ class ApiTest extends \Phpunit_Framework_TestCase
     }
 
     /**
+     * @test
+     */
+    public function shouldReturnFalseIfHashNotSetToParams()
+    {
+        $api = new Api($this->createClientMock(), array(
+            'identifier' => 'anId',
+            'password' => 'aPass',
+            'sandbox' => true,
+        ));
+
+        $this->assertFalse($api->verifyHash(array()));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnFalseIfHashesMisMatched()
+    {
+        $params = array(
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        );
+        $invalidHash = 'invalidHash';
+
+        $api = new Api($this->createClientMock(), array(
+            'identifier' => 'anId',
+            'password' => 'aPass',
+            'sandbox' => true,
+        ));
+
+        //guard
+        $this->assertNotEquals($invalidHash, $api->calculateHash($params));
+
+        $params['HASH'] = $invalidHash;
+
+        $this->assertFalse($api->verifyHash($params));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnTrueIfHashesMatched()
+    {
+        $params = array(
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        );
+
+        $api = new Api($this->createClientMock(), array(
+            'identifier' => 'anId',
+            'password' => 'aPass',
+            'sandbox' => true,
+        ));
+
+        $params['HASH'] = $api->calculateHash($params);
+
+        $this->assertTrue($api->verifyHash($params));
+    }
+
+    /**
      * @return \PHPUnit_Framework_MockObject_MockObject|ClientInterface
      */
     protected function createClientMock()
