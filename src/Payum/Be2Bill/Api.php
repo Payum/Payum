@@ -272,7 +272,7 @@ class Api
      *
      * @return string
      */
-    protected function calculateHash(array $params)
+    public function calculateHash(array $params)
     {
         #Alpha sort
         ksort($params);
