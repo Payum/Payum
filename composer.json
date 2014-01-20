@@ -40,7 +40,7 @@
     "require-dev": {
         "phpunit/phpunit": "*",
         "doctrine/orm": "*",
-        "payum/core": "0.7.*",
+        "payum/payum": "0.7.*",
         "symfony/browser-kit": "~2.0",
         "symfony/class-loader": "~2.0"
     },
