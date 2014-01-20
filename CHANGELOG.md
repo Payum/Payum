@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.3 (2014-01-20)
+
+* fix composer requires payum/core 0.8.
+
 ## 0.7.2 (2014-01-16)
 
 * [notify] add posiblity to track unsafe notifications (one without token).
