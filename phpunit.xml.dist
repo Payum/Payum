@@ -59,6 +59,9 @@
         <testsuite name="Payum PaypalIpn Component Test Suite">
             <directory>./src/Payum/Paypal/Ipn/Tests</directory>
         </testsuite>
+        <testsuite name="Payum KlarnaCheckout Component Test Suite">
+            <directory>./src/Payum/Klarna/Checkout/Tests</directory>
+        </testsuite>
     </testsuites>
 
     <filter>

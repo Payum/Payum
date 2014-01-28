@@ -40,6 +40,7 @@
         "ajbdev/authorizenet-php-api": "1.1.*",
         "paypal/rest-api-sdk-php" : "0.5.*",
         "omnipay/omnipay": "~1.0",
+        "klarna/checkout": "~1",
         "ext-soap": "*"
     },
     "require-dev": {
