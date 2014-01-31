@@ -1,13 +1,21 @@
 <?php
 namespace Payum\Klarna\Checkout\Request\Api;
 
-use Payum\Core\Request\BaseModelInteractiveRequest;
+use Payum\Core\Request\BaseInteractiveRequest;
 
-class ShowSnippetInteractiveRequest extends BaseModelInteractiveRequest
+class ShowSnippetInteractiveRequest extends BaseInteractiveRequest
 {
-    public function __construct(\Klarna_Checkout_Order $order)
+    /**
+     * @var string
+     */
+    protected $snippet;
+
+    /**
+     * @param string $snippet
+     */
+    public function __construct($snippet)
     {
-        parent::__construct($order);
+        $this->snippet = $snippet;
     }
 
     /**
@@ -15,16 +23,6 @@ class ShowSnippetInteractiveRequest extends BaseModelInteractiveRequest
      */
     public function getSnippet()
     {
-        $gui = $this->model['gui'];
-
-        return $gui['snippet'];
-    }
-
-    /**
-     * @return string
-     */
-    public function getLayout()
-    {
-        return $this->model['gui']['layout'];
+        return $this->snippet;
     }
 } 
