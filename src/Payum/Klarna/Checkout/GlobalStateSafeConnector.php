@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Klarna\Checkout;
 
-class GloabStateSafeConnector extends \Klarna_Checkout_BasicConnector
+class GlobalStateSafeConnector implements \Klarna_Checkout_ConnectorInterface
 {
     /**
      * @var string
@@ -14,27 +14,23 @@ class GloabStateSafeConnector extends \Klarna_Checkout_BasicConnector
     protected $contentType;
 
     /**
-     * @param string $secret
+     * @var \Klarna_Checkout_ConnectorInterface
+     */
+    protected $internalConnector;
+
+    /**
+     * @param \Klarna_Checkout_ConnectorInterface $internalConnector
      * @param string $baseUri
      * @param string $contentType
-     * @param \Klarna_Checkout_HTTP_TransportInterface $transport
-     * @param \Klarna_Checkout_Digest $digest
      */
     public function __construct(
-        $secret,
+        \Klarna_Checkout_ConnectorInterface $internalConnector,
         $baseUri = null,
-        $contentType = null,
-        \Klarna_Checkout_HTTP_TransportInterface $transport = null,
-        \Klarna_Checkout_Digest $digest = null
+        $contentType = null
     ) {
         $this->baseUri = $baseUri ?: 'https://checkout.testdrive.klarna.com/checkout/orders';
         $this->contentType = $contentType ?: 'application/vnd.klarna.checkout.aggregated-order-v2+json';
-
-        parent::__construct(
-            $transport ?: \Klarna_Checkout_HTTP_Transport::create(),
-            $digest ?: new \Klarna_Checkout_Digest,
-            $secret
-        );
+        $this->internalConnector = $internalConnector;
     }
 
     /**
@@ -49,12 +45,10 @@ class GloabStateSafeConnector extends \Klarna_Checkout_BasicConnector
         \Klarna_Checkout_Order::$contentType = $this->contentType;
 
         try {
-            $result = parent::apply($method, $resource, $options);
+            $this->internalConnector->apply($method, $resource, $options);
 
             \Klarna_Checkout_Order::$baseUri = $previousBaseUri;
             \Klarna_Checkout_Order::$contentType = $previousContentType;
-
-            return $result;
         } catch (\Exception $e) {
             \Klarna_Checkout_Order::$baseUri = $previousBaseUri;
             \Klarna_Checkout_Order::$contentType = $previousContentType;
@@ -62,4 +56,12 @@ class GloabStateSafeConnector extends \Klarna_Checkout_BasicConnector
             throw $e;
         }
     }
-} 
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTransport()
+    {
+        return $this->internalConnector->getTransport();
+    }
+}
