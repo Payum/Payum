@@ -86,6 +86,8 @@
                 <directory>./src/Payum/Paypal/Rest/Resources</directory>
                 <directory>./src/Payum/Paypal/Ipn/Tests</directory>
                 <directory>./src/Payum/Paypal/Ipn/Resources</directory>
+                <directory>./src/Payum/Klarna/Checkout/Tests</directory>
+                <directory>./src/Payum/Klarna/Checkout/Resources</directory>
             </exclude>
         </whitelist>
     </filter>
