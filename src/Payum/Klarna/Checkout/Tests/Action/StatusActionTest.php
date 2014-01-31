@@ -14,7 +14,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\StatusAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
     /**
@@ -151,7 +151,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
         $action = new StatusAction();
 
         $status = new BinaryMaskStatusRequest(array(
-            'status' => Constants::STATUS_CHECKOUT_CREATED,
+            'status' => Constants::STATUS_CREATED,
         ));
 
         //guard

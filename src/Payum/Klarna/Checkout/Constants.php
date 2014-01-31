@@ -7,7 +7,7 @@ final class Constants
 
     const STATUS_CHECKOUT_COMPLETE = 'checkout_complete';
 
-    const STATUS_CHECKOUT_CREATED = 'created';
+    const STATUS_CREATED = 'created';
 
     const GUI_LAYOUT_DESKTOP = 'desktop';
 
