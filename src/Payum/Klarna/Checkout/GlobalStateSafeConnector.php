@@ -28,8 +28,8 @@ class GlobalStateSafeConnector implements \Klarna_Checkout_ConnectorInterface
         $baseUri = null,
         $contentType = null
     ) {
-        $this->baseUri = $baseUri ?: 'https://checkout.testdrive.klarna.com/checkout/orders';
-        $this->contentType = $contentType ?: 'application/vnd.klarna.checkout.aggregated-order-v2+json';
+        $this->baseUri = $baseUri ?: Constants::BASE_URI_SANDBOX;
+        $this->contentType = $contentType ?: Constants::CONTENT_TYPE_V2_PLUS_JSON;
         $this->internalConnector = $internalConnector;
     }
 
