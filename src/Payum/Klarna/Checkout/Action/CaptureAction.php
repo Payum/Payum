@@ -25,7 +25,7 @@ class CaptureAction extends PaymentAwareAction
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == $model['status']) {
+        if (Constants::STATUS_CREATED != $model['status']) {
             if ($model['location']) {
                 $modifyOrderRequest = new UpdateOrderRequest($model);
             } else {
