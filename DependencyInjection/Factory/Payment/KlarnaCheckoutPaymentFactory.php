@@ -58,7 +58,7 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory
      */
     protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
     {
-        $internalConnectorDefinition = new Definition();
+        $internalConnectorDefinition = new Definition('Klarna_Checkout_ConnectorInterface');
         $internalConnectorDefinition->setFactoryClass('Klarna_Checkout_Connector');
         $internalConnectorDefinition->setFactoryMethod('create');
         $internalConnectorDefinition->addArgument($config['api']['options']['secret']);
