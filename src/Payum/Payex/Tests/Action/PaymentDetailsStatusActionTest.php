@@ -67,26 +67,6 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotBinaryMaskStatusRequest()
-    {
-        $action = new PaymentDetailsStatusAction;
-
-        $this->assertFalse($action->supports(new \stdClass()));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportBinaryMaskStatusRequestWithNotArrayAccessModel()
-    {
-        $action = new PaymentDetailsStatusAction;
-
-        $this->assertFalse($action->supports(new BinaryMaskStatusRequest(new \stdClass)));
-    }
-
-    /**
-     * @test
-     */
     public function shouldNotSupportAnythingNotStatusRequest()
     {
         $action = new PaymentDetailsStatusAction;
@@ -530,13 +510,5 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $action->execute($status);
 
         $this->assertTrue($status->isFailed());
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\PaymentInterface
-     */
-    protected function createPaymentMock()
-    {
-        return $this->getMock('Payum\Core\PaymentInterface');
     }
 }
