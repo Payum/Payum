@@ -5,6 +5,7 @@ use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\SyncRequest;
+use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\FetchOrderRequest;
 
 class SyncAction extends PaymentAwareAction
@@ -21,7 +22,7 @@ class SyncAction extends PaymentAwareAction
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if ($model['location']) {
+        if ($model['location'] && Constants::STATUS_CREATED != $model['status']) {
             $fetchOrderRequest = new FetchOrderRequest($model);
             $this->payment->execute($fetchOrderRequest);
 

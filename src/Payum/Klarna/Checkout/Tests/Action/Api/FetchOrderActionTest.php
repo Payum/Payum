@@ -1,17 +1,18 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests\Action\Api;
 
-use Payum\Klarna\Checkout\Action\Api\UpdateOrderAction;
-use Payum\Klarna\Checkout\Request\Api\UpdateOrderRequest;
+use Payum\Klarna\Checkout\Action\Api\FetchOrderAction;
+use Payum\Klarna\Checkout\Constants;
+use Payum\Klarna\Checkout\Request\Api\FetchOrderRequest;
 
-class UpdateOrderActionTest extends \PHPUnit_Framework_TestCase
+class FetchOrderActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\UpdateOrderAction');
+        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\FetchOrderAction');
 
         $rc->isSubclassOf('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
     }
@@ -21,25 +22,25 @@ class UpdateOrderActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new UpdateOrderAction;
+        new FetchOrderAction;
     }
 
     /**
      * @test
      */
-    public function shouldSupportUpdateOrderRequest()
+    public function shouldSupportFetchOrderRequest()
     {
-        $action = new UpdateOrderAction;
+        $action = new FetchOrderAction;
 
-        $this->assertTrue($action->supports(new UpdateOrderRequest(array())));
+        $this->assertTrue($action->supports(new FetchOrderRequest(array())));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotUpdateOrderRequest()
+    public function shouldNotSupportAnythingNotFetchOrderRequest()
     {
-        $action = new UpdateOrderAction;
+        $action = new FetchOrderAction;
 
         $this->assertFalse($action->supports(new \stdClass));
     }
@@ -51,21 +52,34 @@ class UpdateOrderActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $action = new UpdateOrderAction();
+        $action = new FetchOrderAction();
 
         $action->execute(new \stdClass());
     }
 
     /**
      * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage Location has to be provided to fetch an order
      */
-    public function shouldFetchOrderOnExecute()
+    public function throwIfLocationNotSetOnExecute()
+    {
+        $action = new FetchOrderAction();
+
+        $action->execute(new FetchOrderRequest(array()));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldFetchOrderWhenLocationSetOnExecute()
     {
         $model = array(
             'location' => 'theKlarnaOrderLocation'
         );
 
-        $request = new UpdateOrderRequest($model);
+        $request = new FetchOrderRequest($model);
 
         $connector = $this->createConnectorMock();
 
@@ -82,7 +96,7 @@ class UpdateOrderActionTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $action = new UpdateOrderAction();
+        $action = new FetchOrderAction();
         $action->setApi($connector);
 
         $action->execute($request);
@@ -93,44 +107,27 @@ class UpdateOrderActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldUpdateOrderIfModelHasCartItemsSetOnExecute()
+    public function shouldNotFetchOrderStatusCreatedOnExecute()
     {
         $model = array(
-            'cart' => array(
-                'items' => array(
-                    array('foo'),
-                    array('bar')
-                )
-            )
+            'location' => 'theKlarnaOrderLocation',
+            'status' => Constants::STATUS_CREATED,
         );
 
-        $request = new UpdateOrderRequest($model);
-
-        $testCase = $this;
+        $request = new FetchOrderRequest($model);
 
         $connector = $this->createConnectorMock();
         $connector
-            ->expects($this->at(0))
+            ->expects($this->never())
             ->method('apply')
-            ->with('GET')
-        ;
-        $connector
-            ->expects($this->at(1))
-            ->method('apply')
-            ->with('POST')
-            ->will($this->returnCallback(function($method, $order, $options) use ($testCase, $model) {
-                $testCase->assertInternalType('array', $options);
-                $testCase->assertArrayHasKey('data', $options);
-                $testCase->assertEquals($model['cart']['items'], $options['data']);
-            }))
         ;
 
-        $action = new UpdateOrderAction();
+        $action = new FetchOrderAction();
         $action->setApi($connector);
 
         $action->execute($request);
 
-        $this->assertInstanceOf('Klarna_Checkout_Order', $request->getOrder());
+        $this->assertNull($request->getOrder());
     }
 
     /**
@@ -148,7 +145,7 @@ class UpdateOrderActionTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $request = new UpdateOrderRequest($model);
+        $request = new FetchOrderRequest($model);
 
         $testCase = $this;
         $expectedOrder = null;
@@ -163,7 +160,7 @@ class UpdateOrderActionTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $action = new UpdateOrderAction();
+        $action = new FetchOrderAction();
         $action->setApi($connector);
 
         $action->execute($request);

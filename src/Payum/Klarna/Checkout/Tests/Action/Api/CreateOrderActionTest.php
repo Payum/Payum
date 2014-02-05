@@ -9,7 +9,7 @@ class CreateOrderActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfBaseApiAwaerAction()
+    public function shouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\CreateOrderAction');
 

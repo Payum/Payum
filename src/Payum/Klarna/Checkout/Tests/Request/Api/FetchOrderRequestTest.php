@@ -1,16 +1,16 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests\Request\Api;
 
-use Payum\Klarna\Checkout\Request\Api\CreateOrderRequest;
+use Payum\Klarna\Checkout\Request\Api\FetchOrderRequest;
 
-class CreateOrderRequestTest extends \PHPUnit_Framework_TestCase
+class FetchOrderRequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfBaseOrderRequest()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Request\Api\CreateOrderRequest');
+        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Request\Api\FetchOrderRequest');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Checkout\Request\Api\BaseOrderRequest'));
     }
@@ -20,6 +20,6 @@ class CreateOrderRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithArrayModelAsArgument()
     {
-        new CreateOrderRequest(array());
+        new FetchOrderRequest(array());
     }
 }
