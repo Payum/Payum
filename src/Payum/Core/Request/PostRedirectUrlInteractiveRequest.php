@@ -1,34 +1,28 @@
 <?php
-
 namespace Payum\Core\Request;
 
-class PostRedirectUrlInteractiveRequest extends BaseInteractiveRequest
+class PostRedirectUrlInteractiveRequest extends ResponseInteractiveRequest
 {
     /**
-     * @var string
+     * @param string $content
+     * @param array $fields
      */
-    protected $url;
-
-    /**
-     * @var array
-     */
-    protected $post;
-
-    /**
-     * @param string $url
-     * @param array $post
-     */
-    public function __construct($url, array $post = array())
+    public function __construct($content, array $fields = array())
     {
-        $this->url = $url;
-        $this->post = $post;
+        parent::__construct($this->prepareContent($content, $fields));
     }
 
-    public function getContent()
+    /**
+     * @param $url
+     * @param array $fields
+     *
+     * @return string
+     */
+    protected function prepareContent($url, array $fields)
     {
-        $formFields = '';
-        foreach ($this->post as $name => $value) {
-            $formFields .= sprintf(
+        $formInputs = '';
+        foreach ($fields as $name => $value) {
+            $formInputs .= sprintf(
                 '<input type="hidden" name="%1$s" value="%2$s" />',
                 htmlspecialchars($name, ENT_QUOTES, 'UTF-8'),
                 htmlspecialchars($value, ENT_QUOTES, 'UTF-8')
@@ -50,6 +44,6 @@ class PostRedirectUrlInteractiveRequest extends BaseInteractiveRequest
 </html>
 HTML;
 
-       return sprintf($content, htmlspecialchars($this->url, ENT_QUOTES, 'UTF-8'), $formFields);
+       return sprintf($content, htmlspecialchars($url, ENT_QUOTES, 'UTF-8'), $formInputs);
     }
 }
