@@ -127,7 +127,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldMarkNewIfStatusCheckoutComplete()
+    public function shouldMarkPendingIfStatusCheckoutComplete()
     {
         $action = new StatusAction();
 
@@ -140,7 +140,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
 
         $action->execute($status);
 
-        $this->assertTrue($status->isNew());
+        $this->assertTrue($status->isPending());
     }
 
     /**

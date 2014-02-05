@@ -87,7 +87,36 @@ class GlobalStateSafeConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $expectedMethod = 'theMethod';
         $expectedResourceMock = $this->getMock('Klarna_Checkout_ResourceInterface');
-        $expectedOptions = array('foo', 'bar', 'baz');
+        $expectedOptions = array('foo', 'bar', 'baz', 'url' => 'foo');
+
+        $internalConnectorMock = $this->createConnectorMock();
+        $internalConnectorMock
+            ->expects($this->once())
+            ->method('apply')
+            ->with(
+                $expectedMethod,
+                $this->identicalTo($expectedResourceMock),
+                $expectedOptions
+            )
+        ;
+
+        $connector = new GlobalStateSafeConnector(
+            $internalConnectorMock,
+            'theOtherBaseUri',
+            'theOtherContentType'
+        );
+
+        $connector->apply($expectedMethod, $expectedResourceMock, $expectedOptions);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldProxyAllArgumentsAddingUriIfNotSetToInternalConnectorOnApply()
+    {
+        $expectedMethod = 'theMethod';
+        $expectedResourceMock = $this->getMock('Klarna_Checkout_ResourceInterface');
+        $expectedOptions = array('foo', 'bar', 'baz', 'url' => 'theOtherBaseUri');
 
         $internalConnectorMock = $this->createConnectorMock();
         $internalConnectorMock

@@ -1,15 +1,14 @@
 <?php
 namespace Payum\Klarna\Checkout\Action;
 
-use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\ResponseInteractiveRequest;
+use Payum\Core\Request\SyncRequest;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\CreateOrderRequest;
-use Payum\Klarna\Checkout\Request\Api\ShowSnippetInteractiveRequest;
-use Payum\Klarna\Checkout\Request\Api\UpdateOrderRequest;
 
 class CaptureAction extends PaymentAwareAction
 {
@@ -25,21 +24,21 @@ class CaptureAction extends PaymentAwareAction
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (Constants::STATUS_CREATED != $model['status']) {
-            if ($model['location']) {
-                $modifyOrderRequest = new UpdateOrderRequest($model);
-            } else {
-                $modifyOrderRequest = new CreateOrderRequest($model);
-            }
+        if (false == $model['location']) {
+            $createOrderRequest = new CreateOrderRequest($model);
+            $this->payment->execute($createOrderRequest);
 
-            $this->payment->execute($modifyOrderRequest);
+            $model->replace($createOrderRequest->getOrder()->marshal());
+            $model['location'] = $createOrderRequest->getOrder()->getLocation();
         }
+
+        $this->payment->execute(new SyncRequest($model));
 
         if (
             Constants::STATUS_CHECKOUT_INCOMPLETE == $model['status'] ||
             Constants::STATUS_CHECKOUT_COMPLETE == $model['status']
         ) {
-            throw new ShowSnippetInteractiveRequest($model['gui']['snippet']);
+            throw new ResponseInteractiveRequest($model['gui']['snippet']);
         }
     }
 

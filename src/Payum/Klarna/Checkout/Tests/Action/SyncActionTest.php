@@ -8,14 +8,14 @@ use Payum\Klarna\Checkout\Action\CaptureAction;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\CreateOrderRequest;
 
-class CaptureActionTest extends \PHPUnit_Framework_TestCase
+class SyncActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfPaymentAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\CaptureAction');
+        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\SyncAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
     }

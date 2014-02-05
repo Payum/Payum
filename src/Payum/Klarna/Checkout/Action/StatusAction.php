@@ -20,13 +20,14 @@ class StatusAction implements ActionInterface
         }
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-
-        if (
-            false == $model['status'] ||
-            Constants::STATUS_CHECKOUT_INCOMPLETE == $model['status'] ||
-            Constants::STATUS_CHECKOUT_COMPLETE == $model['status']
-        ) {
+        if (false == $model['status'] || Constants::STATUS_CHECKOUT_INCOMPLETE == $model['status']) {
             $request->markNew();
+
+            return;
+        }
+
+        if (Constants::STATUS_CHECKOUT_COMPLETE == $model['status']) {
+            $request->markPending();
 
             return;
         }
