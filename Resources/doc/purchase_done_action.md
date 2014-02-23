@@ -19,7 +19,9 @@ Pay attention to third parameter `acme_payment_done`.
 It is the route of url you will be redirected after capture done its job. Let's look at an example of how this action may look like:
 
 ```php
-    public function captureDoneAction(Request $request)
+    use Payum\Core\Request\BinaryMaskStatusRequest;
+
+    public function captureDoneAction()
     {
         $token = $this->get('payum.security.http_request_verifier')->verify($request);
 
@@ -30,17 +32,17 @@ It is the route of url you will be redirected after capture done its job. Let's 
 
         if ($status->isSuccess()) {
             $this->getUser()->addCredits(100);
-            $this->getRequest()->getSession()->getFlashBag()->set(
+            $this->get('session')->getFlashBag()->set(
                 'notice',
                 'Payment success. Credits were added'
             );
         } else if ($status->isPending()) {
-            $this->getRequest()->getSession()->getFlashBag()->set(
+            $this->get('session')->getFlashBag()->set(
                 'notice',
                 'Payment is still pending. Credits were not added'
             );
         } else {
-            $this->getRequest()->getSession()->getFlashBag()->set('error', 'Payment failed');
+            $this->get('session')->getFlashBag()->set('error', 'Payment failed');
         }
 
         return $this->redirect('homepage');
