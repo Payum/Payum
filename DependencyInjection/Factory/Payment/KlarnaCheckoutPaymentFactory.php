@@ -88,6 +88,11 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory
         $container->setDefinition($captureActionId, $captureActionDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($captureActionId)));
 
+        $syncActionDefinition = new DefinitionDecorator('payum.klarna.checkout.action.sync');
+        $syncActionId = 'payum.context.'.$contextName.'.action.sync';
+        $container->setDefinition($syncActionId, $syncActionDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($syncActionId)));
+
         $statusActionDefinition = new DefinitionDecorator('payum.klarna.checkout.action.status');
         $statusActionId = 'payum.context.'.$contextName.'.action.status';
         $container->setDefinition($statusActionId, $statusActionDefinition);
@@ -102,5 +107,10 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory
         $updateOrderActionId = 'payum.context.'.$contextName.'.action.api.update_order';
         $container->setDefinition($updateOrderActionId, $updateOrderActionDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($updateOrderActionId)));
+
+        $fetchOrderActionDefinition = new DefinitionDecorator('payum.klarna.checkout.action.api.fetch_order');
+        $fetchOrderActionId = 'payum.context.'.$contextName.'.action.api.fetch_order';
+        $container->setDefinition($fetchOrderActionId, $fetchOrderActionDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($fetchOrderActionId)));
     }
 }

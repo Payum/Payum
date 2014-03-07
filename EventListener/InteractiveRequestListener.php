@@ -1,12 +1,11 @@
 <?php
 namespace Payum\Bundle\PayumBundle\EventListener;
 
-use Payum\Bundle\PayumBundle\Request\ResponseInteractiveRequest;
+use Payum\Bundle\PayumBundle\Request\ResponseInteractiveRequest as SymfonyResponseInteractiveRequest;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Request\InteractiveRequestInterface;
-use Payum\Core\Request\PostRedirectUrlInteractiveRequest;
 use Payum\Core\Request\RedirectUrlInteractiveRequest;
-use Payum\Core\Request\RedirectPostInteractiveRequest;
+use Payum\Core\Request\ResponseInteractiveRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
@@ -24,9 +23,9 @@ class InteractiveRequestListener
 
         $interactiveRequest = $event->getException();
 
-        if ($interactiveRequest instanceof ResponseInteractiveRequest) {
+        if ($interactiveRequest instanceof SymfonyResponseInteractiveRequest) {
             $event->setResponse($interactiveRequest->getResponse());
-        } elseif ($interactiveRequest instanceof PostRedirectUrlInteractiveRequest) {
+        } elseif ($interactiveRequest instanceof ResponseInteractiveRequest) {
             $event->setResponse(new Response($interactiveRequest->getContent()));
         } elseif ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {
             $event->setResponse(new RedirectResponse($interactiveRequest->getUrl()));
