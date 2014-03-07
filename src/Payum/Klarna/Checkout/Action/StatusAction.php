@@ -27,7 +27,7 @@ class StatusAction implements ActionInterface
         }
 
         if (Constants::STATUS_CHECKOUT_COMPLETE == $model['status']) {
-            $request->markPending();
+            $request->markNew();
 
             return;
         }

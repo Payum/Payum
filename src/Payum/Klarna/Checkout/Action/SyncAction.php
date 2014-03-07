@@ -22,7 +22,7 @@ class SyncAction extends PaymentAwareAction
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if ($model['location'] && Constants::STATUS_CREATED != $model['status']) {
+        if ($model['location']) {
             $fetchOrderRequest = new FetchOrderRequest($model);
             $this->payment->execute($fetchOrderRequest);
 

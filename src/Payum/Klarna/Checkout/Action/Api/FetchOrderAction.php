@@ -27,13 +27,6 @@ class FetchOrderAction extends BaseApiAwareAction
             throw new LogicException('Location has to be provided to fetch an order');
         }
 
-        // it seems that fetch method never returns created status,
-        // so we must not call it when status was already changed to created
-        // otherwise we loose it.
-        if ($model['status'] == Constants::STATUS_CREATED) {
-            return;
-        }
-
         $order = new \Klarna_Checkout_Order($this->api, $model['location']);
         $order->fetch();
 

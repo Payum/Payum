@@ -9,6 +9,7 @@ use Payum\Core\Request\ResponseInteractiveRequest;
 use Payum\Core\Request\SyncRequest;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\CreateOrderRequest;
+use Payum\Klarna\Checkout\Request\Api\UpdateOrderRequest;
 
 class CaptureAction extends PaymentAwareAction
 {
@@ -34,12 +35,11 @@ class CaptureAction extends PaymentAwareAction
 
         $this->payment->execute(new SyncRequest($model));
 
-        if (
-            Constants::STATUS_CHECKOUT_INCOMPLETE == $model['status'] ||
-            Constants::STATUS_CHECKOUT_COMPLETE == $model['status']
-        ) {
+        if (Constants::STATUS_CHECKOUT_INCOMPLETE == $model['status']) {
             throw new ResponseInteractiveRequest($model['gui']['snippet']);
         }
+
+
     }
 
     /**

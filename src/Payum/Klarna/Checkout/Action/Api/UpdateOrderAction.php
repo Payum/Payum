@@ -21,11 +21,12 @@ class UpdateOrderAction extends BaseApiAwareAction
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         $order = new \Klarna_Checkout_Order($this->api, $model['location']);
-        $order->fetch();
 
-        if (isset($model['cart']['items'])) {
-            $order->update($model['cart']['items']);
-        }
+        $data = $model->toUnsafeArray();
+        unset($data['location']);
+
+        $order->update($data);
+        $order->fetch();
 
         $request->setOrder($order);
     }
