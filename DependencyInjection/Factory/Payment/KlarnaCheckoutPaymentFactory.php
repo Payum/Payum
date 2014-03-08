@@ -88,6 +88,11 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory
         $container->setDefinition($captureActionId, $captureActionDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($captureActionId)));
 
+        $notifyActionDefinition = new DefinitionDecorator('payum.klarna.checkout.action.notify');
+        $notifyActionId = 'payum.context.'.$contextName.'.action.notify';
+        $container->setDefinition($notifyActionId, $notifyActionDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($notifyActionId)));
+
         $syncActionDefinition = new DefinitionDecorator('payum.klarna.checkout.action.sync');
         $syncActionId = 'payum.context.'.$contextName.'.action.sync';
         $container->setDefinition($syncActionId, $syncActionDefinition);

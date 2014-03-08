@@ -7,6 +7,7 @@
     <parameters>
         <parameter key="payum.klarna.checkout.connector.class">Payum\Klarna\Checkout\GlobalStateSafeConnector</parameter>
         <parameter key="payum.klarna.checkout.action.capture.class">Payum\Klarna\Checkout\Action\CaptureAction</parameter>
+        <parameter key="payum.klarna.checkout.action.notify.class">Payum\Klarna\Checkout\Action\NotifyAction</parameter>
         <parameter key="payum.klarna.checkout.action.sync.class">Payum\Klarna\Checkout\Action\SyncAction</parameter>
         <parameter key="payum.klarna.checkout.action.status.class">Payum\Klarna\Checkout\Action\StatusAction</parameter>
         <parameter key="payum.klarna.checkout.action.api.create_order.class">Payum\Klarna\Checkout\Action\Api\CreateOrderAction</parameter>
@@ -18,6 +19,13 @@
         <service
             id="payum.klarna.checkout.action.capture"
             class="%payum.klarna.checkout.action.capture.class%"
+            public="false"
+        >
+        </service>
+
+        <service
+            id="payum.klarna.checkout.action.notify"
+            class="%payum.klarna.checkout.action.notify.class%"
             public="false"
         >
         </service>
