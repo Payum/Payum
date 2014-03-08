@@ -38,8 +38,6 @@ class CaptureAction extends PaymentAwareAction
         if (Constants::STATUS_CHECKOUT_INCOMPLETE == $model['status']) {
             throw new ResponseInteractiveRequest($model['gui']['snippet']);
         }
-
-
     }
 
     /**

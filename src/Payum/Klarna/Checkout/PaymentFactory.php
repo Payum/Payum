@@ -5,6 +5,7 @@ use Payum\Core\Payment;
 use Payum\Klarna\Checkout\Action\Api\CreateOrderAction;
 use Payum\Klarna\Checkout\Action\Api\UpdateOrderAction;
 use Payum\Klarna\Checkout\Action\CaptureAction;
+use Payum\Klarna\Checkout\Action\NotifyAction;
 use Payum\Klarna\Checkout\Action\StatusAction;
 
 abstract class PaymentFactory
@@ -21,6 +22,7 @@ abstract class PaymentFactory
         $payment->addApi($connector);
 
         $payment->addAction(new CaptureAction);
+        $payment->addAction(new NotifyAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new CreateOrderAction);
         $payment->addAction(new UpdateOrderAction);
