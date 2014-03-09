@@ -23,7 +23,7 @@ We need to add payment factory and payment details storage.
 ```php
 <?php
 
-use Payum\Klarn\Checkout\GlobalStateSafeConnector as KlarnaConnector;
+use Payum\Klarn\Checkout\GlobalStateSafeConnector;
 use Payum\Klarn\Checkout\PaymentFactory as KlarnaPaymentFactory;
 
 //config.php
@@ -37,8 +37,9 @@ $storages = array(
 );
 
 $payments = array(
-    'klarna_checkout' => KlarnaPaymentFactory::create(new KlarnaConnector(
+    'klarna_checkout' => KlarnaPaymentFactory::create(new GlobalStateSafeConnector(
         new Klarna_Checkout_Connector('REPLACE_WITH_YOUR_SECRET'),
+        'REPLACE_WITH_YOUR_MERCHANT_ID',
         Payum\Klarna\Checkout::Constants::BASE_URI_SANDBOX
     )),
 );
@@ -85,7 +86,6 @@ $notifyToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/notify.php?payum_to
 $notifyStorage->updateModel($notifyToken);
 
 $details['merchant'] = array(
-    'id' => 'REPLACE WITH YOUR MERCHANT_ID',
     'terms_uri' => 'http://example.com/terms',
     'checkout_uri' => $captureToken->getTargetUrl(),
     'confirmation_uri' => $captureToken->getTargetUrl(),

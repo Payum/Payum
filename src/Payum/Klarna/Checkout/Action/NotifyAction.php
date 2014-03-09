@@ -26,13 +26,11 @@ class NotifyAction extends PaymentAwareAction
         $this->payment->execute(new SyncRequest($model));
 
         if (Constants::STATUS_CHECKOUT_COMPLETE == $model['status']) {
-            $model->validatedNotEmpty(array('order_id'));
-
             $this->payment->execute(new UpdateOrderRequest(array(
                 'location' => $model['location'],
                 'status' => Constants::STATUS_CREATED,
                 'merchant_reference' => array(
-                    'orderid1' => $model['order_id'] ?: uniqid()
+                    'orderid1' => $model['order_id'] ?: uniqid().'-'.time()
                 ),
             )));
 
