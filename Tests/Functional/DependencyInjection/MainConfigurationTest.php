@@ -3,6 +3,7 @@ namespace Payum\Bundle\PayumBundle\Tests\Functional\DependencyInjection;
 
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AuthorizeNetAimPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaCheckoutPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory;
 use Symfony\Component\Config\Definition\Processor;
@@ -29,7 +30,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             new PaypalProCheckoutNvpPaymentFactory,
             new AuthorizeNetAimPaymentFactory,
             new Be2BillPaymentFactory,
-            new OmnipayPaymentFactory
+            new OmnipayPaymentFactory,
+            new KlarnaCheckoutPaymentFactory,
         );
         
         $this->storageFactories = array(
@@ -43,10 +45,6 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldPassConfigurationProcessingWithPaypalExpressCheckoutNvpPaymentFactory()
     {
-        if (false == class_exists('Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory')) {
-            $this->markTestSkipped('Skipped because payment library is not installed.');
-        }
-        
         $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
 
         $processor = new Processor();
@@ -84,12 +82,46 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldPassConfigurationProcessingWithKlarnaCheckoutPaymentFactory()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Core\Model\Token' => array(
+                            'filesystem' => array(
+                                'storage_dir' => sys_get_temp_dir(),
+                                'id_property' => 'hash'
+                            )
+                        )
+                    )
+                ),
+                'contexts' => array(
+                    'a_context' => array(
+                        'klarna_checkout' => array(
+                            'api' => array(
+                                'options' => array(
+                                    'secret' => 'aSecret',
+                                    'merchant_id' => 'anId',
+                                    'sandbox' => true
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     */
     public function shouldPassConfigurationProcessingWithDoctrineStorageFactory()
     {
-        if (false == class_exists('Doctrine\ORM\Configuration')) {
-            $this->markTestSkipped('Skipped because payment library is not installed.');
-        }
-
         $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
 
         $processor = new Processor();
