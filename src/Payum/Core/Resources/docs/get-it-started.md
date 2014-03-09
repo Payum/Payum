@@ -88,7 +88,6 @@ $payments = array(
 )));
 
 $registry = new SimpleRegistry($payments, $storages, null, null);
-$registry->registerStorageExtensions();
 ```
 
 An initial configuration for payum basically wants to ensure we have things ready to be stored such as
