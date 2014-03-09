@@ -33,6 +33,7 @@ class GlobalStateSafeConnectorTest extends \PHPUnit_Framework_TestCase
 
         $connector = new GlobalStateSafeConnector(
             $this->createConnectorMock(),
+            'aMerchantId',
             'theOtherBaseUri',
             'theOtherContentType'
         );
@@ -62,6 +63,7 @@ class GlobalStateSafeConnectorTest extends \PHPUnit_Framework_TestCase
 
         $connector = new GlobalStateSafeConnector(
             $internalConnectorMock,
+            'aMerchantId',
             'theOtherBaseUri',
             'theOtherContentType'
         );
@@ -102,6 +104,7 @@ class GlobalStateSafeConnectorTest extends \PHPUnit_Framework_TestCase
 
         $connector = new GlobalStateSafeConnector(
             $internalConnectorMock,
+            null,
             'theOtherBaseUri',
             'theOtherContentType'
         );
@@ -131,6 +134,81 @@ class GlobalStateSafeConnectorTest extends \PHPUnit_Framework_TestCase
 
         $connector = new GlobalStateSafeConnector(
             $internalConnectorMock,
+            null,
+            'theOtherBaseUri',
+            'theOtherContentType'
+        );
+
+        $connector->apply($expectedMethod, $expectedResourceMock, $expectedOptions);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSetMerchantIdIfSetInConstructorAndNotPassWithDataOnApply()
+    {
+        $expectedMethod = 'theMethod';
+        $expectedResourceMock = $this->getMock('Klarna_Checkout_ResourceInterface');
+        $expectedOptions = array(
+            'url' => 'theOtherBaseUri',
+            'data' => array(
+                'merchant' => array(
+                    'id' => 'theMerchantId'
+                )
+            )
+        );
+
+        $internalConnectorMock = $this->createConnectorMock();
+        $internalConnectorMock
+            ->expects($this->once())
+            ->method('apply')
+            ->with(
+                $expectedMethod,
+                $this->identicalTo($expectedResourceMock),
+                $expectedOptions
+            )
+        ;
+
+        $connector = new GlobalStateSafeConnector(
+            $internalConnectorMock,
+            'theMerchantId',
+            'theOtherBaseUri',
+            'theOtherContentType'
+        );
+
+        $connector->apply($expectedMethod, $expectedResourceMock, $expectedOptions);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotSetMerchantIdIfPassedWithDataOnApply()
+    {
+        $expectedMethod = 'theMethod';
+        $expectedResourceMock = $this->getMock('Klarna_Checkout_ResourceInterface');
+        $expectedOptions = array(
+            'url' => 'theOtherBaseUri',
+            'data' => array(
+                'merchant' => array(
+                    'id' => 'theRuntimeMerchantId'
+                )
+            )
+        );
+
+        $internalConnectorMock = $this->createConnectorMock();
+        $internalConnectorMock
+            ->expects($this->once())
+            ->method('apply')
+            ->with(
+                $expectedMethod,
+                $this->identicalTo($expectedResourceMock),
+                $expectedOptions
+            )
+        ;
+
+        $connector = new GlobalStateSafeConnector(
+            $internalConnectorMock,
+            'theMerchantId',
             'theOtherBaseUri',
             'theOtherContentType'
         );
