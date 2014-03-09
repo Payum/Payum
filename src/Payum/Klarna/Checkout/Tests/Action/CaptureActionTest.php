@@ -166,29 +166,6 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldThrowInteractiveRequestWhenStatusCheckoutComplete()
-    {
-        $action = new CaptureAction;
-        $action->setPayment($this->createPaymentMock());
-
-        try {
-            $action->execute(new CaptureRequest(array(
-                'location' => 'aLocation',
-                'status' => Constants::STATUS_CHECKOUT_COMPLETE,
-                'gui' => array('snippet' => 'theSnippet'),
-            )));
-        } catch (ResponseInteractiveRequest $interactiveRequest) {
-            $this->assertEquals('theSnippet', $interactiveRequest->getContent());
-
-            return;
-        }
-
-        $this->fail('Exception expected to be throw');
-    }
-
-    /**
-     * @test
-     */
     public function shouldNotThrowInteractiveRequestWhenStatusNotSet()
     {
         $action = new CaptureAction;

@@ -107,32 +107,6 @@ class FetchOrderActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotFetchOrderStatusCreatedOnExecute()
-    {
-        $model = array(
-            'location' => 'theKlarnaOrderLocation',
-            'status' => Constants::STATUS_CREATED,
-        );
-
-        $request = new FetchOrderRequest($model);
-
-        $connector = $this->createConnectorMock();
-        $connector
-            ->expects($this->never())
-            ->method('apply')
-        ;
-
-        $action = new FetchOrderAction();
-        $action->setApi($connector);
-
-        $action->execute($request);
-
-        $this->assertNull($request->getOrder());
-    }
-
-    /**
-     * @test
-     */
     public function shouldReturnSameOrderUsedWhileFetchAndUpdateCallsOnExecute()
     {
         $model = array(

@@ -59,43 +59,10 @@ class UpdateOrderActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldFetchOrderOnExecute()
-    {
-        $model = array(
-            'location' => 'theKlarnaOrderLocation'
-        );
-
-        $request = new UpdateOrderRequest($model);
-
-        $connector = $this->createConnectorMock();
-
-        $testCase = $this;
-
-        $connector
-            ->expects($this->at(0))
-            ->method('apply')
-            ->with('GET')
-            ->will($this->returnCallback(function($method, $order, $options) use ($testCase, $model) {
-                $testCase->assertInternalType('array', $options);
-                $testCase->assertArrayHasKey('url', $options);
-                $testCase->assertEquals($model['location'], $options['url']);
-            }))
-        ;
-
-        $action = new UpdateOrderAction();
-        $action->setApi($connector);
-
-        $action->execute($request);
-
-        $this->assertInstanceOf('Klarna_Checkout_Order', $request->getOrder());
-    }
-
-    /**
-     * @test
-     */
     public function shouldUpdateOrderIfModelHasCartItemsSetOnExecute()
     {
         $model = array(
+            'location' => 'theLocation',
             'cart' => array(
                 'items' => array(
                     array('foo'),
@@ -112,16 +79,21 @@ class UpdateOrderActionTest extends \PHPUnit_Framework_TestCase
         $connector
             ->expects($this->at(0))
             ->method('apply')
-            ->with('GET')
-        ;
-        $connector
-            ->expects($this->at(1))
-            ->method('apply')
             ->with('POST')
             ->will($this->returnCallback(function($method, $order, $options) use ($testCase, $model) {
                 $testCase->assertInternalType('array', $options);
                 $testCase->assertArrayHasKey('data', $options);
-                $testCase->assertEquals($model['cart']['items'], $options['data']);
+                $testCase->assertEquals(array('cart' => $model['cart']), $options['data']);
+            }))
+        ;
+        $connector
+            ->expects($this->at(1))
+            ->method('apply')
+            ->with('GET')
+            ->will($this->returnCallback(function($method, $order, $options) use ($testCase, $model) {
+                $testCase->assertInternalType('array', $options);
+                $testCase->assertArrayHasKey('url', $options);
+                $testCase->assertEquals($model['location'], $options['url']);
             }))
         ;
 
@@ -155,7 +127,7 @@ class UpdateOrderActionTest extends \PHPUnit_Framework_TestCase
 
         $connector = $this->createConnectorMock();
         $connector
-            ->expects($this->at(0))
+            ->expects($this->at(1))
             ->method('apply')
             ->with('GET')
             ->will($this->returnCallback(function($method, $order, $options) use ($testCase, &$expectedOrder) {
