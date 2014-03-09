@@ -47,6 +47,7 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory
             ->arrayNode('api')->isRequired()->children()
                 ->arrayNode('options')->isRequired()->children()
                     ->scalarNode('secret')->isRequired()->cannotBeEmpty()->end()
+                    ->scalarNode('merchant_id')->isRequired()->cannotBeEmpty()->end()
                     ->booleanNode('sandbox')->defaultTrue()->end()
                 ->end()
             ->end()
@@ -67,6 +68,7 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory
 
         $connectorDefinition = new Definition('%payum.klarna.checkout.connector.class%');
         $connectorDefinition->addArgument(new Reference($internalConnectorId));
+        $connectorDefinition->addArgument($config['api']['options']['merchant_id']);
         $connectorDefinition->addArgument($config['api']['options']['sandbox'] ?
             Constants::BASE_URI_SANDBOX :
             Constants::BASE_URI_LIVE
