@@ -28,6 +28,7 @@ payum:
                 api:
                     options:
                         secret:  'get this from gateway side'
+                        merchant_id: 'REPLACE WITH YOUR MERCHANT_ID'
                         sandbox: true
             storages:
                 Acme\PaymentBundle\Entity\PaymentDetails:
@@ -74,7 +75,6 @@ class PaymentController extends Controller
         );
 
         $details['merchant'] = array(
-            'id' => 'REPLACE WITH YOUR MERCHANT_ID',
             'terms_uri' => 'http://example.com/terms',
             'checkout_uri' => 'http://example.com/fuck',
             'confirmation_uri' => $captureToken->getTargetUrl(),
