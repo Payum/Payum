@@ -38,7 +38,7 @@
         "twig/twig": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "*",
+        "phpunit/phpunit": "~3.7",
         "doctrine/orm": "*",
         "payum/payum": "0.8.*@dev", 
         "symfony/browser-kit": "~2.0",
