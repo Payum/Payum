@@ -60,20 +60,7 @@ $paymentDetails->intent = "sale";
 $paymentDetails->payer = $payer;
 $paymentDetails->transactions = array($transaction);
 
-$doneToken = $tokenStorage->createModel();
-$doneToken->setPaymentName('paypalRest');
-$doneToken->setDetails($storage->getIdentificator($paymentDetails));
-$doneToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/done.php?payum_token='.$doneToken->getHash());
-$tokenStorage->updateModel($doneToken);
-
-$captureToken = $tokenStorage->createModel();
-$captureToken->setPaymentName('paypalRest');
-$captureToken->setDetails($storage->getIdentificator($paymentDetails));
-$captureToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/capture.php?payum_token='.$captureToken->getHash());
-$captureToken->setAfterUrl($doneToken->getTargetUrl());
-$tokenStorage->updateModel($captureToken);
-
-$storage->updateModel($paymentDetails);
+$captureToken = $tokenFactory->createCaptureToken('paypalRest', $paymentDetails, 'create_recurring_payment.php');
 
 header("Location: ".$captureToken->getTargetUrl());
 ```

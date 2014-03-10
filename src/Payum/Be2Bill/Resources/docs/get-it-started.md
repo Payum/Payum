@@ -72,18 +72,7 @@ $paymentDetails['CARDFULLNAME'] = new SensitiveValue('John Doe');
 $paymentDetails['CARDVALIDITYDATE'] = new SensitiveValue('10-16');
 $storage->updateModel($paymentDetails);
 
-$doneToken = $tokenStorage->createModel();
-$doneToken->setPaymentName('be2bill');
-$doneToken->setDetails($storage->getIdentificator($paymentDetails));
-$doneToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/done.php?payum_token='.$doneToken->getHash());
-$tokenStorage->updateModel($doneToken);
-
-$captureToken = $tokenStorage->createModel();
-$captureToken->setPaymentName('be2bill');
-$captureToken->setDetails($storage->getIdentificator($paymentDetails));
-$captureToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/capture.php?payum_token='.$captureToken->getHash());
-$captureToken->setAfterUrl($doneToken->getTargetUrl());
-$tokenStorage->updateModel($captureToken);
+$captureToken = $tokenFactory->createCaptureToken('be2bill', $paymentDetails, 'done.php');
 
 $_REQUEST['payum_token'] = $captureToken;
 

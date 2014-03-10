@@ -78,18 +78,7 @@ $paymentDetails['billtozip'] = '95101';
 $paymentDetails['billtocountry'] = 'US';
 $storage->updateModel($paymentDetails);
 
-$doneToken = $tokenStorage->createModel();
-$doneToken->setPaymentName('paypal-pro');
-$doneToken->setDetails($storage->getIdentificator($paymentDetails));
-$doneToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/done.php?payum_token='.$doneToken->getHash());
-$tokenStorage->updateModel($doneToken);
-
-$captureToken = $tokenStorage->createModel();
-$captureToken->setPaymentName('paypal-pro');
-$captureToken->setDetails($storage->getIdentificator($paymentDetails));
-$captureToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/capture.php?payum_token='.$captureToken->getHash());
-$captureToken->setAfterUrl($doneToken->getTargetUrl());
-$tokenStorage->updateModel($captureToken);
+$captureToken = $tokenFactory->createCaptureToken('paypal-pro', $paymentDetails, 'create_recurring_payment.php');
 
 $_REQUEST['payum_token'] = $captureToken;
 

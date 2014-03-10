@@ -66,6 +66,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Security\PlainHttpRequestVerifier;
+use Payum\Core\Security\GenericTokenFactory;
 
 $tokenStorage = new FilesystemStorage('/path/to/storage', 'App\Model\PaymentSecurityToken');
 $requestVerifier = new PlainHttpRequestVerifier($tokenStorage);
@@ -88,6 +89,14 @@ $payments = array(
 )));
 
 $registry = new SimpleRegistry($payments, $storages, null, null);
+
+$tokenFactory = new GenericTokenFactory(
+    $tokenStorage,
+    $registry,
+    'http://'.$_SERVER['HTTP_HOST'],
+    'capture.php',
+    'notify.php'
+);
 ```
 
 An initial configuration for payum basically wants to ensure we have things ready to be stored such as
@@ -114,19 +123,7 @@ $paymentDetails['PAYMENTREQUEST_0_CURRENCYCODE'] = 'EUR';
 $paymentDetails['PAYMENTREQUEST_0_AMT'] = 1.23;
 $storage->updateModel($paymentDetails);
 
-$doneToken = $tokenStorage->createModel();
-$doneToken->setPaymentName('paypal');
-$doneToken->setDetails($storage->getIdentificator($paymentDetails));
-$doneToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/done.php?payum_token='.$doneToken->getHash());
-$tokenStorage->updateModel($doneToken);
-
-$captureToken = $tokenStorage->createModel();
-$captureToken->setPaymentName('paypal');
-$captureToken->setDetails($storage->getIdentificator($paymentDetails));
-$captureToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/capture.php?payum_token='.$captureToken->getHash());
-$captureToken->setAfterUrl($doneToken->getTargetUrl());
-$tokenStorage->updateModel($captureToken);
-
+$captureToken = $tokenFactory->createCaptureToken('paypal', $paymentDetails, 'done.php');
 $paymentDetails['RETURNURL'] = $captureToken->getTargetUrl();
 $paymentDetails['CANCELURL'] = $captureToken->getTargetUrl();
 $storage->updateModel($paymentDetails);
