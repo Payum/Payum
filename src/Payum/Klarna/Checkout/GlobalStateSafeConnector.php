@@ -51,7 +51,11 @@ class GlobalStateSafeConnector implements \Klarna_Checkout_ConnectorInterface
         $options['url'] = isset($options['url']) ? $options['url'] : $this->baseUri;
         \Klarna_Checkout_Order::$contentType = $this->contentType;
 
-        if (false == isset($options['data']['merchant']['id']) && $this->merchantId) {
+        if (
+            $this->baseUri == $options['url'] && // set merchant id only when we create an order.
+            false == isset($options['data']['merchant']['id']) &&
+            $this->merchantId
+        ) {
             $options['data']['merchant']['id'] = (string) $this->merchantId;
         }
 
