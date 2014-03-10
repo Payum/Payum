@@ -77,22 +77,7 @@ $agreementDetails['L_BILLINGAGREEMENTDESCRIPTION0'] = $subscription['description
 $agreementDetails['NOSHIPPING'] = 1;
 $storage->updateModel($agreementDetails);
 
-$createRecurringPaymentToken = $tokenStorage->createModel();
-$createRecurringPaymentToken->setPaymentName('paypal');
-$createRecurringPaymentToken->setDetails($storage->getIdentificator($agreementDetails));
-$createRecurringPaymentToken->setTargetUrl(
-    'http://'.$_SERVER['HTTP_HOST'].'/create_recurring_payment.php?payum_token='.$doneToken->getHash()
-);
-$tokenStorage->updateModel($createRecurringPaymentToken);
-
-$captureToken = $tokenStorage->createModel();
-$captureToken->setPaymentName('paypal');
-$captureToken->setDetails($storage->getIdentificator($agreementDetails));
-$captureToken->setTargetUrl(
-    'http://'.$_SERVER['HTTP_HOST'].'/capture.php?payum_token='.$captureToken->getHash()
-);
-$captureToken->setAfterUrl($createRecurringPaymentToken->getTargetUrl());
-$tokenStorage->updateModel($captureToken);
+$captureToken = $tokenFactory->createCaptureToken('paypal', $paymentDetails, 'create_recurring_payment.php');
 
 $agreementDetails['RETURNURL'] = $captureToken->getTargetUrl();
 $agreementDetails['CANCELURL'] = $captureToken->getTargetUrl();
@@ -156,15 +141,7 @@ $recurringPaymentDetails['BILLINGPERIOD'] = Api::BILLINGPERIOD_DAY;
 $payment->execute(new CreateRecurringPaymentProfileRequest($recurringPaymentDetails));
 $payment->execute(new SyncRequest($recurringPaymentDetails));
 
-$doneToken = $tokenStorage->createModel();
-$doneToken->setPaymentName('paypal');
-$doneToken->setDetails(
-    $recurringPaymentStorage->getIdentificator($recurringPaymentDetails)
-);
-$doneToken->setTargetUrl(
-    'http://'.$_SERVER['HTTP_HOST'].'/done.php?payum_token='.$doneToken->getHash()
-);
-$tokenStorage->updateModel($doneToken);
+$doneToken = $tokenFactory->createToken('paypal', $recurringPaymentDetails, 'done.php');
 
 header("Location: ".$doneToken->getTargetUrl());
 ```
