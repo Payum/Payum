@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Security;
+namespace Payum\Core\Security;
 
 interface TokenFactoryInterface
 {
@@ -14,4 +14,4 @@ interface TokenFactoryInterface
      * @return TokenInterface
      */
     function createToken($paymentName, $model, $targetPath, array $targetParameters = array(), $afterPath = null, array $afterParameters = array());
-} 
+}
