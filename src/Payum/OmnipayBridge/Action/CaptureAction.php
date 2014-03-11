@@ -2,12 +2,9 @@
 
 namespace Payum\OmnipayBridge\Action;
 
-use Omnipay\Common\Message\RedirectResponseInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\CaptureRequest;
-use Payum\Core\Request\InteractiveRequestInterface;
 use Payum\Core\Request\RedirectUrlInteractiveRequest;
 
 class CaptureAction extends BaseApiAwareAction
