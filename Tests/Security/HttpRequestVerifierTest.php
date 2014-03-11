@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Bundle\PayumBundle\Security;
+namespace Payum\Bundle\PayumBundle\Tests\Security;
 
 use Payum\Core\Model\Token;
 use Payum\Core\Storage\StorageInterface;

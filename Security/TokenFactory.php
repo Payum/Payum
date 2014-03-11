@@ -1,12 +1,13 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Security;
 
-use Payum\Core\Registry\RegistryInterface;
+use Payum\Core\Registry\StorageRegistryInterface;
+use Payum\Core\Security\AbstractGenericTokenFactory;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-class TokenFactory
+class TokenFactory extends AbstractGenericTokenFactory
 {
     /**
      * @var \Symfony\Component\Routing\RouterInterface
@@ -14,88 +15,27 @@ class TokenFactory
     protected $router;
 
     /**
-     * @var \Payum\Core\Storage\StorageInterface
-     */
-    protected $tokenStorage;
-
-    /**
-     * @var \Payum\Core\Registry\RegistryInterface
-     */
-    protected $payum;
-
-    /**
      * @param RouterInterface $router
-     * @param \Payum\Core\Storage\StorageInterface $tokenStorage
-     * @param \Payum\Core\Registry\RegistryInterface $payum
+     * @param StorageInterface $tokenStorage
+     * @param StorageRegistryInterface $storageRegistry
+     * @param string $capturePath
+     * @param string $notifyPath
      */
-    public function __construct(RouterInterface $router, StorageInterface $tokenStorage, RegistryInterface $payum)
+    public function __construct(RouterInterface $router, StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $capturePath, $notifyPath)
     {
         $this->router = $router;
-        $this->tokenStorage = $tokenStorage;
-        $this->payum = $payum;
+
+        parent::__construct($tokenStorage, $storageRegistry, $capturePath, $notifyPath);
     }
 
     /**
-     * @param string $paymentName
-     * @param object $model
-     * @param string $afterRoute
-     * @param array $afterRouteParameters
-     * 
-     * @return TokenInterface
-     */
-    public function createCaptureToken($paymentName, $model, $afterRoute, array $afterRouteParameters = array())
-    {
-        $afterToken = $this->createTokenForRoute($paymentName, $model, $afterRoute, $afterRouteParameters);
-        
-        $captureToken = $this->createTokenForRoute( $paymentName, $model, 'payum_capture_do');
-        $captureToken->setAfterUrl($afterToken->getTargetUrl());
-        
-        $this->tokenStorage->updateModel($captureToken);
-        
-        return $captureToken;
-    }
-
-    /**
-     * @param string $paymentName
-     * @param object $model
+     * @param string $path
+     * @param array $parameters
      *
-     * @return TokenInterface
+     * @return string
      */
-    public function createNotifyToken($paymentName, $model)
+    protected function generateUrl($path, array $parameters = array())
     {
-        return $this->createTokenForRoute($paymentName, $model, 'payum_notify_do');
-    }
-
-    /**
-     * @param string $paymentName
-     * @param object $model
-     * @param string $targetRoute
-     * @param array $targetRouteParameters
-     * @param string $afterRoute
-     * @param array $afterRouteParameters
-     * 
-     * @return TokenInterface
-     */
-    public function createTokenForRoute($paymentName, $model, $targetRoute, array $targetRouteParameters = array(), $afterRoute = null, array $afterRouteParameters = array())
-    {
-        $modelStorage = $this->payum->getStorageForClass($model, $paymentName);
-
-        /** @var TokenInterface $token */
-        $token = $this->tokenStorage->createModel();
-        $token->setDetails($modelStorage->getIdentificator($model));
-        $token->setPaymentName($paymentName);
-        $token->setTargetUrl($this->router->generate($targetRoute, array_replace($targetRouteParameters, array(
-            'payum_token' => $token->getHash()
-        )), $absolute = true));
-
-        if ($afterRoute) {
-            $token->setAfterUrl(
-                $this->router->generate($afterRoute, $afterRouteParameters, $absolute = true)
-            );
-        }
-
-        $this->tokenStorage->updateModel($token);
-
-        return $token;
+        return $this->router->generate($path, $parameters, $absolute = true);
     }
 }
