@@ -103,6 +103,8 @@
             <argument type="service" id="router"></argument>
             <argument type="service" id="payum.security.token_storage"></argument>
             <argument type="service" id="payum"></argument>
+            <argument>payum_capture_do</argument>
+            <argument>payum_notify_do</argument>
         </service>
     </services>
 </container>
