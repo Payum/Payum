@@ -94,14 +94,12 @@ Now I want to show changes need to enable Paypal IPN. To do so we have to modify
 
 ```php
 <?php
+// prepare.php
 
-$notifyToken = $tokenStorage->createModel();
-$notifyToken->setPaymentName('paypal');
-$notifyToken->setDetails($storage->getIdentificator($paymentDetails));
-$notifyToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/notify.php?payum_token='.$doneToken->getHash());
-$tokenStorage->updateModel($notifyToken);
+$notifyToken = $tokenFactory->createNotifyToken('paypal', $paymentDetails);
 
 $paymentDetails['NOTIFYURL'] = $notifyToken->getTargetUrl();
+
 $storage->updateModel($paymentDetails);
 ```
 

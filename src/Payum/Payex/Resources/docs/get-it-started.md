@@ -79,18 +79,7 @@ $paymentDetails['priceArgList'] = '',
 $paymentDetails['agreementRef'] = '',
 $storage->updateModel($paymentDetails);
 
-$doneToken = $tokenStorage->createModel();
-$doneToken->setPaymentName('payex');
-$doneToken->setDetails($storage->getIdentificator($paymentDetails));
-$doneToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/done.php?payum_token='.$doneToken->getHash());
-$tokenStorage->updateModel($doneToken);
-
-$captureToken = $tokenStorage->createModel();
-$captureToken->setPaymentName('payex');
-$captureToken->setDetails($storage->getIdentificator($paymentDetails));
-$captureToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/capture.php?payum_token='.$captureToken->getHash());
-$captureToken->setAfterUrl($doneToken->getTargetUrl());
-$tokenStorage->updateModel($captureToken);
+$captureToken = $tokenFactory->createCaptureToken('payex', $paymentDetails, 'done.php');
 
 header("Location: ".$captureToken->getTargetUrl());
 ```

@@ -99,18 +99,7 @@ $order->price = 1;
 $order->currency = 'USD';
 $storage->updateModel($order);
 
-$doneToken = $tokenStorage->createModel();
-$doneToken->setPaymentName('foo');
-$doneToken->setDetails($storage->getIdentificator($order));
-$doneToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/done.php?payum_token='.$doneToken->getHash());
-$tokenStorage->updateModel($doneToken);
-
-$captureToken = $tokenStorage->createModel();
-$captureToken->setPaymentName('foo');
-$captureToken->setDetails($storage->getIdentificator($order));
-$captureToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/capture.php?payum_token='.$captureToken->getHash());
-$captureToken->setAfterUrl($doneToken->getTargetUrl());
-$tokenStorage->updateModel($captureToken);
+$captureToken = $tokenFactory->createCaptureToken('foo', $order, 'done.php');
 
 header("Location: ".$captureToken->getTargetUrl());
 ```

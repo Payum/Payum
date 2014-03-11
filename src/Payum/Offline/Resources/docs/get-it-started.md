@@ -62,18 +62,7 @@ $paymentDetails = $storage->createModel();
 $paymentDetails[Constants::FIELD_PAID] = true;
 $storage->updateModel($paymentDetails);
 
-$doneToken = $tokenStorage->createModel();
-$doneToken->setPaymentName('offline');
-$doneToken->setDetails($storage->getIdentificator($paymentDetails));
-$doneToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/done.php?payum_token='.$doneToken->getHash());
-$tokenStorage->updateModel($doneToken);
-
-$captureToken = $tokenStorage->createModel();
-$captureToken->setPaymentName('offline');
-$captureToken->setDetails($storage->getIdentificator($paymentDetails));
-$captureToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/capture.php?payum_token='.$captureToken->getHash());
-$captureToken->setAfterUrl($doneToken->getTargetUrl());
-$tokenStorage->updateModel($captureToken);
+$captureToken = $tokenFactory->createCaptureToken('offline', $paymentDetails, 'done.php');
 
 header("Location: ".$captureToken->getTargetUrl());
 ```
