@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle;
 
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaCheckoutPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OfflinePaymentFactory;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -32,6 +33,7 @@ class PayumBundle extends Bundle
         $extension->addPaymentFactory(new OmnipayPaymentFactory);
         $extension->addPaymentFactory(new CustomPaymentFactory);
         $extension->addPaymentFactory(new OfflinePaymentFactory);
+        $extension->addPaymentFactory(new KlarnaCheckoutPaymentFactory);
 
         $extension->addStorageFactory(new FilesystemStorageFactory);
         $extension->addStorageFactory(new DoctrineStorageFactory);

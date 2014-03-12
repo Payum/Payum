@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Tests\Functional\DependencyInjection;
 
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaCheckoutPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OfflinePaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\FilesystemStorageFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -23,10 +24,6 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldLoadExtensionWithPaypalExpressCheckoutConfiguredPayment()
     {
-        if (false == class_exists('Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory')) {
-            $this->markTestSkipped('Skipped because payment library is not installed.');
-        }
-        
         $config = array(
             'security' => array(
                 'token_storage' => array(
@@ -79,10 +76,6 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldLoadExtensionWithPaypalProCheckoutConfiguredPayment()
     {
-        if (false == class_exists('Payum\Paypal\ProCheckout\Nvp\PaymentFactory')) {
-            $this->markTestSkipped('Skipped because payment library is not installed.');
-        }
-        
         $config = array(
             'security' => array(
                 'token_storage' => array(
@@ -130,10 +123,6 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldLoadExtensionWithBe2billConfiguredPayment()
     {
-        if (false == class_exists('Payum\Be2Bill\PaymentFactory')) {
-            $this->markTestSkipped('Skipped because payment library is not installed.');
-        }
-        
         $config = array(
             'security' => array(
                 'token_storage' => array(
@@ -185,10 +174,6 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldLoadExtensionWithOfflineConfiguredPayment()
     {
-        if (false == class_exists('Payum\Offline\PaymentFactory')) {
-            $this->markTestSkipped('Skipped because payment library is not installed.');
-        }
-
         $config = array(
             'security' => array(
                 'token_storage' => array(
@@ -225,10 +210,6 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldLoadExtensionWithAuthorizeNetAimConfiguredPayment()
     {
-        if (false == class_exists('Payum\AuthorizeNet\Aim\PaymentFactory')) {
-            $this->markTestSkipped('Skipped because payment library is not installed.');
-        }
-        
         $config = array(
             'security' => array(
                 'token_storage' => array(
@@ -280,10 +261,6 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldLoadExtensionWithOmnipayConfiguredPayment()
     {
-        if (false == class_exists('Payum\OmnipayBridge\PaymentFactory')) {
-            $this->markTestSkipped('Skipped because payment library is not installed.');
-        }
-        
         $config = array(
             'security' => array(
                 'token_storage' => array(
@@ -332,10 +309,6 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldLoadExtensionWithPayexConfiguredPayment()
     {
-        if (false == class_exists('Payum\Payex\PaymentFactory')) {
-            $this->markTestSkipped('Skipped because payment library is not installed.');
-        }
-
         $config = array(
             'security' => array(
                 'token_storage' => array(
@@ -378,6 +351,56 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
             $containerBuilder->getDefinition('payum.context.a_context.payment'),
             'addApi',
             new Reference('payum.context.a_context.api.order')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLoadExtensionWithKlarnaCheckoutConfiguredPayment()
+    {
+        $config = array(
+            'security' => array(
+                'token_storage' => array(
+                    'Payum\Core\Model\Token' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
+            'contexts' => array(
+                'a_context' => array(
+                    'klarna_checkout' => array(
+                        'api' => array(
+                            'options' => array(
+                                'secret' => 'aSecret',
+                                'merchant_id' => 'anId'
+                            )
+                        )
+                    ),
+                )
+            )
+        );
+
+        $configs = array($config);
+
+        $containerBuilder = new ContainerBuilder(new ParameterBag);
+
+        $extension = new PayumExtension;
+        $extension->addPaymentFactory(new KlarnaCheckoutPaymentFactory);
+        $extension->addStorageFactory(new FilesystemStorageFactory);
+
+        $extension->load($configs, $containerBuilder);
+
+        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.connector'));
+        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
+
+        $this->assertDefinitionContainsMethodCall(
+            $containerBuilder->getDefinition('payum.context.a_context.payment'),
+            'addApi',
+            new Reference('payum.context.a_context.connector')
         );
     }
 
