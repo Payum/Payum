@@ -1,8 +1,8 @@
 <?php
-namespace Payum\Bridge\ZendTableGateway\Storage;
+namespace Payum\Core\Bridge\Zend\Storage;
 
 use Payum\Core\Exception\LogicException;
-use Payum\Core\Model\Identificator as ModelIdentificator;
+use Payum\Core\Model\Identificator;
 use Payum\Core\Storage\AbstractStorage;
 use Zend\Db\TableGateway\TableGateway;
 
@@ -41,10 +41,10 @@ use Zend\Db\TableGateway\TableGateway;
  *        },
  *    ]
  */
-class ZendTableGateway extends AbstractStorage
+class TableGatewayStorage extends AbstractStorage
 {
     /**
-     * @var \Zend\Db\TableGateway\TableGateway
+     * @var TableGateway
      */
     protected $tableGateway;
 
@@ -54,7 +54,7 @@ class ZendTableGateway extends AbstractStorage
     protected $idField;
 
     /**
-     * @param \Zend\Db\TableGateway\TableGateway $tableGateway
+     * @param TableGateway $tableGateway
      * @param string $modelClass
      * @param string $idField
      */
@@ -71,7 +71,7 @@ class ZendTableGateway extends AbstractStorage
      */
     public function findModelById($id)
     {
-        return $this->tableGateway->select(array($this->idField . ' = ?' => $id))->current();
+        return $this->tableGateway->select(array("{$this->idField} = ?" => $id))->current();
     }
 
     /**
@@ -79,13 +79,13 @@ class ZendTableGateway extends AbstractStorage
      */
     protected function doUpdateModel($model)
     {
-        try {
-            $this->tableGateway->insert($this->tableGateway->getResultSetPrototype()->getHydrator()->extract($model));
-        } catch (\Zend\Db\Adapter\Exception\InvalidQueryException $e) {
+        if ($id = $this->getModelId($model)) {
             $this->tableGateway->update(
                 $this->tableGateway->getResultSetPrototype()->getHydrator()->extract($model),
-                array($this->idField . ' = ?' => $this->getModelId($model))
+                array("{$this->idField} = ?" => $id)
             );
+        } else {
+            $this->tableGateway->insert($this->tableGateway->getResultSetPrototype()->getHydrator()->extract($model));
         }
     }
 
@@ -94,7 +94,7 @@ class ZendTableGateway extends AbstractStorage
      */
     protected function doDeleteModel($model)
     {
-        $this->tableGateway->delete(array($this->idField . ' = ?' => $this->getModelId($model)));
+        $this->tableGateway->delete(array("{$this->idField} = ?" => $this->getModelId($model)));
     }
 
     /**
@@ -108,27 +108,24 @@ class ZendTableGateway extends AbstractStorage
             throw new LogicException('The model must be persisted before usage of this method');
         }
 
-        return new ModelIdentificator($id, $model);
+        return new Identificator($id, $model);
     }
 
     /**
      * Given a specific model, extract the value of the id using either a get method, if one exists, or reflection of
      * the id property. The get method / property used is defined in $this->idField.
      *
-     * @param mixed $model
+     * @param object $model
+     *
      * @return mixed
      */
     protected function getModelId($model)
     {
-        $getMethod = 'get' . ucfirst($this->idField);
-        if (method_exists($model, $getMethod)) {
-            $id = $model->$getMethod();
-        } else {
-            $rp = new \ReflectionProperty($model, $this->idField);
-            $rp->setAccessible(true);
-            $id = $rp->getValue($model);
-        }
+        $rp = new \ReflectionProperty($model, $this->idField);
+        $rp->setAccessible(true);
+        $id = $rp->getValue($model);
+        $rp->setAccessible(false);
 
-        return $id ? : false;
+        return $id;
     }
 }

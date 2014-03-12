@@ -49,7 +49,8 @@
         "doctrine/mongodb": "1.0.*@dev",
         "doctrine/mongodb-odm": "1.0.*@dev",
         "phpunit/phpunit": "3.7.*",
-        "psr/log": "~1.0"
+        "psr/log": "~1.0",
+        "zendframework/zend-db": "~2"
     },
     "replace": {
         "payum/core": "self.version",
@@ -66,6 +67,7 @@
     "suggest": {
         "doctrine/orm": "If you want to store models to database using doctrin2 ORM",
         "doctrine/mongodb-odm": "If you want to store models to mongo doctrin2 ODM",
+        "zendframework/zend-db": "If you want to store models to Zend Db ORM",
         "monolog/monolog": "In case you want to use PSR-3 logger"
     },
     "config": {
