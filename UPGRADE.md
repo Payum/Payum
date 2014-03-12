@@ -1,5 +1,9 @@
 # Upgrades
 
+## 0.7 to 0.8
+
+* `TokenFactory::createTokenForRoute` was renamed to `createToken`.
+
 ## 0.5 to 0.6
 
 * AbstractPaymentFactory::addCommonExtensions method signature has been changed.
