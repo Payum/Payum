@@ -112,9 +112,6 @@ class TableGatewayStorage extends AbstractStorage
     }
 
     /**
-     * Given a specific model, extract the value of the id using either a get method, if one exists, or reflection of
-     * the id property. The get method / property used is defined in $this->idField.
-     *
      * @param object $model
      *
      * @return mixed
