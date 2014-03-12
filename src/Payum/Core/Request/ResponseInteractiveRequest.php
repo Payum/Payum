@@ -1,26 +1,26 @@
 <?php
 namespace Payum\Core\Request;
 
-class RedirectUrlInteractiveRequest extends BaseInteractiveRequest
+class ResponseInteractiveRequest extends BaseInteractiveRequest
 {
     /**
      * @var string
      */
-    protected $url;
+    protected $content;
 
     /**
      * @param string $content
      */
     public function __construct($content)
     {
-        $this->url = $content;
+        $this->content = $content;
     }
 
     /**
      * @return string
      */
-    public function getUrl()
+    public function getContent()
     {
-        return $this->url;
+        return $this->content;
     }
 }

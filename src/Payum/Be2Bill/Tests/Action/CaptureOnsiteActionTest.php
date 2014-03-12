@@ -130,6 +130,8 @@ class CaptureOnsiteActionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     *
+     * @expectedException \Payum\Core\Request\PostRedirectUrlInteractiveRequest
      */
     public function shouldRedirectToBe2billSiteIfExecCodeNotPresentInQuery()
     {
@@ -165,13 +167,7 @@ class CaptureOnsiteActionTest extends \PHPUnit_Framework_TestCase
 
         $request = new CaptureRequest($model);
 
-        try {
-            $action->execute($request);
-
-            $this->fail('Interactive request is expected to be thrown.');
-        } catch (PostRedirectUrlInteractiveRequest $interactiveRequest) {
-            $this->assertAttributeEquals($postArray, 'post', $interactiveRequest);
-        }
+        $action->execute($request);
     }
 
     /**

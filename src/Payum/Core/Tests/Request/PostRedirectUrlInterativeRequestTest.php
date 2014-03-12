@@ -18,6 +18,16 @@ class PostRedirectUrlInterativeRequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldBeSubClassOfResponseInteractiveRequest()
+    {
+        $rc = new \ReflectionClass('Payum\Core\Request\PostRedirectUrlInteractiveRequest');
+
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\ResponseInteractiveRequest'));
+    }
+
+    /**
+     * @test
+     */
     public function couldBeConstructedWithUrlAsArgument()
     {
         new PostRedirectUrlInteractiveRequest('an_url');
