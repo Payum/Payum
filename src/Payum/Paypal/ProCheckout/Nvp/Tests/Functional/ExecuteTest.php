@@ -30,7 +30,12 @@ class ExecuteTest extends \PHPUnit_Framework_TestCase
 
         //@testo:start
         $client = new Curl;
+        //@testo:end
         $client->setTimeout(20000);
+        $client->setOption(CURLOPT_SSL_VERIFYPEER, false);
+        $client->setOption(CURLOPT_SSL_VERIFYHOST, false);
+        $client->setOption(CURLOPT_SSLVERSION, 3);
+        //@testo:start
 
         $payment = PaymentFactory::create(new Api($client, array(
             'username' => $GLOBALS['__PAYUM_PAYPAL_PRO_CHECKOUT_NVP_API_USERNAME'],
