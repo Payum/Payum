@@ -6,5 +6,6 @@
 * [Authorize.Net AIM](simple_purchase_examples/authorize_net_aim.md).
 * [Be2Bill credit card](simple_purchase_examples/be2bill.md).
 * [Be2Bill onsite](simple_purchase_examples/be2bill_onsite.md).
+* [Klarna Checkout](simple_purchase_examples/klarna_checkout.md).
 * [Stripe via omnipay](simple_purchase_examples/stripe_via_omnipay.md).
 * [JMS payment plugins](https://github.com/Payum/JMSPaymentBridge/blob/master/docs/get-it-started.md).
