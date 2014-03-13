@@ -28,11 +28,9 @@ class ExecuteTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Please configure __PAYUM_PAYPAL_PRO_CHECKOUT_NVP_API_VENDOR in your phpunit.xml');
         }
 
-
-
         //@testo:start
         $client = new Curl;
-        $client->setTimeout(20);
+        $client->setTimeout(20000);
 
         $payment = PaymentFactory::create(new Api($client, array(
             'username' => $GLOBALS['__PAYUM_PAYPAL_PRO_CHECKOUT_NVP_API_USERNAME'],
