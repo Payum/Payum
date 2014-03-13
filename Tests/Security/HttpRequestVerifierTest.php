@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Tests\Security;
 
+use Payum\Bundle\PayumBundle\Security\HttpRequestVerifier;
 use Payum\Core\Model\Token;
 use Payum\Core\Storage\StorageInterface;
 use Symfony\Component\HttpFoundation\Request;
