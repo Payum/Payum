@@ -21,7 +21,7 @@ class CaptureAction implements ActionInterface
         /** @var \ArrayAccess $model */
         $model = $request->getModel();
 
-        if ($model[Constants::FIELD_PAID]) {
+        if isset(($model[Constants::FIELD_PAID])) {
             $model[Constants::FIELD_STATUS] = Constants::STATUS_SUCCESS;
         } else {
             $model[Constants::FIELD_STATUS] = Constants::STATUS_PENDING;
