@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.0 (2014-04-02)
+
+* [klarna][doc] add a klarna purchase example doc
+* [security] add functional test for TokenFactory.
+* [security] extend TokenFactory from GenericTokenFactory.
+
 ## 0.7.3 (2014-01-20)
 
 * fix composer requires payum/core 0.8.
