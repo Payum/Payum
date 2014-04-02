@@ -21,7 +21,7 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "payum/core": "0.8.*",
+        "payum/core": "0.9.*@dev",
         "omnipay/omnipay": "~1.0"
     },
     "require-dev": {
@@ -36,7 +36,7 @@
     "target-dir": "Payum/OmnipayBridge",
     "extra": {
         "branch-alias": {
-            "dev-master": "0.8-dev"
+            "dev-master": "0.9-dev"
         }
     }
 }
