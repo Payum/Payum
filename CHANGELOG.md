@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.8.0 (2014-04-02)
+
+* [paypal][pro] set bigger timeout to prevent test fails
+* [klarna] add support of klarna checkout payment.
+* [zend][storage] add zend table gateway storage.
+* [omnipay] do not wrap omnipay's exceptions in capture action.
+* [security] add generic token factory.
+* [security] introduce token factory.
+* [action] add tests for notify action
+* [request] add response interactive request.
+* [payex] remove duplicated tests.
+* [registry] register storage extensions lazily.
+
 ## 0.7.2 (2014-01-18)
 
 * [be2bill][api] add a method to verify params hash.

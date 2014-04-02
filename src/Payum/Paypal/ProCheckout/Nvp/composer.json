@@ -25,7 +25,7 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "payum/core": "0.8.*@dev"
+        "payum/core": "0.8.*"
     },
     "config": {
         "bin-dir": "bin"
