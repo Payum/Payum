@@ -59,6 +59,7 @@
         "payum/paypal-pro-checkout-nvp": "self.version",
         "payum/paypal-rest": "self.version",
         "payum/paypal-ipn": "self.version",
+        "payum/klarna-checkout": "self.version",
         "payum/authorize-net-aim": "self.version",
         "payum/be2bill": "self.version",
         "payum/payex": "self.version",
