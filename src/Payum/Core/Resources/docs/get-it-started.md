@@ -32,7 +32,7 @@ namespace App\Model;
 
 use Payum\Core\Model\ArrayObject;
 
-class PaymentDetails extends \ArrayObject
+class PaymentDetails extends ArrayObject
 {
 }
 ```
