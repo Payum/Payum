@@ -3,11 +3,15 @@
 ## Frameworks.
 
 * [PayumBundle](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md) for [Symfony2](http://symfony.com/).
-
-This bundle provide configuration layer and useful controllers (capture, notify etc). There is a sandbox [web](http://sandbox.payum.forma-dev.com/)|[code](https://github.com/Payum/PayumBundleSandbox)
-
 * [PayumModule](https://github.com/Payum/PayumModule/blob/master/docs/index.md) for [Zend2](http://framework.zend.com/)
 * [PayumYiiExtension](https://github.com/Payum/PayumYiiExtension/blob/master/docs/index.md) for [Yii](http://www.yiiframework.com/)
+* [PayumLaravelPackage](https://github.com/Payum/PayumLaravelPackage) for [Laravel](http://laravel.com/)
+
+## Storages.
+
+* Doctrine ORM\MongoODM
+* Zend Db Gateway
+* Filesystem
 
 ## E-Commerce
 
