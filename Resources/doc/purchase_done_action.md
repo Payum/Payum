@@ -19,9 +19,10 @@ Pay attention to third parameter `acme_payment_done`.
 It is the route of url you will be redirected after capture done its job. Let's look at an example of how this action may look like:
 
 ```php
+<?php
     use Payum\Core\Request\BinaryMaskStatusRequest;
 
-    public function captureDoneAction()
+    public function captureDoneAction(Request $request)
     {
         $token = $this->get('payum.security.http_request_verifier')->verify($request);
 
