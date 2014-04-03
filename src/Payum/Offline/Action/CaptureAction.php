@@ -2,6 +2,7 @@
 namespace Payum\Offline\Action;
 
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Offline\Constants;
 use Payum\Core\Request\CaptureRequest;
@@ -18,10 +19,9 @@ class CaptureAction implements ActionInterface
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        /** @var \ArrayAccess $model */
-        $model = $request->getModel();
+        $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (isset($model[Constants::FIELD_PAID])) {
+        if ($model[Constants::FIELD_PAID]) {
             $model[Constants::FIELD_STATUS] = Constants::STATUS_SUCCESS;
         } else {
             $model[Constants::FIELD_STATUS] = Constants::STATUS_PENDING;

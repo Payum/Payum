@@ -23,7 +23,7 @@ class StatusAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == isset($model[Constants::FIELD_STATUS])) {
+        if (false == $model[Constants::FIELD_STATUS]) {
             $request->markNew();
 
             return;
