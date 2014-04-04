@@ -32,7 +32,7 @@ namespace App\Model;
 
 use Payum\Core\Model\ArrayObject;
 
-class PaymentDetails extends \ArrayObject
+class PaymentDetails extends ArrayObject
 {
 }
 ```
@@ -60,7 +60,6 @@ Now we are ready to configure all the stuff:
 //config.php
 
 use Buzz\Client\Curl;
-use Payum\Core\Extension\StorageExtension;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Core\Registry\SimpleRegistry;
