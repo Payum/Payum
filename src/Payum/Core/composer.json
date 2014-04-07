@@ -47,7 +47,9 @@
         "phpunit/phpunit": "3.7.*",
         "psr/log": "~1.0",
         "zendframework/zend-db": "~2",
-        "symfony/routing": "~2"
+        "symfony/routing": "~2",
+        "symfony/http-kernel": "~2",
+        "symfony/http-foundation": "~2"
     },
     "suggest": {
         "payum/paypal-express-checkout-nvp": "If you want to use paypal express checkout, digital goods or recurring payments",
@@ -62,6 +64,8 @@
         "doctrine/mongodb-odm": "If you want to store models to mongo doctrin2 ODM",
         "zendframework/zend-db": "If you want to store models to Zend Db ORM",
         "symfony/routing": "If you want to use TokenFactory from symfony's bridge",
+        "symfony/http-kernel": "If you want to use HttpRequestVerifier from symfony's bridge",
+        "symfony/http-foundation": "If you want to use HttpRequestVerifier from symfony's bridge",
         "monolog/monolog": "In case you want to use logger"
     },
     "config": {

@@ -51,7 +51,10 @@
         "doctrine/mongodb-odm": "1.0.*@dev",
         "phpunit/phpunit": "3.7.*",
         "psr/log": "~1.0",
-        "zendframework/zend-db": "~2"
+        "zendframework/zend-db": "~2",
+        "symfony/routing": "~2",
+        "symfony/http-kernel": "~2",
+        "symfony/http-foundation": "~2"
     },
     "replace": {
         "payum/core": "self.version",
@@ -70,6 +73,8 @@
         "doctrine/mongodb-odm": "If you want to store models to mongo doctrin2 ODM",
         "zendframework/zend-db": "If you want to store models to Zend Db ORM",
         "symfony/routing": "If you want to use TokenFactory from symfony's bridge",
+        "symfony/http-kernel": "If you want to use HttpRequestVerifier from symfony's bridge",
+        "symfony/http-foundation": "If you want to use HttpRequestVerifier from symfony's bridge",
         "monolog/monolog": "In case you want to use PSR-3 logger"
     },
     "config": {
