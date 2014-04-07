@@ -3,7 +3,9 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Buzz\Message\Form\FormRequest;
 
+use Payum\Core\Model\Token;
 use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\SecuredCaptureRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
@@ -95,7 +97,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldRequestSetExpressCheckoutActionAndAuthorizeActionIfTokenNotSetInInstruction()
+    public function shouldRequestSetExpressCheckoutActionAndAuthorizeActionIfTokenNotSetInModel()
     {
         $paymentMock = $this->createPaymentMock();
         $paymentMock
@@ -113,6 +115,74 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment($paymentMock);
 
         $action->execute(new CaptureRequest(array()));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSetTokenTargetUrlAsReturnUrlIfSecuredCaptureRequestPassedAndReturnUrlNotSet()
+    {
+        $testCase = $this;
+
+        $expectedTargetUrl = 'theTargetUrl';
+
+        $token = new Token;
+        $token->setTargetUrl($expectedTargetUrl);
+        $token->setDetails(array());
+
+        $paymentMock = $this->createPaymentMock();
+        $paymentMock
+            ->expects($this->at(0))
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckoutRequest'))
+            ->will($this->returnCallback(function($request) use ($testCase, $expectedTargetUrl) {
+                $model = $request->getModel();
+
+                $this->assertEquals($expectedTargetUrl, $model['RETURNURL']);
+            }))
+        ;
+
+        $action = new CaptureAction();
+        $action->setPayment($paymentMock);
+
+        $request = new SecuredCaptureRequest($token);
+        $request->setModel(array());
+
+        $action->execute($request);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSetTokenTargetUrlAsCancelUrlIfSecuredCaptureRequestPassedAndReturnUrlNotSet()
+    {
+        $testCase = $this;
+
+        $expectedCancelUrl = 'theCancelUrl';
+
+        $token = new Token;
+        $token->setTargetUrl($expectedCancelUrl);
+        $token->setDetails(array());
+
+        $paymentMock = $this->createPaymentMock();
+        $paymentMock
+            ->expects($this->at(0))
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckoutRequest'))
+            ->will($this->returnCallback(function($request) use ($testCase, $expectedCancelUrl) {
+                $model = $request->getModel();
+
+                $this->assertEquals($expectedCancelUrl, $model['CANCELURL']);
+            }))
+        ;
+
+        $action = new CaptureAction();
+        $action->setPayment($paymentMock);
+
+        $request = new SecuredCaptureRequest($token);
+        $request->setModel(array());
+
+        $action->execute($request);
     }
 
     /**
