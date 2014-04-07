@@ -5,25 +5,25 @@ use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\AbstractGenericTokenFactory;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TokenFactory extends AbstractGenericTokenFactory
 {
     /**
      * @var \Symfony\Component\Routing\RouterInterface
      */
-    protected $router;
+    protected $urlGenerator;
 
     /**
-     * @param RouterInterface $router
+     * @param UrlGeneratorInterface $urlGenerator
      * @param StorageInterface $tokenStorage
      * @param StorageRegistryInterface $storageRegistry
      * @param string $capturePath
      * @param string $notifyPath
      */
-    public function __construct(RouterInterface $router, StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $capturePath, $notifyPath)
+    public function __construct(UrlGeneratorInterface $urlGenerator, StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $capturePath, $notifyPath)
     {
-        $this->router = $router;
+        $this->urlGenerator = $urlGenerator;
 
         parent::__construct($tokenStorage, $storageRegistry, $capturePath, $notifyPath);
     }
@@ -36,6 +36,6 @@ class TokenFactory extends AbstractGenericTokenFactory
      */
     protected function generateUrl($path, array $parameters = array())
     {
-        return $this->router->generate($path, $parameters, $absolute = true);
+        return $this->urlGenerator->generate($path, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
     }
 }

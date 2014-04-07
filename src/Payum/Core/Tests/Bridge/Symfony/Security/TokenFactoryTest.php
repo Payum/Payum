@@ -8,7 +8,7 @@ use Payum\Core\Model\Token;
 use Payum\Core\PaymentInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Storage\StorageInterface;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TokenFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +28,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
     public function couldBeConstructedWithExpectedArguments()
     {
         new TokenFactory(
-            $this->createRouterMock(),
+            $this->createUrlGeneratorMock(),
             $this->createStorageMock(),
             $this->createStorageRegistryMock(),
             'capture.php',
@@ -75,7 +75,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($modelStorage))
         ;
 
-        $routerMock = $this->createRouterMock();
+        $routerMock = $this->createUrlGeneratorMock();
         $routerMock
             ->expects($this->at(0))
             ->method('generate')
@@ -152,7 +152,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($modelStorage))
         ;
 
-        $routerMock = $this->createRouterMock();
+        $routerMock = $this->createUrlGeneratorMock();
         $routerMock
             ->expects($this->once())
             ->method('generate')
@@ -216,7 +216,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($modelStorage))
         ;
 
-        $routerMock = $this->createRouterMock();
+        $routerMock = $this->createUrlGeneratorMock();
         $routerMock
             ->expects($this->once())
             ->method('generate')
@@ -297,7 +297,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($modelStorage))
         ;
 
-        $routerMock = $this->createRouterMock();
+        $routerMock = $this->createUrlGeneratorMock();
         $routerMock
             ->expects($this->at(0))
             ->method('generate')
@@ -329,11 +329,11 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|RouterInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|UrlGeneratorInterface
      */
-    protected function createRouterMock()
+    protected function createUrlGeneratorMock()
     {
-        return $this->getMock('Symfony\Component\Routing\RouterInterface');
+        return $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
     }
 
     /**
