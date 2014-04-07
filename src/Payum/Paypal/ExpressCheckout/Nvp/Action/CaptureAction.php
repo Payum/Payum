@@ -12,7 +12,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeTokenRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPaymentRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
-class CaptureAction extends \Payum\Core\Action\PaymentAwareAction
+class CaptureAction extends PaymentAwareAction
 {
     /**
      * {@inheritdoc}

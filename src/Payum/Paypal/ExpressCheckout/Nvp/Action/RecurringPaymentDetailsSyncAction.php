@@ -9,7 +9,7 @@ use Payum\Core\Request\SyncRequest;
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
 
-class RecurringPaymentDetailsSyncAction extends \Payum\Core\Action\PaymentAwareAction
+class RecurringPaymentDetailsSyncAction extends PaymentAwareAction
 {
     /**
      * {@inheritdoc}
