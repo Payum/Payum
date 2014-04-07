@@ -52,9 +52,19 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
         $token = $this->tokenStorage->createModel();
         $token->setDetails($modelStorage->getIdentificator($model));
         $token->setPaymentName($paymentName);
-        $token->setTargetUrl($this->generateUrl($targetPath, array_replace($targetParameters, array(
-            'payum_token' => $token->getHash()
-        ))));
+
+        $targetParameters = array_replace($targetParameters, array('payum_token' => $token->getHash()));
+        if (0 === strpos($targetPath, 'http')) {
+            if (false !== strpos($targetPath, '?')) {
+                $targetPath .= '&'.http_build_query($targetParameters);
+            } else {
+                $targetPath .= '?'.http_build_query($targetParameters);
+            }
+
+            $token->setTargetUrl($targetPath);
+        } else {
+            $token->setTargetUrl($this->generateUrl($targetPath, $targetParameters));
+        }
 
         if ($afterPath) {
             $token->setAfterUrl($this->generateUrl($afterPath, $afterParameters));
