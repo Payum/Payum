@@ -69,6 +69,7 @@
         "doctrine/orm": "If you want to store models to database using doctrin2 ORM",
         "doctrine/mongodb-odm": "If you want to store models to mongo doctrin2 ODM",
         "zendframework/zend-db": "If you want to store models to Zend Db ORM",
+        "symfony/routing": "If you want to use TokenFactory from symfony's bridge",
         "monolog/monolog": "In case you want to use PSR-3 logger"
     },
     "config": {
