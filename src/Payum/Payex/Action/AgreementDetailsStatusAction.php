@@ -8,7 +8,7 @@ use Payum\Payex\Api\AgreementApi;
 use Payum\Core\Request\StatusRequestInterface;
 use Payum\Payex\Api\OrderApi;
 
-class AgreementDetailsStatusAction implements \Payum\Core\Action\ActionInterface
+class AgreementDetailsStatusAction implements ActionInterface
 {
     /**
      * {@inheritDoc}

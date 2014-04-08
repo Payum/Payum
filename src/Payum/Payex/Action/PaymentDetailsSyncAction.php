@@ -10,7 +10,7 @@ use Payum\Core\Request\SyncRequest;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Payex\Request\Api\CheckAgreementRequest;
 
-class PaymentDetailsSyncAction extends \Payum\Core\Action\PaymentAwareAction
+class PaymentDetailsSyncAction extends PaymentAwareAction
 {
     /**
      * {@inheritDoc}

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Payum\Paypal\Rest\Action;
 
 use PayPal\Api\Payment;

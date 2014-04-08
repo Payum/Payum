@@ -12,7 +12,7 @@ use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Request\CaptureRequest;
 use Payum\Core\Request\RedirectUrlInteractiveRequest;
 
-class CaptureAction extends \Payum\Core\Action\PaymentAwareAction implements ApiAwareInterface
+class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
 {
     /**
      * @param ApiContext

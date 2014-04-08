@@ -16,7 +16,7 @@ use Payum\Core\Request\CaptureRequest;
 /**
  * @author Ton Sharp <Forma-PRO@66ton99.org.ua>
  */
-class CaptureAction implements \Payum\Core\Action\ActionInterface, ApiAwareInterface
+class CaptureAction implements ActionInterface, ApiAwareInterface
 {
     /**
      * @var Api

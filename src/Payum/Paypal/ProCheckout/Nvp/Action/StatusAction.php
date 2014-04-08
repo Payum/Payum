@@ -11,7 +11,7 @@ use Payum\Paypal\ProCheckout\Nvp\Model\PaymentDetails;
 /**
  * @author Ton Sharp <Forma-PRO@66ton99.org.ua>
  */
-class StatusAction implements \Payum\Core\Action\ActionInterface
+class StatusAction implements ActionInterface
 {
     /**
      * {@inheritdoc}
