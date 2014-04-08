@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.8.1 (2014-04-08)
+
+* [security] symfony's TokenFactory now require UrlGeneratorInterface.
+* import namespaces.
+* [security][symfony] move HttpRequestVerifier from bundle to bridge.
+* [security][symfony] move TokenFactory from symfony bundle to bridge.
+* [security] TokenFactory accepts urls as targetPath and afterPath.
+* [doc] added laravel to supported frameworks list.
+* [offline] wrap model by ArrayObject from bridge.
+* [offline] Fixing Notice: Undefined index: paid in ...
+
 ## 0.8.0 (2014-04-02)
 
 * [paypal][pro] set bigger timeout to prevent test fails
