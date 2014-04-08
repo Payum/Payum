@@ -9,6 +9,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @deprecated since 0.8.1 will be removed in 0.9. Use HttpRequestVerifier from bridge
+ */
 class HttpRequestVerifier implements HttpRequestVerifierInterface
 {
     /**

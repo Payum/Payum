@@ -7,6 +7,9 @@ use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 use Symfony\Component\Routing\RouterInterface;
 
+/**
+ * @deprecated since 0.8.1 will be removed in 0.9. Use TokenFactory from bridge.
+ */
 class TokenFactory extends AbstractGenericTokenFactory
 {
     /**
@@ -15,15 +18,15 @@ class TokenFactory extends AbstractGenericTokenFactory
     protected $router;
 
     /**
-     * @param RouterInterface $router
+     * @param RouterInterface $urlGenerator
      * @param StorageInterface $tokenStorage
      * @param StorageRegistryInterface $storageRegistry
      * @param string $capturePath
      * @param string $notifyPath
      */
-    public function __construct(RouterInterface $router, StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $capturePath, $notifyPath)
+    public function __construct(RouterInterface $urlGenerator, StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $capturePath, $notifyPath)
     {
-        $this->router = $router;
+        $this->router = $urlGenerator;
 
         parent::__construct($tokenStorage, $storageRegistry, $capturePath, $notifyPath);
     }
