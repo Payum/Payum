@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.1 (2014-04-08)
+
+* [security] Mark TokenFactory as deprecated. Use one from bridge.
+* [security] mark HttpRequestVerifier as deprecated. Use one from bridge.
+* [doc] Missing argument in purchase_done_action caused fatal error.
+
 ## 0.8.0 (2014-04-02)
 
 * [klarna][doc] add a klarna purchase example doc
