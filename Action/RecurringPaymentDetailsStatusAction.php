@@ -7,7 +7,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\StatusRequestInterface;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
-class RecurringPaymentDetailsStatusAction implements \Payum\Core\Action\ActionInterface
+class RecurringPaymentDetailsStatusAction implements ActionInterface
 {
     /**
      * {@inheritdoc}
