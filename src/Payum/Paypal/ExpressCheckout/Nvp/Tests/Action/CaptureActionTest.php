@@ -138,7 +138,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnCallback(function($request) use ($testCase, $expectedTargetUrl) {
                 $model = $request->getModel();
 
-                $this->assertEquals($expectedTargetUrl, $model['RETURNURL']);
+                $testCase->assertEquals($expectedTargetUrl, $model['RETURNURL']);
             }))
         ;
 
@@ -172,7 +172,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnCallback(function($request) use ($testCase, $expectedCancelUrl) {
                 $model = $request->getModel();
 
-                $this->assertEquals($expectedCancelUrl, $model['CANCELURL']);
+                $testCase->assertEquals($expectedCancelUrl, $model['CANCELURL']);
             }))
         ;
 
