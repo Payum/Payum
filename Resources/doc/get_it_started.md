@@ -168,7 +168,7 @@ doctrine_mongodb:
                 payum:
                     is_bundle: false
                     type: xml
-                    dir: %kernel.root_dir%/../vendor/payum/core/Bridge/Doctrine/Resources/mapping
+                    dir: %kernel.root_dir%/../vendor/payum/core/Payum/Core/Bridge/Doctrine/Resources/mapping
 
                     # set this dir instead if you use `payum/payum` library
                     #dir: %kernel.root_dir%/../vendor/payum/payum/src/Payum/Core/Bridge/Doctrine/Resources/mapping
@@ -262,7 +262,7 @@ doctrine:
                     payum:
                         is_bundle: false
                         type: xml
-                        dir: %kernel.root_dir%/../vendor/payum/core/Bridge/Doctrine/Resources/mapping
+                        dir: %kernel.root_dir%/../vendor/payum/core/Payum/Core/Bridge/Doctrine/Resources/mapping
 
                         # set this dir instead if you use `payum/payum` library
                         #dir: %kernel.root_dir%/../vendor/payum/payum/src/Payum/Core/Bridge/Doctrine/Resources/mapping
