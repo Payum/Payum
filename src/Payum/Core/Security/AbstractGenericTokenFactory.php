@@ -66,7 +66,15 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
             $token->setTargetUrl($this->generateUrl($targetPath, $targetParameters));
         }
 
-        if ($afterPath) {
+        if ($afterPath && 0 === strpos($afterPath, 'http')) {
+            if (false !== strpos($afterPath, '?')) {
+                $afterPath .= '&'.http_build_query($afterParameters);
+            } else {
+                $afterPath .= '?'.http_build_query($afterParameters);
+            }
+
+            $token->setAfterUrl($afterPath);
+        } elseif ($afterPath) {
             $token->setAfterUrl($this->generateUrl($afterPath, $afterParameters));
         }
 
