@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.8.2 (2014-04-10)
+
+* [paypal] Set return\cancel (if not set) url from secured capture request.
+* [paypal] Add NotifyAction to PaymentFactory.
+* [paypal][action] Add generic NotifyAction.
+* [security] Fix `GenericTokenFactory`. It did not handle afterPath correctly, when it is url.
+* [symfony][request] move symfony's response interactive request to bridge.
+
 ## 0.8.1 (2014-04-08)
 
 * [security] symfony's TokenFactory now require UrlGeneratorInterface.
