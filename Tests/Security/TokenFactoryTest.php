@@ -10,6 +10,9 @@ use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Storage\StorageInterface;
 use Symfony\Component\Routing\RouterInterface;
 
+/**
+ * @deprecated since 0.8.2
+ */
 class TokenFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**

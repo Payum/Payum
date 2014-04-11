@@ -1,29 +1,11 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Request;
 
-use Payum\Core\Request\BaseInteractiveRequest;
-use Symfony\Component\HttpFoundation\Response;
+use Payum\Core\Bridge\Symfony\Request\ResponseInteractiveRequest as BaseResponseInteractiveRequest;
 
-class ResponseInteractiveRequest extends BaseInteractiveRequest
+/**
+ * @deprecated since 0.8.2 will be removed in 0.9. Use ResponseInteractiveRequest from bridge.
+ */
+class ResponseInteractiveRequest extends BaseResponseInteractiveRequest
 {
-    /**
-     * @var \Symfony\Component\HttpFoundation\Response
-     */
-    protected $response;
-
-    /**
-     * @param \Symfony\Component\HttpFoundation\Response $response
-     */
-    public function __construct(Response $response)
-    {
-        $this->response = $response;
-    }
-
-    /**
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function getResponse()
-    {
-        return $this->response;
-    }
 }
