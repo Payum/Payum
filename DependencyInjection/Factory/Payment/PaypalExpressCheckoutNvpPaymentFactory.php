@@ -119,6 +119,11 @@ class PaypalExpressCheckoutNvpPaymentFactory extends AbstractPaymentFactory
         $container->setDefinition($captureId, $captureDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($captureId)));
 
+        $notifyDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.notify');
+        $notifyId = 'payum.context.' . $contextName . '.action.notify';
+        $container->setDefinition($notifyId, $notifyDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($notifyId)));
+
         $paymentDetailsStatusDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.payment_details_status');
         $paymentDetailsStatusId = 'payum.context.' . $contextName . '.action.payment_details_status';
         $container->setDefinition($paymentDetailsStatusId, $paymentDetailsStatusDefinition);
