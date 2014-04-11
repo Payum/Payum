@@ -2,7 +2,7 @@
 namespace Payum\Bundle\PayumBundle\Tests\EventListener;
 
 use Payum\Bundle\PayumBundle\EventListener\InteractiveRequestListener;
-use Payum\Bundle\PayumBundle\Request\ResponseInteractiveRequest;
+use Payum\Core\Bridge\Symfony\Request\ResponseInteractiveRequest;
 use Payum\Core\Request\PostRedirectUrlInteractiveRequest;
 use Payum\Core\Request\RedirectUrlInteractiveRequest;
 use Symfony\Component\Config\Definition\Exception\Exception;
