@@ -6,6 +6,9 @@ use Payum\Core\Model\Token;
 use Payum\Core\Storage\StorageInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @deprecated since 0.8.2
+ */
 class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
 {
     /**
