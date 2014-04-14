@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.3 (2014-04-14)
+
+* [security][symfony] Fix bug: `PHP Fatal error:  Undefined class constant 'ABSOLUTE_URL' in ...`
+
 ## 0.8.2 (2014-04-10)
 
 * [paypal] Set return\cancel (if not set) url from secured capture request.
