@@ -3,7 +3,6 @@ namespace Payum\Core\Bridge\Symfony\Security;
 
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\AbstractGenericTokenFactory;
-use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -36,6 +35,6 @@ class TokenFactory extends AbstractGenericTokenFactory
      */
     protected function generateUrl($path, array $parameters = array())
     {
-        return $this->urlGenerator->generate($path, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
+        return $this->urlGenerator->generate($path, $parameters, true);
     }
 }
