@@ -23,6 +23,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
             'api.get_recurring_payments_profile_details' => array('payum.context.aContextName.action.api.get_recurring_payments_profile_details'),
             
             'capture' => array('payum.context.aContextName.action.capture'),
+            'notify' => array('payum.context.aContextName.action.notify'),
             'payment_details_status' => array('payum.context.aContextName.action.payment_details_status'),
             'payment_details_sync' => array('payum.context.aContextName.action.payment_details_sync'),
             'recurring_payment_details_status' => array('payum.context.aContextName.action.recurring_payment_details_status'),
