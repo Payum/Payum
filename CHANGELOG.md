@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.2 (2014-04-14)
+
+* [paypal][factory] add generic NotifyAction to payment.
+* [security] add deprecate notes. extend classes from bridge.
+* [doc] fix mapping links
+
 ## 0.8.1 (2014-04-08)
 
 * [security] Mark TokenFactory as deprecated. Use one from bridge.
