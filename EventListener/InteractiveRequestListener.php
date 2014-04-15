@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\EventListener;
 
-use Payum\Bundle\PayumBundle\Request\ResponseInteractiveRequest as SymfonyResponseInteractiveRequest;
+use Payum\Core\Bridge\Symfony\Request\ResponseInteractiveRequest as SymfonyResponseInteractiveRequest;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Request\InteractiveRequestInterface;
 use Payum\Core\Request\RedirectUrlInteractiveRequest;
