@@ -202,8 +202,8 @@ class Api
     public function getOnsiteUrl()
     {
         return $this->options['sandbox'] ?
-            'https://secure-test.be2bill.com/front/form/process' :
-            'https://secure-magenta1.be2bill.com/front/form/process'
+            'https://secure-test.be2bill.com/front/form/process.php' :
+            'https://secure-magenta1.be2bill.com/front/form/process.php'
         ;
     }
 
