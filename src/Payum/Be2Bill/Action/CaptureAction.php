@@ -72,6 +72,6 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
 
         $model = $request->getModel();
 
-        return false == empty($model['CARDCODE']);
+        return false == empty($model['CARDCODE']) || false == empty($model['ALIAS']);
     }
 }

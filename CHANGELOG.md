@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.5 (2014-04-16)
+
+* [be2bill] should not use capture onsite action when aliased credit card used.
+
 ## 0.8.4 (2014-04-16)
 
 * [be2bill] api endpoint has ".php" at the end. Fixes temporal glitches with api.

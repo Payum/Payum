@@ -73,6 +73,6 @@ class CaptureOnsiteAction extends PaymentAwareAction implements ApiAwareInterfac
 
         $model = $request->getModel();
 
-        return empty($model['CARDCODE']);
+        return empty($model['CARDCODE']) && empty($model['ALIAS']);
     }
 }
