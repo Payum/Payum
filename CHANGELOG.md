@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.4 (2014-04-16)
+
+* [be2bill] api endpoint has ".php" at the end. Fixes temporal glitches with api.
+
 ## 0.8.3 (2014-04-14)
 
 * [security][symfony] Fix bug: `PHP Fatal error:  Undefined class constant 'ABSOLUTE_URL' in ...`
