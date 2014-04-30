@@ -15,7 +15,7 @@ class CreateBillingAgreementAction extends BaseApiAwareAction
      */
     public function execute($request)
     {
-        /** @var $request \Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateBillingAgreementRequest */
+        /** @var $request CreateBillingAgreementRequest */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -24,9 +24,6 @@ class CreateBillingAgreementAction extends BaseApiAwareAction
 
         if (null === $model['TOKEN']) {
             throw new LogicException('TOKEN must be set. Have you run SetExpressCheckoutAction?');
-        }
-        if (null === $model['PAYERID']) {
-            throw new LogicException('PAYERID must be set. Have user authorize this transaction?');
         }
         
         $buzzRequest = new FormRequest();

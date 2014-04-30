@@ -72,23 +72,6 @@ class CreateBillingAgreementActionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage PAYERID must be set.
-     */
-    public function throwIfPayerIdNotSetInModel()
-    {
-        $action = new CreateBillingAgreementAction();
-
-        $request = new CreateBillingAgreementRequest(array(
-            'TOKEN' => 'aToken'
-        ));
-
-        $action->execute($request);
-    }
-
-    /**
-     * @test
      */
     public function shouldCallApiCreateBillingAgreementMethodWithExpectedRequiredArguments()
     {
@@ -109,8 +92,7 @@ class CreateBillingAgreementActionTest extends \PHPUnit_Framework_TestCase
         $action->setApi($apiMock);
 
         $request = new CreateBillingAgreementRequest(array(
-            'TOKEN' => 'theToken',
-            'PAYERID' => 'thePayerId'
+            'TOKEN' => 'theToken'
         ));
 
         $action->execute($request);
@@ -120,10 +102,7 @@ class CreateBillingAgreementActionTest extends \PHPUnit_Framework_TestCase
         $fields = $actualRequest->getFields();
 
         $this->assertArrayHasKey('TOKEN', $fields);
-        $this->assertEquals('theToken', $fields['TOKEN']);;
-
-        $this->assertArrayHasKey('PAYERID', $fields);
-        $this->assertEquals('thePayerId', $fields['PAYERID']);
+        $this->assertEquals('theToken', $fields['TOKEN']);
     }
 
     /**
@@ -150,8 +129,8 @@ class CreateBillingAgreementActionTest extends \PHPUnit_Framework_TestCase
         $action->setApi($apiMock);
 
         $request = new CreateBillingAgreementRequest(array(
-            'TOKEN' => 'aToken',
-            'PAYERID' => 'aPayerId'        ));
+            'TOKEN' => 'aToken'
+        ));
 
         $action->execute($request);
 
