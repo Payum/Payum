@@ -444,6 +444,23 @@ class Api
     }
 
     /**
+     * Require: PAYERID, TOKEN
+     *
+     * @param \Buzz\Message\Form\FormRequest $request
+     *
+     * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
+     */
+    public function createBillingAgreement(FormRequest $request)
+    {
+        $request->setField('METHOD', 'CreateBillingAgreement');
+
+        $this->addVersionField($request);
+        $this->addAuthorizeFields($request);
+
+        return $this->doRequest($request);
+    }
+
+    /**
      * @param \Buzz\Message\Form\FormRequest $request
      *
      * @throws \Payum\Core\Exception\Http\HttpException
