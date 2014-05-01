@@ -17,4 +17,15 @@ payum:
         token_storage:
             Payum\Core\Model\Token:
                 filesystem:
-                    storage_dir: %kernel.cache_dir%/payum_tokens
+                    id_property: hash
+                    storage_dir: %kernel.cache_dir%
+
+    contexts:
+        offline:
+            offline: ~
+
+            storages:
+                Payum\Core\Model\ArrayObject:
+                    filesystem:
+                        storage_dir: %kernel.cache_dir%
+                        id_property: id
