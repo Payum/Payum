@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.6 (2014-05-01)
+
+* [security] allow create notify token without model set.
+
 ## 0.8.5 (2014-04-16)
 
 * [be2bill] should not use capture onsite action when aliased credit card used.
