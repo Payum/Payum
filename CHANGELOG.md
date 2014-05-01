@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.3 (2014-05-01)
+
+* [security] add create notify token cli command.
+
 ## 0.8.2 (2014-04-14)
 
 * [paypal][factory] add generic NotifyAction to payment.
