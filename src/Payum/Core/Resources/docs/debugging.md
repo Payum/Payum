@@ -21,8 +21,8 @@ $payment->execute(new CaptureRequest($model = new \stdClass));
 Here's an example of what the log may contain:
 
 ```
-DEBUG - [Payum] 1# Payum\Core\Action\StatusDetailsAggregatedModelAction::execute(BinaryMaskStatusRequest{model: Token})
-DEBUG - [Payum] 2# Payum\Payex\Action\PaymentDetailsStatusAction::execute(BinaryMaskStatusRequest{model: PaymentDetails})
+DEBUG - [Payum] 1# Payum\Core\Action\StatusDetailsAggregatedModelAction::execute(SimpleStatusRequest{model: Token})
+DEBUG - [Payum] 2# Payum\Payex\Action\PaymentDetailsStatusAction::execute(SimpleStatusRequest{model: PaymentDetails})
 DEBUG - [Payum] 1# Payum\Core\Action\CaptureDetailsAggregatedModelAction::execute(SecuredCaptureRequest{model: Token})
 DEBUG - [Payum] 2# Payum\Payex\Action\PaymentDetailsCaptureAction::execute(SecuredCaptureRequest{model: PaymentDetails})
 DEBUG - [Payum] 3# Payum\Payex\Action\Api\InitializeOrderAction::execute(InitializeOrderRequest{model: ArrayObject})
