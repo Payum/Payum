@@ -163,7 +163,7 @@ include 'config.php';
 $token = $requestVerifier->verify($_REQUEST);
 $payment = $registry->getPayment($token->getPaymentName());
 
-$payment->execute($status = new BinaryMaskStatusRequest($token));
+$payment->execute($status = new SimpleStatusRequest($token));
 if ($status->isSuccess()) {
     //Do your business tasks here
 
