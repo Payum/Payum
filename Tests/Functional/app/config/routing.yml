@@ -1,0 +1,3 @@
+payum_notify:
+    resource: "@PayumBundle/Resources/config/routing/notify.xml"
+    prefix:   /
