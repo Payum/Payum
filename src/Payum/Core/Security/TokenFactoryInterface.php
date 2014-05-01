@@ -5,7 +5,7 @@ interface TokenFactoryInterface
 {
     /**
      * @param string $paymentName
-     * @param object $model
+     * @param object|null $model
      * @param string $targetPath
      * @param array $targetParameters
      * @param string $afterPath

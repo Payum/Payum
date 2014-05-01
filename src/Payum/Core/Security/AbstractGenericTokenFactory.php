@@ -28,7 +28,7 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
 
     /**
      * @param StorageInterface $tokenStorage
-     * @param StorageRegistryInterface $payum
+     * @param StorageRegistryInterface $storageRegistry
      * @param string $capturePath
      * @param string $notifyPath
      */
@@ -46,12 +46,16 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
      */
     public function createToken($paymentName, $model, $targetPath, array $targetParameters = array(), $afterPath = null, array $afterParameters = array())
     {
-        $modelStorage = $this->storageRegistry->getStorageForClass($model, $paymentName);
-
         /** @var TokenInterface $token */
         $token = $this->tokenStorage->createModel();
-        $token->setDetails($modelStorage->getIdentificator($model));
+
         $token->setPaymentName($paymentName);
+
+        if (null !== $model) {
+            $token->setDetails(
+                $this->storageRegistry->getStorageForClass($model, $paymentName)->getIdentificator($model)
+            );
+        }
 
         $targetParameters = array_replace($targetParameters, array('payum_token' => $token->getHash()));
         if (0 === strpos($targetPath, 'http')) {
@@ -84,12 +88,7 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
     }
 
     /**
-     * @param string $paymentName
-     * @param object $model
-     * @param string $afterPath
-     * @param array $afterParameters
-     *
-     * @return TokenInterface
+     * {@inheritDoc}
      */
     public function createCaptureToken($paymentName, $model, $afterPath, array $afterParameters = array())
     {
@@ -104,12 +103,9 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
     }
 
     /**
-     * @param string $paymentName
-     * @param object $model
-     *
-     * @return TokenInterface
+     * {@inheritDoc}
      */
-    public function createNotifyToken($paymentName, $model)
+    public function createNotifyToken($paymentName, $model = null)
     {
         return $this->createToken($paymentName, $model, $this->notifyPath);
     }

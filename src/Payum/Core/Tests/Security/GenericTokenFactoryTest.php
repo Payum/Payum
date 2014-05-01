@@ -288,6 +288,53 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldCreateNotifyTokenWithoutModel()
+    {
+        $token = new Token;
+
+        $tokenStorageMock = $this->createStorageMock();
+        $tokenStorageMock
+            ->expects($this->once())
+            ->method('createModel')
+            ->will($this->returnValue($token))
+        ;
+        $tokenStorageMock
+            ->expects($this->once())
+            ->method('updateModel')
+            ->with($this->identicalTo($token))
+        ;
+
+        $paymentName = 'thePaymentName';
+
+        $storageRegistryMock = $this->createStorageRegistryMock();
+        $storageRegistryMock
+            ->expects($this->never())
+            ->method('getStorageForClass')
+        ;
+
+        $factory = new GenericTokenFactory(
+            $tokenStorageMock,
+            $storageRegistryMock,
+            'http://example.com',
+            'capture.php',
+            'notify.php'
+        );
+
+        $actualToken = $factory->createNotifyToken($paymentName, null);
+
+        $this->assertSame($token, $actualToken);
+        $this->assertEquals($paymentName, $token->getPaymentName());
+        $this->assertNull($token->getDetails());
+        $this->assertEquals(
+            'http://example.com/notify.php?payum_token='.$token->getHash(),
+            $token->getTargetUrl()
+        );
+        $this->assertNull($token->getAfterUrl());
+    }
+
+    /**
+     * @test
+     */
     public function shouldCreateCaptureToken()
     {
         $captureToken = new Token;
