@@ -1,5 +1,9 @@
 # Upgrades
 
+## 0.8.5 to 0.8.6
+
+* [Security] Second argument of `GenericTokenFactory::createNotifyToken` is option now.
+
 ## 0.7 to 0.8
 
 * [Registry] `Registry::registerStorageExtensions` method was removed. the logic of the method is done internally.

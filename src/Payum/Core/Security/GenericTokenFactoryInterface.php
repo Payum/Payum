@@ -15,9 +15,9 @@ interface GenericTokenFactoryInterface extends TokenFactoryInterface
 
     /**
      * @param string $paymentName
-     * @param object $model
+     * @param object|null $model
      *
      * @return TokenInterface
      */
-    public function createNotifyToken($paymentName, $model);
+    public function createNotifyToken($paymentName, $model = null);
 }
