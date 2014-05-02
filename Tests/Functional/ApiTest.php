@@ -245,8 +245,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             $response = $e->getResponse();
 
             $this->assertEquals(Api::ACK_FAILURE, $response['ACK']);
-            $this->assertEquals('Profile Id is missing from the request', $response['L_LONGMESSAGE0']);
-            $this->assertEquals('Action is missing from the request', $response['L_LONGMESSAGE1']);
+            $this->assertEquals('Token : Required parameter missing', $response['L_LONGMESSAGE0']);
 
             return;
         }
