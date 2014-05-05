@@ -118,7 +118,7 @@ App\Payum\Action\CaptureAction;
 App\Payum\Action\StatusAction;
 use Payum\Core\Payment;
 use Payum\Core\Request\CaptureRequest;
-use Payum\Core\Request\BinaryMaskStatusRequest;
+use Payum\Core\Request\SimpleStatusRequest;
 
 $payment = new Payment;
 $payment->addAction(new CaptureAction('aUsername', 'aPassword'));
@@ -130,7 +130,7 @@ $model = new ArrayObject(array(
 ));
 
 $payment->execute(new CaptureRequest($model));
-$payment->execute($status = new BinaryMaskStatusRequest($model));
+$payment->execute($status = new SimpleStatusRequest($model));
 
 if ($status->isSuccess()) {
     echo 'We purchase staff successfully';
