@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.7 (2014-05-05)
+
+* [request] add simple status request.
+
 ## 0.8.6 (2014-05-01)
 
 * [security] allow create notify token without model set.
