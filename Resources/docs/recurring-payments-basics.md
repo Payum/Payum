@@ -105,7 +105,7 @@ The page that shows payment details could be a good starting place.
 // create_recurring_payment.php
 
 use Payum\Core\Request\SyncRequest;
-use Payum\Core\Request\BinaryMaskStatusRequest;
+use Payum\Core\Request\SimpleStatusRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfileRequest;
 
 include 'config.php';
@@ -115,7 +115,7 @@ $this->getHttpRequestVerifier()->invalidate($token);
 
 $payment = $registry->getPayment($token->getPaymentName());
 
-$agreementStatus = new BinaryMaskStatusRequest($token);
+$agreementStatus = new SimpleStatusRequest($token);
 $payment->execute($agreementStatus);
 
 $recurringPaymentStatus = null;
