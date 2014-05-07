@@ -15,7 +15,8 @@
         <parameter key="payum.paypal.express_checkout_nvp.action.api.create_recurring_payment_profile.class">Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileAction</parameter>
         <parameter key="payum.paypal.express_checkout_nvp.action.api.get_recurring_payments_profile_details.class">Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetRecurringPaymentsProfileDetailsAction</parameter>
         <parameter key="payum.paypal.express_checkout_nvp.action.api.manage_recurring_payments_profile_status.class">Payum\Paypal\ExpressCheckout\Nvp\Action\Api\ManageRecurringPaymentsProfileStatusAction</parameter>
-        
+        <parameter key="payum.paypal.express_checkout_nvp.action.api.create_billing_agreement.class">Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateBillingAgreementAction</parameter>
+
         <parameter key="payum.paypal.express_checkout_nvp.action.capture.class">Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction</parameter>
         <parameter key="payum.paypal.express_checkout_nvp.action.notify.class">Payum\Paypal\ExpressCheckout\Nvp\Action\NotifyAction</parameter>
         <parameter key="payum.paypal.express_checkout_nvp.action.payment_details_status.class">Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction</parameter>
@@ -82,6 +83,12 @@
         <service
             id="payum.paypal.express_checkout_nvp.action.api.manage_recurring_payments_profile_status"
             class="%payum.paypal.express_checkout_nvp.action.api.manage_recurring_payments_profile_status.class%"
+            public="false"
+        />
+
+        <service
+            id="payum.paypal.express_checkout_nvp.action.api.create_billing_agreement"
+            class="%payum.paypal.express_checkout_nvp.action.api.create_billing_agreement.class%"
             public="false"
         />
 
