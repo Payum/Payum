@@ -18,7 +18,7 @@ class CreateCaptureTokenCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('payum:security:create-notify-token')
+            ->setName('payum:security:create-capture-token')
             ->addArgument('payment-name', InputArgument::REQUIRED, 'The payment name associated with the token')
             ->addOption('model-class', null, InputOption::VALUE_REQUIRED, 'The model class associated with the token')
             ->addOption('model-id', null, InputOption::VALUE_REQUIRED, 'The model id associated with the token')
