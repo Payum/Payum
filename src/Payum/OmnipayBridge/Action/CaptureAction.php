@@ -28,7 +28,14 @@ class CaptureAction extends BaseApiAwareAction
         }
 
         if ($response->isRedirect()) {
-            throw new RedirectUrlInteractiveRequest($response->getRedirectUrl());
+            $options['_completeCaptureRequired'] = 1;
+            
+            if ($response->getRedirectMethod() == 'POST') {
+                throw new PostRedirectUrlInteractiveRequest($response->getRedirectUrl(), $response->getRedirectData());
+            }
+            else {
+                throw new RedirectUrlInteractiveRequest($response->getRedirectUrl());
+            }
         }
 
         $options['_reference']      = $response->getTransactionReference();
