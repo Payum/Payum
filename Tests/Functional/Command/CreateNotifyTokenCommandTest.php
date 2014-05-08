@@ -1,6 +1,7 @@
 <?php
-namespace Payum\Bundle\PayumBundle\Command;
+namespace Payum\Bundle\PayumBundle\Tests\Functional\Command;
 
+use Payum\Bundle\PayumBundle\Command\CreateNotifyTokenCommand;
 use Payum\Bundle\PayumBundle\Tests\Functional\WebTestCase;
 use Payum\Core\Registry\RegistryInterface;
 use Symfony\Bundle\FrameworkBundle\Client;
