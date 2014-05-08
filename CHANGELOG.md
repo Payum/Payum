@@ -1,8 +1,13 @@
 # Changelog
 
+## 0.8.4 (2014-05-08)
+
+* [cli][security] add create capture token cli command.
+* [cli] add a command to get payment status.
+
 ## 0.8.3 (2014-05-01)
 
-* [security] add create notify token cli command.
+* [cli][security] add create notify token cli command.
 
 ## 0.8.2 (2014-04-14)
 
