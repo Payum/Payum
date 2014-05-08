@@ -1,3 +1,10 @@
-payum_notify:
+_payum_capture:
+    resource: "@PayumBundle/Resources/config/routing/capture.xml"
+    prefix:   /
+
+_payum_notify:
     resource: "@PayumBundle/Resources/config/routing/notify.xml"
     prefix:   /
+
+foo:
+    path:      /foo/url
