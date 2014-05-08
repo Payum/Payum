@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Tests\Functional\Command;
 
-use Payum\Bundle\PayumBundle\Command\CreateNotifyTokenCommand;
+use Payum\Bundle\PayumBundle\Command\StatusCommand;
 use Payum\Bundle\PayumBundle\Tests\Functional\WebTestCase;
 use Payum\Core\Registry\RegistryInterface;
 use Symfony\Bundle\FrameworkBundle\Client;
@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CreateNotifyTokenCommandTest extends WebTestCase
+class StatusCommandTest extends WebTestCase
 {
     /**
      * @var Client
@@ -25,21 +25,7 @@ class CreateNotifyTokenCommandTest extends WebTestCase
     /**
      * @test
      */
-    public function shouldCreateNotifyTokenWithoutModel()
-    {
-        $output = $this->executeConsole(new CreateNotifyTokenCommand, array(
-            'payment-name' => 'offline'
-        ));
-
-        $this->assertContains('Hash: ', $output);
-        $this->assertContains('Url: ', $output);
-        $this->assertContains('Details: null', $output);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldCreateNotifyTokenWithModel()
+    public function shouldReturnNewStatus()
     {
         /** @var RegistryInterface $payum */
         $payum = $this->client->getContainer()->get('payum');
@@ -52,15 +38,13 @@ class CreateNotifyTokenCommandTest extends WebTestCase
 
         $modelId = $storage->getIdentificator($model)->getId();
 
-        $output = $this->executeConsole(new CreateNotifyTokenCommand, array(
+        $output = $this->executeConsole(new StatusCommand, array(
             'payment-name' => 'offline',
             '--model-class' => $modelClass,
             '--model-id' => $modelId
         ));
 
-        $this->assertContains('Hash: ', $output);
-        $this->assertContains('Url: ', $output);
-        $this->assertContains("Details: $modelClass#$modelId", $output);
+        $this->assertContains("Status: new", $output);
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Tests\Functional\Command;
 
-use Payum\Bundle\PayumBundle\Command\CreateNotifyTokenCommand;
+use Payum\Bundle\PayumBundle\Command\CreateCaptureTokenCommand;
 use Payum\Bundle\PayumBundle\Tests\Functional\WebTestCase;
 use Payum\Core\Registry\RegistryInterface;
 use Symfony\Bundle\FrameworkBundle\Client;
@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CreateNotifyTokenCommandTest extends WebTestCase
+class CreateCaptureTokenCommandTest extends WebTestCase
 {
     /**
      * @var Client
@@ -25,21 +25,7 @@ class CreateNotifyTokenCommandTest extends WebTestCase
     /**
      * @test
      */
-    public function shouldCreateNotifyTokenWithoutModel()
-    {
-        $output = $this->executeConsole(new CreateNotifyTokenCommand, array(
-            'payment-name' => 'offline'
-        ));
-
-        $this->assertContains('Hash: ', $output);
-        $this->assertContains('Url: ', $output);
-        $this->assertContains('Details: null', $output);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldCreateNotifyTokenWithModel()
+    public function shouldCreateCaptureTokenWithUrlAsAfterUrl()
     {
         /** @var RegistryInterface $payum */
         $payum = $this->client->getContainer()->get('payum');
@@ -52,21 +38,52 @@ class CreateNotifyTokenCommandTest extends WebTestCase
 
         $modelId = $storage->getIdentificator($model)->getId();
 
-        $output = $this->executeConsole(new CreateNotifyTokenCommand, array(
+        $output = $this->executeConsole(new CreateCaptureTokenCommand, array(
             'payment-name' => 'offline',
             '--model-class' => $modelClass,
-            '--model-id' => $modelId
+            '--model-id' => $modelId,
+            '--after-url' => 'http://google.com'
         ));
 
         $this->assertContains('Hash: ', $output);
-        $this->assertContains('Url: ', $output);
+        $this->assertContains('Url: http://localhost/payment/capture', $output);
+        $this->assertContains('After Url: http://google.com?payum_token=', $output);
         $this->assertContains("Details: $modelClass#$modelId", $output);
     }
 
     /**
-     * @param \Symfony\Component\Console\Command\Command $command
-     * @param string[]                                   $arguments
-     * @param string[]                                   $options
+     * @test
+     */
+    public function shouldCreateCaptureTokenWithRouteAsAfterUrl()
+    {
+        /** @var RegistryInterface $payum */
+        $payum = $this->client->getContainer()->get('payum');
+
+        $modelClass = 'Payum\Core\Model\ArrayObject';
+
+        $storage = $payum->getStorageForClass($modelClass, 'offline');
+        $model = $storage->createModel();
+        $storage->updateModel($model);
+
+        $modelId = $storage->getIdentificator($model)->getId();
+
+        $output = $this->executeConsole(new CreateCaptureTokenCommand, array(
+            'payment-name' => 'offline',
+            '--model-class' => $modelClass,
+            '--model-id' => $modelId,
+            '--after-url' => 'foo'
+        ));
+
+        $this->assertContains('Hash: ', $output);
+        $this->assertContains('Url: http://localhost/payment/capture', $output);
+        $this->assertContains('After Url: http://localhost/foo/url?payum_token=', $output);
+        $this->assertContains("Details: $modelClass#$modelId", $output);
+    }
+
+    /**
+     * @param Command  $command
+     * @param string[] $arguments
+     * @param string[] $options
      *
      * @return string
      */

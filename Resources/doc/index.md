@@ -5,5 +5,6 @@
 * [Purchase done action](purchase_done_action.md).
 * [Custom api usage](custom_api_usage.md).
 * [Sandbox](sandbox.md).
+* [Console commands](console_commands.md).
 * [Debugging](debugging.md).
 * [Configuration reference](configuration_reference.md).
