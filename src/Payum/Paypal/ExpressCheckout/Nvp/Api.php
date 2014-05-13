@@ -461,6 +461,23 @@ class Api
     }
 
     /**
+     * Require: AMT, PAYMENTACTION, REFERENCEID
+     *
+     * @param \Buzz\Message\Form\FormRequest $request
+     *
+     * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
+     */
+    public function doReferenceTransaction(FormRequest $request)
+    {
+        $request->setField('METHOD', 'DoReferenceTransaction');
+
+        $this->addVersionField($request);
+        $this->addAuthorizeFields($request);
+
+        return $this->doRequest($request);
+    }
+
+    /**
      * @param \Buzz\Message\Form\FormRequest $request
      *
      * @throws \Payum\Core\Exception\Http\HttpException
