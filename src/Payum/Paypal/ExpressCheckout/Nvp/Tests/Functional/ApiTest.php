@@ -252,4 +252,25 @@ class ApiTest extends \PHPUnit_Framework_TestCase
 
         $this->fail('Expected `HttpResponseAckNotSuccessException` exception.');
     }
+
+    /**
+     * @test
+     */
+    public function shouldReturnFailedAckOnDoReferenceTransactionWithoutProfileIdSet()
+    {
+        //we cannot test success scenario of this request. So at least we can test the failure one.
+
+        try {
+            $this->api->doReferenceTransaction(new FormRequest());
+        } catch (HttpResponseAckNotSuccessException $e) {
+            $response = $e->getResponse();
+
+            $this->assertEquals(Api::ACK_FAILURE, $response['ACK']);
+            $this->assertEquals('ReferenceID : Mandatory parameter missing', $response['L_LONGMESSAGE0']);
+
+            return;
+        }
+
+        $this->fail('Expected `HttpResponseAckNotSuccessException` exception.');
+    }
 }
