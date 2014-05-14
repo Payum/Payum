@@ -13,7 +13,7 @@ _**Note**: We assume you followed all steps in [get it started](https://github.c
 Run the following command:
 
 ```bash
-$ php composer.phar require "payum/omnipay-bridge:*@stable"
+$ php composer.phar require "payum/omnipay-bridge:*@stable" "omnipay/stripe:~2.0"
 ```
 
 ## Configure context

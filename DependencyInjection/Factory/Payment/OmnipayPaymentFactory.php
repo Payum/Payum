@@ -1,11 +1,14 @@
 <?php
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
+use Omnipay\Common\GatewayFactory;
 use Payum\Core\Exception\RuntimeException;
 use Payum\Core\Exception\LogicException;
-use Omnipay\Common\GatewayFactory;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
@@ -19,9 +22,9 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
         if (false == class_exists('Payum\OmnipayBridge\PaymentFactory')) {
             throw new RuntimeException('Cannot find OmnipayBridge payment factory class. Have you installed payum/omnipay-bridge package?');
         }
-        if (false == interface_exists('Omnipay\Common\GatewayInterface')) {
-            throw new RuntimeException('Cannot find GatewayInterface interface. Have you installed omnipay/omnipay package?');
-        }
+
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/payment'));
+        $loader->load('omnipay_bridge.xml');
 
         return parent::create($container, $contextName, $config);
     }
@@ -52,10 +55,13 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
         $builder
             ->validate()
             ->ifTrue(function($v) {
-                $supportedTypes = GatewayFactory::find();
+                $gatewayFactory = new GatewayFactory;
+                $gatewayFactory->find();
+
+                $supportedTypes = $gatewayFactory->all();
                 if (false == in_array($v['type'], $supportedTypes)) {
                     throw new LogicException(sprintf(
-                        'Given type %s is not supported. These types %s are supported.',
+                        'Given type %s is not supported. Try one of supported types: %s.',
                         $v['type'],
                         implode(', ', $supportedTypes)
                     ));
@@ -74,7 +80,7 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
     {
         $gatewayDefinition = new Definition();
         $gatewayDefinition->setClass('Omnipay\Common\GatewayInterface');
-        $gatewayDefinition->setFactoryClass('Omnipay\Common\GatewayFactory');
+        $gatewayDefinition->setFactoryService('payum.omnipay_bridge.gateway_factory');
         $gatewayDefinition->setFactoryMethod('create');
         $gatewayDefinition->addArgument($config['type']);
         $gatewayDefinition->setPublic(true);
@@ -93,14 +99,14 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
      */
     protected function addActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
     {
-        $captureActionDefinition = new Definition('Payum\OmnipayBridge\Action\CaptureAction');
-        $captureActionId = 'payum.context.'.$contextName.'.action.capture';
-        $container->setDefinition($captureActionId, $captureActionDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($captureActionId)));
+        $captureDefinition = new DefinitionDecorator('payum.omnipay_bridge.action.capture');
+        $captureId = 'payum.context.' . $contextName . '.action.capture';
+        $container->setDefinition($captureId, $captureDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($captureId)));
 
-        $statusActionDefinition = new Definition('Payum\OmnipayBridge\Action\StatusAction');
-        $statusActionId = 'payum.context.'.$contextName.'.action.status';
-        $container->setDefinition($statusActionId, $statusActionDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($statusActionId)));
+        $statusDefinition = new DefinitionDecorator('payum.omnipay_bridge.action.status');
+        $statusId = 'payum.context.' . $contextName . '.action.status';
+        $container->setDefinition($statusId, $statusDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($statusId)));
     }
 }
