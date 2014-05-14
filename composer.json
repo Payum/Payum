@@ -42,7 +42,10 @@
         "doctrine/orm": "*",
         "payum/payum": "0.9.*@dev",
         "symfony/browser-kit": "~2.0",
-        "symfony/class-loader": "~2.0"
+        "symfony/class-loader": "~2.0",
+        "omnipay/dummy": "~2.0",
+        "omnipay/stripe": "~2.0",
+        "omnipay/paypal": "~2.0"
     },
     "suggest": {
         "payum/paypal-express-checkout-nvp": "If you want to use paypal express checkout nvp gateway",
