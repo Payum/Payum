@@ -67,7 +67,7 @@ use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Security\PlainHttpRequestVerifier;
 use Payum\Core\Security\GenericTokenFactory;
 
-$tokenStorage = new FilesystemStorage('/path/to/storage', 'App\Model\PaymentSecurityToken');
+$tokenStorage = new FilesystemStorage('/path/to/storage', 'App\Model\PaymentSecurityToken', 'hash');
 $requestVerifier = new PlainHttpRequestVerifier($tokenStorage);
 
 $detailsClass = 'App\Model\PaymentDetails';
