@@ -55,7 +55,7 @@
         "symfony/routing": "~2",
         "symfony/http-kernel": "~2",
         "symfony/http-foundation": "~2",
-        "omnipay/stripe": "~2.0"
+        "omnipay/dummy": "~2.0"
     },
     "replace": {
         "payum/core": "self.version",
