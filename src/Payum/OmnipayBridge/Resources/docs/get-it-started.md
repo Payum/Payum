@@ -10,7 +10,7 @@ The preferred way to install the library is using [composer](http://getcomposer.
 Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require "payum/omnipay-bridge:*@stable"
+php composer.phar require "payum/omnipay-bridge:*@stable" "omnipay/stripe:~2.0"
 ```
 
 Now you have all codes prepared and ready to be used.
@@ -30,7 +30,10 @@ use Payum\OmnipayBridge\PaymentFactory as OmnipayPaymentFactory;
 
 // ...
 
-$stripeGateway = GatewayFactory::create('Stripe');
+$gatewayFactory = new GatewayFactory;
+$gatewayFactory->find();
+
+$stripeGateway = $gatewayFactory->create('Stripe');
 $stripeGateway->setApiKey('REPLACE IT');
 $stripeGateway->setTestMode(true);
 
