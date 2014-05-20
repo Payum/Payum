@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="default" namespace="Payum\Core\Bridge\Propel\Model" defaultIdMethod="native">
+
+    <table name="PaymentNotificationDetails" phpName="NotificationDetails" idMethod="native">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="payment_name" phpName="PaymentName" type="VARCHAR" size="255" required="true"/>
+        <column name="details" phpName="Details" type="LONGVARCHAR" required="true"/>
+        <behavior name="timestampable" />
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+        </vendor>
+    </table>
+
+    <table name="PaymentDetails" phpName="PaymentDetails" idMethod="native">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="details" phpName="Details" type="LONGVARCHAR" required="true"/>
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+        </vendor>
+    </table>
+
+    <table name="PaymentSecurityToken" phpName="PaymentSecurityToken" idMethod="none">
+        <column name="hash" phpName="Hash" type="VARCHAR" size="100" primaryKey="true" required="true"/>
+        <column name="details" phpName="Details" type="OBJECT" required="true"/>
+        <column name="after_url" phpName="AfterUrl" type="LONGVARCHAR" required="true"/>
+        <column name="target_url" phpName="TargetUrl" type="LONGVARCHAR" required="true"/>
+        <column name="payment_name" phpName="PaymentName" type="VARCHAR" size="255" required="true"/>
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+        </vendor>
+    </table>
+
+</database>
