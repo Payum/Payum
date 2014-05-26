@@ -114,6 +114,16 @@ class PaypalExpressCheckoutNvpPaymentFactory extends AbstractPaymentFactory
         $container->setDefinition($manageRecurringPaymentsProfileStatusId, $manageRecurringPaymentsProfileStatusDefinition);
         $paymentDefinition->addMethodCall('addAction', array(new Reference($manageRecurringPaymentsProfileStatusId)));
 
+        $createBillingAgreementDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.create_billing_agreement');
+        $createBillingAgreementId = 'payum.context.' . $contextName . '.action.api.create_billing_agreement';
+        $container->setDefinition($createBillingAgreementId, $createBillingAgreementDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($createBillingAgreementId)));
+
+        $doReferenceTransactionDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.do_reference_transaction');
+        $doReferenceTransactionId = 'payum.context.' . $contextName . '.action.api.do_reference_transaction';
+        $container->setDefinition($doReferenceTransactionId, $doReferenceTransactionDefinition);
+        $paymentDefinition->addMethodCall('addAction', array(new Reference($doReferenceTransactionId)));
+
         $captureDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.capture');
         $captureId = 'payum.context.' . $contextName . '.action.capture';
         $container->setDefinition($captureId, $captureDefinition);
