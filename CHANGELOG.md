@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.5 (2014-05-26)
+
+* [action] add ability to add action by container tag
+* [composer] Add klarna to package keywords
+
 ## 0.8.4 (2014-05-08)
 
 * [cli][security] add create capture token cli command.

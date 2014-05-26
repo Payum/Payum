@@ -11,7 +11,7 @@ $ ./app/console payum:status paypal --model-clsas=Acme\PaymentBundle\Entity\Paym
 
 ## Create notify token.
 
-Some payment gateway does allow you to set a callback url per model. You can set only one url in their admin area.
+Some payment gateway does not allow you to set a callback url per model. You can set only one url in their admin area.
 This command allows you to generate secure url. Optionally, you can associate a model with this token.
 
 ```bash
