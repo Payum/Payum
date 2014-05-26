@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle;
 
+use Payum\Bundle\PayumBundle\DependencyInjection\Compiler\PayumActionsPass;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaCheckoutPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OfflinePaymentFactory;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -37,5 +38,7 @@ class PayumBundle extends Bundle
 
         $extension->addStorageFactory(new FilesystemStorageFactory);
         $extension->addStorageFactory(new DoctrineStorageFactory);
+
+        $container->addCompilerPass(new PayumActionsPass);
     }
 }

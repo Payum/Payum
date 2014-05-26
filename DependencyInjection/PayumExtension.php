@@ -69,7 +69,12 @@ class PayumExtension extends Extension
                 $contextConfig[$paymentFactoryName]
             );
             $paymentsServicesIds[$contextName] = $paymentId;
-            
+
+            $container->getDefinition($paymentId)->addTag('payum.payment', array(
+                'factory' => $paymentFactoryName,
+                'context' => $contextName
+            ));
+
             foreach ($contextConfig['storages'] as $modelClass => $storageConfig) {
                 $storageFactoryName = $this->findSelectedStorageFactoryNameInStorageConfig($storageConfig);
                 $storageId = $this->storageFactories[$storageFactoryName]->create(

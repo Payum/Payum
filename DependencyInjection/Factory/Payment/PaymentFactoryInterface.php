@@ -1,13 +1,14 @@
 <?php
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 interface PaymentFactoryInterface
 {
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param ContainerBuilder $container
      * @param string $contextName
      * @param array $config
      * 
@@ -24,7 +25,7 @@ interface PaymentFactoryInterface
     function getName();
 
     /**
-     * @param \Symfony\Component\Config\Definition\Builder\NodeDefinition $builder
+     * @param NodeDefinition $builder
      * 
      * @return void
      */
