@@ -404,6 +404,63 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @test
+     */
+    public function shouldAddPaymentTagWithCorrectContextAndFactoryNamesSet()
+    {
+        $config = array(
+            'security' => array(
+                'token_storage' => array(
+                    'Payum\Core\Model\Token' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
+            'contexts' => array(
+                'the_paypal_context' => array(
+                    'paypal_express_checkout_nvp' => array(
+                        'api' => array(
+                            'options' => array(
+                                'username' => 'a_username',
+                                'password' => 'a_password',
+                                'signature' => 'a_signature',
+                                'sandbox' => true
+                            )
+                        )
+                    ),
+                )
+            )
+        );
+
+        $configs = array($config);
+
+        $containerBuilder = new ContainerBuilder(new ParameterBag);
+
+        $extension = new PayumExtension;
+        $extension->addPaymentFactory(new PaypalExpressCheckoutNvpPaymentFactory);
+        $extension->addStorageFactory(new FilesystemStorageFactory);
+
+        $extension->load($configs, $containerBuilder);
+
+        $paymentDefinition = $containerBuilder->getDefinition('payum.context.the_paypal_context.payment');
+
+        $tagAttributes = $paymentDefinition->getTag('payum.payment');
+
+        $this->assertCount(1, $tagAttributes);
+
+        $attributes = $tagAttributes[0];
+
+        $this->assertArrayHasKey('factory', $attributes);
+        $this->assertEquals('paypal_express_checkout_nvp', $attributes['factory']);
+
+        $this->assertArrayHasKey('context', $attributes);
+        $this->assertEquals('the_paypal_context', $attributes['context']);
+    }
+
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)
     {
         foreach ($serviceDefinition->getMethodCalls() as $methodCall) {
