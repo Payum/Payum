@@ -121,47 +121,45 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldDecorateBasicCaptureActionDefinitionAndAddItToPayment()
+    public function shouldAddPayumActionTagCaptureAction()
     {
         $factory = new OfflinePaymentFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+         $factory->create($container, 'aContextName', array(
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
         ));
 
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addAction',
-            new Reference('payum.context.aContextName.action.capture')
-        );
+        $actionDefinition = $container->getDefinition('payum.offline.action.capture');
+
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(1, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     /**
      * @test
      */
-    public function shouldDecorateBasicStatusActionDefinitionAndAddItToPayment()
+    public function shouldAddPayumActionTagStatusAction()
     {
         $factory = new OfflinePaymentFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $factory->create($container, 'aContextName', array(
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
         ));
 
-        $this->assertTrue($container->hasDefinition('payum.context.aContextName.action.status'));
+        $actionDefinition = $container->getDefinition('payum.offline.action.status');
 
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addAction',
-            new Reference('payum.context.aContextName.action.status')
-        );
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(1, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)

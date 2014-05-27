@@ -18,27 +18,27 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         }
     }
     
-    public static function provideDecoratedActions()
+    public static function provideTaggedActions()
     {
         return array(
-            'api.initialize_order' => array('payum.context.aContextName.action.api.initialize_order'),
-            'api.complete_order' => array('payum.context.aContextName.action.api.complete_order'),
-            'api.check_order' => array('payum.context.aContextName.action.api.check_order'),
-            'api.create_agreement' => array('payum.context.aContextName.action.api.create_agreement'),
-            'api.delete_agreement' => array('payum.context.aContextName.action.api.delete_agreement'),
-            'api.check_agreement' => array('payum.context.aContextName.action.api.check_agreement'),
-            'api.autopay_agreement' => array('payum.context.aContextName.action.api.autopay_agreement'),
-            'api.start_recurring_payment' => array('payum.context.aContextName.action.api.start_recurring_payment'),
-            'api.stop_recurring_payment' => array('payum.context.aContextName.action.api.stop_recurring_payment'),
-            'api.check_recurring_payment' => array('payum.context.aContextName.action.api.check_recurring_payment'),
+            'api.initialize_order' => array('payum.payex.action.api.initialize_order'),
+            'api.complete_order' => array('payum.payex.action.api.complete_order'),
+            'api.check_order' => array('payum.payex.action.api.check_order'),
+            'api.create_agreement' => array('payum.payex.action.api.create_agreement'),
+            'api.delete_agreement' => array('payum.payex.action.api.delete_agreement'),
+            'api.check_agreement' => array('payum.payex.action.api.check_agreement'),
+            'api.autopay_agreement' => array('payum.payex.action.api.autopay_agreement'),
+            'api.start_recurring_payment' => array('payum.payex.action.api.start_recurring_payment'),
+            'api.stop_recurring_payment' => array('payum.payex.action.api.stop_recurring_payment'),
+            'api.check_recurring_payment' => array('payum.payex.action.api.check_recurring_payment'),
 
-            'payment_details_capture' => array('payum.context.aContextName.action.payment_details_capture'),
-            'payment_details_status' => array('payum.context.aContextName.action.payment_details_status'),
-            'payment_details_sync' => array('payum.context.aContextName.action.payment_details_sync'),
-            'autopay_payment_details_capture' => array('payum.context.aContextName.action.autopay_payment_details_capture'),
-            'autopay_payment_details_status' => array('payum.context.aContextName.action.autopay_payment_details_status'),
-            'agreement_details_status' => array('payum.context.aContextName.action.agreement_details_status'),
-            'agreement_details_sync' => array('payum.context.aContextName.action.agreement_details_sync'),
+            'payment_details_capture' => array('payum.payex.action.payment_details_capture'),
+            'payment_details_status' => array('payum.payex.action.payment_details_status'),
+            'payment_details_sync' => array('payum.payex.action.payment_details_sync'),
+            'autopay_payment_details_capture' => array('payum.payex.action.autopay_payment_details_capture'),
+            'autopay_payment_details_status' => array('payum.payex.action.autopay_payment_details_status'),
+            'agreement_details_status' => array('payum.payex.action.agreement_details_status'),
+            'agreement_details_sync' => array('payum.payex.action.agreement_details_sync'),
         );
     }
     
@@ -305,15 +305,15 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @dataProvider provideDecoratedActions
+     * @dataProvider provideTaggedActions
      */
-    public function shouldDecorateExpectedActionDefinitionsAndAddItToPayment($expectedActionDefinitionId)
+    public function shouldAddPayumActionTagToActions($actionId)
     {
         $factory = new PayexPaymentFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $factory->create($container, 'aContextName', array(
             'api' => array(
                 'options' => array(
                     'encryption_key' => 'aKey',
@@ -326,11 +326,11 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
 
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addAction',
-            new Reference($expectedActionDefinitionId)
-        );
+        $actionDefinition = $container->getDefinition($actionId);
+
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(1, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)

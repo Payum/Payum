@@ -238,13 +238,13 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldDecorateBasicCaptureActionDefinitionAndAddItToPayment()
+    public function shouldAddPayumActionTagCaptureAction()
     {
         $factory = new OmnipayPaymentFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $factory->create($container, 'aContextName', array(
             'type' => 'PayPal_Express',
             'options' => array(
                 'foo' => 'foo',
@@ -255,25 +255,23 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
 
-        $this->assertTrue($container->hasDefinition('payum.context.aContextName.action.capture'));
+        $actionDefinition = $container->getDefinition('payum.omnipay_bridge.action.capture');
 
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addAction',
-            new Reference('payum.context.aContextName.action.capture')
-        );
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(1, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     /**
      * @test
      */
-    public function shouldDecorateBasicStatusActionDefinitionAndAddItToPayment()
+    public function shouldAddPayumActionTagStatusAction()
     {
         $factory = new OmnipayPaymentFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $factory->create($container, 'aContextName', array(
             'type' => 'PayPal_Express',
             'options' => array(
                 'foo' => 'foo',
@@ -284,13 +282,11 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
 
-        $this->assertTrue($container->hasDefinition('payum.context.aContextName.action.status'));
+        $actionDefinition = $container->getDefinition('payum.omnipay_bridge.action.status');
 
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addAction',
-            new Reference('payum.context.aContextName.action.status')
-        );
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(1, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)

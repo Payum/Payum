@@ -11,25 +11,25 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCh
 
 class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    public static function provideDecoratedActions()
+    public static function provideTaggedActions()
     {
         return array(
-            'api.authorize_token' => array('payum.context.aContextName.action.api.authorize_token'),
-            'api.do_express_checkout_payment' => array('payum.context.aContextName.action.api.do_express_checkout_payment'),
-            'api.get_express_checkout_details' => array('payum.context.aContextName.action.api.get_express_checkout_details'),
-            'api.get_transaction_details' => array('payum.context.aContextName.action.api.get_transaction_details'),
-            'api.set_express_checkout' => array('payum.context.aContextName.action.api.set_express_checkout'),
-            'api.create_recurring_payment_profile' => array('payum.context.aContextName.action.api.create_recurring_payment_profile'),
-            'api.get_recurring_payments_profile_details' => array('payum.context.aContextName.action.api.get_recurring_payments_profile_details'),
-            'api.create_billing_agreement' => array('payum.context.aContextName.action.api.create_billing_agreement'),
-            'api.do_reference_transaction' => array('payum.context.aContextName.action.api.do_reference_transaction'),
+            'api.authorize_token' => array('payum.paypal.express_checkout_nvp.action.api.authorize_token'),
+            'api.do_express_checkout_payment' => array('payum.paypal.express_checkout_nvp.action.api.do_express_checkout_payment'),
+            'api.get_express_checkout_details' => array('payum.paypal.express_checkout_nvp.action.api.get_express_checkout_details'),
+            'api.get_transaction_details' => array('payum.paypal.express_checkout_nvp.action.api.get_transaction_details'),
+            'api.set_express_checkout' => array('payum.paypal.express_checkout_nvp.action.api.set_express_checkout'),
+            'api.create_recurring_payment_profile' => array('payum.paypal.express_checkout_nvp.action.api.create_recurring_payment_profile'),
+            'api.get_recurring_payments_profile_details' => array('payum.paypal.express_checkout_nvp.action.api.get_recurring_payments_profile_details'),
+            'api.create_billing_agreement' => array('payum.paypal.express_checkout_nvp.action.api.create_billing_agreement'),
+            'api.do_reference_transaction' => array('payum.paypal.express_checkout_nvp.action.api.do_reference_transaction'),
 
-            'capture' => array('payum.context.aContextName.action.capture'),
-            'notify' => array('payum.context.aContextName.action.notify'),
-            'payment_details_status' => array('payum.context.aContextName.action.payment_details_status'),
-            'payment_details_sync' => array('payum.context.aContextName.action.payment_details_sync'),
-            'recurring_payment_details_status' => array('payum.context.aContextName.action.recurring_payment_details_status'),
-            'recurring_payment_details_sync' => array('payum.context.aContextName.action.recurring_payment_details_sync'),
+            'capture' => array('payum.paypal.express_checkout_nvp.action.capture'),
+            'notify' => array('payum.paypal.express_checkout_nvp.action.notify'),
+            'payment_details_status' => array('payum.paypal.express_checkout_nvp.action.payment_details_status'),
+            'payment_details_sync' => array('payum.paypal.express_checkout_nvp.action.payment_details_sync'),
+            'recurring_payment_details_status' => array('payum.paypal.express_checkout_nvp.action.recurring_payment_details_status'),
+            'recurring_payment_details_sync' => array('payum.paypal.express_checkout_nvp.action.recurring_payment_details_sync'),
         );
     }
     
@@ -288,15 +288,15 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
     /**
      * @test
      * 
-     * @dataProvider provideDecoratedActions
+     * @dataProvider provideTaggedActions
      */
-    public function shouldDecorateExpectedActionDefinitionsAndAddItToPayment($expectedActionDefinitionId)
+    public function shouldAddPayumActionTagToActions($actionId)
     {
         $factory = new PaypalExpressCheckoutNvpPaymentFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $factory->create($container, 'aContextName', array(
             'api' => array(
                 'client' => 'foo',
                 'options' => array(
@@ -310,13 +310,11 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
             'extensions' => array(),
         ));
 
-        $this->assertTrue($container->hasDefinition('payum.context.aContextName.action.capture'));
+        $actionDefinition = $container->getDefinition($actionId);
 
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addAction',
-            new Reference($expectedActionDefinitionId)
-        );
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(1, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)
