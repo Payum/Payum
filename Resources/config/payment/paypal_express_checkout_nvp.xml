@@ -43,96 +43,128 @@
             id="payum.paypal.express_checkout_nvp.action.api.authorize_token" 
             class="%payum.paypal.express_checkout_nvp.action.api.authorize_token.class%" 
             public="false"
-        />
+        >
+            <tag name="payum.action" factory="paypal_express_checkout_nvp" />
+        </service>
 
         <service
             id="payum.paypal.express_checkout_nvp.action.api.do_express_checkout_payment"
             class="%payum.paypal.express_checkout_nvp.action.api.do_express_checkout_payment.class%"
             public="false"
-        />
+        >
+            <tag name="payum.action" factory="paypal_express_checkout_nvp" />
+        </service>
         
         <service
             id="payum.paypal.express_checkout_nvp.action.api.get_express_checkout_details"
             class="%payum.paypal.express_checkout_nvp.action.api.get_express_checkout_details.class%"
             public="false"
-        />
+        >
+            <tag name="payum.action" factory="paypal_express_checkout_nvp" />
+        </service>
 
         <service
             id="payum.paypal.express_checkout_nvp.action.api.get_transaction_details"
             class="%payum.paypal.express_checkout_nvp.action.api.get_transaction_details.class%"
             public="false"
-        />
+        >
+            <tag name="payum.action" factory="paypal_express_checkout_nvp" />
+        </service>
 
         <service
             id="payum.paypal.express_checkout_nvp.action.api.set_express_checkout"
             class="%payum.paypal.express_checkout_nvp.action.api.set_express_checkout.class%"
             public="false"
-        />
+        >
+            <tag name="payum.action" factory="paypal_express_checkout_nvp" />
+        </service>
 
         <service
             id="payum.paypal.express_checkout_nvp.action.api.create_recurring_payment_profile"
             class="%payum.paypal.express_checkout_nvp.action.api.create_recurring_payment_profile.class%"
             public="false"
-        />
+        >
+            <tag name="payum.action" factory="paypal_express_checkout_nvp" />
+        </service>
 
         <service
             id="payum.paypal.express_checkout_nvp.action.api.get_recurring_payments_profile_details"
             class="%payum.paypal.express_checkout_nvp.action.api.get_recurring_payments_profile_details.class%"
             public="false"
-        />
+        >
+            <tag name="payum.action" factory="paypal_express_checkout_nvp" />
+        </service>
 
         <service
             id="payum.paypal.express_checkout_nvp.action.api.manage_recurring_payments_profile_status"
             class="%payum.paypal.express_checkout_nvp.action.api.manage_recurring_payments_profile_status.class%"
             public="false"
-        />
+        >
+            <tag name="payum.action" factory="paypal_express_checkout_nvp" />
+        </service>
 
         <service
             id="payum.paypal.express_checkout_nvp.action.api.create_billing_agreement"
             class="%payum.paypal.express_checkout_nvp.action.api.create_billing_agreement.class%"
             public="false"
-        />
+        >
+            <tag name="payum.action" factory="paypal_express_checkout_nvp" />
+        </service>
 
         <service
             id="payum.paypal.express_checkout_nvp.action.api.do_reference_transaction"
             class="%payum.paypal.express_checkout_nvp.action.api.do_reference_transaction.class%"
             public="false"
-        />
+        >
+            <tag name="payum.action" factory="paypal_express_checkout_nvp" />
+        </service>
 
         <service
             id="payum.paypal.express_checkout_nvp.action.capture"
             class="%payum.paypal.express_checkout_nvp.action.capture.class%"
             public="false"
-        />
+        >
+            <tag name="payum.action" factory="paypal_express_checkout_nvp" />
+        </service>
 
         <service
             id="payum.paypal.express_checkout_nvp.action.notify"
             class="%payum.paypal.express_checkout_nvp.action.notify.class%"
             public="false"
-        />
+        >
+            <tag name="payum.action" factory="paypal_express_checkout_nvp" />
+        </service>
 
         <service
             id="payum.paypal.express_checkout_nvp.action.payment_details_status"
             class="%payum.paypal.express_checkout_nvp.action.payment_details_status.class%"
             public="false"
-        />
+        >
+            <tag name="payum.action" factory="paypal_express_checkout_nvp" />
+        </service>
 
         <service
             id="payum.paypal.express_checkout_nvp.action.payment_details_sync"
             class="%payum.paypal.express_checkout_nvp.action.payment_details_sync.class%"
             public="false"
-        />
+        >
+            <tag name="payum.action" factory="paypal_express_checkout_nvp" />
+        </service>
 
         <service
             id="payum.paypal.express_checkout_nvp.action.recurring_payment_details_status"
             class="%payum.paypal.express_checkout_nvp.action.recurring_payment_details_status.class%"
             public="false"
-        />
+        >
+            <tag name="payum.action" factory="paypal_express_checkout_nvp" />
+        </service>
 
         <service
             id="payum.paypal.express_checkout_nvp.action.recurring_payment_details_sync"
             class="%payum.paypal.express_checkout_nvp.action.recurring_payment_details_sync.class%"
             public="false"
-        />
+        >
+            <tag name="payum.action" factory="paypal_express_checkout_nvp" />
+        </service>
     </services>
 </container>

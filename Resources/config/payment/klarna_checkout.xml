@@ -21,6 +21,7 @@
             class="%payum.klarna.checkout.action.capture.class%"
             public="false"
         >
+            <tag name="payum.action" factory="klarna_checkout" />
         </service>
 
         <service
@@ -28,6 +29,7 @@
             class="%payum.klarna.checkout.action.notify.class%"
             public="false"
         >
+            <tag name="payum.action" factory="klarna_checkout" />
         </service>
 
         <service
@@ -35,6 +37,7 @@
             class="%payum.klarna.checkout.action.sync.class%"
             public="false"
         >
+            <tag name="payum.action" factory="klarna_checkout" />
         </service>
 
         <service
@@ -42,6 +45,7 @@
             class="%payum.klarna.checkout.action.status.class%"
             public="false"
         >
+            <tag name="payum.action" factory="klarna_checkout" />
         </service>
 
         <service
@@ -49,6 +53,7 @@
             class="%payum.klarna.checkout.action.api.create_order.class%"
             public="false"
         >
+            <tag name="payum.action" factory="klarna_checkout" />
         </service>
 
         <service
@@ -56,6 +61,7 @@
             class="%payum.klarna.checkout.action.api.update_order.class%"
             public="false"
         >
+            <tag name="payum.action" factory="klarna_checkout" />
         </service>
 
         <service
@@ -63,6 +69,7 @@
             class="%payum.klarna.checkout.action.api.fetch_order.class%"
             public="false"
         >
+            <tag name="payum.action" factory="klarna_checkout" />
         </service>
     </services>
 </container>

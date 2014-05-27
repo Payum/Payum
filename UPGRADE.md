@@ -1,5 +1,9 @@
 # Upgrades
 
+## 0.8 to 0.9
+
+* Payment factory does not create action services any more. Instead, it uses actions defined in payment/foo.xml by tag.
+
 ## 0.7 to 0.8
 
 * `TokenFactory::createTokenForRoute` was renamed to `createToken`.

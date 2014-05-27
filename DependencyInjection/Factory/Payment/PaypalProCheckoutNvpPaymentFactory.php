@@ -76,20 +76,4 @@ class PaypalProCheckoutNvpPaymentFactory extends AbstractPaymentFactory
         $container->setDefinition($apiId, $apiDefinition);
         $paymentDefinition->addMethodCall('addApi', array(new Reference($apiId)));
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function addActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
-    {
-        $captureDefinition = new DefinitionDecorator('payum.paypal.pro_checkout_nvp.action.capture');
-        $captureId = 'payum.context.' . $contextName . '.action.capture';
-        $container->setDefinition($captureId, $captureDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($captureId)));
-
-        $statusDefinition = new DefinitionDecorator('payum.paypal.pro_checkout_nvp.action.status');
-        $statusId = 'payum.context.' . $contextName . '.action.status';
-        $container->setDefinition($statusId, $statusDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($statusId)));
-    }
 }

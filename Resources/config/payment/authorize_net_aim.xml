@@ -27,6 +27,7 @@
             class="%payum.authorize_net_aim.action.capture.class%"
             public="false"
         >
+            <tag name="payum.action" factory="authorize_net_aim" />
         </service>
 
         <service
@@ -34,6 +35,7 @@
             class="%payum.authorize_net_aim.action.status.class%"
             public="false"
         >
+            <tag name="payum.action" factory="authorize_net_aim" />
         </service>
     </services>
 </container>

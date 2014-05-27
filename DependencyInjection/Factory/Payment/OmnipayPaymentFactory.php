@@ -93,20 +93,4 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
 
         $paymentDefinition->addMethodCall('addApi', array(new Reference($gatewayId)));
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function addActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
-    {
-        $captureDefinition = new DefinitionDecorator('payum.omnipay_bridge.action.capture');
-        $captureId = 'payum.context.' . $contextName . '.action.capture';
-        $container->setDefinition($captureId, $captureDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($captureId)));
-
-        $statusDefinition = new DefinitionDecorator('payum.omnipay_bridge.action.status');
-        $statusId = 'payum.context.' . $contextName . '.action.status';
-        $container->setDefinition($statusId, $statusDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($statusId)));
-    }
 }

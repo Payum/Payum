@@ -66,20 +66,4 @@ class AuthorizeNetAimPaymentFactory extends AbstractPaymentFactory
         $container->setDefinition($apiId, $apiDefinition);
         $paymentDefinition->addMethodCall('addApi', array(new Reference($apiId)));
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function addActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
-    {
-        $captureActionDefinition = new DefinitionDecorator('payum.authorize_net_aim.action.capture');
-        $captureActionId = 'payum.context.'.$contextName.'.action.capture';
-        $container->setDefinition($captureActionId, $captureActionDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($captureActionId)));
-
-        $statusActionDefinition = new DefinitionDecorator('payum.authorize_net_aim.action.status');
-        $statusActionId = 'payum.context.'.$contextName.'.action.status';
-        $container->setDefinition($statusActionId, $statusActionDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($statusActionId)));
-    }
 }

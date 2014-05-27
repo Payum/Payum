@@ -33,20 +33,4 @@ class OfflinePaymentFactory extends AbstractPaymentFactory
     {
         return 'offline';
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function addActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
-    {
-        $captureActionDefinition = new DefinitionDecorator('payum.offline.action.capture');
-        $captureActionId = 'payum.context.'.$contextName.'.action.capture';
-        $container->setDefinition($captureActionId, $captureActionDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($captureActionId)));
-
-        $statusActionDefinition = new DefinitionDecorator('payum.offline.action.status');
-        $statusActionId = 'payum.context.'.$contextName.'.action.status';
-        $container->setDefinition($statusActionId, $statusActionDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($statusActionId)));
-    }
 }

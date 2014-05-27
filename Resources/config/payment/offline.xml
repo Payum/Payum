@@ -15,6 +15,7 @@
             class="%payum.offline.action.capture.class%"
             public="false"
         >
+            <tag name="payum.action" factory="offline" />
         </service>
 
         <service
@@ -22,6 +23,7 @@
             class="%payum.offline.action.status.class%"
             public="false"
         >
+            <tag name="payum.action" factory="offline" />
         </service>
     </services>
 </container>
