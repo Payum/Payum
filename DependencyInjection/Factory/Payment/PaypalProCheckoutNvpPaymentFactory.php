@@ -68,28 +68,12 @@ class PaypalProCheckoutNvpPaymentFactory extends AbstractPaymentFactory
      */
     protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
     {
-        $apiDefinition = new DefinitionDecorator('payum.paypal.pro_checkout_nvp.api');
+        $apiDefinition = new DefinitionDecorator('payum.paypal.pro_checkout_nvp.api.prototype');
         $apiDefinition->replaceArgument(0, new Reference($config['api']['client']));
         $apiDefinition->replaceArgument(1, $config['api']['options']);
         $apiDefinition->setPublic(true);
         $apiId = 'payum.context.'.$contextName.'.api';
         $container->setDefinition($apiId, $apiDefinition);
         $paymentDefinition->addMethodCall('addApi', array(new Reference($apiId)));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function addActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
-    {
-        $captureDefinition = new DefinitionDecorator('payum.paypal.pro_checkout_nvp.action.capture');
-        $captureId = 'payum.context.' . $contextName . '.action.capture';
-        $container->setDefinition($captureId, $captureDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($captureId)));
-
-        $statusDefinition = new DefinitionDecorator('payum.paypal.pro_checkout_nvp.action.status');
-        $statusId = 'payum.context.' . $contextName . '.action.status';
-        $container->setDefinition($statusId, $statusDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($statusId)));
     }
 }

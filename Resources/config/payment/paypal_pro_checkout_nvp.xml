@@ -1,39 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-  <parameters>
-    <parameter key="payum.paypal.pro_checkout_nvp.api.class">Payum\Paypal\ProCheckout\Nvp\Api</parameter>
+    <parameters>
+        <parameter key="payum.paypal.pro_checkout_nvp.api.class">Payum\Paypal\ProCheckout\Nvp\Api</parameter>
 
-    <parameter key="payum.paypal.pro_checkout_nvp.action.capture.class">Payum\Paypal\ProCheckout\Nvp\Action\CaptureAction</parameter>
-    <parameter key="payum.paypal.pro_checkout_nvp.action.status.class">Payum\Paypal\ProCheckout\Nvp\Action\StatusAction</parameter>
-  </parameters>
+        <parameter key="payum.paypal.pro_checkout_nvp.action.capture.class">Payum\Paypal\ProCheckout\Nvp\Action\CaptureAction</parameter>
+        <parameter key="payum.paypal.pro_checkout_nvp.action.status.class">Payum\Paypal\ProCheckout\Nvp\Action\StatusAction</parameter>
+    </parameters>
 
-  <services>
-    <service
-      id="payum.paypal.pro_checkout_nvp.api"
-      class="%payum.paypal.pro_checkout_nvp.api.class%"
-      abstract="true"
-      public="false"
-      >
-      <argument type="service" id="payum.buzz.client" />
-      <argument type="collection">
-        <!-- It is template service. The real service will be created by Be2BillPaymentFactory -->
-      </argument>
-    </service>
+    <services>
+        <service
+            id="payum.paypal.pro_checkout_nvp.api.prototype"
+            class="%payum.paypal.pro_checkout_nvp.api.class%"
+            abstract="true"
+            public="false"
+            >
+            <argument type="service" id="payum.buzz.client" />
+            <argument type="collection">
+                <!-- It is template service. The real service will be created by Be2BillPaymentFactory -->
+            </argument>
+        </service>
 
-    <service
-      id="payum.paypal.pro_checkout_nvp.action.capture"
-      class="%payum.paypal.pro_checkout_nvp.action.capture.class%"
-      public="false"
-      />
+        <service
+            id="payum.paypal.pro_checkout_nvp.action.capture"
+            class="%payum.paypal.pro_checkout_nvp.action.capture.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="paypal_pro_checkout_nvp" />
+        </service>
 
-    <service
-      id="payum.paypal.pro_checkout_nvp.action.status"
-      class="%payum.paypal.pro_checkout_nvp.action.status.class%"
-      public="false"
-      />
-  </services>
+        <service
+            id="payum.paypal.pro_checkout_nvp.action.status"
+            class="%payum.paypal.pro_checkout_nvp.action.status.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="paypal_pro_checkout_nvp" />
+        </service>
+    </services>
 </container>

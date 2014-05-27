@@ -267,13 +267,13 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldDecorateBasicCaptureActionDefinitionAndAddItToPayment()
+    public function shouldAddPayumActionTagToCaptureAction()
     {
         $factory = new KlarnaCheckoutPaymentFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $factory->create($container, 'aContextName', array(
             'api' => array(
                 'client' => 'foo',
                 'options' => array(
@@ -287,23 +287,23 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
 
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addAction',
-            new Reference('payum.context.aContextName.action.capture')
-        );
+        $actionDefinition = $container->getDefinition('payum.klarna.checkout.action.capture');
+
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(1, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     /**
      * @test
      */
-    public function shouldDecorateBasicStatusActionDefinitionAndAddItToPayment()
+    public function shouldAddPayumActionTagToStatusAction()
     {
         $factory = new KlarnaCheckoutPaymentFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $factory->create($container, 'aContextName', array(
             'api' => array(
                 'client' => 'foo',
                 'options' => array(
@@ -317,25 +317,23 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
 
-        $this->assertTrue($container->hasDefinition('payum.context.aContextName.action.status'));
+        $actionDefinition = $container->getDefinition('payum.klarna.checkout.action.status');
 
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addAction',
-            new Reference('payum.context.aContextName.action.status')
-        );
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(1, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     /**
      * @test
      */
-    public function shouldDecorateBasicSyncActionDefinitionAndAddItToPayment()
+    public function shouldAddPayumActionTagToSyncAction()
     {
         $factory = new KlarnaCheckoutPaymentFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $factory->create($container, 'aContextName', array(
             'api' => array(
                 'client' => 'foo',
                 'options' => array(
@@ -349,25 +347,23 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
 
-        $this->assertTrue($container->hasDefinition('payum.context.aContextName.action.sync'));
+        $actionDefinition = $container->getDefinition('payum.klarna.checkout.action.sync');
 
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addAction',
-            new Reference('payum.context.aContextName.action.sync')
-        );
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(1, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     /**
      * @test
      */
-    public function shouldDecorateBasicNotifyActionDefinitionAndAddItToPayment()
+    public function shouldAddPayumActionTagNotifyAction()
     {
         $factory = new KlarnaCheckoutPaymentFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $factory->create($container, 'aContextName', array(
             'api' => array(
                 'client' => 'foo',
                 'options' => array(
@@ -381,13 +377,11 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
 
-        $this->assertTrue($container->hasDefinition('payum.context.aContextName.action.notify'));
+        $actionDefinition = $container->getDefinition('payum.klarna.checkout.action.notify');
 
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addAction',
-            new Reference('payum.context.aContextName.action.notify')
-        );
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(1, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)

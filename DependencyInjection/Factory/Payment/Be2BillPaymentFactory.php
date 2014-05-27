@@ -59,33 +59,12 @@ class Be2BillPaymentFactory extends AbstractPaymentFactory
      */
     protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
     {
-        $apiDefinition = new DefinitionDecorator('payum.be2bill.api');
+        $apiDefinition = new DefinitionDecorator('payum.be2bill.api.prototype');
         $apiDefinition->replaceArgument(0, new Reference($config['api']['client']));
         $apiDefinition->replaceArgument(1, $config['api']['options']);
         $apiDefinition->setPublic(true);
         $apiId = 'payum.context.'.$contextName.'.api';
         $container->setDefinition($apiId, $apiDefinition);
         $paymentDefinition->addMethodCall('addApi', array(new Reference($apiId)));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function addActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
-    {
-        $captureActionDefinition = new DefinitionDecorator('payum.be2bill.action.capture');
-        $captureActionId = 'payum.context.'.$contextName.'.action.capture';
-        $container->setDefinition($captureActionId, $captureActionDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($captureActionId)));
-
-        $captureOnsiteActionDefinition = new DefinitionDecorator('payum.be2bill.action.capture_onsite');
-        $captureOnsiteActionId = 'payum.context.'.$contextName.'.action.capture_onsite';
-        $container->setDefinition($captureOnsiteActionId, $captureOnsiteActionDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($captureOnsiteActionId)));
-
-        $statusActionDefinition = new DefinitionDecorator('payum.be2bill.action.status');
-        $statusActionId = 'payum.context.'.$contextName.'.action.status';
-        $container->setDefinition($statusActionId, $statusActionDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($statusActionId)));
     }
 }

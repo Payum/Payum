@@ -60,98 +60,12 @@ class PaypalExpressCheckoutNvpPaymentFactory extends AbstractPaymentFactory
      */
     protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
     {
-        $apiDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.api');
+        $apiDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.api.prototype');
         $apiDefinition->replaceArgument(0, new Reference($config['api']['client']));
         $apiDefinition->replaceArgument(1, $config['api']['options']);
         $apiDefinition->setPublic(true);
         $apiId = 'payum.context.'.$contextName.'.api';
         $container->setDefinition($apiId, $apiDefinition);
         $paymentDefinition->addMethodCall('addApi', array(new Reference($apiId)));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function addActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
-    {
-        $authorizeTokenDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.authorize_token');
-        $authorizeTokenId = 'payum.context.'.$contextName.'.action.api.authorize_token';
-        $container->setDefinition($authorizeTokenId, $authorizeTokenDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($authorizeTokenId)));
-
-        $doExpressCheckoutPaymentDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.do_express_checkout_payment');
-        $doExpressCheckoutPaymentId = 'payum.context.'.$contextName.'.action.api.do_express_checkout_payment';
-        $container->setDefinition($doExpressCheckoutPaymentId, $doExpressCheckoutPaymentDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($doExpressCheckoutPaymentId)));
-
-        $getExpressCheckoutDetailsDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.get_express_checkout_details');
-        $getExpressCheckoutDetailsId = 'payum.context.'.$contextName.'.action.api.get_express_checkout_details';
-        $container->setDefinition($getExpressCheckoutDetailsId, $getExpressCheckoutDetailsDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($getExpressCheckoutDetailsId)));
-
-        $getTransactionDetailsDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.get_transaction_details');
-        $getTransactionDetailsId = 'payum.context.'.$contextName.'.action.api.get_transaction_details';
-        $container->setDefinition($getTransactionDetailsId, $getTransactionDetailsDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($getTransactionDetailsId)));
-
-        $setExpressCheckoutDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.set_express_checkout');
-        $setExpressCheckoutId = 'payum.context.' . $contextName . '.action.api.set_express_checkout';
-        $container->setDefinition($setExpressCheckoutId, $setExpressCheckoutDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($setExpressCheckoutId)));
-
-        $createRecurringPaymentProfileDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.create_recurring_payment_profile');
-        $createRecurringPaymentProfileId = 'payum.context.' . $contextName . '.action.api.create_recurring_payment_profile';
-        $container->setDefinition($createRecurringPaymentProfileId, $createRecurringPaymentProfileDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($createRecurringPaymentProfileId)));
-
-        $getRecurringPaymentsProfileDetailsDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.get_recurring_payments_profile_details');
-        $getRecurringPaymentsProfileDetailsId = 'payum.context.' . $contextName . '.action.api.get_recurring_payments_profile_details';
-        $container->setDefinition($getRecurringPaymentsProfileDetailsId, $getRecurringPaymentsProfileDetailsDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($getRecurringPaymentsProfileDetailsId)));
-
-        $manageRecurringPaymentsProfileStatusDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.manage_recurring_payments_profile_status');
-        $manageRecurringPaymentsProfileStatusId = 'payum.context.' . $contextName . '.action.api.manage_recurring_payments_profile_status';
-        $container->setDefinition($manageRecurringPaymentsProfileStatusId, $manageRecurringPaymentsProfileStatusDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($manageRecurringPaymentsProfileStatusId)));
-
-        $createBillingAgreementDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.create_billing_agreement');
-        $createBillingAgreementId = 'payum.context.' . $contextName . '.action.api.create_billing_agreement';
-        $container->setDefinition($createBillingAgreementId, $createBillingAgreementDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($createBillingAgreementId)));
-
-        $doReferenceTransactionDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.api.do_reference_transaction');
-        $doReferenceTransactionId = 'payum.context.' . $contextName . '.action.api.do_reference_transaction';
-        $container->setDefinition($doReferenceTransactionId, $doReferenceTransactionDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($doReferenceTransactionId)));
-
-        $captureDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.capture');
-        $captureId = 'payum.context.' . $contextName . '.action.capture';
-        $container->setDefinition($captureId, $captureDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($captureId)));
-
-        $notifyDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.notify');
-        $notifyId = 'payum.context.' . $contextName . '.action.notify';
-        $container->setDefinition($notifyId, $notifyDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($notifyId)));
-
-        $paymentDetailsStatusDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.payment_details_status');
-        $paymentDetailsStatusId = 'payum.context.' . $contextName . '.action.payment_details_status';
-        $container->setDefinition($paymentDetailsStatusId, $paymentDetailsStatusDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($paymentDetailsStatusId)));
-
-        $syncDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.payment_details_sync');
-        $syncId = 'payum.context.' . $contextName . '.action.payment_details_sync';
-        $container->setDefinition($syncId, $syncDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($syncId)));
-
-        $recurringPaymentDetailsStatusDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.recurring_payment_details_status');
-        $recurringPaymentDetailsStatusId = 'payum.context.' . $contextName . '.action.recurring_payment_details_status';
-        $container->setDefinition($recurringPaymentDetailsStatusId, $recurringPaymentDetailsStatusDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($recurringPaymentDetailsStatusId)));
-
-        $recurringPaymentDetailsSyncDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.action.recurring_payment_details_sync');
-        $recurringPaymentDetailsSyncsId = 'payum.context.' . $contextName . '.action.recurring_payment_details_sync';
-        $container->setDefinition($recurringPaymentDetailsSyncsId, $recurringPaymentDetailsSyncDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($recurringPaymentDetailsSyncsId)));
     }
 }

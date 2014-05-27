@@ -33,7 +33,7 @@
             </call>
         </service>
         
-        <service id="payum.buzz.client" class="%payum.buzz.client.class%" public="false">
+        <service id="payum.buzz.client" class="%payum.buzz.client.class%">
             <call method="setTimeout">
                 <argument>200</argument>
             </call>

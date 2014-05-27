@@ -13,7 +13,7 @@
 
     <services>
         <service
-            id="payum.be2bill.api"
+            id="payum.be2bill.api.prototype"
             class="%payum.be2bill.api.class%"
             abstract="true"
             public="false"
@@ -29,6 +29,7 @@
             class="%payum.be2bill.action.capture.class%"
             public="false"
         >
+            <tag name="payum.action" factory="be2bill" />
         </service>
 
         <service
@@ -36,6 +37,7 @@
             class="%payum.be2bill.action.capture_onsite.class%"
             public="false"
         >
+            <tag name="payum.action" factory="be2bill" />
         </service>
 
         <service
@@ -43,6 +45,7 @@
             class="%payum.be2bill.action.status.class%"
             public="false"
         >
+            <tag name="payum.action" factory="be2bill" />
         </service>
     </services>
 </container>

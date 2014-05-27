@@ -237,7 +237,7 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldDecorateBasicApiDefinitionAndAddItToPayment()
+    public function shouldAddPayumActionTagApiDefinitionAndAddItToPayment()
     {
         $factory = new Be2BillPaymentFactory;
 
@@ -269,13 +269,13 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldDecorateBasicCaptureActionDefinitionAndAddItToPayment()
+    public function shouldAddPayumActionTagToCaptureAction()
     {
         $factory = new Be2BillPaymentFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $factory->create($container, 'aContextName', array(
             'api' => array(
                 'client' => 'foo',
                 'options' => array(
@@ -289,23 +289,23 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
 
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addAction',
-            new Reference('payum.context.aContextName.action.capture')
-        );
+        $actionDefinition = $container->getDefinition('payum.be2bill.action.capture');
+
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(1, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     /**
      * @test
      */
-    public function shouldDecorateBasicCaptureOnsiteActionDefinitionAndAddItToPayment()
+    public function shouldAddPayumActionTagToCaptureOnsiteAction()
     {
         $factory = new Be2BillPaymentFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $factory->create($container, 'aContextName', array(
             'api' => array(
                 'client' => 'foo',
                 'options' => array(
@@ -319,23 +319,23 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
 
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addAction',
-            new Reference('payum.context.aContextName.action.capture_onsite')
-        );
+        $actionDefinition = $container->getDefinition('payum.be2bill.action.capture_onsite');
+
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(1, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     /**
      * @test
      */
-    public function shouldDecorateBasicStatusActionDefinitionAndAddItToPayment()
+    public function shouldAddPayumActionTagToStatusAction()
     {
         $factory = new Be2BillPaymentFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $factory->create($container, 'aContextName', array(
             'api' => array(
                 'client' => 'foo',
                 'options' => array(
@@ -349,13 +349,11 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
 
-        $this->assertTrue($container->hasDefinition('payum.context.aContextName.action.status'));
+        $actionDefinition = $container->getDefinition('payum.be2bill.action.status');
 
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addAction',
-            new Reference('payum.context.aContextName.action.status')
-        );
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(1, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)

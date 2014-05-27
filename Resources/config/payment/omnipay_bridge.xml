@@ -22,6 +22,7 @@
             class="%payum.omnipay_bridge.action.capture.class%"
             public="false"
         >
+            <tag name="payum.action" factory="omnipay" />
         </service>
 
         <service
@@ -29,6 +30,7 @@
             class="%payum.omnipay_bridge.action.status.class%"
             public="false"
         >
+            <tag name="payum.action" factory="omnipay" />
         </service>
     </services>
 </container>
