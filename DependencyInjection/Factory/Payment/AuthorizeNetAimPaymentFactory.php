@@ -58,7 +58,7 @@ class AuthorizeNetAimPaymentFactory extends AbstractPaymentFactory
      */
     protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
     {
-        $apiDefinition = new DefinitionDecorator('payum.authorize_net_aim.api');
+        $apiDefinition = new DefinitionDecorator('payum.authorize_net_aim.api.prototype');
         $apiDefinition->replaceArgument(0, $config['api']['options']['login_id']);
         $apiDefinition->replaceArgument(1, $config['api']['options']['transaction_key']);
         $apiDefinition->addMethodCall('setSandbox', array($config['api']['options']['sandbox']));

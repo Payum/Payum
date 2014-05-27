@@ -13,7 +13,7 @@
 
     <services>
         <service
-            id="payum.be2bill.api"
+            id="payum.be2bill.api.prototype"
             class="%payum.be2bill.api.class%"
             abstract="true"
             public="false"

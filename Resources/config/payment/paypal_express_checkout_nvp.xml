@@ -28,7 +28,7 @@
 
     <services>
         <service
-            id="payum.paypal.express_checkout_nvp.api"
+            id="payum.paypal.express_checkout_nvp.api.prototype"
             class="%payum.paypal.express_checkout_nvp.api.class%"
             abstract="true"
             public="false"

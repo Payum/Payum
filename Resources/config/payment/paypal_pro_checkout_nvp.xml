@@ -13,7 +13,7 @@
 
     <services>
         <service
-            id="payum.paypal.pro_checkout_nvp.api"
+            id="payum.paypal.pro_checkout_nvp.api.prototype"
             class="%payum.paypal.pro_checkout_nvp.api.class%"
             abstract="true"
             public="false"

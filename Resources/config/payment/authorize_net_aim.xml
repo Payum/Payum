@@ -12,7 +12,7 @@
 
     <services>
         <service
-            id="payum.authorize_net_aim.api"
+            id="payum.authorize_net_aim.api.prototype"
             class="%payum.authorize_net_aim.api.class%"
             abstract="true"
             public="false"
