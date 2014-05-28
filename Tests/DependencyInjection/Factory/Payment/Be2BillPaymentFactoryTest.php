@@ -224,31 +224,6 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAddPayumActionTagToCaptureOnsiteAction()
-    {
-        $factory = new Be2BillPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'identifier' => 'anIdentifier',
-            'password' => 'aPassword',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.be2bill.action.capture_onsite');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
     public function shouldAddPayumActionTagToStatusAction()
     {
         $factory = new Be2BillPaymentFactory;
@@ -267,7 +242,7 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $actionDefinition = $container->getDefinition('payum.be2bill.action.status');
 
         $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
+        $this->assertCount(2, $tagAttributes);
         $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 

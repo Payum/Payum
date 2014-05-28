@@ -48,30 +48,23 @@ class Be2BillOnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
-        
+
         $factory->addConfiguration($rootNode);
 
         $processor = new Processor();
         $config = $processor->process($tb->buildTree(), array(array(
-            'api' => array(
-                'options' => array(
-                    'identifier' => 'anIdentifier',
-                    'password' => 'aPassword',
-                )
-            )
+            'identifier' => 'anIdentifier',
+            'password' => 'aPassword',
         )));
 
-        $this->assertArrayHasKey('api', $config);
-        $this->assertArrayHasKey('options', $config['api']);
-        
-        $this->assertArrayHasKey('identifier', $config['api']['options']);
-        $this->assertEquals('anIdentifier', $config['api']['options']['identifier']);
-        
-        $this->assertArrayHasKey('password', $config['api']['options']);
-        $this->assertEquals('aPassword', $config['api']['options']['password']);
+        $this->assertArrayHasKey('identifier', $config);
+        $this->assertEquals('anIdentifier', $config['identifier']);
 
-        $this->assertArrayHasKey('sandbox', $config['api']['options']);
-        $this->assertTrue($config['api']['options']['sandbox']);
+        $this->assertArrayHasKey('password', $config);
+        $this->assertEquals('aPassword', $config['password']);
+
+        $this->assertArrayHasKey('sandbox', $config);
+        $this->assertTrue($config['sandbox']);
 
         //come from abstract payment factory
         $this->assertArrayHasKey('actions', $config);
@@ -81,49 +74,9 @@ class Be2BillOnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "api" at path "foo" must be configured.
-     */
-    public function thrownIfApiSectionMissing()
-    {
-        $factory = new Be2BillOnsitePaymentFactory;
-
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('foo');
-
-        $factory->addConfiguration($rootNode);
-
-        $processor = new Processor();
-        $processor->process($tb->buildTree(), array());
-    }
-
-    /**
-     * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "options" at path "foo.api" must be configured.
-     */
-    public function thrownIfApiOptionsSectionMissing()
-    {
-        $factory = new Be2BillOnsitePaymentFactory;
-
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('foo');
-
-        $factory->addConfiguration($rootNode);
-
-        $processor = new Processor();
-        $processor->process($tb->buildTree(), array(array(
-            'api' => array()
-        )));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "identifier" at path "foo.api.options" must be configured.
+     * @expectedExceptionMessage The child node "identifier" at path "foo" must be configured.
      */
     public function thrownIfApiOptionsIdentifierSectionMissing()
     {
@@ -135,18 +88,14 @@ class Be2BillOnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->addConfiguration($rootNode);
 
         $processor = new Processor();
-        $processor->process($tb->buildTree(), array(array(
-            'api' => array(
-                'options' => array()
-            )
-        )));
+        $processor->process($tb->buildTree(), array(array()));
     }
 
     /**
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "password" at path "foo.api.options" must be configured.
+     * @expectedExceptionMessage The child node "password" at path "foo" must be configured.
      */
     public function thrownIfApiOptionsPasswordSectionMissing()
     {
@@ -159,11 +108,7 @@ class Be2BillOnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
-            'api' => array(
-                'options' => array(
-                    'identifier' => 'anIdentifier'
-                )
-            )
+            'identifier' => 'anIdentifier'
         )));
     }
 
@@ -177,19 +122,14 @@ class Be2BillOnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'identifier' => 'anIdentifier',
-                    'password' => 'aPassword',
-                    'sandbox' => true,
-                )
-            ),
+            'identifier' => 'anIdentifier',
+            'password' => 'aPassword',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
         ));
-        
+
         $this->assertEquals('payum.context.aContextName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
     }
@@ -204,22 +144,17 @@ class Be2BillOnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'identifier' => 'anIdentifier',
-                    'password' => 'aPassword',
-                    'sandbox' => true,
-                )
-            ),
+            'identifier' => 'anIdentifier',
+            'password' => 'aPassword',
+            'sandbox' => true,
             'actions' => array('payum.action.foo'),
             'apis' => array('payum.api.bar'),
             'extensions' => array('payum.extension.ololo'),
         ));
 
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId), 
-            'addAction', 
+            $container->getDefinition($paymentId),
+            'addAction',
             new Reference('payum.action.foo')
         );
         $this->assertDefinitionContainsMethodCall(
@@ -237,21 +172,16 @@ class Be2BillOnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldDecorateBasicApiDefinitionAndAddItToPayment()
+    public function shouldAddPayumActionTagApiDefinitionAndAddItToPayment()
     {
         $factory = new Be2BillOnsitePaymentFactory;
 
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'identifier' => 'anIdentifier',
-                    'password' => 'aPassword',
-                    'sandbox' => true,
-                )
-            ),
+            'identifier' => 'anIdentifier',
+            'password' => 'aPassword',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -269,63 +199,51 @@ class Be2BillOnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldDecorateBasicCaptureOnsiteActionDefinitionAndAddItToPayment()
+    public function shouldAddPayumActionTagToCaptureOnsiteAction()
     {
         $factory = new Be2BillOnsitePaymentFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'identifier' => 'anIdentifier',
-                    'password' => 'aPassword',
-                    'sandbox' => true,
-                )
-            ),
+        $factory->create($container, 'aContextName', array(
+            'identifier' => 'anIdentifier',
+            'password' => 'aPassword',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
         ));
 
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addAction',
-            new Reference('payum.context.aContextName.action.capture_onsite')
-        );
+        $actionDefinition = $container->getDefinition('payum.be2bill.action.capture_onsite');
+
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(1, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     /**
      * @test
      */
-    public function shouldDecorateBasicStatusActionDefinitionAndAddItToPayment()
+    public function shouldAddPayumActionTagToStatusAction()
     {
         $factory = new Be2BillOnsitePaymentFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'identifier' => 'anIdentifier',
-                    'password' => 'aPassword',
-                    'sandbox' => true,
-                )
-            ),
+        $factory->create($container, 'aContextName', array(
+            'identifier' => 'anIdentifier',
+            'password' => 'aPassword',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
         ));
 
-        $this->assertTrue($container->hasDefinition('payum.context.aContextName.action.status'));
+        $actionDefinition = $container->getDefinition('payum.be2bill.action.status');
 
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addAction',
-            new Reference('payum.context.aContextName.action.status')
-        );
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(2, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[1]['factory']);
     }
 
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)
