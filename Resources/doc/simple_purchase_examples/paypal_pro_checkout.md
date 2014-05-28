@@ -25,13 +25,12 @@ payum:
     contexts:
         your_context_here:
             paypal_pro_checkout_nvp:
-                api:
-                    options:
-                        username: 'EDIT ME'
-                        password: 'EDIT ME'
-                        partner:  'EDIT ME'
-                        vendor:   'EDIT ME'
-                        sandbox: true
+                username: 'EDIT ME'
+                password: 'EDIT ME'
+                partner:  'EDIT ME'
+                vendor:   'EDIT ME'
+                sandbox: true
+
             storages:
                 Acme\PaymentBundle\Entity\PaymentDetails:
                     doctrine:

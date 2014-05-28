@@ -64,14 +64,10 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                 'contexts' => array(
                     'a_context' => array(
                         'paypal_express_checkout_nvp' => array(
-                            'api' => array(
-                                'options' => array(
-                                    'username' => 'aUsername',
-                                    'password' => 'aPassword',
-                                    'signature' => 'aSignature',
-                                    'sandbox' => true
-                                )
-                            )
+                            'username' => 'aUsername',
+                            'password' => 'aPassword',
+                            'signature' => 'aSignature',
+                            'sandbox' => true
                         )
                     )
                 )
@@ -103,13 +99,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                 'contexts' => array(
                     'a_context' => array(
                         'klarna_checkout' => array(
-                            'api' => array(
-                                'options' => array(
-                                    'secret' => 'aSecret',
-                                    'merchant_id' => 'anId',
-                                    'sandbox' => true
-                                )
-                            )
+                            'secret' => 'aSecret',
+                            'merchant_id' => 'anId',
+                            'sandbox' => true
                         )
                     )
                 )

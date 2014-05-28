@@ -53,25 +53,18 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $config = $processor->process($tb->buildTree(), array(array(
-            'api' => array(
-                'options' => array(
-                    'identifier' => 'anIdentifier',
-                    'password' => 'aPassword',
-                )
-            )
+            'identifier' => 'anIdentifier',
+            'password' => 'aPassword',
         )));
 
-        $this->assertArrayHasKey('api', $config);
-        $this->assertArrayHasKey('options', $config['api']);
+        $this->assertArrayHasKey('identifier', $config);
+        $this->assertEquals('anIdentifier', $config['identifier']);
         
-        $this->assertArrayHasKey('identifier', $config['api']['options']);
-        $this->assertEquals('anIdentifier', $config['api']['options']['identifier']);
-        
-        $this->assertArrayHasKey('password', $config['api']['options']);
-        $this->assertEquals('aPassword', $config['api']['options']['password']);
+        $this->assertArrayHasKey('password', $config);
+        $this->assertEquals('aPassword', $config['password']);
 
-        $this->assertArrayHasKey('sandbox', $config['api']['options']);
-        $this->assertTrue($config['api']['options']['sandbox']);
+        $this->assertArrayHasKey('sandbox', $config);
+        $this->assertTrue($config['sandbox']);
 
         //come from abstract payment factory
         $this->assertArrayHasKey('actions', $config);
@@ -81,49 +74,9 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "api" at path "foo" must be configured.
-     */
-    public function thrownIfApiSectionMissing()
-    {
-        $factory = new Be2BillPaymentFactory;
-
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('foo');
-
-        $factory->addConfiguration($rootNode);
-
-        $processor = new Processor();
-        $processor->process($tb->buildTree(), array());
-    }
-
-    /**
-     * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "options" at path "foo.api" must be configured.
-     */
-    public function thrownIfApiOptionsSectionMissing()
-    {
-        $factory = new Be2BillPaymentFactory;
-
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('foo');
-
-        $factory->addConfiguration($rootNode);
-
-        $processor = new Processor();
-        $processor->process($tb->buildTree(), array(array(
-            'api' => array()
-        )));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "identifier" at path "foo.api.options" must be configured.
+     * @expectedExceptionMessage The child node "identifier" at path "foo" must be configured.
      */
     public function thrownIfApiOptionsIdentifierSectionMissing()
     {
@@ -135,18 +88,14 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->addConfiguration($rootNode);
 
         $processor = new Processor();
-        $processor->process($tb->buildTree(), array(array(
-            'api' => array(
-                'options' => array()
-            )
-        )));
+        $processor->process($tb->buildTree(), array(array()));
     }
 
     /**
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "password" at path "foo.api.options" must be configured.
+     * @expectedExceptionMessage The child node "password" at path "foo" must be configured.
      */
     public function thrownIfApiOptionsPasswordSectionMissing()
     {
@@ -159,11 +108,7 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
-            'api' => array(
-                'options' => array(
-                    'identifier' => 'anIdentifier'
-                )
-            )
+            'identifier' => 'anIdentifier'
         )));
     }
 
@@ -177,14 +122,9 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'identifier' => 'anIdentifier',
-                    'password' => 'aPassword',
-                    'sandbox' => true,
-                )
-            ),
+            'identifier' => 'anIdentifier',
+            'password' => 'aPassword',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -204,14 +144,9 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'identifier' => 'anIdentifier',
-                    'password' => 'aPassword',
-                    'sandbox' => true,
-                )
-            ),
+            'identifier' => 'anIdentifier',
+            'password' => 'aPassword',
+            'sandbox' => true,
             'actions' => array('payum.action.foo'),
             'apis' => array('payum.api.bar'),
             'extensions' => array('payum.extension.ololo'),
@@ -244,14 +179,9 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'identifier' => 'anIdentifier',
-                    'password' => 'aPassword',
-                    'sandbox' => true,
-                )
-            ),
+            'identifier' => 'anIdentifier',
+            'password' => 'aPassword',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -276,14 +206,9 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'identifier' => 'anIdentifier',
-                    'password' => 'aPassword',
-                    'sandbox' => true,
-                )
-            ),
+            'identifier' => 'anIdentifier',
+            'password' => 'aPassword',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -306,14 +231,9 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'identifier' => 'anIdentifier',
-                    'password' => 'aPassword',
-                    'sandbox' => true,
-                )
-            ),
+            'identifier' => 'anIdentifier',
+            'password' => 'aPassword',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -336,14 +256,9 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'identifier' => 'anIdentifier',
-                    'password' => 'aPassword',
-                    'sandbox' => true,
-                )
-            ),
+            'identifier' => 'anIdentifier',
+            'password' => 'aPassword',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),

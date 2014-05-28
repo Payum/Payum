@@ -44,13 +44,9 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory
         parent::addConfiguration($builder);
         
         $builder->children()
-            ->arrayNode('api')->isRequired()->children()
-                ->arrayNode('options')->isRequired()->children()
-                    ->scalarNode('secret')->isRequired()->cannotBeEmpty()->end()
-                    ->scalarNode('merchant_id')->isRequired()->cannotBeEmpty()->end()
-                    ->booleanNode('sandbox')->defaultTrue()->end()
-                ->end()
-            ->end()
+            ->scalarNode('secret')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('merchant_id')->isRequired()->cannotBeEmpty()->end()
+            ->booleanNode('sandbox')->defaultTrue()->end()
         ->end();
     }
 
@@ -62,14 +58,14 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory
         $internalConnectorDefinition = new Definition('Klarna_Checkout_ConnectorInterface');
         $internalConnectorDefinition->setFactoryClass('Klarna_Checkout_Connector');
         $internalConnectorDefinition->setFactoryMethod('create');
-        $internalConnectorDefinition->addArgument($config['api']['options']['secret']);
+        $internalConnectorDefinition->addArgument($config['secret']);
         $internalConnectorId = 'payum.context.'.$contextName.'.internal_connector';
         $container->setDefinition($internalConnectorId, $internalConnectorDefinition);
 
         $connectorDefinition = new Definition('%payum.klarna.checkout.connector.class%');
         $connectorDefinition->addArgument(new Reference($internalConnectorId));
-        $connectorDefinition->addArgument($config['api']['options']['merchant_id']);
-        $connectorDefinition->addArgument($config['api']['options']['sandbox'] ?
+        $connectorDefinition->addArgument($config['merchant_id']);
+        $connectorDefinition->addArgument($config['sandbox'] ?
             Constants::BASE_URI_SANDBOX :
             Constants::BASE_URI_LIVE
         );

@@ -48,18 +48,13 @@ class PaypalProCheckoutNvpPaymentFactory extends AbstractPaymentFactory
         parent::addConfiguration($builder);
         
         $builder->children()
-            ->arrayNode('api')->isRequired()->children()
-                ->scalarNode('client')->defaultValue('payum.buzz.client')->cannotBeEmpty()->end()
-                ->arrayNode('options')->isRequired()->children()
-                    ->scalarNode('username')->isRequired()->cannotBeEmpty()->end()
-                    ->scalarNode('password')->isRequired()->cannotBeEmpty()->end()
-                    ->scalarNode('partner')->isRequired()->cannotBeEmpty()->end()
-                    ->scalarNode('vendor')->isRequired()->cannotBeEmpty()->end()
-                    ->scalarNode('tender')->defaultValue('C')->cannotBeEmpty()->end()
-                    ->scalarNode('trxtype')->defaultValue('S')->cannotBeEmpty()->end()
-                    ->booleanNode('sandbox')->defaultTrue()->end()
-                ->end()
-            ->end()
+            ->scalarNode('username')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('password')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('partner')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('vendor')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('tender')->defaultValue('C')->cannotBeEmpty()->end()
+            ->scalarNode('trxtype')->defaultValue('S')->cannotBeEmpty()->end()
+            ->booleanNode('sandbox')->defaultTrue()->end()
         ->end();
     }
 
@@ -69,8 +64,15 @@ class PaypalProCheckoutNvpPaymentFactory extends AbstractPaymentFactory
     protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
     {
         $apiDefinition = new DefinitionDecorator('payum.paypal.pro_checkout_nvp.api.prototype');
-        $apiDefinition->replaceArgument(0, new Reference($config['api']['client']));
-        $apiDefinition->replaceArgument(1, $config['api']['options']);
+        $apiDefinition->replaceArgument(1, array(
+            'username' => $config['username'],
+            'password' => $config['password'],
+            'partner' => $config['partner'],
+            'vendor' => $config['vendor'],
+            'sandbox' => $config['sandbox'],
+            'tender' => isset($config['tender']) ? $config['tender'] : 'C',
+            'trxtype' => isset($config['trxtype']) ? $config['trxtype'] : 'S',
+        ));
         $apiDefinition->setPublic(true);
         $apiId = 'payum.context.'.$contextName.'.api';
         $container->setDefinition($apiId, $apiDefinition);

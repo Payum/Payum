@@ -13,7 +13,7 @@ use Symfony\Component\Config\FileLocator;
 class AuthorizeNetAimPaymentFactory extends AbstractPaymentFactory
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function create(ContainerBuilder $container, $contextName, array $config)
     {
@@ -28,7 +28,7 @@ class AuthorizeNetAimPaymentFactory extends AbstractPaymentFactory
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getName()
     {
@@ -36,20 +36,16 @@ class AuthorizeNetAimPaymentFactory extends AbstractPaymentFactory
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
         parent::addConfiguration($builder);
         
         $builder->children()
-            ->arrayNode('api')->isRequired()->children()
-                ->arrayNode('options')->isRequired()->children()
-                    ->scalarNode('login_id')->isRequired()->cannotBeEmpty()->end()
-                    ->scalarNode('transaction_key')->isRequired()->cannotBeEmpty()->end()
-                    ->booleanNode('sandbox')->defaultTrue()->end()
-                ->end()
-            ->end()
+            ->scalarNode('login_id')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('transaction_key')->isRequired()->cannotBeEmpty()->end()
+            ->booleanNode('sandbox')->defaultTrue()->end()
         ->end();
     }
 
@@ -59,9 +55,9 @@ class AuthorizeNetAimPaymentFactory extends AbstractPaymentFactory
     protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
     {
         $apiDefinition = new DefinitionDecorator('payum.authorize_net_aim.api.prototype');
-        $apiDefinition->replaceArgument(0, $config['api']['options']['login_id']);
-        $apiDefinition->replaceArgument(1, $config['api']['options']['transaction_key']);
-        $apiDefinition->addMethodCall('setSandbox', array($config['api']['options']['sandbox']));
+        $apiDefinition->replaceArgument(0, $config['login_id']);
+        $apiDefinition->replaceArgument(1, $config['transaction_key']);
+        $apiDefinition->addMethodCall('setSandbox', array($config['sandbox']));
         $apiId = 'payum.context.'.$contextName.'.api';
         $container->setDefinition($apiId, $apiDefinition);
         $paymentDefinition->addMethodCall('addApi', array(new Reference($apiId)));

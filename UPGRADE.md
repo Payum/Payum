@@ -3,6 +3,29 @@
 ## 0.8 to 0.9
 
 * Payment factory does not create action services any more. Instead, it uses actions defined in payment/foo.xml by tag.
+* Payment factories configurations were simplified. Sub options `api.options` were moved to the root, section was removed.
+
+    before:
+
+    ```yml
+    payum:
+        a_context:
+            a_factory:
+                api:
+                    options:
+                        foo: foo
+                        bar: bar
+    ```
+
+    after:
+
+    ```yml
+    payum:
+        a_context:
+            a_factory:
+                foo: foo
+                bar: bar
+    ```
 
 ## 0.7 to 0.8
 
@@ -19,30 +42,30 @@
 * `sync` url was changed if you still want use old one add `payum_deprecated_sync_do`.
 * bundle configuration was changed. Now you have to configure `payum.security` section.
 
-before:
+    before:
 
-```yml
-payum:
-    contexts:
-        foo:
-            storages:
-                Acme\PaymentBundle\Entity\TokenizedDetails:
+    ```yml
+    payum:
+        contexts:
+            foo:
+                storages:
+                    Acme\PaymentBundle\Entity\TokenizedDetails:
+                        filesystem:
+                            storage_dir: %kernel.root_dir%/Resources/payments
+                            id_property: token
+    ```
+
+    after:
+
+    ```yml
+    payum:
+        security:
+            token_storage:
+                Acme\PaymentBundle\Entity\PayumSecurityToken:
                     filesystem:
                         storage_dir: %kernel.root_dir%/Resources/payments
-                        id_property: token
-```
-
-after:
-
-```yml
-payum:
-    security:
-        token_storage:
-            Acme\PaymentBundle\Entity\PayumSecurityToken:
-                filesystem:
-                    storage_dir: %kernel.root_dir%/Resources/payments
-                    id_property: hash
-```
+                        id_property: hash
+    ```
 
 ## 0.3 to 0.5
 

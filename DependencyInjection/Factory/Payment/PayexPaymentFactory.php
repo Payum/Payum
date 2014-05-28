@@ -43,13 +43,9 @@ class PayexPaymentFactory extends AbstractPaymentFactory
         parent::addConfiguration($builder);
         
         $builder->children()
-            ->arrayNode('api')->isRequired()->children()
-                ->arrayNode('options')->isRequired()->children()
-                    ->scalarNode('encryption_key')->isRequired()->cannotBeEmpty()->end()
-                    ->scalarNode('account_number')->isRequired()->cannotBeEmpty()->end()
-                    ->booleanNode('sandbox')->defaultTrue()->end()
-                ->end()
-            ->end()
+            ->scalarNode('encryption_key')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('account_number')->isRequired()->cannotBeEmpty()->end()
+            ->booleanNode('sandbox')->defaultTrue()->end()
         ->end();
     }
 
@@ -60,9 +56,9 @@ class PayexPaymentFactory extends AbstractPaymentFactory
     {
         $orderApiDefinition = new DefinitionDecorator('payum.payex.api.order.prototype');
         $orderApiDefinition->replaceArgument(1, array(
-            'encryptionKey' => $config['api']['options']['encryption_key'],
-            'accountNumber' => $config['api']['options']['account_number'],
-            'sandbox' => $config['api']['options']['sandbox']
+            'encryptionKey' => $config['encryption_key'],
+            'accountNumber' => $config['account_number'],
+            'sandbox' => $config['sandbox']
         ));
         $orderApiDefinition->setPublic(true);
         $orderApiId = 'payum.context.'.$contextName.'.api.order';
@@ -71,9 +67,9 @@ class PayexPaymentFactory extends AbstractPaymentFactory
 
         $agreementApiDefinition = new DefinitionDecorator('payum.payex.api.agreement.prototype');
         $agreementApiDefinition->replaceArgument(1, array(
-            'encryptionKey' => $config['api']['options']['encryption_key'],
-            'accountNumber' => $config['api']['options']['account_number'],
-            'sandbox' => $config['api']['options']['sandbox']
+            'encryptionKey' => $config['encryption_key'],
+            'accountNumber' => $config['account_number'],
+            'sandbox' => $config['sandbox']
         ));
         $agreementApiDefinition->setPublic(true);
         $agreementApiId = 'payum.context.'.$contextName.'.api.agreement';
@@ -82,9 +78,9 @@ class PayexPaymentFactory extends AbstractPaymentFactory
 
         $recurringApiDefinition = new DefinitionDecorator('payum.payex.api.recurring.prototype');
         $recurringApiDefinition->replaceArgument(1, array(
-            'encryptionKey' => $config['api']['options']['encryption_key'],
-            'accountNumber' => $config['api']['options']['account_number'],
-            'sandbox' => $config['api']['options']['sandbox']
+            'encryptionKey' => $config['encryption_key'],
+            'accountNumber' => $config['account_number'],
+            'sandbox' => $config['sandbox']
         ));
         $recurringApiDefinition->setPublic(true);
         $recurringApiId = 'payum.context.'.$contextName.'.api.recurring';

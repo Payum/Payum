@@ -84,23 +84,16 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $config = $processor->process($tb->buildTree(), array(array(
-            'api' => array( 
-                'options' => array(
-                    'encryption_key' => 'aKey',
-                    'account_number' => 'aNum',
-                )
-            )
+            'encryption_key' => 'aKey',
+            'account_number' => 'aNum',
+            'sandbox' => true,
         )));
         
-        $this->assertArrayHasKey('api', $config);
-        
-        $this->assertArrayHasKey('options', $config['api']);
-        
-        $this->assertArrayHasKey('encryption_key', $config['api']['options']);
-        $this->assertEquals('aKey', $config['api']['options']['encryption_key']);
+        $this->assertArrayHasKey('encryption_key', $config);
+        $this->assertEquals('aKey', $config['encryption_key']);
 
-        $this->assertArrayHasKey('account_number', $config['api']['options']);
-        $this->assertEquals('aNum', $config['api']['options']['account_number']);
+        $this->assertArrayHasKey('account_number', $config);
+        $this->assertEquals('aNum', $config['account_number']);
 
         //come from abstract payment factory
         $this->assertArrayHasKey('actions', $config);
@@ -110,49 +103,9 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "api" at path "foo" must be configured.
-     */
-    public function thrownIfApiSectionMissing()
-    {
-        $factory = new PayexPaymentFactory;
-
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('foo');
-
-        $factory->addConfiguration($rootNode);
-
-        $processor = new Processor();
-        $processor->process($tb->buildTree(), array());
-    }
-
-    /**
-     * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "options" at path "foo.api" must be configured.
-     */
-    public function thrownIfApiOptionsSectionMissing()
-    {
-        $factory = new PayexPaymentFactory;
-
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('foo');
-
-        $factory->addConfiguration($rootNode);
-
-        $processor = new Processor();
-        $processor->process($tb->buildTree(), array(array(
-            'api' => array()
-        )));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "encryption_key" at path "foo.api.options" must be configured.
+     * @expectedExceptionMessage The child node "encryption_key" at path "foo" must be configured.
      */
     public function thrownIfApiOptionEncryptionKeySectionMissing()
     {
@@ -164,18 +117,14 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->addConfiguration($rootNode);
 
         $processor = new Processor();
-        $processor->process($tb->buildTree(), array(array(
-            'api' => array(
-                'options' => array()
-            )
-        )));
+        $processor->process($tb->buildTree(), array(array()));
     }
 
     /**
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "account_number" at path "foo.api.options" must be configured.
+     * @expectedExceptionMessage The child node "account_number" at path "foo" must be configured.
      */
     public function thrownIfApiOptionAccountNumberSectionMissing()
     {
@@ -188,11 +137,7 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
-            'api' => array(
-                'options' => array(
-                    'encryption_key' => 'aKey'
-                )
-            )
+            'encryption_key' => 'aKey'
         )));
     }
 
@@ -206,13 +151,9 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'options' => array(
-                    'encryption_key' => 'aKey',
-                    'account_number' => 'aNum',
-                    'sandbox' => true
-                ),
-            ),
+            'encryption_key' => 'aKey',
+            'account_number' => 'aNum',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -232,13 +173,9 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'options' => array(
-                    'encryption_key' => 'aKey',
-                    'account_number' => 'aNum',
-                    'sandbox' => true
-                ),
-            ),
+            'encryption_key' => 'aKey',
+            'account_number' => 'aNum',
+            'sandbox' => true,
             'actions' => array('payum.action.foo'),
             'apis' => array('payum.api.bar'),
             'extensions' => array('payum.extension.ololo'),
@@ -271,13 +208,9 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'options' => array(
-                    'encryption_key' => 'aKey',
-                    'account_number' => 'aNum',
-                    'sandbox' => true
-                ),
-            ),
+            'encryption_key' => 'aKey',
+            'account_number' => 'aNum',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -314,13 +247,9 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'options' => array(
-                    'encryption_key' => 'aKey',
-                    'account_number' => 'aNum',
-                    'sandbox' => true
-                ),
-            ),
+            'encryption_key' => 'aKey',
+            'account_number' => 'aNum',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),

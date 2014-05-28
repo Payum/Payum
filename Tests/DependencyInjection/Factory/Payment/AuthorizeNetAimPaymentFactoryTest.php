@@ -53,25 +53,18 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $config = $processor->process($tb->buildTree(), array(array(
-            'api' => array(
-                'options' => array(
-                    'login_id' => 'aLoginId',
-                    'transaction_key' => 'aTransactionKey',
-                )
-            )
+            'login_id' => 'aLoginId',
+            'transaction_key' => 'aTransactionKey',
         )));
 
-        $this->assertArrayHasKey('api', $config);
-        $this->assertArrayHasKey('options', $config['api']);
+        $this->assertArrayHasKey('login_id', $config);
+        $this->assertEquals('aLoginId', $config['login_id']);
         
-        $this->assertArrayHasKey('login_id', $config['api']['options']);
-        $this->assertEquals('aLoginId', $config['api']['options']['login_id']);
-        
-        $this->assertArrayHasKey('transaction_key', $config['api']['options']);
-        $this->assertEquals('aTransactionKey', $config['api']['options']['transaction_key']);
+        $this->assertArrayHasKey('transaction_key', $config);
+        $this->assertEquals('aTransactionKey', $config['transaction_key']);
 
-        $this->assertArrayHasKey('sandbox', $config['api']['options']);
-        $this->assertTrue($config['api']['options']['sandbox']);
+        $this->assertArrayHasKey('sandbox', $config);
+        $this->assertTrue($config['sandbox']);
 
         //come from abstract payment factory
         $this->assertArrayHasKey('actions', $config);
@@ -81,49 +74,9 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "api" at path "foo" must be configured.
-     */
-    public function thrownIfApiSectionMissing()
-    {
-        $factory = new AuthorizeNetAimPaymentFactory;
-
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('foo');
-
-        $factory->addConfiguration($rootNode);
-
-        $processor = new Processor();
-        $processor->process($tb->buildTree(), array());
-    }
-
-    /**
-     * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "options" at path "foo.api" must be configured.
-     */
-    public function thrownIfApiOptionsSectionMissing()
-    {
-        $factory = new AuthorizeNetAimPaymentFactory;
-
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('foo');
-
-        $factory->addConfiguration($rootNode);
-
-        $processor = new Processor();
-        $processor->process($tb->buildTree(), array(array(
-            'api' => array()
-        )));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "login_id" at path "foo.api.options" must be configured.
+     * @expectedExceptionMessage The child node "login_id" at path "foo" must be configured.
      */
     public function thrownIfApiOptionsLoginIdSectionMissing()
     {
@@ -135,18 +88,14 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->addConfiguration($rootNode);
 
         $processor = new Processor();
-        $processor->process($tb->buildTree(), array(array(
-            'api' => array(
-                'options' => array()
-            )
-        )));
+        $processor->process($tb->buildTree(), array(array()));
     }
 
     /**
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "transaction_key" at path "foo.api.options" must be configured.
+     * @expectedExceptionMessage The child node "transaction_key" at path "foo" must be configured.
      */
     public function thrownIfApiOptionsTransactionKeySectionMissing()
     {
@@ -159,12 +108,8 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
-                'api' => array(
-                    'options' => array(
-                        'login_id' => 'aLoginId'
-                    )
-                )
-            )));
+            'login_id' => 'aLoginId'
+        )));
     }
 
     /**
@@ -177,13 +122,9 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'options' => array(
-                    'login_id' => 'aLoginId',
-                    'transaction_key' => 'aTransactionKey',
-                    'sandbox' => true,
-                )
-            ),
+            'login_id' => 'aLoginId',
+            'transaction_key' => 'aTransactionKey',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -203,13 +144,9 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'options' => array(
-                    'login_id' => 'aLoginId',
-                    'transaction_key' => 'aTransactionKey',
-                    'sandbox' => true,
-                )
-            ),
+            'login_id' => 'aLoginId',
+            'transaction_key' => 'aTransactionKey',
+            'sandbox' => true,
             'actions' => array('payum.action.foo'),
             'apis' => array('payum.api.bar'),
             'extensions' => array('payum.extension.ololo'),
@@ -242,13 +179,9 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'options' => array(
-                    'login_id' => 'aLoginId',
-                    'transaction_key' => 'aTransactionKey',
-                    'sandbox' => true,
-                )
-            ),
+            'login_id' => 'aLoginId',
+            'transaction_key' => 'aTransactionKey',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -273,13 +206,9 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'options' => array(
-                    'login_id' => 'aLoginId',
-                    'transaction_key' => 'aTransactionKey',
-                    'sandbox' => true,
-                )
-            ),
+            'login_id' => 'aLoginId',
+            'transaction_key' => 'aTransactionKey',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -302,13 +231,9 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'options' => array(
-                    'login_id' => 'aLoginId',
-                    'transaction_key' => 'aTransactionKey',
-                    'sandbox' => true,
-                )
-            ),
+            'login_id' => 'aLoginId',
+            'transaction_key' => 'aTransactionKey',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),

@@ -52,54 +52,65 @@ doctrine:
 filesystem:
     storage_dir: 'required'
     id_property: 'required'
-    payment_extension:
-        enabled: false
 ```
 
 ## Paypal express checkout payment
 
 ```yaml
 paypal_express_checkout_nvp:
-    api:
-        client: payum.buzz.client #default
-        options:
-            username:  'required'
-            password:  'required'
-            signature: 'required'
-            sandbox: true
+    username:  'required'
+    password:  'required'
+    signature: 'required'
+    sandbox: true
+```
+
+## Paypal pro checkout payment
+
+```yaml
+paypal_express_checkout_nvp:
+    username:  'required'
+    password:  'required'
+    partner: 'required'
+    vendor: 'required'
+    tender: C
+    trxtype: S
+    sandbox: true
 ```
 
 ## Authorize.Net AIM payment
 
 ```yaml
 authorize_net_aim:
-    api:
-        options:
-            login_id: 'required'
-            transaction_key: 'required'
-            sandbox: true
+    login_id: 'required'
+    transaction_key: 'required'
+    sandbox: true
 ```
 
 ## Be2Bill payment
 
 ```yml
 be2bill:
-    api:
-        options:
-            identifier: 'required'
-            password: 'required'
-            sandbox: true
+    identifier: 'required'
+    password: 'required'
+    sandbox: true
 ```
 
 ## Payex payment
 
 ```yml
 payex:
-    api:
-        options:
-            encryption_key: 'required'
-            account_number: 'required'
-            sandbox: true
+    encryption_key: 'required'
+    account_number: 'required'
+    sandbox: true
+```
+
+## Klarna checkout payment
+
+```yml
+klarna_checkout:
+    secret:  'required'
+    merchant_id: 'required'
+    sandbox: true
 ```
 
 ## Omnipay payment
@@ -116,7 +127,7 @@ omnipay:
 
 ```yaml
 custom:
-    #if service not set an empty payment will be created. 
+    # if service not set an empty payment will be created.
     service: ~ 
 ```
 

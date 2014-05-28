@@ -52,25 +52,18 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $config = $processor->process($tb->buildTree(), array(array(
-            'api' => array(
-                'options' => array(
-                    'secret' => 'aSecret',
-                    'merchant_id' => 'aMerchantId',
-                )
-            )
+            'secret' => 'aSecret',
+            'merchant_id' => 'aMerchantId',
         )));
 
-        $this->assertArrayHasKey('api', $config);
-        $this->assertArrayHasKey('options', $config['api']);
+        $this->assertArrayHasKey('secret', $config);
+        $this->assertEquals('aSecret', $config['secret']);
         
-        $this->assertArrayHasKey('secret', $config['api']['options']);
-        $this->assertEquals('aSecret', $config['api']['options']['secret']);
-        
-        $this->assertArrayHasKey('merchant_id', $config['api']['options']);
-        $this->assertEquals('aMerchantId', $config['api']['options']['merchant_id']);
+        $this->assertArrayHasKey('merchant_id', $config);
+        $this->assertEquals('aMerchantId', $config['merchant_id']);
 
-        $this->assertArrayHasKey('sandbox', $config['api']['options']);
-        $this->assertTrue($config['api']['options']['sandbox']);
+        $this->assertArrayHasKey('sandbox', $config);
+        $this->assertTrue($config['sandbox']);
 
         //come from abstract payment factory
         $this->assertArrayHasKey('actions', $config);
@@ -80,49 +73,9 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "api" at path "foo" must be configured.
-     */
-    public function thrownIfApiSectionMissing()
-    {
-        $factory = new KlarnaCheckoutPaymentFactory;
-
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('foo');
-
-        $factory->addConfiguration($rootNode);
-
-        $processor = new Processor();
-        $processor->process($tb->buildTree(), array());
-    }
-
-    /**
-     * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "options" at path "foo.api" must be configured.
-     */
-    public function thrownIfApiOptionsSectionMissing()
-    {
-        $factory = new KlarnaCheckoutPaymentFactory;
-
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('foo');
-
-        $factory->addConfiguration($rootNode);
-
-        $processor = new Processor();
-        $processor->process($tb->buildTree(), array(array(
-            'api' => array()
-        )));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "secret" at path "foo.api.options" must be configured.
+     * @expectedExceptionMessage The child node "secret" at path "foo" must be configured.
      */
     public function thrownIfApiOptionsIdentifierSectionMissing()
     {
@@ -134,18 +87,14 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->addConfiguration($rootNode);
 
         $processor = new Processor();
-        $processor->process($tb->buildTree(), array(array(
-            'api' => array(
-                'options' => array()
-            )
-        )));
+        $processor->process($tb->buildTree(), array(array()));
     }
 
     /**
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "merchant_id" at path "foo.api.options" must be configured.
+     * @expectedExceptionMessage The child node "merchant_id" at path "foo" must be configured.
      */
     public function thrownIfApiOptionsPasswordSectionMissing()
     {
@@ -158,11 +107,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
-            'api' => array(
-                'options' => array(
-                    'secret' => 'aSecret'
-                )
-            )
+            'secret' => 'aSecret'
         )));
     }
 
@@ -176,14 +121,9 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'secret' => 'aSecret',
-                    'merchant_id' => 'aMerchantId',
-                    'sandbox' => true,
-                )
-            ),
+            'secret' => 'aSecret',
+            'merchant_id' => 'aMerchantId',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -203,13 +143,9 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'secret' => 'aSecret',
-                    'merchant_id' => 'aMerchantId',
-                    'sandbox' => true,                )
-            ),
+            'secret' => 'aSecret',
+            'merchant_id' => 'aMerchantId',
+            'sandbox' => true,
             'actions' => array('payum.action.foo'),
             'apis' => array('payum.api.bar'),
             'extensions' => array('payum.extension.ololo'),
@@ -242,14 +178,9 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'secret' => 'aSecret',
-                    'merchant_id' => 'aMerchantId',
-                    'sandbox' => true,
-                )
-            ),
+            'secret' => 'aSecret',
+            'merchant_id' => 'aMerchantId',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -274,14 +205,9 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'secret' => 'aSecret',
-                    'merchant_id' => 'aMerchantId',
-                    'sandbox' => true,
-                )
-            ),
+            'secret' => 'aSecret',
+            'merchant_id' => 'aMerchantId',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -304,14 +230,9 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'secret' => 'aSecret',
-                    'merchant_id' => 'aMerchantId',
-                    'sandbox' => true,
-                )
-            ),
+            'secret' => 'aSecret',
+            'merchant_id' => 'aMerchantId',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -334,14 +255,9 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'secret' => 'aSecret',
-                    'merchant_id' => 'aMerchantId',
-                    'sandbox' => true,
-                )
-            ),
+            'secret' => 'aSecret',
+            'merchant_id' => 'aMerchantId',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -364,14 +280,9 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'secret' => 'aSecret',
-                    'merchant_id' => 'aMerchantId',
-                    'sandbox' => true,
-                )
-            ),
+            'secret' => 'aSecret',
+            'merchant_id' => 'aMerchantId',
+            'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),

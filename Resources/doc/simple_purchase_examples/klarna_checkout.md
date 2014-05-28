@@ -25,11 +25,10 @@ payum:
     contexts:
         your_context_here:
             klarna_checkout:
-                api:
-                    options:
-                        secret:  'get this from gateway side'
-                        merchant_id: 'REPLACE WITH YOUR MERCHANT_ID'
-                        sandbox: true
+                secret:  'get this from gateway side'
+                merchant_id: 'REPLACE WITH YOUR MERCHANT_ID'
+                sandbox: true
+
             storages:
                 Acme\PaymentBundle\Entity\PaymentDetails:
                     doctrine:

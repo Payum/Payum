@@ -53,36 +53,27 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $config = $processor->process($tb->buildTree(), array(array(
-            'api' => array( 
-                'options' => array(
-                    'username' => 'aUsername',
-                    'password' => 'aPassword',
-                    'partner' => 'aPartner',
-                    'vendor' => 'aVendor'
-                )
-            )
+            'username' => 'aUsername',
+            'password' => 'aPassword',
+            'partner' => 'aPartner',
+            'vendor' => 'aVendor'
         )));
         
-        $this->assertArrayHasKey('api', $config);
-        
-        $this->assertArrayHasKey('options', $config['api']);
-        $this->assertArrayHasKey('client', $config['api']);
-        
-        $this->assertArrayHasKey('username', $config['api']['options']);
-        $this->assertEquals('aUsername', $config['api']['options']['username']);
+        $this->assertArrayHasKey('username', $config);
+        $this->assertEquals('aUsername', $config['username']);
 
-        $this->assertArrayHasKey('password', $config['api']['options']);
-        $this->assertEquals('aPassword', $config['api']['options']['password']);
+        $this->assertArrayHasKey('password', $config);
+        $this->assertEquals('aPassword', $config['password']);
 
-        $this->assertArrayHasKey('partner', $config['api']['options']);
-        $this->assertEquals('aPartner', $config['api']['options']['partner']);
+        $this->assertArrayHasKey('partner', $config);
+        $this->assertEquals('aPartner', $config['partner']);
 
-        $this->assertArrayHasKey('vendor', $config['api']['options']);
-        $this->assertEquals('aVendor', $config['api']['options']['vendor']);
+        $this->assertArrayHasKey('vendor', $config);
+        $this->assertEquals('aVendor', $config['vendor']);
 
-        $this->assertArrayHasKey('tender', $config['api']['options']);
-        $this->assertArrayHasKey('trxtype', $config['api']['options']);
-        $this->assertArrayHasKey('sandbox', $config['api']['options']);
+        $this->assertArrayHasKey('tender', $config);
+        $this->assertArrayHasKey('trxtype', $config);
+        $this->assertArrayHasKey('sandbox', $config);
 
         //come from abstract payment factory
         $this->assertArrayHasKey('actions', $config);
@@ -92,49 +83,9 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "api" at path "foo" must be configured.
-     */
-    public function thrownIfApiSectionMissing()
-    {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
-
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('foo');
-
-        $factory->addConfiguration($rootNode);
-
-        $processor = new Processor();
-        $processor->process($tb->buildTree(), array());
-    }
-
-    /**
-     * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "options" at path "foo.api" must be configured.
-     */
-    public function thrownIfApiOptionsSectionMissing()
-    {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
-
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('foo');
-
-        $factory->addConfiguration($rootNode);
-
-        $processor = new Processor();
-        $processor->process($tb->buildTree(), array(array(
-            'api' => array()
-        )));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "username" at path "foo.api.options" must be configured.
+     * @expectedExceptionMessage The child node "username" at path "foo" must be configured.
      */
     public function thrownIfApiOptionUsernameSectionMissing()
     {
@@ -146,18 +97,14 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->addConfiguration($rootNode);
 
         $processor = new Processor();
-        $processor->process($tb->buildTree(), array(array(
-            'api' => array(
-                'options' => array()
-            )
-        )));
+        $processor->process($tb->buildTree(), array(array()));
     }
 
     /**
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "password" at path "foo.api.options" must be configured.
+     * @expectedExceptionMessage The child node "password" at path "foo" must be configured.
      */
     public function thrownIfApiOptionPasswordSectionMissing()
     {
@@ -170,11 +117,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
-            'api' => array(
-                'options' => array(
-                    'username' => 'aUsername'
-                )
-            )
+            'username' => 'aUsername'
         )));
     }
 
@@ -182,7 +125,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "partner" at path "foo.api.options" must be configured.
+     * @expectedExceptionMessage The child node "partner" at path "foo" must be configured.
      */
     public function thrownIfApiOptionPartnerSectionMissing()
     {
@@ -195,12 +138,8 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
-            'api' => array(
-                'options' => array(
-                    'username' => 'aUsername',
-                    'password' => 'aPassword',
-                )
-            )
+            'username' => 'aUsername',
+            'password' => 'aPassword',
         )));
     }
 
@@ -208,7 +147,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "vendor" at path "foo.api.options" must be configured.
+     * @expectedExceptionMessage The child node "vendor" at path "foo" must be configured.
      */
     public function thrownIfApiOptionVendorSectionMissing()
     {
@@ -221,13 +160,9 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
-            'api' => array(
-                'options' => array(
-                    'username' => 'aUsername',
-                    'password' => 'aPassword',
-                    'partner' => 'aPartner',
-                )
-            )
+            'username' => 'aUsername',
+            'password' => 'aPassword',
+            'partner' => 'aPartner',
         )));
     }
 
@@ -241,15 +176,10 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'username' => 'aUsername',
-                    'password' => 'aPassword',
-                    'partner' => 'aPartner',
-                    'vendor' => 'aVendor'
-                ),
-            ),
+            'username' => 'aUsername',
+            'password' => 'aPassword',
+            'partner' => 'aPartner',
+            'vendor' => 'aVendor',
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -269,15 +199,10 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'username' => 'aUsername',
-                    'password' => 'aPassword',
-                    'partner' => 'aPartner',
-                    'vendor' => 'aVendor'
-                ),
-            ),
+            'username' => 'aUsername',
+            'password' => 'aPassword',
+            'partner' => 'aPartner',
+            'vendor' => 'aVendor',
             'actions' => array('payum.action.foo'),
             'apis' => array('payum.api.bar'),
             'extensions' => array('payum.extension.ololo'),
@@ -310,15 +235,10 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'username' => 'aUsername',
-                    'password' => 'aPassword',
-                    'partner' => 'aPartner',
-                    'vendor' => 'aVendor'
-                ),
-            ),
+            'username' => 'aUsername',
+            'password' => 'aPassword',
+            'partner' => 'aPartner',
+            'vendor' => 'aVendor',
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -343,15 +263,10 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'username' => 'aUsername',
-                    'password' => 'aPassword',
-                    'partner' => 'aPartner',
-                    'vendor' => 'aVendor'
-                ),
-            ),
+            'username' => 'aUsername',
+            'password' => 'aPassword',
+            'partner' => 'aPartner',
+            'vendor' => 'aVendor',
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -374,15 +289,10 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'username' => 'aUsername',
-                    'password' => 'aPassword',
-                    'partner' => 'aPartner',
-                    'vendor' => 'aVendor'
-                ),
-            ),
+            'username' => 'aUsername',
+            'password' => 'aPassword',
+            'partner' => 'aPartner',
+            'vendor' => 'aVendor',
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),

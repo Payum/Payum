@@ -25,11 +25,10 @@ payum:
     contexts:
         your_context_here:
             authorize_net_aim:
-                api:
-                    options:
-                        login_id: 'get it from gateway'
-                        transaction_key: 'get it from gateway'
-                        sandbox: true
+                login_id: 'get it from gateway'
+                transaction_key: 'get it from gateway'
+                sandbox: true
+
             storages:
                 Acme\PaymentBundle\Entity\PaymentDetails:
                     doctrine:
