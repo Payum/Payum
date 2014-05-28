@@ -95,6 +95,15 @@ be2bill:
     sandbox: true
 ```
 
+## Be2Bill onsite payment
+
+```yml
+be2bill_onsite:
+    identifier: 'required'
+    password: 'required'
+    sandbox: true
+```
+
 ## Payex payment
 
 ```yml
