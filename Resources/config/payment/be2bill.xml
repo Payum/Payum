@@ -37,7 +37,7 @@
             class="%payum.be2bill.action.capture_onsite.class%"
             public="false"
         >
-            <tag name="payum.action" factory="be2bill" />
+            <tag name="payum.action" factory="be2bill_onsite" />
         </service>
 
         <service
@@ -46,6 +46,7 @@
             public="false"
         >
             <tag name="payum.action" factory="be2bill" />
+            <tag name="payum.action" factory="be2bill_onsite" />
         </service>
     </services>
 </container>

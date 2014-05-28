@@ -25,11 +25,10 @@ payum:
     contexts:
         your_context_here:
             payex:
-                api:
-                    options:
-                        account_number:  'get this from gateway side'
-                        encryption_key:  'get this from gateway side'
-                        sandbox: true
+                account_number:  'get this from gateway side'
+                encryption_key:  'get this from gateway side'
+                sandbox: true
+
             storages:
                 Acme\PaymentBundle\Entity\PaymentDetails:
                     doctrine:

@@ -88,14 +88,6 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'api' => array(
-                'client' => 'foo',
-                'options' => array(
-                    'identifier' => 'anIdentifier',
-                    'password' => 'aPassword',
-                    'sandbox' => true,
-                )
-            ),
             'actions' => array('payum.action.foo'),
             'apis' => array('payum.api.bar'),
             'extensions' => array('payum.extension.ololo'),

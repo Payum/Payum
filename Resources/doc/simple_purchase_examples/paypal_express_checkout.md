@@ -25,12 +25,11 @@ payum:
     contexts:
         your_context_here:
             paypal_express_checkout_nvp:
-                api:
-                    options:
-                        username:  'get this from gateway side'
-                        password:  'get this from gateway side'
-                        signature: 'get this from gateway side'
-                        sandbox: true
+                username:  'get this from gateway side'
+                password:  'get this from gateway side'
+                signature: 'get this from gateway side'
+                sandbox: true
+
             storages:
                 Acme\PaymentBundle\Entity\PaymentDetails:
                     doctrine:

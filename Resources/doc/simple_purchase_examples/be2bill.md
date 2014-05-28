@@ -25,11 +25,10 @@ payum:
     contexts:
         your_context_here:
             be2bill:
-                api:
-                    options:
-                        identifier: 'get this from gateway'
-                        password: 'get this from gateway'
-                        sandbox: true
+                identifier: 'get this from gateway'
+                password: 'get this from gateway'
+                sandbox: true
+
             storages:
                 Acme\PaymentBundle\Entity\PaymentDetails:
                     doctrine:

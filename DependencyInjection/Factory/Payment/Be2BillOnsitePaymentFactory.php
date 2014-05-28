@@ -41,17 +41,12 @@ class Be2BillOnsitePaymentFactory extends AbstractPaymentFactory
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
         parent::addConfiguration($builder);
-        
+
         $builder->children()
-            ->arrayNode('api')->isRequired()->children()
-                ->scalarNode('client')->defaultValue('payum.buzz.client')->cannotBeEmpty()->end()
-                ->arrayNode('options')->isRequired()->children()
-                    ->scalarNode('identifier')->isRequired()->cannotBeEmpty()->end()
-                    ->scalarNode('password')->isRequired()->cannotBeEmpty()->end()
-                    ->booleanNode('sandbox')->defaultTrue()->end()
-                ->end()
-            ->end()
-        ->end();
+            ->scalarNode('identifier')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('password')->isRequired()->cannotBeEmpty()->end()
+            ->booleanNode('sandbox')->defaultTrue()->end()
+            ->end();
     }
 
     /**
@@ -59,28 +54,15 @@ class Be2BillOnsitePaymentFactory extends AbstractPaymentFactory
      */
     protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
     {
-        $apiDefinition = new DefinitionDecorator('payum.be2bill.api');
-        $apiDefinition->replaceArgument(0, new Reference($config['api']['client']));
-        $apiDefinition->replaceArgument(1, $config['api']['options']);
+        $apiDefinition = new DefinitionDecorator('payum.be2bill.api.prototype');
+        $apiDefinition->replaceArgument(1, array(
+            'identifier' => $config['identifier'],
+            'password' => $config['password'],
+            'sandbox' => $config['sandbox'],
+        ));
         $apiDefinition->setPublic(true);
         $apiId = 'payum.context.'.$contextName.'.api';
         $container->setDefinition($apiId, $apiDefinition);
         $paymentDefinition->addMethodCall('addApi', array(new Reference($apiId)));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function addActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
-    {
-        $captureOnsiteActionDefinition = new DefinitionDecorator('payum.be2bill.action.capture_onsite');
-        $captureOnsiteActionId = 'payum.context.'.$contextName.'.action.capture_onsite';
-        $container->setDefinition($captureOnsiteActionId, $captureOnsiteActionDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($captureOnsiteActionId)));
-
-        $statusActionDefinition = new DefinitionDecorator('payum.be2bill.action.status');
-        $statusActionId = 'payum.context.'.$contextName.'.action.status';
-        $container->setDefinition($statusActionId, $statusActionDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($statusActionId)));
     }
 }
