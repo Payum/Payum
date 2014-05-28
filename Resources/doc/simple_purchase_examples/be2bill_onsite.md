@@ -24,7 +24,7 @@ $ php composer.phar require "payum/be2bill:*@stable"
 payum:
     contexts:
         your_context_here:
-            be2bill:
+            be2bill_onsite:
                 api:
                     options:
                         identifier: 'get this from gateway'
