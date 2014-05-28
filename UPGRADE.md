@@ -27,6 +27,8 @@
                 bar: bar
     ```
 
+* `be2bill` payment factory does not provide support of onsite payments any more, use `be2bill_onsite` factory instead.
+
 ## 0.7 to 0.8
 
 * `TokenFactory::createTokenForRoute` was renamed to `createToken`.
