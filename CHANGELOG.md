@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.8.8 (2014-05-29)
+
+* [request] add ObtainCreditCardRequest.
+* [model] add credit card model.
+* [security] add mask util. allows mask strings with diff options.
+* [doc] configure TokenStorage to use hash field as idPropery.
+
 ## 0.8.7 (2014-05-05)
 
 * [request] add simple status request.
