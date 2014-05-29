@@ -2,10 +2,10 @@
 
 ## 0.8.8 (2014-05-29)
 
-1ee5a9c [request] add ObtainCreditCardRequest.
-b6533e6 [model] add credit card model.
-52382ff [security] add mask util. allows mask strings with diff options.
-378b708 [doc] configure TokenStorage to use hash field as idPropery
+* [request] add ObtainCreditCardRequest.
+* [model] add credit card model.
+* [security] add mask util. allows mask strings with diff options.
+* [doc] configure TokenStorage to use hash field as idPropery.
 
 ## 0.8.7 (2014-05-05)
 
