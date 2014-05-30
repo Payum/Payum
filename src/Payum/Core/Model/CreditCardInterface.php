@@ -82,4 +82,9 @@ interface CreditCardInterface
      * @param \DateTime $date
      */
     public function setExpireAt(\DateTime $date);
+
+    /**
+     * Wraps all sensitive values by SensitiveValue objects. Prevent accidental storing of them while serialization and so on.
+     */
+    public function secure();
 }
