@@ -5,6 +5,7 @@
 * [model] Method `CreditCardInterface::getCardHolder` renamed to `getHolder`
 * [model] Method `CreditCardInterface::setCardHolder` renamed to `setHolder`
 * [model] Methods `getExpiryMonth`, `setExpiryMonth`, `getExpiryYear`, `setExpiryYear` removed. Use `setExpiredAt` and `getExpiredAt` instead.
+* [be2bill] `PaymentFactory` does not provide support of onsite payments. Use `OnsitePaymentFactory` instead.
 
 ## 0.8.5 to 0.8.6
 

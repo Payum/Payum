@@ -1,16 +1,18 @@
 <?php
 namespace Payum\Be2Bill\Action;
 
-use Payum\Core\Action\ActionInterface;
+use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Request\CaptureRequest;
-use Payum\Core\Request\UserInputRequiredInteractiveRequest;
+use Payum\Core\Request\ObtainCreditCardRequest;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Be2Bill\Api;
+use Payum\Core\Security\SensitiveValue;
 
-class CaptureAction implements ActionInterface, ApiAwareInterface
+class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
 {
     /**
      * @var Api
@@ -18,7 +20,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
     protected $api;
     
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function setApi($api)
     {
@@ -30,7 +32,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
     }
     
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function execute($request)
     {
@@ -45,11 +47,25 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
             return;
         }
 
-        $requiredCardFields = array('CARDCODE', 'CARDCVV', 'CARDVALIDITYDATE', 'CARDFULLNAME');
+        $cardFields = array('CARDCODE', 'CARDCVV', 'CARDVALIDITYDATE', 'CARDFULLNAME');
+        if (false == $model->validatedNotEmpty($cardFields, false)) {
+            try {
+                $creditCardRequest = new ObtainCreditCardRequest;
+                $this->payment->execute($creditCardRequest);
+                $card = $creditCardRequest->obtain();
+
+                $model['CARDVALIDITYDATE'] = new SensitiveValue($card->getExpireAt()->format('d-y'));
+                $model['CARDCODE'] = $card->getNumber();
+                $model['CARDFULLNAME'] = $card->getHolder();
+                $model['CARDCVV'] = $card->getSecurityCode();
+            } catch (RequestNotSupportedException $e) {
+                throw new LogicException('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCardRequest request.');
+            }
+        }
         
         //instruction must have an alias set (e.g oneclick payment) or credit card info. 
-        if (false == ($model['ALIAS'] || $model->validatedNotEmpty($requiredCardFields, false))) {
-            throw new UserInputRequiredInteractiveRequest($requiredCardFields);
+        if (false == ($model['ALIAS'] || $model->validatedNotEmpty($cardFields, false))) {
+            throw new LogicException('Either credit card fields or its alias has to be set.');
         }
 
         $response = $this->api->payment($model->toUnsafeArray());
@@ -58,20 +74,13 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {
-        if (false == $request instanceof CaptureRequest) {
-            return false;
-        }
-
-        if (false == $request->getModel() instanceof \ArrayAccess) {
-            return false;
-        }
-
-        $model = $request->getModel();
-
-        return false == empty($model['CARDCODE']) || false == empty($model['ALIAS']);
+        return
+            $request instanceof CaptureRequest &&
+            $request->getModel() instanceof \ArrayAccess
+        ;
     }
 }

@@ -1,7 +1,6 @@
 <?php
 namespace Payum\AuthorizeNet\Aim\Action;
 
-use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
@@ -10,7 +9,6 @@ use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Request\CaptureRequest;
 use Payum\Core\Request\ObtainCreditCardRequest;
-use Payum\Core\Request\UserInputRequiredInteractiveRequest;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Security\SensitiveValue;
 
