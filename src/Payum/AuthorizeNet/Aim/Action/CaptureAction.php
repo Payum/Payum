@@ -2,15 +2,19 @@
 namespace Payum\AuthorizeNet\Aim\Action;
 
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\ObtainCreditCardRequest;
 use Payum\Core\Request\UserInputRequiredInteractiveRequest;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Security\SensitiveValue;
 
-class CaptureAction implements ActionInterface, ApiAwareInterface
+class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
 {
     /**
      * @var AuthorizeNetAIM
@@ -45,8 +49,17 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
             return;
         }
         
-        if (false == ($model['amount'] && $model['card_num'] && $model['exp_date'])) {
-            throw new UserInputRequiredInteractiveRequest(array('amount', 'card_num', 'exp_date'));
+        if (false == $model->validatedNotEmpty(array('card_num', 'exp_date'), false)) {
+            try {
+                $creditCardRequest = new ObtainCreditCardRequest;
+                $this->payment->execute($creditCardRequest);
+                $card = $creditCardRequest->obtain();
+
+                $model['exp_date'] = new SensitiveValue($card->getExpireAt()->format('y/d'));
+                $model['card_num'] = $card->getNumber();
+            } catch (RequestNotSupportedException $e) {
+                throw new LogicException('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCardRequest request.');
+            }
         }
         
         $api = clone $this->api;
