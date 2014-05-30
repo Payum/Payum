@@ -59,7 +59,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
                 throw new LogicException('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCardRequest request.');
             }
         }
-        
+
         $api = clone $this->api;
         $api->ignore_not_x_fields = true;
         $api->setFields(array_filter($model->toUnsafeArray()));

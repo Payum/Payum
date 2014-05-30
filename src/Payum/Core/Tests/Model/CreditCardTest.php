@@ -2,7 +2,6 @@
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\CreditCard;
-use Payum\Core\Security\SensitiveValue;
 
 class CreditCardTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,28 +50,28 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowGetPreviouslySetStringHolder()
+    public function shouldAllowGetPreviouslySetHolder()
     {
         $card = new CreditCard;
 
         $card->setHolder('Mahatma Gandhi');
 
-        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $card->getHolder());
-        $this->assertEquals('Mahatma Gandhi', $card->getHolder()->peek());
+        $this->assertEquals('Mahatma Gandhi', $card->getHolder());
     }
 
     /**
      * @test
      */
-    public function shouldAllowGetPreviouslySetSensitiveValueHolder()
+    public function shouldKeepHolderInternallyWrappedBySensitiveValue()
     {
         $card = new CreditCard;
 
-        $expected = new SensitiveValue('Mahatma Gandhi');
+        $card->setHolder('Mahatma Gandhi');
 
-        $card->setHolder($expected);
+        $value = $this->readAttribute($card, 'holder');
 
-        $this->assertSame($expected, $card->getHolder());
+        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $value);
+        $this->assertEquals('Mahatma Gandhi', $value->peek());
     }
 
     /**
@@ -97,37 +96,35 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
         $card->setHolder('Mahatma Gandhi');
         $card->setMaskedHolder('theMaskedHolder');
 
-        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $card->getHolder());
-        $this->assertEquals('Mahatma Gandhi', $card->getHolder()->peek());
-
+        $this->assertEquals('Mahatma Gandhi', $card->getHolder());
         $this->assertEquals('theMaskedHolder', $card->getMaskedHolder());
     }
 
     /**
      * @test
      */
-    public function shouldAllowGetPreviouslySetStringNumber()
+    public function shouldAllowGetPreviouslySetNumber()
     {
         $card = new CreditCard;
 
         $card->setNumber('1234 5678 1234 5678');
 
-        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $card->getNumber());
-        $this->assertEquals('1234 5678 1234 5678', $card->getNumber()->peek());
+        $this->assertEquals('1234 5678 1234 5678', $card->getNumber());
     }
 
     /**
      * @test
      */
-    public function shouldAllowGetPreviouslySetSensitiveValueNumber()
+    public function shouldKeepNumberInternallyWrappedBySensitiveValue()
     {
         $card = new CreditCard;
 
-        $expected = new SensitiveValue('1234 5678 1234 5678');
+        $card->setNumber('1234 5678 1234 5678');
 
-        $card->setNumber($expected);
+        $value = $this->readAttribute($card, 'number');
 
-        $this->assertSame($expected, $card->getNumber());
+        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $value);
+        $this->assertEquals('1234 5678 1234 5678', $value->peek());
     }
 
     /**
@@ -152,8 +149,7 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
         $card->setNumber('1234 5678 1234 5678');
         $card->setMaskedNumber('theMaskedNumber');
 
-        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $card->getNumber());
-        $this->assertEquals('1234 5678 1234 5678', $card->getNumber()->peek());
+        $this->assertEquals('1234 5678 1234 5678', $card->getNumber());
 
         $this->assertEquals('theMaskedNumber', $card->getMaskedNumber());
     }
@@ -161,34 +157,34 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowGetPreviouslySetStringSecurityCode()
+    public function shouldAllowGetPreviouslySetSecurityCode()
     {
         $card = new CreditCard;
 
         $card->setSecurityCode('theCode');
 
-        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $card->getSecurityCode());
-        $this->assertEquals('theCode', $card->getSecurityCode()->peek());
+        $this->assertEquals('theCode', $card->getSecurityCode());
     }
 
     /**
      * @test
      */
-    public function shouldAllowGetPreviouslySetSensitiveValueSecurityCode()
+    public function shouldKeepSecurityCodeInternallyWrappedBySensitiveValue()
     {
         $card = new CreditCard;
-        
-        $expected = new SensitiveValue('theCode');
 
-        $card->setSecurityCode($expected);
+        $card->setSecurityCode('123');
 
-        $this->assertSame($expected, $card->getSecurityCode());
+        $value = $this->readAttribute($card, 'securityCode');
+
+        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $value);
+        $this->assertEquals('123', $value->peek());
     }
 
     /**
      * @test
      */
-    public function shouldAllowGetPreviouslySetExpiryDate()
+    public function shouldAllowGetPreviouslySetExpireAt()
     {
         $card = new CreditCard;
 
@@ -197,5 +193,22 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
         $card->setExpireAt($expected);
 
         $this->assertSame($expected, $card->getExpireAt());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldKeepExiSecurityCodeInternallyWrappedBySensitiveValue()
+    {
+        $card = new CreditCard;
+
+        $expected = new \DateTime;
+
+        $card->setExpireAt($expected);
+
+        $value = $this->readAttribute($card, 'expireAt');
+
+        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $value);
+        $this->assertSame($expected, $value->peek());
     }
 }

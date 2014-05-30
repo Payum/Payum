@@ -1,8 +1,6 @@
 <?php
 namespace Payum\Core\Model;
 
-use Payum\Core\Security\SensitiveValue;
-
 interface CreditCardInterface
 {
     /**
@@ -26,12 +24,12 @@ interface CreditCardInterface
     public function setBrand($brand);
 
     /**
-     * @return SensitiveValue
+     * @return string
      */
     public function getHolder();
 
     /**
-     * @param SensitiveValue|string $holder
+     * @param string $holder
      */
     public function setHolder($holder);
 
@@ -46,12 +44,12 @@ interface CreditCardInterface
     public function getMaskedHolder();
 
     /**
-     * @return SensitiveValue
+     * @return string
      */
     public function getNumber();
 
     /**
-     * @param SensitiveValue|string $number
+     * @param string $number
      */
     public function setNumber($number);
 
@@ -66,12 +64,12 @@ interface CreditCardInterface
     public function getMaskedNumber();
 
     /**
-     * @return SensitiveValue
+     * @return string
      */
     public function getSecurityCode();
 
     /**
-     * @param SensitiveValue|string $securityCode
+     * @param string $securityCode
      */
     public function setSecurityCode($securityCode);
 
