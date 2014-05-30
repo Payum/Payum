@@ -16,6 +16,7 @@
 
         <parameter key="payum.action.execute_same_request_with_model_details.class">Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction</parameter>
         <parameter key="payum.action.get_http_query.class">Payum\Bundle\PayumBundle\Action\GetHttpQueryAction</parameter>
+        <parameter key="payum.action.obtain_credit_card.class">Payum\Bundle\PayumBundle\Action\ObtainCreditCardAction</parameter>
 
         <parameter key="payum.security.http_request_verifier.class">Payum\Bundle\PayumBundle\Security\HttpRequestVerifier</parameter>
         <parameter key="payum.security.token_factory.class">Payum\Bundle\PayumBundle\Security\TokenFactory</parameter>
@@ -86,6 +87,16 @@
             </call>
         </service>
 
+        <service id="payum.action.obtain_credit_card" class="%payum.action.obtain_credit_card.class%" public="false">
+            <argument type="service" id="form.factory" />
+            <argument type="service" id="templating" />
+            <call method="setRequest">
+                <argument type="service" id="request" on-invalid="null" strict="false" />
+            </call>
+
+            <tag name="payum.action" all="true" />
+        </service>
+
         <!-- Should be replaced by PayumExtension -->
         <service id="payum.security.token_storage" abstract="true" />
 
@@ -105,6 +116,14 @@
             <argument type="service" id="payum"></argument>
             <argument>payum_capture_do</argument>
             <argument>payum_notify_do</argument>
+        </service>
+
+        <service id="payum.form.type.credit_card_expiration_date" class="Payum\Bundle\PayumBundle\Form\Type\CreditCardExpirationDateType">
+            <tag name="form.type" alias="payum_credit_card_expiration_date" />
+        </service>
+
+        <service id="payum.form.type.credit_card" class="Payum\Bundle\PayumBundle\Form\Type\CreditCardType">
+            <tag name="form.type" alias="payum_credit_card" />
         </service>
     </services>
 </container>
