@@ -42,7 +42,7 @@ class CreditCard implements CreditCardInterface
     protected $securityCode;
 
     /**
-     * @var \DateTime
+     * @var SensitiveValue
      */
     protected $expireAt;
 
@@ -83,8 +83,7 @@ class CreditCard implements CreditCardInterface
      */
     public function setHolder($holder)
     {
-        $this->holder = $this->wrapBySensitiveValue($holder);
-
+        $this->holder = new SensitiveValue($holder);
         $this->maskedHolder = Mask::mask($this->holder->peek());
     }
 
@@ -93,7 +92,7 @@ class CreditCard implements CreditCardInterface
      */
     public function getHolder()
     {
-        return $this->holder;
+        return $this->holder->peek();
     }
 
     /**
@@ -117,8 +116,7 @@ class CreditCard implements CreditCardInterface
      */
     public function setNumber($number)
     {
-        $this->number = $this->wrapBySensitiveValue($number);
-
+        $this->number = new SensitiveValue($number);
         $this->maskedNumber = Mask::mask($this->number->peek());
     }
 
@@ -127,7 +125,7 @@ class CreditCard implements CreditCardInterface
      */
     public function getNumber()
     {
-        return $this->number;
+        return $this->number->peek();
     }
 
     /**
@@ -151,7 +149,7 @@ class CreditCard implements CreditCardInterface
      */
     public function setSecurityCode($securityCode)
     {
-        $this->securityCode = $this->wrapBySensitiveValue($securityCode);
+        $this->securityCode = new SensitiveValue($securityCode);
     }
 
     /**
@@ -159,7 +157,7 @@ class CreditCard implements CreditCardInterface
      */
     public function getSecurityCode()
     {
-        return $this->securityCode;
+        return $this->securityCode->peek();
     }
 
     /**
@@ -167,7 +165,7 @@ class CreditCard implements CreditCardInterface
      */
     public function getExpireAt()
     {
-        return $this->expireAt;
+        return $this->expireAt->peek();
     }
 
     /**
@@ -175,17 +173,7 @@ class CreditCard implements CreditCardInterface
      */
     public function setExpireAt(\DateTime $date)
     {
-        $this->expireAt = $date;
-    }
-
-    /**
-     * @param mixed $value
-     *
-     * @return SensitiveValue
-     */
-    protected function wrapBySensitiveValue($value)
-    {
-        return $value instanceof SensitiveValue ? $value : new SensitiveValue($value);
+        $this->expireAt = new SensitiveValue($date);
     }
 }
 

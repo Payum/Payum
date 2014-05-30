@@ -4,6 +4,7 @@
 
 * [model] Method `CreditCardInterface::getCardHolder` renamed to `getHolder`
 * [model] Method `CreditCardInterface::setCardHolder` renamed to `setHolder`
+* [model] `CreditCardInterface` getters does not return `SensitiveValue` anymore. It is used only internally.
 * [model] Methods `getExpiryMonth`, `setExpiryMonth`, `getExpiryYear`, `setExpiryYear` removed. Use `setExpiredAt` and `getExpiredAt` instead.
 
 ## 0.8.5 to 0.8.6
