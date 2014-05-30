@@ -23,7 +23,7 @@ class CreateRecurringPaymentProfileAction extends BaseApiAwareAction
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validatedNotEmpty(array(
+        $model->validateNotEmpty(array(
             'TOKEN',
             'PROFILESTARTDATE',
             'DESC',
