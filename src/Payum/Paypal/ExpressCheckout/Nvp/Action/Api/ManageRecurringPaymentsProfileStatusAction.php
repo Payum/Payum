@@ -22,7 +22,7 @@ class ManageRecurringPaymentsProfileStatusAction extends BaseApiAwareAction
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validatedNotEmpty(array('PROFILEID', 'ACTION'));
+        $model->validateNotEmpty(array('PROFILEID', 'ACTION'));
 
         $buzzRequest = new FormRequest;
         $buzzRequest->setFields((array) $model);

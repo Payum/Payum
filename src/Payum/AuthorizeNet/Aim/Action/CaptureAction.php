@@ -47,7 +47,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
             return;
         }
         
-        if (false == $model->validatedNotEmpty(array('card_num', 'exp_date'), false)) {
+        if (false == $model->validateNotEmpty(array('card_num', 'exp_date'), false)) {
             try {
                 $creditCardRequest = new ObtainCreditCardRequest;
                 $this->payment->execute($creditCardRequest);

@@ -53,7 +53,7 @@ class ArrayObject extends \ArrayObject
      * 
      * @return bool
      */
-    public function validatedNotEmpty($required, $throwOnInvalid = true)
+    public function validateNotEmpty($required, $throwOnInvalid = true)
     {
         $required = is_array($required) ? $required : array($required);
         

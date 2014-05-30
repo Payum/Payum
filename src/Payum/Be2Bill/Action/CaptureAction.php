@@ -48,7 +48,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         }
 
         $cardFields = array('CARDCODE', 'CARDCVV', 'CARDVALIDITYDATE', 'CARDFULLNAME');
-        if (false == $model->validatedNotEmpty($cardFields, false)) {
+        if (false == $model->validateNotEmpty($cardFields, false)) {
             try {
                 $creditCardRequest = new ObtainCreditCardRequest;
                 $this->payment->execute($creditCardRequest);
@@ -64,7 +64,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         }
         
         //instruction must have an alias set (e.g oneclick payment) or credit card info. 
-        if (false == ($model['ALIAS'] || $model->validatedNotEmpty($cardFields, false))) {
+        if (false == ($model['ALIAS'] || $model->validateNotEmpty($cardFields, false))) {
             throw new LogicException('Either credit card fields or its alias has to be set.');
         }
 

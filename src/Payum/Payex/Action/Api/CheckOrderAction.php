@@ -40,7 +40,7 @@ class CheckOrderAction implements ActionInterface, ApiAwareInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validatedNotEmpty(array(
+        $model->validateNotEmpty(array(
             'transactionNumber',
         ));
         
