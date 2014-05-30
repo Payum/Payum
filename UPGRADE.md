@@ -1,8 +1,14 @@
 # Upgrades
 
+## 0.8 to 0.9
+
+[model] Method `CreditCardInterface::getCardHolder` renamed to `getHolder`
+[model] Method `CreditCardInterface::setCardHolder` renamed to `setHolder`
+[model] Methods `getExpiryMonth`, `setExpiryMonth`, `getExpiryYear`, `setExpiryYear` removed. Use `setExpiredAt` and `getExpiredAt` instead.
+
 ## 0.8.5 to 0.8.6
 
-* [Security] Second argument of `GenericTokenFactory::createNotifyToken` is option now.
+* [Security] Second argument of `GenericTokenFactory::createNotifyToken` is optional now.
 
 ## 0.7 to 0.8
 
