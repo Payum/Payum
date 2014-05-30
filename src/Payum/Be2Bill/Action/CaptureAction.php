@@ -54,7 +54,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
                 $this->payment->execute($creditCardRequest);
                 $card = $creditCardRequest->obtain();
 
-                $model['CARDVALIDITYDATE'] = new SensitiveValue($card->getExpireAt()->format('d-y'));
+                $model['CARDVALIDITYDATE'] = new SensitiveValue($card->getExpireAt()->format('m-y'));
                 $model['CARDCODE'] = $card->getNumber();
                 $model['CARDFULLNAME'] = $card->getHolder();
                 $model['CARDCVV'] = $card->getSecurityCode();
