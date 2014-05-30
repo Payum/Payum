@@ -48,7 +48,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
         if (false == ($model['amount'] && $model['card_num'] && $model['exp_date'])) {
             throw new UserInputRequiredInteractiveRequest(array('amount', 'card_num', 'exp_date'));
         }
-        
+
         $api = clone $this->api;
         $api->ignore_not_x_fields = true;
         $api->setFields(array_filter($model->toUnsafeArray()));
