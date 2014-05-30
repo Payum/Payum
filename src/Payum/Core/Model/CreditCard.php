@@ -19,12 +19,12 @@ class CreditCard implements CreditCardInterface
     /**
      * @var SensitiveValue
      */
-    protected $cardHolder;
+    protected $holder;
 
     /**
      * @var string
      */
-    protected $maskedCardHolder;
+    protected $maskedHolder;
 
     /**
      * @var SensitiveValue
@@ -42,14 +42,9 @@ class CreditCard implements CreditCardInterface
     protected $securityCode;
 
     /**
-     * @var SensitiveValue
+     * @var \DateTime
      */
-    protected $expiryMonth;
-
-    /**
-     * @var SensitiveValue
-     */
-    protected $expiryYear;
+    protected $expireAt;
 
     /**
      * {@inheritDoc}
@@ -86,35 +81,35 @@ class CreditCard implements CreditCardInterface
     /**
      * {@inheritDoc}
      */
-    public function setCardHolder($cardHolder)
+    public function setHolder($holder)
     {
-        $this->cardHolder = $this->wrapBySensitiveValue($cardHolder);
+        $this->holder = $this->wrapBySensitiveValue($holder);
 
-        $this->maskedCardHolder = Mask::mask($this->cardHolder->peek());
+        $this->maskedHolder = Mask::mask($this->holder->peek());
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getCardHolder()
+    public function getHolder()
     {
-        return $this->cardHolder;
+        return $this->holder;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setMaskedCardHolder($maskedCardHolder)
+    public function setMaskedHolder($maskedHolder)
     {
-        $this->maskedCardHolder = $maskedCardHolder;
+        $this->maskedHolder = $maskedHolder;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getMaskedCardHolder()
+    public function getMaskedHolder()
     {
-        return $this->maskedCardHolder;
+        return $this->maskedHolder;
     }
 
     /**
@@ -170,33 +165,17 @@ class CreditCard implements CreditCardInterface
     /**
      * {@inheritDoc}
      */
-    public function setExpiryMonth($expiryMonth)
+    public function getExpireAt()
     {
-        $this->expiryMonth = $this->wrapBySensitiveValue($expiryMonth);
+        return $this->expireAt;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getExpiryMonth()
+    public function setExpireAt(\DateTime $date)
     {
-        return $this->expiryMonth;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setExpiryYear($expiryYear)
-    {
-        $this->expiryYear = $this->wrapBySensitiveValue($expiryYear);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getExpiryYear()
-    {
-        return $this->expiryYear;
+        $this->expireAt = $date;
     }
 
     /**

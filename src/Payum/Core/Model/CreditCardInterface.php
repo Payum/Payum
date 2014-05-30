@@ -28,22 +28,22 @@ interface CreditCardInterface
     /**
      * @return SensitiveValue
      */
-    public function getCardHolder();
+    public function getHolder();
 
     /**
-     * @param SensitiveValue|string $cardHolder
+     * @param SensitiveValue|string $holder
      */
-    public function setCardHolder($cardHolder);
+    public function setHolder($holder);
 
     /**
-     * @param string $maskedCardHolder
+     * @param string $maskedHolder
      */
-    public function setMaskedCardHolder($maskedCardHolder);
+    public function setMaskedHolder($maskedHolder);
 
     /**
      * @return string
      */
-    public function getMaskedCardHolder();
+    public function getMaskedHolder();
 
     /**
      * @return SensitiveValue
@@ -76,22 +76,12 @@ interface CreditCardInterface
     public function setSecurityCode($securityCode);
 
     /**
-     * @return SensitiveValue
+     * @return \DateTime
      */
-    public function getExpiryMonth();
+    public function getExpireAt();
 
     /**
-     * @param SensitiveValue|integer
+     * @param \DateTime $date
      */
-    public function setExpiryMonth($expiryMonth);
-
-    /**
-     * @return SensitiveValue
-     */
-    public function getExpiryYear();
-
-    /**
-     * @param SensitiveValue|integer $expiryYear
-     */
-    public function setExpiryYear($expiryYear);
+    public function setExpireAt(\DateTime $date);
 }

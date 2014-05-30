@@ -51,56 +51,56 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowGetPreviouslySetStringCardHolder()
+    public function shouldAllowGetPreviouslySetStringHolder()
     {
         $card = new CreditCard;
 
-        $card->setCardHolder('Mahatma Gandhi');
+        $card->setHolder('Mahatma Gandhi');
 
-        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $card->getCardHolder());
-        $this->assertEquals('Mahatma Gandhi', $card->getCardHolder()->peek());
+        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $card->getHolder());
+        $this->assertEquals('Mahatma Gandhi', $card->getHolder()->peek());
     }
 
     /**
      * @test
      */
-    public function shouldAllowGetPreviouslySetSensitiveValueCardHolder()
+    public function shouldAllowGetPreviouslySetSensitiveValueHolder()
     {
         $card = new CreditCard;
 
         $expected = new SensitiveValue('Mahatma Gandhi');
 
-        $card->setCardHolder($expected);
+        $card->setHolder($expected);
 
-        $this->assertSame($expected, $card->getCardHolder());
+        $this->assertSame($expected, $card->getHolder());
     }
 
     /**
      * @test
      */
-    public function shouldAllowGetMaskedCardHolderWhenSetCardHolder()
+    public function shouldAllowGetMaskedHolderWhenSetHolder()
     {
         $card = new CreditCard;
 
-        $card->setCardHolder('Mahatma Gandhi');
+        $card->setHolder('Mahatma Gandhi');
 
-        $this->assertEquals('MXXXXXX XXndhi', $card->getMaskedCardHolder());
+        $this->assertEquals('MXXXXXX XXndhi', $card->getMaskedHolder());
     }
 
     /**
      * @test
      */
-    public function shouldAllowChangeMaskedCardHolder()
+    public function shouldAllowChangeMaskedHolder()
     {
         $card = new CreditCard;
 
-        $card->setCardHolder('Mahatma Gandhi');
-        $card->setMaskedCardHolder('theMaskedCardHolder');
+        $card->setHolder('Mahatma Gandhi');
+        $card->setMaskedHolder('theMaskedHolder');
 
-        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $card->getCardHolder());
-        $this->assertEquals('Mahatma Gandhi', $card->getCardHolder()->peek());
+        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $card->getHolder());
+        $this->assertEquals('Mahatma Gandhi', $card->getHolder()->peek());
 
-        $this->assertEquals('theMaskedCardHolder', $card->getMaskedCardHolder());
+        $this->assertEquals('theMaskedHolder', $card->getMaskedHolder());
     }
 
     /**
@@ -188,54 +188,14 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowGetPreviouslySetStringExpirationYear()
+    public function shouldAllowGetPreviouslySetExpiryDate()
     {
         $card = new CreditCard;
 
-        $card->setExpiryYear('theCode');
+        $expected = new \DateTime;
 
-        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $card->getExpiryYear());
-        $this->assertEquals('theCode', $card->getExpiryYear()->peek());
-    }
+        $card->setExpireAt($expected);
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetSensitiveValueExpirationYear()
-    {
-        $card = new CreditCard;
-
-        $expected = new SensitiveValue('theCode');
-
-        $card->setExpiryYear($expected);
-
-        $this->assertSame($expected, $card->getExpiryYear());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetStringExpirationMonth()
-    {
-        $card = new CreditCard;
-
-        $card->setExpiryMonth('theCode');
-
-        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $card->getExpiryMonth());
-        $this->assertEquals('theCode', $card->getExpiryMonth()->peek());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetSensitiveValueExpirationMonth()
-    {
-        $card = new CreditCard;
-
-        $expected = new SensitiveValue('theCode');
-
-        $card->setExpiryMonth($expected);
-
-        $this->assertSame($expected, $card->getExpiryMonth());
+        $this->assertSame($expected, $card->getExpireAt());
     }
 }
