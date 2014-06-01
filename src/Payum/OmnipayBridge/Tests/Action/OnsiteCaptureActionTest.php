@@ -1,16 +1,16 @@
 <?php
 namespace Payum\OmnipayBridge\Action;
 
-use Payum\OmnipayBridge\Action\CaptureAction;
+use Payum\OmnipayBridge\Action\OnsiteCaptureAction;
 
-class CaptureActionTest extends \PHPUnit_Framework_TestCase
+class OnsiteCaptureActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\CaptureAction');
+        $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\OnsiteCaptureAction');
         
         $this->assertTrue($rc->isSubclassOf('Payum\OmnipayBridge\Action\BaseApiAwareAction'));
     }
@@ -20,6 +20,6 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new CaptureAction;
+        new OnsiteCaptureAction;
     }
 }

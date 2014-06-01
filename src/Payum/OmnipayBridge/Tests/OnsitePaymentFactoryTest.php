@@ -2,16 +2,16 @@
 namespace Payum\OmnipayBridge\Tests;
 
 use Omnipay\Common\GatewayInterface;
-use Payum\OmnipayBridge\PaymentFactory;
+use Payum\OmnipayBridge\OnsitePaymentFactory;
 
-class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
+class OnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function couldNotBeInstantiated()
     {
-        $rc = new \ReflectionClass('Payum\OmnipayBridge\PaymentFactory');
+        $rc = new \ReflectionClass('Payum\OmnipayBridge\OnsitePaymentFactory');
 
         $this->assertFalse($rc->isInstantiable());
     }
@@ -23,7 +23,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $gatewayMock = $this->createGatewayMock();
         
-        $payment = PaymentFactory::create($gatewayMock);
+        $payment = OnsitePaymentFactory::create($gatewayMock);
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
         
