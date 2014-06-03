@@ -28,7 +28,7 @@ class CreditCardType extends AbstractType
         $resolver
             ->setDefaults(array(
                 'data_class'        => 'Payum\Core\Model\CreditCard',
-                'validation_groups' => array('payum'),
+                'validation_groups' => array('Payum'),
                 'label' => false
             ))
         ;

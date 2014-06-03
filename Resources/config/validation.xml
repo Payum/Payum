@@ -8,37 +8,37 @@
     <class name="Payum\Core\Model\CreditCard">
         <property name="number">
             <constraint name="NotBlank">
-                <option name="groups">payum</option>
+                <option name="groups">Payum</option>
             </constraint>
             <constraint name="Luhn">
-                <option name="groups">payum</option>
+                <option name="groups">Payum</option>
             </constraint>
         </property>
         <property name="holder">
             <constraint name="NotBlank">
-                <option name="groups">payum</option>
+                <option name="groups">Payum</option>
             </constraint>
             <constraint name="Length">
                 <option name="min">4</option>
-                <option name="groups">payum</option>
+                <option name="groups">Payum</option>
             </constraint>
         </property>
         <property name="securityCode">
             <constraint name="NotBlank">
-                <option name="groups">payum</option>
+                <option name="groups">Payum</option>
             </constraint>
             <constraint name="Length">
                 <option name="min">3</option>
                 <option name="max">4</option>
-                <option name="groups">payum</option>
+                <option name="groups">Payum</option>
             </constraint>
         </property>
         <property name="expireAt">
             <constraint name="NotBlank">
-                <option name="groups">payum</option>
+                <option name="groups">Payum</option>
             </constraint>
             <constraint name="DateTime">
-                <option name="groups">payum</option>
+                <option name="groups">Payum</option>
             </constraint>
         </property>
     </class>
