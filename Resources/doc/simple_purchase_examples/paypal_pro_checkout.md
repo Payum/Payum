@@ -65,9 +65,6 @@ class PaymentController extends Controller
 
         /** @var \Acme\PaymentBundle\Entity\PaymentDetails $paymentDetails */
         $paymentDetails = $storage->createModel();
-        $paymentDetails['acct'] = new SensitiveValue('5105105105105100');
-        $paymentDetails['cvv2'] = new SensitiveValue('123');
-        $paymentDetails['expDate'] = new SensitiveValue('1214');
         $paymentDetails['amt'] = 1;
         $paymentDetails['currency'] = 'USD';
         $storage->updateModel($paymentDetails);
@@ -78,14 +75,10 @@ class PaymentController extends Controller
             'acme_payment_done' // the route to redirect after capture;
         );
 
-        return $this->forward('PayumBundle:Capture:do', array(
-            'payum_token' => $captureToken,
-        ));
+        return $this->redirect($captureToken->getTargetUrl());
     }
 }
 ```
-
-_**Note**: The sensitive value object ensures that any valuable info will not be saved accidentally somewhere._
 
 That's it. After the payment done you will be redirect to `acme_payment_done` action.
 Check [this chapter](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/purchase_done_action.md) to find out how this done action could look like.

@@ -36,6 +36,7 @@ payum:
 ```
 
 _**Attention**: You have to changed `your_payment_name` to something more descriptive and domain related, for example `post_a_job_with_omnipay`._
+_**Attention**: If you have to use onsite payment like paypal express checkout use `omnipay_onsite` factory._
 
 ## Prepare payment
 
@@ -64,14 +65,7 @@ class PaymentController extends Controller
         /** @var \Acme\PaymentBundle\Entity\PaymentDetails */
         $paymentDetails = $storage->createModel();
         $paymentDetails['amount'] = 10;
-        $paymentDetails['card'] = new SensitiveValue(array(
-            'number' => '5555556778250000',
-            'cvv' => 123,
-            'expiryMonth' => 6,
-            'expiryYear' => 16,
-            'firstName' => 'foo',
-            'lastName' => 'bar',
-        ));
+        
         $storage->updateModel($paymentDetails);
 
         $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
@@ -80,14 +74,10 @@ class PaymentController extends Controller
             'acme_payment_done' // the route to redirect after capture;
         );
 
-        return $this->forward('PayumBundle:Capture:do', array(
-            'payum_token' => $captureToken,
-        ));
+        return $this->redirect($captureToken->getTargetUrl());
     }
 }
 ```
-
-_**Note**: The sensitive value object ensures that any valuable info will not be saved accidentally somewhere._
 
 That's it. After the payment done you will be redirect to `acme_payment_done` action.
 Check [this chapter](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/purchase_done_action.md) to find out how this done action could look like.
