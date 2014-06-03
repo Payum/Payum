@@ -15,7 +15,7 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
     protected $gateway;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function setApi($api)
     {

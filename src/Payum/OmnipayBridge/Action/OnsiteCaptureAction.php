@@ -1,5 +1,4 @@
 <?php
-
 namespace Payum\OmnipayBridge\Action;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -20,6 +19,10 @@ class OnsiteCaptureAction extends BaseApiAwareAction
         }
 
         $options = ArrayObject::ensureArrayObject($request->getModel());
+
+        if ($options['_status']) {
+            return;
+        }
 
         if (isset($options['_completeCaptureRequired'])) {
             unset($options['_completeCaptureRequired']);

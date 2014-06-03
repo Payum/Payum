@@ -5,10 +5,10 @@ use Omnipay\Common\GatewayInterface;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Payment;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
-use Payum\OmnipayBridge\Action\OnsiteCaptureAction;
+use Payum\OmnipayBridge\Action\CaptureAction;
 use Payum\OmnipayBridge\Action\StatusAction;
 
-abstract class OnsitePaymentFactory
+abstract class PaymentFactory
 {
     /**
      * @param \Omnipay\Common\GatewayInterface $gateway
@@ -23,7 +23,7 @@ abstract class OnsitePaymentFactory
         
         $payment->addExtension(new EndlessCycleDetectorExtension);
 
-        $payment->addAction(new OnsiteCaptureAction);
+        $payment->addAction(new CaptureAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 
