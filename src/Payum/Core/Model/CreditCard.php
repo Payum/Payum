@@ -199,7 +199,7 @@ class CreditCard implements CreditCardInterface
     /**
      * {@inheritDoc}
      */
-    public function setExpireAt(\DateTime $date)
+    public function setExpireAt(\DateTime $date = null)
     {
         $this->expireAt = $date;
     }
