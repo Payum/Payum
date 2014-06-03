@@ -10,9 +10,7 @@ class GetHttpQueryActionTest extends WebTestCase
      */
     public function shouldAllowGetAsServiceFromContainer()
     {
-        static::createClient();
-
-        $service = static::$kernel->getContainer()->get('payum.security.token_factory');
+        $service = $this->container->get('payum.security.token_factory');
 
         $this->assertInstanceOf('Payum\Bundle\PayumBundle\Security\TokenFactory', $service);
     }

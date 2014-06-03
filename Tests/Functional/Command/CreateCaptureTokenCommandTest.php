@@ -13,16 +13,6 @@ use Symfony\Component\Console\Tester\CommandTester;
 class CreateCaptureTokenCommandTest extends WebTestCase
 {
     /**
-     * @var Client
-     */
-    protected $client;
-
-    protected function setUp()
-    {
-        $this->client = static::createClient();
-    }
-
-    /**
      * @test
      */
     public function shouldCreateCaptureTokenWithUrlAsAfterUrl()
