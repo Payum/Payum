@@ -42,6 +42,7 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
     {
         $builder
             ->children()
+                ->booleanNode('allow_obtain_credit_card')->defaultValue(false)->cannotBeEmpty()->end()
                 ->arrayNode('actions')
                     ->useAttributeAsKey('key')
                     ->prototype('scalar')->end()

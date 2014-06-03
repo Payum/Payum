@@ -9,11 +9,15 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class CreditCardExpirationDateType extends AbstractType
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         if ('choice' == $options['widget']) {
+            if (empty($view['day']->vars['value'])) {
+                $view['day']->vars['value'] = $view['day']->vars['choices'][0]->value;
+            }
+
             $style = 'display:none';
             if (false == empty($view['day']->vars['attr']['style'])) {
                 $style = $view['day']->vars['attr']['style'].'; '.$style;
@@ -29,10 +33,7 @@ class CreditCardExpirationDateType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->replaceDefaults(array(
-            'input' => 'datetime',
-            'widget' => 'choice',
-            'days' => array(1),
-            'years' => range(date('Y'), date('Y') + 10)
+            'years' => range(date('Y'), date('Y') + 9)
         ));
     }
 

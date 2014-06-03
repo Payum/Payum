@@ -1,7 +1,11 @@
-<form method="POST">
-    {{ form_row(form) }}
+{% extends "PayumBundle::layout.html.twig" %}
 
-    {{ form_rest(form) }}
+{% block payum_content %}
+    <form method="POST">
+        {{ form_row(form) }}
 
-    <input type="submit" value="Submit" />
-</form>
+        {{ form_rest(form) }}
+
+        <input type="submit" value="Submit" />
+    </form>
+{% endblock %}

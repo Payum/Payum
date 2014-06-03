@@ -76,15 +76,21 @@
         <service 
             id="payum.action.execute_same_request_with_model_details"
             class="%payum.action.execute_same_request_with_model_details.class%"
-        />
+            public="false"
+        >
+            <tag name="payum.action" all="true" />
+        </service>
 
         <service
             id="payum.action.get_http_query"
             class="%payum.action.get_http_query.class%"
+            public="false"
         >
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
+
+            <tag name="payum.action" all="true" />
         </service>
 
         <service id="payum.action.obtain_credit_card" class="%payum.action.obtain_credit_card.class%" public="false">
