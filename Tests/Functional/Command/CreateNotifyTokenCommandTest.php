@@ -13,16 +13,6 @@ use Symfony\Component\Console\Tester\CommandTester;
 class CreateNotifyTokenCommandTest extends WebTestCase
 {
     /**
-     * @var Client
-     */
-    protected $client;
-
-    protected function setUp()
-    {
-        $this->client = static::createClient();
-    }
-
-    /**
      * @test
      */
     public function shouldCreateNotifyTokenWithoutModel()

@@ -86,9 +86,7 @@ class PaymentController extends Controller
          */
         $request->getSession()->set('payum_token', $captureToken->getHash());
 
-        return $this->forward('PayumBundle:Capture:do', array(
-            'payum_token' => $captureToken,
-        ));
+        return $this->redirect($captureToken->getTargetUrl());
     }
 }
 ```

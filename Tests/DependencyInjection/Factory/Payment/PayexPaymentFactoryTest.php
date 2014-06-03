@@ -11,13 +11,6 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PayexPaymentFac
 
 class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass() 
-    {
-        if (false == class_exists('Payum\Payex\PaymentFactory')) {
-            throw new \PHPUnit_Framework_SkippedTestError('Skipped because payment library is not installed.');
-        }
-    }
-    
     public static function provideTaggedActions()
     {
         return array(
@@ -84,6 +77,7 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $config = $processor->process($tb->buildTree(), array(array(
+            'obtain_credit_card' => false,
             'encryption_key' => 'aKey',
             'account_number' => 'aNum',
             'sandbox' => true,
@@ -117,7 +111,9 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->addConfiguration($rootNode);
 
         $processor = new Processor();
-        $processor->process($tb->buildTree(), array(array()));
+        $processor->process($tb->buildTree(), array(array(
+            'obtain_credit_card' => false,
+        )));
     }
 
     /**
@@ -137,6 +133,7 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
+            'obtain_credit_card' => false,
             'encryption_key' => 'aKey'
         )));
     }
@@ -151,6 +148,7 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'encryption_key' => 'aKey',
             'account_number' => 'aNum',
             'sandbox' => true,
@@ -173,6 +171,7 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'encryption_key' => 'aKey',
             'account_number' => 'aNum',
             'sandbox' => true,
@@ -208,6 +207,7 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'encryption_key' => 'aKey',
             'account_number' => 'aNum',
             'sandbox' => true,
@@ -247,6 +247,7 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'encryption_key' => 'aKey',
             'account_number' => 'aNum',
             'sandbox' => true,

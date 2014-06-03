@@ -74,6 +74,7 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $config = $processor->process($tb->buildTree(), array(array(
+            'obtain_credit_card' => false,
             'service' => 'foo.payment.service'
         )));
 
@@ -96,6 +97,7 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -119,11 +121,12 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-                'service' => 'foo.payment.service',
-                'actions' => array(),
-                'apis' => array(),
-                'extensions' => array(),
-            ));
+            'obtain_credit_card' => false,
+            'service' => 'foo.payment.service',
+            'actions' => array(),
+            'apis' => array(),
+            'extensions' => array(),
+        ));
 
         $this->assertEquals('payum.context.aContextName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
@@ -143,6 +146,7 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'actions' => array('payum.action.foo'),
             'apis' => array('payum.api.bar'),
             'extensions' => array('payum.extension.ololo'),

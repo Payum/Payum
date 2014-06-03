@@ -122,6 +122,7 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'login_id' => 'aLoginId',
             'transaction_key' => 'aTransactionKey',
             'sandbox' => true,
@@ -144,6 +145,7 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'login_id' => 'aLoginId',
             'transaction_key' => 'aTransactionKey',
             'sandbox' => true,
@@ -179,6 +181,7 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'login_id' => 'aLoginId',
             'transaction_key' => 'aTransactionKey',
             'sandbox' => true,
@@ -206,6 +209,7 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'login_id' => 'aLoginId',
             'transaction_key' => 'aTransactionKey',
             'sandbox' => true,
@@ -231,6 +235,7 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'login_id' => 'aLoginId',
             'transaction_key' => 'aTransactionKey',
             'sandbox' => true,

@@ -145,6 +145,7 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -157,6 +158,50 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldAddObtainCreditCardActionIfSuchOptionsSetToTrue()
+    {
+        $factory = $this->createAbstractPaymentFactory();
+
+        $actionDefinition = new Definition;
+
+        $container = new ContainerBuilder;
+        $container->setDefinition('payum.action.obtain_credit_card', $actionDefinition);
+
+        $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => true,
+            'actions' => array(),
+            'apis' => array(),
+            'extensions' => array(),
+        ));
+
+        $this->assertEquals(array(array('context' => 'aContextName')), $actionDefinition->getTag('payum.action'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotAddObtainCreditCardActionIfSuchOptionsSetToFalse()
+    {
+        $factory = $this->createAbstractPaymentFactory();
+
+        $actionDefinition = new Definition;
+
+        $container = new ContainerBuilder;
+        $container->setDefinition('payum.action.obtain_credit_card', $actionDefinition);
+
+        $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
+            'actions' => array(),
+            'apis' => array(),
+            'extensions' => array(),
+        ));
+
+        $this->assertEquals(array(), $actionDefinition->getTag('payum.action'));
+    }
+
+    /**
+     * @test
+     */
     public function shouldAddCustomActions()
     {
         $factory = $this->createAbstractPaymentFactory();
@@ -164,6 +209,7 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'actions' => array(
                 'payum.action.foo',
                 'payum.action.bar',
@@ -187,33 +233,6 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAddCommonActions()
-    {
-        $factory = $this->createAbstractPaymentFactory();
-
-        $container = new ContainerBuilder;
-
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addAction',
-            new Reference('payum.action.execute_same_request_with_model_details')
-        );
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addAction',
-            new Reference('payum.action.get_http_query')
-        );
-    }
-
-    /**
-     * @test
-     */
     public function shouldAddCommonExtensions()
     {
         $factory = $this->createAbstractPaymentFactory();
@@ -221,6 +240,7 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -243,6 +263,7 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -271,13 +292,14 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-                'actions' => array(),
-                'apis' => array(
-                    'payum.api.foo',
-                    'payum.api.bar',
-                ),
-                'extensions' => array(),
-            ));
+            'obtain_credit_card' => false,
+            'actions' => array(),
+            'apis' => array(
+                'payum.api.foo',
+                'payum.api.bar',
+            ),
+            'extensions' => array(),
+        ));
 
         $this->assertDefinitionContainsMethodCall(
             $container->getDefinition($paymentId),
@@ -301,13 +323,14 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-                'actions' => array(),
-                'apis' => array(),
-                'extensions' => array(
-                    'payum.extension.foo',
-                    'payum.extension.bar',
-                ),
-            ));
+            'obtain_credit_card' => false,
+            'actions' => array(),
+            'apis' => array(),
+            'extensions' => array(
+                'payum.extension.foo',
+                'payum.extension.bar',
+            ),
+        ));
 
         $this->assertDefinitionContainsMethodCall(
             $container->getDefinition($paymentId),

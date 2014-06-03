@@ -132,6 +132,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
+            'obtain_credit_card' => false,
             'username' => 'aUsername'
         )));
     }
@@ -153,6 +154,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
+            'obtain_credit_card' => false,
             'username' => 'aUsername',
             'password' => 'aPassword',
         )));
@@ -168,6 +170,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'username' => 'aUsername',
             'password' => 'aPassword',
             'signature' => 'aSignature',
@@ -191,6 +194,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'username' => 'aUsername',
             'password' => 'aPassword',
             'signature' => 'aSignature',
@@ -229,6 +233,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'username' => 'aUsername',
             'password' => 'aPassword',
             'signature' => 'aSignature',

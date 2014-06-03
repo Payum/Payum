@@ -11,13 +11,6 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentF
 
 class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        if (false == class_exists('Omnipay\Common\GatewayFactory')) {
-            $this->markTestSkipped('The omnipay lib required to run these tests');
-        }
-    }
-    
     /**
      * @test
      */
@@ -155,6 +148,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'type' => 'PayPal_Express',
             'options' => array(
                 'foo' => 'foo',
@@ -179,6 +173,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'type' => 'PayPal_Express',
             'options' => array(
                 'foo' => 'foo',
@@ -216,6 +211,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'type' => 'PayPal_Express',
             'options' => array(
                 'foo' => 'foo',
@@ -245,6 +241,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'type' => 'PayPal_Express',
             'options' => array(
                 'foo' => 'foo',
@@ -272,6 +269,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'type' => 'PayPal_Express',
             'options' => array(
                 'foo' => 'foo',
@@ -285,7 +283,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $actionDefinition = $container->getDefinition('payum.omnipay_bridge.action.status');
 
         $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
+        $this->assertCount(2, $tagAttributes);
         $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 

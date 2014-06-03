@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<constraint-mapping xmlns="http://symfony.com/schema/dic/constraint-mapping"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping
+                                        http://symfony.com/schema/dic/services/constraint-mapping-1.0.xsd">
+
+    <class name="Payum\Core\Model\CreditCard">
+        <property name="number">
+            <constraint name="NotBlank">
+                <option name="groups">Payum</option>
+            </constraint>
+            <constraint name="Luhn">
+                <option name="groups">Payum</option>
+            </constraint>
+        </property>
+        <property name="holder">
+            <constraint name="NotBlank">
+                <option name="groups">Payum</option>
+            </constraint>
+            <constraint name="Length">
+                <option name="min">4</option>
+                <option name="groups">Payum</option>
+            </constraint>
+        </property>
+        <property name="securityCode">
+            <constraint name="NotBlank">
+                <option name="groups">Payum</option>
+            </constraint>
+            <constraint name="Length">
+                <option name="min">3</option>
+                <option name="max">4</option>
+                <option name="groups">Payum</option>
+            </constraint>
+        </property>
+        <property name="expireAt">
+            <constraint name="NotBlank">
+                <option name="groups">Payum</option>
+            </constraint>
+            <constraint name="DateTime">
+                <option name="groups">Payum</option>
+            </constraint>
+        </property>
+    </class>
+
+</constraint-mapping>

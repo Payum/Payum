@@ -122,6 +122,7 @@ class Be2BillOnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'identifier' => 'anIdentifier',
             'password' => 'aPassword',
             'sandbox' => true,
@@ -144,6 +145,7 @@ class Be2BillOnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'identifier' => 'anIdentifier',
             'password' => 'aPassword',
             'sandbox' => true,
@@ -179,6 +181,7 @@ class Be2BillOnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'identifier' => 'anIdentifier',
             'password' => 'aPassword',
             'sandbox' => true,
@@ -206,6 +209,7 @@ class Be2BillOnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'identifier' => 'anIdentifier',
             'password' => 'aPassword',
             'sandbox' => true,
@@ -231,6 +235,7 @@ class Be2BillOnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'identifier' => 'anIdentifier',
             'password' => 'aPassword',
             'sandbox' => true,
