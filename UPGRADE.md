@@ -2,6 +2,7 @@
 
 ## 0.8 to 0.9
 
+* Minimum Symfony 2.3 version required.
 * Payment factory does not create action services any more. Instead, it uses actions defined in payment/foo.xml by tag.
 * Payment factories configurations were simplified. Sub options `api.options` were moved to the root, section was removed.
 

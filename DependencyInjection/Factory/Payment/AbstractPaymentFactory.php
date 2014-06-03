@@ -212,15 +212,13 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
             array(new Reference('payum.extension.endless_cycle_detector'))
         );
 
-        if (version_compare(Kernel::VERSION, '2.2.0', '>=')) {
-            $paymentDefinition->addMethodCall(
-                'addExtension',
-                array(new Reference('payum.extension.log_executed_actions'))
-            );
-            $paymentDefinition->addMethodCall(
-                'addExtension',
-                array(new Reference('payum.extension.logger'))
-            );
-        }
+        $paymentDefinition->addMethodCall(
+            'addExtension',
+            array(new Reference('payum.extension.log_executed_actions'))
+        );
+        $paymentDefinition->addMethodCall(
+            'addExtension',
+            array(new Reference('payum.extension.logger'))
+        );
     }
 }
