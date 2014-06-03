@@ -16,7 +16,10 @@ class CreditCardType extends AbstractType
             ->add('holder', 'text')
             ->add('number', 'text')
             ->add('securityCode', 'text')
-            ->add('expireAt', 'payum_credit_card_expiration_date')
+            ->add('expireAt', 'payum_credit_card_expiration_date', array(
+                'input' => 'datetime',
+                'widget' => 'choice'
+            ))
         ;
     }
 

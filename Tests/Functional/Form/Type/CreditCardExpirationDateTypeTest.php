@@ -44,14 +44,14 @@ class CreditCardExpirationDateTypeTest extends WebTestCase
         $form->submit(array(
             'day' => 1,
             'month' => 1,
-            'year' => 2014,
+            'year' => 2020,
         ));
 
         $this->assertTrue($form->isValid(), $form->getErrorsAsString());
 
         $data = $form->getData();
         $this->assertInstanceOf('DateTime', $data);
-        $this->assertEquals('2014-01-01', $data->format('Y-m-d'));
+        $this->assertEquals('2020-01-01', $data->format('Y-m-d'));
     }
 
     /**
@@ -76,7 +76,7 @@ class CreditCardExpirationDateTypeTest extends WebTestCase
      */
     public function shouldHideDaySelectAndSetDayFromGivenDateTimeAsValue()
     {
-        $date = new \DateTime('2014-01-10');
+        $date = new \DateTime('2020-01-10');
 
         $form = $this->formFactory->create('payum_credit_card_expiration_date', $date, array(
             'widget' => 'choice',
