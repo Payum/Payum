@@ -6,7 +6,7 @@
     <parameters>
         <parameter key="payum.omnipay_bridge.gateway_factory.class">Omnipay\Common\GatewayFactory</parameter>
         <parameter key="payum.omnipay_bridge.action.capture.class">Payum\OmnipayBridge\Action\CaptureAction</parameter>
-        <parameter key="payum.omnipay_bridge.action.onsite_capture.class">Payum\OmnipayBridge\Action\OnsiteCaptureAction</parameter>
+        <parameter key="payum.omnipay_bridge.action.capture_onsite.class">Payum\OmnipayBridge\Action\OnsiteCaptureAction</parameter>
         <parameter key="payum.omnipay_bridge.action.status.class">Payum\OmnipayBridge\Action\StatusAction</parameter>
     </parameters>
 
