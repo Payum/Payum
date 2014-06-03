@@ -99,8 +99,6 @@
             <call method="setRequest">
                 <argument type="service" id="request" on-invalid="null" strict="false" />
             </call>
-
-            <tag name="payum.action" all="true" />
         </service>
 
         <!-- Should be replaced by PayumExtension -->

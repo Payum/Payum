@@ -19,7 +19,7 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
      */
     public function create(ContainerBuilder $container, $contextName, array $config)
     {
-        if (false == class_exists('Payum\OmnipayBridge\OnsitePaymentFactory')) {
+        if (false == class_exists('Payum\OmnipayBridge\PaymentFactory')) {
             throw new RuntimeException('Cannot find OmnipayBridge payment factory class. Have you installed payum/omnipay-bridge package?');
         }
 

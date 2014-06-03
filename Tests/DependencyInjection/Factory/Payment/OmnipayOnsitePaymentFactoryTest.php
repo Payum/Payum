@@ -7,18 +7,18 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayOnsitePaymentFactory;
 
-class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
+class OmnipayOnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldBeSubClassOfAbstractPaymentFactory()
+    public function shouldBeSubClassOfOmnipayPaymentFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayOnsitePaymentFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentFactory'));
     }
 
     /**
@@ -26,7 +26,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new PaypalProCheckoutNvpPaymentFactory;
+        new OmnipayOnsitePaymentFactory;
     }
 
     /**
@@ -34,9 +34,9 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetName()
     {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
+        $factory = new OmnipayOnsitePaymentFactory;
 
-        $this->assertEquals('paypal_pro_checkout_nvp', $factory->getName());
+        $this->assertEquals('omnipay_onsite', $factory->getName());
     }
 
     /**
@@ -44,7 +44,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfiguration()
     {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
+        $factory = new OmnipayOnsitePaymentFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -53,27 +53,22 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $config = $processor->process($tb->buildTree(), array(array(
-            'username' => 'aUsername',
-            'password' => 'aPassword',
-            'partner' => 'aPartner',
-            'vendor' => 'aVendor'
+            'type' => 'PayPal_Express',
+            'options' => array(
+                'foo' => 'foo',
+                'bar' => 'bar',
+            )
         )));
+
+        $this->assertArrayHasKey('type', $config);
+
+        $this->assertArrayHasKey('options', $config);
         
-        $this->assertArrayHasKey('username', $config);
-        $this->assertEquals('aUsername', $config['username']);
-
-        $this->assertArrayHasKey('password', $config);
-        $this->assertEquals('aPassword', $config['password']);
-
-        $this->assertArrayHasKey('partner', $config);
-        $this->assertEquals('aPartner', $config['partner']);
-
-        $this->assertArrayHasKey('vendor', $config);
-        $this->assertEquals('aVendor', $config['vendor']);
-
-        $this->assertArrayHasKey('tender', $config);
-        $this->assertArrayHasKey('trxtype', $config);
-        $this->assertArrayHasKey('sandbox', $config);
+        $this->assertArrayHasKey('foo', $config['options']);
+        $this->assertEquals('foo', $config['options']['foo']);
+        
+        $this->assertArrayHasKey('bar', $config['options']);
+        $this->assertEquals('bar', $config['options']['bar']);
 
         //come from abstract payment factory
         $this->assertArrayHasKey('actions', $config);
@@ -83,13 +78,13 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     *
+     * 
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "username" at path "foo" must be configured.
+     * @expectedExceptionMessage The child node "type" at path "foo" must be configured.
      */
-    public function thrownIfApiOptionUsernameSectionMissing()
+    public function thrownIfTypeSectionMissing()
     {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
+        $factory = new OmnipayOnsitePaymentFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -97,18 +92,18 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->addConfiguration($rootNode);
 
         $processor = new Processor();
-        $processor->process($tb->buildTree(), array(array()));
+        $processor->process($tb->buildTree(), array());
     }
 
     /**
      * @test
-     *
+     * 
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "password" at path "foo" must be configured.
+     * @expectedExceptionMessage Invalid configuration for path "foo": Given type notSupportedGatewayType is not supported.
      */
-    public function thrownIfApiOptionPasswordSectionMissing()
+    public function thrownIfTypeNotSupportedByOmnipay()
     {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
+        $factory = new OmnipayOnsitePaymentFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -117,7 +112,8 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
-            'username' => 'aUsername'
+            'type' => 'notSupportedGatewayType',
+            'options' => array()
         )));
     }
 
@@ -125,11 +121,11 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "partner" at path "foo" must be configured.
+     * @expectedExceptionMessage The child node "options" at path "foo" must be configured.
      */
-    public function thrownIfApiOptionPartnerSectionMissing()
+    public function thrownIfApiOptionsSectionMissing()
     {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
+        $factory = new OmnipayOnsitePaymentFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -138,31 +134,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
-            'username' => 'aUsername',
-            'password' => 'aPassword',
-        )));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "vendor" at path "foo" must be configured.
-     */
-    public function thrownIfApiOptionVendorSectionMissing()
-    {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
-
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('foo');
-
-        $factory->addConfiguration($rootNode);
-
-        $processor = new Processor();
-        $processor->process($tb->buildTree(), array(array(
-            'username' => 'aUsername',
-            'password' => 'aPassword',
-            'partner' => 'aPartner',
+            'type' => 'PayPal_Express'
         )));
     }
 
@@ -171,17 +143,17 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePaymentAndReturnItsId()
     {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
+        $factory = new OmnipayOnsitePaymentFactory;
 
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
             'obtain_credit_card' => false,
-            'username' => 'aUsername',
-            'password' => 'aPassword',
-            'partner' => 'aPartner',
-            'vendor' => 'aVendor',
-            'sandbox' => true,
+            'type' => 'PayPal_Express',
+            'options' => array(
+                'foo' => 'foo',
+                'bar' => 'bar',
+            ),
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -196,17 +168,17 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
+        $factory = new OmnipayOnsitePaymentFactory;
 
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
             'obtain_credit_card' => false,
-            'username' => 'aUsername',
-            'password' => 'aPassword',
-            'partner' => 'aPartner',
-            'vendor' => 'aVendor',
-            'sandbox' => true,
+            'type' => 'PayPal_Express',
+            'options' => array(
+                'foo' => 'foo',
+                'bar' => 'bar',
+            ),
             'actions' => array('payum.action.foo'),
             'apis' => array('payum.api.bar'),
             'extensions' => array('payum.extension.ololo'),
@@ -234,28 +206,28 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldDecorateBasicApiDefinitionAndAddItToPayment()
     {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
+        $factory = new OmnipayOnsitePaymentFactory;
 
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
             'obtain_credit_card' => false,
-            'username' => 'aUsername',
-            'password' => 'aPassword',
-            'partner' => 'aPartner',
-            'vendor' => 'aVendor',
-            'sandbox' => true,
+            'type' => 'PayPal_Express',
+            'options' => array(
+                'foo' => 'foo',
+                'bar' => 'bar',
+            ),
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
         ));
 
-        $this->assertTrue($container->hasDefinition('payum.context.aContextName.api'));
+        $this->assertTrue($container->hasDefinition('payum.context.aContextName.gateway'));
 
         $this->assertDefinitionContainsMethodCall(
             $container->getDefinition($paymentId),
             'addApi',
-            new Reference('payum.context.aContextName.api')
+            new Reference('payum.context.aContextName.gateway')
         );
     }
 
@@ -264,23 +236,23 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAddPayumActionTagCaptureAction()
     {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
+        $factory = new OmnipayOnsitePaymentFactory;
 
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
             'obtain_credit_card' => false,
-            'username' => 'aUsername',
-            'password' => 'aPassword',
-            'partner' => 'aPartner',
-            'vendor' => 'aVendor',
-            'sandbox' => true,
+            'type' => 'PayPal_Express',
+            'options' => array(
+                'foo' => 'foo',
+                'bar' => 'bar',
+            ),
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
         ));
 
-        $actionDefinition = $container->getDefinition('payum.paypal.pro_checkout_nvp.action.capture');
+        $actionDefinition = $container->getDefinition('payum.omnipay_bridge.action.capture_onsite');
 
         $tagAttributes = $actionDefinition->getTag('payum.action');
         $this->assertCount(1, $tagAttributes);
@@ -292,27 +264,27 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAddPayumActionTagStatusAction()
     {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
+        $factory = new OmnipayOnsitePaymentFactory;
 
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
             'obtain_credit_card' => false,
-            'username' => 'aUsername',
-            'password' => 'aPassword',
-            'partner' => 'aPartner',
-            'vendor' => 'aVendor',
-            'sandbox' => true,
+            'type' => 'PayPal_Express',
+            'options' => array(
+                'foo' => 'foo',
+                'bar' => 'bar',
+            ),
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
         ));
 
-        $actionDefinition = $container->getDefinition('payum.paypal.pro_checkout_nvp.action.status');
+        $actionDefinition = $container->getDefinition('payum.omnipay_bridge.action.status');
 
         $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
+        $this->assertCount(2, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[1]['factory']);
     }
 
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)

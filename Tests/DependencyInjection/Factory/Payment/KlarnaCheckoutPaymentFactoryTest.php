@@ -107,6 +107,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
+            'obtain_credit_card' => false,
             'secret' => 'aSecret'
         )));
     }
@@ -121,6 +122,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'secret' => 'aSecret',
             'merchant_id' => 'aMerchantId',
             'sandbox' => true,
@@ -143,6 +145,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'secret' => 'aSecret',
             'merchant_id' => 'aMerchantId',
             'sandbox' => true,
@@ -178,6 +181,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'secret' => 'aSecret',
             'merchant_id' => 'aMerchantId',
             'sandbox' => true,
@@ -205,6 +209,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'secret' => 'aSecret',
             'merchant_id' => 'aMerchantId',
             'sandbox' => true,
@@ -230,6 +235,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'secret' => 'aSecret',
             'merchant_id' => 'aMerchantId',
             'sandbox' => true,
@@ -255,6 +261,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'secret' => 'aSecret',
             'merchant_id' => 'aMerchantId',
             'sandbox' => true,
@@ -280,6 +287,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
             'secret' => 'aSecret',
             'merchant_id' => 'aMerchantId',
             'sandbox' => true,

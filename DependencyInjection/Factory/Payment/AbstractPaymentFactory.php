@@ -42,7 +42,7 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
     {
         $builder
             ->children()
-                ->booleanNode('allow_obtain_credit_card')->defaultValue(false)->cannotBeEmpty()->end()
+                ->booleanNode('obtain_credit_card')->defaultValue(true)->end()
                 ->arrayNode('actions')
                     ->useAttributeAsKey('key')
                     ->prototype('scalar')->end()
@@ -190,14 +190,11 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
      */
     protected function addCommonActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
     {
-        $paymentDefinition->addMethodCall(
-            'addAction',
-            array(new Reference('payum.action.execute_same_request_with_model_details'))
-        );
-        $paymentDefinition->addMethodCall(
-            'addAction',
-            array(new Reference('payum.action.get_http_query'))
-        );
+        if ($config['obtain_credit_card']) {
+            $obtainCreditCardActionDefinition = $container->getDefinition('payum.action.obtain_credit_card');
+
+            $obtainCreditCardActionDefinition->addTag('payum.action', array('context' => $contextName));
+        }
     }
 
     /**
