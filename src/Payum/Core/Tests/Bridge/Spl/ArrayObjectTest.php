@@ -210,7 +210,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
     {
         $arrayObject = new ArrayObject();
 
-        $arrayObject->validatedNotEmpty(array('aRequiredField'), $throwOnInvalid = true);
+        $arrayObject->validateNotEmpty(array('aRequiredField'), $throwOnInvalid = true);
     }
 
     /**
@@ -224,7 +224,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
         $arrayObject = new ArrayObject();
         $arrayObject['aRequiredField'] = 'foo';
 
-        $arrayObject->validatedNotEmpty(array('aRequiredField', 'otherRequiredField'), $throwOnInvalid = true);
+        $arrayObject->validateNotEmpty(array('aRequiredField', 'otherRequiredField'), $throwOnInvalid = true);
     }
 
     /**
@@ -237,7 +237,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
     {
         $arrayObject = new ArrayObject();
 
-        $arrayObject->validatedNotEmpty(array('aRequiredField'));
+        $arrayObject->validateNotEmpty(array('aRequiredField'));
     }
 
     /**
@@ -247,7 +247,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
     {
         $arrayObject = new ArrayObject();
 
-        $this->assertFalse($arrayObject->validatedNotEmpty(array('aRequiredField'), $throwOnInvalid = false));
+        $this->assertFalse($arrayObject->validateNotEmpty(array('aRequiredField'), $throwOnInvalid = false));
     }
 
     /**
@@ -257,7 +257,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
     {
         $arrayObject = new ArrayObject();
 
-        $this->assertFalse($arrayObject->validatedNotEmpty('aRequiredField', $throwOnInvalid = false));
+        $this->assertFalse($arrayObject->validateNotEmpty('aRequiredField', $throwOnInvalid = false));
     }
 
     /**
@@ -269,7 +269,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
         $arrayObject['aRequiredField'] = 'foo';
         $arrayObject['otherRequiredField'] = 'bar';
 
-        $this->assertTrue($arrayObject->validatedNotEmpty(array('aRequiredField', 'otherRequiredField')));
+        $this->assertTrue($arrayObject->validateNotEmpty(array('aRequiredField', 'otherRequiredField')));
     }
 
     /**

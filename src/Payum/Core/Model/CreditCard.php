@@ -17,9 +17,14 @@ class CreditCard implements CreditCardInterface
     protected $brand;
 
     /**
-     * @var SensitiveValue
+     * @var string
      */
     protected $holder;
+
+    /**
+     * @var SensitiveValue
+     */
+    protected $securedHolder;
 
     /**
      * @var string
@@ -27,9 +32,14 @@ class CreditCard implements CreditCardInterface
     protected $maskedHolder;
 
     /**
-     * @var SensitiveValue
+     * @var string
      */
     protected $number;
+
+    /**
+     * @var SensitiveValue
+     */
+    protected $securedNumber;
 
     /**
      * @var string
@@ -37,14 +47,32 @@ class CreditCard implements CreditCardInterface
     protected $maskedNumber;
 
     /**
-     * @var SensitiveValue
+     * @var string
      */
     protected $securityCode;
 
     /**
      * @var SensitiveValue
      */
+    protected $securedSecurityCode;
+
+    /**
+     * @var \DateTime
+     */
     protected $expireAt;
+
+    /**
+     * @var SensitiveValue
+     */
+    protected $securedExpireAt;
+
+    public function __construct()
+    {
+        $this->holder = new SensitiveValue(null);
+        $this->securityCode = new SensitiveValue(null);
+        $this->number = new SensitiveValue(null);
+        $this->expireAt = new SensitiveValue(null);
+    }
 
     /**
      * {@inheritDoc}
@@ -83,8 +111,8 @@ class CreditCard implements CreditCardInterface
      */
     public function setHolder($holder)
     {
-        $this->holder = new SensitiveValue($holder);
-        $this->maskedHolder = Mask::mask($this->holder->peek());
+        $this->holder = $holder;
+        $this->maskedHolder = Mask::mask($this->holder);
     }
 
     /**
@@ -92,7 +120,7 @@ class CreditCard implements CreditCardInterface
      */
     public function getHolder()
     {
-        return $this->holder->peek();
+        return $this->securedHolder ? $this->securedHolder->peek() : $this->holder;
     }
 
     /**
@@ -116,8 +144,8 @@ class CreditCard implements CreditCardInterface
      */
     public function setNumber($number)
     {
-        $this->number = new SensitiveValue($number);
-        $this->maskedNumber = Mask::mask($this->number->peek());
+        $this->number = $number;
+        $this->maskedNumber = Mask::mask($this->number);
     }
 
     /**
@@ -125,7 +153,7 @@ class CreditCard implements CreditCardInterface
      */
     public function getNumber()
     {
-        return $this->number->peek();
+        return $this->securedNumber ? $this->securedNumber->peek() : $this->number;
     }
 
     /**
@@ -149,7 +177,7 @@ class CreditCard implements CreditCardInterface
      */
     public function setSecurityCode($securityCode)
     {
-        $this->securityCode = new SensitiveValue($securityCode);
+        $this->securityCode = $securityCode;
     }
 
     /**
@@ -157,7 +185,7 @@ class CreditCard implements CreditCardInterface
      */
     public function getSecurityCode()
     {
-        return $this->securityCode->peek();
+        return $this->securedSecurityCode ? $this->securedSecurityCode->peek() : $this->securityCode;
     }
 
     /**
@@ -165,15 +193,40 @@ class CreditCard implements CreditCardInterface
      */
     public function getExpireAt()
     {
-        return $this->expireAt->peek();
+        return $this->securedExpireAt ? $this->securedExpireAt->peek() : $this->expireAt;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setExpireAt(\DateTime $date)
+    public function setExpireAt(\DateTime $date = null)
     {
-        $this->expireAt = new SensitiveValue($date);
+        $this->expireAt = $date;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function secure()
+    {
+        if ($this->holder) {
+            $this->securedHolder = new SensitiveValue($this->holder);
+            $this->holder = null;
+        }
+
+        if ($this->number) {
+            $this->securedNumber = new SensitiveValue($this->number);
+            $this->number = null;
+        }
+
+        if ($this->securityCode) {
+            $this->securedSecurityCode = new SensitiveValue($this->securityCode);
+            $this->securityCode = null;
+        }
+
+        if ($this->expireAt) {
+            $this->securedExpireAt = new SensitiveValue($this->expireAt);
+            $this->expireAt = null;
+        }
     }
 }
-

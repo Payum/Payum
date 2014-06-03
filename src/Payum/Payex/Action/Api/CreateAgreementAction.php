@@ -54,7 +54,7 @@ class CreateAgreementAction implements ActionInterface, ApiAwareInterface
             'stopDate'
         ));
 
-        $model->validatedNotEmpty(array(
+        $model->validateNotEmpty(array(
             'maxAmount',
             'merchantRef',
             'description',

@@ -1,22 +1,22 @@
 <?php
 namespace Payum\Paypal\ProCheckout\Nvp\Action;
 
-use Payum\Core\Action\ActionInterface;
+use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Exception\LogicException;
+use Payum\Core\Request\ObtainCreditCardRequest;
+use Payum\Core\Security\SensitiveValue;
 use Payum\Paypal\ProCheckout\Nvp\Api;
 use Payum\Paypal\ProCheckout\Nvp\Bridge\Buzz\Request;
-use Payum\Paypal\ProCheckout\Nvp\Model\PaymentDetails;
 use Payum\Core\Request\CaptureRequest;
 
 /**
  * @author Ton Sharp <Forma-PRO@66ton99.org.ua>
  */
-class CaptureAction implements ActionInterface, ApiAwareInterface
+class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
 {
     /**
      * @var Api
@@ -36,7 +36,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function execute($request)
     {
@@ -47,6 +47,25 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
 
         $model = new ArrayObject($request->getModel());
 
+        if (is_numeric($model['RESULT'])) {
+            return;
+        }
+
+        $cardFields = array('ACCT', 'CVV2', 'EXPDATE');
+        if (false == $model->validateNotEmpty($cardFields, false)) {
+            try {
+                $creditCardRequest = new ObtainCreditCardRequest;
+                $this->payment->execute($creditCardRequest);
+                $card = $creditCardRequest->obtain();
+
+                $model['EXPDATE'] = new SensitiveValue($card->getExpireAt()->format('my'));
+                $model['ACCT'] = $card->getNumber();
+                $model['CVV2'] = $card->getSecurityCode();
+            } catch (RequestNotSupportedException $e) {
+                throw new LogicException('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCardRequest request.');
+            }
+        }
+
         $buzzRequest = new Request();
         $buzzRequest->setFields($model->toUnsafeArray());
         $response = $this->api->doPayment($buzzRequest);
@@ -55,7 +74,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {

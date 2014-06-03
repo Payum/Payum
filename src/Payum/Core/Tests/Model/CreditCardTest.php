@@ -62,16 +62,26 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldKeepHolderInternallyWrappedBySensitiveValue()
+    public function shouldAllowSecureHolder()
     {
         $card = new CreditCard;
 
         $card->setHolder('Mahatma Gandhi');
 
-        $value = $this->readAttribute($card, 'holder');
+        $this->assertEquals('Mahatma Gandhi', $this->readAttribute($card, 'holder'));
+        $this->assertEquals('Mahatma Gandhi', $card->getHolder());
+        $this->assertNull($this->readAttribute($card, 'securedHolder'));
+
+
+        $card->secure();
+
+        $this->assertNull($this->readAttribute($card, 'holder'));
+
+        $value = $this->readAttribute($card, 'securedHolder');
 
         $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $value);
         $this->assertEquals('Mahatma Gandhi', $value->peek());
+        $this->assertEquals('Mahatma Gandhi', $card->getHolder());
     }
 
     /**
@@ -115,16 +125,26 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldKeepNumberInternallyWrappedBySensitiveValue()
+    public function shouldAllowSecureNumber()
     {
         $card = new CreditCard;
 
         $card->setNumber('1234 5678 1234 5678');
 
-        $value = $this->readAttribute($card, 'number');
+        $this->assertEquals('1234 5678 1234 5678', $this->readAttribute($card, 'number'));
+        $this->assertEquals('1234 5678 1234 5678', $card->getNumber());
+        $this->assertNull($this->readAttribute($card, 'securedNumber'));
+
+
+        $card->secure();
+
+        $this->assertNull($this->readAttribute($card, 'number'));
+
+        $value = $this->readAttribute($card, 'securedNumber');
 
         $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $value);
         $this->assertEquals('1234 5678 1234 5678', $value->peek());
+        $this->assertEquals('1234 5678 1234 5678', $card->getNumber());
     }
 
     /**
@@ -169,16 +189,26 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldKeepSecurityCodeInternallyWrappedBySensitiveValue()
+    public function shouldAllowSecureSecurityCode()
     {
         $card = new CreditCard;
 
         $card->setSecurityCode('123');
 
-        $value = $this->readAttribute($card, 'securityCode');
+        $this->assertEquals('123', $this->readAttribute($card, 'securityCode'));
+        $this->assertEquals('123', $card->getSecuritycode());
+        $this->assertNull($this->readAttribute($card, 'securedSecurityCode'));
+
+
+        $card->secure();
+
+        $this->assertNull($this->readAttribute($card, 'securityCode'));
+
+        $value = $this->readAttribute($card, 'securedSecurityCode');
 
         $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $value);
         $this->assertEquals('123', $value->peek());
+        $this->assertEquals('123', $card->getSecuritycode());
     }
 
     /**
@@ -198,17 +228,52 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldKeepExiSecurityCodeInternallyWrappedBySensitiveValue()
+    public function shouldAllowSecureExpireAt()
     {
         $card = new CreditCard;
-
+        
         $expected = new \DateTime;
 
         $card->setExpireAt($expected);
 
-        $value = $this->readAttribute($card, 'expireAt');
+        $this->assertEquals($expected, $this->readAttribute($card, 'expireAt'));
+        $this->assertEquals($expected, $card->getExpireAt());
+        $this->assertNull($this->readAttribute($card, 'securedExpireAt'));
+
+
+        $card->secure();
+
+        $this->assertNull($this->readAttribute($card, 'expireAt'));
+
+        $value = $this->readAttribute($card, 'securedExpireAt');
 
         $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $value);
-        $this->assertSame($expected, $value->peek());
+        $this->assertEquals($expected, $value->peek());
+        $this->assertEquals($expected, $card->getExpireAt());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSecureOnlyChangedFields()
+    {
+        $card = new CreditCard;
+        $card->setNumber('1234');
+
+        $card->secure();
+
+        //guard
+        $this->assertNull($this->readAttribute($card, 'number'));
+        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $this->readAttribute($card, 'securedNumber'));
+
+        $card->setNumber('John Doe');
+
+        $card->secure();
+
+        $this->assertNull($this->readAttribute($card, 'holder'));
+        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $this->readAttribute($card, 'securedHolder'));
+
+        $this->assertNull($this->readAttribute($card, 'number'));
+        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $this->readAttribute($card, 'securedNumber'));
     }
 }

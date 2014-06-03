@@ -1,16 +1,32 @@
 <?php
-
 namespace Payum\OmnipayBridge\Action;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\PaymentAwareInterface;
+use Payum\Core\PaymentInterface;
 use Payum\Core\Request\CaptureRequest;
-use Payum\Core\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\ObtainCreditCardRequest;
+use Payum\Core\Security\SensitiveValue;
 
-class CaptureAction extends BaseApiAwareAction
+class CaptureAction extends BaseApiAwareAction implements PaymentAwareInterface
 {
     /**
-     * {@inheritdoc}
+     * @var PaymentInterface
+     */
+    protected $payment;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setPayment(PaymentInterface $payment)
+    {
+        $this->payment = $payment;
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function execute($request)
     {
@@ -18,34 +34,44 @@ class CaptureAction extends BaseApiAwareAction
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        $options = ArrayObject::ensureArrayObject($request->getModel());
+        $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (isset($options['_completeCaptureRequired'])) {
-            unset($options['_completeCaptureRequired']);
-            $response = $this->gateway->completePurchase($options->toUnsafeArray())->send();
-        } else {
-            $response = $this->gateway->purchase($options->toUnsafeArray())->send();
+        if ($model['_status']) {
+            return;
         }
 
-        if ($response->isRedirect()) {
-            $options['_completeCaptureRequired'] = 1;
-            
-            if ($response->getRedirectMethod() == 'POST') {
-                throw new PostRedirectUrlInteractiveRequest($response->getRedirectUrl(), $response->getRedirectData());
-            }
-            else {
-                throw new RedirectUrlInteractiveRequest($response->getRedirectUrl());
+        if (false == $model->validateNotEmpty(array('card'), false)) {
+            try {
+                $creditCardRequest = new ObtainCreditCardRequest;
+                $this->payment->execute($creditCardRequest);
+                $card = $creditCardRequest->obtain();
+
+                $firstName = $lastName = '';
+                list($firstName, $lastName) = explode(' ', $card->getHolder(), 1);
+
+                $model['card'] = new SensitiveValue(array(
+                    'number' => $card->getNumber(),
+                    'cvv' => $card->getSecurityCode(),
+                    'expiryMonth' => $card->getExpireAt()->format('m'),
+                    'expiryYear' => $card->getExpireAt()->format('y'),
+                    'firstName' => $firstName,
+                    'lastName' => $lastName,
+                ));
+            } catch (RequestNotSupportedException $e) {
+                throw new LogicException('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCardRequest request.');
             }
         }
 
-        $options['_reference']      = $response->getTransactionReference();
-        $options['_status']         = $response->isSuccessful() ? 'success' : 'failed';
-        $options['_status_code']    = $response->getCode();
-        $options['_status_message'] = $response->isSuccessful() ? '' : $response->getMessage();
+        $response = $this->gateway->purchase($model->toUnsafeArray())->send();
+
+        $model['_reference']      = $response->getTransactionReference();
+        $model['_status']         = $response->isSuccessful() ? 'success' : 'failed';
+        $model['_status_code']    = $response->getCode();
+        $model['_status_message'] = $response->isSuccessful() ? '' : $response->getMessage();
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {

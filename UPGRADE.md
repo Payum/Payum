@@ -6,6 +6,10 @@
 * [model] Method `CreditCardInterface::setCardHolder` renamed to `setHolder`
 * [model] `CreditCardInterface` getters does not return `SensitiveValue` anymore. It is used only internally.
 * [model] Methods `getExpiryMonth`, `setExpiryMonth`, `getExpiryYear`, `setExpiryYear` removed. Use `setExpiredAt` and `getExpiredAt` instead.
+* [be2bill] `PaymentFactory` does not provide support of onsite payments. Use `OnsitePaymentFactory` instead.
+* [omnipay] Switch to Omnipay v2.x.
+* [omnipay] Rename `CaptureAction` to `OnsiteCaptureAction`. It would not support credit card payments. Use new `CaptureAction` for such payments.
+* [request] `UserInputRequiredInteractiveRequest` request was removed.
 
 ## 0.8.5 to 0.8.6
 

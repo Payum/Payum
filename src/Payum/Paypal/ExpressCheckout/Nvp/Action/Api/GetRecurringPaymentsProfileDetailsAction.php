@@ -24,7 +24,7 @@ class GetRecurringPaymentsProfileDetailsAction extends BaseApiAwareAction
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validatedNotEmpty('PROFILEID');
+        $model->validateNotEmpty('PROFILEID');
 
         try {
             $buzzRequest = new FormRequest();

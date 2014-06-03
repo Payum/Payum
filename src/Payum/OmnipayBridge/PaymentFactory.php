@@ -2,7 +2,6 @@
 namespace Payum\OmnipayBridge;
 
 use Omnipay\Common\GatewayInterface;
-
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Payment;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;

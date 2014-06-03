@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Paypal\ProCheckout\Nvp\Examples;
+namespace Payum\Paypal\ProCheckout\Nvp\Tests\Functional;
 
 use Buzz\Client\Curl;
 use Payum\Paypal\ProCheckout\Nvp\Api;

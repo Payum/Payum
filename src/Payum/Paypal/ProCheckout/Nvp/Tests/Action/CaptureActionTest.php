@@ -1,14 +1,14 @@
 <?php
-namespace Payum\Be2Bill\Tests\Action;
+namespace Payum\Paypal\ProCheckout\Nvp\Tests\Action;
 
-use Payum\Be2Bill\Api;
-use Payum\Core\Bridge\Buzz\JsonResponse;
+use Payum\Paypal\ProCheckout\Nvp\Api;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\CreditCard;
 use Payum\Core\PaymentInterface;
 use Payum\Core\Request\CaptureRequest;
-use Payum\Be2Bill\Action\CaptureAction;
+use Payum\Paypal\ProCheckout\Nvp\Action\CaptureAction;
 use Payum\Core\Request\ObtainCreditCardRequest;
+use Payum\Paypal\ProCheckout\Nvp\Bridge\Buzz\Response;
 
 class CaptureActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,7 +17,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfPaymentAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Be2Bill\Action\CaptureAction');
+        $rc = new \ReflectionClass('Payum\Paypal\ProCheckout\Nvp\Action\CaptureAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
     }
@@ -27,7 +27,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Be2Bill\Action\CaptureAction');
+        $rc = new \ReflectionClass('Payum\Paypal\ProCheckout\Nvp\Action\CaptureAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\ApiAwareInterface'));
     }
@@ -35,7 +35,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()   
+    public function couldBeConstructedWithoutAnyArguments()
     {
         new CaptureAction();
     }
@@ -60,7 +60,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     public function shouldNotSupportNotCaptureRequest()
     {
         $action = new CaptureAction();
-        
+
         $request = new \stdClass();
 
         $this->assertFalse($action->supports($request));
@@ -72,15 +72,15 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     public function shouldNotSupportCaptureRequestAndNotArrayAsModel()
     {
         $action = new CaptureAction();
-        
+
         $request = new CaptureRequest(new \stdClass());
-        
+
         $this->assertFalse($action->supports($request));
     }
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
@@ -105,13 +105,13 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\UnsupportedApiException
      */
     public function throwIfUnsupportedApiGiven()
     {
         $action = new CaptureAction();
-        
+
         $action->setApi(new \stdClass);
     }
 
@@ -135,7 +135,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment($paymentMock);
 
         $request = new CaptureRequest(array(
-            'CARDCODE' => '1234432112344321',
+            'AMOUNT' => 10,
         ));
 
         //guard
@@ -147,7 +147,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldDoNothingIfExeccodeSet()
+    public function shouldDoNothingIfResultSet()
     {
         $paymentMock = $this->createPaymentMock();
         $paymentMock
@@ -160,12 +160,12 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('payment')
         ;
-        
+
         $action = new CaptureAction();
         $action->setApi($apiMock);
         $action->setPayment($paymentMock);
 
-        $request = new CaptureRequest(array('EXECCODE' => 1));
+        $request = new CaptureRequest(array('RESULT' => Api::RESULT_SUCCESS));
 
         $action->execute($request);
     }
@@ -181,16 +181,14 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
         ;
 
-        $apiResponse = new JsonResponse();
-        $apiResponse->setContent(json_encode(array(
-            'FOO' => 'FOOVAL',
-            'BAR' => 'BARVAL'
-        )));
+        $apiResponse = new Response();
+        $apiResponse['FOO'] = 'FOOVAL';
+        $apiResponse['BAR'] = 'BARVAL';
 
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
-            ->method('payment')
+            ->method('doPayment')
             ->will($this->returnValue($apiResponse))
         ;
 
@@ -200,10 +198,9 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
 
         $request = new CaptureRequest(array(
             'AMOUNT' => 10,
-            'CARDCODE' => '1234432112344321',
-            'CARDCVV' => 123,
-            'CARDFULLNAME' => 'Johh Doe',
-            'CARDVALIDITYDATE' => '10-16',
+            'ACCT' => '1234432112344321',
+            'CVV2' => 123,
+            'EXPDATE' => '1016',
         ));
 
         //guard
@@ -241,16 +238,14 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $apiResponse = new JsonResponse();
-        $apiResponse->setContent(json_encode(array(
-            'FOO' => 'FOOVAL',
-            'BAR' => 'BARVAL'
-        )));
+        $apiResponse = new Response();
+        $apiResponse['FOO'] = 'FOOVAL';
+        $apiResponse['BAR'] = 'BARVAL';
 
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
-            ->method('payment')
+            ->method('doPayment')
             ->will($this->returnValue($apiResponse))
         ;
 
@@ -281,7 +276,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createApiMock()
     {
-        return $this->getMock('Payum\Be2Bill\Api', array(), array(), '', false);
+        return $this->getMock('Payum\Paypal\ProCheckout\Nvp\Api', array(), array(), '', false);
     }
 
     /**

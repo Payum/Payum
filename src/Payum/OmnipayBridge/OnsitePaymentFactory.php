@@ -1,28 +1,29 @@
 <?php
-namespace Payum\Be2Bill;
+namespace Payum\OmnipayBridge;
 
+use Omnipay\Common\GatewayInterface;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Payment;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
-use Payum\Be2Bill\Action\CaptureAction;
-use Payum\Be2Bill\Action\StatusAction;
+use Payum\OmnipayBridge\Action\OnsiteCaptureAction;
+use Payum\OmnipayBridge\Action\StatusAction;
 
-abstract class PaymentFactory
+abstract class OnsitePaymentFactory
 {
     /**
-     * @param Api $api
+     * @param \Omnipay\Common\GatewayInterface $gateway
      *
      * @return Payment
      */
-    public static function create(Api $api)
+    public static function create(GatewayInterface $gateway)
     {
         $payment = new Payment;
-
-        $payment->addApi($api);
-
+        
+        $payment->addApi($gateway);
+        
         $payment->addExtension(new EndlessCycleDetectorExtension);
 
-        $payment->addAction(new CaptureAction);
+        $payment->addAction(new OnsiteCaptureAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 

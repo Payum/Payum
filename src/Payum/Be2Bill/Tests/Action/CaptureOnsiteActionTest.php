@@ -40,23 +40,7 @@ class CaptureOnsiteActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestWithArrayAccessAsModelWhichContainsCARDCODE()
-    {
-        $action = new CaptureOnsiteAction();
-
-        $model = new \ArrayObject(array(
-            'CARDCODE' => '1234432112344321',
-        ));
-
-        $request = new CaptureRequest($model);
-
-        $this->assertFalse($action->supports($request));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureRequestWithArrayAccessAsModelWhichNotContainsCARDCODE()
+    public function shouldSupportCaptureRequestWithArrayAccessAsModel()
     {
         $action = new CaptureOnsiteAction();
 

@@ -3,16 +3,16 @@ namespace Payum\OmnipayBridge\Action;
 
 use Omnipay\Common\GatewayInterface;
 use Payum\Core\Request\CaptureRequest;
-use Payum\OmnipayBridge\Action\CaptureAction;
+use Payum\OmnipayBridge\Action\OnsiteCaptureAction;
 
-class CaptureActionTest extends \PHPUnit_Framework_TestCase
+class OnsiteCaptureActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\CaptureAction');
+        $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\OnsiteCaptureAction');
         
         $this->assertTrue($rc->isSubclassOf('Payum\OmnipayBridge\Action\BaseApiAwareAction'));
     }
@@ -22,7 +22,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new CaptureAction;
+        new OnsiteCaptureAction;
     }
 
     /**
@@ -40,7 +40,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             ->method('completePurchase')
         ;
 
-        $action = new CaptureAction;
+        $action = new OnsiteCaptureAction;
         $action->setApi($gatewayMock);
 
         $action->execute(new CaptureRequest(array(

@@ -63,16 +63,9 @@ class CaptureOnsiteAction extends PaymentAwareAction implements ApiAwareInterfac
      */
     public function supports($request)
     {
-        if (false == $request instanceof CaptureRequest) {
-            return false;
-        }
-
-        if (false == $request->getModel() instanceof \ArrayAccess) {
-            return false;
-        }
-
-        $model = $request->getModel();
-
-        return empty($model['CARDCODE']) && empty($model['ALIAS']);
+        return
+            $request instanceof CaptureRequest &&
+            $request->getModel() instanceof \ArrayAccess
+        ;
     }
 }

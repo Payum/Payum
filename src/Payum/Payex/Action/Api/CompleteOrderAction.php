@@ -40,7 +40,7 @@ class CompleteOrderAction implements ActionInterface, ApiAwareInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validatedNotEmpty(array(
+        $model->validateNotEmpty(array(
             'orderRef',
         ));
         
