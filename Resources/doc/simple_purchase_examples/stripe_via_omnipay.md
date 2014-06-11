@@ -35,8 +35,9 @@ payum:
                         driver: orm
 ```
 
-_**Attention**: You have to changed `your_payment_name` to something more descriptive and domain related, for example `post_a_job_with_omnipay`._
-_**Attention**: If you have to use onsite payment like paypal express checkout use `omnipay_onsite` factory._
+_**Note:** You have to changed `your_payment_name` to something more descriptive and domain related, for example `post_a_job_with_omnipay`._
+
+_**Note:** If you have to use onsite payment like paypal express checkout use `omnipay_onsite` factory._
 
 ## Prepare payment
 
@@ -79,8 +80,24 @@ class PaymentController extends Controller
 }
 ```
 
-That's it. After the payment done you will be redirect to `acme_payment_done` action.
+That's it. It will ask user for credit card and convert it to payment specific format. After the payment done you will be redirect to `acme_payment_done` action.
 Check [this chapter](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/purchase_done_action.md) to find out how this done action could look like.
+
+If you still able to pass credit card details explicitly:
+
+```php
+<?php
+use Payum\Core\Security\SensitiveValue;
+
+$paymentDetails['card'] = new SensitiveValue(array(
+    'number' => '5555556778250000',
+    'cvv' => 123,
+    'expiryMonth' => 6,
+    'expiryYear' => 16,
+    'firstName' => 'foo',
+    'lastName' => 'bar',
+));
+```
 
 ## Next Step
 

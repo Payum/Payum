@@ -49,7 +49,6 @@ Please note that you have to set details in the payment gateway specific format.
 //src/Acme/PaymentBundle/Controller
 namespace AcmeDemoBundle\Controller;
 
-use Payum\Core\Security\SensitiveValue;
 use Symfony\Component\HttpFoundation\Request;
 
 class PaymentController extends Controller
@@ -80,8 +79,19 @@ class PaymentController extends Controller
 }
 ```
 
-That's it. After the payment done you will be redirect to `acme_payment_done` action.
+That's it. It will ask user for credit card and convert it to payment specific format. After the payment done you will be redirect to `acme_payment_done` action.
 Check [this chapter](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/purchase_done_action.md) to find out how this done action could look like.
+
+If you still able to pass credit card details explicitly:
+
+```php
+<?php
+use Payum\Core\Security\SensitiveValue;
+
+$paymentDetails['acct'] = new SensitiveValue('5105105105105100');
+$paymentDetails['cvv2'] = new SensitiveValue('123');
+$paymentDetails['expDate'] = new SensitiveValue('1214');
+```
 
 ## Next Step
 
