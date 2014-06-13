@@ -9,7 +9,6 @@ use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpKernel\Kernel;
 
 class PayumExtension extends Extension
 {
@@ -36,6 +35,7 @@ class PayumExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('payum.xml');
 
+        $this->loadStorages($config['storages'], $container);
         $this->loadSecurity($config['security'], $container);
         $this->loadContexts($config['contexts'], $container);
     }
@@ -46,11 +46,8 @@ class PayumExtension extends Extension
      */
     protected function loadContexts(array $config, ContainerBuilder $container)
     {
-        $paymentsServicesIds = array();
-        $storagesServicesIds = array();
-        
+        $paymentsIds = array();
         $defaultName = null;
-        
         foreach ($config as $contextName => $contextConfig) {
             //use first defined context as default.
             if (false == $defaultName) {
@@ -63,31 +60,54 @@ class PayumExtension extends Extension
                 $contextName,
                 $contextConfig[$paymentFactoryName]
             );
-            $paymentsServicesIds[$contextName] = $paymentId;
+            $paymentsIds[$contextName] = $paymentId;
 
             $container->getDefinition($paymentId)->addTag('payum.payment', array(
                 'factory' => $paymentFactoryName,
                 'context' => $contextName
             ));
+        }
 
-            foreach ($contextConfig['storages'] as $modelClass => $storageConfig) {
-                $storageFactoryName = $this->findSelectedStorageFactoryNameInStorageConfig($storageConfig);
-                $storageId = $this->storageFactories[$storageFactoryName]->create(
-                    $container,
-                    $contextName,
-                    $modelClass,
-                    $paymentId,
-                    $storageConfig[$storageFactoryName]
-                );
-                $storagesServicesIds[$contextName][$modelClass] = $storageId;
+        $registryDefinition = $container->getDefinition('payum');
+        $registryDefinition->replaceArgument(0, $paymentsIds);
+        $registryDefinition->replaceArgument(2, $defaultName);
+    }
+
+    /**
+     * @param array $config
+     * @param ContainerBuilder $container
+     */
+    protected function loadStorages(array $config, ContainerBuilder $container)
+    {
+        $storagesIds = array();
+
+        foreach ($config as $modelClass => $storageConfig) {
+//            var_dump($modelClass, $storageConfig);
+            $storageFactoryName = $this->findSelectedStorageFactoryNameInStorageConfig($storageConfig);
+            $storageId = $this->storageFactories[$storageFactoryName]->create(
+                $container,
+                $modelClass,
+                $storageConfig[$storageFactoryName]
+            );
+
+            $storagesIds[$modelClass] = $storageId;
+
+            if ($storageConfig['add_to_payment']['all']) {
+                $container->getDefinition($storageId)->addTag('payum.storage_extension',  array('all' => true));
+            } else {
+                foreach ($storageConfig['add_to_payment']['contexts'] as $contextName) {
+                    $container->getDefinition($storageId)->addTag('payum.storage_extension',  array('context' => $contextName));
+                }
+
+                foreach ($storageConfig['add_to_payment']['factories'] as $factory) {
+                    $container->getDefinition($storageId)->addTag('payum.storage_extension',  array('factory' => $factory));
+                }
             }
         }
-        
+
         $registryDefinition = $container->getDefinition('payum');
-        $registryDefinition->replaceArgument(0, $paymentsServicesIds);
-        $registryDefinition->replaceArgument(1, $storagesServicesIds);
-        $registryDefinition->replaceArgument(2, $defaultName);
-        $registryDefinition->replaceArgument(3, $defaultName);
+
+        $registryDefinition->replaceArgument(1, $storagesIds);
     }
 
     /**
@@ -99,14 +119,9 @@ class PayumExtension extends Extension
         foreach ($securityConfig['token_storage'] as $tokenClass => $tokenStorageConfig) {
             $storageFactoryName = $this->findSelectedStorageFactoryNameInStorageConfig($tokenStorageConfig);
 
-            //force not to use payment extension because we are out of payment scope.
-            $tokenStorageConfig[$storageFactoryName]['payment_extension']['enabled'] = false;
-
             $storageId = $this->storageFactories[$storageFactoryName]->create(
                 $container,
-                '_security_token',
                 $tokenClass,
-                null,
                 $tokenStorageConfig[$storageFactoryName]
             );
 

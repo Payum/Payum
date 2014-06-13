@@ -61,7 +61,7 @@ class MainConfiguration implements ConfigurationInterface
         ;
 
         $this->addPaymentsSection($contextsPrototypeNode, $this->paymentFactories);
-        $this->addStoragesSection($contextsPrototypeNode, $this->storageFactories);
+        $this->addStoragesSection($rootNode, $this->storageFactories);
 
         $contextsPrototypeNode
                     ->validate()
@@ -114,7 +114,10 @@ class MainConfiguration implements ConfigurationInterface
                 ->arrayNode('storages')
                 ->validate()
                     ->ifTrue(function($v) {
-                        foreach($v as $key => $value) {
+                        $storages = $v;
+                        unset($storages['add_to_payment']);
+
+                        foreach($storages as $key => $value) {
                             if (false == class_exists($key)) {
                                 throw new LogicException(sprintf(
                                     'The storage entry must be a valid model class. It is set %s',
@@ -134,10 +137,13 @@ class MainConfiguration implements ConfigurationInterface
         $storageNode
             ->validate()
                 ->ifTrue(function($v) {
-                    if (count($v) == 0) {
+                    $storages = $v;
+                    unset($storages['add_to_payment']);
+
+                    if (count($storages) == 0) {
                         throw new LogicException('At least one storage must be configured.');
                     }
-                    if (count($v) > 1) {
+                    if (count($storages) > 1) {
                         throw new LogicException('Only one storage per entry could be selected');
                     }
                     
@@ -146,6 +152,22 @@ class MainConfiguration implements ConfigurationInterface
                 ->thenInvalid('A message')
             ->end()
         ;
+
+        $storageNode->children()
+            ->arrayNode('add_to_payment')
+                ->children()
+                    ->booleanNode('all')->defaultValue(false)->end()
+                    ->arrayNode('contexts')
+                        ->useAttributeAsKey('key')
+                        ->prototype('scalar')
+                    ->end()->end()
+                    ->arrayNode('factories')
+                        ->useAttributeAsKey('key')
+                        ->prototype('scalar')
+                    ->end()->end()
+                ->end()
+            ->end()
+        ->end();
         
         foreach ($this->storageFactories as $factory) {
             $factory->addConfiguration(

@@ -71,9 +71,7 @@ class ContainerAwareRegistryTest extends \PHPUnit_Framework_TestCase
     {
         $payments = array();
         $storages = array(
-            'barStorage' => array(
-                'stdClass' =>  'fooStorageServiceId'
-            )
+            'stdClass' =>  'fooStorageServiceId'
         );
 
         $paymentName = 'fooName';
@@ -85,9 +83,6 @@ class ContainerAwareRegistryTest extends \PHPUnit_Framework_TestCase
         $registry = new ContainerAwareRegistry($payments, $storages, $paymentName, $storageName);
         $registry->setContainer($container);
 
-        $this->assertSame(
-            $container->get('fooStorageServiceId'),
-            $registry->getStorageForClass('stdClass', 'barStorage')
-        );
+        $this->assertSame($container->get('fooStorageServiceId'), $registry->getStorage('stdClass'));
     }
 }

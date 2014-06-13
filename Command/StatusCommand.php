@@ -37,13 +37,12 @@ class StatusCommand extends ContainerAwareCommand
         $modelClass = $input->getOption('model-class');
         $modelId = $input->getOption('model-id');
 
-        $storage = $this->getPayum()->getStorageForClass($modelClass, $paymentName);
+        $storage = $this->getPayum()->getStorage($modelClass);
         if (false == $model = $storage->findModelById($modelId)) {
             throw new RuntimeException(sprintf(
-                'Cannot find model with class %s and id %s. Payment %s',
+                'Cannot find model with class %s and id %s.',
                 $modelClass,
-                $modelId,
-                $paymentName
+                $modelId
             ));
         }
 

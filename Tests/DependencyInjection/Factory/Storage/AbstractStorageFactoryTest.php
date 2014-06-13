@@ -1,13 +1,11 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Storage;
 
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\AbstractStorageFactory;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
-
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\AbstractStorageFactory;
 
 class AbstractStorageFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -62,6 +60,7 @@ class AbstractStorageFactoryTest extends \PHPUnit_Framework_TestCase
         $processor = new Processor();
 
         $config = $processor->process($tb->buildTree(), array());
+
         $this->assertArrayHasKey('payment_extension', $config);
         $this->assertArrayHasKey('enabled', $config['payment_extension']);
         $this->assertTrue($config['payment_extension']['enabled']);
@@ -138,7 +137,7 @@ class AbstractStorageFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowCreatePaymentAndReturnItsId()
+    public function shouldAllowCreateStorageAndReturnItsId()
     {
         $expectedStorage = new Definition();
         
@@ -152,9 +151,8 @@ class AbstractStorageFactoryTest extends \PHPUnit_Framework_TestCase
         ;
 
         $container = new ContainerBuilder;
-        $container->setDefinition('aPaymentId', new Definition);
 
-        $actualStorageId = $factory->create($container, 'aContextName', 'A\Model\Class', 'aPaymentId', array(
+        $actualStorageId = $factory->create($container, 'aContextName', 'A\Model\Class', array(
             'payment_extension' => array(
                 'enabled' => false
             )
@@ -168,7 +166,7 @@ class AbstractStorageFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotCreatePaymentExtensionIfEnabledFalse()
+    public function shouldNotAddPayumStorageTagIfEnabledFalse()
     {
         $expectedStorage = new Definition();
 
@@ -182,21 +180,23 @@ class AbstractStorageFactoryTest extends \PHPUnit_Framework_TestCase
         ;
 
         $container = new ContainerBuilder;
-        $container->setDefinition('aPaymentId', new Definition);
 
-        $factory->create($container, 'aContextName', 'A\Model\Class', 'aPaymentId', array(
+        $storageId = $factory->create($container, 'aContextName', 'A\Model\Class', array(
             'payment_extension' => array(
                 'enabled' => false
             )
         ));
 
-        $this->assertFalse($container->hasDefinition('payum.context.aContextName.extension.storage.amodelclass'));
+        $this->assertTrue($container->hasDefinition($storageId));
+        $storage = $container->getDefinition($storageId);
+
+        $this->assertEquals(array(), $storage->getTag('payum.storage'));
     }
 
     /**
      * @test
      */
-    public function shouldCreatePaymentExtensionIfEnabledTrue()
+    public function shouldAddCorrectPayumStorageTagIfEnabledTrue()
     {
         $expectedStorage = new Definition();
 
@@ -210,21 +210,17 @@ class AbstractStorageFactoryTest extends \PHPUnit_Framework_TestCase
         ;
 
         $container = new ContainerBuilder;
-        $container->setDefinition('aPaymentId', new Definition);
-        $container->getDefinition('aPaymentId')->setClass('Payum\Core\PaymentInterface');
 
-        $factory->create($container, 'aContextName', 'A\Model\Class', 'aPaymentId', array(
+        $storageId = $factory->create($container, 'aContextName', 'A\Model\Class', array(
             'payment_extension' => array(
                 'enabled' => true
             )
         ));
 
-        $this->assertTrue($container->hasDefinition('payum.context.aContextName.extension.storage.amodelclass'));
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition('aPaymentId'), 
-            'addExtension',
-            new Reference('payum.context.aContextName.extension.storage.amodelclass')
-        );
+        $this->assertTrue($container->hasDefinition($storageId));
+        $storage = $container->getDefinition($storageId);
+
+        $this->assertEquals(array(array('context' => 'aContextName')), $storage->getTag('payum.storage'));
     }
 
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)

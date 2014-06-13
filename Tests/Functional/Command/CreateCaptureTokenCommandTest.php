@@ -22,7 +22,7 @@ class CreateCaptureTokenCommandTest extends WebTestCase
 
         $modelClass = 'Payum\Core\Model\ArrayObject';
 
-        $storage = $payum->getStorageForClass($modelClass, 'offline');
+        $storage = $payum->getStorage($modelClass);
         $model = $storage->createModel();
         $storage->updateModel($model);
 
@@ -51,7 +51,7 @@ class CreateCaptureTokenCommandTest extends WebTestCase
 
         $modelClass = 'Payum\Core\Model\ArrayObject';
 
-        $storage = $payum->getStorageForClass($modelClass, 'offline');
+        $storage = $payum->getStorage($modelClass);
         $model = $storage->createModel();
         $storage->updateModel($model);
 

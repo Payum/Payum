@@ -504,7 +504,7 @@ class BarPaymentFactory implements PaymentFactoryInterface
 
 class FooStorageFactory implements StorageFactoryInterface
 {
-    public function create(ContainerBuilder $container, $contextName, $modelClass, $paymentId, array $config)
+    public function create(ContainerBuilder $container, $modelClass, array $config)
     {
     }
 
@@ -525,7 +525,7 @@ class FooStorageFactory implements StorageFactoryInterface
 
 class BarStorageFactory implements StorageFactoryInterface
 {
-    public function create(ContainerBuilder $container, $contextName, $modelClass, $paymentId, array $config)
+    public function create(ContainerBuilder $container, $modelClass, array $config)
     {
     }
 

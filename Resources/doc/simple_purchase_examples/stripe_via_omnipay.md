@@ -58,10 +58,7 @@ class PaymentController extends Controller
     {
         $paymentName = 'your_payment_name';
 
-        $storage = $this->get('payum')->getStorageForClass(
-            'Acme\PaymentBundle\Entity\PaymentDetails',
-            $paymentName
-        );
+        $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\PaymentDetails');
 
         /** @var \Acme\PaymentBundle\Entity\PaymentDetails */
         $paymentDetails = $storage->createModel();
