@@ -43,17 +43,14 @@ Now we have to adjust `config.php` to support paypal recurring payments:
 
 $agreementDetailsClass = 'App\Model\AgreementDetails';
 $recurringPaymentDetailsClass = 'App\Model\RecurringPaymentDetails';
-$storages = array(
-    'paypal' => array(
-        $agreementDetailsClass => new FilesystemStorage(
-            __DIR__.'/storage',
-            $agreementDetailsClass
-        )
-        $recurringPaymentDetailsClass => new FilesystemStorage(
-            __DIR__.'/storage',
-            $recurringPaymentDetailsClass
-        )
-    )
+
+$storages[$agreementDetailsClass] = new FilesystemStorage(
+    __DIR__.'/storage',
+    $agreementDetailsClass
+);
+$storages[$recurringPaymentDetailsClass] = new FilesystemStorage(
+    __DIR__.'/storage',
+    $recurringPaymentDetailsClass
 );
 ```
 

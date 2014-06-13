@@ -73,9 +73,7 @@ $requestVerifier = new PlainHttpRequestVerifier($tokenStorage);
 $detailsClass = 'App\Model\PaymentDetails';
 
 $storages = array(
-    'paypal' => array(
-        $detailsClass => new FilesystemStorage('/path/to/storage', $detailsClass)
-    )
+    $detailsClass => new FilesystemStorage('/path/to/storage', $detailsClass)
 );
 
 $payments = array(

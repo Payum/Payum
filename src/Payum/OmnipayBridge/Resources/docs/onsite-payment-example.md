@@ -27,15 +27,7 @@ $gateway->setPassword('REPLACE IT');
 $gateway->setSignature('REPLACE IT');
 $gateway->setTestMode(true);
 
-$storages = array(
-    'paypal' => array(
-        $detailsClass => new FilesystemStorage('/path/to/storage', $detailsClass)
-    )
-);
-
-$payments = array(
-    'paypal' => OmnipayOnsitePaymentFactory::create($gateway)
-);
+$payments['paypal'] = OmnipayOnsitePaymentFactory::create($gateway);
 ```
 
 ## Prepare payment
