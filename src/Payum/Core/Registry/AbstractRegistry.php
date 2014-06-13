@@ -19,25 +19,18 @@ abstract class AbstractRegistry implements RegistryInterface
      * @var string
      */
     protected $defaultPayment;
-
-    /**
-     * @var string
-     */
-    protected $defaultStorage;
     
     /**
      * @param array $payments
      * @param array $storages
      * @param string $defaultPayment
-     * @param string $defaultStorage
      */
-    public function __construct($payments, $storages, $defaultPayment = 'default', $defaultStorage = 'default')
+    public function __construct($payments, $storages, $defaultPayment = 'default')
     {
         $this->payments = $payments;
         $this->storages = $storages;
-        
+
         $this->defaultPayment = $defaultPayment;
-        $this->defaultStorage = $defaultStorage;
     }
 
     /**
@@ -50,61 +43,32 @@ abstract class AbstractRegistry implements RegistryInterface
      * @return object instance of the given service
      */
     abstract protected function getService($id);
-    
-    /**
-     * {@inheritDoc}
-     */
-    public function getDefaultStorageName()
-    {
-        return $this->defaultStorage;
-    }
 
     /**
      * {@inheritDoc}
      */
-    public function getStorageForClass($class, $name = null)
+    public function getStorage($class)
     {
-        if (null === $name) {
-            $name = $this->defaultStorage;
-        }
+        $class = is_object($class) ? get_class($class) : $class;
 
-        if (false == isset($this->storages[$name])) {
+        if (!isset($this->storages[$class])) {
             throw new InvalidArgumentException(sprintf(
-                'Any storages for payment %s were not registered. Registered payments: %s.',
-                $name,
+                'A storage for model %s was not registered. There are storages for next models: %s.',
+                $class,
                 implode(', ', array_keys($this->storages))
             ));
         }
 
-        $class = is_object($class) ? get_class($class) : $class;
-
-        if (!isset($this->storages[$name][$class])) {
-            throw new InvalidArgumentException(sprintf(
-                'A storage for payment %s and model %s was not registered. The payment supports storages for next models: %s.',
-                $name,
-                $class,
-                implode(', ', array_keys($this->storages[$name]))
-            ));
-        }
-
-        return $this->getService($this->storages[$name][$class]);
+        return $this->getService($this->storages[$class]);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getStorages($name = null)
+    public function getStorages()
     {
-        if (null === $name) {
-            $name = $this->defaultStorage;
-        }
-
-        if (!isset($this->storages[$name])) {
-            throw new InvalidArgumentException(sprintf('Payum storages named %s do not exist.', $name));
-        }
-
         $storages = array();
-        foreach ($this->storages[$name] as $modelClass => $storageId) {
+        foreach ($this->storages as $modelClass => $storageId) {
             $storages[$modelClass] = $this->getService($storageId);
         }
 

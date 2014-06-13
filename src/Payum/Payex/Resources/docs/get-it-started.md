@@ -60,7 +60,7 @@ use Payum\Payex\Api\OrderApi;
 
 include 'config.php';
 
-$storage = $registry->getStorageForClass($detailsClass, 'payex');
+$storage = $registry->getStorage($detailsClass);
 
 $paymentDetails = $storage->createModel();
 $paymentDetails['price'] = 10000 //10 EUR

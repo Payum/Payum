@@ -54,11 +54,8 @@ $payments = array(
 
 include 'config.php';
 
-$storage = $registry->getStorageForClass($detailsClass, 'klarna_checkout');
-$storage = $this->getPayum()->getStorageForClass(
-    'Acme\PaymentBundle\Model\PaymentDetails',
-    $paymentName
-);
+$storage = $registry->getStorage($detailsClass);
+$storage = $this->getPayum()->getStorage('Acme\PaymentBundle\Model\PaymentDetails');
 
 $details = $storage->createModel();
 $details['purchase_country'] = 'SE';

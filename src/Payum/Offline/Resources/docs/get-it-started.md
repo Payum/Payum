@@ -54,7 +54,7 @@ use Payum\Offline\Constants;
 
 include 'config.php';
 
-$storage = $registry->getStorageForClass($detailsClass, 'offline');
+$storage = $registry->getStorage($detailsClass);
 
 $paymentDetails = $storage->createModel();
 
