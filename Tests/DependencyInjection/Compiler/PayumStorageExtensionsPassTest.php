@@ -180,6 +180,33 @@ class PayumStorageExtensionsPassTest extends \Phpunit_Framework_TestCase
 
     /**
      * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage In order to add storage to extension the storage d has to contains ".storage." inside.
+     */
+    public function throwIfStorageServiceIdDoesNotMatchRequiredPattern()
+    {
+        $container = new ContainerBuilder;
+
+        $paymentFoo = new Definition;
+        $paymentFoo->addTag('payum.payment', array(
+            'factory' => 'foo',
+        ));
+        $container->setDefinition('payment.foo', $paymentFoo);
+
+        $storageFoo = new Definition;
+        $storageFoo->addTag('payum.storage_extension', array(
+            'factory' => 'foo', 'prepend' => false
+        ));
+        $container->setDefinition('foo', $storageFoo);
+
+        $pass = new PayumStorageExtensionsPass;
+
+        $pass->process($container);
+    }
+
+    /**
+     * @test
      */
     public function shouldAddSinglestorageToPaymentsByContextName()
     {
