@@ -51,14 +51,7 @@ class FilesystemStorageFactoryTest extends \PHPUnit_Framework_TestCase
         $config = $processor->process($tb->buildTree(), array(array(
             'id_property' => 'id',
             'storage_dir' => '/the/path/to/store/models',
-            'payment_extension' => array(
-                'enabled' => false
-            )
         )));
-
-        $this->assertArrayHasKey('payment_extension', $config);
-        $this->assertArrayHasKey('enabled', $config['payment_extension']);
-        $this->assertFalse($config['payment_extension']['enabled']);
 
         $this->assertArrayHasKey('id_property', $config);
         $this->assertEquals('id', $config['id_property']);

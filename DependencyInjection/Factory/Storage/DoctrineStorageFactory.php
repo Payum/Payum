@@ -24,9 +24,13 @@ class DoctrineStorageFactory extends AbstractStorageFactory
     {
         parent::addConfiguration($builder);
         
-        $builder->children()
-            ->scalarNode('driver')->isRequired()->cannotBeEmpty()->end()
-        ->end();
+        $builder
+            ->beforeNormalization()->ifString()->then(function($v) {
+                return array('driver' => $v);
+            })->end()
+            ->children()
+                ->scalarNode('driver')->isRequired()->cannotBeEmpty()->end()
+            ->end();
     }
 
     /**

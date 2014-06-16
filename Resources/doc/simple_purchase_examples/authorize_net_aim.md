@@ -28,11 +28,6 @@ payum:
                 login_id: 'get it from gateway'
                 transaction_key: 'get it from gateway'
                 sandbox: true
-
-            storages:
-                Acme\PaymentBundle\Entity\PaymentDetails:
-                    doctrine:
-                        driver: orm
 ```
 
 _**Attention**: You have to changed `your_payment_name` to something more descriptive and domain related, for example `post_a_job_with_authorize_net`._

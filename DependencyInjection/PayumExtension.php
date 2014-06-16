@@ -80,9 +80,7 @@ class PayumExtension extends Extension
     protected function loadStorages(array $config, ContainerBuilder $container)
     {
         $storagesIds = array();
-
         foreach ($config as $modelClass => $storageConfig) {
-//            var_dump($modelClass, $storageConfig);
             $storageFactoryName = $this->findSelectedStorageFactoryNameInStorageConfig($storageConfig);
             $storageId = $this->storageFactories[$storageFactoryName]->create(
                 $container,
@@ -92,14 +90,14 @@ class PayumExtension extends Extension
 
             $storagesIds[$modelClass] = $storageId;
 
-            if ($storageConfig['add_to_payment']['all']) {
+            if ($storageConfig['payment']['all']) {
                 $container->getDefinition($storageId)->addTag('payum.storage_extension',  array('all' => true));
             } else {
-                foreach ($storageConfig['add_to_payment']['contexts'] as $contextName) {
+                foreach ($storageConfig['payment']['contexts'] as $contextName) {
                     $container->getDefinition($storageId)->addTag('payum.storage_extension',  array('context' => $contextName));
                 }
 
-                foreach ($storageConfig['add_to_payment']['factories'] as $factory) {
+                foreach ($storageConfig['payment']['factories'] as $factory) {
                     $container->getDefinition($storageId)->addTag('payum.storage_extension',  array('factory' => $factory));
                 }
             }

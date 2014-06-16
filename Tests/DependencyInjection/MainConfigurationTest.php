@@ -48,6 +48,18 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
+                'storages' => array(
+                    $fooModelClass => array(
+                        'bar_storage' => array(
+                            'bar_opt' => 'bar'
+                        ),
+                    ),
+                    $barModelClass => array(
+                        'bar_storage' => array(
+                            'bar_opt' => 'bar'
+                        ),
+                    )
+                ),
                 'security' => array(
                     'token_storage' => array(
                         'Payum\Core\Model\Token' => array(
@@ -62,18 +74,6 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         'foo_payment' => array( 
                             'foo_opt' => 'foo'
                         ),
-                        'storages' => array(
-                            $fooModelClass => array(
-                                'bar_storage' => array(
-                                    'bar_opt' => 'bar'
-                                ),
-                            ),
-                            $barModelClass => array(
-                                'bar_storage' => array(
-                                    'bar_opt' => 'bar'
-                                ),
-                            )
-                        )
                     )
                 )
             )
@@ -82,9 +82,172 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function shouldAddStoragesToAllPaymentByDefault()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $fooModelClass = get_class($this->getMock('stdClass'));
+
+        $config = $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'storages' => array(
+                    $fooModelClass => array(
+                        'bar_storage' => array(
+                            'bar_opt' => 'bar'
+                        ),
+                    ),
+                ),
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Core\Model\Token' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
+            )
+        ));
+
+        $this->assertTrue(isset($config['storages'][$fooModelClass]['payment']['all']));
+        $this->assertTrue($config['storages'][$fooModelClass]['payment']['all']);
+
+        $this->assertTrue(isset($config['storages'][$fooModelClass]['payment']['factories']));
+        $this->assertEquals(array(), $config['storages'][$fooModelClass]['payment']['factories']);
+
+        $this->assertTrue(isset($config['storages'][$fooModelClass]['payment']['contexts']));
+        $this->assertEquals(array(), $config['storages'][$fooModelClass]['payment']['contexts']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowDisableAddStoragesToAllPaymentFeature()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $fooModelClass = get_class($this->getMock('stdClass'));
+
+        $config = $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'storages' => array(
+                    $fooModelClass => array(
+                        'payment' => array(
+                            'all' => false,
+                        ),
+                        'bar_storage' => array(
+                            'bar_opt' => 'bar'
+                        ),
+                    ),
+                ),
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Core\Model\Token' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
+            )
+        ));
+
+        $this->assertTrue(isset($config['storages'][$fooModelClass]['payment']['all']));
+        $this->assertFalse($config['storages'][$fooModelClass]['payment']['all']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowSetConcretePaymentsWhereToAddStorages()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $fooModelClass = get_class($this->getMock('stdClass'));
+
+        $config = $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'storages' => array(
+                    $fooModelClass => array(
+                        'payment' => array(
+                            'contexts' => array(
+                                'foo', 'bar'
+                            )
+                        ),
+                        'bar_storage' => array(
+                            'bar_opt' => 'bar'
+                        ),
+                    ),
+                ),
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Core\Model\Token' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
+            )
+        ));
+
+        $this->assertTrue(isset($config['storages'][$fooModelClass]['payment']['contexts']));
+        $this->assertEquals(array('foo', 'bar'), $config['storages'][$fooModelClass]['payment']['contexts']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowSetPaymentsCreatedWithFactoriesWhereToAddStorages()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $fooModelClass = get_class($this->getMock('stdClass'));
+
+        $config = $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'storages' => array(
+                    $fooModelClass => array(
+                        'payment' => array(
+                            'factories' => array(
+                                'foo', 'bar'
+                            )
+                        ),
+                        'bar_storage' => array(
+                            'bar_opt' => 'bar'
+                        ),
+                    ),
+                ),
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Core\Model\Token' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
+            )
+        ));
+
+        $this->assertTrue(isset($config['storages'][$fooModelClass]['payment']['factories']));
+        $this->assertEquals(array('foo', 'bar'), $config['storages'][$fooModelClass]['payment']['factories']);
+    }
+
+    /**
+     * @test
      * 
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "payum.contexts.a_context.storages": The storage entry must be a valid model class. It is set notExistClass
+     * @expectedExceptionMessage Invalid configuration for path "payum.storages": The storage entry must be a valid model class. It is set notExistClass
      */
     public function throwIfTryToUseNotValidClassAsStorageEntry()
     {
@@ -94,6 +257,13 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
+                'storages' => array(
+                    'notExistClass' => array(
+                        'foo_storage' => array(
+                            'foo_opt' => 'bar'
+                        ),
+                    ),
+                ),
                 'security' => array(
                     'token_storage' => array(
                         'Payum\Core\Model\Token' => array(
@@ -108,13 +278,6 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         ),
-                        'storages' => array(
-                            'notExistClass' => array(
-                                'foo_storage' => array(
-                                    'foo_opt' => 'bar'
-                                ),
-                            ),
-                        )
                     )
                 )
             )
@@ -125,7 +288,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @test
      * 
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "payum.contexts.a_context.storages.stdClass": Only one storage per entry could be selected
+     * @expectedExceptionMessage Invalid configuration for path "payum.storages.stdClass": Only one storage per entry could be selected
      */
     public function throwIfTryToAddMoreThenOneStorageForOneEntry()
     {
@@ -135,6 +298,16 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
+                'storages' => array(
+                    'stdClass' => array(
+                        'foo_storage' => array(
+                            'foo_opt' => 'bar'
+                        ),
+                        'bar_storage' => array(
+                            'bar_opt' => 'bar'
+                        )
+                    ),
+                ),
                 'security' => array(
                     'token_storage' => array(
                         'Payum\Core\Model\Token' => array(
@@ -149,16 +322,6 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         ),
-                        'storages' => array(
-                            'stdClass' => array(
-                                'foo_storage' => array(
-                                    'foo_opt' => 'bar'
-                                ),
-                                'bar_storage' => array(
-                                    'bar_opt' => 'bar'
-                                )
-                            ),
-                        )
                     )
                 )
             )
@@ -169,7 +332,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "payum.contexts.a_context.storages.stdClass": At least one storage must be configured.
+     * @expectedExceptionMessage Invalid configuration for path "payum.storages.stdClass": At least one storage must be configured.
      */
     public function throwIfStorageEntryDefinedWithoutConcreteStorage()
     {
@@ -179,6 +342,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
+                'storages' => array(
+                    'stdClass' => array(),
+                ),
                 'security' => array(
                     'token_storage' => array(
                         'Payum\Core\Model\Token' => array(
@@ -193,9 +359,6 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         ),
-                        'storages' => array(
-                            'stdClass' => array(),
-                        )
                     )
                 )
             )

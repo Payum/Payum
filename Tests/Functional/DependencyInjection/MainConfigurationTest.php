@@ -120,6 +120,13 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
+                'storages' => array(
+                    'stdClass' => array(
+                        'doctrine' => array(
+                            'driver' => 'aDriver',
+                        )
+                    ),
+                ),
                 'security' => array(
                     'token_storage' => array(
                         'Payum\Core\Model\Token' => array(
@@ -132,13 +139,6 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                 ),
                 'contexts' => array(
                     'a_context' => array(
-                        'storages' => array(
-                            'stdClass' => array(
-                                'doctrine' => array(
-                                    'driver' => 'aDriver',
-                                ) 
-                            ),
-                        ),
                         'omnipay' => array(
                             'type' => 'PayPal_Express',
                             'options' => array(),
@@ -160,6 +160,14 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
+                'storages' => array(
+                    'stdClass' => array(
+                        'filesystem' => array(
+                            'storage_dir' => 'a_dir',
+                            'id_property' => 'aProp',
+                        ),
+                    ),
+                ),
                 'security' => array(
                     'token_storage' => array(
                         'Payum\Core\Model\Token' => array(
@@ -172,14 +180,6 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                 ),
                 'contexts' => array(
                     'a_context' => array(
-                        'storages' => array(
-                            'stdClass' => array(
-                                'filesystem' => array(
-                                    'storage_dir' => 'a_dir',
-                                    'id_property' => 'aProp',
-                                ),
-                            ),
-                        ),
                         'omnipay' => array(
                             'type' => 'PayPal_Express',
                             'options' => array(),

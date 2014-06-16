@@ -4,6 +4,21 @@
 
 ```yaml
 payum:
+    storages:
+        A\Model\Class:
+            payment:
+                all: true 
+                factories: []
+                contexts: []
+
+            # storage specific options
+        Another\Model\Class:
+            payment:
+                all: true 
+                factories: []
+                contexts: []
+
+            # storage specific options
     security:
         token_storage:
             A\Model\TokenClass:
@@ -13,12 +28,6 @@ payum:
         foo_payment_context:
             xxx_payment:
                 # payment specific options
-
-            storages:
-                A\Model\Class:
-                    # storage specific options
-                Another\Model\Class:
-                    # storage specific options
                 
         bar_payment_context:
             xxx_payment:
@@ -40,10 +49,11 @@ payum:
 ## Doctrine storage:
 
 ```yaml
+doctrine: 'driver required'
+
+# or 
 doctrine:
-    driver: 'required' # orm only supported atm
-    payment_extension:
-        enabled: false
+    driver: 'required' # orm mongodb only supported atm
 ```
 
 ## Filesystem storage:

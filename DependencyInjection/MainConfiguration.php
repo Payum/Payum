@@ -115,7 +115,7 @@ class MainConfiguration implements ConfigurationInterface
                 ->validate()
                     ->ifTrue(function($v) {
                         $storages = $v;
-                        unset($storages['add_to_payment']);
+                        unset($storages['payment']);
 
                         foreach($storages as $key => $value) {
                             if (false == class_exists($key)) {
@@ -138,7 +138,7 @@ class MainConfiguration implements ConfigurationInterface
             ->validate()
                 ->ifTrue(function($v) {
                     $storages = $v;
-                    unset($storages['add_to_payment']);
+                    unset($storages['payment']);
 
                     if (count($storages) == 0) {
                         throw new LogicException('At least one storage must be configured.');
@@ -154,9 +154,10 @@ class MainConfiguration implements ConfigurationInterface
         ;
 
         $storageNode->children()
-            ->arrayNode('add_to_payment')
+            ->arrayNode('payment')
+                ->addDefaultsIfNotSet()
                 ->children()
-                    ->booleanNode('all')->defaultValue(false)->end()
+                    ->booleanNode('all')->defaultValue(true)->end()
                     ->arrayNode('contexts')
                         ->useAttributeAsKey('key')
                         ->prototype('scalar')

@@ -48,95 +48,6 @@ class AbstractStorageFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldEnabledPaymentExtensionByDefault()
-    {
-        $factory = $this->createAbstractStorageFactory();
-
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('foo');
-
-        $factory->addConfiguration($rootNode);
-
-        $processor = new Processor();
-
-        $config = $processor->process($tb->buildTree(), array());
-
-        $this->assertArrayHasKey('payment_extension', $config);
-        $this->assertArrayHasKey('enabled', $config['payment_extension']);
-        $this->assertTrue($config['payment_extension']['enabled']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowExplicitlyEnabledPaymentExtension()
-    {
-        $factory = $this->createAbstractStorageFactory();
-
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('foo');
-
-        $factory->addConfiguration($rootNode);
-
-        $processor = new Processor();
-
-        $config = $processor->process($tb->buildTree(), array(array(
-            'payment_extension' => true
-        )));
-        $this->assertArrayHasKey('payment_extension', $config);
-        $this->assertArrayHasKey('enabled', $config['payment_extension']);
-        $this->assertTrue($config['payment_extension']['enabled']);
-
-        $config = $processor->process($tb->buildTree(), array(array(
-            'payment_extension' => array(
-                'enabled' => true
-            )
-        )));
-        $this->assertArrayHasKey('payment_extension', $config);
-        $this->assertArrayHasKey('enabled', $config['payment_extension']);
-        $this->assertTrue($config['payment_extension']['enabled']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowDisablePaymentExtension()
-    {
-        $factory = $this->createAbstractStorageFactory();
-
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('foo');
-
-        $factory->addConfiguration($rootNode);
-
-        $processor = new Processor();
-
-        $config = $processor->process($tb->buildTree(), array());
-
-        $this->assertArrayHasKey('payment_extension', $config);
-        $this->assertArrayHasKey('enabled', $config['payment_extension']);
-        $this->assertTrue($config['payment_extension']['enabled']);
-
-        $config = $processor->process($tb->buildTree(), array(array(
-            'payment_extension' => false
-        )));
-        $this->assertArrayHasKey('payment_extension', $config);
-        $this->assertArrayHasKey('enabled', $config['payment_extension']);
-        $this->assertFalse($config['payment_extension']['enabled']);
-
-        $config = $processor->process($tb->buildTree(), array(array(
-            'payment_extension' => array(
-                'enabled' => false
-            )
-        )));
-        $this->assertArrayHasKey('payment_extension', $config);
-        $this->assertArrayHasKey('enabled', $config['payment_extension']);
-        $this->assertFalse($config['payment_extension']['enabled']);
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowCreateStorageAndReturnItsId()
     {
         $expectedStorage = new Definition();
@@ -152,75 +63,11 @@ class AbstractStorageFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $actualStorageId = $factory->create($container, 'aContextName', 'A\Model\Class', array(
-            'payment_extension' => array(
-                'enabled' => false
-            )
-        ));
+        $actualStorageId = $factory->create($container, 'A\Model\Class', array());
 
-        $this->assertEquals('payum.context.aContextName.storage.amodelclass', $actualStorageId);
-        $this->assertTrue($container->hasDefinition('payum.context.aContextName.storage.amodelclass'));
-        $this->assertSame($expectedStorage, $container->getDefinition('payum.context.aContextName.storage.amodelclass'));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotAddPayumStorageTagIfEnabledFalse()
-    {
-        $expectedStorage = new Definition();
-
-        $factory = $this->createAbstractStorageFactory();
-        $factory
-            ->expects($this->once())
-            ->method('createStorage')
-            ->will($this->returnCallback(function() use ($expectedStorage) {
-                return $expectedStorage;
-            }))
-        ;
-
-        $container = new ContainerBuilder;
-
-        $storageId = $factory->create($container, 'aContextName', 'A\Model\Class', array(
-            'payment_extension' => array(
-                'enabled' => false
-            )
-        ));
-
-        $this->assertTrue($container->hasDefinition($storageId));
-        $storage = $container->getDefinition($storageId);
-
-        $this->assertEquals(array(), $storage->getTag('payum.storage'));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddCorrectPayumStorageTagIfEnabledTrue()
-    {
-        $expectedStorage = new Definition();
-
-        $factory = $this->createAbstractStorageFactory();
-        $factory
-            ->expects($this->once())
-            ->method('createStorage')
-            ->will($this->returnCallback(function() use ($expectedStorage) {
-                return $expectedStorage;
-            }))
-        ;
-
-        $container = new ContainerBuilder;
-
-        $storageId = $factory->create($container, 'aContextName', 'A\Model\Class', array(
-            'payment_extension' => array(
-                'enabled' => true
-            )
-        ));
-
-        $this->assertTrue($container->hasDefinition($storageId));
-        $storage = $container->getDefinition($storageId);
-
-        $this->assertEquals(array(array('context' => 'aContextName')), $storage->getTag('payum.storage'));
+        $this->assertEquals('payum.storage.a_model_class', $actualStorageId);
+        $this->assertTrue($container->hasDefinition($actualStorageId));
+        $this->assertSame($expectedStorage, $container->getDefinition($actualStorageId));
     }
 
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)
