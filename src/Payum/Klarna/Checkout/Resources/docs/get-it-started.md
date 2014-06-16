@@ -30,19 +30,11 @@ use Payum\Klarn\Checkout\PaymentFactory as KlarnaPaymentFactory;
 
 // ...
 
-$storages = array(
-    'klarna_checkout' => array(
-        $detailsClass => new FilesystemStorage('/path/to/storage', $detailsClass)
-    )
-);
-
-$payments = array(
-    'klarna_checkout' => KlarnaPaymentFactory::create(new GlobalStateSafeConnector(
-        new Klarna_Checkout_Connector('REPLACE_WITH_YOUR_SECRET'),
-        'REPLACE_WITH_YOUR_MERCHANT_ID',
-        Payum\Klarna\Checkout::Constants::BASE_URI_SANDBOX
-    )),
-);
+$payments['klarna_checkout'] => KlarnaPaymentFactory::create(new GlobalStateSafeConnector(
+    new Klarna_Checkout_Connector('REPLACE_WITH_YOUR_SECRET'),
+    'REPLACE_WITH_YOUR_MERCHANT_ID',
+    Payum\Klarna\Checkout::Constants::BASE_URI_SANDBOX
+));
 ```
 
 ## Prepare payment
@@ -54,11 +46,8 @@ $payments = array(
 
 include 'config.php';
 
-$storage = $registry->getStorageForClass($detailsClass, 'klarna_checkout');
-$storage = $this->getPayum()->getStorageForClass(
-    'Acme\PaymentBundle\Model\PaymentDetails',
-    $paymentName
-);
+$storage = $registry->getStorage($detailsClass);
+$storage = $this->getPayum()->getStorage('Acme\PaymentBundle\Model\PaymentDetails');
 
 $details = $storage->createModel();
 $details['purchase_country'] = 'SE';

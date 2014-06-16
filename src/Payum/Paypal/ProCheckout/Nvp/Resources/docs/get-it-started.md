@@ -30,24 +30,16 @@ use Payum\Paypal\ProCheckout\Nvp\Api as PaypalProApi;
 
 // ...
 
-$storages = array(
-    'paypal-pro' => array(
-        $detailsClass => new FilesystemStorage('/path/to/storage', $detailsClass)
+$payments['paypal-pro'] = PaypalProPaymentFactory::create(new PaypalProApi(
+    new Curl,
+    array(
+        'username' => 'REPLACE IT',
+        'password' => 'REPLACE IT',
+        'partner' => 'REPLACE IT',
+        'vendor' => 'REPLACE IT',
+        'sandbox' => true
     )
-);
-
-$payments = array(
-    'paypal-pro' => PaypalProPaymentFactory::create(new PaypalProApi(
-        new Curl,
-        array(
-            'username' => 'REPLACE IT',
-            'password' => 'REPLACE IT',
-            'partner' => 'REPLACE IT',
-            'vendor' => 'REPLACE IT',
-            'sandbox' => true
-        )
-    ))
-);
+));
 ```
 
 ## Prepare payment
@@ -61,7 +53,7 @@ use Payum\Core\Security\SensitiveValue;
 
 include 'config.php';
 
-$storage = $registry->getStorageForClass($detailsClass, 'paypal-pro');
+$storage = $registry->getStorage($detailsClass);
 
 $paymentDetails = $storage->createModel();
 $paymentDetails['currency'] = 'USD';

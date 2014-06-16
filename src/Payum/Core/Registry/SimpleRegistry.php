@@ -11,9 +11,29 @@ class SimpleRegistry extends AbstractRegistry
     protected $initializedStorageExtensions;
 
     /**
-     * @param $name
+     * {@inheritDoc}
      */
-    protected function initializeStorageExtensionsForPayment($name)
+    public function getPayment($name = null)
+    {
+        $payment = parent::getPayment($name);
+
+        $this->addStorageToPayment($name);
+
+        return $payment;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getService($id)
+    {
+        return $id;
+    }
+
+    /**
+     * @param string|null $name
+     */
+    protected function addStorageToPayment($name)
     {
         if (null === $name) {
             $name = $this->defaultPayment;
@@ -25,33 +45,9 @@ class SimpleRegistry extends AbstractRegistry
 
         $this->initializedStorageExtensions[$name] = true;
 
-        if (!isset($this->storages[$name])) {
-            return;
-        }
-
         $payment = $this->getPayment($name);
-        foreach ($this->getStorages($name) as $storage) {
+        foreach ($this->getStorages() as $storage) {
             $payment->addExtension(new StorageExtension($storage));
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getPayment($name = null)
-    {
-        $payment = parent::getPayment($name);
-
-        $this->initializeStorageExtensionsForPayment($name);
-
-        return $payment;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function getService($id)
-    {
-        return $id;
     }
 }

@@ -10,6 +10,9 @@
 * [omnipay] Switch to Omnipay v2.x.
 * [omnipay] Rename `CaptureAction` to `OnsiteCaptureAction`. It would not support credit card payments. Use new `CaptureAction` for such payments.
 * [request] `UserInputRequiredInteractiveRequest` request was removed.
+* [registry] `StorageRegistryInterface::getDefaultStorageName` method was removed.
+* [registry] `StorageRegistryInterface::getStorageForClass` renamed to `getStorage`. Do not take second argument any more.
+* [registry] `StorageRegistryInterface::getStorages` does not take any arguments any more.
 
 ## 0.8.5 to 0.8.6
 

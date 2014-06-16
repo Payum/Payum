@@ -69,8 +69,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
         $storageRegistryMock = $this->createStorageRegistryMock();
         $storageRegistryMock
             ->expects($this->once())
-            ->method('getStorageForClass')
-            ->with($this->identicalTo($model), $paymentName)
+            ->method('getStorage')
+            ->with($this->identicalTo($model))
             ->will($this->returnValue($modelStorage))
         ;
 
@@ -135,8 +135,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
         $storageRegistryMock = $this->createStorageRegistryMock();
         $storageRegistryMock
             ->expects($this->once())
-            ->method('getStorageForClass')
-            ->with($this->identicalTo($model), $paymentName)
+            ->method('getStorage')
+            ->with($this->identicalTo($model))
             ->will($this->returnValue($modelStorage))
         ;
 
@@ -201,8 +201,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
         $storageRegistryMock = $this->createStorageRegistryMock();
         $storageRegistryMock
             ->expects($this->once())
-            ->method('getStorageForClass')
-            ->with($this->identicalTo($model), $paymentName)
+            ->method('getStorage')
+            ->with($this->identicalTo($model))
             ->will($this->returnValue($modelStorage))
         ;
 
@@ -260,8 +260,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
         $storageRegistryMock = $this->createStorageRegistryMock();
         $storageRegistryMock
             ->expects($this->once())
-            ->method('getStorageForClass')
-            ->with($this->identicalTo($model), $paymentName)
+            ->method('getStorage')
+            ->with($this->identicalTo($model))
             ->will($this->returnValue($modelStorage))
         ;
 
@@ -309,7 +309,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
         $storageRegistryMock = $this->createStorageRegistryMock();
         $storageRegistryMock
             ->expects($this->never())
-            ->method('getStorageForClass')
+            ->method('getStorage')
         ;
 
         $factory = new GenericTokenFactory(
@@ -383,8 +383,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
         $storageRegistryMock = $this->createStorageRegistryMock();
         $storageRegistryMock
             ->expects($this->exactly(2))
-            ->method('getStorageForClass')
-            ->with($this->identicalTo($model), $paymentName)
+            ->method('getStorage')
+            ->with($this->identicalTo($model))
             ->will($this->returnValue($modelStorage))
         ;
 
@@ -462,8 +462,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
         $storageRegistryMock = $this->createStorageRegistryMock();
         $storageRegistryMock
             ->expects($this->exactly(2))
-            ->method('getStorageForClass')
-            ->with($this->identicalTo($model), $paymentName)
+            ->method('getStorage')
+            ->with($this->identicalTo($model))
             ->will($this->returnValue($modelStorage))
         ;
 

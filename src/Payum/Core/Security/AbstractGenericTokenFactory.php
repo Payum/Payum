@@ -53,7 +53,7 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
 
         if (null !== $model) {
             $token->setDetails(
-                $this->storageRegistry->getStorageForClass($model, $paymentName)->getIdentificator($model)
+                $this->storageRegistry->getStorage($model)->getIdentificator($model)
             );
         }
 

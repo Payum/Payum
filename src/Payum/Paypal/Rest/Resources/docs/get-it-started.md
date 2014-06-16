@@ -30,13 +30,11 @@ At last setup a model storage.
 
 // You way want to modify it to suite your needs
 $paypalRestPaymentDetailsClass = 'Payum\Paypal\Rest\Model\PaymentDetails';
-$storages = array(
 
-    // other storages here
-
-    'paypalRest' => array(
-        $paypalRestPaymentDetailsClass => new FilesystemStorage(__DIR__.'/storage', $paypalRestPaymentDetailsClass, 'idStorage')
-    )
+$storages[$paypalRestPaymentDetailsClass] = new FilesystemStorage(
+    __DIR__.'/storage', 
+    $paypalRestPaymentDetailsClass, 
+    'idStorage'
 );
 
 define("PP_CONFIG_PATH", __DIR__);
@@ -48,14 +46,7 @@ $cred = new OAuthTokenCredential(
     $configManager->get('acct1.ClientSecret')
 );
 
-$payments = array(
-
-    // other storages here
-
-    'paypalRest' => RestPaymentFactory::create(new ApiContext($cred, 'Request' . time()))
-);
-
-$payments['paypalRest']->addExtension(new StorageExtension($storages['paypalRest'][$paypalRestPaymentDetailsClass]));
+$payments['paypalRest'] = RestPaymentFactory::create(new ApiContext($cred, 'Request' . time()));
 ```
 
 ## Prepare payment
@@ -71,7 +62,7 @@ use PayPal\Api\Payer;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
 
-$storage = $registry->getStorageForClass($paypalRestPaymentDetailsClass, 'paypalRest');
+$storage = $registry->getStorage($paypalRestPaymentDetailsClass);
 
 $paymentDetails = $storage->createModel();
 $storage->updateModel($paymentDetails);

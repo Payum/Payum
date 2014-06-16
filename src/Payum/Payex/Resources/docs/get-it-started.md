@@ -39,15 +39,7 @@ $payexOrderApi = new OrderApi(new SoapClientFactory(), array(
    'sandbox' => true
 ));
 
-$storages = array(
-    'payex' => array(
-        $detailsClass => new FilesystemStorage('/path/to/storage', $detailsClass)
-    )
-);
-
-$payments = array(
-    'payex' => PaymentFactory::create($payexOrderApi)
-);
+$payments['payex'] = PaymentFactory::create($payexOrderApi);
 ```
 
 ## Prepare payment
@@ -60,7 +52,7 @@ use Payum\Payex\Api\OrderApi;
 
 include 'config.php';
 
-$storage = $registry->getStorageForClass($detailsClass, 'payex');
+$storage = $registry->getStorage($detailsClass);
 
 $paymentDetails = $storage->createModel();
 $paymentDetails['price'] = 10000 //10 EUR

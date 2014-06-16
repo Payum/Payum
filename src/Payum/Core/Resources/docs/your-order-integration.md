@@ -74,11 +74,7 @@ use App\Payum\Action\CaptureOrderUsingFooAction;
 
 $payments['foo']->addAction(new CaptureOrderUsingFooAction);
 
-$storages = array(
-    'foo' => array(
-        'App\Model\Order' => new FilesystemStorage('/path/to/storage', 'App\Model\Order')
-    )
-);
+$storages['App\Model\Order'] = new FilesystemStorage('/path/to/storage', 'App\Model\Order');
 
 // ...
 ```
@@ -91,7 +87,7 @@ use App\Model\Order;
 
 include 'config.php';
 
-$storage = $registry->getStorageForClass('App\Model\Order', 'foo');
+$storage = $registry->getStorage('App\Model\Order');
 
 $order = $storage->createModel();
 $order = new Order;

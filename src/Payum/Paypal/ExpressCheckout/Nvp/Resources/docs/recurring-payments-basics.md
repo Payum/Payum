@@ -43,17 +43,14 @@ Now we have to adjust `config.php` to support paypal recurring payments:
 
 $agreementDetailsClass = 'App\Model\AgreementDetails';
 $recurringPaymentDetailsClass = 'App\Model\RecurringPaymentDetails';
-$storages = array(
-    'paypal' => array(
-        $agreementDetailsClass => new FilesystemStorage(
-            __DIR__.'/storage',
-            $agreementDetailsClass
-        )
-        $recurringPaymentDetailsClass => new FilesystemStorage(
-            __DIR__.'/storage',
-            $recurringPaymentDetailsClass
-        )
-    )
+
+$storages[$agreementDetailsClass] = new FilesystemStorage(
+    __DIR__.'/storage',
+    $agreementDetailsClass
+);
+$storages[$recurringPaymentDetailsClass] = new FilesystemStorage(
+    __DIR__.'/storage',
+    $recurringPaymentDetailsClass
 );
 ```
 
@@ -68,7 +65,7 @@ For this we have to create an agreement with him.
 
 include 'config.php';
 
-$storage = $registry->getStorageForClass($agreementDetailsClass, 'paypal');
+$storage = $registry->getStorage($agreementDetailsClass);
 
 $agreementDetails = $storage->createModel();
 $agreementDetails['PAYMENTREQUEST_0_AMT'] = 0;
@@ -126,7 +123,7 @@ if (false == $agreementStatus->isSuccess()) {
 
 $agreementDetails = $agreementStatus->getModel();
 
-$storage = $registry->getStorageForClass($recurringPaymentDetailsClass, $token->getPaymentName());
+$storage = $registry->getStorage($recurringPaymentDetailsClass);
 
 $recurringPaymentDetails = $recurringPaymentStorage->createModel();
 $recurringPaymentDetails['TOKEN'] = $agreementDetails->getToken();

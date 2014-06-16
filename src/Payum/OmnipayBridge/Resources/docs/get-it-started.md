@@ -37,15 +37,7 @@ $stripeGateway = $gatewayFactory->create('Stripe');
 $stripeGateway->setApiKey('REPLACE IT');
 $stripeGateway->setTestMode(true);
 
-$storages = array(
-    'stripe' => array(
-        $detailsClass => new FilesystemStorage('/path/to/storage', $detailsClass)
-    )
-);
-
-$payments = array(
-    'stripe' => OmnipayPaymentFactory::create($stripeGateway)
-);
+$payments['stripe'] = OmnipayPaymentFactory::create($stripeGateway);
 ```
 
 ## Prepare payment
@@ -59,7 +51,7 @@ use Payum\Core\Security\SensitiveValue;
 
 include 'config.php';
 
-$storage = $registry->getStorageForClass($detailsClass, 'stripe');
+$storage = $registry->getStorage($detailsClass);
 
 $paymentDetails = $storage->createModel();
 $paymentDetails['amount'] = 10;

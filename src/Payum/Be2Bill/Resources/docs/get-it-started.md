@@ -30,19 +30,11 @@ use Payum\Be2Bill\PaymentFactory as Be2BillPaymentFactory;
 
 // ...
 
-$storages = array(
-    'be2bill' => array(
-        $detailsClass => new FilesystemStorage('/path/to/storage', $detailsClass)
-    )
-);
-
-$payments = array(
-    'be2bill' => Be2BillPaymentFactory::create(new Be2BillApi(new Curl, array(
-       'identifier' => 'REPLACE WITH YOURS',
-       'password' => 'REPLACE WITH YOURS',
-       'sandbox' => true
-    )
-);
+$payments['be2bill'] = Be2BillPaymentFactory::create(new Be2BillApi(new Curl, array(
+   'identifier' => 'REPLACE WITH YOURS',
+   'password' => 'REPLACE WITH YOURS',
+   'sandbox' => true
+)));
 ```
 
 ## Prepare payment
@@ -56,7 +48,7 @@ use Payum\Core\Security\SensitiveValue;
 
 include 'config.php';
 
-$storage = $registry->getStorageForClass($detailsClass, 'be2bill');
+$storage = $registry->getStorage($detailsClass);
 
 $paymentDetails = $storage->createModel();
 $paymentDetails['AMOUNT'] = 100; //1$

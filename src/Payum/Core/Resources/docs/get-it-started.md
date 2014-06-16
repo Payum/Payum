@@ -73,9 +73,7 @@ $requestVerifier = new PlainHttpRequestVerifier($tokenStorage);
 $detailsClass = 'App\Model\PaymentDetails';
 
 $storages = array(
-    'paypal' => array(
-        $detailsClass => new FilesystemStorage('/path/to/storage', $detailsClass)
-    )
+    $detailsClass => new FilesystemStorage('/path/to/storage', $detailsClass)
 );
 
 $payments = array(
@@ -87,7 +85,7 @@ $payments = array(
     )
 )));
 
-$registry = new SimpleRegistry($payments, $storages, null, null);
+$registry = new SimpleRegistry($payments, $storages);
 
 $tokenFactory = new GenericTokenFactory(
     $tokenStorage,
@@ -115,7 +113,7 @@ _**Note**: You are not required to use this PaymentDetails. Payum is designed to
 
 include 'config.php';
 
-$storage = $registry->getStorageForClass($detailsClass, 'paypal');
+$storage = $registry->getStorage($detailsClass);
 
 $paymentDetails = $storage->createModel();
 $paymentDetails['PAYMENTREQUEST_0_CURRENCYCODE'] = 'EUR';

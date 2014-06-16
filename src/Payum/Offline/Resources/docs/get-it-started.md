@@ -27,21 +27,7 @@ use Payum\Offline\PaymentFactory as OfflinePaymentFactory;
 
 // ...
 
-$storages = array(
-
-    // other storages here
-
-    'offline' => array(
-        $detailsClass => new FilesystemStorage(__DIR__.'/storage', $detailsClass)
-    )
-);
-
-$payments = array(
-
-    // other storages here
-
-    'offline' => OfflinePaymentFactory::create()
-);
+$payments['offline'] = OfflinePaymentFactory::create();
 ```
 
 ## Prepare payment
@@ -54,7 +40,7 @@ use Payum\Offline\Constants;
 
 include 'config.php';
 
-$storage = $registry->getStorageForClass($detailsClass, 'offline');
+$storage = $registry->getStorage($detailsClass);
 
 $paymentDetails = $storage->createModel();
 

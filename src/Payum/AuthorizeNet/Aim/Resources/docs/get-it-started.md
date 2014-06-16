@@ -33,15 +33,7 @@ use Payum\AuthorizeNet\Aim\PaymentFactory as AuthorizeNetPaymentFactory;
 $authorizeNetAim = new AuthorizeNetAIM($loginId = 'REPLACE IT', $transactionKey = 'REPLACE IT');
 $authorizeNetAim->setSandbox(true);
 
-$storages = array(
-    'authorize-net-aim' => array(
-        $detailsClass => new FilesystemStorage('/path/to/storage', $detailsClass)
-    )
-);
-
-$payments = array(
-    'authorize-net-aim' => AuthorizeNetPaymentFactory::create($authorizeNetAim)
-);
+$payments['authorize-net-aim'] = AuthorizeNetPaymentFactory::create($authorizeNetAim);
 ```
 
 ## Prepare payment
@@ -55,7 +47,7 @@ use Payum\Core\Security\SensitiveValue;
 
 include 'config.php';
 
-$storage = $registry->getStorageForClass($detailsClass, 'authorize-net-aim');
+$storage = $registry->getStorage($detailsClass);
 
 $paymentDetails = $storage->createModel();
 $paymentDetails['amount'] = 2; // 2$
