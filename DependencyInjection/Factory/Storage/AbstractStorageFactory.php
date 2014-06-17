@@ -10,67 +10,32 @@ use Symfony\Component\DependencyInjection\Reference;
 abstract class AbstractStorageFactory implements StorageFactoryInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function create(ContainerBuilder $container, $contextName, $modelClass, $paymentId, array $config)
+    public function create(ContainerBuilder $container, $modelClass, array $config)
     {
-        $storageId = sprintf(
-            'payum.context.%s.storage.%s',
-            $contextName,
-            strtolower(str_replace('\\', '', $modelClass))
-        );
-        $storageDefinition = $this->createStorage($container, $contextName, $modelClass, $paymentId, $config);
+        $storageId = sprintf('payum.storage.%s', strtolower(str_replace(array('\\\\', '\\'), '_', $modelClass)));
+
+        $storageDefinition = $this->createStorage($container, $modelClass, $config);
         
         $container->setDefinition($storageId, $storageDefinition);
-        
-        if ($config['payment_extension']['enabled']) {
-            $this->addStorageExtension($container, $storageId, $paymentId);
-        }
 
         return $storageId;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
-        $builder->children()
-            ->arrayNode('payment_extension')
-                ->addDefaultsIfNotSet()
-                ->treatNullLike(array('enabled' => true))
-                ->treatTrueLike(array('enabled' => true))
-                ->treatFalseLike(array('enabled' => false))
-                ->children()
-                    ->booleanNode('enabled')->defaultTrue()->end()
-                ->end()
-            ->end()
-            ->end()
-        ->end();
     }
 
     /**
      * @param ContainerBuilder $container
-     * @param string $storageId
-     * @param string $paymentId
-     */
-    protected function addStorageExtension(ContainerBuilder $container, $storageId, $paymentId)
-    {
-        $storageExtensionDefinition = new DefinitionDecorator('payum.extension.storage.prototype');
-        $storageExtensionDefinition->replaceArgument(0, new Reference($storageId));
-        $storageExtensionDefinition->setPublic(false);
-        $storageExtensionId = str_replace('.storage.', '.extension.storage.', $storageId);
-        $container->setDefinition($storageExtensionId, $storageExtensionDefinition);
-
-        $paymentDefinition = $container->getDefinition($paymentId);
-        $paymentDefinition->addMethodCall('addExtension', array(new Reference($storageExtensionId)));
-    }
-
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param string $modelClass
      * @param array $config
      *
      * @return Definition
      */
-    abstract protected function createStorage(ContainerBuilder $container, $contextName, $modelClass, $paymentId, array $config);
+    abstract protected function createStorage(ContainerBuilder $container, $modelClass, array $config);
 }

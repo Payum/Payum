@@ -33,17 +33,17 @@ class FilesystemStorageFactory extends AbstractStorageFactory
     /**
      * {@inheritdoc}
      */
-    protected function createStorage(ContainerBuilder $container, $contextName, $modelClass, $paymentId, array $config)
+    protected function createStorage(ContainerBuilder $container, $modelClass, array $config)
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/storage'));
         $loader->load('filesystem.xml');
 
-        $contextStorageDefinition = new DefinitionDecorator('payum.storage.filesystem.prototype');
-        $contextStorageDefinition->setPublic(true);
-        $contextStorageDefinition->replaceArgument(0, $config['storage_dir']);
-        $contextStorageDefinition->replaceArgument(1, $modelClass);
-        $contextStorageDefinition->replaceArgument(2, $config['id_property']);
+        $storage = new DefinitionDecorator('payum.storage.filesystem.prototype');
+        $storage->setPublic(true);
+        $storage->replaceArgument(0, $config['storage_dir']);
+        $storage->replaceArgument(1, $modelClass);
+        $storage->replaceArgument(2, $config['id_property']);
 
-        return $contextStorageDefinition;
+        return $storage;
     }
 }

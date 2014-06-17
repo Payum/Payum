@@ -29,10 +29,6 @@ payum:
                 options:
                     apiKey: abc123
                     testMode: true
-            storages:
-                Acme\PaymentBundle\Entity\PaymentDetails:
-                    doctrine:
-                        driver: orm
 ```
 
 _**Note:** You have to changed `your_payment_name` to something more descriptive and domain related, for example `post_a_job_with_omnipay`._
@@ -58,10 +54,7 @@ class PaymentController extends Controller
     {
         $paymentName = 'your_payment_name';
 
-        $storage = $this->get('payum')->getStorageForClass(
-            'Acme\PaymentBundle\Entity\PaymentDetails',
-            $paymentName
-        );
+        $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\PaymentDetails');
 
         /** @var \Acme\PaymentBundle\Entity\PaymentDetails */
         $paymentDetails = $storage->createModel();

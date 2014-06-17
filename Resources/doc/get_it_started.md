@@ -270,12 +270,9 @@ doctrine:
                         prefix: Payum\Core\Model
 
 payum:
-    contexts:
-        your_context_here:
-            storages:
-                Acme\PaymentBundle\Entity\PaymentDetails:
-                    doctrine:
-                        driver: orm
+    storages:
+        Acme\PaymentBundle\Entity\PaymentDetails:
+            doctrine: orm
 ```
 
 ### Doctrine MongoODM persistence.
@@ -325,12 +322,9 @@ doctrine_mongodb:
                     prefix: Payum\Core\Model
 
 payum:
-    contexts:
-        your_context_here:
-            storages:
-                Acme\PaymentBundle\Document\PaymentDetails:
-                    doctrine:
-                        driver: mongodb
+    storages:
+        Acme\PaymentBundle\Document\PaymentDetails:
+            doctrine: mongodb
 ```
 
 ## Filesystem persistence.
@@ -353,13 +347,11 @@ next, you have to configure token storage to use this model:
 #app/config/config.yml
 
 payum:
-    contexts:
-        your_context_here:
-            storages:
-                Acme\PaymentBundle\Model\PaymentDetails:
-                    filesystem:
-                        storage_dir: %kernel.root_dir%/Resources/payments
-                        id_property: id
+    storages:
+        Acme\PaymentBundle\Model\PaymentDetails:
+            filesystem:
+                storage_dir: %kernel.root_dir%/Resources/payments
+                id_property: id
 ```
 
 ## Next Step

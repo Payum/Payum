@@ -50,14 +50,26 @@ class DoctrineStorageFactoryTest extends \PHPUnit_Framework_TestCase
         $processor = new Processor();
         $config = $processor->process($tb->buildTree(), array(array(
             'driver' => 'orm',
-            'payment_extension' => array(
-                'enabled' => false
-            )
         )));
         
-        $this->assertArrayHasKey('payment_extension', $config);
-        $this->assertArrayHasKey('enabled', $config['payment_extension']);
-        $this->assertFalse($config['payment_extension']['enabled']);
+        $this->assertArrayHasKey('driver', $config);
+        $this->assertEquals('orm', $config['driver']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowAddShortConfiguration()
+    {
+        $factory = new DoctrineStorageFactory;
+
+        $tb = new TreeBuilder();
+        $rootNode = $tb->root('foo');
+
+        $factory->addConfiguration($rootNode);
+
+        $processor = new Processor();
+        $config = $processor->process($tb->buildTree(), array('orm'));
 
         $this->assertArrayHasKey('driver', $config);
         $this->assertEquals('orm', $config['driver']);

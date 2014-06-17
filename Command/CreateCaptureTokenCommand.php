@@ -37,12 +37,11 @@ class CreateCaptureTokenCommand extends ContainerAwareCommand
         $model = null;
         $afterUrl = $input->getOption('after-url');
 
-        if (false == $model = $this->getPayum()->getStorageForClass($modelClass, $paymentName)->findModelById($modelId)) {
+        if (false == $model = $this->getPayum()->getStorage($modelClass)->findModelById($modelId)) {
             throw new RuntimeException(sprintf(
-                'Cannot find model with class %s and id %s. Payment %s',
+                'Cannot find model with class %s and id %s.',
                 $modelClass,
-                $modelId,
-                $paymentName
+                $modelId
             ));
         }
 

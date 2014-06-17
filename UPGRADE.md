@@ -29,6 +29,36 @@
     ```
 
 * `be2bill` payment factory does not provide support of onsite payments any more, use `be2bill_onsite` factory instead.
+* [config] `storages` section inside a context was removed. Use new `storages` section in the root `payum` (by default storages are added to all payments). Here's how to migrate example:
+
+    before:
+ 
+    ```yml
+    payum:
+        a_context:
+            a_factory:
+                storages:
+                    Acme\PaymentBundle\Entity\PaymentDetails:
+                        doctrine:
+                            driver: orm
+    ```
+    
+    after: 
+    
+    ```yml
+    payum:
+        storages:
+            Acme\PaymentBundle\Entity\PaymentDetails:
+                payment:
+                    contexts: [a_factory]
+                doctrine: orm
+                
+        a_context:
+            a_factory: 
+    ```
+
+* [factory] The signature of `StorageFactoryInterface::create` method was changed. Second `contextName` and fourth `paymentId` arguments were removed.
+    
 
 ## 0.7 to 0.8
 

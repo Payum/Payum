@@ -28,11 +28,6 @@ payum:
                 account_number:  'get this from gateway side'
                 encryption_key:  'get this from gateway side'
                 sandbox: true
-
-            storages:
-                Acme\PaymentBundle\Entity\PaymentDetails:
-                    doctrine:
-                        driver: orm
 ```
 
 _**Attention**: You have to changed `your_payment_name` to something more descriptive and domain related, for example `post_a_job_with_payex`._
@@ -55,10 +50,7 @@ class PaymentController extends Controller
     {
         $paymentName = 'your_payment_name';
 
-        $storage = $this->getPayum()->getStorageForClass(
-            'Acme\PaymentBundle\Entity\PaymentDetails',
-            $paymentName
-        );
+        $storage = $this->getPayum()->getStorage('Acme\PaymentBundle\Entity\PaymentDetails');
 
         /** @var \Acme\PaymentBundle\Entity\PaymentDetails $paymentDetails */
         $paymentDetails = $storage->createModel();

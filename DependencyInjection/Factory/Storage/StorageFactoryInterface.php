@@ -7,15 +7,13 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 interface StorageFactoryInterface
 {
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string $contextName
+     * @param ContainerBuilder $container
      * @param string $modelClass
-     * @param string $paymentId
      * @param array $config
      *
      * @return string The context serviceId
      */
-    function create(ContainerBuilder $container, $contextName, $modelClass, $paymentId, array $config);
+    function create(ContainerBuilder $container, $modelClass, array $config);
 
     /**
      * The storage name, 
@@ -26,7 +24,7 @@ interface StorageFactoryInterface
     function getName();
 
     /**
-     * @param \Symfony\Component\Config\Definition\Builder\NodeDefinition $builder
+     * @param ArrayNodeDefinition $builder
      * 
      * @return void
      */

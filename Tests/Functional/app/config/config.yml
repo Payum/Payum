@@ -18,6 +18,12 @@ framework:
     validation:                                           { enable_annotations: true }
 
 payum:
+    storages:
+        Payum\Core\Model\ArrayObject:
+            filesystem:
+                storage_dir: %kernel.cache_dir%
+                id_property: id
+
     security:
         token_storage:
             Payum\Core\Model\Token:
@@ -28,9 +34,3 @@ payum:
     contexts:
         offline:
             offline: ~
-
-            storages:
-                Payum\Core\Model\ArrayObject:
-                    filesystem:
-                        storage_dir: %kernel.cache_dir%
-                        id_property: id

@@ -10,7 +10,7 @@ use Symfony\Component\Config\FileLocator;
 class DoctrineStorageFactory extends AbstractStorageFactory
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getName()
     {
@@ -18,29 +18,33 @@ class DoctrineStorageFactory extends AbstractStorageFactory
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
         parent::addConfiguration($builder);
         
-        $builder->children()
-            ->scalarNode('driver')->isRequired()->cannotBeEmpty()->end()
-        ->end();
+        $builder
+            ->beforeNormalization()->ifString()->then(function($v) {
+                return array('driver' => $v);
+            })->end()
+            ->children()
+                ->scalarNode('driver')->isRequired()->cannotBeEmpty()->end()
+            ->end();
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function createStorage(ContainerBuilder $container, $contextName, $modelClass, $paymentId, array $config)
+    protected function createStorage(ContainerBuilder $container, $modelClass, array $config)
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/storage'));
         $loader->load('doctrine.'.$config['driver'].'.xml');
 
-        $contextStorageDefinition = new DefinitionDecorator('payum.storage.doctrine.'.$config['driver']);
-        $contextStorageDefinition->setPublic(true);
-        $contextStorageDefinition->replaceArgument(1, $modelClass);
+        $storage = new DefinitionDecorator(sprintf('payum.storage.doctrine.%s', $config['driver']));
+        $storage->setPublic(true);
+        $storage->replaceArgument(1, $modelClass);
         
-        return $contextStorageDefinition;
+        return $storage;
     }
 }
