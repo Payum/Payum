@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.9.0 (2014-06-17)
+
+* [symfony] require minimum version symfony 2.3.
+* [storage-factory][doctrine] allow shorten way of configuration: `doctrine: orm`.
+* [payment-factory] add ability to disable obtain credit card feature. Added boolean option `obtain_credit_card`.
+* [payment-factory] simplify payments configuration, remove api.options subsection.
+* [payment-factory][be2bill] add `Be2billOnsitePaymentFactory` to the bundle.
+* [registry] make bundle work with latest changes in `StorageRegistry`.
+* [doc] add example of how to set cc fields explisitly.
+* [doc] update simple purchase examples to demonstrate obtain credit card credit card feature.
+* [action] add `ObtainCreditCardAction`.
+* [form] add `CreditCardType` and `CreditCardExpirationDateType`.
+* [be2bill] add a note that be2bill does support onsite payments any more.
+* buzz client service public now.
+* [payment] add `prototype` post fix to api service which are abstract.
+* [payment-factory] reuse `payum.action` tag, simplify factories.
+* [omnipay] support omnipay v2.0, drop support of v1.0
+* [paypal] add do reference transaction action in payment factory.
+* [paypal] add create billing agreement action in payment factory.
+* [paypal] add notify action in payment factory.
+
 ## 0.8.5 (2014-05-26)
 
 * [action] add ability to add action by container tag
