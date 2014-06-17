@@ -3,7 +3,7 @@
     "type": "library",
     "description": "Payex payment lib",
     "keywords": ["payment", "payex"],
-    "homepage": "",
+    "homepage": "http://payum.forma-dev.com",
     "license": "MIT",
     "authors": [
         {

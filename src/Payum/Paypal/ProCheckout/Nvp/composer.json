@@ -3,7 +3,7 @@
     "type": "library",
     "description": "Paypal pro checkout",
     "keywords": ["payment", "paypal", "pro checkout"],
-    "homepage": "",
+    "homepage": "http://payum.forma-dev.com",
     "license": "MIT",
     "authors": [
         {

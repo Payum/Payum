@@ -3,7 +3,7 @@
     "type": "library",
     "description": "Be2Bill payment lib",
     "keywords": ["payment", "be2bill"],
-    "homepage": "",
+    "homepage": "http://payum.forma-dev.com",
     "license": "MIT",
     "authors": [
         {
