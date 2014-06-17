@@ -52,7 +52,7 @@
         "symfony/http-foundation": "~2"
     },
     "suggest": {
-        "payum/paypal-express-checkout-nvp": "If  you want to use paypal express checkout, digital goods or recurring payments",
+        "payum/paypal-express-checkout-nvp": "If you want to use paypal express checkout, digital goods or recurring payments",
         "payum/paypal-pro-checkout-nvp": "If you want to use paypal pro checkout",
         "payum/paypal-rest": "If you want to use paypal rest gateway",
         "payum/paypal-ipn": "If you want to use paypal instant payment notifications(Paypal IPN)",
@@ -77,7 +77,7 @@
     "target-dir": "Payum/Core",
     "extra": {
         "branch-alias": {
-            "dev-master": "0.9-dev"
+            "dev-master": "0.10-dev"
         }
     }
 }
