@@ -3,7 +3,7 @@
     "type": "library",
     "description": "Authorize.net advanced integration method (AIM).",
     "keywords": ["payment", "authorize.net", "authorizenet"],
-    "homepage": "",
+    "homepage": "http://payum.forma-dev.com",
     "license": "MIT",
     "authors": [
         {
