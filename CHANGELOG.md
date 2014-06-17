@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.9.0 (2014-06-17)
+
+* [registry] decouple `StorageRegistry` from payments. The `name` argument was removed.
+* [security] allow create notify token without model set.
+* [creditcard] allow set null as expire at date.
+* [creditcard] allow secure credit card sensitive values.
+* [creditcard] `CreditCardInterface` getters does not return `SensitiveValue` anymore.
+* [creditcard] rename credit card method `setCardholder` and `getCardholder` to just `setHodler` and `getHolder`.
+* [creditcard] use `DateTime` to represent expire date.
+* [spl] the method `ArrayObject::validatedNotEmpty` was renamed to `validateNotEmpty`.
+* [request] remove `UserInputRequeredRequest` request.
+* [omnipay] support Omnipay version >=2.
+* [omnipay] add `OnsiteCaptureAction`.
+* [omnipay] allow obtain credit card in `CaptureAction`.
+* [omnipay] fix not imported namespace, onsite capture, prepare for obtain cc.
+* [omnipay] add support of POST redirect.
+* [paypal-pro] allow obtain credit card.
+* [be2bill] allow obtain credit card.
+* [authorize.net] allow obtain credit card.
+* [paypal] Add DoReferenceTransactionActionAction and DoReferenceTransactionActionRequest
+* [security][symfony] Pass bollean true to url generator. Fixes fatal error on an old symfony's versions.
+
 ## 0.8.8 (2014-05-29)
 
 * [request] add ObtainCreditCardRequest.
