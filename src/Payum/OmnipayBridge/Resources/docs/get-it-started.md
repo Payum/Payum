@@ -54,7 +54,8 @@ include 'config.php';
 $storage = $registry->getStorage($detailsClass);
 
 $paymentDetails = $storage->createModel();
-$paymentDetails['amount'] = 10;
+$paymentDetails['amount'] = '10.00';
+$paymentDetails['currency'] = 'USD';
 $paymentDetails['card'] = new SensitiveValue(array(
     'number' => '5555556778250000', //end zero so will be accepted
     'cvv' => 123,
