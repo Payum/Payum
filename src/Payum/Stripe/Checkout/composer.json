@@ -1,0 +1,39 @@
+{
+    "name": "payum/stripe",
+    "type": "library",
+    "description": "Stripe payment lib",
+    "keywords": ["payment", "stripe"],
+    "homepage": "http://payum.forma-dev.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kotlyar Maksim",
+            "email": "kotlyar.maksim@gmail.com"
+        },
+        {
+            "name":     "Payum project",
+            "homepage": "http://payum.forma-dev.com/"
+        },
+        {
+            "name":     "Community contributions",
+            "homepage": "https://github.com/Payum/Stripe/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "payum/core": "0.10.*@dev",
+        "stripe/stripe-php": "~1.0"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": { "Payum\\Be2Bill": "" }
+    },
+    "target-dir": "Payum/Be2Bill",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.10-dev"
+        }
+    }
+}

@@ -16,6 +16,7 @@
         "be2bill",
         "payex",
         "omnipay",
+        "stripe",
         "jms payment"
     ],
     "homepage": "http://payum.forma-dev.com",
@@ -41,6 +42,7 @@
         "paypal/rest-api-sdk-php" : "0.5.*",
         "omnipay/common": "~2.0",
         "klarna/checkout": "~1",
+        "stripe/stripe-php": "~1.0",
         "ext-soap": "*",
         "twig/twig": "~1.0"
     },
@@ -69,7 +71,8 @@
         "payum/be2bill": "self.version",
         "payum/payex": "self.version",
         "payum/omnipay-bridge": "self.version",
-        "payum/offline": "self.version"
+        "payum/offline": "self.version",
+        "payum/stripe": "self.version"
     },
     "suggest": {
         "doctrine/orm": "If you want to store models to database using doctrin2 ORM",
