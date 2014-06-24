@@ -27,4 +27,8 @@ Vespolina another one e-commerce solution. It's also built on top of symfony2 fr
 
 Speckcommerce is a shop solution for zend framework2 developers. They have [plans to integrate payum](https://github.com/speckcommerce/SpeckPaypal/issues/8).
 
+* [Thelia](http://thelia.net/)
+
+French e-commerce solution. They [mentioned on their blog](http://thelia.net/thelia-attended-the-first-symfonycon-which-took-place-from-10th-to-14th-december-in-warsaw-poland/) that they want to integrate Payum.
+
 Back to [index](index.md).
