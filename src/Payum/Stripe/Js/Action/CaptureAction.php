@@ -18,6 +18,6 @@ class CaptureAction implements ActionInterface
      */
     public function supports($request)
     {
-        // TODO: Implement supports() method.
+
     }
 }
