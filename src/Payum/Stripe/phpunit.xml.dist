@@ -12,7 +12,7 @@
          bootstrap="Tests/bootstrap.php"
 >    
     <testsuites>
-        <testsuite name="Payum StripeCheckout Component Test Suite">
+        <testsuite name="Payum Stripe Component Test Suite">
             <directory>./Tests</directory>
         </testsuite>
     </testsuites>

@@ -28,9 +28,9 @@
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-0": { "Payum\\Be2Bill": "" }
+        "psr-0": { "Payum\\Stripe": "" }
     },
-    "target-dir": "Payum/Be2Bill",
+    "target-dir": "Payum/Stripe",
     "extra": {
         "branch-alias": {
             "dev-master": "0.10-dev"
