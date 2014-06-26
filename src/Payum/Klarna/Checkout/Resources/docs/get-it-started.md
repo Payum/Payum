@@ -55,24 +55,8 @@ $details['purchase_currency'] = 'SEK';
 $details['locale'] = 'sv-se';
 $storage->updateModel($details);
 
-$doneToken = $tokenStorage->createModel();
-$doneToken->setPaymentName('klarna_checkout');
-$doneToken->setDetails($storage->getIdentificator($paymentDetails));
-$doneToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/done.php?payum_token='.$doneToken->getHash());
-$tokenStorage->updateModel($doneToken);
-
-$captureToken = $tokenStorage->createModel();
-$captureToken->setPaymentName('klarna_checkout');
-$captureToken->setDetails($storage->getIdentificator($paymentDetails));
-$captureToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/capture.php?payum_token='.$captureToken->getHash());
-$captureToken->setAfterUrl($doneToken->getTargetUrl());
-$tokenStorage->updateModel($captureToken);
-
-$notifyToken = $tokenStorage->createModel();
-$notifyToken->setPaymentName('klarna_checkout');
-$notifyToken->setDetails($storage->getIdentificator($paymentDetails));
-$notifyToken->setTargetUrl('http://'.$_SERVER['HTTP_HOST'].'/notify.php?payum_token='.$notifyToken->getHash());
-$notifyStorage->updateModel($notifyToken);
+$captureToken = $tokenFactory->createCaptureToken('klarna_checkout', $details, 'done.php');
+$notifyToken = $tokenFactory->createNotifyToken('klarna_checkout', $details);
 
 $details['merchant'] = array(
     'terms_uri' => 'http://example.com/terms',
@@ -107,7 +91,7 @@ $_REQUEST['payum_token'] = $captureToken;
 include 'capture.php';
 ```
 
-That's it. As you see we configured be2bill payment `config.php` and set details `prepare.php`.
+That's it. As you see we configured klarna payment `config.php` and set details `prepare.php`.
 `capture.php` and `done.php` scripts remain same.
 
 Back to [index](index.md).
