@@ -6,11 +6,12 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryI
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Config\FileLocator;
 
-class PayumExtension extends Extension
+class PayumExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * @var StorageFactoryInterface[]
@@ -38,6 +39,22 @@ class PayumExtension extends Extension
         $this->loadStorages($config['storages'], $container);
         $this->loadSecurity($config['security'], $container);
         $this->loadContexts($config['contexts'], $container);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function prepend(ContainerBuilder $container)
+    {
+        $container->prependExtensionConfig(
+            'twig',
+            array(
+                'paths' => array_flip(array_filter(array(
+                    'PayumCore' => $this->guessViewsPath('Payum\Core\Payment'),
+                    'PayumKlarnaCheckout' => $this->guessViewsPath('Payum\Klarna\Checkout\PaymentFactory'),
+                )))
+            )
+        );
     }
 
     /**
@@ -197,5 +214,21 @@ class PayumExtension extends Extension
                 return $name;
             }
         }
+    }
+
+    /**
+     * @param string $class
+     *
+     * @return mixed
+     */
+    protected function guessViewsPath($class)
+    {
+        if (false == class_exists($class)) {
+            return;
+        }
+
+        $rc = new \ReflectionClass($class);
+
+        return dirname($rc->getFileName()).'/Resources/views';
     }
 }

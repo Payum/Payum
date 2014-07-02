@@ -17,9 +17,12 @@
         <parameter key="payum.action.execute_same_request_with_model_details.class">Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction</parameter>
         <parameter key="payum.action.get_http_query.class">Payum\Bundle\PayumBundle\Action\GetHttpQueryAction</parameter>
         <parameter key="payum.action.obtain_credit_card.class">Payum\Bundle\PayumBundle\Action\ObtainCreditCardAction</parameter>
+        <parameter key="payum.action.render_template.class">Payum\Core\Action\TwigRenderTemplateAction</parameter>
 
         <parameter key="payum.security.http_request_verifier.class">Payum\Bundle\PayumBundle\Security\HttpRequestVerifier</parameter>
         <parameter key="payum.security.token_factory.class">Payum\Bundle\PayumBundle\Security\TokenFactory</parameter>
+
+        <parameter key="payum.twig.template.layout">@PayumCore\layout.html.twig</parameter>
     </parameters>
 
     <services>
@@ -98,6 +101,16 @@
             <call method="setRequest">
                 <argument type="service" id="request" on-invalid="null" strict="false" />
             </call>
+        </service>
+
+        <service
+            id="payum.action.render_template"
+            class="%payum.action.render_template.class%"
+            public="false"
+        >
+            <argument type="service" id="twig" />
+            <argument>%payum.twig.template.layout%</argument>
+            <tag name="payum.action" all="true" />
         </service>
 
         <!-- Should be replaced by PayumExtension -->
