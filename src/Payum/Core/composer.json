@@ -36,7 +36,8 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "kriswallsmith/buzz": "*"
+        "kriswallsmith/buzz": "*",
+        "twig/twig": "~1.0"
     },
     "require-dev": {
         "ext-curl": "*",

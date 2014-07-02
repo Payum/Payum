@@ -5,14 +5,27 @@ use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\RenderTemplateRequest;
 use Payum\Core\Request\ResponseInteractiveRequest;
 use Payum\Core\Request\SyncRequest;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\CreateOrderRequest;
-use Payum\Klarna\Checkout\Request\Api\UpdateOrderRequest;
 
 class CaptureAction extends PaymentAwareAction
 {
+    /**
+     * @var string
+     */
+    protected $templateName;
+
+    /**
+     * @param string|null $templateName
+     */
+    public function __construct($templateName)
+    {
+        $this->templateName = $templateName;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -36,7 +49,12 @@ class CaptureAction extends PaymentAwareAction
         $this->payment->execute(new SyncRequest($model));
 
         if (Constants::STATUS_CHECKOUT_INCOMPLETE == $model['status']) {
-            throw new ResponseInteractiveRequest($model['gui']['snippet']);
+            $renderTemplate = new RenderTemplateRequest($this->templateName, array(
+                'snippet' => $model['gui']['snippet']
+            ));
+            $this->payment->execute($renderTemplate);
+
+            throw new ResponseInteractiveRequest($renderTemplate->getResult());
         }
     }
 

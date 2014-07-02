@@ -30,11 +30,16 @@ use Payum\Klarn\Checkout\PaymentFactory as KlarnaPaymentFactory;
 
 // ...
 
-$payments['klarna_checkout'] => KlarnaPaymentFactory::create(new GlobalStateSafeConnector(
-    new Klarna_Checkout_Connector('REPLACE_WITH_YOUR_SECRET'),
-    'REPLACE_WITH_YOUR_MERCHANT_ID',
-    Payum\Klarna\Checkout::Constants::BASE_URI_SANDBOX
-));
+$twigLoader->addPath(__DIR__.'/vendor/payum/klarna-checkout/Resources/views', 'PayumKlarnaCheckout');
+
+$payments['klarna_checkout'] => KlarnaPaymentFactory::create(
+    new GlobalStateSafeConnector(
+        new Klarna_Checkout_Connector('REPLACE_WITH_YOUR_SECRET'),
+        'REPLACE_WITH_YOUR_MERCHANT_ID',
+        Payum\Klarna\Checkout::Constants::BASE_URI_SANDBOX
+    ),
+    $twig
+);
 ```
 
 ## Prepare payment
