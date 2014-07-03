@@ -46,15 +46,11 @@ class PayumExtension extends Extension implements PrependExtensionInterface
      */
     public function prepend(ContainerBuilder $container)
     {
-        $container->prependExtensionConfig(
-            'twig',
-            array(
-                'paths' => array_flip(array_filter(array(
-                    'PayumCore' => $this->guessViewsPath('Payum\Core\Payment'),
-                    'PayumKlarnaCheckout' => $this->guessViewsPath('Payum\Klarna\Checkout\PaymentFactory'),
-                )))
-            )
-        );
+        foreach ($this->paymentFactories as $factory) {
+            if ($factory instanceof PrependExtensionInterface) {
+                $factory->prepend($container);
+            }
+        }
     }
 
     /**
@@ -214,21 +210,5 @@ class PayumExtension extends Extension implements PrependExtensionInterface
                 return $name;
             }
         }
-    }
-
-    /**
-     * @param string $class
-     *
-     * @return mixed
-     */
-    protected function guessViewsPath($class)
-    {
-        if (false == class_exists($class)) {
-            return;
-        }
-
-        $rc = new \ReflectionClass($class);
-
-        return dirname($rc->getFileName()).'/Resources/views';
     }
 }
