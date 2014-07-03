@@ -15,7 +15,7 @@
         <parameter key="payum.listener.interactive_request.class">Payum\Bundle\PayumBundle\EventListener\InteractiveRequestListener</parameter>
 
         <parameter key="payum.action.execute_same_request_with_model_details.class">Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction</parameter>
-        <parameter key="payum.action.get_http_query.class">Payum\Bundle\PayumBundle\Action\GetHttpQueryAction</parameter>
+        <parameter key="payum.action.get_http_request.class">Payum\Core\Bridge\Symfony\Action\GetHttpRequestAction</parameter>
         <parameter key="payum.action.obtain_credit_card.class">Payum\Bundle\PayumBundle\Action\ObtainCreditCardAction</parameter>
         <parameter key="payum.action.render_template.class">Payum\Core\Bridge\Twig\Action\RenderTemplateAction</parameter>
 
@@ -85,12 +85,12 @@
         </service>
 
         <service
-            id="payum.action.get_http_query"
-            class="%payum.action.get_http_query.class%"
+            id="payum.action.get_http_request"
+            class="%payum.action.get_http_request.class%"
             public="false"
         >
-            <call method="setContainer">
-                <argument type="service" id="service_container" />
+            <call method="setHttpRequest">
+                <argument type="service" id="request" on-invalid="null" strict="false" />
             </call>
 
             <tag name="payum.action" all="true" />

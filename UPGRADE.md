@@ -1,5 +1,10 @@
 # Upgrades
 
+## 0.9 to 0.10
+
+* `GetHttpQueryAction` was removed. Use `GetHttpRequestAction` from the bridge.
+* `ResponseInteractiveRequest` was removed. Use one from the bridge. 
+
 ## 0.8 to 0.9
 
 * Minimum Symfony 2.3 version required.

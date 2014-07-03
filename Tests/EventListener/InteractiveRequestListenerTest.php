@@ -3,8 +3,8 @@ namespace Payum\Bundle\PayumBundle\Tests\EventListener;
 
 use Payum\Bundle\PayumBundle\EventListener\InteractiveRequestListener;
 use Payum\Core\Bridge\Symfony\Request\ResponseInteractiveRequest;
-use Payum\Core\Request\PostRedirectUrlInteractiveRequest;
-use Payum\Core\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\Http\PostRedirectUrlInteractiveRequest;
+use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
