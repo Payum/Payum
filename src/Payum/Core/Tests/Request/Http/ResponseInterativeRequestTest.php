@@ -1,7 +1,7 @@
 <?php
-namespace Payum\Core\Tests\Request;
+namespace Payum\Core\Tests\Request\Http;
 
-use Payum\Core\Request\ResponseInteractiveRequest;
+use Payum\Core\Request\Http\ResponseInteractiveRequest;
 
 class ResponseInteractiveRequestTest extends \PHPUnit_Framework_TestCase
 {
@@ -10,7 +10,7 @@ class ResponseInteractiveRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementInteractiveRequestInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\ResponseInteractiveRequest');
+        $rc = new \ReflectionClass('Payum\Core\Request\Http\ResponseInteractiveRequest');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Request\InteractiveRequestInterface'));
     }

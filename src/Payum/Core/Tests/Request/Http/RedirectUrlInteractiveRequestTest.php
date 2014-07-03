@@ -1,7 +1,7 @@
 <?php
-namespace Payum\Core\Tests\Request;
+namespace Payum\Core\Tests\Request\Http;
 
-use Payum\Core\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
 
 class RedirectUrlInteractiveRequestTest extends \PHPUnit_Framework_TestCase
 {
@@ -10,7 +10,7 @@ class RedirectUrlInteractiveRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementInteractiveRequestInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\RedirectUrlInteractiveRequest');
+        $rc = new \ReflectionClass('Payum\Core\Request\Http\RedirectUrlInteractiveRequest');
         
         $this->assertTrue($rc->implementsInterface('Payum\Core\Request\InteractiveRequestInterface'));
     }
