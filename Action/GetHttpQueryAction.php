@@ -6,6 +6,9 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetHttpQueryRequest;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
+/**
+ * @deprecated since 0.9. use Payum\Core\Bridge\Symfony\Action\GetHttpRequestAction
+ */
 class GetHttpQueryAction extends ContainerAware implements ActionInterface
 {
     /**
