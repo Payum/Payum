@@ -1,19 +1,19 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Action;
 
-use Payum\Core\Action\ActionInterface;
+use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Bridge\Symfony\Request\ResponseInteractiveRequest;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\CreditCardInterface;
 use Payum\Core\Request\ObtainCreditCardRequest;
+use Payum\Core\Request\RenderTemplateRequest;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Templating\EngineInterface;
 
-class ObtainCreditCardAction implements ActionInterface
+class ObtainCreditCardAction extends PaymentAwareAction
 {
     /**
      * @var FormFactoryInterface
@@ -21,23 +21,23 @@ class ObtainCreditCardAction implements ActionInterface
     protected $formFactory;
 
     /**
-     * @var EngineInterface
-     */
-    protected $templating;
-
-    /**
      * @var Request
      */
     protected $httpRequest;
 
     /**
-     * @param FormFactoryInterface $formFactory
-     * @param EngineInterface      $templating
+     * @var string
      */
-    public function __construct(FormFactoryInterface $formFactory, EngineInterface $templating)
+    protected $templateName;
+
+    /**
+     * @param FormFactoryInterface $formFactory
+     * @param string $templateName
+     */
+    public function __construct(FormFactoryInterface $formFactory, $templateName)
     {
         $this->formFactory = $formFactory;
-        $this->templating = $templating;
+        $this->templateName = $templateName;
     }
 
     /**
@@ -76,16 +76,15 @@ class ObtainCreditCardAction implements ActionInterface
              }
         }
 
-        throw new ResponseInteractiveRequest(new Response(
-            $this->templating->render('PayumBundle:Action:obtainCreditCard.html.twig', array(
-                'form' => $form->createView()
-            )),
-            200,
-            array(
-                'Cache-Control' => 'no-store, no-cache, max-age=0, post-check=0, pre-check=0',
-                'Pragma' => 'no-cache',
-            )
+        $renderTemplate = new RenderTemplateRequest($this->templateName, array(
+            'form' => $form->createView()
         ));
+        $this->payment->execute($renderTemplate);
+
+        throw new ResponseInteractiveRequest(new Response($renderTemplate->getResult(), 200, array(
+            'Cache-Control' => 'no-store, no-cache, max-age=0, post-check=0, pre-check=0',
+            'Pragma' => 'no-cache',
+        )));
     }
 
     /**

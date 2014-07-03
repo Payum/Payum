@@ -1,6 +1,6 @@
-{% extends "PayumBundle::layout.html.twig" %}
+{% extends layout ?: "@PayumCore/layout.html.twig" %}
 
-{% block payum_content %}
+{% block payum_body %}
     <form method="POST">
         {{ form_row(form) }}
 

@@ -17,9 +17,13 @@
         <parameter key="payum.action.execute_same_request_with_model_details.class">Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction</parameter>
         <parameter key="payum.action.get_http_query.class">Payum\Bundle\PayumBundle\Action\GetHttpQueryAction</parameter>
         <parameter key="payum.action.obtain_credit_card.class">Payum\Bundle\PayumBundle\Action\ObtainCreditCardAction</parameter>
+        <parameter key="payum.action.render_template.class">Payum\Core\Bridge\Twig\Action\RenderTemplateAction</parameter>
 
         <parameter key="payum.security.http_request_verifier.class">Payum\Bundle\PayumBundle\Security\HttpRequestVerifier</parameter>
         <parameter key="payum.security.token_factory.class">Payum\Bundle\PayumBundle\Security\TokenFactory</parameter>
+
+        <parameter key="payum.template.layout">@PayumCore\layout.html.twig</parameter>
+        <parameter key="payum.template.obtain_credit_card">PayumBundle:Action:obtainCreditCard.html.twig</parameter>
     </parameters>
 
     <services>
@@ -58,14 +62,14 @@
             id="payum.extension.log_executed_actions"
             class="%payum.extension.log_executed_actions.class%"
         >
-            <argument type="service" id="logger" on-invalid="ignore"></argument>
+            <argument type="service" id="logger" on-invalid="ignore" />
         </service>
 
         <service
             id="payum.extension.logger"
             class="%payum.extension.logger.class%"
         >
-            <argument type="service" id="logger" on-invalid="ignore"></argument>
+            <argument type="service" id="logger" on-invalid="ignore" />
         </service>
 
         <service id="payum.listener.interactive_request" class="%payum.listener.interactive_request.class%">
@@ -94,10 +98,20 @@
 
         <service id="payum.action.obtain_credit_card" class="%payum.action.obtain_credit_card.class%" public="false">
             <argument type="service" id="form.factory" />
-            <argument type="service" id="templating" />
+            <argument>%payum.template.obtain_credit_card%</argument>
             <call method="setRequest">
                 <argument type="service" id="request" on-invalid="null" strict="false" />
             </call>
+        </service>
+
+        <service
+            id="payum.action.render_template"
+            class="%payum.action.render_template.class%"
+            public="false"
+        >
+            <argument type="service" id="twig" />
+            <argument>%payum.template.layout%</argument>
+            <tag name="payum.action" all="true" />
         </service>
 
         <!-- Should be replaced by PayumExtension -->
@@ -107,16 +121,16 @@
             id="payum.security.http_request_verifier"
             class="%payum.security.http_request_verifier.class%"
         >
-            <argument type="service" id="payum.security.token_storage"></argument>
+            <argument type="service" id="payum.security.token_storage" />
         </service>
 
         <service
             id="payum.security.token_factory"
             class="%payum.security.token_factory.class%"
         >
-            <argument type="service" id="router"></argument>
-            <argument type="service" id="payum.security.token_storage"></argument>
-            <argument type="service" id="payum"></argument>
+            <argument type="service" id="router" />
+            <argument type="service" id="payum.security.token_storage" />
+            <argument type="service" id="payum" />
             <argument>payum_capture_do</argument>
             <argument>payum_notify_do</argument>
         </service>

@@ -23,6 +23,16 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldImplementPrependExtensionInterface()
+    {
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaCheckoutPaymentFactory');
+
+        $this->assertTrue($rc->implementsInterface('Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface'));
+    }
+
+    /**
+     * @test
+     */
     public function couldBeConstructedWithoutAnyArguments()
     {
         new KlarnaCheckoutPaymentFactory;
@@ -301,6 +311,31 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $tagAttributes = $actionDefinition->getTag('payum.action');
         $this->assertCount(1, $tagAttributes);
         $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldPrependTwigsExtensionConfig()
+    {
+        $factory = new KlarnaCheckoutPaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->prepend($container);
+
+        $twigConfig = $container->getExtensionConfig('twig');
+
+        //guard
+        $this->assertTrue(isset($twigConfig[0]['paths']));
+
+        $paths = $twigConfig[0]['paths'];
+
+        $key = array_search('PayumCore', $paths);
+        $this->assertFileExists($key);
+
+        $key = array_search('PayumKlarnaCheckout', $paths);
+        $this->assertFileExists($key);
     }
 
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)

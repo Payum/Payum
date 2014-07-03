@@ -1,20 +1,33 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection;
 
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
-
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AuthorizeNetAimPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCheckoutNvpPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Payum\Bundle\PayumBundle\DependencyInjection\PayumExtension;
-use Symfony\Component\DependencyInjection\Reference;
 
 class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 {
+    /**
+     * @test
+     */
+    public function shouldBeSubClassOfExtension()
+    {
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\PayumExtension');
+
+        $this->assertTrue($rc->isSubclassOf('Symfony\Component\HttpKernel\DependencyInjection\Extension'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldImplementPrependExtensionInterface()
+    {
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\PayumExtension');
+
+        $this->assertTrue($rc->implementsInterface('Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface'));
+    }
+
     /**
      * @test
      */
@@ -137,4 +150,68 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $extension->addStorageFactory($factory);
         $extension->addStorageFactory($factory);
     }
+
+    /**
+     * @test
+     */
+    public function shouldDoNothingIfPaymentFactoryNotImeplementPreprendFactoryInterface()
+    {
+        $factoryMock = $this->getMock('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface');
+        $factoryMock
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('aFactory'))
+        ;
+
+        //guard
+        $this->assertNotInstanceOf('Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface', $factoryMock);
+
+        $extension = new PayumExtension;
+        $extension->addPaymentFactory($factoryMock);
+
+        $container = new ContainerBuilder;
+
+        $extension->prepend($container);
+
+        $this->assertEmpty($container->getExtensionConfig('twig'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldPassContainerToPaymentFactoryPrependMethodIfImeplementsPreprendFactoryInterface()
+    {
+        $container = new ContainerBuilder;
+
+        $factoryMock = $this->getMock('Payum\Bundle\PayumBundle\Tests\DependencyInjection\FactoryPlusPrependExtension');
+        $factoryMock
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('aFactory'))
+        ;
+        $factoryMock
+            ->expects($this->any())
+            ->method('prepend')
+            ->with($this->identicalTo($container))
+            ->will($this->returnCallback(function(ContainerBuilder $container) {
+                $container->prependExtensionConfig('twig', array('foo' => 'fooVal'));
+                $container->prependExtensionConfig('twig', array('bar' => 'barVal'));
+            }))
+        ;
+
+        //guard
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface', $factoryMock);
+
+        $extension = new PayumExtension;
+        $extension->addPaymentFactory($factoryMock);
+
+
+        $extension->prepend($container);
+
+        $this->assertEquals(array(array('bar' => 'barVal'), array('foo' => 'fooVal')), $container->getExtensionConfig('twig'));
+    }
+}
+
+interface FactoryPlusPrependExtension extends PaymentFactoryInterface, PrependExtensionInterface
+{
 }

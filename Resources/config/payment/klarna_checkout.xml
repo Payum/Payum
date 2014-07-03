@@ -13,6 +13,7 @@
         <parameter key="payum.klarna.checkout.action.api.create_order.class">Payum\Klarna\Checkout\Action\Api\CreateOrderAction</parameter>
         <parameter key="payum.klarna.checkout.action.api.update_order.class">Payum\Klarna\Checkout\Action\Api\UpdateOrderAction</parameter>
         <parameter key="payum.klarna.checkout.action.api.fetch_order.class">Payum\Klarna\Checkout\Action\Api\FetchOrderAction</parameter>
+        <parameter key="payum.klarna.checkout.template.capture">@PayumKlarnaCheckout/Action/capture.html.twig</parameter>
     </parameters>
 
     <services>
@@ -21,6 +22,7 @@
             class="%payum.klarna.checkout.action.capture.class%"
             public="false"
         >
+            <argument>%payum.klarna.checkout.template.capture%</argument>
             <tag name="payum.action" factory="klarna_checkout" />
         </service>
 
