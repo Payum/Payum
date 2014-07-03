@@ -17,7 +17,7 @@
         <parameter key="payum.action.execute_same_request_with_model_details.class">Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction</parameter>
         <parameter key="payum.action.get_http_query.class">Payum\Bundle\PayumBundle\Action\GetHttpQueryAction</parameter>
         <parameter key="payum.action.obtain_credit_card.class">Payum\Bundle\PayumBundle\Action\ObtainCreditCardAction</parameter>
-        <parameter key="payum.action.render_template.class">Payum\Core\Action\TwigRenderTemplateAction</parameter>
+        <parameter key="payum.action.render_template.class">Payum\Core\Bridge\Twig\Action\RenderTemplateAction</parameter>
 
         <parameter key="payum.security.http_request_verifier.class">Payum\Bundle\PayumBundle\Security\HttpRequestVerifier</parameter>
         <parameter key="payum.security.token_factory.class">Payum\Bundle\PayumBundle\Security\TokenFactory</parameter>
