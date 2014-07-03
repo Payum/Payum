@@ -1,16 +1,16 @@
 <?php
-namespace Payum\Core\Tests\Request;
+namespace Payum\Core\Tests\Request\Http;
 
-use Payum\Core\Request\PostRedirectUrlInteractiveRequest;
+use Payum\Core\Request\Http\PostRedirectUrlInteractiveRequest;
 
-class PostRedirectUrlInterativeRequestTest extends \PHPUnit_Framework_TestCase
+class PostRedirectUrlInteractiveRequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldImplementInteractiveRequestInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\PostRedirectUrlInteractiveRequest');
+        $rc = new \ReflectionClass('Payum\Core\Request\Http\PostRedirectUrlInteractiveRequest');
         
         $this->assertTrue($rc->implementsInterface('Payum\Core\Request\InteractiveRequestInterface'));
     }
@@ -20,9 +20,9 @@ class PostRedirectUrlInterativeRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfResponseInteractiveRequest()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\PostRedirectUrlInteractiveRequest');
+        $rc = new \ReflectionClass('Payum\Core\Request\Http\PostRedirectUrlInteractiveRequest');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\ResponseInteractiveRequest'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Http\ResponseInteractiveRequest'));
     }
 
     /**
