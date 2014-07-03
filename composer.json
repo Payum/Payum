@@ -41,7 +41,8 @@
         "paypal/rest-api-sdk-php" : "0.5.*",
         "omnipay/common": "~2.0",
         "klarna/checkout": "~1",
-        "ext-soap": "*"
+        "ext-soap": "*",
+        "twig/twig": "~1.0"
     },
     "require-dev": {
         "ext-curl": "*",
