@@ -8,8 +8,8 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Request\CaptureRequest;
-use Payum\Core\Request\GetHttpQueryRequest;
-use Payum\Core\Request\PostRedirectUrlInteractiveRequest;
+use Payum\Core\Request\Http\GetRequestRequest;
+use Payum\Core\Request\Http\PostRedirectUrlInteractiveRequest;
 
 class CaptureOnsiteAction extends PaymentAwareAction implements ApiAwareInterface
 {
@@ -44,12 +44,12 @@ class CaptureOnsiteAction extends PaymentAwareAction implements ApiAwareInterfac
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $getHttpQuery = new GetHttpQueryRequest();
-        $this->payment->execute($getHttpQuery);
+        $httpRequest = new GetRequestRequest;
+        $this->payment->execute($httpRequest);
 
         //we are back from be2bill site so we have to just update model.
-        if (isset($getHttpQuery['EXECCODE'])) {
-            $model->replace($getHttpQuery);
+        if (isset($httpRequest->query['EXECCODE'])) {
+            $model->replace($httpRequest->query);
         } else {
             throw new PostRedirectUrlInteractiveRequest(
                 $this->api->getOnsiteUrl(),

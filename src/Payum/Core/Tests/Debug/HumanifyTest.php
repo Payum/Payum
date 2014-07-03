@@ -3,7 +3,7 @@ namespace Payum\Core\Tests\Debug;
 
 use Payum\Core\Debug\Humanify;
 use Payum\Core\Request\CaptureRequest;
-use Payum\Core\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
 
 class HumanifyTest extends \PHPUnit_Framework_TestCase
 {

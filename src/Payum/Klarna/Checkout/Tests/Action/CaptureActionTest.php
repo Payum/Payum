@@ -4,7 +4,7 @@ namespace Payum\Klarna\Checkout\Tests\Action;
 use Payum\Core\PaymentInterface;
 use Payum\Core\Request\CaptureRequest;
 use Payum\Core\Request\RenderTemplateRequest;
-use Payum\Core\Request\ResponseInteractiveRequest;
+use Payum\Core\Request\Http\ResponseInteractiveRequest;
 use Payum\Klarna\Checkout\Action\CaptureAction;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\CreateOrderRequest;
@@ -74,7 +74,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Core\Request\ResponseInteractiveRequest
+     * @expectedException \Payum\Core\Request\Http\ResponseInteractiveRequest
      */
     public function shouldSubExecuteSyncRequestIfModelHasLocationSet()
     {

@@ -6,7 +6,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\CaptureRequest;
 use Payum\Core\Request\RenderTemplateRequest;
-use Payum\Core\Request\ResponseInteractiveRequest;
+use Payum\Core\Request\Http\ResponseInteractiveRequest;
 use Payum\Core\Request\SyncRequest;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\CreateOrderRequest;
