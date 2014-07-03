@@ -5,7 +5,7 @@ use Buzz\Client\Curl;
 use Payum\Core\Request\CaptureRequest;
 use Payum\Core\Request\SyncRequest;
 use Payum\Core\Request\BinaryMaskStatusRequest;
-use Payum\Core\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Examples\Model\AwesomeCart;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory;
@@ -25,7 +25,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Api;
         //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory;
         //@testo:uncomment:use Payum\Core\Request\CaptureRequest;
-        //@testo:uncomment:use Payum\Core\Request\RedirectUrlInteractiveRequest;
+        //@testo:uncomment:use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
         
         $payment = PaymentFactory::create(new Api(new Curl, array(
             'username' => 'a_username',

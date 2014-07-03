@@ -5,7 +5,7 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension;
 use Payum\Core\Request\CaptureRequest;
 use Payum\Core\Request\InteractiveRequestInterface;
-use Payum\Core\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
 use Psr\Log\LoggerInterface;
 
 class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase

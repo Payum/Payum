@@ -2,7 +2,7 @@
 namespace Payum\Core\Debug;
 
 use Payum\Core\Request\ModelRequestInterface;
-use Payum\Core\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
 
 abstract class Humanify
 {

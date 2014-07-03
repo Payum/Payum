@@ -1,5 +1,12 @@
 # Upgrades
 
+## 0.9 to 0.10
+
+* [request] Class `GetHttpQueryRequest` was removed use `GetRequestRequest` instead.
+* [request] Class `PostRedirectUrlInteractiveRequest` was moved to sub namespace `Http`.
+* [request] Class `RedirectUrlInteractiveRequest` was moved to sub namespace `Http`.
+* [request] Class `ResponseInteractiveRequest` was moved to sub namespace `Http`.
+
 ## 0.8 to 0.9
 
 * [model] Method `CreditCardInterface::getCardHolder` renamed to `getHolder`

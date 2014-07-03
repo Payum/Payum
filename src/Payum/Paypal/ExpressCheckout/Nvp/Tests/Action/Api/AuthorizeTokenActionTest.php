@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
-use Payum\Core\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\AuthorizeTokenAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeTokenRequest;
 

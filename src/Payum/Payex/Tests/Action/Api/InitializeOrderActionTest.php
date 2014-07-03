@@ -4,7 +4,7 @@ namespace Payum\Payex\Tests\Action\Api;
 use Payum\Payex\Action\Api\InitializeOrderAction;
 use Payum\Payex\Api\OrderApi;
 use Payum\Payex\Request\Api\InitializeOrderRequest;
-use Payum\Core\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
 
 class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
 {

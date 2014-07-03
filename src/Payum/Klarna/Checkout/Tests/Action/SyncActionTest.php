@@ -3,10 +3,8 @@ namespace Payum\Klarna\Checkout\Tests\Action;
 
 use Payum\Core\PaymentInterface;
 use Payum\Core\Request\SyncRequest;
-use Payum\Core\Request\ResponseInteractiveRequest;
 use Payum\Klarna\Checkout\Action\SyncAction;
 use Payum\Klarna\Checkout\Constants;
-use Payum\Klarna\Checkout\Request\Api\CreateOrderRequest;
 use Payum\Klarna\Checkout\Request\Api\FetchOrderRequest;
 
 class SyncActionTest extends \PHPUnit_Framework_TestCase

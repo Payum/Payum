@@ -4,8 +4,8 @@ namespace Payum\OmnipayBridge\Action;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\CaptureRequest;
-use Payum\Core\Request\PostRedirectUrlInteractiveRequest;
-use Payum\Core\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\Http\PostRedirectUrlInteractiveRequest;
+use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
 
 class OnsiteCaptureAction extends BaseApiAwareAction
 {

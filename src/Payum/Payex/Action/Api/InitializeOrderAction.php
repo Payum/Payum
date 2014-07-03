@@ -7,9 +7,9 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
 use Payum\Payex\Api\OrderApi;
 use Payum\Payex\Request\Api\InitializeOrderRequest;
-use Payum\Core\Request\RedirectUrlInteractiveRequest;
 
 class InitializeOrderAction implements ActionInterface, ApiAwareInterface
 {

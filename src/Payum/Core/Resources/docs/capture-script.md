@@ -9,7 +9,7 @@ By the way we are going to reuse it for all our payments.
 
 use Payum\Core\Request\SimpleStatusRequest;
 use Payum\Core\Request\SecuredCaptureRequest;
-use Payum\Core\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
 
 include 'config.php';
 

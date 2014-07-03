@@ -5,7 +5,8 @@ use Payum\Be2Bill\Api;
 use Payum\Core\PaymentInterface;
 use Payum\Core\Request\CaptureRequest;
 use Payum\Be2Bill\Action\CaptureOnsiteAction;
-use Payum\Core\Request\PostRedirectUrlInteractiveRequest;
+use Payum\Core\Request\Http\GetRequestRequest;
+use Payum\Core\Request\Http\PostRedirectUrlInteractiveRequest;
 
 class CaptureOnsiteActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -115,7 +116,7 @@ class CaptureOnsiteActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Core\Request\PostRedirectUrlInteractiveRequest
+     * @expectedException \Payum\Core\Request\Http\PostRedirectUrlInteractiveRequest
      */
     public function shouldRedirectToBe2billSiteIfExecCodeNotPresentInQuery()
     {
@@ -142,7 +143,7 @@ class CaptureOnsiteActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpQueryRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\Http\GetRequestRequest'))
         ;
 
         $action = new CaptureOnsiteAction();
@@ -176,10 +177,10 @@ class CaptureOnsiteActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpQueryRequest'))
-            ->will($this->returnCallback(function($request) {
-                $request['EXECCODE'] = 1;
-                $request['FOO'] = 'fooVal';
+            ->with($this->isInstanceOf('Payum\Core\Request\Http\GetRequestRequest'))
+            ->will($this->returnCallback(function(GetRequestRequest $request) {
+                $request->query['EXECCODE'] = 1;
+                $request->query['FOO'] = 'fooVal';
             }))
         ;
 
