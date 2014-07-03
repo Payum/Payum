@@ -22,7 +22,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $connectorMock = $this->createConnectorMock();
 
-        $payment = PaymentFactory::create($connectorMock);
+        $payment = PaymentFactory::create($connectorMock, $this->createTwigMock());
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
 
@@ -39,5 +39,13 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     protected function createConnectorMock()
     {
         return $this->getMock('Klarna_Checkout_ConnectorInterface');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Twig_Environment
+     */
+    protected function createTwigMock()
+    {
+        return $this->getMock('Twig_Environment', array('render'), array(), '', false);
     }
 }
