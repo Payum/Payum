@@ -1,3 +1,4 @@
 # Stripe
 
-* [Get it started (Stripe.js)](get-it-started-stripe-js.md)
+* [Get it started (Stripe.js)](get-it-started.md)
+* [Checkout](checkout.md)

@@ -1,6 +1,8 @@
-# Get it started (Stripe.js).
+# Checkout.
 
-In this chapter we are going to talk about [Stripe.js](https://stripe.com/docs/stripe.js) integration.
+In this chapter we are going to talk about [Stripe checkout](https://stripe.com/docs/checkout) integration.
+We assume you already read [payum's get it started documentation](https://github.com/Payum/Payum/blob/master/docs/get-it-started.md).
+Here we just extend it and describe [Payex](http://www.payexpim.com/) specific details.
 
 ## Installation
 
@@ -28,7 +30,7 @@ use Payum\Stripe\Keys;
 
 $twigLoader->addPath(__DIR__.'/vendor/payum/stripe/Resources/views', 'PayumStripe');
 
-$payments['stripe_js'] = StripePaymentFactory::createJs(
+$payments['stripe_checkout'] = StripePaymentFactory::createCheckout(
     new Keys('publishable_key', 'secret_key'),
     $twig
 );
@@ -50,7 +52,7 @@ $details["currency"] = 'USD';
 $details["description"] = 'a description';
 $storage->updateModel($details);
 
-$captureToken = $tokenFactory->createCaptureToken('stripe_js', $details, 'done.php');
+$captureToken = $tokenFactory->createCaptureToken('stripe_checkout', $details, 'done.php');
 
 header("Location: ".$captureToken->getTargetUrl());
 ```
