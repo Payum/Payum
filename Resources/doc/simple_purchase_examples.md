@@ -8,5 +8,6 @@
 * [Be2Bill onsite](simple_purchase_examples/be2bill_onsite.md).
 * [Klarna Checkout](simple_purchase_examples/klarna_checkout.md).
 * [Stripe.Js](simple_purchase_examples/stripe_js.md).
+* [Stripe Checkout](simple_purchase_examples/stripe_checkout.md).
 * [Stripe Direct (via omnipay)](simple_purchase_examples/stripe_via_omnipay.md).
 * [JMS payment plugins](https://github.com/Payum/JMSPaymentBridge/blob/master/docs/get-it-started.md).
