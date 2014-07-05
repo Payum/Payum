@@ -13,7 +13,7 @@ use Payum\Core\Request\RenderTemplateRequest;
 use Payum\Core\Request\Http\ResponseInteractiveRequest;
 use Payum\Stripe\Keys;
 
-class CaptureJsAction extends PaymentAwareAction implements ApiAwareInterface
+class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
 {
     /**
      * @var string
@@ -57,13 +57,16 @@ class CaptureJsAction extends PaymentAwareAction implements ApiAwareInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if ($model['card']) {
+        if (is_array($model['card'])) {
             return;
         }
 
         $getHttpRequest = new GetRequestRequest;
         $this->payment->execute($getHttpRequest);
-        if ($getHttpRequest->method == 'POST' && isset($getHttpRequest->request['stripeToken'])) {
+        if (
+            ($getHttpRequest->method == 'POST' && isset($getHttpRequest->request['stripeToken'])) |
+            $model['card']
+        ) {
             try {
                 \Stripe::setApiKey($this->keys->getSecret());
 
