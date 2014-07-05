@@ -14,6 +14,7 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCh
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PayexPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AuthorizeNetAimPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\StripeJsPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\DoctrineStorageFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\FilesystemStorageFactory;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -39,6 +40,7 @@ class PayumBundle extends Bundle
         $extension->addPaymentFactory(new CustomPaymentFactory);
         $extension->addPaymentFactory(new OfflinePaymentFactory);
         $extension->addPaymentFactory(new KlarnaCheckoutPaymentFactory);
+        $extension->addPaymentFactory(new StripeJsPaymentFactory);
 
         $extension->addStorageFactory(new FilesystemStorageFactory);
         $extension->addStorageFactory(new DoctrineStorageFactory);

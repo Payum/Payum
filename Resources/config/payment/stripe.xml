@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="payum.stripe.action.capture_js.class">Payum\Stripe\Action\CaptureJsAction</parameter>
+        <parameter key="payum.stripe.action.status.class">Payum\Stripe\Action\StatusAction</parameter>
+        <parameter key="payum.stripe.keys.prototype.class">Payum\Stripe\Keys</parameter>
+
+        <parameter key="payum.stripe.template.capture_js">@PayumStripe/Action/capture_js.html.twig</parameter>
+    </parameters>
+
+    <services>
+        <service
+            id="payum.stripe.keys.prototype"
+            class="%payum.stripe.keys.prototype.class%"
+            abstract="true"
+            public="false"
+        >
+            <argument />  <!-- The real publishable key will be created by StripeXXXPaymentFactory -->
+            <argument />  <!-- The real secret key will be created by StripeXXXPaymentFactory -->
+        </service>
+
+        <service
+            id="payum.stripe.action.capture_js"
+            class="%payum.stripe.action.capture_js.class%"
+            public="false"
+        >
+            <argument>%payum.stripe.template.capture_js%</argument>
+            
+            <tag name="payum.action" factory="stripe_js" />
+        </service>
+
+        <service
+            id="payum.stripe.action.status"
+            class="%payum.stripe.action.status.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="stripe_js" />
+        </service>
+    </services>
+</container>
