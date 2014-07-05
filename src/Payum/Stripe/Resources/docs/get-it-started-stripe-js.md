@@ -40,8 +40,6 @@ $payments['stripe_js'] = StripePaymentFactory::createJs(
 <?php
 // prepare.php
 
-use Payum\Payex\Api\OrderApi;
-
 include 'config.php';
 
 $storage = $registry->getStorage($detailsClass);
