@@ -5,12 +5,15 @@
 * [Paypal Express Checkout](https://github.com/Payum/PaypalExpressCheckoutNvp/blob/master/Resources/docs/index.md)
 * [Paypal Pro Checkout](https://github.com/Payum/PaypalProCheckoutNvp/blob/master/Resources/docs/index.md)
 * [Paypal Rest](https://github.com/Payum/PaypalRest/blob/master/Resources/docs/index.md)
+* [Stripe.js](https://github.com/Payum/Stripe/blob/master/Resources/docs/get-it-started.md)
+* [Stripe Checkout](https://github.com/Payum/Stripe/blob/master/Resources/docs/checkout.md)
 * [Authorize.Net AIM](https://github.com/Payum/AuthorizeNetAim/blob/master/Resources/docs/index.md)
 * [Be2Bill CreditCard](https://github.com/Payum/Be2Bill/blob/master/Resources/docs/index.md)
 * [Be2Bill Onsite](https://github.com/Payum/Be2Bill/blob/master/Resources/docs/index.md)
 * [Payex](https://github.com/Payum/Payex/blob/master/Resources/docs/index.md)
 * [Offline](https://github.com/Payum/Offline/blob/master/Resources/docs/index.md)
 * [Klarna Checkout](https://github.com/Payum/KlarnaCheckout/blob/master/Resources/docs/get-it-started.md)
+* Paylink (on demand)
 
 ## Community
 
