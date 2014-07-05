@@ -2,7 +2,7 @@
     "name": "payum/stripe",
     "type": "library",
     "description": "Stripe payment lib",
-    "keywords": ["payment", "stripe"],
+    "keywords": ["payment", "stripe", "stripe.js", "checkout"],
     "homepage": "http://payum.forma-dev.com",
     "license": "MIT",
     "authors": [

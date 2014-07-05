@@ -17,6 +17,8 @@
         "payex",
         "omnipay",
         "stripe",
+        "stripe.js",
+        "stripe checkout",
         "jms payment"
     ],
     "homepage": "http://payum.forma-dev.com",
