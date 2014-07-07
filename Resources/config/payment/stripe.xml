@@ -7,10 +7,12 @@
     <parameters>
         <parameter key="payum.stripe.action.capture.class">Payum\Stripe\Action\CaptureAction</parameter>
         <parameter key="payum.stripe.action.status.class">Payum\Stripe\Action\StatusAction</parameter>
+        <parameter key="payum.stripe.action.api.obtain_token.class">Payum\Stripe\Action\Api\ObtainTokenAction</parameter>
+        <parameter key="payum.stripe.action.api.create_charge.class">Payum\Stripe\Action\Api\CreateChargeAction</parameter>
         <parameter key="payum.stripe.keys.prototype.class">Payum\Stripe\Keys</parameter>
 
-        <parameter key="payum.stripe.template.capture_js">@PayumStripe/Action/capture_js.html.twig</parameter>
-        <parameter key="payum.stripe.template.capture_checkout">@PayumStripe/Action/capture_checkout.html.twig</parameter>
+        <parameter key="payum.stripe.template.obtain_js_token">@PayumStripe/Action/obtain_js_token.html.twig</parameter>
+        <parameter key="payum.stripe.template.obtain_checkout_token">@PayumStripe/Action/obtain_checkout_token.html.twig</parameter>
     </parameters>
 
     <services>
@@ -25,22 +27,20 @@
         </service>
 
         <service
-            id="payum.stripe.action.capture_js"
+            id="payum.stripe.action.capture"
             class="%payum.stripe.action.capture.class%"
             public="false"
         >
-            <argument>%payum.stripe.template.capture_js%</argument>
-            
             <tag name="payum.action" factory="stripe_js" />
+            <tag name="payum.action" factory="stripe_checkout" />
         </service>
 
         <service
-            id="payum.stripe.action.capture_checkout"
-            class="%payum.stripe.action.capture.class%"
+            id="payum.stripe.action.api.create_charge"
+            class="%payum.stripe.action.api.create_charge.class%"
             public="false"
         >
-            <argument>%payum.stripe.template.capture_checkout%</argument>
-
+            <tag name="payum.action" factory="stripe_js" />
             <tag name="payum.action" factory="stripe_checkout" />
         </service>
 
@@ -50,6 +50,26 @@
             public="false"
         >
             <tag name="payum.action" factory="stripe_js" />
+            <tag name="payum.action" factory="stripe_checkout" />
+        </service>
+
+        <service
+            id="payum.stripe.action.api.obtain_js_token"
+            class="%payum.stripe.action.api.obtain_token.class%"
+            public="false"
+        >
+            <argument>%payum.stripe.template.obtain_js_token%</argument>
+
+            <tag name="payum.action" factory="stripe_js" />
+        </service>
+
+        <service
+            id="payum.stripe.action.api.obtain_checkout_token"
+            class="%payum.stripe.action.api.obtain_token.class%"
+            public="false"
+        >
+            <argument>%payum.stripe.template.obtain_checkout_token%</argument>
+
             <tag name="payum.action" factory="stripe_checkout" />
         </service>
     </services>
