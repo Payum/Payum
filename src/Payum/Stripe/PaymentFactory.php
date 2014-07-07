@@ -1,8 +1,10 @@
 <?php
 namespace Payum\Stripe;
 
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
+use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Payment;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\PaymentInterface;
@@ -16,10 +18,19 @@ abstract class PaymentFactory
     /**
      * @param Keys $keys
      *
+     *
      * @return PaymentInterface
      */
-    public static function createJs(Keys $keys, \Twig_Environment $twig)
-    {
+    public static function createJs(
+        Keys $keys,
+        ActionInterface $renderTemplateAction = null,
+        $layoutTemplate = null,
+        $obtainTokenTemplate = null
+    ) {
+        $layoutTemplate = $layoutTemplate ?: '@PayumCore/layout.html.twig';
+        $obtainTokenTemplate = $obtainTokenTemplate ?: '@PayumStripe/Action/obtain_js_token.html.twig';
+        $renderTemplateAction = $renderTemplateAction ?: new RenderTemplateAction(TwigFactory::createGeneric(), $layoutTemplate);
+
         $payment = new Payment;
 
         $payment->addApi($keys);
@@ -29,8 +40,8 @@ abstract class PaymentFactory
         $payment->addAction(new CaptureAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
-        $payment->addAction(new RenderTemplateAction($twig, '@PayumCore/layout.html.twig'));
-        $payment->addAction(new ObtainTokenAction('@PayumStripe/Action/obtain_js_token.html.twig'));
+        $payment->addAction($renderTemplateAction);
+        $payment->addAction(new ObtainTokenAction($obtainTokenTemplate));
         $payment->addAction(new CreateChargeAction);
 
         return $payment;
@@ -41,8 +52,16 @@ abstract class PaymentFactory
      *
      * @return PaymentInterface
      */
-    public static function createCheckout(Keys $keys, \Twig_Environment $twig)
-    {
+    public static function createCheckout(
+        Keys $keys,
+        ActionInterface $renderTemplateAction = null,
+        $layoutTemplate = null,
+        $obtainTokenTemplate = null
+    ) {
+        $layoutTemplate = $layoutTemplate ?: '@PayumCore/layout.html.twig';
+        $obtainTokenTemplate = $obtainTokenTemplate ?: '@PayumStripe/Action/obtain_checkout_token.html.twig';
+        $renderTemplateAction = $renderTemplateAction ?: new RenderTemplateAction(TwigFactory::createGeneric(), $layoutTemplate);
+
         $payment = new Payment;
 
         $payment->addApi($keys);
@@ -52,8 +71,8 @@ abstract class PaymentFactory
         $payment->addAction(new CaptureAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
-        $payment->addAction(new RenderTemplateAction($twig, '@PayumCore/layout.html.twig'));
-        $payment->addAction(new ObtainTokenAction('@PayumStripe/Action/obtain_checkout_token.html.twig'));
+        $payment->addAction($renderTemplateAction);
+        $payment->addAction(new ObtainTokenAction($obtainTokenTemplate));
         $payment->addAction(new CreateChargeAction);
 
         return $payment;

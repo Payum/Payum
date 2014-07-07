@@ -28,11 +28,8 @@ use Payum\Stripe\Keys;
 
 //config.php
 
-$twigLoader->addPath(__DIR__.'/vendor/payum/stripe/Resources/views', 'PayumStripe');
-
 $payments['stripe_js'] = StripePaymentFactory::createJs(
-    new Keys('publishable_key', 'secret_key'),
-    $twig
+    new Keys('publishable_key', 'secret_key')
 );
 ```
 

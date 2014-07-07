@@ -105,20 +105,6 @@ _**Note**: Consider using something other than `FilesystemStorage` in production
 
 _**Note**: You are not required to use this PaymentDetails. Payum is designed to work with array or ArrayAccess._
 
-Some payments may require twig to render a page. Basically you need a filesystem loader with correctly set paths and namespaces. 
-When you are done with the loader you can create an instance of twig environment and start use it:
-
-```php
-<?php
-//config.php
-
-$twigLoader = new \Twig_Loader_Filesystem;
-$twigLoader->addPath(__DIR__.'/vendor/payum/core/Resources/views', 'PayumCore');
-$twigLoader->addPath(__DIR__.'/vendor/payum/klarna-checkout/Resources/views', 'PayumKlarnaCheckout');
-
-$twig = new \Twig_Environment($loader);
-```
-
 ## Prepare payment
 
 ```php
