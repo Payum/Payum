@@ -6,6 +6,8 @@ use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
 use Payum\Core\Payment;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\PaymentInterface;
+use Payum\Stripe\Action\Api\CreateChargeAction;
+use Payum\Stripe\Action\Api\ObtainTokenAction;
 use Payum\Stripe\Action\CaptureAction;
 use Payum\Stripe\Action\StatusAction;
 
@@ -24,10 +26,12 @@ abstract class PaymentFactory
 
         $payment->addExtension(new EndlessCycleDetectorExtension);
 
-        $payment->addAction(new CaptureAction('@PayumStripe/Action/capture_js.html.twig'));
+        $payment->addAction(new CaptureAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
         $payment->addAction(new RenderTemplateAction($twig, '@PayumCore/layout.html.twig'));
+        $payment->addAction(new ObtainTokenAction('@PayumStripe/Action/obtain_js_token.html.twig'));
+        $payment->addAction(new CreateChargeAction);
 
         return $payment;
     }
@@ -45,10 +49,12 @@ abstract class PaymentFactory
 
         $payment->addExtension(new EndlessCycleDetectorExtension);
 
-        $payment->addAction(new CaptureAction('@PayumStripe/Action/capture_checkout.html.twig'));
+        $payment->addAction(new CaptureAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
         $payment->addAction(new RenderTemplateAction($twig, '@PayumCore/layout.html.twig'));
+        $payment->addAction(new ObtainTokenAction('@PayumStripe/Action/obtain_checkout_token.html.twig'));
+        $payment->addAction(new CreateChargeAction);
 
         return $payment;
     }
