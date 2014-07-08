@@ -13,7 +13,7 @@
 * [Payex](https://github.com/Payum/Payex/blob/master/Resources/docs/index.md)
 * [Offline](https://github.com/Payum/Offline/blob/master/Resources/docs/index.md)
 * [Klarna Checkout](https://github.com/Payum/KlarnaCheckout/blob/master/Resources/docs/get-it-started.md)
-* Paylink (on demand)
+* [PaylinkJustpay](https://github.com/locastic/PayumPaylinkJustpay)
 
 ## Community
 
