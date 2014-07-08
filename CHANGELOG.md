@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.1 (2014-07-08)
+
+* [be2bill] fix capture with aliased credit card.
+
 ## 0.9.0 (2014-06-17)
 
 * [registry] decouple `StorageRegistry` from payments. The `name` argument was removed.
