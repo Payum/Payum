@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.2 (2014-07-08)
+
+* [request] fix post redirect interactive request, it has to extend response interactive request.
+
 ## 0.9.1 (2014-07-08)
 
 * [be2bill] fix capture with aliased credit card.
