@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
+use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -54,15 +55,12 @@ class StripeJsPaymentFactory extends AbstractPaymentFactory implements PrependEx
      */
     public function prepend(ContainerBuilder $container)
     {
-        $container->prependExtensionConfig(
-            'twig',
-            array(
-                'paths' => array_flip(array_filter(array(
-                    'PayumCore' => $this->guessViewsPath('Payum\Core\Payment'),
-                    'PayumStripe' => $this->guessViewsPath('Payum\Stripe\PaymentFactory'),
-                )))
-            )
-        );
+        $container->prependExtensionConfig('twig', array(
+            'paths' => array_flip(array_filter(array(
+                'PayumCore' => TwigFactory::guessViewsPath('Payum\Core\Payment'),
+                'PayumStripe' => TwigFactory::guessViewsPath('Payum\Stripe\PaymentFactory'),
+            )))
+        ));
     }
 
     /**
@@ -74,25 +72,9 @@ class StripeJsPaymentFactory extends AbstractPaymentFactory implements PrependEx
         $publishableKey->replaceArgument(0, $config['publishable_key']);
         $publishableKey->replaceArgument(1, $config['secret_key']);
         $publishableKey->setPublic(true);
-        $publishableKeyId = 'payum.context.'.$contextName.'.keys';
+        $publishableKeyId = 'payum.context.' . $contextName . '.keys';
 
         $container->setDefinition($publishableKeyId, $publishableKey);
         $paymentDefinition->addMethodCall('addApi', array(new Reference($publishableKeyId)));
-    }
-
-    /**
-     * @param string $class
-     *
-     * @return mixed
-     */
-    protected function guessViewsPath($class)
-    {
-        if (false == class_exists($class)) {
-            return;
-        }
-
-        $rc = new \ReflectionClass($class);
-
-        return dirname($rc->getFileName()).'/Resources/views';
     }
 }

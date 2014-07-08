@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
+use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -54,15 +55,12 @@ class StripeCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
      */
     public function prepend(ContainerBuilder $container)
     {
-        $container->prependExtensionConfig(
-            'twig',
-            array(
-                'paths' => array_flip(array_filter(array(
-                    'PayumCore' => $this->guessViewsPath('Payum\Core\Payment'),
-                    'PayumStripe' => $this->guessViewsPath('Payum\Stripe\PaymentFactory'),
-                )))
-            )
-        );
+        $container->prependExtensionConfig('twig', array(
+            'paths' => array_flip(array_filter(array(
+                'PayumCore' => TwigFactory::guessViewsPath('Payum\Core\Payment'),
+                'PayumStripe' => TwigFactory::guessViewsPath('Payum\Stripe\PaymentFactory'),
+            )))
+        ));
     }
 
     /**
@@ -78,21 +76,5 @@ class StripeCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
 
         $container->setDefinition($publishableKeyId, $publishableKey);
         $paymentDefinition->addMethodCall('addApi', array(new Reference($publishableKeyId)));
-    }
-
-    /**
-     * @param string $class
-     *
-     * @return mixed
-     */
-    protected function guessViewsPath($class)
-    {
-        if (false == class_exists($class)) {
-            return;
-        }
-
-        $rc = new \ReflectionClass($class);
-
-        return dirname($rc->getFileName()).'/Resources/views';
     }
 }
