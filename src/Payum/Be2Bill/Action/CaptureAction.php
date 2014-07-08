@@ -48,7 +48,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         }
 
         $cardFields = array('CARDCODE', 'CARDCVV', 'CARDVALIDITYDATE', 'CARDFULLNAME');
-        if (false == $model->validateNotEmpty($cardFields, false)) {
+        if (false == $model->validateNotEmpty($cardFields, false) && false == $model['ALIAS']) {
             try {
                 $creditCardRequest = new ObtainCreditCardRequest;
                 $this->payment->execute($creditCardRequest);
