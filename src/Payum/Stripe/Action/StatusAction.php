@@ -33,13 +33,13 @@ class StatusAction implements ActionInterface
         }
 
         // means we have only received a stripe token but have not done a payment.
-        if (false == is_array($model['card'])) {
+        if (is_string($model['card'])) {
             $request->markPending();
 
             return;
         }
 
-        if ($model['captured'] && $model['paid']) {
+        if (is_array($model['card']) && $model['captured'] && $model['paid']) {
             $request->markSuccess();
 
             return;

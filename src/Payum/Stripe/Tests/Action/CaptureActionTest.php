@@ -3,11 +3,7 @@ namespace Payum\Stripe\Tests\Action\Api;
 
 use Payum\Core\PaymentInterface;
 use Payum\Core\Request\CaptureRequest;
-use Payum\Core\Request\Http\GetRequestRequest;
-use Payum\Core\Request\Http\ResponseInteractiveRequest;
-use Payum\Core\Request\RenderTemplateRequest;
 use Payum\Stripe\Action\CaptureAction;
-use Payum\Stripe\Keys;
 
 class CaptureActionTest extends \PHPUnit_Framework_TestCase
 {
