@@ -71,7 +71,7 @@ class ObtainTokenAction extends PaymentAwareAction implements ApiAwareInterface
 
         $this->payment->execute($renderTemplate = new RenderTemplateRequest($this->templateName, array(
             'model' => $model,
-            'publishable_key' => $this->keys->getPublishable(),
+            'publishable_key' => $this->keys->getPublishableKey(),
         )));
 
         throw new ResponseInteractiveRequest($renderTemplate->getResult());

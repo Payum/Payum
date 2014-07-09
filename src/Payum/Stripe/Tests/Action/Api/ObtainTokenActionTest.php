@@ -94,6 +94,19 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
+     * @expectedExceptionMessage Action ObtainTokenAction is not supported the request stdClass.
+     */
+    public function throwRequestNotSupportedIfNotSupportedGiven()
+    {
+        $action = new ObtainTokenAction('aTemplateName');
+
+        $action->execute(new \stdClass);
+    }
+
+    /**
+     * @test
+     *
      * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage The token has already been set.
      */
