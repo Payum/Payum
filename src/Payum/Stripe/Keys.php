@@ -26,7 +26,7 @@ class Keys
     /**
      * @return string
      */
-    public function getSecret()
+    public function getSecretKey()
     {
         return $this->secret;
     }
@@ -34,7 +34,7 @@ class Keys
     /**
      * @return string
      */
-    public function getPublishable()
+    public function getPublishableKey()
     {
         return $this->publishable;
     }
