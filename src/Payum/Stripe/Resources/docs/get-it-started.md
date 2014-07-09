@@ -1,4 +1,4 @@
-# Get it started (Stripe.js).
+# Get it started. Stripe.js.
 
 In this chapter we are going to talk about [Stripe.js](https://stripe.com/docs/stripe.js) integration.
 We assume you already read [payum's get it started documentation](https://github.com/Payum/Payum/blob/master/docs/get-it-started.md).
