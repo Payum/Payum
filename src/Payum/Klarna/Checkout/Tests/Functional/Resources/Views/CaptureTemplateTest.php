@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests\Functional\Resources\Views;
 
+use Payum\Core\Bridge\Twig\TwigFactory;
+
 class CaptureTemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -8,17 +10,7 @@ class CaptureTemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldRenderExpectedResult()
     {
-        $loader = new \Twig_Loader_Filesystem;
-
-        $rc = new \ReflectionClass('Payum\Core\Payment');
-        $coreViews = dirname($rc->getFileName()).'/Resources/views';
-        $loader->addPath($coreViews, 'PayumCore');
-
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\PaymentFactory');
-        $coreViews = dirname($rc->getFileName()).'/Resources/views';
-        $loader->addPath($coreViews, 'PayumKlarnaCheckout');
-
-        $twig = new \Twig_Environment($loader);
+        $twig = TwigFactory::createGeneric();
 
         $actualResult = $twig->render('@PayumKlarnaCheckout/Action/capture.html.twig', array(
             'snippet' => 'theSnippet',
@@ -37,4 +29,4 @@ HTML;
 
         $this->assertEquals($expectedResult, $actualResult);
     }
-} 
+}

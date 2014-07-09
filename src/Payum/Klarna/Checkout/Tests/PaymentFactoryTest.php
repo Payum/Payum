@@ -22,7 +22,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $connectorMock = $this->createConnectorMock();
 
-        $payment = PaymentFactory::create($connectorMock, $this->createTwigMock());
+        $payment = PaymentFactory::create($connectorMock);
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
 
@@ -30,7 +30,25 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $actions = $this->readAttribute($payment, 'actions');
         $this->assertInternalType('array', $actions);
-        $this->assertNotEmpty($actions);
+        $this->assertAttributeCount(6, 'actions', $payment);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowCreatePaymentWithStandardActionsAndCustomRenderTemplateAction()
+    {
+        $connectorMock = $this->createConnectorMock();
+
+        $payment = PaymentFactory::create($connectorMock, $this->getMock('Payum\Core\Action\ActionInterface'), 'aLayout', 'aTemplate');
+
+        $this->assertInstanceOf('Payum\Core\Payment', $payment);
+
+        $this->assertAttributeCount(1, 'apis', $payment);
+
+        $actions = $this->readAttribute($payment, 'actions');
+        $this->assertInternalType('array', $actions);
+        $this->assertAttributeCount(6, 'actions', $payment);
     }
 
     /**

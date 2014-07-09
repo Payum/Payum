@@ -5,6 +5,8 @@
 * [Paypal Express Checkout](https://github.com/Payum/PaypalExpressCheckoutNvp/blob/master/Resources/docs/index.md)
 * [Paypal Pro Checkout](https://github.com/Payum/PaypalProCheckoutNvp/blob/master/Resources/docs/index.md)
 * [Paypal Rest](https://github.com/Payum/PaypalRest/blob/master/Resources/docs/index.md)
+* [Stripe.js](https://github.com/Payum/Stripe/blob/master/Resources/docs/get-it-started.md)
+* [Stripe Checkout](https://github.com/Payum/Stripe/blob/master/Resources/docs/checkout.md)
 * [Authorize.Net AIM](https://github.com/Payum/AuthorizeNetAim/blob/master/Resources/docs/index.md)
 * [Be2Bill CreditCard](https://github.com/Payum/Be2Bill/blob/master/Resources/docs/index.md)
 * [Be2Bill Onsite](https://github.com/Payum/Be2Bill/blob/master/Resources/docs/index.md)
@@ -15,7 +17,10 @@
 ## Community
 
 * [DineroMail](https://github.com/r3s7/PayumDineroMail)
+* [BitPay](https://github.com/r3s7/PayumBitPay)
 * [Paydollar](https://github.com/kayue/Paydollar)
+* [PaylinkJustpay](https://github.com/locastic/PayumPaylinkJustpay)
+* [TcomPayWay](https://github.com/locastic/TcomPayWayPayum)
 
 ## Omnipay gateways.
 

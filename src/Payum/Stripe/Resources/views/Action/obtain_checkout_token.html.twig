@@ -1,0 +1,27 @@
+{% extends layout ?: "@PayumCore/layout.html.twig" %}
+
+{% block payum_body %}
+    {{ parent() }}
+
+    <form action="" method="POST">
+        <script
+            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="{{ publishable_key }}"
+            data-image="{{ model.image|default("") }}"
+            data-name="{{ model.name|default("") }}"
+            data-description="{{ model.description }}"
+            data-amount="{{ model.amount }}">
+        </script>
+    </form>
+{% endblock %}
+
+{% block payum_javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        $('form .stripe-button-el').click();
+    </script>
+
+{% endblock %}
