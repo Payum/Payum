@@ -14,7 +14,10 @@
         "instant notifications",
         "payex",
         "klarna",
-        "offline"
+        "offline",
+        "stripe",
+        "stripe.js",
+        "stripe checkout"
     ],
     "homepage": "http://payum.forma-dev.com",
     "license": "MIT",
@@ -57,7 +60,8 @@
         "payum/be2bill": "If you want to use be2bill gateway",
         "payum/payex": "If you want to use payex gateway",
         "payum/omnipay-bridge": "If you want to use omnipay provided gateways",
-        "payum/offline": "If you want to manage offline payments"
+        "payum/offline": "If you want to manage offline payments",
+        "payum/stripe": "If you want to manage stripe.js or checkout payments"
     },
     "autoload": {
         "psr-0": { "Payum\\Bundle\\PayumBundle": "" }

@@ -1,13 +1,13 @@
 <?php
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
+use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Exception\RuntimeException;
 use Payum\Klarna\Checkout\Constants;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\FileLocator;
@@ -56,15 +56,12 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
      */
     public function prepend(ContainerBuilder $container)
     {
-        $container->prependExtensionConfig(
-            'twig',
-            array(
-                'paths' => array_flip(array_filter(array(
-                    'PayumCore' => $this->guessViewsPath('Payum\Core\Payment'),
-                    'PayumKlarnaCheckout' => $this->guessViewsPath('Payum\Klarna\Checkout\PaymentFactory'),
-                )))
-            )
-        );
+        $container->prependExtensionConfig('twig', array(
+            'paths' => array_flip(array_filter(array(
+                'PayumCore' => TwigFactory::guessViewsPath('Payum\Core\Payment'),
+                'PayumKlarnaCheckout' => TwigFactory::guessViewsPath('Payum\Klarna\Checkout\PaymentFactory'),
+            )))
+        ));
     }
 
     /**
@@ -91,21 +88,5 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
         $container->setDefinition($connectorId, $connectorDefinition);
 
         $paymentDefinition->addMethodCall('addApi', array(new Reference($connectorId)));
-    }
-
-    /**
-     * @param string $class
-     *
-     * @return mixed
-     */
-    protected function guessViewsPath($class)
-    {
-        if (false == class_exists($class)) {
-            return;
-        }
-
-        $rc = new \ReflectionClass($class);
-
-        return dirname($rc->getFileName()).'/Resources/views';
     }
 }
