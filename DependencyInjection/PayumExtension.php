@@ -46,11 +46,13 @@ class PayumExtension extends Extension implements PrependExtensionInterface
      */
     public function prepend(ContainerBuilder $container)
     {
-        foreach ($this->paymentFactories as $factory) {
-            if ($factory instanceof PrependExtensionInterface) {
-                $factory->prepend($container);
-            }
-        }
+        // TODO: The logic is disabled due to bug in TwigBundle. See https://github.com/symfony/symfony/pull/9719
+
+//        foreach ($this->paymentFactories as $factory) {
+//            if ($factory instanceof PrependExtensionInterface) {
+//                $factory->prepend($container);
+//            }
+//        }
     }
 
     /**
