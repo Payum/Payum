@@ -3,6 +3,7 @@
     "type": "symfony-bundle",
     "description": "Rich payment solutions for symfony2. Paypal, payex, authorize.net, be2bill, omnipay, recurring payments, instant notifications and many more",
     "keywords": [
+        "symfony"
         "payment",
         "paypal",
         "be2bill",
