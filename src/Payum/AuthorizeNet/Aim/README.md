@@ -7,7 +7,7 @@ The lib implements [Authorize.Net AIM](http://www.authorize.net/) payment.
 
 ## Resources
 
-* [Documentation](http://payum.forma-dev.com/documentation#AuthorizeNetAim)
+* [Documentation](http://payum.org/doc#AuthorizeNetAim)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)

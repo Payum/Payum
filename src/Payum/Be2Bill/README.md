@@ -7,7 +7,7 @@ The lib implements [Be2Bill](http://www.be2bill.com/) payment.
 
 ## Resources
 
-* [Documentation](http://payum.forma-dev.com/documentation#Be2Bill)
+* [Documentation](http://payum.org/doc#Be2Bill)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)

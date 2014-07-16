@@ -7,7 +7,7 @@
         "payment",
         "offlile"
     ],
-    "homepage": "http://payum.forma-dev.com",
+    "homepage": "http://payum.org",
     "license": "MIT",
     "authors": [
         {
@@ -16,7 +16,7 @@
         },
         {
             "name":     "Payum project",
-            "homepage": "http://payum.forma-dev.com/"
+            "homepage": "http://payum.org/"
         },
         {
             "name":     "Community contributions",

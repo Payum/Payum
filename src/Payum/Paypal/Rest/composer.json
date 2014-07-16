@@ -3,7 +3,7 @@
     "type": "library",
     "description": "Paypal rest",
     "keywords": ["payment", "paypal", "rest"],
-    "homepage": "http://payum.forma-dev.com/",
+    "homepage": "http://payum.org/",
     "license": "MIT",
     "authors": [
         {
@@ -16,7 +16,7 @@
         },
         {
             "name":     "Payum project",
-            "homepage": "http://payum.forma-dev.com/"
+            "homepage": "http://payum.org/"
         },
         {
             "name":     "Community contributions",

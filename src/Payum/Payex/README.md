@@ -7,7 +7,7 @@ The lib implements [Payex](http://www.payexpim.com/) payment.
 
 ## Resources
 
-* [Documentation](http://payum.forma-dev.com/documentation#Payex)
+* [Documentation](http://payum.org/doc#Payex)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)

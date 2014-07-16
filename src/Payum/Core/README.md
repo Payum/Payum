@@ -8,7 +8,7 @@ It would be handy tool not only for basic tasks like capture or refund but for r
 
 ## Resources
 
-* [Documentation](http://payum.forma-dev.com/documentation#Payum)
+* [Documentation](http://payum.org/doc#Payum)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)
