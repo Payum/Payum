@@ -40,6 +40,8 @@ class GetHttpRequestAction implements ActionInterface
         $request->headers = $this->httpRequest->headers->all();
         $request->method = $this->httpRequest->getMethod();
         $request->uri = $this->httpRequest->getUri();
+        $request->clientIp = $this->httpRequest->getClientIp();
+        $request->userAgent = $this->httpRequest->headers->get('User-Agent');
     }
 
     /**
