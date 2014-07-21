@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.3 (2014-07-21)
+
+* [doctrine] Quote a column  `array` in metadata for `ArrayObject` class. Array is a reserved word in some databases.
+
 ## 0.9.2 (2014-07-08)
 
 * [request] fix post redirect interactive request, it has to extend response interactive request.
