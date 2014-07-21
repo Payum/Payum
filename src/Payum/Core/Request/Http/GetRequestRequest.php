@@ -23,11 +23,23 @@ class GetRequestRequest
      */
     public $uri;
 
+    /**
+     * @var string
+     */
+    public $clientIp;
+
+    /**
+     * @var string
+     */
+    public $userAgent;
+
     public function __construct()
     {
         $this->query = array();
         $this->request = array();
         $this->method = '';
         $this->uri = '';
+        $this->clientIp = '';
+        $this->userAgent = '';
     }
 } 

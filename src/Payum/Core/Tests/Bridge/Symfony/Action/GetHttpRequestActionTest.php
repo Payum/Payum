@@ -106,6 +106,8 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(array(), $request->request);
         $this->assertSame('GET', $request->method);
         $this->assertSame('http://request.uri/?foo=fooVal', $request->uri);
+        $this->assertSame('Symfony/2.X', $request->userAgent);
+        $this->assertSame('127.0.0.1', $request->clientIp);
     }
 
     /**
@@ -127,5 +129,7 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(array('foo' => 'fooVal'), $request->request);
         $this->assertSame('POST', $request->method);
         $this->assertSame('http://request.uri/', $request->uri);
+        $this->assertSame('Symfony/2.X', $request->userAgent);
+        $this->assertSame('127.0.0.1', $request->clientIp);
     }
 } 
