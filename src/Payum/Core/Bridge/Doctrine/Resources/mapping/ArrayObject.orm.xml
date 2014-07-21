@@ -5,8 +5,8 @@
                   http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
 >
     <mapped-superclass name="Payum\Core\Model\ArrayObject">
-        
-        <field name="array" column="details" type="json_array" />
+
+        <field name="details" column="details" type="json_array" />
 
     </mapped-superclass>
 </doctrine-mapping>
