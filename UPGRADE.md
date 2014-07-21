@@ -6,6 +6,8 @@
 * [request] Class `PostRedirectUrlInteractiveRequest` was moved to sub namespace `Http`.
 * [request] Class `RedirectUrlInteractiveRequest` was moved to sub namespace `Http`.
 * [request] Class `ResponseInteractiveRequest` was moved to sub namespace `Http`.
+* [doctrine][orm] The column name `array` was renamed to `details` in mapping xml for `ArrayObject` class. You have to take care of the migration in your app code.
+* [doctrine][mongodb] The field name `array` was renamed to `details` in mapping xml for `ArrayObject` class. You have to take care of the migration in your app code.
 
 ## 0.8 to 0.9
 
