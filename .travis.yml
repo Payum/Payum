@@ -12,7 +12,7 @@ env:
   - SYMFONY_VERSION=2.4.*
 
 matrix:
-  allow_failure:
+  allow_failures:
     - php: hhvm
 
 before_script:
