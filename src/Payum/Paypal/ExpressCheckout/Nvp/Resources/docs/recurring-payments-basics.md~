@@ -65,8 +65,11 @@ For this we have to create an agreement with him.
 
 include 'config.php';
 
+<<<<<<< HEAD:src/Payum/Paypal/ExpressCheckout/Nvp/Resources/docs/recurring-payments-basics.md
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
+=======
+>>>>>>> 5217be1c408a7aa831c2b05ef0da8e3b54ea9fdd:src/Payum/Paypal/ExpressCheckout/Nvp/Resources/docs/recurring-payments-basics.md
 $storage = $registry->getStorage($agreementDetailsClass);
 
 $agreementDetails = $storage->createModel();
