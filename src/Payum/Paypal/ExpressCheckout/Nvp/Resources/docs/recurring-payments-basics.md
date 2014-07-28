@@ -76,7 +76,7 @@ $agreementDetails['L_BILLINGAGREEMENTDESCRIPTION0'] = "Insert some description h
 $agreementDetails['NOSHIPPING'] = 1;
 $storage->updateModel($agreementDetails);
 
-$captureToken = $tokenFactory->createCaptureToken('paypal', $paymentDetails, 'create_recurring_payment.php');
+$captureToken = $tokenFactory->createCaptureToken('paypal', $agreementDetails, 'create_recurring_payment.php');
 
 $agreementDetails['RETURNURL'] = $captureToken->getTargetUrl();
 $agreementDetails['CANCELURL'] = $captureToken->getTargetUrl();
