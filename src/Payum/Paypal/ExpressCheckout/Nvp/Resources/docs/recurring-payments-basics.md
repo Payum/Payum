@@ -107,8 +107,8 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfileRe
 
 include 'config.php';
 
-$token = $this->getHttpRequestVerifier()->verify($_REQUEST);
-$this->getHttpRequestVerifier()->invalidate($token);
+$token = $requestVerifier->verify($_REQUEST);
+$requestVerifier->invalidate($token);
 
 $payment = $registry->getPayment($token->getPaymentName());
 
@@ -125,7 +125,7 @@ $agreementDetails = $agreementStatus->getModel();
 
 $storage = $registry->getStorage($recurringPaymentDetailsClass);
 
-$recurringPaymentDetails = $recurringPaymentStorage->createModel();
+$recurringPaymentDetails = $storage->createModel();
 $recurringPaymentDetails['TOKEN'] = $agreementDetails->getToken();
 $recurringPaymentDetails['DESC'] = 'Subscribe to weather forecast for a week. It is 0.05$ per day.';
 $recurringPaymentDetails['EMAIL'] = $agreementDetails->getEmail();
