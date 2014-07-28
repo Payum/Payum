@@ -78,8 +78,6 @@ $storage->updateModel($agreementDetails);
 
 $captureToken = $tokenFactory->createCaptureToken('paypal', $agreementDetails, 'create_recurring_payment.php');
 
-$agreementDetails['RETURNURL'] = $captureToken->getTargetUrl();
-$agreementDetails['CANCELURL'] = $captureToken->getTargetUrl();
 $storage->updateModel($agreementDetails);
 
 header("Location: ".$captureToken->getTargetUrl());
