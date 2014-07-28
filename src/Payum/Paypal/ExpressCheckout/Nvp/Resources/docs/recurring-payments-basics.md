@@ -65,6 +65,8 @@ For this we have to create an agreement with him.
 
 include 'config.php';
 
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
+
 $storage = $registry->getStorage($agreementDetailsClass);
 
 $agreementDetails = $storage->createModel();
