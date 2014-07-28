@@ -107,12 +107,10 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfileRe
 
 include 'config.php';
 
-$payum = $this->getPayum();
+$token = $requestVerifier->verify($_REQUEST);
+$requestVerifier->invalidate($token);
 
-$token = $payum->getHttpRequestVerifier()->verify($_REQUEST);
-$payum->getHttpRequestVerifier()->invalidate($token);
-
-$payment = $payum->getRegistry()->getPayment($token->getPaymentName());
+$payment = $registry->getPayment($token->getPaymentName());
 
 $agreementStatus = new SimpleStatusRequest($token);
 $payment->execute($agreementStatus);
@@ -125,7 +123,7 @@ if (false == $agreementStatus->isSuccess()) {
 
 $agreementDetails = $agreementStatus->getModel();
 
-$storage = $payum->getRegistry()->getStorage($recurringPaymentDetailsClass);
+$storage = $registry->getStorage($recurringPaymentDetailsClass);
 
 $recurringPaymentDetails = $storage->createModel();
 $recurringPaymentDetails['TOKEN'] = $agreementDetails->getToken();
@@ -140,7 +138,7 @@ $recurringPaymentDetails['BILLINGPERIOD'] = Api::BILLINGPERIOD_DAY;
 $payment->execute(new CreateRecurringPaymentProfileRequest($recurringPaymentDetails));
 $payment->execute(new SyncRequest($recurringPaymentDetails));
 
-$doneToken = $payum->getTokenFactory()->createToken('paypal', $recurringPaymentDetails, 'done.php');
+$doneToken = $tokenFactory->createToken('paypal', $recurringPaymentDetails, 'done.php');
 
 header("Location: ".$doneToken->getTargetUrl());
 ```
