@@ -72,7 +72,7 @@ $storage = $registry->getStorage($agreementDetailsClass);
 $agreementDetails = $storage->createModel();
 $agreementDetails['PAYMENTREQUEST_0_AMT'] = 0;
 $agreementDetails['L_BILLINGTYPE0'] = Api::BILLINGTYPE_RECURRING_PAYMENTS;
-$agreementDetails['L_BILLINGAGREEMENTDESCRIPTION0'] = $subscription['description'];
+$agreementDetails['L_BILLINGAGREEMENTDESCRIPTION0'] = "Insert some description here";
 $agreementDetails['NOSHIPPING'] = 1;
 $storage->updateModel($agreementDetails);
 
