@@ -107,10 +107,12 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfileRe
 
 include 'config.php';
 
-$token = $this->getHttpRequestVerifier()->verify($_REQUEST);
-$this->getHttpRequestVerifier()->invalidate($token);
+$payum = $this->getPayum();
 
-$payment = $registry->getPayment($token->getPaymentName());
+$token = $payum->getHttpRequestVerifier()->verify($_REQUEST);
+$payum->getHttpRequestVerifier()->invalidate($token);
+
+$payment = $payum->getRegistry()->getPayment($token->getPaymentName());
 
 $agreementStatus = new SimpleStatusRequest($token);
 $payment->execute($agreementStatus);
@@ -123,9 +125,9 @@ if (false == $agreementStatus->isSuccess()) {
 
 $agreementDetails = $agreementStatus->getModel();
 
-$storage = $registry->getStorage($recurringPaymentDetailsClass);
+$storage = $payum->getRegistry()->getStorage($recurringPaymentDetailsClass);
 
-$recurringPaymentDetails = $recurringPaymentStorage->createModel();
+$recurringPaymentDetails = $storage->createModel();
 $recurringPaymentDetails['TOKEN'] = $agreementDetails->getToken();
 $recurringPaymentDetails['DESC'] = 'Subscribe to weather forecast for a week. It is 0.05$ per day.';
 $recurringPaymentDetails['EMAIL'] = $agreementDetails->getEmail();
@@ -138,7 +140,7 @@ $recurringPaymentDetails['BILLINGPERIOD'] = Api::BILLINGPERIOD_DAY;
 $payment->execute(new CreateRecurringPaymentProfileRequest($recurringPaymentDetails));
 $payment->execute(new SyncRequest($recurringPaymentDetails));
 
-$doneToken = $tokenFactory->createToken('paypal', $recurringPaymentDetails, 'done.php');
+$doneToken = $payum->getTokenFactory()->createToken('paypal', $recurringPaymentDetails, 'done.php');
 
 header("Location: ".$doneToken->getTargetUrl());
 ```
