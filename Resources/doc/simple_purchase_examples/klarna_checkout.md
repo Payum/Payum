@@ -1,4 +1,4 @@
-# Paypal express checkout
+# Klarna checkout
 
 Steps:
 
