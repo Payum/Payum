@@ -115,7 +115,7 @@ $payment = $registry->getPayment($token->getPaymentName());
 $agreementStatus = new SimpleStatusRequest($token);
 $payment->execute($agreementStatus);
 
-if (false == $agreementStatus->isSuccess()) {
+if (!$agreementStatus->isSuccess()) {
     header('HTTP/1.1 400 Bad Request', true, 400);
     exit;
 }
