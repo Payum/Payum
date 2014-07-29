@@ -126,9 +126,9 @@ $agreementDetails = $agreementStatus->getModel();
 $storage = $registry->getStorage($recurringPaymentDetailsClass);
 
 $recurringPaymentDetails = $storage->createModel();
-$recurringPaymentDetails['TOKEN'] = $agreementDetails->getToken();
+$recurringPaymentDetails['TOKEN'] = $agreementDetails['TOKEN'];
 $recurringPaymentDetails['DESC'] = 'Subscribe to weather forecast for a week. It is 0.05$ per day.';
-$recurringPaymentDetails['EMAIL'] = $agreementDetails->getEmail();
+$recurringPaymentDetails['EMAIL'] = $agreementDetails['EMAIL'];
 $recurringPaymentDetails['AMT'] = 0.05;
 $recurringPaymentDetails['CURRENCYCODE'] = 'USD';
 $recurringPaymentDetails['BILLINGFREQUENCY'] = 7;
