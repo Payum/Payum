@@ -56,7 +56,7 @@ class PaypalExpressCheckoutNvpPaymentFactory extends AbstractPaymentFactory
     protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
     {
         $apiDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.api.prototype');
-        $apiDefinition->replaceArgument(1, array(
+        $apiDefinition->replaceArgument(0, array(
             'username' => $config['username'],
             'password' => $config['password'],
             'signature' => $config['signature'],
