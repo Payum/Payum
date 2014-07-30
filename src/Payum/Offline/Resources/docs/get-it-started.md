@@ -4,6 +4,8 @@ In this chapter we are going to talk about offline payments. The offline payment
 We assume you already read [payum's get it started documentation](https://github.com/Payum/Payum/blob/master/docs/get-it-started.md).
 This chapter is based on that one.
 
+_**Note**: If you are working with symfony2 framework look at the bundle [documentation instead](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md)._
+
 ## Installation
 
 The preferred way to install the library is using [composer](http://getcomposer.org/).
@@ -53,7 +55,7 @@ $captureToken = $tokenFactory->createCaptureToken('offline', $paymentDetails, 'd
 header("Location: ".$captureToken->getTargetUrl());
 ```
 
-That's it. As you see we have to update `config.php` and create `prepare.php`.
-Capture and Done scripts remain same for this and other payments.
+That's it. As you see we configured Offline `config.php` and set details `prepare.php`.
+[`capture.php`](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/capture-script.md) and [`done.php`](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/done-script.md) scripts remain same.
 
 Back to [index](index.md).

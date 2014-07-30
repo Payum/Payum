@@ -4,6 +4,8 @@ In this chapter we are going to talk about [Stripe.js](https://stripe.com/docs/s
 We assume you already read [payum's get it started documentation](https://github.com/Payum/Payum/blob/master/docs/get-it-started.md).
 Here we just extend it and describe [Stripe](https://stripe.com/) specific details.
 
+_**Note**: If you are working with symfony2 framework look at the bundle [documentation instead](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md)._
+
 ## Installation
 
 The preferred way to install the library is using [composer](http://getcomposer.org/).
@@ -54,7 +56,7 @@ $captureToken = $tokenFactory->createCaptureToken('stripe_js', $details, 'done.p
 header("Location: ".$captureToken->getTargetUrl());
 ```
 
-That's it. As you see we configured Stripe.js payment in `config.php` and set details in `prepare.php`.
-`capture.php` and `done.php` scripts remain same.
+That's it. As you see we configured Stripe.Js `config.php` and set details `prepare.php`.
+[`capture.php`](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/capture-script.md) and [`done.php`](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/done-script.md) scripts remain same.
 
 Back to [index](index.md).
