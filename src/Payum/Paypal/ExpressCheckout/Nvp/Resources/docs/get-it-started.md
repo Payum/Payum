@@ -24,11 +24,10 @@ We need to add payment factory and payment details storage.
 ```php
 <?php
 
-use Buzz\Client\Curl;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory as PaypalExpressPaymentFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
-$payments['paypal_es'] = PaypalExpressPaymentFactory::create(new Api(new Curl, array(
+$payments['paypal_es'] = PaypalExpressPaymentFactory::create(new Api(array(
    'username'  => 'change it',
    'password'  => 'change it',
    'signature' => 'change it',

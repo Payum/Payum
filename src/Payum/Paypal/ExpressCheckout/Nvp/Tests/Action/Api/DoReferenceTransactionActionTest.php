@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
-use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoReferenceTransactionAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoReferenceTransactionRequest;
 
@@ -110,16 +109,23 @@ class DoReferenceTransactionActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallApiDoReferenceTransactionMethodWithExpectedRequiredArguments()
     {
-        $actualRequest = null;
+        $testCase = $this;
         
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('doReferenceTransaction')
-            ->will($this->returnCallback(function($request) use (&$actualRequest){
-                $actualRequest = $request;
+            ->will($this->returnCallback(function(array $fields) use ($testCase){
+                $testCase->assertArrayHasKey('REFERENCEID', $fields);
+                $testCase->assertEquals('theReferenceId', $fields['REFERENCEID']);
 
-                return new Response();
+                $testCase->assertArrayHasKey('AMT', $fields);
+                $testCase->assertEquals('theAmt', $fields['AMT']);
+
+                $testCase->assertArrayHasKey('PAYMENTACTION', $fields);
+                $testCase->assertEquals('theAction', $fields['PAYMENTACTION']);
+
+                return array();
             }))
         ;
         
@@ -133,19 +139,6 @@ class DoReferenceTransactionActionTest extends \PHPUnit_Framework_TestCase
         ));
 
         $action->execute($request);
-        
-        $this->assertInstanceOf('Buzz\Message\Form\FormRequest', $actualRequest);
-        
-        $fields = $actualRequest->getFields();
-
-        $this->assertArrayHasKey('REFERENCEID', $fields);
-        $this->assertEquals('theReferenceId', $fields['REFERENCEID']);
-
-        $this->assertArrayHasKey('AMT', $fields);
-        $this->assertEquals('theAmt', $fields['AMT']);
-
-        $this->assertArrayHasKey('PAYMENTACTION', $fields);
-        $this->assertEquals('theAction', $fields['PAYMENTACTION']);
     }
 
     /**
@@ -158,13 +151,10 @@ class DoReferenceTransactionActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('doReferenceTransaction')
             ->will($this->returnCallback(function() {
-                $response = new Response;
-                $response->setContent(http_build_query(array(
+                return array(
                     'FIRSTNAME'=> 'theFirstname',
                     'EMAIL' => 'the@example.com'
-                )));
-                
-                return $response;
+                );
             }))
         ;
 

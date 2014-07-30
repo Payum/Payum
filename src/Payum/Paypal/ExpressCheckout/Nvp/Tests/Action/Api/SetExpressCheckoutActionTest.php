@@ -3,7 +3,6 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\SetExpressCheckoutAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckoutRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 
 class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -79,16 +78,19 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallApiGetExpressCheckoutDetailsMethodWithExpectedRequiredArguments()
     {
-        $actualRequest = null;
+        $testCase = $this;
+
+        $expectedAmount = 154.23;
         
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('setExpressCheckout')
-            ->will($this->returnCallback(function($request) use (&$actualRequest){
-                $actualRequest = $request;
+            ->will($this->returnCallback(function(array $fields) use ($testCase, $expectedAmount) {
+                $testCase->assertArrayHasKey('PAYMENTREQUEST_0_AMT', $fields);
+                $testCase->assertEquals($expectedAmount, $fields['PAYMENTREQUEST_0_AMT']);
 
-                return new Response();
+                return array();
             }))
         ;
         
@@ -96,17 +98,10 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
         $action->setApi($apiMock);
 
         $request = new SetExpressCheckoutRequest(array(
-            'PAYMENTREQUEST_0_AMT' => $expectedAmount = 154.23
+            'PAYMENTREQUEST_0_AMT' => $expectedAmount
         ));
 
         $action->execute($request);
-        
-        $this->assertInstanceOf('Buzz\Message\Form\FormRequest', $actualRequest);
-        
-        $fields = $actualRequest->getFields();
-
-        $this->assertArrayHasKey('PAYMENTREQUEST_0_AMT', $fields);
-        $this->assertEquals($expectedAmount, $fields['PAYMENTREQUEST_0_AMT']);
     }
 
     /**
@@ -119,13 +114,10 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('setExpressCheckout')
             ->will($this->returnCallback(function() {
-                $response = new Response;
-                $response->setContent(http_build_query(array(
+                return array(
                     'FIRSTNAME'=> 'theFirstname',
                     'EMAIL' => 'the@example.com'
-                )));
-                
-                return $response;
+                );
             }))
         ;
 

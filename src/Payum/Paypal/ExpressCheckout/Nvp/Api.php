@@ -2,12 +2,13 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
 use Buzz\Client\ClientInterface;
+use Buzz\Client\Curl;
 use Buzz\Message\Form\FormRequest;
-
+use Buzz\Message\Response;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
-use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
-use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
+use Payum\Core\Exception\RuntimeException;
+use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
 
 /**
  * @link https://www.x.com/developers/paypal/documentation-tools/api/getexpresscheckoutdetails-api-operation-nvp
@@ -294,9 +295,14 @@ class Api
         'cmd' => Api::CMD_EXPRESS_CHECKOUT,
     );
 
-    public function __construct(ClientInterface $client, array $options)
+    /**
+     * @param array $options
+     * @param ClientInterface|null $client
+     */
+    public function __construct(array $options, ClientInterface $client = null)
     {
-        $this->client = $client;
+        $this->client = $client ?: new Curl;
+
         $this->options = array_replace($this->options, $options);
 
         if (true == empty($this->options['username'])) {
@@ -318,14 +324,16 @@ class Api
      *
      * @param array $fields
      *
-     * @return Response
+     * @return array
      */
-    public function setExpressCheckout(FormRequest $request)
+    public function setExpressCheckout(array $fields)
     {
-        $fields = $request->getFields();
+        $request = new FormRequest;
+        $request->setFields($fields);
+
         if (false == isset($fields['RETURNURL'])) {
             if (false == $this->options['return_url']) {
-                throw new \Payum\Core\Exception\RuntimeException('The return_url must be set either to FormRequest or to options.');
+                throw new RuntimeException('The return_url must be set either to FormRequest or to options.');
             }
 
             $request->setField('RETURNURL', $this->options['return_url']);
@@ -333,7 +341,7 @@ class Api
 
         if (false == isset($fields['CANCELURL'])) {
             if (false == $this->options['cancel_url']) {
-                throw new \Payum\Core\Exception\RuntimeException('The cancel_url must be set either to FormRequest or to options.');
+                throw new RuntimeException('The cancel_url must be set either to FormRequest or to options.');
             }
 
             $request->setField('CANCELURL', $this->options['cancel_url']);
@@ -350,12 +358,15 @@ class Api
     /**
      * Require: TOKEN
      *
-     * @param \Buzz\Message\Form\FormRequest $request
+     * @param array $fields
      *
-     * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
+     * @return array
      */
-    public function getExpressCheckoutDetails(FormRequest $request)
+    public function getExpressCheckoutDetails(array $fields)
     {
+        $request = new FormRequest;
+        $request->setFields($fields);
+
         $request->setField('METHOD', 'GetExpressCheckoutDetails');
 
         $this->addVersionField($request);
@@ -367,12 +378,15 @@ class Api
     /**
      * Require: TRANSACTIONID
      *
-     * @param \Buzz\Message\Form\FormRequest $request
+     * @param array $fields
      *
-     * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
+     * @return array
      */
-    public function getTransactionDetails(FormRequest $request)
+    public function getTransactionDetails(array $fields)
     {
+        $request = new FormRequest;
+        $request->setFields($fields);
+
         $request->setField('METHOD', 'GetTransactionDetails');
 
         $this->addVersionField($request);
@@ -384,12 +398,15 @@ class Api
     /**
      * Require: PAYMENTREQUEST_0_AMT, PAYMENTREQUEST_0_PAYMENTACTION, PAYERID, TOKEN
      *
-     * @param \Buzz\Message\Form\FormRequest $request
+     * @param array $fields
      *
-     * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
+     * @return array
      */
-    public function doExpressCheckoutPayment(FormRequest $request)
+    public function doExpressCheckoutPayment(array $fields)
     {
+        $request = new FormRequest;
+        $request->setFields($fields);
+
         $request->setField('METHOD', 'DoExpressCheckoutPayment');
 
         $this->addVersionField($request);
@@ -399,12 +416,15 @@ class Api
     }
 
     /**
-     * @param \Buzz\Message\Form\FormRequest $request
+     * @param array $fields
      *
-     * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
+     * @return array
      */
-    public function createRecurringPaymentsProfile(FormRequest $request)
+    public function createRecurringPaymentsProfile(array $fields)
     {
+        $request = new FormRequest;
+        $request->setFields($fields);
+
         $request->setField('METHOD', 'CreateRecurringPaymentsProfile');
 
         $this->addVersionField($request);
@@ -414,12 +434,15 @@ class Api
     }
 
     /**
-     * @param \Buzz\Message\Form\FormRequest $request
-     * 
-     * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
+     * @param array $fields
+     *
+     * @return array
      */
-    public function getRecurringPaymentsProfileDetails(FormRequest $request)
+    public function getRecurringPaymentsProfileDetails(array $fields)
     {
+        $request = new FormRequest;
+        $request->setFields($fields);
+
         $request->setField('METHOD', 'GetRecurringPaymentsProfileDetails');
 
         $this->addVersionField($request);
@@ -429,12 +452,15 @@ class Api
     }
 
     /**
-     * @param FormRequest $request
-     * 
-     * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
+     * @param array $fields
+     *
+     * @return array
      */
-    public function manageRecurringPaymentsProfileStatus(FormRequest $request)
+    public function manageRecurringPaymentsProfileStatus(array $fields)
     {
+        $request = new FormRequest;
+        $request->setFields($fields);
+
         $request->setField('METHOD', 'ManageRecurringPaymentsProfileStatus');
 
         $this->addVersionField($request);
@@ -446,12 +472,15 @@ class Api
     /**
      * Require: PAYERID, TOKEN
      *
-     * @param \Buzz\Message\Form\FormRequest $request
+     * @param array $fields
      *
-     * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
+     * @return array
      */
-    public function createBillingAgreement(FormRequest $request)
+    public function createBillingAgreement(array $fields)
     {
+        $request = new FormRequest;
+        $request->setFields($fields);
+
         $request->setField('METHOD', 'CreateBillingAgreement');
 
         $this->addVersionField($request);
@@ -463,12 +492,15 @@ class Api
     /**
      * Require: AMT, PAYMENTACTION, REFERENCEID
      *
-     * @param \Buzz\Message\Form\FormRequest $request
+     * @param array $fields
      *
-     * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
+     * @return array
      */
-    public function doReferenceTransaction(FormRequest $request)
+    public function doReferenceTransaction(array $fields)
     {
+        $request = new FormRequest;
+        $request->setFields($fields);
+
         $request->setField('METHOD', 'DoReferenceTransaction');
 
         $this->addVersionField($request);
@@ -478,36 +510,36 @@ class Api
     }
 
     /**
-     * @param \Buzz\Message\Form\FormRequest $request
+     * @param FormRequest $request
      *
-     * @throws \Payum\Core\Exception\Http\HttpException
+     * @throws HttpException
      *
-     * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
+     * @return array
      */
     protected function doRequest(FormRequest $request)
     {
         $request->setMethod('POST');
         $request->fromUrl($this->getApiEndpoint());
 
-        $this->client->send($request, $response = $this->createResponse());
+        $this->client->send($request, $response = new Response);
 
         if (false == $response->isSuccessful()) {
             throw HttpException::factory($request, $response);
         }
-        if (false == ($response['ACK'] == self::ACK_SUCCESS || $response['ACK'] ==  self::ACK_SUCCESS_WITH_WARNING)) {
-            $e = new HttpResponseAckNotSuccessException('The response ACK is not success.');
-            $e->setRequest($request);
-            $e->setResponse($response);
-            
-            throw $e;
+
+        $result = array();
+        parse_str($response->getContent(), $result);
+        foreach ($result as &$value) {
+            $value = urldecode($value);
         }
 
-        return $response;
+        return $result;
     }
 
     /**
      * @param string $token
-     * 
+     * @param array $query
+     *
      * @return string
      */
     public function getAuthorizeTokenUrl($token, array $query = array())
@@ -554,13 +586,5 @@ class Api
     protected function addVersionField(FormRequest $request)
     {
         $request->setField('VERSION', self::VERSION);
-    }
-
-    /**
-     * @return \Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response
-     */
-    protected function createResponse()
-    {
-        return new Response();
     }
 }

@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
-use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoExpressCheckoutPaymentAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPaymentRequest;
 
@@ -129,16 +128,27 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallApiDoExpressCheckoutMethodWithExpectedRequiredArguments()
     {
-        $actualRequest = null;
+        $testCase = $this;
         
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('doExpressCheckoutPayment')
-            ->will($this->returnCallback(function($request) use (&$actualRequest){
-                $actualRequest = $request;
+            ->will($this->returnCallback(function(array $fields) use ($testCase) {
 
-                return new Response();
+                $testCase->assertArrayHasKey('TOKEN', $fields);
+                $testCase->assertEquals('theToken', $fields['TOKEN']);
+
+                $testCase->assertArrayHasKey('PAYMENTREQUEST_0_AMT', $fields);
+                $testCase->assertEquals('theAmt', $fields['PAYMENTREQUEST_0_AMT']);
+
+                $testCase->assertArrayHasKey('PAYMENTREQUEST_0_PAYMENTACTION', $fields);
+                $testCase->assertEquals('theAction', $fields['PAYMENTREQUEST_0_PAYMENTACTION']);
+
+                $testCase->assertArrayHasKey('PAYERID', $fields);
+                $testCase->assertEquals('thePayerId', $fields['PAYERID']);
+
+                return array();
             }))
         ;
         
@@ -153,22 +163,6 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
         ));
 
         $action->execute($request);
-        
-        $this->assertInstanceOf('Buzz\Message\Form\FormRequest', $actualRequest);
-        
-        $fields = $actualRequest->getFields();
-
-        $this->assertArrayHasKey('TOKEN', $fields);
-        $this->assertEquals('theToken', $fields['TOKEN']);
-
-        $this->assertArrayHasKey('PAYMENTREQUEST_0_AMT', $fields);
-        $this->assertEquals('theAmt', $fields['PAYMENTREQUEST_0_AMT']);
-
-        $this->assertArrayHasKey('PAYMENTREQUEST_0_PAYMENTACTION', $fields);
-        $this->assertEquals('theAction', $fields['PAYMENTREQUEST_0_PAYMENTACTION']);
-
-        $this->assertArrayHasKey('PAYERID', $fields);
-        $this->assertEquals('thePayerId', $fields['PAYERID']);
     }
 
     /**
@@ -181,13 +175,10 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('doExpressCheckoutPayment')
             ->will($this->returnCallback(function() {
-                $response = new Response;
-                $response->setContent(http_build_query(array(
+                return array(
                     'FIRSTNAME'=> 'theFirstname',
                     'EMAIL' => 'the@example.com'
-                )));
-                
-                return $response;
+                );
             }))
         ;
 

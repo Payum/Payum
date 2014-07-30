@@ -3,7 +3,6 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\ManageRecurringPaymentsProfileStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ManageRecurringPaymentsProfileStatusRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 
 class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -96,16 +95,23 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_
      */
     public function shouldCallApiManageRecurringPaymentsProfileStatusMethodWithExpectedRequiredArguments()
     {
-        $actualRequest = null;
+        $testCase = $this;
 
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('manageRecurringPaymentsProfileStatus')
-            ->will($this->returnCallback(function($request) use (&$actualRequest){
-                $actualRequest = $request;
+            ->will($this->returnCallback(function(array $fields) use ($testCase) {
+                $testCase->assertArrayHasKey('PROFILEID', $fields);
+                $testCase->assertEquals('theProfileId', $fields['PROFILEID']);
 
-                return new Response();
+                $testCase->assertArrayHasKey('ACTION', $fields);
+                $testCase->assertEquals('theAction', $fields['ACTION']);
+
+                $testCase->assertArrayHasKey('NOTE', $fields);
+                $testCase->assertEquals('theNote', $fields['NOTE']);
+
+                return array();
             }))
         ;
 
@@ -119,19 +125,6 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_
         ));
 
         $action->execute($request);
-
-        $this->assertInstanceOf('Buzz\Message\Form\FormRequest', $actualRequest);
-
-        $fields = $actualRequest->getFields();
-
-        $this->assertArrayHasKey('PROFILEID', $fields);
-        $this->assertEquals('theProfileId', $fields['PROFILEID']);
-
-        $this->assertArrayHasKey('ACTION', $fields);
-        $this->assertEquals('theAction', $fields['ACTION']);
-
-        $this->assertArrayHasKey('NOTE', $fields);
-        $this->assertEquals('theNote', $fields['NOTE']);
     }
 
     /**
@@ -144,12 +137,9 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_
             ->expects($this->once())
             ->method('manageRecurringPaymentsProfileStatus')
             ->will($this->returnCallback(function() {
-                $response = new Response;
-                $response->setContent(http_build_query(array(
+                return array(
                     'PROFILEID'=> 'theResponseProfileId',
-                )));
-
-                return $response;
+                );
             }))
         ;
 

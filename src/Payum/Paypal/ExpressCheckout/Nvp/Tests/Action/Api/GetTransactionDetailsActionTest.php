@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
-use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetTransactionDetailsAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetailsRequest;
 
@@ -79,16 +78,18 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallApiGetTransactionDetailsMethodWithExpectedRequiredArguments()
     {
-        $actualRequest = null;
+        $testCase = $this;
         
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('getTransactionDetails')
-            ->will($this->returnCallback(function($request) use (&$actualRequest){
-                $actualRequest = $request;
+            ->will($this->returnCallback(function(array $fields) use ($testCase) {
+                $testCase->assertArrayHasKey('TRANSACTIONID', $fields);
+                $testCase->assertEquals('theTransactionId', $fields['TRANSACTIONID']);
 
-                return new Response();
+
+                return array();
             }))
         ;
         
@@ -100,13 +101,6 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
         ), $paymentRequestN = 5);
 
         $action->execute($request);
-        
-        $this->assertInstanceOf('Buzz\Message\Form\FormRequest', $actualRequest);
-        
-        $fields = $actualRequest->getFields();
-
-        $this->assertArrayHasKey('TRANSACTIONID', $fields);
-        $this->assertEquals('theTransactionId', $fields['TRANSACTIONID']);
     }
 
     /**
@@ -119,12 +113,9 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getTransactionDetails')
             ->will($this->returnCallback(function() {
-                $response = new Response;
-                $response->setContent(http_build_query(array(
+                return array(
                     'PAYMENTSTATUS' => 'theStatus',
-                )));
-                
-                return $response;
+                );
             }))
         ;
 

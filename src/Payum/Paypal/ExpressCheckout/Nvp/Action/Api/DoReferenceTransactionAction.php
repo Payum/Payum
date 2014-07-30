@@ -1,8 +1,6 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
-use Buzz\Message\Form\FormRequest;
-
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\LogicException;
@@ -32,12 +30,9 @@ class DoReferenceTransactionAction extends BaseApiAwareAction
             throw new LogicException('AMT must be set.');
         }
         
-        $buzzRequest = new FormRequest();
-        $buzzRequest->setFields((array) $model);
-
-        $response = $this->api->doReferenceTransaction($buzzRequest);
-
-        $model->replace($response);
+        $model->replace(
+            $this->api->doReferenceTransaction((array) $model)
+        );
     }
 
     /**

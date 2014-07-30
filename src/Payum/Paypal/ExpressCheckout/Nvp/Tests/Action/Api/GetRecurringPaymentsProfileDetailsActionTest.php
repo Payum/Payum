@@ -2,7 +2,6 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetRecurringPaymentsProfileDetailsAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetRecurringPaymentsProfileDetailsRequest;
 
 class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_TestCase
@@ -79,16 +78,17 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_Te
      */
     public function shouldCallApiGetRecurringPaymentsProfileDetailsMethodWithExpectedRequiredArguments()
     {
-        $actualRequest = null;
-        
+        $testCase = $this;
+
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('getRecurringPaymentsProfileDetails')
-            ->will($this->returnCallback(function($request) use (&$actualRequest){
-                $actualRequest = $request;
+            ->will($this->returnCallback(function(array $fields) use ($testCase) {
+                $testCase->assertArrayHasKey('PROFILEID', $fields);
+                $testCase->assertEquals('theProfileId', $fields['PROFILEID']);
 
-                return new Response();
+                return array();
             }))
         ;
         
@@ -100,13 +100,6 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_Te
         ));
 
         $action->execute($request);
-        
-        $this->assertInstanceOf('Buzz\Message\Form\FormRequest', $actualRequest);
-        
-        $fields = $actualRequest->getFields();
-
-        $this->assertArrayHasKey('PROFILEID', $fields);
-        $this->assertEquals('theProfileId', $fields['PROFILEID']);
     }
 
     /**
@@ -119,12 +112,9 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_Te
             ->expects($this->once())
             ->method('getRecurringPaymentsProfileDetails')
             ->will($this->returnCallback(function() {
-                $response = new Response;
-                $response->setContent(http_build_query(array(
+                return array(
                     'STATUS'=> 'theStatus',
-                )));
-                
-                return $response;
+                );
             }))
         ;
 

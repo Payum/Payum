@@ -8,6 +8,12 @@
 * [request] Class `ResponseInteractiveRequest` was moved to sub namespace `Http`.
 * [doctrine][orm] The column name `array` was renamed to `details` in mapping xml for `ArrayObject` class. You have to take care of the migration in your app code.
 * [doctrine][mongodb] The field name `array` was renamed to `details` in mapping xml for `ArrayObject` class. You have to take care of the migration in your app code.
+* [paypal ec] `Api` constructor arguments order was changed. Second argument `options` is now first, and the client now is second and optional.
+* [paypal ec] `Api` methods which used FormRequest as argument now accept an array.
+* [paypal ec] `Api` methods which returned Response now return an array.
+* [paypal ec] Class `Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response` was removed.
+* [paypal ec] Class `Payum\Paypal\ExpressCheckout\Nvp\Exception\HttpResponseAckNotSuccessException` was removed.
+
 
 ## 0.8 to 0.9
 
