@@ -1,7 +1,7 @@
 # Get it started. Paypal ExpressCheckout.
 
 In this chapter we are going to talk about [Paypal ExpressCheckout](https://www.paypal.com/webapps/mpp/express-checkout) integration.
-We assume you already read [Payum's get it started documentation](https://github.com/Payum/Payum/blob/master/docs/get-it-started.md).
+We assume you already read [Payum's get it started documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md).
 Here we just extend it and describe Paypal specific details.
 
 _**Note**: If you are working with symfony2 framework look at the bundle [documentation instead](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md)._

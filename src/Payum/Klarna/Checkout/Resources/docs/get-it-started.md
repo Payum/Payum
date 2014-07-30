@@ -1,7 +1,7 @@
 # Get it started.
 
 In this chapter we are going to talk about the most common task: purchasing a product using klarna checkout.
-We assume you already read [payum's get it started documentation](https://github.com/Payum/Payum/blob/master/docs/get-it-started.md).
+We assume you already read [payum's get it started documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md).
 Here we just extend what was said there to match klarna's specific details.
 
 _**Note**: If you are working with symfony2 framework look at the bundle [documentation instead](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md)._

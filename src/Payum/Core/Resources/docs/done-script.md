@@ -1,4 +1,4 @@
-## Capture done script
+## Done script
 
 After the capture did its job you will be redirected to `done.php`.
 The [`capture.php`](capture-script.md) script always redirects you to `done.php` no matter the payment was a success or not.

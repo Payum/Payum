@@ -1,7 +1,7 @@
 # Get it started. Stripe.js.
 
 In this chapter we are going to talk about [Stripe.js](https://stripe.com/docs/stripe.js) integration.
-We assume you already read [payum's get it started documentation](https://github.com/Payum/Payum/blob/master/docs/get-it-started.md).
+We assume you already read [payum's get it started documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md).
 Here we just extend it and describe [Stripe](https://stripe.com/) specific details.
 
 _**Note**: If you are working with symfony2 framework look at the bundle [documentation instead](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md)._

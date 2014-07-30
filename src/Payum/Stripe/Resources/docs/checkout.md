@@ -1,7 +1,7 @@
 # Checkout.
 
 In this chapter we are going to talk about [Stripe checkout](https://stripe.com/docs/checkout) integration.
-We assume you already read [payum's get it started documentation](https://github.com/Payum/Payum/blob/master/docs/get-it-started.md).
+We assume you already read [payum's get it started documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md).
 Here we just extend it and describe [Stripe](https://stripe.com/) specific details.
 
 ## Installation
