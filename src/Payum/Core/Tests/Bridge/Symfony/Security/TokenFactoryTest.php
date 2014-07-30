@@ -32,7 +32,8 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             $this->createStorageMock(),
             $this->createStorageRegistryMock(),
             'capture.php',
-            'notify.php'
+            'notify.php',
+            'authorize'
         );
     }
 
@@ -94,7 +95,8 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             $tokenStorageMock,
             $storageRegistryMock,
             'capture',
-            'notify'
+            'notify',
+            'authorize'
         );
 
         $actualToken = $factory->createToken(
@@ -164,8 +166,9 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             $routerMock,
             $tokenStorageMock,
             $storageRegistryMock,
-            'capture.php',
-            'notify.php'
+            'capture',
+            'notify',
+            'authorize'
         );
 
         $actualToken = $factory->createToken($paymentName, $model, 'theTargetPath');
@@ -229,7 +232,8 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             $tokenStorageMock,
             $storageRegistryMock,
             'capture',
-            'notify'
+            'notify',
+            'authorize'
         );
 
         $actualToken = $factory->createNotifyToken($paymentName, $model);
@@ -316,7 +320,8 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             $tokenStorageMock,
             $storageRegistryMock,
             'capture',
-            'notify'
+            'notify',
+            'authorize'
         );
 
         $actualToken = $factory->createCaptureToken($paymentName, $model, 'after', array('afterKey' => 'afterVal'));
@@ -326,6 +331,94 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($identificator, $captureToken->getDetails());
         $this->assertEquals('theCaptureUrl', $captureToken->getTargetUrl());
         $this->assertEquals('theAfterUrl', $captureToken->getAfterUrl());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCreateAuthorizeToken()
+    {
+        $authorizeToken = new Token;
+        $afterToken = new Token;
+
+        $tokenStorageMock = $this->createStorageMock();
+        $tokenStorageMock
+            ->expects($this->at(0))
+            ->method('createModel')
+            ->will($this->returnValue($afterToken))
+        ;
+        $tokenStorageMock
+            ->expects($this->at(1))
+            ->method('updateModel')
+            ->with($this->identicalTo($afterToken))
+        ;
+        $tokenStorageMock
+            ->expects($this->at(2))
+            ->method('createModel')
+            ->will($this->returnValue($authorizeToken))
+        ;
+        $tokenStorageMock
+            ->expects($this->at(3))
+            ->method('updateModel')
+            ->with($this->identicalTo($authorizeToken))
+        ;
+        $tokenStorageMock
+            ->expects($this->at(4))
+            ->method('updateModel')
+            ->with($this->identicalTo($authorizeToken))
+        ;
+
+
+        $model = new \stdClass;
+        $identificator = new Identificator('anId', 'stdClass');
+        $paymentName = 'thePaymentName';
+
+        $modelStorage = $this->createStorageMock();
+        $modelStorage
+            ->expects($this->exactly(2))
+            ->method('getIdentificator')
+            ->with($this->identicalTo($model))
+            ->will($this->returnValue($identificator))
+        ;
+
+        $storageRegistryMock = $this->createStorageRegistryMock();
+        $storageRegistryMock
+            ->expects($this->exactly(2))
+            ->method('getStorage')
+            ->with($this->identicalTo($model))
+            ->will($this->returnValue($modelStorage))
+        ;
+
+        $routerMock = $this->createUrlGeneratorMock();
+        $routerMock
+            ->expects($this->at(0))
+            ->method('generate')
+            ->with('after', $this->isType('array'), true)
+            ->will($this->returnValue('theAfterUrl'))
+        ;
+        $routerMock
+            ->expects($this->at(1))
+            ->method('generate')
+            ->with('authorize', array('payum_token' => $authorizeToken->getHash()), true)
+            ->will($this->returnValue('theAuthorizeUrl'))
+        ;
+
+        $factory = new TokenFactory(
+            $routerMock,
+            $tokenStorageMock,
+            $storageRegistryMock,
+            'capture',
+            'notify',
+            'authorize'
+        );
+
+        $actualToken = $factory->createAuthorizeToken($paymentName, $model, 'after', array('afterKey' => 'afterVal'));
+
+        $this->assertSame($authorizeToken, $actualToken);
+        $this->assertEquals($paymentName, $authorizeToken->getPaymentName());
+        $this->assertSame($identificator, $authorizeToken->getDetails());
+        $this->assertEquals('theAuthorizeUrl', $authorizeToken->getTargetUrl());
+        $this->assertEquals('theAfterUrl', $authorizeToken->getAfterUrl());
     }
 
     /**

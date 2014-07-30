@@ -31,7 +31,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             $this->createStorageRegistryMock(),
             'http://example.com',
             'capture.php',
-            'notify.php'
+            'notify.php',
+            'authorize.php'
         );
     }
 
@@ -79,7 +80,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             $storageRegistryMock,
             'http://example.com',
             'capture.php',
-            'notify.php'
+            'notify.php',
+            'authorize.php'
         );
 
         $actualToken = $factory->createToken(
@@ -145,7 +147,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             $storageRegistryMock,
             'http://example.com',
             'capture.php',
-            'notify.php'
+            'notify.php',
+            'authorize.php'
         );
 
         $actualToken = $factory->createToken(
@@ -211,7 +214,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             $storageRegistryMock,
             'http://example.com',
             'capture.php',
-            'notify.php'
+            'notify.php',
+            'authorize.php'
         );
 
         $actualToken = $factory->createToken($paymentName, $model, 'theTargetPath');
@@ -270,7 +274,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             $storageRegistryMock,
             'http://example.com',
             'capture.php',
-            'notify.php'
+            'notify.php',
+            'authorize.php'
         );
 
         $actualToken = $factory->createNotifyToken($paymentName, $model);
@@ -317,7 +322,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             $storageRegistryMock,
             'http://example.com',
             'capture.php',
-            'notify.php'
+            'notify.php',
+            'authorize.php'
         );
 
         $actualToken = $factory->createNotifyToken($paymentName, null);
@@ -393,7 +399,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             $storageRegistryMock,
             'http://example.com',
             'capture.php',
-            'notify.php'
+            'notify.php',
+            'authorize.php'
         );
 
         $actualToken = $factory->createCaptureToken($paymentName, $model, 'after.php', array('afterKey' => 'afterVal'));
@@ -472,7 +479,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             $storageRegistryMock,
             'http://example.com',
             'capture.php',
-            'notify.php'
+            'notify.php',
+            'authorize.php'
         );
 
         $actualToken = $factory->createCaptureToken($paymentName, $model, 'http://google.com', array('afterKey' => 'afterVal'));
@@ -487,6 +495,166 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             'http://google.com?afterKey=afterVal&payum_token='.$afterToken->getHash(),
             $captureToken->getAfterUrl()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCreateAuthorizeToken()
+    {
+        $authorizeToken = new Token;
+        $afterToken = new Token;
+
+        $tokenStorageMock = $this->createStorageMock();
+        $tokenStorageMock
+            ->expects($this->at(0))
+            ->method('createModel')
+            ->will($this->returnValue($afterToken))
+        ;
+        $tokenStorageMock
+            ->expects($this->at(1))
+            ->method('updateModel')
+            ->with($this->identicalTo($afterToken))
+        ;
+        $tokenStorageMock
+            ->expects($this->at(2))
+            ->method('createModel')
+            ->will($this->returnValue($authorizeToken))
+        ;
+        $tokenStorageMock
+            ->expects($this->at(3))
+            ->method('updateModel')
+            ->with($this->identicalTo($authorizeToken))
+        ;
+        $tokenStorageMock
+            ->expects($this->at(4))
+            ->method('updateModel')
+            ->with($this->identicalTo($authorizeToken))
+        ;
+
+
+        $model = new \stdClass;
+        $identificator = new Identificator('anId', 'stdClass');
+        $paymentName = 'thePaymentName';
+
+        $modelStorage = $this->createStorageMock();
+        $modelStorage
+            ->expects($this->exactly(2))
+            ->method('getIdentificator')
+            ->with($this->identicalTo($model))
+            ->will($this->returnValue($identificator))
+        ;
+
+        $storageRegistryMock = $this->createStorageRegistryMock();
+        $storageRegistryMock
+            ->expects($this->exactly(2))
+            ->method('getStorage')
+            ->with($this->identicalTo($model))
+            ->will($this->returnValue($modelStorage))
+        ;
+
+        $factory = new GenericTokenFactory(
+            $tokenStorageMock,
+            $storageRegistryMock,
+            'http://example.com',
+            'capture.php',
+            'notify.php',
+            'authorize.php'
+        );
+
+        $actualToken = $factory->createAuthorizeToken($paymentName, $model, 'after.php', array('afterKey' => 'afterVal'));
+
+        $this->assertSame($authorizeToken, $actualToken);
+        $this->assertEquals($paymentName, $authorizeToken->getPaymentName());
+        $this->assertSame($identificator, $authorizeToken->getDetails());
+        $this->assertEquals(
+            'http://example.com/authorize.php?payum_token='.$authorizeToken->getHash(),
+            $authorizeToken->getTargetUrl()
+        );
+        $this->assertEquals(
+            'http://example.com/after.php?afterKey=afterVal&payum_token='.$afterToken->getHash(),
+            $authorizeToken->getAfterUrl()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCreateAuthorizeTokenWithAfterPathAlreadyUrl()
+    {
+        $authorizeToken = new Token;
+        $afterToken = new Token;
+
+        $tokenStorageMock = $this->createStorageMock();
+        $tokenStorageMock
+            ->expects($this->at(0))
+            ->method('createModel')
+            ->will($this->returnValue($afterToken))
+        ;
+        $tokenStorageMock
+            ->expects($this->at(1))
+            ->method('updateModel')
+            ->with($this->identicalTo($afterToken))
+        ;
+        $tokenStorageMock
+            ->expects($this->at(2))
+            ->method('createModel')
+            ->will($this->returnValue($authorizeToken))
+        ;
+        $tokenStorageMock
+            ->expects($this->at(3))
+            ->method('updateModel')
+            ->with($this->identicalTo($authorizeToken))
+        ;
+        $tokenStorageMock
+            ->expects($this->at(4))
+            ->method('updateModel')
+            ->with($this->identicalTo($authorizeToken))
+        ;
+
+
+        $model = new \stdClass;
+        $identificator = new Identificator('anId', 'stdClass');
+        $paymentName = 'thePaymentName';
+
+        $modelStorage = $this->createStorageMock();
+        $modelStorage
+            ->expects($this->exactly(2))
+            ->method('getIdentificator')
+            ->with($this->identicalTo($model))
+            ->will($this->returnValue($identificator))
+        ;
+
+        $storageRegistryMock = $this->createStorageRegistryMock();
+        $storageRegistryMock
+            ->expects($this->exactly(2))
+            ->method('getStorage')
+            ->with($this->identicalTo($model))
+            ->will($this->returnValue($modelStorage))
+        ;
+
+        $factory = new GenericTokenFactory(
+            $tokenStorageMock,
+            $storageRegistryMock,
+            'http://example.com',
+            'capture.php',
+            'notify.php',
+            'authorize.php'
+        );
+
+        $actualToken = $factory->createAuthorizeToken($paymentName, $model, 'http://google.com', array('afterKey' => 'afterVal'));
+
+        $this->assertSame($authorizeToken, $actualToken);
+        $this->assertEquals($paymentName, $authorizeToken->getPaymentName());
+        $this->assertSame($identificator, $authorizeToken->getDetails());
+        $this->assertEquals(
+            'http://example.com/authorize.php?payum_token='.$authorizeToken->getHash(),
+            $authorizeToken->getTargetUrl()
+        );
+        $this->assertEquals(
+            'http://google.com?afterKey=afterVal&payum_token='.$afterToken->getHash(),
+            $authorizeToken->getAfterUrl()
         );
     }
 
