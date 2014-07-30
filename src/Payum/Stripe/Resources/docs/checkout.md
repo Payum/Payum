@@ -54,7 +54,7 @@ $captureToken = $tokenFactory->createCaptureToken('stripe_checkout', $details, '
 header("Location: ".$captureToken->getTargetUrl());
 ```
 
-That's it. As you see we configured Stripe.js payment in `config.php` and set details in `prepare.php`.
-`capture.php` and `done.php` scripts remain same.
+That's it. As you see we configured Stripe Checkout `config.php` and set details `prepare.php`.
+[`capture.php`](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/capture-script.md) and [`done.php`](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/done-script.md) scripts remain same.
 
 Back to [index](index.md).

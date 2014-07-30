@@ -54,7 +54,7 @@ $_REQUEST['payum_token'] = $captureToken;
 include 'capture.php';
 ```
 
-That's it. As you see we configured be2bill payment in `config.php` and set details in `prepare.php`.
-The `capture.php` and `done.php` scripts remain same.
+That's it. As you see we configured Be2Bill `config.php` and set details `prepare.php`.
+[`capture.php`](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/capture-script.md) and [`done.php`](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/done-script.md) scripts remain same.
 
 Back to [index](index.md).
