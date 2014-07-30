@@ -1,5 +1,5 @@
 <?php
-namespace Payum\OmnipayBridge\Tests\Integration;
+namespace Payum\OmnipayBridge\Tests\Functional;
 
 use Omnipay\Dummy\Gateway;
 
