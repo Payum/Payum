@@ -3,8 +3,6 @@
 Here we describe basic steps required by all supported payments. We are going to setup models, storages, a security layer and so on.
 All that stuff will be used later.
 
-_**Note**: If you are working with symfony2 framework look at the bundle [documentation instead](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md)._
-
 ## Install
 
 The preferred way to install the library is using [composer](http://getcomposer.org/).
@@ -15,7 +13,8 @@ php composer.phar require "payum/paypal-express-checkout-nvp:*@stable"
 ```
 
 _**Note**: Where payum/xxx is a payment. It could be payum/paypal-express-checkout-nvp for example._
-_**Note**: Use payum/payum if you want to install payments at once._
+
+_**Note**: Use payum/payum if you want to install all payments at once._
 
 ## Configure
 
