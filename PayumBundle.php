@@ -16,6 +16,7 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PayexPaymentFac
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AuthorizeNetAimPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\StripeCheckoutPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\StripeJsPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\CustomStorageFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\DoctrineStorageFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\FilesystemStorageFactory;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -46,6 +47,7 @@ class PayumBundle extends Bundle
 
         $extension->addStorageFactory(new FilesystemStorageFactory);
         $extension->addStorageFactory(new DoctrineStorageFactory);
+        $extension->addStorageFactory(new CustomStorageFactory);
 
         $container->addCompilerPass(new PayumActionsPass);
         $container->addCompilerPass(new PayumStorageExtensionsPass);
