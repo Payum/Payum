@@ -430,7 +430,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('send')
             ->will($this->returnCallback(function(FormRequest $request, Response $response) use ($testCase) {
-                $this->assertEquals('https://api-3t.paypal.com/nvp', $request->getUrl());
+                $testCase->assertEquals('https://api-3t.paypal.com/nvp', $request->getUrl());
 
                 $response->setHeaders(array('HTTP/1.1 200 OK'));
                 $response->setContent('ACK=Success');
@@ -463,7 +463,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('send')
             ->will($this->returnCallback(function(FormRequest $request, Response $response) use ($testCase) {
-                $this->assertEquals('https://api-3t.sandbox.paypal.com/nvp', $request->getUrl());
+                $testCase->assertEquals('https://api-3t.sandbox.paypal.com/nvp', $request->getUrl());
 
                 $response->setHeaders(array('HTTP/1.1 200 OK'));
                 $response->setContent('ACK=Success');
