@@ -9,10 +9,10 @@ The preferred way to install the library is using [composer](http://getcomposer.
 Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require "payum/paypal-express-checkout-nvp:*@stable"
+php composer.phar require "payum/xxx:*@stable"
 ```
 
-_**Note**: Where payum/xxx is a payment. It could be payum/paypal-express-checkout-nvp for example._
+_**Note**: Where payum/xxx is a payum package, for example it could be payum/paypal-express-checkout-nvp. Look at [supported payments](supported-payments.md) to find out what you can use._
 
 _**Note**: Use payum/payum if you want to install all payments at once._
 
