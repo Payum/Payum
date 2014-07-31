@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.10.0 (2014-07-31)
+
+* [doc] fix typos, improve examples, get-it-started page.
+* [paypal ec][api] simplify Api class constructor. The client is optional now.
+* [paypal ec][api] Api methods now takes array as argument and return array as well. Do not expose buzz outside Api.
+* [tests] remove fragile functional tests.
+* [composer] fix typos in composer.json
+* [http] add client ip and user agent to the get http request.
+* [doctrine] rename `array` property to `details`.
+* [stripe] add stripe.js, checkout support. 
+* [template] use twig as a templating engine.
+* [template] add twig factory, simplify first setup.
+* [template] allow configure a layout.
+* [request] remove deprecated requests.
+* [registry] decouple `StorageRegistry` from payments removing name argument.
+
 ## 0.9.3 (2014-07-21)
 
 * [doctrine] Quote a column  `array` in metadata for `ArrayObject` class. Array is a reserved word in some databases.
