@@ -1,12 +1,8 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
-use Buzz\Message\Form\FormRequest;
-
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfileRequest;
 
 class CreateRecurringPaymentProfileAction extends BaseApiAwareAction
@@ -33,16 +29,9 @@ class CreateRecurringPaymentProfileAction extends BaseApiAwareAction
             'CURRENCYCODE',
         ));
 
-        try {
-            $buzzRequest = new FormRequest();
-            $buzzRequest->setFields((array) $model);
-
-            $response = $this->api->createRecurringPaymentsProfile($buzzRequest);
-            
-            $model->replace($response);
-        } catch (HttpResponseAckNotSuccessException $e) {
-            $model->replace($e->getResponse());
-        }
+        $model->replace(
+            $this->api->createRecurringPaymentsProfile((array) $model)
+        );
     }
 
     /**

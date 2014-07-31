@@ -1,13 +1,10 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
-use Buzz\Message\Form\FormRequest;
-
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\SyncRequest;
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetailsRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetailsRequest;
 
@@ -29,16 +26,12 @@ class PaymentDetailsSyncAction extends PaymentAwareAction
             return;
         }
         
-        try {
-            $this->payment->execute(new GetExpressCheckoutDetailsRequest($model));
-            
-            foreach (range(0, 9) as $index) {
-                if ($model['PAYMENTREQUEST_'.$index.'_TRANSACTIONID']) {
-                    $this->payment->execute(new GetTransactionDetailsRequest($model, $index));
-                }
+        $this->payment->execute(new GetExpressCheckoutDetailsRequest($model));
+
+        foreach (range(0, 9) as $index) {
+            if ($model['PAYMENTREQUEST_'.$index.'_TRANSACTIONID']) {
+                $this->payment->execute(new GetTransactionDetailsRequest($model, $index));
             }
-        } catch (HttpResponseAckNotSuccessException $e) {
-            $model->replace($e->getResponse());
         }
     }
 

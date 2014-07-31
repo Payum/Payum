@@ -1,15 +1,11 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
-use Buzz\Message\Form\FormRequest;
-
 use Payum\Core\Model\Token;
 use Payum\Core\Request\CaptureRequest;
 use Payum\Core\Request\SecuredCaptureRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
-use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 
 class CaptureActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -309,48 +305,6 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         )));
     }
 
-    /**
-     * @test
-     */
-    public function shouldUpdateModelFromResponseInCaughtAckFailedException()
-    {
-        $response = new Response();
-        $response->setContent(http_build_query(array(
-            'L_ERRORCODE0' => 'foo_error',
-            'L_ERRORCODE1' => 'bar_error',
-        )));
-        
-        $ackFailedException = new HttpResponseAckNotSuccessException;
-        $ackFailedException->setRequest(new FormRequest());
-        $ackFailedException->setResponse($response);
-        
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
-            ->expects($this->exactly(1))
-            ->method('execute')
-            ->will($this->throwException($ackFailedException))
-        ;
-
-        $action = new CaptureAction();
-        $action->setPayment($paymentMock);
-
-        $action = new CaptureAction();
-        $action->setPayment($paymentMock);
-
-        $action->execute($request = new CaptureRequest(array(
-            'TOKEN' => 'aToken',
-            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS
-        )));
-
-        $model = $request->getModel();
-
-        $this->assertArrayHasKey('L_ERRORCODE0', $model);
-        $this->assertEquals('foo_error', $model['L_ERRORCODE0']);
-
-        $this->assertArrayHasKey('L_ERRORCODE1', $model);
-        $this->assertEquals('bar_error', $model['L_ERRORCODE1']);
-    }
-    
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\PaymentInterface
      */

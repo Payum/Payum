@@ -1,11 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
-use Buzz\Message\Form\FormRequest;
-
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
-use Payum\Paypal\ExpressCheckout\Nvp\Exception\Http\HttpResponseAckNotSuccessException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfileRequest;
 
 class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCase
@@ -93,16 +89,51 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
      */
     public function shouldCallApiCreateRecurringPaymentsProfileMethodWithExpectedRequiredArguments()
     {
-        $actualRequest = null;
+        $testCase = $this;
 
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('createRecurringPaymentsProfile')
-            ->will($this->returnCallback(function($request) use (&$actualRequest){
-                $actualRequest = $request;
+            ->will($this->returnCallback(function(array $fields) use ($testCase) {
 
-                return new Response();
+                $testCase->assertArrayHasKey('TOKEN', $fields);
+                $testCase->assertEquals('theToken', $fields['TOKEN']);
+
+                $testCase->assertArrayHasKey('PROFILESTARTDATE', $fields);
+                $testCase->assertEquals('theStartDate', $fields['PROFILESTARTDATE']);
+
+                $testCase->assertArrayHasKey('DESC', $fields);
+                $testCase->assertEquals('theDesc', $fields['DESC']);
+
+                $testCase->assertArrayHasKey('BILLINGPERIOD', $fields);
+                $testCase->assertEquals('thePeriod', $fields['BILLINGPERIOD']);
+
+                $testCase->assertArrayHasKey('BILLINGFREQUENCY', $fields);
+                $testCase->assertEquals('theFrequency', $fields['BILLINGFREQUENCY']);
+
+                $testCase->assertArrayHasKey('AMT', $fields);
+                $testCase->assertEquals('theAmt', $fields['AMT']);
+
+                $testCase->assertArrayHasKey('CURRENCYCODE', $fields);
+                $testCase->assertEquals('theCurr', $fields['CURRENCYCODE']);
+
+                $testCase->assertArrayHasKey('EMAIL', $fields);
+                $testCase->assertEquals('theEmail', $fields['EMAIL']);
+
+                $testCase->assertArrayHasKey('STREET', $fields);
+                $testCase->assertEquals('theStreet', $fields['STREET']);
+
+                $testCase->assertArrayHasKey('CITY', $fields);
+                $testCase->assertEquals('theCity', $fields['CITY']);
+
+                $testCase->assertArrayHasKey('COUNTRYCODE', $fields);
+                $testCase->assertEquals('theCountry', $fields['COUNTRYCODE']);
+
+                $testCase->assertArrayHasKey('ZIP', $fields);
+                $testCase->assertEquals('theZip', $fields['ZIP']);
+
+                return array();
             }))
         ;
 
@@ -125,46 +156,6 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
         ));
 
         $action->execute($request);
-
-        $this->assertInstanceOf('Buzz\Message\Form\FormRequest', $actualRequest);
-
-        $fields = $actualRequest->getFields();
-
-        $this->assertArrayHasKey('TOKEN', $fields);
-        $this->assertEquals('theToken', $fields['TOKEN']);
-
-        $this->assertArrayHasKey('PROFILESTARTDATE', $fields);
-        $this->assertEquals('theStartDate', $fields['PROFILESTARTDATE']);
-
-        $this->assertArrayHasKey('DESC', $fields);
-        $this->assertEquals('theDesc', $fields['DESC']);
-
-        $this->assertArrayHasKey('BILLINGPERIOD', $fields);
-        $this->assertEquals('thePeriod', $fields['BILLINGPERIOD']);
-
-        $this->assertArrayHasKey('BILLINGFREQUENCY', $fields);
-        $this->assertEquals('theFrequency', $fields['BILLINGFREQUENCY']);
-
-        $this->assertArrayHasKey('AMT', $fields);
-        $this->assertEquals('theAmt', $fields['AMT']);
-
-        $this->assertArrayHasKey('CURRENCYCODE', $fields);
-        $this->assertEquals('theCurr', $fields['CURRENCYCODE']);
-
-        $this->assertArrayHasKey('EMAIL', $fields);
-        $this->assertEquals('theEmail', $fields['EMAIL']);
-
-        $this->assertArrayHasKey('STREET', $fields);
-        $this->assertEquals('theStreet', $fields['STREET']);
-
-        $this->assertArrayHasKey('CITY', $fields);
-        $this->assertEquals('theCity', $fields['CITY']);
-
-        $this->assertArrayHasKey('COUNTRYCODE', $fields);
-        $this->assertEquals('theCountry', $fields['COUNTRYCODE']);
-
-        $this->assertArrayHasKey('ZIP', $fields);
-        $this->assertEquals('theZip', $fields['ZIP']);
     }
 
     /**
@@ -177,13 +168,10 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
             ->expects($this->once())
             ->method('createRecurringPaymentsProfile')
             ->will($this->returnCallback(function() {
-                $response = new Response;
-                $response->setContent(http_build_query(array(
+                return array(
                     'PROFILEID'=> 'theId',
                     'PROFILESTATUS' => 'theStatus'
-                )));
-
-                return $response;
+                );
             }))
         ;
 
@@ -213,56 +201,6 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
         
         $this->assertArrayHasKey('PROFILESTATUS', $model);
         $this->assertEquals('theStatus', $model['PROFILESTATUS']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldUpdateModelFromResponseInCaughtAckFailedException()
-    {
-        $response = new Response();
-        $response->setContent(http_build_query(array(
-            'L_ERRORCODE0' => 'foo_error',
-            'L_ERRORCODE1' => 'bar_error',
-        )));
-
-        $ackFailedException = new HttpResponseAckNotSuccessException;
-        $ackFailedException->setRequest(new FormRequest());
-        $ackFailedException->setResponse($response);
-
-        $apiMock = $this->createApiMock();
-        $apiMock
-            ->expects($this->once())
-            ->method('createRecurringPaymentsProfile')
-            ->will($this->throwException($ackFailedException))
-        ;
-
-        $action = new CreateRecurringPaymentProfileAction();
-        $action->setApi($apiMock);
-
-        $request = new CreateRecurringPaymentProfileRequest(array(
-            'TOKEN' => 'theToken',
-            'PROFILESTARTDATE' => 'theStartDate',
-            'DESC' => 'theDesc',
-            'BILLINGPERIOD' => 'thePeriod',
-            'BILLINGFREQUENCY' => 'theFrequency',
-            'AMT' => 'theAmt',
-            'CURRENCYCODE' => 'theCurr',
-            'EMAIL' => 'theEmail',
-            'STREET' => 'theStreet',
-            'CITY' => 'theCity',
-            'COUNTRYCODE' => 'theCountry',
-            'ZIP' => 'theZip',
-        ));
-
-        $action->execute($request);
-
-        $model = $request->getModel();
-
-        $this->assertArrayHasKey('L_ERRORCODE0', $model);
-        $this->assertEquals('foo_error', $model['L_ERRORCODE0']);
-        $this->assertArrayHasKey('L_ERRORCODE1', $model);
-        $this->assertEquals('bar_error', $model['L_ERRORCODE1']);
     }
 
     /**

@@ -1,8 +1,6 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
-use Buzz\Message\Form\FormRequest;
-
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\LogicException;
@@ -26,12 +24,9 @@ class CreateBillingAgreementAction extends BaseApiAwareAction
             throw new LogicException('TOKEN must be set. Have you run SetExpressCheckoutAction?');
         }
         
-        $buzzRequest = new FormRequest();
-        $buzzRequest->setFields((array) $model);
-
-        $response = $this->api->createBillingAgreement($buzzRequest);
-
-        $model->replace($response);
+        $model->replace(
+            $this->api->createBillingAgreement((array) $model)
+        );
     }
 
     /**

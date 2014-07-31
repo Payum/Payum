@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
-use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetailsRequest;
 
@@ -79,16 +78,17 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallApiGetExpressCheckoutDetailsMethodWithExpectedRequiredArguments()
     {
-        $actualRequest = null;
+        $testCase = $this;
         
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('getExpressCheckoutDetails')
-            ->will($this->returnCallback(function($request) use (&$actualRequest){
-                $actualRequest = $request;
+            ->will($this->returnCallback(function(array $fields) use ($testCase){
+                $testCase->assertArrayHasKey('TOKEN', $fields);
+                $testCase->assertEquals('theToken', $fields['TOKEN']);
 
-                return new Response();
+                return array();
             }))
         ;
         
@@ -100,13 +100,6 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
         ));
 
         $action->execute($request);
-        
-        $this->assertInstanceOf('Buzz\Message\Form\FormRequest', $actualRequest);
-        
-        $fields = $actualRequest->getFields();
-
-        $this->assertArrayHasKey('TOKEN', $fields);
-        $this->assertEquals('theToken', $fields['TOKEN']);
     }
 
     /**
@@ -119,13 +112,10 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getExpressCheckoutDetails')
             ->will($this->returnCallback(function() {
-                $response = new Response;
-                $response->setContent(http_build_query(array(
+                return array(
                     'FIRSTNAME'=> 'theFirstname',
                     'EMAIL' => 'the@example.com'
-                )));
-                
-                return $response;
+                );
             }))
         ;
 

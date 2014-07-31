@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
-use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateBillingAgreementAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateBillingAgreementRequest;
 
@@ -75,16 +74,17 @@ class CreateBillingAgreementActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallApiCreateBillingAgreementMethodWithExpectedRequiredArguments()
     {
-        $actualRequest = null;
+        $testCase = $this;
         
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('createBillingAgreement')
-            ->will($this->returnCallback(function($request) use (&$actualRequest){
-                $actualRequest = $request;
+            ->will($this->returnCallback(function(array $fields) use ($testCase){
+                $testCase->assertArrayHasKey('TOKEN', $fields);
+                $testCase->assertEquals('theToken', $fields['TOKEN']);
 
-                return new Response();
+                return array();
             }))
         ;
         
@@ -96,13 +96,6 @@ class CreateBillingAgreementActionTest extends \PHPUnit_Framework_TestCase
         ));
 
         $action->execute($request);
-        
-        $this->assertInstanceOf('Buzz\Message\Form\FormRequest', $actualRequest);
-        
-        $fields = $actualRequest->getFields();
-
-        $this->assertArrayHasKey('TOKEN', $fields);
-        $this->assertEquals('theToken', $fields['TOKEN']);
     }
 
     /**
@@ -115,13 +108,10 @@ class CreateBillingAgreementActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('createBillingAgreement')
             ->will($this->returnCallback(function() {
-                $response = new Response;
-                $response->setContent(http_build_query(array(
+                return array(
                     'FIRSTNAME'=> 'theFirstname',
                     'EMAIL' => 'the@example.com'
-                )));
-                
-                return $response;
+                );
             }))
         ;
 

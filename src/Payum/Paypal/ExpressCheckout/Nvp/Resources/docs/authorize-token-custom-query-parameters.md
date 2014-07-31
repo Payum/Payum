@@ -13,7 +13,7 @@ You can pass these query parameters as api options:
 ```php
 <?php
 
-$api = new Api($client, array(
+$api = new Api(array(
     // ...
     'useraction' => Api::USERACTION_COMMIT,
     'cmd' => Api::CMD_EXPRESS_CHECKOUT_MOBILE,
@@ -32,7 +32,7 @@ You could also use second variant to pass any other parameters.
 ```php
 <?php
 
-$api = new Api($client, $options= array());
+$api = new Api($options= array());
 
 echo $api->getAuthorizeTokenUrl('aToken', array(
     'useraction' => Api::USERACTION_COMMIT,

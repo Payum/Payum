@@ -1,13 +1,8 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
-use Buzz\Message\Form\FormRequest;
-
-use Payum\Paypal\ExpressCheckout\Nvp\Examples\Entity\RecurringPaymentDetails;
 use Payum\Core\Request\SyncRequest;
-use Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsSyncAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
 {

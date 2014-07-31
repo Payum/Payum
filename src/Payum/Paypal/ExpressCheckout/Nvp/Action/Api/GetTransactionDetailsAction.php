@@ -1,12 +1,8 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
-use Buzz\Message\Form\FormRequest;
-
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetailsRequest;
 use Payum\Core\Exception\RequestNotSupportedException;
 
@@ -29,11 +25,8 @@ class GetTransactionDetailsAction extends BaseApiAwareAction
             throw new LogicException($transactionIndex.' must be set.');
         }
 
-        $buzzRequest = new FormRequest();
-        $buzzRequest->setField('TRANSACTIONID', $model[$transactionIndex]);
-        
-        $response = $this->api->getTransactionDetails($buzzRequest);
-        foreach ($response as $name => $value) {
+        $result = $this->api->getTransactionDetails(array('TRANSACTIONID' => $model[$transactionIndex]));
+        foreach ($result as $name => $value) {
             if (in_array($name, $this->getPaymentRequestNFields())) {
                 $model['PAYMENTREQUEST_'.$request->getPaymentRequestN().'_'.$name] = $value;
             }

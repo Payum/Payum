@@ -1,12 +1,9 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
-use Buzz\Message\Form\FormRequest;
-
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\LogicException;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetailsRequest;
 
 class GetExpressCheckoutDetailsAction extends  BaseApiAwareAction
@@ -26,12 +23,9 @@ class GetExpressCheckoutDetailsAction extends  BaseApiAwareAction
             throw new LogicException('TOKEN must be set. Have you run SetExpressCheckoutAction?');
         }
 
-        $buzzRequest = new FormRequest();
-        $buzzRequest->setField('TOKEN', $model['TOKEN']);
-        
-        $response = $this->api->getExpressCheckoutDetails($buzzRequest);
-        
-        $model->replace($response);
+        $model->replace(
+            $this->api->getExpressCheckoutDetails(array('TOKEN' => $model['TOKEN']))
+        );
     }
 
     /**

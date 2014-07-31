@@ -27,38 +27,34 @@ class CaptureAction extends PaymentAwareAction
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        try {
-            if (false == $model['PAYMENTREQUEST_0_PAYMENTACTION']) {
-                $model['PAYMENTREQUEST_0_PAYMENTACTION'] = Api::PAYMENTACTION_SALE;
-            }
-            
-            if (false == $model['TOKEN']) {
-                if (false == $model['RETURNURL'] && $request instanceof SecuredCaptureRequest) {
-                    $model['RETURNURL'] = $request->getToken()->getTargetUrl();
-                }
-
-                if (false == $model['CANCELURL'] && $request instanceof SecuredCaptureRequest) {
-                    $model['CANCELURL'] = $request->getToken()->getTargetUrl();
-                }
-
-                $this->payment->execute(new SetExpressCheckoutRequest($model));
-                $this->payment->execute(new AuthorizeTokenRequest($model));
-            }
-
-            $this->payment->execute(new SyncRequest($model));
-            
-            if (
-                $model['PAYERID'] &&  
-                Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $model['CHECKOUTSTATUS'] &&
-                $model['PAYMENTREQUEST_0_AMT'] > 0
-            ) {
-                $this->payment->execute(new DoExpressCheckoutPaymentRequest($model));
-            }
-
-            $this->payment->execute(new SyncRequest($model));
-        } catch (HttpResponseAckNotSuccessException $e) {
-            $model->replace($e->getResponse());
+        if (false == $model['PAYMENTREQUEST_0_PAYMENTACTION']) {
+            $model['PAYMENTREQUEST_0_PAYMENTACTION'] = Api::PAYMENTACTION_SALE;
         }
+
+        if (false == $model['TOKEN']) {
+            if (false == $model['RETURNURL'] && $request instanceof SecuredCaptureRequest) {
+                $model['RETURNURL'] = $request->getToken()->getTargetUrl();
+            }
+
+            if (false == $model['CANCELURL'] && $request instanceof SecuredCaptureRequest) {
+                $model['CANCELURL'] = $request->getToken()->getTargetUrl();
+            }
+
+            $this->payment->execute(new SetExpressCheckoutRequest($model));
+            $this->payment->execute(new AuthorizeTokenRequest($model));
+        }
+
+        $this->payment->execute(new SyncRequest($model));
+
+        if (
+            $model['PAYERID'] &&
+            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $model['CHECKOUTSTATUS'] &&
+            $model['PAYMENTREQUEST_0_AMT'] > 0
+        ) {
+            $this->payment->execute(new DoExpressCheckoutPaymentRequest($model));
+        }
+
+        $this->payment->execute(new SyncRequest($model));
     }
 
     /**
