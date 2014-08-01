@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.10.0 (2014-08-01)
+
+* [paypal] reflect changes in api. constructor arguments order has been changed.
+* [stripe] add stripe checkout payment factory and services.
+* [stripe] add stripe js payment factory and services.
+* [request] remove some previously deprecated requests.
+* [action] remove get http query action. one from bridge will be used.
+* [templates] add render template action.
+* [templates] add support of twig templates.
+* [doc] simplify get it started. add storages section.
+*  added PHP 5.6 and HHVM to travis.yml
+
 ## 0.9.0 (2014-06-17)
 
 * [symfony] require minimum version symfony 2.3.
