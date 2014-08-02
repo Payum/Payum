@@ -9,21 +9,21 @@ Once we are done here you will be redirected to after capture script. Here's an 
 <?php
 //capture.php
 
-use Payum\Core\Request\SecuredCaptureRequest;
-use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\SecuredCapture;
+use Payum\Core\Reply\HttpRedirect;
 
 include 'config.php';
 
 $token = $requestVerifier->verify($_REQUEST);
 $payment = $registry->getPayment($token->getPaymentName());
 
-if ($interactiveRequest = $payment->execute(new SecuredCaptureRequest($token), true)) {
-    if ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {
-        header("Location: ".$interactiveRequest->getUrl());
+if ($reply = $payment->execute(new SecuredCapture($token), true)) {
+    if ($reply instanceof HttpRedirect) {
+        header("Location: ".$reply->getUrl());
         die();
     }
 
-    throw new \LogicException('Unsupported interactive request', null, $interactiveRequest);
+    throw new \LogicException('Unsupported reply', null, $reply);
 }
 
 $requestVerifier->invalidate($token);
