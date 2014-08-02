@@ -1,8 +1,8 @@
 # Get it started.
 
-In this chapter we are going to talk about the most common task: purchasing a product using [Omnipay library](https://github.com/adrianmacneil/omnipay).
-We assume you already read [payum's get it started documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md).
-Here we just extend it and describe [Omnipay](https://github.com/adrianmacneil/omnipay) specific details.
+In this chapter we are going to talk about the most common task: purchasing a product using [Omnipay library](https://github.com/omnipay/omnipay).
+We assume you already read [payum's get it started documentation](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
+Here we just extend it and describe [Omnipay](https://github.com/omnipay/omnipay) specific details.
 
 _**Note**: If you are working with symfony2 framework look at the bundle [documentation instead](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md)._
 
@@ -12,8 +12,12 @@ The preferred way to install the library is using [composer](http://getcomposer.
 Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require "payum/omnipay-bridge:*@stable" "omnipay/stripe:~2.0"
+php composer.phar require "payum/omnipay-bridge:*@stable" "payum/xxx:*@stable"
 ```
+
+_**Note**: Where payum/xxx is a payum package, for example it could be omnipay/stripe. Look at [supported payments](https://github.com/Payum/Core/blob/master/Resources/docs/supported-payments.md) to find out what you can use._
+
+_**Note**: Use payum/payum if you want to install all payments at once._
 
 Now you have all codes prepared and ready to be used.
 
