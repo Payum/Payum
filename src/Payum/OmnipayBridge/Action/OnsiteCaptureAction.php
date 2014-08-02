@@ -3,9 +3,9 @@ namespace Payum\OmnipayBridge\Action;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Request\CaptureRequest;
-use Payum\Core\Request\Http\PostRedirectUrlInteractiveRequest;
-use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\Capture;
+use Payum\Core\Reply\HttpPostRedirect;
+use Payum\Core\Reply\HttpRedirect;
 
 class OnsiteCaptureAction extends BaseApiAwareAction
 {
@@ -35,10 +35,10 @@ class OnsiteCaptureAction extends BaseApiAwareAction
             $options['_completeCaptureRequired'] = 1;
             
             if ($response->getRedirectMethod() == 'POST') {
-                throw new PostRedirectUrlInteractiveRequest($response->getRedirectUrl(), $response->getRedirectData());
+                throw new HttpPostRedirect($response->getRedirectUrl(), $response->getRedirectData());
             }
             else {
-                throw new RedirectUrlInteractiveRequest($response->getRedirectUrl());
+                throw new HttpRedirect($response->getRedirectUrl());
             }
         }
 
@@ -54,7 +54,7 @@ class OnsiteCaptureAction extends BaseApiAwareAction
     public function supports($request)
     {
         return
-            $request instanceof CaptureRequest &&
+            $request instanceof Capture &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

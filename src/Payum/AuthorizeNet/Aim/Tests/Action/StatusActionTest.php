@@ -3,8 +3,8 @@ namespace Payum\AuthorizeNet\Aim\Tests\Action;
 
 use Payum\AuthorizeNet\Aim\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Request\BinaryMaskStatusRequest;
-use Payum\Core\Request\StatusRequestInterface;
+use Payum\Core\Request\GetBinaryStatus;
+use Payum\Core\Request\GetStatusInterface;
 
 class StatusActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -81,7 +81,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StatusAction();
 
-        $request = new BinaryMaskStatusRequest(new ArrayObject());
+        $request = new GetBinaryStatus(new ArrayObject());
 
         $action->execute($request);
         
@@ -98,7 +98,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
         $model = new ArrayObject();
         $model['response_code'] = 'foobarbaz';
 
-        $request = new BinaryMaskStatusRequest($model);
+        $request = new GetBinaryStatus($model);
 
         $action->execute($request);
 
@@ -115,7 +115,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
         $model = new ArrayObject();
         $model['response_code'] = \AuthorizeNetAIM_Response::APPROVED;
 
-        $request = new BinaryMaskStatusRequest($model);
+        $request = new GetBinaryStatus($model);
 
         $action->execute($request);
 
@@ -132,7 +132,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
         $model = new ArrayObject();
         $model['response_code'] = \AuthorizeNetAIM_Response::ERROR;
 
-        $request = new BinaryMaskStatusRequest($model);
+        $request = new GetBinaryStatus($model);
 
         $action->execute($request);
 
@@ -149,7 +149,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
         $model = new ArrayObject();
         $model['response_code'] = \AuthorizeNetAIM_Response::HELD;
 
-        $request = new BinaryMaskStatusRequest($model);
+        $request = new GetBinaryStatus($model);
 
         $action->execute($request);
 
@@ -166,7 +166,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
         $model = new ArrayObject();
         $model['response_code'] = \AuthorizeNetAIM_Response::DECLINED;
 
-        $request = new BinaryMaskStatusRequest($model);
+        $request = new GetBinaryStatus($model);
 
         $action->execute($request);
 
@@ -174,7 +174,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|StatusRequestInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|GetStatusInterface
      */
     protected function createStatusRequestStub($model)
     {

@@ -2,7 +2,7 @@
 namespace Payum\Stripe\Tests\Action\Api;
 
 use Payum\Core\PaymentInterface;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\Capture;
 use Payum\Stripe\Action\CaptureAction;
 
 class CaptureActionTest extends \PHPUnit_Framework_TestCase
@@ -32,7 +32,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CaptureAction;
 
-        $this->assertTrue($action->supports(new CaptureRequest(array())));
+        $this->assertTrue($action->supports(new Capture(array())));
     }
 
     /**
@@ -42,7 +42,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CaptureAction;
 
-        $this->assertFalse($action->supports(new CaptureRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new Capture(new \stdClass)));
     }
 
     /**
@@ -86,7 +86,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction;
         $action->setPayment($paymentMock);
 
-        $action->execute(new CaptureRequest($model));
+        $action->execute(new Capture($model));
     }
 
     /**
@@ -106,7 +106,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction;
         $action->setPayment($paymentMock);
 
-        $action->execute(new CaptureRequest($model));
+        $action->execute(new Capture($model));
     }
 
     /**
@@ -128,7 +128,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction;
         $action->setPayment($paymentMock);
 
-        $action->execute(new CaptureRequest($model));
+        $action->execute(new Capture($model));
     }
 
     /**

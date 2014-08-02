@@ -1,7 +1,7 @@
 <?php
-namespace Payum\Core\Request\Http;
+namespace Payum\Core\Request;
 
-class GetRequestRequest
+class GetHttpRequest
 {
     /**
      * @var array

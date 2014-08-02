@@ -2,8 +2,8 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Payum\Core\Model\Token;
-use Payum\Core\Request\CaptureRequest;
-use Payum\Core\Request\SecuredCaptureRequest;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\SecuredCapture;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
@@ -34,7 +34,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CaptureAction();
 
-        $request = new CaptureRequest($this->getMock('ArrayAccess'));
+        $request = new Capture($this->getMock('ArrayAccess'));
         
         $this->assertTrue($action->supports($request));
     }
@@ -58,7 +58,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CaptureAction();
         
-        $request = new CaptureRequest(new \stdClass());
+        $request = new Capture(new \stdClass());
         
         $this->assertFalse($action->supports($request));
     }
@@ -83,7 +83,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($this->createPaymentMock());
         
-        $action->execute($request = new CaptureRequest(array()));
+        $action->execute($request = new Capture(array()));
 
         $model = $request->getModel();
         $this->assertArrayHasKey('PAYMENTREQUEST_0_PAYMENTACTION', $model);
@@ -110,7 +110,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $action->execute(new CaptureRequest(array()));
+        $action->execute(new Capture(array()));
     }
 
     /**
@@ -141,7 +141,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $request = new SecuredCaptureRequest($token);
+        $request = new SecuredCapture($token);
         $request->setModel(array());
 
         $action->execute($request);
@@ -175,7 +175,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $request = new SecuredCaptureRequest($token);
+        $request = new SecuredCapture($token);
         $request->setModel(array());
 
         $action->execute($request);
@@ -196,7 +196,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $action->execute(new CaptureRequest(array(
+        $action->execute(new Capture(array(
             'TOKEN' => 'aToken'
         )));
     }
@@ -221,7 +221,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $action->execute(new CaptureRequest(array(
+        $action->execute(new Capture(array(
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
             'PAYMENTREQUEST_0_AMT' => 5,
@@ -244,7 +244,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $action->execute(new CaptureRequest(array(
+        $action->execute(new Capture(array(
             'TOKEN' => 'aToken',
             'PAYERID' => null,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED
@@ -271,7 +271,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $action->execute(new CaptureRequest(array(
+        $action->execute(new Capture(array(
             'TOKEN' => 'aToken',
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS
         )));
@@ -297,7 +297,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $action->execute(new CaptureRequest(array(
+        $action->execute(new Capture(array(
             'TOKEN' => 'aToken',
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
             'PAYERID' => 'aPayerId',

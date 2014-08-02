@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Request;
 
-use Payum\Core\Request\BinaryMaskStatusRequest;
+use Payum\Core\Request\GetBinaryStatus;
 
 class BaseStatusRequestTest extends \PHPUnit_Framework_TestCase
 {

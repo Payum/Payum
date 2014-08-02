@@ -3,9 +3,9 @@ namespace Payum\Core\Tests\Bridge\Psr\Log;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension;
-use Payum\Core\Request\CaptureRequest;
-use Payum\Core\Request\InteractiveRequestInterface;
-use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\Capture;
+use Payum\Core\Reply\ReplyInterface;
+use Payum\Core\Reply\HttpRedirect;
 use Psr\Log\LoggerInterface;
 
 class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
@@ -274,7 +274,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new FooAction;
         $model = array();
-        $modelRequest = new CaptureRequest($model);
+        $modelRequest = new Capture($model);
 
         $logger = $this->createLoggerMock();
         $logger
@@ -296,7 +296,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new FooAction;
         $stdModel = new \stdClass;
-        $stdModelRequest = new CaptureRequest($stdModel);
+        $stdModelRequest = new Capture($stdModel);
 
         $logger = $this->createLoggerMock();
         $logger
@@ -340,7 +340,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     public function shouldLogRedirectUrlInteractiveRequestWithUrlIncludedOnInteractiveRequest()
     {
         $action = new FooAction;
-        $interactiveRequest = new RedirectUrlInteractiveRequest('http://example.com');
+        $interactiveRequest = new HttpRedirect('http://example.com');
 
         $logger = $this->createLoggerMock();
         $logger
@@ -402,7 +402,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|InteractiveRequestInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|ReplyInterface
      */
     protected function createInteractiveRequestMock()
     {

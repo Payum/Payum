@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Request;
 
-use Payum\Core\Request\BinaryMaskStatusRequest;
+use Payum\Core\Request\GetBinaryStatus;
 
 class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
 {
@@ -48,7 +48,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkUnknownInConstructor()
     {
-        $statusRequest = new BinaryMaskStatusRequest(new \stdClass);
+        $statusRequest = new GetBinaryStatus(new \stdClass);
 
         $this->assertTrue($statusRequest->isUnknown());
     }
@@ -60,7 +60,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetMarkedStatus($markXXXMethod)
     {
-        $statusRequest = new BinaryMaskStatusRequest(new \stdClass);
+        $statusRequest = new GetBinaryStatus(new \stdClass);
 
         $statusRequest->$markXXXMethod();
         
@@ -74,7 +74,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallIsXXXStatus($isXXXMethod)
     {
-        $statusRequest = new BinaryMaskStatusRequest(new \stdClass);
+        $statusRequest = new GetBinaryStatus(new \stdClass);
 
         $this->assertInternalType('boolean', $statusRequest->$isXXXMethod());
     }
@@ -84,7 +84,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenSuccessStatus()
     {
-        $statusRequest = new BinaryMaskStatusRequest(new \stdClass);
+        $statusRequest = new GetBinaryStatus(new \stdClass);
 
         $statusRequest->markSuccess();
         
@@ -104,7 +104,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenFailedStatus()
     {
-        $statusRequest = new BinaryMaskStatusRequest(new \stdClass);
+        $statusRequest = new GetBinaryStatus(new \stdClass);
 
         $statusRequest->markFailed();
 
@@ -124,7 +124,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenPendingStatus()
     {
-        $statusRequest = new BinaryMaskStatusRequest(new \stdClass);
+        $statusRequest = new GetBinaryStatus(new \stdClass);
 
         $statusRequest->markPending();
 
@@ -144,7 +144,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenCanceledStatus()
     {
-        $statusRequest = new BinaryMaskStatusRequest(new \stdClass);
+        $statusRequest = new GetBinaryStatus(new \stdClass);
 
         $statusRequest->markCanceled();
 
@@ -164,7 +164,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenNewStatus()
     {
-        $statusRequest = new BinaryMaskStatusRequest(new \stdClass);
+        $statusRequest = new GetBinaryStatus(new \stdClass);
 
         $statusRequest->markNew();
 
@@ -184,7 +184,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenUnknownStatus()
     {
-        $statusRequest = new BinaryMaskStatusRequest(new \stdClass);
+        $statusRequest = new GetBinaryStatus(new \stdClass);
 
         $statusRequest->markUnknown();
 
@@ -204,7 +204,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenExpiredStatus()
     {
-        $statusRequest = new BinaryMaskStatusRequest(new \stdClass);
+        $statusRequest = new GetBinaryStatus(new \stdClass);
 
         $statusRequest->markExpired();
 
@@ -224,7 +224,7 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenSuspendedStatus()
     {
-        $statusRequest = new BinaryMaskStatusRequest(new \stdClass);
+        $statusRequest = new GetBinaryStatus(new \stdClass);
 
         $statusRequest->markSuspended();
 

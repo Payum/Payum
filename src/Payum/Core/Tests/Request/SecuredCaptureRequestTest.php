@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Request;
 
-use Payum\Core\Request\SecuredCaptureRequest;
+use Payum\Core\Request\SecuredCapture;
 use Payum\Core\Model\Token;
 
 class SecuredCaptureRequestTest extends \PHPUnit_Framework_TestCase
@@ -31,7 +31,7 @@ class SecuredCaptureRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithTokenAsFirstArgument()
     {
-        new SecuredCaptureRequest($this->getMock('Payum\Core\Security\TokenInterface'));
+        new SecuredCapture($this->getMock('Payum\Core\Security\TokenInterface'));
     }
 
     /**
@@ -41,7 +41,7 @@ class SecuredCaptureRequestTest extends \PHPUnit_Framework_TestCase
     {
         $expectedToken = new Token;
         
-        $request = new SecuredCaptureRequest($expectedToken);
+        $request = new SecuredCapture($expectedToken);
         
         $this->assertSame($expectedToken, $request->getToken());
         $this->assertSame($expectedToken, $request->getModel());
@@ -54,7 +54,7 @@ class SecuredCaptureRequestTest extends \PHPUnit_Framework_TestCase
     {
         $token = new Token;
 
-        $request = new SecuredCaptureRequest($token);
+        $request = new SecuredCapture($token);
 
         //guard
         $this->assertSame($token, $request->getToken());

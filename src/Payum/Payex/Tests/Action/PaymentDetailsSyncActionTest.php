@@ -2,7 +2,7 @@
 namespace Payum\Payex\Tests\Action;
 
 use Payum\Core\PaymentInterface;
-use Payum\Core\Request\SyncRequest;
+use Payum\Core\Request\Sync;
 use Payum\Payex\Action\PaymentDetailsSyncAction;
 
 class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
@@ -40,7 +40,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true))
         ;
 
-        $this->assertTrue($action->supports(new SyncRequest($array)));
+        $this->assertTrue($action->supports(new Sync($array)));
     }
 
     /**
@@ -60,7 +60,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsSyncAction;
 
-        $this->assertFalse($action->supports(new SyncRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new Sync(new \stdClass)));
     }
 
     /**
@@ -90,7 +90,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new PaymentDetailsSyncAction();
         $action->setPayment($paymentMock);
 
-        $action->execute(new SyncRequest(array(
+        $action->execute(new Sync(array(
             'transactionNumber' => 'aNum'
         )));
     }

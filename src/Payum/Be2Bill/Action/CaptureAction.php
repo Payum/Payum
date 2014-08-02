@@ -5,8 +5,8 @@ use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
-use Payum\Core\Request\CaptureRequest;
-use Payum\Core\Request\ObtainCreditCardRequest;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Be2Bill\Api;
@@ -36,7 +36,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
      */
     public function execute($request)
     {
-        /** @var $request \Payum\Core\Request\CaptureRequest */
+        /** @var $request \Payum\Core\Request\Capture */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -50,7 +50,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         $cardFields = array('CARDCODE', 'CARDCVV', 'CARDVALIDITYDATE', 'CARDFULLNAME');
         if (false == $model->validateNotEmpty($cardFields, false) && false == $model['ALIAS']) {
             try {
-                $creditCardRequest = new ObtainCreditCardRequest;
+                $creditCardRequest = new ObtainCreditCard;
                 $this->payment->execute($creditCardRequest);
                 $card = $creditCardRequest->obtain();
 
@@ -79,7 +79,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
     public function supports($request)
     {
         return
-            $request instanceof CaptureRequest &&
+            $request instanceof Capture &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

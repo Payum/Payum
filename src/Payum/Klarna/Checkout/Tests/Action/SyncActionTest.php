@@ -2,7 +2,7 @@
 namespace Payum\Klarna\Checkout\Tests\Action;
 
 use Payum\Core\PaymentInterface;
-use Payum\Core\Request\SyncRequest;
+use Payum\Core\Request\Sync;
 use Payum\Klarna\Checkout\Action\SyncAction;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\FetchOrderRequest;
@@ -34,7 +34,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new SyncAction();
 
-        $this->assertTrue($action->supports(new SyncRequest(array())));
+        $this->assertTrue($action->supports(new Sync(array())));
     }
 
     /**
@@ -54,7 +54,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new SyncAction;
 
-        $this->assertFalse($action->supports(new SyncRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new Sync(new \stdClass)));
     }
 
     /**
@@ -94,7 +94,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new SyncAction;
         $action->setPayment($paymentMock);
 
-        $request = new SyncRequest(array(
+        $request = new Sync(array(
             'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
             'location' => 'theLocation',
         ));
@@ -122,7 +122,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new SyncAction;
         $action->setPayment($paymentMock);
 
-        $request = new SyncRequest(array());
+        $request = new Sync(array());
 
         $action->execute($request);
     }

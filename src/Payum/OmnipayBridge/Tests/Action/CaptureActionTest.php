@@ -2,7 +2,7 @@
 namespace Payum\OmnipayBridge\Action;
 
 use Omnipay\Common\GatewayInterface;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\Capture;
 use Payum\OmnipayBridge\Action\CaptureAction;
 
 class CaptureActionTest extends \PHPUnit_Framework_TestCase
@@ -43,7 +43,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction;
         $action->setApi($gatewayMock);
 
-        $action->execute(new CaptureRequest(array(
+        $action->execute(new Capture(array(
             '_status' => 'foo',
         )));
     }

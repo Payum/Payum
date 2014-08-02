@@ -1,9 +1,9 @@
 <?php
-namespace Payum\Core\Request;
+namespace Payum\Core\Reply;
 
 use Payum\Core\Exception\LogicException;
 
-abstract class BaseModelInteractiveRequest  extends LogicException implements InteractiveRequestInterface, ModelRequestInterface
+abstract class BaseModelAware extends LogicException implements ReplyInterface, ModelAwareInterface
 {
     /**
      * @var mixed

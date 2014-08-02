@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Request;
 
-interface SecuredRequestInterface
+interface SecuredRequest
 {
     /**
      * @return \Payum\Core\Security\TokenInterface

@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Request;
 
-abstract class BaseStatusRequest extends BaseModelInteractiveRequest implements StatusRequestInterface
+abstract class BaseGetStatus extends BaseModelAware implements GetStatusInterface
 {
     /**
      * @var mixed

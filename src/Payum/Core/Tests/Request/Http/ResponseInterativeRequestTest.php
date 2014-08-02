@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Request\Http;
 
-use Payum\Core\Request\Http\ResponseInteractiveRequest;
+use Payum\Core\Reply\ResponseInteractiveRequest;
 
 class ResponseInteractiveRequestTest extends \PHPUnit_Framework_TestCase
 {

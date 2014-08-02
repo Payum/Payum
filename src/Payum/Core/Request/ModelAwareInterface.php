@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Request;
 
-interface ModelRequestInterface 
+interface ModelAwareInterface
 {
     /**
      * @param mixed $model

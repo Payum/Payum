@@ -1,8 +1,7 @@
 <?php
-namespace Payum\Core\Request\Http;
-use Payum\Core\Request\BaseInteractiveRequest;
+namespace Payum\Core\Reply;
 
-class RedirectUrlInteractiveRequest extends BaseInteractiveRequest
+class HttpRedirect extends Base
 {
     /**
      * @var string

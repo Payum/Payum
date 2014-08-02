@@ -2,7 +2,7 @@
 namespace Payum\Payex\Tests\Action;
 
 use Payum\Core\PaymentInterface;
-use Payum\Core\Request\BinaryMaskStatusRequest;
+use Payum\Core\Request\GetBinaryStatus;
 use Payum\Payex\Action\AutoPayPaymentDetailsStatusAction;
 use Payum\Payex\Api\OrderApi;
 
@@ -33,7 +33,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $this->assertTrue($action->supports(new BinaryMaskStatusRequest(array(
+        $this->assertTrue($action->supports(new GetBinaryStatus(array(
             'autoPay' => true
         ))));
     }
@@ -45,7 +45,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new BinaryMaskStatusRequest(array())));
+        $this->assertFalse($action->supports(new GetBinaryStatus(array())));
     }
 
     /**
@@ -55,7 +55,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new BinaryMaskStatusRequest(array(
+        $this->assertFalse($action->supports(new GetBinaryStatus(array(
             'autoPay' => true,
             'recurring' => true,
         ))));
@@ -68,7 +68,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new BinaryMaskStatusRequest(array(
+        $this->assertFalse($action->supports(new GetBinaryStatus(array(
             'autoPay' => false
         ))));
     }
@@ -90,7 +90,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AutoPayPaymentDetailsStatusAction;
 
-        $this->assertFalse($action->supports(new BinaryMaskStatusRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new GetBinaryStatus(new \stdClass)));
     }
 
     /**
@@ -113,7 +113,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $status = new BinaryMaskStatusRequest(array(
+        $status = new GetBinaryStatus(array(
             'autoPay' => true,
         ));
 
@@ -132,7 +132,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $status = new BinaryMaskStatusRequest(array(
+        $status = new GetBinaryStatus(array(
             'purchaseOperation' => OrderApi::PURCHASEOPERATION_AUTHORIZATION,
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_AUTHORIZE,
             'autoPay' => true,
@@ -153,7 +153,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $status = new BinaryMaskStatusRequest(array(
+        $status = new GetBinaryStatus(array(
             'purchaseOperation' => OrderApi::PURCHASEOPERATION_SALE,
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_SALE,
             'autoPay' => true,
@@ -174,7 +174,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $status = new BinaryMaskStatusRequest(array(
+        $status = new GetBinaryStatus(array(
             'purchaseOperation' => OrderApi::PURCHASEOPERATION_AUTHORIZATION,
             'transactionStatus' => 'foobarbaz',
             'autoPay' => true,

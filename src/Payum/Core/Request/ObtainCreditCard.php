@@ -4,7 +4,7 @@ namespace Payum\Core\Request;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\CreditCardInterface;
 
-class ObtainCreditCardRequest
+class ObtainCreditCard
 {
     /**
      * @var CreditCardInterface

@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Request\Http;
 
-use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
+use Payum\Core\Reply\HttpRedirect;
 
 class RedirectUrlInteractiveRequestTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +20,7 @@ class RedirectUrlInteractiveRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithUrlAsArgument()
     {
-        new RedirectUrlInteractiveRequest('an_url');
+        new HttpRedirect('an_url');
     }
 
     /**
@@ -30,7 +30,7 @@ class RedirectUrlInteractiveRequestTest extends \PHPUnit_Framework_TestCase
     {
         $expectedUrl = 'theUrl';
         
-        $request = new RedirectUrlInteractiveRequest($expectedUrl);
+        $request = new HttpRedirect($expectedUrl);
         
         $this->assertEquals($expectedUrl, $request->getUrl());
     }

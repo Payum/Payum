@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Request;
 
-class SimpleStatusRequest extends BaseStatusRequest
+class GetHumanStatus extends BaseGetStatus
 {
     const STATUS_UNKNOWN = 'unknown';
     

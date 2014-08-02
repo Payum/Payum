@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
-use Payum\Core\Request\SyncRequest;
+use Payum\Core\Request\Sync;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsSyncAction;
 
 class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
@@ -35,7 +35,7 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
             'BILLINGPERIOD' => 12
         );
         
-        $request = new SyncRequest($paymentDetails);
+        $request = new Sync($paymentDetails);
 
         $this->assertTrue($action->supports($request));
     }
@@ -76,7 +76,7 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new RecurringPaymentDetailsSyncAction();
         $action->setPayment($paymentMock);
 
-        $request = new SyncRequest(array(
+        $request = new Sync(array(
             'BILLINGPERIOD' => 12
         ));
         
@@ -98,7 +98,7 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new RecurringPaymentDetailsSyncAction();
         $action->setPayment($paymentMock);
 
-        $action->execute(new SyncRequest(array(
+        $action->execute(new Sync(array(
             'BILLINGPERIOD' => 'aBillingPeriod',
             'PROFILEID' => 'anId',
         )));

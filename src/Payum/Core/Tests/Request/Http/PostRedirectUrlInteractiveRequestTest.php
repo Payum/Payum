@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Request\Http;
 
-use Payum\Core\Request\Http\PostRedirectUrlInteractiveRequest;
+use Payum\Core\Reply\HttpPostRedirect;
 
 class PostRedirectUrlInteractiveRequestTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,7 +30,7 @@ class PostRedirectUrlInteractiveRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithUrlAsArgument()
     {
-        new PostRedirectUrlInteractiveRequest('an_url');
+        new \Payum\Core\Reply\HttpPostRedirect('an_url');
     }
 
     /**
@@ -38,7 +38,7 @@ class PostRedirectUrlInteractiveRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithUrlAsArgumentAndPostValuesArray()
     {
-        new PostRedirectUrlInteractiveRequest('an_url', array('foo' => 'bar'));
+        new HttpPostRedirect('an_url', array('foo' => 'bar'));
     }
 
     /**
@@ -61,7 +61,7 @@ class PostRedirectUrlInteractiveRequestTest extends \PHPUnit_Framework_TestCase
 </html>
 HTML;
         
-        $request = new PostRedirectUrlInteractiveRequest('theUrl');
+        $request = new \Payum\Core\Reply\HttpPostRedirect('theUrl');
         
         $this->assertEquals($expectedContent, $request->getContent());
     }
@@ -88,7 +88,7 @@ HTML;
 </html>
 HTML;
 
-        $request = new PostRedirectUrlInteractiveRequest('theUrl', array('foo' => 'fooVal', 'bar' => 'barVal'));
+        $request = new \Payum\Core\Reply\HttpPostRedirect('theUrl', array('foo' => 'fooVal', 'bar' => 'barVal'));
 
         $this->assertEquals($expectedContent, $request->getContent());
     }
@@ -114,7 +114,7 @@ HTML;
 </html>
 HTML;
 
-        $request = new PostRedirectUrlInteractiveRequest('theUrl', array('foo' => '<>&"'));
+        $request = new HttpPostRedirect('theUrl', array('foo' => '<>&"'));
 
         $this->assertEquals($expectedContent, $request->getContent());
     }

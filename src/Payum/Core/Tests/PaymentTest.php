@@ -6,7 +6,7 @@ use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Payment;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\PaymentAwareAction;
-use Payum\Core\Request\InteractiveRequestInterface;
+use Payum\Core\Reply\ReplyInterface;
 
 class PaymentTest extends \PHPUnit_Framework_TestCase
 {
@@ -275,7 +275,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * 
-     * @expectedException \Payum\Core\Request\BaseInteractiveRequest
+     * @expectedException \Payum\Core\Reply\Base
      */
     public function shouldNotCatchInteractiveRequestByDefault()
     {
@@ -555,7 +555,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\Request\InteractiveRequestInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\Reply\ReplyInterface
      */
     protected function createInteractiveRequestMock()
     {
@@ -629,7 +629,7 @@ class ThrowInteractiveAction implements ActionInterface
     /**
      * @param $request
      */
-    public function setInteractiveRequest(InteractiveRequestInterface $request)
+    public function setInteractiveRequest(ReplyInterface $request)
     {
         $this->interactiveRequest = $request;
     }

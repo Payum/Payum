@@ -2,9 +2,9 @@
 namespace Payum\Stripe\Tests\Action\Api;
 
 use Payum\Core\PaymentInterface;
-use Payum\Core\Request\Http\GetRequestRequest;
-use Payum\Core\Request\Http\ResponseInteractiveRequest;
-use Payum\Core\Request\RenderTemplateRequest;
+use Payum\Core\Request\GetHttpRequest;
+use Payum\Core\Reply\ResponseInteractiveRequest;
+use Payum\Core\Request\RenderTemplate;
 use Payum\Stripe\Action\Api\ObtainTokenAction;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\ObtainTokenRequest;
@@ -135,7 +135,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Http\GetRequestRequest'))
-            ->will($this->returnCallback(function(GetRequestRequest $request) {
+            ->will($this->returnCallback(function(GetHttpRequest $request) {
                 $request->method = 'GET';
             }))
         ;
@@ -143,7 +143,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplateRequest'))
-            ->will($this->returnCallback(function(RenderTemplateRequest $request) use ($templateName, $publishableKey, $model, $testCase) {
+            ->will($this->returnCallback(function(RenderTemplate $request) use ($templateName, $publishableKey, $model, $testCase) {
                 $testCase->assertEquals($templateName, $request->getTemplateName());
 
                 $context = $request->getContext();
@@ -185,7 +185,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Http\GetRequestRequest'))
-            ->will($this->returnCallback(function(GetRequestRequest $request) {
+            ->will($this->returnCallback(function(GetHttpRequest $request) {
                 $request->method = 'POST';
             }))
         ;
@@ -222,7 +222,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Http\GetRequestRequest'))
-            ->will($this->returnCallback(function(GetRequestRequest $request) {
+            ->will($this->returnCallback(function(GetHttpRequest $request) {
                 $request->method = 'POST';
                 $request->request = array('stripeToken' => 'theToken');
             }))

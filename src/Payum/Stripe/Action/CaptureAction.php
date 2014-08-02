@@ -4,7 +4,7 @@ namespace Payum\Stripe\Action;
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\Capture;
 use Payum\Stripe\Request\Api\CreateChargeRequest;
 use Payum\Stripe\Request\Api\ObtainTokenRequest;
 
@@ -15,7 +15,7 @@ class CaptureAction extends PaymentAwareAction
      */
     public function execute($request)
     {
-        /** @var $request CaptureRequest */
+        /** @var $request Capture */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -39,7 +39,7 @@ class CaptureAction extends PaymentAwareAction
     public function supports($request)
     {
         return
-            $request instanceof CaptureRequest &&
+            $request instanceof Capture &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

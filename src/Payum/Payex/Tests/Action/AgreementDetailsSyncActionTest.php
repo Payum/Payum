@@ -2,7 +2,7 @@
 namespace Payum\Payex\Tests\Action;
 
 use Payum\Core\PaymentInterface;
-use Payum\Core\Request\SyncRequest;
+use Payum\Core\Request\Sync;
 use Payum\Payex\Action\AgreementDetailsSyncAction;
 
 class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
@@ -46,7 +46,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false))
         ;
 
-        $this->assertTrue($action->supports(new SyncRequest($array)));
+        $this->assertTrue($action->supports(new Sync($array)));
     }
 
     /**
@@ -70,7 +70,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true))
         ;
 
-        $this->assertFalse($action->supports(new SyncRequest($array)));
+        $this->assertFalse($action->supports(new Sync($array)));
     }
 
     /**
@@ -90,7 +90,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AgreementDetailsSyncAction;
 
-        $this->assertFalse($action->supports(new SyncRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new Sync(new \stdClass)));
     }
 
     /**
@@ -120,7 +120,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new AgreementDetailsSyncAction();
         $action->setPayment($paymentMock);
 
-        $action->execute(new SyncRequest(array(
+        $action->execute(new Sync(array(
             'agreementRef' => 'aRef'
         )));
     }

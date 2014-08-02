@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Be2Bill\Tests\Action;
 
-use Payum\Core\Request\StatusRequestInterface;
+use Payum\Core\Request\GetStatusInterface;
 use Payum\Be2Bill\Action\StatusAction;
 
 class StatusActionTest extends \PHPUnit_Framework_TestCase
@@ -73,7 +73,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|StatusRequestInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|GetStatusInterface
      */
     protected function createStatusRequestStub($model)
     {

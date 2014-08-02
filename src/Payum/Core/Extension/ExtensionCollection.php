@@ -2,7 +2,7 @@
 namespace Payum\Core\Extension;
 
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\Request\InteractiveRequestInterface;
+use Payum\Core\Reply\ReplyInterface;
 
 class ExtensionCollection implements ExtensionInterface 
 {
@@ -58,7 +58,7 @@ class ExtensionCollection implements ExtensionInterface
     /**
      * {@inheritdoc}
      */
-    public function onInteractiveRequest(InteractiveRequestInterface $interactiveRequest, $request, ActionInterface $action)
+    public function onInteractiveRequest(ReplyInterface $interactiveRequest, $request, ActionInterface $action)
     {
         $inputInteractiveRequest = $interactiveRequest;
         foreach ($this->extensions as $extension) {

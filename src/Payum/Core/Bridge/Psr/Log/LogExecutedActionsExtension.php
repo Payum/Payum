@@ -4,7 +4,7 @@ namespace Payum\Core\Bridge\Psr\Log;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Debug\Humanify;
 use Payum\Core\Extension\ExtensionInterface;
-use Payum\Core\Request\InteractiveRequestInterface;
+use Payum\Core\Reply\ReplyInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -70,7 +70,7 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
     /**
      * {@inheritDoc}
      */
-    public function onInteractiveRequest(InteractiveRequestInterface $interactiveRequest, $request, ActionInterface $action)
+    public function onInteractiveRequest(ReplyInterface $interactiveRequest, $request, ActionInterface $action)
     {
         $this->logger->debug(sprintf('[Payum] %d# %s::execute(%s) throws interactive %s',
             $this->stackLevel,

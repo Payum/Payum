@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Request;
 
-class RenderTemplateRequest
+class RenderTemplate
 {
     /**
      * @var string

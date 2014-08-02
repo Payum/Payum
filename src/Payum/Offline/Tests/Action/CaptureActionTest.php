@@ -4,7 +4,7 @@ namespace Payum\Offline\Tests\Action;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Offline\Action\CaptureAction;
 use Payum\Offline\Constants;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\Capture;
 
 class CaptureActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,7 +33,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CaptureAction();
 
-        $request = new CaptureRequest($this->getMock('ArrayAccess'));
+        $request = new Capture($this->getMock('ArrayAccess'));
 
         $this->assertTrue($action->supports($request));
     }
@@ -57,7 +57,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CaptureAction();
 
-        $request = new CaptureRequest(new \stdClass());
+        $request = new Capture(new \stdClass());
 
         $this->assertFalse($action->supports($request));
     }
@@ -83,7 +83,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
 
         $details = new ArrayObject();
 
-        $request = new CaptureRequest($details);
+        $request = new Capture($details);
 
         //guard
         $this->assertTrue($action->supports($request));
@@ -104,7 +104,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $details = new ArrayObject();
         $details[Constants::FIELD_PAID] = false;
 
-        $request = new CaptureRequest($details);
+        $request = new Capture($details);
 
         //guard
         $this->assertTrue($action->supports($request));
@@ -125,7 +125,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $details = new ArrayObject();
         $details[Constants::FIELD_PAID] = true;
 
-        $request = new CaptureRequest($details);
+        $request = new Capture($details);
 
         //guard
         $this->assertTrue($action->supports($request));

@@ -5,7 +5,7 @@ namespace Payum\Paypal\Rest\Tests\Action;
 use PayPal\Rest\ApiContext;
 use Payum\Paypal\Rest\Action\CaptureAction;
 use Payum\Paypal\Rest\Model\PaymentDetails;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\Capture;
 
 class CaptureActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +26,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
 
         $model = new PaymentDetails();
 
-        $request = new CaptureRequest($model);
+        $request = new Capture($model);
 
         $this->assertTrue($action->supports($request));
     }
@@ -38,7 +38,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CaptureAction();
 
-        $request = new CaptureRequest(new \stdClass());
+        $request = new Capture(new \stdClass());
 
         $this->assertFalse($action->supports($request));
     }
@@ -74,7 +74,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CaptureAction();
 
-        $request = new CaptureRequest($this->getMock('PayPal\Api\Payment'));
+        $request = new Capture($this->getMock('PayPal\Api\Payment'));
 
         $this->assertTrue($action->supports($request));
     }

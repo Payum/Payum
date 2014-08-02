@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Stripe\Tests\Action\Api;
 
-use Payum\Core\Request\SimpleStatusRequest;
+use Payum\Core\Request\SimpleGetStatus;
 use Payum\Stripe\Action\StatusAction;
 
 class StatusActionTest extends \PHPUnit_Framework_TestCase
@@ -31,7 +31,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StatusAction;
 
-        $this->assertTrue($action->supports(new SimpleStatusRequest(array())));
+        $this->assertTrue($action->supports(new SimpleGetStatus(array())));
     }
 
     /**
@@ -41,7 +41,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StatusAction;
 
-        $this->assertFalse($action->supports(new SimpleStatusRequest('foo')));
+        $this->assertFalse($action->supports(new SimpleGetStatus('foo')));
     }
 
     /**
@@ -78,7 +78,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
             'error' => array('code' => 'foo'),
         );
 
-        $action->execute($status = new SimpleStatusRequest($model));
+        $action->execute($status = new SimpleGetStatus($model));
 
         $this->assertTrue($status->isFailed());
     }
@@ -92,7 +92,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
 
         $model = array();
 
-        $action->execute($status = new SimpleStatusRequest($model));
+        $action->execute($status = new SimpleGetStatus($model));
 
         $this->assertTrue($status->isNew());
     }
@@ -108,7 +108,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
             'card' => 'not-used-token'
         );
 
-        $action->execute($status = new SimpleStatusRequest($model));
+        $action->execute($status = new SimpleGetStatus($model));
 
         $this->assertTrue($status->isPending());
     }
@@ -126,7 +126,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
             'paid' => true,
         );
 
-        $action->execute($status = new SimpleStatusRequest($model));
+        $action->execute($status = new SimpleGetStatus($model));
 
         $this->assertTrue($status->isSuccess());
     }
@@ -144,7 +144,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
             'paid' => true,
         );
 
-        $status = new SimpleStatusRequest($model);
+        $status = new SimpleGetStatus($model);
         $status->markPending();
 
         $action->execute($status);

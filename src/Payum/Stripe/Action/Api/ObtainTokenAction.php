@@ -7,9 +7,9 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
-use Payum\Core\Request\Http\GetRequestRequest;
-use Payum\Core\Request\Http\ResponseInteractiveRequest;
-use Payum\Core\Request\RenderTemplateRequest;
+use Payum\Core\Request\GetHttpRequest;
+use Payum\Core\Reply\ResponseInteractiveRequest;
+use Payum\Core\Request\RenderTemplate;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\ObtainTokenRequest;
 
@@ -61,7 +61,7 @@ class ObtainTokenAction extends PaymentAwareAction implements ApiAwareInterface
             throw new LogicException('The token has already been set.');
         }
 
-        $getHttpRequest = new GetRequestRequest;
+        $getHttpRequest = new GetHttpRequest;
         $this->payment->execute($getHttpRequest);
         if ($getHttpRequest->method == 'POST' && isset($getHttpRequest->request['stripeToken'])) {
             $model['card'] = $getHttpRequest->request['stripeToken'];
@@ -69,7 +69,7 @@ class ObtainTokenAction extends PaymentAwareAction implements ApiAwareInterface
             return;
         }
 
-        $this->payment->execute($renderTemplate = new RenderTemplateRequest($this->templateName, array(
+        $this->payment->execute($renderTemplate = new RenderTemplate($this->templateName, array(
             'model' => $model,
             'publishable_key' => $this->keys->getPublishableKey(),
         )));

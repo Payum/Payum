@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Request;
 
-class BinaryMaskStatusRequest extends BaseStatusRequest
+class GetBinaryStatus extends BaseGetStatus
 {
     const STATUS_UNKNOWN = 2097152; //2^21
     

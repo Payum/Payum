@@ -3,7 +3,7 @@ namespace Payum\Payex\Tests\Action;
 
 use Payum\Payex\Api\AgreementApi;
 use Payum\Core\PaymentInterface;
-use Payum\Core\Request\BinaryMaskStatusRequest;
+use Payum\Core\Request\GetBinaryStatus;
 use Payum\Payex\Action\AgreementDetailsStatusAction;
 
 class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
@@ -47,7 +47,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false))
         ;
         
-        $this->assertTrue($action->supports(new BinaryMaskStatusRequest($array)));
+        $this->assertTrue($action->supports(new GetBinaryStatus($array)));
     }
     
     /**
@@ -71,7 +71,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true))
         ;
 
-        $this->assertFalse($action->supports(new BinaryMaskStatusRequest($array)));
+        $this->assertFalse($action->supports(new GetBinaryStatus($array)));
     }
 
     /**
@@ -91,7 +91,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AgreementDetailsStatusAction;
 
-        $this->assertFalse($action->supports(new BinaryMaskStatusRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new GetBinaryStatus(new \stdClass)));
     }
 
     /**
@@ -113,7 +113,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AgreementDetailsStatusAction();
 
-        $status = new BinaryMaskStatusRequest(array(
+        $status = new GetBinaryStatus(array(
             'agreementRef' => 'aRef',
         ));
 
@@ -132,7 +132,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AgreementDetailsStatusAction();
 
-        $status = new BinaryMaskStatusRequest(array(
+        $status = new GetBinaryStatus(array(
             'agreementRef' => 'aRef',
             'agreementStatus' => AgreementApi::AGREEMENTSTATUS_NOTVERIFIED,
         ));
@@ -152,7 +152,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AgreementDetailsStatusAction();
 
-        $status = new BinaryMaskStatusRequest(array(
+        $status = new GetBinaryStatus(array(
             'agreementRef' => 'aRef',
             'agreementStatus' => AgreementApi::AGREEMENTSTATUS_VERIFIED,
         ));
@@ -172,7 +172,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AgreementDetailsStatusAction();
 
-        $status = new BinaryMaskStatusRequest(array(
+        $status = new GetBinaryStatus(array(
             'agreementRef' => 'aRef',
             'agreementStatus' => AgreementApi::AGREEMENTSTATUS_DELETED,
         ));
@@ -192,7 +192,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AgreementDetailsStatusAction();
 
-        $status = new BinaryMaskStatusRequest(array(
+        $status = new GetBinaryStatus(array(
             'agreementRef' => 'aRef',
             'errorCode' => 'not-ok',
         ));

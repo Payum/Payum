@@ -1,8 +1,8 @@
 <?php
 namespace Payum\Payex\Request\Api;
 
-use Payum\Core\Request\BaseModelRequest;
+use Payum\Core\Request\BaseModelAware;
 
-class DeleteAgreementRequest extends BaseModelRequest 
+class DeleteAgreementRequest extends BaseModelAware
 {
 }

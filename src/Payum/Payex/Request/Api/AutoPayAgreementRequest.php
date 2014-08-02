@@ -1,8 +1,8 @@
 <?php
 namespace Payum\Payex\Request\Api;
 
-use Payum\Core\Request\BaseModelRequest;
+use Payum\Core\Request\BaseModelAware;
 
-class AutoPayAgreementRequest extends BaseModelRequest 
+class AutoPayAgreementRequest extends BaseModelAware
 {
 }

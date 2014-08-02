@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Request;
 
-use Payum\Core\Request\NotifyRequest;
+use Payum\Core\Request\Notify;
 
 class NotifyRequestTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +20,7 @@ class NotifyRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithNotificationAsFirstArgument()
     {
-        new NotifyRequest(array(
+        new Notify(array(
             'foo' => 'aFoo'
         ));
     }
@@ -35,7 +35,7 @@ class NotifyRequestTest extends \PHPUnit_Framework_TestCase
             'bar' => 'aBarValue'
         );
         
-        $request = new NotifyRequest($expectedNotification);
+        $request = new Notify($expectedNotification);
         
         $this->assertSame($expectedNotification, $request->getNotification());
     }
@@ -47,7 +47,7 @@ class NotifyRequestTest extends \PHPUnit_Framework_TestCase
     {
         $expectedModel = new \stdClass;
 
-        $request = new NotifyRequest(array(), $expectedModel);
+        $request = new Notify(array(), $expectedModel);
 
         $this->assertSame($expectedModel, $request->getModel());
     }

@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
-use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
+use Payum\Core\Reply\HttpRedirect;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\AuthorizeTokenAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeTokenRequest;
 
@@ -98,7 +98,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
 
         try {
             $action->execute($request);
-        } catch (RedirectUrlInteractiveRequest $redirectUrlRequest) {
+        } catch (HttpRedirect $redirectUrlRequest) {
             $this->assertEquals($expectedRedirectUrl, $redirectUrlRequest->getUrl());
             
             return;
@@ -133,7 +133,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
 
         try {
             $action->execute($request);
-        } catch (RedirectUrlInteractiveRequest $redirectUrlRequest) {
+        } catch (HttpRedirect $redirectUrlRequest) {
             return;
         }
 
@@ -185,7 +185,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
 
         try {
             $action->execute($request);
-        } catch (RedirectUrlInteractiveRequest $redirectUrlRequest) {
+        } catch (HttpRedirect $redirectUrlRequest) {
             return;
         }
 

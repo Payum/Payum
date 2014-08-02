@@ -5,7 +5,7 @@ namespace Payum\Paypal\Rest\Action;
 use PayPal\Api\Payment;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Request\StatusRequestInterface;
+use Payum\Core\Request\GetStatusInterface;
 
 class StatusAction implements ActionInterface
 {
@@ -19,7 +19,7 @@ class StatusAction implements ActionInterface
     function execute($request)
     {
         /**
-         * @var $request \Payum\Core\Request\StatusRequestInterface
+         * @var $request \Payum\Core\Request\GetStatusInterface
          */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
@@ -56,7 +56,7 @@ class StatusAction implements ActionInterface
      */
     function supports($request)
     {
-        if (false == $request instanceof StatusRequestInterface) {
+        if (false == $request instanceof GetStatusInterface) {
             return false;
         }
 

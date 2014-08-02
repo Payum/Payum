@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Request;
 
-use Payum\Core\Request\SecuredNotifyRequest;
+use Payum\Core\Request\SecuredNotify;
 use Payum\Core\Model\Token;
 
 class SecuredNotifyRequestTest extends \PHPUnit_Framework_TestCase
@@ -31,7 +31,7 @@ class SecuredNotifyRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithNotificationAndTokenAsModel()
     {
-        new SecuredNotifyRequest(array(), $this->getMock('Payum\Core\Security\TokenInterface'));
+        new SecuredNotify(array(), $this->getMock('Payum\Core\Security\TokenInterface'));
     }
 
     /**
@@ -41,7 +41,7 @@ class SecuredNotifyRequestTest extends \PHPUnit_Framework_TestCase
     {
         $expectedToken = new Token;
         
-        $request = new SecuredNotifyRequest($notification = array(), $expectedToken);
+        $request = new SecuredNotify($notification = array(), $expectedToken);
         
         $this->assertSame($expectedToken, $request->getToken());
         $this->assertSame($expectedToken, $request->getModel());
@@ -54,7 +54,7 @@ class SecuredNotifyRequestTest extends \PHPUnit_Framework_TestCase
     {
         $token = new Token;
 
-        $request = new SecuredNotifyRequest($notification = array(), $token);
+        $request = new SecuredNotify($notification = array(), $token);
 
         //guard
         $this->assertSame($token, $request->getToken());

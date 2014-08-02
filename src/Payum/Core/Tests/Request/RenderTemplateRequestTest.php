@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Request;
 
-use Payum\Core\Request\RenderTemplateRequest;
+use Payum\Core\Request\RenderTemplate;
 
 class RenderTemplateRequestTest extends \PHPUnit_Framework_TestCase
 {
@@ -10,7 +10,7 @@ class RenderTemplateRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithTemplateNameAndContextAsArguments()
     {
-        new RenderTemplateRequest('aTemplate', array());
+        new RenderTemplate('aTemplate', array());
     }
 
     /**
@@ -18,7 +18,7 @@ class RenderTemplateRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetTemplateNameSetInConstructor()
     {
-        $request = new RenderTemplateRequest('theTemplate', array());
+        $request = new RenderTemplate('theTemplate', array());
 
         $this->assertSame('theTemplate', $request->getTemplateName());
     }
@@ -28,7 +28,7 @@ class RenderTemplateRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetContextSetInConstructor()
     {
-        $request = new RenderTemplateRequest('aTemplate', array('foo' => 'fooVal', 'bar' => 'barVal'));
+        $request = new RenderTemplate('aTemplate', array('foo' => 'fooVal', 'bar' => 'barVal'));
 
         $this->assertSame(array('foo' => 'fooVal', 'bar' => 'barVal'), $request->getContext());
     }
@@ -38,7 +38,7 @@ class RenderTemplateRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetResultPreviouslySet()
     {
-        $request = new RenderTemplateRequest('aTemplate', array());
+        $request = new RenderTemplate('aTemplate', array());
 
         $request->setResult('theResult');
 

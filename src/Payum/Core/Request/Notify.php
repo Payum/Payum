@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Request;
 
-class NotifyRequest extends BaseModelRequest
+class Notify extends BaseModelAware
 {
     /**
      * @var array

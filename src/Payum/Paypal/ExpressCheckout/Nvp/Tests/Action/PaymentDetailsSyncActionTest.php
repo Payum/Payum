@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
-use Payum\Core\Request\SyncRequest;
+use Payum\Core\Request\Sync;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction;
 
 class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
@@ -35,7 +35,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
             'PAYMENTREQUEST_0_AMT' => 12
         );
         
-        $request = new SyncRequest($paymentDetails);
+        $request = new Sync($paymentDetails);
 
         $this->assertTrue($action->supports($request));
     }
@@ -51,7 +51,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
             'PAYMENTREQUEST_0_AMT' => 0
         );
 
-        $request = new SyncRequest($paymentDetails);
+        $request = new Sync($paymentDetails);
 
         $this->assertTrue($action->supports($request));
     }
@@ -92,7 +92,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new PaymentDetailsSyncAction();
         $action->setPayment($paymentMock);
 
-        $request = new SyncRequest(array(
+        $request = new Sync(array(
             'PAYMENTREQUEST_0_AMT' => 12
         ));
         
@@ -114,7 +114,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new PaymentDetailsSyncAction();
         $action->setPayment($paymentMock);
 
-        $action->execute(new SyncRequest(array(
+        $action->execute(new Sync(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'TOKEN' => 'aToken',
         )));
@@ -140,7 +140,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new PaymentDetailsSyncAction();
         $action->setPayment($paymentMock);
 
-        $action->execute(new SyncRequest(array(
+        $action->execute(new Sync(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'TOKEN' => 'aToken',
             'PAYMENTREQUEST_0_TRANSACTIONID' => 'zeroTransId',

@@ -4,7 +4,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Request\StatusRequestInterface;
+use Payum\Core\Request\GetStatusInterface;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class RecurringPaymentDetailsStatusAction implements ActionInterface
@@ -14,7 +14,7 @@ class RecurringPaymentDetailsStatusAction implements ActionInterface
      */
     public function execute($request)
     {
-        /** @var $request \Payum\Core\Request\StatusRequestInterface */
+        /** @var $request \Payum\Core\Request\GetStatusInterface */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -85,7 +85,7 @@ class RecurringPaymentDetailsStatusAction implements ActionInterface
      */
     public function supports($request)
     {
-        if (false == $request instanceof StatusRequestInterface) {
+        if (false == $request instanceof GetStatusInterface) {
             return false;
         }
 

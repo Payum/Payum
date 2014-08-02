@@ -2,7 +2,7 @@
 namespace Payum\Core\Tests\Bridge\Symfony\Action\Http;
 
 use Payum\Core\Bridge\Symfony\Action\GetHttpRequestAction;
-use Payum\Core\Request\Http\GetRequestRequest;
+use Payum\Core\Request\GetHttpRequest;
 use Symfony\Component\HttpFoundation\Request;
 
 class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
@@ -45,7 +45,7 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new GetHttpRequestAction;
 
-        $this->assertTrue($action->supports(new GetRequestRequest));
+        $this->assertTrue($action->supports(new GetHttpRequest));
     }
 
     /**
@@ -78,7 +78,7 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new GetHttpRequestAction;
 
-        $request = new GetRequestRequest;
+        $request = new \Payum\Core\Request\GetHttpRequest;
         $action->execute($request);
 
         $this->assertSame(array(), $request->query);
@@ -99,7 +99,7 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
             array('foo' => 'fooVal')
         ));
 
-        $request = new GetRequestRequest;
+        $request = new GetHttpRequest;
         $action->execute($request);
 
         $this->assertSame(array('foo' => 'fooVal'), $request->query);
@@ -122,7 +122,7 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
             array('foo' => 'fooVal')
         ));
 
-        $request = new GetRequestRequest;
+        $request = new \Payum\Core\Request\GetHttpRequest;
         $action->execute($request);
 
         $this->assertSame(array(), $request->query);

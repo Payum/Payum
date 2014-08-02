@@ -2,7 +2,7 @@
 namespace Payum\Payex\Tests\Action;
 
 use Payum\Core\PaymentInterface;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\Capture;
 use Payum\Payex\Action\AutoPayPaymentDetailsCaptureAction;
 
 class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
@@ -32,7 +32,7 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
-        $this->assertTrue($action->supports(new CaptureRequest(array(
+        $this->assertTrue($action->supports(new Capture(array(
             'autoPay' => true
         ))));
     }
@@ -44,7 +44,7 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
-        $this->assertFalse($action->supports(new CaptureRequest(array())));
+        $this->assertFalse($action->supports(new Capture(array())));
     }
 
     /**
@@ -54,7 +54,7 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
-        $this->assertFalse($action->supports(new CaptureRequest(array(
+        $this->assertFalse($action->supports(new Capture(array(
             'autoPay' => true,
             'recurring' => true,
         ))));
@@ -67,7 +67,7 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
-        $this->assertFalse($action->supports(new CaptureRequest(array(
+        $this->assertFalse($action->supports(new Capture(array(
             'autoPay' => false
         ))));
     }
@@ -89,7 +89,7 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AutoPayPaymentDetailsCaptureAction;
 
-        $this->assertFalse($action->supports(new CaptureRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new Capture(new \stdClass)));
     }
 
     /**
@@ -119,7 +119,7 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new AutoPayPaymentDetailsCaptureAction();
         $action->setPayment($paymentMock);
 
-        $request = new CaptureRequest(array(
+        $request = new Capture(array(
             'autoPay' => true
         ));
         

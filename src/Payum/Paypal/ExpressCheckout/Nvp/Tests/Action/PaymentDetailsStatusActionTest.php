@@ -3,7 +3,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Buzz\Message\Form\FormRequest;
 
-use Payum\Core\Request\BinaryMaskStatusRequest;
+use Payum\Core\Request\GetBinaryStatus;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
@@ -39,7 +39,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
            'PAYMENTREQUEST_0_AMT' => 1
         );
         
-        $request = new BinaryMaskStatusRequest($paymentDetails);
+        $request = new GetBinaryStatus($paymentDetails);
         
         $this->assertTrue($action->supports($request));
     }
@@ -55,7 +55,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
             'PAYMENTREQUEST_0_AMT' => 0
         );
 
-        $request = new BinaryMaskStatusRequest($paymentDetails);
+        $request = new GetBinaryStatus($paymentDetails);
 
         $this->assertTrue($action->supports($request));
     }
@@ -67,7 +67,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new BinaryMaskStatusRequest(new \stdClass());
+        $request = new GetBinaryStatus(new \stdClass());
 
         $this->assertFalse($action->supports($request));
     }
@@ -101,7 +101,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new BinaryMaskStatusRequest(array(
+        $request = new GetBinaryStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'L_ERRORCODE0' => Api::L_ERRORCODE_PAYMENT_NOT_AUTHORIZED
         ));
@@ -118,7 +118,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new BinaryMaskStatusRequest(array(
+        $request = new GetBinaryStatus(array(
             'PAYMENTREQUEST_0_AMT' => 21,
             'L_ERRORCODE9' => 'foo'
         ));
@@ -135,7 +135,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new BinaryMaskStatusRequest(array(
+        $request = new GetBinaryStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'PAYERID' => null,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED
@@ -153,7 +153,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new BinaryMaskStatusRequest(array(
+        $request = new GetBinaryStatus(array(
             'PAYMENTREQUEST_0_AMT' => 0,
             'PAYERID' => 'thePayerId',
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
@@ -172,7 +172,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new BinaryMaskStatusRequest(array(
+        $request = new GetBinaryStatus(array(
             'PAYMENTREQUEST_0_AMT' => 0,
             'PAYERID' => 'thePayerId',
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
@@ -190,7 +190,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new BinaryMaskStatusRequest(array(
+        $request = new GetBinaryStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS
         ));
@@ -207,7 +207,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new BinaryMaskStatusRequest(array(
+        $request = new GetBinaryStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_FAILED
         ));
@@ -224,7 +224,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new BinaryMaskStatusRequest(array(
+        $request = new GetBinaryStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
@@ -243,7 +243,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new BinaryMaskStatusRequest(array(
+        $request = new GetBinaryStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
@@ -262,7 +262,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new BinaryMaskStatusRequest(array(
+        $request = new GetBinaryStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
@@ -281,7 +281,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new BinaryMaskStatusRequest(array(
+        $request = new GetBinaryStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => 'unknownCheckoutStatus',
         ));
@@ -298,7 +298,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new BinaryMaskStatusRequest(array(
+        $request = new GetBinaryStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTREQUEST_9_PAYMENTSTATUS' => 'unknownPaymentStatus',

@@ -1,9 +1,7 @@
 <?php
-namespace Payum\Core\Request\Http;
+namespace Payum\Core\Reply;
 
-use Payum\Core\Request\BaseInteractiveRequest;
-
-class ResponseInteractiveRequest extends BaseInteractiveRequest
+class HttpResponse extends Base
 {
     /**
      * @var string

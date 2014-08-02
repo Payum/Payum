@@ -5,7 +5,7 @@ use Buzz\Message\Form\FormRequest;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetRecurringPaymentsProfileDetailsRequest;
-use Payum\Core\Request\SyncRequest;
+use Payum\Core\Request\Sync;
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
 
@@ -16,7 +16,7 @@ class RecurringPaymentDetailsSyncAction extends PaymentAwareAction
      */
     public function execute($request)
     {
-        /** @var $request SyncRequest */
+        /** @var $request Sync */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -35,7 +35,7 @@ class RecurringPaymentDetailsSyncAction extends PaymentAwareAction
      */
     public function supports($request)
     {
-        if (false == $request instanceof SyncRequest) {
+        if (false == $request instanceof Sync) {
             return false;
         }
 

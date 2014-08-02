@@ -3,7 +3,7 @@ namespace Payum\Payex\Action;
 
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\Capture;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Payex\Request\Api\AutoPayAgreementRequest;
 
@@ -14,7 +14,7 @@ class AutoPayPaymentDetailsCaptureAction extends PaymentAwareAction
      */
     public function execute($request)
     {
-        /** @var $request \Payum\Core\Request\CaptureRequest */
+        /** @var $request \Payum\Core\Request\Capture */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -28,7 +28,7 @@ class AutoPayPaymentDetailsCaptureAction extends PaymentAwareAction
     public function supports($request)
     {
         if (false == (
-                $request instanceof CaptureRequest &&
+                $request instanceof Capture &&
                 $request->getModel() instanceof \ArrayAccess
             )) {
             return false;

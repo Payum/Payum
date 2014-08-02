@@ -2,10 +2,10 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Examples;
 
 use Buzz\Client\Curl;
-use Payum\Core\Request\CaptureRequest;
-use Payum\Core\Request\SyncRequest;
-use Payum\Core\Request\BinaryMaskStatusRequest;
-use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\Sync;
+use Payum\Core\Request\GetBinaryStatus;
+use Payum\Core\Reply\HttpRedirect;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Examples\Model\AwesomeCart;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory;
@@ -34,7 +34,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
             'sandbox' => true
         )));
 
-        $capture = new CaptureRequest(array(
+        $capture = new Capture(array(
             'PAYMENTREQUEST_0_AMT' => 10,
             'PAYMENTREQUEST_0_CURRENCY' => 'USD',
             'RETURNURL' => 'http://foo.com/finishPayment',
@@ -43,7 +43,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         
         if ($interactiveRequest = $payment->execute($capture, $expectsInteractive = true)) {
             //save your models somewhere.
-            if ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {
+            if ($interactiveRequest instanceof HttpRedirect) {
                 header('Location: '.$interactiveRequest->getUrl());
                 exit;
             }
@@ -70,7 +70,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
     {
         //@testo:source
         
-        $capture = new CaptureRequest(array(
+        $capture = new Capture(array(
             
             // ... 
             
@@ -105,7 +105,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         //@testo:source
         //@testo:uncomment:use Payum\Core\Request\BinaryMaskStatusRequest;
         
-        $status = new BinaryMaskStatusRequest($capture->getModel());
+        $status = new GetBinaryStatus($capture->getModel());
         $payment->execute($status);
         
         if ($status->isSuccess()) {
@@ -127,7 +127,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         //@testo:uncomment:use Payum\Core\Request\CaptureRequest;
         //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Api;
         
-        $captureBillingAgreement = new CaptureRequest(array(
+        $captureBillingAgreement = new Capture(array(
             'PAYMENTREQUEST_0_AMT' => 0,
             'RETURNURL' => 'http://foo.com/finishPayment',
             'CANCELURL' => 'http://foo.com/finishPayment',
@@ -185,9 +185,9 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         $payment->execute(
             new CreateRecurringPaymentProfileRequest($recurringPaymentDetails)
         );
-        $payment->execute(new SyncRequest($recurringPaymentDetails));
+        $payment->execute(new Sync($recurringPaymentDetails));
 
-        $recurringPaymentStatus = new BinaryMaskStatusRequest($recurringPaymentDetails);
+        $recurringPaymentStatus = new GetBinaryStatus($recurringPaymentDetails);
         $payment->execute($recurringPaymentStatus);
 
         if ($recurringPaymentStatus->isSuccess()) {
@@ -220,9 +220,9 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
 
         $payment->addAction(new CaptureAwesomeCartAction);
 
-        $capture = new CaptureRequest($cart);
+        $capture = new Capture($cart);
         if ($interactiveRequest = $payment->execute($capture, $expectsInteractive = true)) {
-            if ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {
+            if ($interactiveRequest instanceof HttpRedirect) {
                 header('Location: '.$interactiveRequest->getUrl());
                 exit;
             }
@@ -230,7 +230,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
             throw $interactiveRequest; //unexpected request
         }
 
-        $status = new BinaryMaskStatusRequest($capture->getModel()->getPaymentDetails());
+        $status = new GetBinaryStatus($capture->getModel()->getPaymentDetails());
         $payment->execute($status);
 
         if ($status->isSuccess()) {

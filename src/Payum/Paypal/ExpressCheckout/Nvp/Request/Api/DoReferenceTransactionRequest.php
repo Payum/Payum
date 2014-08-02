@@ -1,8 +1,8 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Request\Api;
 
-use Payum\Core\Request\BaseModelRequest;
+use Payum\Core\Request\BaseModelAware;
 
-class DoReferenceTransactionRequest extends BaseModelRequest
+class DoReferenceTransactionRequest extends BaseModelAware
 {
 }

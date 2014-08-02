@@ -2,7 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Request\SyncRequest;
+use Payum\Core\Request\Sync;
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetailsRequest;
@@ -15,7 +15,7 @@ class PaymentDetailsSyncAction extends PaymentAwareAction
      */
     public function execute($request)
     {
-        /** @var $request SyncRequest */
+        /** @var $request Sync */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -40,7 +40,7 @@ class PaymentDetailsSyncAction extends PaymentAwareAction
      */
     public function supports($request)
     {
-        if (false == $request instanceof SyncRequest) {
+        if (false == $request instanceof Sync) {
             return false;
         }
 

@@ -1,10 +1,10 @@
 <?php
 namespace Payum\Core\Bridge\Symfony\Request;
 
-use Payum\Core\Request\BaseInteractiveRequest;
+use Payum\Core\Reply\Base;
 use Symfony\Component\HttpFoundation\Response;
 
-class ResponseInteractiveRequest extends BaseInteractiveRequest
+class ResponseInteractiveRequest extends Base
 {
     /**
      * @var \Symfony\Component\HttpFoundation\Response

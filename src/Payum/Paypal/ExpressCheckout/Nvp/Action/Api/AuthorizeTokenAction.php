@@ -2,7 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
+use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\LogicException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeTokenRequest;
@@ -13,7 +13,7 @@ class AuthorizeTokenAction extends BaseApiAwareAction
      * {@inheritdoc}
      * 
      * @throws \Payum\Core\Exception\LogicException if the token not set in the instruction.
-     * @throws \Payum\Core\Request\Http\RedirectUrlInteractiveRequest if authorization required.
+     * @throws \Payum\Core\Reply\HttpRedirect if authorization required.
      */
     public function execute($request)
     {
@@ -28,7 +28,7 @@ class AuthorizeTokenAction extends BaseApiAwareAction
         }
           
         if (false == $model['PAYERID'] || $request->isForced()) {
-            throw new RedirectUrlInteractiveRequest(
+            throw new HttpRedirect(
                 $this->api->getAuthorizeTokenUrl($model['TOKEN'], array(
                     'USERACTION' => $model['AUTHORIZE_TOKEN_USERACTION'],
                     'CMD' => $model['AUTHORIZE_TOKEN_CMD'],

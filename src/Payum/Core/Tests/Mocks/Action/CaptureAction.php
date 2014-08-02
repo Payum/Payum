@@ -3,7 +3,7 @@ namespace Payum\Core\Tests\Mocks\Action;
 
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Tests\Mocks\Model\AuthorizeRequiredModel;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\Capture;
 use Payum\Core\Tests\Mocks\Request\AuthorizeRequest;
 
 class CaptureAction extends PaymentAwareAction
@@ -13,7 +13,7 @@ class CaptureAction extends PaymentAwareAction
      */
     public function execute($request)
     {   
-        /** @var $request CaptureRequest */
+        /** @var $request Capture */
         if ($request->getModel() instanceof AuthorizeRequiredModel) {
             $this->payment->execute(new AuthorizeRequest);
         }
@@ -26,6 +26,6 @@ class CaptureAction extends PaymentAwareAction
      */
     public function supports($request)
     {
-        return $request instanceof CaptureRequest;
+        return $request instanceof Capture;
     }
 }

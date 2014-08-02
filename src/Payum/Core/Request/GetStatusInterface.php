@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Request;
 
-interface StatusRequestInterface extends InteractiveRequestInterface, ModelRequestInterface
+interface GetStatusInterface extends ModelAwareInterface
 {
     /**
      * @return mixed

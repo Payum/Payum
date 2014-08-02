@@ -4,7 +4,7 @@ namespace Payum\Payex\Tests\Action\Api;
 use Payum\Payex\Action\Api\InitializeOrderAction;
 use Payum\Payex\Api\OrderApi;
 use Payum\Payex\Request\Api\InitializeOrderRequest;
-use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
+use Payum\Core\Reply\HttpRedirect;
 
 class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -221,7 +221,7 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
 
         try {
             $action->execute($request);
-        } catch (RedirectUrlInteractiveRequest $interactiveRequest) {
+        } catch (HttpRedirect $interactiveRequest) {
             $this->assertEquals('http://example.com/theUrl', $interactiveRequest->getUrl());
             
             return;

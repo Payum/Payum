@@ -1,7 +1,7 @@
 <?php
-namespace Payum\Core\Request\Http;
+namespace Payum\Core\Reply;
 
-class PostRedirectUrlInteractiveRequest extends ResponseInteractiveRequest
+class HttpPostRedirect extends HttpResponse
 {
     /**
      * @param string $content

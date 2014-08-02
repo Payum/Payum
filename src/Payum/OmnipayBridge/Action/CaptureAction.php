@@ -6,8 +6,8 @@ use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\PaymentAwareInterface;
 use Payum\Core\PaymentInterface;
-use Payum\Core\Request\CaptureRequest;
-use Payum\Core\Request\ObtainCreditCardRequest;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Security\SensitiveValue;
 
 class CaptureAction extends BaseApiAwareAction implements PaymentAwareInterface
@@ -42,7 +42,7 @@ class CaptureAction extends BaseApiAwareAction implements PaymentAwareInterface
 
         if (false == $model->validateNotEmpty(array('card'), false)) {
             try {
-                $creditCardRequest = new ObtainCreditCardRequest;
+                $creditCardRequest = new ObtainCreditCard;
                 $this->payment->execute($creditCardRequest);
                 $card = $creditCardRequest->obtain();
 
@@ -76,7 +76,7 @@ class CaptureAction extends BaseApiAwareAction implements PaymentAwareInterface
     public function supports($request)
     {
         return
-            $request instanceof CaptureRequest &&
+            $request instanceof Capture &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

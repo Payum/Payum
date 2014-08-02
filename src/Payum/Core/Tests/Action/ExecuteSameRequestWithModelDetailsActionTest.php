@@ -2,7 +2,7 @@
 namespace Payum\Core\Tests\Action;
 
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\Capture;
 
 class ExecuteSameRequestWithModelDetailsActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -127,7 +127,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends \PHPUnit_Framework_Te
             ->will($this->returnValue($expectedDetails))
         ;
 
-        $request = new CaptureRequest($modelMock);
+        $request = new Capture($modelMock);
 
         // guard
         $this->assertInstanceOf('Payum\Core\Request\ModelRequestInterface', $request);
