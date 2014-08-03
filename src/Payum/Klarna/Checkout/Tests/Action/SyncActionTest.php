@@ -30,7 +30,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportSyncRequestWithArrayAsModel()
+    public function shouldSupportSyncWithArrayAsModel()
     {
         $action = new SyncAction();
 
@@ -40,7 +40,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotSyncRequest()
+    public function shouldNotSupportAnythingNotSync()
     {
         $action = new SyncAction;
 
@@ -50,7 +50,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportSyncRequestWithNotArrayAccessModel()
+    public function shouldNotSupportSyncWithNotArrayAccessModel()
     {
         $action = new SyncAction;
 

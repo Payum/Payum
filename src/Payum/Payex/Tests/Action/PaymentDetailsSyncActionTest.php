@@ -28,7 +28,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportSyncRequestWithArrayAccessAsModelIfTransactionNumberSet()
+    public function shouldSupportSyncWithArrayAccessAsModelIfTransactionNumberSet()
     {
         $action = new PaymentDetailsSyncAction();
 
@@ -46,7 +46,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotSyncRequest()
+    public function shouldNotSupportAnythingNotSync()
     {
         $action = new PaymentDetailsSyncAction;
 
@@ -56,7 +56,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportSyncRequestWithNotArrayAccessModel()
+    public function shouldNotSupportSyncWithNotArrayAccessModel()
     {
         $action = new PaymentDetailsSyncAction;
 

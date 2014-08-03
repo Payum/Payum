@@ -28,7 +28,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportSyncRequestWithArrayAccessAsModelIfOrderIdNotSetAndAgreementRefSet()
+    public function shouldSupportSyncWithArrayAccessAsModelIfOrderIdNotSetAndAgreementRefSet()
     {
         $action = new AgreementDetailsSyncAction();
 
@@ -52,7 +52,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportSyncRequestWithArrayAccessAsModelIfOrderIdAndAgreementRefSet()
+    public function shouldNotSupportSyncWithArrayAccessAsModelIfOrderIdAndAgreementRefSet()
     {
         $action = new AgreementDetailsSyncAction();
 
@@ -76,7 +76,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotSyncRequest()
+    public function shouldNotSupportAnythingNotSync()
     {
         $action = new AgreementDetailsSyncAction;
 
@@ -86,7 +86,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportSyncRequestWithNotArrayAccessModel()
+    public function shouldNotSupportSyncWithNotArrayAccessModel()
     {
         $action = new AgreementDetailsSyncAction;
 

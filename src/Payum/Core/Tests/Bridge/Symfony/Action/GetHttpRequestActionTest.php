@@ -41,7 +41,7 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportGetRequestRequest()
+    public function shouldSupportGetHttpRequest()
     {
         $action = new GetHttpRequestAction;
 
@@ -51,7 +51,7 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotGetRequestRequest()
+    public function shouldNotSupportAnythingNotGetHttpRequest()
     {
         $action = new GetHttpRequestAction;
 

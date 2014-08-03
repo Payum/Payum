@@ -27,7 +27,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportSyncRequestAndArrayAsModelWhichHasPaymentRequestAmountSet()
+    public function shouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSet()
     {
         $action = new PaymentDetailsSyncAction();
 
@@ -43,7 +43,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportSyncRequestAndArrayAsModelWhichHasPaymentRequestAmountSetToZero()
+    public function shouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSetToZero()
     {
         $action = new PaymentDetailsSyncAction();
 
@@ -59,7 +59,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotSyncRequest()
+    public function shouldNotSupportAnythingNotSync()
     {
         $action = new PaymentDetailsSyncAction();
 

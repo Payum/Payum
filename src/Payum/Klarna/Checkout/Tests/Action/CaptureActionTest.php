@@ -76,18 +76,18 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      *
      * @expectedException \Payum\Core\Reply\HttpResponse
      */
-    public function shouldSubExecuteSyncRequestIfModelHasLocationSet()
+    public function shouldSubExecuteSyncIfModelHasLocationSet()
     {
         $paymentMock = $this->createPaymentMock();
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
         $paymentMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplateRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
         ;
 
         $action = new CaptureAction('aTemplate');
@@ -131,7 +131,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
 
         $action = new CaptureAction('aTemplate');
@@ -162,7 +162,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplateRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
             ->will($this->returnCallback(function(RenderTemplate $request) use($testCase, $expectedTemplateName, $expectedContext, $expectedContent) {
                 $testCase->assertEquals($expectedTemplateName, $request->getTemplateName());
                 $testCase->assertEquals($expectedContext, $request->getContext());

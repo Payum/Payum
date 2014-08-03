@@ -76,7 +76,7 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSubExecuteSyncRequestWithSameModel()
+    public function shouldSubExecuteSyncWithSameModel()
     {
         $expectedModel = array('foo' => 'fooVal');
 
@@ -86,7 +86,7 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
         
         $action = new NotifyAction();

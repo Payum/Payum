@@ -143,7 +143,7 @@ class CaptureOnsiteActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Http\GetRequestRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
         ;
 
         $action = new CaptureOnsiteAction();
@@ -177,7 +177,7 @@ class CaptureOnsiteActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Http\GetRequestRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
             ->will($this->returnCallback(function(GetHttpRequest $request) {
                 $request->query['EXECCODE'] = 1;
                 $request->query['FOO'] = 'fooVal';

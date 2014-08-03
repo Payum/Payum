@@ -134,7 +134,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Http\GetRequestRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
             ->will($this->returnCallback(function(GetHttpRequest $request) {
                 $request->method = 'GET';
             }))
@@ -142,7 +142,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplateRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
             ->will($this->returnCallback(function(RenderTemplate $request) use ($templateName, $publishableKey, $model, $testCase) {
                 $testCase->assertEquals($templateName, $request->getTemplateName());
 
@@ -184,7 +184,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Http\GetRequestRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
             ->will($this->returnCallback(function(GetHttpRequest $request) {
                 $request->method = 'POST';
             }))
@@ -192,7 +192,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplateRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
         ;
 
         $action = new ObtainTokenAction($templateName);
@@ -221,7 +221,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Http\GetRequestRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
             ->will($this->returnCallback(function(GetHttpRequest $request) {
                 $request->method = 'POST';
                 $request->request = array('stripeToken' => 'theToken');

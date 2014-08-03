@@ -101,7 +101,7 @@ The page that shows payment details could be a good starting place.
 <?php
 // create_recurring_payment.php
 
-use Payum\Core\Request\SyncRequest;
+use Payum\Core\Request\Sync;
 use Payum\Core\Request\SimpleStatusRequest;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfileRequest;
 
@@ -135,7 +135,7 @@ $recurringPaymentDetails['PROFILESTARTDATE'] = date(DATE_ATOM);
 $recurringPaymentDetails['BILLINGPERIOD'] = Api::BILLINGPERIOD_DAY;
 
 $payment->execute(new CreateRecurringPaymentProfileRequest($recurringPaymentDetails));
-$payment->execute(new SyncRequest($recurringPaymentDetails));
+$payment->execute(new Sync($recurringPaymentDetails));
 
 $doneToken = $tokenFactory->createToken('paypal', $recurringPaymentDetails, 'done.php');
 

@@ -27,7 +27,7 @@ class RenderTemplateActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportRenderTemplateRequest()
+    public function shouldSupportRenderTemplate()
     {
         $action = new RenderTemplateAction($this->createTwigMock(), 'aLayout');
 
@@ -37,7 +37,7 @@ class RenderTemplateActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotRenderTemplateRequest()
+    public function shouldNotSupportAnythingNotRenderTemplate()
     {
         $action = new RenderTemplateAction($this->createTwigMock(), 'aLayout');
 

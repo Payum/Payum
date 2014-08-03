@@ -27,7 +27,7 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportSyncRequestAndArrayAsModelWhichHasBillingPeriodSet()
+    public function shouldSupportSyncAndArrayAsModelWhichHasBillingPeriodSet()
     {
         $action = new RecurringPaymentDetailsSyncAction();
 
