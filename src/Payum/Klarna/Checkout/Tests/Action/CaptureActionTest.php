@@ -2,9 +2,9 @@
 namespace Payum\Klarna\Checkout\Tests\Action;
 
 use Payum\Core\PaymentInterface;
+use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\RenderTemplate;
-use Payum\Core\Reply\ResponseInteractiveRequest;
 use Payum\Klarna\Checkout\Action\CaptureAction;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\CreateOrderRequest;
@@ -32,7 +32,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestWithArrayAsModel()
+    public function shouldSupportCaptureWithArrayAsModel()
     {
         $action = new CaptureAction('aTemplate');
 
@@ -42,7 +42,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotCaptureRequest()
+    public function shouldNotSupportAnythingNotCapture()
     {
         $action = new CaptureAction('aTemplate');
 
@@ -52,7 +52,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestWithNotArrayAccessModel()
+    public function shouldNotSupportCaptureWithNotArrayAccessModel()
     {
         $action = new CaptureAction('aTemplate');
 
@@ -74,7 +74,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Core\Reply\ResponseInteractiveRequest
+     * @expectedException \Payum\Core\Reply\HttpResponse
      */
     public function shouldSubExecuteSyncRequestIfModelHasLocationSet()
     {
@@ -180,7 +180,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
                 'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
                 'gui' => array('snippet' => $snippet),
             )));
-        } catch (ResponseInteractiveRequest $interactiveRequest) {
+        } catch (HttpResponse $interactiveRequest) {
             $this->assertEquals($expectedContent, $interactiveRequest->getContent());
 
             return;

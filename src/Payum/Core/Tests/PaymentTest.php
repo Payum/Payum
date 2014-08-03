@@ -247,9 +247,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldCatchInteractiveRequestThrownAndReturnIfInteractiveRequestSetTrue()
+    public function shouldCatchReplyThrownAndReturnIfReplyCatchSetTrue()
     {
-        $expectedInteractiveRequest = $this->createInteractiveRequestMock();
+        $expectedReply = $this->createReplyMock();
         $request = new \stdClass();
 
         $actionMock = $this->createActionMock();
@@ -261,15 +261,15 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $actionMock
             ->expects($this->once())
             ->method('execute')
-            ->will($this->throwException($expectedInteractiveRequest))
+            ->will($this->throwException($expectedReply))
         ;
 
         $payment = new Payment();
         $payment->addAction($actionMock);
 
-        $actualInteractiveRequest = $payment->execute($request, $isInteractiveRequestExpected = true);
+        $actualReply = $payment->execute($request, $catchReply = true);
         
-        $this->assertSame($expectedInteractiveRequest, $actualInteractiveRequest);
+        $this->assertSame($expectedReply, $actualReply);
     }
 
     /**
@@ -281,7 +281,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     {
         $firstRequest = new \stdClass();
         $secondRequest = new \stdClass();
-        $interactiveRequest = $this->createInteractiveRequestMock();
+        $interactiveRequest = $this->createReplyMock();
         
         $firstAction = new RequireOtherRequestAction();
         $firstAction->setSupportedRequest($firstRequest);
@@ -360,7 +360,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallExtensionOnInteractiveRequestWhenInteractiveRequestThrown()
     {
-        $expectedInteractiveRequestMock = $this->createInteractiveRequestMock();
+        $expectedInteractiveRequestMock = $this->createReplyMock();
         $expectedRequest = new \stdClass;
 
         $actionMock = $this->createActionMock();
@@ -400,8 +400,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnNewInteractiveRequestProvidedByExtension()
     {
-        $thrownInteractiveRequestMock = $this->createInteractiveRequestMock();
-        $expectedInteractiveRequestMock = $this->createInteractiveRequestMock();
+        $thrownInteractiveRequestMock = $this->createReplyMock();
+        $expectedInteractiveRequestMock = $this->createReplyMock();
         $expectedRequest = new \stdClass;
 
         $actionMock = $this->createActionMock();
@@ -557,9 +557,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\Reply\ReplyInterface
      */
-    protected function createInteractiveRequestMock()
+    protected function createReplyMock()
     {
-        return $this->getMock('Payum\Core\Request\BaseInteractiveRequest');
+        return $this->getMock('Payum\Core\Reply\Base');
     }
 
     /**

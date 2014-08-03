@@ -1,28 +1,28 @@
 <?php
-namespace Payum\Core\Tests\Request\Http;
+namespace Payum\Core\Tests\Reply;
 
 use Payum\Core\Reply\HttpPostRedirect;
 
-class PostRedirectUrlInteractiveRequestTest extends \PHPUnit_Framework_TestCase
+class HttpPostRedirectTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldImplementInteractiveRequestInterface()
+    public function shouldImplementReplyInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\Http\PostRedirectUrlInteractiveRequest');
+        $rc = new \ReflectionClass('Payum\Core\Reply\HttpPostRedirect');
         
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Request\InteractiveRequestInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Reply\ReplyInterface'));
     }
 
     /**
      * @test
      */
-    public function shouldBeSubClassOfResponseInteractiveRequest()
+    public function shouldBeSubClassOfHttpResponseReply()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\Http\PostRedirectUrlInteractiveRequest');
+        $rc = new \ReflectionClass('Payum\Core\Reply\HttpPostRedirect');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Http\ResponseInteractiveRequest'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Reply\HttpResponse'));
     }
 
     /**
@@ -30,7 +30,7 @@ class PostRedirectUrlInteractiveRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithUrlAsArgument()
     {
-        new \Payum\Core\Reply\HttpPostRedirect('an_url');
+        new HttpPostRedirect('an_url');
     }
 
     /**
@@ -61,7 +61,7 @@ class PostRedirectUrlInteractiveRequestTest extends \PHPUnit_Framework_TestCase
 </html>
 HTML;
         
-        $request = new \Payum\Core\Reply\HttpPostRedirect('theUrl');
+        $request = new HttpPostRedirect('theUrl');
         
         $this->assertEquals($expectedContent, $request->getContent());
     }
@@ -88,7 +88,7 @@ HTML;
 </html>
 HTML;
 
-        $request = new \Payum\Core\Reply\HttpPostRedirect('theUrl', array('foo' => 'fooVal', 'bar' => 'barVal'));
+        $request = new HttpPostRedirect('theUrl', array('foo' => 'fooVal', 'bar' => 'barVal'));
 
         $this->assertEquals($expectedContent, $request->getContent());
     }

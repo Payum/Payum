@@ -6,10 +6,10 @@ class ManageRecurringPaymentsProfileStatusRequestTest extends \PHPUnit_Framework
     /**
      * @test
      */
-    public function shouldBeSubClassOfBaseModelRequest()
+    public function shouldBeSubClassOfBaseModelAware()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ManageRecurringPaymentsProfileStatusRequest');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelRequest'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelAware'));
     }
 }

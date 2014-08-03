@@ -1,16 +1,16 @@
 <?php
-namespace Payum\Core\Tests\Request\Http;
+namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\GetHttpRequest;
 
-class GetRequestRequestTest extends \PHPUnit_Framework_TestCase
+class GetHttpRequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new \Payum\Core\Request\GetHttpRequest;
+        new GetHttpRequest;
     }
 
     /**
@@ -18,7 +18,7 @@ class GetRequestRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSetExpectedDefaultValuesInConstructor()
     {
-        $request = new \Payum\Core\Request\GetHttpRequest;
+        $request = new GetHttpRequest;
 
         $this->assertSame(array(), $request->query);
         $this->assertSame(array(), $request->request);

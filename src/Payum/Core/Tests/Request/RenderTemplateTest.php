@@ -3,7 +3,7 @@ namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\RenderTemplate;
 
-class RenderTemplateRequestTest extends \PHPUnit_Framework_TestCase
+class RenderTemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test

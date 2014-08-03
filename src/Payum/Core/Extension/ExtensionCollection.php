@@ -58,16 +58,16 @@ class ExtensionCollection implements ExtensionInterface
     /**
      * {@inheritdoc}
      */
-    public function onInteractiveRequest(ReplyInterface $interactiveRequest, $request, ActionInterface $action)
+    public function onInteractiveRequest(ReplyInterface $reply, $request, ActionInterface $action)
     {
-        $inputInteractiveRequest = $interactiveRequest;
+        $inputInteractiveRequest = $reply;
         foreach ($this->extensions as $extension) {
-            if (null !== $newInteractiveRequest = $extension->onInteractiveRequest($interactiveRequest, $request, $action)) {
-                $interactiveRequest = $newInteractiveRequest;
+            if (null !== $newInteractiveRequest = $extension->onInteractiveRequest($reply, $request, $action)) {
+                $reply = $newInteractiveRequest;
             }
         }
 
-        return $inputInteractiveRequest !== $interactiveRequest ? $interactiveRequest : null;
+        return $inputInteractiveRequest !== $reply ? $reply : null;
     }
     
     /**

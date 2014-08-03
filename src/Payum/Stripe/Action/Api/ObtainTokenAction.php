@@ -7,8 +7,8 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\GetHttpRequest;
-use Payum\Core\Reply\ResponseInteractiveRequest;
 use Payum\Core\Request\RenderTemplate;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\ObtainTokenRequest;
@@ -74,7 +74,7 @@ class ObtainTokenAction extends PaymentAwareAction implements ApiAwareInterface
             'publishable_key' => $this->keys->getPublishableKey(),
         )));
 
-        throw new ResponseInteractiveRequest($renderTemplate->getResult());
+        throw new HttpResponse($renderTemplate->getResult());
     }
 
     /**

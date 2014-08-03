@@ -15,7 +15,7 @@ $payment = new Payment;
 $payment->addAction(new CaptureAction));
 
 //CaptureAction does its job.
-$payment->execute($capture = new CaptureRequest(array(
+$payment->execute($capture = new Capture(array(
     'amount' => 100,
     'currency' => 'USD'
 ));
@@ -39,7 +39,7 @@ class CaptureAction implements ActionInterface
 
     public function supports($request)
     {
-        return $request instanceof CaptureRequest;
+        return $request instanceof Capture;
     }
 }
 ```

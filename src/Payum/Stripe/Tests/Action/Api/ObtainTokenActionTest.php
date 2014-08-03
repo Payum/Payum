@@ -2,8 +2,8 @@
 namespace Payum\Stripe\Tests\Action\Api;
 
 use Payum\Core\PaymentInterface;
+use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\GetHttpRequest;
-use Payum\Core\Reply\ResponseInteractiveRequest;
 use Payum\Core\Request\RenderTemplate;
 use Payum\Stripe\Action\Api\ObtainTokenAction;
 use Payum\Stripe\Keys;
@@ -161,7 +161,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
 
         try {
             $action->execute(new ObtainTokenRequest($model));
-        } catch (ResponseInteractiveRequest $interactiveRequest) {
+        } catch (HttpResponse $interactiveRequest) {
             $this->assertEquals('theContent', $interactiveRequest->getContent());
 
             return;
@@ -201,7 +201,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
 
         try {
             $action->execute(new ObtainTokenRequest($model));
-        } catch (ResponseInteractiveRequest $interactiveRequest) {
+        } catch (HttpResponse $interactiveRequest) {
             return;
         }
 

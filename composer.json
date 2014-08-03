@@ -82,7 +82,7 @@
         "zendframework/zend-db": "If you want to store models to Zend Db ORM",
         "symfony/routing": "If you want to use TokenFactory from symfony's bridge",
         "symfony/http-kernel": "If you want to use HttpRequestVerifier from symfony's bridge",
-        "symfony/http-foundation": "If you want to use HttpRequestVerifier or ResponseInteractiveRequest from symfony's bridge",
+        "symfony/http-foundation": "If you want to use HttpRequestVerifier or HttpResponse reply from symfony's bridge",
         "monolog/monolog": "In case you want to use PSR-3 logger"
     },
     "config": {

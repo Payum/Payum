@@ -27,7 +27,7 @@ As an example we created a capture action that can capture order using foo payme
 namespace App\Payum\Action;
 
 use App\Model\Order;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\Capture;
 use Payum\Core\Exception\RequestNotSupportedException;
 
 class CaptureOrderUsingFooAction extends PaymentAwareAction
@@ -54,7 +54,7 @@ class CaptureOrderUsingFooAction extends PaymentAwareAction
     public function supports($request)
     {
         return
-            $request instanceof CaptureRequest &&
+            $request instanceof Capture &&
             $request->getModel() instanceof Order
         ;
     }

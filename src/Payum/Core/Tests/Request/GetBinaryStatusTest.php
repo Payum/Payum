@@ -3,7 +3,7 @@ namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\GetBinaryStatus;
 
-class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
+class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
 {
     public static function provideIsXXXMethods()
     {
@@ -36,11 +36,11 @@ class BinaryMaskStatusRequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfBaseStatusRequest()
+    public function shouldBeSubClassOfBaseGetStatus()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\BinaryMaskStatusRequest');
+        $rc = new \ReflectionClass('Payum\Core\Request\GetBinaryStatus');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseStatusRequest'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseGetStatus'));
     }
 
     /**

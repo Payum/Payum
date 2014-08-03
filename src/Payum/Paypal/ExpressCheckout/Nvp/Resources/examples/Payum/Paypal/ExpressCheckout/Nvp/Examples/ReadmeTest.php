@@ -24,7 +24,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         //@testo:uncomment:use Buzz\Client\Curl;
         //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Api;
         //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory;
-        //@testo:uncomment:use Payum\Core\Request\CaptureRequest;
+        //@testo:uncomment:use Payum\Core\Request\Capture;
         //@testo:uncomment:use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
         
         $payment = PaymentFactory::create(new Api(new Curl, array(
@@ -124,7 +124,7 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
     {
         //@testo:start
         //@testo:source
-        //@testo:uncomment:use Payum\Core\Request\CaptureRequest;
+        //@testo:uncomment:use Payum\Core\Request\Capture;
         //@testo:uncomment:use Payum\Paypal\ExpressCheckout\Nvp\Api;
         
         $captureBillingAgreement = new Capture(array(

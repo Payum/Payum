@@ -1,14 +1,14 @@
 <?php
-namespace Payum\Core\Tests\Request;
+namespace Payum\Core\Tests\Reply;
 
-class InteractiveRequestInterfaceTest extends \PHPUnit_Framework_TestCase
+class ReplyInterfaceTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldImplementExceptionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\InteractiveRequestInterface');
+        $rc = new \ReflectionClass('Payum\Core\Reply\ReplyInterface');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Exception\ExceptionInterface'));
     }

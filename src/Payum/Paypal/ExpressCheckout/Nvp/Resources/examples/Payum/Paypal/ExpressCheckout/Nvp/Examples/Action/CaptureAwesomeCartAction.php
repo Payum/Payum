@@ -20,16 +20,16 @@ class CaptureAwesomeCartAction extends \Payum\Core\Action\PaymentAwareAction
 
         $cart = $request->getModel();
 
-        $rawCaptureRequest = new Capture(array(
+        $rawCapture = new Capture(array(
             'PAYMENTREQUEST_0_AMT' => $cart->getPrice(),
             'PAYMENTREQUEST_0_CURRENCY' => $cart->getCurrency(),
             'RETURNURL' => 'http://foo.com/finishPayment/'.$cart->getId(),
             'CANCELURL' => 'http://foo.com/finishPayment/'.$cart->getId(),
         ));
 
-        $this->payment->execute($rawCaptureRequest);
+        $this->payment->execute($rawCapture);
 
-        $cart->setPaymentDetails($rawCaptureRequest->getModel());
+        $cart->setPaymentDetails($rawCapture->getModel());
     }
 
     /**

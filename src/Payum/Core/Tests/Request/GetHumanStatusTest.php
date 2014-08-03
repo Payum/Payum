@@ -1,9 +1,9 @@
 <?php
 namespace Payum\Core\Tests\Request;
 
-use Payum\Core\Request\SimpleGetStatus;
+use Payum\Core\Request\GetHumanStatus;
 
-class SimpleStatusRequestTest extends \PHPUnit_Framework_TestCase
+class GetHumanStatusTest extends \PHPUnit_Framework_TestCase
 {
     public static function provideIsXXXMethods()
     {
@@ -38,9 +38,9 @@ class SimpleStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfBaseStatusRequest()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\SimpleStatusRequest');
+        $rc = new \ReflectionClass('Payum\Core\Request\GetHumanStatus');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseStatusRequest'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseGetStatus'));
     }
 
     /**
@@ -48,7 +48,7 @@ class SimpleStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkUnknownInConstructor()
     {
-        $statusRequest = new SimpleGetStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass);
 
         $this->assertTrue($statusRequest->isUnknown());
     }
@@ -60,7 +60,7 @@ class SimpleStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetMarkedStatus($markXXXMethod)
     {
-        $statusRequest = new SimpleGetStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass);
 
         $statusRequest->$markXXXMethod();
         
@@ -74,7 +74,7 @@ class SimpleStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallIsXXXStatus($isXXXMethod)
     {
-        $statusRequest = new SimpleGetStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass);
 
         $this->assertInternalType('boolean', $statusRequest->$isXXXMethod());
     }
@@ -84,7 +84,7 @@ class SimpleStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenSuccessStatus()
     {
-        $statusRequest = new SimpleGetStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass);
 
         $statusRequest->markSuccess();
         
@@ -104,7 +104,7 @@ class SimpleStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenFailedStatus()
     {
-        $statusRequest = new SimpleGetStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass);
 
         $statusRequest->markFailed();
 
@@ -124,7 +124,7 @@ class SimpleStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenPendingStatus()
     {
-        $statusRequest = new SimpleGetStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass);
 
         $statusRequest->markPending();
 
@@ -144,7 +144,7 @@ class SimpleStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenCanceledStatus()
     {
-        $statusRequest = new SimpleGetStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass);
 
         $statusRequest->markCanceled();
 
@@ -164,7 +164,7 @@ class SimpleStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenNewStatus()
     {
-        $statusRequest = new SimpleGetStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass);
 
         $statusRequest->markNew();
 
@@ -184,7 +184,7 @@ class SimpleStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenUnknownStatus()
     {
-        $statusRequest = new SimpleGetStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass);
 
         $statusRequest->markUnknown();
 
@@ -204,7 +204,7 @@ class SimpleStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenExpiredStatus()
     {
-        $statusRequest = new SimpleGetStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass);
 
         $statusRequest->markExpired();
 
@@ -224,7 +224,7 @@ class SimpleStatusRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenSuspendedStatus()
     {
-        $statusRequest = new SimpleGetStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass);
 
         $statusRequest->markSuspended();
 

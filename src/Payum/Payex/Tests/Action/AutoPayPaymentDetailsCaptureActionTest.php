@@ -28,7 +28,7 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestWithArrayAsModelIfAutoPaySetToTrue()
+    public function shouldSupportCaptureWithArrayAsModelIfAutoPaySetToTrue()
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
@@ -40,7 +40,7 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestWithArrayAsModelIfAutoPayNotSet()
+    public function shouldNotSupportCaptureWithArrayAsModelIfAutoPayNotSet()
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
@@ -50,7 +50,7 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestWithArrayAsModelIfAutoPaySetToTrueAndRecurringSetToTrue()
+    public function shouldNotSupportCaptureWithArrayAsModelIfAutoPaySetToTrueAndRecurringSetToTrue()
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
@@ -63,7 +63,7 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestWithArrayAsModelIfAutoPaySetToFalse()
+    public function shouldNotSupportCaptureayAsModelIfAutoPaySetToFalse()
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
@@ -75,7 +75,7 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotCaptureRequest()
+    public function shouldNotSupportAnythingNotCapture()
     {
         $action = new AutoPayPaymentDetailsCaptureAction;
 
@@ -85,7 +85,7 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestWithNotArrayAccessModel()
+    public function shouldNotSupportCaptureWithNotArrayAccessModel()
     {
         $action = new AutoPayPaymentDetailsCaptureAction;
 

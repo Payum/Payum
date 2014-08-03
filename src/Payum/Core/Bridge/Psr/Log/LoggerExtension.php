@@ -58,7 +58,7 @@ class LoggerExtension implements ExtensionInterface, LoggerAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function onInteractiveRequest(ReplyInterface $interactiveRequest, $request, ActionInterface $action)
+    public function onInteractiveRequest(ReplyInterface $reply, $request, ActionInterface $action)
     {
     }
 

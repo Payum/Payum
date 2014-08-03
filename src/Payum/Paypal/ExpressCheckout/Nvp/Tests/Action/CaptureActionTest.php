@@ -30,7 +30,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestAndArrayAccessAsModel()
+    public function shouldSupportCaptureAndArrayAccessAsModel()
     {
         $action = new CaptureAction();
 
@@ -42,7 +42,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportNotCaptureRequest()
+    public function shouldNotSupportNotCapture()
     {
         $action = new CaptureAction();
         
@@ -54,7 +54,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestAndNotArrayAccessAsModel()
+    public function shouldNotSupportCaptureCaptureessAsModel()
     {
         $action = new CaptureAction();
         
@@ -116,7 +116,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSetTokenTargetUrlAsReturnUrlIfSecuredCaptureRequestPassedAndReturnUrlNotSet()
+    public function shouldSetTokenTargetUrlAsReturnUrlIfSecuredCapturePassedACaptureSet()
     {
         $testCase = $this;
 
@@ -150,7 +150,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSetTokenTargetUrlAsCancelUrlIfSecuredCaptureRequestPassedAndReturnUrlNotSet()
+    public function shouldSetTokenTargetUrlAsCancelUrlIfSecuredCapturePassedAndReturnUrlNotSet()
     {
         $testCase = $this;
 

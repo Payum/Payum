@@ -28,7 +28,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestWithArrayAsModelIfAutoPayNotSet()
+    public function shouldSupportCaptureWithArrayAsModelIfAutoPayNotSet()
     {
         $action = new PaymentDetailsCaptureAction();
 
@@ -38,7 +38,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestWithArrayAsModelIfAutoPaySet()
+    public function shouldNotSupportCaptureayAsModelIfAutoPaySet()
     {
         $action = new PaymentDetailsCaptureAction();
 
@@ -50,7 +50,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestWithArrayAsModelIfAutoPaySetToFalse()
+    public function shouldSupportCaptureCaptureelIfAutoPaySetToFalse()
     {
         $action = new PaymentDetailsCaptureAction();
 
@@ -62,7 +62,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestWithArrayAsModelIfRecurringSetToTrueAndAutoPaySet()
+    public function shouldSupportCaptureWithArrCaptureurringSetToTrueAndAutoPaySet()
     {
         $action = new PaymentDetailsCaptureAction();
 
@@ -75,7 +75,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotCaptureRequest()
+    public function shouldNotSupportAnythingNotCapture()
     {
         $action = new PaymentDetailsCaptureAction;
 
@@ -85,7 +85,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestWithNotArrayAccessModel()
+    public function shouldNotSupportCaptureWithNotArrayAccessModel()
     {
         $action = new PaymentDetailsCaptureAction;
 

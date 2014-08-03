@@ -32,12 +32,12 @@ interface PaymentInterface
 
     /**
      * @param mixed $request
-     * @param boolean $catchInteractive
+     * @param boolean $catchReply
      * 
      * @throws \Payum\Core\Exception\RequestNotSupportedException if any action supports the request.
-     * @throws \Payum\Core\Reply\ReplyInterface if $catchInteractive parameter set to false.
+     * @throws \Payum\Core\Reply\ReplyInterface if $catchReply parameter set to false.
      * 
      * @return \Payum\Core\Reply\ReplyInterface|null
      */
-    function execute($request, $catchInteractive = false);
+    function execute($request, $catchReply = false);
 }

@@ -20,7 +20,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestWithPaymentSdkModel()
+    public function shouldSupportCaptureWithPaymentSdkModel()
     {
         $action = new CaptureAction();
 
@@ -34,7 +34,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestWithNotPaymentSdkModel()
+    public function shouldNotSupportCapturePaymentSdkModel()
     {
         $action = new CaptureAction();
 
@@ -58,19 +58,17 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportNotCaptureRequest()
+    public function shouldNotSupportNotCapture()
     {
         $action = new CaptureAction();
 
-        $request = new \stdClass();
-
-        $this->assertFalse($action->supports($request));
+        $this->assertFalse($action->supports(new \stdClass()));
     }
 
     /**
      * @test
      */
-    public function shouldSupportCaptureRequest()
+    public function shouldSupportCapture()
     {
         $action = new CaptureAction();
 

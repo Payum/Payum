@@ -50,7 +50,7 @@ $model = new PaymentDetails;
 $model['AUTHORIZE_TOKEN_CMD'] = Api::CMD_EXPRESS_CHECKOUT_MOBILE;
 $model['AUTHORIZE_TOKEN_USERACTION'] = Api::USERACTION_COMMIT;
 
-$payment->execute(new CaptureRequest($model));
+$payment->execute(new Capture($model));
 ```
 
 Back to [index](index.md).

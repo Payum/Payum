@@ -82,7 +82,7 @@ class StorageExtension implements ExtensionInterface
     /**
      * {@inheritDoc}
      */
-    public function onInteractiveRequest(ReplyInterface $interactiveRequest, $request, ActionInterface $action)
+    public function onInteractiveRequest(ReplyInterface $reply, $request, ActionInterface $action)
     {
         $this->onPostXXX($request);
     }

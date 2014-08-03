@@ -3,7 +3,7 @@ namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\ObtainCreditCard;
 
-class ObtainCreditCardRequestTest extends \PHPUnit_Framework_TestCase
+class ObtainCreditCardTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test

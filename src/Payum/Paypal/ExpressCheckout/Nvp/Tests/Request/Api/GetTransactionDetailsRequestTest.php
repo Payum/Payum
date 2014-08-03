@@ -9,11 +9,11 @@ class GetTransactionDetailsRequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfBaseModelRequest()
+    public function shouldBeSubClassOfBaseModelAware()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetailsRequest');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelRequest'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelAware'));
     }
 
     /**

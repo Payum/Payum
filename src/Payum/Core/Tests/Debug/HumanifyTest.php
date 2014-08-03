@@ -82,16 +82,16 @@ class HumanifyTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Capture($this);
 
-        $this->assertEquals('CaptureRequest{model: HumanifyTest}', Humanify::request($request));
+        $this->assertEquals('Capture{model: HumanifyTest}', Humanify::request($request));
     }
 
     /**
      * @test
      */
-    public function shouldReturnRequestShortClassAndUrlIfRedirectUrlInteractiveRequestOnRequest()
+    public function shouldReturnReplyShortClassAndUrlIfHttpRedirectReplyOnRequest()
     {
         $request = new HttpRedirect('http://example.com/foo');
 
-        $this->assertEquals('RedirectUrlInteractiveRequest{url: http://example.com/foo}', Humanify::request($request));
+        $this->assertEquals('HttpRedirect{url: http://example.com/foo}', Humanify::request($request));
     }
 }

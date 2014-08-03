@@ -1,26 +1,26 @@
 <?php
-namespace Payum\Core\Tests\Request;
+namespace Payum\Core\Tests\Reply;
 
-class BaseModelInteractiveRequestTest extends \PHPUnit_Framework_TestCase 
+class BaseModeAwareTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldImplementInteractiveRequestInterface()
+    public function shouldImplementReplyInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\BaseModelInteractiveRequest');
+        $rc = new \ReflectionClass('Payum\Core\Reply\BaseModelAware');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Request\InteractiveRequestInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Reply\ReplyInterface'));
     }
 
     /**
      * @test
      */
-    public function shouldImplementModelRequestInterface()
+    public function shouldImplementModelAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\BaseModelInteractiveRequest');
+        $rc = new \ReflectionClass('Payum\Core\Reply\BaseModelAware');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Request\ModelRequestInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Reply\ModelAwareInterface'));
     }
 
     /**
@@ -28,7 +28,7 @@ class BaseModelInteractiveRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfLogicException()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\BaseModelInteractiveRequest');
+        $rc = new \ReflectionClass('Payum\Core\Reply\BaseModelAware');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Exception\LogicException'));
     }
@@ -38,7 +38,7 @@ class BaseModelInteractiveRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeAbstractClass()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\BaseModelInteractiveRequest');
+        $rc = new \ReflectionClass('Payum\Core\Reply\BaseModelAware');
         
         $this->assertTrue($rc->isAbstract());
     }
@@ -62,7 +62,7 @@ class BaseModelInteractiveRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithModelOfAnyType($phpType)
     {
-        $this->getMockForAbstractClass('Payum\Core\Request\BaseModelInteractiveRequest', array($phpType));
+        $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array($phpType));
     }
 
     /**
@@ -72,7 +72,7 @@ class BaseModelInteractiveRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetModelAndGetIt($phpType)
     {
-        $request = $this->getMockForAbstractClass('Payum\Core\Request\BaseModelInteractiveRequest', array(123321));
+        $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array(123321));
 
         $request->setModel($phpType);
         
@@ -86,7 +86,7 @@ class BaseModelInteractiveRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetModelSetInConstructor($phpType)
     {
-        $request = $this->getMockForAbstractClass('Payum\Core\Request\BaseModelInteractiveRequest', array($phpType));
+        $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array($phpType));
         
         $this->assertEquals($phpType, $request->getModel());
     }
@@ -98,7 +98,7 @@ class BaseModelInteractiveRequestTest extends \PHPUnit_Framework_TestCase
     {
         $model = array('foo' => 'bar');
         
-        $request = $this->getMockForAbstractClass('Payum\Core\Request\BaseModelInteractiveRequest', array($model));
+        $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array($model));
 
         $this->assertInstanceOf('ArrayObject', $request->getModel());
         $this->assertEquals($model, (array) $request->getModel());
@@ -109,7 +109,7 @@ class BaseModelInteractiveRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldConvertArrayToArrayObjectSetWithSetter()
     {
-        $request = $this->getMockForAbstractClass('Payum\Core\Request\BaseModelInteractiveRequest', array(123321));
+        $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array(123321));
 
         $model = array('foo' => 'bar');
         

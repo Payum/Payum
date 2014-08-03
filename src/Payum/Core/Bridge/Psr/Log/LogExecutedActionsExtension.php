@@ -70,13 +70,13 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
     /**
      * {@inheritDoc}
      */
-    public function onInteractiveRequest(ReplyInterface $interactiveRequest, $request, ActionInterface $action)
+    public function onInteractiveRequest(ReplyInterface $reply, $request, ActionInterface $action)
     {
         $this->logger->debug(sprintf('[Payum] %d# %s::execute(%s) throws interactive %s',
             $this->stackLevel,
             Humanify::value($action),
             Humanify::request($request),
-            Humanify::request($interactiveRequest)
+            Humanify::request($reply)
         ));
 
         $this->stackLevel--;

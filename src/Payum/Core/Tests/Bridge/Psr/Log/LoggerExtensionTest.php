@@ -130,7 +130,7 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
 
         $action = new LoggerAwareAction;
 
-        $extension->onInteractiveRequest($this->createInteractiveRequestMock(), new \stdClass, $action);
+        $extension->onInteractiveRequest($this->createReplyMock(), new \stdClass, $action);
 
         $this->assertNull($action->logger);
     }
@@ -162,9 +162,9 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\Reply\ReplyInterface
      */
-    protected function createInteractiveRequestMock()
+    protected function createReplyMock()
     {
-        return $this->getMock('Payum\Core\Request\InteractiveRequestInterface');
+        return $this->getMock('Payum\Core\Reply\ReplyInterface');
     }
 
     /**

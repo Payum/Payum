@@ -41,7 +41,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestAndArrayAccessAsModel()
+    public function shouldSupportCaptureAndArrayAccessAsModel()
     {
         $action = new CaptureAction();
 
@@ -53,7 +53,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportNotCaptureRequest()
+    public function shouldNotSupportNotCapture()
     {
         $action = new CaptureAction();
         
@@ -65,7 +65,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestAndNotArrayAsModel()
+    public function shouldNotSupportCaptureAndNotArrayAsModel()
     {
         $action = new CaptureAction();
         

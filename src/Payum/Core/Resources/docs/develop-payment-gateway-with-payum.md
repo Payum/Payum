@@ -17,7 +17,7 @@ We assume you use `ArrayObject` as model but you of course may change it to what
 namespace App\Payum\Action;
 
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\Capture;
 
 class CaptureAction implements ActionInterface
 {
@@ -48,7 +48,7 @@ class CaptureAction implements ActionInterface
     public function supports($request)
     {
         return
-            $request instanceof CaptureRequest &&
+            $request instanceof Capture &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }
@@ -117,7 +117,7 @@ namespace App;
 App\Payum\Action\CaptureAction;
 App\Payum\Action\StatusAction;
 use Payum\Core\Payment;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\Capture;
 use Payum\Core\Request\SimpleStatusRequest;
 
 $payment = new Payment;
@@ -129,7 +129,7 @@ $model = new ArrayObject(array(
     'currency' => 'USD',
 ));
 
-$payment->execute(new CaptureRequest($model));
+$payment->execute(new Capture($model));
 $payment->execute($status = new SimpleStatusRequest($model));
 
 if ($status->isSuccess()) {

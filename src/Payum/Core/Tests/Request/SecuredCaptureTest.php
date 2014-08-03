@@ -1,19 +1,19 @@
 <?php
 namespace Payum\Core\Tests\Request;
 
-use Payum\Core\Request\SecuredNotify;
+use Payum\Core\Request\SecuredCapture;
 use Payum\Core\Model\Token;
 
-class SecuredNotifyRequestTest extends \PHPUnit_Framework_TestCase
+class SecuredCaptureTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldBeSubClassOfCaptureRequest()
+    public function shouldBeSubClassOfCapture()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\SecuredNotifyRequest');
+        $rc = new \ReflectionClass('Payum\Core\Request\SecuredCapture');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\NotifyRequest'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Capture'));
     }
 
     /**
@@ -21,17 +21,17 @@ class SecuredNotifyRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementsSecuredRequestInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\SecuredNotifyRequest');
+        $rc = new \ReflectionClass('Payum\Core\Request\SecuredCapture');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Request\SecuredRequestInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Request\SecuredRequest'));
     }
 
     /**
      * @test
      */
-    public function couldBeConstructedWithNotificationAndTokenAsModel()
+    public function couldBeConstructedWithTokenAsFirstArgument()
     {
-        new SecuredNotify(array(), $this->getMock('Payum\Core\Security\TokenInterface'));
+        new SecuredCapture($this->getMock('Payum\Core\Security\TokenInterface'));
     }
 
     /**
@@ -41,7 +41,7 @@ class SecuredNotifyRequestTest extends \PHPUnit_Framework_TestCase
     {
         $expectedToken = new Token;
         
-        $request = new SecuredNotify($notification = array(), $expectedToken);
+        $request = new SecuredCapture($expectedToken);
         
         $this->assertSame($expectedToken, $request->getToken());
         $this->assertSame($expectedToken, $request->getModel());
@@ -54,7 +54,7 @@ class SecuredNotifyRequestTest extends \PHPUnit_Framework_TestCase
     {
         $token = new Token;
 
-        $request = new SecuredNotify($notification = array(), $token);
+        $request = new SecuredCapture($token);
 
         //guard
         $this->assertSame($token, $request->getToken());

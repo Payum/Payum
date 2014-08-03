@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Request;
 
-class BaseModelRequestTest extends \PHPUnit_Framework_TestCase 
+class BaseModelAwareTest extends \PHPUnit_Framework_TestCase
 {
     public static function provideDifferentPhpTypes()
     {
@@ -20,7 +20,7 @@ class BaseModelRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeAbstractClass()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\BaseModelRequest');
+        $rc = new \ReflectionClass('Payum\Core\Request\BaseModelAware');
         
         $this->assertTrue($rc->isAbstract());
     }
@@ -28,11 +28,11 @@ class BaseModelRequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementModelRequestInterface()
+    public function shouldImplementModelAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\BaseModelRequest');
+        $rc = new \ReflectionClass('Payum\Core\Request\BaseModelAware');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Request\ModelRequestInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Request\ModelAwareInterface'));
     }
 
     /**
@@ -42,7 +42,7 @@ class BaseModelRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithModelOfAnyType($phpType)
     {
-        $this->getMockForAbstractClass('Payum\Core\Request\BaseModelRequest', array($phpType));
+        $this->getMockForAbstractClass('Payum\Core\Request\BaseModelAware', array($phpType));
     }
 
     /**
@@ -52,7 +52,7 @@ class BaseModelRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetModelAndGetIt($phpType)
     {
-        $request = $this->getMockForAbstractClass('Payum\Core\Request\BaseModelRequest', array(123321));
+        $request = $this->getMockForAbstractClass('Payum\Core\Request\BaseModelAware', array(123321));
 
         $request->setModel($phpType);
         
@@ -66,7 +66,7 @@ class BaseModelRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetModelSetInConstructor($phpType)
     {
-        $request = $this->getMockForAbstractClass('Payum\Core\Request\BaseModelRequest', array($phpType));
+        $request = $this->getMockForAbstractClass('Payum\Core\Request\BaseModelAware', array($phpType));
         
         $this->assertEquals($phpType, $request->getModel());
     }
@@ -78,7 +78,7 @@ class BaseModelRequestTest extends \PHPUnit_Framework_TestCase
     {
         $model = array('foo' => 'bar');
         
-        $request = $this->getMockForAbstractClass('Payum\Core\Request\BaseModelRequest', array($model));
+        $request = $this->getMockForAbstractClass('Payum\Core\Request\BaseModelAware', array($model));
 
         $this->assertInstanceOf('ArrayObject', $request->getModel());
         $this->assertEquals($model, (array) $request->getModel());
@@ -89,7 +89,7 @@ class BaseModelRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldConvertArrayToArrayObjectSetWithSetter()
     {
-        $request = $this->getMockForAbstractClass('Payum\Core\Request\BaseModelRequest', array(123321));
+        $request = $this->getMockForAbstractClass('Payum\Core\Request\BaseModelAware', array(123321));
 
         $model = array('foo' => 'bar');
         

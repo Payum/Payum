@@ -6,7 +6,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\RenderTemplate;
-use Payum\Core\Reply\ResponseInteractiveRequest;
+use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Sync;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\CreateOrderRequest;
@@ -54,7 +54,7 @@ class CaptureAction extends PaymentAwareAction
             ));
             $this->payment->execute($renderTemplate);
 
-            throw new ResponseInteractiveRequest($renderTemplate->getResult());
+            throw new HttpResponse($renderTemplate->getResult());
         }
     }
 

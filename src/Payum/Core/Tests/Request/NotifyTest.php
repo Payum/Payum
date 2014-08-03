@@ -3,16 +3,16 @@ namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\Notify;
 
-class NotifyRequestTest extends \PHPUnit_Framework_TestCase
+class NotifyTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldBeSubClassOfBaseModelRequest()
+    public function shouldBeSubClassOfBaseModelAware()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\NotifyRequest');
+        $rc = new \ReflectionClass('Payum\Core\Request\Notify');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelRequest'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelAware'));
     }
 
     /**
