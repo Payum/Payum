@@ -74,7 +74,7 @@ class EndlessCycleDetectorExtension implements ExtensionInterface
     /**
      * {@inheritdoc}
      */
-    public function onInteractiveRequest(ReplyInterface $reply, $request, ActionInterface $action)
+    public function onReply(ReplyInterface $reply, $request, ActionInterface $action)
     {
         if ($request === $this->firstRequest) {
             $this->firstRequest = null;

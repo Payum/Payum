@@ -187,7 +187,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldDecrementStackOnInteractiveRequest()
+    public function shouldDecrementStackOnReply()
     {
         $logger = $this->createLoggerMock();
         $logger
@@ -205,8 +205,8 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension->onPreExecute('string');
         $extension->onPreExecute('string');
-        $extension->onInteractiveRequest($this->createReplyMock(), new \stdClass, $this->createActionMock());
-        $extension->onInteractiveRequest($this->createReplyMock(), new \stdClass, $this->createActionMock());
+        $extension->onReply($this->createReplyMock(), new \stdClass, $this->createActionMock());
+        $extension->onReply($this->createReplyMock(), new \stdClass, $this->createActionMock());
     }
 
     /**
@@ -314,24 +314,24 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldLogOnInteractiveRequest()
+    public function shouldLogOnReply()
     {
         $action = new FooAction;
-        $interactiveRequest = $this->createReplyMock();
+        $replyMock = $this->createReplyMock();
 
-        $ro = new \ReflectionObject($interactiveRequest);
+        $ro = new \ReflectionObject($replyMock);
 
         $logger = $this->createLoggerMock();
         $logger
             ->expects($this->at(0))
             ->method('debug')
-            ->with('[Payum] 1# FooAction::execute(string) throws interactive '.$ro->getShortName())
+            ->with('[Payum] 1# FooAction::execute(string) throws reply '.$ro->getShortName())
         ;
 
         $extension = new LogExecutedActionsExtension($logger);
 
         $extension->onPreExecute('string');
-        $extension->onInteractiveRequest($interactiveRequest, 'string', $action);
+        $extension->onReply($replyMock, 'string', $action);
     }
 
     /**
@@ -340,19 +340,19 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     public function shouldLogHttpRedirectReplyWithUrlIncludedOnReply()
     {
         $action = new FooAction;
-        $interactiveRequest = new HttpRedirect('http://example.com');
+        $reply = new HttpRedirect('http://example.com');
 
         $logger = $this->createLoggerMock();
         $logger
             ->expects($this->at(0))
             ->method('debug')
-            ->with('[Payum] 1# FooAction::execute(string) throws interactive HttpRedirect{url: '.$interactiveRequest->getUrl().'}')
+            ->with('[Payum] 1# FooAction::execute(string) throws reply HttpRedirect{url: '.$reply->getUrl().'}')
         ;
 
         $extension = new LogExecutedActionsExtension($logger);
 
         $extension->onPreExecute('string');
-        $extension->onInteractiveRequest($interactiveRequest, 'string', $action);
+        $extension->onReply($reply, 'string', $action);
     }
 
     /**

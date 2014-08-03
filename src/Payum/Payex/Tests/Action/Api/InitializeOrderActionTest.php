@@ -202,7 +202,7 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldThrowRedirectUrlInteractiveRequestIfRedirectUrlReturnedInResponse()
+    public function shouldThrowHttpRedirectReplyIfRedirectUrlReturnedInResponse()
     {
         $apiMock = $this->createApiMock();
         $apiMock
@@ -221,13 +221,13 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
 
         try {
             $action->execute($request);
-        } catch (HttpRedirect $interactiveRequest) {
-            $this->assertEquals('http://example.com/theUrl', $interactiveRequest->getUrl());
+        } catch (HttpRedirect $reply) {
+            $this->assertEquals('http://example.com/theUrl', $reply->getUrl());
             
             return;
         }
 
-        $this->fail('The redirect url interactive request is expected to be thrown.');
+        $this->fail('The redirect url reply was expected to be thrown.');
     }
 
     /**

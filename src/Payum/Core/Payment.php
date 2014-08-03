@@ -105,7 +105,7 @@ class Payment implements PaymentInterface
             $this->extensions->onPostExecute($request, $action);
         } catch (ReplyInterface $reply) {
             $reply =
-                $this->extensions->onInteractiveRequest($reply, $request, $action) ?:
+                $this->extensions->onReply($reply, $request, $action) ?:
                 $reply
             ;
 

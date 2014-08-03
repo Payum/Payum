@@ -161,14 +161,14 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
 
         try {
             $action->execute(new ObtainTokenRequest($model));
-        } catch (HttpResponse $interactiveRequest) {
-            $this->assertEquals('theContent', $interactiveRequest->getContent());
+        } catch (HttpResponse $reply) {
+            $this->assertEquals('theContent', $reply->getContent());
 
             return;
         }
 
 
-        $this->fail('Response interactive request was expected to be thrown.');
+        $this->fail('HttpResponse reply was expected to be thrown.');
     }
 
     /**
@@ -201,11 +201,11 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
 
         try {
             $action->execute(new ObtainTokenRequest($model));
-        } catch (HttpResponse $interactiveRequest) {
+        } catch (HttpResponse $reply) {
             return;
         }
 
-        $this->fail('Response interactive request was expected to be thrown.');
+        $this->fail('HttpResponse reply was expected to be thrown.');
     }
 
     /**

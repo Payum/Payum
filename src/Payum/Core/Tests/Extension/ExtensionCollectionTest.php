@@ -175,7 +175,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldCallOnInteractiveRequestForAllExtensionsInCollection()
+    public function shouldCallOnReplyForAllExtensionsInCollection()
     {
         $expectedReply = $this->getMock('Payum\Core\Reply\ReplyInterface');
         $expectedAction = $this->getMock('Payum\Core\Action\ActionInterface');
@@ -184,7 +184,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
         $extensionFirst = $this->createExtensionMock();
         $extensionFirst
             ->expects($this->once())
-            ->method('onInteractiveRequest')
+            ->method('onReply')
             ->with(
                 $this->identicalTo($expectedReply),
                 $this->identicalTo($expectedRequest),
@@ -195,7 +195,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
         $extensionSecond = $this->createExtensionMock();
         $extensionSecond
             ->expects($this->once())
-            ->method('onInteractiveRequest')
+            ->method('onReply')
             ->with(
                 $this->identicalTo($expectedReply),
                 $this->identicalTo($expectedRequest),
@@ -207,7 +207,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
 
-        $result = $collection->onInteractiveRequest($expectedReply, $expectedRequest, $expectedAction);
+        $result = $collection->onReply($expectedReply, $expectedRequest, $expectedAction);
 
         $this->assertNull($result);
     }
@@ -215,7 +215,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldCallOnInteractiveRequestWithNewRequestIfFirstExtensionReturnNew()
+    public function shouldCallOnReplyWithNewReplyIfFirstExtensionReturnNew()
     {
         $expectedReply = $this->getMock('Payum\Core\Reply\ReplyInterface');
         $expectedNewReply = $this->getMock('Payum\Core\Reply\ReplyInterface');
@@ -225,7 +225,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
         $extensionFirst = $this->createExtensionMock();
         $extensionFirst
             ->expects($this->once())
-            ->method('onInteractiveRequest')
+            ->method('onReply')
             ->with(
                 $this->identicalTo($expectedReply),
                 $this->identicalTo($expectedRequest),
@@ -237,7 +237,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
         $extensionSecond = $this->createExtensionMock();
         $extensionSecond
             ->expects($this->once())
-            ->method('onInteractiveRequest')
+            ->method('onReply')
             ->with(
                 $this->identicalTo($expectedNewReply),
                 $this->identicalTo($expectedRequest),
@@ -249,7 +249,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
 
-        $result = $collection->onInteractiveRequest($expectedReply, $expectedRequest, $expectedAction);
+        $result = $collection->onReply($expectedReply, $expectedRequest, $expectedAction);
 
         $this->assertSame($expectedNewReply, $result);
     }

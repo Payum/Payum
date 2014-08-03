@@ -20,7 +20,7 @@ class BaseOrderRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeAbstractClass()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\BaseModelInteractiveRequest');
+        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Request\Api\BaseOrderRequest');
 
         $this->assertTrue($rc->isAbstract());
     }

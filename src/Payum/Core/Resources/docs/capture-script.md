@@ -31,6 +31,6 @@ $requestVerifier->invalidate($token);
 header("Location: ".$token->getAfterUrl());
 ```
 
-_**Note**: If you've got the "Unsupported interactive request" you have to add an if condition for that. There we have to convert the request to http response._
+_**Note**: If you've got the "Unsupported reply" you have to add an if condition for that. There we have to convert the reply to http response._
 
 Back to [index](index.md).

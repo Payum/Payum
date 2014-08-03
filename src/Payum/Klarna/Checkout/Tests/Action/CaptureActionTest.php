@@ -149,7 +149,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldThrowInteractiveRequestWhenStatusCheckoutIncomplete()
+    public function shouldThrowReplyWhenStatusCheckoutIncomplete()
     {
         $snippet = 'theSnippet';
         $expectedContent = 'theTemplateContent';
@@ -180,8 +180,8 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
                 'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
                 'gui' => array('snippet' => $snippet),
             )));
-        } catch (HttpResponse $interactiveRequest) {
-            $this->assertEquals($expectedContent, $interactiveRequest->getContent());
+        } catch (HttpResponse $reply) {
+            $this->assertEquals($expectedContent, $reply->getContent());
 
             return;
         }
@@ -192,7 +192,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotThrowInteractiveRequestWhenStatusNotSet()
+    public function shouldNotThrowReplyWhenStatusNotSet()
     {
         $action = new CaptureAction('aTemplate');
         $action->setPayment($this->createPaymentMock());
@@ -206,7 +206,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotThrowInteractiveRequestWhenStatusCreated()
+    public function shouldNotThrowReplyWhenStatusCreated()
     {
         $action = new CaptureAction('aTemplate');
         $action->setPayment($this->createPaymentMock());

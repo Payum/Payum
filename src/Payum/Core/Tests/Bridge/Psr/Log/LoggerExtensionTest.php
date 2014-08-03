@@ -122,7 +122,7 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotInjectLoggerToLoggerAwareActionOnInteractiveRequest()
+    public function shouldNotInjectLoggerToLoggerAwareActionOnReply()
     {
         $logger = $this->createLoggerMock();
 
@@ -130,7 +130,7 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
 
         $action = new LoggerAwareAction;
 
-        $extension->onInteractiveRequest($this->createReplyMock(), new \stdClass, $action);
+        $extension->onReply($this->createReplyMock(), new \stdClass, $action);
 
         $this->assertNull($action->logger);
     }

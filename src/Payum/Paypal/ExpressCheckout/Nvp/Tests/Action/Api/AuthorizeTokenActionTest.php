@@ -104,7 +104,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
             return;
         }
         
-        $this->fail('RedirectUrlInteractiveRequest exception was expected.');
+        $this->fail('HttpRedirect reply was expected to be thrown.');
     }
 
     /**
@@ -137,7 +137,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
             return;
         }
 
-        $this->fail('RedirectUrlInteractiveRequest exception was expected.');
+        $this->fail('HttpRedirect reply was expected to be thrown.');
     }
 
     /**
@@ -189,7 +189,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
             return;
         }
 
-        $this->fail('RedirectUrlInteractiveRequest exception was expected.');
+        $this->fail('HttpRedirect reply was expected to be thrown.');
     }
 
     /**

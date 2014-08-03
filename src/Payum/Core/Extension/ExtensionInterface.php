@@ -28,9 +28,9 @@ interface ExtensionInterface
      * @param mixed $request
      * @param \Payum\Core\Action\ActionInterface $action
      *
-     * @return null|\Payum\Core\Reply\ReplyInterface an extension able to change interactive request to something else.
+     * @return null|\Payum\Core\Reply\ReplyInterface an extension able to change reply to something else.
      */
-    function onInteractiveRequest(ReplyInterface $reply, $request, ActionInterface $action);
+    function onReply(ReplyInterface $reply, $request, ActionInterface $action);
 
     /**
      * @param \Exception $exception

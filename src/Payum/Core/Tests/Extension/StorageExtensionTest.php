@@ -243,7 +243,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldScheduleForUpdateRequestModelIfStorageSupportItOnInteractiveRequest()
+    public function shouldScheduleForUpdateRequestModelIfStorageSupportItOnReply()
     {
         $model = new \stdClass;
 
@@ -270,7 +270,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertAttributeCount(0, 'scheduledForUpdateModels', $extension);
 
-        $extension->onInteractiveRequest($this->createReplyMock(), $modelRequestMock, $this->createActionMock());
+        $extension->onReply($this->createReplyMock(), $modelRequestMock, $this->createActionMock());
 
         $this->assertAttributeCount(1, 'scheduledForUpdateModels', $extension);
         $this->assertAttributeContains($model, 'scheduledForUpdateModels', $extension);
@@ -355,7 +355,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldDecreaseStackLevelOnEveryOnInteractiveRequestCall()
+    public function shouldDecreaseStackLevelOnEveryOnReply()
     {
         $extension = new StorageExtension($this->createStorageMock());
 
@@ -366,10 +366,10 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
         //guard
         $this->assertAttributeEquals(3, 'stackLevel', $extension);
 
-        $extension->onInteractiveRequest($this->createReplyMock(), new \stdClass, $this->createActionMock());
+        $extension->onReply($this->createReplyMock(), new \stdClass, $this->createActionMock());
         $this->assertAttributeEquals(2, 'stackLevel', $extension);
 
-        $extension->onInteractiveRequest($this->createReplyMock(), new \stdClass, $this->createActionMock());
+        $extension->onReply($this->createReplyMock(), new \stdClass, $this->createActionMock());
         $this->assertAttributeEquals(1, 'stackLevel', $extension);
     }
 
@@ -444,7 +444,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldUpdateModelOneTimeOnLastStackLevelOnInteractiveRequest()
+    public function shouldUpdateModelOneTimeOnLastStackLevelOnReply()
     {
         $expectedModel = new \stdClass;
 
@@ -478,13 +478,13 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEquals(3, 'stackLevel', $extension);
         $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
 
-        $extension->onInteractiveRequest($this->createReplyMock(), $modelRequestMock, $this->createActionMock());
+        $extension->onReply($this->createReplyMock(), $modelRequestMock, $this->createActionMock());
         $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
 
-        $extension->onInteractiveRequest($this->createReplyMock(), $modelRequestMock, $this->createActionMock());
+        $extension->onReply($this->createReplyMock(), $modelRequestMock, $this->createActionMock());
         $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
 
-        $extension->onInteractiveRequest($this->createReplyMock(), $modelRequestMock, $this->createActionMock());
+        $extension->onReply($this->createReplyMock(), $modelRequestMock, $this->createActionMock());
         $this->assertAttributeEmpty('scheduledForUpdateModels', $extension);
     }
 
