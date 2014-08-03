@@ -129,7 +129,7 @@ class FooAction implements ActionInterface
 
     public function supports($request)
     {
-        return $request instanceof StatusRequestInterface;
+        return $request instanceof GetStatusInterface;
     }
 }
 ```
@@ -266,7 +266,7 @@ Back to [index](index.md).
 [sandbox-online]: http://sandbox.payum.forma-dev.com
 [sandbox-code]: https://github.com/Payum/PayumBundleSandbox
 [base-request]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Request/BaseModelRequest.php
-[status-request-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Request/StatusRequestInterface.php
+[status-request-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Request/GetStatusInterface.php
 [status-request]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Request/SimpleStatusRequest.php
 [base-reply]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Reply/Base.php
 [action-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Action/ActionInterface.php

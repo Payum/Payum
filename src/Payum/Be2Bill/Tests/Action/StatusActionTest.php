@@ -31,7 +31,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StatusAction();
 
-        $request = $this->createStatusRequestStub($this->getMock('ArrayAccess'));
+        $request = $this->createGetStatusStub($this->getMock('ArrayAccess'));
 
         $this->assertTrue($action->supports($request));
     }
@@ -55,7 +55,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StatusAction();
 
-        $request = $this->createStatusRequestStub(new \stdClass);
+        $request = $this->createGetStatusStub(new \stdClass);
         
         $this->assertFalse($action->supports($request));
     }
@@ -75,9 +75,9 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|GetStatusInterface
      */
-    protected function createStatusRequestStub($model)
+    protected function createGetStatusStub($model)
     {
-        $status = $this->getMock('Payum\Core\Request\StatusRequestInterface');
+        $status = $this->getMock('Payum\Core\Request\GetStatusInterface');
 
         $status
             ->expects($this->any())

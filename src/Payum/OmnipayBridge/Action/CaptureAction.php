@@ -58,7 +58,7 @@ class CaptureAction extends BaseApiAwareAction implements PaymentAwareInterface
                     'lastName' => $lastName,
                 ));
             } catch (RequestNotSupportedException $e) {
-                throw new LogicException('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCardRequest request.');
+                throw new LogicException('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.');
             }
         }
 

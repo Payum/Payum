@@ -172,7 +172,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCardRequest request.
+     * @expectedExceptionMessage Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.
      */
     public function throwIfCreditCardNotSetExplicitlyAndObtainRequestNotSupportedOnCapture()
     {
@@ -187,7 +187,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCardRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
             ->will($this->throwException(new RequestNotSupportedException()))
         ;
 
@@ -216,7 +216,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCardRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
             ->will($this->returnCallback(function(ObtainCreditCard $request) {
                 $card = new CreditCard();
                 $card->setNumber('1234567812345678');

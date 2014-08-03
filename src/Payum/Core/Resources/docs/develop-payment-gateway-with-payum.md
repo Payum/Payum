@@ -66,7 +66,7 @@ Let's assume your model have `status` field and it can be either success or erro
 namespace App\Payum\Action;
 
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\Request\StatusRequestInterface;
+use Payum\Core\Request\GetStatusInterface;
 
 class StatusAction implements ActionInterface
 {
@@ -98,7 +98,7 @@ class StatusAction implements ActionInterface
     public function supports($request)
     {
         return
-            $request instanceof StatusRequestInterface &&
+            $request instanceof GetStatusInterface &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }
