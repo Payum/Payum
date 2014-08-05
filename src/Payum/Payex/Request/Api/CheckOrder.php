@@ -3,6 +3,6 @@ namespace Payum\Payex\Request\Api;
 
 use Payum\Core\Request\BaseModelAware;
 
-class CheckOrderRequest extends BaseModelAware
+class CheckOrder extends BaseModelAware
 {
 }
