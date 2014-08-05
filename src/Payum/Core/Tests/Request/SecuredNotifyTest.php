@@ -19,11 +19,11 @@ class SecuredNotifyTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementsSecuredRequest()
+    public function shouldImplementsSecuredInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Request\SecuredNotify');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Request\SecuredRequest'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Request\SecuredInterface'));
     }
 
     /**

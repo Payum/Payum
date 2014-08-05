@@ -7,7 +7,7 @@ use Payum\Core\Request\Capture;
 use Payum\Core\Request\RenderTemplate;
 use Payum\Klarna\Checkout\Action\CaptureAction;
 use Payum\Klarna\Checkout\Constants;
-use Payum\Klarna\Checkout\Request\Api\CreateOrderRequest;
+use Payum\Klarna\Checkout\Request\Api\CreateOrder;
 
 class CaptureActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -123,8 +123,8 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\CreateOrderRequest'))
-            ->will($this->returnCallback(function(CreateOrderRequest $request) use ($orderMock) {
+            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\CreateOrder'))
+            ->will($this->returnCallback(function(CreateOrder $request) use ($orderMock) {
                 $request->setOrder($orderMock);
             }))
         ;

@@ -9,7 +9,7 @@ use Payum\Core\Request\RenderTemplate;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Sync;
 use Payum\Klarna\Checkout\Constants;
-use Payum\Klarna\Checkout\Request\Api\CreateOrderRequest;
+use Payum\Klarna\Checkout\Request\Api\CreateOrder;
 
 class CaptureAction extends PaymentAwareAction
 {
@@ -39,11 +39,10 @@ class CaptureAction extends PaymentAwareAction
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         if (false == $model['location']) {
-            $createOrderRequest = new CreateOrderRequest($model);
-            $this->payment->execute($createOrderRequest);
+            $this->payment->execute($createOrder = new CreateOrder($model));
 
-            $model->replace($createOrderRequest->getOrder()->marshal());
-            $model['location'] = $createOrderRequest->getOrder()->getLocation();
+            $model->replace($createOrder->getOrder()->marshal());
+            $model['location'] = $createOrder->getOrder()->getLocation();
         }
 
         $this->payment->execute(new Sync($model));

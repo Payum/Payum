@@ -7,7 +7,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Notify;
 use Payum\Core\Request\Sync;
 use Payum\Klarna\Checkout\Constants;
-use Payum\Klarna\Checkout\Request\Api\UpdateOrderRequest;
+use Payum\Klarna\Checkout\Request\Api\UpdateOrder;
 
 class NotifyAction extends PaymentAwareAction
 {
@@ -26,7 +26,7 @@ class NotifyAction extends PaymentAwareAction
         $this->payment->execute(new Sync($model));
 
         if (Constants::STATUS_CHECKOUT_COMPLETE == $model['status']) {
-            $this->payment->execute(new UpdateOrderRequest(array(
+            $this->payment->execute(new UpdateOrder(array(
                 'location' => $model['location'],
                 'status' => Constants::STATUS_CREATED,
                 'merchant_reference' => array(

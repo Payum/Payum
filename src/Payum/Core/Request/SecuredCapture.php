@@ -3,7 +3,7 @@ namespace Payum\Core\Request;
 
 use Payum\Core\Security\TokenInterface;
 
-class SecuredCapture extends Capture implements SecuredRequest
+class SecuredCapture extends Capture implements SecuredInterface
 {
     /**
      * @var TokenInterface

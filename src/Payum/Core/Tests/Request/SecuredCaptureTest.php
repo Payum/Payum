@@ -19,11 +19,11 @@ class SecuredCaptureTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementsSecuredRequestInterface()
+    public function shouldImplementsSecuredInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Request\SecuredCapture');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Request\SecuredRequest'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Request\SecuredInterface'));
     }
 
     /**

@@ -2,7 +2,7 @@
 namespace Payum\Klarna\Checkout\Tests\Action\Api;
 
 use Payum\Klarna\Checkout\Action\Api\UpdateOrderAction;
-use Payum\Klarna\Checkout\Request\Api\UpdateOrderRequest;
+use Payum\Klarna\Checkout\Request\Api\UpdateOrder;
 
 class UpdateOrderActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +31,7 @@ class UpdateOrderActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new UpdateOrderAction;
 
-        $this->assertTrue($action->supports(new UpdateOrderRequest(array())));
+        $this->assertTrue($action->supports(new UpdateOrder(array())));
     }
 
     /**
@@ -71,7 +71,7 @@ class UpdateOrderActionTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $request = new UpdateOrderRequest($model);
+        $request = new UpdateOrder($model);
 
         $testCase = $this;
 
@@ -120,7 +120,7 @@ class UpdateOrderActionTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $request = new UpdateOrderRequest($model);
+        $request = new UpdateOrder($model);
 
         $testCase = $this;
         $expectedOrder = null;

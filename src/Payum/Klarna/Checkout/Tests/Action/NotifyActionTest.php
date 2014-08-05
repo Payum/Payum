@@ -82,7 +82,7 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\UpdateOrderRequest'))
+            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\UpdateOrder'))
         ;
         $paymentMock
             ->expects($this->at(2))

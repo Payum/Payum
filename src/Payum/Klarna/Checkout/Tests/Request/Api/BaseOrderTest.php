@@ -1,16 +1,16 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests\Request\Api;
 
-use Payum\Klarna\Checkout\Request\Api\BaseOrderRequest;
+use Payum\Klarna\Checkout\Request\Api\BaseOrder;
 
-class BaseOrderRequestTest extends \PHPUnit_Framework_TestCase
+class BaseOrderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfBaseModelAware()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Request\Api\BaseOrderRequest');
+        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Request\Api\BaseOrder');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelAware'));
     }
@@ -20,7 +20,7 @@ class BaseOrderRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeAbstractClass()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Request\Api\BaseOrderRequest');
+        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Request\Api\BaseOrder');
 
         $this->assertTrue($rc->isAbstract());
     }
@@ -30,9 +30,9 @@ class BaseOrderRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithArrayModelAsArgument()
     {
-        $this->createBaseOrderRequestMock(array());
-        $this->createBaseOrderRequestMock(new \ArrayObject());
-        $this->createBaseOrderRequestMock($this->getMock('ArrayAccess'));
+        $this->createBaseOrderMock(array());
+        $this->createBaseOrderMock(new \ArrayObject());
+        $this->createBaseOrderMock($this->getMock('ArrayAccess'));
     }
 
     /**
@@ -43,7 +43,7 @@ class BaseOrderRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfTryConstructWithNotArrayModel()
     {
-        $this->createBaseOrderRequestMock('not array');
+        $this->createBaseOrderMock('not array');
     }
 
     /**
@@ -51,7 +51,7 @@ class BaseOrderRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetOrder()
     {
-        $request = $this->createBaseOrderRequestMock(array());
+        $request = $this->createBaseOrderMock(array());
 
         $expectedOrder = $this->createOrderMock();
 
@@ -65,7 +65,7 @@ class BaseOrderRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetOrder()
     {
-        $request = $this->createBaseOrderRequestMock(array());
+        $request = $this->createBaseOrderMock(array());
 
         $expectedOrder = $this->createOrderMock();
 
@@ -85,10 +85,10 @@ class BaseOrderRequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $arguments
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|BaseOrderRequest
+     * @return \PHPUnit_Framework_MockObject_MockObject|BaseOrder
      */
-    protected function createBaseOrderRequestMock($model)
+    protected function createBaseOrderMock($model)
     {
-        return $this->getMockForAbstractClass('Payum\Klarna\Checkout\Request\Api\BaseOrderRequest', array($model));
+        return $this->getMockForAbstractClass('Payum\Klarna\Checkout\Request\Api\BaseOrder', array($model));
     }
 }

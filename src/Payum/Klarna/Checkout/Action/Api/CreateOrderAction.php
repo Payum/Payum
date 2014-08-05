@@ -3,7 +3,7 @@ namespace Payum\Klarna\Checkout\Action\Api;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Klarna\Checkout\Request\Api\CreateOrderRequest;
+use Payum\Klarna\Checkout\Request\Api\CreateOrder;
 
 class CreateOrderAction extends BaseApiAwareAction
 {
@@ -12,7 +12,7 @@ class CreateOrderAction extends BaseApiAwareAction
      */
     public function execute($request)
     {
-        /** @var $request CreateOrderRequest */
+        /** @var $request CreateOrder */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -31,6 +31,6 @@ class CreateOrderAction extends BaseApiAwareAction
      */
     public function supports($request)
     {
-        return $request instanceof CreateOrderRequest;
+        return $request instanceof CreateOrder;
     }
 }

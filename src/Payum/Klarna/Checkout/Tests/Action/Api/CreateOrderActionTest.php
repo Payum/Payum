@@ -2,7 +2,7 @@
 namespace Payum\Klarna\Checkout\Tests\Action\Api;
 
 use Payum\Klarna\Checkout\Action\Api\CreateOrderAction;
-use Payum\Klarna\Checkout\Request\Api\CreateOrderRequest;
+use Payum\Klarna\Checkout\Request\Api\CreateOrder;
 
 class CreateOrderActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +31,7 @@ class CreateOrderActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CreateOrderAction;
 
-        $this->assertTrue($action->supports(new CreateOrderRequest(array())));
+        $this->assertTrue($action->supports(new CreateOrder(array())));
     }
 
     /**
@@ -61,7 +61,7 @@ class CreateOrderActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCreateOrderOnExecute()
     {
-        $request = new CreateOrderRequest(array());
+        $request = new CreateOrder(array());
 
         $connector = $this->createConnectorMock();
         $connector
@@ -93,7 +93,7 @@ class CreateOrderActionTest extends \PHPUnit_Framework_TestCase
             'bar' => 'barVal',
         );
 
-        $request = new CreateOrderRequest($model);
+        $request = new CreateOrder($model);
 
         $testCase = $this;
 
@@ -122,7 +122,7 @@ class CreateOrderActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnSameOrderUsedWhileCreateAndFetchCallsOnExecute()
     {
-        $request = new CreateOrderRequest(array());
+        $request = new CreateOrder(array());
 
         $testCase = $this;
         $expectedOrder = null;

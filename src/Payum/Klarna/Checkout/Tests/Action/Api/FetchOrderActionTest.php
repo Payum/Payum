@@ -3,7 +3,7 @@ namespace Payum\Klarna\Checkout\Tests\Action\Api;
 
 use Payum\Klarna\Checkout\Action\Api\FetchOrderAction;
 use Payum\Klarna\Checkout\Constants;
-use Payum\Klarna\Checkout\Request\Api\FetchOrderRequest;
+use Payum\Klarna\Checkout\Request\Api\FetchOrder;
 
 class FetchOrderActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,7 +32,7 @@ class FetchOrderActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new FetchOrderAction;
 
-        $this->assertTrue($action->supports(new FetchOrderRequest(array())));
+        $this->assertTrue($action->supports(new FetchOrder(array())));
     }
 
     /**
@@ -67,7 +67,7 @@ class FetchOrderActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new FetchOrderAction();
 
-        $action->execute(new FetchOrderRequest(array()));
+        $action->execute(new FetchOrder(array()));
     }
 
     /**
@@ -79,7 +79,7 @@ class FetchOrderActionTest extends \PHPUnit_Framework_TestCase
             'location' => 'theKlarnaOrderLocation'
         );
 
-        $request = new FetchOrderRequest($model);
+        $request = new FetchOrder($model);
 
         $connector = $this->createConnectorMock();
 
@@ -119,7 +119,7 @@ class FetchOrderActionTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $request = new FetchOrderRequest($model);
+        $request = new FetchOrder($model);
 
         $testCase = $this;
         $expectedOrder = null;

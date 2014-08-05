@@ -3,7 +3,7 @@ namespace Payum\Core\Request;
 
 use Payum\Core\Security\TokenInterface;
 
-class SecuredNotify extends Notify implements SecuredRequest
+class SecuredNotify extends Notify implements SecuredInterface
 {
     /**
      * @var TokenInterface

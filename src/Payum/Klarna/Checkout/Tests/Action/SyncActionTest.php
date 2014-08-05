@@ -5,7 +5,7 @@ use Payum\Core\PaymentInterface;
 use Payum\Core\Request\Sync;
 use Payum\Klarna\Checkout\Action\SyncAction;
 use Payum\Klarna\Checkout\Constants;
-use Payum\Klarna\Checkout\Request\Api\FetchOrderRequest;
+use Payum\Klarna\Checkout\Request\Api\FetchOrder;
 
 class SyncActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -85,8 +85,8 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\FetchOrderRequest'))
-            ->will($this->returnCallback(function(FetchOrderRequest $request) use ($orderMock) {
+            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\FetchOrder'))
+            ->will($this->returnCallback(function(FetchOrder $request) use ($orderMock) {
                 $request->setOrder($orderMock);
             }))
         ;
