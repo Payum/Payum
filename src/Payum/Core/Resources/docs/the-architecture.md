@@ -139,7 +139,7 @@ class FooAction implements ActionInterface
 
 $payment->addAction(new FooAction);
 
-$payment->execute($status = new SimpleStatusRequest);
+$payment->execute($status = new GetHumanStatus);
 
 $status->isSuccess();
 $status->isPending();
@@ -265,9 +265,9 @@ Back to [index](index.md).
 
 [sandbox-online]: http://sandbox.payum.forma-dev.com
 [sandbox-code]: https://github.com/Payum/PayumBundleSandbox
-[base-request]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Request/BaseModelRequest.php
+[base-request]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Request/BaseModelAware.php
 [status-request-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Request/GetStatusInterface.php
-[status-request]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Request/SimpleStatusRequest.php
+[status-request]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Request/GetHumanStatus.php
 [base-reply]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Reply/Base.php
 [action-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Action/ActionInterface.php
 [extension-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Extension/ExtensionInterface.php

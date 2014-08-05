@@ -118,7 +118,7 @@ App\Payum\Action\CaptureAction;
 App\Payum\Action\StatusAction;
 use Payum\Core\Payment;
 use Payum\Core\Request\Capture;
-use Payum\Core\Request\SimpleStatusRequest;
+use Payum\Core\Request\GetHumanStatus;
 
 $payment = new Payment;
 $payment->addAction(new CaptureAction('aUsername', 'aPassword'));
@@ -130,7 +130,7 @@ $model = new ArrayObject(array(
 ));
 
 $payment->execute(new Capture($model));
-$payment->execute($status = new SimpleStatusRequest($model));
+$payment->execute($status = new GetHumanStatus($model));
 
 if ($status->isSuccess()) {
     echo 'We purchase staff successfully';
