@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Controller;
 
-use Payum\Core\Request\SyncRequest;
+use Payum\Core\Request\Sync;
 use Symfony\Component\HttpFoundation\Request;
 
 class SyncController extends PayumController
@@ -12,7 +12,7 @@ class SyncController extends PayumController
 
         $payment = $this->getPayum()->getPayment($token->getPaymentName());
 
-        $payment->execute(new SyncRequest($token));
+        $payment->execute(new Sync($token));
         
         $this->getHttpRequestVerifier()->invalidate($token);
         

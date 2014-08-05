@@ -32,7 +32,7 @@ class NotifyControllerTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\NotifyRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\Notify'))
         ;
 
         $registryMock = $this->getMock('Payum\Core\Registry\RegistryInterface');

@@ -2,12 +2,12 @@
 namespace Payum\Bundle\PayumBundle\Action;
 
 use Payum\Core\Action\PaymentAwareAction;
-use Payum\Core\Bridge\Symfony\Request\ResponseInteractiveRequest;
+use Payum\Core\Bridge\Symfony\Reply\HttpResponse;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\CreditCardInterface;
-use Payum\Core\Request\ObtainCreditCardRequest;
-use Payum\Core\Request\RenderTemplateRequest;
+use Payum\Core\Request\ObtainCreditCard;
+use Payum\Core\Request\RenderTemplate;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,7 +53,7 @@ class ObtainCreditCardAction extends PaymentAwareAction
      */
     public function execute($request)
     {
-        /** @var $request ObtainCreditCardRequest */
+        /** @var $request ObtainCreditCard */
         if (!$this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -76,12 +76,12 @@ class ObtainCreditCardAction extends PaymentAwareAction
              }
         }
 
-        $renderTemplate = new RenderTemplateRequest($this->templateName, array(
+        $renderTemplate = new RenderTemplate($this->templateName, array(
             'form' => $form->createView()
         ));
         $this->payment->execute($renderTemplate);
 
-        throw new ResponseInteractiveRequest(new Response($renderTemplate->getResult(), 200, array(
+        throw new HttpResponse(new Response($renderTemplate->getResult(), 200, array(
             'Cache-Control' => 'no-store, no-cache, max-age=0, post-check=0, pre-check=0',
             'Pragma' => 'no-cache',
         )));
@@ -92,7 +92,7 @@ class ObtainCreditCardAction extends PaymentAwareAction
      */
     public function supports($request)
     {
-        return $request instanceof ObtainCreditCardRequest;
+        return $request instanceof ObtainCreditCard;
     }
 
     /**

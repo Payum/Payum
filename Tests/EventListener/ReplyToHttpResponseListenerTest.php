@@ -1,30 +1,31 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Tests\EventListener;
 
-use Payum\Bundle\PayumBundle\EventListener\InteractiveRequestListener;
-use Payum\Core\Bridge\Symfony\Request\ResponseInteractiveRequest;
-use Payum\Core\Request\Http\PostRedirectUrlInteractiveRequest;
-use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
+use Payum\Bundle\PayumBundle\EventListener\ReplyToHttpResponseListener;
+use Payum\Core\Bridge\Symfony\Reply\HttpResponse as SymfonyHttpResponse;
+use Payum\Core\Reply\HttpPostRedirect;
+use Payum\Core\Reply\HttpRedirect;
+use Payum\Core\Reply\HttpResponse;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class InteractiveRequestListenerTest extends \PHPUnit_Framework_TestCase
+class ReplyToHttpResponseListenerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new InteractiveRequestListener;
+        new ReplyToHttpResponseListener;
     }
 
     /**
      * @test
      */
-    public function shouldDoNothingIfExceptionNotInstanceOfInteractiveRequest()
+    public function shouldDoNothingIfExceptionNotInstanceOfReply()
     {
         $expectedException = new Exception;
         
@@ -35,7 +36,7 @@ class InteractiveRequestListenerTest extends \PHPUnit_Framework_TestCase
             $expectedException
         );
         
-        $listener = new InteractiveRequestListener;
+        $listener = new ReplyToHttpResponseListener;
 
         $listener->onKernelException($event);
         
@@ -47,43 +48,43 @@ class InteractiveRequestListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSetRedirectResponseIfExceptionInstanceOfRedirectUrlInteractiveRequest()
+    public function shouldSetRedirectResponseIfExceptionHttpRedirectReply()
     {
         $expectedUrl = '/foo/bar';
         
-        $interactiveRequest = new RedirectUrlInteractiveRequest($expectedUrl);
+        $reply = new HttpRedirect($expectedUrl);
 
         $event = new GetResponseForExceptionEvent(
             $this->createHttpKernelMock(),
             new Request,
             'requestType',
-            $interactiveRequest
+            $reply
         );
 
-        $listener = new InteractiveRequestListener;
+        $listener = new ReplyToHttpResponseListener;
 
         $listener->onKernelException($event);
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $event->getResponse());
         $this->assertEquals($expectedUrl, $event->getResponse()->getTargetUrl());
-        $this->assertSame($interactiveRequest, $event->getException());
+        $this->assertSame($reply, $event->getException());
     }
 
     /**
      * @test
      */
-    public function shouldSetXStatusCodeWhenExceptionInstanceOfRedirectUrlInteractiveRequest()
+    public function shouldSetXStatusCodeWhenExceptionInstanceOfHttpRedirectReply()
     {
-        $interactiveRequest = new RedirectUrlInteractiveRequest('/foo/bar');
+        $reply = new HttpRedirect('/foo/bar');
 
         $event = new GetResponseForExceptionEvent(
             $this->createHttpKernelMock(),
             new Request,
             'requestType',
-            $interactiveRequest
+            $reply
         );
 
-        $listener = new InteractiveRequestListener;
+        $listener = new ReplyToHttpResponseListener;
 
         $listener->onKernelException($event);
 
@@ -95,46 +96,46 @@ class InteractiveRequestListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSetResponseIfExceptionInstanceOfResponseInteractiveRequest()
+    public function shouldSetResponseIfExceptionInstanceOfSymfonyHttpResponseReply()
     {
         $expectedResponse = new Response('foobar');
 
-        $interactiveRequest = new ResponseInteractiveRequest($expectedResponse);
+        $reply = new SymfonyHttpResponse($expectedResponse);
 
         $event = new GetResponseForExceptionEvent(
             $this->createHttpKernelMock(),
             new Request,
             'requestType',
-            $interactiveRequest
+            $reply
         );
 
-        $listener = new InteractiveRequestListener;
+        $listener = new ReplyToHttpResponseListener;
 
         $listener->onKernelException($event);
 
         $this->assertSame($expectedResponse, $event->getResponse());
-        $this->assertSame($interactiveRequest, $event->getException());
+        $this->assertSame($reply, $event->getException());
     }
 
     /**
      * @test
      */
-    public function shouldSetXStatusCodeWhenExceptionInstanceOfResponseInteractiveRequest()
+    public function shouldSetXStatusCodeWhenExceptionInstanceOfSymfonyHttpResponseReply()
     {
         $expectedStatus = 555;
 
         $response = new Response('foobar', $expectedStatus);
 
-        $interactiveRequest = new ResponseInteractiveRequest($response);
+        $reply = new SymfonyHttpResponse($response);
 
         $event = new GetResponseForExceptionEvent(
             $this->createHttpKernelMock(),
             new Request,
             'requestType',
-            $interactiveRequest
+            $reply
         );
 
-        $listener = new InteractiveRequestListener;
+        $listener = new ReplyToHttpResponseListener;
 
         $listener->onKernelException($event);
 
@@ -148,23 +149,23 @@ class InteractiveRequestListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSetXStatusCodeIfAlreadySetWhenExceptionInstanceOfResponseInteractiveRequest()
+    public function shouldNotSetXStatusCodeIfAlreadySetWhenExceptionInstanceOfSymfonyHttpResponseReply()
     {
         $expectedStatus = 555;
 
         $response = new Response('foobar', $expectedStatus);
         $response->headers->set('X-Status-Code', 666);
 
-        $interactiveRequest = new ResponseInteractiveRequest($response);
+        $reply = new SymfonyHttpResponse($response);
 
         $event = new GetResponseForExceptionEvent(
             $this->createHttpKernelMock(),
             new Request,
             'requestType',
-            $interactiveRequest
+            $reply
         );
 
-        $listener = new InteractiveRequestListener;
+        $listener = new ReplyToHttpResponseListener;
 
         $listener->onKernelException($event);
 
@@ -178,25 +179,47 @@ class InteractiveRequestListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldChangeInteractiveRequestToLogicExceptionIfNotSupported()
+    public function shouldSetResponseAndStatus200IfExceptionInstanceOfHttpResponseReply()
     {
-        $notSupportedInteractiveRequest = $this->getMock('Payum\Core\Request\BaseInteractiveRequest');
+        $reply = new HttpResponse('theContent');
 
         $event = new GetResponseForExceptionEvent(
             $this->createHttpKernelMock(),
             new Request,
             'requestType',
-            $notSupportedInteractiveRequest
+            $reply
         );
 
-        $listener = new InteractiveRequestListener;
+        $listener = new ReplyToHttpResponseListener;
+
+        $listener->onKernelException($event);
+
+        $this->assertSame('theContent', $event->getResponse()->getContent());
+        $this->assertEquals(200, $event->getResponse()->headers->get('X-Status-Code'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldChangeReplyToLogicExceptionIfNotSupported()
+    {
+        $notSupportedReply = $this->getMock('Payum\Core\Reply\Base');
+
+        $event = new GetResponseForExceptionEvent(
+            $this->createHttpKernelMock(),
+            new Request,
+            'requestType',
+            $notSupportedReply
+        );
+
+        $listener = new ReplyToHttpResponseListener;
 
         $listener->onKernelException($event);
 
         $this->assertNull($event->getResponse());
         $this->assertInstanceOf('Payum\Core\Exception\LogicException', $event->getException());
         $this->assertStringStartsWith(
-            'Cannot convert interactive request Mock_BaseInteractiveRequest', 
+            'Cannot convert reply Mock_Base_',
             $event->getException()->getMessage()
         );
     }
@@ -204,24 +227,24 @@ class InteractiveRequestListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSetResponseIfExceptionInstanceOfPostRedirectUrlInteractiveRequest()
+    public function shouldSetResponseIfExceptionInstanceOfHttpPostRedirectReply()
     {
-        $interactiveRequest = new PostRedirectUrlInteractiveRequest('anUrl', array('foo' => 'foo'));
+        $reply = new HttpPostRedirect('anUrl', array('foo' => 'foo'));
 
         $event = new GetResponseForExceptionEvent(
             $this->createHttpKernelMock(),
             new Request,
             'requestType',
-            $interactiveRequest
+            $reply
         );
 
-        $listener = new InteractiveRequestListener;
+        $listener = new ReplyToHttpResponseListener;
 
         $listener->onKernelException($event);
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $event->getResponse());
         $this->assertEquals(200, $event->getResponse()->getStatusCode());
-        $this->assertEquals($interactiveRequest->getContent(), $event->getResponse()->getContent());
+        $this->assertEquals($reply->getContent(), $event->getResponse()->getContent());
     }
 
     /**

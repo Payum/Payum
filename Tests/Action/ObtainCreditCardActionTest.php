@@ -2,11 +2,11 @@
 namespace Payum\Bundle\PayumBundle\Tests\Action;
 
 use Payum\Bundle\PayumBundle\Action\ObtainCreditCardAction;
-use Payum\Core\Bridge\Symfony\Request\ResponseInteractiveRequest;
+use Payum\Core\Bridge\Symfony\Reply\HttpResponse;
 use Payum\Core\Model\CreditCard;
 use Payum\Core\PaymentInterface;
-use Payum\Core\Request\ObtainCreditCardRequest;
-use Payum\Core\Request\RenderTemplateRequest;
+use Payum\Core\Request\ObtainCreditCard;
+use Payum\Core\Request\RenderTemplate;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -39,7 +39,7 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new ObtainCreditCardAction($this->createFormFactoryMock(), 'aTemplate');
 
-        $this->assertTrue($action->supports(new ObtainCreditCardRequest));
+        $this->assertTrue($action->supports(new ObtainCreditCard));
     }
 
     /**
@@ -75,7 +75,7 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new ObtainCreditCardAction($this->createFormFactoryMock(), 'aTemplate');
 
-        $action->execute(new ObtainCreditCardRequest);
+        $action->execute(new ObtainCreditCard);
     }
 
     /**
@@ -122,8 +122,8 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplateRequest'))
-            ->will($this->returnCallback(function(RenderTemplateRequest $request) use ($testCase, $formView) {
+            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
+            ->will($this->returnCallback(function(RenderTemplate $request) use ($testCase, $formView) {
                 $testCase->assertEquals('theTemplateName', $request->getTemplateName());
                 $testCase->assertEquals(array('form' => $formView), $request->getContext());
 
@@ -136,8 +136,8 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment($paymentMock);
 
         try {
-            $action->execute(new ObtainCreditCardRequest);
-        } catch (ResponseInteractiveRequest $e) {
+            $action->execute(new ObtainCreditCard);
+        } catch (HttpResponse $e) {
             $this->assertEquals('theObtainCreditCardPageWithForm', $e->getResponse()->getContent());
             $this->assertEquals(200, $e->getResponse()->getStatusCode());
             $this->assertEquals(
@@ -150,7 +150,7 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
             return;
         }
 
-        $this->fail('ResponseInteractiveRequest exception was expected to be thrown');
+        $this->fail('Reply exception was expected to be thrown');
     }
 
     /**
@@ -205,8 +205,8 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplateRequest'))
-            ->will($this->returnCallback(function(RenderTemplateRequest $request) use ($testCase, $formView) {
+            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
+            ->will($this->returnCallback(function(RenderTemplate $request) use ($testCase, $formView) {
                 $testCase->assertEquals('theTemplateName', $request->getTemplateName());
                 $testCase->assertEquals(array('form' => $formView), $request->getContext());
 
@@ -219,8 +219,8 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment($paymentMock);
 
         try {
-            $action->execute(new ObtainCreditCardRequest);
-        } catch (ResponseInteractiveRequest $e) {
+            $action->execute(new ObtainCreditCard);
+        } catch (HttpResponse $e) {
             $this->assertEquals('theObtainCreditCardPageWithForm', $e->getResponse()->getContent());
             $this->assertEquals(200, $e->getResponse()->getStatusCode());
             $this->assertEquals(
@@ -233,7 +233,7 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
             return;
         }
 
-        $this->fail('ResponseInteractiveRequest exception was expected to be thrown');
+        $this->fail('Reply exception was expected to be thrown');
     }
 
     /**
@@ -278,7 +278,7 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
         $action = new ObtainCreditCardAction($formFactoryMock, 'aTemplate');
         $action->setRequest($httpRequest);
 
-        $obtainCreditCard = new ObtainCreditCardRequest;
+        $obtainCreditCard = new ObtainCreditCard;
 
         $action->execute($obtainCreditCard);
 

@@ -117,7 +117,7 @@ class CaptureControllerTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\SecuredCaptureRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\SecuredCapture'))
         ;
 
         $registryMock = $this->getMock('Payum\Core\Registry\RegistryInterface');

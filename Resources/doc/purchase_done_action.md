@@ -20,7 +20,7 @@ It is the route of url you will be redirected after capture done its job. Let's 
 
 ```php
 <?php
-    use Payum\Core\Request\BinaryMaskStatusRequest;
+    use Payum\Core\Request\GetHumanStatus;
 
     public function captureDoneAction(Request $request)
     {
@@ -28,9 +28,7 @@ It is the route of url you will be redirected after capture done its job. Let's 
 
         $payment = $this->get('payum')->getPayment($token->getPaymentName());
 
-        $status = new BinaryMaskStatusRequest($token);
-        $payment->execute($status);
-
+        $payment->execute($status = new GetHumanStatus($token));
         if ($status->isSuccess()) {
             $this->getUser()->addCredits(100);
             $this->get('session')->getFlashBag()->set(

@@ -2,10 +2,8 @@
 namespace Payum\Bundle\PayumBundle\Command;
 
 use Payum\Core\Exception\RuntimeException;
-use Payum\Core\Model\Identificator;
 use Payum\Core\Registry\RegistryInterface;
-use Payum\Core\Request\BinaryMaskStatusRequest;
-use Payum\Core\Request\SimpleStatusRequest;
+use Payum\Core\Request\GetHumanStatus;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -46,7 +44,7 @@ class StatusCommand extends ContainerAwareCommand
             ));
         }
 
-        $status = new SimpleStatusRequest($model);
+        $status = new GetHumanStatus($model);
         $this->getPayum()->getPayment($paymentName)->execute($status);
 
         $output->writeln(sprintf('Status: %s', $status->getStatus()));
