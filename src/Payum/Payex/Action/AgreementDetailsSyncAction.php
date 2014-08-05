@@ -4,7 +4,7 @@ namespace Payum\Payex\Action;
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Request\Sync;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Payex\Request\Api\CheckAgreementRequest;
+use Payum\Payex\Request\Api\CheckAgreement;
 
 class AgreementDetailsSyncAction extends PaymentAwareAction
 {
@@ -18,7 +18,7 @@ class AgreementDetailsSyncAction extends PaymentAwareAction
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        $this->payment->execute(new CheckAgreementRequest($request->getModel()));
+        $this->payment->execute(new CheckAgreement($request->getModel()));
     }
 
     /**

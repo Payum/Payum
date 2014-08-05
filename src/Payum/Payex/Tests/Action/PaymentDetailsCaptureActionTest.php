@@ -113,7 +113,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\InitializeOrderRequest'))
+            ->with($this->isInstanceOf('Payum\Payex\Request\Api\InitializeOrder'))
         ;
 
         $action = new PaymentDetailsCaptureAction();
@@ -133,7 +133,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\CompleteOrderRequest'))
+            ->with($this->isInstanceOf('Payum\Payex\Request\Api\CompleteOrder'))
         ;
 
         $action = new PaymentDetailsCaptureAction();
@@ -155,7 +155,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\StartRecurringPaymentRequest'))
+            ->with($this->isInstanceOf('Payum\Payex\Request\Api\StartRecurringPayment'))
         ;
 
         $action = new PaymentDetailsCaptureAction();

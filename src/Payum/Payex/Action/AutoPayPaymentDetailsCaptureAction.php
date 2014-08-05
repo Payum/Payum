@@ -5,7 +5,7 @@ use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\Capture;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Payex\Request\Api\AutoPayAgreementRequest;
+use Payum\Payex\Request\Api\AutoPayAgreement;
 
 class AutoPayPaymentDetailsCaptureAction extends PaymentAwareAction
 {
@@ -19,7 +19,7 @@ class AutoPayPaymentDetailsCaptureAction extends PaymentAwareAction
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        $this->payment->execute(new AutoPayAgreementRequest($request->getModel()));
+        $this->payment->execute(new AutoPayAgreement($request->getModel()));
     }
 
     /**

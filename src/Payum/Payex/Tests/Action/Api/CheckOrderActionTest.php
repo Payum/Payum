@@ -2,7 +2,7 @@
 namespace Payum\Payex\Tests\Action\Api;
 
 use Payum\Payex\Action\Api\CheckOrderAction;
-use Payum\Payex\Request\Api\CheckOrderRequest;
+use Payum\Payex\Request\Api\CheckOrder;
 
 class CheckOrderActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -83,7 +83,7 @@ class CheckOrderActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CheckOrderAction();
 
-        $this->assertTrue($action->supports(new CheckOrderRequest($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new CheckOrder($this->getMock('ArrayAccess'))));
     }
 
     /**
@@ -103,7 +103,7 @@ class CheckOrderActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CheckOrderAction;
 
-        $this->assertFalse($action->supports(new CheckOrderRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new CheckOrder(new \stdClass)));
     }
 
     /**
@@ -131,7 +131,7 @@ class CheckOrderActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new CheckOrderAction();
 
-        $action->execute(new CheckOrderRequest($this->requiredFields));
+        $action->execute(new CheckOrder($this->requiredFields));
     }
 
     /**
@@ -152,7 +152,7 @@ class CheckOrderActionTest extends \PHPUnit_Framework_TestCase
         $action = new CheckOrderAction();
         $action->setApi($apiMock);
 
-        $request = new CheckOrderRequest($this->requiredFields);
+        $request = new CheckOrder($this->requiredFields);
         
         $action->execute($request);
 

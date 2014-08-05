@@ -113,7 +113,7 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\AutoPayAgreementRequest'))
+            ->with($this->isInstanceOf('Payum\Payex\Request\Api\AutoPayAgreement'))
         ;
 
         $action = new AutoPayPaymentDetailsCaptureAction();

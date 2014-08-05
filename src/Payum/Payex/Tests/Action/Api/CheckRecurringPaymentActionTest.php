@@ -3,7 +3,7 @@ namespace Payum\Payex\Tests\Action\Api;
 
 use Payum\Payex\Action\Api\CheckRecurringPaymentAction;
 use Payum\Payex\Api\RecurringApi;
-use Payum\Payex\Request\Api\CheckRecurringPaymentRequest;
+use Payum\Payex\Request\Api\CheckRecurringPayment;
 
 class CheckRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -84,7 +84,7 @@ class CheckRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CheckRecurringPaymentAction();
 
-        $this->assertTrue($action->supports(new CheckRecurringPaymentRequest($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new CheckRecurringPayment($this->getMock('ArrayAccess'))));
     }
 
     /**
@@ -104,7 +104,7 @@ class CheckRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CheckRecurringPaymentAction;
 
-        $this->assertFalse($action->supports(new CheckRecurringPaymentRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new CheckRecurringPayment(new \stdClass)));
     }
 
     /**
@@ -132,7 +132,7 @@ class CheckRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new CheckRecurringPaymentAction();
 
-        $action->execute(new CheckRecurringPaymentRequest($this->requiredFields));
+        $action->execute(new CheckRecurringPayment($this->requiredFields));
     }
 
     /**
@@ -153,7 +153,7 @@ class CheckRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
         $action = new CheckRecurringPaymentAction();
         $action->setApi($apiMock);
 
-        $request = new CheckRecurringPaymentRequest($this->requiredFields);
+        $request = new CheckRecurringPayment($this->requiredFields);
         
         $action->execute($request);
 

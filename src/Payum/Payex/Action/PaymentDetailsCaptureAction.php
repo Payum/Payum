@@ -5,9 +5,9 @@ use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\Capture;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Payex\Request\Api\StartRecurringPaymentRequest;
-use Payum\Payex\Request\Api\InitializeOrderRequest;
-use Payum\Payex\Request\Api\CompleteOrderRequest;
+use Payum\Payex\Request\Api\StartRecurringPayment;
+use Payum\Payex\Request\Api\InitializeOrder;
+use Payum\Payex\Request\Api\CompleteOrder;
 
 class PaymentDetailsCaptureAction extends PaymentAwareAction
 {
@@ -24,14 +24,14 @@ class PaymentDetailsCaptureAction extends PaymentAwareAction
         $model = ArrayObject::ensureArrayObject($request->getModel());
         
         if (false == $model['orderRef']) {
-            $this->payment->execute(new InitializeOrderRequest($model));
+            $this->payment->execute(new InitializeOrder($model));
         }
 
         if ($model['orderRef']) {
-            $this->payment->execute(new CompleteOrderRequest($model));
+            $this->payment->execute(new CompleteOrder($model));
             
             if ($model['recurring']) {
-                $this->payment->execute(new StartRecurringPaymentRequest($model));
+                $this->payment->execute(new StartRecurringPayment($model));
             }
         }
     }

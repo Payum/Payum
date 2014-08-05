@@ -8,10 +8,10 @@ use Payum\Payex\Api\AgreementApi;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
-use Payum\Payex\Request\Api\CheckAgreementRequest;
-use Payum\Payex\Request\Api\CompleteOrderRequest;
-use Payum\Payex\Request\Api\CreateAgreementRequest;
-use Payum\Payex\Request\Api\DeleteAgreementRequest;
+use Payum\Payex\Request\Api\CheckAgreement;
+use Payum\Payex\Request\Api\CompleteOrder;
+use Payum\Payex\Request\Api\CreateAgreement;
+use Payum\Payex\Request\Api\DeleteAgreement;
 
 class DeleteAgreementAction implements ActionInterface, ApiAwareInterface
 {
@@ -37,7 +37,7 @@ class DeleteAgreementAction implements ActionInterface, ApiAwareInterface
      */
     public function execute($request)
     {
-        /** @var $request DeleteAgreementRequest */
+        /** @var $request DeleteAgreement */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -59,7 +59,7 @@ class DeleteAgreementAction implements ActionInterface, ApiAwareInterface
     public function supports($request)
     {
         return 
-            $request instanceof DeleteAgreementRequest &&
+            $request instanceof DeleteAgreement &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

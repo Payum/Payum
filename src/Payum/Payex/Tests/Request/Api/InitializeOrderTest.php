@@ -8,7 +8,7 @@ class InitializeOrderTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfBaseModelAware()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Request\Api\InitializeOrderRequest');
+        $rc = new \ReflectionClass('Payum\Payex\Request\Api\InitializeOrder');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelAware'));
     }

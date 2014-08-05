@@ -7,7 +7,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Payex\Api\OrderApi;
-use Payum\Payex\Request\Api\CheckOrderRequest;
+use Payum\Payex\Request\Api\CheckOrder;
 
 class CheckOrderAction implements ActionInterface, ApiAwareInterface
 {
@@ -33,7 +33,7 @@ class CheckOrderAction implements ActionInterface, ApiAwareInterface
      */
     public function execute($request)
     {
-        /** @var $request CheckOrderRequest */
+        /** @var $request CheckOrder */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -55,7 +55,7 @@ class CheckOrderAction implements ActionInterface, ApiAwareInterface
     public function supports($request)
     {
         return 
-            $request instanceof CheckOrderRequest &&
+            $request instanceof CheckOrder &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

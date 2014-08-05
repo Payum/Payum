@@ -8,7 +8,7 @@ class AutoPayAgreementTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfBaseModelAware()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Request\Api\AutoPayAgreementRequest');
+        $rc = new \ReflectionClass('Payum\Payex\Request\Api\AutoPayAgreement');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelAware'));
     }

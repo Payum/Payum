@@ -8,7 +8,7 @@ use Payum\Payex\Api\AgreementApi;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
-use Payum\Payex\Request\Api\CreateAgreementRequest;
+use Payum\Payex\Request\Api\CreateAgreement;
 
 class CreateAgreementAction implements ActionInterface, ApiAwareInterface
 {
@@ -34,7 +34,7 @@ class CreateAgreementAction implements ActionInterface, ApiAwareInterface
      */
     public function execute($request)
     {
-        /** @var $request CreateAgreementRequest */
+        /** @var $request CreateAgreement */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -71,7 +71,7 @@ class CreateAgreementAction implements ActionInterface, ApiAwareInterface
     public function supports($request)
     {
         return 
-            $request instanceof CreateAgreementRequest &&
+            $request instanceof CreateAgreement &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

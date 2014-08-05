@@ -8,7 +8,7 @@ class StartRecurringPaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfBaseModelAware()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Request\Api\StartRecurringPaymentRequest');
+        $rc = new \ReflectionClass('Payum\Payex\Request\Api\StartRecurringPayment');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelAware'));
     }

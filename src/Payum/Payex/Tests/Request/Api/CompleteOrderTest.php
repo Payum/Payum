@@ -8,7 +8,7 @@ class CompleteOrderTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfBaseModelAware()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Request\Api\CompleteOrderRequest');
+        $rc = new \ReflectionClass('Payum\Payex\Request\Api\CompleteOrder');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelAware'));
     }

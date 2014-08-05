@@ -2,7 +2,7 @@
 namespace Payum\Payex\Tests\Action\Api;
 
 use Payum\Payex\Action\Api\CompleteOrderAction;
-use Payum\Payex\Request\Api\CompleteOrderRequest;
+use Payum\Payex\Request\Api\CompleteOrder;
 
 class CompleteOrderActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -83,7 +83,7 @@ class CompleteOrderActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CompleteOrderAction();
 
-        $this->assertTrue($action->supports(new CompleteOrderRequest($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new CompleteOrder($this->getMock('ArrayAccess'))));
     }
 
     /**
@@ -103,7 +103,7 @@ class CompleteOrderActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CompleteOrderAction;
 
-        $this->assertFalse($action->supports(new CompleteOrderRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new CompleteOrder(new \stdClass)));
     }
 
     /**
@@ -131,7 +131,7 @@ class CompleteOrderActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new CompleteOrderAction();
 
-        $action->execute(new CompleteOrderRequest($this->requiredFields));
+        $action->execute(new CompleteOrder($this->requiredFields));
     }
 
     /**
@@ -152,7 +152,7 @@ class CompleteOrderActionTest extends \PHPUnit_Framework_TestCase
         $action = new CompleteOrderAction();
         $action->setApi($apiMock);
 
-        $request = new CompleteOrderRequest($this->requiredFields);
+        $request = new CompleteOrder($this->requiredFields);
         
         $action->execute($request);
 

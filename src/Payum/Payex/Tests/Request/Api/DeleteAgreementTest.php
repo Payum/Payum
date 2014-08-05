@@ -8,7 +8,7 @@ class DeleteAgreementTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfBaseModelAware()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Request\Api\DeleteAgreementRequest');
+        $rc = new \ReflectionClass('Payum\Payex\Request\Api\DeleteAgreement');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelAware'));
     }

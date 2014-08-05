@@ -114,7 +114,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\CheckAgreementRequest'))
+            ->with($this->isInstanceOf('Payum\Payex\Request\Api\CheckAgreement'))
         ;
         
         $action = new AgreementDetailsSyncAction();

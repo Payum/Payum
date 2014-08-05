@@ -3,7 +3,7 @@ namespace Payum\Payex\Tests\Action\Api;
 
 use Payum\Payex\Action\Api\InitializeOrderAction;
 use Payum\Payex\Api\OrderApi;
-use Payum\Payex\Request\Api\InitializeOrderRequest;
+use Payum\Payex\Request\Api\InitializeOrder;
 use Payum\Core\Reply\HttpRedirect;
 
 class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
@@ -100,7 +100,7 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new InitializeOrderAction();
 
-        $this->assertTrue($action->supports(new InitializeOrderRequest($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new InitializeOrder($this->getMock('ArrayAccess'))));
     }
 
     /**
@@ -120,7 +120,7 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new InitializeOrderAction;
 
-        $this->assertFalse($action->supports(new InitializeOrderRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new InitializeOrder(new \stdClass)));
     }
 
     /**
@@ -152,7 +152,7 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
         $action = new InitializeOrderAction();
         $action->setApi($apiMock);
 
-        $action->execute(new InitializeOrderRequest(array(
+        $action->execute(new InitializeOrder(array(
             'orderRef' => 'aRef',
         )));
     }
@@ -170,7 +170,7 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new InitializeOrderAction();
 
-        $action->execute(new InitializeOrderRequest($this->requiredFields));
+        $action->execute(new InitializeOrder($this->requiredFields));
     }
 
     /**
@@ -191,7 +191,7 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
         $action = new InitializeOrderAction();
         $action->setApi($apiMock);
 
-        $request = new InitializeOrderRequest($this->requiredFields);
+        $request = new InitializeOrder($this->requiredFields);
         
         $action->execute($request);
 
@@ -217,7 +217,7 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
         $action = new InitializeOrderAction();
         $action->setApi($apiMock);
 
-        $request = new InitializeOrderRequest($this->requiredFields);
+        $request = new InitializeOrder($this->requiredFields);
 
         try {
             $action->execute($request);
