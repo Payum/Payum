@@ -1,5 +1,10 @@
 # Upgrades
 
+## 0.10 to 0.11
+
+* `InteractiveRequestListener` was renamed to `ReplyToHttpResponseListener`. The container service and related parameter was changed too. Now it takes replies and convert that to http response.
+* The `Request` postfix was removed.
+
 ## 0.9 to 0.10
 
 * `GetHttpQueryAction` was removed. Use `GetHttpRequestAction` from the bridge.
