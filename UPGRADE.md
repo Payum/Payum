@@ -1,5 +1,13 @@
 # Upgrades
 
+## 0.10 to 0.11
+
+* [request] Postfix `Request` was removed. For example `CaptureRequest` become `Capture`.
+* [request] `SimpleStatusRequest` was renamed to `GetHumanStatus`.
+* [request] `BinaryMaskStatusRequest` was renamed to `GetBinaryStatus`.
+* [request] All interactive request were replaced by reply concept. Moved to Reply namespace and renamed. For example `Request\Http\RedirectUrlInteractiveRequest` become `Reply\HttpRedirect`.
+* [extension] The method `onInteractiveRequest` was renamed to `onReply`. The first parameter has to be an instance of `ReplyInterface`.    
+
 ## 0.9 to 0.10
 
 * [request] Class `GetHttpQueryRequest` was removed use `GetRequestRequest` instead.
