@@ -1,14 +1,14 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request\Api;
 
-class DoExpressCheckoutPaymentRequestTest extends \PHPUnit_Framework_TestCase
+class GetRecurringPaymentsProfileDetailsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfBaseModelAware()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeTokenRequest');
+        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetRecurringPaymentsProfileDetails');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelAware'));
     }

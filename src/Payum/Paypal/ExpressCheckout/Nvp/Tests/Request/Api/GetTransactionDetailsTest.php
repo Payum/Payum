@@ -2,16 +2,16 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request\Api;
 
 use MyProject\Proxies\__CG__\stdClass;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetailsRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
 
-class GetTransactionDetailsRequestTest extends \PHPUnit_Framework_TestCase
+class GetTransactionDetailsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfBaseModelAware()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetailsRequest');
+        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelAware'));
     }
@@ -21,7 +21,7 @@ class GetTransactionDetailsRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithModelAndPaymentRequestNAsArguments()
     {
-        new \Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetailsRequest(new \stdClass, $paymentRequestN = 5);
+        new GetTransactionDetails(new \stdClass, $paymentRequestN = 5);
     }
 
     /**
@@ -31,7 +31,7 @@ class GetTransactionDetailsRequestTest extends \PHPUnit_Framework_TestCase
     {
         $expectedPaymentRequestN = 7;
 
-        $request = new GetTransactionDetailsRequest(new \stdClass, $expectedPaymentRequestN);
+        $request = new GetTransactionDetails(new \stdClass, $expectedPaymentRequestN);
 
         $this->assertSame($expectedPaymentRequestN, $request->getPaymentRequestN());
     }

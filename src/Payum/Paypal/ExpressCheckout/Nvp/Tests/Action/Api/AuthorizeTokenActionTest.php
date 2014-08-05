@@ -3,7 +3,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\AuthorizeTokenAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeTokenRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken;
 
 class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,7 +32,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AuthorizeTokenAction();
         
-        $this->assertTrue($action->supports(new AuthorizeTokenRequest($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new AuthorizeToken($this->getMock('ArrayAccess'))));
     }
 
     /**
@@ -67,7 +67,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AuthorizeTokenAction($this->createApiMock());
 
-        $action->execute(new AuthorizeTokenRequest(new \ArrayObject()));
+        $action->execute(new AuthorizeToken(new \ArrayObject()));
     }
 
     /**
@@ -92,7 +92,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
         $model = new \ArrayObject();
         $model['TOKEN'] = $expectedRedirectUrl; 
         
-        $request = new AuthorizeTokenRequest(array(
+        $request = new AuthorizeToken(array(
             'TOKEN' => $expectedToken
         ));
 
@@ -125,7 +125,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
         $action = new AuthorizeTokenAction();
         $action->setApi($apiMock);
 
-        $request = new AuthorizeTokenRequest(array(
+        $request = new AuthorizeToken(array(
             'TOKEN' => 'aToken',
             'AUTHORIZE_TOKEN_USERACTION' => 'theUserAction',
             'AUTHORIZE_TOKEN_CMD' => 'theCmd',
@@ -154,7 +154,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
         $action = new AuthorizeTokenAction();
         $action->setApi($apiMock);
 
-        $request = new AuthorizeTokenRequest(array(
+        $request = new AuthorizeToken(array(
             'TOKEN' => 'aToken',
             //payer id means that the user already authorize the token. 
             //Entered his login\passowrd and press enter at paypal side.
@@ -178,7 +178,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
         $action = new AuthorizeTokenAction();
         $action->setApi($apiMock);
 
-        $request = new AuthorizeTokenRequest(array(
+        $request = new AuthorizeToken(array(
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId'
         ), $force = true);

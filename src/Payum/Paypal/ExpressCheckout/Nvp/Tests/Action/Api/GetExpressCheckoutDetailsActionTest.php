@@ -2,7 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetailsRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetails;
 
 class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,7 +32,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
         $action = new GetExpressCheckoutDetailsAction();
         
         $this->assertTrue(
-            $action->supports(new GetExpressCheckoutDetailsRequest($this->getMock('ArrayAccess')))
+            $action->supports(new GetExpressCheckoutDetails($this->getMock('ArrayAccess')))
         );
     }
 
@@ -68,7 +68,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new GetExpressCheckoutDetailsAction();
         
-        $request = new GetExpressCheckoutDetailsRequest(array());
+        $request = new GetExpressCheckoutDetails(array());
 
         $action->execute($request);
     }
@@ -95,7 +95,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
         $action = new GetExpressCheckoutDetailsAction();
         $action->setApi($apiMock);
 
-        $request = new GetExpressCheckoutDetailsRequest(array(
+        $request = new GetExpressCheckoutDetails(array(
             'TOKEN' => 'theToken', 
         ));
 
@@ -122,7 +122,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
         $action = new GetExpressCheckoutDetailsAction();
         $action->setApi($apiMock);
 
-        $request = new GetExpressCheckoutDetailsRequest(array(
+        $request = new GetExpressCheckoutDetails(array(
             'TOKEN' => 'aToken',
         ));
 

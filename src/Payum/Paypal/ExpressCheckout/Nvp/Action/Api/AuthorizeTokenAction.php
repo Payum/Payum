@@ -5,7 +5,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\LogicException;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeTokenRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken;
 
 class AuthorizeTokenAction extends BaseApiAwareAction
 {
@@ -17,7 +17,7 @@ class AuthorizeTokenAction extends BaseApiAwareAction
      */
     public function execute($request)
     {
-        /** @var $request \Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeTokenRequest */
+        /** @var $request \Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -43,7 +43,7 @@ class AuthorizeTokenAction extends BaseApiAwareAction
     public function supports($request)
     {
         return 
-            $request instanceof AuthorizeTokenRequest &&
+            $request instanceof AuthorizeToken &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

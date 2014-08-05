@@ -1,16 +1,16 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request\Api;
 
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeTokenRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken;
 
-class AuthorizeTokenRequestTest extends \PHPUnit_Framework_TestCase
+class AuthorizeTokenTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfBaseModelAware()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeTokenRequest');
+        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken');
         
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelAware'));
     }
@@ -20,7 +20,7 @@ class AuthorizeTokenRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetDefaultForceSetToFalseByDefault()
     {
-        $request = new AuthorizeTokenRequest(new \stdClass);
+        $request = new AuthorizeToken(new \stdClass);
         
         $this->assertFalse($request->isForced());
     }
@@ -30,7 +30,7 @@ class AuthorizeTokenRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetForceSetInConstructor()
     {
-        $request = new AuthorizeTokenRequest(new \stdClass(), $force = true);
+        $request = new AuthorizeToken(new \stdClass(), $force = true);
 
         $this->assertTrue($request->isForced());
     }

@@ -2,7 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\ManageRecurringPaymentsProfileStatusAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ManageRecurringPaymentsProfileStatusRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ManageRecurringPaymentsProfileStatus;
 
 class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,7 +32,7 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_
         $action = new ManageRecurringPaymentsProfileStatusAction();
 
         $this->assertTrue(
-            $action->supports(new ManageRecurringPaymentsProfileStatusRequest($this->getMock('ArrayAccess')))
+            $action->supports(new ManageRecurringPaymentsProfileStatus($this->getMock('ArrayAccess')))
         );
     }
 
@@ -68,7 +68,7 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_
     {
         $action = new ManageRecurringPaymentsProfileStatusAction();
 
-        $request = new ManageRecurringPaymentsProfileStatusRequest(array());
+        $request = new ManageRecurringPaymentsProfileStatus(array());
 
         $action->execute($request);
     }
@@ -83,7 +83,7 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_
     {
         $action = new ManageRecurringPaymentsProfileStatusAction();
 
-        $request = new ManageRecurringPaymentsProfileStatusRequest(array(
+        $request = new ManageRecurringPaymentsProfileStatus(array(
             'PROFILEID' => 'aProfId',
         ));
 
@@ -118,7 +118,7 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_
         $action = new ManageRecurringPaymentsProfileStatusAction();
         $action->setApi($apiMock);
 
-        $request = new ManageRecurringPaymentsProfileStatusRequest(array(
+        $request = new ManageRecurringPaymentsProfileStatus(array(
             'PROFILEID' => 'theProfileId',
             'ACTION' => 'theAction',
             'NOTE' => 'theNote',
@@ -146,7 +146,7 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_
         $action = new ManageRecurringPaymentsProfileStatusAction();
         $action->setApi($apiMock);
 
-        $request = new ManageRecurringPaymentsProfileStatusRequest(array(
+        $request = new ManageRecurringPaymentsProfileStatus(array(
             'PROFILEID' => 'aProfileId',
             'ACTION' => 'anAction',
             'NOTE' => 'aNote',

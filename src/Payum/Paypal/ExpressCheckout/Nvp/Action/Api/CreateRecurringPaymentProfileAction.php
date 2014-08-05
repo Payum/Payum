@@ -3,7 +3,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfileRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfile;
 
 class CreateRecurringPaymentProfileAction extends BaseApiAwareAction
 {
@@ -12,7 +12,7 @@ class CreateRecurringPaymentProfileAction extends BaseApiAwareAction
      */
     public function execute($request)
     {
-        /** @var $request CreateRecurringPaymentProfileRequest */
+        /** @var $request CreateRecurringPaymentProfile */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -40,7 +40,7 @@ class CreateRecurringPaymentProfileAction extends BaseApiAwareAction
     public function supports($request)
     {
         return 
-            $request instanceof CreateRecurringPaymentProfileRequest &&
+            $request instanceof CreateRecurringPaymentProfile &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

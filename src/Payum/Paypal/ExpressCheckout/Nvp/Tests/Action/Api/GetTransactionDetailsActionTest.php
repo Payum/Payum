@@ -2,7 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetTransactionDetailsAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetailsRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
 
 class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +31,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new GetTransactionDetailsAction();
         
-        $request = new GetTransactionDetailsRequest($this->getMock('ArrayAccess'), $paymentRequestN = 5);
+        $request = new GetTransactionDetails($this->getMock('ArrayAccess'), $paymentRequestN = 5);
         
         $this->assertTrue($action->supports($request));
     }
@@ -68,7 +68,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new GetTransactionDetailsAction();
         
-        $request = new GetTransactionDetailsRequest(array(), $paymentRequestN = 5);
+        $request = new GetTransactionDetails(array(), $paymentRequestN = 5);
 
         $action->execute($request);
     }
@@ -96,7 +96,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
         $action = new GetTransactionDetailsAction();
         $action->setApi($apiMock);
 
-        $request = new GetTransactionDetailsRequest(array(
+        $request = new GetTransactionDetails(array(
             'PAYMENTREQUEST_5_TRANSACTIONID' => 'theTransactionId' 
         ), $paymentRequestN = 5);
 
@@ -122,7 +122,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
         $action = new GetTransactionDetailsAction();
         $action->setApi($apiMock);
 
-        $request = new GetTransactionDetailsRequest(array(
+        $request = new GetTransactionDetails(array(
             'PAYMENTREQUEST_5_TRANSACTIONID' => 'aTransactionId'
         ), $paymentRequestN = 5);
 

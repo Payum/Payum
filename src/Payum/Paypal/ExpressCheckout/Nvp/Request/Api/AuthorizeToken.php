@@ -3,7 +3,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Request\Api;
 
 use Payum\Core\Request\BaseModelAware;
 
-class AuthorizeTokenRequest extends BaseModelAware
+class AuthorizeToken extends BaseModelAware
 {
     /**
      * @var bool

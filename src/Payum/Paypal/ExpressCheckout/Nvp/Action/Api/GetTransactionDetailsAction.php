@@ -3,7 +3,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetailsRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
 use Payum\Core\Exception\RequestNotSupportedException;
 
 class GetTransactionDetailsAction extends BaseApiAwareAction
@@ -13,7 +13,7 @@ class GetTransactionDetailsAction extends BaseApiAwareAction
      */
     public function execute($request)
     {
-        /** @var $request GetTransactionDetailsRequest */
+        /** @var $request GetTransactionDetails */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -39,7 +39,7 @@ class GetTransactionDetailsAction extends BaseApiAwareAction
     public function supports($request)
     {
         return 
-            $request instanceof GetTransactionDetailsRequest &&
+            $request instanceof GetTransactionDetails &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

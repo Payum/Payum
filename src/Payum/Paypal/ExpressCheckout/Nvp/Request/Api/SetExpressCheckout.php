@@ -3,6 +3,6 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Request\Api;
 
 use Payum\Core\Request\BaseModelAware;
 
-class CreateRecurringPaymentProfileRequest extends BaseModelAware
+class SetExpressCheckout extends BaseModelAware
 {
 }
