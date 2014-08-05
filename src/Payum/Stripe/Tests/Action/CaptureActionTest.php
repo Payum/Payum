@@ -100,7 +100,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Stripe\Request\Api\ObtainTokenRequest'))
+            ->with($this->isInstanceOf('Payum\Stripe\Request\Api\ObtainToken'))
         ;
 
         $action = new CaptureAction;
@@ -122,7 +122,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Stripe\Request\Api\CreateChargeRequest'))
+            ->with($this->isInstanceOf('Payum\Stripe\Request\Api\CreateCharge'))
         ;
 
         $action = new CaptureAction;

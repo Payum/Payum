@@ -7,7 +7,7 @@ use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\RenderTemplate;
 use Payum\Stripe\Action\Api\ObtainTokenAction;
 use Payum\Stripe\Keys;
-use Payum\Stripe\Request\Api\ObtainTokenRequest;
+use Payum\Stripe\Request\Api\ObtainToken;
 
 class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -68,7 +68,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new ObtainTokenAction('aTemplateName');
 
-        $this->assertTrue($action->supports(new ObtainTokenRequest(array())));
+        $this->assertTrue($action->supports(new ObtainToken(array())));
     }
 
     /**
@@ -78,7 +78,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new ObtainTokenAction('aTemplateName');
 
-        $this->assertFalse($action->supports(new ObtainTokenRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new ObtainToken(new \stdClass)));
     }
 
     /**
@@ -114,7 +114,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new ObtainTokenAction('aTemplateName');
 
-        $action->execute(new ObtainTokenRequest(array(
+        $action->execute(new ObtainToken(array(
             'card' => 'aToken'
         )));
     }
@@ -160,7 +160,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
         $action->setApi(new Keys($publishableKey, 'secretKey'));
 
         try {
-            $action->execute(new ObtainTokenRequest($model));
+            $action->execute(new ObtainToken($model));
         } catch (HttpResponse $reply) {
             $this->assertEquals('theContent', $reply->getContent());
 
@@ -200,7 +200,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
         $action->setApi(new Keys($publishableKey, 'secretKey'));
 
         try {
-            $action->execute(new ObtainTokenRequest($model));
+            $action->execute(new ObtainToken($model));
         } catch (HttpResponse $reply) {
             return;
         }
@@ -232,9 +232,9 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment($paymentMock);
         $action->setApi(new Keys($publishableKey, 'secretKey'));
 
-        $action->execute($obtainTokenRequest = new ObtainTokenRequest($model));
+        $action->execute($obtainToken = new ObtainToken($model));
 
-        $model = $obtainTokenRequest->getModel();
+        $model = $obtainToken->getModel();
         $this->assertEquals('theToken', $model['card']);
     }
 

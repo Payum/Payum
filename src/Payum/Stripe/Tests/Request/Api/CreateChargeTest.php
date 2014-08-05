@@ -1,16 +1,16 @@
 <?php
 namespace Payum\Stripe\Tests\Request\Api;
 
-use Payum\Stripe\Request\Api\ObtainTokenRequest;
+use Payum\Stripe\Request\Api\CreateCharge;
 
-class ObtainTokenRequestTest extends \PHPUnit_Framework_TestCase
+class CreateChargeTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfBaseModelAware()
     {
-        $rc = new \ReflectionClass('Payum\Stripe\Request\Api\ObtainTokenRequest');
+        $rc = new \ReflectionClass('Payum\Stripe\Request\Api\CreateCharge');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelAware'));
     }
@@ -20,6 +20,6 @@ class ObtainTokenRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithModelAsFirstArgument()
     {
-        new ObtainTokenRequest($model = array());
+        new CreateCharge($model = array());
     }
 }

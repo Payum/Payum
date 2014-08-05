@@ -8,7 +8,7 @@ use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Stripe\Keys;
-use Payum\Stripe\Request\Api\CreateChargeRequest;
+use Payum\Stripe\Request\Api\CreateCharge;
 
 class CreateChargeAction implements ActionInterface, ApiAwareInterface
 {
@@ -34,7 +34,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
      */
     public function execute($request)
     {
-        /** @var $request CreateChargeRequest */
+        /** @var $request CreateCharge */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -66,7 +66,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
     public function supports($request)
     {
         return
-            $request instanceof CreateChargeRequest &&
+            $request instanceof CreateCharge &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

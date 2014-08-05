@@ -11,7 +11,7 @@ use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\RenderTemplate;
 use Payum\Stripe\Keys;
-use Payum\Stripe\Request\Api\ObtainTokenRequest;
+use Payum\Stripe\Request\Api\ObtainToken;
 
 class ObtainTokenAction extends PaymentAwareAction implements ApiAwareInterface
 {
@@ -50,7 +50,7 @@ class ObtainTokenAction extends PaymentAwareAction implements ApiAwareInterface
      */
     public function execute($request)
     {
-        /** @var $request ObtainTokenRequest */
+        /** @var $request ObtainToken */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -83,7 +83,7 @@ class ObtainTokenAction extends PaymentAwareAction implements ApiAwareInterface
     public function supports($request)
     {
         return
-            $request instanceof ObtainTokenRequest &&
+            $request instanceof ObtainToken &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }
