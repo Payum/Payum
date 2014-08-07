@@ -2,8 +2,8 @@
 namespace Payum\Offline\Tests\Action;
 
 use Payum\Offline\Constants;
-use Payum\Core\Request\BinaryMaskStatusRequest;
-use Payum\Core\Request\StatusRequestInterface;
+use Payum\Core\Request\GetBinaryStatus;
+use Payum\Core\Request\GetStatusInterface;
 use Payum\Offline\Action\StatusAction;
 
 class StatusActionTest extends \PHPUnit_Framework_TestCase
@@ -33,7 +33,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StatusAction();
 
-        $request = $this->createStatusRequestStub($this->getMock('ArrayAccess'));
+        $request = $this->createGetStatusStub($this->getMock('ArrayAccess'));
 
         $this->assertTrue($action->supports($request));
     }
@@ -57,7 +57,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StatusAction();
 
-        $request = $this->createStatusRequestStub(new \stdClass);
+        $request = $this->createGetStatusStub(new \stdClass);
 
         $this->assertFalse($action->supports($request));
     }
@@ -79,7 +79,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkNewIfStatusNotSet()
     {
-        $request = new BinaryMaskStatusRequest(array());
+        $request = new GetBinaryStatus(array());
         $request->markUnknown();
 
         $action = new StatusAction();
@@ -94,7 +94,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkPendingIfStatusSetToPending()
     {
-        $request = new BinaryMaskStatusRequest(array(
+        $request = new GetBinaryStatus(array(
             Constants::FIELD_STATUS => Constants::STATUS_PENDING
         ));
         $request->markUnknown();
@@ -111,7 +111,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkSuccessIfStatusSetToSuccess()
     {
-        $request = new BinaryMaskStatusRequest(array(
+        $request = new GetBinaryStatus(array(
             Constants::FIELD_STATUS => Constants::STATUS_SUCCESS
         ));
         $request->markUnknown();
@@ -128,7 +128,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkUnknownIfStatusNotRecognized()
     {
-        $request = new BinaryMaskStatusRequest(array(
+        $request = new GetBinaryStatus(array(
             Constants::FIELD_STATUS => 'some-foo-bar-status'
         ));
         $request->markSuccess();
@@ -141,11 +141,11 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|StatusRequestInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|GetStatusInterface
      */
-    protected function createStatusRequestStub($model)
+    protected function createGetStatusStub($model)
     {
-        $status = $this->getMock('Payum\Core\Request\StatusRequestInterface');
+        $status = $this->getMock('Payum\Core\Request\GetStatusInterface');
 
         $status
             ->expects($this->any())

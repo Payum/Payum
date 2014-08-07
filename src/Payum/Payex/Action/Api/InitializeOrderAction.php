@@ -7,9 +7,9 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
-use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
+use Payum\Core\Reply\HttpRedirect;
 use Payum\Payex\Api\OrderApi;
-use Payum\Payex\Request\Api\InitializeOrderRequest;
+use Payum\Payex\Request\Api\InitializeOrder;
 
 class InitializeOrderAction implements ActionInterface, ApiAwareInterface
 {
@@ -35,7 +35,7 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
      */
     public function execute($request)
     {
-        /** @var $request InitializeOrderRequest */
+        /** @var $request InitializeOrder */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -70,7 +70,7 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
         $model->replace($result);
         
         if ($model['redirectUrl']) {
-            throw new RedirectUrlInteractiveRequest($model['redirectUrl']);
+            throw new HttpRedirect($model['redirectUrl']);
         }
     }
 
@@ -80,7 +80,7 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
     public function supports($request)
     {
         return 
-            $request instanceof InitializeOrderRequest &&
+            $request instanceof InitializeOrder &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

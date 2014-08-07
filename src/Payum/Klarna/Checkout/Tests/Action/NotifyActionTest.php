@@ -2,7 +2,7 @@
 namespace Payum\Klarna\Checkout\Tests\Action;
 
 use Payum\Core\PaymentInterface;
-use Payum\Core\Request\NotifyRequest;
+use Payum\Core\Request\Notify;
 use Payum\Klarna\Checkout\Action\NotifyAction;
 use Payum\Klarna\Checkout\Constants;
 
@@ -33,7 +33,7 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new NotifyAction();
 
-        $this->assertTrue($action->supports(new NotifyRequest(array(), array())));
+        $this->assertTrue($action->supports(new Notify(array(), array())));
     }
 
     /**
@@ -53,7 +53,7 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new NotifyAction;
 
-        $this->assertFalse($action->supports(new NotifyRequest(array(), new \stdClass)));
+        $this->assertFalse($action->supports(new Notify(array(), new \stdClass)));
     }
 
     /**
@@ -77,23 +77,23 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
         $paymentMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\UpdateOrderRequest'))
+            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\UpdateOrder'))
         ;
         $paymentMock
             ->expects($this->at(2))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
 
         $action = new NotifyAction;
         $action->setPayment($paymentMock);
 
-        $action->execute(new NotifyRequest(array(), array(
+        $action->execute(new Notify(array(), array(
             'status' => Constants::STATUS_CHECKOUT_COMPLETE,
             'location' => 'aLocation',
         )));
@@ -108,13 +108,13 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
 
         $action = new NotifyAction;
         $action->setPayment($paymentMock);
 
-        $action->execute(new NotifyRequest(array(), array(
+        $action->execute(new Notify(array(), array(
             'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
             'location' => 'aLocation',
         )));
@@ -129,13 +129,13 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
 
         $action = new NotifyAction;
         $action->setPayment($paymentMock);
 
-        $action->execute(new NotifyRequest(array(), array(
+        $action->execute(new Notify(array(), array(
             'status' => Constants::STATUS_CREATED,
             'location' => 'aLocation',
         )));

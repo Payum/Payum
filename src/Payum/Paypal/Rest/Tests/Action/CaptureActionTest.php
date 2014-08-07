@@ -5,7 +5,7 @@ namespace Payum\Paypal\Rest\Tests\Action;
 use PayPal\Rest\ApiContext;
 use Payum\Paypal\Rest\Action\CaptureAction;
 use Payum\Paypal\Rest\Model\PaymentDetails;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\Capture;
 
 class CaptureActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,13 +20,13 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestWithPaymentSdkModel()
+    public function shouldSupportCaptureWithPaymentSdkModel()
     {
         $action = new CaptureAction();
 
         $model = new PaymentDetails();
 
-        $request = new CaptureRequest($model);
+        $request = new Capture($model);
 
         $this->assertTrue($action->supports($request));
     }
@@ -34,11 +34,11 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestWithNotPaymentSdkModel()
+    public function shouldNotSupportCapturePaymentSdkModel()
     {
         $action = new CaptureAction();
 
-        $request = new CaptureRequest(new \stdClass());
+        $request = new Capture(new \stdClass());
 
         $this->assertFalse($action->supports($request));
     }
@@ -58,23 +58,21 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportNotCaptureRequest()
+    public function shouldNotSupportNotCapture()
     {
         $action = new CaptureAction();
 
-        $request = new \stdClass();
-
-        $this->assertFalse($action->supports($request));
+        $this->assertFalse($action->supports(new \stdClass()));
     }
 
     /**
      * @test
      */
-    public function shouldSupportCaptureRequest()
+    public function shouldSupportCapture()
     {
         $action = new CaptureAction();
 
-        $request = new CaptureRequest($this->getMock('PayPal\Api\Payment'));
+        $request = new Capture($this->getMock('PayPal\Api\Payment'));
 
         $this->assertTrue($action->supports($request));
     }

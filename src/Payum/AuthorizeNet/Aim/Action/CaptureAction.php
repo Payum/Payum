@@ -7,8 +7,8 @@ use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\UnsupportedApiException;
-use Payum\Core\Request\CaptureRequest;
-use Payum\Core\Request\ObtainCreditCardRequest;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Security\SensitiveValue;
 
@@ -36,7 +36,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
      */
     public function execute($request)
     {
-        /** @var $request CaptureRequest */
+        /** @var $request Capture */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -49,14 +49,14 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         
         if (false == $model->validateNotEmpty(array('card_num', 'exp_date'), false)) {
             try {
-                $creditCardRequest = new ObtainCreditCardRequest;
-                $this->payment->execute($creditCardRequest);
-                $card = $creditCardRequest->obtain();
+                $this->payment->execute($obtainCreditCard = new ObtainCreditCard);
+
+                $card = $obtainCreditCard->obtain();
 
                 $model['exp_date'] = new SensitiveValue($card->getExpireAt()->format('m/y'));
                 $model['card_num'] = new SensitiveValue($card->getNumber());
             } catch (RequestNotSupportedException $e) {
-                throw new LogicException('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCardRequest request.');
+                throw new LogicException('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.');
             }
         }
 
@@ -75,7 +75,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
     public function supports($request)
     {
         return 
-            $request instanceof CaptureRequest &&
+            $request instanceof Capture &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

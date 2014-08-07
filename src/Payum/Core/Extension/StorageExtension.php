@@ -2,8 +2,8 @@
 namespace Payum\Core\Extension;
 
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\Request\InteractiveRequestInterface;
-use Payum\Core\Request\ModelRequestInterface;
+use Payum\Core\Reply\ReplyInterface;
+use Payum\Core\Request\ModelAwareInterface;
 use Payum\Core\Model\Identificator;
 use Payum\Core\Storage\StorageInterface;
 
@@ -39,7 +39,7 @@ class StorageExtension implements ExtensionInterface
     {
         $this->stackLevel++;
         
-        if (false == $request instanceof ModelRequestInterface) {
+        if (false == $request instanceof ModelAwareInterface) {
             return;
         }
 
@@ -82,7 +82,7 @@ class StorageExtension implements ExtensionInterface
     /**
      * {@inheritDoc}
      */
-    public function onInteractiveRequest(InteractiveRequestInterface $interactiveRequest, $request, ActionInterface $action)
+    public function onReply(ReplyInterface $reply, $request, ActionInterface $action)
     {
         $this->onPostXXX($request);
     }
@@ -91,7 +91,7 @@ class StorageExtension implements ExtensionInterface
     {
         $this->stackLevel--;
 
-        if ($request instanceof ModelRequestInterface) {
+        if ($request instanceof ModelAwareInterface) {
             $this->scheduleForUpdateIfSupported($request->getModel());
         }
 

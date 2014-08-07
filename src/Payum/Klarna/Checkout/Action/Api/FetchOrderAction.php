@@ -5,9 +5,9 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Klarna\Checkout\Constants;
-use Payum\Klarna\Checkout\Request\Api\CreateOrderRequest;
-use Payum\Klarna\Checkout\Request\Api\FetchOrderRequest;
-use Payum\Klarna\Checkout\Request\Api\UpdateOrderRequest;
+use Payum\Klarna\Checkout\Request\Api\CreateOrder;
+use Payum\Klarna\Checkout\Request\Api\FetchOrder;
+use Payum\Klarna\Checkout\Request\Api\UpdateOrder;
 
 class FetchOrderAction extends BaseApiAwareAction
 {
@@ -16,7 +16,7 @@ class FetchOrderAction extends BaseApiAwareAction
      */
     public function execute($request)
     {
-        /** @var $request FetchOrderRequest */
+        /** @var $request FetchOrder */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -38,6 +38,6 @@ class FetchOrderAction extends BaseApiAwareAction
      */
     public function supports($request)
     {
-        return $request instanceof FetchOrderRequest;
+        return $request instanceof FetchOrder;
     }
 }

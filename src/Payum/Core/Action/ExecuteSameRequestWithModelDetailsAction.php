@@ -3,7 +3,7 @@ namespace Payum\Core\Action;
 
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\DetailsAggregateInterface;
-use Payum\Core\Request\ModelRequestInterface;
+use Payum\Core\Request\ModelAwareInterface;
 
 class ExecuteSameRequestWithModelDetailsAction extends PaymentAwareAction
 {
@@ -12,7 +12,7 @@ class ExecuteSameRequestWithModelDetailsAction extends PaymentAwareAction
      */
     public function execute($request)
     {
-        /** @var $request ModelRequestInterface */
+        /** @var $request ModelAwareInterface */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -28,7 +28,7 @@ class ExecuteSameRequestWithModelDetailsAction extends PaymentAwareAction
     public function supports($request)
     {
         return 
-            $request instanceof ModelRequestInterface &&
+            $request instanceof ModelAwareInterface &&
             $request->getModel() instanceof DetailsAggregateInterface && 
             $request->getModel()->getDetails()
         ;

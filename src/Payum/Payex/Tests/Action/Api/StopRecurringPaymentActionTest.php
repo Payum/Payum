@@ -2,7 +2,7 @@
 namespace Payum\Payex\Tests\Action\Api;
 
 use Payum\Payex\Action\Api\StopRecurringPaymentAction;
-use Payum\Payex\Request\Api\StopRecurringPaymentRequest;
+use Payum\Payex\Request\Api\StopRecurringPayment;
 
 class StopRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -83,7 +83,7 @@ class StopRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StopRecurringPaymentAction();
 
-        $this->assertTrue($action->supports(new StopRecurringPaymentRequest($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new StopRecurringPayment($this->getMock('ArrayAccess'))));
     }
 
     /**
@@ -103,7 +103,7 @@ class StopRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StopRecurringPaymentAction;
 
-        $this->assertFalse($action->supports(new StopRecurringPaymentRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new StopRecurringPayment(new \stdClass)));
     }
 
     /**
@@ -131,7 +131,7 @@ class StopRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new StopRecurringPaymentAction();
 
-        $action->execute(new StopRecurringPaymentRequest($this->requiredFields));
+        $action->execute(new StopRecurringPayment($this->requiredFields));
     }
 
     /**
@@ -152,7 +152,7 @@ class StopRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
         $action = new StopRecurringPaymentAction();
         $action->setApi($apiMock);
 
-        $request = new StopRecurringPaymentRequest($this->requiredFields);
+        $request = new StopRecurringPayment($this->requiredFields);
         
         $action->execute($request);
 

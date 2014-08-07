@@ -2,7 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateBillingAgreementAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateBillingAgreementRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateBillingAgreement;
 
 class CreateBillingAgreementActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +31,7 @@ class CreateBillingAgreementActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CreateBillingAgreementAction();
         
-        $this->assertTrue($action->supports(new CreateBillingAgreementRequest($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new CreateBillingAgreement($this->getMock('ArrayAccess'))));
     }
 
     /**
@@ -66,7 +66,7 @@ class CreateBillingAgreementActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CreateBillingAgreementAction();
         
-        $action->execute(new CreateBillingAgreementRequest(array()));
+        $action->execute(new CreateBillingAgreement(array()));
     }
 
     /**
@@ -91,7 +91,7 @@ class CreateBillingAgreementActionTest extends \PHPUnit_Framework_TestCase
         $action = new CreateBillingAgreementAction();
         $action->setApi($apiMock);
 
-        $request = new CreateBillingAgreementRequest(array(
+        $request = new CreateBillingAgreement(array(
             'TOKEN' => 'theToken'
         ));
 
@@ -118,7 +118,7 @@ class CreateBillingAgreementActionTest extends \PHPUnit_Framework_TestCase
         $action = new CreateBillingAgreementAction();
         $action->setApi($apiMock);
 
-        $request = new CreateBillingAgreementRequest(array(
+        $request = new CreateBillingAgreement(array(
             'TOKEN' => 'aToken'
         ));
 

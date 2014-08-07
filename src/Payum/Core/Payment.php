@@ -5,7 +5,7 @@ use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Extension\ExtensionCollection;
 use Payum\Core\Extension\ExtensionInterface;
-use Payum\Core\Request\InteractiveRequestInterface;
+use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 
@@ -88,7 +88,7 @@ class Payment implements PaymentInterface
     /**
      * {@inheritDoc}
      */
-    public function execute($request, $catchInteractive = false)
+    public function execute($request, $catchReply = false)
     {
         $action = null;
         try {
@@ -103,17 +103,17 @@ class Payment implements PaymentInterface
             $action->execute($request);
 
             $this->extensions->onPostExecute($request, $action);
-        } catch (InteractiveRequestInterface $interactiveRequest) {
-            $interactiveRequest =
-                $this->extensions->onInteractiveRequest($interactiveRequest, $request, $action) ?:
-                $interactiveRequest
+        } catch (ReplyInterface $reply) {
+            $reply =
+                $this->extensions->onReply($reply, $request, $action) ?:
+                $reply
             ;
 
-            if ($catchInteractive) {
-                return $interactiveRequest;
+            if ($catchReply) {
+                return $reply;
             }
 
-            throw $interactiveRequest;
+            throw $reply;
         } catch (\Exception $e) {
             $this->extensions->onException($e, $request, $action ?: null);
 

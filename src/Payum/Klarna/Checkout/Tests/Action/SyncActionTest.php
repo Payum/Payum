@@ -2,10 +2,10 @@
 namespace Payum\Klarna\Checkout\Tests\Action;
 
 use Payum\Core\PaymentInterface;
-use Payum\Core\Request\SyncRequest;
+use Payum\Core\Request\Sync;
 use Payum\Klarna\Checkout\Action\SyncAction;
 use Payum\Klarna\Checkout\Constants;
-use Payum\Klarna\Checkout\Request\Api\FetchOrderRequest;
+use Payum\Klarna\Checkout\Request\Api\FetchOrder;
 
 class SyncActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,17 +30,17 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportSyncRequestWithArrayAsModel()
+    public function shouldSupportSyncWithArrayAsModel()
     {
         $action = new SyncAction();
 
-        $this->assertTrue($action->supports(new SyncRequest(array())));
+        $this->assertTrue($action->supports(new Sync(array())));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotSyncRequest()
+    public function shouldNotSupportAnythingNotSync()
     {
         $action = new SyncAction;
 
@@ -50,11 +50,11 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportSyncRequestWithNotArrayAccessModel()
+    public function shouldNotSupportSyncWithNotArrayAccessModel()
     {
         $action = new SyncAction;
 
-        $this->assertFalse($action->supports(new SyncRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new Sync(new \stdClass)));
     }
 
     /**
@@ -85,8 +85,8 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\FetchOrderRequest'))
-            ->will($this->returnCallback(function(FetchOrderRequest $request) use ($orderMock) {
+            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\FetchOrder'))
+            ->will($this->returnCallback(function(FetchOrder $request) use ($orderMock) {
                 $request->setOrder($orderMock);
             }))
         ;
@@ -94,7 +94,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new SyncAction;
         $action->setPayment($paymentMock);
 
-        $request = new SyncRequest(array(
+        $request = new Sync(array(
             'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
             'location' => 'theLocation',
         ));
@@ -122,7 +122,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new SyncAction;
         $action->setPayment($paymentMock);
 
-        $request = new SyncRequest(array());
+        $request = new Sync(array());
 
         $action->execute($request);
     }

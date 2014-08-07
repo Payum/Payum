@@ -2,7 +2,7 @@
 namespace Payum\Core\Extension;
 
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\Request\InteractiveRequestInterface;
+use Payum\Core\Reply\ReplyInterface;
 
 class ExtensionCollection implements ExtensionInterface 
 {
@@ -58,16 +58,16 @@ class ExtensionCollection implements ExtensionInterface
     /**
      * {@inheritdoc}
      */
-    public function onInteractiveRequest(InteractiveRequestInterface $interactiveRequest, $request, ActionInterface $action)
+    public function onReply(ReplyInterface $reply, $request, ActionInterface $action)
     {
-        $inputInteractiveRequest = $interactiveRequest;
+        $inputReply = $reply;
         foreach ($this->extensions as $extension) {
-            if (null !== $newInteractiveRequest = $extension->onInteractiveRequest($interactiveRequest, $request, $action)) {
-                $interactiveRequest = $newInteractiveRequest;
+            if (null !== $newReply = $extension->onReply($reply, $request, $action)) {
+                $reply = $newReply;
             }
         }
 
-        return $inputInteractiveRequest !== $interactiveRequest ? $interactiveRequest : null;
+        return $inputReply !== $reply ? $reply : null;
     }
     
     /**

@@ -8,7 +8,7 @@ In `done.php` we will check the payment status and act on its result. We can dis
 <?php
 // done.php
 
-use Payum\Core\Request\SimpleStatusRequest;
+use Payum\Core\Request\GetHumanStatus;
 
 include 'config.php';
 
@@ -17,7 +17,7 @@ $token = $requestVerifier->verify($_REQUEST);
 
 $payment = $registry->getPayment($token->getPaymentName());
 
-$payment->execute($status = new SimpleStatusRequest($token));
+$payment->execute($status = new GetHumanStatus($token));
 
 header('Content-Type: application/json');
 echo json_encode(array(

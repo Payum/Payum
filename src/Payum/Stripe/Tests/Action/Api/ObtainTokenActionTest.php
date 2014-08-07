@@ -2,12 +2,12 @@
 namespace Payum\Stripe\Tests\Action\Api;
 
 use Payum\Core\PaymentInterface;
-use Payum\Core\Request\Http\GetRequestRequest;
-use Payum\Core\Request\Http\ResponseInteractiveRequest;
-use Payum\Core\Request\RenderTemplateRequest;
+use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Request\GetHttpRequest;
+use Payum\Core\Request\RenderTemplate;
 use Payum\Stripe\Action\Api\ObtainTokenAction;
 use Payum\Stripe\Keys;
-use Payum\Stripe\Request\Api\ObtainTokenRequest;
+use Payum\Stripe\Request\Api\ObtainToken;
 
 class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -68,7 +68,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new ObtainTokenAction('aTemplateName');
 
-        $this->assertTrue($action->supports(new ObtainTokenRequest(array())));
+        $this->assertTrue($action->supports(new ObtainToken(array())));
     }
 
     /**
@@ -78,7 +78,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new ObtainTokenAction('aTemplateName');
 
-        $this->assertFalse($action->supports(new ObtainTokenRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new ObtainToken(new \stdClass)));
     }
 
     /**
@@ -114,7 +114,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new ObtainTokenAction('aTemplateName');
 
-        $action->execute(new ObtainTokenRequest(array(
+        $action->execute(new ObtainToken(array(
             'card' => 'aToken'
         )));
     }
@@ -134,16 +134,16 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Http\GetRequestRequest'))
-            ->will($this->returnCallback(function(GetRequestRequest $request) {
+            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
+            ->will($this->returnCallback(function(GetHttpRequest $request) {
                 $request->method = 'GET';
             }))
         ;
         $paymentMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplateRequest'))
-            ->will($this->returnCallback(function(RenderTemplateRequest $request) use ($templateName, $publishableKey, $model, $testCase) {
+            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
+            ->will($this->returnCallback(function(RenderTemplate $request) use ($templateName, $publishableKey, $model, $testCase) {
                 $testCase->assertEquals($templateName, $request->getTemplateName());
 
                 $context = $request->getContext();
@@ -160,15 +160,15 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
         $action->setApi(new Keys($publishableKey, 'secretKey'));
 
         try {
-            $action->execute(new ObtainTokenRequest($model));
-        } catch (ResponseInteractiveRequest $interactiveRequest) {
-            $this->assertEquals('theContent', $interactiveRequest->getContent());
+            $action->execute(new ObtainToken($model));
+        } catch (HttpResponse $reply) {
+            $this->assertEquals('theContent', $reply->getContent());
 
             return;
         }
 
 
-        $this->fail('Response interactive request was expected to be thrown.');
+        $this->fail('HttpResponse reply was expected to be thrown.');
     }
 
     /**
@@ -184,15 +184,15 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Http\GetRequestRequest'))
-            ->will($this->returnCallback(function(GetRequestRequest $request) {
+            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
+            ->will($this->returnCallback(function(GetHttpRequest $request) {
                 $request->method = 'POST';
             }))
         ;
         $paymentMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplateRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
         ;
 
         $action = new ObtainTokenAction($templateName);
@@ -200,12 +200,12 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
         $action->setApi(new Keys($publishableKey, 'secretKey'));
 
         try {
-            $action->execute(new ObtainTokenRequest($model));
-        } catch (ResponseInteractiveRequest $interactiveRequest) {
+            $action->execute(new ObtainToken($model));
+        } catch (HttpResponse $reply) {
             return;
         }
 
-        $this->fail('Response interactive request was expected to be thrown.');
+        $this->fail('HttpResponse reply was expected to be thrown.');
     }
 
     /**
@@ -221,8 +221,8 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Http\GetRequestRequest'))
-            ->will($this->returnCallback(function(GetRequestRequest $request) {
+            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
+            ->will($this->returnCallback(function(GetHttpRequest $request) {
                 $request->method = 'POST';
                 $request->request = array('stripeToken' => 'theToken');
             }))
@@ -232,9 +232,9 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment($paymentMock);
         $action->setApi(new Keys($publishableKey, 'secretKey'));
 
-        $action->execute($obtainTokenRequest = new ObtainTokenRequest($model));
+        $action->execute($obtainToken = new ObtainToken($model));
 
-        $model = $obtainTokenRequest->getModel();
+        $model = $obtainToken->getModel();
         $this->assertEquals('theToken', $model['card']);
     }
 

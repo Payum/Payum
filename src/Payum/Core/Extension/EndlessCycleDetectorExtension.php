@@ -3,7 +3,7 @@ namespace Payum\Core\Extension;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\LogicException;
-use Payum\Core\Request\InteractiveRequestInterface;
+use Payum\Core\Reply\ReplyInterface;
 
 class EndlessCycleDetectorExtension implements ExtensionInterface 
 {
@@ -74,7 +74,7 @@ class EndlessCycleDetectorExtension implements ExtensionInterface
     /**
      * {@inheritdoc}
      */
-    public function onInteractiveRequest(InteractiveRequestInterface $interactiveRequest, $request, ActionInterface $action)
+    public function onReply(ReplyInterface $reply, $request, ActionInterface $action)
     {
         if ($request === $this->firstRequest) {
             $this->firstRequest = null;

@@ -60,7 +60,7 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSetFirstRequestToNullOnInteractiveRequestIfRequestEqualsFirst()
+    public function shouldSetFirstRequestToNullOnReplyIfRequestSameAsFirst()
     {
         $request = new \stdClass;
 
@@ -71,7 +71,7 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
         //guard
         $this->assertAttributeSame($request, 'firstRequest', $extension);
 
-        $extension->onInteractiveRequest($this->createInteractiveRequestMock(), $request, $this->createActionMock());
+        $extension->onReply($this->createReplyMock(), $request, $this->createActionMock());
 
         $this->assertAttributeEquals(null, 'firstRequest', $extension);
     }
@@ -79,7 +79,7 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSetFirstRequestToNullOnInteractiveRequestIfRequestNotEqualsFirst()
+    public function shouldNotSetFirstRequestToNullOnReplyIfRequestNotSameAsFirst()
     {
         $request = new \stdClass;
         $otherRequest = new \stdClass;
@@ -91,7 +91,7 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
         //guard
         $this->assertAttributeSame($request, 'firstRequest', $extension);
 
-        $extension->onInteractiveRequest($this->createInteractiveRequestMock(), $otherRequest, $this->createActionMock());
+        $extension->onReply($this->createReplyMock(), $otherRequest, $this->createActionMock());
 
         $this->assertAttributeSame($request, 'firstRequest', $extension);
     }
@@ -222,9 +222,9 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
         $extension->onPreExecute(new \stdClass);
     }
 
-    protected function createInteractiveRequestMock()
+    protected function createReplyMock()
     {
-        return $this->getMock('Payum\Core\Request\InteractiveRequestInterface');
+        return $this->getMock('Payum\Core\Reply\ReplyInterface');
     }
     
     protected function createActionMock()

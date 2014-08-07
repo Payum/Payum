@@ -3,7 +3,7 @@ namespace Payum\Core\Bridge\Psr\Log;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Extension\ExtensionInterface;
-use Payum\Core\Request\InteractiveRequestInterface;
+use Payum\Core\Reply\ReplyInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -58,7 +58,7 @@ class LoggerExtension implements ExtensionInterface, LoggerAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function onInteractiveRequest(InteractiveRequestInterface $interactiveRequest, $request, ActionInterface $action)
+    public function onReply(ReplyInterface $reply, $request, ActionInterface $action)
     {
     }
 

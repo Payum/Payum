@@ -4,7 +4,7 @@ namespace Payum\Paypal\Rest\Tests\Action;
 
 use Payum\Paypal\Rest\Action\StatusAction;
 use Payum\Paypal\Rest\Model\PaymentDetails;
-use Payum\Core\Request\BinaryMaskStatusRequest;
+use Payum\Core\Request\GetBinaryStatus;
 
 class StatusActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,7 +33,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StatusAction();
 
-        $request = new BinaryMaskStatusRequest(new \stdClass());
+        $request = new GetBinaryStatus(new \stdClass());
 
         $this->assertFalse($action->supports($request));
     }
@@ -70,7 +70,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
         $model = new PaymentDetails();
         $model->setState('created');
 
-        $request = new BinaryMaskStatusRequest($model);
+        $request = new GetBinaryStatus($model);
 
         $action->execute($request);
 
@@ -86,7 +86,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
 
         $model = new PaymentDetails();
 
-        $request = new BinaryMaskStatusRequest($model);
+        $request = new GetBinaryStatus($model);
 
         $action->execute($request);
 
@@ -103,7 +103,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
         $model = new PaymentDetails();
         $model->setState('approved');
 
-        $request = new BinaryMaskStatusRequest($model);
+        $request = new GetBinaryStatus($model);
 
         $action->execute($request);
 
@@ -120,7 +120,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
         $model = new PaymentDetails();
         $model->setState('random');
 
-        $request = new BinaryMaskStatusRequest($model);
+        $request = new GetBinaryStatus($model);
 
         $action->execute($request);
 

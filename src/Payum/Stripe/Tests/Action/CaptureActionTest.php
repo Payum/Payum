@@ -2,7 +2,7 @@
 namespace Payum\Stripe\Tests\Action\Api;
 
 use Payum\Core\PaymentInterface;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\Capture;
 use Payum\Stripe\Action\CaptureAction;
 
 class CaptureActionTest extends \PHPUnit_Framework_TestCase
@@ -28,27 +28,27 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestWithArrayAccessModel()
+    public function shouldSupportCaptureWithArrayAccessModel()
     {
         $action = new CaptureAction;
 
-        $this->assertTrue($action->supports(new CaptureRequest(array())));
+        $this->assertTrue($action->supports(new Capture(array())));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestWithNotArrayAccessModel()
+    public function shouldNotSupportCaptureArrayAccessModel()
     {
         $action = new CaptureAction;
 
-        $this->assertFalse($action->supports(new CaptureRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new Capture(new \stdClass)));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportNotCaptureRequest()
+    public function shouldNotSupportNotCapture()
     {
         $action = new CaptureAction;
 
@@ -86,7 +86,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction;
         $action->setPayment($paymentMock);
 
-        $action->execute(new CaptureRequest($model));
+        $action->execute(new Capture($model));
     }
 
     /**
@@ -100,13 +100,13 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Stripe\Request\Api\ObtainTokenRequest'))
+            ->with($this->isInstanceOf('Payum\Stripe\Request\Api\ObtainToken'))
         ;
 
         $action = new CaptureAction;
         $action->setPayment($paymentMock);
 
-        $action->execute(new CaptureRequest($model));
+        $action->execute(new Capture($model));
     }
 
     /**
@@ -122,13 +122,13 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Stripe\Request\Api\CreateChargeRequest'))
+            ->with($this->isInstanceOf('Payum\Stripe\Request\Api\CreateCharge'))
         ;
 
         $action = new CaptureAction;
         $action->setPayment($paymentMock);
 
-        $action->execute(new CaptureRequest($model));
+        $action->execute(new Capture($model));
     }
 
     /**

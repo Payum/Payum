@@ -4,8 +4,8 @@ namespace Payum\OmnipayBridge\Tests\Functional;
 use Omnipay\Dummy\Gateway;
 
 use Payum\OmnipayBridge\OnsitePaymentFactory;
-use Payum\Core\Request\BinaryMaskStatusRequest;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\GetBinaryStatus;
+use Payum\Core\Request\Capture;
 
 class PaymentTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,7 +18,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $date = new \DateTime('now + 2 year');
 
-        $captureRequest = new CaptureRequest(array(
+        $capture = new Capture(array(
             'amount' => '1000.00',
             'card' => array(
                 'number' => '4242424242424242', // must be authorized
@@ -30,9 +30,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             )
         ));
 
-        $payment->execute($captureRequest);
+        $payment->execute($capture);
 
-        $statusRequest = new BinaryMaskStatusRequest($captureRequest->getModel());
+        $statusRequest = new GetBinaryStatus($capture->getModel());
         $payment->execute($statusRequest);
 
         $this->assertTrue($statusRequest->isSuccess());
@@ -47,7 +47,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $date = new \DateTime('now + 2 year');
 
-        $captureRequest = new CaptureRequest(array(
+        $capture = new Capture(array(
             'amount' => '1000.00',
             'card' => array(
                 'number' => '4111111111111111', //must be declined,
@@ -59,9 +59,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             )
         ));
 
-        $payment->execute($captureRequest);
+        $payment->execute($capture);
 
-        $statusRequest = new BinaryMaskStatusRequest($captureRequest->getModel());
+        $statusRequest = new GetBinaryStatus($capture->getModel());
         $payment->execute($statusRequest);
 
         $this->assertTrue($statusRequest->isFailed());

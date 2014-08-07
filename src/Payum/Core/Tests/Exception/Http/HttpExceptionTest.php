@@ -31,7 +31,7 @@ class HttpExceptionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedSameAsStanrdException()
+    public function couldBeConstructedSameAsStandardException()
     {
         new HttpException('aMessage', 404);
     }
@@ -104,30 +104,4 @@ class HttpExceptionTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals(404, $httpException->getCode());
     }
-    
-    
-//
-//    /**
-//     * @test
-//     */
-//    public function shouldAllowGetRequestSetInConstructor()
-//    {
-//        $expectedRequest = new Request;
-//        
-//        $exception = new HttpException($expectedRequest, new Response);
-//        
-//        $this->assertSame($expectedRequest, $exception->getRequest());
-//    }
-//
-//    /**
-//     * @test
-//     */
-//    public function shouldAllowGetResponseSetInConstructor()
-//    {
-//        $expectedResponse = new Response();
-//
-//        $exception = new HttpException(new Request, $expectedResponse);
-//
-//        $this->assertSame($expectedResponse, $exception->getResponse());
-//    }
 }

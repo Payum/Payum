@@ -7,7 +7,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Payex\Api\RecurringApi;
-use Payum\Payex\Request\Api\StopRecurringPaymentRequest;
+use Payum\Payex\Request\Api\StopRecurringPayment;
 
 class StopRecurringPaymentAction implements ActionInterface, ApiAwareInterface
 {
@@ -33,7 +33,7 @@ class StopRecurringPaymentAction implements ActionInterface, ApiAwareInterface
      */
     public function execute($request)
     {
-        /** @var $request StopRecurringPaymentRequest */
+        /** @var $request StopRecurringPayment */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -55,7 +55,7 @@ class StopRecurringPaymentAction implements ActionInterface, ApiAwareInterface
     public function supports($request)
     {
         return
-            $request instanceof StopRecurringPaymentRequest &&
+            $request instanceof StopRecurringPayment &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

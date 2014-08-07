@@ -2,7 +2,7 @@
 namespace Payum\Payex\Tests\Action;
 
 use Payum\Core\PaymentInterface;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\Capture;
 use Payum\Payex\Action\PaymentDetailsCaptureAction;
 
 class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
@@ -28,21 +28,21 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestWithArrayAsModelIfAutoPayNotSet()
+    public function shouldSupportCaptureWithArrayAsModelIfAutoPayNotSet()
     {
         $action = new PaymentDetailsCaptureAction();
 
-        $this->assertTrue($action->supports(new CaptureRequest(array())));
+        $this->assertTrue($action->supports(new Capture(array())));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestWithArrayAsModelIfAutoPaySet()
+    public function shouldNotSupportCaptureayAsModelIfAutoPaySet()
     {
         $action = new PaymentDetailsCaptureAction();
 
-        $this->assertFalse($action->supports(new CaptureRequest(array(
+        $this->assertFalse($action->supports(new Capture(array(
             'autoPay' => true
         ))));
     }
@@ -50,11 +50,11 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestWithArrayAsModelIfAutoPaySetToFalse()
+    public function shouldSupportCaptureCaptureelIfAutoPaySetToFalse()
     {
         $action = new PaymentDetailsCaptureAction();
 
-        $this->assertTrue($action->supports(new CaptureRequest(array(
+        $this->assertTrue($action->supports(new Capture(array(
             'autoPay' => false
         ))));
     }
@@ -62,11 +62,11 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestWithArrayAsModelIfRecurringSetToTrueAndAutoPaySet()
+    public function shouldSupportCaptureWithArrCaptureurringSetToTrueAndAutoPaySet()
     {
         $action = new PaymentDetailsCaptureAction();
 
-        $this->assertTrue($action->supports(new CaptureRequest(array(
+        $this->assertTrue($action->supports(new Capture(array(
             'autoPay' => true,
             'recurring' => true
         ))));
@@ -75,7 +75,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotCaptureRequest()
+    public function shouldNotSupportAnythingNotCapture()
     {
         $action = new PaymentDetailsCaptureAction;
 
@@ -85,11 +85,11 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestWithNotArrayAccessModel()
+    public function shouldNotSupportCaptureWithNotArrayAccessModel()
     {
         $action = new PaymentDetailsCaptureAction;
 
-        $this->assertFalse($action->supports(new CaptureRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new Capture(new \stdClass)));
     }
 
     /**
@@ -113,13 +113,13 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\InitializeOrderRequest'))
+            ->with($this->isInstanceOf('Payum\Payex\Request\Api\InitializeOrder'))
         ;
 
         $action = new PaymentDetailsCaptureAction();
         $action->setPayment($paymentMock);
 
-        $request = new CaptureRequest(array());
+        $request = new Capture(array());
         
         $action->execute($request);
     }
@@ -133,13 +133,13 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\CompleteOrderRequest'))
+            ->with($this->isInstanceOf('Payum\Payex\Request\Api\CompleteOrder'))
         ;
 
         $action = new PaymentDetailsCaptureAction();
         $action->setPayment($paymentMock);
 
-        $request = new CaptureRequest(array(
+        $request = new Capture(array(
             'orderRef' => 'aRef',
         ));
 
@@ -155,13 +155,13 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\StartRecurringPaymentRequest'))
+            ->with($this->isInstanceOf('Payum\Payex\Request\Api\StartRecurringPayment'))
         ;
 
         $action = new PaymentDetailsCaptureAction();
         $action->setPayment($paymentMock);
 
-        $request = new CaptureRequest(array(
+        $request = new Capture(array(
             'orderRef' => 'aRef',
             'recurring' => true
         ));

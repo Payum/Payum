@@ -9,8 +9,8 @@ use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
-use Payum\Core\Request\CaptureRequest;
-use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\Capture;
+use Payum\Core\Reply\HttpRedirect;
 
 class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
 {
@@ -25,7 +25,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
     public function execute($request)
     {
         /**
-         * @var $request \Payum\Core\Request\CaptureRequest
+         * @var $request \Payum\Core\Request\Capture
          */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
@@ -43,7 +43,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
 
             foreach($model->links as $link) {
                 if($link->rel == 'approval_url') {
-                    throw new RedirectUrlInteractiveRequest($link->href);
+                    throw new HttpRedirect($link->href);
                 }
             }
         }
@@ -75,7 +75,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
     public function supports($request)
     {
         return
-            $request instanceof CaptureRequest &&
+            $request instanceof Capture &&
             $request->getModel() instanceof Payment
         ;
     }

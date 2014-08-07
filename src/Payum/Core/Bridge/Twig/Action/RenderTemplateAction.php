@@ -3,7 +3,7 @@ namespace Payum\Core\Bridge\Twig\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Request\RenderTemplateRequest;
+use Payum\Core\Request\RenderTemplate;
 
 class RenderTemplateAction implements ActionInterface
 {
@@ -32,7 +32,7 @@ class RenderTemplateAction implements ActionInterface
      */
     public function execute($request)
     {
-        /** @var $request RenderTemplateRequest */
+        /** @var $request RenderTemplate */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -48,6 +48,6 @@ class RenderTemplateAction implements ActionInterface
      */
     public function supports($request)
     {
-        return $request instanceof RenderTemplateRequest;
+        return $request instanceof RenderTemplate;
     }
 }

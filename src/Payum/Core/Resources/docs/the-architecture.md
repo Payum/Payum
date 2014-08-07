@@ -15,7 +15,7 @@ $payment = new Payment;
 $payment->addAction(new CaptureAction));
 
 //CaptureAction does its job.
-$payment->execute($capture = new CaptureRequest(array(
+$payment->execute($capture = new Capture(array(
     'amount' => 100,
     'currency' => 'USD'
 ));
@@ -39,7 +39,7 @@ class CaptureAction implements ActionInterface
 
     public function supports($request)
     {
-        return $request instanceof CaptureRequest;
+        return $request instanceof Capture;
     }
 }
 ```
@@ -69,11 +69,13 @@ class FooAction extends PaymentAwareAction
 
 _**Link**: See paypal [CaptureAction][paypal-capture-action]._
 
-## Interactive Requests
+## Replys
 
-What about redirects? Some payments, like paypal express for instance, require authorization on their side. Payum can handle such cases and for that we use something called _[interactive requests][base-interactive-request]_.
+What about redirects or a credit card form? Some payments, 
+like Paypal ExpressCheckout for instance, require authorization on their side. 
+Payum can handle such cases and for that we use something called _[replys][base-reply]_.
 It is a special request object, which extends an exception.
-You can throw an interactive redirect request at any time and catch it at a top level.
+You can throw a  redirect reply at any time and catch it at a top level.
 
 ```php
 <?php
@@ -81,13 +83,13 @@ class FooAction implements ActionInterface
 {
     public function execute($request)
     {
-        throw new RedirectUrlInteractiveRequest('http://example.com/auth');
+        throw new HttpRedirect('http://example.com/auth');
     }
 }
 ```
 
-Above I see an action which throws interactive request.
-The request is about redirecting user to another url.
+Above we see an action which throws a reply.
+The reply is about redirecting a user to another url.
 Next code example demonstrate how you catch and process it.
 
 ```php
@@ -96,13 +98,13 @@ try {
     $payment->addAction(new FooAction);
 
     $payment->execute(new FooRequest);
-} catch (RedirectUrlInteractiveRequest $redirectUrlInteractiveRequest) {
-    header( 'Location: '.$redirectUrlInteractiveRequest->getUrl());
+} catch (HttpRedirect $reply) {
+    header( 'Location: '.$reply->getUrl());
     exit;
 }
 ```
 
-_**Link**: See paypal [AuthorizeTokenAction][paypal-authorize-token-action]._
+_**Link**: See real world example: [AuthorizeTokenAction][paypal-authorize-token-action]._
 
 ## Managing status
 
@@ -127,7 +129,7 @@ class FooAction implements ActionInterface
 
     public function supports($request)
     {
-        return $request instanceof StatusRequestInterface;
+        return $request instanceof GetStatusInterface;
     }
 }
 ```
@@ -137,7 +139,7 @@ class FooAction implements ActionInterface
 
 $payment->addAction(new FooAction);
 
-$payment->execute($status = new SimpleStatusRequest);
+$payment->execute($status = new GetHumanStatus);
 
 $status->isSuccess();
 $status->isPending();
@@ -263,10 +265,10 @@ Back to [index](index.md).
 
 [sandbox-online]: http://sandbox.payum.forma-dev.com
 [sandbox-code]: https://github.com/Payum/PayumBundleSandbox
-[base-request]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Request/BaseModelRequest.php
-[status-request-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Request/StatusRequestInterface.php
-[status-request]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Request/SimpleStatusRequest.php
-[base-interactive-request]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Request/BaseInteractiveRequest.php
+[base-request]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Request/BaseModelAware.php
+[status-request-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Request/GetStatusInterface.php
+[status-request]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Request/GetHumanStatus.php
+[base-reply]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Reply/Base.php
 [action-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Action/ActionInterface.php
 [extension-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Extension/ExtensionInterface.php
 [storage-extension-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Extension/StorageExtension.php

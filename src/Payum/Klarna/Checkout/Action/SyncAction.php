@@ -4,9 +4,9 @@ namespace Payum\Klarna\Checkout\Action;
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Request\SyncRequest;
+use Payum\Core\Request\Sync;
 use Payum\Klarna\Checkout\Constants;
-use Payum\Klarna\Checkout\Request\Api\FetchOrderRequest;
+use Payum\Klarna\Checkout\Request\Api\FetchOrder;
 
 class SyncAction extends PaymentAwareAction
 {
@@ -15,7 +15,7 @@ class SyncAction extends PaymentAwareAction
      */
     public function execute($request)
     {
-        /** @var $request \Payum\Core\Request\SyncRequest */
+        /** @var $request \Payum\Core\Request\Sync */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -23,10 +23,9 @@ class SyncAction extends PaymentAwareAction
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         if ($model['location']) {
-            $fetchOrderRequest = new FetchOrderRequest($model);
-            $this->payment->execute($fetchOrderRequest);
+            $this->payment->execute($fetchOrder = new FetchOrder($model));
 
-            $model->replace($fetchOrderRequest->getOrder()->marshal());
+            $model->replace($fetchOrder->getOrder()->marshal());
         }
     }
 
@@ -36,7 +35,7 @@ class SyncAction extends PaymentAwareAction
     public function supports($request)
     {
         return
-            $request instanceof SyncRequest &&
+            $request instanceof Sync &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

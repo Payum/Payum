@@ -9,26 +9,26 @@ _**Council**: You can filter log by `[Payum]`. For example using `grep` tool._
 use Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension;
 use Payum\Core\Tests\Mocks\Action\CaptureAction;
 use Payum\Core\Payment;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\Capture;
 
 $payment = new Payment;
 $payment->addExtension(new LogExecutedActionsExtension($logger));
 $payment->addAction(new CaptureAction);
 
-$payment->execute(new CaptureRequest($model = new \stdClass));
+$payment->execute(new Capture($model = new \stdClass));
 ```
 
 Here's an example of what the log may contain:
 
 ```
-DEBUG - [Payum] 1# Payum\Core\Action\StatusDetailsAggregatedModelAction::execute(SimpleStatusRequest{model: Token})
-DEBUG - [Payum] 2# Payum\Payex\Action\PaymentDetailsStatusAction::execute(SimpleStatusRequest{model: PaymentDetails})
-DEBUG - [Payum] 1# Payum\Core\Action\CaptureDetailsAggregatedModelAction::execute(SecuredCaptureRequest{model: Token})
-DEBUG - [Payum] 2# Payum\Payex\Action\PaymentDetailsCaptureAction::execute(SecuredCaptureRequest{model: PaymentDetails})
-DEBUG - [Payum] 3# Payum\Payex\Action\Api\InitializeOrderAction::execute(InitializeOrderRequest{model: ArrayObject})
-DEBUG - [Payum] 3# InitializeOrderAction::execute(InitializeOrderRequest{model: ArrayObject}) throws interactive RedirectUrlInteractiveRequest{url: https://test-confined.payex.com/PxOrderCC.aspx?orderRef=7cbefc70ff294fd194d2411f457423d6}
-DEBUG - [Payum] 2# PaymentDetailsCaptureAction::execute(SecuredCaptureRequest{model: PaymentDetails}) throws interactive RedirectUrlInteractiveRequest{url: https://test-confined.payex.com/PxOrderCC.aspx?orderRef=7cbefc70ff294fd194d2411f457423d6}
-DEBUG - [Payum] 1# CaptureDetailsAggregatedModelAction::execute(SecuredCaptureRequest{model: PaymentDetails}) throws interactive RedirectUrlInteractiveRequest{url: https://test-confined.payex.com/PxOrderCC.aspx?orderRef=7cbefc70ff294fd194d2411f457423d6}
+DEBUG - [Payum] 1# Payum\Core\Action\StatusDetailsAggregatedModelAction::execute(GetHumanStatus{model: Token})
+DEBUG - [Payum] 2# Payum\Payex\Action\PaymentDetailsStatusAction::execute(GetHumanStatus{model: PaymentDetails})
+DEBUG - [Payum] 1# Payum\Core\Action\CaptureDetailsAggregatedModelAction::execute(SecuredCapture{model: Token})
+DEBUG - [Payum] 2# Payum\Payex\Action\PaymentDetailsCaptureAction::execute(SecuredCapture{model: PaymentDetails})
+DEBUG - [Payum] 3# Payum\Payex\Action\Api\InitializeOrderAction::execute(InitializeOrder{model: ArrayObject})
+DEBUG - [Payum] 3# InitializeOrderAction::execute(InitializeOrder{model: ArrayObject}) throws reply HttpRedirect{url: https://test-confined.payex.com/PxOrderCC.aspx?orderRef=7cbefc70ff294fd194d2411f457423d6}
+DEBUG - [Payum] 2# PaymentDetailsCaptureAction::execute(SecuredCapture{model: PaymentDetails}) throws reply HttpRedirect{url: https://test-confined.payex.com/PxOrderCC.aspx?orderRef=7cbefc70ff294fd194d2411f457423d6}
+DEBUG - [Payum] 1# CaptureDetailsAggregatedModelAction::execute(SecuredCapture{model: PaymentDetails}) throws reply HttpRedirect{url: https://test-confined.payex.com/PxOrderCC.aspx?orderRef=7cbefc70ff294fd194d2411f457423d6}
 ```
 
 As you see it shows stack of executed actions. Also it shows some details about the request. For example it could show a model class related with request.

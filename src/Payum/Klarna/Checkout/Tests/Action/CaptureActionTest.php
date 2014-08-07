@@ -2,12 +2,12 @@
 namespace Payum\Klarna\Checkout\Tests\Action;
 
 use Payum\Core\PaymentInterface;
-use Payum\Core\Request\CaptureRequest;
-use Payum\Core\Request\RenderTemplateRequest;
-use Payum\Core\Request\Http\ResponseInteractiveRequest;
+use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\RenderTemplate;
 use Payum\Klarna\Checkout\Action\CaptureAction;
 use Payum\Klarna\Checkout\Constants;
-use Payum\Klarna\Checkout\Request\Api\CreateOrderRequest;
+use Payum\Klarna\Checkout\Request\Api\CreateOrder;
 
 class CaptureActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,17 +32,17 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestWithArrayAsModel()
+    public function shouldSupportCaptureWithArrayAsModel()
     {
         $action = new CaptureAction('aTemplate');
 
-        $this->assertTrue($action->supports(new CaptureRequest(array())));
+        $this->assertTrue($action->supports(new Capture(array())));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotCaptureRequest()
+    public function shouldNotSupportAnythingNotCapture()
     {
         $action = new CaptureAction('aTemplate');
 
@@ -52,11 +52,11 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestWithNotArrayAccessModel()
+    public function shouldNotSupportCaptureWithNotArrayAccessModel()
     {
         $action = new CaptureAction('aTemplate');
 
-        $this->assertFalse($action->supports(new CaptureRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new Capture(new \stdClass)));
     }
 
     /**
@@ -74,26 +74,26 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Core\Request\Http\ResponseInteractiveRequest
+     * @expectedException \Payum\Core\Reply\HttpResponse
      */
-    public function shouldSubExecuteSyncRequestIfModelHasLocationSet()
+    public function shouldSubExecuteSyncIfModelHasLocationSet()
     {
         $paymentMock = $this->createPaymentMock();
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
         $paymentMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplateRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
         ;
 
         $action = new CaptureAction('aTemplate');
         $action->setPayment($paymentMock);
 
-        $action->execute(new CaptureRequest(array(
+        $action->execute(new Capture(array(
             'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
             'location' => 'aLocation',
         )));
@@ -123,15 +123,15 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\CreateOrderRequest'))
-            ->will($this->returnCallback(function(CreateOrderRequest $request) use ($orderMock) {
+            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\CreateOrder'))
+            ->will($this->returnCallback(function(CreateOrder $request) use ($orderMock) {
                 $request->setOrder($orderMock);
             }))
         ;
         $paymentMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
 
         $action = new CaptureAction('aTemplate');
@@ -139,7 +139,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
 
         $model = new \ArrayObject();
 
-        $action->execute(new CaptureRequest($model));
+        $action->execute(new Capture($model));
 
         $this->assertEquals('fooVal', $model['foo']);
         $this->assertEquals('barVal', $model['bar']);
@@ -149,7 +149,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldThrowInteractiveRequestWhenStatusCheckoutIncomplete()
+    public function shouldThrowReplyWhenStatusCheckoutIncomplete()
     {
         $snippet = 'theSnippet';
         $expectedContent = 'theTemplateContent';
@@ -162,8 +162,8 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplateRequest'))
-            ->will($this->returnCallback(function(RenderTemplateRequest $request) use($testCase, $expectedTemplateName, $expectedContext, $expectedContent) {
+            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
+            ->will($this->returnCallback(function(RenderTemplate $request) use($testCase, $expectedTemplateName, $expectedContext, $expectedContent) {
                 $testCase->assertEquals($expectedTemplateName, $request->getTemplateName());
                 $testCase->assertEquals($expectedContext, $request->getContext());
 
@@ -175,13 +175,13 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action->setPayment($paymentMock);
 
         try {
-            $action->execute(new CaptureRequest(array(
+            $action->execute(new Capture(array(
                 'location' => 'aLocation',
                 'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
                 'gui' => array('snippet' => $snippet),
             )));
-        } catch (ResponseInteractiveRequest $interactiveRequest) {
-            $this->assertEquals($expectedContent, $interactiveRequest->getContent());
+        } catch (HttpResponse $reply) {
+            $this->assertEquals($expectedContent, $reply->getContent());
 
             return;
         }
@@ -192,12 +192,12 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotThrowInteractiveRequestWhenStatusNotSet()
+    public function shouldNotThrowReplyWhenStatusNotSet()
     {
         $action = new CaptureAction('aTemplate');
         $action->setPayment($this->createPaymentMock());
 
-        $action->execute(new CaptureRequest(array(
+        $action->execute(new Capture(array(
             'location' => 'aLocation',
             'gui' => array('snippet' => 'theSnippet'),
         )));
@@ -206,12 +206,12 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotThrowInteractiveRequestWhenStatusCreated()
+    public function shouldNotThrowReplyWhenStatusCreated()
     {
         $action = new CaptureAction('aTemplate');
         $action->setPayment($this->createPaymentMock());
 
-        $action->execute(new CaptureRequest(array(
+        $action->execute(new Capture(array(
             'location' => 'aLocation',
             'status' => Constants::STATUS_CREATED,
             'gui' => array('snippet' => 'theSnippet'),

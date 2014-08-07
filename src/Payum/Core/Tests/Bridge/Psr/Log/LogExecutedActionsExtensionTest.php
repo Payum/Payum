@@ -3,9 +3,9 @@ namespace Payum\Core\Tests\Bridge\Psr\Log;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension;
-use Payum\Core\Request\CaptureRequest;
-use Payum\Core\Request\InteractiveRequestInterface;
-use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\Capture;
+use Payum\Core\Reply\ReplyInterface;
+use Payum\Core\Reply\HttpRedirect;
 use Psr\Log\LoggerInterface;
 
 class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
@@ -187,7 +187,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldDecrementStackOnInteractiveRequest()
+    public function shouldDecrementStackOnReply()
     {
         $logger = $this->createLoggerMock();
         $logger
@@ -205,8 +205,8 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension->onPreExecute('string');
         $extension->onPreExecute('string');
-        $extension->onInteractiveRequest($this->createInteractiveRequestMock(), new \stdClass, $this->createActionMock());
-        $extension->onInteractiveRequest($this->createInteractiveRequestMock(), new \stdClass, $this->createActionMock());
+        $extension->onReply($this->createReplyMock(), new \stdClass, $this->createActionMock());
+        $extension->onReply($this->createReplyMock(), new \stdClass, $this->createActionMock());
     }
 
     /**
@@ -274,13 +274,13 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new FooAction;
         $model = array();
-        $modelRequest = new CaptureRequest($model);
+        $modelRequest = new Capture($model);
 
         $logger = $this->createLoggerMock();
         $logger
             ->expects($this->at(0))
             ->method('debug')
-            ->with('[Payum] 1# '.get_class($action).'::execute(CaptureRequest{model: ArrayObject})')
+            ->with('[Payum] 1# '.get_class($action).'::execute(Capture{model: ArrayObject})')
         ;
 
         $extension = new LogExecutedActionsExtension($logger);
@@ -296,13 +296,13 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new FooAction;
         $stdModel = new \stdClass;
-        $stdModelRequest = new CaptureRequest($stdModel);
+        $stdModelRequest = new Capture($stdModel);
 
         $logger = $this->createLoggerMock();
         $logger
             ->expects($this->at(0))
             ->method('debug')
-            ->with('[Payum] 1# '.get_class($action).'::execute(CaptureRequest{model: stdClass})')
+            ->with('[Payum] 1# '.get_class($action).'::execute(Capture{model: stdClass})')
         ;
 
         $extension = new LogExecutedActionsExtension($logger);
@@ -314,45 +314,45 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldLogOnInteractiveRequest()
+    public function shouldLogOnReply()
     {
         $action = new FooAction;
-        $interactiveRequest = $this->createInteractiveRequestMock();
+        $replyMock = $this->createReplyMock();
 
-        $ro = new \ReflectionObject($interactiveRequest);
+        $ro = new \ReflectionObject($replyMock);
 
         $logger = $this->createLoggerMock();
         $logger
             ->expects($this->at(0))
             ->method('debug')
-            ->with('[Payum] 1# FooAction::execute(string) throws interactive '.$ro->getShortName())
+            ->with('[Payum] 1# FooAction::execute(string) throws reply '.$ro->getShortName())
         ;
 
         $extension = new LogExecutedActionsExtension($logger);
 
         $extension->onPreExecute('string');
-        $extension->onInteractiveRequest($interactiveRequest, 'string', $action);
+        $extension->onReply($replyMock, 'string', $action);
     }
 
     /**
      * @test
      */
-    public function shouldLogRedirectUrlInteractiveRequestWithUrlIncludedOnInteractiveRequest()
+    public function shouldLogHttpRedirectReplyWithUrlIncludedOnReply()
     {
         $action = new FooAction;
-        $interactiveRequest = new RedirectUrlInteractiveRequest('http://example.com');
+        $reply = new HttpRedirect('http://example.com');
 
         $logger = $this->createLoggerMock();
         $logger
             ->expects($this->at(0))
             ->method('debug')
-            ->with('[Payum] 1# FooAction::execute(string) throws interactive RedirectUrlInteractiveRequest{url: '.$interactiveRequest->getUrl().'}')
+            ->with('[Payum] 1# FooAction::execute(string) throws reply HttpRedirect{url: '.$reply->getUrl().'}')
         ;
 
         $extension = new LogExecutedActionsExtension($logger);
 
         $extension->onPreExecute('string');
-        $extension->onInteractiveRequest($interactiveRequest, 'string', $action);
+        $extension->onReply($reply, 'string', $action);
     }
 
     /**
@@ -402,11 +402,11 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|InteractiveRequestInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|ReplyInterface
      */
-    protected function createInteractiveRequestMock()
+    protected function createReplyMock()
     {
-        return $this->getMock('Payum\Core\Request\InteractiveRequestInterface');
+        return $this->getMock('Payum\Core\Reply\ReplyInterface');
     }
 
     /**

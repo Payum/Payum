@@ -1,8 +1,8 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
-use Payum\Core\Request\NotifyRequest;
-use Payum\Core\Request\SyncRequest;
+use Payum\Core\Request\Notify;
+use Payum\Core\Request\Sync;
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
 
@@ -13,12 +13,12 @@ class NotifyAction extends PaymentAwareAction
      */
     public function execute($request)
     {
-        /** @var $request NotifyRequest */
+        /** @var $request Notify */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        $this->payment->execute(new SyncRequest($request->getModel()));
+        $this->payment->execute(new Sync($request->getModel()));
     }
 
     /**
@@ -27,7 +27,7 @@ class NotifyAction extends PaymentAwareAction
     public function supports($request)
     {
         return 
-            $request instanceof NotifyRequest &&
+            $request instanceof Notify &&
             $request->getModel() instanceof \ArrayAccess
         ; 
     }

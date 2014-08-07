@@ -2,7 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetRecurringPaymentsProfileDetailsAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetRecurringPaymentsProfileDetailsRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetRecurringPaymentsProfileDetails;
 
 class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,7 +32,7 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_Te
         $action = new GetRecurringPaymentsProfileDetailsAction();
         
         $this->assertTrue(
-            $action->supports(new GetRecurringPaymentsProfileDetailsRequest($this->getMock('ArrayAccess')))
+            $action->supports(new GetRecurringPaymentsProfileDetails($this->getMock('ArrayAccess')))
         );
     }
 
@@ -68,7 +68,7 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_Te
     {
         $action = new GetRecurringPaymentsProfileDetailsAction();
         
-        $request = new GetRecurringPaymentsProfileDetailsRequest(array());
+        $request = new GetRecurringPaymentsProfileDetails(array());
 
         $action->execute($request);
     }
@@ -95,7 +95,7 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_Te
         $action = new GetRecurringPaymentsProfileDetailsAction();
         $action->setApi($apiMock);
 
-        $request = new GetRecurringPaymentsProfileDetailsRequest(array(
+        $request = new GetRecurringPaymentsProfileDetails(array(
             'PROFILEID' => 'theProfileId', 
         ));
 
@@ -121,7 +121,7 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_Te
         $action = new GetRecurringPaymentsProfileDetailsAction();
         $action->setApi($apiMock);
 
-        $request = new GetRecurringPaymentsProfileDetailsRequest(array(
+        $request = new GetRecurringPaymentsProfileDetails(array(
             'PROFILEID' => 'theProfileId',
         ));
 

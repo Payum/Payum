@@ -2,7 +2,7 @@
 namespace Payum\Core\Extension;
 
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\Request\InteractiveRequestInterface;
+use Payum\Core\Reply\ReplyInterface;
 
 interface ExtensionInterface 
 {
@@ -24,13 +24,13 @@ interface ExtensionInterface
     function onPostExecute($request, ActionInterface $action);
 
     /**
-     * @param \Payum\Core\Request\InteractiveRequestInterface $interactiveRequest
+     * @param \Payum\Core\Reply\ReplyInterface $reply
      * @param mixed $request
      * @param \Payum\Core\Action\ActionInterface $action
      *
-     * @return null|\Payum\Core\Request\InteractiveRequestInterface an extension able to change interactive request to something else.
+     * @return null|\Payum\Core\Reply\ReplyInterface an extension able to change reply to something else.
      */
-    function onInteractiveRequest(InteractiveRequestInterface $interactiveRequest, $request, ActionInterface $action);
+    function onReply(ReplyInterface $reply, $request, ActionInterface $action);
 
     /**
      * @param \Exception $exception

@@ -5,7 +5,7 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Offline\Constants;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\Capture;
 
 class CaptureAction implements ActionInterface
 {
@@ -14,7 +14,7 @@ class CaptureAction implements ActionInterface
      */
     public function execute($request)
     {
-        /** @var $request \Payum\Core\Request\CaptureRequest */
+        /** @var $request \Payum\Core\Request\Capture */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -34,7 +34,7 @@ class CaptureAction implements ActionInterface
     public function supports($request)
     {
         return
-            $request instanceof CaptureRequest &&
+            $request instanceof Capture &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

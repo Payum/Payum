@@ -3,10 +3,10 @@ namespace Payum\Be2Bill\Tests\Action;
 
 use Payum\Be2Bill\Api;
 use Payum\Core\PaymentInterface;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\Capture;
 use Payum\Be2Bill\Action\CaptureOnsiteAction;
-use Payum\Core\Request\Http\GetRequestRequest;
-use Payum\Core\Request\Http\PostRedirectUrlInteractiveRequest;
+use Payum\Core\Request\GetHttpRequest;
+use Payum\Core\Reply\HttpPostRedirect;
 
 class CaptureOnsiteActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,13 +41,13 @@ class CaptureOnsiteActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestWithArrayAccessAsModel()
+    public function shouldSupportCaptureWithArrayAccessAsModel()
     {
         $action = new CaptureOnsiteAction();
 
         $model = new \ArrayObject(array());
 
-        $request = new CaptureRequest($model);
+        $request = new Capture($model);
 
         $this->assertTrue($action->supports($request));
     }
@@ -55,7 +55,7 @@ class CaptureOnsiteActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportNotCaptureRequest()
+    public function shouldNotSupportNotCapture()
     {
         $action = new CaptureOnsiteAction();
 
@@ -67,11 +67,11 @@ class CaptureOnsiteActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestAndNotArrayAsModel()
+    public function shouldNotSupportCaptureAndNotArrayAsModel()
     {
         $action = new CaptureOnsiteAction();
 
-        $request = new CaptureRequest(new \stdClass());
+        $request = new Capture(new \stdClass());
 
         $this->assertFalse($action->supports($request));
     }
@@ -116,7 +116,7 @@ class CaptureOnsiteActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Core\Request\Http\PostRedirectUrlInteractiveRequest
+     * @expectedException \Payum\Core\Reply\HttpPostRedirect
      */
     public function shouldRedirectToBe2billSiteIfExecCodeNotPresentInQuery()
     {
@@ -143,14 +143,14 @@ class CaptureOnsiteActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Http\GetRequestRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
         ;
 
         $action = new CaptureOnsiteAction();
         $action->setApi($apiMock);
         $action->setPayment($paymentMock);
 
-        $request = new CaptureRequest($model);
+        $request = new Capture($model);
 
         $action->execute($request);
     }
@@ -177,8 +177,8 @@ class CaptureOnsiteActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Http\GetRequestRequest'))
-            ->will($this->returnCallback(function(GetRequestRequest $request) {
+            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
+            ->will($this->returnCallback(function(GetHttpRequest $request) {
                 $request->query['EXECCODE'] = 1;
                 $request->query['FOO'] = 'fooVal';
             }))
@@ -188,7 +188,7 @@ class CaptureOnsiteActionTest extends \PHPUnit_Framework_TestCase
         $action->setApi($apiMock);
         $action->setPayment($paymentMock);
 
-        $request = new CaptureRequest($model);
+        $request = new Capture($model);
 
         $action->execute($request);
 

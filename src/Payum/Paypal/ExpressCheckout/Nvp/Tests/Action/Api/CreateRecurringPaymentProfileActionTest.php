@@ -2,7 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfileRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfile;
 
 class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,13 +31,13 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
     {
         $action = new CreateRecurringPaymentProfileAction();
 
-        $this->assertTrue($action->supports(new CreateRecurringPaymentProfileRequest($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new CreateRecurringPaymentProfile($this->getMock('ArrayAccess'))));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotDoExpressCheckoutPaymentRequest()
+    public function shouldNotSupportAnythingNotCreateRecurringPaymentProfileRequest()
     {
         $action = new CreateRecurringPaymentProfileAction();
 
@@ -66,7 +66,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
     {
         $action = new CreateRecurringPaymentProfileAction();
 
-        $action->execute(new CreateRecurringPaymentProfileRequest(array()));
+        $action->execute(new CreateRecurringPaymentProfile(array()));
     }
 
     /**
@@ -79,7 +79,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
     {
         $action = new CreateRecurringPaymentProfileAction();
 
-        $action->execute(new CreateRecurringPaymentProfileRequest(array(
+        $action->execute(new CreateRecurringPaymentProfile(array(
             'TOKEN' => 'aToken',
         )));
     }
@@ -140,7 +140,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
         $action = new CreateRecurringPaymentProfileAction();
         $action->setApi($apiMock);
 
-        $request = new CreateRecurringPaymentProfileRequest(array(
+        $request = new CreateRecurringPaymentProfile(array(
             'TOKEN' => 'theToken',
             'PROFILESTARTDATE' => 'theStartDate',
             'DESC' => 'theDesc',
@@ -178,7 +178,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
         $action = new CreateRecurringPaymentProfileAction();
         $action->setApi($apiMock);
 
-        $request = new CreateRecurringPaymentProfileRequest(array(
+        $request = new CreateRecurringPaymentProfile(array(
             'TOKEN' => 'theToken',
             'PROFILESTARTDATE' => 'theStartDate',
             'DESC' => 'theDesc',

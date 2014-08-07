@@ -2,7 +2,7 @@
 namespace Payum\AuthorizeNet\Aim\Action;
 
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\Request\StatusRequestInterface;
+use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 
@@ -13,7 +13,7 @@ class StatusAction implements ActionInterface
      */
     public function execute($request)
     {
-        /** @var $request StatusRequestInterface */
+        /** @var $request GetStatusInterface */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -59,7 +59,7 @@ class StatusAction implements ActionInterface
     public function supports($request)
     {
         return 
-            $request instanceof StatusRequestInterface &&
+            $request instanceof GetStatusInterface &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

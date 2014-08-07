@@ -77,14 +77,14 @@ Now we have to implement `notify.php` script which must be accessible from the i
 <?php
 //notify.php
 
-use Payum\Core\Request\SecuredNotifyRequest;
+use Payum\Core\Request\SecuredNotify;
 
 include 'config.php';
 
 $token = $requestVerifier->verify();
 $payment = $registry->getPayment($token->getPaymentName());
 
-$payment->execute(new SecuredNotifyRequest($_REQUEST, $token));
+$payment->execute(new SecuredNotify($_REQUEST, $token));
 ```
 
 ## Setup Paypal IPN.

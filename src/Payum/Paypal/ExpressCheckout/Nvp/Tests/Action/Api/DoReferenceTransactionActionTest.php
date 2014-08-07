@@ -2,7 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoReferenceTransactionAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoReferenceTransactionRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoReferenceTransaction;
 
 class DoReferenceTransactionActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +31,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new DoReferenceTransactionAction();
         
-        $this->assertTrue($action->supports(new DoReferenceTransactionRequest($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new DoReferenceTransaction($this->getMock('ArrayAccess'))));
     }
 
     /**
@@ -66,7 +66,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new DoReferenceTransactionAction();
         
-        $action->execute(new DoReferenceTransactionRequest(array()));
+        $action->execute(new DoReferenceTransaction(array()));
     }
 
     /**
@@ -79,7 +79,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new DoReferenceTransactionAction();
 
-        $request = new DoReferenceTransactionRequest(array(
+        $request = new DoReferenceTransaction(array(
             'REFERENCEID' => 'aReferenceId'
         ));
 
@@ -96,7 +96,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new DoReferenceTransactionAction();
 
-        $request = new DoReferenceTransactionRequest(array(
+        $request = new DoReferenceTransaction(array(
             'REFERENCEID' => 'aReferenceId',
             'PAYMENTACTION' => 'anAction',
         ));
@@ -132,7 +132,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit_Framework_TestCase
         $action = new DoReferenceTransactionAction();
         $action->setApi($apiMock);
 
-        $request = new DoReferenceTransactionRequest(array(
+        $request = new DoReferenceTransaction(array(
             'REFERENCEID' => 'theReferenceId',
             'PAYMENTACTION' => 'theAction',
             'AMT' => 'theAmt'
@@ -161,7 +161,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit_Framework_TestCase
         $action = new DoReferenceTransactionAction();
         $action->setApi($apiMock);
 
-        $request = new DoReferenceTransactionRequest(array(
+        $request = new DoReferenceTransaction(array(
             'REFERENCEID' => 'aReferenceId',
             'PAYMENTACTION' => 'anAction',
             'AMT' => 'anAmt'

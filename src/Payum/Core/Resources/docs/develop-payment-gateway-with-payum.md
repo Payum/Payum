@@ -17,7 +17,7 @@ We assume you use `ArrayObject` as model but you of course may change it to what
 namespace App\Payum\Action;
 
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\Capture;
 
 class CaptureAction implements ActionInterface
 {
@@ -48,7 +48,7 @@ class CaptureAction implements ActionInterface
     public function supports($request)
     {
         return
-            $request instanceof CaptureRequest &&
+            $request instanceof Capture &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }
@@ -66,7 +66,7 @@ Let's assume your model have `status` field and it can be either success or erro
 namespace App\Payum\Action;
 
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\Request\StatusRequestInterface;
+use Payum\Core\Request\GetStatusInterface;
 
 class StatusAction implements ActionInterface
 {
@@ -98,7 +98,7 @@ class StatusAction implements ActionInterface
     public function supports($request)
     {
         return
-            $request instanceof StatusRequestInterface &&
+            $request instanceof GetStatusInterface &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }
@@ -117,8 +117,8 @@ namespace App;
 App\Payum\Action\CaptureAction;
 App\Payum\Action\StatusAction;
 use Payum\Core\Payment;
-use Payum\Core\Request\CaptureRequest;
-use Payum\Core\Request\SimpleStatusRequest;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetHumanStatus;
 
 $payment = new Payment;
 $payment->addAction(new CaptureAction('aUsername', 'aPassword'));
@@ -129,8 +129,8 @@ $model = new ArrayObject(array(
     'currency' => 'USD',
 ));
 
-$payment->execute(new CaptureRequest($model));
-$payment->execute($status = new SimpleStatusRequest($model));
+$payment->execute(new Capture($model));
+$payment->execute($status = new GetHumanStatus($model));
 
 if ($status->isSuccess()) {
     echo 'We purchase staff successfully';

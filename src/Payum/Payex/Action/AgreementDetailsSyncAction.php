@@ -2,9 +2,9 @@
 namespace Payum\Payex\Action;
 
 use Payum\Core\Action\PaymentAwareAction;
-use Payum\Core\Request\SyncRequest;
+use Payum\Core\Request\Sync;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Payex\Request\Api\CheckAgreementRequest;
+use Payum\Payex\Request\Api\CheckAgreement;
 
 class AgreementDetailsSyncAction extends PaymentAwareAction
 {
@@ -13,12 +13,12 @@ class AgreementDetailsSyncAction extends PaymentAwareAction
      */
     public function execute($request)
     {
-        /** @var $request SyncRequest */
+        /** @var $request Sync */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
         
-        $this->payment->execute(new CheckAgreementRequest($request->getModel()));
+        $this->payment->execute(new CheckAgreement($request->getModel()));
     }
 
     /**
@@ -27,7 +27,7 @@ class AgreementDetailsSyncAction extends PaymentAwareAction
     public function supports($request)
     {
         return 
-            $request instanceof SyncRequest &&
+            $request instanceof Sync &&
             $request->getModel() instanceof \ArrayAccess &&
             //Make sure it is payment. Apparently an order(payment) does not have this field.
             $request->getModel()->offsetExists('agreementRef') &&

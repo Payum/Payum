@@ -2,7 +2,7 @@
 namespace Payum\Core\Tests\Bridge\Twig\Action;
 
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
-use Payum\Core\Request\RenderTemplateRequest;
+use Payum\Core\Request\RenderTemplate;
 
 class RenderTemplateActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,17 +27,17 @@ class RenderTemplateActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportRenderTemplateRequest()
+    public function shouldSupportRenderTemplate()
     {
         $action = new RenderTemplateAction($this->createTwigMock(), 'aLayout');
 
-        $this->assertTrue($action->supports(new RenderTemplateRequest('aTemplate', array())));
+        $this->assertTrue($action->supports(new RenderTemplate('aTemplate', array())));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotRenderTemplateRequest()
+    public function shouldNotSupportAnythingNotRenderTemplate()
     {
         $action = new RenderTemplateAction($this->createTwigMock(), 'aLayout');
 
@@ -79,7 +79,7 @@ class RenderTemplateActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new RenderTemplateAction($twigMock, 'theLayout');
 
-        $renderTemplate = new RenderTemplateRequest($expectedTemplate, $context);
+        $renderTemplate = new RenderTemplate($expectedTemplate, $context);
         $action->execute($renderTemplate);
 
         $this->assertEquals($expectedView, $renderTemplate->getResult());
@@ -107,7 +107,7 @@ class RenderTemplateActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new RenderTemplateAction($twigMock, 'defaultLayout');
 
-        $renderTemplate = new RenderTemplateRequest($expectedTemplate, $context);
+        $renderTemplate = new RenderTemplate($expectedTemplate, $context);
         $action->execute($renderTemplate);
 
         $this->assertEquals($expectedView, $renderTemplate->getResult());

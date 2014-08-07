@@ -2,7 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoExpressCheckoutPaymentAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPaymentRequest;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment;
 
 class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +31,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new DoExpressCheckoutPaymentAction();
         
-        $this->assertTrue($action->supports(new DoExpressCheckoutPaymentRequest($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new DoExpressCheckoutPayment($this->getMock('ArrayAccess'))));
     }
 
     /**
@@ -66,7 +66,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new DoExpressCheckoutPaymentAction();
         
-        $action->execute(new DoExpressCheckoutPaymentRequest(array()));
+        $action->execute(new DoExpressCheckoutPayment(array()));
     }
 
     /**
@@ -79,7 +79,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new DoExpressCheckoutPaymentAction();
 
-        $request = new DoExpressCheckoutPaymentRequest(array(
+        $request = new DoExpressCheckoutPayment(array(
             'TOKEN' => 'aToken'
         ));
 
@@ -96,7 +96,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new DoExpressCheckoutPaymentAction();
 
-        $request = new DoExpressCheckoutPaymentRequest(array(
+        $request = new DoExpressCheckoutPayment(array(
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId'
         ));
@@ -114,7 +114,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new DoExpressCheckoutPaymentAction();
 
-        $request = new DoExpressCheckoutPaymentRequest(array(
+        $request = new DoExpressCheckoutPayment(array(
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
             'PAYMENTREQUEST_0_PAYMENTACTION' => 'anAction',
@@ -155,7 +155,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
         $action = new DoExpressCheckoutPaymentAction();
         $action->setApi($apiMock);
 
-        $request = new DoExpressCheckoutPaymentRequest(array(
+        $request = new DoExpressCheckoutPayment(array(
             'TOKEN' => 'theToken',
             'PAYERID' => 'thePayerId',
             'PAYMENTREQUEST_0_PAYMENTACTION' => 'theAction',
@@ -185,7 +185,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
         $action = new DoExpressCheckoutPaymentAction();
         $action->setApi($apiMock);
 
-        $request = new DoExpressCheckoutPaymentRequest(array(
+        $request = new DoExpressCheckoutPayment(array(
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
             'PAYMENTREQUEST_0_PAYMENTACTION' => 'anAction',

@@ -4,9 +4,9 @@ namespace Payum\AuthorizeNet\Aim\Tests\Action;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\CreditCard;
 use Payum\Core\PaymentInterface;
-use Payum\Core\Request\CaptureRequest;
+use Payum\Core\Request\Capture;
 use Payum\AuthorizeNet\Aim\Action\CaptureAction;
-use Payum\Core\Request\ObtainCreditCardRequest;
+use Payum\Core\Request\ObtainCreditCard;
 
 class CaptureActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,11 +41,11 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportCaptureRequestAndArrayAccessAsModel()
+    public function shouldSupportCaptureAndArrayAccessAsModel()
     {
         $action = new CaptureAction();
 
-        $request = new CaptureRequest($this->getMock('ArrayAccess'));
+        $request = new Capture($this->getMock('ArrayAccess'));
 
         $this->assertTrue($action->supports($request));
     }
@@ -53,7 +53,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportNotCaptureRequest()
+    public function shouldNotSupportNotCapture()
     {
         $action = new CaptureAction();
         
@@ -65,11 +65,11 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureRequestAndNotArrayAsModel()
+    public function shouldNotSupportCaptureAndNotArrayAsModel()
     {
         $action = new CaptureAction();
         
-        $request = new CaptureRequest(new \stdClass());
+        $request = new Capture(new \stdClass());
         
         $this->assertFalse($action->supports($request));
     }
@@ -133,7 +133,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action->setApi($api);
         $action->setPayment($paymentMock);
 
-        $action->execute(new CaptureRequest(array(
+        $action->execute(new Capture(array(
             'response_code' => 'foo',
         )));
     }
@@ -161,7 +161,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action->setApi($api);
         $action->setPayment($paymentMock);
 
-        $action->execute(new CaptureRequest(array(
+        $action->execute(new Capture(array(
             'amount' => 10,
             'card_num' => '1234567812345678',
             'exp_date' => '10/16',
@@ -172,7 +172,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCardRequest request.
+     * @expectedExceptionMessage Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.
      */
     public function throwIfCreditCardNotSetExplicitlyAndObtainRequestNotSupportedOnCapture()
     {
@@ -187,7 +187,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCardRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
             ->will($this->throwException(new RequestNotSupportedException()))
         ;
 
@@ -195,7 +195,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action->setApi($api);
         $action->setPayment($paymentMock);
 
-        $action->execute(new CaptureRequest(array(
+        $action->execute(new Capture(array(
             'amount' => 10,
         )));
     }
@@ -216,8 +216,8 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCardRequest'))
-            ->will($this->returnCallback(function(ObtainCreditCardRequest $request) {
+            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
+            ->will($this->returnCallback(function(ObtainCreditCard $request) {
                 $card = new CreditCard();
                 $card->setNumber('1234567812345678');
                 $card->setExpireAt(new \DateTime('2014-10-01'));
@@ -230,7 +230,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action->setApi($api);
         $action->setPayment($paymentMock);
 
-        $action->execute(new CaptureRequest(array(
+        $action->execute(new Capture(array(
             'amount' => 10,
         )));
     }

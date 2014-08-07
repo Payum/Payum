@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests\Action;
 
-use Payum\Core\Request\BinaryMaskStatusRequest;
+use Payum\Core\Request\GetBinaryStatus;
 use Payum\Klarna\Checkout\Action\StatusAction;
 use Payum\Klarna\Checkout\Constants;
 
@@ -33,7 +33,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
         $action = new StatusAction();
 
         $this->assertTrue($action->supports(
-            new BinaryMaskStatusRequest(array())
+            new GetBinaryStatus(array())
         ));
     }
 
@@ -54,7 +54,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StatusAction;
 
-        $this->assertFalse($action->supports(new BinaryMaskStatusRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new GetBinaryStatus(new \stdClass)));
     }
 
     /**
@@ -76,7 +76,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StatusAction();
 
-        $status = new BinaryMaskStatusRequest(array(
+        $status = new GetBinaryStatus(array(
             'status' => 'not-supported-status',
         ));
 
@@ -95,7 +95,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StatusAction();
 
-        $status = new BinaryMaskStatusRequest(array());
+        $status = new GetBinaryStatus(array());
 
         //guard
         $status->markUnknown();
@@ -112,7 +112,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StatusAction();
 
-        $status = new BinaryMaskStatusRequest(array(
+        $status = new GetBinaryStatus(array(
             'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
         ));
 
@@ -131,7 +131,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StatusAction();
 
-        $status = new BinaryMaskStatusRequest(array(
+        $status = new GetBinaryStatus(array(
             'status' => Constants::STATUS_CHECKOUT_COMPLETE,
         ));
 
@@ -150,7 +150,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StatusAction();
 
-        $status = new BinaryMaskStatusRequest(array(
+        $status = new GetBinaryStatus(array(
             'status' => Constants::STATUS_CREATED,
         ));
 

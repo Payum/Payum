@@ -3,7 +3,7 @@ namespace Payum\Payex\Tests\Action\Api;
 
 use Payum\Payex\Action\Api\CreateAgreementAction;
 use Payum\Payex\Api\AgreementApi;
-use Payum\Payex\Request\Api\CreateAgreementRequest;
+use Payum\Payex\Request\Api\CreateAgreement;
 
 class CreateAgreementActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -106,7 +106,7 @@ class CreateAgreementActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CreateAgreementAction();
 
-        $this->assertTrue($action->supports(new CreateAgreementRequest($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new CreateAgreement($this->getMock('ArrayAccess'))));
     }
 
     /**
@@ -126,7 +126,7 @@ class CreateAgreementActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CreateAgreementAction;
 
-        $this->assertFalse($action->supports(new CreateAgreementRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new CreateAgreement(new \stdClass)));
     }
 
     /**
@@ -154,7 +154,7 @@ class CreateAgreementActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new CreateAgreementAction();
 
-        $action->execute(new CreateAgreementRequest($this->requiredFields));
+        $action->execute(new CreateAgreement($this->requiredFields));
     }
 
     /**
@@ -172,7 +172,7 @@ class CreateAgreementActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new CreateAgreementAction();
 
-        $action->execute(new CreateAgreementRequest($fields));
+        $action->execute(new CreateAgreement($fields));
     }
 
     /**
@@ -193,7 +193,7 @@ class CreateAgreementActionTest extends \PHPUnit_Framework_TestCase
         $action = new CreateAgreementAction();
         $action->setApi($apiMock);
 
-        $request = new CreateAgreementRequest($this->requiredFields);
+        $request = new CreateAgreement($this->requiredFields);
         
         $action->execute($request);
 
@@ -211,7 +211,7 @@ class CreateAgreementActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CreateAgreementAction();
 
-        $request = new CreateAgreementRequest(array(
+        $request = new CreateAgreement(array(
             'agreementRef' => 'aRef',
         ));
 

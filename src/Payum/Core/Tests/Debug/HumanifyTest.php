@@ -2,8 +2,8 @@
 namespace Payum\Core\Tests\Debug;
 
 use Payum\Core\Debug\Humanify;
-use Payum\Core\Request\CaptureRequest;
-use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\Capture;
+use Payum\Core\Reply\HttpRedirect;
 
 class HumanifyTest extends \PHPUnit_Framework_TestCase
 {
@@ -80,18 +80,18 @@ class HumanifyTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnRequestShortClassAndModelIfRequestImplementsModelRequestInterfaceOnRequest()
     {
-        $request = new CaptureRequest($this);
+        $request = new Capture($this);
 
-        $this->assertEquals('CaptureRequest{model: HumanifyTest}', Humanify::request($request));
+        $this->assertEquals('Capture{model: HumanifyTest}', Humanify::request($request));
     }
 
     /**
      * @test
      */
-    public function shouldReturnRequestShortClassAndUrlIfRedirectUrlInteractiveRequestOnRequest()
+    public function shouldReturnReplyShortClassAndUrlIfHttpRedirectReplyOnRequest()
     {
-        $request = new RedirectUrlInteractiveRequest('http://example.com/foo');
+        $request = new HttpRedirect('http://example.com/foo');
 
-        $this->assertEquals('RedirectUrlInteractiveRequest{url: http://example.com/foo}', Humanify::request($request));
+        $this->assertEquals('HttpRedirect{url: http://example.com/foo}', Humanify::request($request));
     }
 }

@@ -3,7 +3,7 @@ namespace Payum\Payex\Tests\Action\Api;
 
 use Payum\Payex\Action\Api\AutoPayAgreementAction;
 use Payum\Payex\Api\AgreementApi;
-use Payum\Payex\Request\Api\AutoPayAgreementRequest;
+use Payum\Payex\Request\Api\AutoPayAgreement;
 
 class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -90,7 +90,7 @@ class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AutoPayAgreementAction();
 
-        $this->assertTrue($action->supports(new AutoPayAgreementRequest($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new AutoPayAgreement($this->getMock('ArrayAccess'))));
     }
 
     /**
@@ -110,7 +110,7 @@ class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AutoPayAgreementAction;
 
-        $this->assertFalse($action->supports(new AutoPayAgreementRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new AutoPayAgreement(new \stdClass)));
     }
 
     /**
@@ -138,7 +138,7 @@ class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new AutoPayAgreementAction();
 
-        $action->execute(new AutoPayAgreementRequest($this->requiredFields));
+        $action->execute(new AutoPayAgreement($this->requiredFields));
     }
 
     /**
@@ -159,7 +159,7 @@ class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
         $action = new AutoPayAgreementAction();
         $action->setApi($apiMock);
 
-        $request = new AutoPayAgreementRequest($this->requiredFields);
+        $request = new AutoPayAgreement($this->requiredFields);
         
         $action->execute($request);
 

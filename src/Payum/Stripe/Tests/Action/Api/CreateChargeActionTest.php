@@ -3,7 +3,7 @@ namespace Payum\Stripe\Tests\Action\Api;
 
 use Payum\Stripe\Action\Api\CreateChargeAction;
 use Payum\Stripe\Keys;
-use Payum\Stripe\Request\Api\CreateChargeRequest;
+use Payum\Stripe\Request\Api\CreateCharge;
 
 class CreateChargeActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -64,7 +64,7 @@ class CreateChargeActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CreateChargeAction;
 
-        $this->assertTrue($action->supports(new CreateChargeRequest(array())));
+        $this->assertTrue($action->supports(new CreateCharge(array())));
     }
 
     /**
@@ -74,7 +74,7 @@ class CreateChargeActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CreateChargeAction;
 
-        $this->assertFalse($action->supports(new CreateChargeRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new CreateCharge(new \stdClass)));
     }
 
     /**

@@ -2,7 +2,7 @@
 namespace Payum\Payex\Tests\Action;
 
 use Payum\Core\PaymentInterface;
-use Payum\Core\Request\SyncRequest;
+use Payum\Core\Request\Sync;
 use Payum\Payex\Action\PaymentDetailsSyncAction;
 
 class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
@@ -28,7 +28,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportSyncRequestWithArrayAccessAsModelIfTransactionNumberSet()
+    public function shouldSupportSyncWithArrayAccessAsModelIfTransactionNumberSet()
     {
         $action = new PaymentDetailsSyncAction();
 
@@ -40,13 +40,13 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true))
         ;
 
-        $this->assertTrue($action->supports(new SyncRequest($array)));
+        $this->assertTrue($action->supports(new Sync($array)));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotSyncRequest()
+    public function shouldNotSupportAnythingNotSync()
     {
         $action = new PaymentDetailsSyncAction;
 
@@ -56,11 +56,11 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportSyncRequestWithNotArrayAccessModel()
+    public function shouldNotSupportSyncWithNotArrayAccessModel()
     {
         $action = new PaymentDetailsSyncAction;
 
-        $this->assertFalse($action->supports(new SyncRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new Sync(new \stdClass)));
     }
 
     /**
@@ -84,13 +84,13 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\CheckOrderRequest'))
+            ->with($this->isInstanceOf('Payum\Payex\Request\Api\CheckOrder'))
         ;
         
         $action = new PaymentDetailsSyncAction();
         $action->setPayment($paymentMock);
 
-        $action->execute(new SyncRequest(array(
+        $action->execute(new Sync(array(
             'transactionNumber' => 'aNum'
         )));
     }

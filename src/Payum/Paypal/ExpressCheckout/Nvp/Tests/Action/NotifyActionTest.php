@@ -1,8 +1,8 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
-use Payum\Core\Request\NotifyRequest;
-use Payum\Core\Request\SyncRequest;
+use Payum\Core\Request\Notify;
+use Payum\Core\Request\Sync;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\NotifyAction;
 
 class NotifyActionTest extends \PHPUnit_Framework_TestCase
@@ -32,7 +32,7 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new NotifyAction();
 
-        $request = new NotifyRequest(array(), $this->getMock('ArrayAccess'));
+        $request = new Notify(array(), $this->getMock('ArrayAccess'));
         
         $this->assertTrue($action->supports($request));
     }
@@ -56,7 +56,7 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new NotifyAction();
         
-        $request = new NotifyRequest(array(), new \stdClass());
+        $request = new Notify(array(), new \stdClass());
         
         $this->assertFalse($action->supports($request));
     }
@@ -76,7 +76,7 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSubExecuteSyncRequestWithSameModel()
+    public function shouldSubExecuteSyncWithSameModel()
     {
         $expectedModel = array('foo' => 'fooVal');
 
@@ -86,13 +86,13 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\SyncRequest'))
+            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
         
         $action = new NotifyAction();
         $action->setPayment($paymentMock);
 
-        $action->execute(new NotifyRequest(array(), $expectedModel));
+        $action->execute(new Notify(array(), $expectedModel));
     }
     
     /**

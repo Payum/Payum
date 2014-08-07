@@ -3,7 +3,7 @@ namespace Payum\Payex\Tests\Action\Api;
 
 use Payum\Payex\Action\Api\CheckAgreementAction;
 use Payum\Payex\Api\AgreementApi;
-use Payum\Payex\Request\Api\CheckAgreementRequest;
+use Payum\Payex\Request\Api\CheckAgreement;
 
 class CheckAgreementActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -84,7 +84,7 @@ class CheckAgreementActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CheckAgreementAction();
 
-        $this->assertTrue($action->supports(new CheckAgreementRequest($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new CheckAgreement($this->getMock('ArrayAccess'))));
     }
 
     /**
@@ -104,7 +104,7 @@ class CheckAgreementActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CheckAgreementAction;
 
-        $this->assertFalse($action->supports(new CheckAgreementRequest(new \stdClass)));
+        $this->assertFalse($action->supports(new CheckAgreement(new \stdClass)));
     }
 
     /**
@@ -134,7 +134,7 @@ class CheckAgreementActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new CheckAgreementAction();
 
-        $action->execute(new CheckAgreementRequest($fields));
+        $action->execute(new CheckAgreement($fields));
     }
 
     /**
@@ -155,7 +155,7 @@ class CheckAgreementActionTest extends \PHPUnit_Framework_TestCase
         $action = new CheckAgreementAction();
         $action->setApi($apiMock);
 
-        $request = new CheckAgreementRequest($this->requiredNotEmptyFields);
+        $request = new CheckAgreement($this->requiredNotEmptyFields);
         
         $action->execute($request);
 
