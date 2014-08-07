@@ -12,7 +12,7 @@
         <parameter key="payum.extension.storage.class">Payum\Core\Extension\StorageExtension</parameter>
         <parameter key="payum.extension.endless_cycle_detector.class">Payum\Core\Extension\EndlessCycleDetectorExtension</parameter>
         <parameter key="payum.buzz.client.class">Buzz\Client\Curl</parameter>
-        <parameter key="payum.listener.interactive_request.class">Payum\Bundle\PayumBundle\EventListener\InteractiveRequestListener</parameter>
+        <parameter key="payum.listener.reply_to_http_response.class">Payum\Bundle\PayumBundle\EventListener\ReplyToHttpResponseListener</parameter>
 
         <parameter key="payum.action.execute_same_request_with_model_details.class">Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction</parameter>
         <parameter key="payum.action.get_http_request.class">Payum\Core\Bridge\Symfony\Action\GetHttpRequestAction</parameter>
@@ -72,7 +72,7 @@
             <argument type="service" id="logger" on-invalid="ignore" />
         </service>
 
-        <service id="payum.listener.interactive_request" class="%payum.listener.interactive_request.class%">
+        <service id="payum.listener.reply_to_http_response" class="%payum.listener.reply_to_http_response.class%">
             <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" priority="128" />
         </service>
 
