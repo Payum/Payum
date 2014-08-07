@@ -74,8 +74,8 @@ _**Link**: See paypal [CaptureAction][paypal-capture-action]._
 What about redirects or a credit card form? Some payments, 
 like Paypal ExpressCheckout for instance, require authorization on their side. 
 Payum can handle such cases and for that we use something called _[replys][base-reply]_.
-It is a special request object, which extends an exception.
-You can throw a  redirect reply at any time and catch it at a top level.
+It is a special object which extends an exception hence could be thrown.
+You can throw a http redirect reply for example at any time and catch it at a top level.
 
 ```php
 <?php
