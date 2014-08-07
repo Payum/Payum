@@ -54,7 +54,7 @@
         "doctrine/orm": "2.3.*",
         "doctrine/mongodb": "1.0.*@dev",
         "doctrine/mongodb-odm": "1.0.*@dev",
-        "phpunit/phpunit": "3.7.*",
+        "phpunit/phpunit": "~4.0",
         "psr/log": "~1.0",
         "zendframework/zend-db": "~2",
         "symfony/routing": "~2",

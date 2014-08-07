@@ -28,7 +28,7 @@
         "ext-curl": "*",
         "ext-pdo_sqlite": "*",
         "doctrine/orm": "2.*",
-        "phpunit/phpunit": "3.7.*"
+        "phpunit/phpunit": "~4.0"
     },
     "suggest": {
         "doctrine/orm": "If you want store models to database using doctrin2 ORM"

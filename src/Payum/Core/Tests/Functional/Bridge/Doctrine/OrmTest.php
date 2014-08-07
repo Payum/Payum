@@ -8,7 +8,7 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 
-class OrmTest extends BaseOrmTest
+abstract class OrmTest extends BaseOrmTest
 {
     /**
      * @return MappingDriver
