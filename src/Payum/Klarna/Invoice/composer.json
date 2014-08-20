@@ -33,7 +33,8 @@
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-0": { "Payum\\Klarna\\Invoice": "" }
+        "psr-0": { "Payum\\Klarna\\Invoice": "" },
+        "classmap": ["klarna-invoice"]
     },
     "target-dir": "Payum/Klarna/Invoice",
     "extra": {
