@@ -11,6 +11,16 @@ interface GenericTokenFactoryInterface extends TokenFactoryInterface
      *
      * @return TokenInterface
      */
+    public function createAuthorizeToken($paymentName, $model, $afterPath, array $afterParameters = array());
+
+    /**
+     * @param string $paymentName
+     * @param object $model
+     * @param string $afterPath
+     * @param array $afterParameters
+     *
+     * @return TokenInterface
+     */
     public function createCaptureToken($paymentName, $model, $afterPath, array $afterParameters = array());
 
     /**

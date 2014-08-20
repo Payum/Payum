@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Core\Security;
 
-use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Storage\StorageInterface;
 
@@ -18,10 +17,11 @@ class GenericTokenFactory extends AbstractGenericTokenFactory
      * @param string $baseUrl
      * @param string $capturePath
      * @param string $notifyPath
+     * @param string $authorizePath
      */
-    public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $baseUrl, $capturePath, $notifyPath)
+    public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $baseUrl, $capturePath, $notifyPath, $authorizePath)
     {
-        parent::__construct($tokenStorage, $storageRegistry, $capturePath, $notifyPath);
+        parent::__construct($tokenStorage, $storageRegistry, $capturePath, $notifyPath, $authorizePath);
 
         $this->baseUrl = $baseUrl;
     }

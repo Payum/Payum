@@ -6,7 +6,10 @@
 * [request] `SimpleStatusRequest` was renamed to `GetHumanStatus`.
 * [request] `BinaryMaskStatusRequest` was renamed to `GetBinaryStatus`.
 * [request] All interactive request were replaced by reply concept. Moved to Reply namespace and renamed. For example `Request\Http\RedirectUrlInteractiveRequest` become `Reply\HttpRedirect`.
-* [extension] The method `onInteractiveRequest` was renamed to `onReply`. The first parameter has to be an instance of `ReplyInterface`.    
+* [extension] The method `onInteractiveRequest` was renamed to `onReply`. The first parameter has to be an instance of `ReplyInterface`.
+* [security] Method `createAuthorizeToken` method was added to `GenericTokenInterface`.
+* [security] New argument `authorizePath` was added to `AbstractGenericTokenFactory` and `GenericTokenFactory`.
+* [security][symfony] New argument `authorizePath` was added to `TokenFactory` from Symfony's bridge.
 
 ## 0.9 to 0.10
 
@@ -21,7 +24,6 @@
 * [paypal ec] `Api` methods which returned Response now return an array.
 * [paypal ec] Class `Payum\Paypal\ExpressCheckout\Nvp\Bridge\Buzz\Response` was removed.
 * [paypal ec] Class `Payum\Paypal\ExpressCheckout\Nvp\Exception\HttpResponseAckNotSuccessException` was removed.
-
 
 ## 0.8 to 0.9
 

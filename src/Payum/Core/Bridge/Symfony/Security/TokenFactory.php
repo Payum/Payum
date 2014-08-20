@@ -19,12 +19,13 @@ class TokenFactory extends AbstractGenericTokenFactory
      * @param StorageRegistryInterface $storageRegistry
      * @param string $capturePath
      * @param string $notifyPath
+     * @param string $autorizePath
      */
-    public function __construct(UrlGeneratorInterface $urlGenerator, StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $capturePath, $notifyPath)
+    public function __construct(UrlGeneratorInterface $urlGenerator, StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $capturePath, $notifyPath, $autorizePath)
     {
         $this->urlGenerator = $urlGenerator;
 
-        parent::__construct($tokenStorage, $storageRegistry, $capturePath, $notifyPath);
+        parent::__construct($tokenStorage, $storageRegistry, $capturePath, $notifyPath, $autorizePath);
     }
 
     /**

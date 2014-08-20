@@ -86,7 +86,8 @@ $tokenFactory = new GenericTokenFactory(
     $registry,
     'http://'.$_SERVER['HTTP_HOST'],
     'capture.php',
-    'notify.php'
+    'notify.php',
+    'authorize.php'
 );
 ```
 
