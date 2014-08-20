@@ -1,9 +1,9 @@
 # KlarnaCheckout
 [![Build Status](https://travis-ci.org/Payum/KlarnaCheckout.png?branch=master)](https://travis-ci.org/Payum/KlarnaCheckout)
-[![Total Downloads](https://poser.pugx.org/payum/klarna-checkout/d/total.png)](https://packagist.org/packages/payum/klarna-checkout)
-[![Latest Stable Version](https://poser.pugx.org/payum/klarna-checkout/version.png)](https://packagist.org/packages/payum/klarna-checkout)
+[![Total Downloads](https://poser.pugx.org/payum/klarna-invoice/d/total.png)](https://packagist.org/packages/payum/klarna-invoice)
+[![Latest Stable Version](https://poser.pugx.org/payum/klarna-invoice/version.png)](https://packagist.org/packages/payum/klarna-invoice)
 
-Provide integration of Klarna Checkout to Payum.
+Provide integration of Klarna Invoice to Payum.
 
 ## Resources
 
