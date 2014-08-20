@@ -3,7 +3,7 @@ namespace Payum\Bundle\PayumBundle\Tests\Functional\Security;
 
 use Payum\Bundle\PayumBundle\Tests\Functional\WebTestCase;
 
-class GetHttpQueryActionTest extends WebTestCase
+class TokenFactoryTest extends WebTestCase
 {
     /**
      * @test
@@ -12,6 +12,6 @@ class GetHttpQueryActionTest extends WebTestCase
     {
         $service = $this->container->get('payum.security.token_factory');
 
-        $this->assertInstanceOf('Payum\Bundle\PayumBundle\Security\TokenFactory', $service);
+        $this->assertInstanceOf('Payum\Core\Bridge\Symfony\Security\TokenFactory', $service);
     }
 } 

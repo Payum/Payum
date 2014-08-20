@@ -1,3 +1,7 @@
+_payum_authorize:
+    resource: "@PayumBundle/Resources/config/routing/authorize.xml"
+    prefix:   /
+
 _payum_capture:
     resource: "@PayumBundle/Resources/config/routing/capture.xml"
     prefix:   /

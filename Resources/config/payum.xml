@@ -19,8 +19,8 @@
         <parameter key="payum.action.obtain_credit_card.class">Payum\Bundle\PayumBundle\Action\ObtainCreditCardAction</parameter>
         <parameter key="payum.action.render_template.class">Payum\Core\Bridge\Twig\Action\RenderTemplateAction</parameter>
 
-        <parameter key="payum.security.http_request_verifier.class">Payum\Bundle\PayumBundle\Security\HttpRequestVerifier</parameter>
-        <parameter key="payum.security.token_factory.class">Payum\Bundle\PayumBundle\Security\TokenFactory</parameter>
+        <parameter key="payum.security.http_request_verifier.class">Payum\Core\Bridge\Symfony\Security\HttpRequestVerifier</parameter>
+        <parameter key="payum.security.token_factory.class">Payum\Core\Bridge\Symfony\Security\TokenFactory</parameter>
 
         <parameter key="payum.template.layout">@PayumCore\layout.html.twig</parameter>
         <parameter key="payum.template.obtain_credit_card">PayumBundle:Action:obtainCreditCard.html.twig</parameter>
@@ -133,6 +133,7 @@
             <argument type="service" id="payum" />
             <argument>payum_capture_do</argument>
             <argument>payum_notify_do</argument>
+            <argument>payum_authorize_do</argument>
         </service>
 
         <service id="payum.form.type.credit_card_expiration_date" class="Payum\Bundle\PayumBundle\Form\Type\CreditCardExpirationDateType">
