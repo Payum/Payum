@@ -18,7 +18,7 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
      */
     public function setApi($api)
     {
-        if ($api instanceof Api == false) {
+        if (false ==$api instanceof Api) {
             throw new UnsupportedApiException('Not supported.');
         }
         
