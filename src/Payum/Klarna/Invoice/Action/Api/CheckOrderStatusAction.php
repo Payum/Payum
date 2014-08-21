@@ -18,6 +18,11 @@ class CheckOrderStatusAction extends BaseApiAwareAction
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
+
+        if ($details['invoice_number']) {
+            return;
+        }
+
         $details->validateNotEmpty(array('rno'));
 
         $klarna = $this->createKlarna();
