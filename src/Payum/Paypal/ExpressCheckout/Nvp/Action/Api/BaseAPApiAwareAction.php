@@ -9,7 +9,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\APApi;
 abstract class BaseAPApiAwareAction implements ActionInterface, ApiAwareInterface
 {
     /**
-     * @var \Payum\Paypal\ExpressCheckout\Nvp\Api
+     * @var \Payum\Paypal\ExpressCheckout\Nvp\APApi
      */
     protected $api;
 
