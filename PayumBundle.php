@@ -6,6 +6,7 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Compiler\PayumStorageExtensions
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillOnsitePaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaCheckoutPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaInvoicePaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OfflinePaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\CustomPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayOnsitePaymentFactory;
@@ -42,6 +43,7 @@ class PayumBundle extends Bundle
         $extension->addPaymentFactory(new CustomPaymentFactory);
         $extension->addPaymentFactory(new OfflinePaymentFactory);
         $extension->addPaymentFactory(new KlarnaCheckoutPaymentFactory);
+        $extension->addPaymentFactory(new KlarnaInvoicePaymentFactory);
         $extension->addPaymentFactory(new StripeJsPaymentFactory);
         $extension->addPaymentFactory(new StripeCheckoutPaymentFactory);
 
