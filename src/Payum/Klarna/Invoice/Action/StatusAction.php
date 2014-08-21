@@ -31,26 +31,27 @@ class StatusAction implements ActionInterface
             return;
         }
 
+        if ($details['invoice_number']) {
+            $request->markSuccess();
+
+            return;
+        }
+
         if (false == $details['status']) {
             $request->markNew();
 
             return;
         }
 
-        if (\KlarnaFlags::ACCEPTED == $details['status']) {
-            $request->markSuccess();
+        if (\KlarnaFlags::ACCEPTED == $details['status'] || \KlarnaFlags::PENDING == $details['status']) {
+            //authorized but not capture, there must be a separate status for it, pending for now.
+            $request->markPending();
 
             return;
         }
 
         if (\KlarnaFlags::DENIED == $details['status']) {
             $request->markFailed();
-
-            return;
-        }
-
-        if (\KlarnaFlags::PENDING == $details['status']) {
-            $request->markPending();
 
             return;
         }

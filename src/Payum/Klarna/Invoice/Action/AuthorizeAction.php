@@ -8,13 +8,14 @@ use Payum\Core\Request\Authorize;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\Sync;
 use Payum\Klarna\Invoice\Request\Api\Activate;
+use Payum\Klarna\Invoice\Request\Api\ReserveAmount;
 
-class CaptureAction extends PaymentAwareAction
+class AuthorizeAction extends PaymentAwareAction
 {
     /**
      * {@inheritDoc}
      *
-     * @param Capture $request
+     * @param Authorize $request
      */
     public function execute($request)
     {
@@ -23,14 +24,8 @@ class CaptureAction extends PaymentAwareAction
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
         if (false == $details['rno']) {
-            $this->payment->execute(new Authorize($details));
+            $this->payment->execute(new ReserveAmount($details));
         }
-
-        if ($details['rno'] && false == $details['invoice_number']) {
-            $this->payment->execute(new Activate($details));
-        }
-
-        $this->payment->execute(new Sync($details));
     }
 
     /**
@@ -39,7 +34,7 @@ class CaptureAction extends PaymentAwareAction
     public function supports($request)
     {
         return
-            $request instanceof Capture &&
+            $request instanceof Authorize &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }
