@@ -4,9 +4,9 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\UnsupportedApiException;
-use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use Payum\Paypal\ExpressCheckout\Nvp\APApi;
 
-abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
+abstract class BaseAPApiAwareAction implements ActionInterface, ApiAwareInterface
 {
     /**
      * @var \Payum\Paypal\ExpressCheckout\Nvp\Api
@@ -18,7 +18,7 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
      */
     public function setApi($api)
     {
-        if ($api instanceof Api == false) {
+        if ($api instanceof APApi == false) {
             throw new UnsupportedApiException('Not supported.');
         }
         
