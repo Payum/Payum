@@ -40,8 +40,16 @@ abstract class BaseApiAwareAction implements  ApiAwareInterface, ActionInterface
             $this->config->country,
             $this->config->language,
             $this->config->currency,
-            $this->config->testMode
+            $this->config->mode
         );
+
+        $rp = new \ReflectionProperty($klarna, 'xmlrpc');
+        $rp->setAccessible(true);
+        /** @var \xmlrpc_client $xmlrpc */
+        $xmlrpc = $rp->getValue($klarna);
+        $xmlrpc->verifyhost = 0;
+        $xmlrpc->verifypeer = false;
+        $rp->setAccessible(false);
 
         return $klarna;
     }

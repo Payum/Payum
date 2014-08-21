@@ -13,7 +13,7 @@ class Config
 
     public $currency = \KlarnaCurrency::SEK;
 
-    public $server = \Klarna::BETA;
+    public $mode = \Klarna::BETA;
 
     public $pClassStorage = 'json';
 

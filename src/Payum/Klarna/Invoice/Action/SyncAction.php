@@ -2,6 +2,7 @@
 namespace Payum\Klarna\Invoice\Action;
 
 use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Request\Sync;
@@ -18,7 +19,11 @@ class SyncAction extends PaymentAwareAction
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $this->payment->execute(new CheckOrderStatus($request->getModel()));
+        $details = ArrayObject::ensureArrayObject($request->getModel());
+
+        if ($details['rno']) {
+            $this->payment->execute(new CheckOrderStatus($request->getModel()));
+        }
     }
 
     /**

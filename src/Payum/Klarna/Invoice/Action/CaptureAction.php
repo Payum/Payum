@@ -29,8 +29,6 @@ class CaptureAction extends PaymentAwareAction
         if ($details['rno'] && false == $details['invoice_number']) {
             $this->payment->execute(new Activate($details));
         }
-
-        $this->payment->execute(new Sync($details));
     }
 
     /**

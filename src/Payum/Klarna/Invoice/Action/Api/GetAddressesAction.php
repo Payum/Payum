@@ -1,10 +1,8 @@
 <?php
 namespace Payum\Klarna\Invoice\Action\Api;
 
-use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Klarna\Invoice\Request\Api\GetAddresses;
-use Payum\Klarna\Invoice\Request\Api\ReserveAmount;
 
 class GetAddressesAction extends BaseApiAwareAction
 {
@@ -17,17 +15,25 @@ class GetAddressesAction extends BaseApiAwareAction
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $details = ArrayObject::ensureArrayObject($request->getModel());
-
         $klarna = $this->createKlarna();
 
-        try {
-            $result = $klarna->getAddresses($details['pno']);
+        foreach ($klarna->getAddresses($request->getPno()) as $address) {
+            /** @var \KlarnaAddr $address */
+            $address->setEmail(utf8_encode($address->getEmail()));
+            $address->setTelno(utf8_encode($address->getTelno()));
+            $address->setCellno(utf8_encode($address->getCellno()));
+            $address->setFirstName(utf8_encode($address->getFirstName()));
+            $address->setLastName(utf8_encode($address->getLastName()));
+            $address->setCompanyName(utf8_encode($address->getCompanyName()));
+            $address->setCareof(utf8_encode($address->getCareof()));
+            $address->setStreet(utf8_encode($address->getStreet()));
+            $address->setHouseNumber(utf8_encode($address->getHouseNumber()));
+            $address->setHouseExt(utf8_encode($address->getHouseExt()));
+            $address->setZipCode(utf8_encode($address->getZipCode()));
+            $address->setCity(utf8_encode($address->getCity()));
+            $address->setCountry(utf8_encode($address->getCountry()));
 
-            $details['addresses'] = $result;
-        } catch (\KlarnaException $e) {
-            $details['error_code'] = $e->getCode();
-            $details['error_message'] = $e->getMessage();
+            $request->addAddress($address);
         }
     }
 
@@ -36,9 +42,6 @@ class GetAddressesAction extends BaseApiAwareAction
      */
     public function supports($request)
     {
-        return
-            $request instanceof GetAddresses &&
-            $request->getModel() instanceof \ArrayAccess
-        ;
+        return $request instanceof GetAddresses;
     }
 }

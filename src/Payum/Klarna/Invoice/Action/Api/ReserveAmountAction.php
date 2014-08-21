@@ -25,57 +25,69 @@ class ReserveAmountAction extends BaseApiAwareAction
                 $article = ArrayObject::ensureArrayObject($article);
 
                 $klarna->addArticle(
-                    $article['qty'],
-                    $article['artNo'],
-                    $article['title'],
-                    $article['price'],
-                    $article['vat'],
-                    $article['discount'],
-                    $article['flags']
+                    utf8_decode($article['qty']),
+                    utf8_decode($article['artNo']),
+                    utf8_decode($article['title']),
+                    utf8_decode($article['price']),
+                    utf8_decode($article['vat']),
+                    utf8_decode($article['discount']),
+                    utf8_decode($article['flags'])
                 );
             }
         }
 
         if ($details['shipping_address']) {
+            $address = ArrayObject::ensureArrayObject($details['shipping_address']);
+
             $klarna->setAddress(\KlarnaFlags::IS_SHIPPING, new \KlarnaAddr(
-                $details['email'],
-                $details['telno'],
-                $details['cellno'],
-                $details['fname'],
-                $details['lname'],
-                $details['careof'],
-                $details['street'],
-                $details['zip'],
-                $details['city'],
-                $details['country'],
-                $details['houseNo'],
-                $details['houseExt']
+                utf8_decode($address['email']),
+                utf8_decode($address['telno']),
+                utf8_decode($address['cellno']),
+                utf8_decode($address['fname']),
+                utf8_decode($address['lname']),
+                utf8_decode($address['careof']),
+                utf8_decode($address['street']),
+                utf8_decode($address['zip']),
+                utf8_decode($address['city']),
+                utf8_decode($address['country']),
+                utf8_decode($address['house_number']),
+                utf8_decode($address['house_extension'])
             ));
         }
 
         if ($details['billing_address']) {
+            $address = ArrayObject::ensureArrayObject($details['billing_address']);
+
             $klarna->setAddress(\KlarnaFlags::IS_BILLING, new \KlarnaAddr(
-                $details['email'],
-                $details['telno'],
-                $details['cellno'],
-                $details['fname'],
-                $details['lname'],
-                $details['careof'],
-                $details['street'],
-                $details['zip'],
-                $details['city'],
-                $details['country'],
-                $details['houseNo'],
-                $details['houseExt']
+                utf8_decode($address['email']),
+                utf8_decode($address['telno']),
+                utf8_decode($address['cellno']),
+                utf8_decode($address['fname']),
+                utf8_decode($address['lname']),
+                utf8_decode($address['careof']),
+                utf8_decode($address['street']),
+                utf8_decode($address['zip']),
+                utf8_decode($address['city']),
+                utf8_decode($address['country']),
+                utf8_decode($address['house_number']),
+                utf8_decode($address['house_extension'])
             ));
         }
 
         try {
-            $result = $klarna->reserveAmount($details['pno'], $details['gender'], $details['amount'], $details['reservation_flags']);
+            $result = $klarna->reserveAmount(
+                $details['pno'],
+                $details['gender'],
+                $details['amount'] ?: -1,
+                $details['reservation_flags'] ?: \KlarnaFlags::NO_FLAG
+            );
 
             $details['rno'] = $result[0];
             $details['status'] = $result[1];
         } catch (\KlarnaException $e) {
+            $details['error_request'] = get_class($request);
+            $details['error_file'] = $e->getFile();
+            $details['error_line'] = $e->getLine();
             $details['error_code'] = $e->getCode();
             $details['error_message'] = $e->getMessage();
         }
