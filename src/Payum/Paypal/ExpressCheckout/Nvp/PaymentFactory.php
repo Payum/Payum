@@ -26,6 +26,7 @@ abstract class PaymentFactory
 {
     /**
      * @param Api $api
+     * @param APApi|null $apapi
      *
      * @return \Payum\Core\Payment
      */
