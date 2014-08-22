@@ -5,10 +5,10 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\PaymentAwareInterface;
 use Payum\Core\PaymentInterface;
+use Payum\Klarna\Invoice\Request\Api\ActivateReservation;
 use Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails;
-use Payum\Klarna\Invoice\Request\Api\ReserveAmount;
 
-class ReserveAmountAction extends BaseApiAwareAction implements PaymentAwareInterface
+class ActivateReservationAction extends BaseApiAwareAction implements PaymentAwareInterface
 {
     /**
      * @var PaymentInterface
@@ -26,7 +26,7 @@ class ReserveAmountAction extends BaseApiAwareAction implements PaymentAwareInte
     /**
      * {@inheritDoc}
      *
-     * @param ReserveAmount $request
+     * @param ActivateReservation $request
      */
     public function execute($request)
     {
@@ -39,11 +39,12 @@ class ReserveAmountAction extends BaseApiAwareAction implements PaymentAwareInte
         $this->payment->execute(new PopulateKlarnaFromDetails($details, $klarna));
 
         try {
-            $result = $klarna->reserveAmount(
+            $result = $klarna->activateReservation(
                 $details['pno'],
+                $details['rno'],
                 $details['gender'],
-                $details['amount'] ?: -1,
-                $details['reservation_flags'] ?: \KlarnaFlags::NO_FLAG
+                $details['ocr'],
+                $details['activate_reservation_flags'] ?: \KlarnaFlags::NO_FLAG
             );
 
             $details['rno'] = $result[0];
@@ -59,8 +60,8 @@ class ReserveAmountAction extends BaseApiAwareAction implements PaymentAwareInte
     public function supports($request)
     {
         return
-            $request instanceof ReserveAmount &&
+            $request instanceof ActivateReservation &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }
-}
+} 

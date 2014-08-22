@@ -53,4 +53,18 @@ abstract class BaseApiAwareAction implements  ApiAwareInterface, ActionInterface
 
         return $klarna;
     }
+
+    /**
+     * @param \ArrayAccess $details
+     * @param \KlarnaException $e
+     * @param object $request
+     */
+    protected function populateDetailsWithError(\ArrayAccess $details, \KlarnaException $e, $request)
+    {
+        $details['error_request'] = get_class($request);
+        $details['error_file'] = $e->getFile();
+        $details['error_line'] = $e->getLine();
+        $details['error_code'] = $e->getCode();
+        $details['error_message'] = $e->getMessage();
+    }
 }

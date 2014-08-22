@@ -30,11 +30,7 @@ class CheckOrderStatusAction extends BaseApiAwareAction
         try {
             $details['status'] = $klarna->checkOrderStatus($details['rno']);
         } catch (\KlarnaException $e) {
-            $details['error_request'] = get_class($request);
-            $details['error_file'] = $e->getFile();
-            $details['error_line'] = $e->getLine();
-            $details['error_code'] = $e->getCode();
-            $details['error_message'] = $e->getMessage();
+            $this->populateDetailsWithError($details, $e, $request);
         }
     }
 
