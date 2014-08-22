@@ -17,6 +17,9 @@ matrix:
 
 before_script:
   - composer require symfony/framework-bundle:${SYMFONY_VERSION} --prefer-source --no-update
+  - composer require symfony/validator:${SYMFONY_VERSION} --prefer-source --no-update
+  - composer require symfony/form:${SYMFONY_VERSION} --prefer-source --no-update
+  - composer require symfony/twig-bundle:${SYMFONY_VERSION} --prefer-source --no-update
   - composer install --dev --prefer-source
 
 notifications:

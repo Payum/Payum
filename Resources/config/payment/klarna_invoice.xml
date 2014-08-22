@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="payum.klarna.invoice.config.class">Payum\Klarna\Invoice\Config</parameter>
+        <parameter key="payum.klarna.invoice.action.capture.class">Payum\Klarna\Invoice\Action\CaptureAction</parameter>
+        <parameter key="payum.klarna.invoice.action.authorize.class">Payum\Klarna\Invoice\Action\AuthorizeAction</parameter>
+        <parameter key="payum.klarna.invoice.action.sync.class">Payum\Klarna\Invoice\Action\SyncAction</parameter>
+        <parameter key="payum.klarna.invoice.action.status.class">Payum\Klarna\Invoice\Action\StatusAction</parameter>
+        <parameter key="payum.klarna.invoice.action.api.activate.class">Payum\Klarna\Invoice\Action\Api\ActivateAction</parameter>
+        <parameter key="payum.klarna.invoice.action.api.activate_reservation.class">Payum\Klarna\Invoice\Action\Api\ActivateReservationAction</parameter>
+        <parameter key="payum.klarna.invoice.action.api.reserve_amount.class">Payum\Klarna\Invoice\Action\Api\ReserveAmountAction</parameter>
+        <parameter key="payum.klarna.invoice.action.api.cancel_reservation.class">Payum\Klarna\Invoice\Action\Api\CancelReservationAction</parameter>
+        <parameter key="payum.klarna.invoice.action.api.check_order_status.class">Payum\Klarna\Invoice\Action\Api\CheckOrderStatusAction</parameter>
+        <parameter key="payum.klarna.invoice.action.api.get_addresses.class">Payum\Klarna\Invoice\Action\Api\GetAddressesAction</parameter>
+        <parameter key="payum.klarna.invoice.action.api.populate_klarna_from_details.class">Payum\Klarna\Invoice\Action\Api\PopulateKlarnaFromDetailsAction</parameter>
+    </parameters>
+
+    <services>
+        <service
+            id="payum.klarna.invoice.config.prototype"
+            class="%payum.klarna.invoice.config.class%"
+            abstract="true"
+            public="false"
+        >
+        </service>
+
+        <service
+            id="payum.klarna.invoice.action.capture"
+            class="%payum.klarna.invoice.action.capture.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="klarna_invoice" />
+        </service>
+
+        <service
+            id="payum.klarna.invoice.action.authorize"
+            class="%payum.klarna.invoice.action.authorize.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="klarna_invoice" />
+        </service>
+
+        <service
+            id="payum.klarna.invoice.action.sync"
+            class="%payum.klarna.invoice.action.sync.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="klarna_invoice" />
+        </service>
+
+        <service
+            id="payum.klarna.invoice.action.status"
+            class="%payum.klarna.invoice.action.status.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="klarna_invoice" />
+        </service>
+
+        <service
+            id="payum.klarna.invoice.action.api.activate"
+            class="%payum.klarna.invoice.action.api.activate.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="klarna_invoice" />
+        </service>
+
+        <service
+            id="payum.klarna.invoice.action.api.activate_reservation"
+            class="%payum.klarna.invoice.action.api.activate_reservation.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="klarna_invoice" />
+        </service>
+
+        <service
+            id="payum.klarna.invoice.action.api.reserve_amount"
+            class="%payum.klarna.invoice.action.api.reserve_amount.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="klarna_invoice" />
+        </service>
+
+        <service
+            id="payum.klarna.invoice.action.api.cancel_reservation"
+            class="%payum.klarna.invoice.action.api.cancel_reservation.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="klarna_invoice" />
+        </service>
+
+        <service
+            id="payum.klarna.invoice.action.api.check_order_status"
+            class="%payum.klarna.invoice.action.api.check_order_status.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="klarna_invoice" />
+        </service>
+
+        <service
+            id="payum.klarna.invoice.action.api.get_addresses"
+            class="%payum.klarna.invoice.action.api.get_addresses.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="klarna_invoice" />
+        </service>
+
+        <service
+            id="payum.klarna.invoice.action.api.populate_klarna_from_details"
+            class="%payum.klarna.invoice.action.api.populate_klarna_from_details.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="klarna_invoice" />
+        </service>
+    </services>
+</container>
