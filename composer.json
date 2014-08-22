@@ -44,6 +44,7 @@
         "paypal/rest-api-sdk-php" : "0.5.*",
         "omnipay/common": "~2.0",
         "klarna/checkout": "~1",
+        "fp/klarna-invoice": "0.1.*",
         "stripe/stripe-php": "~1.0",
         "ext-soap": "*",
         "twig/twig": "~1.0"
@@ -69,6 +70,7 @@
         "payum/paypal-rest": "self.version",
         "payum/paypal-ipn": "self.version",
         "payum/klarna-checkout": "self.version",
+        "payum/klarna-invoice": "self.version",
         "payum/authorize-net-aim": "self.version",
         "payum/be2bill": "self.version",
         "payum/payex": "self.version",

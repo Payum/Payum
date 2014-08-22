@@ -7,6 +7,19 @@ use Payum\Core\Debug\Humanify;
 class RequestNotSupportedException extends InvalidArgumentException
 {
     /**
+     * @param \Payum\Core\Action\ActionInterface $action
+     * @param mixed $request
+     *
+     * @throws RequestNotSupportedException
+     */
+    public static function assertSupports(ActionInterface $action, $request)
+    {
+        if (false == $action->supports($request)) {
+            throw static::createActionNotSupported($action, $request);
+        }
+    }
+
+    /**
      * @param mixed $request
      *
      * @return RequestNotSupportedException

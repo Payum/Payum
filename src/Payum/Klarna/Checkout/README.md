@@ -3,7 +3,7 @@
 [![Total Downloads](https://poser.pugx.org/payum/klarna-checkout/d/total.png)](https://packagist.org/packages/payum/klarna-checkout)
 [![Latest Stable Version](https://poser.pugx.org/payum/klarna-checkout/version.png)](https://packagist.org/packages/payum/klarna-checkout)
 
-Provide integration of paypal express checkout api to payum.
+Provide integration of Klarna Checkout to Payum.
 
 ## Resources
 
