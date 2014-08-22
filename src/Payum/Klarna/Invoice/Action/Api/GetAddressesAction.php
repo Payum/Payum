@@ -15,7 +15,7 @@ class GetAddressesAction extends BaseApiAwareAction
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $klarna = $this->createKlarna();
+        $klarna = $this->getKlarna();
 
         foreach ($klarna->getAddresses($request->getPno()) as $address) {
             /** @var \KlarnaAddr $address */

@@ -20,7 +20,7 @@ class ActivateAction extends BaseApiAwareAction
         $details = ArrayObject::ensureArrayObject($request->getModel());
         $details->validateNotEmpty(array('rno'));
 
-        $klarna = $this->createKlarna();
+        $klarna = $this->getKlarna();
 
         try {
             $result = $klarna->activate($details['rno'], $details['osr'], $details['activation_flags']);

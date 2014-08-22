@@ -25,7 +25,7 @@ class CheckOrderStatusAction extends BaseApiAwareAction
 
         $details->validateNotEmpty(array('rno'));
 
-        $klarna = $this->createKlarna();
+        $klarna = $this->getKlarna();
 
         try {
             $details['status'] = $klarna->checkOrderStatus($details['rno']);

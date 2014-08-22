@@ -14,6 +14,19 @@ abstract class BaseApiAwareAction implements  ApiAwareInterface, ActionInterface
     protected $config;
 
     /**
+     * @var \Klarna
+     */
+    private $klarna;
+
+    /**
+     * @param \Klarna $klarna
+     */
+    public function __construct(\Klarna $klarna = null)
+    {
+        $this->klarna = $klarna ?: new \Klarna;
+    }
+
+    /**
      * @param mixed $api
      *
      * @throws UnsupportedApiException if the given Api is not supported.
@@ -30,11 +43,9 @@ abstract class BaseApiAwareAction implements  ApiAwareInterface, ActionInterface
     /**
      * @return \Klarna
      */
-    protected function createKlarna()
+    protected function getKlarna()
     {
-        $klarna = new \Klarna;
-
-        $klarna->config(
+        $this->klarna->config(
             $this->config->eid,
             $this->config->secret,
             $this->config->country,
@@ -43,15 +54,15 @@ abstract class BaseApiAwareAction implements  ApiAwareInterface, ActionInterface
             $this->config->mode
         );
 
-        $rp = new \ReflectionProperty($klarna, 'xmlrpc');
+        $rp = new \ReflectionProperty($this->klarna, 'xmlrpc');
         $rp->setAccessible(true);
         /** @var \xmlrpc_client $xmlrpc */
-        $xmlrpc = $rp->getValue($klarna);
+        $xmlrpc = $rp->getValue($this->klarna);
         $xmlrpc->verifyhost = 0;
         $xmlrpc->verifypeer = false;
         $rp->setAccessible(false);
 
-        return $klarna;
+        return $this->klarna;
     }
 
     /**

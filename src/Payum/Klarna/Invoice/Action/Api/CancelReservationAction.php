@@ -20,7 +20,7 @@ class CancelReservationAction extends BaseApiAwareAction
         $details = ArrayObject::ensureArrayObject($request->getModel());
         $details->validateNotEmpty(array('rno'));
 
-        $klarna = $this->createKlarna();
+        $klarna = $this->getKlarna();
 
         try {
             $details['canceled'] = $klarna->cancelReservation($details['rno']);
