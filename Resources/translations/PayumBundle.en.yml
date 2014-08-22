@@ -3,4 +3,4 @@ form:
         holder: Holder Name
         expire_at: Expiration Date
         number: Card Number
-        security_code: Security (CVV) Code
+        security_code: Security (CVV) Code'translation_domain' => 'PayumBundle'
