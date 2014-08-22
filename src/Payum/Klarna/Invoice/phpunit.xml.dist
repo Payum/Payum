@@ -12,7 +12,7 @@
          bootstrap="Tests/bootstrap.php"
 >
     <testsuites>
-        <testsuite name="Payum KlarnaCheckout Component Test Suite">
+        <testsuite name="Payum KlarnaInvoice Component Test Suite">
             <directory>./Tests</directory>
         </testsuite>
     </testsuites>
