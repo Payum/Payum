@@ -2,6 +2,7 @@
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
 use Payum\Klarna\Invoice\Action\Api\CancelReservationAction;
+use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\CancelReservation;
 
 class CancelReservationActionTest extends \PHPUnit_Framework_TestCase
@@ -87,6 +88,9 @@ class CancelReservationActionTest extends \PHPUnit_Framework_TestCase
         $action->execute(new CancelReservation(array()));
     }
 
+    /**
+     * @test
+     */
     public function shouldCallKlarnaCancelReservationMethod()
     {
         $details = array(
@@ -102,6 +106,7 @@ class CancelReservationActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new CancelReservationAction($klarnaMock);
+        $action->setApi(new Config);
 
         $action->execute($activate = new CancelReservation($details));
 
@@ -110,6 +115,9 @@ class CancelReservationActionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($canceledDetails['canceled']);
     }
 
+    /**
+     * @test
+     */
     public function shouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
         $details = array(
@@ -121,15 +129,16 @@ class CancelReservationActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('cancelReservation')
             ->with($details['rno'])
-            ->will($this->returnThrow(new \KlarnaException('theMessage', 'theCode')))
+            ->will($this->throwException(new \KlarnaException('theMessage', 123)))
         ;
 
         $action = new CancelReservationAction($klarnaMock);
+        $action->setApi(new Config);
 
         $action->execute($cancel = new CancelReservation($details));
 
         $activatedDetails = $cancel->getModel();
-        $this->assertEquals('theCode', $activatedDetails['error_code']);
+        $this->assertEquals(123, $activatedDetails['error_code']);
         $this->assertEquals('theMessage', $activatedDetails['error_message']);
     }
 
@@ -138,6 +147,13 @@ class CancelReservationActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createKlarnaMock()
     {
-        return $this->getMock('Klarna');
+        $klarnaMock =  $this->getMock('Klarna', array('config', 'activate', 'cancelReservation', 'checkOrderStatus'));
+
+        $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
+        $rp->setAccessible(true);
+        $rp->setValue($klarnaMock, $this->getMock('xmlrpc_client', array(), array(), '', false));
+        $rp->setAccessible(false);
+
+        return $klarnaMock;
     }
 }

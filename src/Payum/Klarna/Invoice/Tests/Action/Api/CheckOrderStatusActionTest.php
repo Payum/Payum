@@ -1,18 +1,18 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
-use Payum\Klarna\Invoice\Action\Api\ActivateAction;
+use Payum\Klarna\Invoice\Action\Api\CheckOrderStatusAction;
 use Payum\Klarna\Invoice\Config;
-use Payum\Klarna\Invoice\Request\Api\Activate;
+use Payum\Klarna\Invoice\Request\Api\CheckOrderStatus;
 
-class ActivateActionTest extends \PHPUnit_Framework_TestCase
+class CheckOrderStatusActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\ActivateAction');
+        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\CheckOrderStatusAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
     }
@@ -22,7 +22,7 @@ class ActivateActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new ActivateAction;
+        new CheckOrderStatusAction;
     }
 
     /**
@@ -30,25 +30,25 @@ class ActivateActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithKlarnaAsArgument()
     {
-        new ActivateAction($this->createKlarnaMock());
+        new CheckOrderStatusAction($this->createKlarnaMock());
     }
 
     /**
      * @test
      */
-    public function shouldSupportActivateWithArrayAsModel()
+    public function shouldSupportCheckOrderStatusWithArrayAsModel()
     {
-        $action = new ActivateAction;
+        $action = new CheckOrderStatusAction;
 
-        $this->assertTrue($action->supports(new Activate(array())));
+        $this->assertTrue($action->supports(new CheckOrderStatus(array())));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotActivate()
+    public function shouldNotSupportAnythingNotCheckOrderStatus()
     {
-        $action = new ActivateAction;
+        $action = new CheckOrderStatusAction;
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -56,11 +56,11 @@ class ActivateActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportActivateWithNotArrayAccessModel()
+    public function shouldNotSupportCheckOrderStatusWithNotArrayAccessModel()
     {
-        $action = new ActivateAction;
+        $action = new CheckOrderStatusAction;
 
-        $this->assertFalse($action->supports(new Activate(new \stdClass)));
+        $this->assertFalse($action->supports(new CheckOrderStatus(new \stdClass)));
     }
 
     /**
@@ -70,7 +70,7 @@ class ActivateActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $action = new ActivateAction;
+        $action = new CheckOrderStatusAction;
 
         $action->execute(new \stdClass());
     }
@@ -83,42 +83,36 @@ class ActivateActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfRnoNotSet()
     {
-        $action = new ActivateAction;
+        $action = new CheckOrderStatusAction;
 
-        $action->execute(new Activate(array()));
+        $action->execute(new CheckOrderStatus(array()));
     }
 
     /**
      * @test
      */
-    public function shouldCallKlarnaActivate()
+    public function shouldCallKlarnaCheckOrderStatusMethod()
     {
         $details = array(
             'rno' => 'theRno',
-            'osr' => 'theOsr',
-            'activation_flags' => 'theFlags'
         );
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
             ->expects($this->once())
-            ->method('activate')
-            ->with(
-                $details['rno'],
-                $details['osr'],
-                $details['activation_flags']
-            )
-            ->will($this->returnValue(array('theRisk', 'theInvNumber')))
+            ->method('checkOrderStatus')
+            ->with($details['rno'])
+            ->will($this->returnValue('theStatus'))
         ;
 
-        $action = new ActivateAction($klarnaMock);
+        $action = new CheckOrderStatusAction($klarnaMock);
         $action->setApi(new Config);
 
-        $action->execute($activate = new Activate($details));
+        $action->execute($check = new CheckOrderStatus($details));
 
-        $activatedDetails = $activate->getModel();
-        $this->assertEquals('theRisk', $activatedDetails['risk_status']);
-        $this->assertEquals('theInvNumber', $activatedDetails['invoice_number']);
+        $activatedDetails = $check->getModel();
+
+        $this->assertEquals('theStatus', $activatedDetails['status']);
     }
 
     /**
@@ -128,32 +122,45 @@ class ActivateActionTest extends \PHPUnit_Framework_TestCase
     {
         $details = array(
             'rno' => 'theRno',
-            'osr' => 'theOsr',
-            'activation_flags' => 'theFlags'
         );
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
             ->expects($this->once())
-            ->method('activate')
-            ->with(
-                $details['rno'],
-                $details['osr'],
-                $details['activation_flags']
-            )
+            ->method('checkOrderStatus')
+            ->with($details['rno'])
             ->will($this->throwException(new \KlarnaException('theMessage', 123)))
         ;
 
-        $action = new ActivateAction($klarnaMock);
+        $action = new CheckOrderStatusAction($klarnaMock);
         $action->setApi(new Config);
 
-        $action->execute($activate = new Activate($details));
+        $action->execute($activate = new CheckOrderStatus($details));
 
         $activatedDetails = $activate->getModel();
-
         $this->assertEquals(123, $activatedDetails['error_code']);
         $this->assertEquals('theMessage', $activatedDetails['error_message']);
+    }
 
+    /**
+     * @test
+     */
+    public function shouldDoNothingIfAlreadyActivated()
+    {
+        $details = array(
+            'rno' => 'theRno',
+            'invoice_number' => 'anInvNumber',
+        );
+
+        $klarnaMock = $this->createKlarnaMock();
+        $klarnaMock
+            ->expects($this->never())
+            ->method('checkOrderStatus')
+        ;
+
+        $action = new CheckOrderStatusAction($klarnaMock);
+
+        $action->execute($activate = new CheckOrderStatus($details));
     }
 
     /**
