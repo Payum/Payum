@@ -3,4 +3,4 @@ form:
         holder: Holder Name
         expire_at: Expiration Date
         number: Card Number
-        security_code: Sigurnosni kod (CVV)
+        security_code: Security (CVV) Code
