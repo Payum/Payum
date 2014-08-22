@@ -19,7 +19,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()   
+    public function couldBeConstructedWithoutAnyArguments()
     {
         new SetExpressCheckoutAction();
     }
@@ -30,9 +30,9 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
     public function shouldSupportSetExpressCheckoutRequestAndArrayAccessAsModel()
     {
         $action = new SetExpressCheckoutAction();
-        
+
         $request = new SetExpressCheckout($this->getMock('ArrayAccess'));
-        
+
         $this->assertTrue($action->supports($request));
     }
 
@@ -48,7 +48,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
@@ -62,12 +62,12 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The PAYMENTREQEUST_0_AMT must be set.
+     * @expectedExceptionMessage The PAYMENTREQUEST_0_AMT must be set.
      */
     public function throwIfModelNotHavePaymentAmountSet()
     {
         $action = new SetExpressCheckoutAction();
-        
+
         $request = new SetExpressCheckout(new \ArrayObject());
 
         $action->execute($request);
@@ -81,7 +81,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
         $testCase = $this;
 
         $expectedAmount = 154.23;
-        
+
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
@@ -93,7 +93,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
                 return array();
             }))
         ;
-        
+
         $action = new SetExpressCheckoutAction($apiMock);
         $action->setApi($apiMock);
 
@@ -131,7 +131,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
         $action->execute($request);
 
         $model = $request->getModel();
-        
+
         $this->assertEquals('theFirstname', $model['FIRSTNAME']);
         $this->assertEquals('the@example.com', $model['EMAIL']);
     }
