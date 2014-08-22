@@ -38,7 +38,7 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
      * @param string $notifyPath
      * @param string $authorizePath
      */
-    public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $capturePath, $notifyPath, $authorizePath)
+    public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $capturePath, $notifyPath, $authorizePath, $creditPath)
     {
         $this->tokenStorage = $tokenStorage;
         $this->storageRegistry = $storageRegistry;
@@ -46,6 +46,7 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
         $this->capturePath = $capturePath;
         $this->notifyPath = $notifyPath;
         $this->authorizePath = $authorizePath;
+        $this->creditPath = $creditPath;
     }
 
     /**
@@ -122,6 +123,21 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
         $this->tokenStorage->updateModel($authorizeToken);
 
         return $authorizeToken;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createCreditToken($paymentName, $model, $afterPath, array $afterParameters = array())
+    {
+        $afterToken = $this->createToken($paymentName, $model, $afterPath, $afterParameters);
+
+        $creditToken = $this->createToken($paymentName, $model, $this->creditPath);
+        $creditToken->setAfterUrl($afterToken->getTargetUrl());
+
+        $this->tokenStorage->updateModel($creditToken);
+
+        return $creditToken;
     }
 
     /**
