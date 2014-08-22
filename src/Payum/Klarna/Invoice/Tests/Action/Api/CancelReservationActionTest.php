@@ -36,6 +36,31 @@ class CancelReservationActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldAllowSetConfigAsApi()
+    {
+        $action = new CancelReservationAction($this->createKlarnaMock());
+
+        $action->setApi($config = new Config);
+
+        $this->assertAttributeSame($config, 'config', $action);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\UnsupportedApiException
+     * @expectedExceptionMessage Instance of Config is expected to be passed as api.
+     */
+    public function throwApiNotSupportedIfNotConfigGivenAsApi()
+    {
+        $action = new CancelReservationAction($this->createKlarnaMock());
+
+        $action->setApi(new \stdClass);
+    }
+
+    /**
+     * @test
+     */
     public function shouldSupportCancelReservationWithArrayAsModel()
     {
         $action = new CancelReservationAction;
