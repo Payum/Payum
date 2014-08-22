@@ -21,7 +21,7 @@ class SyncAction extends PaymentAwareAction
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if ($details['rno']) {
+        if ($details['rno'] && false == $details['invoice_number']) {
             $this->payment->execute(new CheckOrderStatus($request->getModel()));
         }
     }
