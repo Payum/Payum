@@ -13,14 +13,18 @@ class CreditCardType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('holder', 'text')
-            ->add('number', 'text')
-            ->add('securityCode', 'text')
-            ->add('expireAt', 'payum_credit_card_expiration_date', array(
-                'input' => 'datetime',
-                'widget' => 'choice'
-            ))
-        ;
+            ->add('holder', 'text', array('label' => 'form.credit_card.holder'))
+            ->add('number', 'text', array('label' => 'form.credit_card.number'))
+            ->add('securityCode', 'text', array('label' => 'form.credit_card.security_code'))
+            ->add(
+                'expireAt',
+                'payum_credit_card_expiration_date',
+                array(
+                    'input' => 'datetime',
+                    'widget' => 'choice',
+                    'label' => 'form.credit_card.expire_at'
+                )
+            );
     }
 
     /**
@@ -29,12 +33,14 @@ class CreditCardType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver
-            ->setDefaults(array(
-                'data_class'        => 'Payum\Core\Model\CreditCard',
-                'validation_groups' => array('Payum'),
-                'label' => false
-            ))
-        ;
+            ->setDefaults(
+                array(
+                    'data_class' => 'Payum\Core\Model\CreditCard',
+                    'validation_groups' => array('Payum'),
+                    'label' => false,
+                    'translation_domain' => 'PayumBundle',
+                )
+            );
     }
 
     /**

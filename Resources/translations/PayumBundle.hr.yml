@@ -1,0 +1,6 @@
+form:
+    credit_card:
+        holder: Ime i prezime
+        expire_at: Vrijedi do
+        number: Broj Kartice
+        security_code: Sigurnosni broj (CVV)
