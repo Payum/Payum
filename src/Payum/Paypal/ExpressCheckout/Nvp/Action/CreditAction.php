@@ -3,6 +3,8 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\Credit;
+use Payum\Core\Request\SecuredCredit;
+use Payum\Core\Request\Sync;
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\APApi;
@@ -21,7 +23,24 @@ class CreditAction extends PaymentAwareAction
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        //TODO
+        if (false == $model['returnUrl'] && $request instanceof SecuredCredit) {
+            $model['returnUrl'] = $request->getToken()->getTargetUrl();
+        }
+
+        if (false == $model['cancelUrl'] && $request instanceof SecuredCredit) {
+            $model['cancelUrl'] = $request->getToken()->getTargetUrl();
+        }
+
+        $this->payment->execute(new SetExpressCheckout($model));
+
+        $this->payment->execute(new Sync($model));
+
+        /*
+         * TODO
+         * $this->payment->execute(new DoSimpleAdaptivePayment($model));
+         */
+
+        $this->payment->execute(new Sync($model));
     }
 
     /**
