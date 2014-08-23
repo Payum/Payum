@@ -16,7 +16,7 @@ Provide integration of Klarna Checkout to Payum.
 
 KlarnaCheckout is an open source, community-driven project. Pull requests are very welcome.
 
-## Like it? Spread the world!
+## Like it? Spread the word!
 
 Star payum on [github](https://github.com/Payum/KlarnaCheckout) or [packagist](https://packagist.org/packages/payum/klarna-checkout).
 
