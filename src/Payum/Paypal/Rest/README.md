@@ -3,7 +3,7 @@
 [![Total Downloads](https://poser.pugx.org/payum/paypal-rest/d/total.png)](https://packagist.org/packages/payum/paypal-rest)
 [![Latest Stable Version](https://poser.pugx.org/payum/paypal-rest/version.png)](https://packagist.org/packages/payum/paypal-rest)
 
-Provide integration of paypal rest api to payum.
+Provide integration of PayPal REST API to payum.
 
 ## Resources
 
@@ -17,7 +17,7 @@ Provide integration of paypal rest api to payum.
 
 PaypalRest is an open source, community-driven project. Pull requests are very welcome.
 
-## Like it? Spread the world!
+## Like it? Spread the word!
 
 Star payum on [github](https://github.com/Payum/PaypalRest) or [packagist](https://packagist.org/packages/payum/paypal-rest).
 You may also drop a message on Twitter.

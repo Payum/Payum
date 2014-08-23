@@ -16,7 +16,7 @@ The lib implements [Be2Bill](http://www.be2bill.com/) payment.
 
 Be2Bill is an open source, community-driven project. Pull requests are very welcome.
 
-## Like it? Spread the world!
+## Like it? Spread the word!
 
 Star payum on [github](https://github.com/Payum/Be2Bill) or [packagist](https://packagist.org/packages/payum/be2bill).
 You may also drop a message on Twitter.

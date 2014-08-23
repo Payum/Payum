@@ -15,7 +15,7 @@ This bridge allows you to use omnipay gateways but in payum like way.
 
 OmnipayBridge is an open source, community-driven project. Pull requests are very welcome.
 
-## Like it? Spread the world!
+## Like it? Spread the word!
 
 Star payum on [github](https://github.com/Payum/OmnipayBridge) or [packagist](https://packagist.org/packages/payum/omnipay-bridge).
 
