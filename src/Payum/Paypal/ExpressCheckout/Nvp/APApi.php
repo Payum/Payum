@@ -11,6 +11,8 @@ use Payum\Core\Exception\RuntimeException;
 
 class APApi
 {
+    const ADAPTIVEOPERATION_PAY = 'PAY';
+
     const CMD_ADAPTIVE_PAYMENT = '_ap-payment';
     
     const CMD_ADAPTIVE_PREAPPROVAL = '_ap-preapproval';
@@ -68,13 +70,46 @@ class APApi
      *
      * @return array
      */
+    public function setSimpleAdaptivePayment(array $fields)
+    {
+        $request = new FormRequest;
+        $request->setFields($fields);
+
+        if (false == isset($fields['returnUrl'])) {
+            if (false == $this->options['return_url']) {
+                throw new RuntimeException('The return_url must be set either to FormRequest or to options.');
+            }
+
+            $request->setField('returnUrl', $this->options['return_url']);
+        }
+
+        if (false == isset($fields['cancelUrl'])) {
+            if (false == $this->options['cancel_url']) {
+                throw new RuntimeException('The cancel_url must be set either to FormRequest or to options.');
+            }
+
+            $request->setField('cancelUrl', $this->options['cancel_url']);
+        }
+
+        $request->setField('actionType', APApi::ADAPTIVEOPERATION_PAY);
+
+        $this->addAuthorizeFields($request);
+        $this->addAppID($request);
+
+        return $this->doRequest($request);
+    }
+
+    /**
+     * @param array $fields
+     *
+     * @return array
+     */
     public function pay(array $fields)
     {
         $request = new FormRequest;
         $request->setFields($fields);
 
         $request->setField('METHOD', 'Pay');
-        $request->addHeader("");
 
         $this->addAuthorizeFields($request);
         $this->addAppID($request);
@@ -109,7 +144,9 @@ class APApi
         return $result;
     }
 
-    //TODO
+    /*
+     * TODO: Implement more methods
+     */
 
     /**
      * @return string
@@ -117,8 +154,8 @@ class APApi
     protected function getApiEndpoint()
     {
         return $this->options['sandbox'] ?
-            'https://svcs.sandbox.paypal.com/AdaptivePayments/API_operation' :
-            'https://svcs.paypal.com/AdaptivePayments/API_operation'
+            'https://svcs.sandbox.paypal.com/AdaptivePayments/Pay' :
+            'https://svcs.paypal.com/AdaptivePayments/Pay'
         ;
     }
 
@@ -136,5 +173,10 @@ class APApi
     protected function addAppID(FormRequest $request)
     {
         $request->addHeader('X-PAYPAL-APPLICATION-ID: ' . $this->options['appid']);
+        /*
+         * TODO: Should those 2 be here?
+         */
+        $request->addHeader('X-PAYPAL-REQUEST-DATA-FORMAT: NV');
+        $request->addHeader('X-PAYPAL-RESPONSE-DATA-FORMAT: NV');
     }
 }

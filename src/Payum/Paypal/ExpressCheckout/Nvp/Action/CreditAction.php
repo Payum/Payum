@@ -31,14 +31,14 @@ class CreditAction extends PaymentAwareAction
             $model['cancelUrl'] = $request->getToken()->getTargetUrl();
         }
 
-        $this->payment->execute(new SetExpressCheckout($model));
+        $this->payment->execute(new setSimpleAdaptivePayment($model));
 
         $this->payment->execute(new Sync($model));
 
         /*
-         * TODO
-         * $this->payment->execute(new DoSimpleAdaptivePayment($model));
+         * TODO: Check for something before calling 'pay'?
          */
+        $this->payment->execute(new pay($model));
 
         $this->payment->execute(new Sync($model));
     }
