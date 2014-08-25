@@ -8,6 +8,7 @@ use Payum\Core\Request\Sync;
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\APApi;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetSimpleAdaptivePayment;
 
 class CreditAction extends PaymentAwareAction
 {
