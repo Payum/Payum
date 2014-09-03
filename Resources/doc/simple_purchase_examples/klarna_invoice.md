@@ -30,8 +30,8 @@ payum:
     contexts:
         your_context_here:
             klarna_invoice:
-                secret:  'get this from gateway side'
-                merchant_id: 'REPLACE WITH YOUR MERCHANT_ID'
+                secret: 'EDIT ME'
+                eid: 'EDIT ME'
                 sandbox: true
 ```
 
