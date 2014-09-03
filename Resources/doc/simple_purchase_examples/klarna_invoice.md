@@ -51,7 +51,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PaymentController extends Controller
 {
-    public function preparePaypalExpressCheckoutPaymentAction()
+    public function prepareKlarnaInvoiceAction()
     {
         $paymentName = 'your_payment_name';
 
