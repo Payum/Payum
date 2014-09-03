@@ -1,6 +1,6 @@
 # Get it started.
 
-In this chapter we are going to talk about the most common task: purchasing a product using klarna checkout.
+In this chapter we are going to talk about the most common task: purchasing a product using Klarna Checkout.
 We assume you already read [payum's get it started documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md).
 Here we just extend what was said there to match klarna's specific details.
 
