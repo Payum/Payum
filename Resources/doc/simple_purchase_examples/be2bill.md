@@ -54,20 +54,20 @@ class PaymentController extends Controller
         $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\PaymentDetails');
 
         /** @var \Acme\PaymentBundle\Entity\PaymentDetails */
-        $paymentDetails = $storage->createModel();
+        $details = $storage->createModel();
         //be2bill amount format is cents: for example:  100.05 (EUR). will be 10005.
-        $paymentDetails['AMOUNT'] = 10005;
-        $paymentDetails['CLIENTEMAIL'] = 'user@email.com';
-        $paymentDetails['CLIENTUSERAGENT'] = $request->headers->get('User-Agent', 'Unknown');
-        $paymentDetails['CLIENTIP'] = $request->getClientIp();
-        $paymentDetails['CLIENTIDENT'] = 'payerId';
-        $paymentDetails['DESCRIPTION'] = 'Payment for digital stuff';
-        $paymentDetails['ORDERID'] = 'orderId';
-        $storage->updateModel($paymentDetails);
+        $details['AMOUNT'] = 10005;
+        $details['CLIENTEMAIL'] = 'user@email.com';
+        $details['CLIENTUSERAGENT'] = $request->headers->get('User-Agent', 'Unknown');
+        $details['CLIENTIP'] = $request->getClientIp();
+        $details['CLIENTIDENT'] = 'payerId';
+        $details['DESCRIPTION'] = 'Payment for digital stuff';
+        $details['ORDERID'] = 'orderId';
+        $storage->updateModel($details);
 
         $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
             $paymentName,
-            $paymentDetails,
+            $details,
             'acme_payment_done' // the route to redirect after capture;
         );
 
@@ -85,10 +85,10 @@ If you still able to pass credit card details explicitly:
 <?php
 use Payum\Core\Security\SensitiveValue;
 
-$paymentDetails['CARDCODE'] = new SensitiveValue('5555 5567 7825 0000');
-$paymentDetails['CARDCVV'] = new SensitiveValue(123);
-$paymentDetails['CARDFULLNAME'] = new SensitiveValue('John Doe');
-$paymentDetails['CARDVALIDITYDATE'] = new SensitiveValue('15-11');
+$details['CARDCODE'] = new SensitiveValue('5555 5567 7825 0000');
+$details['CARDCVV'] = new SensitiveValue(123);
+$details['CARDFULLNAME'] = new SensitiveValue('John Doe');
+$details['CARDVALIDITYDATE'] = new SensitiveValue('15-11');
 ```
 
 ## Next Step

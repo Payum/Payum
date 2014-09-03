@@ -1,4 +1,4 @@
-# Paypal express checkout
+# Klarna Invoice
 
 Steps:
 
@@ -13,7 +13,7 @@ _**Note**: We assume you followed all steps in [get it started](https://github.c
 Run the following command:
 
 ```bash
-$ php composer.phar require "payum/paypal-express-checkout-nvp:*@stable"
+$ php composer.phar require "payum/klarna-invoice:@stable"
 ```
 
 ## Configure context
@@ -21,21 +21,25 @@ $ php composer.phar require "payum/paypal-express-checkout-nvp:*@stable"
 ```yaml
 #app/config/config.yml
 
+twig:
+    paths:
+        %kernel.root_dir%/../vendor/payum/payum/src/Payum/Core/Resources/views: PayumCore
+        %kernel.root_dir%/../vendor/payum/payum/src/Payum/Klarna/Checkout/Resources/views: PayumKlarnaCheckout
+
 payum:
     contexts:
         your_context_here:
-            paypal_express_checkout_nvp:
-                username:  'get this from gateway side'
-                password:  'get this from gateway side'
-                signature: 'get this from gateway side'
+            klarna_invoice:
+                secret:  'get this from gateway side'
+                merchant_id: 'REPLACE WITH YOUR MERCHANT_ID'
                 sandbox: true
 ```
 
-_**Attention**: You have to changed `your_payment_name` to something more descriptive and domain related, for example `post_a_job_with_paypal`._
+_**Attention**: You have to changed `your_payment_name` to something more descriptive and domain related, for example `post_a_job_with_klarna`._
 
 ## Prepare payment
 
-Now we are ready to prepare the payment. Here we set price, currency, cart items details and so.
+Now we are ready to prepare the payment. Here we set price, currency, cart items details and so on.
 Please note that you have to set details in the payment gateway specific format.
 
 ```php
@@ -54,20 +58,39 @@ class PaymentController extends Controller
         $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\PaymentDetails');
 
         /** @var \Acme\PaymentBundle\Entity\PaymentDetails $details */
+        $payment = $payum->getPayment($paymentName);
+        $payment->execute($getAddresses = new GetAddresses($pno));
+
+        $storage = $registry->getStorage($detailsClass);
+        $storage = $this->getPayum()->getStorage('Acme\PaymentBundle\Model\PaymentDetails');
+
         $details = $storage->createModel();
-        $details['PAYMENTREQUEST_0_CURRENCYCODE'] = 'USD';
-        $details['PAYMENTREQUEST_0_AMT'] = 1.23;
+        $details = array(
+            /** @link http://developers.klarna.com/en/testing/invoice-and-account */
+            'pno' => '410321-9202',
+            'amount' => -1,
+            'gender' => \KlarnaFlags::MALE,
+            'articles' => array(
+                array(
+                    'qty' => 4,
+                    'artNo' => 'HANDLING',
+                    'title' => 'Handling fee',
+                    'price' => '50.99',
+                    'vat' => '25',
+                    'discount' => '0',
+                    'flags' => \KlarnaFlags::INC_VAT | \KlarnaFlags::IS_HANDLING
+                ),
+            ),
+            'billing_address' => $getAddresses->getFirstAddress()->toArray(),
+            'shipping_address' => $getAddresses->getFirstAddress()->toArray(),
+        );
         $storage->updateModel($details);
 
-        $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
+        $captureToken = $this->getTokenFactory()->createCaptureToken(
             $paymentName,
             $details,
-            'acme_payment_done' // the route to redirect after capture;
+            'acme_payment_details_view'
         );
-
-        $details['INVNUM'] = $details->getId();
-        $details['RETURNURL'] = $captureToken->getTargetUrl();
-        $details['CANCELURL'] = $captureToken->getTargetUrl();
         $storage->updateModel($details);
 
         return $this->redirect($captureToken->getTargetUrl());

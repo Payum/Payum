@@ -10,7 +10,7 @@ Well, let's assume you created capture token this way while preparing payment:
 <?php
 $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
     $paymentName,
-    $paymentDetails,
+    $details,
     'acme_payment_done'
 );
 ```

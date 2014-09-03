@@ -1,4 +1,4 @@
-# Klarna checkout
+# Klarna Checkout
 
 Steps:
 
@@ -57,14 +57,14 @@ class PaymentController extends Controller
 
         $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\PaymentDetails');
 
-        /** @var \Acme\PaymentBundle\Entity\PaymentDetails $paymentDetails */
+        /** @var \Acme\PaymentBundle\Entity\PaymentDetails $details */
         $details = $storage->createModel();
         $details['purchase_country'] = 'SE';
         $details['purchase_currency'] = 'SEK';
         $details['locale'] = 'sv-se';
         $storage->updateModel($details);
 
-        $captureToken = $captureToken = $this->getTokenFactory()->createCaptureToken(
+        $captureToken = $this->getTokenFactory()->createCaptureToken(
             $paymentName,
             $details,
             'acme_payment_details_view'

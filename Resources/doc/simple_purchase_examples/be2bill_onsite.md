@@ -55,17 +55,17 @@ class PaymentController extends Controller
         $storage = $this->getPayum()->getStorage('Acme\PaymentBundle\Entity\PaymentDetails');
 
         /** @var PaymentDetails */
-        $paymentDetails = $storage->createModel();
+        $details = $storage->createModel();
         //be2bill amount format is cents: for example:  100.05 (EUR). will be 10005.
-        $paymentDetails['AMOUNT'] = 10005;
-        $paymentDetails['CLIENTIDENT'] = 'payerId';
-        $paymentDetails['DESCRIPTION'] = 'Payment for digital stuff';
-        $paymentDetails['ORDERID'] = 'orderId'.uniqid();
-        $storage->updateModel($paymentDetails);
+        $details['AMOUNT'] = 10005;
+        $details['CLIENTIDENT'] = 'payerId';
+        $details['DESCRIPTION'] = 'Payment for digital stuff';
+        $details['ORDERID'] = 'orderId'.uniqid();
+        $storage->updateModel($details);
 
         $captureToken = $this->getTokenFactory()->createCaptureToken(
             $paymentName,
-            $paymentDetails,
+            $details,
             'acme_payment_done' // the route to redirect after capture;
         );
 

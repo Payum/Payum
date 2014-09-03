@@ -54,15 +54,15 @@ class PaymentController extends Controller
 
         $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\PaymentDetails');
 
-        /** @var \Acme\PaymentBundle\Entity\PaymentDetails $paymentDetails */
-        $paymentDetails = $storage->createModel();
-        $paymentDetails['amt'] = 1;
-        $paymentDetails['currency'] = 'USD';
-        $storage->updateModel($paymentDetails);
+        /** @var \Acme\PaymentBundle\Entity\PaymentDetails $details */
+        $details = $storage->createModel();
+        $details['amt'] = 1;
+        $details['currency'] = 'USD';
+        $storage->updateModel($details);
 
         $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
             $paymentName,
-            $paymentDetails,
+            $details,
             'acme_payment_done' // the route to redirect after capture;
         );
 
@@ -80,9 +80,9 @@ If you still able to pass credit card details explicitly:
 <?php
 use Payum\Core\Security\SensitiveValue;
 
-$paymentDetails['acct'] = new SensitiveValue('5105105105105100');
-$paymentDetails['cvv2'] = new SensitiveValue('123');
-$paymentDetails['expDate'] = new SensitiveValue('1214');
+$details['acct'] = new SensitiveValue('5105105105105100');
+$details['cvv2'] = new SensitiveValue('123');
+$details['expDate'] = new SensitiveValue('1214');
 ```
 
 ## Next Step
