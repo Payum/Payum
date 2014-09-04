@@ -55,7 +55,7 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
         $builder
             ->validate()
             ->ifTrue(function($v) {
-                $gatewayFactory = new GatewayFactory;
+                $gatewayFactory = Omnipay::getFactory();
                 $gatewayFactory->find();
 
                 $supportedTypes = $gatewayFactory->all();
