@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
+use Omnipay\Omnipay;
 use Omnipay\Common\GatewayFactory;
 use Payum\Core\Exception\RuntimeException;
 use Payum\Core\Exception\LogicException;
