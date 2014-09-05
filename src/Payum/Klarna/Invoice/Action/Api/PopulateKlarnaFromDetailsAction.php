@@ -77,10 +77,14 @@ class PopulateKlarnaFromDetailsAction implements ActionInterface
         if ($details['estore_info']) {
             $estoreInfo = ArrayObject::ensureArrayObject($details['estore_info']);
 
-            $klarna->setEstoreInfo($estoreInfo['order_id1'], $estoreInfo['order_id2'], $estoreInfo['username']);
+            $klarna->setEstoreInfo(
+                utf8_decode($estoreInfo['order_id1']),
+                utf8_decode($estoreInfo['order_id2']),
+                utf8_decode($estoreInfo['username'])
+            );
         }
 
-        $klarna->setComment($details['commnet']);
+        $klarna->setComment(utf8_decode($details['commnet']));
     }
 
     /**
