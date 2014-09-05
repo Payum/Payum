@@ -60,8 +60,8 @@ abstract class BaseApiAwareAction implements  ApiAwareInterface, ActionInterface
         $rp->setAccessible(true);
         /** @var \xmlrpc_client $xmlrpc */
         $xmlrpc = $rp->getValue($this->klarna);
-        $xmlrpc->verifyhost = 0;
-        $xmlrpc->verifypeer = false;
+        $xmlrpc->verifyhost = $this->config->xmlRpcVerifyHost;
+        $xmlrpc->verifypeer = $this->config->xmlRpcVerifyPeer;
         $rp->setAccessible(false);
 
         return $this->klarna;
