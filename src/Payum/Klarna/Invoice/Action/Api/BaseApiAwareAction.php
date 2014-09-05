@@ -54,6 +54,8 @@ abstract class BaseApiAwareAction implements  ApiAwareInterface, ActionInterface
             $this->config->mode
         );
 
+        $this->klarna->clear();
+
         $rp = new \ReflectionProperty($this->klarna, 'xmlrpc');
         $rp->setAccessible(true);
         /** @var \xmlrpc_client $xmlrpc */
