@@ -63,12 +63,12 @@ class PopulateKlarnaFromDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldPopulateKlarnaFromDetails()
     {
-        $details = new \ArrayObject(array (
+        $details = new \ArrayObject(array(
             'pno' => '410321-9202',
             'amount' => -1,
             'gender' => 1,
-            'articles' => array (
-                array (
+            'articles' => array(
+                array(
                     'qty' => 4,
                     'artNo' => 'HANDLING',
                     'title' => 'Handling fee',
@@ -78,7 +78,7 @@ class PopulateKlarnaFromDetailsActionTest extends \PHPUnit_Framework_TestCase
                     'flags' => 48,
                 ),
             ),
-            'billing_address' => array (
+            'billing_address' => array(
                 'email' => 'info@payum.com',
                 'telno' => '0700 00 00 00',
                 'cellno' => '',
@@ -93,7 +93,7 @@ class PopulateKlarnaFromDetailsActionTest extends \PHPUnit_Framework_TestCase
                 'city' => 'Ankeborg',
                 'country' => 209,
             ),
-            'shipping_address' => array (
+            'shipping_address' => array(
                 'email' => 'info@payum.com',
                 'telno' => '0700 00 00 00',
                 'cellno' => '',
@@ -108,11 +108,33 @@ class PopulateKlarnaFromDetailsActionTest extends \PHPUnit_Framework_TestCase
                 'city' => 'Ankeborg',
                 'country' => 209,
             ),
+            'estore_info' => array(
+                'order_id1' => 'anId',
+                'order_id2' => 'anId',
+                'username' => 'aName',
+            ),
+            'comment' => 'aComment',
         ));
 
         $klarna = new \Klarna;
 
         $request = new PopulateKlarnaFromDetails($details, $klarna);
+
+        $action = new PopulateKlarnaFromDetailsAction;
+
+        $action->execute($request);
+
+        //Klarna does not provide a way to get data from its object. So we just test that there werent any errors.
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotFaileIfEmptyDetailsGiven()
+    {
+        $klarna = new \Klarna;
+
+        $request = new PopulateKlarnaFromDetails(new \ArrayObject, $klarna);
 
         $action = new PopulateKlarnaFromDetailsAction;
 
