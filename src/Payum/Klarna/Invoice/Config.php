@@ -42,4 +42,14 @@ class Config
      * @var string
      */
     public $pClassStoragePath = './pclasses.json';
+
+    /**
+     * @var int
+     */
+    public $xmlRpcVerifyHost = 2;
+
+    /**
+     * @var bool
+     */
+    public $xmlRpcVerifyPeer = true;
 }

@@ -73,6 +73,18 @@ class PopulateKlarnaFromDetailsAction implements ActionInterface
                 utf8_decode($address['house_extension'])
             ));
         }
+
+        if ($details['estore_info']) {
+            $estoreInfo = ArrayObject::ensureArrayObject($details['estore_info']);
+
+            $klarna->setEstoreInfo(
+                utf8_decode($estoreInfo['order_id1']),
+                utf8_decode($estoreInfo['order_id2']),
+                utf8_decode($estoreInfo['username'])
+            );
+        }
+
+        $klarna->setComment(utf8_decode($details['commnet']));
     }
 
     /**
