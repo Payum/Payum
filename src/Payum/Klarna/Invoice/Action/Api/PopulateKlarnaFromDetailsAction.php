@@ -84,7 +84,7 @@ class PopulateKlarnaFromDetailsAction implements ActionInterface
             );
         }
 
-        $klarna->setComment(utf8_decode($details['commnet']));
+        $klarna->setComment(utf8_decode($details['comment']));
     }
 
     /**
