@@ -31,7 +31,7 @@ class PopulateKlarnaFromDetailsAction implements ActionInterface
                     utf8_decode($article['price']),
                     utf8_decode($article['vat']),
                     utf8_decode($article['discount']),
-                    utf8_decode($article['flags'])
+                    $article['flags'] ?: \KlarnaFlags::NO_FLAG
                 );
             }
         }
