@@ -121,6 +121,25 @@ class CustomStorageFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldAllowAddShortConfiguration()
+    {
+        $factory = new CustomStorageFactory;
+
+        $tb = new TreeBuilder();
+        $rootNode = $tb->root('foo');
+
+        $factory->addConfiguration($rootNode);
+
+        $processor = new Processor();
+        $config = $processor->process($tb->buildTree(), array('storageId'));
+
+        $this->assertArrayHasKey('service', $config);
+        $this->assertEquals('storageId', $config['service']);
+    }
+
+    /**
+     * @test
+     */
     public function shouldCreateServiceDefinition()
     {
         $serviceName = 'service.name';

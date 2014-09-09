@@ -30,8 +30,13 @@ class CustomStorageFactory extends AbstractStorageFactory
     {
         parent::addConfiguration($builder);
 
-        $builder->children()
-            ->scalarNode('service')->isRequired()->cannotBeEmpty()->end()
-        ->end();
+        $builder
+            ->beforeNormalization()->ifString()->then(function($v) {
+                return array('service' => $v);
+            })->end()
+            ->children()
+                ->scalarNode('service')->isRequired()->cannotBeEmpty()->end()
+            ->end()
+        ;
     }
 }

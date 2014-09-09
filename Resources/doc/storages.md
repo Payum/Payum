@@ -165,6 +165,46 @@ payum:
 
 _**Note**: You should use commented path if you install payum/payum package._
 
+
+## Custom.
+
+We have several built in storages which cover all your needs. Sometimes you need completely custom storage.
+To have a custom storage you have to implement `StorageInterface` from core:
+
+```php
+<?php
+namespace Acme\PaymentBundle\Payum\Storage;
+
+use Payum\Core\Storage\StorageInterface;
+
+class CustomStorage implements StorageInterface
+{
+  // implement interface methods.
+}
+```
+
+Register it as a service:
+
+```yaml
+# app/config/config.yml
+
+services:
+    acme.payment.payum.storage.custom:
+        class: Acme\PaymentBundle\Payum\Storage\CustomStorage
+```
+
+When you are done you can use it like this:
+
+
+```yaml
+# app/config/config.yml
+
+payum:
+    storages:
+        Acme\PaymentBundle\Model\Foo:
+            custom: acme.payment.payum.storage.custom
+```
+
 ## Filesystem.
 
 _**Attention**: Use filesystem storage only for testing and never in production._
