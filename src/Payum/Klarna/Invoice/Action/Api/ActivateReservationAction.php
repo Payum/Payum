@@ -47,8 +47,8 @@ class ActivateReservationAction extends BaseApiAwareAction implements PaymentAwa
                 $details['activate_reservation_flags'] ?: \KlarnaFlags::NO_FLAG
             );
 
-            $details['rno'] = $result[0];
-            $details['status'] = $result[1];
+            $details['risk_status'] = $result[0];
+            $details['invoice_number'] = $result[1];
         } catch (\KlarnaException $e) {
             $this->populateDetailsWithError($details, $e, $request);
         }
