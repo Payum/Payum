@@ -25,7 +25,7 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "payum/core": "0.11.*",
+        "payum/core": "0.12.*@dev",
         "paypal/rest-api-sdk-php" : "0.5.*"
     },
     "require-dev": {
@@ -40,7 +40,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.11-dev"
+            "dev-master": "0.12-dev"
         }
     }
 }
