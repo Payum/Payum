@@ -1,7 +1,7 @@
 {
     "name": "payum/core",
     "type": "library",
-    "description": "Domain friendly payment framework. Paypal, payex, authorize.net, be2bill, omnipay, recurring payments, instant notifications and many more",
+    "description": "Domain  friendly payment framework. Paypal, payex, authorize.net, be2bill, omnipay, recurring payments, instant notifications and many more",
     "keywords": [
         "payment",
         "recurring payment",

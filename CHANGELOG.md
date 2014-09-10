@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.11.0 (2014-09-10)
+
+* [klarna] add klarna invoice support.
+* [request] add authorize request.
+* [tests] upgrade phpunit up to 4.x
+* [request] Rename interactive requests to replies. `RedirectUrlInteractiveRequest` become `HttpRedirect` reply.
+* [request] Remove `Request` postfix. CaptureRequest become just Capture.
+* [request] Rename `SimpleStatusRequest` to `GetHumanStatus` request.
+* [request] Rename `BinaryMaskStatusRequest` to `GetBinaryStatus` request.
+
 ## 0.10.0 (2014-07-31)
 
 * [doc] fix typos, improve examples, get-it-started page.
