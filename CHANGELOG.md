@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.11.0 (2014-09-11)
+
+* [storage] add short version of config for custom storage.
+* [storage] add custom storage.
+* [klarna] add klarna invoice payment support.
+* [translation] add croatian translation for credit card form
+* [request] add support of authorize request.
+* [request] remove Request postfix, move interactive request to reply namespace.
+* [tests] phpunit 4.x upgrade
+
+## 0.10.0 (2014-09-04)
+
+* [omnipay] add support custom gateways.
+
 ## 0.10.0 (2014-08-01)
 
 * [paypal] reflect changes in api. constructor arguments order has been changed.
