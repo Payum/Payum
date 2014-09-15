@@ -1,9 +1,9 @@
 <?php
 namespace Payum\Core\Tests\Registry;
 
-use Payum\Core\Registry\AbstractRegistry;
+use Doctrine\Common\Persistence\Proxy;
 
-class AbstractRegistryTest extends \PHPUnit_Framework_TestCase 
+class AbstractRegistryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -182,6 +182,44 @@ class AbstractRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function shouldAllowGetStorageIfDoctrineProxyClassGiven()
+    {
+        $payments = array('fooName' => 'fooPayment', 'barName' => 'barPayment');
+        $storages = array('Payum\Core\Tests\Registry\DoctrineModel' => 'barStorage');
+
+        $paymentName = 'fooName';
+
+        $registry = $this->createAbstractRegistryMock(array(
+            $payments,
+            $storages,
+            $paymentName
+        ));
+
+        $this->assertEquals('barStorage', $registry->getStorage('Payum\Core\Tests\Registry\DoctrineProxy'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetStorageIfDoctrineProxyObjectGiven()
+    {
+        $payments = array('fooName' => 'fooPayment', 'barName' => 'barPayment');
+        $storages = array('Payum\Core\Tests\Registry\DoctrineModel' => 'barStorage');
+
+        $paymentName = 'fooName';
+
+        $registry = $this->createAbstractRegistryMock(array(
+            $payments,
+            $storages,
+            $paymentName
+        ));
+
+        $this->assertEquals('barStorage', $registry->getStorage(new DoctrineProxy));
+    }
+
+    /**
+     * @test
      *
      * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage A storage for model notRegisteredModelClass was not registered. There are storages for next models: stdClass.
@@ -259,4 +297,15 @@ class AbstractRegistryTest extends \PHPUnit_Framework_TestCase
         
         return $registryMock;
     }
+}
+
+class DoctrineModel
+{
+}
+
+class DoctrineProxy extends DoctrineModel implements Proxy
+{
+    public function __load() {}
+
+    public function __isInitialized() {}
 }
