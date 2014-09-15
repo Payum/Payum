@@ -51,6 +51,14 @@ abstract class AbstractRegistry implements RegistryInterface
     {
         $class = is_object($class) ? get_class($class) : $class;
 
+        // TODO: this is a quick fix. I have to find a better\clean solution.
+        if (class_exists($class)) {
+            $rc = new \ReflectionClass($class);
+            if ($rc->implementsInterface('Doctrine\Common\Persistence\Proxy')) {
+                $class = $rc->getParentClass()->getName();
+            }
+        }
+
         if (!isset($this->storages[$class])) {
             throw new InvalidArgumentException(sprintf(
                 'A storage for model %s was not registered. There are storages for next models: %s.',
