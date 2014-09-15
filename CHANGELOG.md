@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.11.1 (2014-09-15)
+
+* [omnipay] Fix undefined offset 1 error. No more splits, the holder name is set as a first name.
+* [doctrine][registry] fix ability to get a storage by passing doctrine proxy object.
+
 ## 0.11.0 (2014-09-10)
 
 * [klarna] add klarna invoice support.
