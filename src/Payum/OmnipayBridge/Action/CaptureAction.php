@@ -46,16 +46,13 @@ class CaptureAction extends BaseApiAwareAction implements PaymentAwareInterface
                 $this->payment->execute($creditCardRequest);
                 $card = $creditCardRequest->obtain();
 
-                $firstName = $lastName = '';
-                list($firstName, $lastName) = explode(' ', $card->getHolder(), 1);
-
                 $model['card'] = new SensitiveValue(array(
                     'number' => $card->getNumber(),
                     'cvv' => $card->getSecurityCode(),
                     'expiryMonth' => $card->getExpireAt()->format('m'),
                     'expiryYear' => $card->getExpireAt()->format('y'),
-                    'firstName' => $firstName,
-                    'lastName' => $lastName,
+                    'firstName' => $card->getHolder(),
+                    'lastName' => '',
                 ));
             } catch (RequestNotSupportedException $e) {
                 throw new LogicException('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.');
