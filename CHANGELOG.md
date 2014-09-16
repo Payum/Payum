@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.11.2 (2014-09-16)
+
+* [paypal-pro] `StatusAction` has to accept `GetStatusInterface`, not only `GetBinaryStatus` instance.
+
 ## 0.11.1 (2014-09-15)
 
 * [omnipay] Fix undefined offset 1 error. No more splits, the holder name is set as a first name.
