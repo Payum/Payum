@@ -4,7 +4,7 @@ namespace Payum\Paypal\ProCheckout\Nvp\Action;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Paypal\ProCheckout\Nvp\Api;
-use Payum\Core\Request\GetBinaryStatus;
+use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ProCheckout\Nvp\Model\PaymentDetails;
 
@@ -14,11 +14,12 @@ use Payum\Paypal\ProCheckout\Nvp\Model\PaymentDetails;
 class StatusAction implements ActionInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     * 
+     * @param GetStatusInterface $request
      */
     public function execute($request)
     {
-        /** @var $request \Payum\Core\Request\GetStatusInterface */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
@@ -46,7 +47,7 @@ class StatusAction implements ActionInterface
     public function supports($request)
     {
         return
-            $request instanceof GetBinaryStatus &&
+            $request instanceof GetStatusInterface &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }
