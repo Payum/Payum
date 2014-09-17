@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.11.3 (2014-09-17)
+
+* [storage] fix bug "Interface Doctrine\Common\Persistence\Proxy does not exist".
+
 ## 0.11.2 (2014-09-16)
 
 * [paypal-pro] `StatusAction` has to accept `GetStatusInterface`, not only `GetBinaryStatus` instance.
