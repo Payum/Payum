@@ -77,7 +77,7 @@ abstract class BaseApiAwareAction implements  ApiAwareInterface, ActionInterface
         $details['error_request'] = get_class($request);
         $details['error_file'] = $e->getFile();
         $details['error_line'] = $e->getLine();
-        $details['error_code'] = $e->getCode();
-        $details['error_message'] = $e->getMessage();
+        $details['error_code'] = utf8_encode($e->getCode());
+        $details['error_message'] = utf8_encode($e->getMessage());
     }
 }
