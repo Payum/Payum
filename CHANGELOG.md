@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.11.4 (2014-09-17)
+
+*  [klarna] fix encoding when setting error code, message back to details.
+
 ## 0.11.3 (2014-09-17)
 
 * [storage] fix bug "Interface Doctrine\Common\Persistence\Proxy does not exist".
