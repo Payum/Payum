@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\Nvp;
+namespace Payum\Paypal\AdaptivePayments;
 
 use Buzz\Client\ClientInterface;
 use Buzz\Client\Curl;
@@ -9,27 +9,27 @@ use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\RuntimeException;
 
-class APApi
+class Api
 {
-    const ADAPTIVEOPERATION_PAY = 'PAY';
-
-    const CMD_ADAPTIVE_PAYMENT = '_ap-payment';
-    
-    const CMD_ADAPTIVE_PREAPPROVAL = '_ap-preapproval';
-
     /**
      * All Adaptive API calls in sandbox mode should have this
      */
-    const APP_ID = 'APP-80W284485P519543T';
+    const SANDBOX_APP_ID = 'APP-80W284485P519543T';
 
+    /**
+     * @var ClientInterface
+     */
     protected $client;
 
+    /**
+     * @var string[]
+     */
     protected $options = array(
         'username' => null,
         'password' => null,
         'signature' => null,
         'subject' => null,
-        'appid' => null,
+        'app_id' => null,
         'sandbox' => null
     );
 
@@ -46,19 +46,23 @@ class APApi
         if (true == empty($this->options['username'])) {
             throw new InvalidArgumentException('The username option must be set.');
         }
+
         if (true == empty($this->options['password'])) {
             throw new InvalidArgumentException('The password option must be set.');
         }
+
         if (true == empty($this->options['subject'])) {
             throw new InvalidArgumentException('The subject option must be set.');
         }
+
         if (true == empty($this->options['signature'])) {
             throw new InvalidArgumentException('The signature option must be set.');
         }
-        if (true == empty($this->options['appip']) && !$this->options['sandbox']) {
-            throw new InvalidArgumentException('The appid option must be set (except when sandbox=true).');
-        }else{
-            $this->options['appid'] = APApi::APP_ID;
+
+        if (true == empty($this->options['app_ip']) && !$this->options['sandbox']) {
+            throw new InvalidArgumentException('The app_id option must be set (except when sandbox=true).');
+        } else {
+            $this->options['app_id'] = Api::SANDBOX_APP_ID;
         }
         if (false == is_bool($this->options['sandbox'])) {
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
@@ -70,7 +74,7 @@ class APApi
      *
      * @return array
      */
-    public function setSimpleAdaptivePayment(array $fields)
+    public function pay(array $fields)
     {
         $request = new FormRequest;
         $request->setFields($fields);
@@ -91,30 +95,48 @@ class APApi
             $request->setField('cancelUrl', $this->options['cancel_url']);
         }
 
-        $request->setField('actionType', APApi::ADAPTIVEOPERATION_PAY);
+        $request->setField('actionType', 'Pay');
+        $request->fromUrl($this->getApiUrl('Pay'));
 
-        $this->addAuthorizeFields($request);
-        $this->addAppID($request);
+        $this->addHeaders($request);
 
         return $this->doRequest($request);
     }
 
     /**
-     * @param array $fields
+     * @param string $payKey
      *
      * @return array
      */
-    public function pay(array $fields)
+    public function paymentDetails($payKey)
     {
         $request = new FormRequest;
-        $request->setFields($fields);
+        $request->setField('payKey', $payKey);
 
-        $request->setField('METHOD', 'Pay');
+        $request->fromUrl($this->getApiUrl('PaymentDetails'));
 
-        $this->addAuthorizeFields($request);
-        $this->addAppID($request);
+        $this->addHeaders($request);
 
         return $this->doRequest($request);
+    }
+
+    /**
+     * @param string $payKey
+     *
+     * @return string
+     */
+    public function getAuthorizePayKeyUrl($payKey)
+    {
+        $query = array_filter(array(
+            'cmd' => '_ap-payment',
+            'paykey' => $payKey,
+        ));
+
+        return sprintf(
+            'https://%s/cgi-bin/webscr?%s',
+            $this->options['sandbox'] ? 'www.sandbox.paypal.com' : 'www.paypal.com',
+            http_build_query($query)
+        );
     }
 
     /**
@@ -127,7 +149,6 @@ class APApi
     protected function doRequest(FormRequest $request)
     {
         $request->setMethod('POST');
-        $request->fromUrl($this->getApiEndpoint());
 
         $this->client->send($request, $response = new Response);
 
@@ -144,38 +165,29 @@ class APApi
         return $result;
     }
 
-    /*
-     * TODO: Implement more methods
-     */
-
     /**
+     * @param string $method
+     *
      * @return string
      */
-    protected function getApiEndpoint()
+    protected function getApiUrl($method)
     {
         return $this->options['sandbox'] ?
-            'https://svcs.sandbox.paypal.com/AdaptivePayments/Pay' :
-            'https://svcs.paypal.com/AdaptivePayments/Pay'
+            "https://svcs.sandbox.paypal.com/AdaptivePayments/$method" :
+            "https://svcs.paypal.com/AdaptivePayments/$method"
         ;
     }
 
     /**
      * @param FormRequest $request
      */
-    protected function addAuthorizeFields(FormRequest $request)
+    protected function addHeaders(FormRequest $request)
     {
         $request->addHeader('X-PAYPAL-SECURITY-PASSWORD: ' . $this->options['password']);
         $request->addHeader('X-PAYPAL-SECURITY-USERID: ' . $this->options['username']);
         $request->addHeader('X-PAYPAL-SECURITY-SIGNATURE: ' . $this->options['signature']);
         $request->addHeader('X-PAYPAL-SECURITY-SUBJECT: ' . $this->options['subject']);
-    }
-
-    protected function addAppID(FormRequest $request)
-    {
-        $request->addHeader('X-PAYPAL-APPLICATION-ID: ' . $this->options['appid']);
-        /*
-         * TODO: Should those 2 be here?
-         */
+        $request->addHeader('X-PAYPAL-APPLICATION-ID: ' . $this->options['app_id']);
         $request->addHeader('X-PAYPAL-REQUEST-DATA-FORMAT: NV');
         $request->addHeader('X-PAYPAL-RESPONSE-DATA-FORMAT: NV');
     }
