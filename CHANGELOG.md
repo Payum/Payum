@@ -1,8 +1,12 @@
 # Changelog
 
+## 0.11.5 (2014-09-18)
+
+* [klarna] error_code has to be int.
+
 ## 0.11.4 (2014-09-17)
 
-*  [klarna] fix encoding when setting error code, message back to details.
+* [klarna] fix encoding when setting error code, message back to details.
 
 ## 0.11.3 (2014-09-17)
 
