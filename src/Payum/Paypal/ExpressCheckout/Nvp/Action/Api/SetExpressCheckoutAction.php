@@ -21,7 +21,7 @@ class SetExpressCheckoutAction extends BaseApiAwareAction
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         if (null === $model['PAYMENTREQUEST_0_AMT']) {
-            throw new LogicException('The PAYMENTREQEUST_0_AMT must be set.');
+            throw new LogicException('The PAYMENTREQUEST_0_AMT must be set.');
         }
 
         $model->replace(
@@ -34,7 +34,7 @@ class SetExpressCheckoutAction extends BaseApiAwareAction
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof SetExpressCheckout &&
             $request->getModel() instanceof \ArrayAccess
         ;

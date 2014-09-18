@@ -24,7 +24,7 @@ class DoExpressCheckoutPaymentAction extends BaseApiAwareAction
             throw new LogicException('TOKEN must be set. Have you run SetExpressCheckoutAction?');
         }
         if (null === $model['PAYERID']) {
-            throw new LogicException('PAYERID must be set. Have user authorize this transaction?');
+            throw new LogicException('PAYERID must be set. Has user authorized this transaction?');
         }
         if (null === $model['PAYMENTREQUEST_0_PAYMENTACTION']) {
             throw new LogicException('PAYMENTREQUEST_0_PAYMENTACTION must be set.');
@@ -32,7 +32,7 @@ class DoExpressCheckoutPaymentAction extends BaseApiAwareAction
         if (null === $model['PAYMENTREQUEST_0_AMT']) {
             throw new LogicException('PAYMENTREQUEST_0_AMT must be set.');
         }
-        
+
         $model->replace(
             $this->api->doExpressCheckoutPayment((array) $model)
         );
@@ -43,7 +43,7 @@ class DoExpressCheckoutPaymentAction extends BaseApiAwareAction
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof DoExpressCheckoutPayment &&
             $request->getModel() instanceof \ArrayAccess
         ;

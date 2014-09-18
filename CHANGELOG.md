@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.11.4 (2014-09-17)
+
+*  [klarna] fix encoding when setting error code, message back to details.
+
+## 0.11.3 (2014-09-17)
+
+* [storage] fix bug "Interface Doctrine\Common\Persistence\Proxy does not exist".
+
+## 0.11.2 (2014-09-16)
+
+* [paypal-pro] `StatusAction` has to accept `GetStatusInterface`, not only `GetBinaryStatus` instance.
+
+## 0.11.1 (2014-09-15)
+
+* [omnipay] Fix undefined offset 1 error. No more splits, the holder name is set as a first name.
+* [doctrine][registry] fix ability to get a storage by passing doctrine proxy object.
+
+## 0.11.0 (2014-09-10)
+
+* [klarna] add klarna invoice support.
+* [request] add authorize request.
+* [tests] upgrade phpunit up to 4.x
+* [request] Rename interactive requests to replies. `RedirectUrlInteractiveRequest` become `HttpRedirect` reply.
+* [request] Remove `Request` postfix. CaptureRequest become just Capture.
+* [request] Rename `SimpleStatusRequest` to `GetHumanStatus` request.
+* [request] Rename `BinaryMaskStatusRequest` to `GetBinaryStatus` request.
+
 ## 0.10.0 (2014-07-31)
 
 * [doc] fix typos, improve examples, get-it-started page.

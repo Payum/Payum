@@ -16,7 +16,7 @@ The lib implements [Authorize.Net AIM](http://www.authorize.net/) payment.
 
 AuthorizeNetAIM is an open source, community-driven project. Pull requests are very welcome.
 
-## Like it? Spread the world!
+## Like it? Spread the word!
 
 Star payum on [github](https://github.com/Payum/AuthorizeNetAIM) or [packagist](https://packagist.org/packages/payum/authorize-net-aim).
 
