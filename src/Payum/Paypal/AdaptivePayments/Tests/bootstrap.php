@@ -11,4 +11,4 @@ EOM;
     exit(1);
 }
 
-$loader->add('Payum\Paypal\ExpressCheckout\Nvp\Tests', __DIR__);
+$loader->add('Payum\Paypal\AdaptivePayments\Tests', __DIR__);
