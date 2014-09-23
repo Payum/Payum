@@ -8,11 +8,11 @@ class CreateChargeTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfBaseModelAware()
+    public function shouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass('Payum\Stripe\Request\Api\CreateCharge');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelAware'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
     }
 
     /**

@@ -3,7 +3,6 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Payum\Core\Model\Token;
 use Payum\Core\Request\Capture;
-use Payum\Core\Request\SecuredCapture;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
@@ -116,7 +115,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSetTokenTargetUrlAsReturnUrlIfSecuredCapturePassedACaptureSet()
+    public function shouldSetTokenTargetUrlAsReturnUrlIfCapturePassedWithToken()
     {
         $testCase = $this;
 
@@ -141,7 +140,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $request = new SecuredCapture($token);
+        $request = new Capture($token);
         $request->setModel(array());
 
         $action->execute($request);
@@ -150,7 +149,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSetTokenTargetUrlAsCancelUrlIfSecuredCapturePassedAndReturnUrlNotSet()
+    public function shouldSetTokenTargetUrlAsCancelUrlIfCapturePassedWithToken()
     {
         $testCase = $this;
 
@@ -175,7 +174,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
-        $request = new SecuredCapture($token);
+        $request = new Capture($token);
         $request->setModel(array());
 
         $action->execute($request);

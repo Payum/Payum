@@ -1,6 +1,6 @@
 <?php
 namespace Payum\Core\Request;
 
-class Sync extends BaseModelAware
+class Sync extends Generic
 {
 }

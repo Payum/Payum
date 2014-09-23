@@ -1,6 +1,6 @@
 <?php
 namespace Payum\Core\Request;
 
-class Capture extends BaseModelAware
+class Capture extends Generic
 {
 }

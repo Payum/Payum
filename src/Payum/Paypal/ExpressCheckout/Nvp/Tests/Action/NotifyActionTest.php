@@ -32,7 +32,7 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new NotifyAction();
 
-        $request = new Notify(array(), $this->getMock('ArrayAccess'));
+        $request = new Notify($this->getMock('ArrayAccess'));
         
         $this->assertTrue($action->supports($request));
     }
@@ -56,7 +56,7 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new NotifyAction();
         
-        $request = new Notify(array(), new \stdClass());
+        $request = new Notify(new \stdClass());
         
         $this->assertFalse($action->supports($request));
     }
@@ -92,7 +92,7 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
         $action = new NotifyAction();
         $action->setPayment($paymentMock);
 
-        $action->execute(new Notify(array(), $expectedModel));
+        $action->execute(new Notify($expectedModel));
     }
     
     /**

@@ -2,9 +2,9 @@
 namespace Payum\Klarna\Checkout\Request\Api;
 
 use Payum\Core\Exception\InvalidArgumentException;
-use Payum\Core\Request\BaseModelAware;
+use Payum\Core\Request\Generic;
 
-abstract class BaseOrder extends BaseModelAware
+abstract class BaseOrder extends Generic
 {
     /**
      * @var \Klarna_Checkout_Order

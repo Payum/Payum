@@ -1,5 +1,14 @@
 # Upgrades
 
+## 0.11 to 0.12
+
+* [request] `BaseModelAware` request was renamed to `Generic`.
+* [request] `SecuredInterface` allows to return a null on `getToken` method call.
+* [request] `SecuredAuthorize` request was removed. The removed logic is now in `Authorize` request, so use it.
+* [request] `SecuredNotify` request was removed. The removed logic is now in `Notify` request, so use it.
+* [request] `SecuredCapture` request was removed. The removed logic is now in `Capture` request, so use it.
+* [request] `Notify` request does not contains `notification` array any more. You have to execute `$this->payment->execute($httpRequest = new GetHttpRequest);`.
+
 ## 0.10 to 0.11
 
 * [request] Postfix `Request` was removed. For example `CaptureRequest` become `Capture`.

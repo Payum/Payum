@@ -33,7 +33,7 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new NotifyAction();
 
-        $this->assertTrue($action->supports(new Notify(array(), array())));
+        $this->assertTrue($action->supports(new Notify(array())));
     }
 
     /**
@@ -53,7 +53,7 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new NotifyAction;
 
-        $this->assertFalse($action->supports(new Notify(array(), new \stdClass)));
+        $this->assertFalse($action->supports(new Notify(new \stdClass)));
     }
 
     /**
@@ -93,7 +93,7 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
         $action = new NotifyAction;
         $action->setPayment($paymentMock);
 
-        $action->execute(new Notify(array(), array(
+        $action->execute(new Notify(array(
             'status' => Constants::STATUS_CHECKOUT_COMPLETE,
             'location' => 'aLocation',
         )));
@@ -114,7 +114,7 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
         $action = new NotifyAction;
         $action->setPayment($paymentMock);
 
-        $action->execute(new Notify(array(), array(
+        $action->execute(new Notify(array(
             'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
             'location' => 'aLocation',
         )));
@@ -135,7 +135,7 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
         $action = new NotifyAction;
         $action->setPayment($paymentMock);
 
-        $action->execute(new Notify(array(), array(
+        $action->execute(new Notify(array(
             'status' => Constants::STATUS_CREATED,
             'location' => 'aLocation',
         )));

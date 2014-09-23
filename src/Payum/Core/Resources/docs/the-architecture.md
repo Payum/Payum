@@ -265,7 +265,7 @@ Back to [index](index.md).
 
 [sandbox-online]: http://sandbox.payum.forma-dev.com
 [sandbox-code]: https://github.com/Payum/PayumBundleSandbox
-[base-request]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Request/BaseModelAware.php
+[base-request]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Request/Generic.php
 [status-request-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Request/GetStatusInterface.php
 [status-request]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Request/GetHumanStatus.php
 [base-reply]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Reply/Base.php

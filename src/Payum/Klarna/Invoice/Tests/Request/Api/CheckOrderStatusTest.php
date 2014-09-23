@@ -12,7 +12,7 @@ class CheckOrderStatusTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Request\Api\CheckOrderStatus');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelAware'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
     }
 
     /**

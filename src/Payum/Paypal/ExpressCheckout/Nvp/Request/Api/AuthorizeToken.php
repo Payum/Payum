@@ -1,9 +1,9 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Request\Api;
 
-use Payum\Core\Request\BaseModelAware;
+use Payum\Core\Request\Generic;
 
-class AuthorizeToken extends BaseModelAware
+class AuthorizeToken extends Generic
 {
     /**
      * @var bool

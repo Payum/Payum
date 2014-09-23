@@ -23,10 +23,10 @@ Then we have to do our notification action which would actually do all the job:
 
 ```php
 <?php
-use Payum\Core\Action\ActionInterface;
-use Payum\Core\Request\SecuredNotifyRequest;
+use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Request\Notify;
 
-class StoreNotificationAction implements ActionInterface
+class StoreNotificationAction extends PaymentAwareAction
 {
     protected $notificationStorage;
 
@@ -38,7 +38,12 @@ class StoreNotificationAction implements ActionInterface
     public function execute($request)
     {
         $notification = $this->notificationStorage->createModel();
-        foreach ($request->getNotification() as $name => $value) {
+
+        $this->payment->execute($getHttpRequest = new GetHttpRequest);
+        foreach ($getHttpRequest->query as $name => $value) {
+            $paymentNotification[$name] => $value;
+        }
+        foreach ($getHttpRequest->request as $name => $value) {
             $paymentNotification[$name] => $value;
         }
 
@@ -47,7 +52,7 @@ class StoreNotificationAction implements ActionInterface
 
     public function supports($request)
     {
-        return $request instanceof SecuredNotifyRequest;
+        return $request instanceof Notify;
     }
 }
 ```
@@ -77,14 +82,14 @@ Now we have to implement `notify.php` script which must be accessible from the i
 <?php
 //notify.php
 
-use Payum\Core\Request\SecuredNotify;
+use Payum\Core\Request\Notify;
 
 include 'config.php';
 
 $token = $requestVerifier->verify();
 $payment = $registry->getPayment($token->getPaymentName());
 
-$payment->execute(new SecuredNotify($_REQUEST, $token));
+$payment->execute(new Notify($token));
 ```
 
 ## Setup Paypal IPN.

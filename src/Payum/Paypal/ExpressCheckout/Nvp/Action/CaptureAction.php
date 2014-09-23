@@ -3,7 +3,6 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\Capture;
-use Payum\Core\Request\SecuredCapture;
 use Payum\Core\Request\Sync;
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -31,11 +30,11 @@ class CaptureAction extends PaymentAwareAction
         }
 
         if (false == $model['TOKEN']) {
-            if (false == $model['RETURNURL'] && $request instanceof SecuredCapture) {
+            if (false == $model['RETURNURL'] && $request->getToken()) {
                 $model['RETURNURL'] = $request->getToken()->getTargetUrl();
             }
 
-            if (false == $model['CANCELURL'] && $request instanceof SecuredCapture) {
+            if (false == $model['CANCELURL'] && $request->getToken()) {
                 $model['CANCELURL'] = $request->getToken()->getTargetUrl();
             }
 

@@ -12,7 +12,7 @@ class CreditPartTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Request\Api\CreditPart');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelAware'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
     }
 
     /**
