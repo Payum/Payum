@@ -47,6 +47,9 @@ abstract class Generic implements ModelAwareInterface, SecuredInterface
         $this->model = $model;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getToken()
     {
         return $this->token;
