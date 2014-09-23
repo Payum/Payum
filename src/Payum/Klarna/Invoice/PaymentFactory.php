@@ -6,6 +6,7 @@ use Payum\Klarna\Invoice\Action\Api\ActivateAction;
 use Payum\Klarna\Invoice\Action\Api\ActivateReservationAction;
 use Payum\Klarna\Invoice\Action\Api\CancelReservationAction;
 use Payum\Klarna\Invoice\Action\Api\CheckOrderStatusAction;
+use Payum\Klarna\Invoice\Action\Api\CreditPartAction;
 use Payum\Klarna\Invoice\Action\Api\GetAddressesAction;
 use Payum\Klarna\Invoice\Action\Api\PopulateKlarnaFromDetailsAction;
 use Payum\Klarna\Invoice\Action\Api\ReserveAmountAction;
@@ -33,6 +34,7 @@ abstract class PaymentFactory
         $payment->addAction(new CheckOrderStatusAction);
         $payment->addAction(new GetAddressesAction);
         $payment->addAction(new PopulateKlarnaFromDetailsAction);
+        $payment->addAction(new CreditPartAction);
         $payment->addAction(new ReserveAmountAction);
 
         return $payment;
