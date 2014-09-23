@@ -42,8 +42,7 @@ class CaptureAction extends BaseApiAwareAction implements PaymentAwareInterface
 
         if (false == $model->validateNotEmpty(array('card'), false)) {
             try {
-                $creditCardRequest = new ObtainCreditCard;
-                $this->payment->execute($creditCardRequest);
+                $this->payment->execute($creditCardRequest = new ObtainCreditCard);
                 $card = $creditCardRequest->obtain();
 
                 $model['card'] = new SensitiveValue(array(

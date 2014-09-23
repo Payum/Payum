@@ -17,32 +17,11 @@ class GetHumanStatus extends BaseGetStatus
     
     const STATUS_EXPIRED = 'expired';
 
-    /**
-     * @deprecated since 0.12, will be removed in next release. use self::STATUS_CAPTURED
-     */
-    const STATUS_SUCCESS = 'success';
-
     const STATUS_PENDING = 'pending';
 
     const STATUS_CANCELED = 'canceled';
 
     const STATUS_NEW = 'new';
-
-    /**
-     * {@inheritDoc}
-     */
-    public function markSuccess()
-    {
-        $this->status = static::STATUS_SUCCESS;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function isSuccess()
-    {
-        return $this->isCurrentStatusEqualTo(static::STATUS_SUCCESS);
-    }
 
     /**
      * {@inheritDoc}

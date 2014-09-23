@@ -17,20 +17,6 @@ interface GetStatusInterface extends ModelAwareInterface
      * @return boolean
      */
     function isNew();
-    
-    /**
-     * @deprecated since 0.12, will be removed in next release. use self::markCaptured
-     *
-     * @return void
-     */
-    function markSuccess();
-
-    /**
-     * @deprecated since 0.12, will be removed in next release. use self::isCaptured
-     *
-     * @return boolean
-     */
-    function isSuccess();
 
     /**
      * @return void

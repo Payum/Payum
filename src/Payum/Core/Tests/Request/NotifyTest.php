@@ -15,6 +15,9 @@ class NotifyTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
     }
 
+    /**
+     * @test
+     */
     public function couldBeConstructedWithModel()
     {
         new Notify(new \stdClass);

@@ -96,7 +96,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldMarkSuccessIfStateApproved()
+    public function shouldMarkCapturedIfStateApproved()
     {
         $action = new StatusAction();
 
@@ -107,7 +107,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
 
         $action->execute($request);
 
-        $this->assertTrue($request->isSuccess());
+        $this->assertTrue($request->isCaptured());
     }
 
     /**

@@ -7,11 +7,6 @@ abstract class Constants
 
     const FIELD_STATUS = 'status';
 
-    /**
-     * @deprecated since 0.12, will be removed. use self::STATUS_CAPTURED instead.
-     */
-    const STATUS_SUCCESS = 'success';
-
     const STATUS_CAPTURED = 'captured';
 
     const STATUS_PENDING = 'pending';

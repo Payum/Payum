@@ -8,7 +8,9 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
     public static function provideIsXXXMethods()
     {
         return array(
-            array('isSuccess'),
+            array('isCaptured'),
+            array('isAuthorized'),
+            array('isRefunded'),
             array('isCanceled'),
             array('isPending'),
             array('isFailed'),
@@ -22,7 +24,9 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
     public static function provideMarkXXXMethods()
     {
         return array(
-            array('markSuccess'),
+            array('markCaptured'),
+            array('markAuthorized'),
+            array('markRefunded'),
             array('markCanceled'),
             array('markPending'),
             array('markFailed'),
@@ -112,7 +116,7 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($statusRequest->isFailed());
         
-        $this->assertFalse($statusRequest->isSuccess());
+        $this->assertFalse($statusRequest->isCaptured());
         $this->assertFalse($statusRequest->isSuspended());
         $this->assertFalse($statusRequest->isExpired());
         $this->assertFalse($statusRequest->isCanceled());
@@ -135,7 +139,7 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($statusRequest->isFailed());
         $this->assertFalse($statusRequest->isSuspended());
         $this->assertFalse($statusRequest->isExpired());
-        $this->assertFalse($statusRequest->isSuccess());
+        $this->assertFalse($statusRequest->isCaptured());
         $this->assertFalse($statusRequest->isCanceled());
         $this->assertFalse($statusRequest->isNew());
         $this->assertFalse($statusRequest->isUnknown());
@@ -156,7 +160,7 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($statusRequest->isSuspended());
         $this->assertFalse($statusRequest->isExpired());
         $this->assertFalse($statusRequest->isFailed());
-        $this->assertFalse($statusRequest->isSuccess());
+        $this->assertFalse($statusRequest->isCaptured());
         $this->assertFalse($statusRequest->isNew());
         $this->assertFalse($statusRequest->isUnknown());
     }
@@ -172,7 +176,7 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($statusRequest->isNew());
 
-        $this->assertFalse($statusRequest->isSuccess());
+        $this->assertFalse($statusRequest->isCaptured());
         $this->assertFalse($statusRequest->isSuspended());
         $this->assertFalse($statusRequest->isExpired());
         $this->assertFalse($statusRequest->isCanceled());
@@ -192,7 +196,7 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($statusRequest->isUnknown());
 
-        $this->assertFalse($statusRequest->isSuccess());
+        $this->assertFalse($statusRequest->isCaptured());
         $this->assertFalse($statusRequest->isSuspended());
         $this->assertFalse($statusRequest->isExpired());
         $this->assertFalse($statusRequest->isCanceled());
@@ -212,7 +216,7 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($statusRequest->isExpired());
 
-        $this->assertFalse($statusRequest->isSuccess());
+        $this->assertFalse($statusRequest->isCaptured());
         $this->assertFalse($statusRequest->isSuspended());
         $this->assertFalse($statusRequest->isCanceled());
         $this->assertFalse($statusRequest->isPending());
@@ -232,7 +236,7 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($statusRequest->isSuspended());
 
-        $this->assertFalse($statusRequest->isSuccess());
+        $this->assertFalse($statusRequest->isCaptured());
         $this->assertFalse($statusRequest->isExpired());
         $this->assertFalse($statusRequest->isCanceled());
         $this->assertFalse($statusRequest->isPending());

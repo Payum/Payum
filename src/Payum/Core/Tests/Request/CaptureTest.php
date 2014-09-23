@@ -15,6 +15,9 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
     }
 
+    /**
+     * @test
+     */
     public function couldBeConstructedWithModel()
     {
         new Capture(new \stdClass);

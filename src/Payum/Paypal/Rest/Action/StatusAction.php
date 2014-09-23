@@ -29,7 +29,7 @@ class StatusAction implements ActionInterface
         $model = $request->getModel();
 
         if (isset($model->state) && 'approved' == $model->state ) {
-            $request->markSuccess();
+            $request->markCaptured();
 
             return;
         }

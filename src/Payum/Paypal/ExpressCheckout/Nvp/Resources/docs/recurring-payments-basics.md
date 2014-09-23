@@ -115,7 +115,7 @@ $payment = $registry->getPayment($token->getPaymentName());
 $agreementStatus = new GetHumanStatus($token);
 $payment->execute($agreementStatus);
 
-if (!$agreementStatus->isSuccess()) {
+if (!$agreementStatus->isCaptured()) {
     header('HTTP/1.1 400 Bad Request', true, 400);
     exit;
 }

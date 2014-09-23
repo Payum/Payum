@@ -11,11 +11,6 @@ class GetBinaryStatus extends BaseGetStatus
     
     const STATUS_EXPIRED = 262144; // 2^18
 
-    /**
-     * @deprecated since 0.12, will be removed in next release. use self::STATUS_CAPTURED
-     */
-    const STATUS_SUCCESS = 32768; // 2^15
-
     const STATUS_PENDING = 1024; // 2^10
 
     const STATUS_CANCELED = 32; //2^5
@@ -27,22 +22,6 @@ class GetBinaryStatus extends BaseGetStatus
     const STATUS_CAPTURED = 4; // 2^2
 
     const STATUS_NEW = 2; //2^1
-
-    /**
-     * {@inheritdoc}
-     */
-    public function markSuccess()
-    {
-        $this->status = static::STATUS_SUCCESS;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isSuccess()
-    {
-        return $this->isCurrentStatusEqualTo(static::STATUS_SUCCESS);
-    }
 
     /**
      * {@inheritDoc}

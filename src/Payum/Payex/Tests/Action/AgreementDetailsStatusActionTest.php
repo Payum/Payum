@@ -148,7 +148,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldMarkSuccessIfAgreementStatusVerified()
+    public function shouldMarkCapturedIfAgreementStatusVerified()
     {
         $action = new AgreementDetailsStatusAction();
 
@@ -162,7 +162,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
 
         $action->execute($status);
 
-        $this->assertTrue($status->isSuccess());
+        $this->assertTrue($status->isCaptured());
     }
 
     /**

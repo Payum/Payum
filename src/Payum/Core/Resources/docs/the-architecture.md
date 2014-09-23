@@ -141,7 +141,7 @@ $payment->addAction(new FooAction);
 
 $payment->execute($status = new GetHumanStatus);
 
-$status->isSuccess();
+$status->isCaptured();
 $status->isPending();
 
 // or

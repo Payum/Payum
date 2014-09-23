@@ -35,7 +35,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $statusRequest = new GetBinaryStatus($capture->getModel());
         $payment->execute($statusRequest);
 
-        $this->assertTrue($statusRequest->isSuccess());
+        $this->assertTrue($statusRequest->isCaptured());
     }
 
     /**

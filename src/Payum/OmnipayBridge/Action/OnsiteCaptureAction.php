@@ -43,7 +43,7 @@ class OnsiteCaptureAction extends BaseApiAwareAction
         }
 
         $options['_reference']      = $response->getTransactionReference();
-        $options['_status']         = $response->isSuccessful() ? 'success' : 'failed';
+        $options['_status']         = $response->isSuccessful() ? 'captured' : 'failed';
         $options['_status_code']    = $response->getCode();
         $options['_status_message'] = $response->isSuccessful() ? '' : $response->getMessage();
     }
