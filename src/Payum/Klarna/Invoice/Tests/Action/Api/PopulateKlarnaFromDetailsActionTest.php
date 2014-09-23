@@ -142,4 +142,34 @@ class PopulateKlarnaFromDetailsActionTest extends \PHPUnit_Framework_TestCase
 
         //Klarna does not provide a way to get data from its object. So we just test that there werent any errors.
     }
+
+    /**
+     * @test
+     */
+    public function shouldCorrectlyPutPartialArticles()
+    {
+        $details = new \ArrayObject(array(
+            'partial_articles' => array(
+                array(
+                    'qty' => 4,
+                    'artNo' => 'HANDLING',
+                    'title' => 'Handling fee',
+                    'price' => '50.99',
+                    'vat' => '25',
+                    'discount' => '0',
+                    'flags' => 48,
+                ),
+            ),
+        ));
+
+        $klarna = new \Klarna;
+
+        $request = new PopulateKlarnaFromDetails($details, $klarna);
+
+        $action = new PopulateKlarnaFromDetailsAction;
+
+        $action->execute($request);
+
+        //Klarna does not provide a way to get data from its object. So we just test that there werent any errors.
+    }
 }
