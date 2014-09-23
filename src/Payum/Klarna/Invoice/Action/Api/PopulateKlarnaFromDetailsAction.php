@@ -36,6 +36,15 @@ class PopulateKlarnaFromDetailsAction implements ActionInterface
             }
         }
 
+        if ($details['partial_articles']) {
+            foreach ($details['partial_articles'] as $article) {
+                $klarna->addArtNo(
+                    utf8_decode($article['qty']),
+                    utf8_decode($article['artNo'])
+                );
+            }
+        }
+
         if ($details['shipping_address']) {
             $address = ArrayObject::ensureArrayObject($details['shipping_address']);
 
