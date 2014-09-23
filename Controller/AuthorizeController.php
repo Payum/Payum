@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Controller;
 
-use Payum\Core\Request\SecuredAuthorize;
+use Payum\Core\Request\Authorize;
 use Symfony\Component\HttpFoundation\Request;
 
 class AuthorizeController extends PayumController
@@ -11,7 +11,7 @@ class AuthorizeController extends PayumController
         $token = $this->getHttpRequestVerifier()->verify($request);
 
         $payment = $this->getPayum()->getPayment($token->getPaymentName());
-        $payment->execute(new SecuredAuthorize($token));
+        $payment->execute(new Authorize($token));
         
         $this->getHttpRequestVerifier()->invalidate($token);
         
