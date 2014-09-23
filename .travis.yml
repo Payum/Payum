@@ -10,16 +10,14 @@ php:
 env:
   - SYMFONY_VERSION=2.3.*
   - SYMFONY_VERSION=2.4.*
+  - SYMFONY_VERSION=2.5.*
 
 matrix:
   allow_failures:
     - php: hhvm
 
 before_script:
-  - composer require symfony/framework-bundle:${SYMFONY_VERSION} --prefer-source --no-update
-  - composer require symfony/validator:${SYMFONY_VERSION} --prefer-source --no-update
-  - composer require symfony/form:${SYMFONY_VERSION} --prefer-source --no-update
-  - composer require symfony/twig-bundle:${SYMFONY_VERSION} --prefer-source --no-update
+  - composer require symfony/symfony:${SYMFONY_VERSION} --prefer-source --no-update
   - composer install --dev --prefer-source
 
 notifications:
