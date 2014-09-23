@@ -9,7 +9,7 @@ Once we are done here you will be redirected to after capture script. Here's an 
 <?php
 //capture.php
 
-use Payum\Core\Request\SecuredCapture;
+use Payum\Core\Request\Capture;
 use Payum\Core\Reply\HttpRedirect;
 
 include 'config.php';
@@ -17,7 +17,7 @@ include 'config.php';
 $token = $requestVerifier->verify($_REQUEST);
 $payment = $registry->getPayment($token->getPaymentName());
 
-if ($reply = $payment->execute(new SecuredCapture($token), true)) {
+if ($reply = $payment->execute(new Capture($token), true)) {
     if ($reply instanceof HttpRedirect) {
         header("Location: ".$reply->getUrl());
         die();

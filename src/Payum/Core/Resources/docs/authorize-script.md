@@ -9,7 +9,7 @@ Once we are done here you will be redirected to after capture script. Here's an 
 <?php
 //capture.php
 
-use Payum\Core\Request\SecuredAuthorizeRequest;
+use Payum\Core\Request\Authorize;
 use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
 
 include 'config.php';
@@ -17,7 +17,7 @@ include 'config.php';
 $token = $requestVerifier->verify($_REQUEST);
 $payment = $registry->getPayment($token->getPaymentName());
 
-if ($interactiveRequest = $payment->execute(new SecuredAuthorizeRequest($token), true)) {
+if ($interactiveRequest = $payment->execute(new Authorize($token), true)) {
     if ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {
         header("Location: ".$interactiveRequest->getUrl());
         die();

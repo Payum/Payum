@@ -1,7 +1,9 @@
 <?php
 namespace Payum\Core\Request;
 
-abstract class Generic implements ModelAwareInterface
+use Payum\Core\Security\TokenInterface;
+
+abstract class Generic implements ModelAwareInterface, SecuredInterface
 {
     /**
      * @var mixed
@@ -9,11 +11,20 @@ abstract class Generic implements ModelAwareInterface
     protected $model;
 
     /**
+     * @var TokenInterface
+     */
+    protected $token;
+
+    /**
      * @param mixed $model
      */
     public function __construct($model)
     {
         $this->setModel($model);
+
+        if ($model instanceof TokenInterface) {
+            $this->token = $model;
+        }
     }
 
     /**
@@ -34,5 +45,10 @@ abstract class Generic implements ModelAwareInterface
         }
         
         $this->model = $model;
+    }
+
+    public function getToken()
+    {
+        return $this->token;
     }
 }

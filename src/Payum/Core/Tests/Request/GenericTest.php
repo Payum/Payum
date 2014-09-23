@@ -37,6 +37,16 @@ class GenericTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function shouldImplementSecuredRequestInterface()
+    {
+        $rc = new \ReflectionClass('Payum\Core\Request\Generic');
+
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Request\SecuredInterface'));
+    }
+
+    /**
+     * @test
      * 
      * @dataProvider provideDifferentPhpTypes
      */
@@ -69,6 +79,19 @@ class GenericTest extends \PHPUnit_Framework_TestCase
         $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array($phpType));
         
         $this->assertEquals($phpType, $request->getModel());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetTokenSetInConstructor()
+    {
+        $tokenMock = $this->getMock('Payum\Core\Security\TokenInterface');
+
+        $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array($tokenMock));
+
+        $this->assertSame($tokenMock, $request->getModel());
+        $this->assertSame($tokenMock, $request->getToken());
     }
 
     /**

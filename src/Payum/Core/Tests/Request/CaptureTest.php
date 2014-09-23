@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Core\Tests\Request;
 
+use Payum\Core\Request\Capture;
+
 class CaptureTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -11,5 +13,10 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
         $rc = new \ReflectionClass('Payum\Core\Request\Capture');
         
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
+    }
+
+    public function couldBeConstructedWithModel()
+    {
+        new Capture(new \stdClass);
     }
 }
