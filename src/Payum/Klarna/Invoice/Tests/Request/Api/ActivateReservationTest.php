@@ -12,7 +12,7 @@ class ActivateReservationTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Request\Api\ActivateReservation');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelAware'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
     }
 
     /**

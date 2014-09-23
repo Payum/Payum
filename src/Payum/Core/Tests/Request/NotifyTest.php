@@ -8,11 +8,11 @@ class NotifyTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfBaseModelAware()
+    public function shouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass('Payum\Core\Request\Notify');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseModelAware'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
     }
 
     /**

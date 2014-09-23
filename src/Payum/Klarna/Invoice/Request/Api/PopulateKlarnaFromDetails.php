@@ -1,9 +1,9 @@
 <?php
 namespace Payum\Klarna\Invoice\Request\Api;
 
-use Payum\Core\Request\BaseModelAware;
+use Payum\Core\Request\Generic;
 
-class PopulateKlarnaFromDetails extends BaseModelAware
+class PopulateKlarnaFromDetails extends Generic
 {
     /**
      * @var \Klarna

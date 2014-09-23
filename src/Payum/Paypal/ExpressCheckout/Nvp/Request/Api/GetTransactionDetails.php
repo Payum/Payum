@@ -1,9 +1,9 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Request\Api;
 
-use Payum\Core\Request\BaseModelAware;
+use Payum\Core\Request\Generic;
 
-class GetTransactionDetails extends BaseModelAware
+class GetTransactionDetails extends Generic
 {
     /**
      * @var int

@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Request;
 
-abstract class BaseModelAware implements ModelAwareInterface
+abstract class Generic implements ModelAwareInterface
 {
     /**
      * @var mixed

@@ -1,8 +1,8 @@
 <?php
 namespace Payum\Klarna\Invoice\Request\Api;
 
-use Payum\Core\Request\BaseModelAware;
+use Payum\Core\Request\Generic;
 
-class ReserveAmount extends BaseModelAware
+class ReserveAmount extends Generic
 {
 }

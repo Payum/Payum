@@ -1,5 +1,9 @@
 # Upgrades
 
+## 0.11 to 0.12
+
+* [request] `BaseModelAware` request was renamed to `Generic`.
+
 ## 0.10 to 0.11
 
 * [request] Postfix `Request` was removed. For example `CaptureRequest` become `Capture`.

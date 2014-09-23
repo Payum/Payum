@@ -1,6 +1,6 @@
 <?php
 namespace Payum\Core\Request;
 
-class Authorize extends BaseModelAware
+class Authorize extends Generic
 {
 }
