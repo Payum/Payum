@@ -54,7 +54,7 @@ class PaymentDetailsStatusAction implements ActionInterface
             $model['L_BILLINGTYPE0'] && 
             $model['PAYMENTREQUEST_0_AMT'] == 0
         ) {
-            $request->markSuccess();
+            $request->markCaptured();
 
             return;
         }
@@ -125,7 +125,7 @@ class PaymentDetailsStatusAction implements ActionInterface
             }
             
             if ($successCounter === $allCounter) {
-                $request->markSuccess();
+                $request->markCaptured();
                 
                 return;
             }

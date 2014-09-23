@@ -6,7 +6,7 @@ interface GetStatusInterface extends ModelAwareInterface
     /**
      * @return mixed
      */
-    function getStatus();
+    function getValue();
 
     /**
      * @return void
@@ -19,11 +19,15 @@ interface GetStatusInterface extends ModelAwareInterface
     function isNew();
     
     /**
+     * @deprecated since 0.12, will be removed in next release. use self::markCaptured
+     *
      * @return void
      */
     function markSuccess();
 
     /**
+     * @deprecated since 0.12, will be removed in next release. use self::isCaptured
+     *
      * @return boolean
      */
     function isSuccess();
@@ -31,7 +35,32 @@ interface GetStatusInterface extends ModelAwareInterface
     /**
      * @return void
      */
-    function markSuspended();
+    function markCaptured();
+
+    /**
+     * @return boolean
+     */
+    function isCaptured();
+
+    /**
+     * @return boolean
+     */
+    function isAuthorized();
+
+    /**
+     * @return void
+     */
+    function markAuthorized();
+
+    /**
+     * @return boolean
+     */
+    function isRefunded();
+
+    /**
+     * @return void
+     */
+    function markRefunded();
 
     /**
      * @return boolean

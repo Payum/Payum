@@ -39,7 +39,7 @@ class AutoPayPaymentDetailsStatusAction implements ActionInterface
             AgreementApi::PURCHASEOPERATION_SALE == $model['purchaseOperation'] && 
             OrderApi::TRANSACTIONSTATUS_SALE == $model['transactionStatus']
         ) {
-            $request->markSuccess();
+            $request->markCaptured();
 
             return;
         }
@@ -48,7 +48,7 @@ class AutoPayPaymentDetailsStatusAction implements ActionInterface
             AgreementApi::PURCHASEOPERATION_AUTHORIZATION == $model['purchaseOperation'] &&
             OrderApi::TRANSACTIONSTATUS_AUTHORIZE == $model['transactionStatus']
         ) {
-            $request->markSuccess();
+            $request->markCaptured();
 
             return;
         }

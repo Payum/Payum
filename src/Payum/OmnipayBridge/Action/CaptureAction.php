@@ -62,7 +62,7 @@ class CaptureAction extends BaseApiAwareAction implements PaymentAwareInterface
         $response = $this->gateway->purchase($model->toUnsafeArray())->send();
 
         $model['_reference']      = $response->getTransactionReference();
-        $model['_status']         = $response->isSuccessful() ? 'success' : 'failed';
+        $model['_status']         = $response->isSuccessful() ? 'captured' : 'failed';
         $model['_status_code']    = $response->getCode();
         $model['_status_message'] = $response->isSuccessful() ? '' : $response->getMessage();
     }

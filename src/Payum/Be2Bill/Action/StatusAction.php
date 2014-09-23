@@ -28,7 +28,7 @@ class StatusAction implements ActionInterface
         }
         
         if (Api::EXECCODE_SUCCESSFUL === $model['EXECCODE']) {
-            $request->markSuccess();
+            $request->markCaptured();
 
             return;
         }

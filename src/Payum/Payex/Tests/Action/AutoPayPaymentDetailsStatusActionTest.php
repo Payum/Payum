@@ -128,7 +128,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldMarkSuccessIfPurchaseOperationAuthorizeAndTransactionStatusThree()
+    public function shouldMarkCapturedIfPurchaseOperationAuthorizeAndTransactionStatusThree()
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
@@ -143,13 +143,13 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
 
         $action->execute($status);
 
-        $this->assertTrue($status->isSuccess());
+        $this->assertTrue($status->isCaptured());
     }
 
     /**
      * @test
      */
-    public function shouldMarkSuccessIfPurchaseOperationSaleAndTransactionStatusZero()
+    public function shouldMarkCapturedIfPurchaseOperationSaleAndTransactionStatusZero()
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
@@ -164,7 +164,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
 
         $action->execute($status);
 
-        $this->assertTrue($status->isSuccess());
+        $this->assertTrue($status->isCaptured());
     }
 
     /**

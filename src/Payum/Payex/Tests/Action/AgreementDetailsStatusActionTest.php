@@ -118,7 +118,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         ));
 
         //guard
-        $status->markSuccess();
+        $status->markCaptured();
 
         $action->execute($status);
 

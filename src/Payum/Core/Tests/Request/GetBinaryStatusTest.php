@@ -64,7 +64,7 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
 
         $statusRequest->$markXXXMethod();
         
-        $this->assertNotEmpty($statusRequest->getStatus());
+        $this->assertNotEmpty($statusRequest->getValue());
     }
 
     /**
@@ -82,15 +82,17 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotMatchOthersThenSuccessStatus()
+    public function shouldNotMatchOthersThenCapturedStatus()
     {
         $statusRequest = new GetBinaryStatus(new \stdClass);
 
-        $statusRequest->markSuccess();
+        $statusRequest->markCaptured();
         
-        $this->assertTrue($statusRequest->isSuccess());
+        $this->assertTrue($statusRequest->isCaptured());
         
         $this->assertFalse($statusRequest->isCanceled());
+        $this->assertFalse($statusRequest->isAuthorized());
+        $this->assertFalse($statusRequest->isRefunded());
         $this->assertFalse($statusRequest->isSuspended());
         $this->assertFalse($statusRequest->isExpired());
         $this->assertFalse($statusRequest->isPending());

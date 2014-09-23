@@ -33,7 +33,7 @@ class StatusAction implements ActionInterface
         }
 
         if (Constants::STATUS_CREATED == $model['status']) {
-            $request->markSuccess();
+            $request->markCaptured();
 
             return;
         }

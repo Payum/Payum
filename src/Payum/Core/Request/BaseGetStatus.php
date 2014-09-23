@@ -26,7 +26,7 @@ abstract class BaseGetStatus extends Generic implements GetStatusInterface
     /**
      * {@inheritdoc}
      */
-    public function getStatus()
+    public function getValue()
     {
         return $this->status;
     }

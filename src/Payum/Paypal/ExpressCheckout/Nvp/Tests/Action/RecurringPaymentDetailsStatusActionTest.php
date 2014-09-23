@@ -164,7 +164,7 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCas
     /**
      * @test
      */
-    public function shouldMarkSuccessIfProfileStatusActiveAndStatusNotSet()
+    public function shouldMarkCapturedIfProfileStatusActiveAndStatusNotSet()
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -175,13 +175,13 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCas
 
         $action->execute($request);
 
-        $this->assertTrue($request->isSuccess());
+        $this->assertTrue($request->isCaptured());
     }
 
     /**
      * @test
      */
-    public function shouldMarkSuccessIfStatusActive()
+    public function shouldMarkCapturedIfStatusActive()
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -192,7 +192,7 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCas
 
         $action->execute($request);
 
-        $this->assertTrue($request->isSuccess());
+        $this->assertTrue($request->isCaptured());
     }
 
     /**

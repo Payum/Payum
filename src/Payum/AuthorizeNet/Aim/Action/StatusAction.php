@@ -27,7 +27,7 @@ class StatusAction implements ActionInterface
         }
         
         if (\AuthorizeNetAIM_Response::APPROVED == $model['response_code']) {
-            $request->markSuccess();
+            $request->markCaptured();
             
             return;
         }

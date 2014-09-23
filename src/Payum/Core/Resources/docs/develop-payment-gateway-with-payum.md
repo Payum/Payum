@@ -81,7 +81,7 @@ class StatusAction implements ActionInterface
         }
 
         if ('success' == $model['status']) {
-            $request->markSuccess();
+            $request->markCaptured();
 
             return;
         }
