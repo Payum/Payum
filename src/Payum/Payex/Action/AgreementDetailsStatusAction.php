@@ -43,7 +43,7 @@ class AgreementDetailsStatusAction implements ActionInterface
             is_numeric($model['agreementStatus']) &&
             AgreementApi::AGREEMENTSTATUS_VERIFIED == $model['agreementStatus']
         ) {
-            $request->markSuccess();
+            $request->markCaptured();
 
             return;
         }

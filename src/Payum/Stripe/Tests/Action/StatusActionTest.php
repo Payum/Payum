@@ -116,7 +116,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldMarkSuccessIfModelHasSuccefullyUsedTokenSet()
+    public function shouldMarkCapturedIfModelHasSuccefullyUsedTokenSet()
     {
         $action = new StatusAction;
 
@@ -128,7 +128,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
 
         $action->execute($status = new GetHumanStatus($model));
 
-        $this->assertTrue($status->isSuccess());
+        $this->assertTrue($status->isCaptured());
     }
 
     /**

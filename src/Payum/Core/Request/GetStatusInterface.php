@@ -6,7 +6,7 @@ interface GetStatusInterface extends ModelAwareInterface
     /**
      * @return mixed
      */
-    function getStatus();
+    function getValue();
 
     /**
      * @return void
@@ -17,21 +17,36 @@ interface GetStatusInterface extends ModelAwareInterface
      * @return boolean
      */
     function isNew();
-    
+
     /**
      * @return void
      */
-    function markSuccess();
+    function markCaptured();
 
     /**
      * @return boolean
      */
-    function isSuccess();
+    function isCaptured();
+
+    /**
+     * @return boolean
+     */
+    function isAuthorized();
 
     /**
      * @return void
      */
-    function markSuspended();
+    function markAuthorized();
+
+    /**
+     * @return boolean
+     */
+    function isRefunded();
+
+    /**
+     * @return void
+     */
+    function markRefunded();
 
     /**
      * @return boolean

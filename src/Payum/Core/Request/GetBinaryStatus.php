@@ -10,29 +10,65 @@ class GetBinaryStatus extends BaseGetStatus
     const STATUS_SUSPENDED = 524288; // 2^19
     
     const STATUS_EXPIRED = 262144; // 2^18
-    
-    const STATUS_SUCCESS = 32768; // 2^15
 
     const STATUS_PENDING = 1024; // 2^10
 
     const STATUS_CANCELED = 32; //2^5
 
+    const STATUS_REFUNDED = 16; // 2^4
+
+    const STATUS_AUTHORIZED = 8; // 2^3
+
+    const STATUS_CAPTURED = 4; // 2^2
+
     const STATUS_NEW = 2; //2^1
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function markSuccess()
+    public function markCaptured()
     {
-        $this->status = static::STATUS_SUCCESS;
+        $this->status = static::STATUS_CAPTURED;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function isSuccess()
+    public function isCaptured()
     {
-        return $this->isCurrentStatusEqualTo(static::STATUS_SUCCESS);
+        return $this->isCurrentStatusEqualTo(static::STATUS_CAPTURED);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function markAuthorized()
+    {
+        $this->status = static::STATUS_AUTHORIZED;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isAuthorized()
+    {
+        return $this->isCurrentStatusEqualTo(static::STATUS_AUTHORIZED);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function markRefunded()
+    {
+        $this->status = static::STATUS_REFUNDED;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isRefunded()
+    {
+        return $this->isCurrentStatusEqualTo(static::STATUS_REFUNDED);
     }
 
     /**
@@ -154,6 +190,6 @@ class GetBinaryStatus extends BaseGetStatus
      */
     protected function isCurrentStatusEqualTo($expectedStatus)
     {
-        return ($expectedStatus | $this->getStatus()) == $expectedStatus;
+        return ($expectedStatus | $this->getValue()) == $expectedStatus;
     }
 }

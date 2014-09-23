@@ -4,11 +4,6 @@ namespace Payum\Core\Request;
 abstract class BaseGetStatus extends Generic implements GetStatusInterface
 {
     /**
-     * @var mixed
-     */
-    protected $model;
-
-    /**
      * @var int
      */
     protected $status;
@@ -26,7 +21,7 @@ abstract class BaseGetStatus extends Generic implements GetStatusInterface
     /**
      * {@inheritdoc}
      */
-    public function getStatus()
+    public function getValue()
     {
         return $this->status;
     }

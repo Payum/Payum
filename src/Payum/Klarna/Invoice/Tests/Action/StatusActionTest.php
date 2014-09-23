@@ -109,7 +109,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldMarkSuccessIfInvoiceNumberSet()
+    public function shouldMarkCapturedIfInvoiceNumberSet()
     {
         $action = new StatusAction;
 
@@ -117,13 +117,13 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
             'invoice_number' => 'aNumber',
         )));
 
-        $this->assertTrue($getStatus->isSuccess());
+        $this->assertTrue($getStatus->isCaptured());
     }
 
     /**
      * @test
      */
-    public function shouldMarkPendingIfStatusAccepted()
+    public function shouldMarkAuthorizedIfStatusAccepted()
     {
         $action = new StatusAction;
 
@@ -131,7 +131,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
             'status' => \KlarnaFlags::ACCEPTED,
         )));
 
-        $this->assertTrue($getStatus->isPending());
+        $this->assertTrue($getStatus->isAuthorized());
     }
 
     /**

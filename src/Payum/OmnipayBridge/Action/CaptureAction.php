@@ -42,8 +42,7 @@ class CaptureAction extends BaseApiAwareAction implements PaymentAwareInterface
 
         if (false == $model->validateNotEmpty(array('card'), false)) {
             try {
-                $creditCardRequest = new ObtainCreditCard;
-                $this->payment->execute($creditCardRequest);
+                $this->payment->execute($creditCardRequest = new ObtainCreditCard);
                 $card = $creditCardRequest->obtain();
 
                 $model['card'] = new SensitiveValue(array(
@@ -62,7 +61,7 @@ class CaptureAction extends BaseApiAwareAction implements PaymentAwareInterface
         $response = $this->gateway->purchase($model->toUnsafeArray())->send();
 
         $model['_reference']      = $response->getTransactionReference();
-        $model['_status']         = $response->isSuccessful() ? 'success' : 'failed';
+        $model['_status']         = $response->isSuccessful() ? 'captured' : 'failed';
         $model['_status_code']    = $response->getCode();
         $model['_status_message'] = $response->isSuccessful() ? '' : $response->getMessage();
     }

@@ -7,7 +7,7 @@ abstract class Constants
 
     const FIELD_STATUS = 'status';
 
-    const STATUS_SUCCESS = 'success';
+    const STATUS_CAPTURED = 'captured';
 
     const STATUS_PENDING = 'pending';
 

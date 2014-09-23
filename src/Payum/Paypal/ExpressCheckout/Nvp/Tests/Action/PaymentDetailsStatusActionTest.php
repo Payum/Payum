@@ -149,7 +149,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldMarkSuccessIfCreateBillingAgreementRequestAndZeroAmount()
+    public function shouldMarkCapturedIfCreateBillingAgreementRequestAndZeroAmount()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -162,7 +162,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
 
         $action->execute($request);
 
-        $this->assertTrue($request->isSuccess());
+        $this->assertTrue($request->isCaptured());
     }
 
     /**
@@ -258,7 +258,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldMarkSuccessIfAllPaymentStatusCompletedOrProcessed()
+    public function shouldMarkCapturedIfAllPaymentStatusCompletedOrProcessed()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -271,7 +271,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         
         $action->execute($request);
 
-        $this->assertTrue($request->isSuccess());
+        $this->assertTrue($request->isCaptured());
     }
 
     /**

@@ -119,7 +119,7 @@ class FooAction implements ActionInterface
     public function execute($request)
     {
         if ('success condition') {
-           $request->markSuccess();
+           $request->markCaptured();
         } else if ('pending condition') {
            $request->markPending();
         } else {
@@ -141,7 +141,7 @@ $payment->addAction(new FooAction);
 
 $payment->execute($status = new GetHumanStatus);
 
-$status->isSuccess();
+$status->isCaptured();
 $status->isPending();
 
 // or

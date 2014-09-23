@@ -36,7 +36,7 @@ class RecurringPaymentDetailsStatusAction implements ActionInterface
         }
 
         if (Api::RECURRINGPAYMENTSTATUS_ACTIVE == $model['STATUS']) {
-            $request->markSuccess();
+            $request->markCaptured();
 
             return;
         }
@@ -72,7 +72,7 @@ class RecurringPaymentDetailsStatusAction implements ActionInterface
         }
 
         if (Api::PROFILESTATUS_ACTIVEPROFILE == $model['PROFILESTATUS']) {
-            $request->markSuccess();
+            $request->markCaptured();
 
             return;
         }

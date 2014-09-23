@@ -33,7 +33,7 @@ class StatusAction implements ActionInterface
         }
 
         if (Api::RESULT_SUCCESS === (int) $model['RESULT']) {
-            $request->markSuccess();
+            $request->markCaptured();
 
             return;
         }

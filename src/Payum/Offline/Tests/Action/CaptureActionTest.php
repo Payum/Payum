@@ -118,7 +118,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSetStatusSuccessIfPaidSetToTrue()
+    public function shouldSetStatusCapturedIfPaidSetToTrue()
     {
         $action = new CaptureAction;
 
@@ -133,6 +133,6 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action->execute($request);
 
         $this->assertTrue(isset($details[Constants::FIELD_STATUS]));
-        $this->assertEquals(Constants::STATUS_SUCCESS, $details[Constants::FIELD_STATUS]);
+        $this->assertEquals(Constants::STATUS_CAPTURED, $details[Constants::FIELD_STATUS]);
     }
 }

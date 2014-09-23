@@ -81,7 +81,7 @@ class StatusAction implements ActionInterface
         }
 
         if ('success' == $model['status']) {
-            $request->markSuccess();
+            $request->markCaptured();
 
             return;
         }
@@ -132,7 +132,7 @@ $model = new ArrayObject(array(
 $payment->execute(new Capture($model));
 $payment->execute($status = new GetHumanStatus($model));
 
-if ($status->isSuccess()) {
+if ($status->isCaptured()) {
     echo 'We purchase staff successfully';
 } else if ($status->isFailed()) {
     echo 'An error occurred';

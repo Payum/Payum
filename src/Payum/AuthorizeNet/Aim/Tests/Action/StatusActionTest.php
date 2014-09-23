@@ -108,7 +108,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldMarkSuccessStatusIfArrayObjectHasResponseCodeApproved()
+    public function shouldMarkCapturedStatusIfArrayObjectHasResponseCodeApproved()
     {
         $action = new StatusAction();
 
@@ -119,7 +119,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
 
         $action->execute($request);
 
-        $this->assertTrue($request->isSuccess());
+        $this->assertTrue($request->isCaptured());
     }
 
     /**

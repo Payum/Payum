@@ -40,7 +40,7 @@ class StatusAction implements ActionInterface
         }
 
         if (is_array($model['card']) && $model['captured'] && $model['paid']) {
-            $request->markSuccess();
+            $request->markCaptured();
 
             return;
         }

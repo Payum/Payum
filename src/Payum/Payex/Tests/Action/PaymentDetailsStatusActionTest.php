@@ -162,7 +162,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldMarkSuccessTwoPhaseTransaction()
+    public function shouldMarkCapturedTwoPhaseTransaction()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -179,7 +179,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
 
         $action->execute($status);
 
-        $this->assertTrue($status->isSuccess());
+        $this->assertTrue($status->isCaptured());
     }
 
     /**
@@ -208,7 +208,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldMarkSuccessOnePhaseTransaction()
+    public function shouldMarkCapturedOnePhaseTransaction()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -225,7 +225,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
 
         $action->execute($status);
 
-        $this->assertTrue($status->isSuccess());
+        $this->assertTrue($status->isCaptured());
     }
 
     /**
@@ -386,7 +386,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldMarkSuccessIfErrorCodeOk()
+    public function shouldMarkCapturedIfErrorCodeOk()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -404,7 +404,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
 
         $action->execute($status);
 
-        $this->assertTrue($status->isSuccess());
+        $this->assertTrue($status->isCaptured());
     }
 
     /**

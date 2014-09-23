@@ -109,10 +109,10 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldMarkSuccessIfStatusSetToSuccess()
+    public function shouldMarkCapturedIfStatusSetToCaptured()
     {
         $request = new GetBinaryStatus(array(
-            Constants::FIELD_STATUS => Constants::STATUS_SUCCESS
+            Constants::FIELD_STATUS => Constants::STATUS_CAPTURED
         ));
         $request->markUnknown();
 
@@ -120,7 +120,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
 
         $action->execute($request);
 
-        $this->assertTrue($request->isSuccess());
+        $this->assertTrue($request->isCaptured());
     }
 
     /**
@@ -131,7 +131,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
         $request = new GetBinaryStatus(array(
             Constants::FIELD_STATUS => 'some-foo-bar-status'
         ));
-        $request->markSuccess();
+        $request->markCaptured();
 
         $action = new StatusAction();
 

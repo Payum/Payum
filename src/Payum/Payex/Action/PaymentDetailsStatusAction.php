@@ -86,7 +86,7 @@ class PaymentDetailsStatusAction implements ActionInterface
             //If you are running 2-phase transactions, you should check that the node transactionStatus contains 3 (authorize)
             if (OrderApi::PURCHASEOPERATION_AUTHORIZATION == $model['purchaseOperation']) {
                 if (OrderApi::TRANSACTIONSTATUS_AUTHORIZE == $model['transactionStatus']) {
-                    $request->markSuccess();
+                    $request->markCaptured();
     
                     return;
                 }
@@ -100,7 +100,7 @@ class PaymentDetailsStatusAction implements ActionInterface
             //If you are running 1-phase transactions, you should check that the node transactionStatus contains 0 (sale)
             if (OrderApi::PURCHASEOPERATION_SALE == $model['purchaseOperation']) {
                 if (is_numeric($model['transactionStatus']) && OrderApi::TRANSACTIONSTATUS_SALE == $model['transactionStatus']) {
-                    $request->markSuccess();
+                    $request->markCaptured();
 
                     return;
                 }
