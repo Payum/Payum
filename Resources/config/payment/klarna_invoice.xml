@@ -11,6 +11,7 @@
         <parameter key="payum.klarna.invoice.action.sync.class">Payum\Klarna\Invoice\Action\SyncAction</parameter>
         <parameter key="payum.klarna.invoice.action.status.class">Payum\Klarna\Invoice\Action\StatusAction</parameter>
         <parameter key="payum.klarna.invoice.action.api.activate.class">Payum\Klarna\Invoice\Action\Api\ActivateAction</parameter>
+        <parameter key="payum.klarna.invoice.action.api.credit_part.class">Payum\Klarna\Invoice\Action\Api\CreditPartAction</parameter>
         <parameter key="payum.klarna.invoice.action.api.activate_reservation.class">Payum\Klarna\Invoice\Action\Api\ActivateReservationAction</parameter>
         <parameter key="payum.klarna.invoice.action.api.reserve_amount.class">Payum\Klarna\Invoice\Action\Api\ReserveAmountAction</parameter>
         <parameter key="payum.klarna.invoice.action.api.cancel_reservation.class">Payum\Klarna\Invoice\Action\Api\CancelReservationAction</parameter>
@@ -63,6 +64,14 @@
         <service
             id="payum.klarna.invoice.action.api.activate"
             class="%payum.klarna.invoice.action.api.activate.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="klarna_invoice" />
+        </service>
+
+        <service
+            id="payum.klarna.invoice.action.api.credit_part"
+            class="%payum.klarna.invoice.action.api.credit_part.class%"
             public="false"
         >
             <tag name="payum.action" factory="klarna_invoice" />
