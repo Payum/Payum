@@ -47,7 +47,7 @@ class StatusCommand extends ContainerAwareCommand
         $status = new GetHumanStatus($model);
         $this->getPayum()->getPayment($paymentName)->execute($status);
 
-        $output->writeln(sprintf('Status: %s', $status->getStatus()));
+        $output->writeln(sprintf('Status: %s', $status->getValue()));
     }
 
     /**

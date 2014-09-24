@@ -47,7 +47,7 @@ class AuthorizeControllerTest extends \PHPUnit_Framework_TestCase
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\SecuredAuthorize'))
+            ->with($this->isInstanceOf('Payum\Core\Request\Authorize'))
         ;
 
         $registryMock = $this->getMock('Payum\Core\Registry\RegistryInterface');
