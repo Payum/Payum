@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Controller;
 
-use Payum\Core\Request\SecuredCapture;
+use Payum\Core\Request\Capture;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -32,7 +32,7 @@ class CaptureController extends PayumController
         $token = $this->getHttpRequestVerifier()->verify($request);
 
         $payment = $this->getPayum()->getPayment($token->getPaymentName());
-        $payment->execute(new SecuredCapture($token));
+        $payment->execute(new Capture($token));
         
         $this->getHttpRequestVerifier()->invalidate($token);
         
