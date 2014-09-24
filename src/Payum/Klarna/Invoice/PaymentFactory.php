@@ -12,6 +12,7 @@ use Payum\Klarna\Invoice\Action\Api\PopulateKlarnaFromDetailsAction;
 use Payum\Klarna\Invoice\Action\Api\ReserveAmountAction;
 use Payum\Klarna\Invoice\Action\AuthorizeAction;
 use Payum\Klarna\Invoice\Action\CaptureAction;
+use Payum\Klarna\Invoice\Action\RefundAction;
 use Payum\Klarna\Invoice\Action\StatusAction;
 use Payum\Klarna\Invoice\Action\SyncAction;
 
@@ -27,6 +28,7 @@ abstract class PaymentFactory
         $payment->addAction(new AuthorizeAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new SyncAction);
+        $payment->addAction(new RefundAction);
 
         $payment->addAction(new ActivateAction);
         $payment->addAction(new ActivateReservationAction);

@@ -175,4 +175,18 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($getStatus->isUnknown());
     }
+
+    /**
+     * @test
+     */
+    public function shouldMarkRefundedIfRefundInvoiceNumberSet()
+    {
+        $action = new StatusAction;
+
+        $action->execute($getStatus = new GetHumanStatus(array(
+            'refund_invoice_number' => 'aNum',
+        )));
+
+        $this->assertTrue($getStatus->isRefunded());
+    }
 }
