@@ -9,7 +9,7 @@ class AuthorizeNetAIM extends \AuthorizeNetAIM
     public $ignore_not_x_fields = false;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function setField($name, $value)
     {

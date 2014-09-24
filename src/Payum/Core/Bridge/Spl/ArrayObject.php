@@ -10,7 +10,7 @@ class ArrayObject extends \ArrayObject
     protected $input;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function __construct($input = array(), $flags = 0, $iterator_class = "ArrayIterator")
     {
@@ -98,7 +98,7 @@ class ArrayObject extends \ArrayObject
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function offsetSet($index, $value)
     {
@@ -110,7 +110,7 @@ class ArrayObject extends \ArrayObject
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function offsetUnset($index)
     {
@@ -125,7 +125,7 @@ class ArrayObject extends \ArrayObject
      * This simply returns NULL when an array does not have this index.
      * It allows us not to do isset all the time we want to access something.
      *
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function offsetGet($index)
     {

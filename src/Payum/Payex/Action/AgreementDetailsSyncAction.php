@@ -14,9 +14,7 @@ class AgreementDetailsSyncAction extends PaymentAwareAction
     public function execute($request)
     {
         /** @var $request Sync */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        RequestNotSupportedException::assertSupports($this, $request);
         
         $this->payment->execute(new CheckAgreement($request->getModel()));
     }

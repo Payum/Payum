@@ -14,10 +14,8 @@ class StatusAction implements ActionInterface
      */
     public function execute($request)
     {
-        /** @var $request \Payum\Core\Request\GetStatusInterface */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        /** @var $request GetStatusInterface */
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
         if (false == $model['status'] || Constants::STATUS_CHECKOUT_INCOMPLETE == $model['status']) {

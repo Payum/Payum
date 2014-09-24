@@ -346,7 +346,7 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getIterator()
     {
@@ -354,7 +354,7 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function offsetExists($offset)
     {
@@ -362,7 +362,7 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function offsetGet($offset)
     {
@@ -375,7 +375,7 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function offsetSet($offset, $value)
     {
@@ -383,7 +383,7 @@ class PaymentDetails implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function offsetUnset($offset)
     {

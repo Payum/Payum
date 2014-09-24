@@ -8,7 +8,7 @@ use Payum\Core\Tests\Mocks\Request\AuthorizeRequest;
 class AuthorizeAction implements ActionInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function execute($request)
     {   
@@ -16,7 +16,7 @@ class AuthorizeAction implements ActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {

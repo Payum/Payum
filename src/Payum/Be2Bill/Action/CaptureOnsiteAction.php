@@ -38,9 +38,7 @@ class CaptureOnsiteAction extends PaymentAwareAction implements ApiAwareInterfac
     public function execute($request)
     {
         /** @var $request Capture */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 

@@ -10,17 +10,15 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken;
 class AuthorizeTokenAction extends BaseApiAwareAction
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      * 
      * @throws \Payum\Core\Exception\LogicException if the token not set in the instruction.
      * @throws \Payum\Core\Reply\HttpRedirect if authorization required.
      */
     public function execute($request)
     {
-        /** @var $request \Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        /** @var $request AuthorizeToken */
+        RequestNotSupportedException::assertSupports($this, $request);
         
         $model = ArrayObject::ensureArrayObject($request->getModel());
         if (false == $model['TOKEN']) {
@@ -38,7 +36,7 @@ class AuthorizeTokenAction extends BaseApiAwareAction
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {

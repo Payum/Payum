@@ -9,7 +9,7 @@ use Payum\Core\Tests\Mocks\Request\AuthorizeRequest;
 class CaptureAction extends PaymentAwareAction
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function execute($request)
     {   
@@ -22,7 +22,7 @@ class CaptureAction extends PaymentAwareAction
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {

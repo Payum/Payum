@@ -17,9 +17,7 @@ class NotifyAction extends PaymentAwareAction
     public function execute($request)
     {
         /** @var $request Notify */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 

@@ -16,9 +16,7 @@ class AutoPayPaymentDetailsStatusAction implements ActionInterface
     public function execute($request)
     {
         /** @var $request GetStatusInterface */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
         

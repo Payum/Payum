@@ -10,14 +10,12 @@ use Payum\Core\Request\Sync;
 class SyncAction extends PaymentAwareAction
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function execute($request)
     {
-        /** @var $request \Payum\Core\Request\Sync */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        /** @var $request Sync */
+        RequestNotSupportedException::assertSupports($this, $request);
 
         /** @var Payment $model */
         $model = $request->getModel();
@@ -28,7 +26,7 @@ class SyncAction extends PaymentAwareAction
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {

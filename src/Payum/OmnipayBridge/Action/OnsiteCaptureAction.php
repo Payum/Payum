@@ -10,7 +10,7 @@ use Payum\Core\Reply\HttpRedirect;
 class OnsiteCaptureAction extends BaseApiAwareAction
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function execute($request)
     {
@@ -49,7 +49,7 @@ class OnsiteCaptureAction extends BaseApiAwareAction
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {

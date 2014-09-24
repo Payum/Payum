@@ -20,9 +20,7 @@ class StatusAction implements ActionInterface
      */
     public function execute($request)
     {
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $model = new ArrayObject($request->getModel());
         
@@ -42,7 +40,7 @@ class StatusAction implements ActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {

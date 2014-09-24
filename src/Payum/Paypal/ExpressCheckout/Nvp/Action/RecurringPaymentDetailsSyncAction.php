@@ -12,14 +12,12 @@ use Payum\Core\Exception\RequestNotSupportedException;
 class RecurringPaymentDetailsSyncAction extends PaymentAwareAction
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function execute($request)
     {
         /** @var $request Sync */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        RequestNotSupportedException::assertSupports($this, $request);
         
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
@@ -31,7 +29,7 @@ class RecurringPaymentDetailsSyncAction extends PaymentAwareAction
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {

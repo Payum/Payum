@@ -26,7 +26,7 @@ class ExtensionCollection implements ExtensionInterface
     }
     
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function onPreExecute($request)
     {
@@ -36,7 +36,7 @@ class ExtensionCollection implements ExtensionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function onExecute($request, ActionInterface $action)
     {
@@ -46,7 +46,7 @@ class ExtensionCollection implements ExtensionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function onPostExecute($request, ActionInterface $action)
     {
@@ -56,7 +56,7 @@ class ExtensionCollection implements ExtensionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function onReply(ReplyInterface $reply, $request, ActionInterface $action)
     {
@@ -71,7 +71,7 @@ class ExtensionCollection implements ExtensionInterface
     }
     
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function onException(\Exception $exception, $request, ActionInterface $action = null)
     {

@@ -34,9 +34,7 @@ class CaptureOrderUsingFooAction extends PaymentAwareAction
 {
     public function execute($request)
     {
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $order = $request->getModel();
 

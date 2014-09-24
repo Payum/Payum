@@ -17,9 +17,7 @@ class FetchOrderAction extends BaseApiAwareAction
     public function execute($request)
     {
         /** @var $request FetchOrder */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 

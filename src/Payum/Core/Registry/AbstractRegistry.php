@@ -84,7 +84,7 @@ abstract class AbstractRegistry implements RegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getDefaultPaymentName()
     {

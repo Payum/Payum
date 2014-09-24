@@ -10,20 +10,12 @@ use Payum\Core\Request\GetStatusInterface;
 class StatusAction implements ActionInterface
 {
     /**
-     * @param mixed $request
-     *
-     * @throws \Payum\Core\Exception\RequestNotSupportedException if the action dose not support the request.
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    function execute($request)
+    public function execute($request)
     {
-        /**
-         * @var $request \Payum\Core\Request\GetStatusInterface
-         */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        /** @var $request GetStatusInterface */
+        RequestNotSupportedException::assertSupports($this, $request);
 
         /** @var Payment $model */
         $model = $request->getModel();
@@ -50,11 +42,9 @@ class StatusAction implements ActionInterface
     }
 
     /**
-     * @param mixed $request
-     *
-     * @return boolean
+     * {@inheritDoc}
      */
-    function supports($request)
+    public function supports($request)
     {
         if (false == $request instanceof GetStatusInterface) {
             return false;

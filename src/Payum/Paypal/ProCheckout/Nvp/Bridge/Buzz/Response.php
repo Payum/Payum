@@ -24,7 +24,7 @@ class Response extends BaseResponse implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function offsetExists($offset)
     {
@@ -34,7 +34,7 @@ class Response extends BaseResponse implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function offsetGet($offset)
     {
@@ -44,7 +44,7 @@ class Response extends BaseResponse implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function offsetSet($offset, $value)
     {
@@ -54,7 +54,7 @@ class Response extends BaseResponse implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function offsetUnset($offset)
     {
@@ -64,7 +64,7 @@ class Response extends BaseResponse implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getIterator()
     {

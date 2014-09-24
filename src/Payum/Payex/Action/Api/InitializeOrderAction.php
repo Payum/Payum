@@ -36,9 +36,7 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
     public function execute($request)
     {
         /** @var $request InitializeOrder */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
         

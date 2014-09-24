@@ -7,7 +7,7 @@ use Payum\Core\Request\GetStatusInterface;
 class StatusAction implements ActionInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @param GetStatusInterface $request
      */
@@ -17,7 +17,7 @@ class StatusAction implements ActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {

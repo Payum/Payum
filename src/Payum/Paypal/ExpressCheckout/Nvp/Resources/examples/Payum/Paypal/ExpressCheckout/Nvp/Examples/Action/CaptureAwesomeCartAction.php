@@ -6,17 +6,15 @@ use Payum\Core\Request\Capture;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Examples\Model\AwesomeCart; 
 
-class CaptureAwesomeCartAction extends \Payum\Core\Action\PaymentAwareAction
+class CaptureAwesomeCartAction extends PaymentAwareAction
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function execute($request)
     {
-        /** @var $request \Payum\Core\Request\Capture */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        /** @var $request Capture */
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $cart = $request->getModel();
 
@@ -33,7 +31,7 @@ class CaptureAwesomeCartAction extends \Payum\Core\Action\PaymentAwareAction
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {

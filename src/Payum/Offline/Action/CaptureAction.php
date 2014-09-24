@@ -14,10 +14,8 @@ class CaptureAction implements ActionInterface
      */
     public function execute($request)
     {
-        /** @var $request \Payum\Core\Request\Capture */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        /** @var $request Capture */
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
