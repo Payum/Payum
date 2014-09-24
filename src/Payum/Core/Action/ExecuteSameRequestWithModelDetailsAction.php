@@ -13,9 +13,7 @@ class ExecuteSameRequestWithModelDetailsAction extends PaymentAwareAction
     public function execute($request)
     {
         /** @var $request ModelAwareInterface */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $request->setModel($request->getModel()->getDetails());
         

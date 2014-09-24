@@ -9,14 +9,12 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetails;
 class GetExpressCheckoutDetailsAction extends  BaseApiAwareAction
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function execute($request)
     {
-        /** @var $request \Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetails */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        /** @var $request GetExpressCheckoutDetails */
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
         if (false == $model['TOKEN']) {
@@ -29,7 +27,7 @@ class GetExpressCheckoutDetailsAction extends  BaseApiAwareAction
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {

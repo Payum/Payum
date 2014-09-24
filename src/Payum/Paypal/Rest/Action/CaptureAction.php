@@ -20,16 +20,24 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
     protected $api;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     */
+    public function setApi($api)
+    {
+        if(false == $api instanceof ApiContext) {
+            throw new UnsupportedApiException('Given api is not supported. Supported api is instance of ApiContext');
+        }
+
+        $this->api = $api;
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function execute($request)
     {
-        /**
-         * @var $request \Payum\Core\Request\Capture
-         */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        /** @var $request Capture */
+        RequestNotSupportedException::assertSupports($this, $request);
 
         /** @var Payment $model */
         $model = $request->getModel();
@@ -70,7 +78,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {
@@ -78,21 +86,5 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
             $request instanceof Capture &&
             $request->getModel() instanceof Payment
         ;
-    }
-
-    /**
-     * @param mixed $api
-     *
-     * @throws \Payum\Core\Exception\UnsupportedApiException if the given Api is not supported.
-     *
-     * @return void
-     */
-    public function setApi($api)
-    {
-        if(false == $api instanceof ApiContext) {
-            throw new UnsupportedApiException('Given api is not supported. Supported api is instance of ApiContext');
-        }
-
-        $this->api = $api;
     }
 }

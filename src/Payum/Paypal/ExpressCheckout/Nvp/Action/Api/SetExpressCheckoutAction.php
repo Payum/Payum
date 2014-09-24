@@ -9,14 +9,12 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout;
 class SetExpressCheckoutAction extends BaseApiAwareAction
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function execute($request)
     {
-        /** @var $request \Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        /** @var $request SetExpressCheckout */
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
@@ -30,7 +28,7 @@ class SetExpressCheckoutAction extends BaseApiAwareAction
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {

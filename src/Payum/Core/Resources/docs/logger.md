@@ -33,7 +33,7 @@ class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
     protected $logger;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function setLogger(LoggerInterface $logger)
     {
@@ -41,7 +41,7 @@ class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function execute($request)
     {
@@ -51,7 +51,7 @@ class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {

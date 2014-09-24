@@ -72,7 +72,7 @@ class GetBinaryStatus extends BaseGetStatus
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function markSuspended()
     {
@@ -80,7 +80,7 @@ class GetBinaryStatus extends BaseGetStatus
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function isSuspended()
     {
@@ -88,7 +88,7 @@ class GetBinaryStatus extends BaseGetStatus
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function markExpired()
     {
@@ -96,7 +96,7 @@ class GetBinaryStatus extends BaseGetStatus
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function isExpired()
     {
@@ -104,7 +104,7 @@ class GetBinaryStatus extends BaseGetStatus
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function markCanceled()
     {
@@ -112,7 +112,7 @@ class GetBinaryStatus extends BaseGetStatus
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function isCanceled()
     {
@@ -120,7 +120,7 @@ class GetBinaryStatus extends BaseGetStatus
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function markPending()
     {
@@ -128,7 +128,7 @@ class GetBinaryStatus extends BaseGetStatus
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function isPending()
     {
@@ -136,7 +136,7 @@ class GetBinaryStatus extends BaseGetStatus
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function markFailed()
     {
@@ -144,7 +144,7 @@ class GetBinaryStatus extends BaseGetStatus
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function isFailed()
     {
@@ -152,7 +152,7 @@ class GetBinaryStatus extends BaseGetStatus
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function markNew()
     {
@@ -160,7 +160,7 @@ class GetBinaryStatus extends BaseGetStatus
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function isNew()
     {
@@ -168,7 +168,7 @@ class GetBinaryStatus extends BaseGetStatus
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function markUnknown()
     {
@@ -176,7 +176,7 @@ class GetBinaryStatus extends BaseGetStatus
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function isUnknown()
     {

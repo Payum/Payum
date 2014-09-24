@@ -24,7 +24,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
     protected $api;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function setApi($api)
     {
@@ -41,9 +41,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
     public function execute($request)
     {
         /** @var $request Capture */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $model = new ArrayObject($request->getModel());
 

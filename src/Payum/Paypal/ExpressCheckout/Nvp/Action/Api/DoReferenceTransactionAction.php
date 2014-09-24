@@ -9,14 +9,12 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoReferenceTransaction;
 class DoReferenceTransactionAction extends BaseApiAwareAction
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function execute($request)
     {
         /** @var $request DoReferenceTransaction */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
@@ -36,7 +34,7 @@ class DoReferenceTransactionAction extends BaseApiAwareAction
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {

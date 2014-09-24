@@ -9,14 +9,12 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetRecurringPaymentsProfileDeta
 class GetRecurringPaymentsProfileDetailsAction extends BaseApiAwareAction
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function execute($request)
     {
         /** @var $request CreateRecurringPaymentProfile */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
@@ -28,7 +26,7 @@ class GetRecurringPaymentsProfileDetailsAction extends BaseApiAwareAction
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {

@@ -9,14 +9,12 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateBillingAgreement;
 class CreateBillingAgreementAction extends BaseApiAwareAction
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function execute($request)
     {
         /** @var $request CreateBillingAgreement */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
@@ -30,7 +28,7 @@ class CreateBillingAgreementAction extends BaseApiAwareAction
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {

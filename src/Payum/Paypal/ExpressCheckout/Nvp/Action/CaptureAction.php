@@ -14,14 +14,12 @@ use Payum\Paypal\ExpressCheckout\Nvp\Api;
 class CaptureAction extends PaymentAwareAction
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function execute($request)
     {
         /** @var $request Capture */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
@@ -56,7 +54,7 @@ class CaptureAction extends PaymentAwareAction
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function supports($request)
     {

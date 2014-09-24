@@ -33,9 +33,7 @@ class RenderTemplateAction implements ActionInterface
     public function execute($request)
     {
         /** @var $request RenderTemplate */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $request->setResult($this->twig->render($request->getTemplateName(), array_replace(
             array('layout' => $this->layout),

@@ -40,7 +40,7 @@ class Identificator implements \Serializable
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function serialize()
     {
@@ -48,7 +48,7 @@ class Identificator implements \Serializable
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function unserialize($serialized)
     {

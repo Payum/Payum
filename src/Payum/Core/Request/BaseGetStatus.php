@@ -9,7 +9,7 @@ abstract class BaseGetStatus extends Generic implements GetStatusInterface
     protected $status;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function __construct($model)
     {
@@ -19,7 +19,7 @@ abstract class BaseGetStatus extends Generic implements GetStatusInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getValue()
     {

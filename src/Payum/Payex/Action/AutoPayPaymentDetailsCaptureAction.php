@@ -15,9 +15,7 @@ class AutoPayPaymentDetailsCaptureAction extends PaymentAwareAction
     public function execute($request)
     {
         /** @var $request \Payum\Core\Request\Capture */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        RequestNotSupportedException::assertSupports($this, $request);
         
         $this->payment->execute(new AutoPayAgreement($request->getModel()));
     }

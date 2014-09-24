@@ -12,7 +12,7 @@ abstract class PaymentAwareAction implements ActionInterface, PaymentAwareInterf
     protected $payment;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function setPayment(PaymentInterface $payment)
     {

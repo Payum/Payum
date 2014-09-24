@@ -12,7 +12,7 @@ class ModelWithInstruction implements \Payum\Core\Model\DetailsAggregateInterfac
     protected $details;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getDetails()
     {
@@ -20,7 +20,7 @@ class ModelWithInstruction implements \Payum\Core\Model\DetailsAggregateInterfac
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function setDetails($details)
     {

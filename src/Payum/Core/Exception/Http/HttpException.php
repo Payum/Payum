@@ -18,7 +18,7 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
     protected $response;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function setRequest(Request $request)
     {
@@ -26,7 +26,7 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getRequest()
     {
@@ -34,7 +34,7 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function setResponse(Response $response)
     {
@@ -42,7 +42,7 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getResponse()
     {
