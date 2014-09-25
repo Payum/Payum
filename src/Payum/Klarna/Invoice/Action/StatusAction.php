@@ -31,6 +31,12 @@ class StatusAction implements ActionInterface
             return;
         }
 
+        if ($details['refund_invoice_number']) {
+            $request->markRefunded();
+
+            return;
+        }
+
         if ($details['invoice_number']) {
             $request->markCaptured();
 

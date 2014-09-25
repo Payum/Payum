@@ -2,17 +2,17 @@
 namespace Payum\Klarna\Invoice\Tests\Action;
 
 use Payum\Core\PaymentInterface;
-use Payum\Core\Request\Capture;
-use Payum\Klarna\Invoice\Action\CaptureAction;
+use Payum\Core\Request\Refund;
+use Payum\Klarna\Invoice\Action\RefundAction;
 
-class CaptureActionTest extends \PHPUnit_Framework_TestCase
+class RefundActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfPaymentAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\CaptureAction');
+        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\RefundAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
     }
@@ -22,25 +22,25 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new CaptureAction;
+        new RefundAction;
     }
 
     /**
      * @test
      */
-    public function shouldSupportCaptureWithArrayAsModel()
+    public function shouldSupportRefundWithArrayAsModel()
     {
-        $action = new CaptureAction();
+        $action = new RefundAction();
 
-        $this->assertTrue($action->supports(new Capture(array())));
+        $this->assertTrue($action->supports(new Refund(array())));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotCapture()
+    public function shouldNotSupportAnythingNotRefund()
     {
-        $action = new CaptureAction;
+        $action = new RefundAction;
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -48,11 +48,11 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureWithNotArrayAccessModel()
+    public function shouldNotSupportRefundWithNotArrayAccessModel()
     {
-        $action = new CaptureAction;
+        $action = new RefundAction;
 
-        $this->assertFalse($action->supports(new Capture(new \stdClass)));
+        $this->assertFalse($action->supports(new Refund(new \stdClass)));
     }
 
     /**
@@ -62,48 +62,28 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $action = new CaptureAction;
+        $action = new RefundAction;
 
-        $action->execute(new \stdClass());
+        $action->execute(new \stdClass);
     }
 
     /**
      * @test
      */
-    public function shouldSubExecuteAuthorizeIfRnoNotSet()
+    public function shouldSubExecuteCreditPartIfNotRefundedYet()
     {
         $paymentMock = $this->createPaymentMock();
         $paymentMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Authorize'))
+            ->with($this->isInstanceOf('Payum\Klarna\Invoice\Request\Api\CreditPart'))
         ;
 
-        $action = new CaptureAction;
+        $action = new RefundAction;
         $action->setPayment($paymentMock);
 
-        $request = new Capture(array());
-
-        $action->execute($request);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSubExecuteActivateIfRnoSet()
-    {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
-            ->expects($this->once())
-            ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Invoice\Request\Api\Activate'))
-        ;
-
-        $action = new CaptureAction;
-        $action->setPayment($paymentMock);
-
-        $request = new Capture(array(
-            'rno' => 'aRno',
+        $request = new Refund(array(
+            'invoice_number' => 'aNum'
         ));
 
         $action->execute($request);
@@ -112,7 +92,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldDoNothingIfAlreadyReservedAndActivated()
+    public function shouldDoNothingIfAlreadyRefunded()
     {
         $paymentMock = $this->createPaymentMock();
         $paymentMock
@@ -120,13 +100,35 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
         ;
 
-        $action = new CaptureAction;
+        $action = new RefundAction;
         $action->setPayment($paymentMock);
 
-        $request = new Capture(array(
-            'rno' => 'aRno',
-            'invoice_number' => 'anInvNumber'
+        $request = new Refund(array(
+            'invoice_number' => 'aNum',
+            'refund_invoice_number' => 'aFooNum',
         ));
+
+        $action->execute($request);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The invoice_number fields is required.
+     */
+    public function shouldThrowsIfDetailsNotHaveInvoiceNumber()
+    {
+        $paymentMock = $this->createPaymentMock();
+        $paymentMock
+            ->expects($this->never())
+            ->method('execute')
+        ;
+
+        $action = new RefundAction;
+        $action->setPayment($paymentMock);
+
+        $request = new Refund(array());
 
         $action->execute($request);
     }
