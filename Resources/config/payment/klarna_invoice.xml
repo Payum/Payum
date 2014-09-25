@@ -7,6 +7,7 @@
     <parameters>
         <parameter key="payum.klarna.invoice.config.class">Payum\Klarna\Invoice\Config</parameter>
         <parameter key="payum.klarna.invoice.action.capture.class">Payum\Klarna\Invoice\Action\CaptureAction</parameter>
+        <parameter key="payum.klarna.invoice.action.refund.class">Payum\Klarna\Invoice\Action\RefundAction</parameter>
         <parameter key="payum.klarna.invoice.action.authorize.class">Payum\Klarna\Invoice\Action\AuthorizeAction</parameter>
         <parameter key="payum.klarna.invoice.action.sync.class">Payum\Klarna\Invoice\Action\SyncAction</parameter>
         <parameter key="payum.klarna.invoice.action.status.class">Payum\Klarna\Invoice\Action\StatusAction</parameter>
@@ -32,6 +33,14 @@
         <service
             id="payum.klarna.invoice.action.capture"
             class="%payum.klarna.invoice.action.capture.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="klarna_invoice" />
+        </service>
+
+        <service
+            id="payum.klarna.invoice.action.refund"
+            class="%payum.klarna.invoice.action.refund.class%"
             public="false"
         >
             <tag name="payum.action" factory="klarna_invoice" />
