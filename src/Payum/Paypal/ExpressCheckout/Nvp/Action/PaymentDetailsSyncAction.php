@@ -27,13 +27,13 @@ class PaymentDetailsSyncAction extends PaymentAwareAction
             return;
         }
 
-        $syncedModel = new ArrayObject(array(
+        $copiedModel = new ArrayObject(array(
             'TOKEN' => $model['TOKEN'],
         ));
         
-        $this->payment->execute(new GetExpressCheckoutDetails($syncedModel));
-        if (Api::L_ERRORCODE_SESSION_HAS_EXPIRED != $syncedModel['L_ERRORCODE0']) {
-            $model->replace($syncedModel);
+        $this->payment->execute(new GetExpressCheckoutDetails($copiedModel));
+        if (Api::L_ERRORCODE_SESSION_HAS_EXPIRED != $copiedModel['L_ERRORCODE0']) {
+            $model->replace($copiedModel);
         }
 
         foreach (range(0, 9) as $index) {
