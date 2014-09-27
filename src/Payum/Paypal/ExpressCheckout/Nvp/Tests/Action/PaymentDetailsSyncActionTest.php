@@ -3,6 +3,9 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Payum\Core\Request\Sync;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetails;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
 
 class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -102,22 +105,69 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldRequestGetExpressCheckoutDetailsIfTokenSetInModel()
+    public function shouldRequestGetExpressCheckoutDetailsAndUpdateModelIfTokenSetInModel()
     {
         $paymentMock = $this->createPaymentMock();
         $paymentMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetails'))
+            ->will($this->returnCallback(function(GetExpressCheckoutDetails $request) {
+                $model = $request->getModel();
+                $model['foo'] = 'fooVal';
+                $model['PAYMENTREQUEST_0_AMT'] = 33;
+            }))
         ;
 
         $action = new PaymentDetailsSyncAction();
         $action->setPayment($paymentMock);
 
-        $action->execute(new Sync(array(
-            'PAYMENTREQUEST_0_AMT' => 12,
+        $details = new \ArrayObject(array(
+            'PAYMENTREQUEST_0_AMT' => 11,
             'TOKEN' => 'aToken',
-        )));
+        ));
+
+        $action->execute($sync = new Sync($details));
+
+        $this->assertArrayHasKey('foo', (array) $details);
+        $this->assertEquals('fooVal', $details['foo']);
+
+        $this->assertArrayHasKey('PAYMENTREQUEST_0_AMT', (array) $details);
+        $this->assertEquals(33, $details['PAYMENTREQUEST_0_AMT']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldRequestGetExpressCheckoutDetailsAndDoNotUpdateModelIfSessionExpired()
+    {
+        $paymentMock = $this->createPaymentMock();
+        $paymentMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetails'))
+            ->will($this->returnCallback(function(GetExpressCheckoutDetails $request) {
+                $model = $request->getModel();
+                $model['foo'] = 'fooVal';
+                $model['PAYMENTREQUEST_0_AMT'] = 33;
+                $model['L_ERRORCODE0'] = Api::L_ERRORCODE_SESSION_HAS_EXPIRED;
+            }))
+        ;
+
+        $action = new PaymentDetailsSyncAction();
+        $action->setPayment($paymentMock);
+
+        $details = new \ArrayObject(array(
+            'PAYMENTREQUEST_0_AMT' => 11,
+            'TOKEN' => 'aToken',
+        ));
+
+        $action->execute($sync = new Sync($details));
+
+        $this->assertArrayNotHasKey('foo', (array) $details);
+
+        $this->assertArrayHasKey('PAYMENTREQUEST_0_AMT', (array) $details);
+        $this->assertEquals(11, $details['PAYMENTREQUEST_0_AMT']);
     }
 
     /**
@@ -130,22 +180,38 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails'))
+            ->will($this->returnCallback(function(GetTransactionDetails $request) {
+                $model = $request->getModel();
+                $model['foo'] = 'fooVal';
+            }))
         ;
         $paymentMock
             ->expects($this->at(2))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails'))
+            ->will($this->returnCallback(function(GetTransactionDetails $request) {
+                $model = $request->getModel();
+                $model['bar'] = 'barVal';
+            }))
         ;
 
         $action = new PaymentDetailsSyncAction();
         $action->setPayment($paymentMock);
 
-        $action->execute(new Sync(array(
+        $details = new \ArrayObject(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'TOKEN' => 'aToken',
             'PAYMENTREQUEST_0_TRANSACTIONID' => 'zeroTransId',
             'PAYMENTREQUEST_9_TRANSACTIONID' => 'nineTransId'
-        )));
+        ));
+
+        $action->execute(new Sync($details));
+
+        $this->assertArrayHasKey('foo', (array) $details);
+        $this->assertEquals('fooVal', $details['foo']);
+
+        $this->assertArrayHasKey('bar', (array) $details);
+        $this->assertEquals('barVal', $details['bar']);
     }
 
     /**
