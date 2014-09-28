@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.11.6 (2014-09-28)
+
+* [paypal][ipn] do not update express checkout related info when session has expired.
+* [klarna] add `CreditPart` action.
+
 ## 0.11.5 (2014-09-18)
 
 * [klarna] error_code has to be int.
