@@ -140,6 +140,11 @@ class Api
     const L_ERRORCODE_PAYMENT_NOT_AUTHORIZED = 10485;
 
     /**
+     * This Express Checkout session has expired.
+     */
+    const L_ERRORCODE_SESSION_HAS_EXPIRED = 10411;
+
+    /**
      * PayPal displays the shipping address on the PayPal pages.
      */
     const NOSHIPPING_DISPLAY_ADDRESS = 0;
