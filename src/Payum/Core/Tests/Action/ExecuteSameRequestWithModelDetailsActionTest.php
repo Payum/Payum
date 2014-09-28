@@ -36,7 +36,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends \PHPUnit_Framework_Te
             ->will($this->returnValue(new \stdClass))
         ;
 
-        $requestMock = $this->getMock('Payum\Core\Request\ModelAwareInterface');
+        $requestMock = $this->getMock('Payum\Core\Request\Generic', array(), array(), '', false);
         $requestMock
             ->expects($this->atLeastOnce())
             ->method('getModel')
@@ -60,7 +60,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends \PHPUnit_Framework_Te
             ->will($this->returnValue(null))
         ;
 
-        $requestMock = $this->getMock('Payum\Core\Request\ModelAwareInterface');
+        $requestMock = $this->getMock('Payum\Core\Request\Generic', array(), array(), '', false);
         $requestMock
             ->expects($this->atLeastOnce())
             ->method('getModel')
@@ -91,7 +91,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends \PHPUnit_Framework_Te
     {
         $action = new ExecuteSameRequestWithModelDetailsAction();
         
-        $requestMock = $this->getMock('Payum\Core\Request\ModelAwareInterface');
+        $requestMock = $this->getMock('Payum\Core\Request\Generic', array(), array(), '', false);
         $requestMock
             ->expects($this->atLeastOnce())
             ->method('getModel')
@@ -130,7 +130,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends \PHPUnit_Framework_Te
         $request = new Capture($modelMock);
 
         // guard
-        $this->assertInstanceOf('Payum\Core\Request\ModelAwareInterface', $request);
+        $this->assertInstanceOf('Payum\Core\Request\Generic', $request);
 
         $testCase = $this;
         

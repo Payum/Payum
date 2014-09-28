@@ -20,7 +20,17 @@ class BaseModeAwareTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Core\Reply\BaseModelAware');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Reply\ModelAwareInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Model\ModelAwareInterface'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldImplementModelAggregateInterface()
+    {
+        $rc = new \ReflectionClass('Payum\Core\Reply\BaseModelAware');
+
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Model\ModelAggregateInterface'));
     }
 
     /**

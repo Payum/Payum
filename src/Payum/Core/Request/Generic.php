@@ -1,9 +1,12 @@
 <?php
 namespace Payum\Core\Request;
 
+use Payum\Core\Model\ModelAggregateInterface;
+use Payum\Core\Model\ModelAwareInterface;
+use Payum\Core\Security\TokenAggregateInterface;
 use Payum\Core\Security\TokenInterface;
 
-abstract class Generic implements ModelAwareInterface, SecuredInterface
+abstract class Generic implements ModelAwareInterface, ModelAggregateInterface, TokenAggregateInterface
 {
     /**
      * @var mixed

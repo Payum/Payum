@@ -2,8 +2,10 @@
 namespace Payum\Core\Reply;
 
 use Payum\Core\Exception\LogicException;
+use Payum\Core\Model\ModelAggregateInterface;
+use Payum\Core\Model\ModelAwareInterface;
 
-abstract class BaseModelAware extends LogicException implements ReplyInterface, ModelAwareInterface
+abstract class BaseModelAware extends LogicException implements ReplyInterface, ModelAwareInterface, ModelAggregateInterface
 {
     /**
      * @var mixed
