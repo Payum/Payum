@@ -312,6 +312,28 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldMarkAuthorizedIfAllPaymentStatusPendingAndReasonAuthorization()
+    {
+        $action = new PaymentDetailsStatusAction();
+
+        $request = new GetBinaryStatus(array(
+            'PAYMENTREQUEST_0_AMT' => 12,
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
+            'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PENDING,
+            'PAYMENTREQUEST_0_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
+            'PAYMENTREQUEST_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PENDING,
+            'PAYMENTREQUEST_9_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
+
+        ));
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isAuthorized());
+    }
+
+    /**
+     * @test
+     */
     public function shouldMarkUnknownIfCheckoutStatusUnknown()
     {
         $action = new PaymentDetailsStatusAction();

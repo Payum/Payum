@@ -82,7 +82,8 @@ class PaymentDetailsStatusAction implements ActionInterface
             Api::CHECKOUTSTATUS_PAYMENT_COMPLETED == $model['CHECKOUTSTATUS'] ||
             Api::CHECKOUTSTATUS_PAYMENT_ACTION_COMPLETED == $model['CHECKOUTSTATUS']
         ) {
-            $successCounter = 0;
+            $completedCounter = 0;
+            $authorizedCounter = 0;
             $allCounter = 0;
             foreach (range(0, 9) as $index) {
                 if (null === $paymentStatus = $model['PAYMENTREQUEST_'.$index.'_PAYMENTSTATUS']) {
@@ -106,9 +107,13 @@ class PaymentDetailsStatusAction implements ActionInterface
                     Api::PAYMENTSTATUS_PENDING,
                 );
                 if (in_array($paymentStatus, $pendingStatuses)) {
-                    $request->markPending();
+                    if (Api::PENDINGREASON_AUTHORIZATION == $model['PAYMENTREQUEST_'.$index.'_PENDINGREASON']) {
+                        $authorizedCounter++;
+                    } else {
+                        $request->markPending();
 
-                    return;
+                        return;
+                    }
                 }
                 
                 $failedStatuses = array(
@@ -128,13 +133,19 @@ class PaymentDetailsStatusAction implements ActionInterface
                     Api::PAYMENTSTATUS_PROCESSED
                 );
                 if (in_array($paymentStatus, $completedStatuses)) {
-                    $successCounter++;
+                    $completedCounter++;
                 }
             }
             
-            if ($successCounter === $allCounter) {
+            if ($completedCounter === $allCounter) {
                 $request->markCaptured();
                 
+                return;
+            }
+
+            if ($authorizedCounter === $allCounter) {
+                $request->markAuthorized();
+
                 return;
             }
         }
