@@ -90,12 +90,22 @@ class PaymentDetailsStatusAction implements ActionInterface
                 }
 
                 $allCounter++;
+
+                $refundStatuses = array(
+                    Api::PAYMENTSTATUS_REFUNDED,
+                    Api::PAYMENTSTATUS_PARTIALLY_REFUNDED,
+                );
+                if (in_array($paymentStatus, $refundStatuses)) {
+                    $request->markRefunded();
+
+                    return;
+                }
                 
-                $inProgress = array(
+                $pendingStatuses = array(
                     Api::PAYMENTSTATUS_IN_PROGRESS,
                     Api::PAYMENTSTATUS_PENDING,
                 );
-                if (in_array($paymentStatus, $inProgress)) {
+                if (in_array($paymentStatus, $pendingStatuses)) {
                     $request->markPending();
 
                     return;
