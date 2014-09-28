@@ -40,6 +40,11 @@ class CaptureAction extends PaymentAwareAction
             }
 
             $this->payment->execute(new SetExpressCheckout($model));
+
+            if ($model['L_ERRORCODE0']) {
+                return;
+            }
+
             $this->payment->execute(new AuthorizeToken($model));
         }
 
