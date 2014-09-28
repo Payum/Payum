@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Debug;
 
-use Payum\Core\Request\ModelAwareInterface;
+use Payum\Core\Model\ModelAggregateInterface;
 use Payum\Core\Reply\HttpRedirect;
 
 abstract class Humanify
@@ -17,7 +17,7 @@ abstract class Humanify
         $details = array();
 
 
-        if ($request instanceof ModelAwareInterface) {
+        if ($request instanceof ModelAggregateInterface) {
             $details[] = sprintf('model: %s', self::value($request->getModel()));
         }
         if ($request instanceof HttpRedirect) {

@@ -1,7 +1,10 @@
 <?php
 namespace Payum\Core\Request;
 
-interface GetStatusInterface extends ModelAwareInterface
+use Payum\Core\Model\ModelAggregateInterface;
+use Payum\Core\Model\ModelAwareInterface;
+
+interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterface
 {
     /**
      * @return mixed

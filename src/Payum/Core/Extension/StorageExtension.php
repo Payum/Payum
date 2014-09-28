@@ -2,8 +2,9 @@
 namespace Payum\Core\Extension;
 
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Model\ModelAggregateInterface;
 use Payum\Core\Reply\ReplyInterface;
-use Payum\Core\Request\ModelAwareInterface;
+use Payum\Core\Model\ModelAwareInterface;
 use Payum\Core\Model\Identificator;
 use Payum\Core\Storage\StorageInterface;
 
@@ -39,12 +40,12 @@ class StorageExtension implements ExtensionInterface
     {
         $this->stackLevel++;
         
-        if (false == $request instanceof ModelAwareInterface) {
+        if (false == $request instanceof ModelAggregateInterface) {
             return;
         }
 
         if ($request->getModel() instanceof Identificator) {
-            /** @var \Payum\Core\Model\Identificator $identificator */
+            /** @var Identificator $identificator */
             $identificator = $request->getModel();
             if (false == $model = $this->storage->findModelByIdentificator($identificator)) {
                 return;
@@ -91,7 +92,7 @@ class StorageExtension implements ExtensionInterface
     {
         $this->stackLevel--;
 
-        if ($request instanceof ModelAwareInterface) {
+        if ($request instanceof ModelAggregateInterface) {
             $this->scheduleForUpdateIfSupported($request->getModel());
         }
 

@@ -15,6 +15,8 @@
 * [request] `GetBinaryStatus::STATUS_SUCCESS` was removed. Use `STATUS_CAPTURED` from the same class.
 * [request] `GetBinaryStatus::markSuccess` method was removed. Use `markCaptured` from the same class.
 * [request] `GetBinaryStatus::isSuccess` method was removed. Use `isCaptured` from the same class.
+* [request] `SecuredInterface` was moved to `Security` namespace and renamed to `TokenAggregateInterface`.
+* [request] `ModelAwareInterface` was moved to `Model` namespace and split into two: `ModelAwareInterface` and `ModelAggregateInterface`.
 
 ## 0.10 to 0.11
 

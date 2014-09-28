@@ -32,17 +32,27 @@ class GenericTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Core\Request\Generic');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Request\ModelAwareInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Model\ModelAwareInterface'));
     }
 
     /**
      * @test
      */
-    public function shouldImplementSecuredRequestInterface()
+    public function shouldImplementModelAggregateInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Request\Generic');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Request\SecuredInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Model\ModelAggregateInterface'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldImplementTokenAggregateInterface()
+    {
+        $rc = new \ReflectionClass('Payum\Core\Request\Generic');
+
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Security\TokenAggregateInterface'));
     }
 
     /**
