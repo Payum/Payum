@@ -113,6 +113,8 @@ class Api
      */
     const PAYMENTSTATUS_COMPLETED_FUNDS_HELD = 'Completed-Funds-Held';
 
+    const PENDINGREASON_AUTHORIZATION = 'authorization';
+
     /**
      * How you want to obtain payment. When implementing parallel payments, this field is required and must be set to Order. When implementing digital goods, this field is required and must be set to Sale. You can specify up to 10 payments, where n is a digit between 0 and 9, inclusive; except for digital goods, which supports single payments only. If the transaction does not include a one-time purchase, this field is ignored. It is one of the following values:
      *

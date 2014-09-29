@@ -1,11 +1,8 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
-use Buzz\Message\Form\FormRequest;
-
 use Payum\Core\Request\GetBinaryStatus;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction;
-
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
@@ -258,6 +255,44 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldMarkRefundedIfAtLeastOnePaymentStatusRefund()
+    {
+        $action = new PaymentDetailsStatusAction();
+
+        $request = new GetBinaryStatus(array(
+            'PAYMENTREQUEST_0_AMT' => 12,
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
+            'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
+            'PAYMENTREQUEST_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_REFUNDED,
+        ));
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isRefunded());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkRefundedIfAtLeastOnePaymentStatusPartiallyRefund()
+    {
+        $action = new PaymentDetailsStatusAction();
+
+        $request = new GetBinaryStatus(array(
+            'PAYMENTREQUEST_0_AMT' => 12,
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
+            'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
+            'PAYMENTREQUEST_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PARTIALLY_REFUNDED,
+        ));
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isRefunded());
+    }
+
+    /**
+     * @test
+     */
     public function shouldMarkCapturedIfAllPaymentStatusCompletedOrProcessed()
     {
         $action = new PaymentDetailsStatusAction();
@@ -272,6 +307,28 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $action->execute($request);
 
         $this->assertTrue($request->isCaptured());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkAuthorizedIfAllPaymentStatusPendingAndReasonAuthorization()
+    {
+        $action = new PaymentDetailsStatusAction();
+
+        $request = new GetBinaryStatus(array(
+            'PAYMENTREQUEST_0_AMT' => 12,
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
+            'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PENDING,
+            'PAYMENTREQUEST_0_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
+            'PAYMENTREQUEST_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PENDING,
+            'PAYMENTREQUEST_9_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
+
+        ));
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isAuthorized());
     }
 
     /**
