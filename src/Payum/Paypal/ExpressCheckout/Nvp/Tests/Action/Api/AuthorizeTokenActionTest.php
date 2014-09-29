@@ -61,7 +61,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
      * @test
      * 
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The TOKEN must be set. Have you executed SetExpressCheckoutAction?
+     * @expectedExceptionMessage The TOKEN must be set by SetExpressCheckout request but it was not executed or failed. Review payment details model for more information
      */
     public function throwIfModelNotHaveTokenSet()
     {

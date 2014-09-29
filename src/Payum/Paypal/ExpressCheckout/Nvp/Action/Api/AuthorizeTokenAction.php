@@ -24,7 +24,7 @@ class AuthorizeTokenAction extends BaseApiAwareAction
         
         $model = ArrayObject::ensureArrayObject($request->getModel());
         if (false == $model['TOKEN']) {
-            throw new LogicException('The TOKEN must be set. Have you executed SetExpressCheckoutAction?');
+            throw new LogicException('The TOKEN must be set by SetExpressCheckout request but it was not executed or failed. Review payment details model for more information');
         }
           
         if (false == $model['PAYERID'] || $request->isForced()) {
