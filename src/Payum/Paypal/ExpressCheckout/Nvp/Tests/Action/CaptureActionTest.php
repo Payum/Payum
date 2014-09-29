@@ -5,6 +5,7 @@ use Payum\Core\Model\Token;
 use Payum\Core\Request\Capture;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout;
 
 class CaptureActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -106,6 +107,29 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken'))
         ;
         
+        $action = new CaptureAction();
+        $action->setPayment($paymentMock);
+
+        $action->execute(new Capture(array()));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotExecuteAnythingIfSetExpressCheckoutActionFails()
+    {
+        $paymentMock = $this->createPaymentMock();
+        $paymentMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout'))
+            ->will($this->returnCallback(function(SetExpressCheckout $request) {
+                $model = $request->getModel();
+
+                $model['L_ERRORCODE0'] = 'aCode';
+            }))
+        ;
+
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
