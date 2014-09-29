@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.11.7 (2014-09-29)
+
+* [payment] Critcal bug fix. It was possible to mix credentials of different payments if you use them in single process.
+
 ## 0.11.6 (2014-09-28)
 
 * [paypal][ipn] do not update express checkout related info when session has expired.
