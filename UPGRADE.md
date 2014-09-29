@@ -1,5 +1,9 @@
 # Upgrades
 
+## 0.11.0 to 0.11.7
+
+* [payment] The injection of apis and payment to an action was moved to execute method. So there maybe a slight BC break if you depend on invalid exceptions thrown when api or payment not set correctly.
+
 ## 0.10 to 0.11
 
 * [request] Postfix `Request` was removed. For example `CaptureRequest` become `Capture`.

@@ -131,7 +131,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSetFirstApiToActionApiAware()
+    public function shouldSetFirstApiToActionApiAwareOnExecute()
     {
         $payment = new Payment();
 
@@ -140,18 +140,25 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         
         $action = $this->getMockForAbstractClass('Payum\Core\Tests\ApiAwareAction');
         $action
-            ->expects($this->once())
+            ->expects($this->at(0))
+            ->method('supports')
+            ->will($this->returnValue(true))
+        ;
+        $action
+            ->expects($this->at(1))
             ->method('setApi')
             ->with($this->identicalTo($firstApi))
         ;
 
         $payment->addAction($action);
+
+        $payment->execute(new \stdClass);
     }
 
     /**
      * @test
      */
-    public function shouldSetSecondApiToActionApiAwareIfFirstUnsupported()
+    public function shouldSetSecondApiToActionApiAwareIfFirstUnsupportedOnExecute()
     {
         $payment = new Payment();
 
@@ -161,17 +168,24 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $action = $this->getMockForAbstractClass('Payum\Core\Tests\ApiAwareAction');
         $action
             ->expects($this->at(0))
+            ->method('supports')
+            ->will($this->returnValue(true))
+        ;
+        $action
+            ->expects($this->at(1))
             ->method('setApi')
             ->with($this->identicalTo($firstApi))
             ->will($this->throwException(new UnsupportedApiException('first api not supported')))
         ;
         $action
-            ->expects($this->at(1))
+            ->expects($this->at(2))
             ->method('setApi')
             ->with($this->identicalTo($secondApi))
         ;
 
         $payment->addAction($action);
+
+        $payment->execute(new \stdClass);
     }
 
     /**
@@ -180,7 +194,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage Cannot find right api supported by
      */
-    public function throwIfPaymentNotHaveApiSupportedByAction()
+    public function throwIfPaymentNotHaveApiSupportedByActionOnExecute()
     {
         $payment = new Payment();
 
@@ -190,18 +204,25 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $action = $this->getMockForAbstractClass('Payum\Core\Tests\ApiAwareAction');
         $action
             ->expects($this->at(0))
+            ->method('supports')
+            ->will($this->returnValue(true))
+        ;
+        $action
+            ->expects($this->at(1))
             ->method('setApi')
             ->with($this->identicalTo($firstApi))
             ->will($this->throwException(new UnsupportedApiException('first api not supported')))
         ;
         $action
-            ->expects($this->at(1))
+            ->expects($this->at(2))
             ->method('setApi')
             ->with($this->identicalTo($secondApi))
             ->will($this->throwException(new UnsupportedApiException('second api not supported')))
         ;
 
         $payment->addAction($action);
+
+        $payment->execute(new \stdClass);
     }
 
     /**
@@ -301,18 +322,25 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSetPaymentToActionIfActionAwareOfPayment()
+    public function shouldSetPaymentToActionIfActionAwareOfPaymentOnExecute()
     {
         $payment = new Payment();
 
         $actionMock = $this->getMock('Payum\Core\Action\PaymentAwareAction');
         $actionMock
-            ->expects($this->once())
+            ->expects($this->at(0))
+            ->method('supports')
+            ->will($this->returnValue(true))
+        ;
+        $actionMock
+            ->expects($this->at(1))
             ->method('setPayment')
             ->with($this->identicalTo($payment))
         ;
         
         $payment->addAction($actionMock);
+
+        $payment->execute(new \stdClass);
     }
 
     /**
