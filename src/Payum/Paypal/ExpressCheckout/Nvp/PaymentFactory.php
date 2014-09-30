@@ -15,6 +15,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\ManageRecurringPaymentsProfileSt
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateBillingAgreementAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoReferenceTransactionAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\CreditAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\NotifyAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction;
@@ -25,14 +26,19 @@ abstract class PaymentFactory
 {
     /**
      * @param Api $api
+     * @param APApi|null $apapi
      *
      * @return \Payum\Core\Payment
      */
-    public static function create(Api $api)
+    public static function create(Api $api, APApi $apapi = null)
     {
         $payment = new Payment;
 
         $payment->addApi($api);
+        if(!$apapi){
+            $payment->addApi($apapi);
+            $payment->addAction(new CreditAction);
+        }
 
         $payment->addExtension(new EndlessCycleDetectorExtension);
 
