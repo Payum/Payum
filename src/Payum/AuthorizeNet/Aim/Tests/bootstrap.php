@@ -10,3 +10,10 @@ EOM;
 
     exit(1);
 }
+
+$rc = new \ReflectionClass('Payum\Core\PaymentInterface');
+$coreDir = dirname($rc->getFileName()).'/Tests';
+
+$loader->add('Payum\AuthorizeNet\Aim\Tests', __DIR__);
+$loader->add('Payum\Core\Tests', $coreDir);
+

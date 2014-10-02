@@ -9,9 +9,14 @@ use Payum\Core\PaymentInterface;
 use Payum\Core\Request\Capture;
 use Payum\Be2Bill\Action\CaptureAction;
 use Payum\Core\Request\ObtainCreditCard;
+use Payum\Core\Tests\GenericActionTest;
 
-class CaptureActionTest extends \PHPUnit_Framework_TestCase
+class CaptureActionTest extends GenericActionTest
 {
+    protected $actionClass = 'Payum\Be2Bill\Action\CaptureAction';
+
+    protected $requestClass = 'Payum\Core\Request\Capture';
+
     /**
      * @test
      */
@@ -30,64 +35,6 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $rc = new \ReflectionClass('Payum\Be2Bill\Action\CaptureAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\ApiAwareInterface'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()   
-    {
-        new CaptureAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureWithArrayAccessAsModel()
-    {
-        $action = new CaptureAction();
-
-        $model = new \ArrayObject(array());
-
-        $request = new Capture($model);
-
-        $this->assertTrue($action->supports($request));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotCapture()
-    {
-        $action = new CaptureAction();
-        
-        $request = new \stdClass();
-
-        $this->assertFalse($action->supports($request));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportCaptureAndNotArrayAsModel()
-    {
-        $action = new CaptureAction();
-        
-        $request = new Capture(new \stdClass());
-        
-        $this->assertFalse($action->supports($request));
-    }
-
-    /**
-     * @test
-     * 
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
-    {
-        $action = new CaptureAction();
-
-        $action->execute(new \stdClass());
     }
 
     /**

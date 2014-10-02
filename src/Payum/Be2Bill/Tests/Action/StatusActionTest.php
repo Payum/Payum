@@ -4,75 +4,13 @@ namespace Payum\Be2Bill\Tests\Action;
 use Payum\Be2Bill\Api;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Be2Bill\Action\StatusAction;
-use Payum\Core\Tests\Request\GetStatusInterfaceTest;
+use Payum\Core\Tests\GenericActionTest;
 
-class StatusActionTest extends \PHPUnit_Framework_TestCase
+class StatusActionTest extends GenericActionTest
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
-    {
-        $rc = new \ReflectionClass('Payum\Be2Bill\Action\StatusAction');
-        
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
-    }
+    protected $actionClass = 'Payum\Be2Bill\Action\StatusAction';
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()   
-    {
-        new StatusAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestWithArrayAccessAsModel()
-    {
-        $action = new StatusAction();
-
-        $request = new GetHumanStatus($this->getMock('ArrayAccess'));
-
-        $this->assertTrue($action->supports($request));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotStatusRequest()
-    {
-        $action = new StatusAction();
-        
-        $request = new \stdClass();
-
-        $this->assertFalse($action->supports($request));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportStatusRequestWithNotArrayAsModel()
-    {
-        $action = new StatusAction();
-
-        $request = new GetHumanStatus(new \stdClass);
-        
-        $this->assertFalse($action->supports($request));
-    }
-
-    /**
-     * @test
-     * 
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
-    {
-        $action = new StatusAction();
-
-        $action->execute(new \stdClass());
-    }
+    protected $requestClass = 'Payum\Core\Request\GetHumanStatus';
 
     /**
      * @test

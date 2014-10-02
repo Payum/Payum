@@ -6,10 +6,14 @@ use Payum\Core\PaymentInterface;
 use Payum\Core\Request\Capture;
 use Payum\Be2Bill\Action\CaptureOnsiteAction;
 use Payum\Core\Request\GetHttpRequest;
-use Payum\Core\Reply\HttpPostRedirect;
+use Payum\Core\Tests\GenericActionTest;
 
-class CaptureOnsiteActionTest extends \PHPUnit_Framework_TestCase
+class CaptureOnsiteActionTest extends GenericActionTest
 {
+    protected $actionClass = 'Payum\Be2Bill\Action\CaptureOnsiteAction';
+
+    protected $requestClass = 'Payum\Core\Request\Capture';
+
     /**
      * @test
      */
@@ -28,64 +32,6 @@ class CaptureOnsiteActionTest extends \PHPUnit_Framework_TestCase
         $rc = new \ReflectionClass('Payum\Be2Bill\Action\CaptureOnsiteAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\ApiAwareInterface'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CaptureOnsiteAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureWithArrayAccessAsModel()
-    {
-        $action = new CaptureOnsiteAction();
-
-        $model = new \ArrayObject(array());
-
-        $request = new Capture($model);
-
-        $this->assertTrue($action->supports($request));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotCapture()
-    {
-        $action = new CaptureOnsiteAction();
-
-        $request = new \stdClass();
-
-        $this->assertFalse($action->supports($request));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportCaptureAndNotArrayAsModel()
-    {
-        $action = new CaptureOnsiteAction();
-
-        $request = new Capture(new \stdClass());
-
-        $this->assertFalse($action->supports($request));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
-    {
-        $action = new CaptureOnsiteAction();
-
-        $action->execute(new \stdClass());
     }
 
     /**
