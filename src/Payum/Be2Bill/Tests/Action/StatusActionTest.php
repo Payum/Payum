@@ -1,8 +1,10 @@
 <?php
 namespace Payum\Be2Bill\Tests\Action;
 
-use Payum\Core\Request\GetStatusInterface;
+use Payum\Be2Bill\Api;
+use Payum\Core\Request\GetHumanStatus;
 use Payum\Be2Bill\Action\StatusAction;
+use Payum\Core\Tests\Request\GetStatusInterfaceTest;
 
 class StatusActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +33,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StatusAction();
 
-        $request = $this->createGetStatusStub($this->getMock('ArrayAccess'));
+        $request = new GetHumanStatus($this->getMock('ArrayAccess'));
 
         $this->assertTrue($action->supports($request));
     }
@@ -55,7 +57,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StatusAction();
 
-        $request = $this->createGetStatusStub(new \stdClass);
+        $request = new GetHumanStatus(new \stdClass);
         
         $this->assertFalse($action->supports($request));
     }
@@ -73,18 +75,68 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GetStatusInterface
+     * @test
      */
-    protected function createGetStatusStub($model)
+    public function shouldMarkNewIfDetailsEmpty()
     {
-        $status = $this->getMock('Payum\Core\Request\GetStatusInterface');
+        $action = new StatusAction();
 
-        $status
-            ->expects($this->any())
-            ->method('getModel')
-            ->will($this->returnValue($model))
-        ;
-        
-        return $status;
+        $action->execute($status = new GetHumanStatus(array()));
+
+        $this->assertTrue($status->isNew());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkNewIfExecCodeNotSet()
+    {
+        $action = new StatusAction();
+
+        $action->execute($status = new GetHumanStatus(array()));
+
+        $this->assertTrue($status->isNew());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkCapturedIfExecCodeSuccessful()
+    {
+        $action = new StatusAction();
+
+        $action->execute($status = new GetHumanStatus(array(
+            'EXECCODE' => Api::EXECCODE_SUCCESSFUL,
+        )));
+
+        $this->assertTrue($status->isCaptured());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkFailedIfExecCodeFailed()
+    {
+        $action = new StatusAction();
+
+        $action->execute($status = new GetHumanStatus(array(
+            'EXECCODE' => Api::EXECCODE_BANK_ERROR,
+        )));
+
+        $this->assertTrue($status->isFailed());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkUnknownIfExecCodeTimeOut()
+    {
+        $action = new StatusAction();
+
+        $action->execute($status = new GetHumanStatus(array(
+            'EXECCODE' => Api::EXECCODE_TIME_OUT,
+        )));
+
+        $this->assertTrue($status->isUnknown());
     }
 }

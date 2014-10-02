@@ -30,8 +30,7 @@ class ExecuteSameRequestWithModelDetailsAction extends PaymentAwareAction
         return 
             $request instanceof ModelAggregateInterface &&
             $request instanceof ModelAwareInterface &&
-            $request->getModel() instanceof DetailsAggregateInterface && 
-            $request->getModel()->getDetails()
+            $request->getModel() instanceof DetailsAggregateInterface
         ;
     }
 }

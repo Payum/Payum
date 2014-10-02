@@ -86,6 +86,20 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldMarkNewIfDetailsEmpty()
+    {
+        $action = new StatusAction;
+
+        $model = array();
+
+        $action->execute($status = new GetHumanStatus($model));
+
+        $this->assertTrue($status->isNew());
+    }
+
+    /**
+     * @test
+     */
     public function shouldMarkNewIfModelHasNotCardSet()
     {
         $action = new StatusAction;

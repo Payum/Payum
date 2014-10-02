@@ -1,9 +1,8 @@
 <?php
-namespace Payum\Klarna\Checkout\Tests\Action;
+namespace Payum\OmnipayBridge\Tests\Action;
 
 use Payum\Core\Request\GetBinaryStatus;
-use Payum\Klarna\Checkout\Action\StatusAction;
-use Payum\Klarna\Checkout\Constants;
+use Payum\OmnipayBridge\Action\StatusAction;
 
 class StatusActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,7 +11,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\StatusAction');
+        $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\StatusAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
@@ -77,7 +76,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
         $action = new StatusAction();
 
         $status = new GetBinaryStatus(array(
-            'status' => 'not-supported-status',
+            '_status' => 'not-supported-status',
         ));
 
         //guard
@@ -125,50 +124,12 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldMarkNewIfStatusCheckoutIncomplete()
+    public function shouldMarkCapturedIfStatusCaptured()
     {
         $action = new StatusAction();
 
         $status = new GetBinaryStatus(array(
-            'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
-        ));
-
-        //guard
-        $status->markUnknown();
-
-        $action->execute($status);
-
-        $this->assertTrue($status->isNew());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldMarkPendingIfStatusCheckoutComplete()
-    {
-        $action = new StatusAction();
-
-        $status = new GetBinaryStatus(array(
-            'status' => Constants::STATUS_CHECKOUT_COMPLETE,
-        ));
-
-        //guard
-        $status->markUnknown();
-
-        $action->execute($status);
-
-        $this->assertTrue($status->isPending());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfStatusCreated()
-    {
-        $action = new StatusAction();
-
-        $status = new GetBinaryStatus(array(
-            'status' => Constants::STATUS_CREATED,
+            '_status' => 'captured',
         ));
 
         //guard
@@ -177,5 +138,24 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
         $action->execute($status);
 
         $this->assertTrue($status->isCaptured());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkFailedIfStatusFailed()
+    {
+        $action = new StatusAction();
+
+        $status = new GetBinaryStatus(array(
+            '_status' => 'failed',
+        ));
+
+        //guard
+        $status->markUnknown();
+
+        $action->execute($status);
+
+        $this->assertTrue($status->isFailed());
     }
 }

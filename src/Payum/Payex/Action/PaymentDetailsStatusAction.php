@@ -12,10 +12,11 @@ class PaymentDetailsStatusAction implements ActionInterface
 {
     /**
      * {@inheritDoc}
+     *
+     * @param GetStatusInterface $request
      */
     public function execute($request)
     {
-        /** @var $request GetStatusInterface */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -47,6 +48,12 @@ class PaymentDetailsStatusAction implements ActionInterface
             RecurringApi::RECURRINGSTATUS_FAILED == $model['recurringStatus']
         ) {
             $request->markFailed();
+
+            return;
+        }
+
+        if (count(iterator_to_array($model)) == 0) {
+            $request->markNew();
 
             return;
         }
@@ -143,6 +150,10 @@ class PaymentDetailsStatusAction implements ActionInterface
         }
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
+
+        if (count(iterator_to_array($model)) == 0) {
+            return true;
+        }
 
         if ($model['recurring']) {
             return true;

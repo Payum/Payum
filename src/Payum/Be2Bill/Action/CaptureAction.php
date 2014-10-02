@@ -33,10 +33,11 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
     
     /**
      * {@inheritDoc}
+     *
+     * @param Capture $request
      */
     public function execute($request)
     {
-        /** @var $request \Payum\Core\Request\Capture */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = new ArrayObject($request->getModel());

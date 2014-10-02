@@ -77,6 +77,20 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldMarkNewIfDetailsEmpty()
+    {
+        $action = new StatusAction();
+
+        $request = new GetBinaryStatus(new ArrayObject());
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isNew());
+    }
+
+    /**
+     * @test
+     */
     public function shouldMarkNewIfResponseCodeNotSetInModel()
     {
         $action = new StatusAction();

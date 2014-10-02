@@ -105,7 +105,6 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $action->execute(new \stdClass());
     }
 
-
     /**
      * @test
      */
