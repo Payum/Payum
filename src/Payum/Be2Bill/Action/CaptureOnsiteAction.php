@@ -33,11 +33,10 @@ class CaptureOnsiteAction extends PaymentAwareAction implements ApiAwareInterfac
     /**
      * {@inheritDoc}
      *
-     * @throws HttpPostRedirect if authorization required.
+     * @param Capture $request
      */
     public function execute($request)
     {
-        /** @var $request Capture */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());

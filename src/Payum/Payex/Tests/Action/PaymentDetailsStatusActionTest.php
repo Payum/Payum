@@ -2,8 +2,7 @@
 namespace Payum\Payex\Tests\Action;
 
 use Payum\Payex\Api\RecurringApi;
-use Payum\Core\PaymentInterface;
-use Payum\Core\Request\GetBinaryStatus;
+use Payum\Core\Request\GetHumanStatus;
 use Payum\Payex\Action\PaymentDetailsStatusAction;
 use Payum\Payex\Api\OrderApi;
 
@@ -30,11 +29,21 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySet()
+    public function shouldSupportGetStatusRequestWithEmptyArrayAsModel()
     {
         $action = new PaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new GetBinaryStatus(array(
+        $this->assertTrue($action->supports(new GetHumanStatus(array())));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotSupportGetStatusRequestWithArrayAsModelIfAutoPaySet()
+    {
+        $action = new PaymentDetailsStatusAction();
+
+        $this->assertFalse($action->supports(new GetHumanStatus(array(
             'autoPay' => true
         ))));
     }
@@ -42,11 +51,11 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToFalse()
+    public function shouldSupportGetStatusRequestWithArrayAsModelIfAutoPaySetToFalse()
     {
         $action = new PaymentDetailsStatusAction();
 
-        $this->assertTrue($action->supports(new GetBinaryStatus(array(
+        $this->assertTrue($action->supports(new GetHumanStatus(array(
             'autoPay' => false
         ))));
     }
@@ -54,11 +63,11 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportBinaryMaskStatusRequestWithArrayAsModelIfRecurringSetToTrueAndAutoPaySet()
+    public function shouldSupportGetStatusRequestWithArrayAsModelIfRecurringSetToTrueAndAutoPaySet()
     {
         $action = new PaymentDetailsStatusAction();
 
-        $this->assertTrue($action->supports(new GetBinaryStatus(array(
+        $this->assertTrue($action->supports(new GetHumanStatus(array(
             'autoPay' => true,
             'recurring' => true
         ))));
@@ -81,7 +90,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction;
 
-        $this->assertFalse($action->supports(new GetBinaryStatus(new \stdClass)));
+        $this->assertFalse($action->supports(new GetHumanStatus(new \stdClass)));
     }
 
     /**
@@ -99,11 +108,28 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldMarkNewIfDetailsEmpty()
+    {
+        $action = new PaymentDetailsStatusAction();
+
+        $status = new GetHumanStatus(array());
+
+        //guard
+        $status->markUnknown();
+
+        $action->execute($status);
+
+        $this->assertTrue($status->isNew());
+    }
+
+    /**
+     * @test
+     */
     public function shouldMarkUnknownIfOrderStatusNotSupported()
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetHumanStatus(array(
             'orderStatus' => 'not-supported-status',
             'orderId' => 'anId',
             'autoPay' => false,
@@ -124,7 +150,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetHumanStatus(array(
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'transactionStatus' => 'not-supported-status',
             'orderId' => 'anId',
@@ -146,7 +172,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetHumanStatus(array(
             'orderId' => 'anId',
             'autoPay' => false,
         ));
@@ -166,7 +192,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetHumanStatus(array(
             'purchaseOperation' => OrderApi::PURCHASEOPERATION_AUTHORIZATION,
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_AUTHORIZE,
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
@@ -189,7 +215,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetHumanStatus(array(
             'purchaseOperation' => OrderApi::PURCHASEOPERATION_AUTHORIZATION,
             'transactionStatus' => 'not-authorize-status',
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
@@ -212,7 +238,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetHumanStatus(array(
             'purchaseOperation' => OrderApi::PURCHASEOPERATION_SALE,
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_SALE,
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
@@ -235,7 +261,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetHumanStatus(array(
             'purchaseOperation' => OrderApi::PURCHASEOPERATION_SALE,
             'transactionStatus' => 'not-sale-status',
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
@@ -258,7 +284,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetHumanStatus(array(
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_CANCEL,
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'orderId' => 'anId',
@@ -280,7 +306,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetHumanStatus(array(
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_CANCEL,
             'errorDetails' => array(
                 'transactionErrorCode' => OrderApi::TRANSACTIONERRORCODE_OPERATIONCANCELLEDBYCUSTOMER
@@ -305,7 +331,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetHumanStatus(array(
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_FAILURE,
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'orderId' => 'anId',
@@ -327,7 +353,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetHumanStatus(array(
             'orderStatus' => OrderApi::ORDERSTATUS_PROCESSING,
             'orderId' => 'anId',
             'autoPay' => false,
@@ -348,7 +374,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetHumanStatus(array(
             'orderStatus' => OrderApi::ORDERSTATUS_NOT_FOUND,
             'orderId' => 'anId',
             'autoPay' => false,
@@ -369,7 +395,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetHumanStatus(array(
             'errorCode' => 'not-ok',
             'orderId' => 'anId',
             'autoPay' => false,
@@ -390,7 +416,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetHumanStatus(array(
             'errorCode' => OrderApi::ERRORCODE_OK,
             'purchaseOperation' => OrderApi::PURCHASEOPERATION_SALE,
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_SALE,
@@ -414,7 +440,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetHumanStatus(array(
             'recurringStatus' => RecurringApi::RECURRINGSTATUS_STOPPEDBYMERCHANT,
             'orderId' => 'anId',
             'autoPay' => false,
@@ -435,7 +461,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetHumanStatus(array(
             'recurringStatus' => RecurringApi::RECURRINGSTATUS_STOPPEDBYADMIN,
             'orderId' => 'anId',
             'autoPay' => false,
@@ -456,7 +482,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetHumanStatus(array(
             'recurringStatus' => RecurringApi::RECURRINGSTATUS_STOPPEDBYCLIENT,
             'orderId' => 'anId',
             'autoPay' => false,
@@ -477,7 +503,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetHumanStatus(array(
             'recurringStatus' => RecurringApi::RECURRINGSTATUS_STOPPEDBYSYSTEM,
             'orderId' => 'anId',
             'autoPay' => false,
@@ -498,7 +524,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetHumanStatus(array(
             'recurringStatus' => RecurringApi::RECURRINGSTATUS_FAILED,
             'orderId' => 'anId',
             'autoPay' => false,

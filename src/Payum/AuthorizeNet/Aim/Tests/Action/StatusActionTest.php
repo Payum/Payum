@@ -5,73 +5,26 @@ use Payum\AuthorizeNet\Aim\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\GetBinaryStatus;
 use Payum\Core\Request\GetStatusInterface;
+use Payum\Core\Tests\GenericActionTest;
 
-class StatusActionTest extends \PHPUnit_Framework_TestCase
+class StatusActionTest extends GenericActionTest
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
-    {
-        $rc = new \ReflectionClass('Payum\AuthorizeNet\Aim\Action\StatusAction');
-        
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
-    }
+    protected $actionClass = 'Payum\AuthorizeNet\Aim\Action\StatusAction';
+
+    protected $requestClass = 'Payum\Core\Request\GetHumanStatus';
 
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()   
-    {
-        new StatusAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestAndArrayAccessAsModel()
+    public function shouldMarkNewIfDetailsEmpty()
     {
         $action = new StatusAction();
 
-        $request = $this->createGetStatusStub($this->getMock('ArrayAccess'));
+        $request = new GetBinaryStatus(new ArrayObject());
 
-        $this->assertTrue($action->supports($request));
-    }
+        $action->execute($request);
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotStatusRequest()
-    {
-        $action = new StatusAction();
-
-        $request = new \stdClass();
-
-        $this->assertFalse($action->supports($request));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportStatusRequestAndNotArrayAccessAsModel()
-    {
-        $action = new StatusAction();
-
-        $request = $this->createGetStatusStub(new \stdClass());
-
-        $this->assertFalse($action->supports($request));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
-    {
-        $action = new StatusAction();
-
-        $action->execute(new \stdClass());
+        $this->assertTrue($request->isNew());
     }
 
     /**

@@ -30,11 +30,6 @@ class ExecuteSameRequestWithModelDetailsActionTest extends \PHPUnit_Framework_Te
     public function shouldSupportModelRequestWithModelThatAggregateNotEmptyDetails()
     {
         $modelMock = $this->getMock('Payum\Core\Model\DetailsAggregateInterface');
-        $modelMock
-            ->expects($this->atLeastOnce())
-            ->method('getDetails')
-            ->will($this->returnValue(new \stdClass))
-        ;
 
         $requestMock = $this->getMock('Payum\Core\Request\Generic', array(), array(), '', false);
         $requestMock
@@ -51,14 +46,9 @@ class ExecuteSameRequestWithModelDetailsActionTest extends \PHPUnit_Framework_Te
     /**
      * @test
      */
-    public function shouldNotSupportModelRequestWithModelThatAggregateEmptyDetails()
+    public function shouldSupportModelRequestWithModelThatAggregateEmptyDetails()
     {
         $modelMock = $this->getMock('Payum\Core\Model\DetailsAggregateInterface');
-        $modelMock
-            ->expects($this->atLeastOnce())
-            ->method('getDetails')
-            ->will($this->returnValue(null))
-        ;
 
         $requestMock = $this->getMock('Payum\Core\Request\Generic', array(), array(), '', false);
         $requestMock
@@ -69,7 +59,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends \PHPUnit_Framework_Te
 
         $action = new ExecuteSameRequestWithModelDetailsAction;
 
-        $this->assertFalse($action->supports($requestMock));
+        $this->assertTrue($action->supports($requestMock));
     }
 
     /**

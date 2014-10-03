@@ -11,10 +11,11 @@ class PaymentDetailsStatusAction implements ActionInterface
 {
     /**
      * {@inheritDoc}
+     *
+     * @param GetStatusInterface $request
      */
     public function execute($request)
     {
-        /** @var $request GetStatusInterface */
         RequestNotSupportedException::assertSupports($this, $request);
         
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -163,6 +164,10 @@ class PaymentDetailsStatusAction implements ActionInterface
         $model = $request->getModel();
         if (false == $model instanceof \ArrayAccess) {
             return false;
+        }
+
+        if (count(iterator_to_array($model)) == 0) {
+            return true;
         }
 
         return isset($model['PAYMENTREQUEST_0_AMT']) && null !== $model['PAYMENTREQUEST_0_AMT'];

@@ -10,10 +10,11 @@ class StatusAction implements ActionInterface
 {
     /**
      * {@inheritDoc}
+     *
+     * @param GetStatusInterface $request
      */
     public function execute($request)
     {
-        /** @var $request GetStatusInterface */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());

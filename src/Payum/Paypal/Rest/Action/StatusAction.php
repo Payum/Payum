@@ -11,10 +11,11 @@ class StatusAction implements ActionInterface
 {
     /**
      * {@inheritDoc}
+     *
+     * @var GetStatusInterface $request
      */
     public function execute($request)
     {
-        /** @var $request GetStatusInterface */
         RequestNotSupportedException::assertSupports($this, $request);
 
         /** @var Payment $model */

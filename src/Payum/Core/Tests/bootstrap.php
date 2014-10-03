@@ -11,5 +11,7 @@ EOM;
     exit(1);
 }
 
-$loader->add('Payum\Core\Tests', __DIR__);
-$loader->add('Payum\Core\Tests\Mocks', realpath(__DIR__.'/../examples'));
+$rc = new \ReflectionClass('Payum\Core\PaymentInterface');
+$coreDir = dirname($rc->getFileName()).'/Tests';
+
+$loader->add('Payum\Core\Tests', $coreDir);

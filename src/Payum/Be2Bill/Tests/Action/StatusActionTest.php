@@ -1,90 +1,80 @@
 <?php
 namespace Payum\Be2Bill\Tests\Action;
 
-use Payum\Core\Request\GetStatusInterface;
+use Payum\Be2Bill\Api;
+use Payum\Core\Request\GetHumanStatus;
 use Payum\Be2Bill\Action\StatusAction;
+use Payum\Core\Tests\GenericActionTest;
 
-class StatusActionTest extends \PHPUnit_Framework_TestCase
+class StatusActionTest extends GenericActionTest
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
-    {
-        $rc = new \ReflectionClass('Payum\Be2Bill\Action\StatusAction');
-        
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
-    }
+    protected $actionClass = 'Payum\Be2Bill\Action\StatusAction';
+
+    protected $requestClass = 'Payum\Core\Request\GetHumanStatus';
 
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()   
-    {
-        new StatusAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestWithArrayAccessAsModel()
+    public function shouldMarkNewIfDetailsEmpty()
     {
         $action = new StatusAction();
 
-        $request = $this->createGetStatusStub($this->getMock('ArrayAccess'));
+        $action->execute($status = new GetHumanStatus(array()));
 
-        $this->assertTrue($action->supports($request));
+        $this->assertTrue($status->isNew());
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportNotStatusRequest()
+    public function shouldMarkNewIfExecCodeNotSet()
     {
         $action = new StatusAction();
-        
-        $request = new \stdClass();
 
-        $this->assertFalse($action->supports($request));
+        $action->execute($status = new GetHumanStatus(array()));
+
+        $this->assertTrue($status->isNew());
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportStatusRequestWithNotArrayAsModel()
+    public function shouldMarkCapturedIfExecCodeSuccessful()
     {
         $action = new StatusAction();
 
-        $request = $this->createGetStatusStub(new \stdClass);
-        
-        $this->assertFalse($action->supports($request));
+        $action->execute($status = new GetHumanStatus(array(
+            'EXECCODE' => Api::EXECCODE_SUCCESSFUL,
+        )));
+
+        $this->assertTrue($status->isCaptured());
     }
 
     /**
      * @test
-     * 
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function shouldMarkFailedIfExecCodeFailed()
     {
         $action = new StatusAction();
 
-        $action->execute(new \stdClass());
+        $action->execute($status = new GetHumanStatus(array(
+            'EXECCODE' => Api::EXECCODE_BANK_ERROR,
+        )));
+
+        $this->assertTrue($status->isFailed());
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GetStatusInterface
+     * @test
      */
-    protected function createGetStatusStub($model)
+    public function shouldMarkUnknownIfExecCodeTimeOut()
     {
-        $status = $this->getMock('Payum\Core\Request\GetStatusInterface');
+        $action = new StatusAction();
 
-        $status
-            ->expects($this->any())
-            ->method('getModel')
-            ->will($this->returnValue($model))
-        ;
-        
-        return $status;
+        $action->execute($status = new GetHumanStatus(array(
+            'EXECCODE' => Api::EXECCODE_TIME_OUT,
+        )));
+
+        $this->assertTrue($status->isUnknown());
     }
 }

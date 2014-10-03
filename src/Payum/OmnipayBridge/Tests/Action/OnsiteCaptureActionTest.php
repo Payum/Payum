@@ -1,5 +1,5 @@
 <?php
-namespace Payum\OmnipayBridge\Action;
+namespace Payum\OmnipayBridge\Tests\Action;
 
 use Omnipay\Common\GatewayInterface;
 use Payum\Core\Request\Capture;
