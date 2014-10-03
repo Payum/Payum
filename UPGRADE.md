@@ -8,7 +8,6 @@
 * [request] `SecuredNotify` request was removed. The removed logic is now in `Notify` request, so use it.
 * [request] `SecuredCapture` request was removed. The removed logic is now in `Capture` request, so use it.
 * [request] `Notify` request does not contains `notification` array any more. You have to execute `$this->payment->execute($httpRequest = new GetHttpRequest);`.
-* [offline] `Payum\Offline\Constains::STATUS_SUCCESS` was removed. Use `STATUS_CAPTURED` from the same class.
 * [request] `GetHumanStatus::STATUS_SUCCESS` was removed. Use `STATUS_CAPTURED` from the same class.
 * [request] `GetHumanStatus::markSuccess` method was removed. Use `markCaptured` from the same class.
 * [request] `GetHumanStatus::isSuccess` method was removed. Use `isCaptured` from the same class.
@@ -17,6 +16,8 @@
 * [request] `GetBinaryStatus::isSuccess` method was removed. Use `isCaptured` from the same class.
 * [request] `SecuredInterface` was moved to `Security` namespace and renamed to `TokenAggregateInterface`.
 * [request] `ModelAwareInterface` was moved to `Model` namespace and split into two: `ModelAwareInterface` and `ModelAggregateInterface`.
+* [action] `ExecuteSameRequestWithModelDetailsAction` does sub execute even for empty details.
+* [offline] `Payum\Offline\Constains::STATUS_SUCCESS` was removed. Use `STATUS_CAPTURED` from the same class.
 
 ## 0.11.0 to 0.11.7
 
