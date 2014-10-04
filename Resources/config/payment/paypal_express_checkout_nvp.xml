@@ -18,6 +18,7 @@
         <parameter key="payum.paypal.express_checkout_nvp.action.api.create_billing_agreement.class">Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateBillingAgreementAction</parameter>
         <parameter key="payum.paypal.express_checkout_nvp.action.api.do_reference_transaction.class">Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoReferenceTransactionAction</parameter>
 
+        <parameter key="payum.paypal.express_checkout_nvp.action.capture_order.class">Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureOrderAction</parameter>
         <parameter key="payum.paypal.express_checkout_nvp.action.capture.class">Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction</parameter>
         <parameter key="payum.paypal.express_checkout_nvp.action.notify.class">Payum\Paypal\ExpressCheckout\Nvp\Action\NotifyAction</parameter>
         <parameter key="payum.paypal.express_checkout_nvp.action.payment_details_status.class">Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction</parameter>
@@ -117,6 +118,14 @@
             public="false"
         >
             <tag name="payum.action" factory="paypal_express_checkout_nvp" />
+        </service>
+
+        <service
+            id="payum.paypal.express_checkout_nvp.action.capture_order"
+            class="%payum.paypal.express_checkout_nvp.action.capture_order.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="paypal_express_checkout_nvp" prepend="true" />
         </service>
 
         <service
