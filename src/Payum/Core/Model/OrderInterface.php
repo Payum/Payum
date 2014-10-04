@@ -12,6 +12,11 @@ interface OrderInterface extends DetailsAggregateInterface, DetailsAwareInterfac
     function getNumber();
 
     /**
+     * @return ClientInterface
+     */
+    function getClient();
+
+    /**
      * @return MoneyInterface
      */
     function getTotalPrice();

@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
+namespace Payum\AuthorizeNet\Aim\Action;
 
 use Payum\Core\Action\BaseCaptureOrderAction;
 use Payum\Core\Model\OrderInterface;
@@ -13,12 +13,8 @@ class CaptureOrderAction extends BaseCaptureOrderAction
      */
     protected function composeDetails(OrderInterface $order, TokenInterface $token = null)
     {
-        $divisor = pow(10, $order->getTotalPrice()->getCurrency()->getDigitsAfterDecimalPoint());
-
         $details = $order->getDetails();
-        $details['INVNUM'] = $order->getNumber();
-        $details['PAYMENTREQUEST_0_CURRENCYCODE'] = $order->getTotalPrice()->getCurrency()->getCode();
-        $details['PAYMENTREQUEST_0_AMT'] = $order->getTotalPrice()->getAmount() / $divisor;
+        $details['amount'] = $order->getTotalPrice()->getAmount();
 
         $order->setDetails($details);
     }

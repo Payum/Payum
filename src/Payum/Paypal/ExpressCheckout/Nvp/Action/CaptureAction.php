@@ -63,7 +63,7 @@ class CaptureAction extends PaymentAwareAction
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof Capture &&
             $request->getModel() instanceof \ArrayAccess
         ; 

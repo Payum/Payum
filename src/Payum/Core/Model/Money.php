@@ -17,7 +17,7 @@ class Money implements MoneyInterface
      * @param int $amount
      * @param CurrencyInterface $currency
      */
-    public function __construct($amount, CurrencyInterface $currency = null)
+    public function __construct($amount = 0, CurrencyInterface $currency = null)
     {
         $this->amount = $amount;
         $this->currency = $currency ?: new Currency('');

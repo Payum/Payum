@@ -9,6 +9,11 @@ class Order implements OrderInterface
     protected $number;
 
     /**
+     * @var ClientInterface
+     */
+    protected $client;
+
+    /**
      * @var MoneyInterface
      */
     protected $totalPrice;
@@ -22,6 +27,7 @@ class Order implements OrderInterface
     {
         $this->number = '';
         $this->totalPrice = new Money(0);
+        $this->details = array();
     }
 
     /**
@@ -74,5 +80,21 @@ class Order implements OrderInterface
         }
 
         $this->details = $details;
+    }
+
+    /**
+     * @return ClientInterface
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    /**
+     * @param ClientInterface $client
+     */
+    public function setClient(ClientInterface $client)
+    {
+        $this->client = $client;
     }
 }

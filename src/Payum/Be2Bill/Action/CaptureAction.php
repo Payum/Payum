@@ -6,6 +6,7 @@ use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -44,6 +45,14 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         
         if (null !== $model['EXECCODE']) {
             return;
+        }
+
+        $this->payment->execute($httpRequest = new GetHttpRequest);
+        if (false == $model['CLIENTUSERAGENT']) {
+            $model['CLIENTUSERAGENT'] = $httpRequest->userAgent;
+        }
+        if (false == $model['CLIENTIP']) {
+            $model['CLIENTIP'] = $httpRequest->clientIp;
         }
 
         $cardFields = array('CARDCODE', 'CARDCVV', 'CARDVALIDITYDATE', 'CARDFULLNAME');

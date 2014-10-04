@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Be2Bill;
 
+use Payum\Be2Bill\Action\CaptureOrderAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Payment;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
@@ -23,6 +24,7 @@ abstract class PaymentFactory
         $payment->addExtension(new EndlessCycleDetectorExtension);
 
         $payment->addAction(new CaptureAction);
+        $payment->addAction(new CaptureOrderAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 
