@@ -39,3 +39,4 @@ class Money implements MoneyInterface
         return $this->currency;
     }
 }
+

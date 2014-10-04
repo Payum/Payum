@@ -20,4 +20,4 @@ interface OrderInterface extends DetailsAggregateInterface, DetailsAwareInterfac
      * @return MoneyInterface
      */
     function getTotalPrice();
-} 
+}

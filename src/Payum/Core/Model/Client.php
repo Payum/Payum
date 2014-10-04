@@ -20,4 +20,4 @@ class Client implements ClientInterface
     {
         $this->email = $email;
     }
-} 
+}

@@ -7,4 +7,4 @@ interface ClientInterface
      * @return string
      */
     function getEmail();
-} 
+}

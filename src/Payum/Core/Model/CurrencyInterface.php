@@ -12,4 +12,4 @@ interface CurrencyInterface
      * @return int
      */
     function getDigitsAfterDecimalPoint();
-} 
+}

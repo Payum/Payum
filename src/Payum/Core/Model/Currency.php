@@ -38,4 +38,4 @@ class Currency implements CurrencyInterface
     {
         return $this->digitsAfterDecimalPoint;
     }
-} 
+}

@@ -12,4 +12,5 @@ interface MoneyInterface
      * @return CurrencyInterface
      */
     function getCurrency();
-} 
+}
+
