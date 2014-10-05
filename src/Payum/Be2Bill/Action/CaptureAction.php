@@ -47,19 +47,21 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
             return;
         }
 
-        $this->payment->execute($httpRequest = new GetHttpRequest);
         if (false == $model['CLIENTUSERAGENT']) {
+            $this->payment->execute($httpRequest = new GetHttpRequest);
+
             $model['CLIENTUSERAGENT'] = $httpRequest->userAgent;
         }
         if (false == $model['CLIENTIP']) {
+            $this->payment->execute($httpRequest = new GetHttpRequest);
+
             $model['CLIENTIP'] = $httpRequest->clientIp;
         }
 
         $cardFields = array('CARDCODE', 'CARDCVV', 'CARDVALIDITYDATE', 'CARDFULLNAME');
         if (false == $model->validateNotEmpty($cardFields, false) && false == $model['ALIAS']) {
             try {
-                $creditCardRequest = new ObtainCreditCard;
-                $this->payment->execute($creditCardRequest);
+                $this->payment->execute($creditCardRequest = new ObtainCreditCard);
                 $card = $creditCardRequest->obtain();
 
                 $model['CARDVALIDITYDATE'] = new SensitiveValue($card->getExpireAt()->format('m-y'));

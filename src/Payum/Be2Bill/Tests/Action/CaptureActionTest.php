@@ -82,6 +82,8 @@ class CaptureActionTest extends GenericActionTest
         $action->setPayment($paymentMock);
 
         $request = new Capture(array(
+            'CLIENTUSERAGENT' => 'anAgent',
+            'CLIENTIP' => '127.0.0.1',
             'CARDCODE' => '1234432112344321',
         ));
 
@@ -151,6 +153,8 @@ class CaptureActionTest extends GenericActionTest
             'CARDCVV' => 123,
             'CARDFULLNAME' => 'Johh Doe',
             'CARDVALIDITYDATE' => '10-16',
+            'CLIENTUSERAGENT' => 'anAgent',
+            'CLIENTIP' => '127.0.0.1',
         ));
 
         //guard
@@ -207,6 +211,8 @@ class CaptureActionTest extends GenericActionTest
 
         $request = new Capture(array(
             'AMOUNT' => 10,
+            'CLIENTUSERAGENT' => 'anAgent',
+            'CLIENTIP' => '127.0.0.1',
         ));
 
         //guard
