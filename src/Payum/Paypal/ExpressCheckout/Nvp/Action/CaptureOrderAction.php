@@ -8,17 +8,16 @@ use Payum\Core\Security\TokenInterface;
 class CaptureOrderAction extends BaseCaptureOrderAction
 {
     /**
-     * @param OrderInterface $order
-     * @param TokenInterface $token
+     * {@inheritDoc}
      */
     protected function composeDetails(OrderInterface $order, TokenInterface $token = null)
     {
-        $divisor = pow(10, $order->getTotalPrice()->getCurrency()->getDigitsAfterDecimalPoint());
+        $divisor = pow(10, $order->getCurrencyDigitsAfterDecimalPoint());
 
         $details = $order->getDetails();
         $details['INVNUM'] = $order->getNumber();
-        $details['PAYMENTREQUEST_0_CURRENCYCODE'] = $order->getTotalPrice()->getCurrency()->getCode();
-        $details['PAYMENTREQUEST_0_AMT'] = $order->getTotalPrice()->getAmount() / $divisor;
+        $details['PAYMENTREQUEST_0_CURRENCYCODE'] = $order->getCurrencyCode();
+        $details['PAYMENTREQUEST_0_AMT'] = $order->getTotalAmount() / $divisor;
 
         $order->setDetails($details);
     }

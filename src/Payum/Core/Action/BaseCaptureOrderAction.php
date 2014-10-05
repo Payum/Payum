@@ -56,7 +56,7 @@ abstract class BaseCaptureOrderAction extends PaymentAwareAction
 
     /**
      * @param OrderInterface $order
-     * @param TokenInterface $token
+     * @param TokenInterface|null $token
      */
     abstract protected function composeDetails(OrderInterface $order, TokenInterface $token = null);
 }

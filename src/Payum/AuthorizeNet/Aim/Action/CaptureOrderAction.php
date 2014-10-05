@@ -8,13 +8,16 @@ use Payum\Core\Security\TokenInterface;
 class CaptureOrderAction extends BaseCaptureOrderAction
 {
     /**
-     * @param OrderInterface $order
-     * @param TokenInterface $token
+     * {@inheritDoc}
      */
     protected function composeDetails(OrderInterface $order, TokenInterface $token = null)
     {
         $details = $order->getDetails();
-        $details['amount'] = $order->getTotalPrice()->getAmount();
+        $details['amount'] = $order->getTotalAmount();
+        $details['invoice_number'] = $order->getNumber();
+        $details['description'] = $order->getDescription();
+        $details['email_address'] = $order->getClientEmail();
+        $details['customer_id'] = $order->getClientId();
 
         $order->setDetails($details);
     }

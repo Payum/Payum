@@ -9,14 +9,34 @@ class Order implements OrderInterface
     protected $number;
 
     /**
-     * @var ClientInterface
+     * @var string
      */
-    protected $client;
+    protected $description;
 
     /**
-     * @var MoneyInterface
+     * @var string
      */
-    protected $totalPrice;
+    protected $clientEmail;
+
+    /**
+     * @var string
+     */
+    protected $clientId;
+
+    /**
+     * @var int
+     */
+    protected $totalAmount;
+
+    /**
+     * @var string
+     */
+    protected $currencyCode;
+
+    /**
+     * @var int
+     */
+    protected $currencyDigitsAfterDecimalPoint;
 
     /**
      * @var array
@@ -25,13 +45,11 @@ class Order implements OrderInterface
 
     public function __construct()
     {
-        $this->number = '';
-        $this->totalPrice = new Money(0);
         $this->details = array();
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function getNumber()
     {
@@ -47,23 +65,97 @@ class Order implements OrderInterface
     }
 
     /**
-     * @return MoneyInterface
+     * {@inheritDoc}
      */
-    public function getTotalPrice()
+    public function getDescription()
     {
-        return $this->totalPrice;
+        return $this->description;
     }
 
     /**
-     * @param MoneyInterface $price
+     * @param string $description
      */
-    public function setTotalPrice(MoneyInterface $price)
+    public function setDescription($description)
     {
-        $this->totalPrice = $price;
+        $this->description = $description;
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
+     */
+    public function getClientEmail()
+    {
+        return $this->clientEmail;
+    }
+
+    /**
+     * @param string $clientEmail
+     */
+    public function setClientEmail($clientEmail)
+    {
+        $this->clientEmail = $clientEmail;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getClientId()
+    {
+        return $this->clientId;
+    }
+
+    /**
+     * @param string $clientId
+     */
+    public function setClientId($clientId)
+    {
+        $this->clientId = $clientId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTotalAmount()
+    {
+        return $this->totalAmount;
+    }
+
+    /**
+     * @param int $totalAmount
+     */
+    public function setTotalAmount($totalAmount)
+    {
+        $this->totalAmount = $totalAmount;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCurrencyCode()
+    {
+        return $this->currencyCode;
+    }
+
+    /**
+     * @param string $currencyCode
+     * @param int $digitsAfterDecimalPoint
+     */
+    public function setCurrencyCode($currencyCode, $digitsAfterDecimalPoint = 2)
+    {
+        $this->currencyCode = $currencyCode;
+        $this->currencyDigitsAfterDecimalPoint = $digitsAfterDecimalPoint;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCurrencyDigitsAfterDecimalPoint()
+    {
+        return $this->currencyDigitsAfterDecimalPoint;
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function getDetails()
     {
@@ -71,6 +163,8 @@ class Order implements OrderInterface
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @param array|\Traversable $details
      */
     public function setDetails($details)
@@ -80,21 +174,5 @@ class Order implements OrderInterface
         }
 
         $this->details = $details;
-    }
-
-    /**
-     * @return ClientInterface
-     */
-    public function getClient()
-    {
-        return $this->client;
-    }
-
-    /**
-     * @param ClientInterface $client
-     */
-    public function setClient(ClientInterface $client)
-    {
-        $this->client = $client;
     }
 }
