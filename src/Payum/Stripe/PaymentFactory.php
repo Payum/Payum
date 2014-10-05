@@ -11,13 +11,16 @@ use Payum\Core\PaymentInterface;
 use Payum\Stripe\Action\Api\CreateChargeAction;
 use Payum\Stripe\Action\Api\ObtainTokenAction;
 use Payum\Stripe\Action\CaptureAction;
+use Payum\Stripe\Action\CaptureOrderAction;
 use Payum\Stripe\Action\StatusAction;
 
 abstract class PaymentFactory
 {
     /**
      * @param Keys $keys
-     *
+     * @param ActionInterface $renderTemplateAction
+     * @param string $layoutTemplate
+     * @param string $obtainTokenTemplate
      *
      * @return PaymentInterface
      */
@@ -37,6 +40,7 @@ abstract class PaymentFactory
 
         $payment->addExtension(new EndlessCycleDetectorExtension);
 
+        $payment->addAction(new CaptureOrderAction);
         $payment->addAction(new CaptureAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
@@ -49,6 +53,9 @@ abstract class PaymentFactory
 
     /**
      * @param Keys $keys
+     * @param ActionInterface $renderTemplateAction
+     * @param string $layoutTemplate
+     * @param string $obtainTokenTemplate
      *
      * @return PaymentInterface
      */
