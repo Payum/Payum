@@ -18,13 +18,13 @@
         <parameter key="payum.paypal.express_checkout_nvp.action.api.create_billing_agreement.class">Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateBillingAgreementAction</parameter>
         <parameter key="payum.paypal.express_checkout_nvp.action.api.do_reference_transaction.class">Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoReferenceTransactionAction</parameter>
 
-        <parameter key="payum.paypal.express_checkout_nvp.action.capture_order.class">Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureOrderAction</parameter>
         <parameter key="payum.paypal.express_checkout_nvp.action.capture.class">Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction</parameter>
         <parameter key="payum.paypal.express_checkout_nvp.action.notify.class">Payum\Paypal\ExpressCheckout\Nvp\Action\NotifyAction</parameter>
         <parameter key="payum.paypal.express_checkout_nvp.action.payment_details_status.class">Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction</parameter>
         <parameter key="payum.paypal.express_checkout_nvp.action.payment_details_sync.class">Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction</parameter>
         <parameter key="payum.paypal.express_checkout_nvp.action.recurring_payment_details_status.class">Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction</parameter>
         <parameter key="payum.paypal.express_checkout_nvp.action.recurring_payment_details_sync.class">Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsSyncAction</parameter>
+        <parameter key="payum.paypal.express_checkout_nvp.action.fill_order_details.class">Payum\Paypal\ExpressCheckout\Nvp\Action\FillOrderDetailsAction</parameter>
     </parameters>
 
     <services>
@@ -121,8 +121,8 @@
         </service>
 
         <service
-            id="payum.paypal.express_checkout_nvp.action.capture_order"
-            class="%payum.paypal.express_checkout_nvp.action.capture_order.class%"
+            id="payum.paypal.express_checkout_nvp.action.fill_order_details"
+            class="%payum.paypal.express_checkout_nvp.action.fill_order_details.class%"
             public="false"
         >
             <tag name="payum.action" factory="paypal_express_checkout_nvp" prepend="true" />
