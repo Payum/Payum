@@ -3,10 +3,15 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Payum\Core\Request\Notify;
 use Payum\Core\Request\Sync;
+use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\NotifyAction;
 
-class NotifyActionTest extends \PHPUnit_Framework_TestCase
+class NotifyActionTest extends GenericActionTest
 {
+    protected $requestClass = 'Payum\Core\Request\Notify';
+
+    protected $actionClass = 'Payum\Paypal\ExpressCheckout\Nvp\Action\NotifyAction';
+
     /**
      * @test
      */
@@ -15,62 +20,6 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\NotifyAction');
         
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()   
-    {
-        new NotifyAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportNotifyRequestAndArrayAccessAsModel()
-    {
-        $action = new NotifyAction();
-
-        $request = new Notify($this->getMock('ArrayAccess'));
-        
-        $this->assertTrue($action->supports($request));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotNotifyRequest()
-    {
-        $action = new NotifyAction();
-        
-        $request = new \stdClass();
-
-        $this->assertFalse($action->supports($request));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotifyRequestAndNotArrayAccessAsModel()
-    {
-        $action = new NotifyAction();
-        
-        $request = new Notify(new \stdClass());
-        
-        $this->assertFalse($action->supports($request));
-    }
-
-    /**
-     * @test
-     * 
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
-    {
-        $action = new NotifyAction();
-
-        $action->execute(new \stdClass());
     }
 
     /**

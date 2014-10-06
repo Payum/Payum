@@ -43,7 +43,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
 
-        $this->assertAttributeCount(7, 'actions', $payment);
+        $this->assertAttributeCount(8, 'actions', $payment);
     }
 
     /**
@@ -73,6 +73,6 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
 
-        $this->assertAttributeCount(6, 'actions', $payment);
+        $this->assertAttributeCount(8, 'actions', $payment);
     }
 }

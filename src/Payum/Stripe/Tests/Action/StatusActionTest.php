@@ -2,70 +2,14 @@
 namespace Payum\Stripe\Tests\Action\Api;
 
 use Payum\Core\Request\GetHumanStatus;
+use Payum\Core\Tests\GenericActionTest;
 use Payum\Stripe\Action\StatusAction;
 
-class StatusActionTest extends \PHPUnit_Framework_TestCase
+class StatusActionTest extends GenericActionTest
 {
-    /**
-     * @test
-     */
-    public function shouldImplementsActionInterface()
-    {
-        $rc = new \ReflectionClass('Payum\Stripe\Action\StatusAction');
+    protected $requestClass = 'Payum\Core\Request\GetHumanStatus';
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new StatusAction;
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestWithArrayAccessModel()
-    {
-        $action = new StatusAction;
-
-        $this->assertTrue($action->supports(new GetHumanStatus(array())));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportStatusRequestWithNotArrayAccessModel()
-    {
-        $action = new StatusAction;
-
-        $this->assertFalse($action->supports(new GetHumanStatus('foo')));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotStatusRequest()
-    {
-        $action = new StatusAction;
-
-        $this->assertFalse($action->supports(new \stdClass));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
-     * @expectedExceptionMessage Action StatusAction is not supported the request stdClass.
-     */
-    public function throwRequestNotSupportedIfNotSupportedGiven()
-    {
-        $action = new StatusAction;
-
-        $action->execute(new \stdClass);
-    }
+    protected $actionClass = 'Payum\Stripe\Action\StatusAction';
 
     /**
      * @test

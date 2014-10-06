@@ -3,10 +3,15 @@ namespace Payum\Stripe\Tests\Action\Api;
 
 use Payum\Core\PaymentInterface;
 use Payum\Core\Request\Capture;
+use Payum\Core\Tests\GenericActionTest;
 use Payum\Stripe\Action\CaptureAction;
 
-class CaptureActionTest extends \PHPUnit_Framework_TestCase
+class CaptureActionTest extends GenericActionTest
 {
+    protected $requestClass = 'Payum\Core\Request\Capture';
+
+    protected $actionClass = 'Payum\Stripe\Action\CaptureAction';
+
     /**
      * @test
      */
@@ -15,57 +20,6 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $rc = new \ReflectionClass('Payum\Stripe\Action\CaptureAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CaptureAction;
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureWithArrayAccessModel()
-    {
-        $action = new CaptureAction;
-
-        $this->assertTrue($action->supports(new Capture(array())));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportCaptureArrayAccessModel()
-    {
-        $action = new CaptureAction;
-
-        $this->assertFalse($action->supports(new Capture(new \stdClass)));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotCapture()
-    {
-        $action = new CaptureAction;
-
-        $this->assertFalse($action->supports(new \stdClass));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
-     * @expectedExceptionMessage Action CaptureAction is not supported the request stdClass.
-     */
-    public function throwRequestNotSupportedIfNotSupportedGiven()
-    {
-        $action = new CaptureAction;
-
-        $action->execute(new \stdClass);
     }
 
     /**
