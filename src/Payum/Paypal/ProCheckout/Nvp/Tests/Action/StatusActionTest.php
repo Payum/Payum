@@ -2,70 +2,15 @@
 namespace Payum\Paypal\ProCheckout\Nvp\Tests\Action;
 
 use Payum\Core\Request\GetHumanStatus;
+use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\ProCheckout\Nvp\Action\StatusAction;
 use Payum\Paypal\ProCheckout\Nvp\Api;
 
-class StatusActionTest extends \PHPUnit_Framework_TestCase
+class StatusActionTest extends GenericActionTest
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
-    {
-        $rc = new \ReflectionClass('Payum\Paypal\ProCheckout\Nvp\Action\StatusAction');
+    protected $actionClass = 'Payum\Paypal\ProCheckout\Nvp\Action\StatusAction';
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new StatusAction;
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportGetStatusRequestWithArrayAsModel()
-    {
-        $action = new StatusAction();
-
-        $this->assertTrue($action->supports(new GetHumanStatus(array())));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotStatusRequest()
-    {
-        $action = new StatusAction;
-
-        $this->assertFalse($action->supports(new \stdClass()));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportStatusRequestWithNotArrayAccessModel()
-    {
-        $action = new StatusAction;
-
-        $this->assertFalse($action->supports(new GetHumanStatus(new \stdClass)));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
-    {
-        $action = new StatusAction;
-
-        $action->execute(new \stdClass());
-    }
+    protected $requestClass = 'Payum\Core\Request\GetHumanStatus';
 
     /**
      * @test
