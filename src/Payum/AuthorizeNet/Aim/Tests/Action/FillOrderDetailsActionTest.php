@@ -4,11 +4,32 @@ namespace Payum\AuthorizeNet\Aim\Tests\Action\Api;
 use Payum\AuthorizeNet\Aim\Action\FillOrderDetailsAction;
 use Payum\Core\Model\Order;
 use Payum\Core\Request\FillOrderDetails;
-use Payum\Core\Tests\BaseFillOrderDetailsActionTest;
+use Payum\Core\Tests\GenericActionTest;
 
-class FillOrderDetailsActionTest extends BaseFillOrderDetailsActionTest
+class FillOrderDetailsActionTest extends GenericActionTest
 {
     protected $actionClass = 'Payum\AuthorizeNet\Aim\Action\FillOrderDetailsAction';
+
+    protected $requestClass = 'Payum\Core\Request\FillOrderDetails';
+
+    public function provideSupportedRequests()
+    {
+        return array(
+            array(new $this->requestClass(new Order)),
+            array(new $this->requestClass($this->getMock('Payum\Core\Model\OrderInterface'))),
+            array(new $this->requestClass(new Order, $this->getMock('Payum\Core\Security\TokenInterface'))),
+        );
+    }
+
+    public function provideNotSupportedRequests()
+    {
+        return array(
+            array('foo'),
+            array(array('foo')),
+            array(new \stdClass()),
+            array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
+        );
+    }
 
     /**
      * @test
