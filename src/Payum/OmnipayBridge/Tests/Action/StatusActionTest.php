@@ -2,71 +2,14 @@
 namespace Payum\OmnipayBridge\Tests\Action;
 
 use Payum\Core\Request\GetBinaryStatus;
+use Payum\Core\Tests\GenericActionTest;
 use Payum\OmnipayBridge\Action\StatusAction;
 
-class StatusActionTest extends \PHPUnit_Framework_TestCase
+class StatusActionTest extends GenericActionTest
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
-    {
-        $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\StatusAction');
+    protected $actionClass = 'Payum\OmnipayBridge\Action\StatusAction';
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new StatusAction;
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportBinaryMaskStatusRequestWithArrayAsModel()
-    {
-        $action = new StatusAction();
-
-        $this->assertTrue($action->supports(
-            new GetBinaryStatus(array())
-        ));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotStatusRequest()
-    {
-        $action = new StatusAction;
-
-        $this->assertFalse($action->supports(new \stdClass()));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportStatusRequestWithNotArrayAccessModel()
-    {
-        $action = new StatusAction;
-
-        $this->assertFalse($action->supports(new GetBinaryStatus(new \stdClass)));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
-    {
-        $action = new StatusAction;
-
-        $action->execute(new \stdClass());
-    }
+    protected $requestClass = 'Payum\Core\Request\GetHumanStatus';
 
     /**
      * @test
