@@ -5,6 +5,7 @@ use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\Capture;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Request\GetHttpRequest;
 use Payum\Payex\Request\Api\StartRecurringPayment;
 use Payum\Payex\Request\Api\InitializeOrder;
 use Payum\Payex\Request\Api\CompleteOrder;
@@ -20,6 +21,12 @@ class PaymentDetailsCaptureAction extends PaymentAwareAction
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
+
+        if ($model['clientIPAddress']) {
+            $this->payment->execute($httpRequest = new GetHttpRequest);
+
+            $details['clientIPAddress'] = $httpRequest->clientIp;
+        }
         
         if (false == $model['orderRef']) {
             $this->payment->execute(new InitializeOrder($model));
