@@ -28,8 +28,8 @@ class FillOrderDetailsAction implements ActionInterface
         $details['productNumber'] = 'n\a';
         $details['purchaseOperation'] = OrderApi::PURCHASEOPERATION_SALE;
         $details['view'] = OrderApi::VIEW_CREDITCARD;
-        $details['description'] = $order->getDescription();;
-        $details['clientIdentifier'] = $order->getClientId();
+        $details['description'] = $order->getDescription();
+        $details['clientIdentifier'] = '';
         $details['additionalValues'] = '';
         $details['agreementRef'] = '';
         $details['clientLanguage'] = isset($details['clientLanguage']) ? $details['clientLanguage'] : 'en-US';

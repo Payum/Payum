@@ -14,29 +14,38 @@ class PaymentDetailsCaptureAction extends PaymentAwareAction
 {
     /**
      * {@inheritDoc}
+     *
+     * @param Capture $request
      */
     public function execute($request)
     {
-        /** @var $request Capture */
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $model = ArrayObject::ensureArrayObject($request->getModel());
+        $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if ($model['clientIPAddress']) {
+        if (false == $details['returnUrl'] && $request->getToken()) {
+            $details['returnUrl'] = $request->getToken()->getTargetUrl();
+        }
+
+        if (false == $details['cancelUrl'] && $request->getToken()) {
+            $details['cancelUrl'] = $request->getToken()->getTargetUrl();
+        }
+
+        if (false == $details['clientIPAddress']) {
             $this->payment->execute($httpRequest = new GetHttpRequest);
 
             $details['clientIPAddress'] = $httpRequest->clientIp;
         }
         
-        if (false == $model['orderRef']) {
-            $this->payment->execute(new InitializeOrder($model));
+        if (false == $details['orderRef']) {
+            $this->payment->execute(new InitializeOrder($details));
         }
 
-        if ($model['orderRef']) {
-            $this->payment->execute(new CompleteOrder($model));
+        if ($details['orderRef']) {
+            $this->payment->execute(new CompleteOrder($details));
             
-            if ($model['recurring']) {
-                $this->payment->execute(new StartRecurringPayment($model));
+            if ($details['recurring']) {
+                $this->payment->execute(new StartRecurringPayment($details));
             }
         }
     }
