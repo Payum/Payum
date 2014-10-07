@@ -6,6 +6,7 @@
 
     <parameters>
         <parameter key="payum.offline.action.capture.class">Payum\Offline\Action\CaptureAction</parameter>
+        <parameter key="payum.offline.action.fill_order_details.class">Payum\Offline\Action\FillOrderDetailsAction</parameter>
         <parameter key="payum.offline.action.status.class">Payum\Offline\Action\StatusAction</parameter>
     </parameters>
 
@@ -13,6 +14,14 @@
         <service
             id="payum.offline.action.capture"
             class="%payum.offline.action.capture.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="offline" />
+        </service>
+
+        <service
+            id="payum.offline.action.fill_order_details"
+            class="%payum.offline.action.fill_order_details.class%"
             public="false"
         >
             <tag name="payum.action" factory="offline" />
