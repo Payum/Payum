@@ -2,6 +2,7 @@
 namespace Payum\Klarna\Checkout;
 
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
 use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Payment;
@@ -40,6 +41,7 @@ abstract class PaymentFactory
         $payment->addAction(new CreateOrderAction);
         $payment->addAction(new UpdateOrderAction);
         $payment->addAction($renderTemplateAction);
+        $payment->addAction(new GetHttpRequestAction);
 
         return $payment;
     }

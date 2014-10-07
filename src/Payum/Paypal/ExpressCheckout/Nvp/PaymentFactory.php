@@ -3,6 +3,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp;
 
 use Payum\Core\Action\CaptureOrderAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Payment;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileAction;
@@ -58,6 +59,7 @@ abstract class PaymentFactory
         $payment->addAction(new DoReferenceTransactionAction);
         $payment->addAction(new AuthorizeTokenAction);
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
+        $payment->addAction(new GetHttpRequestAction);
 
         return $payment;
     }

@@ -49,12 +49,10 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
 
         if (false == $model['CLIENTUSERAGENT']) {
             $this->payment->execute($httpRequest = new GetHttpRequest);
-
             $model['CLIENTUSERAGENT'] = $httpRequest->userAgent;
         }
         if (false == $model['CLIENTIP']) {
             $this->payment->execute($httpRequest = new GetHttpRequest);
-
             $model['CLIENTIP'] = $httpRequest->clientIp;
         }
 

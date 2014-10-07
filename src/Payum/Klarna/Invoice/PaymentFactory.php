@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Klarna\Invoice;
 
+use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Payment;
 use Payum\Klarna\Invoice\Action\Api\ActivateAction;
 use Payum\Klarna\Invoice\Action\Api\ActivateReservationAction;
@@ -29,6 +30,7 @@ abstract class PaymentFactory
         $payment->addAction(new StatusAction);
         $payment->addAction(new SyncAction);
         $payment->addAction(new RefundAction);
+        $payment->addAction(new GetHttpRequestAction);
 
         $payment->addAction(new ActivateAction);
         $payment->addAction(new ActivateReservationAction);

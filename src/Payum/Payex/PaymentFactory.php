@@ -2,6 +2,7 @@
 namespace Payum\Payex;
 
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Payex\Action\Api\CheckOrderAction;
 use Payum\Payex\Action\PaymentDetailsSyncAction;
 use Payum\Core\Payment;
@@ -69,6 +70,7 @@ abstract class PaymentFactory
         $payment->addAction(new AutoPayPaymentDetailsCaptureAction);
         $payment->addAction(new AutoPayPaymentDetailsStatusAction);
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
+        $payment->addAction(new GetHttpRequestAction);
 
         return $payment;
     }

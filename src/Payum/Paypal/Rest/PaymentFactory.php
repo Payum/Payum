@@ -2,6 +2,7 @@
 namespace Payum\Paypal\Rest;
 
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Payment;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Paypal\Rest\Action\CaptureAction;
@@ -28,6 +29,7 @@ abstract class PaymentFactory
         $payment->addAction(new StatusAction);
         $payment->addAction(new SyncAction);
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
+        $payment->addAction(new GetHttpRequestAction);
 
         return $payment;
     }

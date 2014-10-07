@@ -4,6 +4,7 @@ namespace Payum\Stripe;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\CaptureOrderAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
 use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Payment;
@@ -49,6 +50,7 @@ abstract class PaymentFactory
         $payment->addAction($renderTemplateAction);
         $payment->addAction(new ObtainTokenAction($obtainTokenTemplate));
         $payment->addAction(new CreateChargeAction);
+        $payment->addAction(new GetHttpRequestAction);
 
         return $payment;
     }
