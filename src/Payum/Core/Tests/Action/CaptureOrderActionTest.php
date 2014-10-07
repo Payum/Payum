@@ -59,7 +59,7 @@ class CaptureOrderActionTest extends GenericActionTest
             ->with($this->isInstanceOf('Payum\Core\Request\FillOrderDetails'))
             ->will($this->returnCallback(function(FillOrderDetails $request) use ($testCase, $order) {
                 $testCase->assertSame($order, $request->getOrder());
-                $this->assertNull($request->getToken());
+                $testCase->assertNull($request->getToken());
             }))
         ;
 
