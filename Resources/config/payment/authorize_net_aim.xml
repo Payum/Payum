@@ -36,7 +36,7 @@
             class="%payum.authorize_net_aim.action.fill_order_details.class%"
             public="false"
         >
-            <tag name="payum.action" factory="authorize_net_aim" prepend="true" />
+            <tag name="payum.action" factory="authorize_net_aim" />
         </service>
 
         <service

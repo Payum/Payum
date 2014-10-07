@@ -41,8 +41,8 @@
             class="%payum.stripe.action.fill_order_details.class%"
             public="false"
         >
-            <tag name="payum.action" factory="stripe_js" prepend="true" />
-            <tag name="payum.action" factory="stripe_checkout" prepend="true" />
+            <tag name="payum.action" factory="stripe_js" />
+            <tag name="payum.action" factory="stripe_checkout" />
         </service>
 
         <service

@@ -38,8 +38,8 @@
             class="%payum.be2bill.action.fill_order_details.class%"
             public="false"
         >
-            <tag name="payum.action" factory="be2bill" prepend="true" />
-            <tag name="payum.action" factory="be2bill_onsite" prepend="true" />
+            <tag name="payum.action" factory="be2bill" />
+            <tag name="payum.action" factory="be2bill_onsite" />
         </service>
 
         <service
