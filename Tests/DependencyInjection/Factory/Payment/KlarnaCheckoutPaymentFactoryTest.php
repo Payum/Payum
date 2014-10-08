@@ -192,27 +192,27 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $paymentId = $factory->create($container, 'aContextName', array(
             'obtain_credit_card' => false,
+            'merchant_id' => 'aEid',
             'secret' => 'aSecret',
-            'merchant_id' => 'aMerchantId',
             'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
         ));
 
-        $this->assertTrue($container->hasDefinition('payum.context.aContextName.connector'));
+        $this->assertTrue($container->hasDefinition('payum.context.aContextName.config'));
 
         $this->assertDefinitionContainsMethodCall(
             $container->getDefinition($paymentId),
             'addApi',
-            new Reference('payum.context.aContextName.connector')
+            new Reference('payum.context.aContextName.config')
         );
     }
 
     /**
      * @test
      */
-    public function shouldAddPayumActionTagToCaptureAction()
+    public function shouldAddPayumActionTagToAuthorizeAction()
     {
         $factory = new KlarnaCheckoutPaymentFactory;
 
@@ -228,7 +228,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
 
-        $actionDefinition = $container->getDefinition('payum.klarna.checkout.action.capture');
+        $actionDefinition = $container->getDefinition('payum.klarna.checkout.action.authorize');
 
         $tagAttributes = $actionDefinition->getTag('payum.action');
         $this->assertCount(1, $tagAttributes);

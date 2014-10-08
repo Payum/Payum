@@ -2,6 +2,7 @@
 namespace Payum\Bundle\PayumBundle\Tests\Functional\DependencyInjection;
 
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaCheckoutPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaInvoicePaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OfflinePaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\FilesystemStorageFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -370,13 +371,59 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension->load($configs, $containerBuilder);
 
-        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.connector'));
+        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.config'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
 
         $this->assertDefinitionContainsMethodCall(
             $containerBuilder->getDefinition('payum.context.a_context.payment'),
             'addApi',
-            new Reference('payum.context.a_context.connector')
+            new Reference('payum.context.a_context.config')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLoadExtensionWithKlarnaInvoiceConfiguredPayment()
+    {
+        $config = array(
+            'security' => array(
+                'token_storage' => array(
+                    'Payum\Core\Model\Token' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
+            'contexts' => array(
+                'a_context' => array(
+                    'klarna_invoice' => array(
+                        'secret' => 'aSecret',
+                        'eid' => 'anId'
+                    ),
+                )
+            )
+        );
+
+        $configs = array($config);
+
+        $containerBuilder = new ContainerBuilder(new ParameterBag);
+
+        $extension = new PayumExtension;
+        $extension->addPaymentFactory(new KlarnaInvoicePaymentFactory);
+        $extension->addStorageFactory(new FilesystemStorageFactory);
+
+        $extension->load($configs, $containerBuilder);
+
+        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.config'));
+        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
+
+        $this->assertDefinitionContainsMethodCall(
+            $containerBuilder->getDefinition('payum.context.a_context.payment'),
+            'addApi',
+            new Reference('payum.context.a_context.config')
         );
     }
 
