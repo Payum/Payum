@@ -3,6 +3,7 @@ namespace Payum\Payex\Tests\Action;
 
 use Payum\Core\PaymentInterface;
 use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetHttpRequest;
 use Payum\Payex\Action\PaymentDetailsCaptureAction;
 
 class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
@@ -119,7 +120,9 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new PaymentDetailsCaptureAction();
         $action->setPayment($paymentMock);
 
-        $request = new Capture(array());
+        $request = new Capture(array(
+            'clientIPAddress' => 'anIp',
+        ));
         
         $action->execute($request);
     }
@@ -141,6 +144,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
 
         $request = new Capture(array(
             'orderRef' => 'aRef',
+            'clientIPAddress' => 'anIp',
         ));
 
         $action->execute($request);
@@ -163,10 +167,39 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
 
         $request = new Capture(array(
             'orderRef' => 'aRef',
-            'recurring' => true
+            'recurring' => true,
+            'clientIPAddress' => 'anIp',
         ));
 
         $action->execute($request);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldDoSubGetHttpRequestAndSetClientIpFromIt()
+    {
+        $paymentMock = $this->createPaymentMock();
+        $paymentMock
+            ->expects($this->at(0))
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
+            ->will($this->returnCallback(function(GetHttpRequest $request) {
+                $request->clientIp = 'expectedClientIp';
+            }))
+        ;
+
+        $action = new PaymentDetailsCaptureAction();
+        $action->setPayment($paymentMock);
+
+        $request = new Capture(array());
+
+        $action->execute($request);
+
+        $details = iterator_to_array($request->getModel());
+
+        $this->assertArrayHasKey('clientIPAddress', $details);
+        $this->assertEquals('expectedClientIp', $details['clientIPAddress']);
     }
 
     /**

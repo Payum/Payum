@@ -64,8 +64,9 @@ class FillOrderDetailsActionTest extends GenericActionTest
         $this->assertArrayHasKey('description', $details);
         $this->assertEquals('the description', $details['description']);
 
+        // should not work if we pass anything. Not sure what it should be
         $this->assertArrayHasKey('clientIdentifier', $details);
-        $this->assertEquals('theClientId', $details['clientIdentifier']);
+        $this->assertEquals('', $details['clientIdentifier']);
 
         $this->assertArrayHasKey('autoPay', $details);
         $this->assertEquals(false, $details['autoPay']);
