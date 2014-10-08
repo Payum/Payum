@@ -25,18 +25,17 @@ We need to add payment factory and payment details storage.
 ```php
 <?php
 
-use Payum\Klarn\Checkout\GlobalStateSafeConnector;
+use Payum\Klarn\Checkout\Config;
+use Payum\Klarn\Checkout\Constants;
 use Payum\Klarn\Checkout\PaymentFactory as KlarnaPaymentFactory;
 
 //config.php
 
-// ...
+$config = new Config;
+$config->merchantId = 'EDIT IT';
+$config->secret = 'EDIT IT';
 
-$payments['klarna_checkout'] => KlarnaPaymentFactory::create(new GlobalStateSafeConnector(
-    new Klarna_Checkout_Connector('REPLACE_WITH_YOUR_SECRET'),
-    'REPLACE_WITH_YOUR_MERCHANT_ID',
-    \Payum\Klarna\Checkout\Constants::BASE_URI_SANDBOX
-));
+$payments['klarna_checkout'] => KlarnaPaymentFactory::create($config);
 ```
 
 ## Prepare payment

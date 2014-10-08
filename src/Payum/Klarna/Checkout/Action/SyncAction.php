@@ -11,10 +11,11 @@ class SyncAction extends PaymentAwareAction
 {
     /**
      * {@inheritDoc}
+     *
+     * @param Sync $request
      */
     public function execute($request)
     {
-        /** @var $request Sync */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());

@@ -13,10 +13,11 @@ class NotifyAction extends PaymentAwareAction
 {
     /**
      * {@inheritDoc}
+     *
+     * @param Notify $request
      */
     public function execute($request)
     {
-        /** @var $request Notify */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());

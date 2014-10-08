@@ -7,19 +7,22 @@ use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Payment;
 use Payum\Klarna\Checkout\Action\Api\CreateOrderAction;
 use Payum\Klarna\Checkout\Action\Api\UpdateOrderAction;
-use Payum\Klarna\Checkout\Action\CaptureAction;
+use Payum\Klarna\Checkout\Action\AuthorizeAction;
 use Payum\Klarna\Checkout\Action\NotifyAction;
 use Payum\Klarna\Checkout\Action\StatusAction;
 
 abstract class PaymentFactory
 {
     /**
-     * @param \Klarna_Checkout_ConnectorInterface $connector
+     * @param Config $config
+     * @param ActionInterface $renderTemplateAction
+     * @param null $layoutTemplate
+     * @param null $captureTemplate
      *
-     * @return \Payum\Core\Payment
+     * @return \Payum\Core\PaymentInterface
      */
     public static function create(
-        \Klarna_Checkout_ConnectorInterface $connector,
+        Config $config,
         ActionInterface $renderTemplateAction = null,
         $layoutTemplate = null,
         $captureTemplate = null
@@ -29,9 +32,9 @@ abstract class PaymentFactory
         $renderTemplateAction = $renderTemplateAction ?: new RenderTemplateAction(TwigFactory::createGeneric(), $layoutTemplate);
         $payment = new Payment;
 
-        $payment->addApi($connector);
+        $payment->addApi($config);
 
-        $payment->addAction(new CaptureAction($captureTemplate));
+        $payment->addAction(new AuthorizeAction($captureTemplate));
         $payment->addAction(new NotifyAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new CreateOrderAction);

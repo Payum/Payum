@@ -3,12 +3,16 @@ namespace Payum\Klarna\Checkout\Tests\Action;
 
 use Payum\Core\PaymentInterface;
 use Payum\Core\Request\Sync;
+use Payum\Core\Tests\GenericActionTest;
 use Payum\Klarna\Checkout\Action\SyncAction;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\FetchOrder;
 
-class SyncActionTest extends \PHPUnit_Framework_TestCase
+class SyncActionTest extends GenericActionTest
 {
+    protected $actionClass = 'Payum\Klarna\Checkout\Action\SyncAction';
+
+    protected $requestClass = 'Payum\Core\Request\Sync';
     /**
      * @test
      */

@@ -1,12 +1,27 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests\Action\Api;
 
+use Payum\Core\Tests\GenericActionTest;
 use Payum\Klarna\Checkout\Action\Api\FetchOrderAction;
-use Payum\Klarna\Checkout\Constants;
+use Payum\Klarna\Checkout\Config;
 use Payum\Klarna\Checkout\Request\Api\FetchOrder;
 
-class FetchOrderActionTest extends \PHPUnit_Framework_TestCase
+class FetchOrderActionTest extends GenericActionTest
 {
+    protected $requestClass = 'Payum\Klarna\Checkout\Request\Api\FetchOrder';
+
+    protected $actionClass = 'Payum\Klarna\Checkout\Action\Api\FetchOrderAction';
+
+    public function provideNotSupportedRequests()
+    {
+        return array(
+            array('foo'),
+            array(array('foo')),
+            array(new \stdClass()),
+            array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
+        );
+    }
+
     /**
      * @test
      */
@@ -15,46 +30,6 @@ class FetchOrderActionTest extends \PHPUnit_Framework_TestCase
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\FetchOrderAction');
 
         $rc->isSubclassOf('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new FetchOrderAction;
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportFetchOrderRequest()
-    {
-        $action = new FetchOrderAction;
-
-        $this->assertTrue($action->supports(new FetchOrder(array())));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotFetchOrderRequest()
-    {
-        $action = new FetchOrderAction;
-
-        $this->assertFalse($action->supports(new \stdClass));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
-    {
-        $action = new FetchOrderAction();
-
-        $action->execute(new \stdClass());
     }
 
     /**
@@ -96,8 +71,8 @@ class FetchOrderActionTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $action = new FetchOrderAction();
-        $action->setApi($connector);
+        $action = new FetchOrderAction($connector);
+        $action->setApi(new Config);
 
         $action->execute($request);
 
@@ -134,8 +109,8 @@ class FetchOrderActionTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $action = new FetchOrderAction();
-        $action->setApi($connector);
+        $action = new FetchOrderAction($connector);
+        $action->setApi(new Config);
 
         $action->execute($request);
 

@@ -1,11 +1,27 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests\Action\Api;
 
+use Payum\Core\Tests\GenericActionTest;
 use Payum\Klarna\Checkout\Action\Api\CreateOrderAction;
+use Payum\Klarna\Checkout\Config;
 use Payum\Klarna\Checkout\Request\Api\CreateOrder;
 
-class CreateOrderActionTest extends \PHPUnit_Framework_TestCase
+class CreateOrderActionTest extends GenericActionTest
 {
+    protected $requestClass = 'Payum\Klarna\Checkout\Request\Api\CreateOrder';
+
+    protected $actionClass = 'Payum\Klarna\Checkout\Action\Api\CreateOrderAction';
+
+    public function provideNotSupportedRequests()
+    {
+        return array(
+            array('foo'),
+            array(array('foo')),
+            array(new \stdClass()),
+            array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
+        );
+    }
+
     /**
      * @test
      */
@@ -14,46 +30,6 @@ class CreateOrderActionTest extends \PHPUnit_Framework_TestCase
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\CreateOrderAction');
 
         $rc->isSubclassOf('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CreateOrderAction;
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCreateOrderRequest()
-    {
-        $action = new CreateOrderAction;
-
-        $this->assertTrue($action->supports(new CreateOrder(array())));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotCreateOrderRequest()
-    {
-        $action = new CreateOrderAction;
-
-        $this->assertFalse($action->supports(new \stdClass));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
-    {
-        $action = new CreateOrderAction();
-
-        $action->execute(new \stdClass());
     }
 
     /**
@@ -75,8 +51,8 @@ class CreateOrderActionTest extends \PHPUnit_Framework_TestCase
             ->with('GET')
         ;
 
-        $action = new CreateOrderAction();
-        $action->setApi($connector);
+        $action = new CreateOrderAction($connector);
+        $action->setApi(new Config);
 
         $action->execute($request);
 
@@ -91,6 +67,7 @@ class CreateOrderActionTest extends \PHPUnit_Framework_TestCase
         $model = array(
             'foo' => 'fooVal',
             'bar' => 'barVal',
+            'merchant' => array('id' => 'anId')
         );
 
         $request = new CreateOrder($model);
@@ -109,8 +86,48 @@ class CreateOrderActionTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $action = new CreateOrderAction();
-        $action->setApi($connector);
+        $action = new CreateOrderAction($connector);
+        $action->setApi(new Config);
+
+        $action->execute($request);
+
+        $this->assertInstanceOf('Klarna_Checkout_Order', $request->getOrder());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAddMerchantIdFromConfigIfNotSetInModelOnExecute()
+    {
+        $config = new Config;
+        $config->merchantId = 'theMerchantId';
+
+        $model = array(
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        );
+
+        $expectedModel = $model;
+        $expectedModel['merchant']['id'] = 'theMerchantId';
+
+        $request = new CreateOrder($model);
+
+        $testCase = $this;
+
+        $connector = $this->createConnectorMock();
+        $connector
+            ->expects($this->at(0))
+            ->method('apply')
+            ->with('POST')
+            ->will($this->returnCallback(function($method, $order, $options) use ($testCase, $expectedModel) {
+                $testCase->assertInternalType('array', $options);
+                $testCase->assertArrayHasKey('data', $options);
+                $testCase->assertEquals($expectedModel, $options['data']);
+            }))
+        ;
+
+        $action = new CreateOrderAction($connector);
+        $action->setApi($config);
 
         $action->execute($request);
 
@@ -137,8 +154,8 @@ class CreateOrderActionTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $action = new CreateOrderAction();
-        $action->setApi($connector);
+        $action = new CreateOrderAction($connector);
+        $action->setApi(new Config);
 
         $action->execute($request);
 

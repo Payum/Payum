@@ -31,8 +31,14 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (Constants::STATUS_CREATED == $model['status']) {
+        if (Constants::STATUS_CREATED == $model['status'] && $model['invoice_number']) {
             $request->markCaptured();
+
+            return;
+        }
+
+        if (Constants::STATUS_CREATED == $model['status']) {
+            $request->markAuthorized();
 
             return;
         }
