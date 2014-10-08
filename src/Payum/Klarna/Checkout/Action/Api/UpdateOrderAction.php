@@ -10,15 +10,16 @@ class UpdateOrderAction extends BaseApiAwareAction
 {
     /**
      * {@inheritDoc}
+     *
+     * @param CreateOrder $request
      */
     public function execute($request)
     {
-        /** @var $request CreateOrder */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $order = new \Klarna_Checkout_Order($this->api, $model['location']);
+        $order = new \Klarna_Checkout_Order($this->getConnector(), $model['location']);
 
         $data = $model->toUnsafeArray();
         unset($data['location']);

@@ -3,11 +3,16 @@ namespace Payum\Klarna\Checkout\Tests\Action;
 
 use Payum\Core\PaymentInterface;
 use Payum\Core\Request\Notify;
+use Payum\Core\Tests\GenericActionTest;
 use Payum\Klarna\Checkout\Action\NotifyAction;
 use Payum\Klarna\Checkout\Constants;
 
-class NotifyActionTest extends \PHPUnit_Framework_TestCase
+class NotifyActionTest extends GenericActionTest
 {
+    protected $actionClass = 'Payum\Klarna\Checkout\Action\NotifyAction';
+
+    protected $requestClass = 'Payum\Core\Request\Notify';
+
     /**
      * @test
      */
@@ -16,56 +21,6 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\NotifyAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new NotifyAction;
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportNotifyRequestWithArrayAsModel()
-    {
-        $action = new NotifyAction();
-
-        $this->assertTrue($action->supports(new Notify(array())));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotNotifyRequest()
-    {
-        $action = new NotifyAction;
-
-        $this->assertFalse($action->supports(new \stdClass()));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotifyRequestWithNotArrayAccessModel()
-    {
-        $action = new NotifyAction;
-
-        $this->assertFalse($action->supports(new Notify(new \stdClass)));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
-    {
-        $action = new NotifyAction;
-
-        $action->execute(new \stdClass());
     }
 
     /**

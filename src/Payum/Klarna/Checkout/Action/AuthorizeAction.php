@@ -5,6 +5,7 @@ use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Request\Authorize;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\RenderTemplate;
 use Payum\Core\Request\Sync;
@@ -28,10 +29,11 @@ class AuthorizeAction extends PaymentAwareAction
 
     /**
      * {@inheritDoc}
+     *
+     * @param Authorize $request
      */
     public function execute($request)
     {
-        /** @var $request \Payum\Core\Request\Capture */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -62,7 +64,7 @@ class AuthorizeAction extends PaymentAwareAction
     public function supports($request)
     {
         return
-            $request instanceof Capture &&
+            $request instanceof Authorize &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

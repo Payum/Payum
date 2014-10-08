@@ -13,10 +13,11 @@ class FetchOrderAction extends BaseApiAwareAction
 {
     /**
      * {@inheritDoc}
+     *
+     * @param FetchOrder $request
      */
     public function execute($request)
     {
-        /** @var $request FetchOrder */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -25,7 +26,7 @@ class FetchOrderAction extends BaseApiAwareAction
             throw new LogicException('Location has to be provided to fetch an order');
         }
 
-        $order = new \Klarna_Checkout_Order($this->api, $model['location']);
+        $order = new \Klarna_Checkout_Order($this->getConnector(), $model['location']);
         $order->fetch();
 
         $request->setOrder($order);

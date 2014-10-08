@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests\Action\Api;
 
+use Payum\Klarna\Checkout\Config;
+
 class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -36,15 +38,15 @@ class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowSetApi()
+    public function shouldAllowSetConfigAsApi()
     {
-        $expectedApi = $this->createConnectorMock();
-        
         $action = $this->getMockForAbstractClass('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
-        
-        $action->setApi($expectedApi);
 
-        $this->assertAttributeSame($expectedApi, 'api', $action);
+        $config = new Config;
+        
+        $action->setApi($config);
+
+        $this->assertAttributeSame($config, 'config', $action);
     }
 
     /**

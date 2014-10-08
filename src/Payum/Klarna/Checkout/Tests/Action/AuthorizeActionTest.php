@@ -3,20 +3,20 @@ namespace Payum\Klarna\Checkout\Tests\Action;
 
 use Payum\Core\PaymentInterface;
 use Payum\Core\Reply\HttpResponse;
-use Payum\Core\Request\Capture;
+use Payum\Core\Request\Authorize;
 use Payum\Core\Request\RenderTemplate;
-use Payum\Klarna\Checkout\Action\CaptureAction;
+use Payum\Klarna\Checkout\Action\AuthorizeAction;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\CreateOrder;
 
-class CaptureActionTest extends \PHPUnit_Framework_TestCase
+class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfPaymentAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\CaptureAction');
+        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\AuthorizeAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
     }
@@ -26,25 +26,25 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new CaptureAction('aTemplate');
+        new AuthorizeAction('aTemplate');
     }
 
     /**
      * @test
      */
-    public function shouldSupportCaptureWithArrayAsModel()
+    public function shouldSupportAuthorizeWithArrayAsModel()
     {
-        $action = new CaptureAction('aTemplate');
+        $action = new AuthorizeAction('aTemplate');
 
-        $this->assertTrue($action->supports(new Capture(array())));
+        $this->assertTrue($action->supports(new Authorize(array())));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotCapture()
+    public function shouldNotSupportAnythingNotAuthorize()
     {
-        $action = new CaptureAction('aTemplate');
+        $action = new AuthorizeAction('aTemplate');
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -52,11 +52,11 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportCaptureWithNotArrayAccessModel()
+    public function shouldNotSupportAuthorizeWithNotArrayAccessModel()
     {
-        $action = new CaptureAction('aTemplate');
+        $action = new AuthorizeAction('aTemplate');
 
-        $this->assertFalse($action->supports(new Capture(new \stdClass)));
+        $this->assertFalse($action->supports(new Authorize(new \stdClass)));
     }
 
     /**
@@ -66,9 +66,9 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $action = new CaptureAction('aTemplate');
+        $action = new AuthorizeAction('aTemplate');
 
-        $action->execute(new \stdClass());
+        $action->execute(new \stdClass);
     }
 
     /**
@@ -90,10 +90,10 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
         ;
 
-        $action = new CaptureAction('aTemplate');
+        $action = new AuthorizeAction('aTemplate');
         $action->setPayment($paymentMock);
 
-        $action->execute(new Capture(array(
+        $action->execute(new Authorize(array(
             'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
             'location' => 'aLocation',
         )));
@@ -134,12 +134,12 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
 
-        $action = new CaptureAction('aTemplate');
+        $action = new AuthorizeAction('aTemplate');
         $action->setPayment($paymentMock);
 
         $model = new \ArrayObject();
 
-        $action->execute(new Capture($model));
+        $action->execute(new Authorize($model));
 
         $this->assertEquals('fooVal', $model['foo']);
         $this->assertEquals('barVal', $model['bar']);
@@ -171,11 +171,11 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $action = new CaptureAction($expectedTemplateName);
+        $action = new AuthorizeAction($expectedTemplateName);
         $action->setPayment($paymentMock);
 
         try {
-            $action->execute(new Capture(array(
+            $action->execute(new Authorize(array(
                 'location' => 'aLocation',
                 'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
                 'gui' => array('snippet' => $snippet),
@@ -194,10 +194,10 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotThrowReplyWhenStatusNotSet()
     {
-        $action = new CaptureAction('aTemplate');
+        $action = new AuthorizeAction('aTemplate');
         $action->setPayment($this->createPaymentMock());
 
-        $action->execute(new Capture(array(
+        $action->execute(new Authorize(array(
             'location' => 'aLocation',
             'gui' => array('snippet' => 'theSnippet'),
         )));
@@ -208,10 +208,10 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotThrowReplyWhenStatusCreated()
     {
-        $action = new CaptureAction('aTemplate');
+        $action = new AuthorizeAction('aTemplate');
         $action->setPayment($this->createPaymentMock());
 
-        $action->execute(new Capture(array(
+        $action->execute(new Authorize(array(
             'location' => 'aLocation',
             'status' => Constants::STATUS_CREATED,
             'gui' => array('snippet' => 'theSnippet'),

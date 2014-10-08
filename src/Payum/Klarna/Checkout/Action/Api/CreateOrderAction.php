@@ -9,15 +9,18 @@ class CreateOrderAction extends BaseApiAwareAction
 {
     /**
      * {@inheritDoc}
+     *
+     * @param CreateOrder $request
      */
     public function execute($request)
     {
-        /** @var $request CreateOrder */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $order = new \Klarna_Checkout_Order($this->api);
+        $this->addMerchantId($model);
+
+        $order = new \Klarna_Checkout_Order($this->getConnector());
         $order->create($model->toUnsafeArray());
         $order->fetch();
 

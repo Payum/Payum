@@ -18,6 +18,9 @@
 * [request] `ModelAwareInterface` was moved to `Model` namespace and split into two: `ModelAwareInterface` and `ModelAggregateInterface`.
 * [action] `ExecuteSameRequestWithModelDetailsAction` does sub execute even for empty details.
 * [offline] `Payum\Offline\Constains::STATUS_SUCCESS` was removed. Use `STATUS_CAPTURED` from the same class.
+* [klarna-checkout] `GlobalStateSafeConnector` was removed use `Config` instead.
+* [klarna-checkout] `CaptureAction` was renamed to `AuthorizeAction` as it is what it really means.
+* [klarna-checkout] The previous `success` status now means `authorized`. 
 
 ## 0.11.0 to 0.11.7
 

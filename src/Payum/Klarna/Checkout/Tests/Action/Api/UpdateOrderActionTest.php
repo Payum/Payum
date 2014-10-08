@@ -1,11 +1,27 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests\Action\Api;
 
+use Payum\Core\Tests\GenericActionTest;
 use Payum\Klarna\Checkout\Action\Api\UpdateOrderAction;
+use Payum\Klarna\Checkout\Config;
 use Payum\Klarna\Checkout\Request\Api\UpdateOrder;
 
-class UpdateOrderActionTest extends \PHPUnit_Framework_TestCase
+class UpdateOrderActionTest extends GenericActionTest
 {
+    protected $requestClass = 'Payum\Klarna\Checkout\Request\Api\UpdateOrder';
+
+    protected $actionClass = 'Payum\Klarna\Checkout\Action\Api\UpdateOrderAction';
+
+    public function provideNotSupportedRequests()
+    {
+        return array(
+            array('foo'),
+            array(array('foo')),
+            array(new \stdClass()),
+            array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
+        );
+    }
+
     /**
      * @test
      */
@@ -14,46 +30,6 @@ class UpdateOrderActionTest extends \PHPUnit_Framework_TestCase
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\UpdateOrderAction');
 
         $rc->isSubclassOf('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new UpdateOrderAction;
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportUpdateOrderRequest()
-    {
-        $action = new UpdateOrderAction;
-
-        $this->assertTrue($action->supports(new UpdateOrder(array())));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotUpdateOrderRequest()
-    {
-        $action = new UpdateOrderAction;
-
-        $this->assertFalse($action->supports(new \stdClass));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
-    {
-        $action = new UpdateOrderAction();
-
-        $action->execute(new \stdClass());
     }
 
     /**
@@ -97,8 +73,8 @@ class UpdateOrderActionTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $action = new UpdateOrderAction();
-        $action->setApi($connector);
+        $action = new UpdateOrderAction($connector);
+        $action->setApi(new Config);
 
         $action->execute($request);
 
@@ -135,8 +111,8 @@ class UpdateOrderActionTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $action = new UpdateOrderAction();
-        $action->setApi($connector);
+        $action = new UpdateOrderAction($connector);
+        $action->setApi(new Config);
 
         $action->execute($request);
 
