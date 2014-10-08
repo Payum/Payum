@@ -61,7 +61,7 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
 
         $merchant = $details['merchant'];
         if (false == isset($merchant['id'])) {
-            $merchant['id'] = $this->config->merchantId;
+            $merchant['id'] = (string) $this->config->merchantId;
         }
 
         $details['merchant'] = $merchant;
