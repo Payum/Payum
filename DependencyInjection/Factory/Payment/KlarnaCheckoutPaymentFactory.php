@@ -5,6 +5,7 @@ use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Exception\RuntimeException;
 use Payum\Klarna\Checkout\Constants;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Definition;
@@ -69,24 +70,18 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
      */
     protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
     {
-        $internalConnectorDefinition = new Definition('Klarna_Checkout_ConnectorInterface');
-        $internalConnectorDefinition->setFactoryClass('Klarna_Checkout_Connector');
-        $internalConnectorDefinition->setFactoryMethod('create');
-        $internalConnectorDefinition->addArgument($config['secret']);
-        $internalConnectorId = 'payum.context.'.$contextName.'.internal_connector';
-        $container->setDefinition($internalConnectorId, $internalConnectorDefinition);
-
-        $connectorDefinition = new Definition('%payum.klarna.checkout.connector.class%');
-        $connectorDefinition->addArgument(new Reference($internalConnectorId));
-        $connectorDefinition->addArgument($config['merchant_id']);
-        $connectorDefinition->addArgument($config['sandbox'] ?
+        $klarnaConfig = new DefinitionDecorator('payum.klarna.checkout.config.prototype');
+        $klarnaConfig->setProperty('merchantId', $config['merchant_id']);
+        $klarnaConfig->setProperty('secret', $config['secret']);
+        $klarnaConfig->setProperty('baseUri', $config['sandbox'] ?
             Constants::BASE_URI_SANDBOX :
             Constants::BASE_URI_LIVE
         );
-        $connectorDefinition->addArgument(Constants::CONTENT_TYPE_V2_PLUS_JSON);
-        $connectorId = 'payum.context.'.$contextName.'.connector';
-        $container->setDefinition($connectorId, $connectorDefinition);
 
-        $paymentDefinition->addMethodCall('addApi', array(new Reference($connectorId)));
+        $klarnaConfig->setPublic(true);
+        $klarnaConfigId = 'payum.context.'.$contextName.'.config';
+
+        $container->setDefinition($klarnaConfigId, $klarnaConfig);
+        $paymentDefinition->addMethodCall('addApi', array(new Reference($klarnaConfigId)));
     }
 }
