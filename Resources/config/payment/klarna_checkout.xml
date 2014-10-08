@@ -5,8 +5,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="payum.klarna.checkout.connector.class">Payum\Klarna\Checkout\GlobalStateSafeConnector</parameter>
-        <parameter key="payum.klarna.checkout.action.capture.class">Payum\Klarna\Checkout\Action\CaptureAction</parameter>
+        <parameter key="payum.klarna.checkout.config.class">Payum\Klarna\Checkout\Config</parameter>
+        <parameter key="payum.klarna.checkout.action.authorize.class">Payum\Klarna\Checkout\Action\AuthorizeAction</parameter>
         <parameter key="payum.klarna.checkout.action.notify.class">Payum\Klarna\Checkout\Action\NotifyAction</parameter>
         <parameter key="payum.klarna.checkout.action.sync.class">Payum\Klarna\Checkout\Action\SyncAction</parameter>
         <parameter key="payum.klarna.checkout.action.status.class">Payum\Klarna\Checkout\Action\StatusAction</parameter>
@@ -18,8 +18,16 @@
 
     <services>
         <service
-            id="payum.klarna.checkout.action.capture"
-            class="%payum.klarna.checkout.action.capture.class%"
+            id="payum.klarna.checkout.config.prototype"
+            class="%payum.klarna.checkout.config.class%"
+            abstract="true"
+            public="false"
+        >
+        </service>
+
+        <service
+            id="payum.klarna.checkout.action.authorize"
+            class="%payum.klarna.checkout.action.authorize.class%"
             public="false"
         >
             <argument>%payum.klarna.checkout.template.capture%</argument>
