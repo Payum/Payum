@@ -85,7 +85,7 @@ use App\Model\Order;
 
 include 'config.php';
 
-$storage = $registry->getStorage('App\Model\Order');
+$storage = $payum->getStorage('App\Model\Order');
 
 $order = $storage->createModel();
 $order = new Order;

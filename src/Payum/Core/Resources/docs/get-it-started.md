@@ -28,7 +28,7 @@ This flow is same all payments so once you familiar with it any other payments c
 As you can see we have to create some php files: `config.php`, `prepare.php`, `capture.php` and `done.php`.
 At the end you will have the complete payment solution and 
 it would be [much easier to add](https://github.com/Payum/PaypalExpressCheckoutNvp/blob/master/Resources/docs/get-it-started.md) other payments.
-Let's start from the config.php and continue with rest after:
+Let's start from the `config.php` and continue with rest after:
 
 ## config.php
 
@@ -52,11 +52,10 @@ $storages = array(
     //put other storages
 );
 
-$payments = array(
-    'offline' => OfflinePaymentFactory::create(),
-    
-    //put other payments
-);
+$payments = array();
+$payments['offline'] = OfflinePaymentFactory::create();
+
+//put here other payments
 
 $payum = new SimpleRegistry($payments, $storages);
 
@@ -68,7 +67,7 @@ $requestVerifier = new PlainHttpRequestVerifier($tokenStorage);
 
 $tokenFactory = new GenericTokenFactory(
     $tokenStorage,
-    $registry,
+    $payum,
     'http://'.$_SERVER['HTTP_HOST'],
     'capture.php',
     'notify.php',
@@ -128,7 +127,7 @@ use Payum\Core\Reply\HttpRedirect;
 include 'config.php';
 
 $token = $requestVerifier->verify($_REQUEST);
-$payment = $registry->getPayment($token->getPaymentName());
+$payment = $payum->getPayment($token->getPaymentName());
 
 if ($reply = $payment->execute(new Capture($token), true)) {
     if ($reply instanceof HttpRedirect) {
@@ -163,7 +162,7 @@ include 'config.php';
 $token = $requestVerifier->verify($_REQUEST);
 // $requestVerifier->invalidate($token);
 
-$payment = $registry->getPayment($token->getPaymentName());
+$payment = $payum->getPayment($token->getPaymentName());
 
 $payment->execute($status = new GetHumanStatus($token));
 

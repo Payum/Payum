@@ -77,11 +77,11 @@ $config->mode = \Klarna::BETA;
 
 $payments['klarna_invoice'] => KlarnaInvoicePaymentFactory::create($config);
 
-$registry = new SimpleRegistry($payments, $storages);
+$payum = new SimpleRegistry($payments, $storages);
 
 $tokenFactory = new GenericTokenFactory(
     $tokenStorage,
-    $registry,
+    $payum,
     'http://'.$_SERVER['HTTP_HOST'],
     'capture.php',
     'notify.php',
@@ -109,7 +109,7 @@ include 'config.php';
 $payment = $payum->getPayment('klarna_invoice');
 $payment->execute($getAddresses = new GetAddresses($pno));
 
-$storage = $registry->getStorage($detailsClass);
+$storage = $payum->getStorage($detailsClass);
 $storage = $this->getPayum()->getStorage('Acme\PaymentBundle\Model\PaymentDetails');
 
 $details = $storage->createModel();

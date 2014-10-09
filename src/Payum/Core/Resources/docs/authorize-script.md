@@ -15,7 +15,7 @@ use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
 include 'config.php';
 
 $token = $requestVerifier->verify($_REQUEST);
-$payment = $registry->getPayment($token->getPaymentName());
+$payment = $payum->getPayment($token->getPaymentName());
 
 if ($interactiveRequest = $payment->execute(new Authorize($token), true)) {
     if ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {

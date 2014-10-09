@@ -15,7 +15,7 @@ include 'config.php';
 $token = $requestVerifier->verify($_REQUEST);
 // $requestVerifier->invalidate($token);
 
-$payment = $registry->getPayment($token->getPaymentName());
+$payment = $payum->getPayment($token->getPaymentName());
 
 $payment->execute($status = new GetHumanStatus($token));
 

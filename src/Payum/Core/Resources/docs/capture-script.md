@@ -17,7 +17,7 @@ use Payum\Core\Reply\HttpRedirect;
 include 'config.php';
 
 $token = $requestVerifier->verify($_REQUEST);
-$payment = $registry->getPayment($token->getPaymentName());
+$payment = $payum->getPayment($token->getPaymentName());
 
 if ($reply = $payment->execute(new Capture($token), true)) {
     if ($reply instanceof HttpRedirect) {

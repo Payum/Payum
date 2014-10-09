@@ -73,7 +73,7 @@ $storeNotificationAction = new StoreNotificationAction(
     new FilesystemStorage('/path/to/storage', 'Notification')
 );
 
-$registry->getPayment('paypal')->addAction($storeNotificationAction);
+$payum->getPayment('paypal')->addAction($storeNotificationAction);
 ```
 
 Now we have to implement `notify.php` script which must be accessible from the internet.
@@ -87,7 +87,7 @@ use Payum\Core\Request\Notify;
 include 'config.php';
 
 $token = $requestVerifier->verify();
-$payment = $registry->getPayment($token->getPaymentName());
+$payment = $payum->getPayment($token->getPaymentName());
 
 $payment->execute(new Notify($token));
 ```
