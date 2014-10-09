@@ -27,7 +27,7 @@ This flow is same all payments so once you familiar with it any other payments c
 
 As you can see we have to create some php files: `config.php`, `prepare.php`, `capture.php` and `done.php`.
 At the end you will have the complete payment solution and 
-it would be much easier to add other payments.
+it would be [much easier to add](https://github.com/Payum/PaypalExpressCheckoutNvp/blob/master/Resources/docs/get-it-started.md) other payments.
 Let's start from the config.php and continue with rest after:
 
 ## config.php
