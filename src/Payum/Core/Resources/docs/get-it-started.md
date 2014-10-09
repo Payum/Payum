@@ -173,7 +173,7 @@ echo json_encode(array(
 )));
 ```
 
-_**Note**: Find out more about capture script in the [dedicated chapter](done-script.md)._
+_**Note**: Find out more about done script in the [dedicated chapter](done-script.md)._
 
 ## Next 
 
