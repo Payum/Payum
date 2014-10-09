@@ -3,12 +3,17 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Payum\Core\Model\Token;
 use Payum\Core\Request\Capture;
+use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout;
 
-class CaptureActionTest extends \PHPUnit_Framework_TestCase
+class CaptureActionTest extends GenericActionTest
 {
+    protected $requestClass = 'Payum\Core\Request\Capture';
+
+    protected $actionClass = 'Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction';
+
     /**
      * @test
      */
@@ -17,62 +22,6 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction');
         
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()   
-    {
-        new CaptureAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureAndArrayAccessAsModel()
-    {
-        $action = new CaptureAction();
-
-        $request = new Capture($this->getMock('ArrayAccess'));
-        
-        $this->assertTrue($action->supports($request));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotCapture()
-    {
-        $action = new CaptureAction();
-        
-        $request = new \stdClass();
-
-        $this->assertFalse($action->supports($request));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSupportCaptureCaptureessAsModel()
-    {
-        $action = new CaptureAction();
-        
-        $request = new Capture(new \stdClass());
-        
-        $this->assertFalse($action->supports($request));
-    }
-
-    /**
-     * @test
-     * 
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
-    {
-        $action = new CaptureAction();
-
-        $action->execute(new \stdClass());
     }
 
     /**

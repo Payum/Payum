@@ -3,10 +3,15 @@ namespace Payum\OmnipayBridge\Tests\Action;
 
 use Omnipay\Common\GatewayInterface;
 use Payum\Core\Request\Capture;
+use Payum\Core\Tests\GenericActionTest;
 use Payum\OmnipayBridge\Action\CaptureAction;
 
-class CaptureActionTest extends \PHPUnit_Framework_TestCase
+class CaptureActionTest extends GenericActionTest
 {
+    protected $actionClass = 'Payum\OmnipayBridge\Action\CaptureAction';
+
+    protected $requestClass = 'Payum\Core\Request\Capture';
+
     /**
      * @test
      */
@@ -20,9 +25,45 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
+    public function shouldBeSubClassOfPaymentAwareAction()
     {
-        new CaptureAction;
+        $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\CaptureAction');
+
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\PaymentAwareInterface'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCallGatewayPurchaseMethodWithExpectedArguments()
+    {
+        $details = array(
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+            'card' => array('cvv' => 123),
+            'clientIp' => '',
+        );
+
+        $requestMock = $this->getMock('Omnipay\Common\Message\RequestInterface');
+        $requestMock
+            ->expects($this->once())
+            ->method('send')
+            ->will($this->returnValue($this->getMock('Omnipay\Common\Message\ResponseInterface')))
+        ;
+
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
+            ->expects($this->once())
+            ->method('purchase')
+            ->with($details)
+            ->will($this->returnValue($requestMock))
+        ;
+
+        $action = new CaptureAction;
+        $action->setApi($gatewayMock);
+        $action->setPayment($this->createPaymentMock());
+
+        $action->execute(new Capture($details));
     }
 
     /**
@@ -42,6 +83,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new CaptureAction;
         $action->setApi($gatewayMock);
+        $action->setPayment($this->createPaymentMock());
 
         $action->execute(new Capture(array(
             '_status' => 'foo',
@@ -53,6 +95,6 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Omnipay\Common\GatewayInterface');
+        return $this->getMock('Payum\OmnipayBridge\Tests\DummyGateway');
     }
 }

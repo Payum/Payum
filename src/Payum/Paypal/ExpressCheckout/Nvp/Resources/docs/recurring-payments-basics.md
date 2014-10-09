@@ -67,7 +67,7 @@ include 'config.php';
 
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
-$storage = $registry->getStorage($agreementDetailsClass);
+$storage = $payum->getStorage($agreementDetailsClass);
 
 $agreementDetails = $storage->createModel();
 $agreementDetails['PAYMENTREQUEST_0_AMT'] = 0;
@@ -110,7 +110,7 @@ include 'config.php';
 $token = $requestVerifier->verify($_REQUEST);
 $requestVerifier->invalidate($token);
 
-$payment = $registry->getPayment($token->getPaymentName());
+$payment = $payum->getPayment($token->getPaymentName());
 
 $agreementStatus = new GetHumanStatus($token);
 $payment->execute($agreementStatus);
@@ -122,7 +122,7 @@ if (!$agreementStatus->isCaptured()) {
 
 $agreementDetails = $agreementStatus->getModel();
 
-$storage = $registry->getStorage($recurringPaymentDetailsClass);
+$storage = $payum->getStorage($recurringPaymentDetailsClass);
 
 $recurringPaymentDetails = $storage->createModel();
 $recurringPaymentDetails['TOKEN'] = $agreementDetails['TOKEN'];

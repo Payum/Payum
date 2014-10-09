@@ -2,7 +2,9 @@
 namespace Payum\Stripe;
 
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Action\CaptureOrderAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
 use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Payment;
@@ -11,13 +13,16 @@ use Payum\Core\PaymentInterface;
 use Payum\Stripe\Action\Api\CreateChargeAction;
 use Payum\Stripe\Action\Api\ObtainTokenAction;
 use Payum\Stripe\Action\CaptureAction;
+use Payum\Stripe\Action\FillOrderDetailsAction;
 use Payum\Stripe\Action\StatusAction;
 
 abstract class PaymentFactory
 {
     /**
      * @param Keys $keys
-     *
+     * @param ActionInterface $renderTemplateAction
+     * @param string $layoutTemplate
+     * @param string $obtainTokenTemplate
      *
      * @return PaymentInterface
      */
@@ -38,17 +43,23 @@ abstract class PaymentFactory
         $payment->addExtension(new EndlessCycleDetectorExtension);
 
         $payment->addAction(new CaptureAction);
+        $payment->addAction(new CaptureOrderAction);
+        $payment->addAction(new FillOrderDetailsAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
         $payment->addAction($renderTemplateAction);
         $payment->addAction(new ObtainTokenAction($obtainTokenTemplate));
         $payment->addAction(new CreateChargeAction);
+        $payment->addAction(new GetHttpRequestAction);
 
         return $payment;
     }
 
     /**
      * @param Keys $keys
+     * @param ActionInterface $renderTemplateAction
+     * @param string $layoutTemplate
+     * @param string $obtainTokenTemplate
      *
      * @return PaymentInterface
      */
@@ -69,6 +80,8 @@ abstract class PaymentFactory
         $payment->addExtension(new EndlessCycleDetectorExtension);
 
         $payment->addAction(new CaptureAction);
+        $payment->addAction(new CaptureOrderAction);
+        $payment->addAction(new FillOrderDetailsAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
         $payment->addAction($renderTemplateAction);

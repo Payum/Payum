@@ -17,7 +17,7 @@ use PayPal\Api\Payer;
 use PayPal\Api\FundingInstrument;
 use PayPal\Api\Transaction;
 
-$storage = $registry->getStorage($paypalRestPaymentDetailsClass);
+$storage = $payum->getStorage($paypalRestPaymentDetailsClass);
 
 $paymentDetails = $storage->createModel();
 $storage->updateModel($paymentDetails);

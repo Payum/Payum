@@ -3,7 +3,11 @@ namespace Payum\Core\Security;
 
 use Payum\Core\Model\DetailsAggregateInterface;
 use Payum\Core\Model\DetailsAwareInterface;
+use Payum\Core\Model\Identificator;
 
+/**
+ * @method Identificator getDetails
+ */
 interface TokenInterface extends DetailsAggregateInterface, DetailsAwareInterface
 {
     /**

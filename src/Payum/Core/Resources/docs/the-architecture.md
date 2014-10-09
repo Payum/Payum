@@ -146,7 +146,7 @@ $status->isPending();
 
 // or
 
-$status->getStatus();
+$status->getValue();
 ```
 
 _**Link**: The status logic could be a bit complicated [as paypal one][paypal-status-action] or pretty simple as [authorize.net one][authorize-status-action]._

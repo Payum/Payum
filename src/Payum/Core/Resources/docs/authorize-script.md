@@ -3,7 +3,7 @@
 This is the script which does all the job related to payments authorization. 
 It may show a credit card form, an iframe or redirect a user to payment side. 
 The action provides some basic security features. It is completely unique for each payment, and once we done the url invalidated.
-Once we are done here you will be redirected to after capture script. Here's an example [`done.php`](done-script.md) script.
+Once we are done here you will be redirected to after capture script. Here's an example [done.php](done-script.md) script.
 
 ```php
 <?php
@@ -15,7 +15,7 @@ use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
 include 'config.php';
 
 $token = $requestVerifier->verify($_REQUEST);
-$payment = $registry->getPayment($token->getPaymentName());
+$payment = $payum->getPayment($token->getPaymentName());
 
 if ($interactiveRequest = $payment->execute(new Authorize($token), true)) {
     if ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {

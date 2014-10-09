@@ -7,6 +7,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\PaymentAwareInterface;
 use Payum\Core\PaymentInterface;
 use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Security\SensitiveValue;
 
@@ -27,6 +28,8 @@ class CaptureAction extends BaseApiAwareAction implements PaymentAwareInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @param Capture $request
      */
     public function execute($request)
     {
@@ -34,18 +37,24 @@ class CaptureAction extends BaseApiAwareAction implements PaymentAwareInterface
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        $model = ArrayObject::ensureArrayObject($request->getModel());
+        $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if ($model['_status']) {
+        if ($details['_status']) {
             return;
         }
 
-        if (false == $model->validateNotEmpty(array('card'), false)) {
+        if (false == $details['clientIp']) {
+            $this->payment->execute($httpRequest = new GetHttpRequest);
+
+            $details['clientIp'] = $httpRequest->clientIp;
+        }
+
+        if (false == $details->validateNotEmpty(array('card'), false)) {
             try {
                 $this->payment->execute($creditCardRequest = new ObtainCreditCard);
                 $card = $creditCardRequest->obtain();
 
-                $model['card'] = new SensitiveValue(array(
+                $details['card'] = new SensitiveValue(array(
                     'number' => $card->getNumber(),
                     'cvv' => $card->getSecurityCode(),
                     'expiryMonth' => $card->getExpireAt()->format('m'),
@@ -58,12 +67,12 @@ class CaptureAction extends BaseApiAwareAction implements PaymentAwareInterface
             }
         }
 
-        $response = $this->gateway->purchase($model->toUnsafeArray())->send();
+        $response = $this->gateway->purchase($details->toUnsafeArray())->send();
 
-        $model['_reference']      = $response->getTransactionReference();
-        $model['_status']         = $response->isSuccessful() ? 'captured' : 'failed';
-        $model['_status_code']    = $response->getCode();
-        $model['_status_message'] = $response->isSuccessful() ? '' : $response->getMessage();
+        $details['_reference']      = $response->getTransactionReference();
+        $details['_status']         = $response->isSuccessful() ? 'captured' : 'failed';
+        $details['_status_code']    = $response->getCode();
+        $details['_status_message'] = $response->isSuccessful() ? '' : $response->getMessage();
     }
 
     /**

@@ -1,7 +1,7 @@
 ## Done script
 
 After the capture did its job you will be redirected to `done.php`.
-The [`capture.php`](capture-script.md) script always redirects you to `done.php` no matter the payment was a success or not.
+The [capture.php](capture-script.md) script always redirects you to `done.php` no matter the payment was a success or not.
 In `done.php` we will check the payment status and act on its result. We can dispatch events, store status somewhere etc.
 
 ```php
@@ -15,13 +15,13 @@ include 'config.php';
 $token = $requestVerifier->verify($_REQUEST);
 // $requestVerifier->invalidate($token);
 
-$payment = $registry->getPayment($token->getPaymentName());
+$payment = $payum->getPayment($token->getPaymentName());
 
 $payment->execute($status = new GetHumanStatus($token));
 
 header('Content-Type: application/json');
 echo json_encode(array(
-    'status' => $status->getStatus(),
+    'status' => $status->getValue(),
     'details' => iterator_to_array($status->getModel())
 )));
 ```

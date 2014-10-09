@@ -5,6 +5,7 @@ use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\Capture;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Request\GetHttpRequest;
 use Payum\Payex\Request\Api\StartRecurringPayment;
 use Payum\Payex\Request\Api\InitializeOrder;
 use Payum\Payex\Request\Api\CompleteOrder;
@@ -13,23 +14,38 @@ class PaymentDetailsCaptureAction extends PaymentAwareAction
 {
     /**
      * {@inheritDoc}
+     *
+     * @param Capture $request
      */
     public function execute($request)
     {
-        /** @var $request Capture */
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $model = ArrayObject::ensureArrayObject($request->getModel());
-        
-        if (false == $model['orderRef']) {
-            $this->payment->execute(new InitializeOrder($model));
+        $details = ArrayObject::ensureArrayObject($request->getModel());
+
+        if (false == $details['returnUrl'] && $request->getToken()) {
+            $details['returnUrl'] = $request->getToken()->getTargetUrl();
         }
 
-        if ($model['orderRef']) {
-            $this->payment->execute(new CompleteOrder($model));
+        if (false == $details['cancelUrl'] && $request->getToken()) {
+            $details['cancelUrl'] = $request->getToken()->getTargetUrl();
+        }
+
+        if (false == $details['clientIPAddress']) {
+            $this->payment->execute($httpRequest = new GetHttpRequest);
+
+            $details['clientIPAddress'] = $httpRequest->clientIp;
+        }
+        
+        if (false == $details['orderRef']) {
+            $this->payment->execute(new InitializeOrder($details));
+        }
+
+        if ($details['orderRef']) {
+            $this->payment->execute(new CompleteOrder($details));
             
-            if ($model['recurring']) {
-                $this->payment->execute(new StartRecurringPayment($model));
+            if ($details['recurring']) {
+                $this->payment->execute(new StartRecurringPayment($details));
             }
         }
     }

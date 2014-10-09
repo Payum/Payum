@@ -1,10 +1,8 @@
 # Get it started. Paypal ExpressCheckout.
 
-In this chapter we are going to talk about [Paypal ExpressCheckout](https://www.paypal.com/webapps/mpp/express-checkout) integration.
-We assume you already read [Payum's get it started documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md).
-Here we just extend it and describe Paypal specific details.
-
-_**Note**: If you are working with symfony2 framework look at the bundle [documentation instead](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md)._
+In this chapter we are going to talk about the most common task: purchase of a product using [Paypal ExpressCheckout](https://www.paypal.com/webapps/mpp/express-checkout).
+We assume you already read [get it started](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md) from core.
+Here we just show you modifications you have to put to the files shown there.
 
 ## Installation
 
@@ -15,14 +13,13 @@ Run composer require to add dependencies to _composer.json_:
 php composer.phar require "payum/paypal-express-checkout-nvp:*@stable"
 ```
 
-## Configuration
+## config.php
 
-First we have modify `config.php` a bit.
-We need to add payment factory and payment details storage.
-
+We have to only add a the payment factory. All the rest remain the same:
 
 ```php
 <?php
+//config.php
 
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory as PaypalExpressPaymentFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
@@ -35,27 +32,18 @@ $payments['paypal_es'] = PaypalExpressPaymentFactory::create(new Api(array(
 )));
 ```
 
-## Prepare payment
+## prepare.php
 
-```php
-<?php
-// prepare.php
+Here you have to modify a `paymentName` value. Set it to `paypal_es`.
 
-include 'config.php';
+## Next 
 
-$storage = $registry->getStorage($detailsClass);
-
-$paymentDetails = $storage->createModel();
-$paymentDetails['PAYMENTREQUEST_0_CURRENCYCODE'] = 'EUR';
-$paymentDetails['PAYMENTREQUEST_0_AMT'] = 1.23;
-$storage->updateModel($paymentDetails);
-
-$captureToken = $tokenFactory->createCaptureToken('paypal_es', $paymentDetails, 'done.php');
-
-header("Location: ".$captureToken->getTargetUrl());
-```
-
-That's it. As you see we configured Paypal ExpressCheckout `config.php` and set details `prepare.php`.
-[`capture.php`](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/capture-script.md) and [`done.php`](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/done-script.md) scripts remain same.
+* [Core's Get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
+* [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
+* [Supported payments](https://github.com/Payum/Core/blob/master/Resources/docs/supported-payments.md).
+* [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
+* [Capture script](https://github.com/Payum/Core/blob/master/Resources/docs/capture-script.md).
+* [Authorize script](https://github.com/Payum/Core/blob/master/Resources/docs/authorize-script.md).
+* [Done script](https://github.com/Payum/Core/blob/master/Resources/docs/done-script.md).
 
 Back to [index](index.md).

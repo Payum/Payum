@@ -6,6 +6,7 @@ use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -46,11 +47,19 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
             return;
         }
 
+        if (false == $model['CLIENTUSERAGENT']) {
+            $this->payment->execute($httpRequest = new GetHttpRequest);
+            $model['CLIENTUSERAGENT'] = $httpRequest->userAgent;
+        }
+        if (false == $model['CLIENTIP']) {
+            $this->payment->execute($httpRequest = new GetHttpRequest);
+            $model['CLIENTIP'] = $httpRequest->clientIp;
+        }
+
         $cardFields = array('CARDCODE', 'CARDCVV', 'CARDVALIDITYDATE', 'CARDFULLNAME');
         if (false == $model->validateNotEmpty($cardFields, false) && false == $model['ALIAS']) {
             try {
-                $creditCardRequest = new ObtainCreditCard;
-                $this->payment->execute($creditCardRequest);
+                $this->payment->execute($creditCardRequest = new ObtainCreditCard);
                 $card = $creditCardRequest->obtain();
 
                 $model['CARDVALIDITYDATE'] = new SensitiveValue($card->getExpireAt()->format('m-y'));
