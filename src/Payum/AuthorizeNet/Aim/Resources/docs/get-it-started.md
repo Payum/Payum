@@ -19,11 +19,10 @@ We have to only add a the payment factory. All the rest remain the same:
 
 ```php
 <?php
+//config.php
 
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\AuthorizeNet\Aim\PaymentFactory as AuthorizeNetPaymentFactory;
-
-//config.php
 
 // ...
 

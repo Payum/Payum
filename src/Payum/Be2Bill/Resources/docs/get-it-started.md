@@ -17,11 +17,13 @@ php composer.phar require "payum/be2bill:*@stable"
 
 We have to only add a the payment factory. All the rest remain the same:
 
+```php
+<?php
+//config.php
+
 use Payum\Be2Bill\Api as Be2BillApi;
 use Payum\Be2Bill\PaymentFactory as Be2BillPaymentFactory;
 use Payum\Be2Bill\OnsitePaymentFactory as Be2BillOnsitePaymentFactory;
-
-//config.php
 
 // ...
 
