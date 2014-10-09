@@ -1,10 +1,8 @@
 # Get it started.
 
-In this chapter we are going to talk about offline payments. The offline payments is all about cash or cheque.
-We assume you already read [payum's get it started documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md).
-This chapter is based on that one.
-
-_**Note**: If you are working with symfony2 framework look at the bundle [documentation instead](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md)._
+In this chapter we are going to talk about offline payments. The offline may be used in case of cash, cheque or wire transfer.
+We assume you already read [get it started](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md) from core.
+Here we just show you modifications you have to put to the files shown there.
 
 ## Installation
 
@@ -15,9 +13,7 @@ Run composer require to add dependencies to _composer.json_:
 php composer.phar require "payum/offline:*@stable"
 ```
 
-Now you have all required code downloaded, autoload configured.
-
-## Configuration
+## config.php
 
 Let's modify `config.php` a bit.
 
@@ -32,30 +28,18 @@ use Payum\Offline\PaymentFactory as OfflinePaymentFactory;
 $payments['offline'] = OfflinePaymentFactory::create();
 ```
 
-## Prepare payment
+## prepare.php
 
-```php
-<?php
-// prepare.php
+Here you have to modify a `paymentName` value. Set it to `offline`.
 
-use Payum\Offline\Constants;
+## Next 
 
-include 'config.php';
-
-$storage = $registry->getStorage($detailsClass);
-
-$paymentDetails = $storage->createModel();
-
-//if you don`t set this field payment is created with pending status
-$paymentDetails[Constants::FIELD_PAID] = true;
-$storage->updateModel($paymentDetails);
-
-$captureToken = $tokenFactory->createCaptureToken('offline', $paymentDetails, 'done.php');
-
-header("Location: ".$captureToken->getTargetUrl());
-```
-
-That's it. As you see we configured Offline `config.php` and set details `prepare.php`.
-[`capture.php`](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/capture-script.md) and [`done.php`](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/done-script.md) scripts remain same.
+* [Core's Get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
+* [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
+* [Supported payments](https://github.com/Payum/Core/blob/master/Resources/docs/supported-payments.md).
+* [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
+* [Capture script](https://github.com/Payum/Core/blob/master/Resources/docs/capture-script.md).
+* [Authorize script](https://github.com/Payum/Core/blob/master/Resources/docs/authorize-script.md).
+* [Done script](https://github.com/Payum/Core/blob/master/Resources/docs/done-script.md).
 
 Back to [index](index.md).

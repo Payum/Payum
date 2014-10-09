@@ -1,10 +1,8 @@
 # Get it started.
 
-In this chapter we are going to talk about the most common task: purchasing a product using [Paypal Pro Checkout](https://www.paypal.com/webapps/mpp/paypal-payments-pro).
-We assume you already read [payum's get it started documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md).
-Here we just extend it and describe [Paypal Pro Checkout](https://www.paypal.com/webapps/mpp/paypal-payments-pro) specific details.
-
-_**Note**: If you are working with symfony2 framework look at the bundle [documentation instead](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md)._
+In this chapter we are going to talk about the most common task: purchase of a product using [Paypal ExpressCheckout](https://www.paypal.com/webapps/mpp/paypal-payments-pro).
+We assume you already read [get it started](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md) from core.
+Here we just show you modifications you have to put to the files shown there.
 
 ## Installation
 
@@ -15,12 +13,10 @@ Run composer require to add dependencies to _composer.json_:
 php composer.phar require "payum/paypal-pro-checkout-nvp:*@stable"
 ```
 
-Now you have all codes prepared and ready to be used.
+## config.php
 
-## Configuration
+We have to only add a the payment factory. All the rest remain the same:
 
-First we have modify `config.php` a bit.
-We need to add payment factory and payment details storage.
 
 ```php
 <?php
@@ -32,7 +28,7 @@ use Payum\Paypal\ProCheckout\Nvp\Api as PaypalProApi;
 
 // ...
 
-$payments['paypal-pro'] = PaypalProPaymentFactory::create(new PaypalProApi(
+$payments['paypal_pro'] = PaypalProPaymentFactory::create(new PaypalProApi(
     new Curl,
     array(
         'username' => 'REPLACE IT',
@@ -44,42 +40,18 @@ $payments['paypal-pro'] = PaypalProPaymentFactory::create(new PaypalProApi(
 ));
 ```
 
-## Prepare payment
+## prepare.php
 
-```php
-<?php
+Here you have to modify a `paymentName` value. Set it to `paypal_pro`.
 
-use Payum\Core\Security\SensitiveValue;
+## Next 
 
-// prepare.php
-
-include 'config.php';
-
-$storage = $registry->getStorage($detailsClass);
-
-$paymentDetails = $storage->createModel();
-$paymentDetails['currency'] = 'USD';
-$paymentDetails['amt'] = '1.00';
-$paymentDetails['acct' = new SensitiveValue('5105105105105100');
-$paymentDetails['exp_date'] = new SensitiveValue('1214');
-$paymentDetails['cvv2'] = new SensitiveValue('123');
-$paymentDetails['billtofirstname'] = 'John';
-$paymentDetails['billtolastname'] = 'Doe';
-$paymentDetails['billtostreet'] = '123 Main St.';
-$paymentDetails['billtocity'] = 'San Jose';
-$paymentDetails['billtostate'] = 'CA';
-$paymentDetails['billtozip'] = '95101';
-$paymentDetails['billtocountry'] = 'US';
-$storage->updateModel($paymentDetails);
-
-$captureToken = $tokenFactory->createCaptureToken('paypal-pro', $paymentDetails, 'create_recurring_payment.php');
-
-$_REQUEST['payum_token'] = $captureToken;
-
-include 'capture.php';
-```
-
-That's it. As you see we configured Paypal ProCheckout `config.php` and set details `prepare.php`.
-[`capture.php`](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/capture-script.md) and [`done.php`](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/done-script.md) scripts remain same.
+* [Core's Get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
+* [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
+* [Supported payments](https://github.com/Payum/Core/blob/master/Resources/docs/supported-payments.md).
+* [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
+* [Capture script](https://github.com/Payum/Core/blob/master/Resources/docs/capture-script.md).
+* [Authorize script](https://github.com/Payum/Core/blob/master/Resources/docs/authorize-script.md).
+* [Done script](https://github.com/Payum/Core/blob/master/Resources/docs/done-script.md).
 
 Back to [index](index.md).

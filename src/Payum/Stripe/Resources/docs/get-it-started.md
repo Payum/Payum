@@ -1,10 +1,8 @@
 # Get it started. Stripe.js.
 
-In this chapter we are going to talk about [Stripe.js](https://stripe.com/docs/stripe.js) integration.
-We assume you already read [payum's get it started documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md).
-Here we just extend it and describe [Stripe](https://stripe.com/) specific details.
-
-_**Note**: If you are working with symfony2 framework look at the bundle [documentation instead](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md)._
+In this chapter we are going to talk about the most common task: purchase of a product using [Stripe.js](https://stripe.com/docs/stripe.js).
+We assume you already read [get it started](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md) from core.
+Here we just show you modifications you have to put to the files shown there.
 
 ## Installation
 
@@ -15,48 +13,36 @@ Run composer require to add dependencies to _composer.json_:
 php composer.phar require "payum/stripe:*@stable"
 ```
 
-Now you have all codes prepared and ready to be used.
+## config.php
 
-## Configuration
-
-First we have modify `config.php` a bit.
-We need to add payment factory and payment details storage.
+We have to only add a the payment factory. All the rest remain the same:
 
 ```php
 <?php
+//config.php
 
 use Payum\Stripe\PaymentFactory as StripePaymentFactory;
 use Payum\Stripe\Keys;
 
-//config.php
+// ..
 
 $payments['stripe_js'] = StripePaymentFactory::createJs(
     new Keys('publishable_key', 'secret_key')
 );
 ```
 
-## Prepare payment
+## prepare.php
 
-```php
-<?php
-// prepare.php
+Here you have to modify a `paymentName` value. Set it to `stripe_js`.
 
-include 'config.php';
+## Next 
 
-$storage = $registry->getStorage($detailsClass);
-
-$details = $storage->createModel();
-$details["amount"] = 100;
-$details["currency"] = 'USD';
-$details["description"] = 'a description';
-$storage->updateModel($details);
-
-$captureToken = $tokenFactory->createCaptureToken('stripe_js', $details, 'done.php');
-
-header("Location: ".$captureToken->getTargetUrl());
-```
-
-That's it. As you see we configured Stripe.Js `config.php` and set details `prepare.php`.
-[`capture.php`](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/capture-script.md) and [`done.php`](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/done-script.md) scripts remain same.
+* [Core's Get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
+* [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
+* [Supported payments](https://github.com/Payum/Core/blob/master/Resources/docs/supported-payments.md).
+* [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
+* [Capture script](https://github.com/Payum/Core/blob/master/Resources/docs/capture-script.md).
+* [Authorize script](https://github.com/Payum/Core/blob/master/Resources/docs/authorize-script.md).
+* [Done script](https://github.com/Payum/Core/blob/master/Resources/docs/done-script.md).
 
 Back to [index](index.md).

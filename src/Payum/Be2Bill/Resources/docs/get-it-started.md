@@ -1,10 +1,8 @@
 # Get it started.
 
-In this chapter we are going to talk about the most common task: purchasing a product using [be2bill](http://www.be2bill.com/).
-We assume you already read [payum's get it started documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md).
-Here we just extend it and describe [be2bill](http://www.be2bill.com/) specific details.
-
-_**Note**: If you are working with symfony2 framework look at the bundle [documentation instead](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md)._
+In this chapter we are going to talk about the most common task: purchase of a product using [be2bill](http://www.be2bill.com/).
+We assume you already read [get it started](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md) from core.
+Here we just show you modifications you have to put to the files shown there.
 
 ## Installation
 
@@ -15,18 +13,13 @@ Run composer require to add dependencies to _composer.json_:
 php composer.phar require "payum/be2bill:*@stable"
 ```
 
-Now you have all codes prepared and ready to be used.
+## config.php
 
-## Configuration
-
-First we have modify `config.php` a bit.
-We need to add payment factory and payment details storage.
-
-```php
-<?php
+We have to only add a the payment factory. All the rest remain the same:
 
 use Payum\Be2Bill\Api as Be2BillApi;
 use Payum\Be2Bill\PaymentFactory as Be2BillPaymentFactory;
+use Payum\Be2Bill\OnsitePaymentFactory as Be2BillOnsitePaymentFactory;
 
 //config.php
 
@@ -37,43 +30,28 @@ $payments['be2bill'] = Be2BillPaymentFactory::create(new Be2BillApi(new Curl, ar
    'password' => 'REPLACE WITH YOURS',
    'sandbox' => true
 )));
+
+// or onsite 
+
+$payments['be2bill_onsite'] = Be2BillOnsitePaymentFactory::create(new Be2BillApi(new Curl, array(
+   'identifier' => 'REPLACE WITH YOURS',
+   'password' => 'REPLACE WITH YOURS',
+   'sandbox' => true
+)));
 ```
 
-## Prepare payment
+## prepare.php
 
-```php
-<?php
+Here you have to modify a `paymentName` value. Set it to `be2bill` or `be2bill_oniste`.
 
-use Payum\Core\Security\SensitiveValue;
+## Next 
 
-// prepare.php
-
-include 'config.php';
-
-$storage = $registry->getStorage($detailsClass);
-
-$paymentDetails = $storage->createModel();
-$paymentDetails['AMOUNT'] = 100; //1$
-$paymentDetails['CLIENTEMAIL'] = 'buyer@example.com';
-$paymentDetails['CLIENTUSERAGENT'] = 'Firefox';
-$paymentDetails['CLIENTIP'] = "192.168.0.1";
-$paymentDetails['CLIENTIDENT'] = 'payerId';
-$paymentDetails['DESCRIPTION'] = 'Payment for digital stuff';
-$paymentDetails['ORDERID'] = 'orderId';
-$paymentDetails['CARDCODE'] = new SensitiveValue('4111111111111111');
-$paymentDetails['CARDCVV'] = new SensitiveValue(123);
-$paymentDetails['CARDFULLNAME'] = new SensitiveValue('John Doe');
-$paymentDetails['CARDVALIDITYDATE'] = new SensitiveValue('10-16');
-$storage->updateModel($paymentDetails);
-
-$captureToken = $tokenFactory->createCaptureToken('be2bill', $paymentDetails, 'done.php');
-
-$_REQUEST['payum_token'] = $captureToken;
-
-include 'capture.php';
-```
-
-That's it. As you see we configured Be2Bill `config.php` and set details `prepare.php`.
-[`capture.php`](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/capture-script.md) and [`done.php`](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/done-script.md) scripts remain same.
+* [Core's Get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
+* [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
+* [Supported payments](https://github.com/Payum/Core/blob/master/Resources/docs/supported-payments.md).
+* [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
+* [Capture script](https://github.com/Payum/Core/blob/master/Resources/docs/capture-script.md).
+* [Authorize script](https://github.com/Payum/Core/blob/master/Resources/docs/authorize-script.md).
+* [Done script](https://github.com/Payum/Core/blob/master/Resources/docs/done-script.md).
 
 Back to [index](index.md).

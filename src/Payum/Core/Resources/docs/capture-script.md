@@ -5,7 +5,7 @@ It may show a credit card form, an iframe or redirect a user to payment side.
 The action provides some basic security features. 
 Each capture url is completely unique for each purchase, and once we done the url is invalidated.
 After a user will be redirected to after url, in our case it will be `done.php` script. 
-Here's an example of [`done.php`](done-script.md) script:
+Here's an example of [done.php](done-script.md) script:
 
 ```php
 <?php

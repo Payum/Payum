@@ -83,7 +83,7 @@ _**Note**: Consider using something other than `FilesystemStorage` in production
 ## prepare.php
 
 At this stage we have to create an order. Add some information into it. 
-Create a capture token and delegate the job to [`capture.php`](capture-script.md) script.
+Create a capture token and delegate the job to [capture.php](capture-script.md) script.
 Here's an offline payment example:
 
 ```php
@@ -91,6 +91,8 @@ Here's an offline payment example:
 // prepare.php
 
 include 'config.php';
+
+$paymentName = 'offline';
 
 $storage = $payum->getStorage($orderClass);
 
@@ -104,7 +106,7 @@ $order->setClientEmail('foo@example.com');
 
 $storage->updateModel($order);
 
-$captureToken = $tokenFactory->createCaptureToken('offline', $order, 'done.php');
+$captureToken = $tokenFactory->createCaptureToken($paymentName, $order, 'done.php');
 
 header("Location: ".$captureToken->getTargetUrl());
 ```
