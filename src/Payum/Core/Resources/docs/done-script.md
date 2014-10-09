@@ -21,7 +21,7 @@ $payment->execute($status = new GetHumanStatus($token));
 
 header('Content-Type: application/json');
 echo json_encode(array(
-    'status' => $status->getStatus(),
+    'status' => $status->getValue(),
     'details' => iterator_to_array($status->getModel())
 )));
 ```
