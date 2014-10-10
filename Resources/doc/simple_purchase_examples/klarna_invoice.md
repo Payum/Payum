@@ -61,9 +61,6 @@ class PaymentController extends Controller
         $payment = $payum->getPayment($paymentName);
         $payment->execute($getAddresses = new GetAddresses($pno));
 
-        $storage = $registry->getStorage($detailsClass);
-        $storage = $this->getPayum()->getStorage('Acme\PaymentBundle\Model\PaymentDetails');
-
         $details = $storage->createModel();
         $details = array(
             /** @link http://developers.klarna.com/en/testing/invoice-and-account */
