@@ -61,7 +61,7 @@ $payum = new SimpleRegistry($payments, $storages);
 
 //security
 
-$tokenStorage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model', 'hash');
+$tokenStorage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Token', 'hash');
 
 $requestVerifier = new PlainHttpRequestVerifier($tokenStorage);
 
