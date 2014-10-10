@@ -22,18 +22,18 @@ abstract class BaseMongoTest extends \PHPUnit_Framework_TestCase
             Type::addType('object', 'Payum\Core\Bridge\Doctrine\Types\ObjectType')
         ;
 
-        $conf = new Configuration();
-        $conf->setProxyDir(\sys_get_temp_dir());
-        $conf->setProxyNamespace('PayumTestsProxies');
-        $conf->setHydratorDir(\sys_get_temp_dir());
-        $conf->setHydratorNamespace('PayumTestsHydrators');
-        $conf->setMetadataDriverImpl($this->getMetadataDriverImpl());
-        $conf->setMetadataCacheImpl(new ArrayCache());
-        $conf->setDefaultDB('payum_tests');
+        $config = new Configuration();
+        $config->setProxyDir(\sys_get_temp_dir());
+        $config->setProxyNamespace('PayumTestsProxies');
+        $config->setHydratorDir(\sys_get_temp_dir());
+        $config->setHydratorNamespace('PayumTestsHydrators');
+        $config->setMetadataDriverImpl($this->getMetadataDriverImpl($config));
+        $config->setMetadataCacheImpl(new ArrayCache());
+        $config->setDefaultDB('payum_tests');
 
-        $conn = new Connection(null, array(), $conf);
+        $connection = new Connection(null, array(), $config);
 
-        $this->dm = DocumentManager::create($conn, $conf);
+        $this->dm = DocumentManager::create($connection, $config);
 
         foreach ($this->dm->getConnection()->selectDatabase('payum_tests')->listCollections() as $collection) {
             $collection->drop();
@@ -41,6 +41,8 @@ abstract class BaseMongoTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param Configuration $config
+     *
      * @return MappingDriver
      */
     abstract protected function getMetadataDriverImpl();
