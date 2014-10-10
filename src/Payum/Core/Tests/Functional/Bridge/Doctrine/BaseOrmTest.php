@@ -32,17 +32,17 @@ abstract class BaseOrmTest extends \PHPUnit_Framework_TestCase
     
     protected function setUpEntityManager()
     {
-        $conf = new Configuration();
-        $conf->setAutoGenerateProxyClasses(true);
-        $conf->setProxyDir(\sys_get_temp_dir());
-        $conf->setProxyNamespace('Proxies');
-        $conf->setMetadataDriverImpl($this->getMetadataDriverImpl());
-        $conf->setQueryCacheImpl(new ArrayCache());
-        $conf->setMetadataCacheImpl(new ArrayCache());
+        $config = new Configuration();
+        $config->setAutoGenerateProxyClasses(true);
+        $config->setProxyDir(\sys_get_temp_dir());
+        $config->setProxyNamespace('Proxies');
+        $config->setMetadataDriverImpl($this->getMetadataDriverImpl($config));
+        $config->setQueryCacheImpl(new ArrayCache());
+        $config->setMetadataCacheImpl(new ArrayCache());
         
-        $conn = array('driver' => 'pdo_sqlite', 'path' => ':memory:');
+        $connection = array('driver' => 'pdo_sqlite', 'path' => ':memory:');
 
-        $this->em = EntityManager::create($conn, $conf);
+        $this->em = EntityManager::create($connection, $config);
     }
     
     protected function setUpDatabase()
@@ -53,7 +53,9 @@ abstract class BaseOrmTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param Configuration $config
+     *
      * @return MappingDriver
      */
-    abstract protected function getMetadataDriverImpl();
+    abstract protected function getMetadataDriverImpl(Configuration $config);
 }

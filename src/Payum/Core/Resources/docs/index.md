@@ -1,6 +1,7 @@
 # Documents
 
 * [Get it started](get-it-started.md)
+* [Storages](storages.md)
 * [The architecture](the-architecture.md)
 * [Working with sensitive information](working-with-sensitive-information.md)
 * [Mask credit card number](mask-credit-card-number.md)
