@@ -6,6 +6,8 @@ Or you can integrate a storage to a payment using `StorageExtension`.
 In this case every time payment finish to execute a request it stores the information. 
 `StorageExtension` could also load a model by it is `Identificator` so you do not have to care about that.
 
+Explicitly used example:
+
 ```php
 <?php
 use Payum\Core\Storage\FilesystemStorage;
@@ -21,6 +23,8 @@ $storage->updateModel($order);
 $foundOrder = $storage->findModelById($order->getNumber());
 ```
 
+Implicitly used example: 
+
 ```php
 <?php
 use Payum\Core\Extension\StorageExtension;
@@ -31,6 +35,8 @@ $payment->addExtension(new StorageExtension(
    new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Order', 'number')
 ));
 ```
+
+Usage of a model identificator:
 
 ```php
 <?php
