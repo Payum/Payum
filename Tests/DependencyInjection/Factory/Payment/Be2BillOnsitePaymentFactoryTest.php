@@ -251,6 +251,32 @@ class Be2BillOnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($factory->getName(), $tagAttributes[1]['factory']);
     }
 
+    /**
+     * @test
+     */
+    public function shouldAddPayumActionTagToFillOrderDetailsAction()
+    {
+        $factory = new Be2BillOnsitePaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
+            'identifier' => 'anIdentifier',
+            'password' => 'aPassword',
+            'sandbox' => true,
+            'actions' => array(),
+            'apis' => array(),
+            'extensions' => array(),
+        ));
+
+        $actionDefinition = $container->getDefinition('payum.be2bill.action.fill_order_details');
+
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(2, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[1]['factory']);
+    }
+
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)
     {
         foreach ($serviceDefinition->getMethodCalls() as $methodCall) {

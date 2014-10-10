@@ -306,6 +306,32 @@ class StripeJsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldAddPayumActionTagToFillOrderDetailsAction()
+    {
+        $factory = new StripeJsPaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->create($container, 'aContextName', array(
+            'publishable_key' => 'aPubKey',
+            'secret_key' => 'aSecretKey',
+            'obtain_credit_card' => false,
+            'actions' => array(),
+            'apis' => array(),
+            'extensions' => array(),
+        ));
+
+        $actionDefinition = $container->getDefinition('payum.stripe.action.fill_order_details');
+
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(2, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
+    }
+
+
+    /**
+     * @test
+     */
     public function shouldPrependTwigsExtensionConfig()
     {
         $factory = new StripeJsPaymentFactory;
