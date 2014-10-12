@@ -48,9 +48,10 @@
         "phpunit/phpunit": "~4.0",
         "psr/log": "~1.0",
         "zendframework/zend-db": "~2",
-        "symfony/routing": "~2",
-        "symfony/http-kernel": "~2",
-        "symfony/http-foundation": "~2"
+        "symfony/routing": "~2.3",
+        "symfony/http-kernel": "~2.3",
+        "symfony/http-foundation": "~2.3",
+        "symfony/form": "~2.3"
     },
     "suggest": {
         "payum/paypal-express-checkout-nvp": "If you want to use paypal express checkout, digital goods or recurring payments",
@@ -67,6 +68,7 @@
         "symfony/routing": "If you want to use TokenFactory from symfony's bridge",
         "symfony/http-kernel": "If you want to use HttpRequestVerifier from symfony's bridge",
         "symfony/http-foundation": "If you want to use HttpRequestVerifier or HttpResponse reply from symfony's bridge",
+        "symfony/form": "If you want to use forms",
         "monolog/monolog": "In case you want to use logger"
     },
     "config": {
