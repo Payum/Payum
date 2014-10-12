@@ -125,6 +125,8 @@
             class="%payum.paypal.express_checkout_nvp.action.fill_order_details.class%"
             public="false"
         >
+            <argument type="service" id="payum.security.token_factory" />
+
             <tag name="payum.action" factory="paypal_express_checkout_nvp" />
         </service>
 
