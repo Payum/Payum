@@ -257,5 +257,5 @@ payum:
 ## Next Step
 
 * [Get it started](get_it_started.md).
-* [Purchase examples](simple_purchase_examples.md).
+* [Custom purchase examples](custom_purchase_examples.md).
 * [Back to index](index.md).

@@ -1,4 +1,4 @@
-# Paypal pro checkout
+# Stripe via omnipay
 
 Steps:
 
@@ -13,7 +13,7 @@ _**Note**: We assume you followed all steps in [get it started](https://github.c
 Run the following command:
 
 ```bash
-$ php composer.phar require "payum/paypal-pro-checkout-nvp:*@stable"
+$ php composer.phar require "payum/omnipay-bridge:*@stable" "omnipay/stripe:~2.0"
 ```
 
 ## Configure context
@@ -24,15 +24,16 @@ $ php composer.phar require "payum/paypal-pro-checkout-nvp:*@stable"
 payum:
     contexts:
         your_context_here:
-            paypal_pro_checkout_nvp:
-                username: 'EDIT ME'
-                password: 'EDIT ME'
-                partner:  'EDIT ME'
-                vendor:   'EDIT ME'
-                sandbox: true
+            omnipay:
+                type: Stripe
+                options:
+                    apiKey: abc123
+                    testMode: true
 ```
 
-_**Attention**: You have to changed `your_payment_name` to something more descriptive and domain related, for example `post_a_job_with_paypal`._
+_**Note:** You have to changed `your_payment_name` to something more descriptive and domain related, for example `post_a_job_with_omnipay`._
+
+_**Note:** If you have to use onsite payment like paypal express checkout use `omnipay_onsite` factory._
 
 ## Prepare payment
 
@@ -44,20 +45,21 @@ Please note that you have to set details in the payment gateway specific format.
 //src/Acme/PaymentBundle/Controller
 namespace AcmeDemoBundle\Controller;
 
+use Payum\Core\Security\SensitiveValue;
 use Symfony\Component\HttpFoundation\Request;
 
 class PaymentController extends Controller
 {
-    public function preparePaypalProCheckoutPaymentAction(Request $request)
+    public function prepareStripePaymentAction(Request $request)
     {
         $paymentName = 'your_payment_name';
 
         $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\PaymentDetails');
 
-        /** @var \Acme\PaymentBundle\Entity\PaymentDetails $details */
+        /** @var \Acme\PaymentBundle\Entity\PaymentDetails */
         $details = $storage->createModel();
-        $details['amt'] = 1;
-        $details['currency'] = 'USD';
+        $details['amount'] = 10;
+        
         $storage->updateModel($details);
 
         $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
@@ -80,14 +82,19 @@ If you still able to pass credit card details explicitly:
 <?php
 use Payum\Core\Security\SensitiveValue;
 
-$details['acct'] = new SensitiveValue('5105105105105100');
-$details['cvv2'] = new SensitiveValue('123');
-$details['expDate'] = new SensitiveValue('1214');
+$details['card'] = new SensitiveValue(array(
+    'number' => '5555556778250000',
+    'cvv' => 123,
+    'expiryMonth' => 6,
+    'expiryYear' => 16,
+    'firstName' => 'foo',
+    'lastName' => 'bar',
+));
 ```
 
 ## Next Step
 
 * [Purchase done action](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/purchase_done_action.md).
 * [Configuration reference](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/configuration_reference.md).
-* [Back to examples list](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/simple_purchase_examples.md).
+* [Examples list](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/custom_purchase_examples.md).
 * [Back to index](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md).

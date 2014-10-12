@@ -50,9 +50,9 @@ class PaymentController extends Controller
     {
         $paymentName = 'your_payment_name';
     
-        $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\PaymentDetails');
+        $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\Order');
     
-        /** @var \Acme\PaymentBundle\Entity\PaymentDetails $details */
+        /** @var \Acme\PaymentBundle\Entity\Order $details */
         $details = $storage->createModel();
     
         $details['amount'] = 1.23;
@@ -87,5 +87,5 @@ $details['exp_date'] = new SensitiveValue('15-11');
 
 * [Purchase done action](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/purchase_done_action.md).
 * [Configuration reference](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/configuration_reference.md).
-* [Back to examples list](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/simple_purchase_examples.md).
+* [Examples list](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/custom_purchase_examples.md).
 * [Back to index](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md).

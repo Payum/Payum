@@ -1,4 +1,4 @@
-# Be2bill credit card
+# Be2bill onsite
 
 Steps:
 
@@ -24,7 +24,7 @@ $ php composer.phar require "payum/be2bill:*@stable"
 payum:
     contexts:
         your_context_here:
-            be2bill:
+            be2bill_onsite:
                 identifier: 'get this from gateway'
                 password: 'get this from gateway'
                 sandbox: true
@@ -42,7 +42,8 @@ Please note that you have to set details in the payment gateway specific format.
 //src/Acme/PaymentBundle/Controller
 namespace AcmeDemoBundle\Controller;
 
-use Acme\PaymentBundle\Entity\PaymentDetails;
+use Acme\PaymentBundle\Entity\Order;
+use Payum\Core\Security\SensitiveValue;
 use Symfony\Component\HttpFoundation\Request;
 
 class PaymentController extends Controller
@@ -51,49 +52,43 @@ class PaymentController extends Controller
     {
         $paymentName = 'your_payment_name';
 
-        $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\PaymentDetails');
+        $storage = $this->getPayum()->getStorage('Acme\PaymentBundle\Entity\Order');
 
-        /** @var \Acme\PaymentBundle\Entity\PaymentDetails */
+        /** @var PaymentDetails */
         $details = $storage->createModel();
         //be2bill amount format is cents: for example:  100.05 (EUR). will be 10005.
         $details['AMOUNT'] = 10005;
-        $details['CLIENTEMAIL'] = 'user@email.com';
-        $details['CLIENTUSERAGENT'] = $request->headers->get('User-Agent', 'Unknown');
-        $details['CLIENTIP'] = $request->getClientIp();
         $details['CLIENTIDENT'] = 'payerId';
         $details['DESCRIPTION'] = 'Payment for digital stuff';
-        $details['ORDERID'] = 'orderId';
+        $details['ORDERID'] = 'orderId'.uniqid();
         $storage->updateModel($details);
 
-        $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
+        $captureToken = $this->getTokenFactory()->createCaptureToken(
             $paymentName,
             $details,
             'acme_payment_done' // the route to redirect after capture;
         );
+
+        /**
+         * This is the trick.
+         * You have also configure these urls in the account configuration section on be2bill site:
+         *
+         * return url: http://your-domain-here.dev/payment/capture/session-token
+         * cancel url: http://your-domain-here.dev/payment/capture/session-token
+         */
+        $request->getSession()->set('payum_token', $captureToken->getHash());
 
         return $this->redirect($captureToken->getTargetUrl());
     }
 }
 ```
 
-That's it. It will ask user for credit card and convert it to payment specific format. After the payment done you will be redirect to `acme_payment_done` action.
+That's it. After the payment done you will be redirect to `acme_payment_done` action.
 Check [this chapter](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/purchase_done_action.md) to find out how this done action could look like.
-
-If you still able to pass credit card details explicitly: 
-  
-```php
-<?php
-use Payum\Core\Security\SensitiveValue;
-
-$details['CARDCODE'] = new SensitiveValue('5555 5567 7825 0000');
-$details['CARDCVV'] = new SensitiveValue(123);
-$details['CARDFULLNAME'] = new SensitiveValue('John Doe');
-$details['CARDVALIDITYDATE'] = new SensitiveValue('15-11');
-```
 
 ## Next Step
 
 * [Purchase done action](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/purchase_done_action.md).
 * [Configuration reference](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/configuration_reference.md).
-* [Back to examples list](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/simple_purchase_examples.md).
+* [Examples list](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/custom_purchase_examples.md).
 * [Back to index](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md).
