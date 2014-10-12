@@ -9,7 +9,7 @@ Run composer require to add dependencies to _composer.json_:
 php composer.phar require "payum/payum-bundle:*@stable" "payum/offline:*@stable"
 ```
 
-_**Note**: Where payum/offline is a php payum extension, you can for example change it to payum/paypal-express-checkout-nvp or payum/stripe. Look at [supported payments](supported-payments.md) to find out what you can use._
+_**Note**: Where payum/offline is a php payum extension, you can for example change it to payum/paypal-express-checkout-nvp or payum/stripe. Look at [supported payments](https://github.com/Payum/Core/blob/master/Resources/docs/supported-payments.md) to find out what you can use._
 
 _**Note**: Use payum/payum if you want to install all payments at once._
 
