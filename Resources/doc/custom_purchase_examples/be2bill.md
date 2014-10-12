@@ -42,7 +42,7 @@ Please note that you have to set details in the payment gateway specific format.
 //src/Acme/PaymentBundle/Controller
 namespace AcmeDemoBundle\Controller;
 
-use Acme\PaymentBundle\Entity\Order;
+use Acme\PaymentBundle\Entity\PaymentDetails;
 use Symfony\Component\HttpFoundation\Request;
 
 class PaymentController extends Controller
@@ -51,9 +51,9 @@ class PaymentController extends Controller
     {
         $paymentName = 'your_payment_name';
 
-        $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\Order');
+        $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\PaymentDetails');
 
-        /** @var \Acme\PaymentBundle\Entity\Order */
+        /** @var \Acme\PaymentBundle\Entity\PaymentDetails */
         $details = $storage->createModel();
         //be2bill amount format is cents: for example:  100.05 (EUR). will be 10005.
         $details['AMOUNT'] = 10005;

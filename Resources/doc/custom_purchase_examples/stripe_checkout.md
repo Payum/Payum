@@ -46,7 +46,7 @@ Please note that you have to set details in the payment gateway specific format.
 //src/Acme/PaymentBundle/Controller
 namespace AcmeDemoBundle\Controller;
 
-use Acme\PaymentBundle\Entity\Order;
+use Acme\PaymentBundle\Entity\PaymentDetails;
 use Payum\Core\Security\SensitiveValue;
 use Symfony\Component\HttpFoundation\Request;
 
