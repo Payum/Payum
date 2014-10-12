@@ -145,7 +145,7 @@ header("Location: ".$token->getAfterUrl());
 
 _**Note**: Find out more about capture script in the [dedicated chapter](capture-script.md)._
 
-## dome.php
+## done.php
 
 After the capture did its job you will be redirected to [done.php](done-script.md).
 The [capture.php](capture-script.md) script always redirects you to `done.php` no matter the payment was a success or not.
@@ -169,7 +169,17 @@ $payment->execute($status = new GetHumanStatus($token));
 header('Content-Type: application/json');
 echo json_encode(array(
     'status' => $status->getValue(),
-    'details' => iterator_to_array($status->getModel())
+    'order' => array(
+        'client' => array(
+            'id' => $status->getModel()->getClientId(),
+            'email' => $status->getModel()->getClientEmail(),
+        ),
+        'number' => $status->getModel()->getNumber(),
+        'description' => $status->getModel()->getCurrencyCode(),
+        'total_amount' => $status->getModel()->getTotalAmount(),
+        'currency_code' => $status->getModel()->getCurrencyCode(),
+        'details' => $status->getModel()->getDetails(),
+    ),
 )));
 ```
 

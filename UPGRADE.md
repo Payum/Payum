@@ -16,6 +16,7 @@
 * [request] `GetBinaryStatus::isSuccess` method was removed. Use `isCaptured` from the same class.
 * [request] `SecuredInterface` was moved to `Security` namespace and renamed to `TokenAggregateInterface`.
 * [request] `ModelAwareInterface` was moved to `Model` namespace and split into two: `ModelAwareInterface` and `ModelAggregateInterface`.
+* [bridge][symfony] Minimum required version is `2.3`.
 * [action] `ExecuteSameRequestWithModelDetailsAction` does sub execute even for empty details.
 * [offline] `Payum\Offline\Constains::STATUS_SUCCESS` was removed. Use `STATUS_CAPTURED` from the same class.
 * [klarna-checkout] `GlobalStateSafeConnector` was removed use `Config` instead.
