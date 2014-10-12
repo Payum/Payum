@@ -77,7 +77,7 @@ use Payum\Core\Model\Order as BaseOrder;
  * @ORM\Table
  * @ORM\Entity
  */
-class Order extends ArrayObject
+class Order extends BaseOrder
 {
     /**
      * @ORM\Column(name="id", type="integer")
