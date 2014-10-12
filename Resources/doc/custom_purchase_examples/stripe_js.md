@@ -1,4 +1,4 @@
-# Payex
+# Stripe.js
 
 Steps:
 
@@ -13,7 +13,7 @@ _**Note**: We assume you followed all steps in [get it started](https://github.c
 Run the following command:
 
 ```bash
-$ php composer.phar require "payum/payex:*@stable"
+$ php composer.phar require "payum/stripe:*@stable"
 ```
 
 ## Configure context
@@ -21,16 +21,20 @@ $ php composer.phar require "payum/payex:*@stable"
 ```yaml
 #app/config/config.yml
 
+twig:
+    paths:
+        %kernel.root_dir%/../vendor/payum/payum/src/Payum/Core/Resources/views: PayumCore
+        %kernel.root_dir%/../vendor/payum/payum/src/Payum/Stripe/Resources/views: PayumStripe
+
 payum:
     contexts:
         your_context_here:
-            payex:
-                account_number:  'get this from gateway side'
-                encryption_key:  'get this from gateway side'
-                sandbox: true
+            stripe_js:
+                publishable_key: 'get this from gateway'
+                secret_key:      'get this from gateway'
 ```
 
-_**Attention**: You have to changed `your_payment_name` to something more descriptive and domain related, for example `post_a_job_with_payex`._
+_**Attention**: You have to changed `your_payment_name` to something more descriptive and domain related, for example `post_a_job_with_stripe`._
 
 ## Prepare payment
 
@@ -42,43 +46,30 @@ Please note that you have to set details in the payment gateway specific format.
 //src/Acme/PaymentBundle/Controller
 namespace AcmeDemoBundle\Controller;
 
+use Acme\PaymentBundle\Entity\PaymentDetails;
+use Payum\Core\Security\SensitiveValue;
 use Symfony\Component\HttpFoundation\Request;
 
 class PaymentController extends Controller
 {
-    public function preparePayexPaymentAction()
+    public function prepareStripeJsPaymentAction(Request $request)
     {
         $paymentName = 'your_payment_name';
 
         $storage = $this->getPayum()->getStorage('Acme\PaymentBundle\Entity\PaymentDetails');
 
-        /** @var \Acme\PaymentBundle\Entity\PaymentDetails $details */
+        /** @var PaymentDetails $details */
         $details = $storage->createModel();
-        $details['price'] = $data['amount'] * 100;
-        $details['priceArgList'] = '';
-        $details['vat'] = 0;
-        $details['currency'] = $data['currency'];
-        $details['orderId'] = 123;
-        $details['productNumber'] = 123;
-        $details['purchaseOperation'] = OrderApi::PURCHASEOPERATION_AUTHORIZATION;
-        $details['view'] = OrderApi::VIEW_CREDITCARD;
-        $details['description'] = 'a desc';
-        $details['clientIPAddress'] = $request->getClientIp();
-        $details['clientIdentifier'] = '';
-        $details['additionalValues'] = '';
-        $details['agreementRef'] = '';
-        $details['clientLanguage'] = 'en-US';
+        $details["amount"] = 100;
+        $details["currency"] = 'USD';
+        $details["description"] = 'a description';
         $storage->updateModel($details);
-
+        
         $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
             $paymentName,
             $details,
             'acme_payment_done' // the route to redirect after capture;
         );
-
-        $details['returnurl'] = $captureToken->getTargetUrl();
-        $details['cancelurl'] = $captureToken->getTargetUrl();
-        $storage->updateModel($details);
 
         return $this->redirect($captureToken->getTargetUrl());
     }
@@ -92,5 +83,5 @@ Check [this chapter](https://github.com/Payum/PayumBundle/blob/master/Resources/
 
 * [Purchase done action](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/purchase_done_action.md).
 * [Configuration reference](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/configuration_reference.md).
-* [Back to examples list](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/simple_purchase_examples.md).
+* [Examples list](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/custom_purchase_examples.md).
 * [Back to index](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md).

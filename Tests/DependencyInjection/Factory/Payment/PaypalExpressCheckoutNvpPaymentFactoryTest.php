@@ -25,6 +25,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
             'api.do_reference_transaction' => array('payum.paypal.express_checkout_nvp.action.api.do_reference_transaction'),
 
             'capture' => array('payum.paypal.express_checkout_nvp.action.capture'),
+            'fill_order_details' => array('payum.paypal.express_checkout_nvp.action.fill_order_details'),
             'notify' => array('payum.paypal.express_checkout_nvp.action.notify'),
             'payment_details_status' => array('payum.paypal.express_checkout_nvp.action.payment_details_status'),
             'payment_details_sync' => array('payum.paypal.express_checkout_nvp.action.payment_details_sync'),

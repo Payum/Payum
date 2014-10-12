@@ -251,6 +251,32 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
+    /**
+     * @test
+     */
+    public function shouldAddPayumActionTagToFillOrderDetailsAction()
+    {
+        $factory = new AuthorizeNetAimPaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
+            'login_id' => 'aLoginId',
+            'transaction_key' => 'aTransactionKey',
+            'sandbox' => true,
+            'actions' => array(),
+            'apis' => array(),
+            'extensions' => array(),
+        ));
+
+        $actionDefinition = $container->getDefinition('payum.authorize_net_aim.action.fill_order_details');
+
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(1, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
+    }
+
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)
     {
         foreach ($serviceDefinition->getMethodCalls() as $methodCall) {

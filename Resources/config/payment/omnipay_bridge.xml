@@ -7,6 +7,7 @@
         <parameter key="payum.omnipay_bridge.gateway_factory.class">Omnipay\Common\GatewayFactory</parameter>
         <parameter key="payum.omnipay_bridge.action.capture.class">Payum\OmnipayBridge\Action\CaptureAction</parameter>
         <parameter key="payum.omnipay_bridge.action.capture_onsite.class">Payum\OmnipayBridge\Action\OnsiteCaptureAction</parameter>
+        <parameter key="payum.omnipay_bridge.action.fill_order_details.class">Payum\OmnipayBridge\Action\FillOrderDetailsAction</parameter>
         <parameter key="payum.omnipay_bridge.action.status.class">Payum\OmnipayBridge\Action\StatusAction</parameter>
     </parameters>
 
@@ -24,6 +25,15 @@
             public="false"
         >
             <tag name="payum.action" factory="omnipay" />
+        </service>
+
+        <service
+            id="payum.omnipay_bridge.action.fill_order_details"
+            class="%payum.omnipay_bridge.action.fill_order_details.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="omnipay" />
+            <tag name="payum.action" factory="omnipay_onsite" />
         </service>
 
         <service

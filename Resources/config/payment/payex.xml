@@ -26,6 +26,7 @@
         <parameter key="payum.payex.action.autopay_payment_details_status.class">Payum\Payex\Action\AutoPayPaymentDetailsStatusAction</parameter>
         <parameter key="payum.payex.action.agreement_details_status.class">Payum\Payex\Action\AgreementDetailsStatusAction</parameter>
         <parameter key="payum.payex.action.agreement_details_sync.class">Payum\Payex\Action\AgreementDetailsSyncAction</parameter>
+        <parameter key="payum.payex.action.fill_order_details.class">Payum\Payex\Action\FillOrderDetailsAction</parameter>
     </parameters>
 
     <services>
@@ -155,6 +156,14 @@
         <service
             id="payum.payex.action.payment_details_capture"
             class="%payum.payex.action.payment_details_capture.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="payex" />
+        </service>
+
+        <service
+            id="payum.payex.action.fill_order_details"
+            class="%payum.payex.action.fill_order_details.class%"
             public="false"
         >
             <tag name="payum.action" factory="payex" />

@@ -1,4 +1,4 @@
-# Authorize.NET AIM
+# Be2bill onsite
 
 Steps:
 
@@ -13,7 +13,7 @@ _**Note**: We assume you followed all steps in [get it started](https://github.c
 Run the following command:
 
 ```bash
-$ php composer.phar require "payum/authorize-net-aim:*@stable"
+$ php composer.phar require "payum/be2bill:*@stable"
 ```
 
 ## Configure context
@@ -24,13 +24,13 @@ $ php composer.phar require "payum/authorize-net-aim:*@stable"
 payum:
     contexts:
         your_context_here:
-            authorize_net_aim:
-                login_id: 'get it from gateway'
-                transaction_key: 'get it from gateway'
+            be2bill_onsite:
+                identifier: 'get this from gateway'
+                password: 'get this from gateway'
                 sandbox: true
 ```
 
-_**Attention**: You have to changed `your_payment_name` to something more descriptive and domain related, for example `post_a_job_with_authorize_net`._
+_**Attention**: You have to changed `your_payment_name` to something more descriptive and domain related, for example `post_a_job_with_be2bill`._
 
 ## Prepare payment
 
@@ -42,50 +42,53 @@ Please note that you have to set details in the payment gateway specific format.
 //src/Acme/PaymentBundle/Controller
 namespace AcmeDemoBundle\Controller;
 
+use Acme\PaymentBundle\Entity\PaymentDetails;
+use Payum\Core\Security\SensitiveValue;
 use Symfony\Component\HttpFoundation\Request;
 
 class PaymentController extends Controller
 {
-    public function prepareAuthorizeNetPaymentAction(Request $request)
+    public function prepareBe2BillPaymentAction(Request $request)
     {
         $paymentName = 'your_payment_name';
-    
-        $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\PaymentDetails');
-    
-        /** @var \Acme\PaymentBundle\Entity\PaymentDetails $details */
+
+        $storage = $this->getPayum()->getStorage('Acme\PaymentBundle\Entity\PaymentDetails');
+
+        /** @var PaymentDetails */
         $details = $storage->createModel();
-    
-        $details['amount'] = 1.23;
-        $details['clientemail'] = 'user@email.com';
+        //be2bill amount format is cents: for example:  100.05 (EUR). will be 10005.
+        $details['AMOUNT'] = 10005;
+        $details['CLIENTIDENT'] = 'payerId';
+        $details['DESCRIPTION'] = 'Payment for digital stuff';
+        $details['ORDERID'] = 'orderId'.uniqid();
         $storage->updateModel($details);
-        
-        $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
+
+        $captureToken = $this->getTokenFactory()->createCaptureToken(
             $paymentName,
             $details,
-            'acme_payment_done' // the route to redirect after capture
+            'acme_payment_done' // the route to redirect after capture;
         );
+
+        /**
+         * This is the trick.
+         * You have also configure these urls in the account configuration section on be2bill site:
+         *
+         * return url: http://your-domain-here.dev/payment/capture/session-token
+         * cancel url: http://your-domain-here.dev/payment/capture/session-token
+         */
+        $request->getSession()->set('payum_token', $captureToken->getHash());
 
         return $this->redirect($captureToken->getTargetUrl());
     }
 }
 ```
 
-That's it. It will ask user for credit card and convert it to payment specific format. After the payment done you will be redirect to `acme_payment_done` action.
+That's it. After the payment done you will be redirect to `acme_payment_done` action.
 Check [this chapter](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/purchase_done_action.md) to find out how this done action could look like.
-
-If you still able to pass credit card details explicitly: 
-  
-```php
-<?php
-use Payum\Core\Security\SensitiveValue;
-
-$details['card_Num'] = new SensitiveValue('1111222233334444');
-$details['exp_date'] = new SensitiveValue('15-11');
-```
 
 ## Next Step
 
 * [Purchase done action](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/purchase_done_action.md).
 * [Configuration reference](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/configuration_reference.md).
-* [Back to examples list](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/simple_purchase_examples.md).
+* [Examples list](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/custom_purchase_examples.md).
 * [Back to index](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md).

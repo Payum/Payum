@@ -1,4 +1,4 @@
-# Klarna Checkout
+# Klarna Invoice
 
 Steps:
 
@@ -13,7 +13,7 @@ _**Note**: We assume you followed all steps in [get it started](https://github.c
 Run the following command:
 
 ```bash
-$ php composer.phar require "payum/klarna-checkout:@stable"
+$ php composer.phar require "payum/klarna-invoice:@stable"
 ```
 
 ## Configure context
@@ -29,9 +29,9 @@ twig:
 payum:
     contexts:
         your_context_here:
-            klarna_checkout:
-                secret:  'get this from gateway side'
-                merchant_id: 'REPLACE WITH YOUR MERCHANT_ID'
+            klarna_invoice:
+                secret: 'EDIT ME'
+                eid: 'EDIT ME'
                 sandbox: true
 ```
 
@@ -51,50 +51,42 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PaymentController extends Controller
 {
-    public function preparePaypalExpressCheckoutPaymentAction()
+    public function prepareKlarnaInvoiceAction()
     {
         $paymentName = 'your_payment_name';
 
         $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\PaymentDetails');
 
         /** @var \Acme\PaymentBundle\Entity\PaymentDetails $details */
+        $payment = $payum->getPayment($paymentName);
+        $payment->execute($getAddresses = new GetAddresses($pno));
+
         $details = $storage->createModel();
-        $details['purchase_country'] = 'SE';
-        $details['purchase_currency'] = 'SEK';
-        $details['locale'] = 'sv-se';
+        $details = array(
+            /** @link http://developers.klarna.com/en/testing/invoice-and-account */
+            'pno' => '410321-9202',
+            'amount' => -1,
+            'gender' => \KlarnaFlags::MALE,
+            'articles' => array(
+                array(
+                    'qty' => 4,
+                    'artNo' => 'HANDLING',
+                    'title' => 'Handling fee',
+                    'price' => '50.99',
+                    'vat' => '25',
+                    'discount' => '0',
+                    'flags' => \KlarnaFlags::INC_VAT | \KlarnaFlags::IS_HANDLING
+                ),
+            ),
+            'billing_address' => $getAddresses->getFirstAddress()->toArray(),
+            'shipping_address' => $getAddresses->getFirstAddress()->toArray(),
+        );
         $storage->updateModel($details);
 
         $captureToken = $this->getTokenFactory()->createCaptureToken(
             $paymentName,
             $details,
             'acme_payment_details_view'
-        );
-
-        $details['merchant'] = array(
-            'terms_uri' => 'http://example.com/terms',
-            'checkout_uri' => 'http://example.com/fuck',
-            'confirmation_uri' => $captureToken->getTargetUrl(),
-            'push_uri' => $this->getTokenFactory()->createNotifyToken($paymentName, $details)->getTargetUrl()
-        );
-        $details['cart'] = array(
-            'items' => array(
-                array(
-                   'reference' => '123456789',
-                   'name' => 'Klarna t-shirt',
-                   'quantity' => 2,
-                   'unit_price' => 12300,
-                   'discount_rate' => 1000,
-                   'tax_rate' => 2500
-                ),
-                array(
-                   'type' => 'shipping_fee',
-                   'reference' => 'SHIPPING',
-                   'name' => 'Shipping Fee',
-                   'quantity' => 1,
-                   'unit_price' => 4900,
-                   'tax_rate' => 2500
-                )
-            )
         );
         $storage->updateModel($details);
 
@@ -110,5 +102,5 @@ Check [this chapter](https://github.com/Payum/PayumBundle/blob/master/Resources/
 
 * [Purchase done action](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/purchase_done_action.md).
 * [Configuration reference](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/configuration_reference.md).
-* [Back to examples list](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/simple_purchase_examples.md).
+* [Examples list](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/custom_purchase_examples.md).
 * [Back to index](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md).

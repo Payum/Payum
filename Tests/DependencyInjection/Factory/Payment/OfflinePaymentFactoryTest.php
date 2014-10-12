@@ -160,6 +160,29 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
+    /**
+     * @test
+     */
+    public function shouldAddPayumActionTagToFillOrderDetailsAction()
+    {
+        $factory = new OfflinePaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
+            'actions' => array(),
+            'apis' => array(),
+            'extensions' => array(),
+        ));
+
+        $actionDefinition = $container->getDefinition('payum.offline.action.fill_order_details');
+
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(1, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
+    }
+
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)
     {
         foreach ($serviceDefinition->getMethodCalls() as $methodCall) {

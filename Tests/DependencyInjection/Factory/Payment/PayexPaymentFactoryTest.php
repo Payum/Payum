@@ -26,6 +26,7 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'api.check_recurring_payment' => array('payum.payex.action.api.check_recurring_payment'),
 
             'payment_details_capture' => array('payum.payex.action.payment_details_capture'),
+            'fill_order_details' => array('payum.payex.action.fill_order_details'),
             'payment_details_status' => array('payum.payex.action.payment_details_status'),
             'payment_details_sync' => array('payum.payex.action.payment_details_sync'),
             'autopay_payment_details_capture' => array('payum.payex.action.autopay_payment_details_capture'),

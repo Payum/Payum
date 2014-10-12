@@ -287,6 +287,34 @@ class OmnipayOnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($factory->getName(), $tagAttributes[1]['factory']);
     }
 
+    /**
+     * @test
+     */
+    public function shouldAddPayumActionTagToFillOrderDetailsAction()
+    {
+        $factory = new OmnipayOnsitePaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
+            'type' => 'PayPal_Express',
+            'options' => array(
+                'foo' => 'foo',
+                'bar' => 'bar',
+            ),
+            'actions' => array(),
+            'apis' => array(),
+            'extensions' => array(),
+        ));
+
+        $actionDefinition = $container->getDefinition('payum.omnipay_bridge.action.fill_order_details');
+
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(2, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[1]['factory']);
+    }
+
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)
     {
         foreach ($serviceDefinition->getMethodCalls() as $methodCall) {

@@ -8,6 +8,7 @@
         <parameter key="payum.authorize_net_aim.api.class">Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM</parameter>
         <parameter key="payum.authorize_net_aim.action.capture.class">Payum\AuthorizeNet\Aim\Action\CaptureAction</parameter>
         <parameter key="payum.authorize_net_aim.action.status.class">Payum\AuthorizeNet\Aim\Action\StatusAction</parameter>
+        <parameter key="payum.authorize_net_aim.action.fill_order_details.class">Payum\AuthorizeNet\Aim\Action\FillOrderDetailsAction</parameter>
     </parameters>
 
     <services>
@@ -25,6 +26,14 @@
         <service
             id="payum.authorize_net_aim.action.capture"
             class="%payum.authorize_net_aim.action.capture.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="authorize_net_aim" />
+        </service>
+
+        <service
+            id="payum.authorize_net_aim.action.fill_order_details"
+            class="%payum.authorize_net_aim.action.fill_order_details.class%"
             public="false"
         >
             <tag name="payum.action" factory="authorize_net_aim" />

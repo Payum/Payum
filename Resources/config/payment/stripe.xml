@@ -9,6 +9,7 @@
         <parameter key="payum.stripe.action.status.class">Payum\Stripe\Action\StatusAction</parameter>
         <parameter key="payum.stripe.action.api.obtain_token.class">Payum\Stripe\Action\Api\ObtainTokenAction</parameter>
         <parameter key="payum.stripe.action.api.create_charge.class">Payum\Stripe\Action\Api\CreateChargeAction</parameter>
+        <parameter key="payum.stripe.action.fill_order_details.class">Payum\Stripe\Action\FillOrderDetailsAction</parameter>
         <parameter key="payum.stripe.keys.prototype.class">Payum\Stripe\Keys</parameter>
 
         <parameter key="payum.stripe.template.obtain_js_token">@PayumStripe/Action/obtain_js_token.html.twig</parameter>
@@ -29,6 +30,15 @@
         <service
             id="payum.stripe.action.capture"
             class="%payum.stripe.action.capture.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="stripe_js" />
+            <tag name="payum.action" factory="stripe_checkout" />
+        </service>
+
+        <service
+            id="payum.stripe.action.fill_order_details"
+            class="%payum.stripe.action.fill_order_details.class%"
             public="false"
         >
             <tag name="payum.action" factory="stripe_js" />

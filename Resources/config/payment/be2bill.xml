@@ -9,6 +9,7 @@
         <parameter key="payum.be2bill.action.capture.class">Payum\Be2Bill\Action\CaptureAction</parameter>
         <parameter key="payum.be2bill.action.capture_onsite.class">Payum\Be2Bill\Action\CaptureOnsiteAction</parameter>
         <parameter key="payum.be2bill.action.status.class">Payum\Be2Bill\Action\StatusAction</parameter>
+        <parameter key="payum.be2bill.action.fill_order_details.class">Payum\Be2Bill\Action\FillOrderDetailsAction</parameter>
     </parameters>
 
     <services>
@@ -30,6 +31,15 @@
             public="false"
         >
             <tag name="payum.action" factory="be2bill" />
+        </service>
+
+        <service
+            id="payum.be2bill.action.fill_order_details"
+            class="%payum.be2bill.action.fill_order_details.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="be2bill" />
+            <tag name="payum.action" factory="be2bill_onsite" />
         </service>
 
         <service
