@@ -278,5 +278,4 @@ class CustomStorage implements StorageInterface
 ## Next Step
 
 * [Get it started](get-it-started.md).
-* [Purchase examples](simple_purchase_examples.md).
 * [Back to index](index.md).
