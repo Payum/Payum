@@ -87,6 +87,7 @@ abstract class PaymentFactory
         $payment->addAction($renderTemplateAction);
         $payment->addAction(new ObtainTokenAction($obtainTokenTemplate));
         $payment->addAction(new CreateChargeAction);
+        $payment->addAction(new GetHttpRequestAction);
 
         return $payment;
     }
