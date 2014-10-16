@@ -36,9 +36,9 @@ class ActivateReservationAction extends BaseApiAwareAction implements PaymentAwa
 
         $klarna = $this->getKlarna();
 
-        $this->payment->execute(new PopulateKlarnaFromDetails($details, $klarna));
-
         try {
+            $this->payment->execute(new PopulateKlarnaFromDetails($details, $klarna));
+
             $result = $klarna->activateReservation(
                 $details['pno'],
                 $details['rno'],

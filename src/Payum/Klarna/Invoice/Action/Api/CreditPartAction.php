@@ -37,9 +37,10 @@ class CreditPartAction extends BaseApiAwareAction implements PaymentAwareInterfa
         $details->validateNotEmpty(array('invoice_number'));
 
         $klarna = $this->getKlarna();
-        $this->payment->execute(new PopulateKlarnaFromDetails($details, $klarna));
 
         try {
+            $this->payment->execute(new PopulateKlarnaFromDetails($details, $klarna));
+
             $details['refund_invoice_number'] = $klarna->creditPart($details['invoice_number']);
         } catch (\KlarnaException $e) {
             $this->populateDetailsWithError($details, $e, $request);
