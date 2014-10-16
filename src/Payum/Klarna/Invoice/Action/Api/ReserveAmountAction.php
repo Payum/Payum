@@ -36,9 +36,9 @@ class ReserveAmountAction extends BaseApiAwareAction implements PaymentAwareInte
 
         $klarna = $this->getKlarna();
 
-        $this->payment->execute(new PopulateKlarnaFromDetails($details, $klarna));
-
         try {
+            $this->payment->execute(new PopulateKlarnaFromDetails($details, $klarna));
+
             $result = $klarna->reserveAmount(
                 $details['pno'],
                 $details['gender'],
