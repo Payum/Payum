@@ -6,6 +6,7 @@ use Payum\Core\Request\Notify;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Klarna\Checkout\Action\NotifyAction;
 use Payum\Klarna\Checkout\Constants;
+use Payum\Klarna\Checkout\Request\Api\UpdateOrder;
 
 class NotifyActionTest extends GenericActionTest
 {
@@ -28,6 +29,8 @@ class NotifyActionTest extends GenericActionTest
      */
     public function shouldUpdateOrderWithStatusCreatedIfCurrentStatusCheckoutCompleteOnExecute()
     {
+        $testCase = $this;
+
         $paymentMock = $this->createPaymentMock();
         $paymentMock
             ->expects($this->at(0))
@@ -38,6 +41,13 @@ class NotifyActionTest extends GenericActionTest
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\UpdateOrder'))
+            ->will($this->returnCallback(function(UpdateOrder $request) use ($testCase) {
+                $model = $request->getModel();
+
+                $testCase->assertEquals(Constants::STATUS_CREATED, $model['status']);
+                $testCase->assertEquals('theLocation', $model['location']);
+                $testCase->assertEquals('theOrderId', $model['merchant_reference']['orderid1']);
+            }))
         ;
         $paymentMock
             ->expects($this->at(2))
@@ -50,7 +60,10 @@ class NotifyActionTest extends GenericActionTest
 
         $action->execute(new Notify(array(
             'status' => Constants::STATUS_CHECKOUT_COMPLETE,
-            'location' => 'aLocation',
+            'location' => 'theLocation',
+            'merchant_reference' => array(
+                'orderid1' => 'theOrderId',
+            )
         )));
     }
 

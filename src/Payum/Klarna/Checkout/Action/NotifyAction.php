@@ -20,20 +20,20 @@ class NotifyAction extends PaymentAwareAction
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $model = ArrayObject::ensureArrayObject($request->getModel());
+        $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        $this->payment->execute(new Sync($model));
+        $this->payment->execute(new Sync($details));
 
-        if (Constants::STATUS_CHECKOUT_COMPLETE == $model['status']) {
+        if (Constants::STATUS_CHECKOUT_COMPLETE == $details['status']) {
             $this->payment->execute(new UpdateOrder(array(
-                'location' => $model['location'],
+                'location' => $details['location'],
                 'status' => Constants::STATUS_CREATED,
                 'merchant_reference' => array(
-                    'orderid1' => $model['order_id'] ?: uniqid().'-'.time()
+                    'orderid1' => $details['merchant_reference']['orderid1']
                 ),
             )));
 
-            $this->payment->execute(new Sync($model));
+            $this->payment->execute(new Sync($details));
         }
     }
 
