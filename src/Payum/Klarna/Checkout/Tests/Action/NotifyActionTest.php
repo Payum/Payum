@@ -89,9 +89,9 @@ class NotifyActionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnCallback(function(UpdateOrder $request) use ($testCase) {
                 $model = $request->getModel();
 
-                $this->assertEquals(Constants::STATUS_CREATED, $model['status']);
-                $this->assertEquals('theLocation', $model['location']);
-                $this->assertEquals('theOrderId', $model['merchant_reference']['orderid1']);
+                $testCase->assertEquals(Constants::STATUS_CREATED, $model['status']);
+                $testCase->assertEquals('theLocation', $model['location']);
+                $testCase->assertEquals('theOrderId', $model['merchant_reference']['orderid1']);
             }))
         ;
         $paymentMock
