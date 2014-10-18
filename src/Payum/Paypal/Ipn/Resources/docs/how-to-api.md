@@ -7,7 +7,7 @@ use Payum\Paypal\Ipn\Api;
 
 $api = new Api(new Curl, array(
     'sandbox' => true
-)));
+));
 
 if (Api::NOTIFY_VERIFIED === $api->notifyValidate($_POST)) {
     echo 'It is valid paypal notification. Let\'s do some additional checks';
