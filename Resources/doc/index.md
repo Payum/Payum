@@ -12,4 +12,3 @@
 * [Console commands](console_commands.md)
 * [Debugging](debugging.md)
 * [Configuration reference](configuration_reference.md)
-* [Supported payments](https://github.com/Payum/Core/blob/master/Resources/docs/supported-payments.md)
