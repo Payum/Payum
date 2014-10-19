@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.11.8 (2014-10-19)
+
+* [klarna-checkoout] set correctly orderid in notify action.
+* [klarna-invoice] populate klarna from details must be inside try catch block.
+
 ## 0.11.7 (2014-09-29)
 
 * [payment] Critcal bug fix. It was possible to mix credentials of different payments if you use them in single process.
