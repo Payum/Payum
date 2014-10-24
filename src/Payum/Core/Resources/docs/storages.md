@@ -63,6 +63,10 @@ echo get_class($capture->getModel());
 
 ## Doctrine ORM
 
+```
+php composer.phar install "doctrine/orm"
+```
+
 Add token and order classes:
 
 ```php
@@ -140,8 +144,14 @@ $config->setMetadataCacheImpl(new ArrayCache());
 
 $connection = array('driver' => 'pdo_sqlite', 'path' => ':memory:');
 
-$storage = new DoctrineStorage(
-    EntityManager::create($connection, $config)
+$orderStorage = new DoctrineStorage(
+   EntityManager::create($connection, $config),
+   'Payum\Entity\Order'
+);
+
+$tokenStorage = new DoctrineStorage(
+   EntityManager::create($connection, $config),
+   'Payum\Entity\PaymentToken'
 );
 ```
 
@@ -197,7 +207,6 @@ use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
 use Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Configuration;
-use Doctrine\ODM\MongoDB\Types\Type;
 use Doctrine\MongoDB\Connection;
 
 Type::addType('object', 'Payum\Core\Bridge\Doctrine\Types\ObjectType');
@@ -235,8 +244,14 @@ $config->setDefaultDB('payum_tests');
 
 $connection = new Connection(null, array(), $config);
 
-$storage = new DoctrineStorage(
-    DocumentManager::create($connection, $config)
+$orderStorage = new DoctrineStorage(
+    DocumentManager::create($connection, $config),
+    'Acme\Document\Order'
+);
+
+$tokenStorage = new DoctrineStorage(
+    DocumentManager::create($connection, $config),
+    'Acme\Document\SecurityToken'
 );
 ```        
 
