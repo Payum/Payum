@@ -157,6 +157,10 @@ $tokenStorage = new DoctrineStorage(
 
 ### Doctrine MongoODM.
 
+```
+php composer.phar install "doctrine/mongodb": "1.0.*@dev" "doctrine/mongodb-odm": "1.0.*@dev"
+```
+
 ```php
 <?php
 namespace Acme\Document;
