@@ -24,6 +24,11 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
     /**
      * @var string
      */
+    protected $refundPath;
+
+    /**
+     * @var string
+     */
     protected $notifyPath;
 
     /**
@@ -38,12 +43,13 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
      * @param string $notifyPath
      * @param string $authorizePath
      */
-    public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $capturePath, $notifyPath, $authorizePath)
+    public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $capturePath, $refundPath, $notifyPath, $authorizePath)
     {
         $this->tokenStorage = $tokenStorage;
         $this->storageRegistry = $storageRegistry;
 
         $this->capturePath = $capturePath;
+        $this->refundPath = $refundPath;
         $this->notifyPath = $notifyPath;
         $this->authorizePath = $authorizePath;
     }
@@ -107,6 +113,21 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
         $this->tokenStorage->updateModel($captureToken);
 
         return $captureToken;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createRefundToken($paymentName, $model, $afterPath, array $afterParameters = array())
+    {
+        $afterToken = $this->createToken($paymentName, $model, $afterPath, $afterParameters);
+
+        $refundToken = $this->createToken($paymentName, $model, $this->refundPath);
+        $refundToken->setAfterUrl($afterToken->getTargetUrl());
+
+        $this->tokenStorage->updateModel($refundToken);
+
+        return $refundToken;
     }
 
     /**
