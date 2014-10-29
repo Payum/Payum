@@ -1,5 +1,34 @@
 # Changelog
 
+## 0.12.0 (2014-10-29)
+
+* [action] add basic get http request action.
+* [action] `ExecuteSameRequestWithModelDetailsAction` now do sub request for empty details too.
+* [request] move `ModelAwareInterface` to model namespace and `TokenAwareInterface` to Security one.
+* [request] add `Refund` request
+* [request] remove usages of STATUS_SUCCESS and all related methods.
+* [request] `BaseModelAware` request was renamed to `Generic` one.
+* [request] move logic from `SecuredXXX` requests to `Generic`, remove all `SecuredXXX` requests.
+* [tests] reduce code duplications in tests, introduce `GenericActionTest`.
+* [stripe] add `GetHttpRequestAction` to checkout factory.
+* [stripe] add `GetHttpRequestAction` to js factory.
+* [bridge][symfony] add `ObtainCreditCardAction` and credit card form to bridge from bundle.
+* [bridge][symfony] add symfony response to reply converter.
+* [orders] unified interface for all possible payments.
+* [order][paypal] set automatically notify url if not defined.
+* [order][doctrine] add mongo and orm mappings for order model.
+* [order][payex] add fill order details action.
+* [order][paypal-pro]  add fill order details action.
+* [offline] add fill order details action.
+* [omnipay-bridge] add fill order details action.
+* [omnipay-bridge] refactor tests, add auto fill of returnUrl, cancelUrl and clientIp.
+* [omnipay-bridge] fix undefined offset 1 error. set holder name as first name always.
+* [klarna-checkout] fix bad request. merchant.id invalid.
+* [klarna-checkout] Remove GlobalXXXConnector. Replace CaptureAction with Authorize one.
+* [klarna-invoice] add refund support.
+* [paypal] correctly recognize authorize status.
+* [paypal] add make status action aware of refunded payment status.
+
 ## 0.11.8 (2014-10-19)
 
 * [klarna-checkoout] set correctly orderid in notify action.
