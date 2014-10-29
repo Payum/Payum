@@ -10,6 +10,7 @@
 
 ## 0.11 to 0.12
 
+* [refund] `createRefundToken` was added to `AbstractGenericTokenFactory`.
 * [request] `BaseModelAware` request was renamed to `Generic`.
 * [request] `SecuredInterface` allows to return a null on `getToken` method call.
 * [request] `SecuredAuthorize` request was removed. The removed logic is now in `Authorize` request, so use it.
