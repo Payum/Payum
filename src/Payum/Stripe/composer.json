@@ -21,7 +21,7 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "payum/core": "0.12.*@dev",
+        "payum/core": "0.12.*",
         "stripe/stripe-php": "~1.0"
     },
     "config": {
