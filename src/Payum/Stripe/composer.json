@@ -21,7 +21,7 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "payum/core": "0.12.*",
+        "payum/core": "0.13.*@dev",
         "stripe/stripe-php": "~1.0"
     },
     "config": {
@@ -33,7 +33,7 @@
     "target-dir": "Payum/Stripe",
     "extra": {
         "branch-alias": {
-            "dev-master": "0.12-dev"
+            "dev-master": "0.13-dev"
         }
     }
 }
