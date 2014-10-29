@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.12.0 (2014-10-29)
+
+* [doc] simple examples -> custom examples.
+* [doc] update get it started.
+* [request] remove secured requests usages, replace with generic+token.
+* [order] add support of unified order protocol.
+* [paypal-ec] inject token factory to allow auto notifyurl set.
+* [klarna-checkout] reuse Config from the lib, 
+* [klarna-checkout] remove capture action and add authorize one.
+* [klarna-invoice] add refund action to the factory.
+* [klarna] add credit part action to services.
+
 ## 0.11.0 (2014-09-11)
 
 * [storage] add short version of config for custom storage.
