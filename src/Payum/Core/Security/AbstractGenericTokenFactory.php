@@ -118,12 +118,15 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
     /**
      * {@inheritDoc}
      */
-    public function createRefundToken($paymentName, $model, $afterPath, array $afterParameters = array())
+    public function createRefundToken($paymentName, $model, $afterPath=null, array $afterParameters = array())
     {
-        $afterToken = $this->createToken($paymentName, $model, $afterPath, $afterParameters);
 
         $refundToken = $this->createToken($paymentName, $model, $this->refundPath);
-        $refundToken->setAfterUrl($afterToken->getTargetUrl());
+
+        if ($afterPath) {
+            $afterToken = $this->createToken($paymentName, $model, $afterPath, $afterParameters);
+            $refundToken->setAfterUrl($afterToken->getTargetUrl());
+        }
 
         $this->tokenStorage->updateModel($refundToken);
 
