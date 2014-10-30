@@ -3,9 +3,10 @@
 ## Frameworks.
 
 * [PayumBundle](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md) for [Symfony2](http://symfony.com/).
+* [PayumSilexProvider](https://github.com/Payum/PayumSilexProvider) for [Silex](http://silex.sensiolabs.org/)
+* [PayumLaravelPackage](https://github.com/Payum/PayumLaravelPackage) for [Laravel](http://laravel.com/)
 * [PayumModule](https://github.com/Payum/PayumModule/blob/master/docs/index.md) for [Zend2](http://framework.zend.com/)
 * [PayumYiiExtension](https://github.com/Payum/PayumYiiExtension/blob/master/docs/index.md) for [Yii](http://www.yiiframework.com/)
-* [PayumLaravelPackage](https://github.com/Payum/PayumLaravelPackage) for [Laravel](http://laravel.com/)
 
 ## Storages.
 
