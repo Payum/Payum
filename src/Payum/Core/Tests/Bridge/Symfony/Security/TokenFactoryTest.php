@@ -33,7 +33,8 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             $this->createStorageRegistryMock(),
             'capture.php',
             'notify.php',
-            'authorize'
+            'authorize',
+            'refund.php'
         );
     }
 
@@ -96,7 +97,8 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             $storageRegistryMock,
             'capture',
             'notify',
-            'authorize'
+            'authorize',
+            'refund'
         );
 
         $actualToken = $factory->createToken(
@@ -168,7 +170,8 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             $storageRegistryMock,
             'capture',
             'notify',
-            'authorize'
+            'authorize',
+            'refund'
         );
 
         $actualToken = $factory->createToken($paymentName, $model, 'theTargetPath');
@@ -233,7 +236,8 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             $storageRegistryMock,
             'capture',
             'notify',
-            'authorize'
+            'authorize',
+            'refund'
         );
 
         $actualToken = $factory->createNotifyToken($paymentName, $model);
@@ -321,7 +325,8 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             $storageRegistryMock,
             'capture',
             'notify',
-            'authorize'
+            'authorize',
+            'refund'
         );
 
         $actualToken = $factory->createCaptureToken($paymentName, $model, 'after', array('afterKey' => 'afterVal'));
@@ -409,7 +414,8 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             $storageRegistryMock,
             'capture',
             'notify',
-            'authorize'
+            'authorize',
+            'refund'
         );
 
         $actualToken = $factory->createAuthorizeToken($paymentName, $model, 'after', array('afterKey' => 'afterVal'));
