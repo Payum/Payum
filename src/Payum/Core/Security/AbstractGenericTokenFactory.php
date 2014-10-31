@@ -42,6 +42,7 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
      * @param string $capturePath
      * @param string $notifyPath
      * @param string $authorizePath
+     * @param string $refundPath
      */
     public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $capturePath, $notifyPath, $authorizePath, $refundPath)
     {
