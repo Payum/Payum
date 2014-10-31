@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.12.1 (2014-10-31)
+
+* [symfony-bridge][forms] Fix exception "there is only 'years' option available."
+* [symfony-bridge] Add obtain credit card basic template.
+* [doc] add Silex to the list of supported frameworks.
+
 ## 0.12.0 (2014-10-29)
 
 * [action] add basic get http request action.
