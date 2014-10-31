@@ -75,7 +75,6 @@
         "payum/authorize-net-aim": "self.version",
         "payum/be2bill": "self.version",
         "payum/payex": "self.version",
-        "payum/omnipay-bridge": "self.version",
         "payum/offline": "self.version",
         "payum/stripe": "self.version"
     },
