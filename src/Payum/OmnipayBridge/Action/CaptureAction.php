@@ -1,6 +1,7 @@
 <?php
 namespace Payum\OmnipayBridge\Action;
 
+use Omnipay\Common\Exception\InvalidCreditCardException;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -67,12 +68,21 @@ class CaptureAction extends BaseApiAwareAction implements PaymentAwareInterface
             }
         }
 
-        $response = $this->gateway->purchase($details->toUnsafeArray())->send();
+        try {
+            $response = $this->gateway->purchase($details->toUnsafeArray())->send();
 
-        $details['_reference']      = $response->getTransactionReference();
-        $details['_status']         = $response->isSuccessful() ? 'captured' : 'failed';
-        $details['_status_code']    = $response->getCode();
-        $details['_status_message'] = $response->isSuccessful() ? '' : $response->getMessage();
+            $details['_reference'] = $response->getTransactionReference();
+            $details['_status'] = $response->isSuccessful() ? 'captured' : 'failed';
+            $details['_status_code'] = $response->getCode();
+            $details['_status_message'] = $response->isSuccessful() ? '' : $response->getMessage();
+        } catch (InvalidCreditCardException $e) {
+            $details['_status'] = 'failed';
+            $details['_status_code'] = $e->getCode();
+            $details['_status_message'] = $e->getMessage();
+            $details['_exception'] = get_class($e);
+            $details['_exception_file'] = $e->getFile();
+            $details['_exception_line'] = $e->getLine();
+        }
     }
 
     /**
