@@ -1,7 +1,7 @@
 {
     "name": "payum/payum",
     "type": "library",
-    "description": "Domain friendly payment framework. Paypal, payex, authorize.net, be2bill, omnipay, recurring payments, instant notifications and many more",
+    "description": "Domain friendly payment framework. Paypal, payex, authorize.net, be2bill, recurring payments, instant notifications and many more",
     "keywords": [
         "payment",
         "recurring payment",
@@ -15,7 +15,6 @@
         "authorize.net",
         "be2bill",
         "payex",
-        "omnipay",
         "stripe",
         "stripe.js",
         "stripe checkout",
@@ -42,7 +41,6 @@
         "kriswallsmith/buzz": "*",
         "ajbdev/authorizenet-php-api": "1.1.*",
         "paypal/rest-api-sdk-php" : "0.5.*",
-        "omnipay/common": "~2.0",
         "klarna/checkout": "~1",
         "fp/klarna-invoice": "0.1.*",
         "stripe/stripe-php": "~1.0",
@@ -61,8 +59,7 @@
         "symfony/routing": "~2.3",
         "symfony/http-kernel": "~2.3",
         "symfony/http-foundation": "~2.3",
-        "symfony/form": "~2.3",
-        "omnipay/dummy": "~2.0"
+        "symfony/form": "~2.3"
     },
     "replace": {
         "payum/core": "self.version",
