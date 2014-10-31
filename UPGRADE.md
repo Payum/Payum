@@ -1,5 +1,9 @@
 # Upgrades
 
+## 0.12 to 0.13
+
+* [omnipay-bridge] Omnipay bridge is not shipped with `payum\payum` code any more. Install it separatly by requiring `payum/omnipay-bridge` package.
+
 ## 0.11 to 0.12
 
 * [request] `BaseModelAware` request was renamed to `Generic`.
