@@ -175,20 +175,6 @@ class Api
         'sandbox' => true,
     );
 
-
-    /**
-     * @var array
-     */
-    protected $refundOptions = array(
-        'username' => null,
-        'password' => null,
-        'partner' => null,
-        'vendor' => null,
-        'tender' => 'C',
-        'trxtype' => 'C',
-        'sandbox' => null,
-    );
-
     /**
      * @param ClientInterface $client
      * @param array $options
@@ -291,19 +277,6 @@ class Api
         $request->setField('PARTNER', $this->options['partner']);
         $request->setField('VENDOR', $this->options['vendor']);
         $request->setField('TENDER', $this->options['tender']);
-    }
-
-    /**
-     * @param Request $request
-     */
-    protected function addRefundOptions(Request $request)
-    {
-        $request->setField('USER', $this->refundOptions['username']);
-        $request->setField('PWD', $this->refundOptions['password']);
-        $request->setField('PARTNER', $this->refundOptions['partner']);
-        $request->setField('VENDOR', $this->refundOptions['vendor']);
-        $request->setField('TENDER', $this->refundOptions['tender']);
-        $request->setField('TRXTYPE', $this->refundOptions['trxtype']);
     }
 
     /**
