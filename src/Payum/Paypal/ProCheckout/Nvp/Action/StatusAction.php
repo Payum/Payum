@@ -6,7 +6,6 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Paypal\ProCheckout\Nvp\Api;
 use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Paypal\ProCheckout\Nvp\Model\PaymentDetails;
 
 /**
  * @author Ton Sharp <Forma-PRO@66ton99.org.ua>

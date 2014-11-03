@@ -2,11 +2,11 @@
 namespace Payum\Paypal\ProCheckout\Nvp;
 
 use Buzz\Client\ClientInterface;
+use Buzz\Message\Form\FormRequest;
+use Buzz\Message\Request;
+use Buzz\Message\Response;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\Http\HttpException;
-use Payum\Paypal\ProCheckout\Nvp\Bridge\Buzz\Request;
-use Payum\Paypal\ProCheckout\Nvp\Bridge\Buzz\Response;
-use Payum\Paypal\ProCheckout\Nvp\Exception\Http\HttpResponseNotSuccessException;
-use Payum\Core\Exception\InvalidArgumentException;
 
 /**
  * @author Ton Sharp <Forma-PRO@66ton99.org.ua>
@@ -132,7 +132,31 @@ class Api
      */
     const RESULT_GENERIC_HOST_OR_PROCESSOR_ERROR = 1000;
 
-    // Here more error codes too
+    const TRXTYPE_SALE = 'S';
+
+    const TRXTYPE_CREDIT = 'C';
+
+    const TRXTYPE_AUTHORIZATION = 'A';
+
+    const TRXTYPE_DELAYED_CAPUTER = 'D';
+
+    const TRXTYPE_VOID = 'V';
+
+    const TRXTYPE_VOICE_AUTHORIZATION = 'F';
+
+    const TRXTYPE_INQUIRY = 'I';
+
+    const TRXTYPE_DUPLICATE_TRANSACTION = 'N';
+
+    const TENDER_AUTOMATED_CLEARINGHOUSE = 'A';
+
+    const TENDER_CREDIT_CARD = 'C';
+
+    const TENDER_PINLESS_DEBIT = 'D';
+
+    const TENDER_TELECHECK = 'K';
+
+    const TENDER_PAYPAL = 'P';
 
     /**
      * @var ClientInterface
@@ -143,13 +167,12 @@ class Api
      * @var array
      */
     protected $options = array(
-        'username' => null,
-        'password' => null,
-        'partner' => null,
-        'vendor' => null,
-        'tender' => 'C',
-        'trxtype' => 'S',
-        'sandbox' => null,
+        'username' => '',
+        'password' => '',
+        'partner' => '',
+        'vendor' => '',
+        'tender' => self::TENDER_CREDIT_CARD,
+        'sandbox' => true,
     );
 
     /**
@@ -162,55 +185,57 @@ class Api
     {
         $this->client = $client;
         $this->options = array_replace($this->options, $options);
-        
-        if (true == empty($this->options['username'])) {
-            throw new InvalidArgumentException('The username option must be set.');
-        }
-        if (true == empty($this->options['password'])) {
-            throw new InvalidArgumentException('The password option must be set.');
-        }
-        if (true == empty($this->options['partner'])) {
-            throw new InvalidArgumentException('The partner option must be set.');
-        }
-        if (true == empty($this->options['vendor'])) {
-            throw new InvalidArgumentException('The vendor option must be set.');
-        }
-        if (false == is_bool($this->options['sandbox'])) {
-            throw new InvalidArgumentException('The boolean sandbox option must be set.');
-        }
+
+        ArrayObject::ensureArrayObject($this->options)->validateNotEmpty(array(
+            'username',
+            'password',
+            'partner',
+            'vendor',
+            'tender'
+        ));
     }
 
     /**
-     * @param Request $request
+     * @param array $fields
      *
-     * @return Response
+     * @return array
      */
-    public function doPayment(Request $request)
+    public function doSale(array $fields)
     {
+        $request = new FormRequest();
+        $request->setFields($fields);
+        $request->setField('TRXTYPE', self::TRXTYPE_SALE);
+
         $this->addOptions($request);
 
         return $this->doRequest($request);
     }
 
     /**
-     * @param Request $request
+     * @param FormRequest $request
      *
-     * @throws \Payum\Core\Exception\Http\HttpException
+     * @throws HttpException
      *
-     * @return Response
+     * @return array
      */
-    protected function doRequest(Request $request)
+    protected function doRequest(FormRequest $request)
     {
         $request->setMethod('POST');
         $request->fromUrl($this->getApiEndpoint());
-        $this->client->send($request, $response = $this->createResponse());
 
+        $this->client->send($request, $response = new Response);
 
         if (false == $response->isSuccessful()) {
             throw HttpException::factory($request, $response);
         }
 
-        return $response;
+        $result = array();
+        parse_str($response->getContent(), $result);
+        foreach ($result as &$value) {
+            $value = urldecode($value);
+        }
+
+        return $result;
     }
 
     /**
@@ -227,16 +252,15 @@ class Api
     }
 
     /**
-     * @param Request $request
+     * @param FormRequest $request
      */
-    protected function addOptions(Request $request)
+    protected function addOptions(FormRequest $request)
     {
         $request->setField('USER', $this->options['username']);
         $request->setField('PWD', $this->options['password']);
         $request->setField('PARTNER', $this->options['partner']);
         $request->setField('VENDOR', $this->options['vendor']);
         $request->setField('TENDER', $this->options['tender']);
-        $request->setField('TRXTYPE', $this->options['trxtype']);
     }
 
     /**
@@ -245,20 +269,5 @@ class Api
     protected function createResponse()
     {
         return new Response();
-    }
-
-    /**
-     * @return array
-     */
-    public static function getResultErrorCodes()
-    {
-        $return = array();
-        $refl = new \ReflectionClass(get_called_class());
-        foreach ($refl->getConstants() as $key => $val) {
-            if ('RESULT_' == substr($key, 0, strlen('RESULT_'))) {
-                $return[$key] = $val;
-            }
-        }
-        return $return;
     }
 }

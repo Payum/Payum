@@ -10,7 +10,6 @@ use Payum\Core\Exception\LogicException;
 use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Security\SensitiveValue;
 use Payum\Paypal\ProCheckout\Nvp\Api;
-use Payum\Paypal\ProCheckout\Nvp\Bridge\Buzz\Request;
 use Payum\Core\Request\Capture;
 
 /**
@@ -64,11 +63,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
             }
         }
 
-        $buzzRequest = new Request();
-        $buzzRequest->setFields($model->toUnsafeArray());
-        $response = $this->api->doPayment($buzzRequest);
-        
-        $model->replace($response);
+        $model->replace($this->api->doSale($model->toUnsafeArray()));
     }
 
     /**
