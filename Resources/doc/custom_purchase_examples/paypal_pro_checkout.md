@@ -21,6 +21,10 @@ $ php composer.phar require "payum/paypal-pro-checkout-nvp:*@stable"
 ```yaml
 #app/config/config.yml
 
+twig:
+    paths:
+        %kernel.root_dir%/../vendor/payum/payum/src/Payum/Core/Resources/views: PayumCore
+
 payum:
     contexts:
         your_context_here:
