@@ -9,7 +9,6 @@ use Payum\Core\PaymentInterface;
 use Payum\Core\Request\Capture;
 use Payum\Paypal\ProCheckout\Nvp\Action\CaptureAction;
 use Payum\Core\Request\ObtainCreditCard;
-use Payum\Paypal\ProCheckout\Nvp\Bridge\Buzz\Response;
 
 class CaptureActionTest extends GenericActionTest
 {
@@ -118,15 +117,13 @@ class CaptureActionTest extends GenericActionTest
             ->method('execute')
         ;
 
-        $apiResponse = new Response();
-        $apiResponse['FOO'] = 'FOOVAL';
-        $apiResponse['BAR'] = 'BARVAL';
+        $result = array('FOO' => 'FOOVAL', 'BAR' => 'BARVAL');
 
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
-            ->method('doPayment')
-            ->will($this->returnValue($apiResponse))
+            ->method('doSale')
+            ->will($this->returnValue($result))
         ;
 
         $action = new CaptureAction();
@@ -175,15 +172,13 @@ class CaptureActionTest extends GenericActionTest
             }))
         ;
 
-        $apiResponse = new Response();
-        $apiResponse['FOO'] = 'FOOVAL';
-        $apiResponse['BAR'] = 'BARVAL';
+        $result = array('FOO' => 'FOOVAL', 'BAR' => 'BARVAL');
 
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
-            ->method('doPayment')
-            ->will($this->returnValue($apiResponse))
+            ->method('doSale')
+            ->will($this->returnValue($result))
         ;
 
         $action = new CaptureAction();
