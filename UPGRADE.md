@@ -3,6 +3,10 @@
 ## 0.12 to 0.13
 
 * [omnipay-bridge] Omnipay bridge is not shipped with `payum\payum` code any more. Install it separatly by requiring `payum/omnipay-bridge` package.
+* [paypal-pro] Remove `PaymentDetails` class.
+* [paypal-pro] Remove `Request` and `Response` classes. Use ones from Buzz.
+* [paypal-pro] Remove `trxtype` option from api.
+* [paypal-pro] Rename `Api::doPayment` to `Api::doSale`. Change the first argument now it is array and the method returns array too.
 
 ## 0.11 to 0.12
 
