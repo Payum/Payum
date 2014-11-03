@@ -10,7 +10,6 @@ use Payum\Core\Exception\LogicException;
 use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Security\SensitiveValue;
 use Payum\Paypal\ProCheckout\Nvp\Api;
-use Payum\Paypal\ProCheckout\Nvp\Bridge\Buzz\Request;
 use Payum\Core\Request\Refund;
 
 /**
@@ -49,11 +48,8 @@ class RefundAction extends PaymentAwareAction implements ApiAwareInterface
             return;
         }
 
-        $buzzRequest = new Request();
-        $buzzRequest->setFields($model->toUnsafeArray());
-        $response = $this->api->doRefund($buzzRequest);
-
-        $model->replace($response);
+        $model->replace($this->api->doCredit($model->toUnsafeArray()));
+        
     }
 
     /**
