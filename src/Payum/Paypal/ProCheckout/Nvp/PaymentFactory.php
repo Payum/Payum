@@ -15,7 +15,7 @@ abstract class PaymentFactory
     /**
      * @param Api $api
      *
-     * @return \Payum\Core\Payment
+     * @return \Payum\Core\PaymentInterface
      */
     public static function create(Api $api)
     {

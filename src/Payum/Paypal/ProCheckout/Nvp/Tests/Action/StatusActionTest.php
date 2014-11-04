@@ -39,12 +39,12 @@ class StatusActionTest extends GenericActionTest
         $status = new GetHumanStatus(array(
             'RESULT' => 123,
         ));
-        
+
         //guard
         $status->markNew();
-        
+
         $action->execute($status);
-        
+
         $this->assertTrue($status->isFailed());
     }
 
@@ -56,6 +56,7 @@ class StatusActionTest extends GenericActionTest
         $action = new StatusAction();
 
         $status = new GetHumanStatus(array(
+            'TRXTYPE' => Api::TRXTYPE_SALE,
             'RESULT' => Api::RESULT_SUCCESS,
         ));
 
@@ -65,5 +66,76 @@ class StatusActionTest extends GenericActionTest
         $action->execute($status);
 
         $this->assertTrue($status->isCaptured());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkRefundedIfOrigIdSetAndTrxTypeCreditAndResultSuccess()
+    {
+        $action = new StatusAction();
+
+        $status = new GetHumanStatus(array(
+            'TRXTYPE' => Api::TRXTYPE_CREDIT,
+            'RESULT' => Api::RESULT_SUCCESS,
+            'ORIGID' => 'anId',
+        ));
+
+        //guard
+        $status->markNew();
+
+        $action->execute($status);
+
+        $this->assertTrue($status->isRefunded());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkFailedIfResultGreaterThenZero()
+    {
+        $action = new StatusAction();
+
+        $status = new GetHumanStatus(array(
+            'RESULT' => 1,
+        ));
+
+        //guard
+        $status->markNew();
+
+        $action->execute($status);
+
+        $this->assertTrue($status->isFailed());
+
+        $status = new GetHumanStatus(array(
+            'RESULT' => 100000,
+        ));
+
+        //guard
+        $status->markNew();
+
+        $action->execute($status);
+
+        $this->assertTrue($status->isFailed());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkUnknownIfResultSuccessButTrxTypeNotPurchaseOne()
+    {
+        $action = new StatusAction();
+
+        $status = new GetHumanStatus(array(
+            'TRXTYPE' => Api::TRXTYPE_CREDIT,
+            'RESULT' => Api::RESULT_SUCCESS,
+        ));
+
+        //guard
+        $status->markNew();
+
+        $action->execute($status);
+
+        $this->assertTrue($status->isUnknown());
     }
 }
