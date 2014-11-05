@@ -66,7 +66,7 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
 
         $targetParametersInPath = array();
         if (0 === strpos($targetPath, 'http') && false !== strpos($targetPath, '?')) {
-            list($targetPath, $targetParametersInPath) = explode('?', $targetPath);
+            list($targetPath, $targetParametersInPath) = explode('?', $targetPath, 2);
 
             parse_str($targetParametersInPath, $targetParametersInPath);
         }
@@ -131,23 +131,6 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
     public function createNotifyToken($paymentName, $model = null)
     {
         return $this->createToken($paymentName, $model, $this->notifyPath);
-    }
-
-    protected function prepareUrl(TokenInterface $token, $path, array $pathParameters = array())
-    {
-        $targetParametersInPath = array();
-        if (0 === strpos($path, 'http') && false !== strpos($path, '?')) {
-            list($path, $targetParametersInPath) = explode('?', $path);
-
-            parse_str($targetParametersInPath, $targetParametersInPath);
-        }
-
-        $pathParameters = array_replace(array('payum_token' => $token->getHash()), $targetParametersInPath, $pathParameters);
-
-        return 0 === strpos($path, 'http') ?
-            $path.'?'.http_build_query($pathParameters) :
-            $this->generateUrl($path, $pathParameters)
-        ;
     }
 
     /**
