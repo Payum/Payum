@@ -31,9 +31,14 @@ class ReplyToSymfonyResponseConverterTest extends \PHPUnit_Framework_TestCase
 
         $response = $converter->convert($reply);
 
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $response);
-        $this->assertEquals($expectedUrl, $response->getTargetUrl());
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
+        $this->assertContains('Redirecting to /foo/bar', $response->getContent());
         $this->assertEquals(302, $response->getStatusCode());
+
+        $headers = $response->headers->all();
+        $this->assertArrayHasKey('location', $headers);
+        $this->assertNotEmpty($headers['location']);
+        $this->assertEquals($expectedUrl, $headers['location'][0]);
     }
 
     /**
@@ -50,6 +55,27 @@ class ReplyToSymfonyResponseConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
         $this->assertEquals('theContent', $response->getContent());
         $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnResponseIfPayumHttpResponseReplyWithCustomStatusCodeAndHeaders()
+    {
+        $reply = new HttpResponse('theContent', 418, array(
+            'foo' => 'fooVal',
+            'bar' => 'bar'
+        ));
+
+        $converter = new ReplyToSymfonyResponseConverter;
+
+        $response = $converter->convert($reply);
+
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
+        $this->assertEquals('theContent', $response->getContent());
+        $this->assertEquals(418, $response->getStatusCode());
+        $this->assertArrayHasKey('foo', $response->headers->all());
+        $this->assertArrayHasKey('bar', $response->headers->all());
     }
 
     /**

@@ -98,8 +98,8 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
 
         try {
             $action->execute($request);
-        } catch (HttpRedirect $redirectUrlRequest) {
-            $this->assertEquals($expectedRedirectUrl, $redirectUrlRequest->getUrl());
+        } catch (HttpRedirect $reply) {
+            $this->assertEquals($expectedRedirectUrl, $reply->getUrl());
             
             return;
         }
@@ -120,6 +120,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
                 'USERACTION' => 'theUserAction',
                 'CMD' => 'theCmd'
             ))
+            ->will($this->returnValue('theRedirectUrl'))
         ;
 
         $action = new AuthorizeTokenAction();
@@ -133,7 +134,9 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
 
         try {
             $action->execute($request);
-        } catch (HttpRedirect $redirectUrlRequest) {
+        } catch (HttpRedirect $reply) {
+            $this->assertEquals('theRedirectUrl', $reply->getUrl());
+
             return;
         }
 
@@ -173,6 +176,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
         $apiMock
             ->expects($this->once())
             ->method('getAuthorizeTokenUrl')
+            ->will($this->returnValue('theRedirectUrl'))
         ;
 
         $action = new AuthorizeTokenAction();
@@ -185,7 +189,9 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
 
         try {
             $action->execute($request);
-        } catch (HttpRedirect $redirectUrlRequest) {
+        } catch (HttpRedirect $reply) {
+            $this->assertEquals('theRedirectUrl', $reply->getUrl());
+
             return;
         }
 
