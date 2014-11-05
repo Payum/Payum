@@ -64,15 +64,16 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
             );
         }
 
-        $targetParameters = array_replace($targetParameters, array('payum_token' => $token->getHash()));
-        if (0 === strpos($targetPath, 'http')) {
-            if (false !== strpos($targetPath, '?')) {
-                $targetPath .= '&'.http_build_query($targetParameters);
-            } else {
-                $targetPath .= '?'.http_build_query($targetParameters);
-            }
+        $targetParametersInPath = array();
+        if (0 === strpos($targetPath, 'http') && false !== strpos($targetPath, '?')) {
+            list($targetPath, $targetParametersInPath) = explode('?', $targetPath, 2);
 
-            $token->setTargetUrl($targetPath);
+            parse_str($targetParametersInPath, $targetParametersInPath);
+        }
+
+        $targetParameters = array_replace(array('payum_token' => $token->getHash()), $targetParametersInPath, $targetParameters);
+        if (0 === strpos($targetPath, 'http')) {
+            $token->setTargetUrl($targetPath.'?'.http_build_query($targetParameters));
         } else {
             $token->setTargetUrl($this->generateUrl($targetPath, $targetParameters));
         }
