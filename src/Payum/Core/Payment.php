@@ -34,7 +34,10 @@ class Payment implements PaymentInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @param mixed $api
+     * @param bool $forcePrepend
+     *
+     * @return void
      */
     public function addApi($api, $forcePrepend = false)
     {
@@ -45,7 +48,10 @@ class Payment implements PaymentInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @param \Payum\Core\Action\ActionInterface $action
+     * @param bool $forcePrepend
+     *
+     * @return void
      */
     public function addAction(ActionInterface $action, $forcePrepend = false)
     {
@@ -56,7 +62,10 @@ class Payment implements PaymentInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @param \Payum\Core\Extension\ExtensionInterface $extension
+     * @param bool $forcePrepend
+     *
+     * @return void
      */
     public function addExtension(ExtensionInterface $extension, $forcePrepend = false)
     {
