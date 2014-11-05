@@ -64,15 +64,16 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
             );
         }
 
-        $targetParameters = array_replace($targetParameters, array('payum_token' => $token->getHash()));
-        if (0 === strpos($targetPath, 'http')) {
-            if (false !== strpos($targetPath, '?')) {
-                $targetPath .= '&'.http_build_query($targetParameters);
-            } else {
-                $targetPath .= '?'.http_build_query($targetParameters);
-            }
+        $targetParametersInPath = array();
+        if (0 === strpos($targetPath, 'http') && false !== strpos($targetPath, '?')) {
+            list($targetPath, $targetParametersInPath) = explode('?', $targetPath);
 
-            $token->setTargetUrl($targetPath);
+            parse_str($targetParametersInPath, $targetParametersInPath);
+        }
+
+        $targetParameters = array_replace(array('payum_token' => $token->getHash()), $targetParametersInPath, $targetParameters);
+        if (0 === strpos($targetPath, 'http')) {
+            $token->setTargetUrl($targetPath.'?'.http_build_query($targetParameters));
         } else {
             $token->setTargetUrl($this->generateUrl($targetPath, $targetParameters));
         }
@@ -130,6 +131,23 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
     public function createNotifyToken($paymentName, $model = null)
     {
         return $this->createToken($paymentName, $model, $this->notifyPath);
+    }
+
+    protected function prepareUrl(TokenInterface $token, $path, array $pathParameters = array())
+    {
+        $targetParametersInPath = array();
+        if (0 === strpos($path, 'http') && false !== strpos($path, '?')) {
+            list($path, $targetParametersInPath) = explode('?', $path);
+
+            parse_str($targetParametersInPath, $targetParametersInPath);
+        }
+
+        $pathParameters = array_replace(array('payum_token' => $token->getHash()), $targetParametersInPath, $pathParameters);
+
+        return 0 === strpos($path, 'http') ?
+            $path.'?'.http_build_query($pathParameters) :
+            $this->generateUrl($path, $pathParameters)
+        ;
     }
 
     /**
