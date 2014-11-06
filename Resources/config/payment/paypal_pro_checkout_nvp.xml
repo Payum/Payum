@@ -8,6 +8,7 @@
         <parameter key="payum.paypal.pro_checkout_nvp.api.class">Payum\Paypal\ProCheckout\Nvp\Api</parameter>
 
         <parameter key="payum.paypal.pro_checkout_nvp.action.capture.class">Payum\Paypal\ProCheckout\Nvp\Action\CaptureAction</parameter>
+        <parameter key="payum.paypal.pro_checkout_nvp.action.refund.class">Payum\Paypal\ProCheckout\Nvp\Action\RefundAction</parameter>
         <parameter key="payum.paypal.pro_checkout_nvp.action.fill_order_details.class">Payum\Paypal\ProCheckout\Nvp\Action\FillOrderDetailsAction</parameter>
         <parameter key="payum.paypal.pro_checkout_nvp.action.status.class">Payum\Paypal\ProCheckout\Nvp\Action\StatusAction</parameter>
     </parameters>
@@ -28,6 +29,14 @@
         <service
             id="payum.paypal.pro_checkout_nvp.action.capture"
             class="%payum.paypal.pro_checkout_nvp.action.capture.class%"
+            public="false"
+        >
+            <tag name="payum.action" factory="paypal_pro_checkout_nvp" />
+        </service>
+
+        <service
+            id="payum.paypal.pro_checkout_nvp.action.refund"
+            class="%payum.paypal.pro_checkout_nvp.action.refund.class%"
             public="false"
         >
             <tag name="payum.action" factory="paypal_pro_checkout_nvp" />
