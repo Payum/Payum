@@ -1,28 +1,28 @@
-# Capture script.
+# Refund script.
 
 ## Simple use case
 
-To perform a capture you just have to do:
+To perform a refund you just have to do:
 
 ```php
 <?php
-use Payum\Core\Request\Capture;
+use Payum\Core\Request\Refund;
 
-$payment->execute(new Capture($order));
+$payment->execute(new Refund($order));
 
 // or
 
-$payment->execute(new Capture($details));
+$payment->execute(new Refund($details));
 ```
 
-_**Note**: If you've got the "RequestNotSupported" it either means Payum or a gateway do not support the capture._
+_**Note**: If you've got the "RequestNotSupported" it either means Payum or a gateway do not support the refund._
 
 ## Advanced (Secure) use case
 
-To use that you have to configure token factory and create a capture script:
+To use that you have to configure token factory and create a refund script:
 
 ```
-$token = $tokenFactory->createCaptureToken($paymentName, $details, 'afterCaptureUrl');
+$token = $tokenFactory->createRefundToken($paymentName, $details, 'afterRefundUrl');
 
 header("Location: ".$token->getTargetUrl());
 ```
@@ -38,7 +38,7 @@ Here's an example of [done.php](done-script.md) script:
 <?php
 //capture.php
 
-use Payum\Core\Request\Capture;
+use Payum\Core\Request\Refund;
 use Payum\Core\Reply\HttpRedirect;
 
 include 'config.php';
@@ -46,7 +46,7 @@ include 'config.php';
 $token = $requestVerifier->verify($_REQUEST);
 $payment = $payum->getPayment($token->getPaymentName());
 
-if ($reply = $payment->execute(new Capture($token), true)) {
+if ($reply = $payment->execute(new Refund($token), true)) {
     if ($reply instanceof HttpRedirect) {
         header("Location: ".$reply->getUrl());
         die();
@@ -63,3 +63,4 @@ header("Location: ".$token->getAfterUrl());
 _**Note**: If you've got the "Unsupported reply" you have to add an if condition for that. There we have to convert the reply to http response._
 
 Back to [index](index.md).
+

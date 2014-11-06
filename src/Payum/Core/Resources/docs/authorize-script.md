@@ -1,5 +1,32 @@
 # Authorize script.
 
+## Simple use case
+
+To perform a authorize you just have to do:
+
+```php
+<?php
+use Payum\Core\Request\Authorize;
+
+$payment->execute(new Authorize($order));
+
+// or
+
+$payment->execute(new Authorize($details));
+```
+
+_**Note**: If you've got the "RequestNotSupported" it either means Payum or a gateway do not support the authorize._
+
+## Advanced (Secure) use case
+
+To use that you have to configure token factory and create a capture script:
+
+```
+$token = $tokenFactory->createAuthorizeToken($paymentName, $details, 'afterAuthorizeUrl');
+
+header("Location: ".$token->getTargetUrl());
+```
+
 This is the script which does all the job related to payments authorization. 
 It may show a credit card form, an iframe or redirect a user to payment side. 
 The action provides some basic security features. It is completely unique for each payment, and once we done the url invalidated.
