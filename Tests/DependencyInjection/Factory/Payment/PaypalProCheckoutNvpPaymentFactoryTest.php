@@ -290,6 +290,34 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldAddPayumActionTagRefundAction()
+    {
+        $factory = new PaypalProCheckoutNvpPaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->create($container, 'aContextName', array(
+            'obtain_credit_card' => false,
+            'username' => 'aUsername',
+            'password' => 'aPassword',
+            'partner' => 'aPartner',
+            'vendor' => 'aVendor',
+            'sandbox' => true,
+            'actions' => array(),
+            'apis' => array(),
+            'extensions' => array(),
+        ));
+
+        $actionDefinition = $container->getDefinition('payum.paypal.pro_checkout_nvp.action.refund');
+
+        $tagAttributes = $actionDefinition->getTag('payum.action');
+        $this->assertCount(1, $tagAttributes);
+        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
+    }
+
+    /**
+     * @test
+     */
     public function shouldAddPayumActionTagStatusAction()
     {
         $factory = new PaypalProCheckoutNvpPaymentFactory;
