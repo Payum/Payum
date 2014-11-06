@@ -208,7 +208,29 @@ class Api
 
         $this->addOptions($request);
 
-        return $this->doRequest($request);
+        $result = $this->doRequest($request);
+        $result['TRXTYPE'] = self::TRXTYPE_SALE;
+
+        return $result;
+    }
+
+    /**
+     * @param array $fields
+     *
+     * @return array
+     */
+    public function doCredit(array $fields)
+    {
+        $request = new FormRequest();
+        $request->setFields($fields);
+        $request->setField('TRXTYPE', self::TRXTYPE_CREDIT);
+
+        $this->addOptions($request);
+
+        $result = $this->doRequest($request);
+        $result['TRXTYPE'] = self::TRXTYPE_CREDIT;
+
+        return $result;
     }
 
     /**

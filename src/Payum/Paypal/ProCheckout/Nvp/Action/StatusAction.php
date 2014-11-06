@@ -29,13 +29,31 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (Api::RESULT_SUCCESS === (int) $model['RESULT']) {
+        if (false == is_numeric($model['RESULT'])) {
+            $request->markUnknown();
+
+            return;
+        }
+
+        if ($model['RESULT'] > 0) {
+            $request->markFailed();
+
+            return;
+        }
+
+        if ($model['ORIGID'] && Api::TRXTYPE_CREDIT == $model['TRXTYPE'] && Api::RESULT_SUCCESS == $model['RESULT']) {
+            $request->markRefunded();
+
+            return;
+        }
+
+        if (Api::TRXTYPE_SALE == $model['TRXTYPE'] && Api::RESULT_SUCCESS == $model['RESULT']) {
             $request->markCaptured();
 
             return;
         }
 
-        $request->markFailed();
+        $request->markUnknown();
     }
 
     /**

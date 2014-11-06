@@ -32,7 +32,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             'http://example.com',
             'capture.php',
             'notify.php',
-            'authorize.php'
+            'authorize.php',
+            'refund.php'
         );
     }
 
@@ -81,7 +82,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             'http://example.com',
             'capture.php',
             'notify.php',
-            'authorize.php'
+            'authorize.php',
+            'refund.php'
         );
 
         $actualToken = $factory->createToken(
@@ -148,7 +150,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             'http://example.com',
             'capture.php',
             'notify.php',
-            'authorize.php'
+            'authorize.php',
+            'refund.php'
         );
 
         $actualToken = $factory->createToken(
@@ -215,7 +218,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             'http://example.com',
             'capture.php',
             'notify.php',
-            'authorize.php'
+            'authorize.php',
+            'refund.php'
         );
 
         $actualToken = $factory->createToken($paymentName, $model, 'theTargetPath');
@@ -275,7 +279,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             'http://example.com',
             'capture.php',
             'notify.php',
-            'authorize.php'
+            'authorize.php',
+            'refund.php'
         );
 
         $actualToken = $factory->createNotifyToken($paymentName, $model);
@@ -323,7 +328,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             'http://example.com',
             'capture.php',
             'notify.php',
-            'authorize.php'
+            'authorize.php',
+            'refund.php'
         );
 
         $actualToken = $factory->createNotifyToken($paymentName, null);
@@ -400,7 +406,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             'http://example.com',
             'capture.php',
             'notify.php',
-            'authorize.php'
+            'authorize.php',
+            'refund.php'
         );
 
         $actualToken = $factory->createCaptureToken($paymentName, $model, 'after.php', array('afterKey' => 'afterVal'));
@@ -480,7 +487,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             'http://example.com',
             'capture.php',
             'notify.php',
-            'authorize.php'
+            'authorize.php',
+            'refund.php'
         );
 
         $actualToken = $factory->createCaptureToken($paymentName, $model, 'http://google.com', array('afterKey' => 'afterVal'));
@@ -560,7 +568,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             'http://example.com',
             'capture.php',
             'notify.php',
-            'authorize.php'
+            'authorize.php',
+            'refund.php'
         );
 
         $actualToken = $factory->createAuthorizeToken($paymentName, $model, 'after.php', array('afterKey' => 'afterVal'));
@@ -640,7 +649,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             'http://example.com',
             'capture.php',
             'notify.php',
-            'authorize.php'
+            'authorize.php',
+            'refund.php'
         );
 
         $actualToken = $factory->createAuthorizeToken($paymentName, $model, 'http://google.com', array('afterKey' => 'afterVal'));
@@ -720,7 +730,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             'http://example.com',
             'capture.php',
             'notify.php',
-            'authorize.php'
+            'authorize.php',
+            'refund.php'
         );
 
         $actualToken = $factory->createAuthorizeToken($paymentName, $model, 'http://google.com?payum_token=foo', array('afterKey' => 'afterVal'));
@@ -800,7 +811,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             'http://example.com',
             'capture.php',
             'notify.php',
-            'authorize.php'
+            'authorize.php',
+            'refund.php'
         );
 
         $actualToken = $factory->createAuthorizeToken($paymentName, $model, 'http://google.com?payum_token=foo', array('payum_token' => null, 'afterKey' => 'afterVal'));
