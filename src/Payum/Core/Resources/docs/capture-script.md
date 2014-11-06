@@ -21,7 +21,8 @@ _**Note**: If you've got the "RequestNotSupported" it either means Payum or a ga
 
 To use that you have to configure token factory and create a capture script:
 
-```
+```php
+<?php
 $token = $tokenFactory->createCaptureToken($paymentName, $details, 'afterCaptureUrl');
 
 header("Location: ".$token->getTargetUrl());

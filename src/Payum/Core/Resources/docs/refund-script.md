@@ -21,7 +21,8 @@ _**Note**: If you've got the "RequestNotSupported" it either means Payum or a ga
 
 To use that you have to configure token factory and create a refund script:
 
-```
+```php
+<?php
 $token = $tokenFactory->createRefundToken($paymentName, $details, 'afterRefundUrl');
 
 header("Location: ".$token->getTargetUrl());
