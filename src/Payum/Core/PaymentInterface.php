@@ -1,41 +1,14 @@
 <?php
 namespace Payum\Core;
 
-use Payum\Core\Action\ActionInterface;
-use Payum\Core\Extension\ExtensionInterface;
-
 interface PaymentInterface
 {
-    /**
-     * @param mixed $api
-     * @param bool $forcePrepend
-     *
-     * @return void
-     */
-    function addApi($api, $forcePrepend = false);
-
-    /**
-     * @param \Payum\Core\Action\ActionInterface $action
-     * @param bool $forcePrepend
-     *
-     * @return void
-     */
-    function addAction(ActionInterface $action, $forcePrepend = false);
-
-    /**
-     * @param \Payum\Core\Extension\ExtensionInterface $extension
-     * @param bool $forcePrepend
-     *
-     * @return void
-     */
-    function addExtension(ExtensionInterface $extension, $forcePrepend = false);
-
     /**
      * @param mixed $request
      * @param boolean $catchReply
      * 
-     * @throws \Payum\Core\Exception\RequestNotSupportedException if any action supports the request.
-     * @throws \Payum\Core\Reply\ReplyInterface if $catchReply parameter set to false.
+     * @throws \Payum\Core\Exception\RequestNotSupportedException if there is not an action which able to process the request.
+     * @throws \Payum\Core\Reply\ReplyInterface when payment needs some external tasks to be executed. like a redirect to a gateway site or a page with credit card form. if $catchReply set to false the reply will be returned.
      * 
      * @return \Payum\Core\Reply\ReplyInterface|null
      */

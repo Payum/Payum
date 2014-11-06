@@ -2,6 +2,7 @@
 namespace Payum\Core\Registry;
 
 use Payum\Core\Extension\StorageExtension;
+use Payum\Core\Payment;
 
 class SimpleRegistry extends AbstractRegistry
 {
@@ -46,6 +47,10 @@ class SimpleRegistry extends AbstractRegistry
         $this->initializedStorageExtensions[$name] = true;
 
         $payment = $this->getPayment($name);
+        if (false == $payment instanceof Payment) {
+            return;
+        }
+
         foreach ($this->getStorages() as $storage) {
             $payment->addExtension(new StorageExtension($storage));
         }

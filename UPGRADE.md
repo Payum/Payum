@@ -7,6 +7,9 @@
 * [paypal-pro] Remove `Request` and `Response` classes. Use ones from Buzz.
 * [paypal-pro] Remove `trxtype` option from api.
 * [paypal-pro] Rename `Api::doPayment` to `Api::doSale`. Change the first argument now it is array and the method returns array too.
+* [payment] Method `PaymentInterface::addApi` was removed from interface, still available in `Payment` class.
+* [payment] Method `PaymentInterface::addAction` was removed from interface, still available in `Payment` class.
+* [payment] Method `PaymentInterface::addExtension` was removed from interface, still available in `Payment` class.
 
 ## 0.11 to 0.12
 
