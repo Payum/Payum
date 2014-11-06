@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Core\Security;
 
+use League\Url\Url;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Storage\StorageInterface;
 
@@ -71,29 +72,28 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
             );
         }
 
-        $targetParametersInPath = array();
-        if (0 === strpos($targetPath, 'http') && false !== strpos($targetPath, '?')) {
-            list($targetPath, $targetParametersInPath) = explode('?', $targetPath, 2);
-
-            parse_str($targetParametersInPath, $targetParametersInPath);
-        }
-
-        $targetParameters = array_replace(array('payum_token' => $token->getHash()), $targetParametersInPath, $targetParameters);
         if (0 === strpos($targetPath, 'http')) {
-            $token->setTargetUrl($targetPath.'?'.http_build_query($targetParameters));
+            $targetUrl = Url::createFromUrl($targetPath);
+            $targetUrl->getQuery()->set(array_replace(
+                array('payum_token' => $token->getHash()),
+                $targetUrl->getQuery()->toArray(),
+                $targetParameters
+            ));
+
+            $token->setTargetUrl((string) $targetUrl);
         } else {
-            $token->setTargetUrl($this->generateUrl($targetPath, $targetParameters));
+            $token->setTargetUrl($this->generateUrl($targetPath, array_replace(
+                array('payum_token' => $token->getHash()),
+                $targetParameters
+            )));
         }
 
         if ($afterPath && 0 === strpos($afterPath, 'http')) {
-            if (false !== strpos($afterPath, '?')) {
-                $afterPath .= '&'.http_build_query($afterParameters);
-            } else {
-                $afterPath .= '?'.http_build_query($afterParameters);
-            }
+            $afterUrl = Url::createFromUrl($afterPath);
+            $afterUrl->getQuery()->modify($afterParameters);
 
-            $token->setAfterUrl($afterPath);
-        } elseif ($afterPath) {
+            $token->setAfterUrl((string) $afterUrl);
+        } else if ($afterPath) {
             $token->setAfterUrl($this->generateUrl($afterPath, $afterParameters));
         }
 

@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Core\Security;
 
+use League\Url\Url;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Storage\StorageInterface;
 
@@ -32,12 +33,10 @@ class GenericTokenFactory extends AbstractGenericTokenFactory
      */
     protected function generateUrl($path, array $parameters = array())
     {
-        $url = rtrim($this->baseUrl, '/').'/'.ltrim($path, '/');
+        $url = Url::createFromUrl($this->baseUrl);
+        $url->getPath()->set($path);
+        $url->getQuery()->set($parameters);
 
-        if (false == empty($parameters)) {
-            $url .= '?'.http_build_query($parameters);
-        }
-
-        return $url;
+        return (string) $url;
     }
 }
