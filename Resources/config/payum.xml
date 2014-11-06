@@ -143,6 +143,7 @@
             <argument>payum_capture_do</argument>
             <argument>payum_notify_do</argument>
             <argument>payum_authorize_do</argument>
+            <argument>payum_refund_do</argument>
         </service>
 
         <service id="payum.form.type.credit_card_expiration_date" class="Payum\Bundle\PayumBundle\Form\Type\CreditCardExpirationDateType">
