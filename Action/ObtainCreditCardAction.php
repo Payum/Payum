@@ -13,6 +13,9 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @deprecated since 0.13. Use one from bridge.
+ */
 class ObtainCreditCardAction extends PaymentAwareAction
 {
     /**
