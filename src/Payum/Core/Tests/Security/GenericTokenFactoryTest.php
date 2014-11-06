@@ -1,10 +1,8 @@
 <?php
 namespace Payum\Core\Tests\Security;
 
-use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Model\Identificator;
 use Payum\Core\Model\Token;
-use Payum\Core\PaymentInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\GenericTokenFactory;
 use Payum\Core\Storage\StorageInterface;
@@ -167,7 +165,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($paymentName, $token->getPaymentName());
         $this->assertSame($identificator, $token->getDetails());
         $this->assertEquals(
-            'http://google.com?payum_token='.$token->getHash().'&foo=fooVal&targetPathKey=targetPathVal',
+            'http://google.com/?payum_token='.$token->getHash().'&foo=fooVal&targetPathKey=targetPathVal',
             $token->getTargetUrl()
         );
         $this->assertEquals('http://example.com/theAfterPath?afterPathKey=afterPathVal', $token->getAfterUrl());
@@ -501,7 +499,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             $captureToken->getTargetUrl()
         );
         $this->assertEquals(
-            'http://google.com?payum_token='.$afterToken->getHash().'&afterKey=afterVal',
+            'http://google.com/?payum_token='.$afterToken->getHash().'&afterKey=afterVal',
             $captureToken->getAfterUrl()
         );
     }
@@ -663,7 +661,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             $authorizeToken->getTargetUrl()
         );
         $this->assertEquals(
-            'http://google.com?payum_token='.$afterToken->getHash().'&afterKey=afterVal',
+            'http://google.com/?payum_token='.$afterToken->getHash().'&afterKey=afterVal',
             $authorizeToken->getAfterUrl()
         );
     }
@@ -734,7 +732,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             'refund.php'
         );
 
-        $actualToken = $factory->createAuthorizeToken($paymentName, $model, 'http://google.com?payum_token=foo', array('afterKey' => 'afterVal'));
+        $actualToken = $factory->createAuthorizeToken($paymentName, $model, 'http://google.com/?payum_token=foo', array('afterKey' => 'afterVal'));
 
         $this->assertSame($authorizeToken, $actualToken);
         $this->assertEquals($paymentName, $authorizeToken->getPaymentName());
@@ -744,7 +742,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             $authorizeToken->getTargetUrl()
         );
         $this->assertEquals(
-            'http://google.com?payum_token=foo&afterKey=afterVal',
+            'http://google.com/?payum_token=foo&afterKey=afterVal',
             $authorizeToken->getAfterUrl()
         );
     }
@@ -815,7 +813,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             'refund.php'
         );
 
-        $actualToken = $factory->createAuthorizeToken($paymentName, $model, 'http://google.com?payum_token=foo', array('payum_token' => null, 'afterKey' => 'afterVal'));
+        $actualToken = $factory->createAuthorizeToken($paymentName, $model, 'http://google.com/?payum_token=foo', array('payum_token' => null, 'afterKey' => 'afterVal'));
 
         $this->assertSame($authorizeToken, $actualToken);
         $this->assertEquals($paymentName, $authorizeToken->getPaymentName());
@@ -825,7 +823,88 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             $authorizeToken->getTargetUrl()
         );
         $this->assertEquals(
-            'http://google.com?afterKey=afterVal',
+            'http://google.com/?afterKey=afterVal',
+            $authorizeToken->getAfterUrl()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowCreateAfterUrlWithFragment()
+    {
+        $authorizeToken = new Token;
+        $afterToken = new Token;
+
+        $tokenStorageMock = $this->createStorageMock();
+        $tokenStorageMock
+            ->expects($this->at(0))
+            ->method('createModel')
+            ->will($this->returnValue($afterToken))
+        ;
+        $tokenStorageMock
+            ->expects($this->at(1))
+            ->method('updateModel')
+            ->with($this->identicalTo($afterToken))
+        ;
+        $tokenStorageMock
+            ->expects($this->at(2))
+            ->method('createModel')
+            ->will($this->returnValue($authorizeToken))
+        ;
+        $tokenStorageMock
+            ->expects($this->at(3))
+            ->method('updateModel')
+            ->with($this->identicalTo($authorizeToken))
+        ;
+        $tokenStorageMock
+            ->expects($this->at(4))
+            ->method('updateModel')
+            ->with($this->identicalTo($authorizeToken))
+        ;
+
+
+        $model = new \stdClass;
+        $identificator = new Identificator('anId', 'stdClass');
+        $paymentName = 'thePaymentName';
+
+        $modelStorage = $this->createStorageMock();
+        $modelStorage
+            ->expects($this->exactly(2))
+            ->method('getIdentificator')
+            ->with($this->identicalTo($model))
+            ->will($this->returnValue($identificator))
+        ;
+
+        $storageRegistryMock = $this->createStorageRegistryMock();
+        $storageRegistryMock
+            ->expects($this->exactly(2))
+            ->method('getStorage')
+            ->with($this->identicalTo($model))
+            ->will($this->returnValue($modelStorage))
+        ;
+
+        $factory = new GenericTokenFactory(
+            $tokenStorageMock,
+            $storageRegistryMock,
+            'http://example.com',
+            'capture.php',
+            'notify.php',
+            'authorize.php',
+            'refund.php'
+        );
+
+        $actualToken = $factory->createAuthorizeToken($paymentName, $model, 'http://google.com/foo/bar?foo=fooVal#fragment', array('payum_token' => null));
+
+        $this->assertSame($authorizeToken, $actualToken);
+        $this->assertEquals($paymentName, $authorizeToken->getPaymentName());
+        $this->assertSame($identificator, $authorizeToken->getDetails());
+        $this->assertEquals(
+            'http://example.com/authorize.php?payum_token='.$authorizeToken->getHash(),
+            $authorizeToken->getTargetUrl()
+        );
+        $this->assertEquals(
+            'http://google.com/foo/bar?foo=fooVal#fragment',
             $authorizeToken->getAfterUrl()
         );
     }
