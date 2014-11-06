@@ -208,7 +208,10 @@ class Api
 
         $this->addOptions($request);
 
-        return $this->doRequest($request);
+        $result = $this->doRequest($request);
+        $result['TRXTYPE'] = self::TRXTYPE_SALE;
+
+        return $result;
     }
 
     /**
@@ -224,7 +227,10 @@ class Api
 
         $this->addOptions($request);
 
-        return $this->doRequest($request);
+        $result = $this->doRequest($request);
+        $result['TRXTYPE'] = self::TRXTYPE_CREDIT;
+
+        return $result;
     }
 
     /**
