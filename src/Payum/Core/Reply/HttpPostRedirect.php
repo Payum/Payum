@@ -4,16 +4,47 @@ namespace Payum\Core\Reply;
 class HttpPostRedirect extends HttpResponse
 {
     /**
-     * @param string $content
-     * @param array $fields
+     * @var string
      */
-    public function __construct($content, array $fields = array())
+    protected $url;
+
+    /**
+     * @var array
+     */
+    protected $fields;
+
+    /**
+     * @param string $url
+     * @param array $fields
+     * @param int $statusCode
+     * @param string[] $headers
+     */
+    public function __construct($url, array $fields = array(), $statusCode = 200, array $headers = array())
     {
-        parent::__construct($this->prepareContent($content, $fields));
+        $this->url = $url;
+        $this->fields = $fields;
+
+        parent::__construct($this->prepareContent($url, $fields), $statusCode, $headers);
     }
 
     /**
-     * @param $url
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFields()
+    {
+        return $this->fields;
+    }
+
+    /**
+     * @param string $url
      * @param array $fields
      *
      * @return string

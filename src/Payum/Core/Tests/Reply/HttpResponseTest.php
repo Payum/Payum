@@ -18,7 +18,7 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithUrlAsArgument()
+    public function couldBeConstructedWithContentAsArgument()
     {
         new HttpResponse('html page');
     }
@@ -33,5 +33,50 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
         $request = new HttpResponse($expectedContent);
         
         $this->assertEquals($expectedContent, $request->getContent());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetDefaultStatusCodeSetInConstructor()
+    {
+        $request = new HttpResponse('html page');
+
+        $this->assertEquals(200, $request->getStatusCode());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetCustomStatusCodeSetInConstructor()
+    {
+        $request = new HttpResponse('html page', 301);
+
+        $this->assertEquals(301, $request->getStatusCode());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetDefaultHeadersSetInConstructor()
+    {
+        $request = new HttpResponse('html page');
+
+        $this->assertEquals(array(), $request->getHeaders());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetCustomHeadersSetInConstructor()
+    {
+        $expectedHeaders = array(
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        );
+
+        $request = new HttpResponse('html page', 200, $expectedHeaders);
+
+        $this->assertEquals($expectedHeaders, $request->getHeaders());
     }
 }

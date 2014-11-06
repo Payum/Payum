@@ -21,9 +21,7 @@ class ReplyToSymfonyResponseConverter
         if ($reply instanceof SymfonyHttpResponse) {
             return $reply->getResponse();
         } elseif ($reply instanceof HttpResponse) {
-            return new Response($reply->getContent());
-        } elseif ($reply instanceof HttpRedirect) {
-            return new RedirectResponse($reply->getUrl());
+            return new Response($reply->getContent(), $reply->getStatusCode(), $reply->getHeaders());
         }
 
         $ro = new \ReflectionObject($reply);
