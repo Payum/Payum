@@ -38,7 +38,7 @@
             </call>
         </service>
         
-        <service id="payum.buzz.client" class="%payum.buzz.client.class%">
+        <service id="payum.buzz.client" class="%payum.buzz.client.class%" factory-class="Payum\Core\Bridge\Buzz\ClientFactory" factory-method="createCurl">
             <call method="setTimeout">
                 <argument>200</argument>
             </call>
@@ -73,7 +73,11 @@
             <argument type="service" id="logger" on-invalid="ignore" />
         </service>
 
+        <service id="payum.converter.reply_to_http_response" class="Payum\Core\Bridge\Symfony\ReplyToSymfonyResponseConverter" />
+
         <service id="payum.listener.reply_to_http_response" class="%payum.listener.reply_to_http_response.class%">
+            <argument type="service" id="payum.converter.reply_to_http_response" />
+
             <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" priority="128" />
         </service>
 

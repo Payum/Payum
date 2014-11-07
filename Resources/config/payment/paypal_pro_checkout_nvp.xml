@@ -20,10 +20,10 @@
             abstract="true"
             public="false"
         >
-            <argument type="service" id="payum.buzz.client" />
             <argument type="collection">
                 <!-- It is template service. The real service will be created by Be2BillPaymentFactory -->
             </argument>
+            <argument type="service" id="payum.buzz.client" />
         </service>
 
         <service

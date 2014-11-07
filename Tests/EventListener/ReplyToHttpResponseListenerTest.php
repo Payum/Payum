@@ -2,10 +2,8 @@
 namespace Payum\Bundle\PayumBundle\Tests\EventListener;
 
 use Payum\Bundle\PayumBundle\EventListener\ReplyToHttpResponseListener;
-use Payum\Core\Bridge\Symfony\Reply\HttpResponse as SymfonyHttpResponse;
-use Payum\Core\Reply\HttpPostRedirect;
+use Payum\Core\Bridge\Symfony\ReplyToSymfonyResponseConverter;
 use Payum\Core\Reply\HttpRedirect;
-use Payum\Core\Reply\HttpResponse;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,9 +15,9 @@ class ReplyToHttpResponseListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
+    public function couldBeConstructedWithOneArgument()
     {
-        new ReplyToHttpResponseListener;
+        new ReplyToHttpResponseListener($this->createReplyToSymfonyResponseConverterMock());
     }
 
     /**
@@ -35,8 +33,14 @@ class ReplyToHttpResponseListenerTest extends \PHPUnit_Framework_TestCase
             'requestType',
             $expectedException
         );
+
+        $converterMock = $this->createReplyToSymfonyResponseConverterMock();
+        $converterMock
+            ->expects($this->never())
+            ->method('convert')
+        ;
         
-        $listener = new ReplyToHttpResponseListener;
+        $listener = new ReplyToHttpResponseListener($converterMock);
 
         $listener->onKernelException($event);
         
@@ -48,11 +52,12 @@ class ReplyToHttpResponseListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSetRedirectResponseIfExceptionHttpRedirectReply()
+    public function shouldSetResponseReturnedByConverterToEvent()
     {
         $expectedUrl = '/foo/bar';
-        
+
         $reply = new HttpRedirect($expectedUrl);
+        $response = new Response();
 
         $event = new GetResponseForExceptionEvent(
             $this->createHttpKernelMock(),
@@ -61,21 +66,29 @@ class ReplyToHttpResponseListenerTest extends \PHPUnit_Framework_TestCase
             $reply
         );
 
-        $listener = new ReplyToHttpResponseListener;
+        $converterMock = $this->createReplyToSymfonyResponseConverterMock();
+        $converterMock
+            ->expects($this->once())
+            ->method('convert')
+            ->with($this->identicalTo($reply))
+            ->will($this->returnValue($response))
+        ;
+
+        $listener = new ReplyToHttpResponseListener($converterMock);
 
         $listener->onKernelException($event);
 
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $event->getResponse());
-        $this->assertEquals($expectedUrl, $event->getResponse()->getTargetUrl());
+        $this->assertSame($response, $event->getResponse());
         $this->assertSame($reply, $event->getException());
     }
 
     /**
      * @test
      */
-    public function shouldSetXStatusCodeWhenExceptionInstanceOfHttpRedirectReply()
+    public function shouldSetXStatusFromResponseStatusCode()
     {
         $reply = new HttpRedirect('/foo/bar');
+        $response = new Response('', 302);
 
         $event = new GetResponseForExceptionEvent(
             $this->createHttpKernelMock(),
@@ -84,11 +97,19 @@ class ReplyToHttpResponseListenerTest extends \PHPUnit_Framework_TestCase
             $reply
         );
 
-        $listener = new ReplyToHttpResponseListener;
+        $converterMock = $this->createReplyToSymfonyResponseConverterMock();
+        $converterMock
+            ->expects($this->once())
+            ->method('convert')
+            ->with($this->identicalTo($reply))
+            ->will($this->returnValue($response))
+        ;
+
+        $listener = new ReplyToHttpResponseListener($converterMock);
 
         $listener->onKernelException($event);
 
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $event->getResponse());
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $event->getResponse());
         $this->assertTrue($event->getResponse()->headers->has('X-Status-Code'));
         $this->assertEquals(302, $event->getResponse()->headers->get('X-Status-Code'));
     }
@@ -96,11 +117,12 @@ class ReplyToHttpResponseListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSetResponseIfExceptionInstanceOfSymfonyHttpResponseReply()
+    public function shouldNotSetXStatusIfAlreadySet()
     {
-        $expectedResponse = new Response('foobar');
-
-        $reply = new SymfonyHttpResponse($expectedResponse);
+        $reply = new HttpRedirect('/foo/bar');
+        $response = new Response('', 555, array(
+            'X-Status-Code' => 666,
+        ));
 
         $event = new GetResponseForExceptionEvent(
             $this->createHttpKernelMock(),
@@ -109,142 +131,29 @@ class ReplyToHttpResponseListenerTest extends \PHPUnit_Framework_TestCase
             $reply
         );
 
-        $listener = new ReplyToHttpResponseListener;
+        $converterMock = $this->createReplyToSymfonyResponseConverterMock();
+        $converterMock
+            ->expects($this->once())
+            ->method('convert')
+            ->with($this->identicalTo($reply))
+                ->will($this->returnValue($response))
+        ;
+
+        $listener = new ReplyToHttpResponseListener($converterMock);
 
         $listener->onKernelException($event);
 
-        $this->assertSame($expectedResponse, $event->getResponse());
-        $this->assertSame($reply, $event->getException());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSetXStatusCodeWhenExceptionInstanceOfSymfonyHttpResponseReply()
-    {
-        $expectedStatus = 555;
-
-        $response = new Response('foobar', $expectedStatus);
-
-        $reply = new SymfonyHttpResponse($response);
-
-        $event = new GetResponseForExceptionEvent(
-            $this->createHttpKernelMock(),
-            new Request,
-            'requestType',
-            $reply
-        );
-
-        $listener = new ReplyToHttpResponseListener;
-
-        $listener->onKernelException($event);
-
-        //guard
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $event->getResponse());
-
-        $this->assertTrue($event->getResponse()->headers->has('X-Status-Code'));
-        $this->assertEquals(555, $event->getResponse()->headers->get('X-Status-Code'));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSetXStatusCodeIfAlreadySetWhenExceptionInstanceOfSymfonyHttpResponseReply()
-    {
-        $expectedStatus = 555;
-
-        $response = new Response('foobar', $expectedStatus);
-        $response->headers->set('X-Status-Code', 666);
-
-        $reply = new SymfonyHttpResponse($response);
-
-        $event = new GetResponseForExceptionEvent(
-            $this->createHttpKernelMock(),
-            new Request,
-            'requestType',
-            $reply
-        );
-
-        $listener = new ReplyToHttpResponseListener;
-
-        $listener->onKernelException($event);
-
-        //guard
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $event->getResponse());
-
         $this->assertTrue($event->getResponse()->headers->has('X-Status-Code'));
         $this->assertEquals(666, $event->getResponse()->headers->get('X-Status-Code'));
     }
 
     /**
-     * @test
+     * @return \PHPUnit_Framework_MockObject_MockObject|ReplyToSymfonyResponseConverter
      */
-    public function shouldSetResponseAndStatus200IfExceptionInstanceOfHttpResponseReply()
+    protected function createReplyToSymfonyResponseConverterMock()
     {
-        $reply = new HttpResponse('theContent');
-
-        $event = new GetResponseForExceptionEvent(
-            $this->createHttpKernelMock(),
-            new Request,
-            'requestType',
-            $reply
-        );
-
-        $listener = new ReplyToHttpResponseListener;
-
-        $listener->onKernelException($event);
-
-        $this->assertSame('theContent', $event->getResponse()->getContent());
-        $this->assertEquals(200, $event->getResponse()->headers->get('X-Status-Code'));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldChangeReplyToLogicExceptionIfNotSupported()
-    {
-        $notSupportedReply = $this->getMock('Payum\Core\Reply\Base');
-
-        $event = new GetResponseForExceptionEvent(
-            $this->createHttpKernelMock(),
-            new Request,
-            'requestType',
-            $notSupportedReply
-        );
-
-        $listener = new ReplyToHttpResponseListener;
-
-        $listener->onKernelException($event);
-
-        $this->assertNull($event->getResponse());
-        $this->assertInstanceOf('Payum\Core\Exception\LogicException', $event->getException());
-        $this->assertStringStartsWith(
-            'Cannot convert reply Mock_Base_',
-            $event->getException()->getMessage()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSetResponseIfExceptionInstanceOfHttpPostRedirectReply()
-    {
-        $reply = new HttpPostRedirect('anUrl', array('foo' => 'foo'));
-
-        $event = new GetResponseForExceptionEvent(
-            $this->createHttpKernelMock(),
-            new Request,
-            'requestType',
-            $reply
-        );
-
-        $listener = new ReplyToHttpResponseListener;
-
-        $listener->onKernelException($event);
-
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $event->getResponse());
-        $this->assertEquals(200, $event->getResponse()->getStatusCode());
-        $this->assertEquals($reply->getContent(), $event->getResponse()->getContent());
+        return $this->getMock('Payum\Core\Bridge\Symfony\ReplyToSymfonyResponseConverter');
     }
 
     /**

@@ -37,7 +37,7 @@ class CreateCaptureTokenCommandTest extends WebTestCase
 
         $this->assertContains('Hash: ', $output);
         $this->assertContains('Url: http://localhost/payment/capture', $output);
-        $this->assertContains('After Url: http://google.com?payum_token=', $output);
+        $this->assertContains('After Url: http://google.com/?payum_token=', $output);
         $this->assertContains("Details: $modelClass#$modelId", $output);
     }
 
