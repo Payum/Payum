@@ -536,7 +536,7 @@ class Api
         $request->setMethod('POST');
         $request->fromUrl($this->getApiEndpoint());
 
-        $this->client->send($request, $response = new Response, $this->getClientOptions());
+        $this->client->send($request, $response = new Response);
 
         if (false == $response->isSuccessful()) {
             throw HttpException::factory($request, $response);
