@@ -28,16 +28,13 @@ use Payum\Paypal\ProCheckout\Nvp\Api as PaypalProApi;
 
 // ...
 
-$payments['paypal_pro'] = PaypalProPaymentFactory::create(new PaypalProApi(
-    new Curl,
-    array(
-        'username' => 'REPLACE IT',
-        'password' => 'REPLACE IT',
-        'partner' => 'REPLACE IT',
-        'vendor' => 'REPLACE IT',
-        'sandbox' => true
-    )
-));
+$payments['paypal_pro'] = PaypalProPaymentFactory::create(new PaypalProApi(array(
+    'username' => 'REPLACE IT',
+    'password' => 'REPLACE IT',
+    'partner' => 'REPLACE IT',
+    'vendor' => 'REPLACE IT',
+    'sandbox' => true
+)));
 ```
 
 ## prepare.php

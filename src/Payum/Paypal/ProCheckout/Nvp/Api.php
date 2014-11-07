@@ -181,7 +181,7 @@ class Api
      *
      * @throw InvalidArgumentException
      */
-    public function __construct(ClientInterface $client, array $options)
+    public function __construct(array $options, ClientInterface $client = null)
     {
         $this->client = $client;
         $this->options = array_replace($this->options, $options);
