@@ -42,6 +42,14 @@
             <call method="setTimeout">
                 <argument>200</argument>
             </call>
+            <call method="setOption">
+                <argument>10083</argument><!-- CURLOPT_SSL_CIPHER_LIST -->
+                <argument>TLSv1</argument>
+            </call>
+            <call method="setOption">
+                <argument>32</argument><!-- CURLOPT_SSLVERSION -->
+                <argument>1</argument><!-- CURL_SSLVERSION_TLSv1 -->
+            </call>
         </service>
 
         <service
