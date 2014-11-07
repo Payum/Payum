@@ -2,13 +2,12 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
 use Buzz\Client\ClientInterface;
-use Buzz\Client\Curl;
 use Buzz\Message\Form\FormRequest;
 use Buzz\Message\Response;
+use Payum\Core\Bridge\Buzz\ClientFactory;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\RuntimeException;
-use Payum\Core\Reply\HttpRedirect;
 
 /**
  * @link https://www.x.com/developers/paypal/documentation-tools/api/getexpresscheckoutdetails-api-operation-nvp
@@ -308,8 +307,6 @@ class Api
      */
     public function __construct(array $options, ClientInterface $client = null)
     {
-        $this->client = $client ?: new Curl;
-
         $this->options = array_replace($this->options, $options);
 
         if (true == empty($this->options['username'])) {
@@ -324,6 +321,8 @@ class Api
         if (false == is_bool($this->options['sandbox'])) {
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
         }
+        
+        $this->client = $client ?: ClientFactory::createCurl();
     }
 
     /**
