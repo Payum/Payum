@@ -72,7 +72,6 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('aVendor', $config['vendor']);
 
         $this->assertArrayHasKey('tender', $config);
-        $this->assertArrayHasKey('trxtype', $config);
         $this->assertArrayHasKey('sandbox', $config);
 
         //come from abstract payment factory

@@ -55,7 +55,7 @@ class Be2BillPaymentFactory extends AbstractPaymentFactory
     protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
     {
         $apiDefinition = new DefinitionDecorator('payum.be2bill.api.prototype');
-        $apiDefinition->replaceArgument(1, array(
+        $apiDefinition->replaceArgument(0, array(
             'identifier' => $config['identifier'],
             'password' => $config['password'],
             'sandbox' => $config['sandbox'],

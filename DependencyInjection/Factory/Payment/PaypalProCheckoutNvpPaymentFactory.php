@@ -53,7 +53,6 @@ class PaypalProCheckoutNvpPaymentFactory extends AbstractPaymentFactory
             ->scalarNode('partner')->isRequired()->cannotBeEmpty()->end()
             ->scalarNode('vendor')->isRequired()->cannotBeEmpty()->end()
             ->scalarNode('tender')->defaultValue('C')->cannotBeEmpty()->end()
-            ->scalarNode('trxtype')->defaultValue('S')->cannotBeEmpty()->end()
             ->booleanNode('sandbox')->defaultTrue()->end()
         ->end();
     }
@@ -64,14 +63,13 @@ class PaypalProCheckoutNvpPaymentFactory extends AbstractPaymentFactory
     protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
     {
         $apiDefinition = new DefinitionDecorator('payum.paypal.pro_checkout_nvp.api.prototype');
-        $apiDefinition->replaceArgument(1, array(
+        $apiDefinition->replaceArgument(0, array(
             'username' => $config['username'],
             'password' => $config['password'],
             'partner' => $config['partner'],
             'vendor' => $config['vendor'],
             'sandbox' => $config['sandbox'],
             'tender' => isset($config['tender']) ? $config['tender'] : 'C',
-            'trxtype' => isset($config['trxtype']) ? $config['trxtype'] : 'S',
         ));
         $apiDefinition->setPublic(true);
         $apiId = 'payum.context.'.$contextName.'.api';
