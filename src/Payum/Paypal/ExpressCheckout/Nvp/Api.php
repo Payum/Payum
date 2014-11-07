@@ -308,7 +308,15 @@ class Api
      */
     public function __construct(array $options, ClientInterface $client = null)
     {
-        $this->client = $client ?: new Curl;
+        if($client)
+        {
+            $this->client = $client;
+        }
+        else 
+        {
+            $this->client = new Curl();
+            $this->configureDefaultClientOptions();
+        }
 
         $this->options = array_replace($this->options, $options);
 
@@ -567,20 +575,17 @@ class Api
     }
     
     /**
-     * @return array
      */
-    protected function getClientOptions()
+    protected function configureDefaultClientOptions()
     {
-        $options = array();
-        $options[CURLOPT_SSL_CIPHER_LIST] = 'TLSv1';
-        $options[CURLOPT_SSLVERSION] = CURL_SSLVERSION_TLSv1;
+        $this->client->setOption(CURLOPT_SSL_CIPHER_LIST, 'TLSv1');
+        $this->client->setOption(CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
         
         if($this->options['sandbox'])
         {
-            $options[CURLOPT_SSL_VERIFYPEER] = false;
-            $options[CURLOPT_SSL_VERIFYHOST] = false;
+            $this->client->setOption(CURLOPT_SSL_VERIFYPEER, false);
+            $this->client->setOption(CURLOPT_SSL_VERIFYHOST, false);
         }
-        return $options;
     }
 
     /**
