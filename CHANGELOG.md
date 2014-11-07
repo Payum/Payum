@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.12.2 (2014-11-07)
+
+* [security] Added cURL Options for the PayPal Sandbox SSL 3.0 Vulnerability (POODLE)
+* [omnipay-bridge] catch invalid credit card exception.
+
 ## 0.12.1 (2014-10-31)
 
 * [symfony-bridge][forms] Fix exception "there is only 'years' option available."
