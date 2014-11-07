@@ -308,16 +308,6 @@ class Api
      */
     public function __construct(array $options, ClientInterface $client = null)
     {
-        if($client)
-        {
-            $this->client = $client;
-        }
-        else 
-        {
-            $this->client = new Curl();
-            $this->configureDefaultClientOptions();
-        }
-
         $this->options = array_replace($this->options, $options);
 
         if (true == empty($this->options['username'])) {
@@ -332,6 +322,8 @@ class Api
         if (false == is_bool($this->options['sandbox'])) {
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
         }
+        
+        $this->client = $client ?: $this->createDefaultClient();
     }
 
     /**
@@ -575,17 +567,20 @@ class Api
     }
     
     /**
+     * @return \Buzz\Client\Curl
      */
-    protected function configureDefaultClientOptions()
+    protected function createDefaultClient()
     {
-        $this->client->setOption(CURLOPT_SSL_CIPHER_LIST, 'TLSv1');
-        $this->client->setOption(CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
+        $client = new Curl();
+        $client->setOption(CURLOPT_SSL_CIPHER_LIST, 'TLSv1');
+        $client->setOption(CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
         
         if($this->options['sandbox'])
         {
-            $this->client->setOption(CURLOPT_SSL_VERIFYPEER, false);
-            $this->client->setOption(CURLOPT_SSL_VERIFYHOST, false);
+            $client->setOption(CURLOPT_SSL_VERIFYPEER, false);
+            $client->setOption(CURLOPT_SSL_VERIFYHOST, false);
         }
+        return $client;
     }
 
     /**
