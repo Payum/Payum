@@ -12,9 +12,9 @@ class ApiTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithBuzzClientAndOptions()
     {
-        new Api($this->createClientMock(), array(
+        new Api(array(
             'sandbox' => true
-        ));
+        ), $this->createClientMock());
     }
 
     /**
@@ -25,7 +25,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfSandboxOptionNotSetInConstructor()
     {
-        new Api($this->createClientMock(), array());
+        new Api(array(), $this->createClientMock());
     }
 
     /**
@@ -33,9 +33,9 @@ class ApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnSandboxIpnEndpointIfSandboxSetTrueInConstructor()
     {
-        $api = new Api($this->createClientMock(), array(
+        $api = new Api(array(
             'sandbox' => true
-        ));
+        ), $this->createClientMock());
 
         $this->assertEquals('https://www.sandbox.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
     }
@@ -45,9 +45,9 @@ class ApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnLiveIpnEndpointIfSandboxSetFalseInConstructor()
     {
-        $api = new Api($this->createClientMock(), array(
+        $api = new Api(array(
             'sandbox' => false
-        ));
+        ), $this->createClientMock());
 
         $this->assertEquals('https://www.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
     }
@@ -73,9 +73,9 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $api = new Api($clientMock, array(
+        $api = new Api(array(
             'sandbox' => false
-        ));
+        ), $clientMock);
 
         $api->notifyValidate(array());
     }
@@ -103,9 +103,9 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             }))
         ;
         
-        $api = new Api($clientMock, array(
+        $api = new Api(array(
             'sandbox' => false
-        ));
+        ), $clientMock);
 
         $expectedNotification = array(
             'foo' => 'foo',
@@ -142,9 +142,9 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $api = new Api($clientMock, array(
+        $api = new Api(array(
             'sandbox' => false
-        ));
+        ), $clientMock);
 
         $this->assertEquals(Api::NOTIFY_VERIFIED, $api->notifyValidate(array()));
     }
@@ -168,9 +168,9 @@ class ApiTest extends \PHPUnit_Framework_TestCase
                     }))
         ;
 
-        $api = new Api($clientMock, array(
+        $api = new Api(array(
             'sandbox' => false
-        ));
+        ), $clientMock);
 
         $this->assertEquals(Api::NOTIFY_INVALID, $api->notifyValidate(array()));
     }
@@ -194,9 +194,9 @@ class ApiTest extends \PHPUnit_Framework_TestCase
                     }))
         ;
 
-        $api = new Api($clientMock, array(
+        $api = new Api(array(
             'sandbox' => false
-        ));
+        ), $clientMock);
 
         $this->assertEquals(Api::NOTIFY_INVALID, $api->notifyValidate(array()));
     }
