@@ -27,7 +27,7 @@ use Payum\Be2Bill\OnsitePaymentFactory as Be2BillOnsitePaymentFactory;
 
 // ...
 
-$payments['be2bill'] = Be2BillPaymentFactory::create(new Be2BillApi(new Curl, array(
+$payments['be2bill'] = Be2BillPaymentFactory::create(new Be2BillApi(array(
    'identifier' => 'REPLACE WITH YOURS',
    'password' => 'REPLACE WITH YOURS',
    'sandbox' => true
@@ -35,7 +35,7 @@ $payments['be2bill'] = Be2BillPaymentFactory::create(new Be2BillApi(new Curl, ar
 
 // or onsite 
 
-$payments['be2bill_onsite'] = Be2BillOnsitePaymentFactory::create(new Be2BillApi(new Curl, array(
+$payments['be2bill_onsite'] = Be2BillOnsitePaymentFactory::create(new Be2BillApi(array(
    'identifier' => 'REPLACE WITH YOURS',
    'password' => 'REPLACE WITH YOURS',
    'sandbox' => true

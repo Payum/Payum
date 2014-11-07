@@ -5,7 +5,7 @@
 use Buzz\Client\Curl;
 use Payum\Paypal\Ipn\Api;
 
-$api = new Api(new Curl, array(
+$api = new Api(array(
     'sandbox' => true
 ));
 

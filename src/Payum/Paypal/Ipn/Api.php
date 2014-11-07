@@ -4,6 +4,7 @@ namespace Payum\Paypal\Ipn;
 use Buzz\Client\ClientInterface;
 use Buzz\Message\Form\FormRequest;
 use Buzz\Message\Response;
+use Payum\Core\Bridge\Buzz\ClientFactory;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
 
@@ -35,12 +36,12 @@ class Api
     protected $options;
 
     /**
-     * @param ClientInterface $client
      * @param array $options
+     * @param ClientInterface $client
      */
-    public function __construct(ClientInterface $client, array $options)
+    public function __construct(array $options, ClientInterface $client = null)
     {
-        $this->client = $client;
+        $this->client = $client ?: ClientFactory::createCurl();
         
         $this->options = $options;
 
