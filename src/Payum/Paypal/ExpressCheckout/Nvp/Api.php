@@ -2,13 +2,12 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
 use Buzz\Client\ClientInterface;
-use Buzz\Client\Curl;
 use Buzz\Message\Form\FormRequest;
 use Buzz\Message\Response;
+use Payum\Core\Bridge\Buzz\ClientFactory;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\RuntimeException;
-use Payum\Core\Reply\HttpRedirect;
 
 /**
  * @link https://www.x.com/developers/paypal/documentation-tools/api/getexpresscheckoutdetails-api-operation-nvp
@@ -323,7 +322,7 @@ class Api
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
         }
         
-        $this->client = $client ?: $this->createDefaultClient();
+        $this->client = $client ?: ClientFactory::createCurl();
     }
 
     /**
@@ -564,20 +563,6 @@ class Api
             $this->options['sandbox'] ? 'www.sandbox.paypal.com' : 'www.paypal.com',
             http_build_query(array_replace($defaultQuery, $query))
         );
-    }
-    
-    /**
-     * @return \Buzz\Client\Curl
-     */
-    protected function createDefaultClient()
-    {
-        $client = new Curl();
-        //reaction to the ssl3.0 shutdown from paypal
-        //https://www.paypal-community.com/t5/PayPal-Forward/PayPal-Response-to-SSL-3-0-Vulnerability-aka-POODLE/ba-p/891829
-        $client->setOption(CURLOPT_SSL_CIPHER_LIST, 'TLSv1');
-        $client->setOption(CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
-        
-        return $client;
     }
 
     /**
