@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.12.1 (2014-11-07)
+
+* [security] Force TLSv1 encription. This POODLE bites: exploiting the SSL 3.0 fallback
+* [doc][paypal-pro] add twig config.
+
 ## 0.12.0 (2014-10-29)
 
 * [doc] simple examples -> custom examples.

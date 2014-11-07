@@ -37,7 +37,7 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
-        
+
         <service id="payum.buzz.client" class="%payum.buzz.client.class%" factory-class="Payum\Core\Bridge\Buzz\ClientFactory" factory-method="createCurl">
             <call method="setTimeout">
                 <argument>200</argument>
