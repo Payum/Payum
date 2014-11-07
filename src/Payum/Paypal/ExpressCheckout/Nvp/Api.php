@@ -572,14 +572,11 @@ class Api
     protected function createDefaultClient()
     {
         $client = new Curl();
+        //reaction to the ssl3.0 shutdown from paypal
+        //https://www.paypal-community.com/t5/PayPal-Forward/PayPal-Response-to-SSL-3-0-Vulnerability-aka-POODLE/ba-p/891829
         $client->setOption(CURLOPT_SSL_CIPHER_LIST, 'TLSv1');
         $client->setOption(CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
         
-        if($this->options['sandbox'])
-        {
-            $client->setOption(CURLOPT_SSL_VERIFYPEER, false);
-            $client->setOption(CURLOPT_SSL_VERIFYHOST, false);
-        }
         return $client;
     }
 
