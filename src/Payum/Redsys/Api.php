@@ -12,6 +12,7 @@ use Buzz\Client\ClientInterface;
 use Buzz\Client\Curl;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Model\OrderInterface;
+use Payum\Core\Security\TokenInterface;
 
 class Api
 {
@@ -79,11 +80,11 @@ class Api
      * Prepare the payment depending on the order and the token
      *
      * @param OrderInterface $order
-     * @param $token
+     * @param TokenInterface $token
      *
      * @return array
      */
-    public function preparePayment( $order, $token )
+    public function preparePayment( OrderInterface $order, TokenInterface $token )
     {
         $details = $order->getDetails();
 
