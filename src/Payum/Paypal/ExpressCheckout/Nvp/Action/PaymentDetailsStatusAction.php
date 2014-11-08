@@ -166,10 +166,6 @@ class PaymentDetailsStatusAction implements ActionInterface
             return false;
         }
 
-        if (count(iterator_to_array($model)) == 0) {
-            return true;
-        }
-
-        return isset($model['PAYMENTREQUEST_0_AMT']) && null !== $model['PAYMENTREQUEST_0_AMT'];
+        return false == isset($model['BILLINGPERIOD']);
     }
 }
