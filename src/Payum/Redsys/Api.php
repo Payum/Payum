@@ -61,8 +61,8 @@ class Api
         if (true == empty( $this->options['secret_key'] )) {
             throw new InvalidArgumentException( 'The secret_key option must be set.' );
         }
-        if (true == empty( $this->options['url'] )) {
-            throw new InvalidArgumentException( 'The url option must be set.' );
+        if (false == is_bool($this->options['sandbox'])) {
+            throw new InvalidArgumentException('The boolean sandbox option must be set.');
         }
     }
 
@@ -73,7 +73,9 @@ class Api
      */
     public function getRedsysUrl()
     {
-        return $this->options['url'];
+        return $this->options['sanbox']
+            ? 'https://sis-t.redsys.es:25443/canales '
+            : 'https://sis.redsys.es/canales/';
     }
 
     /**
