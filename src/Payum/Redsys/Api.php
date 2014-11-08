@@ -74,7 +74,7 @@ class Api
     public function getRedsysUrl()
     {
         return $this->options['sanbox']
-            ? 'https://sis-t.redsys.es:25443/canales '
+            ? 'https://sis-t.redsys.es:25443/canales'
             : 'https://sis.redsys.es/canales/';
     }
 
