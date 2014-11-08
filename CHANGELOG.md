@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.12.3 (2014-11-08)
+
+* [paypal-ec] Allow purchase order with custom details
+
 ## 0.12.2 (2014-11-07)
 
 * [security] Added cURL Options for the PayPal Sandbox SSL 3.0 Vulnerability (POODLE)
