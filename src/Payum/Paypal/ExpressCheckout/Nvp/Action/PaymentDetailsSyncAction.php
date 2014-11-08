@@ -55,6 +55,6 @@ class PaymentDetailsSyncAction extends PaymentAwareAction
             return false;
         }
 
-        return isset($model['PAYMENTREQUEST_0_AMT']) && null !== $model['PAYMENTREQUEST_0_AMT'];
+        return false == isset($model['BILLINGPERIOD']);
     }
 }
