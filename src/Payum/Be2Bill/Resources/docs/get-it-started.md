@@ -44,7 +44,7 @@ $payments['be2bill_onsite'] = Be2BillOnsitePaymentFactory::create(new Be2BillApi
 
 ## prepare.php
 
-Here you have to modify a `paymentName` value. Set it to `be2bill` or `be2bill_oniste`.
+Here you have to modify a `paymentName` value. Set it to `be2bill` or `be2bill_onsite`.
 
 ## Next 
 
