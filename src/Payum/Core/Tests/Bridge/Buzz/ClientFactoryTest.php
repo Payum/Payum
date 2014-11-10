@@ -10,8 +10,8 @@ class ClientFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnCurlClient()
     {
-        $clinet = ClientFactory::createCurl();
+        $client = ClientFactory::createCurl();
 
-        $this->assertInstanceOf('Buzz\Client\Curl', $clinet);
+        $this->assertInstanceOf('Buzz\Client\Curl', $client);
     }
 }
