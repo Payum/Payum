@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.12.4 (2014-11-10)
+
+* [request] add cancel request.
+* [stripe] description in template must have default val.
+
 ## 0.12.3 (2014-11-08)
 
 * [paypal-ec] Allow purchase order with custom details
