@@ -9,7 +9,7 @@
             data-key="{{ publishable_key }}"
             data-image="{{ model.image|default("") }}"
             data-name="{{ model.name|default("") }}"
-            data-description="{{ model.description }}"
+            data-description="{{ model.description|default("") }}"
             data-amount="{{ model.amount }}">
         </script>
     </form>
