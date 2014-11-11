@@ -106,6 +106,56 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldCreateCustomTokenWithIdentificatorAsModel()
+    {
+        $token = new Token;
+
+        $tokenStorageMock = $this->createStorageMock();
+        $tokenStorageMock
+            ->expects($this->once())
+            ->method('createModel')
+            ->will($this->returnValue($token))
+        ;
+        $tokenStorageMock
+            ->expects($this->once())
+            ->method('updateModel')
+            ->with($this->identicalTo($token))
+        ;
+
+        $paymentName = 'thePaymentName';
+        $identificator = new Identificator('anId', 'stdClass');
+
+        $storageRegistryMock = $this->createStorageRegistryMock();
+        $storageRegistryMock
+            ->expects($this->never())
+            ->method('getStorage')
+        ;
+
+        $factory = new GenericTokenFactory(
+            $tokenStorageMock,
+            $storageRegistryMock,
+            'http://example.com',
+            'capture.php',
+            'notify.php',
+            'authorize.php'
+        );
+
+        $actualToken = $factory->createToken(
+            $paymentName,
+            $identificator,
+            'theTargetPath',
+            array('targetPathKey' => 'targetPathVal'),
+            'theAfterPath',
+            array('afterPathKey' => 'afterPathVal')
+        );
+
+        $this->assertSame($token, $actualToken);
+        $this->assertSame($identificator, $token->getDetails());
+    }
+
+    /**
+     * @test
+     */
     public function shouldCreateCustomTokenWithTargetPathAlreadyUrl()
     {
         $token = new Token;
