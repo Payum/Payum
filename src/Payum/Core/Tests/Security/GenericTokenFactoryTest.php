@@ -137,7 +137,8 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             'http://example.com',
             'capture.php',
             'notify.php',
-            'authorize.php'
+            'authorize.php',
+            'refund.php'
         );
 
         $actualToken = $factory->createToken(
