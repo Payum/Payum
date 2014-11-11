@@ -2,6 +2,7 @@
 namespace Payum\Core\Security;
 
 use League\Url\Url;
+use Payum\Core\Model\Identificator;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Storage\StorageInterface;
 
@@ -66,10 +67,10 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
 
         $token->setPaymentName($paymentName);
 
-        if (null !== $model) {
-            $token->setDetails(
-                $this->storageRegistry->getStorage($model)->getIdentificator($model)
-            );
+        if ($model instanceof Identificator) {
+            $token->setDetails($model);
+        } else if (null !== $model) {
+            $token->setDetails($this->storageRegistry->getStorage($model)->getIdentificator($model));
         }
 
         if (0 === strpos($targetPath, 'http')) {

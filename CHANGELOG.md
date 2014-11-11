@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.12.5 (2014-11-11)
+
+[doc] add sagepay and redsys to list of supported payments.
+[security] token factory should accept Identificator instance as model.
+[paypal-ec] use capture\authorize details as details for notify token.
+
 ## 0.12.4 (2014-11-10)
 
 * [request] add cancel request.
