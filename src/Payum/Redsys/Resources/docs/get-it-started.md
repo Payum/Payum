@@ -27,11 +27,14 @@ use Payum\Redsys\PaymentFactory as RedsysPaymentFactory;
 
 // ...
 
-$payments['redsys'] = Be2BillPaymentFactory::create(new Redsys(array(
-   'identifier' => 'REPLACE WITH YOURS',
-   'password' => 'REPLACE WITH YOURS',
+$payments['redsys'] = RedsysPaymentFactory::create(new Redsys(array(
+   'merchant_code' => 'REPLACE WITH YOURS',
+   'terminal' => 'REPLACE WITH YOURS',
+   'secret_key' => 'REPLACE WITH YOURS',
    'sandbox' => true
 )));
+
+Change sandbox to false when bank confirms you can go live. 
 
 ## prepare.php
 
