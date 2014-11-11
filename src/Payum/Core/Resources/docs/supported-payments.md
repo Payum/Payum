@@ -21,6 +21,8 @@
 * [Paydollar](https://github.com/kayue/Paydollar)
 * [PaylinkJustpay](https://github.com/locastic/PayumPaylinkJustpay)
 * [TcomPayWay](https://github.com/locastic/TcomPayWayPayum)
+* [Sagepay](https://github.com/LedjIn/Sagepay)
+* [Redsys](https://github.com/crevillo/payum-redsys)
 
 ## Omnipay gateways.
 
