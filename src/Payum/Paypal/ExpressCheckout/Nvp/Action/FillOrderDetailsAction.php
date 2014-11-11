@@ -41,7 +41,7 @@ class FillOrderDetailsAction implements ActionInterface
         if (empty($details['PAYMENTREQUEST_0_NOTIFYURL']) && $request->getToken() && $this->tokenFactory) {
             $notifyToken = $this->tokenFactory->createNotifyToken(
                 $request->getToken()->getPaymentName(),
-                $order
+                $request->getToken()->getDetails()
             );
 
             $details['PAYMENTREQUEST_0_NOTIFYURL'] = $notifyToken->getTargetUrl();
