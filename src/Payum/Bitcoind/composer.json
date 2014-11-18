@@ -1,0 +1,39 @@
+{
+    "name": "payum/bitcoind",
+    "type": "library",
+    "description": "Bitcoins extension",
+    "keywords": ["payment", "bitcoin", "bitcoind", "bitcoins"],
+    "homepage": "http://payum.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kotlyar Maksim",
+            "email": "kotlyar.maksim@gmail.com"
+        },
+        {
+            "name":     "Payum project",
+            "homepage": "http://payum.org/"
+        },
+        {
+            "name":     "Community contributions",
+            "homepage": "https://github.com/Payum/Bitcoind/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "payum/core": "0.13.*@dev",
+        "nbobtc/bitcoind-php": "~1.0"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": { "Payum\\Bitcoind": "" }
+    },
+    "target-dir": "Payum/Bitcoind",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.13-dev"
+        }
+    }
+}
