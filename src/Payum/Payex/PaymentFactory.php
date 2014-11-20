@@ -1,8 +1,10 @@
 <?php
 namespace Payum\Payex;
 
+use Payum\Core\Action\CaptureOrderAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetHttpRequestAction;
+use Payum\Core\Action\NotifyOrderAction;
 use Payum\Payex\Action\Api\CheckOrderAction;
 use Payum\Payex\Action\FillOrderDetailsAction;
 use Payum\Payex\Action\PaymentDetailsSyncAction;
@@ -66,6 +68,8 @@ abstract class PaymentFactory
         $payment->addAction(new CheckOrderAction);
         
         $payment->addAction(new PaymentDetailsCaptureAction);
+        $payment->addAction(new CaptureOrderAction);
+        $payment->addAction(new NotifyOrderAction);
         $payment->addAction(new FillOrderDetailsAction);
         $payment->addAction(new PaymentDetailsStatusAction);
         $payment->addAction(new PaymentDetailsSyncAction);
