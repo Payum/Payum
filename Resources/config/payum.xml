@@ -19,6 +19,7 @@
         <parameter key="payum.action.obtain_credit_card.class">Payum\Bundle\PayumBundle\Action\ObtainCreditCardAction</parameter>
         <parameter key="payum.action.render_template.class">Payum\Core\Bridge\Twig\Action\RenderTemplateAction</parameter>
         <parameter key="payum.action.capture_order.class">Payum\Core\Action\CaptureOrderAction</parameter>
+        <parameter key="payum.action.notify_order.class">Payum\Core\Action\NotifyOrderAction</parameter>
 
         <parameter key="payum.security.http_request_verifier.class">Payum\Core\Bridge\Symfony\Security\HttpRequestVerifier</parameter>
         <parameter key="payum.security.token_factory.class">Payum\Core\Bridge\Symfony\Security\TokenFactory</parameter>
@@ -84,6 +85,14 @@
         <service
             id="payum.action.capture_order"
             class="%payum.action.capture_order.class%"
+            public="false"
+        >
+            <tag name="payum.action" all="true" />
+        </service>
+
+        <service
+            id="payum.action.notify_order"
+            class="%payum.action.notify_order.class%"
             public="false"
         >
             <tag name="payum.action" all="true" />

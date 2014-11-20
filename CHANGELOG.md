@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.12.2 (2014-11-20)
+
+* [action] Add `NotifyOrderAction` action.
+
 ## 0.12.1 (2014-11-07)
 
 * [security] Force TLSv1 encription. This POODLE bites: exploiting the SSL 3.0 fallback
