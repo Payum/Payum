@@ -15,7 +15,7 @@ php composer.phar require "payum/stripe:*@stable"
 
 ## config.php
 
-We have to only add a the payment factory. All the rest remain the same:
+We have to only add the payment factory. All the rest remain the same:
 
 ```php
 <?php

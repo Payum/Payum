@@ -15,7 +15,7 @@ php composer.phar require "payum/paypal-express-checkout-nvp:*@stable"
 
 ## config.php
 
-We have to only add a the payment factory. All the rest remain the same:
+We have to only add the payment factory. All the rest remain the same:
 
 ```php
 <?php
