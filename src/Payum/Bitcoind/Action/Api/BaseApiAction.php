@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Bitcoind\Action\Api;
 
-use Nbobtc\Bitcoind\Bitcoind;
+use Nbobtc\Bitcoind\BitcoindInterface;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\UnsupportedApiException;
@@ -9,7 +9,7 @@ use Payum\Core\Exception\UnsupportedApiException;
 abstract class BaseApiAction implements  ActionInterface, ApiAwareInterface
 {
     /**
-     * @var Bitcoind
+     * @var BitcoindInterface
      */
     protected $bitcoind;
 
@@ -18,7 +18,7 @@ abstract class BaseApiAction implements  ActionInterface, ApiAwareInterface
      */
     public function setApi($api)
     {
-        if (false == $api instanceof Bitcoind) {
+        if (false == $api instanceof BitcoindInterface) {
             throw new UnsupportedApiException('Not supported.');
         }
 
