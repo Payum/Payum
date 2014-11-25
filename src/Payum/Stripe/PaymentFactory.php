@@ -5,7 +5,7 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\CaptureOrderAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetHttpRequestAction;
-use Payum\Core\Action\NotifyOrderAction;
+use Payum\Core\Action\GenericOrderAction;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
 use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Payment;
@@ -44,8 +44,6 @@ abstract class PaymentFactory
         $payment->addExtension(new EndlessCycleDetectorExtension);
 
         $payment->addAction(new CaptureAction);
-        $payment->addAction(new CaptureOrderAction);
-        $payment->addAction(new NotifyOrderAction);
         $payment->addAction(new FillOrderDetailsAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
@@ -53,6 +51,9 @@ abstract class PaymentFactory
         $payment->addAction(new ObtainTokenAction($obtainTokenTemplate));
         $payment->addAction(new CreateChargeAction);
         $payment->addAction(new GetHttpRequestAction);
+
+        $payment->addAction(new CaptureOrderAction);
+        $payment->addAction(new GenericOrderAction);
 
         return $payment;
     }
@@ -82,8 +83,6 @@ abstract class PaymentFactory
         $payment->addExtension(new EndlessCycleDetectorExtension);
 
         $payment->addAction(new CaptureAction);
-        $payment->addAction(new CaptureOrderAction);
-        $payment->addAction(new NotifyOrderAction);
         $payment->addAction(new FillOrderDetailsAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
@@ -91,6 +90,9 @@ abstract class PaymentFactory
         $payment->addAction(new ObtainTokenAction($obtainTokenTemplate));
         $payment->addAction(new CreateChargeAction);
         $payment->addAction(new GetHttpRequestAction);
+
+        $payment->addAction(new CaptureOrderAction);
+        $payment->addAction(new GenericOrderAction);
 
         return $payment;
     }

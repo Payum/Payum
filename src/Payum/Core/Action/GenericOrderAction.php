@@ -4,14 +4,19 @@ namespace Payum\Core\Action;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\OrderInterface;
+use Payum\Core\Request\Authorize;
+use Payum\Core\Request\Cancel;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Request\Notify;
+use Payum\Core\Request\Refund;
 
-class NotifyOrderAction extends PaymentAwareAction
+class GenericOrderAction extends PaymentAwareAction
 {
     /**
      * {@inheritDoc}
      *
-     * @param Notify $request
+     * @param mixed $request
      */
     public function execute($request)
     {
@@ -42,7 +47,14 @@ class NotifyOrderAction extends PaymentAwareAction
     public function supports($request)
     {
         return
-            $request instanceof Notify &&
+            (
+                $request instanceof Capture ||
+                $request instanceof Authorize ||
+                $request instanceof Notify ||
+                $request instanceof Refund ||
+                $request instanceof Cancel ||
+                $request instanceof GetStatusInterface
+            ) &&
             $request->getModel() instanceof OrderInterface
         ;
     }
