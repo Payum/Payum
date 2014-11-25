@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Bitcoind\Action;
 
-use Payum\Bitcoind\Request\Api\GetNewAddressRequest;
+use Payum\Bitcoind\Request\Api\GetNewAddress;
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -34,20 +34,16 @@ class CaptureAction extends PaymentAwareAction
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
         if (false == $details['address']) {
-            $this->payment->execute(new GetNewAddressRequest($details));
+            $this->payment->execute(new GetNewAddress($details));
         }
-
-        $query = http_build_query(array_filter(array(
-            'amount' => $details['amount'],
-            'label' => $details['label'],
-            'message' => $details['message'],
-        )));
-        $query = $query ? '?'.$query : '';
-
 
         $this->payment->execute($renderTemplate = new RenderTemplate($this->templateName, array(
             'address' => $details['address'],
-            'uri' => sprintf('bitcoin:%s%s', $details['address'], $query)
+            'uri' => $details['address'].'?'.http_build_query(array_filter(array(
+                'amount' => $details['amount'],
+                'label' => $details['label'],
+                'message' => $details['message'],
+            )))
         )));
 
         throw new HttpResponse($renderTemplate->getResult());

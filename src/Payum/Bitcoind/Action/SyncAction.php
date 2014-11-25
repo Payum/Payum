@@ -1,16 +1,18 @@
 <?php
-namespace Payum\Bitcoind\Action\Api;
+namespace Payum\Bitcoind\Action;
 
-use Payum\Bitcoind\Request\Api\GetNewAddress;
+use Payum\Bitcoind\Request\Api\GetReceivedByAddress;
+use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Request\Sync;
 
-class GetNewAddressAction extends BaseApiAction
+class SyncAction extends  PaymentAwareAction
 {
     /**
      * {@inheritDoc}
      *
-     * @param GetNewAddress $request
+     * @param Sync $request
      */
     public function execute($request)
     {
@@ -18,7 +20,9 @@ class GetNewAddressAction extends BaseApiAction
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        $details['address'] = $this->bitcoind->getnewaddress($details['account']);
+        if ($details['address']) {
+            $this->payment->execute(new GetReceivedByAddress($details));
+        }
     }
 
     /**
@@ -27,7 +31,7 @@ class GetNewAddressAction extends BaseApiAction
     public function supports($request)
     {
         return
-            $request instanceof GetNewAddress &&
+            $request instanceof Sync &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }
