@@ -4,7 +4,7 @@ namespace Payum\Paypal\ProCheckout\Nvp;
 use Payum\Core\Action\CaptureOrderAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetHttpRequestAction;
-use Payum\Core\Action\NotifyOrderAction;
+use Payum\Core\Action\GenericOrderAction;
 use Payum\Core\Payment;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Paypal\ProCheckout\Nvp\Action\CaptureAction;
@@ -29,12 +29,13 @@ abstract class PaymentFactory
 
         $payment->addAction(new CaptureAction);
         $payment->addAction(new RefundAction);
-        $payment->addAction(new CaptureOrderAction);
-        $payment->addAction(new NotifyOrderAction);
         $payment->addAction(new FillOrderDetailsAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
         $payment->addAction(new GetHttpRequestAction);
+
+        $payment->addAction(new CaptureOrderAction);
+        $payment->addAction(new GenericOrderAction);
        
         return $payment;
     }
