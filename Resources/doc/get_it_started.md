@@ -185,32 +185,35 @@ In done action we may check the payment status, update the model, dispatch event
 namespace Acme\PaymentBundle\Controller;
 
 use Payum\Core\Request\GetHumanStatus;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class PaymentController extends Controller 
 {
-    public function doneAction()
+    public function doneAction(Request $request)
     {
-        include 'config.php';
+        $token = $this->get('payum.security.http_request_verifier')->verify($request);
         
-        $token = $requestVerifier->verify($_REQUEST);
-        // $requestVerifier->invalidate($token);
+        // $this->get('payum.security.http_request_verifier')->invalidate($token);
         
         $payment = $payum->getPayment($token->getPaymentName());
         
         $payment->execute($status = new GetHumanStatus($token));
         
+        $order = $token->getDetails();
+        
         return new JsonResponse(array(
             'status' => $status->getValue(),
             'order' => array(
                 'client' => array(
-                    'id' => $status->getModel()->getClientId(),
-                    'email' => $status->getModel()->getClientEmail(),
+                    'id' => $order->getClientId(),
+                    'email' => $order->getClientEmail(),
                 ),
-                'number' => $status->getModel()->getNumber(),
-                'description' => $status->getModel()->getCurrencyCode(),
-                'total_amount' => $status->getModel()->getTotalAmount(),
-                'currency_code' => $status->getModel()->getCurrencyCode(),
-                'details' => $status->getModel()->getDetails(),
+                'number' => $order->getNumber(),
+                'description' => $order->getCurrencyCode(),
+                'total_amount' => $order->getTotalAmount(),
+                'currency_code' => $order->getCurrencyCode(),
+                'details' => $order->getDetails(),
             ),
         ));
     }
