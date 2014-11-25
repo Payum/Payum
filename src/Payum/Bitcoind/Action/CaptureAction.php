@@ -8,6 +8,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\RenderTemplate;
+use Payum\Core\Request\Sync;
 
 class CaptureAction extends PaymentAwareAction
 {
@@ -26,6 +27,8 @@ class CaptureAction extends PaymentAwareAction
 
     /**
      * {@inheritDoc}
+     *
+     * @param Capture $request
      */
     public function execute($request)
     {
@@ -37,16 +40,21 @@ class CaptureAction extends PaymentAwareAction
             $this->payment->execute(new GetNewAddress($details));
         }
 
-        $this->payment->execute($renderTemplate = new RenderTemplate($this->templateName, array(
-            'address' => $details['address'],
-            'uri' => $details['address'].'?'.http_build_query(array_filter(array(
-                'amount' => $details['amount'],
-                'label' => $details['label'],
-                'message' => $details['message'],
-            )))
-        )));
+        $this->payment->execute(new Sync($details));
 
-        throw new HttpResponse($renderTemplate->getResult());
+        if (false == $details['received_amount']) {
+            $this->payment->execute($renderTemplate = new RenderTemplate($this->templateName, array(
+                'address' => $details['address'],
+                'uri' => $details['address'] . '?' . http_build_query(array_filter(array(
+                    'amount' => $details['amount'],
+                    'label' => $details['label'],
+                    'message' => $details['message'],
+//                    'r' => $request->getToken() ? $request->getToken()->getTargetUrl() : null,
+                )))
+            )));
+
+            throw new HttpResponse($renderTemplate->getResult());
+        }
     }
 
     /**
