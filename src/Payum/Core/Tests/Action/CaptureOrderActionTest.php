@@ -30,7 +30,7 @@ class CaptureOrderActionTest extends GenericActionTest
      */
     public function shouldImplementPaymentAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Action\CaptureOrderAction');
+        $rc = new \ReflectionClass($this->actionClass);
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentAwareInterface'));
     }

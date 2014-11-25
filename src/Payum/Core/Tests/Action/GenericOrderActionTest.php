@@ -1,18 +1,21 @@
 <?php
 namespace Payum\Core\Tests\Action;
 
-use Payum\Core\Action\NotifyOrderAction;
+use Payum\Core\Action\GenericOrderAction;
 use Payum\Core\Model\Order;
-use Payum\Core\Request\Notify;
-use Payum\Core\Request\FillOrderDetails;
+use Payum\Core\Request\Authorize;
+use Payum\Core\Request\Cancel;
+use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHumanStatus;
+use Payum\Core\Request\Notify;
+use Payum\Core\Request\Refund;
 use Payum\Core\Tests\GenericActionTest;
 
-class NotifyOrderActionTest extends GenericActionTest
+class GenericOrderActionTest extends GenericActionTest
 {
     protected $requestClass = 'Payum\Core\Request\Notify';
 
-    protected $actionClass = 'Payum\Core\Action\NotifyOrderAction';
+    protected $actionClass = 'Payum\Core\Action\GenericOrderAction';
 
     public function provideSupportedRequests()
     {
@@ -21,7 +24,12 @@ class NotifyOrderActionTest extends GenericActionTest
 
         return array(
             array(new $this->requestClass(new Order)),
-            array($capture),
+            array(new Authorize(new Order)),
+            array(new Capture(new Order)),
+            array(new Refund(new Order)),
+            array(new Cancel(new Order)),
+            array(new Notify(new Order)),
+            array(new GetHumanStatus(new Order())),
         );
     }
 
@@ -30,7 +38,7 @@ class NotifyOrderActionTest extends GenericActionTest
      */
     public function shouldImplementPaymentAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Action\NotifyOrderAction');
+        $rc = new \ReflectionClass($this->actionClass);
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentAwareInterface'));
     }
@@ -58,7 +66,7 @@ class NotifyOrderActionTest extends GenericActionTest
             }))
         ;
 
-        $action = new NotifyOrderAction;
+        $action = new GenericOrderAction;
         $action->setPayment($paymentMock);
 
         $action->execute($notify = new Notify($order));
@@ -84,7 +92,7 @@ class NotifyOrderActionTest extends GenericActionTest
             ->will($this->throwException(new \Exception))
         ;
 
-        $action = new NotifyOrderAction;
+        $action = new GenericOrderAction;
         $action->setPayment($paymentMock);
 
         $this->setExpectedException('Exception');
