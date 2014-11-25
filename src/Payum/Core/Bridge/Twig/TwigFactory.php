@@ -11,7 +11,8 @@ class TwigFactory
         $paths = array_filter(array(
             'PayumCore' => self::guessViewsPath('Payum\Core\Payment'),
             'PayumStripe' => self::guessViewsPath('Payum\Stripe\PaymentFactory'),
-            'PayumKlarnaCheckout' => self::guessViewsPath('Payum\Klarna\Checkout\PaymentFactory')
+            'PayumKlarnaCheckout' => self::guessViewsPath('Payum\Klarna\Checkout\PaymentFactory'),
+            'PayumBitcoind' => self::guessViewsPath('Payum\Bitcoind\PaymentFactory')
         ));
 
         $loader = new \Twig_Loader_Filesystem;

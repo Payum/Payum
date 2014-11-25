@@ -1,28 +1,66 @@
 <?php
 namespace Payum\Bitcoind\Action;
 
+use Payum\Bitcoind\Request\Api\GetNewAddressRequest;
 use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\RenderTemplate;
 
 class CaptureAction extends PaymentAwareAction
 {
+    /**
+     * @var string
+     */
+    protected $templateName;
 
     /**
-     * @param mixed $request
-     *
-     * @throws \Payum\Core\Exception\RequestNotSupportedException if the action dose not support the request.
+     * @param string $templateName
      */
-    function execute($request)
+    public function __construct($templateName)
     {
-        // TODO: Implement execute() method.
+        $this->templateName = $templateName;
     }
 
     /**
-     * @param mixed $request
-     *
-     * @return boolean
+     * {@inheritDoc}
      */
-    function supports($request)
+    public function execute($request)
     {
-        // TODO: Implement supports() method.
+        RequestNotSupportedException::assertSupports($this, $request);
+
+        $details = ArrayObject::ensureArrayObject($request->getModel());
+
+        if (false == $details['address']) {
+            $this->payment->execute(new GetNewAddressRequest($details));
+        }
+
+        $query = http_build_query(array_filter(array(
+            'amount' => $details['amount'],
+            'label' => $details['label'],
+            'message' => $details['message'],
+        )));
+        $query = $query ? '?'.$query : '';
+
+
+        $this->payment->execute($renderTemplate = new RenderTemplate($this->templateName, array(
+            'address' => $details['address'],
+            'uri' => sprintf('bitcoin:%s%s', $details['address'], $query)
+        )));
+
+        throw new HttpResponse($renderTemplate->getResult());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function supports($request)
+    {
+        return
+            $request instanceof Capture &&
+            $request->getModel() instanceof \ArrayAccess
+        ;
     }
 }
