@@ -29,11 +29,12 @@ abstract class OnsitePaymentFactory
         $payment->addAction(new CaptureOnsiteAction);
         $payment->addAction(new FillOrderDetailsAction);
         $payment->addAction(new StatusAction);
-        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
         $payment->addAction(new GetHttpRequestAction);
 
         $payment->addAction(new CaptureOrderAction);
         $payment->addAction(new GenericOrderAction);
+
+        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 
         return $payment;
     }

@@ -28,8 +28,9 @@ abstract class PaymentFactory
         $payment->addAction(new CaptureAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new SyncAction);
-        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
         $payment->addAction(new GetHttpRequestAction);
+
+        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 
         return $payment;
     }

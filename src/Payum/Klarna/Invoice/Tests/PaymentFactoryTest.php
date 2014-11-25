@@ -31,6 +31,6 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $actions = $this->readAttribute($payment, 'actions');
         $this->assertInternalType('array', $actions);
-        $this->assertAttributeCount(14, 'actions', $payment);
+        $this->assertAttributeCount(15, 'actions', $payment);
     }
 }

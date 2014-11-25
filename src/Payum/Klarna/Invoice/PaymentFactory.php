@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Klarna\Invoice;
 
+use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Payment;
 use Payum\Klarna\Invoice\Action\Api\ActivateAction;
@@ -40,6 +41,8 @@ abstract class PaymentFactory
         $payment->addAction(new PopulateKlarnaFromDetailsAction);
         $payment->addAction(new CreditPartAction);
         $payment->addAction(new ReserveAmountAction);
+
+        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction());
 
         return $payment;
     }

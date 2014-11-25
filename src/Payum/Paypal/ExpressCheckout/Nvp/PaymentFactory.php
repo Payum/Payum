@@ -58,11 +58,12 @@ abstract class PaymentFactory
         $payment->addAction(new CreateBillingAgreementAction);
         $payment->addAction(new DoReferenceTransactionAction);
         $payment->addAction(new AuthorizeTokenAction);
-        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
         $payment->addAction(new GetHttpRequestAction);
 
         $payment->addAction(new CaptureOrderAction);
         $payment->addAction(new GenericOrderAction);
+
+        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 
         return $payment;
     }

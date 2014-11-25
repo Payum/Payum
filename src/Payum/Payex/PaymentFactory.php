@@ -73,11 +73,12 @@ abstract class PaymentFactory
         $payment->addAction(new PaymentDetailsSyncAction);
         $payment->addAction(new AutoPayPaymentDetailsCaptureAction);
         $payment->addAction(new AutoPayPaymentDetailsStatusAction);
-        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
         $payment->addAction(new GetHttpRequestAction);
 
         $payment->addAction(new CaptureOrderAction);
         $payment->addAction(new GenericOrderAction);
+
+        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 
         return $payment;
     }

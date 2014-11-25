@@ -46,7 +46,6 @@ abstract class PaymentFactory
         $payment->addAction(new CaptureAction);
         $payment->addAction(new FillOrderDetailsAction);
         $payment->addAction(new StatusAction);
-        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
         $payment->addAction($renderTemplateAction);
         $payment->addAction(new ObtainTokenAction($obtainTokenTemplate));
         $payment->addAction(new CreateChargeAction);
@@ -54,6 +53,8 @@ abstract class PaymentFactory
 
         $payment->addAction(new CaptureOrderAction);
         $payment->addAction(new GenericOrderAction);
+
+        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 
         return $payment;
     }
@@ -85,7 +86,6 @@ abstract class PaymentFactory
         $payment->addAction(new CaptureAction);
         $payment->addAction(new FillOrderDetailsAction);
         $payment->addAction(new StatusAction);
-        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
         $payment->addAction($renderTemplateAction);
         $payment->addAction(new ObtainTokenAction($obtainTokenTemplate));
         $payment->addAction(new CreateChargeAction);
@@ -93,6 +93,8 @@ abstract class PaymentFactory
 
         $payment->addAction(new CaptureOrderAction);
         $payment->addAction(new GenericOrderAction);
+
+        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 
         return $payment;
     }
