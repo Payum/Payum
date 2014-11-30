@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Core\Security;
 
+use Payum\Core\Storage\StorageInterface;
+
 interface TokenFactoryInterface
 {
     /**
@@ -14,4 +16,9 @@ interface TokenFactoryInterface
      * @return TokenInterface
      */
     function createToken($paymentName, $model, $targetPath, array $targetParameters = null, $afterPath = null, array $afterParameters = null);
+
+    /**
+     * @return StorageInterface
+     */
+    function getTokenStorage();
 }
