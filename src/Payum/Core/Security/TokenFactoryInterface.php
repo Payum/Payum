@@ -7,11 +7,11 @@ interface TokenFactoryInterface
      * @param string $paymentName
      * @param object|null $model
      * @param string $targetPath
-     * @param array $targetParameters
-     * @param string $afterPath
-     * @param array $afterParameters
+     * @param array|null $targetParameters
+     * @param string|null $afterPath
+     * @param array|null $afterParameters
      *
      * @return TokenInterface
      */
-    function createToken($paymentName, $model, $targetPath, array $targetParameters = array(), $afterPath = null, array $afterParameters = array());
+    function createToken($paymentName, $model, $targetPath, array $targetParameters = null, $afterPath = null, array $afterParameters = null);
 }
