@@ -1,42 +1,50 @@
 <?php
 namespace Payum\Core\Bridge\Symfony\Security;
 
+use Payum\Core\Exception\TokenFactoryException;
 use Payum\Core\Registry\StorageRegistryInterface;
-use Payum\Core\Security\AbstractGenericTokenFactory;
+use Payum\Core\Security\TokenFactory as BaseTokenFactory;
 use Payum\Core\Storage\StorageInterface;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class TokenFactory extends AbstractGenericTokenFactory
+class TokenFactory extends BaseTokenFactory
 {
+
     /**
-     * @var \Symfony\Component\Routing\RouterInterface
+     *
+     * @var UrlGeneratorInterface
      */
     protected $urlGenerator;
 
     /**
+     *
      * @param UrlGeneratorInterface $urlGenerator
      * @param StorageInterface $tokenStorage
      * @param StorageRegistryInterface $storageRegistry
-     * @param string $capturePath
-     * @param string $notifyPath
-     * @param string $autorizePath
-     * @param string $refundPath
+     * @param string $tokenParameter
      */
-    public function __construct(UrlGeneratorInterface $urlGenerator, StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $capturePath, $notifyPath, $autorizePath, $refundPath)
+    public function __construct(UrlGeneratorInterface $urlGenerator, StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $tokenParameter = 'payum_token')
     {
+        parent::__construct($tokenStorage, $storageRegistry, $tokenParameter);
         $this->urlGenerator = $urlGenerator;
-
-        parent::__construct($tokenStorage, $storageRegistry, $capturePath, $notifyPath, $autorizePath, $refundPath);
     }
 
     /**
+     *
      * @param string $path
      * @param array $parameters
      *
      * @return string
      */
-    protected function generateUrl($path, array $parameters = array())
+    protected function generateUrl($path, array $parameters = null)
     {
-        return $this->urlGenerator->generate($path, $parameters, true);
+        try {
+            return $this->urlGenerator->generate($path, $parameters, true);
+        } catch (RouteNotFoundException $e) {
+            return parent::generateUrl($path, $parameters);
+        } catch (\Exception $e) {
+            throw TokenFactoryException::couldNotGenerateUrlFor($path, $parameters, $e);
+        }
     }
 }
