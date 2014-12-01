@@ -34,38 +34,15 @@ abstract class PaymentFactory
      */
     public static function create(Api $api)
     {
-        $payment = new Payment;
+        $paymentBuilder = new PaymentBuilder();
 
-        $payment->addApi($api);
+        $payment = $paymentBuilder
+            ->set('payum.options', 'username', 'aUsername')
+            ->set('payum.options', 'password', 'aPassword')
+            ->set('payum.options', 'signature', 'aSignature')
+            ->getPayment()
+        ;
 
-        $payment->addExtension(new EndlessCycleDetectorExtension);
-
-        $payment->addAction(new SetExpressCheckoutAction);
-        $payment->addAction(new GetExpressCheckoutDetailsAction);
-        $payment->addAction(new GetTransactionDetailsAction);
-        $payment->addAction(new DoExpressCheckoutPaymentAction);
-        $payment->addAction(new CreateRecurringPaymentProfileAction);
-        $payment->addAction(new GetRecurringPaymentsProfileDetailsAction);
-
-        $payment->addAction(new CaptureAction);
-        $payment->addAction(new FillOrderDetailsAction);
-        $payment->addAction(new NotifyAction);
-        $payment->addAction(new PaymentDetailsStatusAction);
-        $payment->addAction(new PaymentDetailsSyncAction);
-        $payment->addAction(new RecurringPaymentDetailsStatusAction);
-        $payment->addAction(new RecurringPaymentDetailsSyncAction);
-        $payment->addAction(new ManageRecurringPaymentsProfileStatusAction);
-        $payment->addAction(new CreateBillingAgreementAction);
-        $payment->addAction(new DoReferenceTransactionAction);
-        $payment->addAction(new AuthorizeTokenAction);
-        $payment->addAction(new GetHttpRequestAction);
-
-        $payment->addAction(new CaptureOrderAction);
-        $payment->addAction(new GenericOrderAction);
-
-        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
-
-        return $payment;
     }
 
     /**
