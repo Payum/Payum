@@ -13,7 +13,7 @@ use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\Extension\ExtensionInterface;
 
-class PaymentBuilder
+class PaymentBuilder implements PaymentBuilderInterface
 {
     /**
      * @var array
@@ -28,48 +28,67 @@ class PaymentBuilder
 
     public function __construct()
     {
-        $this->set('buzz', 'client', ClientFactory::createCurl());
-        $this->set('twig', 'environment', TwigFactory::createGeneric());
+        $this
+            ->set('buzz', 'client', ClientFactory::createCurl())
+            ->set('twig', 'environment', TwigFactory::createGeneric())
+            ->set('payum.templates', 'layout', '@PayumCore/layout.html.twig')
 
-        $this->set('payum.templates', 'layout', '@PayumCore/layout.html.twig');
+            ->setAction('execute_same_request_with_details', new ExecuteSameRequestWithModelDetailsAction())
+            ->setAction('generic_order', new GenericOrderAction())
+            ->setAction('capture_order', new CaptureOrderAction())
+            ->setAction('get_http_request', new GetHttpRequestAction())
+            ->setAction('render_template', new RenderTemplateAction(
+                $this->get('twig', 'environment'),
+                $this->get('payum.templates', 'layout')
+            ))
 
-        $this->setAction('execute_same_request_with_details', new ExecuteSameRequestWithModelDetailsAction());
-        $this->setAction('generic_order', new GenericOrderAction());
-        $this->setAction('capture_order', new CaptureOrderAction());
-        $this->setAction('get_http_request', new GetHttpRequestAction());
-        $this->setAction('render_template', new RenderTemplateAction(
-            $this->get('twig', 'environment'),
-            $this->get('payum.templates', 'layout')
-        ));
-
-        $this->setExtension('endless_cycle_detector', new EndlessCycleDetectorExtension);
+            ->setExtension('endless_cycle_detector', new EndlessCycleDetectorExtension)
+        ;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function setAction($name, ActionInterface $action)
     {
-        $this->set('oayum.actions', $name, $action);
+        $this->set('payum.actions', $name, $action);
+
+        return $this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function setApi($name, $api)
     {
         $this->set('payum.apis', $name, $api);
+
+        return $this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function setExtension($name, ExtensionInterface $extension)
     {
         $this->set('payum.extensions', $name, $extension);
+
+        return $this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function set($namespace, $name, $value)
     {
         $this->values[$namespace][$name] = $value;
+
+        return $this;
     }
 
-    public function get($namespace, $name, $default = null)
-    {
-        return isset($this->values[$namespace][$name]) ? $this->values[$namespace][$name] : $default;
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     public function getPayment()
     {
         $payment = new Payment();
@@ -79,6 +98,21 @@ class PaymentBuilder
         return $payment;
     }
 
+    /**
+     * @param string $namespace
+     * @param string $name
+     * @param mixed $default
+     *
+     * @return mixed
+     */
+    protected function get($namespace, $name, $default = null)
+    {
+        return isset($this->values[$namespace][$name]) ? $this->values[$namespace][$name] : $default;
+    }
+
+    /**
+     * @param Payment $payment
+     */
     protected function buildPayment(Payment $payment)
     {
         if (false == empty($this->values['payum.required_options'])) {

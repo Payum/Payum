@@ -26,33 +26,37 @@ class PaymentBuilder extends BasePaymentBuilder
     public function __construct()
     {
         parent::__construct();
-
-        $this->set('payum.required_options', 'username', 'username');
-        $this->set('payum.required_options', 'password', 'password');
-        $this->set('payum.required_options', 'signature', 'signature');
-
-        $this->set('payum.options', 'sandbox', true);
         
-        $this->setAction('api.set_express_checkout', new SetExpressCheckoutAction);
-        $this->setAction('api.get_express_checkout_details', new GetExpressCheckoutDetailsAction);
-        $this->setAction('api.get_transaction_details', new GetTransactionDetailsAction);
-        $this->setAction('api.do_express_checkout_payment', new DoExpressCheckoutPaymentAction);
-        $this->setAction('api.create_recurring_payment_profile', new CreateRecurringPaymentProfileAction);
-        $this->setAction('api.get_recurring_payments_profile', new GetRecurringPaymentsProfileDetailsAction);
-        $this->setAction('api.manage_recurring_payments_profile_status', new ManageRecurringPaymentsProfileStatusAction);
-        $this->setAction('api.create_billing_agreement', new CreateBillingAgreementAction);
-        $this->setAction('api.do_reference_transaction', new DoReferenceTransactionAction);
-        $this->setAction('api.authorize_token', new AuthorizeTokenAction);
+        $this
+            ->set('payum.required_options', 'username', 'username')
+            ->set('payum.required_options', 'password', 'password')
+            ->set('payum.required_options', 'signature', 'signature')
+            ->set('payum.options', 'sandbox', true)
 
-        $this->setAction('capture', new CaptureAction);
-        $this->setAction('fill_order_details', new FillOrderDetailsAction);
-        $this->setAction('notify', new NotifyAction);
-        $this->setAction('payment_details_status', new PaymentDetailsStatusAction);
-        $this->setAction('payment_details_sync', new PaymentDetailsSyncAction);
-        $this->setAction('recurring_payment_details_status', new RecurringPaymentDetailsStatusAction);
-        $this->setAction('recurring_payment_details_sync', new RecurringPaymentDetailsSyncAction);
+            ->setAction('api.set_express_checkout', new SetExpressCheckoutAction)
+            ->setAction('api.get_express_checkout_details', new GetExpressCheckoutDetailsAction)
+            ->setAction('api.get_transaction_details', new GetTransactionDetailsAction)
+            ->setAction('api.do_express_checkout_payment', new DoExpressCheckoutPaymentAction)
+            ->setAction('api.create_recurring_payment_profile', new CreateRecurringPaymentProfileAction)
+            ->setAction('api.get_recurring_payments_profile', new GetRecurringPaymentsProfileDetailsAction)
+            ->setAction('api.manage_recurring_payments_profile_status', new ManageRecurringPaymentsProfileStatusAction)
+            ->setAction('api.create_billing_agreement', new CreateBillingAgreementAction)
+            ->setAction('api.do_reference_transaction', new DoReferenceTransactionAction)
+            ->setAction('api.authorize_token', new AuthorizeTokenAction)
+
+            ->setAction('capture', new CaptureAction)
+            ->setAction('fill_order_details', new FillOrderDetailsAction)
+            ->setAction('notify', new NotifyAction)
+            ->setAction('payment_details_status', new PaymentDetailsStatusAction)
+            ->setAction('payment_details_sync', new PaymentDetailsSyncAction)
+            ->setAction('recurring_payment_details_status', new RecurringPaymentDetailsStatusAction)
+            ->setAction('recurring_payment_details_sync', new RecurringPaymentDetailsSyncAction)
+        ;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function buildPayment(Payment $payment)
     {
         parent::buildPayment($payment);
