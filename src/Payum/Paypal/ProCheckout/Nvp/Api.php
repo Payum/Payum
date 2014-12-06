@@ -283,6 +283,7 @@ class Api
         $request->setField('PARTNER', $this->options['partner']);
         $request->setField('VENDOR', $this->options['vendor']);
         $request->setField('TENDER', $this->options['tender']);
+        $request->setField('BUTTONSOURCE', 'AngellEYE_SP_Payum');
     }
 
     /**

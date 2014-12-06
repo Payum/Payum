@@ -584,6 +584,7 @@ class Api
         $request->setField('PWD', $this->options['password']);
         $request->setField('USER', $this->options['username']);
         $request->setField('SIGNATURE', $this->options['signature']);
+        $request->setField('BUTTONSOURCE', 'AngellEYE_SP_Payum');
     }
 
     /**
