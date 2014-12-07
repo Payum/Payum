@@ -43,6 +43,26 @@ class PaymentBuilder implements PaymentBuilderInterface
             ))
 
             ->setExtension('endless_cycle_detector', new EndlessCycleDetectorExtension)
+
+            ->setBuilder('core', function(Payment $payment, PaymentBuilderInterface $builder) {
+                if (false == empty($this->values['payum.required_options'])) {
+                    ArrayObject::ensureArrayObject($builder->get('payum.options'))->validateNotEmpty(
+                        $builder->get('payum.required_options')
+                    );
+                }
+
+                foreach (array_reverse($builder->get('payum.actions')) as $action) {
+                    $payment->addAction($action);
+                }
+
+                foreach (array_reverse($builder->get('payum.apis')) as $api) {
+                    $payment->addApi($api);
+                }
+
+                foreach (array_reverse($builder->get('payum.extensions')) as $extension) {
+                    $payment->addExtension($extension);
+                }
+            })
         ;
     }
 
@@ -79,6 +99,16 @@ class PaymentBuilder implements PaymentBuilderInterface
     /**
      * {@inheritDoc}
      */
+    public function setBuilder($name, \Closure $func)
+    {
+        $this->set('payum.builders', $name, $func);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function set($namespace, $name, $value)
     {
         $this->values[$namespace][$name] = $value;
@@ -89,48 +119,26 @@ class PaymentBuilder implements PaymentBuilderInterface
     /**
      * {@inheritDoc}
      */
+    public function get($namespace, $name = null, $default = null)
+    {
+        if ($name) {
+            return isset($this->values[$namespace][$name]) ? $this->values[$namespace][$name] : $default;
+        }
+
+        return isset($this->values[$namespace]) ? $this->values[$namespace] : [];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getPayment()
     {
         $payment = new Payment();
 
-        $this->buildPayment($payment);
+        foreach ($this->get('payum.builders') as $func) {
+            $func($payment, $this);
+        }
 
         return $payment;
-    }
-
-    /**
-     * @param string $namespace
-     * @param string $name
-     * @param mixed $default
-     *
-     * @return mixed
-     */
-    protected function get($namespace, $name, $default = null)
-    {
-        return isset($this->values[$namespace][$name]) ? $this->values[$namespace][$name] : $default;
-    }
-
-    /**
-     * @param Payment $payment
-     */
-    protected function buildPayment(Payment $payment)
-    {
-        if (false == empty($this->values['payum.required_options'])) {
-            ArrayObject::ensureArrayObject($this->values['payum.options'])->validateNotEmpty(
-                $this->values['payum.required_options']
-            );
-        }
-
-        foreach (array_reverse($this->values['payum.actions']) as $action) {
-            $payment->addAction($action);
-        }
-
-        foreach (array_reverse($this->values['payum.apis']) as $api) {
-            $payment->addApi($api);
-        }
-
-        foreach (array_reverse($this->values['payum.extensions']) as $extension) {
-            $payment->addExtension($extension);
-        }
     }
 }

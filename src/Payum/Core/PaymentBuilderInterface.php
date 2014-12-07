@@ -36,6 +36,14 @@ interface PaymentBuilderInterface
     function setExtension($name, ExtensionInterface $extension);
 
     /**
+     * @param string $name
+     * @param \Closure $func
+     *
+     * @return self
+     */
+    function setBuilder($name, \Closure $func);
+
+    /**
      * @param string $namespace
      * @param string $name
      * @param mixed $value
@@ -43,4 +51,13 @@ interface PaymentBuilderInterface
      * @return self
      */
     function set($namespace, $name, $value);
+
+    /**
+     * @param string $namespace
+     * @param string $name
+     * @param mixed $default
+     *
+     * @return mixed
+     */
+    function get($namespace, $name = null, $default = null);
 }
