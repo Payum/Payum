@@ -32,7 +32,7 @@ class CreditCardExpirationDateType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->replaceDefaults(array(
+        $resolver->setDefaults(array(
             'years' => range(date('Y'), date('Y') + 9)
         ));
     }
