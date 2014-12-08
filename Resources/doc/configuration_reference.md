@@ -123,9 +123,10 @@ payum:
 payum:
     contexts:
         aName:
-            login_id: 'required'
-            transaction_key: 'required'
-            sandbox: true
+            authorize_net_aim:
+                login_id: 'required'
+                transaction_key: 'required'
+                sandbox: true
 ```
 
 ## Be2Bill payment

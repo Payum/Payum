@@ -163,10 +163,10 @@ class PaymentController extends Controller
         $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
             $paymentName, 
             $order, 
-            'done' // the route to redirect after capture;
+            'done' // the route to redirect after capture
         );
         
-        return $this->redirect($captureToken->getTargetUrl())    
+        return $this->redirect($captureToken->getTargetUrl());    
     }
 }
 ```
