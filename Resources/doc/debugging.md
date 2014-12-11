@@ -1,6 +1,17 @@
 # Debugging
 
-Whenever you have problems, want understand payum internals: _check the log file_.
+## Debug payment
+
+This could be helpful when you want to find out what actions were added to payment and in which order. 
+Also it will show extensions and apis added too.  
+
+```bash
+$ php app/console payum:payment:debug
+```
+
+## Logs
+
+Whenever you have problems, or want to understand Payum internals: _check the log file_.
 It contains the whole stack of called actions including details about a request and a model.
 
 _**Note:** The profiler allows to choose from up to 10 last http requests. So find desired one and check the logs section._

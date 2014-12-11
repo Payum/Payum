@@ -41,6 +41,39 @@ $ php app/console payum:security:create-capture-token paypal \
 > Details: Acme\PaymentBundle\Entity\Order#1
 ```
 
+## Debug payment
+
+This could be helpful when you want to find out what actions were added to payment and in which order. 
+Also it will show extensions and apis added too.  
+
+```bash
+$ php app/console payum:payment:debug
+
+Found 1 payments
+
+> fooPayment (Payum\Core\Payment):
+>	Actions:
+>	Payum\Core\Action\CaptureOrderAction
+>	Payum\Core\Action\NotifyOrderAction
+>	Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction
+>	Payum\Core\Bridge\Symfony\Action\GetHttpRequestAction
+>	Payum\Bundle\PayumBundle\Action\ObtainCreditCardAction
+>	Payum\Core\Bridge\Twig\Action\RenderTemplateAction
+>	Payum\Offline\Action\CaptureAction
+>	Payum\Offline\Action\FillOrderDetailsAction
+>	Payum\Offline\Action\StatusAction
+>
+>	Extensions:
+>	Payum\Core\Extension\EndlessCycleDetectorExtension
+>	Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension
+>	Payum\Core\Bridge\Psr\Log\LoggerExtension
+>	Payum\Core\Extension\StorageExtension
+>		Payum\Core\Storage\FilesystemStorage
+>		Payum\Core\Model\ArrayObject
+>
+>	Apis:
+```
+
 ## Next Step
 
 * [Back to index](index.md).
