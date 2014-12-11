@@ -19,6 +19,19 @@ class StatusAction implements ActionInterface
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
+
+        if ($model['error_code']) {
+            $request->markFailed();
+
+            return;
+        }
+
+        if ($model['invoice_number']) {
+            $request->markCaptured();
+
+            return;
+        }
+
         if (false == $model['status'] || Constants::STATUS_CHECKOUT_INCOMPLETE == $model['status']) {
             $request->markNew();
 
@@ -31,11 +44,7 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (Constants::STATUS_CREATED == $model['status'] && $model['invoice_number']) {
-            $request->markCaptured();
 
-            return;
-        }
 
         if (Constants::STATUS_CREATED == $model['status']) {
             $request->markAuthorized();

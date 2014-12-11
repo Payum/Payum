@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.12.7 (2014-12-11)
+
+* [klarna-checkout] Mark failed if error_code set in details.
+
 ## 0.12.6 (2014-11-20)
 
 * [action] Add `NotifyOrderAction` action.

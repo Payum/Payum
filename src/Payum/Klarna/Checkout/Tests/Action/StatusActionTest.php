@@ -130,7 +130,6 @@ class StatusActionTest extends GenericActionTest
         $action = new StatusAction();
 
         $status = new GetBinaryStatus(array(
-            'status' => Constants::STATUS_CREATED,
             'invoice_number' => 'aNum'
         ));
 
@@ -140,5 +139,64 @@ class StatusActionTest extends GenericActionTest
         $action->execute($status);
 
         $this->assertTrue($status->isCaptured());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkFailedIfErrorCodeSet()
+    {
+        $action = new StatusAction();
+
+        $status = new GetBinaryStatus(array(
+            'error_code' => 'aCode'
+        ));
+
+        //guard
+        $status->markUnknown();
+
+        $action->execute($status);
+
+        $this->assertTrue($status->isFailed());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkFailedEvenIfInvoceNumberAndErrorCodeSet()
+    {
+        $action = new StatusAction();
+
+        $status = new GetBinaryStatus(array(
+            'error_code' => 'aCode',
+            'invoice_number' => 'aNum'
+        ));
+
+        //guard
+        $status->markUnknown();
+
+        $action->execute($status);
+
+        $this->assertTrue($status->isFailed());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkFailedEvenIfStatusCreatedAndErrorCodeSet()
+    {
+        $action = new StatusAction();
+
+        $status = new GetBinaryStatus(array(
+            'error_code' => 'aCode',
+            'status' => Constants::STATUS_CREATED,
+        ));
+
+        //guard
+        $status->markUnknown();
+
+        $action->execute($status);
+
+        $this->assertTrue($status->isFailed());
     }
 }
