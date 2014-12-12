@@ -18,7 +18,7 @@ class CreateNotifyTokenCommandTest extends WebTestCase
     public function shouldCreateNotifyTokenWithoutModel()
     {
         $output = $this->executeConsole(new CreateNotifyTokenCommand, array(
-            'payment-name' => 'offline'
+            'payment-name' => 'fooPayment'
         ));
 
         $this->assertContains('Hash: ', $output);
@@ -43,7 +43,7 @@ class CreateNotifyTokenCommandTest extends WebTestCase
         $modelId = $storage->getIdentificator($model)->getId();
 
         $output = $this->executeConsole(new CreateNotifyTokenCommand, array(
-            'payment-name' => 'offline',
+            'payment-name' => 'fooPayment',
             '--model-class' => $modelClass,
             '--model-id' => $modelId
         ));
@@ -54,24 +54,25 @@ class CreateNotifyTokenCommandTest extends WebTestCase
     }
 
     /**
-     * @param \Symfony\Component\Console\Command\Command $command
-     * @param string[]                                   $arguments
-     * @param string[]                                   $options
+     * @param Command  $command
+     * @param string[] $arguments
      *
      * @return string
      */
-    protected function executeConsole(Command $command, array $arguments = array(), array $options = array())
+    protected function executeConsole(Command $command, array $arguments = array())
     {
         $command->setApplication(new Application($this->client->getKernel()));
         if ($command instanceof ContainerAwareCommand) {
             $command->setContainer($this->client->getContainer());
         }
 
-        $arguments = array_replace(array('command' => $command->getName()), $arguments);
-        $options = array_replace(array('--env' => 'test'), $options);
+        $arguments = array_replace(array(
+            '--env' => 'test',
+            'command' => $command->getName()
+        ), $arguments);
 
         $commandTester = new CommandTester($command);
-        $commandTester->execute($arguments, $options);
+        $commandTester->execute($arguments);
 
         return $commandTester->getDisplay();
     }

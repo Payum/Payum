@@ -32,5 +32,12 @@ payum:
                     storage_dir: %kernel.cache_dir%
 
     contexts:
-        offline:
+        fooPayment:
             offline: ~
+
+        barPayment:
+            paypal_express_checkout_nvp:
+                username: aUsername
+                password: aPassword
+                signature: aSignature
+                sandbox: true
