@@ -53,7 +53,10 @@ class DebugPaymentCommand extends ContainerAwareCommand
 
             $output->writeln("\t<info>Actions:</info>");
             foreach ($actions as $action) {
+                $rm = new \ReflectionMethod($action, 'supports');
+
                 $output->writeln(sprintf("\t%s", get_class($action)));
+                $output->write("\n\t".implode("\n\t", $this->getMethodCode($rm)));
             }
 
             $rp = new \ReflectionProperty($payment, 'extensions');
@@ -102,6 +105,31 @@ class DebugPaymentCommand extends ContainerAwareCommand
                 $output->writeln(sprintf("\t%s", get_class($api)));
             }
         }
+    }
+
+    /**
+     * @param \ReflectionMethod $reflectionMethod
+     *
+     * @return array
+     */
+    protected function getMethodCode(\ReflectionMethod $reflectionMethod)
+    {
+        $file = file($reflectionMethod->getFileName());
+
+        $methodCodeLines = array();
+        foreach (range($reflectionMethod->getStartLine(), $reflectionMethod->getEndLine() - 1) as $line) {
+            $methodCodeLines[] = $file[$line];
+        }
+
+//        if (trim($methodCodeLines[count($methodCodeLines) - 1]) == '}') {
+//            unset($methodCodeLines[count($methodCodeLines) - 1]);
+//        }
+//
+//        if (trim($methodCodeLines[0]) == '{') {
+//            unset($methodCodeLines[0]);
+//        }
+
+        return array_values($methodCodeLines);
     }
 
     /**
