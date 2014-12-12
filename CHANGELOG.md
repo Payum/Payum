@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.12.3 (2014-12-12)
+
+[form] fix forms onsymfony 2.6
+[command] add `payum:payment:debug` command.
+
 ## 0.12.2 (2014-11-20)
 
 * [action] Add `NotifyOrderAction` action.
