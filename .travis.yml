@@ -13,6 +13,8 @@ env:
   - SYMFONY_VERSION=2.5.*
   - SYMFONY_VERSION=2.6.*
 
+sudo: false
+
 matrix:
   allow_failures:
     - php: hhvm
