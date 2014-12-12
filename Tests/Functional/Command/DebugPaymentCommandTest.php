@@ -45,6 +45,23 @@ class DebugPaymentCommandTest extends WebTestCase
     }
 
     /**
+     * @test
+     */
+    public function shouldOutputInfoWhatActionsSupports()
+    {
+        $output = $this->executeConsole(new DebugPaymentCommand, array(
+            'payment-name' => 'fooPayment',
+            '--show-supports' => true,
+        ));
+
+        $this->assertContains('Found 1 payments', $output);
+        $this->assertContains('fooPayment (Payum\Core\Payment):', $output);
+        $this->assertContains('Payum\Offline\Action\CaptureAction', $output);
+        $this->assertContains('$request instanceof Capture &&', $output);
+        $this->assertContains('$request->getModel() instanceof OrderInterface', $output);
+    }
+
+    /**
      * @param Command  $command
      * @param string[] $arguments
      *

@@ -21,6 +21,7 @@ class DebugPaymentCommand extends ContainerAwareCommand
         $this
             ->setName('payum:payment:debug')
             ->addArgument('payment-name', InputArgument::OPTIONAL, 'The payment name you want to get information about.')
+            ->addOption('show-supports', null, InputOption::VALUE_NONE, 'Show what actions supports.')
         ;
     }
 
@@ -37,8 +38,12 @@ class DebugPaymentCommand extends ContainerAwareCommand
             $payments = $this->getPayum()->getPayments();
         }
 
+        $output->writeln('<info>Order of actions, apis, extensions matters</info>');
+
         $output->writeln(sprintf('Found <info>%d</info> payments', count($payments)));
-        foreach ($this->getPayum()->getPayments() as $name => $payment) {
+
+
+        foreach ($payments as $name => $payment) {
             $output->writeln('');
             $output->writeln(sprintf('%s (%s):', $name, get_class($payment)));
 
@@ -53,10 +58,12 @@ class DebugPaymentCommand extends ContainerAwareCommand
 
             $output->writeln("\t<info>Actions:</info>");
             foreach ($actions as $action) {
-                $rm = new \ReflectionMethod($action, 'supports');
-
                 $output->writeln(sprintf("\t%s", get_class($action)));
-                $output->write("\n\t".implode("\n\t", $this->getMethodCode($rm)));
+
+                if ($input->getOption('show-supports')) {
+                    $rm = new \ReflectionMethod($action, 'supports');
+                    $output->write("\n\t" . implode("\n\t", $this->getMethodCode($rm)));
+                }
             }
 
             $rp = new \ReflectionProperty($payment, 'extensions');
@@ -81,7 +88,7 @@ class DebugPaymentCommand extends ContainerAwareCommand
                     $storage = $rp->getValue($extension);
                     $rp->setAccessible(false);
 
-                    $output->writeln(sprintf("\t\t%s", get_class($storage)));
+                    $output->writeln(sprintf("\t\t<info>Storage</info>: %s", get_class($storage)));
 
                     if ($storage instanceof AbstractStorage) {
                         $rp = new \ReflectionProperty($storage, 'modelClass');
@@ -89,7 +96,7 @@ class DebugPaymentCommand extends ContainerAwareCommand
                         $modelClass = $rp->getValue($storage);
                         $rp->setAccessible(false);
 
-                        $output->writeln(sprintf("\t\t%s", $modelClass));
+                        $output->writeln(sprintf("\t\t<info>Model</info>: %s", $modelClass));
                     }
                 }
             }
