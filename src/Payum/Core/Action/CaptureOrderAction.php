@@ -1,14 +1,13 @@
 <?php
 namespace Payum\Core\Action;
 
-use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\OrderInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\FillOrderDetails;
 use Payum\Core\Request\GetHumanStatus;
 
-class CaptureOrderAction extends PaymentAwareAction
+class CaptureOrderAction extends GenericOrderAction
 {
     /**
      * {@inheritDoc}
@@ -27,20 +26,7 @@ class CaptureOrderAction extends PaymentAwareAction
             $this->payment->execute(new FillOrderDetails($order, $request->getToken()));
         }
 
-        $details = ArrayObject::ensureArrayObject($order->getDetails());
-
-        try {
-            $request->setModel($details);
-            $this->payment->execute($request);
-
-            $order->setDetails($details);
-            $request->setModel($order);
-        } catch (\Exception $e) {
-            $order->setDetails($details);
-            $request->setModel($order);
-
-            throw $e;
-        }
+        parent::execute($request);
     }
 
     /**
@@ -48,9 +34,6 @@ class CaptureOrderAction extends PaymentAwareAction
      */
     public function supports($request)
     {
-        return
-            $request instanceof Capture &&
-            $request->getModel() instanceof OrderInterface
-        ;
+        return $request instanceof Capture && parent::supports($request);
     }
 }
