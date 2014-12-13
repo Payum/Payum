@@ -50,7 +50,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
             'id'
         );
         
-        $model = $storage->createModel();
+        $model = $storage->create();
         
         $this->assertInstanceOf($expectedModelClass, $model);
         $this->assertNull($model->getId());
@@ -69,9 +69,9 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
             'id'
         );
 
-        $model = $storage->createModel();
+        $model = $storage->create();
         
-        $storage->updateModel($model);
+        $storage->update($model);
 
         $this->assertInstanceOf($expectedModelClass, $model);
         $this->assertNotEmpty($model->getId());
@@ -88,9 +88,9 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
             'notExistProperty'
         );
 
-        $model = $storage->createModel();
+        $model = $storage->create();
 
-        $storage->updateModel($model);
+        $storage->update($model);
 
         $this->assertInstanceOf('stdClass', $model);
         $this->assertObjectHasAttribute('notExistProperty', $model);
@@ -107,12 +107,12 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
             'id'
         );
 
-        $model = $storage->createModel();
+        $model = $storage->create();
 
-        $storage->updateModel($model);
+        $storage->update($model);
         $firstId = $model->getId();
 
-        $storage->updateModel($model);
+        $storage->update($model);
         $secondId = $model->getId();
 
         $this->assertSame($firstId, $secondId);
@@ -129,8 +129,8 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
             'id'
         );
 
-        $model = $storage->createModel();
-        $storage->updateModel($model);
+        $model = $storage->create();
+        $storage->update($model);
         
         $this->assertFileExists(sys_get_temp_dir().'/payum-model-'.$model->getId());
     }
@@ -146,11 +146,11 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
             'id'
         );
 
-        $modelOne = $storage->createModel();
-        $storage->updateModel($modelOne);
+        $modelOne = $storage->create();
+        $storage->update($modelOne);
 
-        $modelTwo = $storage->createModel();
-        $storage->updateModel($modelTwo);
+        $modelTwo = $storage->create();
+        $storage->update($modelTwo);
 
         $this->assertNotSame($modelOne->getId(), $modelTwo->getId());
     }
@@ -169,18 +169,18 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
             'id'
         );
 
-        $model = $storage->createModel();
+        $model = $storage->create();
 
         //guard
         $this->assertNull($model->getId());
 
-        $storage->getIdentificator($model);
+        $storage->identify($model);
     }
 
     /**
      * @test
      */
-    public function shouldAllowGetModelIdentificator()
+    public function shouldAllowGetModelIdentity()
     {
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
@@ -188,12 +188,12 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
             'id'
         );
 
-        $model = $storage->createModel();
+        $model = $storage->create();
 
-        $storage->updateModel($model);
+        $storage->update($model);
         $firstId = $model->getId();
 
-        $storage->updateModel($model);
+        $storage->update($model);
         $secondId = $model->getId();
 
         $this->assertSame($firstId, $secondId);
@@ -202,19 +202,19 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowGetModelIdentificatorWhenDynamicIdUsed()
+    public function shouldAllowGetModelIdentityWhenDynamicIdUsed()
     {
         $storage = new FilesystemStorage(sys_get_temp_dir(), 'stdClass');
 
-        $model = $storage->createModel();
+        $model = $storage->create();
 
-        $storage->updateModel($model);
+        $storage->update($model);
 
-        $identificator = $storage->getIdentificator($model);
+        $identity = $storage->identify($model);
 
-        $this->assertInstanceOf('Payum\Core\Model\Identificator', $identificator);
-        $this->assertEquals('stdClass', $identificator->getClass());
-        $this->assertEquals($model->payum_id, $identificator->getId());
+        $this->assertInstanceOf('Payum\Core\Model\Identity', $identity);
+        $this->assertEquals('stdClass', $identity->getClass());
+        $this->assertEquals($model->payum_id, $identity->getId());
     }
 
     /**
@@ -228,13 +228,13 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
             'id'
         );
         
-        $model = $storage->createModel();
-        $storage->updateModel($model);
+        $model = $storage->create();
+        $storage->update($model);
 
         //guard
         $this->assertNotEmpty($model->getId());
         
-        $foundModel = $storage->findModelById($model->getId());
+        $foundModel = $storage->find($model->getId());
 
         $this->assertInstanceOf('Payum\Core\Tests\Mocks\Model\TestModel', $foundModel);
         $this->assertEquals($model->getId(), $foundModel->getId());
@@ -243,7 +243,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldFindModelByIdentificator()
+    public function shouldFindModelByIdentity()
     {
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
@@ -251,19 +251,19 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
             'id'
         );
 
-        $model = $storage->createModel();
-        $storage->updateModel($model);
+        $model = $storage->create();
+        $storage->update($model);
 
         //guard
         $this->assertNotEmpty($model->getId());
 
-        $identificator = $storage->getIdentificator($model);
+        $identity = $storage->identify($model);
 
         //guard
-        $this->assertInstanceOf('Payum\Core\Model\Identificator', $identificator);
+        $this->assertInstanceOf('Payum\Core\Model\Identity', $identity);
 
 
-        $foundModel = $storage->findModelByIdentificator($identificator);
+        $foundModel = $storage->find($identity);
 
         $this->assertInstanceOf('Payum\Core\Tests\Mocks\Model\TestModel', $foundModel);
         $this->assertEquals($model->getId(), $foundModel->getId());
@@ -280,13 +280,13 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
             'id'
         );
 
-        $model = $storage->createModel();
+        $model = $storage->create();
         $model->setPrice($expectedPrice = 123);
         $model->setCurrency($expectedCurrency = 'FOO');
         
-        $storage->updateModel($model);
+        $storage->update($model);
 
-        $foundModel = $storage->findModelById($model->getId());
+        $foundModel = $storage->find($model->getId());
 
         $this->assertSame($model, $foundModel);
         $this->assertEquals($expectedPrice, $foundModel->getPrice());
@@ -300,17 +300,17 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = new FilesystemStorage(sys_get_temp_dir(), 'Payum\Core\Tests\Mocks\Model\TestModel');
 
-        $model = $storage->createModel();
+        $model = $storage->create();
         $model->setPrice($expectedPrice = 123);
         $model->setCurrency($expectedCurrency = 'FOO');
 
-        $storage->updateModel($model);
+        $storage->update($model);
 
         //guard
         $this->assertObjectHasAttribute('payum_id', $model);
         $this->assertNotEmpty($model->payum_id);
 
-        $foundModel = $storage->findModelById($model->payum_id);
+        $foundModel = $storage->find($model->payum_id);
 
         $this->assertSame($model, $foundModel);
         $this->assertEquals($expectedPrice, $foundModel->getPrice());
@@ -327,18 +327,18 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = new FilesystemStorage(sys_get_temp_dir(), 'Payum\Core\Tests\Mocks\Model\TestModel');
 
-        $model = $storage->createModel();
+        $model = $storage->create();
         $model->setPrice($expectedPrice = 123);
         $model->setCurrency($expectedCurrency = 'FOO');
 
-        $storage->updateModel($model);
+        $storage->update($model);
 
         //guard
         $this->assertObjectHasAttribute('payum_id', $model);
         $this->assertNotEmpty($model->payum_id);
 
-        $storage->deleteModel($model);
+        $storage->delete($model);
 
-        $this->assertNull($storage->findModelById($model->payum_id));
+        $this->assertNull($storage->find($model->payum_id));
     }
 }

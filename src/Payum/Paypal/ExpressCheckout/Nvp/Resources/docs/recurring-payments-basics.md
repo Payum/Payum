@@ -69,16 +69,16 @@ use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 $storage = $payum->getStorage($agreementDetailsClass);
 
-$agreementDetails = $storage->createModel();
+$agreementDetails = $storage->create();
 $agreementDetails['PAYMENTREQUEST_0_AMT'] = 0;
 $agreementDetails['L_BILLINGTYPE0'] = Api::BILLINGTYPE_RECURRING_PAYMENTS;
 $agreementDetails['L_BILLINGAGREEMENTDESCRIPTION0'] = "Insert some description here";
 $agreementDetails['NOSHIPPING'] = 1;
-$storage->updateModel($agreementDetails);
+$storage->update($agreementDetails);
 
 $captureToken = $tokenFactory->createCaptureToken('paypal', $agreementDetails, 'create_recurring_payment.php');
 
-$storage->updateModel($agreementDetails);
+$storage->update($agreementDetails);
 
 header("Location: ".$captureToken->getTargetUrl());
 ```
@@ -124,7 +124,7 @@ $agreementDetails = $agreementStatus->getModel();
 
 $storage = $payum->getStorage($recurringPaymentDetailsClass);
 
-$recurringPaymentDetails = $storage->createModel();
+$recurringPaymentDetails = $storage->create();
 $recurringPaymentDetails['TOKEN'] = $agreementDetails['TOKEN'];
 $recurringPaymentDetails['DESC'] = 'Subscribe to weather forecast for a week. It is 0.05$ per day.';
 $recurringPaymentDetails['EMAIL'] = $agreementDetails['EMAIL'];

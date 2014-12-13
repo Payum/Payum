@@ -37,7 +37,7 @@ class StoreNotificationAction extends PaymentAwareAction
 
     public function execute($request)
     {
-        $notification = $this->notificationStorage->createModel();
+        $notification = $this->notificationStorage->create();
 
         $this->payment->execute($getHttpRequest = new GetHttpRequest);
         foreach ($getHttpRequest->query as $name => $value) {
@@ -47,7 +47,7 @@ class StoreNotificationAction extends PaymentAwareAction
             $paymentNotification[$name] => $value;
         }
 
-        $this->notificationStorage->updateModel($notification);
+        $this->notificationStorage->update($notification);
     }
 
     public function supports($request)
@@ -105,7 +105,7 @@ $notifyToken = $tokenFactory->createNotifyToken('paypal', $paymentDetails);
 
 $paymentDetails['NOTIFYURL'] = $notifyToken->getTargetUrl();
 
-$storage->updateModel($paymentDetails);
+$storage->update($paymentDetails);
 ```
 
 Here we created one more token: `notify` and tell paypal to use its target url for notifications.

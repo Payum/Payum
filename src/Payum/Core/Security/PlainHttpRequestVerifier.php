@@ -43,7 +43,7 @@ class PlainHttpRequestVerifier implements HttpRequestVerifierInterface
             return $httpRequest[$this->tokenParameter];
         }
 
-        if (false == $token = $this->tokenStorage->findModelById($httpRequest[$this->tokenParameter])) {
+        if (false == $token = $this->tokenStorage->find($httpRequest[$this->tokenParameter])) {
             throw new InvalidArgumentException(sprintf('A token with hash `%s` could not be found.', $httpRequest[$this->tokenParameter]));
         }
 
@@ -61,6 +61,6 @@ class PlainHttpRequestVerifier implements HttpRequestVerifierInterface
      */
     public function invalidate(TokenInterface $token)
     {
-        $this->tokenStorage->deleteModel($token);
+        $this->tokenStorage->delete($token);
     }
 }

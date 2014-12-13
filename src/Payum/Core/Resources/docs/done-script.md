@@ -15,14 +15,17 @@ include 'config.php';
 $token = $requestVerifier->verify($_REQUEST);
 // $requestVerifier->invalidate($token);
 
+$identity = $token->getDetails();
+$model = $payum->getStorage($identity->getClass())->find($identity);
+
 $payment = $payum->getPayment($token->getPaymentName());
 
-$payment->execute($status = new GetHumanStatus($token));
+$payment->execute($status = new GetHumanStatus($model));
 
 header('Content-Type: application/json');
 echo json_encode(array(
     'status' => $status->getValue(),
-    'details' => iterator_to_array($status->getModel())
+    'details' => iterator_to_array($model)
 )));
 ```
 

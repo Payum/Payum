@@ -16,9 +16,9 @@ class DoctrineStorageOrmTest extends OrmTest
             'Payum\Core\Tests\Mocks\Entity\TestModel'
         );
         
-        $model = $storage->createModel();
+        $model = $storage->create();
         
-        $storage->updateModel($model);
+        $storage->update($model);
         
         $this->assertNotNull($model->getId());
     }
@@ -33,17 +33,17 @@ class DoctrineStorageOrmTest extends OrmTest
             'Payum\Core\Tests\Mocks\Entity\TestModel'
         );
 
-        $model = $storage->createModel();
+        $model = $storage->create();
 
-        $storage->updateModel($model);
+        $storage->update($model);
 
         $this->assertNotNull($model->getId());
         
-        $identificator = $storage->getIdentificator($model);
+        $identity = $storage->identify($model);
         
-        $this->assertInstanceOf('Payum\Core\Model\Identificator', $identificator);
-        $this->assertEquals(get_class($model), $identificator->getClass());
-        $this->assertEquals($model->getId(), $identificator->getId());
+        $this->assertInstanceOf('Payum\Core\Model\Identity', $identity);
+        $this->assertEquals(get_class($model), $identity->getClass());
+        $this->assertEquals($model->getId(), $identity->getId());
     }
 
     /**
@@ -56,15 +56,15 @@ class DoctrineStorageOrmTest extends OrmTest
             'Payum\Core\Tests\Mocks\Entity\TestModel'
         );
 
-        $model = $storage->createModel();
+        $model = $storage->create();
 
-        $storage->updateModel($model);
+        $storage->update($model);
         
         $requestId = $model->getId();
         
         $this->em->clear();
 
-        $model = $storage->findModelById($requestId);
+        $model = $storage->find($requestId);
         
         $this->assertInstanceOf('Payum\Core\Tests\Mocks\Entity\TestModel', $model);
         $this->assertEquals($requestId, $model->getId());
@@ -73,24 +73,24 @@ class DoctrineStorageOrmTest extends OrmTest
     /**
      * @test
      */
-    public function shouldFindModelByIdentificator()
+    public function shouldFindModelByIdentity()
     {
         $storage = new DoctrineStorage(
             $this->em,
             'Payum\Core\Tests\Mocks\Entity\TestModel'
         );
 
-        $model = $storage->createModel();
+        $model = $storage->create();
 
-        $storage->updateModel($model);
+        $storage->update($model);
 
         $requestId = $model->getId();
 
         $this->em->clear();
 
-        $identificator = $storage->getIdentificator($model);
+        $identity = $storage->identify($model);
 
-        $foundModel = $storage->findModelByIdentificator($identificator);
+        $foundModel = $storage->find($identity);
 
         $this->assertInstanceOf('Payum\Core\Tests\Mocks\Entity\TestModel', $foundModel);
         $this->assertEquals($requestId, $foundModel->getId());

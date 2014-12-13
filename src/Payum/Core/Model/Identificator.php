@@ -1,65 +1,6 @@
 <?php
 namespace Payum\Core\Model;
 
-class Identificator implements \Serializable
+class Identificator extends Identity
 {
-    /**
-     * @var string
-     */
-    protected $class;
-
-    /**
-     * @var mixed
-     */
-    protected $id;
-
-    /**
-     * @param mixed $id
-     * @param string|object $class
-     */
-    public function __construct($id, $class)
-    {
-        $this->id = $id;
-        $this->class = is_object($class) ? get_class($class) : $class;
-    }
-
-    /**
-     * @return object|string
-     */
-    public function getClass()
-    {
-        return $this->class;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function serialize()
-    {
-        return serialize(array($this->id, $this->class));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function unserialize($serialized)
-    {
-        list($this->id, $this->class) = unserialize($serialized);
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->class.'#'.$this->id;
-    }
 }

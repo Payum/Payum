@@ -3,11 +3,12 @@ namespace Payum\Core\Model;
 
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Security\Util\Random;
+use Payum\Core\Storage\IdentityInterface;
 
 class Token implements TokenInterface
 {
     /**
-     * @var \Payum\Core\Model\Identificator
+     * @var IdentityInterface
      */
     protected $details;
 
@@ -39,7 +40,7 @@ class Token implements TokenInterface
     /**
      * {@inheritDoc}
      * 
-     * @return Identificator
+     * @return Identity
      */
     public function getDetails()
     {

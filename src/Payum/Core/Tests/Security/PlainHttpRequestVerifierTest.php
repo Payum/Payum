@@ -63,7 +63,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
         $storageMock = $this->createStorageMock();
         $storageMock
             ->expects($this->once())
-            ->method('findModelById')
+            ->method('find')
             ->with($invalidHash)
             ->will($this->returnValue(null))
         ;
@@ -90,7 +90,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
         $storageMock = $this->createStorageMock();
         $storageMock
             ->expects($this->once())
-            ->method('findModelById')
+            ->method('find')
             ->with('theHash')
             ->will($this->returnValue($token))
         ;
@@ -114,7 +114,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
         $storageMock = $this->createStorageMock();
         $storageMock
             ->expects($this->once())
-            ->method('findModelById')
+            ->method('find')
             ->with('theHash')
             ->will($this->returnValue($expectedToken))
         ;
@@ -164,7 +164,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
         $storageMock = $this->createStorageMock();
         $storageMock
             ->expects($this->once())
-            ->method('deleteModel')
+            ->method('delete')
             ->with($this->identicalTo($token))
         ;
 

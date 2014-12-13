@@ -64,8 +64,8 @@ use PayPal\Api\Transaction;
 
 $storage = $payum->getStorage($paypalRestPaymentDetailsClass);
 
-$paymentDetails = $storage->createModel();
-$storage->updateModel($paymentDetails);
+$paymentDetails = $storage->create();
+$storage->update($paymentDetails);
 
 $payer = new Payer();
 $payer->payment_method = "paypal";
@@ -89,7 +89,7 @@ $paymentDetails->payer = $payer;
 $paymentDetails->redirect_urls = $redirectUrls;
 $paymentDetails->transactions = array($transaction);
 
-$storage->updateModel($paymentDetails);
+$storage->update($paymentDetails);
 
 header("Location: ".$captureToken->getTargetUrl());
 ```

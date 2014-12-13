@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Document;
 
-use Payum\Core\Model\Identificator;
+use Payum\Core\Model\Identity;
 use Payum\Core\Tests\Functional\Bridge\Doctrine\MongoTest;
 use Payum\Core\Tests\Mocks\Document\Token;
 
@@ -29,7 +29,7 @@ class TokenTest extends MongoTest
         $token->setTargetUrl('anUrl');
         $token->setPaymentName('aName');
         $token->setAfterUrl('anAfterUrl');
-        $token->setDetails(new Identificator('anId', 'stdClass'));
+        $token->setDetails(new Identity('anId', 'stdClass'));
 
         $this->dm->persist($token);
         $this->dm->flush();

@@ -87,11 +87,11 @@ include 'config.php';
 
 $storage = $payum->getStorage('App\Model\Order');
 
-$order = $storage->createModel();
+$order = $storage->create();
 $order = new Order;
 $order->price = 1;
 $order->currency = 'USD';
-$storage->updateModel($order);
+$storage->update($order);
 
 $captureToken = $tokenFactory->createCaptureToken('foo', $order, 'done.php');
 
