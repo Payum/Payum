@@ -25,10 +25,13 @@ It is the route of url you will be redirected after capture done its job. Let's 
     public function captureDoneAction(Request $request)
     {
         $token = $this->get('payum.security.http_request_verifier')->verify($request);
+        
+        $identity = $token->getDetails();
+        $model = $payum->getStorage($identity->getClass())->find($identity);
 
         $payment = $this->get('payum')->getPayment($token->getPaymentName());
 
-        $payment->execute($status = new GetHumanStatus($token));
+        $payment->execute($status = new GetHumanStatus($model));
         if ($status->isCaptured()) {
             $this->getUser()->addCredits(100);
             $this->get('session')->getFlashBag()->set(

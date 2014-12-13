@@ -54,21 +54,16 @@ class PaymentController extends Controller
         $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\PaymentDetails');
 
         /** @var \Acme\PaymentBundle\Entity\PaymentDetails $details */
-        $details = $storage->createModel();
+        $details = $storage->create();
         $details['PAYMENTREQUEST_0_CURRENCYCODE'] = 'USD';
         $details['PAYMENTREQUEST_0_AMT'] = 1.23;
-        $storage->updateModel($details);
+        $storage->update($details);
 
         $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
             $paymentName,
             $details,
             'acme_payment_done' // the route to redirect after capture;
         );
-
-        $details['INVNUM'] = $details->getId();
-        $details['RETURNURL'] = $captureToken->getTargetUrl();
-        $details['CANCELURL'] = $captureToken->getTargetUrl();
-        $storage->updateModel($details);
 
         return $this->redirect($captureToken->getTargetUrl());
     }

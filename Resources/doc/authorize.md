@@ -21,7 +21,7 @@ class PaymentController extends Controller
         
         $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\Order');
         
-        $order = $storage->createModel();
+        $order = $storage->create();
         $order->setNumber(uniqid());
         $order->setCurrencyCode('EUR');
         $order->setTotalAmount(123); // 1.23 EUR
@@ -29,7 +29,7 @@ class PaymentController extends Controller
         $order->setClientId('anId');
         $order->setClientEmail('foo@example.com');
         
-        $storage->updateModel($order);
+        $storage->update($order);
         
         $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
             $paymentName, 

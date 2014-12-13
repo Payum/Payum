@@ -36,7 +36,7 @@ class CreateNotifyTokenCommand extends ContainerAwareCommand
         $model = null;
 
         if  ($modelClass && $modelId) {
-            if (false == $model = $this->getPayum()->getStorage($modelClass)->findModelById($modelId)) {
+            if (false == $model = $this->getPayum()->getStorage($modelClass)->find($modelId)) {
                 throw new RuntimeException(sprintf(
                     'Cannot find model with class %s and id %s.',
                     $modelClass,
