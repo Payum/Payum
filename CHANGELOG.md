@@ -1,9 +1,13 @@
 # Changelog
 
+## 0.12.4 (2014-12-13)
+
+* [action] back port `GenericOrderAction` from master. Fixes "Attempted to call method "getClientId" in done script but got array instead of order"
+
 ## 0.12.3 (2014-12-12)
 
-[form] fix forms onsymfony 2.6
-[command] add `payum:payment:debug` command.
+* [form] fix forms onsymfony 2.6
+* [command] add `payum:payment:debug` command.
 
 ## 0.12.2 (2014-11-20)
 
