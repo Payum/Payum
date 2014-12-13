@@ -13,6 +13,14 @@
 * [payment] Method `PaymentInterface::addApi` was removed from interface, still available in `Payment` class.
 * [payment] Method `PaymentInterface::addAction` was removed from interface, still available in `Payment` class.
 * [payment] Method `PaymentInterface::addExtension` was removed from interface, still available in `Payment` class.
+* [storage] Method `StorageInterface::createModel` was renamed to `create`.
+* [storage] Method `StorageInterface::supportModel` was renamed to `support`.
+* [storage] Method `StorageInterface::updateModel` was renamed to `update`.
+* [storage] Method `StorageInterface::deleteModel` was renamed to `delete`.
+* [storage] Method `StorageInterface::findModelById` was renamed to `find`.
+* [storage] Method `StorageInterface::getIdentificator` was renamed to `identify`.
+* [storage] Method `StorageInterface::findByIdentificator` was removed. Use `find` method instead.
+* [storage] Class `Identificator` was deprecated. Use `Identity` instead.
 
 ## 0.11 to 0.12
 

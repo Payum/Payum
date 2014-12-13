@@ -2,8 +2,8 @@
 namespace Payum\Core\Security;
 
 use League\Url\Url;
-use Payum\Core\Model\Identificator;
 use Payum\Core\Registry\StorageRegistryInterface;
+use Payum\Core\Storage\IdentityInterface;
 use Payum\Core\Storage\StorageInterface;
 
 abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterface
@@ -63,14 +63,14 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
     public function createToken($paymentName, $model, $targetPath, array $targetParameters = array(), $afterPath = null, array $afterParameters = array())
     {
         /** @var TokenInterface $token */
-        $token = $this->tokenStorage->createModel();
+        $token = $this->tokenStorage->create();
 
         $token->setPaymentName($paymentName);
 
-        if ($model instanceof Identificator) {
+        if ($model instanceof IdentityInterface) {
             $token->setDetails($model);
         } else if (null !== $model) {
-            $token->setDetails($this->storageRegistry->getStorage($model)->getIdentificator($model));
+            $token->setDetails($this->storageRegistry->getStorage($model)->identify($model));
         }
 
         if (0 === strpos($targetPath, 'http')) {
@@ -98,7 +98,7 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
             $token->setAfterUrl($this->generateUrl($afterPath, $afterParameters));
         }
 
-        $this->tokenStorage->updateModel($token);
+        $this->tokenStorage->update($token);
 
         return $token;
     }
@@ -113,7 +113,7 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
         $captureToken = $this->createToken($paymentName, $model, $this->capturePath);
         $captureToken->setAfterUrl($afterToken->getTargetUrl());
 
-        $this->tokenStorage->updateModel($captureToken);
+        $this->tokenStorage->update($captureToken);
 
         return $captureToken;
     }
@@ -131,7 +131,7 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
             $refundToken->setAfterUrl($afterToken->getTargetUrl());
         }
 
-        $this->tokenStorage->updateModel($refundToken);
+        $this->tokenStorage->update($refundToken);
 
         return $refundToken;
     }
@@ -146,7 +146,7 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
         $authorizeToken = $this->createToken($paymentName, $model, $this->authorizePath);
         $authorizeToken->setAfterUrl($afterToken->getTargetUrl());
 
-        $this->tokenStorage->updateModel($authorizeToken);
+        $this->tokenStorage->update($authorizeToken);
 
         return $authorizeToken;
     }

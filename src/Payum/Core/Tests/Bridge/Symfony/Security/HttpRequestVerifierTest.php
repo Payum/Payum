@@ -65,7 +65,7 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
         $storageMock = $this->createStorageMock();
         $storageMock
             ->expects($this->once())
-            ->method('findModelById')
+            ->method('find')
             ->with($invalidHash)
             ->will($this->returnValue(null))
         ;
@@ -93,7 +93,7 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
         $storageMock = $this->createStorageMock();
         $storageMock
             ->expects($this->once())
-            ->method('findModelById')
+            ->method('find')
             ->with('theHash')
             ->will($this->returnValue($token))
         ;
@@ -118,7 +118,7 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
         $storageMock = $this->createStorageMock();
         $storageMock
             ->expects($this->once())
-            ->method('findModelById')
+            ->method('find')
             ->with('theHash')
             ->will($this->returnValue($expectedToken))
         ;
@@ -145,7 +145,7 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
         $storageMock = $this->createStorageMock();
         $storageMock
             ->expects($this->once())
-            ->method('findModelById')
+            ->method('find')
             ->with('theHash')
             ->will($this->returnValue($expectedToken))
         ;
@@ -172,7 +172,7 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
         $storageMock = $this->createStorageMock();
         $storageMock
             ->expects($this->never())
-            ->method('findModelById')
+            ->method('find')
         ;
 
         $request = Request::create('http://target.com/foo');
@@ -197,7 +197,7 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
         $storageMock = $this->createStorageMock();
         $storageMock
             ->expects($this->never())
-            ->method('findModelById')
+            ->method('find')
         ;
 
         $request = Request::create('http://target.com/foo');
@@ -220,7 +220,7 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
         $storageMock = $this->createStorageMock();
         $storageMock
             ->expects($this->once())
-            ->method('deleteModel')
+            ->method('delete')
             ->with($this->identicalTo($token))
         ;
 

@@ -46,7 +46,7 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
             $expectedModelClass
         );
 
-        $model = $storage->createModel();
+        $model = $storage->create();
 
         $this->assertInstanceOf($expectedModelClass, $model);
         $this->assertNull($model->getId());
@@ -73,9 +73,9 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
             'Payum\Core\Tests\Mocks\Model\TestModel'
         );
 
-        $model = $storage->createModel();
+        $model = $storage->create();
 
-        $storage->updateModel($model);
+        $storage->update($model);
     }
 
     /**
@@ -100,7 +100,7 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
             'Payum\Core\Tests\Mocks\Model\TestModel'
         );
 
-        $actualModel = $storage->findModelById($expectedModelId);
+        $actualModel = $storage->find($expectedModelId);
     
         $this->assertSame($expectedFoundModel, $actualModel);
     }

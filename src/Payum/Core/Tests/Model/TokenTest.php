@@ -2,7 +2,7 @@
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\Token;
-use Payum\Core\Model\Identificator;
+use Payum\Core\Model\Identity;
 
 class TokenTest extends \PHPUnit_Framework_TestCase
 {
@@ -136,11 +136,11 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowSetIdentificatorAsDetails()
+    public function shouldAllowSetIdentityAsDetails()
     {
         $token = new Token;
 
-        $token->setDetails(new Identificator('anId', 'stdClass'));
+        $token->setDetails(new Identity('anId', 'stdClass'));
     }
 
     /**
@@ -148,26 +148,26 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetDetails()
     {
-        $expectedIdentificator = 'theDetails';
+        $expectedIdentity = 'theDetails';
 
         $token = new Token;
 
-        $token->setDetails($expectedIdentificator);
+        $token->setDetails($expectedIdentity);
 
-        $this->assertSame($expectedIdentificator, $token->getDetails());
+        $this->assertSame($expectedIdentity, $token->getDetails());
     }
 
     /**
      * @test
      */
-    public function shouldAllowGetIdentificatorPreviouslySetAsDetails()
+    public function shouldAllowGetIdentityPreviouslySetAsDetails()
     {
-        $expectedIdentificator = new Identificator('anId', 'stdClass');
+        $expectedIdentity = new Identity('anId', 'stdClass');
 
         $token = new Token;
 
-        $token->setDetails($expectedIdentificator);
+        $token->setDetails($expectedIdentity);
 
-        $this->assertSame($expectedIdentificator, $token->getDetails());
+        $this->assertSame($expectedIdentity, $token->getDetails());
     }
 }

@@ -109,11 +109,11 @@ include 'config.php';
 $storage = $payum->getStorage($detailsClass);
 $storage = $this->getPayum()->getStorage('Acme\PaymentBundle\Model\PaymentDetails');
 
-$details = $storage->createModel();
+$details = $storage->create();
 $details['purchase_country'] = 'SE';
 $details['purchase_currency'] = 'SEK';
 $details['locale'] = 'sv-se';
-$storage->updateModel($details);
+$storage->update($details);
 
 $captureToken = $tokenFactory->createCaptureToken('klarna_checkout', $details, 'done.php');
 $notifyToken = $tokenFactory->createNotifyToken('klarna_checkout', $details);
@@ -144,7 +144,7 @@ $details['cart'] = array(
          )
     )
 );
-$storage->updateModel($details);
+$storage->update($details);
 
 header("Location: ".$captureToken->getTargetUrl());
 ```

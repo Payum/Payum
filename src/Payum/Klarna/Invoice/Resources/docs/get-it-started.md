@@ -112,7 +112,7 @@ $payment->execute($getAddresses = new GetAddresses($pno));
 $storage = $payum->getStorage($detailsClass);
 $storage = $this->getPayum()->getStorage('Acme\PaymentBundle\Model\PaymentDetails');
 
-$details = $storage->createModel();
+$details = $storage->create();
 $details = array(
     /** @link http://developers.klarna.com/en/testing/invoice-and-account */
     'pno' => '410321-9202',
@@ -132,7 +132,7 @@ $details = array(
     'billing_address' => $getAddresses->getFirstAddress()->toArray(),
     'shipping_address' => $getAddresses->getFirstAddress()->toArray(),
 );
-$storage->updateModel($details);
+$storage->update($details);
 
 $captureToken = $tokenFactory->createCaptureToken('klarna_invoice', $details, 'done.php');
 

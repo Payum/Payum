@@ -14,13 +14,13 @@ use Payum\Core\Storage\FilesystemStorage;
 
 $storage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Order', 'number');
 
-$order = $storage->createModel();
+$order = $storage->create();
 $order->setTotalAmount(123);
 $order->setCurrency('EUR');
 
-$storage->updateModel($order);
+$storage->update($order);
 
-$foundOrder = $storage->findModelById($order->getNumber());
+$foundOrder = $storage->find($order->getNumber());
 ```
 
 Implicitly used example: 
@@ -36,25 +36,25 @@ $payment->addExtension(new StorageExtension(
 ));
 ```
 
-Usage of a model identificator:
+Usage of a model identity with the extension:
 
 ```php
 <?php
 use Payum\Core\Extension\StorageExtension;
-use Payum\Core\Storage\Identificator;
+use Payum\Core\Model\Identity;
 use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Payment;
 use Payum\Core\Request\Capture;
 
 $storage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Order', 'number');
 
-$order = $storage->createModel();
-$storage->updateModel($order);
+$order = $storage->create();
+$storage->update($order);
 
 $payment->addExtension(new StorageExtension($storage));
 
 $payment->execute($capture = new Capture(
-    $storage->getIdentificator($order)
+    $storage->identify($order)
 ));
 
 echo get_class($capture->getModel());

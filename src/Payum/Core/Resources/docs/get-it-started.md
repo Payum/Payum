@@ -95,7 +95,7 @@ $paymentName = 'offline';
 
 $storage = $payum->getStorage($orderClass);
 
-$order = $storage->createModel();
+$order = $storage->create();
 $order->setNumber(uniqid());
 $order->setCurrencyCode('EUR');
 $order->setTotalAmount(123); // 1.23 EUR
@@ -103,7 +103,7 @@ $order->setDescription('A description');
 $order->setClientId('anId');
 $order->setClientEmail('foo@example.com');
 
-$storage->updateModel($order);
+$storage->update($order);
 
 $captureToken = $tokenFactory->createCaptureToken($paymentName, $order, 'done.php');
 

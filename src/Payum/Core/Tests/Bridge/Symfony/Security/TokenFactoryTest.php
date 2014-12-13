@@ -3,7 +3,7 @@ namespace Payum\Core\Tests\Bridge\Symfony\Security;
 
 use Payum\Core\Bridge\Symfony\Security\TokenFactory;
 use Payum\Core\Exception\InvalidArgumentException;
-use Payum\Core\Model\Identificator;
+use Payum\Core\Model\Identity;
 use Payum\Core\Model\Token;
 use Payum\Core\PaymentInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
@@ -48,25 +48,25 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
         $tokenStorageMock = $this->createStorageMock();
         $tokenStorageMock
             ->expects($this->once())
-            ->method('createModel')
+            ->method('create')
             ->will($this->returnValue($token))
         ;
         $tokenStorageMock
             ->expects($this->once())
-            ->method('updateModel')
+            ->method('update')
             ->with($this->identicalTo($token))
         ;
 
         $model = new \stdClass;
-        $identificator = new Identificator('anId', 'stdClass');
+        $identity = new Identity('anId', 'stdClass');
         $paymentName = 'thePaymentName';
 
         $modelStorage = $this->createStorageMock();
         $modelStorage
             ->expects($this->once())
-            ->method('getIdentificator')
+            ->method('identify')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($identificator))
+            ->will($this->returnValue($identity))
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -112,7 +112,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($token, $actualToken);
         $this->assertEquals($paymentName, $token->getPaymentName());
-        $this->assertSame($identificator, $token->getDetails());
+        $this->assertSame($identity, $token->getDetails());
         $this->assertEquals('theTargetUrl', $token->getTargetUrl());
         $this->assertEquals('theAfterUrl', $token->getAfterUrl());
     }
@@ -127,25 +127,25 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
         $tokenStorageMock = $this->createStorageMock();
         $tokenStorageMock
             ->expects($this->once())
-            ->method('createModel')
+            ->method('create')
             ->will($this->returnValue($token))
         ;
         $tokenStorageMock
             ->expects($this->once())
-            ->method('updateModel')
+            ->method('update')
             ->with($this->identicalTo($token))
         ;
 
         $model = new \stdClass;
-        $identificator = new Identificator('anId', 'stdClass');
+        $identity = new Identity('anId', 'stdClass');
         $paymentName = 'thePaymentName';
 
         $modelStorage = $this->createStorageMock();
         $modelStorage
             ->expects($this->once())
-            ->method('getIdentificator')
+            ->method('identify')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($identificator))
+            ->will($this->returnValue($identity))
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -178,7 +178,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($token, $actualToken);
         $this->assertEquals($paymentName, $token->getPaymentName());
-        $this->assertSame($identificator, $token->getDetails());
+        $this->assertSame($identity, $token->getDetails());
         $this->assertEquals('theTargetUrl', $token->getTargetUrl());
         $this->assertNull($token->getAfterUrl());
     }
@@ -193,25 +193,25 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
         $tokenStorageMock = $this->createStorageMock();
         $tokenStorageMock
             ->expects($this->once())
-            ->method('createModel')
+            ->method('create')
             ->will($this->returnValue($token))
         ;
         $tokenStorageMock
             ->expects($this->once())
-            ->method('updateModel')
+            ->method('update')
             ->with($this->identicalTo($token))
         ;
 
         $model = new \stdClass;
-        $identificator = new Identificator('anId', 'stdClass');
+        $identity = new Identity('anId', 'stdClass');
         $paymentName = 'thePaymentName';
 
         $modelStorage = $this->createStorageMock();
         $modelStorage
             ->expects($this->once())
-            ->method('getIdentificator')
+            ->method('identify')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($identificator))
+            ->will($this->returnValue($identity))
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -244,7 +244,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($token, $actualToken);
         $this->assertEquals($paymentName, $token->getPaymentName());
-        $this->assertSame($identificator, $token->getDetails());
+        $this->assertSame($identity, $token->getDetails());
         $this->assertEquals('theNotifyUrl', $token->getTargetUrl());
         $this->assertNull($token->getAfterUrl());
     }
@@ -260,41 +260,41 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
         $tokenStorageMock = $this->createStorageMock();
         $tokenStorageMock
             ->expects($this->at(0))
-            ->method('createModel')
+            ->method('create')
             ->will($this->returnValue($afterToken))
         ;
         $tokenStorageMock
             ->expects($this->at(1))
-            ->method('updateModel')
+            ->method('update')
             ->with($this->identicalTo($afterToken))
         ;
         $tokenStorageMock
             ->expects($this->at(2))
-            ->method('createModel')
+            ->method('create')
             ->will($this->returnValue($captureToken))
         ;
         $tokenStorageMock
             ->expects($this->at(3))
-            ->method('updateModel')
+            ->method('update')
             ->with($this->identicalTo($captureToken))
         ;
         $tokenStorageMock
             ->expects($this->at(4))
-            ->method('updateModel')
+            ->method('update')
             ->with($this->identicalTo($captureToken))
         ;
 
 
         $model = new \stdClass;
-        $identificator = new Identificator('anId', 'stdClass');
+        $identity = new Identity('anId', 'stdClass');
         $paymentName = 'thePaymentName';
 
         $modelStorage = $this->createStorageMock();
         $modelStorage
             ->expects($this->exactly(2))
-            ->method('getIdentificator')
+            ->method('identify')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($identificator))
+            ->will($this->returnValue($identity))
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -333,7 +333,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($captureToken, $actualToken);
         $this->assertEquals($paymentName, $captureToken->getPaymentName());
-        $this->assertSame($identificator, $captureToken->getDetails());
+        $this->assertSame($identity, $captureToken->getDetails());
         $this->assertEquals('theCaptureUrl', $captureToken->getTargetUrl());
         $this->assertEquals('theAfterUrl', $captureToken->getAfterUrl());
     }
@@ -349,41 +349,41 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
         $tokenStorageMock = $this->createStorageMock();
         $tokenStorageMock
             ->expects($this->at(0))
-            ->method('createModel')
+            ->method('create')
             ->will($this->returnValue($afterToken))
         ;
         $tokenStorageMock
             ->expects($this->at(1))
-            ->method('updateModel')
+            ->method('update')
             ->with($this->identicalTo($afterToken))
         ;
         $tokenStorageMock
             ->expects($this->at(2))
-            ->method('createModel')
+            ->method('create')
             ->will($this->returnValue($authorizeToken))
         ;
         $tokenStorageMock
             ->expects($this->at(3))
-            ->method('updateModel')
+            ->method('update')
             ->with($this->identicalTo($authorizeToken))
         ;
         $tokenStorageMock
             ->expects($this->at(4))
-            ->method('updateModel')
+            ->method('update')
             ->with($this->identicalTo($authorizeToken))
         ;
 
 
         $model = new \stdClass;
-        $identificator = new Identificator('anId', 'stdClass');
+        $identity = new Identity('anId', 'stdClass');
         $paymentName = 'thePaymentName';
 
         $modelStorage = $this->createStorageMock();
         $modelStorage
             ->expects($this->exactly(2))
-            ->method('getIdentificator')
+            ->method('identify')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($identificator))
+            ->will($this->returnValue($identity))
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -422,7 +422,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($authorizeToken, $actualToken);
         $this->assertEquals($paymentName, $authorizeToken->getPaymentName());
-        $this->assertSame($identificator, $authorizeToken->getDetails());
+        $this->assertSame($identity, $authorizeToken->getDetails());
         $this->assertEquals('theAuthorizeUrl', $authorizeToken->getTargetUrl());
         $this->assertEquals('theAfterUrl', $authorizeToken->getAfterUrl());
     }

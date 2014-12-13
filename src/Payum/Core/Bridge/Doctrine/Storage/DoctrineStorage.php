@@ -2,8 +2,8 @@
 namespace Payum\Core\Bridge\Doctrine\Storage;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Payum\Core\Model\Identity;
 use Payum\Core\Storage\AbstractStorage;
-use Payum\Core\Model\Identificator;
 
 class DoctrineStorage extends AbstractStorage
 {
@@ -26,7 +26,7 @@ class DoctrineStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
-    public function findModelById($id)
+    protected function doFind($id)
     {
         return $this->objectManager->find($this->modelClass, $id);
     }
@@ -52,7 +52,7 @@ class DoctrineStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
-    protected function doGetIdentificator($model)
+    protected function doGetIdentity($model)
     {
         $modelMetadata = $this->objectManager->getClassMetadata(get_class($model));
         $id = $modelMetadata->getIdentifierValues($model);
@@ -60,6 +60,6 @@ class DoctrineStorage extends AbstractStorage
             throw new \LogicException('Storage not support composite primary ids');
         }
 
-        return new Identificator(array_shift($id), $model);
+        return new Identity(array_shift($id), $model);
     }
 }

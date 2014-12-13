@@ -3,7 +3,7 @@ namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Entity;
 
 use Doctrine\ORM\Tools\SchemaValidator;
 
-use Payum\Core\Model\Identificator;
+use Payum\Core\Model\Identity;
 use Payum\Core\Tests\Functional\Bridge\Doctrine\OrmTest;
 use Payum\Core\Tests\Mocks\Entity\Token;
 
@@ -41,7 +41,7 @@ class TokenTest extends OrmTest
         $token->setTargetUrl('anUrl');
         $token->setPaymentName('aName');
         $token->setAfterUrl('anAfterUrl');
-        $token->setDetails(new Identificator('anId', 'stdClass'));
+        $token->setDetails(new Identity('anId', 'stdClass'));
 
         $this->em->persist($token);
         $this->em->flush();

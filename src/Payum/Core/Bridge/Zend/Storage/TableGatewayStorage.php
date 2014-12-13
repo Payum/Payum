@@ -2,7 +2,7 @@
 namespace Payum\Core\Bridge\Zend\Storage;
 
 use Payum\Core\Exception\LogicException;
-use Payum\Core\Model\Identificator;
+use Payum\Core\Model\Identity;
 use Payum\Core\Storage\AbstractStorage;
 use Zend\Db\TableGateway\TableGateway;
 
@@ -69,7 +69,7 @@ class TableGatewayStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
-    public function findModelById($id)
+    protected function doFind($id)
     {
         return $this->tableGateway->select(array("{$this->idField} = ?" => $id))->current();
     }
@@ -100,7 +100,7 @@ class TableGatewayStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
-    protected function doGetIdentificator($model)
+    protected function doGetIdentity($model)
     {
         $id = $this->getModelId($model);
 
@@ -108,7 +108,7 @@ class TableGatewayStorage extends AbstractStorage
             throw new LogicException('The model must be persisted before usage of this method');
         }
 
-        return new Identificator($id, $model);
+        return new Identity($id, $model);
     }
 
     /**

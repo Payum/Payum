@@ -4,8 +4,7 @@ namespace Payum\Core\Extension;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Model\ModelAggregateInterface;
 use Payum\Core\Reply\ReplyInterface;
-use Payum\Core\Model\ModelAwareInterface;
-use Payum\Core\Model\Identificator;
+use Payum\Core\Storage\IdentityInterface;
 use Payum\Core\Storage\StorageInterface;
 
 class StorageExtension implements ExtensionInterface 
@@ -44,10 +43,10 @@ class StorageExtension implements ExtensionInterface
             return;
         }
 
-        if ($request->getModel() instanceof Identificator) {
-            /** @var Identificator $identificator */
-            $identificator = $request->getModel();
-            if (false == $model = $this->storage->findModelByIdentificator($identificator)) {
+        if ($request->getModel() instanceof IdentityInterface) {
+            /** @var IdentityInterface $identity */
+            $identity = $request->getModel();
+            if (false == $model = $this->storage->find($identity)) {
                 return;
             }
 
@@ -98,7 +97,7 @@ class StorageExtension implements ExtensionInterface
 
         if (0 === $this->stackLevel) {
             foreach ($this->scheduledForUpdateModels as $modelHash => $model) {
-                $this->storage->updateModel($model);
+                $this->storage->update($model);
                 unset($this->scheduledForUpdateModels[$modelHash]);
             }
         }
@@ -109,7 +108,7 @@ class StorageExtension implements ExtensionInterface
      */
     protected function scheduleForUpdateIfSupported($model)
     {
-        if ($this->storage->supportModel($model)) {
+        if ($this->storage->support($model)) {
             $modelHash = spl_object_hash($model);
             if (array_key_exists($modelHash, $this->scheduledForUpdateModels)) {
                 return;

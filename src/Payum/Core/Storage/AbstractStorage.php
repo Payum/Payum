@@ -2,7 +2,6 @@
 namespace Payum\Core\Storage;
 
 use Payum\Core\Exception\InvalidArgumentException;
-use Payum\Core\Model\Identificator;
 
 abstract class AbstractStorage implements StorageInterface
 {
@@ -22,7 +21,7 @@ abstract class AbstractStorage implements StorageInterface
     /**
      * {@inheritDoc}
      */
-    public function createModel()
+    public function create()
     {
         return new $this->modelClass;
     }
@@ -30,7 +29,7 @@ abstract class AbstractStorage implements StorageInterface
     /**
      * {@inheritDoc}
      */
-    public function supportModel($model)
+    public function support($model)
     {
         return $model instanceof $this->modelClass;
     }
@@ -38,7 +37,7 @@ abstract class AbstractStorage implements StorageInterface
     /**
      * {@inheritDoc}
      */
-    public function updateModel($model)
+    public function update($model)
     {
         $this->assertModelSupported($model);
 
@@ -48,7 +47,23 @@ abstract class AbstractStorage implements StorageInterface
     /**
      * {@inheritDoc}
      */
-    public function deleteModel($model)
+    public function find($id)
+    {
+        if ($id instanceof IdentityInterface) {
+            if (ltrim($id->getClass(), '\\') === ltrim($this->modelClass, '\\')) {
+                return $this->doFind($id->getId());
+            }
+
+            return;
+        }
+
+        return $this->doFind($id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function delete($model)
     {
         $this->assertModelSupported($model);
 
@@ -58,21 +73,11 @@ abstract class AbstractStorage implements StorageInterface
     /**
      * {@inheritDoc}
      */
-    public function findModelByIdentificator(Identificator $identificator)
-    {
-        if (ltrim($identificator->getClass(), '\\') === ltrim($this->modelClass, '\\')) {
-            return $this->findModelById($identificator->getId());
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getIdentificator($model)
+    public function identify($model)
     {
         $this->assertModelSupported($model);
 
-        return $this->doGetIdentificator($model);
+        return $this->doGetIdentity($model);
     }
 
     /**
@@ -92,9 +97,16 @@ abstract class AbstractStorage implements StorageInterface
     /**
      * @param object $model
      *
-     * @return \Payum\Core\Model\Identificator
+     * @return IdentityInterface
      */
-    abstract protected function doGetIdentificator($model);
+    abstract protected function doGetIdentity($model);
+
+    /**
+     * @param mixed $id
+     *
+     * @return object|null
+     */
+    abstract protected function doFind($id);
 
     /**
      * @param object $model
@@ -103,7 +115,7 @@ abstract class AbstractStorage implements StorageInterface
      */
     protected function assertModelSupported($model)
     {
-        if (false == $this->supportModel($model)) {
+        if (false == $this->support($model)) {
             throw new InvalidArgumentException(sprintf(
                 'Invalid model given. Should be instance of %s but it is %s',
                 $this->modelClass,

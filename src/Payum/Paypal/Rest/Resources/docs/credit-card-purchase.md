@@ -19,8 +19,8 @@ use PayPal\Api\Transaction;
 
 $storage = $payum->getStorage($paypalRestPaymentDetailsClass);
 
-$paymentDetails = $storage->createModel();
-$storage->updateModel($paymentDetails);
+$paymentDetails = $storage->create();
+$storage->update($paymentDetails);
 
 $address = new Address();
 $address->line1 = "3909 Witmer Road";
