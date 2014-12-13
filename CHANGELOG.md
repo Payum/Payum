@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.12.8 (2014-12-13)
+
+* [action] Back port from master a `GenericOrderAction`. Fixes "Attempted to call method "getClientId" in done script but got array instead of order" 
+
 ## 0.12.7 (2014-12-11)
 
 * [klarna-checkout] Mark failed if error_code set in details.
