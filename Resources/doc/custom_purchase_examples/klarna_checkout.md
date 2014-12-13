@@ -58,11 +58,11 @@ class PaymentController extends Controller
         $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\PaymentDetails');
 
         /** @var \Acme\PaymentBundle\Entity\PaymentDetails $details */
-        $details = $storage->createModel();
+        $details = $storage->create();
         $details['purchase_country'] = 'SE';
         $details['purchase_currency'] = 'SEK';
         $details['locale'] = 'sv-se';
-        $storage->updateModel($details);
+        $storage->update($details);
 
         $captureToken = $this->getTokenFactory()->createCaptureToken(
             $paymentName,
@@ -96,7 +96,7 @@ class PaymentController extends Controller
                 )
             )
         );
-        $storage->updateModel($details);
+        $storage->update($details);
 
         return $this->redirect($captureToken->getTargetUrl());
     }

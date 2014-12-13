@@ -37,10 +37,10 @@ class CreateNotifyTokenCommandTest extends WebTestCase
         $modelClass = 'Payum\Core\Model\ArrayObject';
 
         $storage = $payum->getStorage($modelClass);
-        $model = $storage->createModel();
-        $storage->updateModel($model);
+        $model = $storage->create();
+        $storage->update($model);
 
-        $modelId = $storage->getIdentificator($model)->getId();
+        $modelId = $storage->identify($model)->getId();
 
         $output = $this->executeConsole(new CreateNotifyTokenCommand, array(
             'payment-name' => 'fooPayment',

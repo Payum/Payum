@@ -61,7 +61,7 @@ class PaymentController extends Controller
         $payment = $payum->getPayment($paymentName);
         $payment->execute($getAddresses = new GetAddresses($pno));
 
-        $details = $storage->createModel();
+        $details = $storage->create();
         $details = array(
             /** @link http://developers.klarna.com/en/testing/invoice-and-account */
             'pno' => '410321-9202',
@@ -81,14 +81,14 @@ class PaymentController extends Controller
             'billing_address' => $getAddresses->getFirstAddress()->toArray(),
             'shipping_address' => $getAddresses->getFirstAddress()->toArray(),
         );
-        $storage->updateModel($details);
+        $storage->update($details);
 
         $captureToken = $this->getTokenFactory()->createCaptureToken(
             $paymentName,
             $details,
             'acme_payment_details_view'
         );
-        $storage->updateModel($details);
+        $storage->update($details);
 
         return $this->redirect($captureToken->getTargetUrl());
     }

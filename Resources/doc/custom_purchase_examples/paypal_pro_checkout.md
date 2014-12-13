@@ -59,10 +59,10 @@ class PaymentController extends Controller
         $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\PaymentDetails');
 
         /** @var \Acme\PaymentBundle\Entity\PaymentDetails $details */
-        $details = $storage->createModel();
+        $details = $storage->create();
         $details['amt'] = 1;
         $details['currency'] = 'USD';
-        $storage->updateModel($details);
+        $storage->update($details);
 
         $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
             $paymentName,
