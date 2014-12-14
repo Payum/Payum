@@ -18,7 +18,7 @@ class ExecuteSameRequestWithModelDetailsAction extends PaymentAwareAction
         RequestNotSupportedException::assertSupports($this, $request);
 
         $request->setModel($request->getModel()->getDetails());
-        
+
         $this->payment->execute($request);
     }
 
