@@ -13,16 +13,24 @@ use Payum\Core\Request\GetHumanStatus;
 include 'config.php';
 
 $token = $requestVerifier->verify($_REQUEST);
-// $requestVerifier->invalidate($token);
 
 $payment = $payum->getPayment($token->getPaymentName());
 
+// you can invalidate the token. The url could not be requested any more.
+// $requestVerifier->invalidate($token);
+
+// Once you have token you can get the model from the storage directly. 
+//$identity = $token->getDetails();
+//$model = $payum->getStorage($identity->getClass())->find($identity);
+
+// or Payum can fetch the model for you while executing a request (Preferred).
 $payment->execute($status = new GetHumanStatus($token));
+$model = $status->getFirstModel());
 
 header('Content-Type: application/json');
 echo json_encode(array(
     'status' => $status->getValue(),
-    'details' => iterator_to_array($status->getModel())
+    'details' => iterator_to_array($model)
 )));
 ```
 
