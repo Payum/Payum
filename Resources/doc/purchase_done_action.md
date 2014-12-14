@@ -4,7 +4,7 @@ We assume you already know how to prepare payment details and how to capture the
 The last thing in this store what to do after?
 This chapter should cover these questions.
 
-Well, let's assume you created capture token this way while preparing payment:
+Well, let's assume you created capture token this way while preparing payment.
 
 ```php
 <?php
@@ -31,23 +31,24 @@ It is the route of url you will be redirected after capture done its job. Let's 
 
         $payment = $this->get('payum')->getPayment($token->getPaymentName());
 
-        $payment->execute($status = new GetHumanStatus($model));
-        if ($status->isCaptured()) {
-            $this->getUser()->addCredits(100);
-            $this->get('session')->getFlashBag()->set(
-                'notice',
-                'Payment success. Credits were added'
-            );
-        } else if ($status->isPending()) {
-            $this->get('session')->getFlashBag()->set(
-                'notice',
-                'Payment is still pending. Credits were not added'
-            );
-        } else {
-            $this->get('session')->getFlashBag()->set('error', 'Payment failed');
-        }
-
-        return $this->redirect('homepage');
+        // you can invalidate the token. The url could not be requested any more.
+        // $this->get('payum.security.http_request_verifier')->invalidate($token);
+        
+        // Once you have token you can get the model from the storage directly. 
+        //$identity = $token->getDetails();
+        //$details = $payum->getStorage($identity->getClass())->find($identity);
+        
+        // or Payum can fetch the model for you while executing a request (Preferred).
+        $payment->execute($status = new GetHumanStatus($token));
+        $details = $status->getFirstModel());
+        
+        // you have order and payment status 
+        // so you can do whatever you want for example you can just print status and payment details.
+        
+        return new JsonResponse(array(
+            'status' => $status->getValue(),
+            'details' => iterator_to_array($details),
+        ));
     }
 ```
 
