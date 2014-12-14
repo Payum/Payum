@@ -4,7 +4,6 @@ namespace Payum\Payex;
 use Payum\Core\Action\CaptureOrderAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetHttpRequestAction;
-use Payum\Core\Action\GenericOrderAction;
 use Payum\Payex\Action\Api\CheckOrderAction;
 use Payum\Payex\Action\FillOrderDetailsAction;
 use Payum\Payex\Action\PaymentDetailsSyncAction;
@@ -76,7 +75,6 @@ abstract class PaymentFactory
         $payment->addAction(new GetHttpRequestAction);
 
         $payment->addAction(new CaptureOrderAction);
-        $payment->addAction(new GenericOrderAction);
 
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 

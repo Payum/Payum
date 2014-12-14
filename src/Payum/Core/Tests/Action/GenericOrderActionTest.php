@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Core\Tests\Action;
 
-use Payum\Core\Action\GenericOrderAction;
 use Payum\Core\Model\Order;
 use Payum\Core\Request\Authorize;
 use Payum\Core\Request\Cancel;
