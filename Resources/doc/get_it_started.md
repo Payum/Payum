@@ -194,23 +194,25 @@ class PaymentController extends Controller
     {
         $token = $this->get('payum.security.http_request_verifier')->verify($request);
         
+        $payment = $this->get('payum')->getPayment($token->getPaymentName());
+        
+        // you can invalidate the token. The url could not be requested any more.
         // $this->get('payum.security.http_request_verifier')->invalidate($token);
         
-        $payment = $payum->getPayment($token->getPaymentName());
+        // Once you have token you can get the model from the storage directly. 
+        //$identity = $token->getDetails();
+        //$order = $payum->getStorage($identity->getClass())->find($identity);
         
+        // or Payum can fetch the model for you while executing a request (Preferred).
         $payment->execute($status = new GetHumanStatus($token));
+        $order = $status->getFirstModel());
         
-        $order = $token->getDetails();
+        // you have order and payment status 
+        // so you can do whatever you want for example you can just print status and payment details.
         
         return new JsonResponse(array(
             'status' => $status->getValue(),
             'order' => array(
-                'client' => array(
-                    'id' => $order->getClientId(),
-                    'email' => $order->getClientEmail(),
-                ),
-                'number' => $order->getNumber(),
-                'description' => $order->getCurrencyCode(),
                 'total_amount' => $order->getTotalAmount(),
                 'currency_code' => $order->getCurrencyCode(),
                 'details' => $order->getDetails(),
