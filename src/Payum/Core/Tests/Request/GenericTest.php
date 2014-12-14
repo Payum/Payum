@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Core\Tests\Request;
 
+use Payum\Core\Request\Generic;
+
 class GenericTest extends \PHPUnit_Framework_TestCase
 {
     public static function provideDifferentPhpTypes()
@@ -72,6 +74,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetModelAndGetIt($phpType)
     {
+        /** @var Generic $request */
         $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array(123321));
 
         $request->setModel($phpType);
@@ -86,6 +89,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetModelSetInConstructor($phpType)
     {
+        /** @var Generic $request */
         $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array($phpType));
         
         $this->assertEquals($phpType, $request->getModel());
@@ -98,6 +102,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
     {
         $tokenMock = $this->getMock('Payum\Core\Security\TokenInterface');
 
+        /** @var Generic $request */
         $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array($tokenMock));
 
         $this->assertSame($tokenMock, $request->getModel());
@@ -110,7 +115,8 @@ class GenericTest extends \PHPUnit_Framework_TestCase
     public function shouldConvertArrayToArrayObjectInConstructor()
     {
         $model = array('foo' => 'bar');
-        
+
+        /** @var Generic $request */
         $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array($model));
 
         $this->assertInstanceOf('ArrayObject', $request->getModel());
@@ -122,6 +128,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldConvertArrayToArrayObjectSetWithSetter()
     {
+        /** @var Generic $request */
         $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array(123321));
 
         $model = array('foo' => 'bar');
@@ -130,5 +137,102 @@ class GenericTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('ArrayObject', $request->getModel());
         $this->assertEquals($model, (array) $request->getModel());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotSetTokenAsFirstModelOnConstruct()
+    {
+        /** @var Generic $request */
+        $token = $this->getMock('Payum\Core\Security\TokenInterface');
+
+        $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array($token));
+
+        $this->assertNull($request->getFirstModel());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotSetIdentityAsFirstModelOnConstruct()
+    {
+        /** @var Generic $request */
+        $identity = $this->getMock('Payum\Core\Storage\Identificator', array(), array(), '', false);
+
+        $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array($identity));
+
+        $this->assertNull($request->getFirstModel());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSetAnyObjectAsFirstModelOnConstruct()
+    {
+        $model = new \stdClass();
+
+        /** @var Generic $request */
+        $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array($model));
+
+        $this->assertSame($model, $request->getFirstModel());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotSetTokenAsFirstModelOnSetModel()
+    {
+        $token = $this->getMock('Payum\Core\Security\TokenInterface');
+
+        /** @var Generic $request */
+        $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array(null));
+        $request->setModel($token);
+
+        $this->assertNull($request->getFirstModel());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotSetIdentityAsFirstModelOnSetModel()
+    {
+        $identity = $this->getMock('Payum\Core\Storage\Identificator', array(), array(), '', false);
+
+        /** @var Generic $request */
+        $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array(null));
+        $request->setModel($identity);
+
+        $this->assertNull($request->getFirstModel());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSetAnyObjectAsFirstModelOnSetModel()
+    {
+        $model = new \stdClass();
+
+        /** @var Generic $request */
+        $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array(null));
+        $request->setModel($model);
+
+        $this->assertSame($model, $request->getFirstModel());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotChangeFirstModelOnSecondSetModelCall()
+    {
+        $firstModel = new \stdClass();
+        $secondModel = new \stdClass();
+
+        /** @var Generic $request */
+        $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array($firstModel));
+        $request->setModel($secondModel);
+
+        $this->assertSame($firstModel, $request->getFirstModel());
+        $this->assertSame($secondModel, $request->getModel());
     }
 }
