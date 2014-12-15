@@ -33,7 +33,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $actions = $this->readAttribute($payment, 'actions');
         $this->assertInternalType('array', $actions);
-        $this->assertCount(13, $actions);
+        $this->assertCount(12, $actions);
     }
 
     /**
@@ -52,7 +52,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $actions = $this->readAttribute($payment, 'actions');
         $this->assertInternalType('array', $actions);
-        $this->assertCount(18, $actions);
+        $this->assertCount(17, $actions);
     }
 
     /**
@@ -71,7 +71,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $actions = $this->readAttribute($payment, 'actions');
         $this->assertInternalType('array', $actions);
-        $this->assertCount(16, $actions);
+        $this->assertCount(15, $actions);
     }
 
     /**
@@ -91,7 +91,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $actions = $this->readAttribute($payment, 'actions');
         $this->assertInternalType('array', $actions);
-        $this->assertCount(21, $actions);
+        $this->assertCount(20, $actions);
     }
 
     /**

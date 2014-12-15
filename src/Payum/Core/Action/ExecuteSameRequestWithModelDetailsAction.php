@@ -1,8 +1,10 @@
 <?php
 namespace Payum\Core\Action;
 
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\DetailsAggregateInterface;
+use Payum\Core\Model\DetailsAwareInterface;
 use Payum\Core\Model\ModelAggregateInterface;
 use Payum\Core\Model\ModelAwareInterface;
 
@@ -17,9 +19,28 @@ class ExecuteSameRequestWithModelDetailsAction extends PaymentAwareAction
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $request->setModel($request->getModel()->getDetails());
+        /** @var DetailsAggregateInterface $model */
+        $model = $request->getModel();
+        $details = $model->getDetails();
 
-        $this->payment->execute($request);
+        if (is_array($details)) {
+            $details = ArrayObject::ensureArrayObject($details);
+        }
+
+        $request->setModel($details);
+        try {
+            $this->payment->execute($request);
+
+            if ($model instanceof DetailsAwareInterface) {
+                $model->setDetails($details);
+            }
+        } catch (\Exception $e) {
+            if ($model instanceof DetailsAwareInterface) {
+                $model->setDetails($details);
+            }
+
+            throw $e;
+        }
     }
 
     /**

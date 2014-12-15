@@ -5,7 +5,6 @@ use Payum\Be2Bill\Action\FillOrderDetailsAction;
 use Payum\Core\Action\CaptureOrderAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetHttpRequestAction;
-use Payum\Core\Action\GenericOrderAction;
 use Payum\Core\Payment;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Be2Bill\Action\CaptureOnsiteAction;
@@ -32,7 +31,6 @@ abstract class OnsitePaymentFactory
         $payment->addAction(new GetHttpRequestAction);
 
         $payment->addAction(new CaptureOrderAction);
-        $payment->addAction(new GenericOrderAction);
 
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 
