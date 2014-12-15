@@ -165,12 +165,12 @@ class CaptureOrderActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldExecuteCaptureDetailsIfStatusNotNew()
+    public function shouldSetDetailsBackToOrderAfterCaptureDetailsExecution()
     {
-        $details = array('foo' => 'fooVal');
+        $expectedDetails = array('foo' => 'fooVal');
 
         $order = new Order;
-        $order->setDetails($details);
+        $order->setDetails($expectedDetails);
 
         $testCase = $this;
 
@@ -187,9 +187,13 @@ class CaptureOrderActionTest extends GenericActionTest
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Capture'))
-            ->will($this->returnCallback(function(Capture $request) use ($testCase, $details) {
-                $testCase->assertInstanceOf('ArrayAccess', $request->getModel());
-                $testCase->assertEquals($details, iterator_to_array($request->getModel()));
+            ->will($this->returnCallback(function(Capture $request) use ($testCase, $expectedDetails) {
+                $details = $request->getModel();
+
+                $testCase->assertInstanceOf('ArrayAccess', $details);
+                $testCase->assertEquals($expectedDetails, iterator_to_array($details));
+
+                $details['bar'] = 'barVal';
             }))
         ;
 
@@ -200,17 +204,18 @@ class CaptureOrderActionTest extends GenericActionTest
 
         $this->assertSame($order, $capture->getFirstModel());
         $this->assertInstanceOf('ArrayAccess', $capture->getModel());
+        $this->assertEquals(array('foo' => 'fooVal', 'bar' => 'barVal'), $order->getDetails());
     }
 
     /**
      * @test
      */
-    public function shouldKeepOrderEvenIfExceptionThrown()
+    public function shouldSetDetailsBackToOrderEvenIfExceptionThrown()
     {
-        $details = array('foo' => 'fooVal');
+        $expectedDetails = array('foo' => 'fooVal');
 
         $order = new Order;
-        $order->setDetails($details);
+        $order->setDetails($expectedDetails);
 
         $paymentMock = $this->createPaymentMock();
         $paymentMock
@@ -225,7 +230,12 @@ class CaptureOrderActionTest extends GenericActionTest
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Capture'))
-            ->will($this->throwException(new \Exception))
+            ->will($this->returnCallback(function(Capture $request) {
+                $details = $request->getModel();
+                $details['bar'] = 'barVal';
+
+                throw new \Exception();
+            }))
         ;
 
         $action = new CaptureOrderAction;
@@ -236,5 +246,6 @@ class CaptureOrderActionTest extends GenericActionTest
 
         $this->assertSame($order, $capture->getFirstModel());
         $this->assertInstanceOf('ArrayAccess', $capture->getModel());
+        $this->assertEquals(array('foo' => 'fooVal', 'bar' => 'barVal'), $order->getDetails());
     }
 }
