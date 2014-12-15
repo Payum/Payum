@@ -2,16 +2,16 @@
 namespace Payum\Be2Bill\Tests;
 
 use Payum\Be2Bill\Api;
-use Payum\Be2Bill\OnsitePaymentFactory;
+use Payum\Be2Bill\OffsitePaymentFactory;
 
-class OnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
+class OffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function couldNotBeInstantiated()
     {
-        $rc = new \ReflectionClass('Payum\Be2Bill\OnsitePaymentFactory');
+        $rc = new \ReflectionClass('Payum\Be2Bill\OffsitePaymentFactory');
 
         $this->assertFalse($rc->isInstantiable());
     }
@@ -23,7 +23,7 @@ class OnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $apiMock = $this->createApiMock();
 
-        $payment = OnsitePaymentFactory::create($apiMock);
+        $payment = OffsitePaymentFactory::create($apiMock);
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
         

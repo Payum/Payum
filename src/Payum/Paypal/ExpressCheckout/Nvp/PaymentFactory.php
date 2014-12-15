@@ -4,8 +4,10 @@ namespace Payum\Paypal\ExpressCheckout\Nvp;
 use Payum\Core\Action\CaptureOrderAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetHttpRequestAction;
+use Payum\Core\Bridge\Buzz\ClientFactory;
 use Payum\Core\Payment;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
+use Payum\Core\PaymentFactoryInterface;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoExpressCheckoutPaymentAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction;
@@ -24,18 +26,16 @@ use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsSyncAction;
 
-abstract class PaymentFactory
+class PaymentFactory implements PaymentFactoryInterface
 {
     /**
-     * @param Api $api
-     *
-     * @return \Payum\Core\Payment
+     * {@inheritDoc}
      */
-    public static function create(Api $api)
+    public function create(array $options = array())
     {
         $payment = new Payment;
 
-        $payment->addApi($api);
+        $payment->addApi(new Api($options, ClientFactory::createCurl()));
 
         $payment->addExtension(new EndlessCycleDetectorExtension);
 
@@ -64,11 +64,5 @@ abstract class PaymentFactory
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 
         return $payment;
-    }
-
-    /**
-     */
-    private  function __construct()
-    {
     }
 }

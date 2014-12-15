@@ -10,7 +10,7 @@ The preferred way to install the library is using [composer](http://getcomposer.
 Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require "payum/offline:*@stable"
+php composer.phar require payum/offline
 ```
 
 ## config.php
@@ -21,11 +21,12 @@ Let's modify `config.php` a bit.
 <?php
 //config.php
 
-use Payum\Offline\PaymentFactory as OfflinePaymentFactory;
+use  as OfflinePaymentFactory;
 
 // ...
 
-$payments['offline'] = OfflinePaymentFactory::create();
+$offlineFactory = new \Payum\Offline\PaymentFactory();
+$payments['offline'] = $offlineFactory->create();
 ```
 
 ## prepare.php

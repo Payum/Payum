@@ -9,7 +9,7 @@ The preferred way to install the library is using [composer](http://getcomposer.
 Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require "payum/klarna-checkout:@stable"
+php composer.phar require payum/klarna-checkout
 ```
 
 ## config.php
@@ -56,8 +56,6 @@ use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Security\PlainHttpRequestVerifier;
 use Payum\Core\Security\GenericTokenFactory;
-use Payum\Klarn\Checkout\Config;
-use Payum\Klarn\Checkout\Constants;
 use Payum\Klarn\Checkout\PaymentFactory as KlarnaPaymentFactory;
 
 $tokenStorage = new FilesystemStorage('/path/to/storage', 'App\Model\PaymentSecurityToken', 'hash');
@@ -71,11 +69,11 @@ $storages = array(
 
 $payments = array();
 
-$config = new Config;
-$config->merchantId = 'EDIT IT';
-$config->secret = 'EDIT IT';
-
-$payments['klarna_checkout'] => KlarnaPaymentFactory::create($config);
+$klarnaCheckoutFactory = new \Payum\Klarna\Checkout\PaymentFactory();
+$payments['klarna_checkout'] => $klarnaCheckoutFactory->create(array(
+    'merchantId' => 'EDIT IT',
+    'secret' => 'EDIT IT',
+));
 
 $payum = new SimpleRegistry($payments, $storages);
 

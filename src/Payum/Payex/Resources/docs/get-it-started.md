@@ -10,7 +10,7 @@ The preferred way to install the library is using [composer](http://getcomposer.
 Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require "payum/payex:*@stable"
+php composer.phar require payum/payex
 ```
 
 ## config.php
@@ -21,21 +21,14 @@ We have to only add the payment factory. All the rest remain the same:
 <?php
 //config.php
 
-use Buzz\Client\Curl;
-
-use Payum\Payex\Api\OrderApi;
-use Payum\Payex\Api\SoapClientFactory;
-use Payum\Payex\PaymentFactory;
-
 // ...
 
-$payexOrderApi = new OrderApi(new SoapClientFactory(), array(
-   'accountNumber' => 'REPLACE IT',
-   'encryptionKey' => 'REPLACE IT',
-   'sandbox' => true
+$payexFactory = new \Payum\Payex\PaymentFactory();
+$payments['payex'] = $payexFactory->create(array(
+    'accountNumber' => 'REPLACE IT',
+    'encryptionKey' => 'REPLACE IT',
+    'sandbox' => true
 ));
-
-$payments['payex'] = PaymentFactory::create($payexOrderApi);
 ```
 
 ## prepare.php

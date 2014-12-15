@@ -4,61 +4,59 @@ namespace Payum\Payex;
 use Payum\Core\Action\CaptureOrderAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetHttpRequestAction;
+use Payum\Core\PaymentFactoryInterface;
+use Payum\Payex\Action\AgreementDetailsStatusAction;
+use Payum\Payex\Action\Api\AutoPayAgreementAction;
+use Payum\Payex\Action\Api\CheckAgreementAction;
 use Payum\Payex\Action\Api\CheckOrderAction;
+use Payum\Payex\Action\Api\CheckRecurringPaymentAction;
+use Payum\Payex\Action\Api\CreateAgreementAction;
+use Payum\Payex\Action\Api\DeleteAgreementAction;
+use Payum\Payex\Action\Api\StartRecurringPaymentAction;
+use Payum\Payex\Action\Api\StopRecurringPaymentAction;
 use Payum\Payex\Action\FillOrderDetailsAction;
 use Payum\Payex\Action\PaymentDetailsSyncAction;
 use Payum\Core\Payment;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
-use Payum\Payex\Action\Api\AutoPayAgreementAction;
-use Payum\Payex\Action\Api\CheckAgreementAction;
 use Payum\Payex\Action\Api\CompleteOrderAction;
-use Payum\Payex\Action\Api\CreateAgreementAction;
-use Payum\Payex\Action\Api\DeleteAgreementAction;
 use Payum\Payex\Action\Api\InitializeOrderAction;
-use Payum\Payex\Action\Api\CheckRecurringPaymentAction;
-use Payum\Payex\Action\Api\StartRecurringPaymentAction;
-use Payum\Payex\Action\Api\StopRecurringPaymentAction;
 use Payum\Payex\Action\PaymentDetailsCaptureAction;
 use Payum\Payex\Action\PaymentDetailsStatusAction;
-use Payum\Payex\Action\AgreementDetailsStatusAction;
 use Payum\Payex\Action\AutoPayPaymentDetailsCaptureAction;
 use Payum\Payex\Action\AutoPayPaymentDetailsStatusAction;
-use Payum\Payex\Api\RecurringApi;
 use Payum\Payex\Api\AgreementApi;
 use Payum\Payex\Api\OrderApi;
+use Payum\Payex\Api\RecurringApi;
+use Payum\Payex\Api\SoapClientFactory;
 
-abstract class PaymentFactory
+class PaymentFactory implements PaymentFactoryInterface
 {
     /**
-     * @param Api\OrderApi $orderApi
-     * @param Api\AgreementApi $agreementApi
-     * @param Api\RecurringApi $recurringApi
-     * 
-     * @return \Payum\Core\Payment
+     * {@inheritDoc}
      */
-    public static function create(OrderApi $orderApi, AgreementApi $agreementApi = null, RecurringApi $recurringApi = null)
+    public function create(array $options = array())
     {
+        array_key_exists('sandbox', $options) ?: $options['sandbox'] = true;
+
+        $soapClientFactory = new SoapClientFactory();
+
         $payment = new Payment;
-        
-        if ($agreementApi) {
-            $payment->addApi($agreementApi);
-            
-            $payment->addAction(new AgreementDetailsStatusAction);
-            $payment->addAction(new CreateAgreementAction);
-            $payment->addAction(new DeleteAgreementAction);
-            $payment->addAction(new CheckAgreementAction);
-            $payment->addAction(new AutoPayAgreementAction);
-        }
 
-        if ($recurringApi) {
-            $payment->addApi($recurringApi);
-            
-            $payment->addAction(new StartRecurringPaymentAction);
-            $payment->addAction(new StopRecurringPaymentAction);
-            $payment->addAction(new CheckRecurringPaymentAction);
-        }
+        $payment->addApi(new OrderApi($soapClientFactory, $options));
+        $payment->addApi(new AgreementApi($soapClientFactory, $options));
+        $payment->addApi(new RecurringApi($soapClientFactory, $options));
 
-        $payment->addApi($orderApi);
+        // agreement actions
+        $payment->addAction(new AgreementDetailsStatusAction);
+        $payment->addAction(new CreateAgreementAction);
+        $payment->addAction(new DeleteAgreementAction);
+        $payment->addAction(new CheckAgreementAction);
+        $payment->addAction(new AutoPayAgreementAction);
+
+        //recurring actions
+        $payment->addAction(new StartRecurringPaymentAction);
+        $payment->addAction(new StopRecurringPaymentAction);
+        $payment->addAction(new CheckRecurringPaymentAction);
 
         $payment->addExtension(new EndlessCycleDetectorExtension);
 

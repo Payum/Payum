@@ -11,7 +11,7 @@ use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Reply\HttpPostRedirect;
 
-class CaptureOnsiteAction extends PaymentAwareAction implements ApiAwareInterface
+class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterface
 {
     /**
      * @var Api

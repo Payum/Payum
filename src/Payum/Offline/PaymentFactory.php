@@ -5,17 +5,18 @@ use Payum\Core\Action\CaptureOrderAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
+use Payum\Core\PaymentFactoryInterface;
 use Payum\Offline\Action\CaptureAction;
 use Payum\Offline\Action\FillOrderDetailsAction;
 use Payum\Offline\Action\StatusAction;
 use Payum\Core\Payment;
 
-abstract class PaymentFactory
+class PaymentFactory implements PaymentFactoryInterface
 {
     /**
-     * @return \Payum\Core\Payment
+     * {@inheritDoc}
      */
-    public static function create()
+    public function create(array $options = array())
     {
         $payment = new Payment;
 
@@ -31,11 +32,5 @@ abstract class PaymentFactory
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 
         return $payment;
-    }
-
-    /**
-     */
-    private  function __construct()
-    {
     }
 }

@@ -3,7 +3,10 @@ namespace Payum\Klarna\Invoice;
 
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetHttpRequestAction;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Payment;
+use Payum\Core\PaymentFactoryInterface;
 use Payum\Klarna\Invoice\Action\Api\ActivateAction;
 use Payum\Klarna\Invoice\Action\Api\ActivateReservationAction;
 use Payum\Klarna\Invoice\Action\Api\CancelReservationAction;
@@ -18,10 +21,44 @@ use Payum\Klarna\Invoice\Action\RefundAction;
 use Payum\Klarna\Invoice\Action\StatusAction;
 use Payum\Klarna\Invoice\Action\SyncAction;
 
-abstract class PaymentFactory
+class PaymentFactory implements PaymentFactoryInterface
 {
-    public static function create(Config $config)
+    /**
+     * {@inheritDoc}
+     */
+    public function create(array $options = array())
     {
+        $options = ArrayObject::ensureArrayObject($options);
+        $options->validateNotEmpty(array('eid', 'secret', 'country', 'language', 'currency'));
+        $options['mode'] = null === $options['sandbox'] ? \Klarna::BETA : \Klarna::LIVE;
+        $options['pClassStorage'] = $options['pClassStorage'] ?: 'json';
+        $options['pClassStoragePath'] = $options['pClassStoragePath'] ?: './pclasses.json';
+        $options['xmlRpcVerifyHost'] = $options['xmlRpcVerifyHost'] ?: 2;
+        $options['xmlRpcVerifyHost'] = null === $options['xmlRpcVerifyPeer'] ? true : $options['xmlRpcVerifyPeer'];
+
+        if (null === $country = \KlarnaCountry::fromCode($options['country'])) {
+            throw new LogicException(sprintf('Given %s country code is not valid. Klarna cannot recognize it.', $options['country']));
+        }
+        if (null === $language = \KlarnaLanguage::fromCode($options['language'])) {
+            throw new LogicException(sprintf('Given %s language code is not valid. Klarna cannot recognize it.', $options['language']));
+        }
+        if (null === $currency = \KlarnaCurrency::fromCode($options['currency'])) {
+            throw new LogicException(sprintf('Given %s currency code is not valid. Klarna cannot recognize it.', $options['currency']));
+        }
+
+        $config = new Config();
+        $config->eid = $options['eid'];
+        $config->secret = $options['secret'];
+        $config->mode = $options['mode'];
+        $config->pClassStorage = $options['pClassStorage'];
+        $config->pClassStoragePath = $options['pClassStoragePath'];
+        $config->xmlRpcVerifyHost = $options['xmlRpcVerifyHost'];
+        $config->xmlRpcVerifyHost = $options['xmlRpcVerifyHost'];
+
+        $config->country = $country;
+        $config->language = $language;
+        $config->currency = $currency;
+
         $payment = new Payment;
 
         $payment->addApi($config);
@@ -45,11 +82,5 @@ abstract class PaymentFactory
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction());
 
         return $payment;
-    }
-
-    /**
-     */
-    private  function __construct()
-    {
     }
 }

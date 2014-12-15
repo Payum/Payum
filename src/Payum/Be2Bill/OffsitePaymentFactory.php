@@ -2,30 +2,29 @@
 namespace Payum\Be2Bill;
 
 use Payum\Be2Bill\Action\FillOrderDetailsAction;
+use Payum\Be2Bill\Action\CaptureOffsiteAction;
+use Payum\Be2Bill\Action\StatusAction;
 use Payum\Core\Action\CaptureOrderAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Payment;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
-use Payum\Be2Bill\Action\CaptureAction;
-use Payum\Be2Bill\Action\StatusAction;
+use Payum\Core\PaymentFactoryInterface;
 
-abstract class PaymentFactory
+class OffsitePaymentFactory implements PaymentFactoryInterface
 {
     /**
-     * @param Api $api
-     *
-     * @return Payment
+     * {@inheritDoc}
      */
-    public static function create(Api $api)
+    public function create(array $options = array())
     {
         $payment = new Payment;
 
-        $payment->addApi($api);
+        $payment->addApi(new Api($options));
 
         $payment->addExtension(new EndlessCycleDetectorExtension);
 
-        $payment->addAction(new CaptureAction);
+        $payment->addAction(new CaptureOffsiteAction);
         $payment->addAction(new FillOrderDetailsAction);
         $payment->addAction(new StatusAction);
         $payment->addAction(new GetHttpRequestAction);
@@ -35,11 +34,5 @@ abstract class PaymentFactory
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 
         return $payment;
-    }
-
-    /**
-     */
-    private function __construct()
-    {
     }
 }

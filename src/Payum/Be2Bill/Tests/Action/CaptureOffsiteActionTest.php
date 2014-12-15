@@ -4,13 +4,13 @@ namespace Payum\Be2Bill\Tests\Action;
 use Payum\Be2Bill\Api;
 use Payum\Core\PaymentInterface;
 use Payum\Core\Request\Capture;
-use Payum\Be2Bill\Action\CaptureOnsiteAction;
+use Payum\Be2Bill\Action\CaptureOffsiteAction;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Tests\GenericActionTest;
 
-class CaptureOnsiteActionTest extends GenericActionTest
+class CaptureOffsiteActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\Be2Bill\Action\CaptureOnsiteAction';
+    protected $actionClass = 'Payum\Be2Bill\Action\CaptureOffsiteAction';
 
     protected $requestClass = 'Payum\Core\Request\Capture';
 
@@ -19,7 +19,7 @@ class CaptureOnsiteActionTest extends GenericActionTest
      */
     public function shouldBeSubClassOfPaymentAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Be2Bill\Action\CaptureOnsiteAction');
+        $rc = new \ReflectionClass('Payum\Be2Bill\Action\CaptureOffsiteAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
     }
@@ -29,7 +29,7 @@ class CaptureOnsiteActionTest extends GenericActionTest
      */
     public function shouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Be2Bill\Action\CaptureOnsiteAction');
+        $rc = new \ReflectionClass('Payum\Be2Bill\Action\CaptureOffsiteAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\ApiAwareInterface'));
     }
@@ -41,7 +41,7 @@ class CaptureOnsiteActionTest extends GenericActionTest
     {
         $expectedApi = $this->createApiMock();
 
-        $action = new CaptureOnsiteAction();
+        $action = new CaptureOffsiteAction();
         $action->setApi($expectedApi);
 
         $this->assertAttributeSame($expectedApi, 'api', $action);
@@ -54,7 +54,7 @@ class CaptureOnsiteActionTest extends GenericActionTest
      */
     public function throwIfUnsupportedApiGiven()
     {
-        $action = new CaptureOnsiteAction();
+        $action = new CaptureOffsiteAction();
 
         $action->setApi(new \stdClass);
     }
@@ -92,7 +92,7 @@ class CaptureOnsiteActionTest extends GenericActionTest
             ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
         ;
 
-        $action = new CaptureOnsiteAction();
+        $action = new CaptureOffsiteAction();
         $action->setApi($apiMock);
         $action->setPayment($paymentMock);
 
@@ -130,7 +130,7 @@ class CaptureOnsiteActionTest extends GenericActionTest
             }))
         ;
 
-        $action = new CaptureOnsiteAction();
+        $action = new CaptureOffsiteAction();
         $action->setApi($apiMock);
         $action->setPayment($paymentMock);
 

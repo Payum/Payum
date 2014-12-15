@@ -2,24 +2,32 @@
 namespace Payum\AuthorizeNet\Aim;
 
 use Payum\AuthorizeNet\Aim\Action\FillOrderDetailsAction;
+use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\Core\Action\CaptureOrderAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetHttpRequestAction;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Payment;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
-use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
+
 use Payum\AuthorizeNet\Aim\Action\CaptureAction;
 use Payum\AuthorizeNet\Aim\Action\StatusAction;
+use Payum\Core\PaymentFactoryInterface;
 
-abstract class PaymentFactory
+class PaymentFactory implements PaymentFactoryInterface
 {
     /**
-     * @param AuthorizeNetAIM $api
-     *
-     * @return Payment
+     * {@inheritDoc}
      */
-    public static function create(AuthorizeNetAIM $api)
+    public function create(array $options = array())
     {
+        $options = ArrayObject::ensureArrayObject($options);
+        $options->validateNotEmpty(array('loginId', 'transactionKey'));
+        $options['sandbox'] = null === $options['sandbox'] ? true : (bool) $options['sandbox'];
+
+        $api = new AuthorizeNetAIM($options['loginId'], $options['transactionKey']);
+        $api->setSandbox($options['sandbox']);
+
         $payment = new Payment;
 
         $payment->addApi($api);
@@ -36,11 +44,5 @@ abstract class PaymentFactory
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 
         return $payment;
-    }
-
-    /**
-     */
-    private function __construct()
-    {
     }
 }
