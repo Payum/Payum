@@ -68,7 +68,8 @@ class CaptureOrderActionTest extends GenericActionTest
 
         $action->execute($capture = new Capture($order));
 
-        $this->assertSame($order, $capture->getModel());
+        $this->assertSame($order, $capture->getFirstModel());
+        $this->assertInstanceOf('ArrayAccess', $capture->getModel());
         $this->assertNull($capture->getToken());
     }
 
@@ -109,7 +110,8 @@ class CaptureOrderActionTest extends GenericActionTest
 
         $action->execute($capture = new Capture($order));
 
-        $this->assertSame($order, $capture->getModel());
+        $this->assertSame($order, $capture->getFirstModel());
+        $this->assertInstanceOf('ArrayAccess', $capture->getModel());
 
         $details = $order->getDetails();
         $this->assertNotEmpty($details);
@@ -155,7 +157,8 @@ class CaptureOrderActionTest extends GenericActionTest
 
         $action->execute($capture);
 
-        $this->assertSame($order, $capture->getModel());
+        $this->assertSame($order, $capture->getFirstModel());
+        $this->assertInstanceOf('ArrayAccess', $capture->getModel());
         $this->assertSame($token, $capture->getToken());
     }
 
@@ -195,7 +198,8 @@ class CaptureOrderActionTest extends GenericActionTest
 
         $action->execute($capture = new Capture($order));
 
-        $this->assertSame($order, $capture->getModel());
+        $this->assertSame($order, $capture->getFirstModel());
+        $this->assertInstanceOf('ArrayAccess', $capture->getModel());
     }
 
     /**
@@ -230,6 +234,7 @@ class CaptureOrderActionTest extends GenericActionTest
         $this->setExpectedException('Exception');
         $action->execute($capture = new Capture($order));
 
-        $this->assertSame($order, $capture->getModel());
+        $this->assertSame($order, $capture->getFirstModel());
+        $this->assertInstanceOf('ArrayAccess', $capture->getModel());
     }
 }
