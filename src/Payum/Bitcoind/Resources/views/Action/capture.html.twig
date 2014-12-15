@@ -1,0 +1,9 @@
+{# https://gist.github.com/briancollins/6365455 #}
+
+{% extends layout ?: "@PayumCore/layout.html.twig" %}
+
+{% block payum_body %}
+    {{ parent() }}
+
+    <a href="bitcoin:{{ uri }}">{{ address }}</a>
+{% endblock %}
