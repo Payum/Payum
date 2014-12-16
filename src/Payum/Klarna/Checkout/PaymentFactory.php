@@ -22,17 +22,23 @@ class PaymentFactory implements PaymentFactoryInterface
     public function create(array $options = array())
     {
         $options = ArrayObject::ensureArrayObject($options);
+        $options->defaults(array(
+            'merchantId' => '',
+            'secret' => '',
+            'contentType' => Constants::CONTENT_TYPE_V2_PLUS_JSON,
+            'sandbox' => true,
+
+        ));
         $options->validateNotEmpty(array('merchantId', 'secret'));
-        $options['sandbox'] = null === $options['sandbox'] ? true : (bool) $options['sandbox'];
 
         $config = new Config();
         $config->merchantId = $options['merchantId'];
         $config->secret = $options['secret'];
+        $config->contentType = $options['contentType'];
         $config->baseUri = $options['sandbox'] ?
             Constants::BASE_URI_SANDBOX :
             Constants::BASE_URI_LIVE
         ;
-        $config->contentType = $options['contentType'] ?: Constants::CONTENT_TYPE_V2_PLUS_JSON;
 
         $payment = new Payment;
 

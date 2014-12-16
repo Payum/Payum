@@ -4,25 +4,35 @@ namespace Payum\Paypal\ProCheckout\Nvp;
 use Payum\Core\Action\CaptureOrderAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetHttpRequestAction;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Payment;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
+use Payum\Core\PaymentFactoryInterface;
 use Payum\Paypal\ProCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ProCheckout\Nvp\Action\RefundAction;
 use Payum\Paypal\ProCheckout\Nvp\Action\FillOrderDetailsAction;
 use Payum\Paypal\ProCheckout\Nvp\Action\StatusAction;
 
-abstract class PaymentFactory
+class PaymentFactory implements PaymentFactoryInterface
 {
     /**
-     * @param Api $api
-     *
-     * @return \Payum\Core\PaymentInterface
+     * {@inheritDoc}
      */
-    public static function create(Api $api)
+    public function create(array $options = array())
     {
+        $options = ArrayObject::ensureArrayObject($options);
+        $options->defaults(array(
+            'username' => '',
+            'password' => '',
+            'partner' => '',
+            'vendor' => '',
+            'tender' => '',
+            'sandbox' => true,
+        ));
+
         $payment = new Payment;
 
-        $payment->addApi($api);
+        $payment->addApi(new Api((array) $options));
         
         $payment->addExtension(new EndlessCycleDetectorExtension);
 
@@ -37,11 +47,5 @@ abstract class PaymentFactory
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 
         return $payment;
-    }
-
-    /**
-     */
-    private function __construct()
-    {
     }
 }

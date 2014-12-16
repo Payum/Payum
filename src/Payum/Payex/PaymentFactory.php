@@ -4,6 +4,7 @@ namespace Payum\Payex;
 use Payum\Core\Action\CaptureOrderAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetHttpRequestAction;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\PaymentFactoryInterface;
 use Payum\Payex\Action\AgreementDetailsStatusAction;
 use Payum\Payex\Action\Api\AutoPayAgreementAction;
@@ -36,15 +37,20 @@ class PaymentFactory implements PaymentFactoryInterface
      */
     public function create(array $options = array())
     {
-        array_key_exists('sandbox', $options) ?: $options['sandbox'] = true;
+        $options = ArrayObject::ensureArrayObject($options);
+        $options->defaults(array(
+            'accountNumber' => '',
+            'encryptionKey' => '',
+            'sandbox' => true,
+        ));
 
         $soapClientFactory = new SoapClientFactory();
 
         $payment = new Payment;
 
-        $payment->addApi(new OrderApi($soapClientFactory, $options));
-        $payment->addApi(new AgreementApi($soapClientFactory, $options));
-        $payment->addApi(new RecurringApi($soapClientFactory, $options));
+        $payment->addApi(new OrderApi($soapClientFactory, (array) $options));
+        $payment->addApi(new AgreementApi($soapClientFactory, (array) $options));
+        $payment->addApi(new RecurringApi($soapClientFactory, (array) $options));
 
         // agreement actions
         $payment->addAction(new AgreementDetailsStatusAction);

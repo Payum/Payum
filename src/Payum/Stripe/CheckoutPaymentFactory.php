@@ -1,20 +1,22 @@
 <?php
-namespace Payum\AuthorizeNet\Aim;
+namespace Payum\Stripe;
 
-use Payum\AuthorizeNet\Aim\Action\FillOrderDetailsAction;
-use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\Core\Action\CaptureOrderAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
+use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Payment;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
-
-use Payum\AuthorizeNet\Aim\Action\CaptureAction;
-use Payum\AuthorizeNet\Aim\Action\StatusAction;
 use Payum\Core\PaymentFactoryInterface;
+use Payum\Stripe\Action\Api\CreateChargeAction;
+use Payum\Stripe\Action\Api\ObtainTokenAction;
+use Payum\Stripe\Action\CaptureAction;
+use Payum\Stripe\Action\FillOrderDetailsAction;
+use Payum\Stripe\Action\StatusAction;
 
-class PaymentFactory implements PaymentFactoryInterface
+class CheckoutPaymentFactory implements PaymentFactoryInterface
 {
     /**
      * {@inheritDoc}
@@ -23,24 +25,23 @@ class PaymentFactory implements PaymentFactoryInterface
     {
         $options = ArrayObject::ensureArrayObject($options);
         $options->defaults(array(
-            'loginId' => '',
-            'transactionKey' => '',
-            'sandbox' => true,
+            'publishable_key' => '',
+            'secret_key' => '',
         ));
-        $options->validateNotEmpty(array('loginId', 'transactionKey'));
-
-        $api = new AuthorizeNetAIM($options['loginId'], $options['transactionKey']);
-        $api->setSandbox($options['sandbox']);
+        $options->validateNotEmpty(array('publishable_key', 'secret_key'));
 
         $payment = new Payment;
 
-        $payment->addApi($api);
-        
+        $payment->addApi(new Keys($options['publishable_key'], $options['secret_key']));
+
         $payment->addExtension(new EndlessCycleDetectorExtension);
 
         $payment->addAction(new CaptureAction);
         $payment->addAction(new FillOrderDetailsAction);
         $payment->addAction(new StatusAction);
+        $payment->addAction(new RenderTemplateAction(TwigFactory::createGeneric(), '@PayumCore/layout.html.twig'));
+        $payment->addAction(new ObtainTokenAction('@PayumStripe/Action/obtain_js_token.html.twig'));
+        $payment->addAction(new CreateChargeAction);
         $payment->addAction(new GetHttpRequestAction);
 
         $payment->addAction(new CaptureOrderAction);
@@ -48,5 +49,11 @@ class PaymentFactory implements PaymentFactoryInterface
         $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
 
         return $payment;
+    }
+
+    /**
+     */
+    private function __construct()
+    {
     }
 }

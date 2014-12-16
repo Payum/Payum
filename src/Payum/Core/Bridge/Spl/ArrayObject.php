@@ -46,6 +46,26 @@ class ArrayObject extends \ArrayObject
     }
 
     /**
+     * @param array|\Traversable $input
+     *
+     * @throws \Payum\Core\Exception\InvalidArgumentException
+     *
+     * @return void
+     */
+    public function defaults($input)
+    {
+        if (false == (is_array($input) || $input instanceof \Traversable)) {
+            throw new InvalidArgumentException('Invalid input given. Should be an array or instance of \Traversable');
+        }
+
+        foreach ($input as $index => $value) {
+            if (null === $this[$index]) {
+                $this[$index] = $value;
+            }
+        }
+    }
+
+    /**
      * @param array $required
      * @param boolean $throwOnInvalid
      * 

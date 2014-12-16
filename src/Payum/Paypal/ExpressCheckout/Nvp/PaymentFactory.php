@@ -5,6 +5,7 @@ use Payum\Core\Action\CaptureOrderAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Buzz\ClientFactory;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Payment;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\PaymentFactoryInterface;
@@ -33,9 +34,17 @@ class PaymentFactory implements PaymentFactoryInterface
      */
     public function create(array $options = array())
     {
+        $options = ArrayObject::ensureArrayObject($options);
+        $options->defaults(array(
+            'username' => '',
+            'password' => '',
+            'signature' => '',
+            'sandbox' => true,
+        ));
+
         $payment = new Payment;
 
-        $payment->addApi(new Api($options, ClientFactory::createCurl()));
+        $payment->addApi(new Api((array) $options));
 
         $payment->addExtension(new EndlessCycleDetectorExtension);
 

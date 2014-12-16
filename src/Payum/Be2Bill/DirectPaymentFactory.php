@@ -5,6 +5,7 @@ use Payum\Be2Bill\Action\FillOrderDetailsAction;
 use Payum\Core\Action\CaptureOrderAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetHttpRequestAction;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Payment;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Be2Bill\Action\CaptureAction;
@@ -18,9 +19,16 @@ class DirectPaymentFactory implements PaymentFactoryInterface
      */
     public function create(array $options = array())
     {
+        $options = ArrayObject::ensureArrayObject($options);
+        $options->defaults(array(
+            'identifier' => '',
+            'password' => '',
+            'sandbox' => true,
+        ));
+
         $payment = new Payment;
 
-        $payment->addApi(new Api($options));
+        $payment->addApi(new Api((array) $options));
 
         $payment->addExtension(new EndlessCycleDetectorExtension);
 

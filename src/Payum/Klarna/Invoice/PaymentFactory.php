@@ -29,12 +29,22 @@ class PaymentFactory implements PaymentFactoryInterface
     public function create(array $options = array())
     {
         $options = ArrayObject::ensureArrayObject($options);
+        $options = ArrayObject::ensureArrayObject($options);
+        $options->defaults(array(
+            'eid' => '',
+            'secret' => '',
+            'country' => '',
+            'language' => '',
+            'currency' => '',
+            'sandbox' => true,
+            'pClassStorage' => 'json',
+            'pClassStoragePath' => './pclasses.json',
+            'xmlRpcVerifyHost' => 2,
+            'xmlRpcVerifyPeer' => true,
+        ));
+
         $options->validateNotEmpty(array('eid', 'secret', 'country', 'language', 'currency'));
         $options['mode'] = null === $options['sandbox'] ? \Klarna::BETA : \Klarna::LIVE;
-        $options['pClassStorage'] = $options['pClassStorage'] ?: 'json';
-        $options['pClassStoragePath'] = $options['pClassStoragePath'] ?: './pclasses.json';
-        $options['xmlRpcVerifyHost'] = $options['xmlRpcVerifyHost'] ?: 2;
-        $options['xmlRpcVerifyHost'] = null === $options['xmlRpcVerifyPeer'] ? true : $options['xmlRpcVerifyPeer'];
 
         if (null === $country = \KlarnaCountry::fromCode($options['country'])) {
             throw new LogicException(sprintf('Given %s country code is not valid. Klarna cannot recognize it.', $options['country']));
@@ -50,14 +60,13 @@ class PaymentFactory implements PaymentFactoryInterface
         $config->eid = $options['eid'];
         $config->secret = $options['secret'];
         $config->mode = $options['mode'];
+        $config->country = $country;
+        $config->language = $language;
+        $config->currency = $currency;
         $config->pClassStorage = $options['pClassStorage'];
         $config->pClassStoragePath = $options['pClassStoragePath'];
         $config->xmlRpcVerifyHost = $options['xmlRpcVerifyHost'];
         $config->xmlRpcVerifyHost = $options['xmlRpcVerifyHost'];
-
-        $config->country = $country;
-        $config->language = $language;
-        $config->currency = $currency;
 
         $payment = new Payment;
 
