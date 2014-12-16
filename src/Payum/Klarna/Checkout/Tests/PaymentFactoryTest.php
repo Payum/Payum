@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests;
 
-use Payum\Klarna\Checkout\Config;
 use Payum\Klarna\Checkout\PaymentFactory;
 
 class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
@@ -9,50 +8,49 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function mustNotBeInstantiated()
+    public function shouldImplementPaymentFactoryInterface()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\PaymentFactory');
 
-        $this->assertFalse($rc->isInstantiable());
+        $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentFactoryInterface'));
     }
 
     /**
      * @test
      */
-    public function shouldAllowCreatePaymentWithStandardActionsAdded()
+    public function couldBeConstructedWithoutAnyArguments()
     {
-        $payment = PaymentFactory::create(new Config);
-
-        $this->assertInstanceOf('Payum\Core\Payment', $payment);
-
-        $this->assertAttributeCount(1, 'apis', $payment);
-
-        $actions = $this->readAttribute($payment, 'actions');
-        $this->assertInternalType('array', $actions);
-        $this->assertAttributeCount(8, 'actions', $payment);
+        new PaymentFactory();
     }
 
     /**
      * @test
      */
-    public function shouldAllowCreatePaymentWithStandardActionsAndCustomRenderTemplateAction()
+    public function shouldAllowCreatePayment()
     {
-        $payment = PaymentFactory::create(new Config, $this->getMock('Payum\Core\Action\ActionInterface'), 'aLayout', 'aTemplate');
+        $factory = new PaymentFactory();
+
+        $payment = $factory->create(array('merchantId' => 'aMerchId', 'secret' => 'aSecret'));
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
+        
+        $this->assertAttributeNotEmpty('apis', $payment);
+        $this->assertAttributeNotEmpty('actions', $payment);
 
-        $this->assertAttributeCount(1, 'apis', $payment);
-
-        $actions = $this->readAttribute($payment, 'actions');
-        $this->assertInternalType('array', $actions);
-        $this->assertAttributeCount(8, 'actions', $payment);
+        $extensions = $this->readAttribute($payment, 'extensions');
+        $this->assertAttributeNotEmpty('extensions', $extensions);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Twig_Environment
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The merchantId, secret fields are required.
      */
-    protected function createTwigMock()
+    public function shouldThrowIfRequiredOptionsNotPassed()
     {
-        return $this->getMock('Twig_Environment', array('render'), array(), '', false);
+        $factory = new PaymentFactory();
+
+        $factory->create();
     }
 }

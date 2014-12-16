@@ -1,59 +1,52 @@
 <?php
 namespace Payum\Klarna\Checkout;
 
-use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
-use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
-use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Payment;
-use Payum\Core\PaymentFactoryInterface;
+use Payum\Core\PaymentFactory as BasePaymentFactory;
 use Payum\Klarna\Checkout\Action\Api\CreateOrderAction;
+use Payum\Klarna\Checkout\Action\Api\FetchOrderAction;
 use Payum\Klarna\Checkout\Action\Api\UpdateOrderAction;
 use Payum\Klarna\Checkout\Action\AuthorizeAction;
 use Payum\Klarna\Checkout\Action\NotifyAction;
 use Payum\Klarna\Checkout\Action\StatusAction;
+use Payum\Klarna\Checkout\Action\SyncAction;
 
-class PaymentFactory implements PaymentFactoryInterface
+class PaymentFactory extends BasePaymentFactory
 {
     /**
      * {@inheritDoc}
      */
-    public function create(array $options = array())
+    protected function build(Payment $payment, ArrayObject $config)
     {
-        $options = ArrayObject::ensureArrayObject($options);
-        $options->defaults(array(
-            'merchantId' => '',
-            'secret' => '',
+        $config->validateNotEmpty(array('merchantId', 'secret'));
+
+        $config->defaults(array(
+            'payum.template.authorize' => '@PayumKlarnaCheckout/Action/capture.html.twig',
             'contentType' => Constants::CONTENT_TYPE_V2_PLUS_JSON,
             'sandbox' => true,
-
         ));
-        $options->validateNotEmpty(array('merchantId', 'secret'));
 
-        $config = new Config();
-        $config->merchantId = $options['merchantId'];
-        $config->secret = $options['secret'];
-        $config->contentType = $options['contentType'];
-        $config->baseUri = $options['sandbox'] ?
+        $config->defaults(array(
+            'payum.action.authorize' => new AuthorizeAction($config['payum.template.authorize']),
+            'payum.action.notify' => new NotifyAction(),
+            'payum.action.status' => new StatusAction(),
+            'payum.action.sync' => new SyncAction(),
+
+            'payum.action.api.create_order' => new CreateOrderAction(),
+            'payum.action.api.update_order' => new UpdateOrderAction(),
+            'payum.action.api.fetch_order' => new FetchOrderAction(),
+        ));
+
+
+        $klarnaConfig = new Config();
+        $klarnaConfig->merchantId = $config['merchantId'];
+        $klarnaConfig->secret = $config['secret'];
+        $klarnaConfig->contentType = $config['contentType'];
+        $klarnaConfig->baseUri = $config['sandbox'] ?
             Constants::BASE_URI_SANDBOX :
             Constants::BASE_URI_LIVE
         ;
-
-        $payment = new Payment;
-
-        $payment->addApi($config);
-
-        $payment->addAction(new AuthorizeAction('@PayumKlarnaCheckout/Action/capture.html.twig'));
-        $payment->addAction(new NotifyAction);
-        $payment->addAction(new StatusAction);
-        $payment->addAction(new CreateOrderAction);
-        $payment->addAction(new UpdateOrderAction);
-        $payment->addAction(new RenderTemplateAction(TwigFactory::createGeneric(), '@PayumCore/layout.html.twig'));
-        $payment->addAction(new GetHttpRequestAction);
-
-        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction());
-
-        return $payment;
+        $config->defaults(array('payum.api.default' => $klarnaConfig));
     }
 }

@@ -1,59 +1,36 @@
 <?php
 namespace Payum\Stripe;
 
-use Payum\Core\Action\CaptureOrderAction;
-use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
-use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
-use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Payment;
-use Payum\Core\Extension\EndlessCycleDetectorExtension;
-use Payum\Core\PaymentFactoryInterface;
+use Payum\Core\PaymentFactory as BasePaymentFactory;
 use Payum\Stripe\Action\Api\CreateChargeAction;
 use Payum\Stripe\Action\Api\ObtainTokenAction;
 use Payum\Stripe\Action\CaptureAction;
 use Payum\Stripe\Action\FillOrderDetailsAction;
 use Payum\Stripe\Action\StatusAction;
 
-class CheckoutPaymentFactory implements PaymentFactoryInterface
+class CheckoutPaymentFactory extends BasePaymentFactory
 {
     /**
      * {@inheritDoc}
      */
-    public function create(array $options = array())
+    protected function build(Payment $payment, ArrayObject $config)
     {
-        $options = ArrayObject::ensureArrayObject($options);
-        $options->defaults(array(
-            'publishable_key' => '',
-            'secret_key' => '',
+        $config->validateNotEmpty(array('publishable_key', 'secret_key'));
+
+        $config->defaults(array(
+            'payum.template.obtain_token' => '@PayumStripe/Action/obtain_checkout_token.html.twig'
         ));
-        $options->validateNotEmpty(array('publishable_key', 'secret_key'));
 
-        $payment = new Payment;
+        $config->defaults(array(
+            'payum.api.default' => new Keys($config['publishable_key'], $config['secret_key']),
 
-        $payment->addApi(new Keys($options['publishable_key'], $options['secret_key']));
-
-        $payment->addExtension(new EndlessCycleDetectorExtension);
-
-        $payment->addAction(new CaptureAction);
-        $payment->addAction(new FillOrderDetailsAction);
-        $payment->addAction(new StatusAction);
-        $payment->addAction(new RenderTemplateAction(TwigFactory::createGeneric(), '@PayumCore/layout.html.twig'));
-        $payment->addAction(new ObtainTokenAction('@PayumStripe/Action/obtain_js_token.html.twig'));
-        $payment->addAction(new CreateChargeAction);
-        $payment->addAction(new GetHttpRequestAction);
-
-        $payment->addAction(new CaptureOrderAction);
-
-        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
-
-        return $payment;
-    }
-
-    /**
-     */
-    private function __construct()
-    {
+            'payum.action.capture' => new CaptureAction(),
+            'payum.action.fill_order_details' => new FillOrderDetailsAction(),
+            'payum.action.status' => new StatusAction(),
+            'payum.action.obtain_token' => new ObtainTokenAction($config['payum.template.obtain_token']),
+            'payum.action.create_charge' => new CreateChargeAction(),
+        ));
     }
 }

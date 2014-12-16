@@ -104,7 +104,7 @@ class CancelReservationActionTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The rno fields is required.
+     * @expectedExceptionMessage The rno fields are required.
      */
     public function throwIfRnoNotSet()
     {

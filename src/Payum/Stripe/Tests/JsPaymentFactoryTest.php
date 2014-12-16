@@ -1,16 +1,16 @@
 <?php
-namespace Payum\Be2Bill\Tests;
+namespace Payum\Stripe\Tests;
 
-use Payum\Be2Bill\DirectPaymentFactory;
+use Payum\Stripe\JsPaymentFactory;
 
-class DirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
+class JsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldImplementPaymentFactoryInterface()
+    public function shouldImplementJsPaymentFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\Be2Bill\DirectPaymentFactory');
+        $rc = new \ReflectionClass('Payum\Stripe\JsPaymentFactory');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentFactoryInterface'));
     }
@@ -20,7 +20,7 @@ class DirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new DirectPaymentFactory();
+        new JsPaymentFactory();
     }
 
     /**
@@ -28,9 +28,9 @@ class DirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePayment()
     {
-        $factory = new DirectPaymentFactory();
+        $factory = new JsPaymentFactory();
 
-        $payment = $factory->create(array('identifier' => 'anId', 'password' => 'aPass'));
+        $payment = $factory->create(array('publishable_key' => 'aPubKey', 'secret_key' => 'aSecretKey'));
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
 
@@ -45,11 +45,11 @@ class DirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The identifier, password fields are required.
+     * @expectedExceptionMessage The publishable_key, secret_key fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {
-        $factory = new DirectPaymentFactory();
+        $factory = new JsPaymentFactory();
 
         $factory->create();
     }

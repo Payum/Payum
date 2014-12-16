@@ -2,51 +2,32 @@
 namespace Payum\AuthorizeNet\Aim;
 
 use Payum\AuthorizeNet\Aim\Action\FillOrderDetailsAction;
-use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
-use Payum\Core\Action\CaptureOrderAction;
-use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
-use Payum\Core\Action\GetHttpRequestAction;
-use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Payment;
-use Payum\Core\Extension\EndlessCycleDetectorExtension;
-
 use Payum\AuthorizeNet\Aim\Action\CaptureAction;
 use Payum\AuthorizeNet\Aim\Action\StatusAction;
-use Payum\Core\PaymentFactoryInterface;
+use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Payment;
+use Payum\Core\PaymentFactory as BasePaymentFactory;
 
-class PaymentFactory implements PaymentFactoryInterface
+class PaymentFactory extends BasePaymentFactory
 {
     /**
      * {@inheritDoc}
      */
-    public function create(array $options = array())
+    protected function build(Payment $payment, ArrayObject $config)
     {
-        $options = ArrayObject::ensureArrayObject($options);
-        $options->defaults(array(
-            'loginId' => '',
-            'transactionKey' => '',
+        $config->validateNotEmpty(array('loginId', 'transactionKey'));
+
+        $config->defaults(array(
             'sandbox' => true,
+
+            'payum.action.capture' => new CaptureAction(),
+            'payum.action.status' => new StatusAction(),
+            'payum.action.fill_order_details' => new FillOrderDetailsAction(),
         ));
-        $options->validateNotEmpty(array('loginId', 'transactionKey'));
 
-        $api = new AuthorizeNetAIM($options['loginId'], $options['transactionKey']);
-        $api->setSandbox($options['sandbox']);
-
-        $payment = new Payment;
-
-        $payment->addApi($api);
-        
-        $payment->addExtension(new EndlessCycleDetectorExtension);
-
-        $payment->addAction(new CaptureAction);
-        $payment->addAction(new FillOrderDetailsAction);
-        $payment->addAction(new StatusAction);
-        $payment->addAction(new GetHttpRequestAction);
-
-        $payment->addAction(new CaptureOrderAction);
-
-        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
-
-        return $payment;
+        $api = new AuthorizeNetAIM($config['loginId'], $config['transactionKey']);
+        $api->setSandbox($config['sandbox']);
+        $config['payum.api.default'] = $api;
     }
 }

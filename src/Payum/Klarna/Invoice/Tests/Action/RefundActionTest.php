@@ -115,7 +115,7 @@ class RefundActionTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The invoice_number fields is required.
+     * @expectedExceptionMessage The invoice_number fields are required.
      */
     public function shouldThrowsIfDetailsNotHaveInvoiceNumber()
     {

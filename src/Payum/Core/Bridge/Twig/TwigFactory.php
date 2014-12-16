@@ -10,7 +10,7 @@ class TwigFactory
     {
         $paths = array_filter(array(
             'PayumCore' => self::guessViewsPath('Payum\Core\Payment'),
-            'PayumStripe' => self::guessViewsPath('Payum\Stripe\PaymentFactory'),
+            'PayumStripe' => self::guessViewsPath('Payum\Stripe\JsPaymentFactory'),
             'PayumKlarnaCheckout' => self::guessViewsPath('Payum\Klarna\Checkout\PaymentFactory')
         ));
 

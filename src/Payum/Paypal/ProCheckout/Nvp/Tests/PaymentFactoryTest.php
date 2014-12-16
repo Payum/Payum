@@ -1,16 +1,16 @@
 <?php
-namespace Payum\Be2Bill\Tests;
+namespace Payum\Paypal\ProCheckout\Nvp\Tests;
 
-use Payum\Be2Bill\DirectPaymentFactory;
+use Payum\Paypal\ProCheckout\Nvp\PaymentFactory;
 
-class DirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
+class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldImplementPaymentFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\Be2Bill\DirectPaymentFactory');
+        $rc = new \ReflectionClass('Payum\Paypal\ProCheckout\Nvp\PaymentFactory');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentFactoryInterface'));
     }
@@ -20,7 +20,7 @@ class DirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new DirectPaymentFactory();
+        new PaymentFactory();
     }
 
     /**
@@ -28,9 +28,15 @@ class DirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePayment()
     {
-        $factory = new DirectPaymentFactory();
+        $factory = new PaymentFactory();
 
-        $payment = $factory->create(array('identifier' => 'anId', 'password' => 'aPass'));
+        $payment = $factory->create(array(
+            'username' => 'aName',
+            'password' => 'aPass',
+            'partner' => 'aPartner',
+            'vendor' => 'aVendor',
+            'tender' => 'aTender'
+        ));
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
 
@@ -45,11 +51,11 @@ class DirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The identifier, password fields are required.
+     * @expectedExceptionMessage The username, password, partner, vendor, tender fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {
-        $factory = new DirectPaymentFactory();
+        $factory = new PaymentFactory();
 
         $factory->create();
     }

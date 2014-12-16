@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Be2Bill\Tests;
 
-use Payum\Be2Bill\Api;
 use Payum\Be2Bill\OffsitePaymentFactory;
 
 class OffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
@@ -9,36 +8,49 @@ class OffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldNotBeInstantiated()
+    public function shouldImplementPaymentFactoryInterface()
     {
         $rc = new \ReflectionClass('Payum\Be2Bill\OffsitePaymentFactory');
 
-        $this->assertFalse($rc->isInstantiable());
+        $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentFactoryInterface'));
     }
-    
+
     /**
      * @test
      */
-    public function shouldAllowCreatePaymentWithStandardActionsAdded()
+    public function couldBeConstructedWithoutAnyArguments()
     {
-        $apiMock = $this->createApiMock();
+        new OffsitePaymentFactory();
+    }
 
-        $payment = OffsitePaymentFactory::create($apiMock);
+    /**
+     * @test
+     */
+    public function shouldAllowCreatePayment()
+    {
+        $factory = new OffsitePaymentFactory();
+
+        $payment = $factory->create(array('identifier' => 'anId', 'password' => 'aPass'));
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
-        
-        $this->assertAttributeCount(1, 'apis', $payment);
-        
-        $actions = $this->readAttribute($payment, 'actions');
-        $this->assertInternalType('array', $actions);
-        $this->assertNotEmpty($actions);
+
+        $this->assertAttributeNotEmpty('apis', $payment);
+        $this->assertAttributeNotEmpty('actions', $payment);
+
+        $extensions = $this->readAttribute($payment, 'extensions');
+        $this->assertAttributeNotEmpty('extensions', $extensions);
     }
-    
+
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Api
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The identifier, password fields are required.
      */
-    protected function createApiMock()
+    public function shouldThrowIfRequiredOptionsNotPassed()
     {
-        return $this->getMock('Payum\Be2bill\Api', array(), array(), '', false);
+        $factory = new OffsitePaymentFactory();
+
+        $factory->create();
     }
 }

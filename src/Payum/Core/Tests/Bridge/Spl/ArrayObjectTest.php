@@ -204,7 +204,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      * @test
      * 
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The aRequiredField fields is required.
+     * @expectedExceptionMessage The aRequiredField fields are required.
      */
     public function throwIfRequiredFieldEmptyAndThrowOnInvalidTrue()
     {
@@ -217,7 +217,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The otherRequiredField fields is required.
+     * @expectedExceptionMessage The otherRequiredField fields are required.
      */
     public function throwIfSecondRequiredFieldEmptyAndThrowOnInvalidTrue()
     {
@@ -231,7 +231,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The aRequiredField fields is required.
+     * @expectedExceptionMessage The aRequiredField fields are required.
      */
     public function throwByDefaultIfRequiredFieldEmpty()
     {
@@ -366,6 +366,23 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar@example.com', $primitiveArray['email']);
 
         $this->assertNull($sensitiveValue->peek());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowSetDefaultValues()
+    {
+        $arrayObject = new ArrayObject();
+        $arrayObject['foo'] = 'fooVal';
+
+        $arrayObject->defaults(array(
+            'foo' => 'fooDefVal',
+            'bar' => 'barDefVal',
+        ));
+
+        $this->assertEquals('fooVal', $arrayObject['foo']);
+        $this->assertEquals('barDefVal', $arrayObject['bar']);
     }
 }
 

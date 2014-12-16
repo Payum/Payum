@@ -1,14 +1,9 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
-use Payum\Core\Action\CaptureOrderAction;
-use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
-use Payum\Core\Action\GetHttpRequestAction;
-use Payum\Core\Bridge\Buzz\ClientFactory;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Payment;
-use Payum\Core\Extension\EndlessCycleDetectorExtension;
-use Payum\Core\PaymentFactoryInterface;
+use Payum\Core\PaymentFactory as BasePaymentFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoExpressCheckoutPaymentAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction;
@@ -27,51 +22,47 @@ use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsSyncAction;
 
-class PaymentFactory implements PaymentFactoryInterface
+class PaymentFactory extends BasePaymentFactory
 {
     /**
      * {@inheritDoc}
      */
-    public function create(array $options = array())
+    protected function build(Payment $payment, ArrayObject $config)
     {
-        $options = ArrayObject::ensureArrayObject($options);
-        $options->defaults(array(
-            'username' => '',
-            'password' => '',
-            'signature' => '',
+        $config->validateNotEmpty(array('username', 'password', 'signature'));
+
+        $config->defaults(array(
             'sandbox' => true,
         ));
 
-        $payment = new Payment;
+        $paypalConfig = array(
+            'username' => $config['username'],
+            'password' => $config['password'],
+            'signature' => $config['signature'],
+            'sandbox' => $config['sandbox'],
+        );
 
-        $payment->addApi(new Api((array) $options));
+        $config->defaults(array(
+            'payum.api.default' => new Api($paypalConfig, $config['buzz.client']),
 
-        $payment->addExtension(new EndlessCycleDetectorExtension);
+            'payum.action.capture' => new CaptureAction(),
+            'payum.action.fill_order_details' => new FillOrderDetailsAction(),
+            'payum.action.notify' => new NotifyAction(),
+            'payum.action.status' => new PaymentDetailsStatusAction(),
+            'payum.action.sync' => new PaymentDetailsSyncAction(),
+            'payum.action.recurring_status' => new RecurringPaymentDetailsStatusAction(),
+            'payum.action.recurring_sync' => new RecurringPaymentDetailsSyncAction(),
 
-        $payment->addAction(new SetExpressCheckoutAction);
-        $payment->addAction(new GetExpressCheckoutDetailsAction);
-        $payment->addAction(new GetTransactionDetailsAction);
-        $payment->addAction(new DoExpressCheckoutPaymentAction);
-        $payment->addAction(new CreateRecurringPaymentProfileAction);
-        $payment->addAction(new GetRecurringPaymentsProfileDetailsAction);
-
-        $payment->addAction(new CaptureAction);
-        $payment->addAction(new FillOrderDetailsAction);
-        $payment->addAction(new NotifyAction);
-        $payment->addAction(new PaymentDetailsStatusAction);
-        $payment->addAction(new PaymentDetailsSyncAction);
-        $payment->addAction(new RecurringPaymentDetailsStatusAction);
-        $payment->addAction(new RecurringPaymentDetailsSyncAction);
-        $payment->addAction(new ManageRecurringPaymentsProfileStatusAction);
-        $payment->addAction(new CreateBillingAgreementAction);
-        $payment->addAction(new DoReferenceTransactionAction);
-        $payment->addAction(new AuthorizeTokenAction);
-        $payment->addAction(new GetHttpRequestAction);
-
-        $payment->addAction(new CaptureOrderAction);
-
-        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
-
-        return $payment;
+            'payum.action.api.set_express_checkout' => new SetExpressCheckoutAction(),
+            'payum.action.api.get_express_checkout_details' => new GetExpressCheckoutDetailsAction(),
+            'payum.action.api.get_transaction_details' => new GetTransactionDetailsAction(),
+            'payum.action.api.do_express_checkout_payment' => new DoExpressCheckoutPaymentAction(),
+            'payum.action.api.create_recurring_payment_profile' => new CreateRecurringPaymentProfileAction(),
+            'payum.action.api.get_recurring_payments_profile_details' => new GetRecurringPaymentsProfileDetailsAction(),
+            'payum.action.api.manage_recurring_payments_profile_status' => new ManageRecurringPaymentsProfileStatusAction(),
+            'payum.action.api.create_billing_agreement' => new CreateBillingAgreementAction(),
+            'payum.action.api.do_reference_transaction' => new DoReferenceTransactionAction(),
+            'payum.action.api.authorize_token' => new AuthorizeTokenAction(),
+        ));
     }
 }

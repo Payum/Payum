@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests;
 
-use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory;
 
 class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
@@ -9,36 +8,53 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldNotBeInstantiated()
+    public function shouldImplementPaymentFactoryInterface()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory');
 
-        $this->assertFalse($rc->isInstantiable());
+        $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentFactoryInterface'));
     }
 
     /**
      * @test
      */
-    public function shouldAllowCreatePaymentWithStandardActionsAdded()
+    public function couldBeConstructedWithoutAnyArguments()
     {
-        $apiMock = $this->createApiMock();
-
-        $payment = PaymentFactory::create($apiMock);
-
-        $this->assertInstanceOf('Payum\Core\Payment', $payment);
-        
-        $this->assertAttributeCount(1, 'apis', $payment);
-
-        $actions = $this->readAttribute($payment, 'actions');
-        $this->assertInternalType('array', $actions);
-        $this->assertNotEmpty($actions);
+        new PaymentFactory();
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Api
+     * @test
      */
-    protected function createApiMock()
+    public function shouldAllowCreatePayment()
     {
-        return $this->getMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        $factory = new PaymentFactory();
+
+        $payment = $factory->create(array(
+            'username' => 'aName',
+            'password' => 'aPass',
+            'signature' => 'aSign',
+        ));
+
+        $this->assertInstanceOf('Payum\Core\Payment', $payment);
+
+        $this->assertAttributeNotEmpty('apis', $payment);
+        $this->assertAttributeNotEmpty('actions', $payment);
+
+        $extensions = $this->readAttribute($payment, 'extensions');
+        $this->assertAttributeNotEmpty('extensions', $extensions);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The username, password, signature fields are required.
+     */
+    public function shouldThrowIfRequiredOptionsNotPassed()
+    {
+        $factory = new PaymentFactory();
+
+        $factory->create();
     }
 }

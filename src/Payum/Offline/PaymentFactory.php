@@ -1,36 +1,24 @@
 <?php
 namespace Payum\Offline;
 
-use Payum\Core\Action\CaptureOrderAction;
-use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
-use Payum\Core\Action\GetHttpRequestAction;
-use Payum\Core\Extension\EndlessCycleDetectorExtension;
-use Payum\Core\PaymentFactoryInterface;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\PaymentFactory as BasePaymentFactory;
 use Payum\Offline\Action\CaptureAction;
 use Payum\Offline\Action\FillOrderDetailsAction;
 use Payum\Offline\Action\StatusAction;
 use Payum\Core\Payment;
 
-class PaymentFactory implements PaymentFactoryInterface
+class PaymentFactory extends BasePaymentFactory
 {
     /**
      * {@inheritDoc}
      */
-    public function create(array $options = array())
+    protected function build(Payment $payment, ArrayObject $config)
     {
-        $payment = new Payment;
-
-        $payment->addExtension(new EndlessCycleDetectorExtension);
-
-        $payment->addAction(new FillOrderDetailsAction);
-        $payment->addAction(new CaptureAction);
-        $payment->addAction(new StatusAction);
-        $payment->addAction(new GetHttpRequestAction);
-
-        $payment->addAction(new CaptureOrderAction);
-
-        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
-
-        return $payment;
+        $config->defaults(array(
+            'payum.action.capture' => new CaptureAction(),
+            'payum.action.status' => new StatusAction(),
+            'payum.action.fill_order_details' => new FillOrderDetailsAction(),
+        ));
     }
 }

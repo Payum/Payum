@@ -1,51 +1,42 @@
 <?php
 namespace Payum\Paypal\ProCheckout\Nvp;
 
-use Payum\Core\Action\CaptureOrderAction;
-use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
-use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Payment;
-use Payum\Core\Extension\EndlessCycleDetectorExtension;
-use Payum\Core\PaymentFactoryInterface;
+use Payum\Core\PaymentFactory as BasePaymentFactory;
 use Payum\Paypal\ProCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ProCheckout\Nvp\Action\RefundAction;
 use Payum\Paypal\ProCheckout\Nvp\Action\FillOrderDetailsAction;
 use Payum\Paypal\ProCheckout\Nvp\Action\StatusAction;
 
-class PaymentFactory implements PaymentFactoryInterface
+class PaymentFactory extends BasePaymentFactory
 {
     /**
      * {@inheritDoc}
      */
-    public function create(array $options = array())
+    protected function build(Payment $payment, ArrayObject $config)
     {
-        $options = ArrayObject::ensureArrayObject($options);
-        $options->defaults(array(
-            'username' => '',
-            'password' => '',
-            'partner' => '',
-            'vendor' => '',
-            'tender' => '',
+        $config->validateNotEmpty(array('username', 'password', 'partner', 'vendor', 'tender'));
+
+        $config->defaults(array(
             'sandbox' => true,
         ));
 
-        $payment = new Payment;
+        $paypalConfig = array(
+            'username' => $config['username'],
+            'password' => $config['password'],
+            'partner' => $config['partner'],
+            'vendor' => $config['vendor'],
+            'tender' =>$config['tender'],
+        );
 
-        $payment->addApi(new Api((array) $options));
-        
-        $payment->addExtension(new EndlessCycleDetectorExtension);
+        $config->defaults(array(
+            'payum.api.default' => new Api($paypalConfig, $config['buzz.client']),
 
-        $payment->addAction(new CaptureAction);
-        $payment->addAction(new RefundAction);
-        $payment->addAction(new FillOrderDetailsAction);
-        $payment->addAction(new StatusAction);
-        $payment->addAction(new GetHttpRequestAction);
-
-        $payment->addAction(new CaptureOrderAction);
-
-        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
-
-        return $payment;
+            'payum.action.capture' => new CaptureAction(),
+            'payum.action.refund' => new RefundAction(),
+            'payum.action.fill_order_details' => new FillOrderDetailsAction(),
+            'payum.action.status' => new StatusAction(),
+        ));
     }
 }

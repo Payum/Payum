@@ -1,7 +1,6 @@
 <?php
 namespace Payum\AuthorizeNet\Aim\Tests;
 
-use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\AuthorizeNet\Aim\PaymentFactory;
 
 class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
@@ -9,36 +8,49 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldNotBeInstantiated()
+    public function shouldImplementPaymentFactoryInterface()
     {
         $rc = new \ReflectionClass('Payum\AuthorizeNet\Aim\PaymentFactory');
 
-        $this->assertFalse($rc->isInstantiable());
+        $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentFactoryInterface'));
     }
 
     /**
      * @test
      */
-    public function shouldAllowCreatePaymentWithStandardActionsAdded()
+    public function couldBeConstructedWithoutAnyArguments()
     {
-        $apiMock = $this->createAuthorizeNetAIMMock();
+        new PaymentFactory();
+    }
 
-        $payment = PaymentFactory::create($apiMock);
+    /**
+     * @test
+     */
+    public function shouldAllowCreatePayment()
+    {
+        $factory = new PaymentFactory();
+
+        $payment = $factory->create(array('loginId' => 'aLoginId', 'transactionKey' => 'aTransKey'));
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
         
-        $this->assertAttributeCount(1, 'apis', $payment);
+        $this->assertAttributeNotEmpty('apis', $payment);
+        $this->assertAttributeNotEmpty('actions', $payment);
 
-        $actions = $this->readAttribute($payment, 'actions');
-        $this->assertInternalType('array', $actions);
-        $this->assertNotEmpty($actions);
+        $extensions = $this->readAttribute($payment, 'extensions');
+        $this->assertAttributeNotEmpty('extensions', $extensions);
     }
-    
+
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|AuthorizeNetAIM
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The loginId, transactionKey fields are required.
      */
-    protected function createAuthorizeNetAIMMock()
+    public function shouldThrowIfRequiredOptionsNotPassed()
     {
-        return $this->getMock('Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM', array(), array(), '', false);
+        $factory = new PaymentFactory();
+
+        $factory->create();
     }
 }

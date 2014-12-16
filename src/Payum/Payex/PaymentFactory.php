@@ -1,11 +1,9 @@
 <?php
 namespace Payum\Payex;
 
-use Payum\Core\Action\CaptureOrderAction;
-use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
-use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\PaymentFactoryInterface;
+use Payum\Core\PaymentFactory as BasePaymentFactory;
+use Payum\Core\Payment;
 use Payum\Payex\Action\AgreementDetailsStatusAction;
 use Payum\Payex\Action\Api\AutoPayAgreementAction;
 use Payum\Payex\Action\Api\CheckAgreementAction;
@@ -17,8 +15,6 @@ use Payum\Payex\Action\Api\StartRecurringPaymentAction;
 use Payum\Payex\Action\Api\StopRecurringPaymentAction;
 use Payum\Payex\Action\FillOrderDetailsAction;
 use Payum\Payex\Action\PaymentDetailsSyncAction;
-use Payum\Core\Payment;
-use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Payex\Action\Api\CompleteOrderAction;
 use Payum\Payex\Action\Api\InitializeOrderAction;
 use Payum\Payex\Action\PaymentDetailsCaptureAction;
@@ -30,64 +26,54 @@ use Payum\Payex\Api\OrderApi;
 use Payum\Payex\Api\RecurringApi;
 use Payum\Payex\Api\SoapClientFactory;
 
-class PaymentFactory implements PaymentFactoryInterface
+class PaymentFactory extends BasePaymentFactory
 {
     /**
      * {@inheritDoc}
      */
-    public function create(array $options = array())
+    protected function build(Payment $payment, ArrayObject $config)
     {
-        $options = ArrayObject::ensureArrayObject($options);
-        $options->defaults(array(
-            'accountNumber' => '',
-            'encryptionKey' => '',
+        $config->validateNotEmpty(array('accountNumber', 'encryptionKey'));
+
+        $config->defaults(array(
+            'soap.client_factory' => new SoapClientFactory(),
             'sandbox' => true,
         ));
 
-        $soapClientFactory = new SoapClientFactory();
+        $payexConfig = array(
+            'accountNumber' => $config['accountNumber'],
+            'encryptionKey' => $config['encryptionKey'],
+            'sandbox' => $config['sandbox'],
+        );
 
-        $payment = new Payment;
+        $config->defaults(array(
+            'payum.api.order' => new OrderApi($config['soap.client_factory'], $payexConfig),
+            'payum.api.agreement' => new AgreementApi($config['soap.client_factory'], $payexConfig),
+            'payum.api.recurring' => new RecurringApi($config['soap.client_factory'], $payexConfig),
 
-        $payment->addApi(new OrderApi($soapClientFactory, (array) $options));
-        $payment->addApi(new AgreementApi($soapClientFactory, (array) $options));
-        $payment->addApi(new RecurringApi($soapClientFactory, (array) $options));
+            'payum.action.capture' => new PaymentDetailsCaptureAction(),
+            'payum.action.fill_order_details' => new FillOrderDetailsAction(),
+            'payum.action.status' => new PaymentDetailsStatusAction(),
+            'payum.action.sync' => new PaymentDetailsSyncAction(),
+            'payum.action.auto_pay_capture' => new AutoPayPaymentDetailsCaptureAction(),
+            'payum.action.auto_pay_status' => new AutoPayPaymentDetailsStatusAction(),
 
-        // agreement actions
-        $payment->addAction(new AgreementDetailsStatusAction);
-        $payment->addAction(new CreateAgreementAction);
-        $payment->addAction(new DeleteAgreementAction);
-        $payment->addAction(new CheckAgreementAction);
-        $payment->addAction(new AutoPayAgreementAction);
+            // agreement actions
+            'payum.action.api.agreement_details_status' => new AgreementDetailsStatusAction(),
+            'payum.action.api.create_agreement' => new CreateAgreementAction(),
+            'payum.action.api.delete_agreement' => new DeleteAgreementAction(),
+            'payum.action.api.check_agreement' => new CheckAgreementAction(),
+            'payum.action.api.auto_pay_agreement' => new AutoPayAgreementAction(),
 
-        //recurring actions
-        $payment->addAction(new StartRecurringPaymentAction);
-        $payment->addAction(new StopRecurringPaymentAction);
-        $payment->addAction(new CheckRecurringPaymentAction);
+            //recurring actions
+            'payum.action.api.start_recurring_payment' => new StartRecurringPaymentAction(),
+            'payum.action.api.stop_recurring_payment' => new StopRecurringPaymentAction(),
+            'payum.action.api.check_recurring_payment' => new CheckRecurringPaymentAction(),
 
-        $payment->addExtension(new EndlessCycleDetectorExtension);
-
-        $payment->addAction(new InitializeOrderAction);
-        $payment->addAction(new CompleteOrderAction);
-        $payment->addAction(new CheckOrderAction);
-        
-        $payment->addAction(new PaymentDetailsCaptureAction);
-        $payment->addAction(new FillOrderDetailsAction);
-        $payment->addAction(new PaymentDetailsStatusAction);
-        $payment->addAction(new PaymentDetailsSyncAction);
-        $payment->addAction(new AutoPayPaymentDetailsCaptureAction);
-        $payment->addAction(new AutoPayPaymentDetailsStatusAction);
-        $payment->addAction(new GetHttpRequestAction);
-
-        $payment->addAction(new CaptureOrderAction);
-
-        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
-
-        return $payment;
-    }
-
-    /**
-     */
-    private  function __construct()
-    {
+            //order actions
+            'payum.action.api.initialize_order' => new InitializeOrderAction(),
+            'payum.action.api.complete_order' => new CompleteOrderAction(),
+            'payum.action.api.check_order' => new CheckOrderAction(),
+        ));
     }
 }

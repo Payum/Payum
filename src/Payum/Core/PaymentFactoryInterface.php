@@ -4,9 +4,9 @@ namespace Payum\Core;
 interface PaymentFactoryInterface
 {
     /**
-     * @param array $options
+     * @param array $config
      *
      * @return PaymentInterface
      */
-    function create(array $options = array());
+    function create(array $config = array());
 }
