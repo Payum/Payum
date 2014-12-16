@@ -3,12 +3,9 @@ namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
 use Payum\Core\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\FileLocator;
 
 class PaypalExpressCheckoutNvpPaymentFactory extends AbstractPaymentFactory
 {
@@ -20,9 +17,6 @@ class PaypalExpressCheckoutNvpPaymentFactory extends AbstractPaymentFactory
         if (false == class_exists('Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory')) {
             throw new RuntimeException('Cannot find paypal express checkout payment factory class. Have you installed payum/paypal-express-checkout-nvp package?');
         }
-
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/payment'));
-        $loader->load('paypal_express_checkout_nvp.xml');
 
         return parent::create($container, $contextName, $config);
     }
@@ -51,20 +45,34 @@ class PaypalExpressCheckoutNvpPaymentFactory extends AbstractPaymentFactory
     }
 
     /**
-     * {@inheritDoc}
+     * @param ContainerBuilder $container
+     * @param $contextName
+     * @param array $config
+     *
+     * @return Definition
      */
-    protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
     {
-        $apiDefinition = new DefinitionDecorator('payum.paypal.express_checkout_nvp.api.prototype');
-        $apiDefinition->replaceArgument(0, array(
-            'username' => $config['username'],
-            'password' => $config['password'],
-            'signature' => $config['signature'],
-            'sandbox' => $config['sandbox'],
+        $api = new Definition('Payum\Paypal\ExpressCheckout\Nvp\Api', array(
+            $config,
+            new Reference('payum.buzz.client')
         ));
-        $apiDefinition->setPublic(true);
-        $apiId = 'payum.context.'.$contextName.'.api';
-        $container->setDefinition($apiId, $apiDefinition);
-        $paymentDefinition->addMethodCall('addApi', array(new Reference($apiId)));
+        $container->setDefinition('payum.context.'.$contextName.'.api', $api);
+
+        $factoryId = 'payum.paypal.express_checkout.factory';
+        $container->setDefinition($factoryId, new Definition('Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory'));
+
+        $config['buzz.client'] = new Reference('payum.buzz.client');
+        $config['twig.env'] = new Reference('twig');
+        $config['payum.action.get_http_request'] = new Reference('payum.action.get_http_request');
+        $config['payum.action.obtain_credit_card'] = new Reference('payum.action.obtain_credit_card');
+        $config['payum.extension.log_executed_actions'] = new Reference('payum.extension.log_executed_actions');
+        $config['payum.extension.logger'] = new Reference('payum.extension.logger');
+
+        $payment = new Definition('Payum\Core\Payment', array($config));
+        $payment->setFactoryService($factoryId);
+        $payment->setFactoryMethod('create');
+
+        return $payment;
     }
 }
