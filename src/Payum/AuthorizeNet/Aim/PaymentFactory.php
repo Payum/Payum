@@ -2,45 +2,32 @@
 namespace Payum\AuthorizeNet\Aim;
 
 use Payum\AuthorizeNet\Aim\Action\FillOrderDetailsAction;
-use Payum\Core\Action\CaptureOrderAction;
-use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
-use Payum\Core\Action\GetHttpRequestAction;
-use Payum\Core\Payment;
-use Payum\Core\Extension\EndlessCycleDetectorExtension;
-use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\AuthorizeNet\Aim\Action\CaptureAction;
 use Payum\AuthorizeNet\Aim\Action\StatusAction;
+use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Payment;
+use Payum\Core\PaymentFactory as BasePaymentFactory;
 
-abstract class PaymentFactory
+class PaymentFactory extends BasePaymentFactory
 {
     /**
-     * @param AuthorizeNetAIM $api
-     *
-     * @return Payment
+     * {@inheritDoc}
      */
-    public static function create(AuthorizeNetAIM $api)
+    protected function build(Payment $payment, ArrayObject $config)
     {
-        $payment = new Payment;
+        $config->validateNotEmpty(array('loginId', 'transactionKey'));
 
-        $payment->addApi($api);
-        
-        $payment->addExtension(new EndlessCycleDetectorExtension);
+        $config->defaults(array(
+            'sandbox' => true,
 
-        $payment->addAction(new CaptureAction);
-        $payment->addAction(new FillOrderDetailsAction);
-        $payment->addAction(new StatusAction);
-        $payment->addAction(new GetHttpRequestAction);
+            'payum.action.capture' => new CaptureAction(),
+            'payum.action.status' => new StatusAction(),
+            'payum.action.fill_order_details' => new FillOrderDetailsAction(),
+        ));
 
-        $payment->addAction(new CaptureOrderAction);
-
-        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
-
-        return $payment;
-    }
-
-    /**
-     */
-    private function __construct()
-    {
+        $api = new AuthorizeNetAIM($config['loginId'], $config['transactionKey']);
+        $api->setSandbox($config['sandbox']);
+        $config['payum.api.default'] = $api;
     }
 }

@@ -1,7 +1,7 @@
 <?php
-namespace Payum\Klarna\Invoice\Tests;
+namespace Payum\Offline\Tests;
 
-use Payum\Klarna\Invoice\PaymentFactory;
+use Payum\Offline\PaymentFactory;
 
 class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -10,7 +10,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementPaymentFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\PaymentFactory');
+        $rc = new \ReflectionClass('Payum\Offline\PaymentFactory');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentFactoryInterface'));
     }
@@ -30,33 +30,14 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new PaymentFactory();
 
-        $payment = $factory->create(array(
-            'eid' => 'aEID',
-            'secret' => 'aSecret',
-            'country' => 'SV',
-            'language' => 'SE',
-            'currency' => 'SEK',
-        ));
+        $payment = $factory->create();
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
         
-        $this->assertAttributeNotEmpty('apis', $payment);
+        $this->assertAttributeEmpty('apis', $payment);
         $this->assertAttributeNotEmpty('actions', $payment);
 
         $extensions = $this->readAttribute($payment, 'extensions');
         $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The eid, secret, country, language, currency fields are required.
-     */
-    public function shouldThrowIfRequiredOptionsNotPassed()
-    {
-        $factory = new PaymentFactory();
-
-        $factory->create();
     }
 }

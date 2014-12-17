@@ -46,6 +46,26 @@ class ArrayObject extends \ArrayObject
     }
 
     /**
+     * @param array|\Traversable $input
+     *
+     * @throws \Payum\Core\Exception\InvalidArgumentException
+     *
+     * @return void
+     */
+    public function defaults($input)
+    {
+        if (false == (is_array($input) || $input instanceof \Traversable)) {
+            throw new InvalidArgumentException('Invalid input given. Should be an array or instance of \Traversable');
+        }
+
+        foreach ($input as $index => $value) {
+            if (null === $this[$index]) {
+                $this[$index] = $value;
+            }
+        }
+    }
+
+    /**
      * @param array $required
      * @param boolean $throwOnInvalid
      * 
@@ -56,19 +76,25 @@ class ArrayObject extends \ArrayObject
     public function validateNotEmpty($required, $throwOnInvalid = true)
     {
         $required = is_array($required) ? $required : array($required);
-        
-        foreach ($required as $required) {
-            $value = $this[$required];
+
+        $empty = array();
+
+        foreach ($required as $r) {
+            $value = $this[$r];
             
             if (empty($value)) {
-                if ($throwOnInvalid) {
-                    throw new LogicException(sprintf('The %s fields is required.', $required));
-                }
-
-                return false;
+                $empty[] = $r;
             }
         }
         
+        if ($empty && $throwOnInvalid) {
+            throw new LogicException(sprintf('The %s fields are required.', implode(', ', $empty)));
+        }
+
+        if ($empty) {
+            return false;
+        }
+
         return true;
     }
 

@@ -1,7 +1,7 @@
 <?php
-namespace Payum\Klarna\Invoice\Tests;
+namespace Payum\Paypal\ProCheckout\Nvp\Tests;
 
-use Payum\Klarna\Invoice\PaymentFactory;
+use Payum\Paypal\ProCheckout\Nvp\PaymentFactory;
 
 class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -10,7 +10,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementPaymentFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\PaymentFactory');
+        $rc = new \ReflectionClass('Payum\Paypal\ProCheckout\Nvp\PaymentFactory');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentFactoryInterface'));
     }
@@ -31,15 +31,15 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new PaymentFactory();
 
         $payment = $factory->create(array(
-            'eid' => 'aEID',
-            'secret' => 'aSecret',
-            'country' => 'SV',
-            'language' => 'SE',
-            'currency' => 'SEK',
+            'username' => 'aName',
+            'password' => 'aPass',
+            'partner' => 'aPartner',
+            'vendor' => 'aVendor',
+            'tender' => 'aTender'
         ));
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
-        
+
         $this->assertAttributeNotEmpty('apis', $payment);
         $this->assertAttributeNotEmpty('actions', $payment);
 
@@ -51,7 +51,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The eid, secret, country, language, currency fields are required.
+     * @expectedExceptionMessage The username, password, partner, vendor, tender fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {

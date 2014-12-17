@@ -62,7 +62,7 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_Te
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The PROFILEID fields is required.
+     * @expectedExceptionMessage The PROFILEID fields are required.
      */
     public function throwIfTokenNotSetInModel()
     {

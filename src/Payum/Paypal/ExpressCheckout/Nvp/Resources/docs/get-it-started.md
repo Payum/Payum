@@ -10,7 +10,7 @@ The preferred way to install the library is using [composer](http://getcomposer.
 Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require "payum/paypal-express-checkout-nvp:*@stable"
+php composer.phar require payum/paypal-express-checkout-nvp
 ```
 
 ## config.php
@@ -24,17 +24,18 @@ We have to only add the payment factory. All the rest remain the same:
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory as PaypalExpressPaymentFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
-$payments['paypal_es'] = PaypalExpressPaymentFactory::create(new Api(array(
+$paypalExpressCheckoutFactory = new \Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory; 
+$payments['paypal_express_checkout'] = $paypalExpressCheckoutFactory->create(array(
    'username'  => 'change it',
    'password'  => 'change it',
    'signature' => 'change it',
    'sandbox'   => true,
-)));
+));
 ```
 
 ## prepare.php
 
-Here you have to modify a `paymentName` value. Set it to `paypal_es`.
+Here you have to modify a `paymentName` value. Set it to `paypal_express_checkout`.
 
 ## Next 
 

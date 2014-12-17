@@ -1,16 +1,16 @@
 <?php
-namespace Payum\Klarna\Invoice\Tests;
+namespace Payum\Stripe\Tests;
 
-use Payum\Klarna\Invoice\PaymentFactory;
+use Payum\Stripe\JsPaymentFactory;
 
-class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
+class JsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldImplementPaymentFactoryInterface()
+    public function shouldImplementJsPaymentFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\PaymentFactory');
+        $rc = new \ReflectionClass('Payum\Stripe\JsPaymentFactory');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentFactoryInterface'));
     }
@@ -20,7 +20,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new PaymentFactory();
+        new JsPaymentFactory();
     }
 
     /**
@@ -28,18 +28,12 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePayment()
     {
-        $factory = new PaymentFactory();
+        $factory = new JsPaymentFactory();
 
-        $payment = $factory->create(array(
-            'eid' => 'aEID',
-            'secret' => 'aSecret',
-            'country' => 'SV',
-            'language' => 'SE',
-            'currency' => 'SEK',
-        ));
+        $payment = $factory->create(array('publishable_key' => 'aPubKey', 'secret_key' => 'aSecretKey'));
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
-        
+
         $this->assertAttributeNotEmpty('apis', $payment);
         $this->assertAttributeNotEmpty('actions', $payment);
 
@@ -51,11 +45,11 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The eid, secret, country, language, currency fields are required.
+     * @expectedExceptionMessage The publishable_key, secret_key fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {
-        $factory = new PaymentFactory();
+        $factory = new JsPaymentFactory();
 
         $factory->create();
     }

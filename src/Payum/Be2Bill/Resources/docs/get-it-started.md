@@ -10,7 +10,7 @@ The preferred way to install the library is using [composer](http://getcomposer.
 Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require "payum/be2bill:*@stable"
+php composer.phar require payum/be2bill
 ```
 
 ## config.php
@@ -21,25 +21,24 @@ We have to only add the payment factory. All the rest remain the same:
 <?php
 //config.php
 
-use Payum\Be2Bill\Api as Be2BillApi;
-use Payum\Be2Bill\PaymentFactory as Be2BillPaymentFactory;
-use Payum\Be2Bill\OnsitePaymentFactory as Be2BillOnsitePaymentFactory;
-
 // ...
 
-$payments['be2bill'] = Be2BillPaymentFactory::create(new Be2BillApi(array(
+// direct payment, credit card form at your app side
+$directBe2billFactory = new \Payum\Be2Bill\DirectPaymentFactory();
+$payments['be2bill'] = $directBe2billFactory->create(array(
    'identifier' => 'REPLACE WITH YOURS',
    'password' => 'REPLACE WITH YOURS',
    'sandbox' => true
-)));
+));
 
-// or onsite 
+// or offsite 
 
-$payments['be2bill_onsite'] = Be2BillOnsitePaymentFactory::create(new Be2BillApi(array(
+$offsiteBe2billFactory = new \Payum\Be2Bill\OffsitePaymentFactory();
+$payments['be2bill_offsite'] = $offsiteBe2billFactory->create(array(
    'identifier' => 'REPLACE WITH YOURS',
    'password' => 'REPLACE WITH YOURS',
    'sandbox' => true
-)));
+));
 ```
 
 ## prepare.php

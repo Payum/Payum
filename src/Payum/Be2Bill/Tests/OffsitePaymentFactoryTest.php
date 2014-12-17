@@ -1,16 +1,16 @@
 <?php
-namespace Payum\Klarna\Invoice\Tests;
+namespace Payum\Be2Bill\Tests;
 
-use Payum\Klarna\Invoice\PaymentFactory;
+use Payum\Be2Bill\OffsitePaymentFactory;
 
-class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
+class OffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldImplementPaymentFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\PaymentFactory');
+        $rc = new \ReflectionClass('Payum\Be2Bill\OffsitePaymentFactory');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentFactoryInterface'));
     }
@@ -20,7 +20,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new PaymentFactory();
+        new OffsitePaymentFactory();
     }
 
     /**
@@ -28,18 +28,12 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePayment()
     {
-        $factory = new PaymentFactory();
+        $factory = new OffsitePaymentFactory();
 
-        $payment = $factory->create(array(
-            'eid' => 'aEID',
-            'secret' => 'aSecret',
-            'country' => 'SV',
-            'language' => 'SE',
-            'currency' => 'SEK',
-        ));
+        $payment = $factory->create(array('identifier' => 'anId', 'password' => 'aPass'));
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
-        
+
         $this->assertAttributeNotEmpty('apis', $payment);
         $this->assertAttributeNotEmpty('actions', $payment);
 
@@ -51,11 +45,11 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The eid, secret, country, language, currency fields are required.
+     * @expectedExceptionMessage The identifier, password fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {
-        $factory = new PaymentFactory();
+        $factory = new OffsitePaymentFactory();
 
         $factory->create();
     }

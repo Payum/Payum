@@ -62,7 +62,7 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The PROFILEID fields is required.
+     * @expectedExceptionMessage The PROFILEID, ACTION fields are required.
      */
     public function throwIfProfileIdNotSetInModel()
     {
@@ -77,7 +77,7 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The ACTION fields is required.
+     * @expectedExceptionMessage The ACTION fields are required.
      */
     public function throwIfTokenNotSetInModel()
     {

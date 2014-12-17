@@ -10,7 +10,7 @@ The preferred way to install the library is using [composer](http://getcomposer.
 Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require "payum/stripe:*@stable"
+php composer.phar require payum/stripe
 ```
 
 ## config.php
@@ -21,14 +21,12 @@ We have to only add the payment factory. All the rest remain the same:
 <?php
 //config.php
 
-use Payum\Stripe\PaymentFactory as StripePaymentFactory;
-use Payum\Stripe\Keys;
-
 // ..
 
-$payments['stripe_checkout'] = StripePaymentFactory::createCheckout(
-    new Keys('publishable_key', 'secret_key')
-);
+$stripeCheckoutFactory = new \Payum\Stripe\CheckoutPaymentFactory();
+$payments['stripe_checkout'] = $stripeJsFactory->create(array(
+    'publishable_key' => 'EDIT IT', 'secret_key' => 'EDIT IT'
+));
 ```
 
 ## prepare.php

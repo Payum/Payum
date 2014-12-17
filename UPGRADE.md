@@ -21,6 +21,12 @@
 * [storage] Method `StorageInterface::getIdentificator` was renamed to `identify`.
 * [storage] Method `StorageInterface::findByIdentificator` was removed. Use `find` method instead.
 * [storage] Class `Identificator` was deprecated. Use `Identity` instead.
+* [factory] Payment factories were changed significantly. Now they implements `PaymentFactoryInterface` and therefor have to accept only array of options as first argument.
+* [be2bill] Action `CaptureOnsiteAction` was renamed to `CaptureOffsiteAction`.
+* [be2bill] Factory `OnsitePaymentFactory` was renamed to `OffsitePaymentFactory`.
+* [be2bill] Factory `PaymentFactory` was renamed to `DirectPaymentFactory`.
+* [stripe] Factory `PaymentFactory` was splitted into two: `JsPaymentFactory` and `CheckoutPaymentFactory`.
+
 
 ## 0.11 to 0.12
 

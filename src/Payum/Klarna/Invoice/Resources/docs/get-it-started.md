@@ -9,7 +9,7 @@ The preferred way to install the library is using [composer](http://getcomposer.
 Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require "payum/klarna-invoice:@stable"
+php composer.phar require payum/klarna-invoice
 ```
 
 ## config.php
@@ -56,8 +56,6 @@ use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Security\PlainHttpRequestVerifier;
 use Payum\Core\Security\GenericTokenFactory;
-use Payum\Klarn\Invoice\Config;
-use Payum\Klarn\Invoice\PaymentFactory as KlarnaInvoicePaymentFactory;
 
 $tokenStorage = new FilesystemStorage('/path/to/storage', 'App\Model\PaymentSecurityToken', 'hash');
 $requestVerifier = new PlainHttpRequestVerifier($tokenStorage);
@@ -73,9 +71,17 @@ $payments = array();
 $config = new Config;
 $config->secret = 'EDIT IT';
 $config->eid = 'EDIT IT';
-$config->mode = \Klarna::BETA;
+$config->mode = ;
 
-$payments['klarna_invoice'] => KlarnaInvoicePaymentFactory::create($config);
+$klarnaInvoiceFactory = new \Payum\Klarna\Invoice\PaymentFactory();
+$payments['klarna_invoice'] => $klarnaInvoiceFactory->create(array(
+    'eid' => 'EDIT IT',
+    'secret' => 'EDIT IT',
+    'country' => 'SE',
+    'language' => 'SV',
+    'currency' => 'SEK',
+    'sandbox' => true,
+));
 
 $payum = new SimpleRegistry($payments, $storages);
 
