@@ -24,9 +24,6 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
             throw new RuntimeException('Cannot find klarna checkout payment factory class. Have you installed payum/klarna-checkout package?');
         }
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/payment'));
-        $loader->load('klarna_checkout.xml');
-
         return parent::create($container, $contextName, $config);
     }
 
@@ -83,5 +80,37 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
 
         $container->setDefinition($klarnaConfigId, $klarnaConfig);
         $paymentDefinition->addMethodCall('addApi', array(new Reference($klarnaConfigId)));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
+    {
+        $klarnaConfig = new DefinitionDecorator('payum.klarna.checkout.config.prototype');
+        $klarnaConfig->setProperty('merchantId', $config['merchant_id']);
+        $klarnaConfig->setProperty('secret', $config['secret']);
+        $klarnaConfig->setProperty('baseUri', $config['sandbox'] ?
+            Constants::BASE_URI_SANDBOX :
+            Constants::BASE_URI_LIVE
+        );
+        $klarnaConfigId = 'payum.context.'.$contextName.'.config';
+        $container->setDefinition($klarnaConfigId, $klarnaConfig);
+
+        $factoryId = 'payum.klarna_checkout.factory';
+        $container->setDefinition($factoryId, new Definition('Payum\Klarna\Checkout\PaymentFactory'));
+
+        $config['buzz.client'] = new Reference('payum.buzz.client');
+        $config['twig.env'] = new Reference('twig');
+        $config['payum.action.get_http_request'] = new Reference('payum.action.get_http_request');
+        $config['payum.action.obtain_credit_card'] = new Reference('payum.action.obtain_credit_card');
+        $config['payum.extension.log_executed_actions'] = new Reference('payum.extension.log_executed_actions');
+        $config['payum.extension.logger'] = new Reference('payum.extension.logger');
+
+        $payment = new Definition('Payum\Core\Payment', array($config));
+        $payment->setFactoryService($factoryId);
+        $payment->setFactoryMethod('create');
+
+        return $payment;
     }
 }

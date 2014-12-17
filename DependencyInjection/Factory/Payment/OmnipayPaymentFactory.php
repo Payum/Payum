@@ -98,4 +98,39 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
 
         $paymentDefinition->addMethodCall('addApi', array(new Reference($gatewayId)));
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
+    {
+        $gateway = new Definition();
+        $gateway->setClass('Omnipay\Common\GatewayInterface');
+        $gateway->setFactoryService('payum.omnipay_bridge.gateway_factory');
+        $gateway->setFactoryMethod('create');
+        $gateway->addArgument($config['type']);
+        $gateway->setPublic(true);
+        foreach ($config['options'] as $name => $value) {
+            $gateway->addMethodCall('set'.strtoupper($name), array($value));
+        }
+
+        $gatewayId = 'payum.context.'.$contextName.'.gateway';
+        $container->setDefinition($gatewayId, $gateway);
+
+        $factoryId = 'payum.omnipay_bridge.factory';
+        $container->setDefinition($factoryId, new Definition('Payum\OmnipayBridge\PaymentFactory'));
+
+        $config['buzz.client'] = new Reference('payum.buzz.client');
+        $config['twig.env'] = new Reference('twig');
+        $config['payum.action.get_http_request'] = new Reference('payum.action.get_http_request');
+        $config['payum.action.obtain_credit_card'] = new Reference('payum.action.obtain_credit_card');
+        $config['payum.extension.log_executed_actions'] = new Reference('payum.extension.log_executed_actions');
+        $config['payum.extension.logger'] = new Reference('payum.extension.logger');
+
+        $payment = new Definition('Payum\Core\Payment', array($config));
+        $payment->setFactoryService($factoryId);
+        $payment->setFactoryMethod('create');
+
+        return $payment;
+    }
 }

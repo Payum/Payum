@@ -2,13 +2,11 @@
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
 use Payum\Core\Exception\RuntimeException;
+use Payum\Paypal\ProCheckout\Nvp\Api;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\FileLocator;
 
 /**
  * @author Ton Sharp <Forma-PRO@66ton99.org.ua>
@@ -21,13 +19,8 @@ class PaypalProCheckoutNvpPaymentFactory extends AbstractPaymentFactory
     public function create(ContainerBuilder $container, $contextName, array $config)
     {
         if (false == class_exists('Payum\Paypal\ProCheckout\Nvp\PaymentFactory')) {
-            throw new RuntimeException(
-              'Cannot find paypal pro checkout payment class. Have you installed payum/paypal-pro-checkout-nvp package?'
-            );
+            throw new RuntimeException('Cannot find paypal pro checkout payment class. Have you installed payum/paypal-pro-checkout-nvp package?');
         }
-
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/payment'));
-        $loader->load('paypal_pro_checkout_nvp.xml');
 
         return parent::create($container, $contextName, $config);
     }
@@ -60,20 +53,30 @@ class PaypalProCheckoutNvpPaymentFactory extends AbstractPaymentFactory
     /**
      * {@inheritDoc}
      */
-    protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
     {
-        $apiDefinition = new DefinitionDecorator('payum.paypal.pro_checkout_nvp.api.prototype');
-        $apiDefinition->replaceArgument(0, array(
-            'username' => $config['username'],
-            'password' => $config['password'],
-            'partner' => $config['partner'],
-            'vendor' => $config['vendor'],
-            'sandbox' => $config['sandbox'],
-            'tender' => isset($config['tender']) ? $config['tender'] : 'C',
+        $config['tender'] = isset($config['tender']) ? $config['tender'] : Api::TRXTYPE_CREDIT;
+
+        $api = new Definition('Payum\Paypal\ProCheckout\Nvp\Api', array(
+            $config,
+            new Reference('payum.buzz.client')
         ));
-        $apiDefinition->setPublic(true);
-        $apiId = 'payum.context.'.$contextName.'.api';
-        $container->setDefinition($apiId, $apiDefinition);
-        $paymentDefinition->addMethodCall('addApi', array(new Reference($apiId)));
+        $container->setDefinition('payum.context.'.$contextName.'.api', $api);
+
+        $factoryId = 'payum.paypal.pro_checkout.factory';
+        $container->setDefinition($factoryId, new Definition('Payum\Paypal\ProCheckout\Nvp\PaymentFactory'));
+
+        $config['buzz.client'] = new Reference('payum.buzz.client');
+        $config['twig.env'] = new Reference('twig');
+        $config['payum.action.get_http_request'] = new Reference('payum.action.get_http_request');
+        $config['payum.action.obtain_credit_card'] = new Reference('payum.action.obtain_credit_card');
+        $config['payum.extension.log_executed_actions'] = new Reference('payum.extension.log_executed_actions');
+        $config['payum.extension.logger'] = new Reference('payum.extension.logger');
+
+        $payment = new Definition('Payum\Core\Payment', array($config));
+        $payment->setFactoryService($factoryId);
+        $payment->setFactoryMethod('create');
+
+        return $payment;
     }
 }

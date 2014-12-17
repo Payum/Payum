@@ -4,7 +4,6 @@ namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Kernel;
 
@@ -67,14 +66,8 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
      */
     protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
     {
-        $paymentDefinition = new Definition();
-        $paymentDefinition->setClass(
-            $this->createContextParameter($container, $contextName, '%payum.payment.class%', 'payment.class')
-        );
-        
-        return $paymentDefinition;
+        return new Definition('Payum\Core\Payment');
     }
-    
 
     /**
      * @param ContainerBuilder $container
@@ -199,18 +192,5 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
      */
     protected function addCommonExtensions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
     {
-        $paymentDefinition->addMethodCall(
-            'addExtension', 
-            array(new Reference('payum.extension.endless_cycle_detector'))
-        );
-
-        $paymentDefinition->addMethodCall(
-            'addExtension',
-            array(new Reference('payum.extension.log_executed_actions'))
-        );
-        $paymentDefinition->addMethodCall(
-            'addExtension',
-            array(new Reference('payum.extension.logger'))
-        );
     }
 }

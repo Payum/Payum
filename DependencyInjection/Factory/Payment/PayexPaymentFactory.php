@@ -3,12 +3,9 @@ namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
 use Payum\Core\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\FileLocator;
 
 class PayexPaymentFactory extends AbstractPaymentFactory
 {
@@ -20,9 +17,6 @@ class PayexPaymentFactory extends AbstractPaymentFactory
         if (false == class_exists('Payum\Payex\PaymentFactory')) {
             throw new RuntimeException('Cannot find payex payment factory class. Have you installed payum/payex package?');
         }
-
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/payment'));
-        $loader->load('payex.xml');
 
         return parent::create($container, $contextName, $config);
     }
@@ -52,39 +46,31 @@ class PayexPaymentFactory extends AbstractPaymentFactory
     /**
      * {@inheritDoc}
      */
-    protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
     {
-        $orderApiDefinition = new DefinitionDecorator('payum.payex.api.order.prototype');
-        $orderApiDefinition->replaceArgument(1, array(
-            'encryptionKey' => $config['encryption_key'],
-            'accountNumber' => $config['account_number'],
-            'sandbox' => $config['sandbox']
-        ));
-        $orderApiDefinition->setPublic(true);
-        $orderApiId = 'payum.context.'.$contextName.'.api.order';
-        $container->setDefinition($orderApiId, $orderApiDefinition);
-        $paymentDefinition->addMethodCall('addApi', array(new Reference($orderApiId)));
+        $orderApi = new Definition('Payum\Payex\Api\OrderApi', array($config));
+        $container->setDefinition('payum.context.'.$contextName.'.api.order', $orderApi);
 
-        $agreementApiDefinition = new DefinitionDecorator('payum.payex.api.agreement.prototype');
-        $agreementApiDefinition->replaceArgument(1, array(
-            'encryptionKey' => $config['encryption_key'],
-            'accountNumber' => $config['account_number'],
-            'sandbox' => $config['sandbox']
-        ));
-        $agreementApiDefinition->setPublic(true);
-        $agreementApiId = 'payum.context.'.$contextName.'.api.agreement';
-        $container->setDefinition($agreementApiId, $agreementApiDefinition);
-        $paymentDefinition->addMethodCall('addApi', array(new Reference($agreementApiId)));
+        $agreementApi = new Definition('Payum\Payex\Api\AgreementApi', array($config));
+        $container->setDefinition('payum.context.'.$contextName.'.api.agreement', $agreementApi);
 
-        $recurringApiDefinition = new DefinitionDecorator('payum.payex.api.recurring.prototype');
-        $recurringApiDefinition->replaceArgument(1, array(
-            'encryptionKey' => $config['encryption_key'],
-            'accountNumber' => $config['account_number'],
-            'sandbox' => $config['sandbox']
-        ));
-        $recurringApiDefinition->setPublic(true);
-        $recurringApiId = 'payum.context.'.$contextName.'.api.recurring';
-        $container->setDefinition($recurringApiId, $recurringApiDefinition);
-        $paymentDefinition->addMethodCall('addApi', array(new Reference($recurringApiId)));
+        $recurringApi = new Definition('Payum\Payex\Api\RecurringApi', array($config));
+        $container->setDefinition('payum.context.'.$contextName.'.api.recurring', $recurringApi);
+
+        $factoryId = 'payum.payex.factory';
+        $container->setDefinition($factoryId, new Definition('Payum\Payex\PaymentFactory'));
+
+        $config['buzz.client'] = new Reference('payum.buzz.client');
+        $config['twig.env'] = new Reference('twig');
+        $config['payum.action.get_http_request'] = new Reference('payum.action.get_http_request');
+        $config['payum.action.obtain_credit_card'] = new Reference('payum.action.obtain_credit_card');
+        $config['payum.extension.log_executed_actions'] = new Reference('payum.extension.log_executed_actions');
+        $config['payum.extension.logger'] = new Reference('payum.extension.logger');
+    
+        $payment = new Definition('Payum\Core\Payment', array($config));
+        $payment->setFactoryService($factoryId);
+        $payment->setFactoryMethod('create');
+    
+        return $payment;
     }
 }

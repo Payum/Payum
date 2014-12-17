@@ -20,9 +20,6 @@ class OfflinePaymentFactory extends AbstractPaymentFactory
             throw new RuntimeException('Cannot find offline payment factory class. Have you installed payum/offline package?');
         }
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/payment'));
-        $loader->load('offline.xml');
-
         return parent::create($container, $contextName, $config);
     }
 
@@ -32,5 +29,28 @@ class OfflinePaymentFactory extends AbstractPaymentFactory
     public function getName()
     {
         return 'offline';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
+    {
+        $factoryId = 'payum.offline.factory';
+        $container->setDefinition($factoryId, new Definition('Payum\Offline\PaymentFactory'));
+
+        $config['payum.template.obtain_token'] = '%payum.stripe.template.obtain_js_token%';
+        $config['buzz.client'] = new Reference('payum.buzz.client');
+        $config['twig.env'] = new Reference('twig');
+        $config['payum.action.get_http_request'] = new Reference('payum.action.get_http_request');
+        $config['payum.action.obtain_credit_card'] = new Reference('payum.action.obtain_credit_card');
+        $config['payum.extension.log_executed_actions'] = new Reference('payum.extension.log_executed_actions');
+        $config['payum.extension.logger'] = new Reference('payum.extension.logger');
+
+        $payment = new Definition('Payum\Core\Payment', array($config));
+        $payment->setFactoryService($factoryId);
+        $payment->setFactoryMethod('create');
+
+        return $payment;
     }
 }

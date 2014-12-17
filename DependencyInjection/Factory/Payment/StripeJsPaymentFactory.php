@@ -19,7 +19,7 @@ class StripeJsPaymentFactory extends AbstractPaymentFactory implements PrependEx
      */
     public function create(ContainerBuilder $container, $contextName, array $config)
     {
-        if (false == class_exists('Payum\Stripe\JsPaymentFactory')) {
+        if (false == class_exists('Payum\Stripe\PaymentFactory')) {
             throw new RuntimeException('Cannot find stripe payment factory class. Have you installed payum/stripe package?');
         }
 
@@ -58,7 +58,7 @@ class StripeJsPaymentFactory extends AbstractPaymentFactory implements PrependEx
         $container->prependExtensionConfig('twig', array(
             'paths' => array_flip(array_filter(array(
                 'PayumCore' => TwigFactory::guessViewsPath('Payum\Core\Payment'),
-                'PayumStripe' => TwigFactory::guessViewsPath('Payum\Stripe\JsPaymentFactory'),
+                'PayumStripe' => TwigFactory::guessViewsPath('Payum\Stripe\PaymentFactory'),
             )))
         ));
     }
@@ -66,15 +66,31 @@ class StripeJsPaymentFactory extends AbstractPaymentFactory implements PrependEx
     /**
      * {@inheritDoc}
      */
-    protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
     {
-        $publishableKey = new DefinitionDecorator('payum.stripe.keys.prototype');
-        $publishableKey->replaceArgument(0, $config['publishable_key']);
-        $publishableKey->replaceArgument(1, $config['secret_key']);
-        $publishableKey->setPublic(true);
-        $publishableKeyId = 'payum.context.' . $contextName . '.keys';
+        $container->setParameter('payum.stripe.template.obtain_js_token', '@PayumStripe/Action/obtain_js_token.html.twig');
 
-        $container->setDefinition($publishableKeyId, $publishableKey);
-        $paymentDefinition->addMethodCall('addApi', array(new Reference($publishableKeyId)));
+        $keys = new Definition('Payum\Stripe\Keys', array(
+            $config['publishable_key'],
+            $config['secret_key']
+        ));
+        $container->setDefinition('payum.context.'.$contextName.'.keys', $keys);
+
+        $factoryId = 'payum.stripe.js_factory';
+        $container->setDefinition($factoryId, new Definition('Payum\Stripe\JsPaymentFactory'));
+
+        $config['payum.template.obtain_token'] = '%payum.stripe.template.obtain_js_token%';
+        $config['buzz.client'] = new Reference('payum.buzz.client');
+        $config['twig.env'] = new Reference('twig');
+        $config['payum.action.get_http_request'] = new Reference('payum.action.get_http_request');
+        $config['payum.action.obtain_credit_card'] = new Reference('payum.action.obtain_credit_card');
+        $config['payum.extension.log_executed_actions'] = new Reference('payum.extension.log_executed_actions');
+        $config['payum.extension.logger'] = new Reference('payum.extension.logger');
+
+        $payment = new Definition('Payum\Core\Payment', array($config));
+        $payment->setFactoryService($factoryId);
+        $payment->setFactoryMethod('create');
+
+        return $payment;
     }
 }

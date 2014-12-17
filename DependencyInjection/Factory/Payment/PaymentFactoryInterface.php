@@ -2,7 +2,6 @@
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 interface PaymentFactoryInterface
@@ -25,7 +24,7 @@ interface PaymentFactoryInterface
     function getName();
 
     /**
-     * @param NodeDefinition $builder
+     * @param ArrayNodeDefinition $builder
      * 
      * @return void
      */

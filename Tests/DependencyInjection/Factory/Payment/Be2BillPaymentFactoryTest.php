@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillDirectPaymentFactory;
 
 class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +26,7 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new Be2BillPaymentFactory;
+        new Be2BillDirectPaymentFactory;
     }
 
     /**
@@ -34,7 +34,7 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetName()
     {
-        $factory = new Be2BillPaymentFactory;
+        $factory = new Be2BillDirectPaymentFactory;
 
         $this->assertEquals('be2bill', $factory->getName());
     }
@@ -44,7 +44,7 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfiguration()
     {
-        $factory = new Be2BillPaymentFactory;
+        $factory = new Be2BillDirectPaymentFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -80,7 +80,7 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfApiOptionsIdentifierSectionMissing()
     {
-        $factory = new Be2BillPaymentFactory;
+        $factory = new Be2BillDirectPaymentFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -99,7 +99,7 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfApiOptionsPasswordSectionMissing()
     {
-        $factory = new Be2BillPaymentFactory;
+        $factory = new Be2BillDirectPaymentFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -117,7 +117,7 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePaymentAndReturnItsId()
     {
-        $factory = new Be2BillPaymentFactory;
+        $factory = new Be2BillDirectPaymentFactory;
 
         $container = new ContainerBuilder;
 
@@ -140,7 +140,7 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new Be2BillPaymentFactory;
+        $factory = new Be2BillDirectPaymentFactory;
 
         $container = new ContainerBuilder;
 
@@ -176,7 +176,7 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAddPayumActionTagApiDefinitionAndAddItToPayment()
     {
-        $factory = new Be2BillPaymentFactory;
+        $factory = new Be2BillDirectPaymentFactory;
 
         $container = new ContainerBuilder;
 
@@ -204,7 +204,7 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAddPayumActionTagToCaptureAction()
     {
-        $factory = new Be2BillPaymentFactory;
+        $factory = new Be2BillDirectPaymentFactory;
 
         $container = new ContainerBuilder;
 
@@ -230,7 +230,7 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAddPayumActionTagToStatusAction()
     {
-        $factory = new Be2BillPaymentFactory;
+        $factory = new Be2BillDirectPaymentFactory;
 
         $container = new ContainerBuilder;
 
@@ -256,7 +256,7 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAddPayumActionTagToFillOrderDetailsAction()
     {
-        $factory = new Be2BillPaymentFactory;
+        $factory = new Be2BillDirectPaymentFactory;
 
         $container = new ContainerBuilder;
 

@@ -45,11 +45,7 @@ class PaypalExpressCheckoutNvpPaymentFactory extends AbstractPaymentFactory
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param $contextName
-     * @param array $config
-     *
-     * @return Definition
+     * {@inheritDoc}
      */
     protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
     {

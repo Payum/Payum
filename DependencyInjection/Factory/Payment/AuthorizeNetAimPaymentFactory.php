@@ -3,12 +3,9 @@ namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
 use Payum\Core\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\FileLocator;
 
 class AuthorizeNetAimPaymentFactory extends AbstractPaymentFactory
 {
@@ -21,9 +18,6 @@ class AuthorizeNetAimPaymentFactory extends AbstractPaymentFactory
             throw new RuntimeException('Cannot find Authorize.net payment factory class. Have you installed payum/authorize-net-aim package?');
         }
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/payment'));
-        $loader->load('authorize_net_aim.xml');
-        
         return parent::create($container, $contextName, $config);
     }
 
@@ -52,14 +46,29 @@ class AuthorizeNetAimPaymentFactory extends AbstractPaymentFactory
     /**
      * {@inheritDoc}
      */
-    protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
     {
-        $apiDefinition = new DefinitionDecorator('payum.authorize_net_aim.api.prototype');
-        $apiDefinition->replaceArgument(0, $config['login_id']);
-        $apiDefinition->replaceArgument(1, $config['transaction_key']);
-        $apiDefinition->addMethodCall('setSandbox', array($config['sandbox']));
-        $apiId = 'payum.context.'.$contextName.'.api';
-        $container->setDefinition($apiId, $apiDefinition);
-        $paymentDefinition->addMethodCall('addApi', array(new Reference($apiId)));
+        $api = new Definition('Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM', array(
+            $config['login_id'],
+            $config['transaction_key']
+        ));
+        $api->addMethodCall('setSandbox', array($config['sandbox']));
+        $container->setDefinition('payum.context.'.$contextName.'.api', $api);
+
+        $factoryId = 'payum.authorize_net_aim.factory';
+        $container->setDefinition($factoryId, new Definition('Payum\AuthorizeNet\Aim\PaymentFactory'));
+
+        $config['buzz.client'] = new Reference('payum.buzz.client');
+        $config['twig.env'] = new Reference('twig');
+        $config['payum.action.get_http_request'] = new Reference('payum.action.get_http_request');
+        $config['payum.action.obtain_credit_card'] = new Reference('payum.action.obtain_credit_card');
+        $config['payum.extension.log_executed_actions'] = new Reference('payum.extension.log_executed_actions');
+        $config['payum.extension.logger'] = new Reference('payum.extension.logger');
+
+        $payment = new Definition('Payum\Core\Payment', array($config));
+        $payment->setFactoryService($factoryId);
+        $payment->setFactoryMethod('create');
+
+        return $payment;
     }
 }
