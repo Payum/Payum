@@ -4,7 +4,7 @@ namespace Payum\Klarna\Invoice;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Payment;
-use Payum\Core\PaymentFactory as BasePaymentFactory;
+use Payum\Core\PaymentFactory as CorePaymentFactory;
 use Payum\Klarna\Invoice\Action\Api\ActivateAction;
 use Payum\Klarna\Invoice\Action\Api\ActivateReservationAction;
 use Payum\Klarna\Invoice\Action\Api\CancelReservationAction;
@@ -19,7 +19,7 @@ use Payum\Klarna\Invoice\Action\RefundAction;
 use Payum\Klarna\Invoice\Action\StatusAction;
 use Payum\Klarna\Invoice\Action\SyncAction;
 
-class PaymentFactory extends BasePaymentFactory
+class PaymentFactory extends CorePaymentFactory
 {
     /**
      * {@inheritDoc}
@@ -75,6 +75,6 @@ class PaymentFactory extends BasePaymentFactory
         $klarnaConfig->pClassStoragePath = $config['pClassStoragePath'];
         $klarnaConfig->xmlRpcVerifyHost = $config['xmlRpcVerifyHost'];
         $klarnaConfig->xmlRpcVerifyHost = $config['xmlRpcVerifyHost'];
-        $config['payum.api.default'] = $klarnaConfig;
+        $config['payum.api'] = $klarnaConfig;
     }
 }

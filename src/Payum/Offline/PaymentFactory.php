@@ -2,13 +2,13 @@
 namespace Payum\Offline;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\PaymentFactory as BasePaymentFactory;
+use Payum\Core\PaymentFactory as CorePaymentFactory;
 use Payum\Offline\Action\CaptureAction;
 use Payum\Offline\Action\FillOrderDetailsAction;
 use Payum\Offline\Action\StatusAction;
 use Payum\Core\Payment;
 
-class PaymentFactory extends BasePaymentFactory
+class PaymentFactory extends CorePaymentFactory
 {
     /**
      * {@inheritDoc}

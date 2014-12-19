@@ -3,7 +3,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Payment;
-use Payum\Core\PaymentFactory as BasePaymentFactory;
+use Payum\Core\PaymentFactory as CorePaymentFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoExpressCheckoutPaymentAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction;
@@ -22,7 +22,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsSyncAction;
 
-class PaymentFactory extends BasePaymentFactory
+class PaymentFactory extends CorePaymentFactory
 {
     /**
      * {@inheritDoc}
@@ -43,7 +43,7 @@ class PaymentFactory extends BasePaymentFactory
         );
 
         $config->defaults(array(
-            'payum.api.default' => new Api($paypalConfig, $config['buzz.client']),
+            'payum.api' => new Api($paypalConfig, $config['buzz.client']),
 
             'payum.action.capture' => new CaptureAction(),
             'payum.action.fill_order_details' => new FillOrderDetailsAction(),

@@ -2,7 +2,7 @@
 namespace Payum\Payex;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\PaymentFactory as BasePaymentFactory;
+use Payum\Core\PaymentFactory as CorePaymentFactory;
 use Payum\Core\Payment;
 use Payum\Payex\Action\AgreementDetailsStatusAction;
 use Payum\Payex\Action\Api\AutoPayAgreementAction;
@@ -26,7 +26,7 @@ use Payum\Payex\Api\OrderApi;
 use Payum\Payex\Api\RecurringApi;
 use Payum\Payex\Api\SoapClientFactory;
 
-class PaymentFactory extends BasePaymentFactory
+class PaymentFactory extends CorePaymentFactory
 {
     /**
      * {@inheritDoc}

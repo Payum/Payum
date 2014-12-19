@@ -3,7 +3,7 @@ namespace Payum\Klarna\Checkout;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Payment;
-use Payum\Core\PaymentFactory as BasePaymentFactory;
+use Payum\Core\PaymentFactory as CorePaymentFactory;
 use Payum\Klarna\Checkout\Action\Api\CreateOrderAction;
 use Payum\Klarna\Checkout\Action\Api\FetchOrderAction;
 use Payum\Klarna\Checkout\Action\Api\UpdateOrderAction;
@@ -12,7 +12,7 @@ use Payum\Klarna\Checkout\Action\NotifyAction;
 use Payum\Klarna\Checkout\Action\StatusAction;
 use Payum\Klarna\Checkout\Action\SyncAction;
 
-class PaymentFactory extends BasePaymentFactory
+class PaymentFactory extends CorePaymentFactory
 {
     /**
      * {@inheritDoc}
@@ -47,6 +47,6 @@ class PaymentFactory extends BasePaymentFactory
             Constants::BASE_URI_SANDBOX :
             Constants::BASE_URI_LIVE
         ;
-        $config->defaults(array('payum.api.default' => $klarnaConfig));
+        $config->defaults(array('payum.api' => $klarnaConfig));
     }
 }

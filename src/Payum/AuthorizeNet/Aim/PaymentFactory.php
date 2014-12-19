@@ -6,18 +6,31 @@ use Payum\AuthorizeNet\Aim\Action\CaptureAction;
 use Payum\AuthorizeNet\Aim\Action\StatusAction;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Payment;
-use Payum\Core\PaymentFactory as BasePaymentFactory;
+use Payum\Core\PaymentFactory as CorePaymentFactory;
+use Payum\Core\PaymentFactoryInterface;
+use Payum\Core\PaymentInterface;
 
-class PaymentFactory extends BasePaymentFactory
+class PaymentFactory implements PaymentFactoryInterface
 {
+    /**
+     * @var PaymentFactoryInterface
+     */
+    protected $corePaymentFactory;
+
+    /**
+     * @param PaymentFactoryInterface $corePaymentFactory
+     */
+    public function __construct(PaymentFactoryInterface $corePaymentFactory = null)
+    {
+        $this->corePaymentFactory = $corePaymentFactory ?: new CorePaymentFactory();
+    }
+
     /**
      * {@inheritDoc}
      */
-    protected function build(Payment $payment, ArrayObject $config)
+    public function create(array $config = array())
     {
-        $config->validateNotEmpty(array('loginId', 'transactionKey'));
-
+        $config = ArrayObject::ensureArrayObject($config);
         $config->defaults(array(
             'sandbox' => true,
 
@@ -26,8 +39,14 @@ class PaymentFactory extends BasePaymentFactory
             'payum.action.fill_order_details' => new FillOrderDetailsAction(),
         ));
 
-        $api = new AuthorizeNetAIM($config['loginId'], $config['transactionKey']);
-        $api->setSandbox($config['sandbox']);
-        $config['payum.api.default'] = $api;
+        if (false == $config['payum.api']) {
+            $config->validateNotEmpty(array('loginId', 'transactionKey'));
+
+            $api = new AuthorizeNetAIM($config['loginId'], $config['transactionKey']);
+            $api->setSandbox($config['sandbox']);
+            $config['payum.api'] = $api;
+        }
+
+        return $this->corePaymentFactory->create((array) $config);
     }
 }

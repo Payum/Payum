@@ -3,14 +3,14 @@ namespace Payum\Stripe;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Payment;
-use Payum\Core\PaymentFactory as BasePaymentFactory;
+use Payum\Core\PaymentFactory as CorePaymentFactory;
 use Payum\Stripe\Action\Api\CreateChargeAction;
 use Payum\Stripe\Action\Api\ObtainTokenAction;
 use Payum\Stripe\Action\CaptureAction;
 use Payum\Stripe\Action\FillOrderDetailsAction;
 use Payum\Stripe\Action\StatusAction;
 
-class CheckoutPaymentFactory extends BasePaymentFactory
+class CheckoutPaymentFactory extends CorePaymentFactory
 {
     /**
      * {@inheritDoc}
@@ -24,7 +24,7 @@ class CheckoutPaymentFactory extends BasePaymentFactory
         ));
 
         $config->defaults(array(
-            'payum.api.default' => new Keys($config['publishable_key'], $config['secret_key']),
+            'payum.api' => new Keys($config['publishable_key'], $config['secret_key']),
 
             'payum.action.capture' => new CaptureAction(),
             'payum.action.fill_order_details' => new FillOrderDetailsAction(),
