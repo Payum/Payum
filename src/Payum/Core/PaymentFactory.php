@@ -20,9 +20,6 @@ class PaymentFactory implements PaymentFactoryInterface
         $config = ArrayObject::ensureArrayObject($config);
         $payment = new Payment();
 
-        $this->buildGeneric($payment, $config);
-        $this->build($payment, $config);
-
         $this->buildActions($payment, $config);
         $this->buildApis($payment, $config);
         $this->buildExtensions($payment, $config);
@@ -31,71 +28,76 @@ class PaymentFactory implements PaymentFactoryInterface
     }
 
     /**
-     * @param Payment $payment
-     * @param ArrayObject $config
+     * {@inheritDoc}
      */
-    protected function build(Payment $payment, ArrayObject $config)
+    public function createConfig(array $config = array())
     {
-    }
-
-    /**
-     * @param Payment $payment
-     * @param ArrayObject $config
-     */
-    protected function buildGeneric(Payment $payment, ArrayObject $config)
-    {
+        $config = ArrayObject::ensureArrayObject($config);
         $config->defaults(array(
             'payum.template.layout' => '@PayumCore/layout.html.twig',
 
             'buzz.client' => ClientFactory::createCurl(),
             'twig.env' => TwigFactory::createGeneric(),
-        ));
 
-        $config->defaults(array(
             'payum.action.get_http_request' => new GetHttpRequestAction(),
             'payum.action.capture_order' => new CaptureOrderAction(),
             'payum.action.execute_same_request_with_model_details' => new ExecuteSameRequestWithModelDetailsAction(),
-            'payum.action.render_template' => new RenderTemplateAction($config['twig.env'], $config['payum.template.layout']),
-
+            'payum.action.render_template' => function (ArrayObject $config) {
+                return new RenderTemplateAction($config['twig.env'], $config['payum.template.layout']);
+            },
             'payum.extension.endless_cycle_detector' => new EndlessCycleDetectorExtension(),
         ));
+
+        return (array) $config;
     }
 
     /**
-     * @param Payment $payment
+     * @param Payment     $payment
      * @param ArrayObject $config
      */
     protected function buildActions(Payment $payment, ArrayObject $config)
     {
         foreach ($config as $name => $value) {
             if (0 === strpos($name, 'payum.action')) {
-                $payment->addAction($value);
+                if (is_callable($value)) {
+                    $payment->addAction(call_user_func_array($value, array($config)));
+                } else {
+                    $payment->addAction($value);
+                }
             }
         }
     }
 
     /**
-     * @param Payment $payment
+     * @param Payment     $payment
      * @param ArrayObject $config
      */
     protected function buildApis(Payment $payment, ArrayObject $config)
     {
         foreach ($config as $name => $value) {
             if (0 === strpos($name, 'payum.api')) {
-                $payment->addApi($value);
+                if (is_callable($value)) {
+                    $payment->addApi(call_user_func_array($value, array($config)));
+                } else {
+                    $payment->addApi($value);
+                }
             }
         }
     }
 
     /**
-     * @param Payment $payment
+     * @param Payment     $payment
      * @param ArrayObject $config
      */
     protected function buildExtensions(Payment $payment, ArrayObject $config)
     {
         foreach ($config as $name => $value) {
             if (0 === strpos($name, 'payum.extension')) {
-                $payment->addExtension($value);
+                if (is_callable($value)) {
+                    $payment->addExtension(call_user_func_array($value, array($config)));
+                } else {
+                    $payment->addExtension($value);
+                }
             }
         }
     }

@@ -11,7 +11,7 @@ class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
     public function shouldImplementActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
-        
+
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
     }
 
@@ -21,10 +21,10 @@ class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
     public function shouldImplementApiAwareInterface()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
-        
+
         $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
     }
-    
+
     /**
      * @test
      */
@@ -42,8 +42,8 @@ class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = $this->getMockForAbstractClass('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
 
-        $config = new Config;
-        
+        $config = new Config();
+
         $action->setApi($config);
 
         $this->assertAttributeSame($config, 'config', $action);
@@ -58,7 +58,7 @@ class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = $this->getMockForAbstractClass('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
 
-        $action->setApi(new \stdClass);
+        $action->setApi(new \stdClass());
     }
 
     /**

@@ -9,7 +9,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     public function shouldImplementReplyInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Reply\Base');
-        
+
         $this->assertTrue($rc->implementsInterface('Payum\Core\Reply\ReplyInterface'));
     }
 

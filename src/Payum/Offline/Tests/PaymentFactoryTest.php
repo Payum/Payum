@@ -33,11 +33,24 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $payment = $factory->create();
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
-        
+
         $this->assertAttributeEmpty('apis', $payment);
         $this->assertAttributeNotEmpty('actions', $payment);
 
         $extensions = $this->readAttribute($payment, 'extensions');
         $this->assertAttributeNotEmpty('extensions', $extensions);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowCreatePaymentConfig()
+    {
+        $factory = new PaymentFactory();
+
+        $config = $factory->createConfig();
+
+        $this->assertInternalType('array', $config);
+        $this->assertNotEmpty($config);
     }
 }

@@ -15,7 +15,7 @@ class ReplyToSymfonyResponseConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new ReplyToSymfonyResponseConverter;
+        new ReplyToSymfonyResponseConverter();
     }
 
     /**
@@ -24,10 +24,10 @@ class ReplyToSymfonyResponseConverterTest extends \PHPUnit_Framework_TestCase
     public function shouldReturnRedirectResponseIfPayumHttpRedirectReply()
     {
         $expectedUrl = '/foo/bar';
-        
+
         $reply = new HttpRedirect($expectedUrl);
 
-        $converter = new ReplyToSymfonyResponseConverter;
+        $converter = new ReplyToSymfonyResponseConverter();
 
         $response = $converter->convert($reply);
 
@@ -48,7 +48,7 @@ class ReplyToSymfonyResponseConverterTest extends \PHPUnit_Framework_TestCase
     {
         $reply = new HttpResponse('theContent');
 
-        $converter = new ReplyToSymfonyResponseConverter;
+        $converter = new ReplyToSymfonyResponseConverter();
 
         $response = $converter->convert($reply);
 
@@ -64,10 +64,10 @@ class ReplyToSymfonyResponseConverterTest extends \PHPUnit_Framework_TestCase
     {
         $reply = new HttpResponse('theContent', 418, array(
             'foo' => 'fooVal',
-            'bar' => 'bar'
+            'bar' => 'bar',
         ));
 
-        $converter = new ReplyToSymfonyResponseConverter;
+        $converter = new ReplyToSymfonyResponseConverter();
 
         $response = $converter->convert($reply);
 
@@ -85,7 +85,7 @@ class ReplyToSymfonyResponseConverterTest extends \PHPUnit_Framework_TestCase
     {
         $reply = new HttpPostRedirect('anUrl', array('foo' => 'foo'));
 
-        $converter = new ReplyToSymfonyResponseConverter;
+        $converter = new ReplyToSymfonyResponseConverter();
 
         $response = $converter->convert($reply);
 
@@ -103,7 +103,7 @@ class ReplyToSymfonyResponseConverterTest extends \PHPUnit_Framework_TestCase
 
         $reply = new SymfonyHttpResponse($expectedResponse);
 
-        $converter = new ReplyToSymfonyResponseConverter;
+        $converter = new ReplyToSymfonyResponseConverter();
 
         $actualResponse = $converter->convert($reply);
 
@@ -120,7 +120,7 @@ class ReplyToSymfonyResponseConverterTest extends \PHPUnit_Framework_TestCase
     {
         $notSupportedReply = $this->getMock('Payum\Core\Reply\Base');
 
-        $listener = new ReplyToSymfonyResponseConverter;
+        $listener = new ReplyToSymfonyResponseConverter();
 
         $listener->convert($notSupportedReply);
     }

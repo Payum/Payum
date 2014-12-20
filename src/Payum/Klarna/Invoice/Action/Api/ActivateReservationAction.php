@@ -64,4 +64,4 @@ class ActivateReservationAction extends BaseApiAwareAction implements PaymentAwa
             $request->getModel() instanceof \ArrayAccess
         ;
     }
-} 
+}

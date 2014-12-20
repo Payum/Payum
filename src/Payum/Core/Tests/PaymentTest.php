@@ -16,7 +16,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     public function shouldImplementPaymentInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Payment');
-        
+
         $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentInterface'));
     }
 
@@ -33,7 +33,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCreateExtensionCollectionInstanceInConstructor()
     {
-        $payment = new Payment;
+        $payment = new Payment();
 
         $this->assertAttributeInstanceOf('Payum\Core\Extension\ExtensionCollection', 'extensions', $payment);
     }
@@ -43,12 +43,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddExtension()
     {
-        $payment = new Payment;
+        $payment = new Payment();
 
         $payment->addExtension($this->createExtensionMock());
 
         $extensions = $this->readAttribute($payment, 'extensions');
-        
+
         $this->assertAttributeCount(1, 'extensions', $extensions);
     }
 
@@ -59,14 +59,14 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     {
         $expectedFirstAction = $this->createActionMock();
         $expectedSecondAction = $this->createActionMock();
-        
-        $payment = new Payment;
+
+        $payment = new Payment();
 
         $payment->addAction($expectedFirstAction);
         $payment->addAction($expectedSecondAction);
 
         $actualActions = $this->readAttribute($payment, 'actions');
-        
+
         $this->assertInternalType('array', $actualActions);
         $this->assertCount(2, $actualActions);
         $this->assertSame($expectedFirstAction, $actualActions[0]);
@@ -81,7 +81,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $expectedFirstAction = $this->createActionMock();
         $expectedSecondAction = $this->createActionMock();
 
-        $payment = new Payment;
+        $payment = new Payment();
 
         $payment->addAction($expectedSecondAction);
         $payment->addAction($expectedFirstAction, $forcePrepend = true);
@@ -103,7 +103,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $payment->addApi(new \stdClass());
         $payment->addApi(new \stdClass());
-        
+
         $this->assertAttributeCount(2, 'apis', $payment);
     }
 
@@ -112,10 +112,10 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddApiWithPrependForced()
     {
-        $expectedFirstApi = new \stdClass;
-        $expectedSecondApi = new \stdClass;
+        $expectedFirstApi = new \stdClass();
+        $expectedSecondApi = new \stdClass();
 
-        $payment = new Payment;
+        $payment = new Payment();
 
         $payment->addApi($expectedSecondApi);
         $payment->addApi($expectedFirstApi, $forcePrepend = true);
@@ -137,7 +137,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $payment->addApi($firstApi = new \stdClass());
         $payment->addApi($secondApi = new \stdClass());
-        
+
         $action = $this->getMockForAbstractClass('Payum\Core\Tests\ApiAwareAction');
         $action
             ->expects($this->at(0))
@@ -152,7 +152,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $payment->addAction($action);
 
-        $payment->execute(new \stdClass);
+        $payment->execute(new \stdClass());
     }
 
     /**
@@ -185,12 +185,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $payment->addAction($action);
 
-        $payment->execute(new \stdClass);
+        $payment->execute(new \stdClass());
     }
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage Cannot find right api supported by
      */
@@ -222,20 +222,20 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $payment->addAction($action);
 
-        $payment->execute(new \stdClass);
+        $payment->execute(new \stdClass());
     }
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwRequestNotSupportedIfNoneActionSet()
     {
         $request = new \stdClass();
-        
+
         $payment = new Payment();
-        
+
         $payment->execute($request);
     }
 
@@ -245,7 +245,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     public function shouldProxyRequestToActionWhichSupportsRequest()
     {
         $request = new \stdClass();
-        
+
         $actionMock = $this->createActionMock();
         $actionMock
             ->expects($this->once())
@@ -258,7 +258,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
             ->with($request)
         ;
-        
+
         $payment = new Payment();
         $payment->addAction($actionMock);
 
@@ -289,13 +289,13 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $payment->addAction($actionMock);
 
         $actualReply = $payment->execute($request, $catchReply = true);
-        
+
         $this->assertSame($expectedReply, $actualReply);
     }
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Reply\Base
      */
     public function shouldNotCatchReplyByDefault()
@@ -303,11 +303,11 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $firstRequest = new \stdClass();
         $secondRequest = new \stdClass();
         $replyMock = $this->createReplyMock();
-        
+
         $firstAction = new RequireOtherRequestAction();
         $firstAction->setSupportedRequest($firstRequest);
         $firstAction->setRequiredRequest($secondRequest);
-        
+
         $secondAction = new ThrowReplyAction();
         $secondAction->setSupportedRequest($secondRequest);
         $secondAction->setReply($replyMock);
@@ -337,23 +337,23 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->method('setPayment')
             ->with($this->identicalTo($payment))
         ;
-        
+
         $payment->addAction($actionMock);
 
-        $payment->execute(new \stdClass);
+        $payment->execute(new \stdClass());
     }
 
     /**
      * @test
-     * 
+     *
      * @expectedException \LogicException
      * @expectedExceptionMessage An error occurred
      */
     public function shouldCallExtensionOnExceptionWhenNotSupportedRequestThrown()
     {
         $expectedException = new \LogicException('An error occurred');
-        $expectedRequest = new \stdClass;
-        
+        $expectedRequest = new \stdClass();
+
         $actionMock = $this->createActionMock();
         $actionMock
             ->expects($this->once())
@@ -365,7 +365,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->method('supports')
             ->will($this->returnValue(true))
         ;
-        
+
         $extensionMock = $this->createExtensionMock();
         $extensionMock
             ->expects($this->once())
@@ -389,7 +389,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     public function shouldCallExtensionOnReplyWhenReplyThrown()
     {
         $expectedReplyMock = $this->createReplyMock();
-        $expectedRequest = new \stdClass;
+        $expectedRequest = new \stdClass();
 
         $actionMock = $this->createActionMock();
         $actionMock
@@ -419,7 +419,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $payment->addExtension($extensionMock);
 
         $actualReply = $payment->execute($expectedRequest, true);
-        
+
         $this->assertSame($expectedReplyMock, $actualReply);
     }
 
@@ -430,7 +430,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     {
         $thrownReplyMock = $this->createReplyMock();
         $expectedReplyMock = $this->createReplyMock();
-        $expectedRequest = new \stdClass;
+        $expectedRequest = new \stdClass();
 
         $actionMock = $this->createActionMock();
         $actionMock
@@ -470,7 +470,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallExtensionOnPreExecute()
     {
-        $expectedRequest = new \stdClass;
+        $expectedRequest = new \stdClass();
 
         $actionMock = $this->createActionMock();
         $actionMock
@@ -500,7 +500,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallExtensionOnExecute()
     {
-        $expectedRequest = new \stdClass;
+        $expectedRequest = new \stdClass();
 
         $actionMock = $this->createActionMock();
         $actionMock
@@ -531,7 +531,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallExtensionOnPostExecute()
     {
-        $expectedRequest = new \stdClass;
+        $expectedRequest = new \stdClass();
 
         $actionMock = $this->createActionMock();
         $actionMock
@@ -564,7 +564,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallExtensionOnExceptionWhenExceptionThrown()
     {
-        $notSupportedRequest = new \stdClass;
+        $notSupportedRequest = new \stdClass();
 
         $extensionMock = $this->createExtensionMock();
         $extensionMock
@@ -643,9 +643,9 @@ class RequireOtherRequestAction extends PaymentAwareAction
 class ThrowReplyAction implements ActionInterface
 {
     protected $supportedRequest;
-    
+
     protected $reply;
-    
+
     /**
      * @param $request
      */
@@ -661,7 +661,7 @@ class ThrowReplyAction implements ActionInterface
     {
         $this->reply = $request;
     }
-    
+
     public function execute($request)
     {
         throw $this->reply;
@@ -675,5 +675,4 @@ class ThrowReplyAction implements ActionInterface
 
 abstract class ApiAwareAction implements ActionInterface, ApiAwareInterface
 {
-    
 }

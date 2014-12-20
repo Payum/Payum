@@ -21,7 +21,7 @@ class CreditCardExpirationDateTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new CreditCardExpirationDateType;
+        new CreditCardExpirationDateType();
     }
 
     /**
@@ -29,7 +29,7 @@ class CreditCardExpirationDateTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldExtendDateType()
     {
-        $type = new CreditCardExpirationDateType;
+        $type = new CreditCardExpirationDateType();
 
         $this->assertEquals('date', $type->getParent());
     }
@@ -39,7 +39,7 @@ class CreditCardExpirationDateTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnExpectedName()
     {
-        $type = new CreditCardExpirationDateType;
+        $type = new CreditCardExpirationDateType();
 
         $this->assertEquals('payum_credit_card_expiration_date', $type->getName());
     }
@@ -49,9 +49,9 @@ class CreditCardExpirationDateTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowResolveOptions()
     {
-        $type = new CreditCardExpirationDateType;
+        $type = new CreditCardExpirationDateType();
 
-        $resolver = new OptionsResolver;
+        $resolver = new OptionsResolver();
 
         $type->setDefaultOptions($resolver);
 
@@ -60,5 +60,4 @@ class CreditCardExpirationDateTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('years', $options);
         $this->assertCount(10, $options['years']);
     }
-
 }

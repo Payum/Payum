@@ -4,7 +4,7 @@ namespace Payum\Payex\Tests\Api;
 use Payum\Payex\Api\AgreementApi;
 use Payum\Payex\Api\SoapClientFactory;
 
-class AgreementApiTest extends \PHPUnit_Framework_TestCase 
+class AgreementApiTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -12,19 +12,19 @@ class AgreementApiTest extends \PHPUnit_Framework_TestCase
     public function shouldBeSubClassOfBaseApi()
     {
         $rc = new \ReflectionClass('Payum\Payex\Api\AgreementApi');
-        
+
         $this->assertTrue($rc->isSubclassOf('Payum\Payex\Api\BaseApi'));
     }
-    
+
     /**
-     * @test 
-     * 
+     * @test
+     *
      * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage The accountNumber option must be set.
      */
     public function throwIfAccountNumberOptionNotSet()
     {
-        new AgreementApi(new SoapClientFactory, array());
+        new AgreementApi(new SoapClientFactory(), array());
     }
 
     /**
@@ -36,7 +36,7 @@ class AgreementApiTest extends \PHPUnit_Framework_TestCase
     public function throwIfEncryptionKeyOptionNotSet()
     {
         new AgreementApi(
-            new SoapClientFactory,
+            new SoapClientFactory(),
             array(
                 'accountNumber' => 'aNumber',
             )
@@ -52,7 +52,7 @@ class AgreementApiTest extends \PHPUnit_Framework_TestCase
     public function throwIfNotBoolSandboxOptionGiven()
     {
         new AgreementApi(
-            new SoapClientFactory,
+            new SoapClientFactory(),
             array(
                 'accountNumber' => 'aNumber',
                 'encryptionKey' => 'aKey',
@@ -67,7 +67,7 @@ class AgreementApiTest extends \PHPUnit_Framework_TestCase
     public function couldBeConstructedWithValidOptions()
     {
         new AgreementApi(
-            new SoapClientFactory,
+            new SoapClientFactory(),
             array(
                 'encryptionKey' => 'aKey',
                 'accountNumber' => 'aNumber',
@@ -81,9 +81,9 @@ class AgreementApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseSoapClientOnCreateAgreementAndConvertItsResponse()
     {
-        $response = new \stdClass;
+        $response = new \stdClass();
         $response->CreateAgreement3Result = '<foo>fooValue</foo>';
-        
+
         $soapClientMock = $this->getMock('SoapClient', array('CreateAgreement3'), array(), '', false);
         $soapClientMock
             ->expects($this->once())
@@ -91,7 +91,7 @@ class AgreementApiTest extends \PHPUnit_Framework_TestCase
             ->with($this->isType('array'))
             ->will($this->returnValue($response))
         ;
-        
+
         $clientFactoryMock = $this->getMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
         $clientFactoryMock
             ->expects($this->atLeastOnce())
@@ -109,7 +109,7 @@ class AgreementApiTest extends \PHPUnit_Framework_TestCase
         );
 
         $result = $agreementApi->create(array());
-        
+
         $this->assertEquals(array('fooValue'),  $result);
     }
 
@@ -118,7 +118,7 @@ class AgreementApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseSoapClientOnCheckAgreementAndConvertItsResponse()
     {
-        $response = new \stdClass;
+        $response = new \stdClass();
         $response->CheckResult = '<foo>fooValue</foo>';
 
         $soapClientMock = $this->getMock('SoapClient', array('Check'), array(), '', false);
@@ -155,7 +155,7 @@ class AgreementApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseSoapClientOnDeleteAgreementAndConvertItsResponse()
     {
-        $response = new \stdClass;
+        $response = new \stdClass();
         $response->DeleteAgreementResult = '<foo>fooValue</foo>';
 
         $soapClientMock = $this->getMock('SoapClient', array('DeleteAgreement'), array(), '', false);
@@ -192,7 +192,7 @@ class AgreementApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseSoapClientOnAgreementAutoPayAndConvertItsResponse()
     {
-        $response = new \stdClass;
+        $response = new \stdClass();
         $response->AutoPay3Result = '<foo>fooValue</foo>';
 
         $soapClientMock = $this->getMock('SoapClient', array('AutoPay3'), array(), '', false);

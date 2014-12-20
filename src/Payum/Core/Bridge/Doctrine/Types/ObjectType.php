@@ -29,13 +29,13 @@ class ObjectType extends Type
     public function convertToPHPValue($value)
     {
         if ($value === null) {
-            return null;
+            return;
         }
 
         $value = (is_resource($value)) ? stream_get_contents($value) : $value;
         $val = unserialize($value);
         if ($val === false && $value !== 'b:0;') {
-            throw new \LogicException('Conversion exception: ' . $value . '. ' . $this->getName());
+            throw new \LogicException('Conversion exception: '.$value.'. '.$this->getName());
         }
 
         return $val;
@@ -50,4 +50,4 @@ class ObjectType extends Type
     {
         return '$return = unserialize($value);';
     }
-} 
+}

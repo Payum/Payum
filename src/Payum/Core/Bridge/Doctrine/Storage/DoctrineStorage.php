@@ -14,7 +14,7 @@ class DoctrineStorage extends AbstractStorage
 
     /**
      * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
-     * @param string $modelClass
+     * @param string                                     $modelClass
      */
     public function __construct(ObjectManager $objectManager, $modelClass)
     {

@@ -9,19 +9,19 @@ interface HttpExceptionInterface extends ExceptionInterface
 {
     /**
      * @param Request $request
-     * 
+     *
      * @return void
      */
     public function setRequest(Request $request);
-    
-    /** 
+
+    /**
      * @return Request
      */
     public function getRequest();
 
     /**
      * @param Response $response
-     * 
+     *
      * @return void
      */
     public function setResponse(Response $response);

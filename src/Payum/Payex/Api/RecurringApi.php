@@ -26,12 +26,12 @@ class RecurringApi extends BaseApi
     const RECURRINGSTATUS_STOPPEDBYSYSTEM = 5;
 
     const RECURRINGSTATUS_FAILED = 6;
-    
+
     /**
      * @link http://www.payexpim.com/technical-reference/pxrecurring/pxrecurring-start/
-     * 
+     *
      * @param array $parameters
-     * 
+     *
      * @return array
      */
     public function start(array $parameters)
@@ -57,7 +57,7 @@ class RecurringApi extends BaseApi
             'productNumber',
             'orderID',
             'description',
-            'notifyUrl'
+            'notifyUrl',
         ));
 
         return $this->call('Start', $parameters, $this->getPxRecurringWsdl());
@@ -100,7 +100,7 @@ class RecurringApi extends BaseApi
 
         return $this->call('Check', $parameters, $this->getPxRecurringWsdl());
     }
-    
+
     /**
      * {@inheritDoc}
      */

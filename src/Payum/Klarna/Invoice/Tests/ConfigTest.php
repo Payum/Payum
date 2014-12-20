@@ -2,7 +2,6 @@
 namespace Payum\Klarna\Invoice\Tests;
 
 use Payum\Klarna\Invoice\Config;
-use Payum\Klarna\Invoice\PaymentFactory;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,7 +10,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructed()
     {
-        new Config;
+        new Config();
     }
 
     /**
@@ -19,7 +18,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetDefaultPublicProperties()
     {
-        $config = new Config;
+        $config = new Config();
 
         $this->assertEquals(\KlarnaCountry::SE, $config->country);
         $this->assertEquals(\KlarnaLanguage::SV, $config->language);
@@ -35,11 +34,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetExpectedPublicProperties()
     {
-        $config = new Config;
+        $config = new Config();
 
         $config->country = 'country';
         $config->eid = 'eid';
-        $config->secret ='secret';
+        $config->secret = 'secret';
         $config->language = 'lang';
         $config->currency = 'currency';
         $config->mode = 'mode';

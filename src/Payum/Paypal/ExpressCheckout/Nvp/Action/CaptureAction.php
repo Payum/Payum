@@ -66,6 +66,6 @@ class CaptureAction extends PaymentAwareAction
         return
             $request instanceof Capture &&
             $request->getModel() instanceof \ArrayAccess
-        ; 
+        ;
     }
 }

@@ -8,5 +8,5 @@ interface ModelAwareInterface
      *
      * @return void
      */
-    function setModel($model);
+    public function setModel($model);
 }

@@ -15,7 +15,7 @@ class AgreementDetailsSyncAction extends PaymentAwareAction
     {
         /** @var $request Sync */
         RequestNotSupportedException::assertSupports($this, $request);
-        
+
         $this->payment->execute(new CheckAgreement($request->getModel()));
     }
 
@@ -24,7 +24,7 @@ class AgreementDetailsSyncAction extends PaymentAwareAction
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof Sync &&
             $request->getModel() instanceof \ArrayAccess &&
             //Make sure it is payment. Apparently an order(payment) does not have this field.

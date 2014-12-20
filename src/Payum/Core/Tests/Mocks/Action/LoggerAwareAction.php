@@ -21,7 +21,7 @@ class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
      * {@inheritDoc}
      */
     public function execute($request)
-    {   
+    {
         if ($this->logger) {
             $this->logger->debug('I can log something here');
         }

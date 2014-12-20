@@ -130,7 +130,7 @@ class StatusActionTest extends GenericActionTest
         $action = new StatusAction();
 
         $status = new GetBinaryStatus(array(
-            'invoice_number' => 'aNum'
+            'invoice_number' => 'aNum',
         ));
 
         //guard
@@ -149,7 +149,7 @@ class StatusActionTest extends GenericActionTest
         $action = new StatusAction();
 
         $status = new GetBinaryStatus(array(
-            'error_code' => 'aCode'
+            'error_code' => 'aCode',
         ));
 
         //guard
@@ -169,7 +169,7 @@ class StatusActionTest extends GenericActionTest
 
         $status = new GetBinaryStatus(array(
             'error_code' => 'aCode',
-            'invoice_number' => 'aNum'
+            'invoice_number' => 'aNum',
         ));
 
         //guard

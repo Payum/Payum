@@ -8,7 +8,7 @@ class RequestNotSupportedException extends InvalidArgumentException
 {
     /**
      * @param \Payum\Core\Action\ActionInterface $action
-     * @param mixed $request
+     * @param mixed                              $request
      *
      * @throws RequestNotSupportedException
      */
@@ -31,13 +31,13 @@ class RequestNotSupportedException extends InvalidArgumentException
 
     /**
      * @param \Payum\Core\Action\ActionInterface $action
-     * @param mixed $request
+     * @param mixed                              $request
      *
      * @return RequestNotSupportedException
      */
     public static function createActionNotSupported(ActionInterface $action, $request)
     {
-        return new self(sprintf('Action %s is not supported the request %s.', 
+        return new self(sprintf('Action %s is not supported the request %s.',
             Humanify::value($action),
             Humanify::request($request)
         ));

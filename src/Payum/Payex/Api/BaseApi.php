@@ -3,7 +3,7 @@ namespace Payum\Payex\Api;
 
 use Payum\Core\Exception\InvalidArgumentException;
 
-abstract class BaseApi 
+abstract class BaseApi
 {
     /**
      * Returns OK if request is successful.
@@ -31,7 +31,7 @@ abstract class BaseApi
 
     /**
      * @param SoapClientFactory $clientFactory
-     * @param array $options
+     * @param array             $options
      *
      * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
      */
@@ -55,9 +55,9 @@ abstract class BaseApi
 
     /**
      * @param string $operation
-     * @param array $parameters
+     * @param array  $parameters
      * @param string $serviceWsdl
-     * 
+     *
      * @return array
      */
     protected function call($operation, array $parameters, $serviceWsdl)
@@ -93,9 +93,9 @@ abstract class BaseApi
             $orderedParameters[$parametersKey] = $parameters[$parametersKey];
         }
 
-        return md5(trim(implode("", $orderedParameters)) . $this->options['encryptionKey']);
+        return md5(trim(implode("", $orderedParameters)).$this->options['encryptionKey']);
     }
-    
+
     /**
      * @param \SimpleXMLElement $element
      *
@@ -117,16 +117,16 @@ abstract class BaseApi
     protected function normalizeStatusFields(array $inputResult)
     {
         $result = $inputResult;
-        
+
         unset($result['status']);
         if (array_key_exists('status', $inputResult) && is_array($inputResult['status'])) {
             $statuses = $inputResult['status'];
-            
+
             //agreement.autoPay seems has a bug. it returns two sub arrays inside status. Lets take the first as status.
             if (is_array(current($statuses))) {
                 $statuses = array_shift($statuses);
             }
-            
+
             foreach ($statuses as $name => $value) {
                 if ('description' == $name) {
                     $name = 'errorDescription';
@@ -154,7 +154,7 @@ abstract class BaseApi
     }
 
     /**
-     * @param array $inputResult
+     * @param  array $inputResult
      * @return array
      */
     protected function removeObsolete(array $inputResult)

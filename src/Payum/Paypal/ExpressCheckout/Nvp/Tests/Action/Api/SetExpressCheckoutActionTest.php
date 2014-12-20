@@ -86,7 +86,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
         $apiMock
             ->expects($this->once())
             ->method('setExpressCheckout')
-            ->will($this->returnCallback(function(array $fields) use ($testCase, $expectedAmount) {
+            ->will($this->returnCallback(function (array $fields) use ($testCase, $expectedAmount) {
                 $testCase->assertArrayHasKey('PAYMENTREQUEST_0_AMT', $fields);
                 $testCase->assertEquals($expectedAmount, $fields['PAYMENTREQUEST_0_AMT']);
 
@@ -98,7 +98,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
         $action->setApi($apiMock);
 
         $request = new SetExpressCheckout(array(
-            'PAYMENTREQUEST_0_AMT' => $expectedAmount
+            'PAYMENTREQUEST_0_AMT' => $expectedAmount,
         ));
 
         $action->execute($request);
@@ -113,10 +113,10 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
         $apiMock
             ->expects($this->once())
             ->method('setExpressCheckout')
-            ->will($this->returnCallback(function() {
+            ->will($this->returnCallback(function () {
                 return array(
-                    'FIRSTNAME'=> 'theFirstname',
-                    'EMAIL' => 'the@example.com'
+                    'FIRSTNAME' => 'theFirstname',
+                    'EMAIL' => 'the@example.com',
                 );
             }))
         ;
@@ -125,7 +125,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit_Framework_TestCase
         $action->setApi($apiMock);
 
         $request = new SetExpressCheckout(array(
-            'PAYMENTREQUEST_0_AMT' => $expectedAmount = 154.23
+            'PAYMENTREQUEST_0_AMT' => $expectedAmount = 154.23,
         ));
 
         $action->execute($request);

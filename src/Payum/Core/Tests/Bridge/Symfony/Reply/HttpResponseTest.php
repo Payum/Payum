@@ -21,7 +21,7 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithResponseAsFirstArgument()
     {
-        new HttpResponse(new Response);
+        new HttpResponse(new Response());
     }
 
     /**
@@ -29,7 +29,7 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetResponseSetInConstructor()
     {
-        $expectedResponse = new Response;
+        $expectedResponse = new Response();
 
         $request = new HttpResponse($expectedResponse);
 

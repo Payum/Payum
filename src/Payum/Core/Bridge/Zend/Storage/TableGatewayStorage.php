@@ -29,7 +29,7 @@ use Zend\Db\TableGateway\TableGateway;
  *                new HydratingResultSet(
  *                    $sm->get('<transactionHydrator>'),  // Hydrator to hydrate your data entity (defined below).
  *                    $sm->get('<transactionEntity>')     // The entity that represents your data (defined below).
-*                 )
+ *                 )
  *            );
  *        },
  *        'transactionHydrator' => function ($sm) {
@@ -55,8 +55,8 @@ class TableGatewayStorage extends AbstractStorage
 
     /**
      * @param TableGateway $tableGateway
-     * @param string $modelClass
-     * @param string $idField
+     * @param string       $modelClass
+     * @param string       $idField
      */
     public function __construct(TableGateway $tableGateway, $modelClass, $idField = 'id')
     {

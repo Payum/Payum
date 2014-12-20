@@ -9,7 +9,7 @@ class PaymentAwareActionTest extends \PHPUnit_Framework_TestCase
     public function shouldImplementActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Action\PaymentAwareAction');
-        
+
         $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
@@ -29,11 +29,11 @@ class PaymentAwareActionTest extends \PHPUnit_Framework_TestCase
     public function shouldSetPaymentToProperty()
     {
         $payment = $this->getMock('Payum\Core\PaymentInterface');
-        
+
         $action = $this->getMockForAbstractClass('Payum\Core\Action\PaymentAwareAction');
-        
+
         $action->setPayment($payment);
-        
+
         $this->assertAttributeSame($payment, 'payment', $action);
     }
 }

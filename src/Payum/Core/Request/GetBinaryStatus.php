@@ -4,11 +4,11 @@ namespace Payum\Core\Request;
 class GetBinaryStatus extends BaseGetStatus
 {
     const STATUS_UNKNOWN = 2097152; //2^21
-    
+
     const STATUS_FAILED = 1048576; //2^20
 
     const STATUS_SUSPENDED = 524288; // 2^19
-    
+
     const STATUS_EXPIRED = 262144; // 2^18
 
     const STATUS_PENDING = 1024; // 2^10
@@ -185,7 +185,7 @@ class GetBinaryStatus extends BaseGetStatus
 
     /**
      * @param int $expectedStatus
-     * 
+     *
      * @return boolean
      */
     protected function isCurrentStatusEqualTo($expectedStatus)

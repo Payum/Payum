@@ -138,7 +138,7 @@ class Order implements OrderInterface
 
     /**
      * @param string $currencyCode
-     * @param int $digitsAfterDecimalPoint
+     * @param int    $digitsAfterDecimalPoint
      */
     public function setCurrencyCode($currencyCode, $digitsAfterDecimalPoint = 2)
     {

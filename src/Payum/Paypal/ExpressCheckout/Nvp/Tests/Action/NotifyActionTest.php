@@ -18,7 +18,7 @@ class NotifyActionTest extends GenericActionTest
     public function shouldBeSubClassOfPaymentAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\NotifyAction');
-        
+
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
     }
 
@@ -37,13 +37,13 @@ class NotifyActionTest extends GenericActionTest
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
-        
+
         $action = new NotifyAction();
         $action->setPayment($paymentMock);
 
         $action->execute(new Notify($expectedModel));
     }
-    
+
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\PaymentInterface
      */

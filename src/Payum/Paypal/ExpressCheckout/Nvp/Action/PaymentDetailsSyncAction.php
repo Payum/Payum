@@ -18,7 +18,7 @@ class PaymentDetailsSyncAction extends PaymentAwareAction
     {
         /** @var $request Sync */
         RequestNotSupportedException::assertSupports($this, $request);
-        
+
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         if (false == $model['TOKEN']) {
@@ -28,7 +28,7 @@ class PaymentDetailsSyncAction extends PaymentAwareAction
         $copiedModel = new ArrayObject(array(
             'TOKEN' => $model['TOKEN'],
         ));
-        
+
         $this->payment->execute(new GetExpressCheckoutDetails($copiedModel));
         if (Api::L_ERRORCODE_SESSION_HAS_EXPIRED != $copiedModel['L_ERRORCODE0']) {
             $model->replace($copiedModel);

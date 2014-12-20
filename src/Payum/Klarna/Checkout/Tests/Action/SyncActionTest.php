@@ -28,7 +28,7 @@ class SyncActionTest extends GenericActionTest
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new SyncAction;
+        new SyncAction();
     }
 
     /**
@@ -46,7 +46,7 @@ class SyncActionTest extends GenericActionTest
      */
     public function shouldNotSupportAnythingNotSync()
     {
-        $action = new SyncAction;
+        $action = new SyncAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -56,9 +56,9 @@ class SyncActionTest extends GenericActionTest
      */
     public function shouldNotSupportSyncWithNotArrayAccessModel()
     {
-        $action = new SyncAction;
+        $action = new SyncAction();
 
-        $this->assertFalse($action->supports(new Sync(new \stdClass)));
+        $this->assertFalse($action->supports(new Sync(new \stdClass())));
     }
 
     /**
@@ -68,7 +68,7 @@ class SyncActionTest extends GenericActionTest
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $action = new SyncAction;
+        $action = new SyncAction();
 
         $action->execute(new \stdClass());
     }
@@ -90,12 +90,12 @@ class SyncActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\FetchOrder'))
-            ->will($this->returnCallback(function(FetchOrder $request) use ($orderMock) {
+            ->will($this->returnCallback(function (FetchOrder $request) use ($orderMock) {
                 $request->setOrder($orderMock);
             }))
         ;
 
-        $action = new SyncAction;
+        $action = new SyncAction();
         $action->setPayment($paymentMock);
 
         $request = new Sync(array(
@@ -123,7 +123,7 @@ class SyncActionTest extends GenericActionTest
             ->method('execute')
         ;
 
-        $action = new SyncAction;
+        $action = new SyncAction();
         $action->setPayment($paymentMock);
 
         $request = new Sync(array());

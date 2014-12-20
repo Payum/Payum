@@ -14,7 +14,7 @@ class StatusAction implements ActionInterface
 {
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param GetStatusInterface $request
      */
     public function execute($request)
@@ -22,10 +22,10 @@ class StatusAction implements ActionInterface
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = new ArrayObject($request->getModel());
-        
+
         if (null === $model['RESULT']) {
             $request->markNew();
-            
+
             return;
         }
 

@@ -2,7 +2,6 @@
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
 use Payum\Klarna\Invoice\Action\Api\PopulateKlarnaFromDetailsAction;
-use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails;
 
 class PopulateKlarnaFromDetailsActionTest extends \PHPUnit_Framework_TestCase
@@ -22,18 +21,17 @@ class PopulateKlarnaFromDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new PopulateKlarnaFromDetailsAction;
+        new PopulateKlarnaFromDetailsAction();
     }
-
 
     /**
      * @test
      */
     public function shouldSupportPopulateKlarnaFromDetails()
     {
-        $action = new PopulateKlarnaFromDetailsAction;
+        $action = new PopulateKlarnaFromDetailsAction();
 
-        $this->assertTrue($action->supports(new PopulateKlarnaFromDetails(new \ArrayObject, new \Klarna)));
+        $this->assertTrue($action->supports(new PopulateKlarnaFromDetails(new \ArrayObject(), new \Klarna())));
     }
 
     /**
@@ -41,7 +39,7 @@ class PopulateKlarnaFromDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotPopulateKlarnaFromDetails()
     {
-        $action = new PopulateKlarnaFromDetailsAction;
+        $action = new PopulateKlarnaFromDetailsAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -53,7 +51,7 @@ class PopulateKlarnaFromDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $action = new PopulateKlarnaFromDetailsAction;
+        $action = new PopulateKlarnaFromDetailsAction();
 
         $action->execute(new \stdClass());
     }
@@ -116,11 +114,11 @@ class PopulateKlarnaFromDetailsActionTest extends \PHPUnit_Framework_TestCase
             'comment' => 'aComment',
         ));
 
-        $klarna = new \Klarna;
+        $klarna = new \Klarna();
 
         $request = new PopulateKlarnaFromDetails($details, $klarna);
 
-        $action = new PopulateKlarnaFromDetailsAction;
+        $action = new PopulateKlarnaFromDetailsAction();
 
         $action->execute($request);
 
@@ -132,11 +130,11 @@ class PopulateKlarnaFromDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotFaileIfEmptyDetailsGiven()
     {
-        $klarna = new \Klarna;
+        $klarna = new \Klarna();
 
-        $request = new PopulateKlarnaFromDetails(new \ArrayObject, $klarna);
+        $request = new PopulateKlarnaFromDetails(new \ArrayObject(), $klarna);
 
-        $action = new PopulateKlarnaFromDetailsAction;
+        $action = new PopulateKlarnaFromDetailsAction();
 
         $action->execute($request);
 
@@ -162,11 +160,11 @@ class PopulateKlarnaFromDetailsActionTest extends \PHPUnit_Framework_TestCase
             ),
         ));
 
-        $klarna = new \Klarna;
+        $klarna = new \Klarna();
 
         $request = new PopulateKlarnaFromDetails($details, $klarna);
 
-        $action = new PopulateKlarnaFromDetailsAction;
+        $action = new PopulateKlarnaFromDetailsAction();
 
         $action->execute($request);
 

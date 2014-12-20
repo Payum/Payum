@@ -21,7 +21,7 @@ class CaptureActionTest extends GenericActionTest
     public function shouldBeSubClassOfPaymentAwareAction()
     {
         $rc = new \ReflectionClass('Payum\AuthorizeNet\Aim\Action\CaptureAction');
-        
+
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
     }
 
@@ -57,7 +57,7 @@ class CaptureActionTest extends GenericActionTest
     {
         $action = new CaptureAction();
 
-        $action->setApi(new \stdClass);
+        $action->setApi(new \stdClass());
     }
 
     /**
@@ -76,7 +76,6 @@ class CaptureActionTest extends GenericActionTest
             ->expects($this->never())
             ->method('execute')
         ;
-
 
         $action = new CaptureAction();
         $action->setApi($api);
@@ -104,7 +103,6 @@ class CaptureActionTest extends GenericActionTest
             ->expects($this->never())
             ->method('execute')
         ;
-
 
         $action = new CaptureAction();
         $action->setApi($api);
@@ -166,7 +164,7 @@ class CaptureActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
-            ->will($this->returnCallback(function(ObtainCreditCard $request) {
+            ->will($this->returnCallback(function (ObtainCreditCard $request) {
                 $card = new CreditCard();
                 $card->setNumber('1234567812345678');
                 $card->setExpireAt(new \DateTime('2014-10-01'));

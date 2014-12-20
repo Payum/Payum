@@ -21,7 +21,7 @@ class CreateBillingAgreementAction extends BaseApiAwareAction
         if (null === $model['TOKEN']) {
             throw new LogicException('TOKEN must be set. Have you run SetExpressCheckoutAction?');
         }
-        
+
         $model->replace(
             $this->api->createBillingAgreement((array) $model)
         );
@@ -32,7 +32,7 @@ class CreateBillingAgreementAction extends BaseApiAwareAction
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof CreateBillingAgreement &&
             $request->getModel() instanceof \ArrayAccess
         ;

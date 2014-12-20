@@ -3,17 +3,19 @@ namespace Payum\Be2Bill;
 
 use Payum\Be2Bill\Action\CaptureOffsiteAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Payment;
 
 class OffsitePaymentFactory extends DirectPaymentFactory
 {
     /**
      * {@inheritDoc}
      */
-    protected function build(Payment $payment, ArrayObject $config)
+    public function createConfig(array $config = array())
     {
-        parent::build($payment, $config);
+        $config = ArrayObject::ensureArrayObject($config);
+        $config->defaults(array(
+            'payum.action.capture' => new CaptureOffsiteAction(),
+        ));
 
-        $config['payum.action.capture'] = new CaptureOffsiteAction;
+        return parent::createConfig((array) $config);
     }
 }

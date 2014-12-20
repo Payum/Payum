@@ -44,7 +44,7 @@ class RefundActionTest extends GenericActionTest
     {
         $action = new RefundAction();
 
-        $action->setApi(new \stdClass);
+        $action->setApi(new \stdClass());
     }
 
     /**

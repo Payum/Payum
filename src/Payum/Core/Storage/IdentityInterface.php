@@ -6,10 +6,10 @@ interface IdentityInterface extends \Serializable
     /**
      * @return string
      */
-    function getClass();
+    public function getClass();
 
     /**
      * @return mixed
      */
-    function getId();
+    public function getId();
 }

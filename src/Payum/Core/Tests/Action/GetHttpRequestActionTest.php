@@ -1,13 +1,8 @@
 <?php
 namespace Payum\Core\Tests\Action;
 
-use Payum\Core\Action\CaptureOrderAction;
 use Payum\Core\Action\GetHttpRequestAction;
-use Payum\Core\Model\Order;
-use Payum\Core\Request\Capture;
-use Payum\Core\Request\FillOrderDetails;
 use Payum\Core\Request\GetHttpRequest;
-use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Tests\GenericActionTest;
 
 class GetHttpRequestActionTest extends GenericActionTest
@@ -19,7 +14,7 @@ class GetHttpRequestActionTest extends GenericActionTest
     public function provideSupportedRequests()
     {
         return array(
-            array(new $this->requestClass),
+            array(new $this->requestClass()),
         );
     }
 
@@ -38,9 +33,9 @@ class GetHttpRequestActionTest extends GenericActionTest
      */
     public function shouldFillRequestDetails()
     {
-        $action = new GetHttpRequestAction;
+        $action = new GetHttpRequestAction();
 
-        $action->execute($httpRequest = new GetHttpRequest);
+        $action->execute($httpRequest = new GetHttpRequest());
 
         $this->assertEquals('GET', $httpRequest->method);
     }

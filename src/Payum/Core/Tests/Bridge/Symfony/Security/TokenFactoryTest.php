@@ -2,10 +2,8 @@
 namespace Payum\Core\Tests\Bridge\Symfony\Security;
 
 use Payum\Core\Bridge\Symfony\Security\TokenFactory;
-use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Model\Identity;
 use Payum\Core\Model\Token;
-use Payum\Core\PaymentInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Storage\StorageInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -43,7 +41,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCreateCustomToken()
     {
-        $token = new Token;
+        $token = new Token();
 
         $tokenStorageMock = $this->createStorageMock();
         $tokenStorageMock
@@ -57,7 +55,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo($token))
         ;
 
-        $model = new \stdClass;
+        $model = new \stdClass();
         $identity = new Identity('anId', 'stdClass');
         $paymentName = 'thePaymentName';
 
@@ -122,7 +120,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCreateCustomTokenWithoutAfterUrl()
     {
-        $token = new Token;
+        $token = new Token();
 
         $tokenStorageMock = $this->createStorageMock();
         $tokenStorageMock
@@ -136,7 +134,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo($token))
         ;
 
-        $model = new \stdClass;
+        $model = new \stdClass();
         $identity = new Identity('anId', 'stdClass');
         $paymentName = 'thePaymentName';
 
@@ -188,7 +186,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCreateNotifyToken()
     {
-        $token = new Token;
+        $token = new Token();
 
         $tokenStorageMock = $this->createStorageMock();
         $tokenStorageMock
@@ -202,7 +200,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo($token))
         ;
 
-        $model = new \stdClass;
+        $model = new \stdClass();
         $identity = new Identity('anId', 'stdClass');
         $paymentName = 'thePaymentName';
 
@@ -254,8 +252,8 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCreateCaptureToken()
     {
-        $captureToken = new Token;
-        $afterToken = new Token;
+        $captureToken = new Token();
+        $afterToken = new Token();
 
         $tokenStorageMock = $this->createStorageMock();
         $tokenStorageMock
@@ -284,8 +282,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo($captureToken))
         ;
 
-
-        $model = new \stdClass;
+        $model = new \stdClass();
         $identity = new Identity('anId', 'stdClass');
         $paymentName = 'thePaymentName';
 
@@ -343,8 +340,8 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCreateAuthorizeToken()
     {
-        $authorizeToken = new Token;
-        $afterToken = new Token;
+        $authorizeToken = new Token();
+        $afterToken = new Token();
 
         $tokenStorageMock = $this->createStorageMock();
         $tokenStorageMock
@@ -373,8 +370,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo($authorizeToken))
         ;
 
-
-        $model = new \stdClass;
+        $model = new \stdClass();
         $identity = new Identity('anId', 'stdClass');
         $paymentName = 'thePaymentName';
 

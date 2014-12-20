@@ -19,7 +19,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()   
+    public function couldBeConstructedWithoutAnyArguments()
     {
         new DoReferenceTransactionAction();
     }
@@ -30,7 +30,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit_Framework_TestCase
     public function shouldSupportDoReferenceTransactionRequestAndArrayAccessAsModel()
     {
         $action = new DoReferenceTransactionAction();
-        
+
         $this->assertTrue($action->supports(new DoReferenceTransaction($this->getMock('ArrayAccess'))));
     }
 
@@ -46,7 +46,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
@@ -65,7 +65,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit_Framework_TestCase
     public function throwIfReferenceIdNotSetInModel()
     {
         $action = new DoReferenceTransactionAction();
-        
+
         $action->execute(new DoReferenceTransaction(array()));
     }
 
@@ -80,7 +80,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit_Framework_TestCase
         $action = new DoReferenceTransactionAction();
 
         $request = new DoReferenceTransaction(array(
-            'REFERENCEID' => 'aReferenceId'
+            'REFERENCEID' => 'aReferenceId',
         ));
 
         $action->execute($request);
@@ -110,12 +110,12 @@ class DoReferenceTransactionActionTest extends \PHPUnit_Framework_TestCase
     public function shouldCallApiDoReferenceTransactionMethodWithExpectedRequiredArguments()
     {
         $testCase = $this;
-        
+
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('doReferenceTransaction')
-            ->will($this->returnCallback(function(array $fields) use ($testCase){
+            ->will($this->returnCallback(function (array $fields) use ($testCase) {
                 $testCase->assertArrayHasKey('REFERENCEID', $fields);
                 $testCase->assertEquals('theReferenceId', $fields['REFERENCEID']);
 
@@ -128,14 +128,14 @@ class DoReferenceTransactionActionTest extends \PHPUnit_Framework_TestCase
                 return array();
             }))
         ;
-        
+
         $action = new DoReferenceTransactionAction();
         $action->setApi($apiMock);
 
         $request = new DoReferenceTransaction(array(
             'REFERENCEID' => 'theReferenceId',
             'PAYMENTACTION' => 'theAction',
-            'AMT' => 'theAmt'
+            'AMT' => 'theAmt',
         ));
 
         $action->execute($request);
@@ -150,10 +150,10 @@ class DoReferenceTransactionActionTest extends \PHPUnit_Framework_TestCase
         $apiMock
             ->expects($this->once())
             ->method('doReferenceTransaction')
-            ->will($this->returnCallback(function() {
+            ->will($this->returnCallback(function () {
                 return array(
-                    'FIRSTNAME'=> 'theFirstname',
-                    'EMAIL' => 'the@example.com'
+                    'FIRSTNAME' => 'theFirstname',
+                    'EMAIL' => 'the@example.com',
                 );
             }))
         ;
@@ -164,13 +164,13 @@ class DoReferenceTransactionActionTest extends \PHPUnit_Framework_TestCase
         $request = new DoReferenceTransaction(array(
             'REFERENCEID' => 'aReferenceId',
             'PAYMENTACTION' => 'anAction',
-            'AMT' => 'anAmt'
+            'AMT' => 'anAmt',
         ));
 
         $action->execute($request);
 
         $model = $request->getModel();
-        
+
         $this->assertArrayHasKey('FIRSTNAME', $model);
         $this->assertEquals('theFirstname', $model['FIRSTNAME']);
 

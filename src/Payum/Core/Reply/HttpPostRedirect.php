@@ -14,9 +14,9 @@ class HttpPostRedirect extends HttpResponse
     protected $fields;
 
     /**
-     * @param string $url
-     * @param array $fields
-     * @param int $statusCode
+     * @param string   $url
+     * @param array    $fields
+     * @param int      $statusCode
      * @param string[] $headers
      */
     public function __construct($url, array $fields = array(), $statusCode = 200, array $headers = array())
@@ -45,7 +45,7 @@ class HttpPostRedirect extends HttpResponse
 
     /**
      * @param string $url
-     * @param array $fields
+     * @param array  $fields
      *
      * @return string
      */
@@ -75,6 +75,6 @@ class HttpPostRedirect extends HttpResponse
 </html>
 HTML;
 
-       return sprintf($content, htmlspecialchars($url, ENT_QUOTES, 'UTF-8'), $formInputs);
+        return sprintf($content, htmlspecialchars($url, ENT_QUOTES, 'UTF-8'), $formInputs);
     }
 }

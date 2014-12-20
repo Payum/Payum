@@ -6,5 +6,5 @@ interface PaymentAwareInterface
     /**
      * @param \Payum\Core\PaymentInterface $payment
      */
-    function setPayment(PaymentInterface $payment);
+    public function setPayment(PaymentInterface $payment);
 }

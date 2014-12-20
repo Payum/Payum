@@ -19,7 +19,7 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()   
+    public function couldBeConstructedWithoutAnyArguments()
     {
         new ManageRecurringPaymentsProfileStatusAction();
     }
@@ -101,7 +101,7 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_
         $apiMock
             ->expects($this->once())
             ->method('manageRecurringPaymentsProfileStatus')
-            ->will($this->returnCallback(function(array $fields) use ($testCase) {
+            ->will($this->returnCallback(function (array $fields) use ($testCase) {
                 $testCase->assertArrayHasKey('PROFILEID', $fields);
                 $testCase->assertEquals('theProfileId', $fields['PROFILEID']);
 
@@ -136,9 +136,9 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit_Framework_
         $apiMock
             ->expects($this->once())
             ->method('manageRecurringPaymentsProfileStatus')
-            ->will($this->returnCallback(function() {
+            ->will($this->returnCallback(function () {
                 return array(
-                    'PROFILEID'=> 'theResponseProfileId',
+                    'PROFILEID' => 'theResponseProfileId',
                 );
             }))
         ;

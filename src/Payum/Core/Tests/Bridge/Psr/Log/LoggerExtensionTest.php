@@ -41,7 +41,7 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        $extension = new LoggerExtension;
+        $extension = new LoggerExtension();
 
         $this->assertAttributeInstanceOf('Psr\Log\NullLogger', 'logger', $extension);
     }
@@ -65,7 +65,7 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $expectedLogger = $this->createLoggerMock();
 
-        $extension = new LoggerExtension;
+        $extension = new LoggerExtension();
 
         //guard
         $this->assertAttributeInstanceOf('Psr\Log\NullLogger', 'logger', $extension);
@@ -84,9 +84,9 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension = new LoggerExtension($logger);
 
-        $action = new LoggerAwareAction;
+        $action = new LoggerAwareAction();
 
-        $extension->onExecute(new \stdClass, $action);
+        $extension->onExecute(new \stdClass(), $action);
 
         $this->assertSame($logger, $action->logger);
     }
@@ -100,7 +100,7 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension = new LoggerExtension($logger);
 
-        $extension->onExecute(new \stdClass, $this->createActionMock());
+        $extension->onExecute(new \stdClass(), $this->createActionMock());
     }
 
     /**
@@ -112,9 +112,9 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension = new LoggerExtension($logger);
 
-        $action = new LoggerAwareAction;
+        $action = new LoggerAwareAction();
 
-        $extension->onPostExecute(new \stdClass, $action);
+        $extension->onPostExecute(new \stdClass(), $action);
 
         $this->assertNull($action->logger);
     }
@@ -128,9 +128,9 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension = new LoggerExtension($logger);
 
-        $action = new LoggerAwareAction;
+        $action = new LoggerAwareAction();
 
-        $extension->onReply($this->createReplyMock(), new \stdClass, $action);
+        $extension->onReply($this->createReplyMock(), new \stdClass(), $action);
 
         $this->assertNull($action->logger);
     }
@@ -144,9 +144,9 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension = new LoggerExtension($logger);
 
-        $action = new LoggerAwareAction;
+        $action = new LoggerAwareAction();
 
-        $extension->onException(new \Exception, new \stdClass, $action);
+        $extension->onException(new \Exception(), new \stdClass(), $action);
 
         $this->assertNull($action->logger);
     }
@@ -185,7 +185,11 @@ class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
         $this->logger = $logger;
     }
 
-    public function execute($request) {}
+    public function execute($request)
+    {
+    }
 
-    public function supports($request) {}
+    public function supports($request)
+    {
+    }
 }

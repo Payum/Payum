@@ -33,4 +33,4 @@ class ObtainTokenTemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('data-key="theKey"', $result);
         $this->assertContains('https://checkout.stripe.com/checkout.js', $result);
     }
-} 
+}

@@ -7,9 +7,9 @@ class RegistryInterfaceTest extends \PHPUnit_Framework_TestCase
      * @test
      */
     public function shouldBeSubInterfaceOfPaymentRegistryInterface()
-    { 
+    {
         $rc = new \ReflectionClass('Payum\Core\Registry\RegistryInterface');
-            
+
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Registry\PaymentRegistryInterface'));
     }
 

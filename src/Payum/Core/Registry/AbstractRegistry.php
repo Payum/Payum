@@ -19,10 +19,10 @@ abstract class AbstractRegistry implements RegistryInterface
      * @var string
      */
     protected $defaultPayment;
-    
+
     /**
-     * @param array $payments
-     * @param array $storages
+     * @param array  $payments
+     * @param array  $storages
      * @param string $defaultPayment
      */
     public function __construct($payments, $storages, $defaultPayment = 'default')

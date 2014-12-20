@@ -37,7 +37,7 @@ class CreateRecurringPaymentProfileAction extends BaseApiAwareAction
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof CreateRecurringPaymentProfile &&
             $request->getModel() instanceof \ArrayAccess
         ;

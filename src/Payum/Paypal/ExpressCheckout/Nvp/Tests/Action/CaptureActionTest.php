@@ -20,7 +20,7 @@ class CaptureActionTest extends GenericActionTest
     public function shouldBeSubClassOfPaymentAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction');
-        
+
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
     }
 
@@ -31,7 +31,7 @@ class CaptureActionTest extends GenericActionTest
     {
         $action = new CaptureAction();
         $action->setPayment($this->createPaymentMock());
-        
+
         $action->execute($request = new Capture(array()));
 
         $model = $request->getModel();
@@ -55,7 +55,7 @@ class CaptureActionTest extends GenericActionTest
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken'))
         ;
-        
+
         $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
@@ -72,7 +72,7 @@ class CaptureActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout'))
-            ->will($this->returnCallback(function(SetExpressCheckout $request) {
+            ->will($this->returnCallback(function (SetExpressCheckout $request) {
                 $model = $request->getModel();
 
                 $model['L_ERRORCODE0'] = 'aCode';
@@ -94,7 +94,7 @@ class CaptureActionTest extends GenericActionTest
 
         $expectedTargetUrl = 'theTargetUrl';
 
-        $token = new Token;
+        $token = new Token();
         $token->setTargetUrl($expectedTargetUrl);
         $token->setDetails(array());
 
@@ -103,7 +103,7 @@ class CaptureActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout'))
-            ->will($this->returnCallback(function($request) use ($testCase, $expectedTargetUrl) {
+            ->will($this->returnCallback(function ($request) use ($testCase, $expectedTargetUrl) {
                 $model = $request->getModel();
 
                 $testCase->assertEquals($expectedTargetUrl, $model['RETURNURL']);
@@ -128,7 +128,7 @@ class CaptureActionTest extends GenericActionTest
 
         $expectedCancelUrl = 'theCancelUrl';
 
-        $token = new Token;
+        $token = new Token();
         $token->setTargetUrl($expectedCancelUrl);
         $token->setDetails(array());
 
@@ -137,7 +137,7 @@ class CaptureActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout'))
-            ->will($this->returnCallback(function($request) use ($testCase, $expectedCancelUrl) {
+            ->will($this->returnCallback(function ($request) use ($testCase, $expectedCancelUrl) {
                 $model = $request->getModel();
 
                 $testCase->assertEquals($expectedCancelUrl, $model['CANCELURL']);
@@ -169,7 +169,7 @@ class CaptureActionTest extends GenericActionTest
         $action->setPayment($paymentMock);
 
         $action->execute(new Capture(array(
-            'TOKEN' => 'aToken'
+            'TOKEN' => 'aToken',
         )));
     }
 
@@ -197,7 +197,7 @@ class CaptureActionTest extends GenericActionTest
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
             'PAYMENTREQUEST_0_AMT' => 5,
-            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
         )));
     }
 
@@ -219,7 +219,7 @@ class CaptureActionTest extends GenericActionTest
         $action->execute(new Capture(array(
             'TOKEN' => 'aToken',
             'PAYERID' => null,
-            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
         )));
     }
 
@@ -245,7 +245,7 @@ class CaptureActionTest extends GenericActionTest
 
         $action->execute(new Capture(array(
             'TOKEN' => 'aToken',
-            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS,
         )));
     }
 

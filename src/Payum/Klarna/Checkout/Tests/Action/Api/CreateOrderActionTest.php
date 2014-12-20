@@ -52,7 +52,7 @@ class CreateOrderActionTest extends GenericActionTest
         ;
 
         $action = new CreateOrderAction($connector);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
 
         $action->execute($request);
 
@@ -67,7 +67,7 @@ class CreateOrderActionTest extends GenericActionTest
         $model = array(
             'foo' => 'fooVal',
             'bar' => 'barVal',
-            'merchant' => array('id' => 'anId')
+            'merchant' => array('id' => 'anId'),
         );
 
         $request = new CreateOrder($model);
@@ -79,7 +79,7 @@ class CreateOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function($method, $order, $options) use ($testCase, $model) {
+            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, $model) {
                 $testCase->assertInternalType('array', $options);
                 $testCase->assertArrayHasKey('data', $options);
                 $testCase->assertEquals($model, $options['data']);
@@ -87,7 +87,7 @@ class CreateOrderActionTest extends GenericActionTest
         ;
 
         $action = new CreateOrderAction($connector);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
 
         $action->execute($request);
 
@@ -99,7 +99,7 @@ class CreateOrderActionTest extends GenericActionTest
      */
     public function shouldAddMerchantIdFromConfigIfNotSetInModelOnExecute()
     {
-        $config = new Config;
+        $config = new Config();
         $config->merchantId = 'theMerchantId';
 
         $model = array(
@@ -119,7 +119,7 @@ class CreateOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function($method, $order, $options) use ($testCase, $expectedModel) {
+            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, $expectedModel) {
                 $testCase->assertInternalType('array', $options);
                 $testCase->assertArrayHasKey('data', $options);
                 $testCase->assertEquals($expectedModel, $options['data']);
@@ -149,13 +149,13 @@ class CreateOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function($method, $order, $options) use ($testCase, &$expectedOrder) {
+            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, &$expectedOrder) {
                 $expectedOrder = $order;
             }))
         ;
 
         $action = new CreateOrderAction($connector);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
 
         $action->execute($request);
 

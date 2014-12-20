@@ -18,7 +18,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
      * @var AuthorizeNetAIM
      */
     protected $api;
-    
+
     /**
      * {@inheritDoc}
      */
@@ -27,10 +27,10 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         if (false == $api instanceof AuthorizeNetAIM) {
             throw new UnsupportedApiException('Not supported.');
         }
-        
+
         $this->api = $api;
     }
-    
+
     /**
      * {@inheritDoc}
      *
@@ -45,10 +45,10 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         if (null != $model['response_code']) {
             return;
         }
-        
+
         if (false == $model->validateNotEmpty(array('card_num', 'exp_date'), false)) {
             try {
-                $this->payment->execute($obtainCreditCard = new ObtainCreditCard);
+                $this->payment->execute($obtainCreditCard = new ObtainCreditCard());
 
                 $card = $obtainCreditCard->obtain();
 
@@ -73,7 +73,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof Capture &&
             $request->getModel() instanceof \ArrayAccess
         ;

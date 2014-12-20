@@ -16,7 +16,7 @@ class AutoPayPaymentDetailsCaptureAction extends PaymentAwareAction
     {
         /** @var $request \Payum\Core\Request\Capture */
         RequestNotSupportedException::assertSupports($this, $request);
-        
+
         $this->payment->execute(new AutoPayAgreement($request->getModel()));
     }
 

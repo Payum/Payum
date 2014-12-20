@@ -19,8 +19,8 @@ class HttpResponse extends Base
     protected $headers;
 
     /**
-     * @param string $content
-     * @param int $statusCode
+     * @param string   $content
+     * @param int      $statusCode
      * @param string[] $headers
      */
     public function __construct($content, $statusCode = 200, array $headers = array())

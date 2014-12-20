@@ -22,7 +22,7 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new AuthorizeAction;
+        new AuthorizeAction();
     }
 
     /**
@@ -40,7 +40,7 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotAuthorize()
     {
-        $action = new AuthorizeAction;
+        $action = new AuthorizeAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -50,9 +50,9 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAuthorizeWithNotArrayAccessModel()
     {
-        $action = new AuthorizeAction;
+        $action = new AuthorizeAction();
 
-        $this->assertFalse($action->supports(new Authorize(new \stdClass)));
+        $this->assertFalse($action->supports(new Authorize(new \stdClass())));
     }
 
     /**
@@ -62,7 +62,7 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $action = new AuthorizeAction;
+        $action = new AuthorizeAction();
 
         $action->execute(new \stdClass());
     }
@@ -79,7 +79,7 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Payum\Klarna\Invoice\Request\Api\ReserveAmount'))
         ;
 
-        $action = new AuthorizeAction;
+        $action = new AuthorizeAction();
         $action->setPayment($paymentMock);
 
         $request = new Authorize(array());
@@ -98,7 +98,7 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
         ;
 
-        $action = new AuthorizeAction;
+        $action = new AuthorizeAction();
         $action->setPayment($paymentMock);
 
         $request = new Authorize(array(

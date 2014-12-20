@@ -51,7 +51,7 @@ class FetchOrderActionTest extends GenericActionTest
     public function shouldFetchOrderWhenLocationSetOnExecute()
     {
         $model = array(
-            'location' => 'theKlarnaOrderLocation'
+            'location' => 'theKlarnaOrderLocation',
         );
 
         $request = new FetchOrder($model);
@@ -64,7 +64,7 @@ class FetchOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('GET')
-            ->will($this->returnCallback(function($method, $order, $options) use ($testCase, $model) {
+            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, $model) {
                 $testCase->assertInternalType('array', $options);
                 $testCase->assertArrayHasKey('url', $options);
                 $testCase->assertEquals($model['location'], $options['url']);
@@ -72,7 +72,7 @@ class FetchOrderActionTest extends GenericActionTest
         ;
 
         $action = new FetchOrderAction($connector);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
 
         $action->execute($request);
 
@@ -89,9 +89,9 @@ class FetchOrderActionTest extends GenericActionTest
             'cart' => array(
                 'items' => array(
                     array('foo'),
-                    array('bar')
-                )
-            )
+                    array('bar'),
+                ),
+            ),
         );
 
         $request = new FetchOrder($model);
@@ -104,13 +104,13 @@ class FetchOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('GET')
-            ->will($this->returnCallback(function($method, $order, $options) use ($testCase, &$expectedOrder) {
+            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, &$expectedOrder) {
                 $expectedOrder = $order;
             }))
         ;
 
         $action = new FetchOrderAction($connector);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
 
         $action->execute($request);
 

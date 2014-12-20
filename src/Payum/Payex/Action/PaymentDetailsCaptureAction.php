@@ -32,18 +32,18 @@ class PaymentDetailsCaptureAction extends PaymentAwareAction
         }
 
         if (false == $details['clientIPAddress']) {
-            $this->payment->execute($httpRequest = new GetHttpRequest);
+            $this->payment->execute($httpRequest = new GetHttpRequest());
 
             $details['clientIPAddress'] = $httpRequest->clientIp;
         }
-        
+
         if (false == $details['orderRef']) {
             $this->payment->execute(new InitializeOrder($details));
         }
 
         if ($details['orderRef']) {
             $this->payment->execute(new CompleteOrder($details));
-            
+
             if ($details['recurring']) {
                 $this->payment->execute(new StartRecurringPayment($details));
             }
@@ -63,7 +63,7 @@ class PaymentDetailsCaptureAction extends PaymentAwareAction
         }
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        
+
         if ($model['recurring']) {
             return true;
         }
@@ -72,7 +72,7 @@ class PaymentDetailsCaptureAction extends PaymentAwareAction
         if (false == $model['autoPay']) {
             return true;
         }
-        
+
         return false;
     }
 }

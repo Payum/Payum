@@ -6,7 +6,14 @@ interface PaymentFactoryInterface
     /**
      * @param array $config
      *
+     * @return array
+     */
+    public function createConfig(array $config = array());
+
+    /**
+     * @param array $config
+     *
      * @return PaymentInterface
      */
-    function create(array $config = array());
+    public function create(array $config = array());
 }

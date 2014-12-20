@@ -11,5 +11,7 @@ abstract class Constants
 
     const STATUS_PENDING = 'pending';
 
-    private final function __construct() {}
+    final private function __construct()
+    {
+    }
 }

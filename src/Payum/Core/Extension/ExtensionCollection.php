@@ -4,7 +4,7 @@ namespace Payum\Core\Extension;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Reply\ReplyInterface;
 
-class ExtensionCollection implements ExtensionInterface 
+class ExtensionCollection implements ExtensionInterface
 {
     /**
      * @var ExtensionInterface[]
@@ -13,18 +13,18 @@ class ExtensionCollection implements ExtensionInterface
 
     /**
      * @param ExtensionInterface $extension
-     * @param bool $forcePrepend
-     * 
+     * @param bool               $forcePrepend
+     *
      * @return void
      */
     public function addExtension(ExtensionInterface $extension, $forcePrepend = false)
     {
-        $forcePrepend ? 
-            array_unshift($this->extensions, $extension) : 
+        $forcePrepend ?
+            array_unshift($this->extensions, $extension) :
             array_push($this->extensions, $extension)
         ;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -69,7 +69,7 @@ class ExtensionCollection implements ExtensionInterface
 
         return $inputReply !== $reply ? $reply : null;
     }
-    
+
     /**
      * {@inheritDoc}
      */

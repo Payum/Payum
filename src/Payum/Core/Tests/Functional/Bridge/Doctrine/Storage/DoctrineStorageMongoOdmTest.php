@@ -15,11 +15,11 @@ class DoctrineStorageMongoOdmTest extends MongoTest
             $this->dm,
             'Payum\Core\Tests\Mocks\Document\TestModel'
         );
-        
+
         $model = $storage->create();
-        
+
         $storage->update($model);
-        
+
         $this->assertNotNull($model->getId());
     }
 
@@ -38,9 +38,9 @@ class DoctrineStorageMongoOdmTest extends MongoTest
         $storage->update($model);
 
         $this->assertNotNull($model->getId());
-        
+
         $identity = $storage->identify($model);
-        
+
         $this->assertInstanceOf('Payum\Core\Model\Identity', $identity);
         $this->assertEquals(get_class($model), $identity->getClass());
         $this->assertEquals($model->getId(), $identity->getId());
@@ -59,13 +59,13 @@ class DoctrineStorageMongoOdmTest extends MongoTest
         $model = $storage->create();
 
         $storage->update($model);
-        
+
         $requestId = $model->getId();
-        
+
         $this->dm->clear();
 
         $model = $storage->find($requestId);
-        
+
         $this->assertInstanceOf('Payum\Core\Tests\Mocks\Document\TestModel', $model);
         $this->assertEquals($requestId, $model->getId());
     }

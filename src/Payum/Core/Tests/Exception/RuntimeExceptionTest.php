@@ -11,7 +11,7 @@ class RuntimeExceptionTest extends \PHPUnit_Framework_TestCase
     public function shouldImplementExceptionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\RuntimeException');
-        
+
         $this->assertTrue($rc->implementsInterface('Payum\Core\Exception\ExceptionInterface'));
     }
 
@@ -30,6 +30,6 @@ class RuntimeExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new RuntimeException;
+        new RuntimeException();
     }
 }

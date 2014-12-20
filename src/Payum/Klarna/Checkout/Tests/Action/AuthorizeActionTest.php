@@ -56,7 +56,7 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AuthorizeAction('aTemplate');
 
-        $this->assertFalse($action->supports(new Authorize(new \stdClass)));
+        $this->assertFalse($action->supports(new Authorize(new \stdClass())));
     }
 
     /**
@@ -68,7 +68,7 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AuthorizeAction('aTemplate');
 
-        $action->execute(new \stdClass);
+        $action->execute(new \stdClass());
     }
 
     /**
@@ -124,7 +124,7 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\CreateOrder'))
-            ->will($this->returnCallback(function(CreateOrder $request) use ($orderMock) {
+            ->will($this->returnCallback(function (CreateOrder $request) use ($orderMock) {
                 $request->setOrder($orderMock);
             }))
         ;
@@ -163,7 +163,7 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
-            ->will($this->returnCallback(function(RenderTemplate $request) use($testCase, $expectedTemplateName, $expectedContext, $expectedContent) {
+            ->will($this->returnCallback(function (RenderTemplate $request) use ($testCase, $expectedTemplateName, $expectedContext, $expectedContent) {
                 $testCase->assertEquals($expectedTemplateName, $request->getTemplateName());
                 $testCase->assertEquals($expectedContext, $request->getContext());
 

@@ -24,7 +24,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
      */
     public function setApi($api)
     {
-        if(false == $api instanceof ApiContext) {
+        if (false == $api instanceof ApiContext) {
             throw new UnsupportedApiException('Given api is not supported. Supported api is instance of ApiContext');
         }
 
@@ -49,8 +49,8 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         ) {
             $model->create($this->api);
 
-            foreach($model->links as $link) {
-                if($link->rel == 'approval_url') {
+            foreach ($model->links as $link) {
+                if ($link->rel == 'approval_url') {
                     throw new HttpRedirect($link->href);
                 }
             }

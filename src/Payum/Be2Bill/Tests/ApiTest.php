@@ -94,7 +94,7 @@ class ApiTest extends \Phpunit_Framework_TestCase
 
         $post = $api->prepareOnsitePayment(array(
             'AMOUNT' => 100,
-            'DESCRIPTION' => 'a desc'
+            'DESCRIPTION' => 'a desc',
         ));
 
         $this->assertInternalType('array', $post);
@@ -173,4 +173,4 @@ class ApiTest extends \Phpunit_Framework_TestCase
     {
         return $this->getMock('Buzz\Client\ClientInterface');
     }
-} 
+}

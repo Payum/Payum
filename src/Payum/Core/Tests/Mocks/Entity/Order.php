@@ -26,5 +26,4 @@ class Order extends BaseOrder
     {
         return $this->id;
     }
-
 }

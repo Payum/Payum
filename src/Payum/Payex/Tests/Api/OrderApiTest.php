@@ -4,7 +4,7 @@ namespace Payum\Payex\Tests\Api;
 use Payum\Payex\Api\OrderApi;
 use Payum\Payex\Api\SoapClientFactory;
 
-class OrderApiTest extends \PHPUnit_Framework_TestCase 
+class OrderApiTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -12,19 +12,19 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
     public function shouldBeSubClassOfBaseApi()
     {
         $rc = new \ReflectionClass('Payum\Payex\Api\OrderApi');
-        
+
         $this->assertTrue($rc->isSubclassOf('Payum\Payex\Api\BaseApi'));
     }
-    
+
     /**
-     * @test 
-     * 
+     * @test
+     *
      * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage The accountNumber option must be set.
      */
     public function throwIfAccountNumberOptionNotSet()
     {
-        new OrderApi(new SoapClientFactory, array());
+        new OrderApi(new SoapClientFactory(), array());
     }
 
     /**
@@ -36,7 +36,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
     public function throwIfEncryptionKeyOptionNotSet()
     {
         new OrderApi(
-            new SoapClientFactory,
+            new SoapClientFactory(),
             array(
                 'accountNumber' => 'aNumber',
             )
@@ -52,7 +52,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
     public function throwIfNotBoolSandboxOptionGiven()
     {
         new OrderApi(
-            new SoapClientFactory,
+            new SoapClientFactory(),
             array(
                 'accountNumber' => 'aNumber',
                 'encryptionKey' => 'aKey',
@@ -67,7 +67,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
     public function couldBeConstructedWithValidOptions()
     {
         new OrderApi(
-            new SoapClientFactory,
+            new SoapClientFactory(),
             array(
                 'encryptionKey' => 'aKey',
                 'accountNumber' => 'aNumber',
@@ -81,9 +81,9 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseSoapClientOnInitialize8AndConvertItsResponse()
     {
-        $response = new \stdClass;
+        $response = new \stdClass();
         $response->Initialize8Result = '<foo>fooValue</foo>';
-        
+
         $soapClientMock = $this->getMock('SoapClient', array('Initialize8'), array(), '', false);
         $soapClientMock
             ->expects($this->once())
@@ -91,7 +91,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
             ->with($this->isType('array'))
             ->will($this->returnValue($response))
         ;
-        
+
         $clientFactoryMock = $this->getMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
         $clientFactoryMock
             ->expects($this->atLeastOnce())
@@ -109,7 +109,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
         );
 
         $result = $orderApi->initialize(array());
-        
+
         $this->assertEquals(array('fooValue'),  $result);
     }
 
@@ -118,7 +118,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseSoapClientOnCompleteAndConvertItsResponse()
     {
-        $response = new \stdClass;
+        $response = new \stdClass();
         $response->CompleteResult = '<foo>fooValue</foo>';
 
         $soapClientMock = $this->getMock('SoapClient', array('Complete'), array(), '', false);
@@ -155,7 +155,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseSoapClientOnCheckAndConvertItsResponse()
     {
-        $response = new \stdClass;
+        $response = new \stdClass();
         $response->Check2Result = '<foo>fooValue</foo>';
 
         $soapClientMock = $this->getMock('SoapClient', array('Check2'), array(), '', false);

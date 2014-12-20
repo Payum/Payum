@@ -41,7 +41,7 @@ class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterfa
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $httpRequest = new GetHttpRequest;
+        $httpRequest = new GetHttpRequest();
         $this->payment->execute($httpRequest);
 
         //we are back from be2bill site so we have to just update model.

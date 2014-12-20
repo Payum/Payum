@@ -11,10 +11,10 @@ class TwigFactory
         $paths = array_filter(array(
             'PayumCore' => self::guessViewsPath('Payum\Core\Payment'),
             'PayumStripe' => self::guessViewsPath('Payum\Stripe\JsPaymentFactory'),
-            'PayumKlarnaCheckout' => self::guessViewsPath('Payum\Klarna\Checkout\PaymentFactory')
+            'PayumKlarnaCheckout' => self::guessViewsPath('Payum\Klarna\Checkout\PaymentFactory'),
         ));
 
-        $loader = new \Twig_Loader_Filesystem;
+        $loader = new \Twig_Loader_Filesystem();
         foreach ($paths as $namespace => $path) {
             $loader->addPath($path, $namespace);
         }
@@ -37,5 +37,4 @@ class TwigFactory
 
         return dirname($rc->getFileName()).'/Resources/views';
     }
-
-} 
+}

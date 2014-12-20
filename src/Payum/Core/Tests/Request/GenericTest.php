@@ -13,17 +13,17 @@ class GenericTest extends \PHPUnit_Framework_TestCase
             'float' => array(5.5),
             'string' => array('foo'),
             'boolean' => array(false),
-            'resource' => array(tmpfile())
+            'resource' => array(tmpfile()),
         );
     }
-    
+
     /**
      * @test
      */
     public function shouldBeAbstractClass()
     {
         $rc = new \ReflectionClass('Payum\Core\Request\Generic');
-        
+
         $this->assertTrue($rc->isAbstract());
     }
 
@@ -59,7 +59,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @dataProvider provideDifferentPhpTypes
      */
     public function couldBeConstructedWithModelOfAnyType($phpType)
@@ -78,7 +78,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
         $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array(123321));
 
         $request->setModel($phpType);
-        
+
         $this->assertEquals($phpType, $request->getModel());
     }
 
@@ -91,7 +91,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Generic $request */
         $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array($phpType));
-        
+
         $this->assertEquals($phpType, $request->getModel());
     }
 
@@ -132,7 +132,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
         $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array(123321));
 
         $model = array('foo' => 'bar');
-        
+
         $request->setModel($model);
 
         $this->assertInstanceOf('ArrayObject', $request->getModel());

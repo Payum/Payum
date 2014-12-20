@@ -30,7 +30,7 @@ class GetAddressesTest extends \PHPUnit_Framework_TestCase
     {
         $request = new GetAddresses('aPno');
 
-        $request->addAddress(new \KlarnaAddr);
+        $request->addAddress(new \KlarnaAddr());
     }
 
     /**
@@ -40,8 +40,8 @@ class GetAddressesTest extends \PHPUnit_Framework_TestCase
     {
         $request = new GetAddresses('aPno');
 
-        $request->addAddress($first = new \KlarnaAddr);
-        $request->addAddress($second = new \KlarnaAddr);
+        $request->addAddress($first = new \KlarnaAddr());
+        $request->addAddress($second = new \KlarnaAddr());
 
         $addresses = $request->getAddresses();
 
@@ -67,8 +67,8 @@ class GetAddressesTest extends \PHPUnit_Framework_TestCase
     {
         $request = new GetAddresses('aPno');
 
-        $request->addAddress($first = new \KlarnaAddr);
-        $request->addAddress($second = new \KlarnaAddr);
+        $request->addAddress($first = new \KlarnaAddr());
+        $request->addAddress($second = new \KlarnaAddr());
 
         $this->assertSame($first, $request->getFirstAddress());
     }

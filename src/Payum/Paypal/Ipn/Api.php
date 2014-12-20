@@ -11,7 +11,7 @@ use Payum\Core\Exception\InvalidArgumentException;
 /**
  * @link https://www.x.com/developers/paypal/documentation-tools/ipn/integration-guide/IPNIntro
  */
-class Api 
+class Api
 {
     /**
      * It sends back if the message originated with PayPal.
@@ -22,7 +22,7 @@ class Api
      * if there is any discrepancy with what was originally sent
      */
     const NOTIFY_INVALID = 'INVALID';
-    
+
     const CMD_NOTIFY_VALIDATE = '_notify-validate';
 
     /**
@@ -36,23 +36,23 @@ class Api
     protected $options;
 
     /**
-     * @param array $options
+     * @param array           $options
      * @param ClientInterface $client
      */
     public function __construct(array $options, ClientInterface $client = null)
     {
         $this->client = $client ?: ClientFactory::createCurl();
-        
+
         $this->options = $options;
 
         if (false == (isset($this->options['sandbox']) && is_bool($this->options['sandbox']))) {
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
         }
     }
-    
+
     /**
      * @param array $notification
-     * 
+     *
      * @return string
      */
     public function notifyValidate(array $notification)
@@ -62,19 +62,19 @@ class Api
         $request->addFields($notification);
         $request->setMethod('POST');
         $request->fromUrl($this->getIpnEndpoint());
-        
-        $response = new Response;
-        
+
+        $response = new Response();
+
         $this->client->send($request, $response);
 
         if (false == $response->isSuccessful()) {
             throw HttpException::factory($request, $response);
         }
-        
+
         if (self::NOTIFY_VERIFIED === $response->getContent()) {
             return self::NOTIFY_VERIFIED;
         }
-        
+
         return self::NOTIFY_INVALID;
     }
 

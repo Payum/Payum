@@ -20,11 +20,11 @@ class AutoPayPaymentDetailsStatusAction implements ActionInterface
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        
+
         //TODO: It may be not correct for all cases. This does NOT indicate wether the transaction requested was successful, only wether the request was carried out successfully.
         if ($model['errorCode'] && OrderApi::ERRORCODE_OK != $model['errorCode']) {
             $request->markFailed();
-            
+
             return;
         }
 
@@ -35,7 +35,7 @@ class AutoPayPaymentDetailsStatusAction implements ActionInterface
         }
 
         if (
-            AgreementApi::PURCHASEOPERATION_SALE == $model['purchaseOperation'] && 
+            AgreementApi::PURCHASEOPERATION_SALE == $model['purchaseOperation'] &&
             OrderApi::TRANSACTIONSTATUS_SALE == $model['transactionStatus']
         ) {
             $request->markCaptured();
@@ -51,7 +51,7 @@ class AutoPayPaymentDetailsStatusAction implements ActionInterface
 
             return;
         }
-        
+
         $request->markFailed();
     }
 

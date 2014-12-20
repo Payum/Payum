@@ -23,7 +23,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new StatusAction;
+        new StatusAction();
     }
 
     /**
@@ -57,7 +57,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StatusAction();
 
-        $request = $this->createGetStatusStub(new \stdClass);
+        $request = $this->createGetStatusStub(new \stdClass());
 
         $this->assertFalse($action->supports($request));
     }
@@ -110,7 +110,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     public function shouldMarkPendingIfStatusSetToPending()
     {
         $request = new GetBinaryStatus(array(
-            Constants::FIELD_STATUS => Constants::STATUS_PENDING
+            Constants::FIELD_STATUS => Constants::STATUS_PENDING,
         ));
         $request->markUnknown();
 
@@ -127,7 +127,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     public function shouldMarkCapturedIfStatusSetToCaptured()
     {
         $request = new GetBinaryStatus(array(
-            Constants::FIELD_STATUS => Constants::STATUS_CAPTURED
+            Constants::FIELD_STATUS => Constants::STATUS_CAPTURED,
         ));
         $request->markUnknown();
 
@@ -144,7 +144,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     public function shouldMarkUnknownIfStatusNotRecognized()
     {
         $request = new GetBinaryStatus(array(
-            Constants::FIELD_STATUS => 'some-foo-bar-status'
+            Constants::FIELD_STATUS => 'some-foo-bar-status',
         ));
         $request->markCaptured();
 
@@ -170,5 +170,4 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
 
         return $status;
     }
-
 }

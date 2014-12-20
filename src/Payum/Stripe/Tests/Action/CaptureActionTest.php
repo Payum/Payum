@@ -28,7 +28,7 @@ class CaptureActionTest extends GenericActionTest
     public function shouldDoNothingIfModelHasAlreadyUsedToken()
     {
         $model = array(
-            'card' => array('foo', 'bar')
+            'card' => array('foo', 'bar'),
         );
 
         $paymentMock = $this->createPaymentMock();
@@ -37,7 +37,7 @@ class CaptureActionTest extends GenericActionTest
             ->method('execute')
         ;
 
-        $action = new CaptureAction;
+        $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
         $action->execute(new Capture($model));
@@ -57,7 +57,7 @@ class CaptureActionTest extends GenericActionTest
             ->with($this->isInstanceOf('Payum\Stripe\Request\Api\ObtainToken'))
         ;
 
-        $action = new CaptureAction;
+        $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
         $action->execute(new Capture($model));
@@ -79,7 +79,7 @@ class CaptureActionTest extends GenericActionTest
             ->with($this->isInstanceOf('Payum\Stripe\Request\Api\CreateCharge'))
         ;
 
-        $action = new CaptureAction;
+        $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
         $action->execute(new Capture($model));
@@ -92,5 +92,4 @@ class CaptureActionTest extends GenericActionTest
     {
         return $this->getMock('Payum\Core\PaymentInterface');
     }
-
 }

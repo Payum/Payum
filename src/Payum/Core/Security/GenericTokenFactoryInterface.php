@@ -7,7 +7,7 @@ interface GenericTokenFactoryInterface extends TokenFactoryInterface
      * @param string $paymentName
      * @param object $model
      * @param string $afterPath
-     * @param array $afterParameters
+     * @param array  $afterParameters
      *
      * @return TokenInterface
      */
@@ -17,7 +17,7 @@ interface GenericTokenFactoryInterface extends TokenFactoryInterface
      * @param string $paymentName
      * @param object $model
      * @param string $afterPath
-     * @param array $afterParameters
+     * @param array  $afterParameters
      *
      * @return TokenInterface
      */
@@ -27,14 +27,14 @@ interface GenericTokenFactoryInterface extends TokenFactoryInterface
      * @param string $paymentName
      * @param object $model
      * @param string $afterPath
-     * @param array $afterParameters
+     * @param array  $afterParameters
      *
      * @return TokenInterface
      */
     public function createRefundToken($paymentName, $model, $afterPath = null, array $afterParameters = array());
 
     /**
-     * @param string $paymentName
+     * @param string      $paymentName
      * @param object|null $model
      *
      * @return TokenInterface

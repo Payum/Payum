@@ -52,14 +52,14 @@ class CaptureActionTest extends GenericActionTest
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\UnsupportedApiException
      */
     public function throwIfUnsupportedApiGiven()
     {
         $action = new CaptureAction();
-        
-        $action->setApi(new \stdClass);
+
+        $action->setApi(new \stdClass());
     }
 
     /**
@@ -109,7 +109,7 @@ class CaptureActionTest extends GenericActionTest
             ->expects($this->never())
             ->method('payment')
         ;
-        
+
         $action = new CaptureAction();
         $action->setApi($apiMock);
         $action->setPayment($paymentMock);
@@ -133,7 +133,7 @@ class CaptureActionTest extends GenericActionTest
         $apiResponse = new JsonResponse();
         $apiResponse->setContent(json_encode(array(
             'FOO' => 'FOOVAL',
-            'BAR' => 'BARVAL'
+            'BAR' => 'BARVAL',
         )));
 
         $apiMock = $this->createApiMock();
@@ -181,7 +181,7 @@ class CaptureActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
-            ->will($this->returnCallback(function(ObtainCreditCard $request) {
+            ->will($this->returnCallback(function (ObtainCreditCard $request) {
                 $card = new CreditCard();
                 $card->setNumber('1234567812345678');
                 $card->setExpireAt(new \DateTime('2014-10-01'));
@@ -195,7 +195,7 @@ class CaptureActionTest extends GenericActionTest
         $apiResponse = new JsonResponse();
         $apiResponse->setContent(json_encode(array(
             'FOO' => 'FOOVAL',
-            'BAR' => 'BARVAL'
+            'BAR' => 'BARVAL',
         )));
 
         $apiMock = $this->createApiMock();

@@ -46,7 +46,6 @@ class SensitiveValueTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($sensitiveValue->get());
     }
 
-
     /**
      * @test
      */

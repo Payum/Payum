@@ -48,7 +48,7 @@ class ExecuteSameRequestWithModelDetailsAction extends PaymentAwareAction
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof ModelAggregateInterface &&
             $request instanceof ModelAwareInterface &&
             $request->getModel() instanceof DetailsAggregateInterface

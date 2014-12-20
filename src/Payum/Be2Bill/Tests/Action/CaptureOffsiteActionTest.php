@@ -56,7 +56,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
     {
         $action = new CaptureOffsiteAction();
 
-        $action->setApi(new \stdClass);
+        $action->setApi(new \stdClass());
     }
 
     /**
@@ -124,7 +124,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
-            ->will($this->returnCallback(function(GetHttpRequest $request) {
+            ->will($this->returnCallback(function (GetHttpRequest $request) {
                 $request->query['EXECCODE'] = 1;
                 $request->query['FOO'] = 'fooVal';
             }))

@@ -53,7 +53,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
             $charge = \Stripe_Charge::create((array) $model);
 
             $model->replace($charge->__toArray(true));
-        } catch(\Stripe_CardError $e) {
+        } catch (\Stripe_CardError $e) {
             $model->replace($e->getJsonBody());
         }
     }

@@ -11,7 +11,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
     public function shouldBeSubClassOfAbstractStorage()
     {
         $rc = new \ReflectionClass('Payum\Core\Storage\FilesystemStorage');
-        
+
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Storage\AbstractStorage'));
     }
 
@@ -43,15 +43,15 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
     public function shouldCreateInstanceOfModelClassGivenInConstructor()
     {
         $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
-        
+
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
             $expectedModelClass,
             'id'
         );
-        
+
         $model = $storage->create();
-        
+
         $this->assertInstanceOf($expectedModelClass, $model);
         $this->assertNull($model->getId());
     }
@@ -70,7 +70,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
         );
 
         $model = $storage->create();
-        
+
         $storage->update($model);
 
         $this->assertInstanceOf($expectedModelClass, $model);
@@ -131,7 +131,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
 
         $model = $storage->create();
         $storage->update($model);
-        
+
         $this->assertFileExists(sys_get_temp_dir().'/payum-model-'.$model->getId());
     }
 
@@ -227,13 +227,13 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
             'Payum\Core\Tests\Mocks\Model\TestModel',
             'id'
         );
-        
+
         $model = $storage->create();
         $storage->update($model);
 
         //guard
         $this->assertNotEmpty($model->getId());
-        
+
         $foundModel = $storage->find($model->getId());
 
         $this->assertInstanceOf('Payum\Core\Tests\Mocks\Model\TestModel', $foundModel);
@@ -262,7 +262,6 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
         //guard
         $this->assertInstanceOf('Payum\Core\Model\Identity', $identity);
 
-
         $foundModel = $storage->find($identity);
 
         $this->assertInstanceOf('Payum\Core\Tests\Mocks\Model\TestModel', $foundModel);
@@ -283,7 +282,7 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
         $model = $storage->create();
         $model->setPrice($expectedPrice = 123);
         $model->setCurrency($expectedCurrency = 'FOO');
-        
+
         $storage->update($model);
 
         $foundModel = $storage->find($model->getId());

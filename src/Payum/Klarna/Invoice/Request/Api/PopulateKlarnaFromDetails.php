@@ -12,7 +12,7 @@ class PopulateKlarnaFromDetails extends Generic
 
     /**
      * @param \ArrayAccess $details
-     * @param \Klarna $klarna
+     * @param \Klarna      $klarna
      */
     public function __construct(\ArrayAccess $details, \Klarna $klarna)
     {

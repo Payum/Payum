@@ -27,7 +27,7 @@ class DoReferenceTransactionAction extends BaseApiAwareAction
         if (null === $model['AMT']) {
             throw new LogicException('AMT must be set.');
         }
-        
+
         $model->replace(
             $this->api->doReferenceTransaction((array) $model)
         );
@@ -38,7 +38,7 @@ class DoReferenceTransactionAction extends BaseApiAwareAction
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof DoReferenceTransaction &&
             $request->getModel() instanceof \ArrayAccess
         ;

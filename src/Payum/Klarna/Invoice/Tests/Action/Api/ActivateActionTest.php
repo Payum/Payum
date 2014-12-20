@@ -22,7 +22,7 @@ class ActivateActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new ActivateAction;
+        new ActivateAction();
     }
 
     /**
@@ -40,7 +40,7 @@ class ActivateActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new ActivateAction($this->createKlarnaMock());
 
-        $action->setApi($config = new Config);
+        $action->setApi($config = new Config());
 
         $this->assertAttributeSame($config, 'config', $action);
     }
@@ -55,7 +55,7 @@ class ActivateActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new ActivateAction($this->createKlarnaMock());
 
-        $action->setApi(new \stdClass);
+        $action->setApi(new \stdClass());
     }
 
     /**
@@ -63,7 +63,7 @@ class ActivateActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportActivateWithArrayAsModel()
     {
-        $action = new ActivateAction;
+        $action = new ActivateAction();
 
         $this->assertTrue($action->supports(new Activate(array())));
     }
@@ -73,7 +73,7 @@ class ActivateActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotActivate()
     {
-        $action = new ActivateAction;
+        $action = new ActivateAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -83,9 +83,9 @@ class ActivateActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportActivateWithNotArrayAccessModel()
     {
-        $action = new ActivateAction;
+        $action = new ActivateAction();
 
-        $this->assertFalse($action->supports(new Activate(new \stdClass)));
+        $this->assertFalse($action->supports(new Activate(new \stdClass())));
     }
 
     /**
@@ -95,7 +95,7 @@ class ActivateActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $action = new ActivateAction;
+        $action = new ActivateAction();
 
         $action->execute(new \stdClass());
     }
@@ -108,7 +108,7 @@ class ActivateActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfRnoNotSet()
     {
-        $action = new ActivateAction;
+        $action = new ActivateAction();
 
         $action->execute(new Activate(array()));
     }
@@ -121,7 +121,7 @@ class ActivateActionTest extends \PHPUnit_Framework_TestCase
         $details = array(
             'rno' => 'theRno',
             'osr' => 'theOsr',
-            'activation_flags' => 'theFlags'
+            'activation_flags' => 'theFlags',
         );
 
         $klarnaMock = $this->createKlarnaMock();
@@ -137,7 +137,7 @@ class ActivateActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new ActivateAction($klarnaMock);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
 
         $action->execute($activate = new Activate($details));
 
@@ -154,7 +154,7 @@ class ActivateActionTest extends \PHPUnit_Framework_TestCase
         $details = array(
             'rno' => 'theRno',
             'osr' => 'theOsr',
-            'activation_flags' => 'theFlags'
+            'activation_flags' => 'theFlags',
         );
 
         $klarnaMock = $this->createKlarnaMock();
@@ -170,7 +170,7 @@ class ActivateActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new ActivateAction($klarnaMock);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
 
         $action->execute($activate = new Activate($details));
 
@@ -178,7 +178,6 @@ class ActivateActionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(123, $activatedDetails['error_code']);
         $this->assertEquals('theMessage', $activatedDetails['error_message']);
-
     }
 
     /**

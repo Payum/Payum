@@ -19,7 +19,7 @@ class CreateBillingAgreementActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()   
+    public function couldBeConstructedWithoutAnyArguments()
     {
         new CreateBillingAgreementAction();
     }
@@ -30,7 +30,7 @@ class CreateBillingAgreementActionTest extends \PHPUnit_Framework_TestCase
     public function shouldSupportCreateBillingAgreementRequestAndArrayAccessAsModel()
     {
         $action = new CreateBillingAgreementAction();
-        
+
         $this->assertTrue($action->supports(new CreateBillingAgreement($this->getMock('ArrayAccess'))));
     }
 
@@ -46,7 +46,7 @@ class CreateBillingAgreementActionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
@@ -65,7 +65,7 @@ class CreateBillingAgreementActionTest extends \PHPUnit_Framework_TestCase
     public function throwIfTokenNotSetInModel()
     {
         $action = new CreateBillingAgreementAction();
-        
+
         $action->execute(new CreateBillingAgreement(array()));
     }
 
@@ -75,24 +75,24 @@ class CreateBillingAgreementActionTest extends \PHPUnit_Framework_TestCase
     public function shouldCallApiCreateBillingAgreementMethodWithExpectedRequiredArguments()
     {
         $testCase = $this;
-        
+
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('createBillingAgreement')
-            ->will($this->returnCallback(function(array $fields) use ($testCase){
+            ->will($this->returnCallback(function (array $fields) use ($testCase) {
                 $testCase->assertArrayHasKey('TOKEN', $fields);
                 $testCase->assertEquals('theToken', $fields['TOKEN']);
 
                 return array();
             }))
         ;
-        
+
         $action = new CreateBillingAgreementAction();
         $action->setApi($apiMock);
 
         $request = new CreateBillingAgreement(array(
-            'TOKEN' => 'theToken'
+            'TOKEN' => 'theToken',
         ));
 
         $action->execute($request);
@@ -107,10 +107,10 @@ class CreateBillingAgreementActionTest extends \PHPUnit_Framework_TestCase
         $apiMock
             ->expects($this->once())
             ->method('createBillingAgreement')
-            ->will($this->returnCallback(function() {
+            ->will($this->returnCallback(function () {
                 return array(
-                    'FIRSTNAME'=> 'theFirstname',
-                    'EMAIL' => 'the@example.com'
+                    'FIRSTNAME' => 'theFirstname',
+                    'EMAIL' => 'the@example.com',
                 );
             }))
         ;
@@ -119,13 +119,13 @@ class CreateBillingAgreementActionTest extends \PHPUnit_Framework_TestCase
         $action->setApi($apiMock);
 
         $request = new CreateBillingAgreement(array(
-            'TOKEN' => 'aToken'
+            'TOKEN' => 'aToken',
         ));
 
         $action->execute($request);
 
         $model = $request->getModel();
-        
+
         $this->assertArrayHasKey('FIRSTNAME', $model);
         $this->assertEquals('theFirstname', $model['FIRSTNAME']);
 

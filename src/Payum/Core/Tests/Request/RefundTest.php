@@ -11,7 +11,7 @@ class RefundTest extends \PHPUnit_Framework_TestCase
     public function shouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass('Payum\Core\Request\Refund');
-        
+
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
     }
 
@@ -20,6 +20,6 @@ class RefundTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithModel()
     {
-        new Refund(new \stdClass);
+        new Refund(new \stdClass());
     }
 }

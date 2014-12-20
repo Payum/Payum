@@ -42,7 +42,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        $extension = new LogExecutedActionsExtension;
+        $extension = new LogExecutedActionsExtension();
 
         $this->assertAttributeInstanceOf('Psr\Log\NullLogger', 'logger', $extension);
     }
@@ -66,7 +66,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $expectedLogger = $this->createLoggerMock();
 
-        $extension = new LogExecutedActionsExtension;
+        $extension = new LogExecutedActionsExtension();
 
         //guard
         $this->assertAttributeInstanceOf('Psr\Log\NullLogger', 'logger', $extension);
@@ -89,7 +89,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension = new LogExecutedActionsExtension($logger);
 
-        $extension->onPreExecute(new \stdClass);
+        $extension->onPreExecute(new \stdClass());
     }
 
     /**
@@ -105,7 +105,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension = new LogExecutedActionsExtension($logger);
 
-        $extension->onPostExecute(new \stdClass, $this->createActionMock());
+        $extension->onPostExecute(new \stdClass(), $this->createActionMock());
     }
 
     /**
@@ -124,7 +124,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension->onPreExecute('string');
         $extension->onPreExecute('string');
-        $extension->onExecute(new \stdClass, $this->createActionMock());
+        $extension->onExecute(new \stdClass(), $this->createActionMock());
     }
 
     /**
@@ -132,7 +132,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldDecrementStackOnPostExecute()
     {
-        $request = new \stdClass;
+        $request = new \stdClass();
         $action = $this->createActionMock();
 
         $logger = $this->createLoggerMock();
@@ -180,8 +180,8 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension->onPreExecute('string');
         $extension->onPreExecute('string');
-        $extension->onException(new \Exception, new \stdClass);
-        $extension->onException(new \Exception, new \stdClass, $this->createActionMock());
+        $extension->onException(new \Exception(), new \stdClass());
+        $extension->onException(new \Exception(), new \stdClass(), $this->createActionMock());
     }
 
     /**
@@ -205,8 +205,8 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension->onPreExecute('string');
         $extension->onPreExecute('string');
-        $extension->onReply($this->createReplyMock(), new \stdClass, $this->createActionMock());
-        $extension->onReply($this->createReplyMock(), new \stdClass, $this->createActionMock());
+        $extension->onReply($this->createReplyMock(), new \stdClass(), $this->createActionMock());
+        $extension->onReply($this->createReplyMock(), new \stdClass(), $this->createActionMock());
     }
 
     /**
@@ -216,7 +216,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $stringRequest = 'a string';
         $arrayRequest = array();
-        $action = new FooAction;
+        $action = new FooAction();
 
         $logger = $this->createLoggerMock();
         $logger
@@ -243,9 +243,9 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLogActionAndObjectRequestOnExecute()
     {
-        $action = new FooAction;
-        $stdRequest = new \stdClass;
-        $namespacedRequest = new NamespacedRequest;
+        $action = new FooAction();
+        $stdRequest = new \stdClass();
+        $namespacedRequest = new NamespacedRequest();
 
         $logger = $this->createLoggerMock();
         $logger
@@ -272,7 +272,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLogActionAndModelRequestWithModelNoObjectOnExecute()
     {
-        $action = new FooAction;
+        $action = new FooAction();
         $model = array();
         $modelRequest = new Capture($model);
 
@@ -294,8 +294,8 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLogActionAndModelRequestWithObjectModelOnExecute()
     {
-        $action = new FooAction;
-        $stdModel = new \stdClass;
+        $action = new FooAction();
+        $stdModel = new \stdClass();
         $stdModelRequest = new Capture($stdModel);
 
         $logger = $this->createLoggerMock();
@@ -316,7 +316,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLogOnReply()
     {
-        $action = new FooAction;
+        $action = new FooAction();
         $replyMock = $this->createReplyMock();
 
         $ro = new \ReflectionObject($replyMock);
@@ -339,7 +339,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLogHttpRedirectReplyWithUrlIncludedOnReply()
     {
-        $action = new FooAction;
+        $action = new FooAction();
         $reply = new HttpRedirect('http://example.com');
 
         $logger = $this->createLoggerMock();
@@ -360,7 +360,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLogOnExceptionWhenActionPassed()
     {
-        $action = new FooAction;
+        $action = new FooAction();
 
         $logger = $this->createLoggerMock();
         $logger
@@ -372,7 +372,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
         $extension = new LogExecutedActionsExtension($logger);
 
         $extension->onPreExecute('string');
-        $extension->onException(new \LogicException, 'string', $action);
+        $extension->onException(new \LogicException(), 'string', $action);
     }
 
     /**
@@ -390,7 +390,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
         $extension = new LogExecutedActionsExtension($logger);
 
         $extension->onPreExecute('string');
-        $extension->onException(new \LogicException, 'string');
+        $extension->onException(new \LogicException(), 'string');
     }
 
     /**

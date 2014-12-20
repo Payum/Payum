@@ -11,7 +11,7 @@ class RequestNotSupportedExceptionTest extends \PHPUnit_Framework_TestCase
     public function shouldBeSubClassOfInvalidArgumentException()
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\RequestNotSupportedException');
-        
+
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Exception\InvalidArgumentException'));
     }
 
@@ -20,7 +20,7 @@ class RequestNotSupportedExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new RequestNotSupportedException;
+        new RequestNotSupportedException();
     }
 
     /**
@@ -29,7 +29,7 @@ class RequestNotSupportedExceptionTest extends \PHPUnit_Framework_TestCase
     public function shouldCreateWithNoneObjectRequest()
     {
         $exception = RequestNotSupportedException::create('anRequest');
-        
+
         $this->assertInstanceOf('Payum\Core\Exception\RequestNotSupportedException', $exception);
         $this->assertEquals('Request string is not supported.', $exception->getMessage());
     }
@@ -51,12 +51,12 @@ class RequestNotSupportedExceptionTest extends \PHPUnit_Framework_TestCase
     public function shouldCreateWithActionAndStringRequest()
     {
         $action = $this->getMock('Payum\Core\Action\ActionInterface', array(), array(), 'Mock_Action12');
-        
+
         $exception = RequestNotSupportedException::createActionNotSupported($action, 'anRequest');
 
         $this->assertInstanceOf('Payum\Core\Exception\RequestNotSupportedException', $exception);
         $this->assertEquals(
-            'Action Mock_Action12 is not supported the request string.', 
+            'Action Mock_Action12 is not supported the request string.',
             $exception->getMessage()
         );
     }

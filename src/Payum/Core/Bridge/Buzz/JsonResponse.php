@@ -8,7 +8,7 @@ class JsonResponse extends Response
 {
     /**
      * @throws \Payum\Core\Exception\LogicException
-     * 
+     *
      * @return array|object
      */
     public function getContentJson()

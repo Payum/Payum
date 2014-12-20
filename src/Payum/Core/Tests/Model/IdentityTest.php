@@ -11,7 +11,7 @@ class IdentityTest extends \PHPUnit_Framework_TestCase
     public function shouldImplementIdentityInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Model\Identity');
-        
+
         $this->assertTrue($rc->implementsInterface('Payum\Core\Storage\IdentityInterface'));
     }
 
@@ -28,7 +28,7 @@ class IdentityTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithIdAndModelAsArguments()
     {
-        new Identity('anId', new \stdClass);
+        new Identity('anId', new \stdClass());
     }
 
     /**
@@ -36,8 +36,8 @@ class IdentityTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetIdSetInConstructor()
     {
-        $id = new Identity('theId', new \stdClass);
-        
+        $id = new Identity('theId', new \stdClass());
+
         $this->assertEquals('theId', $id->getId());
     }
 
@@ -46,7 +46,7 @@ class IdentityTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetClassSetInConstructor()
     {
-        $id = new Identity('theId', new \stdClass);
+        $id = new Identity('theId', new \stdClass());
 
         $this->assertEquals('stdClass', $id->getClass());
     }
@@ -56,12 +56,12 @@ class IdentityTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeCorrectlySerializedAndUnserialized()
     {
-        $id = new Identity('theId', new \stdClass);
+        $id = new Identity('theId', new \stdClass());
 
         $serializedId = serialize($id);
-        
+
         $unserializedId = unserialize($serializedId);
-        
+
         $this->assertEquals($id, $unserializedId);
     }
 }

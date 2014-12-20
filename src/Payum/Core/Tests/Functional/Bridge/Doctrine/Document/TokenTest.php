@@ -12,10 +12,10 @@ class TokenTest extends MongoTest
      */
     public function shouldAllowPersist()
     {
-        $token = new Token;
+        $token = new Token();
         $token->setTargetUrl('anUrl');
         $token->setPaymentName('aName');
-        
+
         $this->dm->persist($token);
         $this->dm->flush();
     }
@@ -25,7 +25,7 @@ class TokenTest extends MongoTest
      */
     public function shouldAllowFindPersistedToken()
     {
-        $token = new Token;
+        $token = new Token();
         $token->setTargetUrl('anUrl');
         $token->setPaymentName('aName');
         $token->setAfterUrl('anAfterUrl');
@@ -33,15 +33,15 @@ class TokenTest extends MongoTest
 
         $this->dm->persist($token);
         $this->dm->flush();
-        
+
         $hash = $token->getHash();
 
         $this->dm->clear();
-        
+
         $foundToken = $this->dm->find(get_class($token), $hash);
-        
+
         $this->assertNotSame($token, $foundToken);
-        
+
         $this->assertEquals($token->getHash(), $foundToken->getHash());
         $this->assertEquals($token->getTargetUrl(), $foundToken->getTargetUrl());
         $this->assertEquals($token->getAfterUrl(), $foundToken->getAfterUrl());

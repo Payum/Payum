@@ -3,7 +3,7 @@ namespace Payum\Payex\Tests\Api;
 
 use Payum\Payex\Api\SoapClientFactory;
 
-class BaseApiTest extends \PHPUnit_Framework_TestCase 
+class BaseApiTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -11,11 +11,10 @@ class BaseApiTest extends \PHPUnit_Framework_TestCase
     public function shouldBeAbstract()
     {
         $rc = new \ReflectionClass('Payum\Payex\Api\BaseApi');
-        
+
         $this->assertTrue($rc->isAbstract());
     }
 
-    
     /**
      * @test
      *
@@ -25,8 +24,8 @@ class BaseApiTest extends \PHPUnit_Framework_TestCase
     public function throwIfAccountNumberOptionNotSet()
     {
         $this->getMockForAbstractClass('Payum\Payex\Api\BaseApi', array(
-            new SoapClientFactory, 
-            array()
+            new SoapClientFactory(),
+            array(),
         ));
     }
 
@@ -39,10 +38,10 @@ class BaseApiTest extends \PHPUnit_Framework_TestCase
     public function throwIfEncryptionKeyOptionNotSet()
     {
         $this->getMockForAbstractClass('Payum\Payex\Api\BaseApi', array(
-            new SoapClientFactory,
+            new SoapClientFactory(),
             array(
                 'accountNumber' => 'aNumber',
-            )
+            ),
         ));
     }
 
@@ -55,12 +54,12 @@ class BaseApiTest extends \PHPUnit_Framework_TestCase
     public function throwIfNotBoolSandboxOptionGiven()
     {
         $this->getMockForAbstractClass('Payum\Payex\Api\BaseApi', array(
-            new SoapClientFactory,
+            new SoapClientFactory(),
             array(
                 'accountNumber' => 'aNumber',
                 'encryptionKey' => 'aKey',
                 'sandbox' => 'not a bool',
-            )
+            ),
         ));
     }
 
@@ -70,12 +69,12 @@ class BaseApiTest extends \PHPUnit_Framework_TestCase
     public function couldBeConstructedWithValidOptions()
     {
         $this->getMockForAbstractClass('Payum\Payex\Api\BaseApi', array(
-            new SoapClientFactory,
+            new SoapClientFactory(),
             array(
                 'accountNumber' => 'aNumber',
                 'encryptionKey' => 'aKey',
                 'sandbox' => true,
-            )
+            ),
         ));
     }
 }

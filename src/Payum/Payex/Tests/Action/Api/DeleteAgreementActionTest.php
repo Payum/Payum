@@ -10,18 +10,18 @@ class DeleteAgreementActionTest extends \PHPUnit_Framework_TestCase
     protected $requiredNotEmptyFields = array(
         'agreementRef' => 'anAgreementRef',
     );
-    
+
     public function provideRequiredNotEmptyFields()
     {
         $fields = array();
-        
+
         foreach ($this->requiredNotEmptyFields as $name => $value) {
             $fields[] = array($name);
         }
 
         return $fields;
     }
-    
+
     /**
      * @test
      */
@@ -47,7 +47,7 @@ class DeleteAgreementActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new DeleteAgreementAction;
+        new DeleteAgreementAction();
     }
 
     /**
@@ -56,25 +56,25 @@ class DeleteAgreementActionTest extends \PHPUnit_Framework_TestCase
     public function shouldAllowSetAgreementApiAsApi()
     {
         $agreementApi = $this->getMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
-        
-        $action = new DeleteAgreementAction;
+
+        $action = new DeleteAgreementAction();
 
         $action->setApi($agreementApi);
-        
+
         $this->assertAttributeSame($agreementApi, 'api', $action);
     }
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\UnsupportedApiException
      * @expectedExceptionMessage Expected api must be instance of AgreementApi.
      */
     public function throwOnTryingSetNotAgreementApiAsApi()
     {
-        $action = new DeleteAgreementAction;
+        $action = new DeleteAgreementAction();
 
-        $action->setApi(new \stdClass);
+        $action->setApi(new \stdClass());
     }
 
     /**
@@ -92,7 +92,7 @@ class DeleteAgreementActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotDeleteAgreementRequest()
     {
-        $action = new DeleteAgreementAction;
+        $action = new DeleteAgreementAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -102,9 +102,9 @@ class DeleteAgreementActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportDeleteAgreementRequestWithNotArrayAccessModel()
     {
-        $action = new DeleteAgreementAction;
+        $action = new DeleteAgreementAction();
 
-        $this->assertFalse($action->supports(new DeleteAgreement(new \stdClass)));
+        $this->assertFalse($action->supports(new DeleteAgreement(new \stdClass())));
     }
 
     /**
@@ -150,13 +150,12 @@ class DeleteAgreementActionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(array(
                 'errorCode' => AgreementApi::ERRORCODE_OK,
             )));
-        ;
 
         $action = new DeleteAgreementAction();
         $action->setApi($apiMock);
 
         $request = new DeleteAgreement($this->requiredNotEmptyFields);
-        
+
         $action->execute($request);
 
         $model = $request->getModel();

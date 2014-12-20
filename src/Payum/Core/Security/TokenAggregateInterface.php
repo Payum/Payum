@@ -6,5 +6,5 @@ interface TokenAggregateInterface
     /**
      * @return TokenInterface|null
      */
-    function getToken();
+    public function getToken();
 }

@@ -20,21 +20,20 @@ class AgreementDetailsStatusAction implements ActionInterface
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        
+
         //TODO: It may be not correct for all cases. This does NOT indicate wether the transaction requested was successful, only wether the request was carried out successfully.
         if ($model['errorCode'] && OrderApi::ERRORCODE_OK != $model['errorCode']) {
-            
             $request->markFailed();
-            
+
             return;
         }
 
         if (
-            is_numeric($model['agreementStatus']) && 
+            is_numeric($model['agreementStatus']) &&
             AgreementApi::AGREEMENTSTATUS_NOTVERIFIED == $model['agreementStatus']
         ) {
             $request->markNew();
-            
+
             return;
         }
 
@@ -64,7 +63,7 @@ class AgreementDetailsStatusAction implements ActionInterface
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof GetStatusInterface &&
             $request->getModel() instanceof \ArrayAccess &&
             //Make sure it is payment. Apparently an order(payment) does not have this field.

@@ -2,7 +2,6 @@
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Entity;
 
 use Doctrine\ORM\Tools\SchemaValidator;
-
 use Payum\Core\Model\Identity;
 use Payum\Core\Tests\Functional\Bridge\Doctrine\OrmTest;
 use Payum\Core\Tests\Mocks\Entity\Token;
@@ -18,16 +17,16 @@ class TokenTest extends OrmTest
 
         $this->assertEmpty($schemaValidator->validateMapping());
     }
-    
+
     /**
      * @test
      */
     public function shouldAllowPersist()
     {
-        $token = new Token;
+        $token = new Token();
         $token->setTargetUrl('anUrl');
         $token->setPaymentName('aName');
-        
+
         $this->em->persist($token);
         $this->em->flush();
     }
@@ -37,7 +36,7 @@ class TokenTest extends OrmTest
      */
     public function shouldAllowFindPersistedToken()
     {
-        $token = new Token;
+        $token = new Token();
         $token->setTargetUrl('anUrl');
         $token->setPaymentName('aName');
         $token->setAfterUrl('anAfterUrl');
@@ -45,15 +44,15 @@ class TokenTest extends OrmTest
 
         $this->em->persist($token);
         $this->em->flush();
-        
+
         $hash = $token->getHash();
 
         $this->em->clear();
-        
+
         $foundToken = $this->em->find(get_class($token), $hash);
-        
+
         $this->assertNotSame($token, $foundToken);
-        
+
         $this->assertEquals($token->getHash(), $foundToken->getHash());
         $this->assertEquals($token->getTargetUrl(), $foundToken->getTargetUrl());
         $this->assertEquals($token->getAfterUrl(), $foundToken->getAfterUrl());

@@ -10,7 +10,7 @@ class ObtainCreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new ObtainCreditCard;
+        new ObtainCreditCard();
     }
 
     /**
@@ -18,7 +18,7 @@ class ObtainCreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetCreditCard()
     {
-        $request = new ObtainCreditCard;
+        $request = new ObtainCreditCard();
 
         $request->set($this->getMock('Payum\Core\Model\CreditCardInterface'));
     }
@@ -28,7 +28,7 @@ class ObtainCreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowObtainPreviouslySetCreditCard()
     {
-        $request = new ObtainCreditCard;
+        $request = new ObtainCreditCard();
 
         $card = $this->getMock('Payum\Core\Model\CreditCardInterface');
 
@@ -45,7 +45,7 @@ class ObtainCreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfObtainCalledBeforeCreditCardSet()
     {
-        $request = new ObtainCreditCard;
+        $request = new ObtainCreditCard();
 
         $request->obtain();
     }

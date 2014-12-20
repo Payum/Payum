@@ -6,28 +6,63 @@ use Payum\AuthorizeNet\Aim\Action\CaptureAction;
 use Payum\AuthorizeNet\Aim\Action\StatusAction;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Payment;
-use Payum\Core\PaymentFactory as BasePaymentFactory;
+use Payum\Core\PaymentFactory as CorePaymentFactory;
+use Payum\Core\PaymentFactoryInterface;
 
-class PaymentFactory extends BasePaymentFactory
+class PaymentFactory implements PaymentFactoryInterface
 {
+    /**
+     * @var PaymentFactoryInterface
+     */
+    protected $corePaymentFactory;
+
+    /**
+     * @param PaymentFactoryInterface $corePaymentFactory
+     */
+    public function __construct(PaymentFactoryInterface $corePaymentFactory = null)
+    {
+        $this->corePaymentFactory = $corePaymentFactory ?: new CorePaymentFactory();
+    }
+
     /**
      * {@inheritDoc}
      */
-    protected function build(Payment $payment, ArrayObject $config)
+    public function create(array $config = array())
     {
-        $config->validateNotEmpty(array('loginId', 'transactionKey'));
+        return $this->corePaymentFactory->create($this->createConfig($config));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createConfig(array $config = array())
+    {
+        $config = ArrayObject::ensureArrayObject($config);
+        $config->defaults($this->corePaymentFactory->createConfig());
 
         $config->defaults(array(
-            'sandbox' => true,
-
             'payum.action.capture' => new CaptureAction(),
             'payum.action.status' => new StatusAction(),
             'payum.action.fill_order_details' => new FillOrderDetailsAction(),
         ));
 
-        $api = new AuthorizeNetAIM($config['loginId'], $config['transactionKey']);
-        $api->setSandbox($config['sandbox']);
-        $config['payum.api.default'] = $api;
+        if (false == $config['payum.api']) {
+            $config['options.required'] = array('loginId', 'transactionKey');
+
+            $config->defaults(array(
+                'sandbox' => true,
+            ));
+
+            $config['payum.api'] = function (ArrayObject $config) {
+                $config->validateNotEmpty($config['options.required']);
+
+                $api = new AuthorizeNetAIM($config['loginId'], $config['transactionKey']);
+                $api->setSandbox($config['sandbox']);
+
+                return $api;
+            };
+        }
+
+        return (array) $config;
     }
 }

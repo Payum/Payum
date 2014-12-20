@@ -13,14 +13,14 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCas
     public function shouldImplementsActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction');
-        
+
         $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()   
+    public function couldBeConstructedWithoutAnyArguments()
     {
         new RecurringPaymentDetailsStatusAction();
     }
@@ -31,13 +31,13 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCas
     public function shouldSupportStatusRequestWithArrayAsModelWhichHasBillingPeriodSet()
     {
         $action = new RecurringPaymentDetailsStatusAction();
-        
+
         $recurringPaymentDetails = array(
-           'BILLINGPERIOD' => 'foo'
+           'BILLINGPERIOD' => 'foo',
         );
-        
+
         $request = new GetBinaryStatus($recurringPaymentDetails);
-        
+
         $this->assertTrue($action->supports($request));
     }
 
@@ -65,7 +65,7 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCas
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
@@ -84,7 +84,7 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCas
 
         $request = new GetBinaryStatus(array(
             'BILLINGPERIOD' => 'foo',
-            'L_ERRORCODE9' => 'foo'
+            'L_ERRORCODE9' => 'foo',
         ));
 
         $action->execute($request);
@@ -102,9 +102,9 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCas
         $request = new GetBinaryStatus(array(
             'BILLINGPERIOD' => 'foo',
         ));
-        
+
         $action->execute($request);
-        
+
         $this->assertTrue($request->isNew());
     }
 
