@@ -38,14 +38,13 @@ class PaymentFactory implements PaymentFactoryInterface
 
             'buzz.client' => ClientFactory::createCurl(),
             'twig.env' => TwigFactory::createGeneric(),
-        ));
 
-        $config->defaults(array(
             'payum.action.get_http_request' => new GetHttpRequestAction(),
             'payum.action.capture_order' => new CaptureOrderAction(),
             'payum.action.execute_same_request_with_model_details' => new ExecuteSameRequestWithModelDetailsAction(),
-            'payum.action.render_template' => new RenderTemplateAction($config['twig.env'], $config['payum.template.layout']),
-
+            'payum.action.render_template' => function (ArrayObject $config) {
+                return new RenderTemplateAction($config['twig.env'], $config['payum.template.layout']);
+            },
             'payum.extension.endless_cycle_detector' => new EndlessCycleDetectorExtension(),
         ));
 

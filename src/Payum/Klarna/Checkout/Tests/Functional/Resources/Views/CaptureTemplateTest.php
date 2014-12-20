@@ -25,6 +25,7 @@ class CaptureTemplateTest extends \PHPUnit_Framework_TestCase
             theSnippet
             </body>
 </html>
+
 HTML;
 
         $this->assertEquals($expectedResult, $actualResult);
