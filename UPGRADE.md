@@ -4,6 +4,7 @@
 
 * `be2bill_onsite` payment was renamed to `be2bill_offsite`.
 * `omnipay_onsite` payment was renamed to `omnipay_offsite`.
+* `omnipay` payment was renamed to `omnipay_direct`.
 
 ## 0.11 to 0.13
 
