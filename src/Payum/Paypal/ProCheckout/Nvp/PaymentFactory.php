@@ -47,7 +47,7 @@ class PaymentFactory implements PaymentFactoryInterface
             'payum.action.status' => new StatusAction(),
         ));
 
-        if (false == $config['paypal.api']) {
+        if (false == $config['payum.api']) {
             $config['options.required'] = array('username', 'password', 'partner', 'vendor', 'tender');
 
             $config->defaults(array(
