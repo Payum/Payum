@@ -39,7 +39,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
-        
+
         $this->assertAttributeNotEmpty('apis', $payment);
         $this->assertAttributeNotEmpty('actions', $payment);
 

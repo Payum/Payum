@@ -7,17 +7,17 @@
     <mapped-superclass name="Payum\Core\Model\Order">
 
         <field name="number" type="string" />
-        
+
         <field name="description" type="string" />
-        
+
         <field name="clientEmail" type="string" />
-        
+
         <field name="clientId" type="string" />
-        
+
         <field name="totalAmount" type="int" />
-        
+
         <field name="currencyCode" type="string" />
-        
+
         <field name="currencyDigitsAfterDecimalPoint" type="string" />
 
         <field name="details" type="object" />

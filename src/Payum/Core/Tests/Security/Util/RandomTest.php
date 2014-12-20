@@ -15,4 +15,4 @@ class RandomTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $token);
         $this->assertEquals(43, strlen($token));
     }
-} 
+}

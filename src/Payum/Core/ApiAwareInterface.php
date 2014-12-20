@@ -3,7 +3,7 @@ namespace Payum\Core;
 
 use Payum\Core\Exception\UnsupportedApiException;
 
-interface ApiAwareInterface 
+interface ApiAwareInterface
 {
     /**
      * @param mixed $api

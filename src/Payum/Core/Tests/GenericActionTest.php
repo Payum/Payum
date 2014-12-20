@@ -22,7 +22,7 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(new $this->requestClass(array())),
-            array(new $this->requestClass(new \ArrayObject)),
+            array(new $this->requestClass(new \ArrayObject())),
         );
     }
 
@@ -33,7 +33,7 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
             array(array('foo')),
             array(new \stdClass()),
             array(new $this->requestClass('foo')),
-            array(new $this->requestClass(new \stdClass)),
+            array(new $this->requestClass(new \stdClass())),
             array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
         );
     }
@@ -53,7 +53,7 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new $this->actionClass;
+        new $this->actionClass();
     }
 
     /**
@@ -63,7 +63,7 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportRequest($request)
     {
-        $action = new $this->actionClass;
+        $action = new $this->actionClass();
 
         $this->assertTrue($action->supports($request));
     }
@@ -75,7 +75,7 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportRequest($request)
     {
-        $action = new $this->actionClass;
+        $action = new $this->actionClass();
 
         $this->assertFalse($action->supports($request));
     }
@@ -89,7 +89,7 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute($request)
     {
-        $action = new $this->actionClass;
+        $action = new $this->actionClass();
 
         $action->execute($request);
     }

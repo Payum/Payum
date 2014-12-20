@@ -22,7 +22,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new AgreementDetailsSyncAction;
+        new AgreementDetailsSyncAction();
     }
 
     /**
@@ -78,7 +78,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotSync()
     {
-        $action = new AgreementDetailsSyncAction;
+        $action = new AgreementDetailsSyncAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -88,9 +88,9 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportSyncWithNotArrayAccessModel()
     {
-        $action = new AgreementDetailsSyncAction;
+        $action = new AgreementDetailsSyncAction();
 
-        $this->assertFalse($action->supports(new Sync(new \stdClass)));
+        $this->assertFalse($action->supports(new Sync(new \stdClass())));
     }
 
     /**
@@ -100,7 +100,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $action = new AgreementDetailsSyncAction;
+        $action = new AgreementDetailsSyncAction();
 
         $action->execute(new \stdClass());
     }
@@ -116,12 +116,12 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Payex\Request\Api\CheckAgreement'))
         ;
-        
+
         $action = new AgreementDetailsSyncAction();
         $action->setPayment($paymentMock);
 
         $action->execute(new Sync(array(
-            'agreementRef' => 'aRef'
+            'agreementRef' => 'aRef',
         )));
     }
 

@@ -11,7 +11,7 @@ class UnsupportedApiExceptionTest extends \PHPUnit_Framework_TestCase
     public function shouldBeSubClassOfInvalidArgumentException()
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\UnsupportedApiException');
-        
+
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Exception\InvalidArgumentException'));
     }
 
@@ -20,6 +20,6 @@ class UnsupportedApiExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new UnsupportedApiException;
+        new UnsupportedApiException();
     }
 }

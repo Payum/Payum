@@ -22,7 +22,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new SyncAction;
+        new SyncAction();
     }
 
     /**
@@ -40,7 +40,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotSync()
     {
-        $action = new SyncAction;
+        $action = new SyncAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -50,9 +50,9 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportSyncWithNotArrayAccessModel()
     {
-        $action = new SyncAction;
+        $action = new SyncAction();
 
-        $this->assertFalse($action->supports(new Sync(new \stdClass)));
+        $this->assertFalse($action->supports(new Sync(new \stdClass())));
     }
 
     /**
@@ -62,7 +62,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $action = new SyncAction;
+        $action = new SyncAction();
 
         $action->execute(new \stdClass());
     }
@@ -79,7 +79,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Payum\Klarna\Invoice\Request\Api\CheckOrderStatus'))
         ;
 
-        $action = new SyncAction;
+        $action = new SyncAction();
         $action->setPayment($paymentMock);
 
         $request = new Sync(array(
@@ -100,7 +100,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
         ;
 
-        $action = new SyncAction;
+        $action = new SyncAction();
         $action->setPayment($paymentMock);
 
         $request = new Sync(array());
@@ -119,7 +119,7 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
         ;
 
-        $action = new SyncAction;
+        $action = new SyncAction();
         $action->setPayment($paymentMock);
 
         $request = new Sync(array(

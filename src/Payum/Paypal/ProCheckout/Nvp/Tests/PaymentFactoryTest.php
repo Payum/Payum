@@ -35,7 +35,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'password' => 'aPass',
             'partner' => 'aPartner',
             'vendor' => 'aVendor',
-            'tender' => 'aTender'
+            'tender' => 'aTender',
         ));
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);

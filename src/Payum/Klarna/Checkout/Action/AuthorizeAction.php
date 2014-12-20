@@ -6,7 +6,6 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Authorize;
-use Payum\Core\Request\Capture;
 use Payum\Core\Request\RenderTemplate;
 use Payum\Core\Request\Sync;
 use Payum\Klarna\Checkout\Constants;
@@ -50,7 +49,7 @@ class AuthorizeAction extends PaymentAwareAction
 
         if (Constants::STATUS_CHECKOUT_INCOMPLETE == $model['status']) {
             $renderTemplate = new RenderTemplate($this->templateName, array(
-                'snippet' => $model['gui']['snippet']
+                'snippet' => $model['gui']['snippet'],
             ));
             $this->payment->execute($renderTemplate);
 

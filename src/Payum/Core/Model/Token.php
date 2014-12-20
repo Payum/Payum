@@ -39,7 +39,7 @@ class Token implements TokenInterface
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @return Identity
      */
     public function getDetails()

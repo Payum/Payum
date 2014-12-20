@@ -5,12 +5,9 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Payex\Api\AgreementApi;
-use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Payex\Request\Api\CheckAgreement;
-use Payum\Payex\Request\Api\CompleteOrder;
-use Payum\Payex\Request\Api\CreateAgreement;
 
 class CheckAgreementAction implements ActionInterface, ApiAwareInterface
 {
@@ -18,7 +15,7 @@ class CheckAgreementAction implements ActionInterface, ApiAwareInterface
      * @var AgreementApi
      */
     protected $api;
-    
+
     /**
      * {@inheritDoc}
      */
@@ -27,10 +24,10 @@ class CheckAgreementAction implements ActionInterface, ApiAwareInterface
         if (false == $api instanceof AgreementApi) {
             throw new UnsupportedApiException('Expected api must be instance of AgreementApi.');
         }
-        
+
         $this->api = $api;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -55,7 +52,7 @@ class CheckAgreementAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof CheckAgreement &&
             $request->getModel() instanceof \ArrayAccess
         ;

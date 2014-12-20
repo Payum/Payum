@@ -5,15 +5,15 @@ interface ActionInterface
 {
     /**
      * @param mixed $request
-     * 
+     *
      * @throws \Payum\Core\Exception\RequestNotSupportedException if the action dose not support the request.
      */
-    function execute($request);
+    public function execute($request);
 
     /**
      * @param mixed $request
-     * 
+     *
      * @return boolean
      */
-    function supports($request);
+    public function supports($request);
 }

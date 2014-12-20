@@ -36,7 +36,7 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
     {
         $verifier = new HttpRequestVerifier($this->createStorageMock());
 
-        $verifier->verify(new \stdClass);
+        $verifier->verify(new \stdClass());
     }
 
     /**
@@ -86,7 +86,7 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfTargetUrlPathNotMatchServerRequestUriPathOnVerify()
     {
-        $token = new Token;
+        $token = new Token();
         $token->setHash('theHash');
         $token->setTargetUrl('http://target.com/foo');
 
@@ -111,7 +111,7 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnExpectedTokenIfAllCheckPassedOnVerify()
     {
-        $expectedToken = new Token;
+        $expectedToken = new Token();
         $expectedToken->setHash('theHash');
         $expectedToken->setTargetUrl('http://target.com/foo');
 
@@ -138,7 +138,7 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnExpectedTokenIfAllCheckPassedOnVerifyAndHashSetToQuery()
     {
-        $expectedToken = new Token;
+        $expectedToken = new Token();
         $expectedToken->setHash('theHash');
         $expectedToken->setTargetUrl('http://target.com/foo');
 
@@ -165,7 +165,7 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnExpectedTokenIfTokenSetToRequestAttribute()
     {
-        $expectedToken = new Token;
+        $expectedToken = new Token();
         $expectedToken->setHash('theHash');
         $expectedToken->setTargetUrl('http://target.com/foo');
 
@@ -190,7 +190,7 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchUriIfTokenSetToRequestAttribute()
     {
-        $expectedToken = new Token;
+        $expectedToken = new Token();
         $expectedToken->setHash('theHash');
         $expectedToken->setTargetUrl('http://target.com/bar');
 
@@ -215,7 +215,7 @@ class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallStorageDeleteModelMethodOnInvalidate()
     {
-        $token = new Token;
+        $token = new Token();
 
         $storageMock = $this->createStorageMock();
         $storageMock

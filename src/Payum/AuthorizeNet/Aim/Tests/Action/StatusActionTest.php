@@ -37,7 +37,7 @@ class StatusActionTest extends GenericActionTest
         $request = new GetBinaryStatus(new ArrayObject());
 
         $action->execute($request);
-        
+
         $this->assertTrue($request->isNew());
     }
 
@@ -125,7 +125,7 @@ class StatusActionTest extends GenericActionTest
 
         $this->assertTrue($request->isCanceled());
     }
-    
+
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|GetStatusInterface
      */
@@ -138,7 +138,7 @@ class StatusActionTest extends GenericActionTest
             ->method('getModel')
             ->will($this->returnValue($model))
         ;
-        
+
         return $status;
     }
 }

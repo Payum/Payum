@@ -52,7 +52,7 @@ abstract class Generic implements ModelAwareInterface, ModelAggregateInterface, 
         if (is_array($model)) {
             $model = new \ArrayObject($model);
         }
-        
+
         $this->model = $model;
 
         $this->setFirstModel($model);

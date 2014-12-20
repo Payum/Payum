@@ -36,7 +36,7 @@ abstract class BaseModelAware extends LogicException implements ReplyInterface, 
         if (is_array($model)) {
             $model = new \ArrayObject($model);
         }
-        
+
         $this->model = $model;
     }
 }

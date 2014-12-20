@@ -2,7 +2,6 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Payment;
 use Payum\Core\PaymentFactory as CorePaymentFactory;
 use Payum\Core\PaymentFactoryInterface;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileAction;
@@ -82,7 +81,7 @@ class PaymentFactory implements PaymentFactoryInterface
                 'sandbox' => true,
             ));
 
-            $config['payum.api'] = function(ArrayObject $config) {
+            $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['options.required']);
 
                 $paypalConfig = array(

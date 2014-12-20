@@ -11,7 +11,7 @@ class HttpPostRedirectTest extends \PHPUnit_Framework_TestCase
     public function shouldImplementReplyInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Reply\HttpPostRedirect');
-        
+
         $this->assertTrue($rc->implementsInterface('Payum\Core\Reply\ReplyInterface'));
     }
 
@@ -60,9 +60,9 @@ class HttpPostRedirectTest extends \PHPUnit_Framework_TestCase
     </body>
 </html>
 HTML;
-        
+
         $request = new HttpPostRedirect('theUrl');
-        
+
         $this->assertEquals($expectedContent, $request->getContent());
     }
 

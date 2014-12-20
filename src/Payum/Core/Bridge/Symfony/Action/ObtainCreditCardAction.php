@@ -32,7 +32,7 @@ class ObtainCreditCardAction extends PaymentAwareAction
 
     /**
      * @param FormFactoryInterface $formFactory
-     * @param string $templateName
+     * @param string               $templateName
      */
     public function __construct(FormFactoryInterface $formFactory, $templateName)
     {
@@ -73,11 +73,11 @@ class ObtainCreditCardAction extends PaymentAwareAction
                 $request->set($card);
 
                 return;
-             }
+            }
         }
 
         $renderTemplate = new RenderTemplate($this->templateName, array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ));
         $this->payment->execute($renderTemplate);
 

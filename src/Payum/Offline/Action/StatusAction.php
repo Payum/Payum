@@ -5,8 +5,6 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Offline\Constants;
-use Payum\Core\Request\GetBinaryStatus;
-use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetStatusInterface;
 
 class StatusAction implements ActionInterface

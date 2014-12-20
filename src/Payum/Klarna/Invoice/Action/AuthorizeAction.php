@@ -5,9 +5,6 @@ use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Authorize;
-use Payum\Core\Request\Capture;
-use Payum\Core\Request\Sync;
-use Payum\Klarna\Invoice\Request\Api\Activate;
 use Payum\Klarna\Invoice\Request\Api\ReserveAmount;
 
 class AuthorizeAction extends PaymentAwareAction

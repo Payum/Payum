@@ -22,7 +22,7 @@ class CancelReservationActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new CancelReservationAction;
+        new CancelReservationAction();
     }
 
     /**
@@ -40,7 +40,7 @@ class CancelReservationActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CancelReservationAction($this->createKlarnaMock());
 
-        $action->setApi($config = new Config);
+        $action->setApi($config = new Config());
 
         $this->assertAttributeSame($config, 'config', $action);
     }
@@ -55,7 +55,7 @@ class CancelReservationActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CancelReservationAction($this->createKlarnaMock());
 
-        $action->setApi(new \stdClass);
+        $action->setApi(new \stdClass());
     }
 
     /**
@@ -63,7 +63,7 @@ class CancelReservationActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportCancelReservationWithArrayAsModel()
     {
-        $action = new CancelReservationAction;
+        $action = new CancelReservationAction();
 
         $this->assertTrue($action->supports(new CancelReservation(array())));
     }
@@ -73,7 +73,7 @@ class CancelReservationActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotCancelReservation()
     {
-        $action = new CancelReservationAction;
+        $action = new CancelReservationAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -83,9 +83,9 @@ class CancelReservationActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportCancelReservationWithNotArrayAccessModel()
     {
-        $action = new CancelReservationAction;
+        $action = new CancelReservationAction();
 
-        $this->assertFalse($action->supports(new CancelReservation(new \stdClass)));
+        $this->assertFalse($action->supports(new CancelReservation(new \stdClass())));
     }
 
     /**
@@ -95,7 +95,7 @@ class CancelReservationActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $action = new CancelReservationAction;
+        $action = new CancelReservationAction();
 
         $action->execute(new \stdClass());
     }
@@ -108,7 +108,7 @@ class CancelReservationActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfRnoNotSet()
     {
-        $action = new CancelReservationAction;
+        $action = new CancelReservationAction();
 
         $action->execute(new CancelReservation(array()));
     }
@@ -131,7 +131,7 @@ class CancelReservationActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new CancelReservationAction($klarnaMock);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
 
         $action->execute($activate = new CancelReservation($details));
 
@@ -158,7 +158,7 @@ class CancelReservationActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new CancelReservationAction($klarnaMock);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
 
         $action->execute($cancel = new CancelReservation($details));
 

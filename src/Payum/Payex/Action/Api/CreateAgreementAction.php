@@ -16,7 +16,7 @@ class CreateAgreementAction implements ActionInterface, ApiAwareInterface
      * @var AgreementApi
      */
     protected $api;
-    
+
     /**
      * {@inheritDoc}
      */
@@ -25,10 +25,10 @@ class CreateAgreementAction implements ActionInterface, ApiAwareInterface
         if (false == $api instanceof AgreementApi) {
             throw new UnsupportedApiException('Expected api must be instance of AgreementApi.');
         }
-        
+
         $this->api = $api;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -49,7 +49,7 @@ class CreateAgreementAction implements ActionInterface, ApiAwareInterface
             'purchaseOperation',
             'maxAmount',
             'startDate',
-            'stopDate'
+            'stopDate',
         ));
 
         $model->validateNotEmpty(array(
@@ -68,7 +68,7 @@ class CreateAgreementAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof CreateAgreement &&
             $request->getModel() instanceof \ArrayAccess
         ;

@@ -10,7 +10,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new Config;
+        new Config();
     }
 
     /**
@@ -18,7 +18,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetOptions()
     {
-        $config = new Config;
+        $config = new Config();
         $config->merchantId = 'aMerhId';
         $config->secret = 'aSecret';
         $config->contentType = 'aType';

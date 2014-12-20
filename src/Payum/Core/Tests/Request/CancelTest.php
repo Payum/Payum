@@ -11,7 +11,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
     public function shouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass('Payum\Core\Request\Cancel');
-        
+
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
     }
 
@@ -20,6 +20,6 @@ class CancelTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithModel()
     {
-        new Cancel(new \stdClass);
+        new Cancel(new \stdClass());
     }
 }

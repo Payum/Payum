@@ -21,7 +21,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new Token;
+        new Token();
     }
 
     /**
@@ -29,7 +29,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetHashGeneratedInConstructor()
     {
-        $token = new Token;
+        $token = new Token();
 
         $this->assertNotEmpty($token->getHash());
     }
@@ -39,8 +39,8 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldGenerateDifferentTokensInConstructor()
     {
-        $tokenOne = new Token;
-        $tokenTwo = new Token;
+        $tokenOne = new Token();
+        $tokenTwo = new Token();
 
         $this->assertNotEquals($tokenOne->getHash(), $tokenTwo->getHash());
     }
@@ -50,7 +50,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetHash()
     {
-        $token = new Token;
+        $token = new Token();
 
         $token->setHash('foo');
     }
@@ -60,7 +60,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetHash()
     {
-        $token = new Token;
+        $token = new Token();
 
         $token->setHash('theToken');
 
@@ -72,7 +72,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetPaymentName()
     {
-        $token = new Token;
+        $token = new Token();
 
         $token->setPaymentName('aName');
     }
@@ -82,7 +82,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetPaymentName()
     {
-        $token = new Token;
+        $token = new Token();
 
         $token->setPaymentName('theName');
 
@@ -94,7 +94,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetTargetUrl()
     {
-        $token = new Token;
+        $token = new Token();
 
         $token->setTargetUrl('anUrl');
     }
@@ -104,7 +104,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetTargetUrl()
     {
-        $token = new Token;
+        $token = new Token();
 
         $token->setTargetUrl('theUrl');
 
@@ -116,7 +116,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetAfterUrl()
     {
-        $token = new Token;
+        $token = new Token();
 
         $token->setAfterUrl('anUrl');
     }
@@ -126,7 +126,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetAfterUrl()
     {
-        $token = new Token;
+        $token = new Token();
 
         $token->setAfterUrl('theUrl');
 
@@ -138,7 +138,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetIdentityAsDetails()
     {
-        $token = new Token;
+        $token = new Token();
 
         $token->setDetails(new Identity('anId', 'stdClass'));
     }
@@ -150,7 +150,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     {
         $expectedIdentity = 'theDetails';
 
-        $token = new Token;
+        $token = new Token();
 
         $token->setDetails($expectedIdentity);
 
@@ -164,7 +164,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     {
         $expectedIdentity = new Identity('anId', 'stdClass');
 
-        $token = new Token;
+        $token = new Token();
 
         $token->setDetails($expectedIdentity);
 

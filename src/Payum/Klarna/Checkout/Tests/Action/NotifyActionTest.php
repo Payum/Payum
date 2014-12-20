@@ -41,7 +41,7 @@ class NotifyActionTest extends GenericActionTest
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\UpdateOrder'))
-            ->will($this->returnCallback(function(UpdateOrder $request) use ($testCase) {
+            ->will($this->returnCallback(function (UpdateOrder $request) use ($testCase) {
                 $model = $request->getModel();
 
                 $testCase->assertEquals(Constants::STATUS_CREATED, $model['status']);
@@ -55,7 +55,7 @@ class NotifyActionTest extends GenericActionTest
             ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
 
-        $action = new NotifyAction;
+        $action = new NotifyAction();
         $action->setPayment($paymentMock);
 
         $action->execute(new Notify(array(
@@ -63,7 +63,7 @@ class NotifyActionTest extends GenericActionTest
             'location' => 'theLocation',
             'merchant_reference' => array(
                 'orderid1' => 'theOrderId',
-            )
+            ),
         )));
     }
 
@@ -79,7 +79,7 @@ class NotifyActionTest extends GenericActionTest
             ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
 
-        $action = new NotifyAction;
+        $action = new NotifyAction();
         $action->setPayment($paymentMock);
 
         $action->execute(new Notify(array(
@@ -100,7 +100,7 @@ class NotifyActionTest extends GenericActionTest
             ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
 
-        $action = new NotifyAction;
+        $action = new NotifyAction();
         $action->setPayment($paymentMock);
 
         $action->execute(new Notify(array(

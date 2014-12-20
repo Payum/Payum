@@ -20,9 +20,9 @@ abstract class BaseFillOrderDetailsActionTest extends \PHPUnit_Framework_TestCas
     public function provideSupportedRequests()
     {
         return array(
-            array(new $this->requestClass(new Order)),
+            array(new $this->requestClass(new Order())),
             array(new $this->requestClass($this->getMock('Payum\Core\Model\OrderInterface'))),
-            array(new $this->requestClass(new Order, $this->getMock('Payum\Core\Security\TokenInterface'))),
+            array(new $this->requestClass(new Order(), $this->getMock('Payum\Core\Security\TokenInterface'))),
         );
     }
 
@@ -51,7 +51,7 @@ abstract class BaseFillOrderDetailsActionTest extends \PHPUnit_Framework_TestCas
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new $this->actionClass;
+        new $this->actionClass();
     }
 
     /**
@@ -61,7 +61,7 @@ abstract class BaseFillOrderDetailsActionTest extends \PHPUnit_Framework_TestCas
      */
     public function shouldSupportRequest($request)
     {
-        $action = new $this->actionClass;
+        $action = new $this->actionClass();
 
         $this->assertTrue($action->supports($request));
     }
@@ -73,7 +73,7 @@ abstract class BaseFillOrderDetailsActionTest extends \PHPUnit_Framework_TestCas
      */
     public function shouldNotSupportRequest($request)
     {
-        $action = new $this->actionClass;
+        $action = new $this->actionClass();
 
         $this->assertFalse($action->supports($request));
     }
@@ -87,7 +87,7 @@ abstract class BaseFillOrderDetailsActionTest extends \PHPUnit_Framework_TestCas
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute($request)
     {
-        $action = new $this->actionClass;
+        $action = new $this->actionClass();
 
         $action->execute($request);
     }

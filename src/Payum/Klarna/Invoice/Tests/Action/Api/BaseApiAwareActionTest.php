@@ -1,9 +1,7 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
-use Payum\Klarna\Invoice\Action\Api\ActivateAction;
 use Payum\Klarna\Invoice\Config;
-use Payum\Klarna\Invoice\Request\Api\Activate;
 
 class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,7 +42,7 @@ class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = $this->getMockForAbstractClass('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction');
 
-        $action->setApi($config = new Config);
+        $action->setApi($config = new Config());
 
         $this->assertAttributeSame($config, 'config', $action);
     }
@@ -59,6 +57,6 @@ class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = $this->getMockForAbstractClass('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction');
 
-        $action->setApi(new \stdClass);
+        $action->setApi(new \stdClass());
     }
 }

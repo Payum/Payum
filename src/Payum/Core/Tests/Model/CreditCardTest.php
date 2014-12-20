@@ -20,7 +20,7 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new CreditCard;
+        new CreditCard();
     }
 
     /**
@@ -28,7 +28,7 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetBrand()
     {
-        $card = new CreditCard;
+        $card = new CreditCard();
 
         $card->setBrand('theBrand');
 
@@ -40,7 +40,7 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetToken()
     {
-        $card = new CreditCard;
+        $card = new CreditCard();
 
         $card->setToken('theToken');
 
@@ -52,7 +52,7 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetHolder()
     {
-        $card = new CreditCard;
+        $card = new CreditCard();
 
         $card->setHolder('Mahatma Gandhi');
 
@@ -64,14 +64,13 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSecureHolder()
     {
-        $card = new CreditCard;
+        $card = new CreditCard();
 
         $card->setHolder('Mahatma Gandhi');
 
         $this->assertEquals('Mahatma Gandhi', $this->readAttribute($card, 'holder'));
         $this->assertEquals('Mahatma Gandhi', $card->getHolder());
         $this->assertNull($this->readAttribute($card, 'securedHolder'));
-
 
         $card->secure();
 
@@ -89,7 +88,7 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetMaskedHolderWhenSetHolder()
     {
-        $card = new CreditCard;
+        $card = new CreditCard();
 
         $card->setHolder('Mahatma Gandhi');
 
@@ -101,7 +100,7 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowChangeMaskedHolder()
     {
-        $card = new CreditCard;
+        $card = new CreditCard();
 
         $card->setHolder('Mahatma Gandhi');
         $card->setMaskedHolder('theMaskedHolder');
@@ -115,7 +114,7 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetNumber()
     {
-        $card = new CreditCard;
+        $card = new CreditCard();
 
         $card->setNumber('1234 5678 1234 5678');
 
@@ -127,14 +126,13 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSecureNumber()
     {
-        $card = new CreditCard;
+        $card = new CreditCard();
 
         $card->setNumber('1234 5678 1234 5678');
 
         $this->assertEquals('1234 5678 1234 5678', $this->readAttribute($card, 'number'));
         $this->assertEquals('1234 5678 1234 5678', $card->getNumber());
         $this->assertNull($this->readAttribute($card, 'securedNumber'));
-
 
         $card->secure();
 
@@ -152,7 +150,7 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetMaskedNumberWhenSetNumber()
     {
-        $card = new CreditCard;
+        $card = new CreditCard();
 
         $card->setNumber('1234 5678 1234 5678');
 
@@ -164,7 +162,7 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowChangeMaskedNumber()
     {
-        $card = new CreditCard;
+        $card = new CreditCard();
 
         $card->setNumber('1234 5678 1234 5678');
         $card->setMaskedNumber('theMaskedNumber');
@@ -179,7 +177,7 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetSecurityCode()
     {
-        $card = new CreditCard;
+        $card = new CreditCard();
 
         $card->setSecurityCode('theCode');
 
@@ -191,14 +189,13 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSecureSecurityCode()
     {
-        $card = new CreditCard;
+        $card = new CreditCard();
 
         $card->setSecurityCode('123');
 
         $this->assertEquals('123', $this->readAttribute($card, 'securityCode'));
         $this->assertEquals('123', $card->getSecuritycode());
         $this->assertNull($this->readAttribute($card, 'securedSecurityCode'));
-
 
         $card->secure();
 
@@ -216,9 +213,9 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetExpireAt()
     {
-        $card = new CreditCard;
+        $card = new CreditCard();
 
-        $expected = new \DateTime;
+        $expected = new \DateTime();
 
         $card->setExpireAt($expected);
 
@@ -230,16 +227,15 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSecureExpireAt()
     {
-        $card = new CreditCard;
-        
-        $expected = new \DateTime;
+        $card = new CreditCard();
+
+        $expected = new \DateTime();
 
         $card->setExpireAt($expected);
 
         $this->assertEquals($expected, $this->readAttribute($card, 'expireAt'));
         $this->assertEquals($expected, $card->getExpireAt());
         $this->assertNull($this->readAttribute($card, 'securedExpireAt'));
-
 
         $card->secure();
 
@@ -257,7 +253,7 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSecureOnlyChangedFields()
     {
-        $card = new CreditCard;
+        $card = new CreditCard();
         $card->setNumber('1234');
 
         $card->secure();

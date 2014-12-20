@@ -12,7 +12,7 @@ class OrderTest extends OrmTest
      */
     public function shouldAllowPersistEmpty()
     {
-        $this->em->persist(new Order);
+        $this->em->persist(new Order());
         $this->em->flush();
     }
 
@@ -21,7 +21,7 @@ class OrderTest extends OrmTest
      */
     public function shouldAllowPersistWithSomeFieldsSet()
     {
-        $order = new Order;
+        $order = new Order();
         $order->setTotalAmount(100);
         $order->setCurrencyCode('USD');
         $order->setNumber('aNum');
@@ -39,20 +39,20 @@ class OrderTest extends OrmTest
      */
     public function shouldAllowFindPersistedOrder()
     {
-        $order = new Order;
+        $order = new Order();
 
         $this->em->persist($order);
         $this->em->flush();
-        
+
         $id = $order->getId();
 
         $this->em->clear();
-        
+
         $foundOrder = $this->em->find(get_class($order), $id);
 
         //guard
         $this->assertNotSame($order, $foundOrder);
-        
+
         $this->assertEquals($order->getId(), $foundOrder->getId());
     }
 
@@ -61,7 +61,7 @@ class OrderTest extends OrmTest
      */
     public function shouldNotStoreSensitiveValue()
     {
-        $order = new Order;
+        $order = new Order();
         $order->setDetails(array('cardNumber' => new SensitiveValue('theCardNumber')));
 
         $this->em->persist($order);

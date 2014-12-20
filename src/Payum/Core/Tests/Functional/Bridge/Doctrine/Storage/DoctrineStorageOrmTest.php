@@ -15,11 +15,11 @@ class DoctrineStorageOrmTest extends OrmTest
             $this->em,
             'Payum\Core\Tests\Mocks\Entity\TestModel'
         );
-        
+
         $model = $storage->create();
-        
+
         $storage->update($model);
-        
+
         $this->assertNotNull($model->getId());
     }
 
@@ -38,9 +38,9 @@ class DoctrineStorageOrmTest extends OrmTest
         $storage->update($model);
 
         $this->assertNotNull($model->getId());
-        
+
         $identity = $storage->identify($model);
-        
+
         $this->assertInstanceOf('Payum\Core\Model\Identity', $identity);
         $this->assertEquals(get_class($model), $identity->getClass());
         $this->assertEquals($model->getId(), $identity->getId());
@@ -59,13 +59,13 @@ class DoctrineStorageOrmTest extends OrmTest
         $model = $storage->create();
 
         $storage->update($model);
-        
+
         $requestId = $model->getId();
-        
+
         $this->em->clear();
 
         $model = $storage->find($requestId);
-        
+
         $this->assertInstanceOf('Payum\Core\Tests\Mocks\Entity\TestModel', $model);
         $this->assertEquals($requestId, $model->getId());
     }

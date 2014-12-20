@@ -22,7 +22,7 @@ class CheckOrderStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new CheckOrderStatusAction;
+        new CheckOrderStatusAction();
     }
 
     /**
@@ -40,7 +40,7 @@ class CheckOrderStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CheckOrderStatusAction($this->createKlarnaMock());
 
-        $action->setApi($config = new Config);
+        $action->setApi($config = new Config());
 
         $this->assertAttributeSame($config, 'config', $action);
     }
@@ -55,7 +55,7 @@ class CheckOrderStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CheckOrderStatusAction($this->createKlarnaMock());
 
-        $action->setApi(new \stdClass);
+        $action->setApi(new \stdClass());
     }
 
     /**
@@ -63,7 +63,7 @@ class CheckOrderStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportCheckOrderStatusWithArrayAsModel()
     {
-        $action = new CheckOrderStatusAction;
+        $action = new CheckOrderStatusAction();
 
         $this->assertTrue($action->supports(new CheckOrderStatus(array())));
     }
@@ -73,7 +73,7 @@ class CheckOrderStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotCheckOrderStatus()
     {
-        $action = new CheckOrderStatusAction;
+        $action = new CheckOrderStatusAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -83,9 +83,9 @@ class CheckOrderStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportCheckOrderStatusWithNotArrayAccessModel()
     {
-        $action = new CheckOrderStatusAction;
+        $action = new CheckOrderStatusAction();
 
-        $this->assertFalse($action->supports(new CheckOrderStatus(new \stdClass)));
+        $this->assertFalse($action->supports(new CheckOrderStatus(new \stdClass())));
     }
 
     /**
@@ -95,7 +95,7 @@ class CheckOrderStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $action = new CheckOrderStatusAction;
+        $action = new CheckOrderStatusAction();
 
         $action->execute(new \stdClass());
     }
@@ -108,7 +108,7 @@ class CheckOrderStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfRnoNotSet()
     {
-        $action = new CheckOrderStatusAction;
+        $action = new CheckOrderStatusAction();
 
         $action->execute(new CheckOrderStatus(array()));
     }
@@ -131,7 +131,7 @@ class CheckOrderStatusActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new CheckOrderStatusAction($klarnaMock);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
 
         $action->execute($check = new CheckOrderStatus($details));
 
@@ -158,7 +158,7 @@ class CheckOrderStatusActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new CheckOrderStatusAction($klarnaMock);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
 
         $action->execute($activate = new CheckOrderStatus($details));
 

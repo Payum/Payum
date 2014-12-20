@@ -51,7 +51,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         $cardFields = array('ACCT', 'CVV2', 'EXPDATE');
         if (false == $model->validateNotEmpty($cardFields, false)) {
             try {
-                $this->payment->execute($obtainCreditCard = new ObtainCreditCard);
+                $this->payment->execute($obtainCreditCard = new ObtainCreditCard());
 
                 $card = $obtainCreditCard->obtain();
 

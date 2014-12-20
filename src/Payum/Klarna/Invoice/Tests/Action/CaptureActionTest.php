@@ -22,7 +22,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new CaptureAction;
+        new CaptureAction();
     }
 
     /**
@@ -40,7 +40,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotCapture()
     {
-        $action = new CaptureAction;
+        $action = new CaptureAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -50,9 +50,9 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportCaptureWithNotArrayAccessModel()
     {
-        $action = new CaptureAction;
+        $action = new CaptureAction();
 
-        $this->assertFalse($action->supports(new Capture(new \stdClass)));
+        $this->assertFalse($action->supports(new Capture(new \stdClass())));
     }
 
     /**
@@ -62,7 +62,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $action = new CaptureAction;
+        $action = new CaptureAction();
 
         $action->execute(new \stdClass());
     }
@@ -79,7 +79,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Payum\Core\Request\Authorize'))
         ;
 
-        $action = new CaptureAction;
+        $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
         $request = new Capture(array());
@@ -99,7 +99,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Payum\Klarna\Invoice\Request\Api\Activate'))
         ;
 
-        $action = new CaptureAction;
+        $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
         $request = new Capture(array(
@@ -120,12 +120,12 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
         ;
 
-        $action = new CaptureAction;
+        $action = new CaptureAction();
         $action->setPayment($paymentMock);
 
         $request = new Capture(array(
             'rno' => 'aRno',
-            'invoice_number' => 'anInvNumber'
+            'invoice_number' => 'anInvNumber',
         ));
 
         $action->execute($request);

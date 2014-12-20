@@ -30,7 +30,7 @@ class GetRecurringPaymentsProfileDetailsAction extends BaseApiAwareAction
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof GetRecurringPaymentsProfileDetails &&
             $request->getModel() instanceof \ArrayAccess
         ;

@@ -16,7 +16,7 @@ use Payum\Core\Exception\RuntimeException;
  * @link https://www.x.com/developers/paypal/documentation-tools/api/gettransactiondetails-api-operation-nvp
  * @link https://www.x.com/developers/paypal/documentation-tools/api/createrecurringpaymentsprofile-api-operation-nvp
  * @link https://www.x.com/developers/paypal/documentation-tools/api/getrecurringpaymentsprofiledetails-api-operation-nvp
- * 
+ *
  * L_ERRORCODE: @link https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_nvp_errorcodes
  * ACK: @link https://www.x.com/content/paypal-nvp-api-overview
  */
@@ -185,7 +185,7 @@ class Api
 
     /**
      * Indicates whether you would like PayPal to automatically bill the outstanding balance amount in the next billing cycle.
-     * 
+     *
      * PayPal does not automatically bill the outstanding balance.
      */
     const AUTOBILLOUTAMT_NOAUTOBILL = 'NoAutoBill';
@@ -219,7 +219,7 @@ class Api
      * If this field is not set or you set it to CancelOnFailure, PayPal creates the recurring payment profile, but places it into a pending status until the initial payment completes. If the initial payment clears, PayPal notifies you by IPN that the pending profile has been activated. If the payment fails, PayPal notifies you by IPN that the pending profile has been canceled.
      */
     const FAILEDINITAMTACTION_CANCELONFAILURE = 'CancelOnFailure';
-    
+
     const CREDITCARDTYPE_VISA = 'Visa';
 
     const CREDITCARDTYPE_MASTERCARD = 'MasterCard';
@@ -232,7 +232,7 @@ class Api
      * If the credit card type is Maestro, you must set CURRENCYCODE to GBP. In addition, you must specify either STARTDATE or ISSUENUMBER.
      */
     const CREDITCARDTYPE_MAESTRO = 'Maestro';
-    
+
     const PAYERSTATUS_VERIFIED = 'verified';
 
     const PAYERSTATUS_UNVERIFIED = 'unverified';
@@ -254,18 +254,18 @@ class Api
 
     /**
      * Type of billing agreement for reference transactions. You must have permission from PayPal to use this field. This field must be set to one of the following values:
-     * 
+     *
      * PayPal creates a billing agreement for each transaction associated with buyer. You must specify version 54.0 or higher to use this option.
      */
     const BILLINGTYPE_MERCHANTINITIATEDBILLING = 'MerchantInitiatedBilling';
 
     /**
      * Type of billing agreement for reference transactions. You must have permission from PayPal to use this field. This field must be set to one of the following values:
-     * 
+     *
      * PayPal creates a single billing agreement for all transactions associated with buyer. Use this value unless you need per-transaction billing agreements. You must specify version 58.0 or higher to use this option.
      */
     const BILLINGTYPE_MERCHANTINITIATEDBILLINGSINGLEAGREEMENT = 'MerchantInitiatedBilling';
-    
+
     const RECURRINGPAYMENTSTATUS_ACTIVE = 'Active';
 
     const RECURRINGPAYMENTSTATUS_PENDING = 'Pending';
@@ -302,7 +302,7 @@ class Api
     );
 
     /**
-     * @param array $options
+     * @param array                $options
      * @param ClientInterface|null $client
      */
     public function __construct(array $options, ClientInterface $client = null)
@@ -321,7 +321,7 @@ class Api
         if (false == is_bool($this->options['sandbox'])) {
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
         }
-        
+
         $this->client = $client ?: ClientFactory::createCurl();
     }
 
@@ -334,7 +334,7 @@ class Api
      */
     public function setExpressCheckout(array $fields)
     {
-        $request = new FormRequest;
+        $request = new FormRequest();
         $request->setFields($fields);
 
         if (false == isset($fields['RETURNURL'])) {
@@ -370,7 +370,7 @@ class Api
      */
     public function getExpressCheckoutDetails(array $fields)
     {
-        $request = new FormRequest;
+        $request = new FormRequest();
         $request->setFields($fields);
 
         $request->setField('METHOD', 'GetExpressCheckoutDetails');
@@ -390,7 +390,7 @@ class Api
      */
     public function getTransactionDetails(array $fields)
     {
-        $request = new FormRequest;
+        $request = new FormRequest();
         $request->setFields($fields);
 
         $request->setField('METHOD', 'GetTransactionDetails');
@@ -410,7 +410,7 @@ class Api
      */
     public function doExpressCheckoutPayment(array $fields)
     {
-        $request = new FormRequest;
+        $request = new FormRequest();
         $request->setFields($fields);
 
         $request->setField('METHOD', 'DoExpressCheckoutPayment');
@@ -428,7 +428,7 @@ class Api
      */
     public function createRecurringPaymentsProfile(array $fields)
     {
-        $request = new FormRequest;
+        $request = new FormRequest();
         $request->setFields($fields);
 
         $request->setField('METHOD', 'CreateRecurringPaymentsProfile');
@@ -446,7 +446,7 @@ class Api
      */
     public function getRecurringPaymentsProfileDetails(array $fields)
     {
-        $request = new FormRequest;
+        $request = new FormRequest();
         $request->setFields($fields);
 
         $request->setField('METHOD', 'GetRecurringPaymentsProfileDetails');
@@ -464,7 +464,7 @@ class Api
      */
     public function manageRecurringPaymentsProfileStatus(array $fields)
     {
-        $request = new FormRequest;
+        $request = new FormRequest();
         $request->setFields($fields);
 
         $request->setField('METHOD', 'ManageRecurringPaymentsProfileStatus');
@@ -484,7 +484,7 @@ class Api
      */
     public function createBillingAgreement(array $fields)
     {
-        $request = new FormRequest;
+        $request = new FormRequest();
         $request->setFields($fields);
 
         $request->setField('METHOD', 'CreateBillingAgreement');
@@ -504,7 +504,7 @@ class Api
      */
     public function doReferenceTransaction(array $fields)
     {
-        $request = new FormRequest;
+        $request = new FormRequest();
         $request->setFields($fields);
 
         $request->setField('METHOD', 'DoReferenceTransaction');
@@ -527,7 +527,7 @@ class Api
         $request->setMethod('POST');
         $request->fromUrl($this->getApiEndpoint());
 
-        $this->client->send($request, $response = new Response);
+        $this->client->send($request, $response = new Response());
 
         if (false == $response->isSuccessful()) {
             throw HttpException::factory($request, $response);
@@ -544,7 +544,7 @@ class Api
 
     /**
      * @param string $token
-     * @param array $query
+     * @param array  $query
      *
      * @return string
      */

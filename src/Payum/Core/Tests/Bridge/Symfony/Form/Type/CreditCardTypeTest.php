@@ -21,7 +21,7 @@ class CreditCardTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new CreditCardType;
+        new CreditCardType();
     }
 
     /**
@@ -29,7 +29,7 @@ class CreditCardTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldExtendFormType()
     {
-        $type = new CreditCardType;
+        $type = new CreditCardType();
 
         $this->assertEquals('form', $type->getParent());
     }
@@ -39,7 +39,7 @@ class CreditCardTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnExpectedName()
     {
-        $type = new CreditCardType;
+        $type = new CreditCardType();
 
         $this->assertEquals('payum_credit_card', $type->getName());
     }
@@ -49,9 +49,9 @@ class CreditCardTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowResolveOptions()
     {
-        $type = new CreditCardType;
+        $type = new CreditCardType();
 
-        $resolver = new OptionsResolver;
+        $resolver = new OptionsResolver();
 
         $type->setDefaultOptions($resolver);
 
@@ -66,5 +66,4 @@ class CreditCardTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('label', $options);
         $this->assertFalse($options['label']);
     }
-
 }

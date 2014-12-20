@@ -12,7 +12,7 @@ class OrderTest extends MongoTest
      */
     public function shouldAllowPersistEmpty()
     {
-        $this->dm->persist(new Order);
+        $this->dm->persist(new Order());
         $this->dm->flush();
     }
 
@@ -21,7 +21,7 @@ class OrderTest extends MongoTest
      */
     public function shouldAllowPersistWithSomeFieldsSet()
     {
-        $order = new Order;
+        $order = new Order();
         $order->setTotalAmount(100);
         $order->setCurrencyCode('USD');
         $order->setNumber('aNum');
@@ -39,20 +39,20 @@ class OrderTest extends MongoTest
      */
     public function shouldAllowFindPersistedOrder()
     {
-        $order = new Order;
+        $order = new Order();
 
         $this->dm->persist($order);
         $this->dm->flush();
-        
+
         $id = $order->getId();
 
         $this->dm->clear();
-        
+
         $foundOrder = $this->dm->find(get_class($order), $id);
 
         //guard
         $this->assertNotSame($order, $foundOrder);
-        
+
         $this->assertEquals($order->getId(), $foundOrder->getId());
     }
 
@@ -61,7 +61,7 @@ class OrderTest extends MongoTest
      */
     public function shouldNotStoreSensitiveValue()
     {
-        $order = new Order;
+        $order = new Order();
         $order->setDetails(array('cardNumber' => new SensitiveValue('theCardNumber')));
 
         $this->dm->persist($order);

@@ -5,7 +5,7 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Reply\ReplyInterface;
 
-class EndlessCycleDetectorExtension implements ExtensionInterface 
+class EndlessCycleDetectorExtension implements ExtensionInterface
 {
     /**
      * @var mixed
@@ -25,11 +25,11 @@ class EndlessCycleDetectorExtension implements ExtensionInterface
     /**
      * @param int $limit
      */
-    public function __construct($limit = 100) 
+    public function __construct($limit = 100)
     {
         $this->limit = $limit;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -39,18 +39,18 @@ class EndlessCycleDetectorExtension implements ExtensionInterface
             $this->firstRequest = $request;
             $this->cyclesCounter = 0;
         }
-        
+
         if ($this->cyclesCounter == $this->limit) {
             $cycles = $this->cyclesCounter;
             $this->firstRequest = null;
             $this->cyclesCounter = 0;
-            
+
             throw new LogicException(sprintf(
                 'Possible endless cycle detected. ::onPreExecute was called %d times before reach the limit.',
                 $cycles
             ));
         }
-        
+
         $this->cyclesCounter++;
     }
 

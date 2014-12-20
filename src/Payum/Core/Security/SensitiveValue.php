@@ -10,7 +10,7 @@ final class SensitiveValue implements \Serializable
     /**
      * @param mixed $value
      */
-    public final function __construct($value)
+    final public function __construct($value)
     {
         $this->value = $value;
     }

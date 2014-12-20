@@ -51,7 +51,7 @@ class DirectPaymentFactory implements PaymentFactoryInterface
                 'sandbox' => true,
             ));
 
-            $config['payum.api'] = function(ArrayObject $config) {
+            $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['options.required']);
 
                 return new Api(array(
@@ -61,7 +61,6 @@ class DirectPaymentFactory implements PaymentFactoryInterface
                 ));
             };
         }
-
 
         return (array) $config;
     }

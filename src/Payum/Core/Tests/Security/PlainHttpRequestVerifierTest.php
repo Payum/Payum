@@ -83,7 +83,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
     {
         $_SERVER['REQUEST_URI'] = 'http://target.com/bar';
 
-        $token = new Token;
+        $token = new Token();
         $token->setHash('theHash');
         $token->setTargetUrl('http://target.com/foo');
 
@@ -107,7 +107,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
     {
         $_SERVER['REQUEST_URI'] = 'http://target.com/foo';
 
-        $expectedToken = new Token;
+        $expectedToken = new Token();
         $expectedToken->setHash('theHash');
         $expectedToken->setTargetUrl('http://target.com/foo');
 
@@ -131,7 +131,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnTokenObjectSetToRequestGlobalArrayWithoutChecks()
     {
-        $expectedToken = new Token;
+        $expectedToken = new Token();
 
         $verifier = new PlainHttpRequestVerifier($this->createStorageMock());
 
@@ -145,7 +145,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCustomizeTokenParameterInConstructor()
     {
-        $expectedToken = new Token;
+        $expectedToken = new Token();
 
         $verifier = new PlainHttpRequestVerifier($this->createStorageMock(), 'custom_token');
 
@@ -159,7 +159,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallStorageDeleteModelMethodOnInvalidate()
     {
-        $token = new Token;
+        $token = new Token();
 
         $storageMock = $this->createStorageMock();
         $storageMock

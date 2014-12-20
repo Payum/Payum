@@ -50,9 +50,9 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
     }
 
     /**
-     * @param Request $request
+     * @param Request  $request
      * @param Response $response
-     * 
+     *
      * @return HttpException
      */
     public static function factory(Request $request, Response $response)
@@ -67,9 +67,9 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
 
         $message = implode(PHP_EOL, array(
             $label,
-            '[status code] ' . $response->getStatusCode(),
-            '[reason phrase] ' . $response->getReasonPhrase(),
-            '[url] ' . $request->getUrl(),
+            '[status code] '.$response->getStatusCode(),
+            '[reason phrase] '.$response->getReasonPhrase(),
+            '[url] '.$request->getUrl(),
         ));
 
         $e = new static($message, $response->getStatusCode());

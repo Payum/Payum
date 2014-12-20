@@ -6,7 +6,6 @@ use Payum\Core\Request\GetHttpRequest;
 
 class GetHttpRequestAction implements ActionInterface
 {
-
     /**
      * {@inheritDoc}
      *

@@ -33,7 +33,7 @@ class CreditPartActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new CreditPartAction;
+        new CreditPartAction();
     }
 
     /**
@@ -63,7 +63,7 @@ class CreditPartActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CreditPartAction($this->createKlarnaMock());
 
-        $action->setApi($config = new Config);
+        $action->setApi($config = new Config());
 
         $this->assertAttributeSame($config, 'config', $action);
     }
@@ -78,7 +78,7 @@ class CreditPartActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CreditPartAction($this->createKlarnaMock());
 
-        $action->setApi(new \stdClass);
+        $action->setApi(new \stdClass());
     }
 
     /**
@@ -86,7 +86,7 @@ class CreditPartActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportCreditPartWithArrayAsModel()
     {
-        $action = new CreditPartAction;
+        $action = new CreditPartAction();
 
         $this->assertTrue($action->supports(new CreditPart(array())));
     }
@@ -96,7 +96,7 @@ class CreditPartActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotCreditPart()
     {
-        $action = new CreditPartAction;
+        $action = new CreditPartAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -106,9 +106,9 @@ class CreditPartActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportCreditPartWithNotArrayAccessModel()
     {
-        $action = new CreditPartAction;
+        $action = new CreditPartAction();
 
-        $this->assertFalse($action->supports(new CreditPart(new \stdClass)));
+        $this->assertFalse($action->supports(new CreditPart(new \stdClass())));
     }
 
     /**
@@ -118,7 +118,7 @@ class CreditPartActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $action = new CreditPartAction;
+        $action = new CreditPartAction();
 
         $action->execute(new \stdClass());
     }
@@ -131,7 +131,7 @@ class CreditPartActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfDetailsDoNotHaveInvoiceNumber()
     {
-        $action = new CreditPartAction;
+        $action = new CreditPartAction();
 
         $action->execute(new CreditPart(array()));
     }
@@ -161,7 +161,7 @@ class CreditPartActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new CreditPartAction($klarnaMock);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
         $action->setPayment($paymentMock);
 
         $action->execute($creditPart = new CreditPart($details));
@@ -194,7 +194,7 @@ class CreditPartActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new CreditPartAction($klarnaMock);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
         $action->setPayment($paymentMock);
 
         $action->execute($creditPart = new CreditPart($details));

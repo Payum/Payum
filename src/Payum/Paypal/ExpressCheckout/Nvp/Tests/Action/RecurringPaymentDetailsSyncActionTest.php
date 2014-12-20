@@ -12,14 +12,14 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     public function shouldBeSubClassOfPaymentAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsSyncAction');
-        
+
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
     }
 
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()   
+    public function couldBeConstructedWithoutAnyArguments()
     {
         new RecurringPaymentDetailsSyncAction();
     }
@@ -32,9 +32,9 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new RecurringPaymentDetailsSyncAction();
 
         $paymentDetails = array(
-            'BILLINGPERIOD' => 12
+            'BILLINGPERIOD' => 12,
         );
-        
+
         $request = new Sync($paymentDetails);
 
         $this->assertTrue($action->supports($request));
@@ -52,7 +52,7 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
@@ -72,14 +72,14 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('execute')
         ;
-        
+
         $action = new RecurringPaymentDetailsSyncAction();
         $action->setPayment($paymentMock);
 
         $request = new Sync(array(
-            'BILLINGPERIOD' => 12
+            'BILLINGPERIOD' => 12,
         ));
-        
+
         $action->execute($request);
     }
 
@@ -103,7 +103,7 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
             'PROFILEID' => 'anId',
         )));
     }
-    
+
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\PaymentInterface
      */

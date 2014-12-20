@@ -1,12 +1,12 @@
 <?php
 namespace Payum\Core\Model;
 
-interface DetailsAwareInterface  
+interface DetailsAwareInterface
 {
     /**
      * @param object $details
-     * 
+     *
      * @return void
      */
-    function setDetails($details);
+    public function setDetails($details);
 }

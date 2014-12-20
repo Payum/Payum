@@ -16,7 +16,7 @@ class StatusActionTest extends GenericActionTest
      */
     public function shouldMarkFailedIfModelHasErrorSet()
     {
-        $action = new StatusAction;
+        $action = new StatusAction();
 
         $model = array(
             'error' => array('code' => 'foo'),
@@ -32,7 +32,7 @@ class StatusActionTest extends GenericActionTest
      */
     public function shouldMarkNewIfDetailsEmpty()
     {
-        $action = new StatusAction;
+        $action = new StatusAction();
 
         $model = array();
 
@@ -46,7 +46,7 @@ class StatusActionTest extends GenericActionTest
      */
     public function shouldMarkNewIfModelHasNotCardSet()
     {
-        $action = new StatusAction;
+        $action = new StatusAction();
 
         $model = array();
 
@@ -60,10 +60,10 @@ class StatusActionTest extends GenericActionTest
      */
     public function shouldMarkPendingIfModelHasNotUsedTokenSet()
     {
-        $action = new StatusAction;
+        $action = new StatusAction();
 
         $model = array(
-            'card' => 'not-used-token'
+            'card' => 'not-used-token',
         );
 
         $action->execute($status = new GetHumanStatus($model));
@@ -76,7 +76,7 @@ class StatusActionTest extends GenericActionTest
      */
     public function shouldMarkCapturedIfModelHasSuccefullyUsedTokenSet()
     {
-        $action = new StatusAction;
+        $action = new StatusAction();
 
         $model = array(
             'card' => array('foo'),
@@ -94,7 +94,7 @@ class StatusActionTest extends GenericActionTest
      */
     public function shouldMarkUnknownIfStatusCouldBeGuessed()
     {
-        $action = new StatusAction;
+        $action = new StatusAction();
 
         $model = array(
             'card' => array('foo'),

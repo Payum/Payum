@@ -6,5 +6,5 @@ interface DetailsAggregateInterface
     /**
      * @return object|null
      */
-    function getDetails();
+    public function getDetails();
 }

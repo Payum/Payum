@@ -42,14 +42,14 @@ class BaseModeAwareTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Exception\LogicException'));
     }
-    
+
     /**
      * @test
      */
     public function shouldBeAbstractClass()
     {
         $rc = new \ReflectionClass('Payum\Core\Reply\BaseModelAware');
-        
+
         $this->assertTrue($rc->isAbstract());
     }
 
@@ -61,13 +61,13 @@ class BaseModeAwareTest extends \PHPUnit_Framework_TestCase
             'float' => array(5.5),
             'string' => array('foo'),
             'boolean' => array(false),
-            'resource' => array(tmpfile())
+            'resource' => array(tmpfile()),
         );
     }
 
     /**
      * @test
-     * 
+     *
      * @dataProvider provideDifferentPhpTypes
      */
     public function couldBeConstructedWithModelOfAnyType($phpType)
@@ -85,7 +85,7 @@ class BaseModeAwareTest extends \PHPUnit_Framework_TestCase
         $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array(123321));
 
         $request->setModel($phpType);
-        
+
         $this->assertEquals($phpType, $request->getModel());
     }
 
@@ -97,7 +97,7 @@ class BaseModeAwareTest extends \PHPUnit_Framework_TestCase
     public function shouldAllowGetModelSetInConstructor($phpType)
     {
         $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array($phpType));
-        
+
         $this->assertEquals($phpType, $request->getModel());
     }
 
@@ -107,7 +107,7 @@ class BaseModeAwareTest extends \PHPUnit_Framework_TestCase
     public function shouldConvertArrayToArrayObjectInConstructor()
     {
         $model = array('foo' => 'bar');
-        
+
         $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array($model));
 
         $this->assertInstanceOf('ArrayObject', $request->getModel());
@@ -122,7 +122,7 @@ class BaseModeAwareTest extends \PHPUnit_Framework_TestCase
         $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array(123321));
 
         $model = array('foo' => 'bar');
-        
+
         $request->setModel($model);
 
         $this->assertInstanceOf('ArrayObject', $request->getModel());

@@ -22,7 +22,7 @@ class CreditCardType extends AbstractType
                 array(
                     'input' => 'datetime',
                     'widget' => 'choice',
-                    'label' => 'form.credit_card.expire_at'
+                    'label' => 'form.credit_card.expire_at',
                 )
             );
     }

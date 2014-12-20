@@ -13,40 +13,40 @@ interface TokenInterface extends DetailsAggregateInterface, DetailsAwareInterfac
     /**
      * @return string
      */
-    function getHash();
+    public function getHash();
 
     /**
      * @param string $hash
      */
-    function setHash($hash);
+    public function setHash($hash);
 
     /**
      * @return string
      */
-    function getTargetUrl();
+    public function getTargetUrl();
 
     /**
      * @param string $targetUrl
      */
-    function setTargetUrl($targetUrl);
+    public function setTargetUrl($targetUrl);
 
     /**
      * @return string
      */
-    function getAfterUrl();
+    public function getAfterUrl();
 
     /**
      * @param string $afterUrl
      */
-    function setAfterUrl($afterUrl);
+    public function setAfterUrl($afterUrl);
 
     /**
      * @return string
      */
-    function getPaymentName();
+    public function getPaymentName();
 
     /**
      * @param string $paymentName
      */
-    function setPaymentName($paymentName);
+    public function setPaymentName($paymentName);
 }

@@ -2,7 +2,6 @@
 namespace Payum\Stripe;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Payment;
 use Payum\Core\PaymentFactory as CorePaymentFactory;
 use Payum\Core\PaymentFactoryInterface;
 use Payum\Stripe\Action\Api\CreateChargeAction;
@@ -48,7 +47,7 @@ class CheckoutPaymentFactory implements PaymentFactoryInterface
             'payum.action.capture' => new CaptureAction(),
             'payum.action.fill_order_details' => new FillOrderDetailsAction(),
             'payum.action.status' => new StatusAction(),
-            'payum.action.obtain_token' => function(ArrayObject $config) {
+            'payum.action.obtain_token' => function (ArrayObject $config) {
                 return new ObtainTokenAction($config['payum.template.obtain_token']);
             },
             'payum.action.create_charge' => new CreateChargeAction(),
@@ -57,7 +56,7 @@ class CheckoutPaymentFactory implements PaymentFactoryInterface
         if (false == $config['payum.api']) {
             $config['options.required'] = array('publishable_key', 'secret_key');
 
-            $config['payum.api'] = function(ArrayObject $config) {
+            $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['options.required']);
 
                 return new Keys($config['publishable_key'], $config['secret_key']);

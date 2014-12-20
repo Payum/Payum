@@ -28,7 +28,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
     public function shouldBeSubClassOfPaymentAwareAction()
     {
         $rc = new \ReflectionClass($this->actionClass);
-        
+
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
     }
 
@@ -37,7 +37,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
      */
     public function shouldExecuteSameRequestWithModelDetails()
     {
-        $expectedDetails = new \stdClass;
+        $expectedDetails = new \stdClass();
 
         $model = new DetailsAggregateModel();
         $model->details = $expectedDetails;
@@ -45,18 +45,18 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
         $request = new ModelAggregateAwareRequest($model);
 
         $testCase = $this;
-        
+
         $paymentMock = $this->getMock('Payum\Core\PaymentInterface');
         $paymentMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->identicalTo($request))
-            ->will($this->returnCallback(function($request) use ($expectedDetails, $testCase) {
+            ->will($this->returnCallback(function ($request) use ($expectedDetails, $testCase) {
                 $testCase->assertSame($expectedDetails, $request->getModel());
             }))
         ;
-        
-        $action = new ExecuteSameRequestWithModelDetailsAction;
+
+        $action = new ExecuteSameRequestWithModelDetailsAction();
         $action->setPayment($paymentMock);
 
         $action->execute($request);
@@ -83,7 +83,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->identicalTo($request))
-            ->will($this->returnCallback(function($request) use ($expectedDetails, $testCase) {
+            ->will($this->returnCallback(function ($request) use ($expectedDetails, $testCase) {
                 $details = $request->getModel();
 
                 $testCase->assertInstanceOf('ArrayAccess', $details);
@@ -93,7 +93,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             }))
         ;
 
-        $action = new ExecuteSameRequestWithModelDetailsAction;
+        $action = new ExecuteSameRequestWithModelDetailsAction();
         $action->setPayment($paymentMock);
 
         $action->execute($request);
@@ -121,7 +121,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->identicalTo($request))
-            ->will($this->returnCallback(function($request) use ($expectedDetails, $testCase) {
+            ->will($this->returnCallback(function ($request) use ($expectedDetails, $testCase) {
                 $details = $request->getModel();
 
                 $testCase->assertInstanceOf('ArrayAccess', $details);
@@ -131,7 +131,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             }))
         ;
 
-        $action = new ExecuteSameRequestWithModelDetailsAction;
+        $action = new ExecuteSameRequestWithModelDetailsAction();
         $action->setPayment($paymentMock);
 
         $action->execute($request);
@@ -163,7 +163,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->identicalTo($request))
-            ->will($this->returnCallback(function($request) use ($expectedDetails, $testCase) {
+            ->will($this->returnCallback(function ($request) use ($expectedDetails, $testCase) {
                 $details = $request->getModel();
 
                 $testCase->assertInstanceOf('ArrayAccess', $details);
@@ -175,7 +175,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             }))
         ;
 
-        $action = new ExecuteSameRequestWithModelDetailsAction;
+        $action = new ExecuteSameRequestWithModelDetailsAction();
         $action->setPayment($paymentMock);
 
         try {

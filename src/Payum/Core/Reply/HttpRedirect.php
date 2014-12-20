@@ -9,8 +9,8 @@ class HttpRedirect extends HttpResponse
     protected $url;
 
     /**
-     * @param string $url
-     * @param int $statusCode
+     * @param string   $url
+     * @param int      $statusCode
      * @param string[] $headers
      */
     public function __construct($url, $statusCode = 302, array $headers = array())

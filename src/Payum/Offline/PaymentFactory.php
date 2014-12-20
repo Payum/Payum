@@ -7,7 +7,6 @@ use Payum\Core\PaymentFactoryInterface;
 use Payum\Offline\Action\CaptureAction;
 use Payum\Offline\Action\FillOrderDetailsAction;
 use Payum\Offline\Action\StatusAction;
-use Payum\Core\Payment;
 
 class PaymentFactory implements PaymentFactoryInterface
 {

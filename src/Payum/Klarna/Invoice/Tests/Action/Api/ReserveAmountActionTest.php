@@ -33,7 +33,7 @@ class ReserveAmountActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new ReserveAmountAction;
+        new ReserveAmountAction();
     }
 
     /**
@@ -63,7 +63,7 @@ class ReserveAmountActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new ReserveAmountAction($this->createKlarnaMock());
 
-        $action->setApi($config = new Config);
+        $action->setApi($config = new Config());
 
         $this->assertAttributeSame($config, 'config', $action);
     }
@@ -78,7 +78,7 @@ class ReserveAmountActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new ReserveAmountAction($this->createKlarnaMock());
 
-        $action->setApi(new \stdClass);
+        $action->setApi(new \stdClass());
     }
 
     /**
@@ -86,7 +86,7 @@ class ReserveAmountActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportReserveAmountWithArrayAsModel()
     {
-        $action = new ReserveAmountAction;
+        $action = new ReserveAmountAction();
 
         $this->assertTrue($action->supports(new ReserveAmount(array())));
     }
@@ -96,7 +96,7 @@ class ReserveAmountActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotReserveAmount()
     {
-        $action = new ReserveAmountAction;
+        $action = new ReserveAmountAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -106,9 +106,9 @@ class ReserveAmountActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportReserveAmountWithNotArrayAccessModel()
     {
-        $action = new ReserveAmountAction;
+        $action = new ReserveAmountAction();
 
-        $this->assertFalse($action->supports(new ReserveAmount(new \stdClass)));
+        $this->assertFalse($action->supports(new ReserveAmount(new \stdClass())));
     }
 
     /**
@@ -118,7 +118,7 @@ class ReserveAmountActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $action = new ReserveAmountAction;
+        $action = new ReserveAmountAction();
 
         $action->execute(new \stdClass());
     }
@@ -132,7 +132,7 @@ class ReserveAmountActionTest extends \PHPUnit_Framework_TestCase
             'pno' => 'thePno',
             'gender' => 'theGender',
             'amount' => 'theAmount',
-            'reservation_flags' => 'theFlags'
+            'reservation_flags' => 'theFlags',
         );
 
         $paymentMock = $this->createPaymentMock();
@@ -156,7 +156,7 @@ class ReserveAmountActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new ReserveAmountAction($klarnaMock);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
         $action->setPayment($paymentMock);
 
         $action->execute($reserve = new ReserveAmount($details));
@@ -175,7 +175,7 @@ class ReserveAmountActionTest extends \PHPUnit_Framework_TestCase
             'pno' => 'thePno',
             'gender' => 'theGender',
             'amount' => 'theAmount',
-            'reservation_flags' => 'theFlags'
+            'reservation_flags' => 'theFlags',
         );
 
         $paymentMock = $this->createPaymentMock();
@@ -199,7 +199,7 @@ class ReserveAmountActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new ReserveAmountAction($klarnaMock);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
         $action->setPayment($paymentMock);
 
         $action->execute($reserve = new ReserveAmount($details));

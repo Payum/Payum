@@ -23,7 +23,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new PaymentDetailsCaptureAction;
+        new PaymentDetailsCaptureAction();
     }
 
     /**
@@ -44,7 +44,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new PaymentDetailsCaptureAction();
 
         $this->assertFalse($action->supports(new Capture(array(
-            'autoPay' => true
+            'autoPay' => true,
         ))));
     }
 
@@ -56,7 +56,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new PaymentDetailsCaptureAction();
 
         $this->assertTrue($action->supports(new Capture(array(
-            'autoPay' => false
+            'autoPay' => false,
         ))));
     }
 
@@ -69,7 +69,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($action->supports(new Capture(array(
             'autoPay' => true,
-            'recurring' => true
+            'recurring' => true,
         ))));
     }
 
@@ -78,7 +78,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotCapture()
     {
-        $action = new PaymentDetailsCaptureAction;
+        $action = new PaymentDetailsCaptureAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -88,9 +88,9 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportCaptureWithNotArrayAccessModel()
     {
-        $action = new PaymentDetailsCaptureAction;
+        $action = new PaymentDetailsCaptureAction();
 
-        $this->assertFalse($action->supports(new Capture(new \stdClass)));
+        $this->assertFalse($action->supports(new Capture(new \stdClass())));
     }
 
     /**
@@ -100,7 +100,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $action = new PaymentDetailsCaptureAction;
+        $action = new PaymentDetailsCaptureAction();
 
         $action->execute(new \stdClass());
     }
@@ -123,7 +123,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
         $request = new Capture(array(
             'clientIPAddress' => 'anIp',
         ));
-        
+
         $action->execute($request);
     }
 
@@ -184,7 +184,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
-            ->will($this->returnCallback(function(GetHttpRequest $request) {
+            ->will($this->returnCallback(function (GetHttpRequest $request) {
                 $request->clientIp = 'expectedClientIp';
             }))
         ;

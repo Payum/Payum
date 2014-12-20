@@ -20,7 +20,7 @@ class PopulateKlarnaFromDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithArrayModelAndKlarnaAsArguments()
     {
-        new PopulateKlarnaFromDetails(new \ArrayObject, new \Klarna);
+        new PopulateKlarnaFromDetails(new \ArrayObject(), new \Klarna());
     }
 
     /**
@@ -28,8 +28,8 @@ class PopulateKlarnaFromDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetModelSetInConstructor()
     {
-        $details = new \ArrayObject;
-        $klarna = new \Klarna;
+        $details = new \ArrayObject();
+        $klarna = new \Klarna();
 
         $request = new PopulateKlarnaFromDetails($details, $klarna);
 
@@ -41,8 +41,8 @@ class PopulateKlarnaFromDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetKlarnaSetInConstructor()
     {
-        $details = new \ArrayObject;
-        $klarna = new \Klarna;
+        $details = new \ArrayObject();
+        $klarna = new \Klarna();
 
         $request = new PopulateKlarnaFromDetails($details, $klarna);
 

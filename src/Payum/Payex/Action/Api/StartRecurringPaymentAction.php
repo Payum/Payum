@@ -15,7 +15,7 @@ class StartRecurringPaymentAction implements ActionInterface, ApiAwareInterface
      * @var RecurringApi
      */
     protected $api;
-    
+
     /**
      * {@inheritDoc}
      */
@@ -24,10 +24,10 @@ class StartRecurringPaymentAction implements ActionInterface, ApiAwareInterface
         if (false == $api instanceof RecurringApi) {
             throw new UnsupportedApiException('Expected api must be instance of RecurringApi.');
         }
-        
+
         $this->api = $api;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -60,7 +60,7 @@ class StartRecurringPaymentAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof StartRecurringPayment &&
             $request->getModel() instanceof \ArrayAccess
         ;

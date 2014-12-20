@@ -5,7 +5,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ManageRecurringPaymentsProfileStatus;
 
-class ManageRecurringPaymentsProfileStatusAction extends BaseApiAwareAction 
+class ManageRecurringPaymentsProfileStatusAction extends BaseApiAwareAction
 {
     /**
      * [@inheritdoc}

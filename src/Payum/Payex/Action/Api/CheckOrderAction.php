@@ -15,7 +15,7 @@ class CheckOrderAction implements ActionInterface, ApiAwareInterface
      * @var OrderApi
      */
     protected $api;
-    
+
     /**
      * {@inheritDoc}
      */
@@ -24,10 +24,10 @@ class CheckOrderAction implements ActionInterface, ApiAwareInterface
         if (false == $api instanceof OrderApi) {
             throw new UnsupportedApiException('Expected api must be instance of OrderApi.');
         }
-        
+
         $this->api = $api;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -41,7 +41,7 @@ class CheckOrderAction implements ActionInterface, ApiAwareInterface
         $model->validateNotEmpty(array(
             'transactionNumber',
         ));
-        
+
         $result = $this->api->check((array) $model);
 
         $model->replace($result);
@@ -52,7 +52,7 @@ class CheckOrderAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof CheckOrder &&
             $request->getModel() instanceof \ArrayAccess
         ;

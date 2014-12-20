@@ -3,7 +3,6 @@ namespace Payum\Klarna\Invoice;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
-use Payum\Core\Payment;
 use Payum\Core\PaymentFactory as CorePaymentFactory;
 use Payum\Core\PaymentFactoryInterface;
 use Payum\Klarna\Invoice\Action\Api\ActivateAction;
@@ -81,7 +80,7 @@ class PaymentFactory implements PaymentFactoryInterface
                 'sandbox' => true,
             ));
 
-            $config['payum.api'] = function(ArrayObject $config) {
+            $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['options.required']);
 
                 $config['mode'] = null === $config['sandbox'] ? \Klarna::BETA : \Klarna::LIVE;

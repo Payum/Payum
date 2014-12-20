@@ -13,13 +13,13 @@ class GenericTokenFactory extends AbstractGenericTokenFactory
     protected $baseUrl;
 
     /**
-     * @param StorageInterface $tokenStorage
+     * @param StorageInterface         $tokenStorage
      * @param StorageRegistryInterface $storageRegistry
-     * @param string $baseUrl
-     * @param string $capturePath
-     * @param string $notifyPath
-     * @param string $authorizePath
-     * @param string $refundPath
+     * @param string                   $baseUrl
+     * @param string                   $capturePath
+     * @param string                   $notifyPath
+     * @param string                   $authorizePath
+     * @param string                   $refundPath
      */
     public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $baseUrl, $capturePath, $notifyPath, $authorizePath, $refundPath)
     {

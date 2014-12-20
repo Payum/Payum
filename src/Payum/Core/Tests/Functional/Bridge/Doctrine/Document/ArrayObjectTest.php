@@ -12,7 +12,7 @@ class ArrayObjectTest extends MongoTest
      */
     public function shouldAllowPersistEmpty()
     {
-        $this->dm->persist(new ArrayObject);
+        $this->dm->persist(new ArrayObject());
         $this->dm->flush();
     }
 
@@ -21,7 +21,7 @@ class ArrayObjectTest extends MongoTest
      */
     public function shouldAllowPersistWithSomeFieldsSet()
     {
-        $model = new ArrayObject;
+        $model = new ArrayObject();
         $model['foo'] = 'theFoo';
         $model['bar'] = array('bar1', 'bar2' => 'theBar2');
 
@@ -34,22 +34,22 @@ class ArrayObjectTest extends MongoTest
      */
     public function shouldAllowFindPersistedArrayobject()
     {
-        $model = new ArrayObject;
+        $model = new ArrayObject();
         $model['foo'] = 'theFoo';
         $model['bar'] = array('bar1', 'bar2' => 'theBar2');
 
         $this->dm->persist($model);
         $this->dm->flush();
-        
+
         $id = $model->getId();
 
         $this->dm->clear();
-        
+
         $foundModel = $this->dm->find(get_class($model), $id);
 
         //guard
         $this->assertNotSame($model, $foundModel);
-        
+
         $this->assertEquals(iterator_to_array($model), iterator_to_array($foundModel));
     }
 
@@ -58,7 +58,7 @@ class ArrayObjectTest extends MongoTest
      */
     public function shouldNotStoreSensitiveValue()
     {
-        $model = new ArrayObject;
+        $model = new ArrayObject();
         $model['cardNumber'] = new SensitiveValue('theCardNumber');
 
         $this->dm->persist($model);

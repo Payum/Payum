@@ -5,11 +5,11 @@ use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\Payment;
 
-class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase 
+class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage Possible endless cycle detected. ::onPreExecute was called 10 times before reach the limit.
      */
@@ -17,7 +17,7 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $cycledRequest = new \stdClass();
 
-        $action = new RequireOtherRequestAction;
+        $action = new RequireOtherRequestAction();
         $action->setSupportedRequest($cycledRequest);
         $action->setRequiredRequest($cycledRequest);
 

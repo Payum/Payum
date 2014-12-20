@@ -19,25 +19,25 @@ abstract class PaymentFactory
      */
     public static function create(ApiContext $api)
     {
-        $payment = new Payment;
+        $payment = new Payment();
 
         $payment->addApi($api);
 
-        $payment->addExtension(new EndlessCycleDetectorExtension);
+        $payment->addExtension(new EndlessCycleDetectorExtension());
 
-        $payment->addAction(new CaptureAction);
-        $payment->addAction(new StatusAction);
-        $payment->addAction(new SyncAction);
-        $payment->addAction(new GetHttpRequestAction);
+        $payment->addAction(new CaptureAction());
+        $payment->addAction(new StatusAction());
+        $payment->addAction(new SyncAction());
+        $payment->addAction(new GetHttpRequestAction());
 
-        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction);
+        $payment->addAction(new ExecuteSameRequestWithModelDetailsAction());
 
         return $payment;
     }
 
     /**
      */
-    private  function __construct()
+    private function __construct()
     {
     }
 }

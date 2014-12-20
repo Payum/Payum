@@ -7,7 +7,7 @@ use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Storage\IdentityInterface;
 use Payum\Core\Storage\StorageInterface;
 
-class StorageExtension implements ExtensionInterface 
+class StorageExtension implements ExtensionInterface
 {
     /**
      * @var \Payum\Core\Storage\StorageInterface
@@ -18,7 +18,7 @@ class StorageExtension implements ExtensionInterface
      * @var int
      */
     protected $stackLevel = 0;
-    
+
     /**
      * @var object[]
      */
@@ -38,7 +38,7 @@ class StorageExtension implements ExtensionInterface
     public function onPreExecute($request)
     {
         $this->stackLevel++;
-        
+
         if (false == $request instanceof ModelAggregateInterface) {
             return;
         }

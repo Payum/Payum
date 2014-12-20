@@ -16,9 +16,9 @@ class FillOrderDetailsActionTest extends GenericActionTest
     public function provideSupportedRequests()
     {
         return array(
-            array(new $this->requestClass(new Order)),
+            array(new $this->requestClass(new Order())),
             array(new $this->requestClass($this->getMock('Payum\Core\Model\OrderInterface'))),
-            array(new $this->requestClass(new Order, $this->getMock('Payum\Core\Security\TokenInterface'))),
+            array(new $this->requestClass(new Order(), $this->getMock('Payum\Core\Security\TokenInterface'))),
         );
     }
 
@@ -37,7 +37,7 @@ class FillOrderDetailsActionTest extends GenericActionTest
      */
     public function shouldCorrectlyConvertOrderToDetailsAndSetItBack()
     {
-        $order = new Order;
+        $order = new Order();
         $order->setNumber('theNumber');
         $order->setCurrencyCode('USD');
         $order->setTotalAmount(123);
@@ -45,7 +45,7 @@ class FillOrderDetailsActionTest extends GenericActionTest
         $order->setClientId('theClientId');
         $order->setClientEmail('theClientEmail');
 
-        $action = new FillOrderDetailsAction;
+        $action = new FillOrderDetailsAction();
 
         $action->execute(new FillOrderDetails($order));
 
@@ -68,7 +68,7 @@ class FillOrderDetailsActionTest extends GenericActionTest
      */
     public function shouldNotOverwriteAlreadySetExtraDetails()
     {
-        $order = new Order;
+        $order = new Order();
         $order->setCurrencyCode('USD');
         $order->setTotalAmount(123);
         $order->setDescription('the description');
@@ -76,7 +76,7 @@ class FillOrderDetailsActionTest extends GenericActionTest
             'foo' => 'fooVal',
         ));
 
-        $action = new FillOrderDetailsAction;
+        $action = new FillOrderDetailsAction();
 
         $action->execute(new FillOrderDetails($order));
 
@@ -93,7 +93,7 @@ class FillOrderDetailsActionTest extends GenericActionTest
      */
     public function shouldAddNotifyUrlIfTokenFactorySetAndCaptureTokenPassed()
     {
-        $order = new Order;
+        $order = new Order();
         $order->setCurrencyCode('USD');
         $order->setTotalAmount(123);
         $order->setDescription('the description');
@@ -101,11 +101,11 @@ class FillOrderDetailsActionTest extends GenericActionTest
             'foo' => 'fooVal',
         ));
 
-        $captureToken = new Token;
+        $captureToken = new Token();
         $captureToken->setPaymentName('thePaymentName');
         $captureToken->setDetails($order);
 
-        $notifyToken = new Token;
+        $notifyToken = new Token();
         $notifyToken->setTargetUrl('theNotifyUrl');
 
         $tokenFactoryMock = $this->getMock('Payum\Core\Security\GenericTokenFactoryInterface');
@@ -133,15 +133,15 @@ class FillOrderDetailsActionTest extends GenericActionTest
      */
     public function shouldNotAddNotifyUrlIfAlreadySet()
     {
-        $order = new Order;
+        $order = new Order();
         $order->setCurrencyCode('USD');
         $order->setTotalAmount(123);
         $order->setDescription('the description');
         $order->setDetails(array(
-            'PAYMENTREQUEST_0_NOTIFYURL' => 'alreadySetUrl'
+            'PAYMENTREQUEST_0_NOTIFYURL' => 'alreadySetUrl',
         ));
 
-        $captureToken = new Token;
+        $captureToken = new Token();
         $captureToken->setPaymentName('thePaymentName');
         $captureToken->setDetails($order);
 
@@ -168,7 +168,7 @@ class FillOrderDetailsActionTest extends GenericActionTest
      */
     public function shouldNotAddNotifyUrlIfCaptureTokenNotSet()
     {
-        $order = new Order;
+        $order = new Order();
         $order->setCurrencyCode('USD');
         $order->setTotalAmount(123);
         $order->setDescription('the description');

@@ -3,7 +3,6 @@ namespace Payum\Be2Bill;
 
 use Buzz\Client\ClientInterface;
 use Buzz\Message\Form\FormRequest;
-
 use Payum\Core\Bridge\Buzz\ClientFactory;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\Http\HttpException;
@@ -118,7 +117,7 @@ class Api
     );
 
     /**
-     * @param array $options
+     * @param array                        $options
      * @param \Buzz\Client\ClientInterface $client
      *
      * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
@@ -159,9 +158,9 @@ class Api
 
     /**
      * Verify if the hash of the given parameter is correct
-     * 
+     *
      * @param array $params
-     * 
+     *
      * @return bool
      */
     public function verifyHash(array $params)
@@ -169,10 +168,10 @@ class Api
         if (empty($params['HASH'])) {
             return false;
         }
-        
+
         $hash = $params['HASH'];
         unset($params['HASH']);
-        
+
         return $hash === $this->calculateHash($params);
     }
 
@@ -209,7 +208,7 @@ class Api
     }
 
     /**
-     * @param array $params
+     * @param  array $params
      * @return array
      */
     public function prepareOnsitePayment(array $params)
@@ -246,7 +245,7 @@ class Api
     }
 
     /**
-     * @param array $params
+     * @param  array $params
      * @return array
      */
     protected function appendGlobalParams(array $params = array())
@@ -280,7 +279,7 @@ class Api
 
         $clearString = $this->options['password'];
         foreach ($params as $key => $value) {
-            $clearString .= $key . '=' . $value . $this->options['password'];
+            $clearString .= $key.'='.$value.$this->options['password'];
         }
 
         return hash('sha256', $clearString);

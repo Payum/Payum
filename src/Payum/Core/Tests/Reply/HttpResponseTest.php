@@ -29,9 +29,9 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
     public function shouldAllowGetContentSetInConstructor()
     {
         $expectedContent = 'html page';
-        
+
         $request = new HttpResponse($expectedContent);
-        
+
         $this->assertEquals($expectedContent, $request->getContent());
     }
 

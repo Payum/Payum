@@ -8,12 +8,12 @@ interface PaymentFactoryInterface
      *
      * @return array
      */
-    function createConfig(array $config = array());
+    public function createConfig(array $config = array());
 
     /**
      * @param array $config
      *
      * @return PaymentInterface
      */
-    function create(array $config = array());
+    public function create(array $config = array());
 }

@@ -41,7 +41,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage The username option must be set.
      */
@@ -59,7 +59,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     public function throwIfPasswordOptionNotSetInConstructor()
     {
         new Api(array(
-            'username' => 'a_username'
+            'username' => 'a_username',
         ));
     }
 
@@ -73,7 +73,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     {
         new Api(array(
             'username' => 'a_username',
-            'password' => 'a_password'
+            'password' => 'a_password',
         ));
     }
 
@@ -94,7 +94,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\RuntimeException
      * @expectedExceptionMessage The return_url must be set either to FormRequest or to options.
      */
@@ -106,7 +106,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
         ));
-        
+
         $api->setExpressCheckout(array());
     }
 
@@ -121,11 +121,11 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
-            'cancel_url' => 'optionCancelUrl'
+            'cancel_url' => 'optionCancelUrl',
         ), $this->createSuccessClientStub());
-        
+
         $result = $api->setExpressCheckout(array('RETURNURL' => 'formRequestReturnUrl'));
-        
+
         $this->assertEquals('formRequestReturnUrl', $result['RETURNURL']);
     }
 
@@ -140,7 +140,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
-            'cancel_url' => 'optionCancelUrl'
+            'cancel_url' => 'optionCancelUrl',
         ), $this->createSuccessClientStub());
 
         $result = $api->setExpressCheckout(array());
@@ -177,7 +177,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
-            'cancel_url' => 'optionCancelUrl'
+            'cancel_url' => 'optionCancelUrl',
         ), $this->createSuccessClientStub());
 
         $result = $api->setExpressCheckout(array('CANCELURL' => 'formRequestCancelUrl'));
@@ -196,7 +196,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
-            'cancel_url' => 'optionCancelUrl'
+            'cancel_url' => 'optionCancelUrl',
         ), $this->createSuccessClientStub());
 
         $result = $api->setExpressCheckout(array());
@@ -215,7 +215,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
-            'cancel_url' => 'optionCancelUrl'
+            'cancel_url' => 'optionCancelUrl',
         ), $this->createSuccessClientStub());
 
         $result = $api->setExpressCheckout(array());
@@ -235,7 +235,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'signature' => 'the_signature',
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
-            'cancel_url' => 'optionCancelUrl'
+            'cancel_url' => 'optionCancelUrl',
         ), $this->createSuccessClientStub());
 
         $result = $api->setExpressCheckout(array());
@@ -261,7 +261,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
-            'cancel_url' => 'optionCancelUrl'
+            'cancel_url' => 'optionCancelUrl',
         ), $this->createSuccessClientStub());
 
         $result = $api->setExpressCheckout(array());
@@ -281,9 +281,9 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
         ), $this->createClientMock());
-        
+
         $this->assertEquals(
-            'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken', 
+            'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
             $api->getAuthorizeTokenUrl('theToken')
         );
     }
@@ -373,7 +373,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
-            'sandbox' => true
+            'sandbox' => true,
         ), $this->createClientMock());
 
         $this->assertEquals(
@@ -391,7 +391,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
-            'sandbox' => true
+            'sandbox' => true,
         ), $this->createClientMock());
 
         $this->assertEquals(
@@ -429,7 +429,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function(FormRequest $request, Response $response) use ($testCase) {
+            ->will($this->returnCallback(function (FormRequest $request, Response $response) use ($testCase) {
                 $testCase->assertEquals('https://api-3t.paypal.com/nvp', $request->getUrl());
 
                 $response->setHeaders(array('HTTP/1.1 200 OK'));
@@ -445,7 +445,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'signature' => 'a_signature',
             'sandbox' => false,
             'return_url' => 'optionReturnUrl',
-            'cancel_url' => 'optionCancelUrl'
+            'cancel_url' => 'optionCancelUrl',
         ), $clientMock);
 
         $api->setExpressCheckout(array());
@@ -462,7 +462,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function(FormRequest $request, Response $response) use ($testCase) {
+            ->will($this->returnCallback(function (FormRequest $request, Response $response) use ($testCase) {
                 $testCase->assertEquals('https://api-3t.sandbox.paypal.com/nvp', $request->getUrl());
 
                 $response->setHeaders(array('HTTP/1.1 200 OK'));
@@ -478,7 +478,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
-            'cancel_url' => 'optionCancelUrl'
+            'cancel_url' => 'optionCancelUrl',
         ), $clientMock);
 
         $api->setExpressCheckout(array());
@@ -501,14 +501,14 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $clientMock
             ->expects($this->any())
             ->method('send')
-            ->will($this->returnCallback(function(FormRequest $request, Response $response) {
+            ->will($this->returnCallback(function (FormRequest $request, Response $response) {
                 $response->setHeaders(array('HTTP/1.1 200 OK'));
                 $response->setContent('ACK=Success');
 
                 $response->setContent(http_build_query($request->getFields()));
             }))
         ;
-        
+
         return $clientMock;
     }
 }

@@ -9,35 +9,35 @@ interface OrderInterface extends DetailsAggregateInterface, DetailsAwareInterfac
     /**
      * @return string
      */
-    function getNumber();
+    public function getNumber();
 
     /**
      * @return string
      */
-    function getDescription();
+    public function getDescription();
 
     /**
      * @return string
      */
-    function getClientEmail();
+    public function getClientEmail();
 
     /**
      * @return string
      */
-    function getClientId();
+    public function getClientId();
 
     /**
      * @return int
      */
-    function getTotalAmount();
+    public function getTotalAmount();
 
     /**
      * @return string
      */
-    function getCurrencyCode();
+    public function getCurrencyCode();
 
     /**
      * @return int
      */
-    function getCurrencyDigitsAfterDecimalPoint();
+    public function getCurrencyDigitsAfterDecimalPoint();
 }

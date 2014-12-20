@@ -18,7 +18,7 @@ class PlainHttpRequestVerifier implements HttpRequestVerifierInterface
 
     /**
      * @param StorageInterface $tokenStorage
-     * @param string $tokenParameter
+     * @param string           $tokenParameter
      */
     public function __construct(StorageInterface $tokenStorage, $tokenParameter = 'payum_token')
     {

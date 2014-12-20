@@ -21,7 +21,7 @@ class GetTransactionDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithModelAndPaymentRequestNAsArguments()
     {
-        new GetTransactionDetails(new \stdClass, $paymentRequestN = 5);
+        new GetTransactionDetails(new \stdClass(), $paymentRequestN = 5);
     }
 
     /**
@@ -31,7 +31,7 @@ class GetTransactionDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $expectedPaymentRequestN = 7;
 
-        $request = new GetTransactionDetails(new \stdClass, $expectedPaymentRequestN);
+        $request = new GetTransactionDetails(new \stdClass(), $expectedPaymentRequestN);
 
         $this->assertSame($expectedPaymentRequestN, $request->getPaymentRequestN());
     }

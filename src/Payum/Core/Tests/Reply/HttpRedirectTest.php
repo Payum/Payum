@@ -11,7 +11,7 @@ class HttpRedirectTest extends \PHPUnit_Framework_TestCase
     public function shouldReplyInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Reply\HttpRedirect');
-        
+
         $this->assertTrue($rc->implementsInterface('Payum\Core\Reply\ReplyInterface'));
     }
 
@@ -24,7 +24,6 @@ class HttpRedirectTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Reply\HttpResponse'));
     }
-
 
     /**
      * @test
@@ -40,9 +39,9 @@ class HttpRedirectTest extends \PHPUnit_Framework_TestCase
     public function shouldAllowGetUrlSetInConstructor()
     {
         $expectedUrl = 'theUrl';
-        
+
         $request = new HttpRedirect($expectedUrl);
-        
+
         $this->assertEquals($expectedUrl, $request->getUrl());
     }
 
@@ -99,7 +98,7 @@ HTML;
         $request = new HttpRedirect('anUrl');
 
         $this->assertEquals(array(
-            'Location' => 'anUrl'
+            'Location' => 'anUrl',
         ), $request->getHeaders());
     }
 

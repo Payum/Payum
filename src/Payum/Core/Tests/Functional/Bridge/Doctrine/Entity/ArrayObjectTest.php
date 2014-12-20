@@ -12,7 +12,7 @@ class ArrayObjectTest extends OrmTest
      */
     public function shouldAllowPersistEmpty()
     {
-        $this->em->persist(new ArrayObject);
+        $this->em->persist(new ArrayObject());
         $this->em->flush();
     }
 
@@ -21,7 +21,7 @@ class ArrayObjectTest extends OrmTest
      */
     public function shouldAllowPersistWithSomeFieldsSet()
     {
-        $model = new ArrayObject;
+        $model = new ArrayObject();
         $model['foo'] = 'theFoo';
         $model['bar'] = array('bar1', 'bar2' => 'theBar2');
 
@@ -34,22 +34,22 @@ class ArrayObjectTest extends OrmTest
      */
     public function shouldAllowFindPersistedArrayobject()
     {
-        $model = new ArrayObject;
+        $model = new ArrayObject();
         $model['foo'] = 'theFoo';
         $model['bar'] = array('bar1', 'bar2' => 'theBar2');
 
         $this->em->persist($model);
         $this->em->flush();
-        
+
         $id = $model->getId();
 
         $this->em->clear();
-        
+
         $foundModel = $this->em->find(get_class($model), $id);
 
         //guard
         $this->assertNotSame($model, $foundModel);
-        
+
         $this->assertEquals(iterator_to_array($model), iterator_to_array($foundModel));
     }
 
@@ -58,7 +58,7 @@ class ArrayObjectTest extends OrmTest
      */
     public function shouldNotStoreSensitiveValue()
     {
-        $model = new ArrayObject;
+        $model = new ArrayObject();
         $model['cardNumber'] = new SensitiveValue('theCardNumber');
 
         $this->em->persist($model);

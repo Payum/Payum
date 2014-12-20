@@ -78,7 +78,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new ObtainTokenAction('aTemplateName');
 
-        $this->assertFalse($action->supports(new ObtainToken(new \stdClass)));
+        $this->assertFalse($action->supports(new ObtainToken(new \stdClass())));
     }
 
     /**
@@ -88,7 +88,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new ObtainTokenAction('aTemplateName');
 
-        $this->assertFalse($action->supports(new \stdClass));
+        $this->assertFalse($action->supports(new \stdClass()));
     }
 
     /**
@@ -101,7 +101,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new ObtainTokenAction('aTemplateName');
 
-        $action->execute(new \stdClass);
+        $action->execute(new \stdClass());
     }
 
     /**
@@ -115,7 +115,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
         $action = new ObtainTokenAction('aTemplateName');
 
         $action->execute(new ObtainToken(array(
-            'card' => 'aToken'
+            'card' => 'aToken',
         )));
     }
 
@@ -126,7 +126,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
     {
         $model = array();
         $templateName = 'theTemplateName';
-        $publishableKey ='thePubKey';
+        $publishableKey = 'thePubKey';
 
         $testCase = $this;
 
@@ -135,7 +135,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
-            ->will($this->returnCallback(function(GetHttpRequest $request) {
+            ->will($this->returnCallback(function (GetHttpRequest $request) {
                 $request->method = 'GET';
             }))
         ;
@@ -143,7 +143,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
-            ->will($this->returnCallback(function(RenderTemplate $request) use ($templateName, $publishableKey, $model, $testCase) {
+            ->will($this->returnCallback(function (RenderTemplate $request) use ($templateName, $publishableKey, $model, $testCase) {
                 $testCase->assertEquals($templateName, $request->getTemplateName());
 
                 $context = $request->getContext();
@@ -167,7 +167,6 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
             return;
         }
 
-
         $this->fail('HttpResponse reply was expected to be thrown.');
     }
 
@@ -178,14 +177,14 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
     {
         $model = array();
         $templateName = 'aTemplateName';
-        $publishableKey ='aPubKey';
+        $publishableKey = 'aPubKey';
 
         $paymentMock = $this->createPaymentMock();
         $paymentMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
-            ->will($this->returnCallback(function(GetHttpRequest $request) {
+            ->will($this->returnCallback(function (GetHttpRequest $request) {
                 $request->method = 'POST';
             }))
         ;
@@ -215,14 +214,14 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
     {
         $model = array();
         $templateName = 'aTemplateName';
-        $publishableKey ='aPubKey';
+        $publishableKey = 'aPubKey';
 
         $paymentMock = $this->createPaymentMock();
         $paymentMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
-            ->will($this->returnCallback(function(GetHttpRequest $request) {
+            ->will($this->returnCallback(function (GetHttpRequest $request) {
                 $request->method = 'POST';
                 $request->request = array('stripeToken' => 'theToken');
             }))
@@ -245,5 +244,4 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
     {
         return $this->getMock('Payum\Core\PaymentInterface');
     }
-
 }

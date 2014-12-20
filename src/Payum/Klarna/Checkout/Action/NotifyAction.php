@@ -29,7 +29,7 @@ class NotifyAction extends PaymentAwareAction
                 'location' => $details['location'],
                 'status' => Constants::STATUS_CREATED,
                 'merchant_reference' => array(
-                    'orderid1' => $details['merchant_reference']['orderid1']
+                    'orderid1' => $details['merchant_reference']['orderid1'],
                 ),
             )));
 

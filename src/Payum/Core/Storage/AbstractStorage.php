@@ -23,7 +23,7 @@ abstract class AbstractStorage implements StorageInterface
      */
     public function create()
     {
-        return new $this->modelClass;
+        return new $this->modelClass();
     }
 
     /**

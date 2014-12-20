@@ -22,7 +22,7 @@ class RefundActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new RefundAction;
+        new RefundAction();
     }
 
     /**
@@ -40,7 +40,7 @@ class RefundActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotRefund()
     {
-        $action = new RefundAction;
+        $action = new RefundAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -50,9 +50,9 @@ class RefundActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportRefundWithNotArrayAccessModel()
     {
-        $action = new RefundAction;
+        $action = new RefundAction();
 
-        $this->assertFalse($action->supports(new Refund(new \stdClass)));
+        $this->assertFalse($action->supports(new Refund(new \stdClass())));
     }
 
     /**
@@ -62,9 +62,9 @@ class RefundActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $action = new RefundAction;
+        $action = new RefundAction();
 
-        $action->execute(new \stdClass);
+        $action->execute(new \stdClass());
     }
 
     /**
@@ -79,11 +79,11 @@ class RefundActionTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Payum\Klarna\Invoice\Request\Api\CreditPart'))
         ;
 
-        $action = new RefundAction;
+        $action = new RefundAction();
         $action->setPayment($paymentMock);
 
         $request = new Refund(array(
-            'invoice_number' => 'aNum'
+            'invoice_number' => 'aNum',
         ));
 
         $action->execute($request);
@@ -100,7 +100,7 @@ class RefundActionTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
         ;
 
-        $action = new RefundAction;
+        $action = new RefundAction();
         $action->setPayment($paymentMock);
 
         $request = new Refund(array(
@@ -125,7 +125,7 @@ class RefundActionTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
         ;
 
-        $action = new RefundAction;
+        $action = new RefundAction();
         $action->setPayment($paymentMock);
 
         $request = new Refund(array());

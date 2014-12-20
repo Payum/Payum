@@ -19,5 +19,7 @@ final class Constants
 
     const CONTENT_TYPE_V2_PLUS_JSON = 'application/vnd.klarna.checkout.aggregated-order-v2+json';
 
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 }

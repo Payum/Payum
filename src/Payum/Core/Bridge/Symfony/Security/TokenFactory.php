@@ -14,13 +14,13 @@ class TokenFactory extends AbstractGenericTokenFactory
     protected $urlGenerator;
 
     /**
-     * @param UrlGeneratorInterface $urlGenerator
-     * @param StorageInterface $tokenStorage
+     * @param UrlGeneratorInterface    $urlGenerator
+     * @param StorageInterface         $tokenStorage
      * @param StorageRegistryInterface $storageRegistry
-     * @param string $capturePath
-     * @param string $notifyPath
-     * @param string $autorizePath
-     * @param string $refundPath
+     * @param string                   $capturePath
+     * @param string                   $notifyPath
+     * @param string                   $autorizePath
+     * @param string                   $refundPath
      */
     public function __construct(UrlGeneratorInterface $urlGenerator, StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $capturePath, $notifyPath, $autorizePath, $refundPath)
     {
@@ -31,7 +31,7 @@ class TokenFactory extends AbstractGenericTokenFactory
 
     /**
      * @param string $path
-     * @param array $parameters
+     * @param array  $parameters
      *
      * @return string
      */

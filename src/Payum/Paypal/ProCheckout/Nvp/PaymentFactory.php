@@ -2,7 +2,6 @@
 namespace Payum\Paypal\ProCheckout\Nvp;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Payment;
 use Payum\Core\PaymentFactory as CorePaymentFactory;
 use Payum\Core\PaymentFactoryInterface;
 use Payum\Paypal\ProCheckout\Nvp\Action\CaptureAction;
@@ -55,7 +54,7 @@ class PaymentFactory implements PaymentFactoryInterface
                 'sandbox' => true,
             ));
 
-            $config['payum.api'] = function(ArrayObject $config) {
+            $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['options.required']);
 
                 $paypalConfig = array(
@@ -64,7 +63,7 @@ class PaymentFactory implements PaymentFactoryInterface
                     'partner' => $config['partner'],
                     'vendor' => $config['vendor'],
                     'tender' => $config['tender'],
-                    'sandbox' => $config['sandbox']
+                    'sandbox' => $config['sandbox'],
                 );
 
                 $config['payum.api'] = new Api($paypalConfig, $config['buzz.client']);

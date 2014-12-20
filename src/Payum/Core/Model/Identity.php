@@ -16,7 +16,7 @@ class Identity implements IdentityInterface
     protected $id;
 
     /**
-     * @param mixed $id
+     * @param mixed         $id
      * @param string|object $class
      */
     public function __construct($id, $class)

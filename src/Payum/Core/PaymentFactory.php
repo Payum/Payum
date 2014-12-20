@@ -53,7 +53,7 @@ class PaymentFactory implements PaymentFactoryInterface
     }
 
     /**
-     * @param Payment $payment
+     * @param Payment     $payment
      * @param ArrayObject $config
      */
     protected function buildActions(Payment $payment, ArrayObject $config)
@@ -70,7 +70,7 @@ class PaymentFactory implements PaymentFactoryInterface
     }
 
     /**
-     * @param Payment $payment
+     * @param Payment     $payment
      * @param ArrayObject $config
      */
     protected function buildApis(Payment $payment, ArrayObject $config)
@@ -87,7 +87,7 @@ class PaymentFactory implements PaymentFactoryInterface
     }
 
     /**
-     * @param Payment $payment
+     * @param Payment     $payment
      * @param ArrayObject $config
      */
     protected function buildExtensions(Payment $payment, ArrayObject $config)

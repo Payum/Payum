@@ -4,7 +4,6 @@ namespace Payum\Klarna\Invoice\Action;
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Request\Sync;
 use Payum\Klarna\Invoice\Request\Api\CheckOrderStatus;
 

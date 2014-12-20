@@ -48,7 +48,7 @@ class CaptureActionTest extends GenericActionTest
     {
         $action = new CaptureAction();
 
-        $action->setApi(new \stdClass);
+        $action->setApi(new \stdClass());
     }
 
     /**
@@ -161,7 +161,7 @@ class CaptureActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
-            ->will($this->returnCallback(function(ObtainCreditCard $request) {
+            ->will($this->returnCallback(function (ObtainCreditCard $request) {
                 $card = new CreditCard();
                 $card->setNumber('1234567812345678');
                 $card->setExpireAt(new \DateTime('2014-10-01'));

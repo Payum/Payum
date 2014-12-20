@@ -9,7 +9,7 @@ class StartRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
 {
     protected $requiredFields = array(
         'agreementRef' => 'aRef',
-        'startDate' => '2013-10-10 12:21:21', 
+        'startDate' => '2013-10-10 12:21:21',
         'periodType' => RecurringApi::PERIODTYPE_HOURS,
         'period' => 2,
         'alertPeriod' => 0,
@@ -18,18 +18,18 @@ class StartRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
         'orderId' => 'anOrderId',
         'description' => 'aDesc',
     );
-    
+
     public function provideRequiredFields()
     {
         $fields = array();
-        
+
         foreach ($this->requiredFields as $name => $value) {
             $fields[] = array($name);
         }
 
         return $fields;
     }
-    
+
     /**
      * @test
      */
@@ -55,7 +55,7 @@ class StartRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new StartRecurringPaymentAction;
+        new StartRecurringPaymentAction();
     }
 
     /**
@@ -64,25 +64,25 @@ class StartRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
     public function shouldAllowSetRecurringApiAsApi()
     {
         $recurringApi = $this->getMock('Payum\Payex\Api\RecurringApi', array(), array(), '', false);
-        
-        $action = new StartRecurringPaymentAction;
+
+        $action = new StartRecurringPaymentAction();
 
         $action->setApi($recurringApi);
-        
+
         $this->assertAttributeSame($recurringApi, 'api', $action);
     }
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\UnsupportedApiException
      * @expectedExceptionMessage Expected api must be instance of RecurringApi.
      */
     public function throwOnTryingSetNotRecurringApiAsApi()
     {
-        $action = new StartRecurringPaymentAction;
+        $action = new StartRecurringPaymentAction();
 
-        $action->setApi(new \stdClass);
+        $action->setApi(new \stdClass());
     }
 
     /**
@@ -100,7 +100,7 @@ class StartRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotStartRecurringPaymentRequest()
     {
-        $action = new StartRecurringPaymentAction;
+        $action = new StartRecurringPaymentAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -110,9 +110,9 @@ class StartRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportStartRecurringPaymentRequestWithNotArrayAccessModel()
     {
-        $action = new StartRecurringPaymentAction;
+        $action = new StartRecurringPaymentAction();
 
-        $this->assertFalse($action->supports(new StartRecurringPayment(new \stdClass)));
+        $this->assertFalse($action->supports(new StartRecurringPayment(new \stdClass())));
     }
 
     /**
@@ -129,9 +129,9 @@ class StartRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @dataProvider provideRequiredFields
-     * 
+     *
      * @expectedException \Payum\Core\Exception\LogicException
      */
     public function throwIfTryInitializeWithRequiredFieldNotPresent($requiredField)
@@ -156,13 +156,12 @@ class StartRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(array(
                 'recurringRef' => 'theRecRef',
             )));
-        ;
 
         $action = new StartRecurringPaymentAction();
         $action->setApi($apiMock);
 
         $request = new StartRecurringPayment($this->requiredFields);
-        
+
         $action->execute($request);
 
         $model = $request->getModel();

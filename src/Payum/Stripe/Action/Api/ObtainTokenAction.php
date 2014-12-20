@@ -59,7 +59,7 @@ class ObtainTokenAction extends PaymentAwareAction implements ApiAwareInterface
             throw new LogicException('The token has already been set.');
         }
 
-        $getHttpRequest = new GetHttpRequest;
+        $getHttpRequest = new GetHttpRequest();
         $this->payment->execute($getHttpRequest);
         if ($getHttpRequest->method == 'POST' && isset($getHttpRequest->request['stripeToken'])) {
             $model['card'] = $getHttpRequest->request['stripeToken'];

@@ -4,7 +4,7 @@ namespace Payum\Core\Tests\Extension;
 use Payum\Core\Extension\ExtensionCollection;
 use Payum\Core\Extension\ExtensionInterface;
 
-class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase 
+class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -12,7 +12,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
     public function shouldImplementExtensionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Extension\ExtensionCollection');
-        
+
         $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
     }
 
@@ -21,7 +21,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new ExtensionCollection;
+        new ExtensionCollection();
     }
 
     /**
@@ -31,17 +31,17 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $extensionFirst = $this->createExtensionMock();
         $extensionSecond = $this->createExtensionMock();
-        
-        $collection = new ExtensionCollection;
+
+        $collection = new ExtensionCollection();
 
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
-        
+
         $addedExtensions = $this->readAttribute($collection, 'extensions');
-        
+
         $this->assertInternalType('array', $addedExtensions);
         $this->assertCount(2, $addedExtensions);
-        
+
         $this->assertSame($extensionFirst, $addedExtensions[0]);
         $this->assertSame($extensionSecond, $addedExtensions[1]);
     }
@@ -54,7 +54,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
         $extensionFirst = $this->createExtensionMock();
         $extensionSecond = $this->createExtensionMock();
 
-        $collection = new ExtensionCollection;
+        $collection = new ExtensionCollection();
 
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond, $forcePrepend = true);
@@ -73,15 +73,15 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallOnPreExecuteForAllExtensionsInCollection()
     {
-        $expectedRequest = new \stdClass;
-        
+        $expectedRequest = new \stdClass();
+
         $extensionFirst = $this->createExtensionMock();
         $extensionFirst
             ->expects($this->once())
             ->method('onPreExecute')
             ->with($this->identicalTo($expectedRequest))
         ;
-        
+
         $extensionSecond = $this->createExtensionMock();
         $extensionSecond
             ->expects($this->once())
@@ -89,7 +89,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo($expectedRequest))
         ;
 
-        $collection = new ExtensionCollection;
+        $collection = new ExtensionCollection();
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
 
@@ -103,7 +103,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallOnExecuteForAllExtensionsInCollection()
     {
-        $expectedRequest = new \stdClass;
+        $expectedRequest = new \stdClass();
         $expectedAction = $this->getMock('Payum\Core\Action\ActionInterface');
 
         $extensionFirst = $this->createExtensionMock();
@@ -126,7 +126,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
             )
         ;
 
-        $collection = new ExtensionCollection;
+        $collection = new ExtensionCollection();
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
 
@@ -140,7 +140,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallOnPostExecuteForAllExtensionsInCollection()
     {
-        $expectedRequest = new \stdClass;
+        $expectedRequest = new \stdClass();
         $expectedAction = $this->getMock('Payum\Core\Action\ActionInterface');
 
         $extensionFirst = $this->createExtensionMock();
@@ -163,7 +163,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
             )
         ;
 
-        $collection = new ExtensionCollection;
+        $collection = new ExtensionCollection();
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
 
@@ -179,7 +179,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $expectedReply = $this->getMock('Payum\Core\Reply\ReplyInterface');
         $expectedAction = $this->getMock('Payum\Core\Action\ActionInterface');
-        $expectedRequest = new \stdClass;
+        $expectedRequest = new \stdClass();
 
         $extensionFirst = $this->createExtensionMock();
         $extensionFirst
@@ -203,7 +203,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
             )
         ;
 
-        $collection = new ExtensionCollection;
+        $collection = new ExtensionCollection();
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
 
@@ -220,7 +220,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
         $expectedReply = $this->getMock('Payum\Core\Reply\ReplyInterface');
         $expectedNewReply = $this->getMock('Payum\Core\Reply\ReplyInterface');
         $expectedAction = $this->getMock('Payum\Core\Action\ActionInterface');
-        $expectedRequest = new \stdClass;
+        $expectedRequest = new \stdClass();
 
         $extensionFirst = $this->createExtensionMock();
         $extensionFirst
@@ -245,7 +245,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
             )
         ;
 
-        $collection = new ExtensionCollection;
+        $collection = new ExtensionCollection();
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
 
@@ -259,8 +259,8 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallOnExceptionForAllExtensionsInCollection()
     {
-        $expectedException = new \Exception;
-        $expectedRequest = new \stdClass;
+        $expectedException = new \Exception();
+        $expectedRequest = new \stdClass();
         $expectedAction = $this->getMock('Payum\Core\Action\ActionInterface');
 
         $extensionFirst = $this->createExtensionMock();
@@ -285,7 +285,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
             )
         ;
 
-        $collection = new ExtensionCollection;
+        $collection = new ExtensionCollection();
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
 

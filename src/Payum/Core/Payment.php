@@ -30,12 +30,12 @@ class Payment implements PaymentInterface
      */
     public function __construct()
     {
-        $this->extensions = new ExtensionCollection;
+        $this->extensions = new ExtensionCollection();
     }
 
     /**
      * @param mixed $api
-     * @param bool $forcePrepend
+     * @param bool  $forcePrepend
      *
      * @return void
      */
@@ -49,7 +49,7 @@ class Payment implements PaymentInterface
 
     /**
      * @param \Payum\Core\Action\ActionInterface $action
-     * @param bool $forcePrepend
+     * @param bool                               $forcePrepend
      *
      * @return void
      */
@@ -63,7 +63,7 @@ class Payment implements PaymentInterface
 
     /**
      * @param \Payum\Core\Extension\ExtensionInterface $extension
-     * @param bool $forcePrepend
+     * @param bool                                     $forcePrepend
      *
      * @return void
      */
@@ -107,7 +107,7 @@ class Payment implements PaymentInterface
             throw $e;
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -130,7 +130,8 @@ class Payment implements PaymentInterface
                             $action->setApi($api);
                             $apiSet = true;
                             break;
-                        } catch (UnsupportedApiException $e) {}
+                        } catch (UnsupportedApiException $e) {
+                        }
                     }
 
                     if (false == $apiSet) {

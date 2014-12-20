@@ -8,7 +8,6 @@ use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\PaymentFactory as CorePaymentFactory;
 use Payum\Core\PaymentFactoryInterface;
-use Payum\Core\PaymentInterface;
 
 class PaymentFactory implements PaymentFactoryInterface
 {
@@ -54,7 +53,7 @@ class PaymentFactory implements PaymentFactoryInterface
                 'sandbox' => true,
             ));
 
-            $config['payum.api'] = function(ArrayObject $config) {
+            $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['options.required']);
 
                 $api = new AuthorizeNetAIM($config['loginId'], $config['transactionKey']);

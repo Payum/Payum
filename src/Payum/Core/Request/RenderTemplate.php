@@ -20,7 +20,7 @@ class RenderTemplate
 
     /**
      * @param string $templateName
-     * @param array $context
+     * @param array  $context
      */
     public function __construct($templateName, array $context = array())
     {

@@ -24,9 +24,9 @@ class NotifyAction extends PaymentAwareAction
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof Notify &&
             $request->getModel() instanceof \ArrayAccess
-        ; 
+        ;
     }
 }

@@ -15,9 +15,9 @@ class FillOrderDetailsActionTest extends GenericActionTest
     public function provideSupportedRequests()
     {
         return array(
-            array(new $this->requestClass(new Order)),
+            array(new $this->requestClass(new Order())),
             array(new $this->requestClass($this->getMock('Payum\Core\Model\OrderInterface'))),
-            array(new $this->requestClass(new Order, $this->getMock('Payum\Core\Security\TokenInterface'))),
+            array(new $this->requestClass(new Order(), $this->getMock('Payum\Core\Security\TokenInterface'))),
         );
     }
 
@@ -36,12 +36,12 @@ class FillOrderDetailsActionTest extends GenericActionTest
      */
     public function shouldCorrectlyConvertOrderToDetailsAndSetItBack()
     {
-        $order = new Order;
+        $order = new Order();
         $order->setCurrencyCode('USD');
         $order->setTotalAmount(123);
         $order->setDescription('the description');
 
-        $action = new FillOrderDetailsAction;
+        $action = new FillOrderDetailsAction();
 
         $action->execute(new FillOrderDetails($order));
 
@@ -64,7 +64,7 @@ class FillOrderDetailsActionTest extends GenericActionTest
      */
     public function shouldNotOverwriteAlreadySetExtraDetails()
     {
-        $order = new Order;
+        $order = new Order();
         $order->setCurrencyCode('USD');
         $order->setTotalAmount(123);
         $order->setDescription('the description');
@@ -72,7 +72,7 @@ class FillOrderDetailsActionTest extends GenericActionTest
             'foo' => 'fooVal',
         ));
 
-        $action = new FillOrderDetailsAction;
+        $action = new FillOrderDetailsAction();
 
         $action->execute(new FillOrderDetails($order));
 

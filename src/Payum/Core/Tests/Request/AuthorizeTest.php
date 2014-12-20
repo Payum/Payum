@@ -11,7 +11,7 @@ class AuthorizeTest extends \PHPUnit_Framework_TestCase
     public function shouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass('Payum\Core\Request\Authorize');
-        
+
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
     }
 
@@ -20,6 +20,6 @@ class AuthorizeTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithModel()
     {
-        new Authorize(new \stdClass);
+        new Authorize(new \stdClass());
     }
 }

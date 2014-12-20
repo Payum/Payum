@@ -95,7 +95,7 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
             array(),
             array(
                 'stdClass' => $storageFooMock,
-                'Payum\Core\Tests\Mocks\Model\TestModel' => $storageBarMock
+                'Payum\Core\Tests\Mocks\Model\TestModel' => $storageBarMock,
             ),
             'bar'
         );
@@ -114,7 +114,7 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
 
         $storages = array(
             'stdClass' => $storageFooMock,
-            'Payum\Core\Tests\Mocks\Model\TestModel' => $storageBarMock
+            'Payum\Core\Tests\Mocks\Model\TestModel' => $storageBarMock,
         );
 
         $registry = new SimpleRegistry(
@@ -140,7 +140,7 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('addExtension')
             ->with($this->isInstanceOf('Payum\Core\Extension\StorageExtension'))
-            ->will($this->returnCallback(function(StorageExtension $extension) use ($storageMock, $testCase) {
+            ->will($this->returnCallback(function (StorageExtension $extension) use ($storageMock, $testCase) {
                 $testCase->assertAttributeSame($storageMock, 'storage', $extension);
             }))
         ;
@@ -170,7 +170,7 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('addExtension')
             ->with($this->isInstanceOf('Payum\Core\Extension\StorageExtension'))
-            ->will($this->returnCallback(function(StorageExtension $extension) use ($storageMock, $testCase) {
+            ->will($this->returnCallback(function (StorageExtension $extension) use ($storageMock, $testCase) {
                 $testCase->assertAttributeSame($storageMock, 'storage', $extension);
             }))
         ;
@@ -261,7 +261,7 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
         $registry = new SimpleRegistry(
             array('foo' => $paymentFooMock, 'bar' => $paymentBarMock),
             array(
-                'fooClass' => $storageOneMock
+                'fooClass' => $storageOneMock,
             ),
             'foo'
         );
@@ -284,7 +284,7 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
         $registry = new SimpleRegistry(
             array('foo' => $paymentFooMock, 'bar' => $paymentBarMock),
             array(
-                'fooClass' => $storageOneMock
+                'fooClass' => $storageOneMock,
             ),
             'foo'
         );

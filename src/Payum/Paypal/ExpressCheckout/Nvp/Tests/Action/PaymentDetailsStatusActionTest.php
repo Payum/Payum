@@ -13,14 +13,14 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     public function shouldImplementsActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction');
-        
+
         $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()   
+    public function couldBeConstructedWithoutAnyArguments()
     {
         new PaymentDetailsStatusAction();
     }
@@ -31,13 +31,13 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     public function shouldSupportStatusRequestWithArrayAsModelWhichHasPaymentRequestAmountSet()
     {
         $action = new PaymentDetailsStatusAction();
-        
+
         $paymentDetails = array(
-           'PAYMENTREQUEST_0_AMT' => 1
+           'PAYMENTREQUEST_0_AMT' => 1,
         );
-        
+
         $request = new GetHumanStatus($paymentDetails);
-        
+
         $this->assertTrue($action->supports($request));
     }
 
@@ -61,7 +61,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $action = new PaymentDetailsStatusAction();
 
         $paymentDetails = array(
-            'PAYMENTREQUEST_0_AMT' => 0
+            'PAYMENTREQUEST_0_AMT' => 0,
         );
 
         $request = new GetHumanStatus($paymentDetails);
@@ -93,7 +93,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
@@ -112,11 +112,11 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
 
         $request = new GetHumanStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
-            'L_ERRORCODE0' => Api::L_ERRORCODE_PAYMENT_NOT_AUTHORIZED
+            'L_ERRORCODE0' => Api::L_ERRORCODE_PAYMENT_NOT_AUTHORIZED,
         ));
-        
+
         $action->execute($request);
-        
+
         $this->assertTrue($request->isCanceled());
     }
 
@@ -129,7 +129,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
 
         $request = new GetHumanStatus(array(
             'PAYMENTREQUEST_0_AMT' => 21,
-            'L_ERRORCODE9' => 'foo'
+            'L_ERRORCODE9' => 'foo',
         ));
 
         $action->execute($request);
@@ -147,7 +147,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $request = new GetHumanStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'PAYERID' => null,
-            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
         ));
 
         $action->execute($request);
@@ -215,7 +215,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
 
         $request = new GetHumanStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
-            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS,
         ));
 
         $action->execute($request);
@@ -232,9 +232,9 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
 
         $request = new GetHumanStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
-            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_FAILED
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_FAILED,
         ));
-        
+
         $action->execute($request);
 
         $this->assertTrue($request->isFailed());
@@ -329,7 +329,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
             'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
             'PAYMENTREQUEST_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PROCESSED,
         ));
-        
+
         $action->execute($request);
 
         $this->assertTrue($request->isCaptured());

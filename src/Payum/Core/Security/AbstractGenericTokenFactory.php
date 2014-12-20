@@ -39,12 +39,12 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
     protected $authorizePath;
 
     /**
-     * @param StorageInterface $tokenStorage
+     * @param StorageInterface         $tokenStorage
      * @param StorageRegistryInterface $storageRegistry
-     * @param string $capturePath
-     * @param string $notifyPath
-     * @param string $authorizePath
-     * @param string $refundPath
+     * @param string                   $capturePath
+     * @param string                   $notifyPath
+     * @param string                   $authorizePath
+     * @param string                   $refundPath
      */
     public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $capturePath, $notifyPath, $authorizePath, $refundPath)
     {
@@ -69,7 +69,7 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
 
         if ($model instanceof IdentityInterface) {
             $token->setDetails($model);
-        } else if (null !== $model) {
+        } elseif (null !== $model) {
             $token->setDetails($this->storageRegistry->getStorage($model)->identify($model));
         }
 
@@ -94,7 +94,7 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
             $afterUrl->getQuery()->modify($afterParameters);
 
             $token->setAfterUrl((string) $afterUrl);
-        } else if ($afterPath) {
+        } elseif ($afterPath) {
             $token->setAfterUrl($this->generateUrl($afterPath, $afterParameters));
         }
 
@@ -121,9 +121,8 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
     /**
      * {@inheritDoc}
      */
-    public function createRefundToken($paymentName, $model, $afterPath=null, array $afterParameters = array())
+    public function createRefundToken($paymentName, $model, $afterPath = null, array $afterParameters = array())
     {
-
         $refundToken = $this->createToken($paymentName, $model, $this->refundPath);
 
         if ($afterPath) {
@@ -161,7 +160,7 @@ abstract class AbstractGenericTokenFactory implements GenericTokenFactoryInterfa
 
     /**
      * @param string $path
-     * @param array $parameters
+     * @param array  $parameters
      *
      * @return string
      */

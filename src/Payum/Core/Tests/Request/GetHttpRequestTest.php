@@ -10,7 +10,7 @@ class GetHttpRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new GetHttpRequest;
+        new GetHttpRequest();
     }
 
     /**
@@ -18,7 +18,7 @@ class GetHttpRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSetExpectedDefaultValuesInConstructor()
     {
-        $request = new GetHttpRequest;
+        $request = new GetHttpRequest();
 
         $this->assertSame(array(), $request->query);
         $this->assertSame(array(), $request->request);

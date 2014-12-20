@@ -3,7 +3,7 @@ namespace Payum\Core\Tests\Exception;
 
 use Payum\Core\Exception\InvalidArgumentException;
 
-class InvalidArgumentExceptionTest extends \PHPUnit_Framework_TestCase
+class InvalidArgumentExceptionExceptionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -11,7 +11,7 @@ class InvalidArgumentExceptionTest extends \PHPUnit_Framework_TestCase
     public function shouldImplementExceptionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\InvalidArgumentException');
-        
+
         $this->assertTrue($rc->implementsInterface('Payum\Core\Exception\ExceptionInterface'));
     }
 
@@ -30,6 +30,6 @@ class InvalidArgumentExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new InvalidArgumentException;
+        new InvalidArgumentException();
     }
 }

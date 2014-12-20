@@ -6,5 +6,5 @@ interface ModelAggregateInterface
     /**
      * @return mixed
      */
-    function getModel();
+    public function getModel();
 }

@@ -12,12 +12,12 @@ class CaptureAction extends PaymentAwareAction
      * {@inheritDoc}
      */
     public function execute($request)
-    {   
+    {
         /** @var $request Capture */
         if ($request->getModel() instanceof AuthorizeRequiredModel) {
-            $this->payment->execute(new AuthorizeRequest);
+            $this->payment->execute(new AuthorizeRequest());
         }
-        
+
         //sell code here.
     }
 

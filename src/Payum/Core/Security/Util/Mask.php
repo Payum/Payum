@@ -6,7 +6,7 @@ class Mask
     /**
      * @param string $value
      * @param string $maskSymbol
-     * @param int $showLast
+     * @param int    $showLast
      *
      * @return string
      */

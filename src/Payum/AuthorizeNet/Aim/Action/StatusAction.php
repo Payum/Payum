@@ -16,7 +16,7 @@ class StatusAction implements ActionInterface
     public function execute($request)
     {
         RequestNotSupportedException::assertSupports($this, $request);
-        
+
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         if (null === $model['response_code']) {
@@ -24,10 +24,10 @@ class StatusAction implements ActionInterface
 
             return;
         }
-        
+
         if (\AuthorizeNetAIM_Response::APPROVED == $model['response_code']) {
             $request->markCaptured();
-            
+
             return;
         }
 
@@ -48,7 +48,7 @@ class StatusAction implements ActionInterface
 
             return;
         }
-        
+
         $request->markUnknown();
     }
 
@@ -57,7 +57,7 @@ class StatusAction implements ActionInterface
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof GetStatusInterface &&
             $request->getModel() instanceof \ArrayAccess
         ;
