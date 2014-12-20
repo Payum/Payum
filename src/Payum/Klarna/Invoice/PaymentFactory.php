@@ -5,6 +5,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Payment;
 use Payum\Core\PaymentFactory as CorePaymentFactory;
+use Payum\Core\PaymentFactoryInterface;
 use Payum\Klarna\Invoice\Action\Api\ActivateAction;
 use Payum\Klarna\Invoice\Action\Api\ActivateReservationAction;
 use Payum\Klarna\Invoice\Action\Api\CancelReservationAction;
@@ -19,14 +20,37 @@ use Payum\Klarna\Invoice\Action\RefundAction;
 use Payum\Klarna\Invoice\Action\StatusAction;
 use Payum\Klarna\Invoice\Action\SyncAction;
 
-class PaymentFactory extends CorePaymentFactory
+class PaymentFactory implements PaymentFactoryInterface
 {
+    /**
+     * @var PaymentFactoryInterface
+     */
+    protected $corePaymentFactory;
+
+    /**
+     * @param PaymentFactoryInterface $corePaymentFactory
+     */
+    public function __construct(PaymentFactoryInterface $corePaymentFactory = null)
+    {
+        $this->corePaymentFactory = $corePaymentFactory ?: new CorePaymentFactory();
+    }
+
     /**
      * {@inheritDoc}
      */
-    protected function build(Payment $payment, ArrayObject $config)
+    public function create(array $config = array())
     {
-        $config->validateNotEmpty(array('eid', 'secret', 'country', 'language', 'currency'));
+        return $this->corePaymentFactory->create($this->createConfig($config));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createConfig(array $config = array())
+    {
+        $config = ArrayObject::ensureArrayObject($config);
+
+        $config->defaults($this->corePaymentFactory->createConfig());
 
         $config->defaults(array(
             'sandbox' => true,
@@ -51,30 +75,43 @@ class PaymentFactory extends CorePaymentFactory
             'payum.action.api.reserve_amount' => new ReserveAmountAction(),
         ));
 
+        if (false == $config['payum.api']) {
+            $config['options.required'] = array('eid', 'secret', 'country', 'language', 'currency');
+            $config->defaults(array(
+                'sandbox' => true,
+            ));
 
-        $config['mode'] = null === $config['sandbox'] ? \Klarna::BETA : \Klarna::LIVE;
+            $config['payum.api'] = function(ArrayObject $config) {
+                $config->validateNotEmpty($config['options.required']);
 
-        if (null === $country = \KlarnaCountry::fromCode($config['country'])) {
-            throw new LogicException(sprintf('Given %s country code is not valid. Klarna cannot recognize it.', $config['country']));
-        }
-        if (null === $language = \KlarnaLanguage::fromCode($config['language'])) {
-            throw new LogicException(sprintf('Given %s language code is not valid. Klarna cannot recognize it.', $config['language']));
-        }
-        if (null === $currency = \KlarnaCurrency::fromCode($config['currency'])) {
-            throw new LogicException(sprintf('Given %s currency code is not valid. Klarna cannot recognize it.', $config['currency']));
+                $config['mode'] = null === $config['sandbox'] ? \Klarna::BETA : \Klarna::LIVE;
+
+                if (null === $country = \KlarnaCountry::fromCode($config['country'])) {
+                    throw new LogicException(sprintf('Given %s country code is not valid. Klarna cannot recognize it.', $config['country']));
+                }
+                if (null === $language = \KlarnaLanguage::fromCode($config['language'])) {
+                    throw new LogicException(sprintf('Given %s language code is not valid. Klarna cannot recognize it.', $config['language']));
+                }
+                if (null === $currency = \KlarnaCurrency::fromCode($config['currency'])) {
+                    throw new LogicException(sprintf('Given %s currency code is not valid. Klarna cannot recognize it.', $config['currency']));
+                }
+
+                $klarnaConfig = new Config();
+                $klarnaConfig->eid = $config['eid'];
+                $klarnaConfig->secret = $config['secret'];
+                $klarnaConfig->mode = $config['mode'];
+                $klarnaConfig->country = $country;
+                $klarnaConfig->language = $language;
+                $klarnaConfig->currency = $currency;
+                $klarnaConfig->pClassStorage = $config['pClassStorage'];
+                $klarnaConfig->pClassStoragePath = $config['pClassStoragePath'];
+                $klarnaConfig->xmlRpcVerifyHost = $config['xmlRpcVerifyHost'];
+                $klarnaConfig->xmlRpcVerifyHost = $config['xmlRpcVerifyHost'];
+
+                return $klarnaConfig;
+            };
         }
 
-        $klarnaConfig = new Config();
-        $klarnaConfig->eid = $config['eid'];
-        $klarnaConfig->secret = $config['secret'];
-        $klarnaConfig->mode = $config['mode'];
-        $klarnaConfig->country = $country;
-        $klarnaConfig->language = $language;
-        $klarnaConfig->currency = $currency;
-        $klarnaConfig->pClassStorage = $config['pClassStorage'];
-        $klarnaConfig->pClassStoragePath = $config['pClassStoragePath'];
-        $klarnaConfig->xmlRpcVerifyHost = $config['xmlRpcVerifyHost'];
-        $klarnaConfig->xmlRpcVerifyHost = $config['xmlRpcVerifyHost'];
-        $config['payum.api'] = $klarnaConfig;
+        return (array) $config;
     }
 }

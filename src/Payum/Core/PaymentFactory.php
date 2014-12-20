@@ -20,9 +20,6 @@ class PaymentFactory implements PaymentFactoryInterface
         $config = ArrayObject::ensureArrayObject($config);
         $payment = new Payment();
 
-        $this->buildGeneric($payment, $config);
-        $this->build($payment, $config);
-
         $this->buildActions($payment, $config);
         $this->buildApis($payment, $config);
         $this->buildExtensions($payment, $config);
@@ -31,19 +28,11 @@ class PaymentFactory implements PaymentFactoryInterface
     }
 
     /**
-     * @param Payment $payment
-     * @param ArrayObject $config
+     * {@inheritDoc}
      */
-    protected function build(Payment $payment, ArrayObject $config)
+    public function createConfig(array $config = array())
     {
-    }
-
-    /**
-     * @param Payment $payment
-     * @param ArrayObject $config
-     */
-    protected function buildGeneric(Payment $payment, ArrayObject $config)
-    {
+        $config = ArrayObject::ensureArrayObject($config);
         $config->defaults(array(
             'payum.template.layout' => '@PayumCore/layout.html.twig',
 
@@ -59,6 +48,8 @@ class PaymentFactory implements PaymentFactoryInterface
 
             'payum.extension.endless_cycle_detector' => new EndlessCycleDetectorExtension(),
         ));
+
+        return (array) $config;
     }
 
     /**
@@ -69,7 +60,11 @@ class PaymentFactory implements PaymentFactoryInterface
     {
         foreach ($config as $name => $value) {
             if (0 === strpos($name, 'payum.action')) {
-                $payment->addAction($value);
+                if (is_callable($value)) {
+                    $payment->addAction(call_user_func_array($value, array($config)));
+                } else {
+                    $payment->addAction($value);
+                }
             }
         }
     }
@@ -82,7 +77,11 @@ class PaymentFactory implements PaymentFactoryInterface
     {
         foreach ($config as $name => $value) {
             if (0 === strpos($name, 'payum.api')) {
-                $payment->addApi($value);
+                if (is_callable($value)) {
+                    $payment->addApi(call_user_func_array($value, array($config)));
+                } else {
+                    $payment->addApi($value);
+                }
             }
         }
     }
@@ -95,7 +94,11 @@ class PaymentFactory implements PaymentFactoryInterface
     {
         foreach ($config as $name => $value) {
             if (0 === strpos($name, 'payum.extension')) {
-                $payment->addExtension($value);
+                if (is_callable($value)) {
+                    $payment->addExtension(call_user_func_array($value, array($config)));
+                } else {
+                    $payment->addExtension($value);
+                }
             }
         }
     }

@@ -9,13 +9,13 @@ class OffsitePaymentFactory extends DirectPaymentFactory
     /**
      * {@inheritDoc}
      */
-    public function create(array $config = array())
+    public function createConfig(array $config = array())
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults(array(
             'payum.action.capture' => new CaptureOffsiteAction,
         ));
 
-        return parent::create((array) $config);
+        return parent::createConfig((array) $config);
     }
 }
