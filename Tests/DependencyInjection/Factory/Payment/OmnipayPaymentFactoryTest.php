@@ -6,7 +6,8 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentFactory;
+
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayDirectPaymentFactory;
 
 class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +26,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new OmnipayPaymentFactory();
+        new OmnipayDirectPaymentFactory;
     }
 
     /**
@@ -33,7 +34,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetName()
     {
-        $factory = new OmnipayPaymentFactory();
+        $factory = new OmnipayDirectPaymentFactory;
 
         $this->assertEquals('omnipay', $factory->getName());
     }
@@ -45,7 +46,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfiguration($config)
     {
-        $factory = new OmnipayPaymentFactory();
+        $factory = new OmnipayDirectPaymentFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -79,7 +80,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfTypeSectionMissing()
     {
-        $factory = new OmnipayPaymentFactory();
+        $factory = new OmnipayDirectPaymentFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -98,7 +99,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfTypeNotSupportedByOmnipay()
     {
-        $factory = new OmnipayPaymentFactory();
+        $factory = new OmnipayDirectPaymentFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -120,7 +121,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfApiOptionsSectionMissing()
     {
-        $factory = new OmnipayPaymentFactory();
+        $factory = new OmnipayDirectPaymentFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -138,7 +139,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePaymentAndReturnItsId()
     {
-        $factory = new OmnipayPaymentFactory();
+        $factory = new OmnipayDirectPaymentFactory;
 
         $container = new ContainerBuilder();
 
@@ -163,7 +164,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new OmnipayPaymentFactory();
+        $factory = new OmnipayDirectPaymentFactory;
 
         $container = new ContainerBuilder();
 
@@ -201,7 +202,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldDecorateBasicApiDefinitionAndAddItToPayment()
     {
-        $factory = new OmnipayPaymentFactory();
+        $factory = new OmnipayDirectPaymentFactory;
 
         $container = new ContainerBuilder();
 
@@ -231,7 +232,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAddPayumActionTagCaptureAction()
     {
-        $factory = new OmnipayPaymentFactory();
+        $factory = new OmnipayDirectPaymentFactory;
 
         $container = new ContainerBuilder();
 
@@ -259,7 +260,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAddPayumActionTagStatusAction()
     {
-        $factory = new OmnipayPaymentFactory();
+        $factory = new OmnipayDirectPaymentFactory;
 
         $container = new ContainerBuilder();
 
@@ -287,7 +288,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAddPayumActionTagToFillOrderDetailsAction()
     {
-        $factory = new OmnipayPaymentFactory();
+        $factory = new OmnipayDirectPaymentFactory;
 
         $container = new ContainerBuilder();
 

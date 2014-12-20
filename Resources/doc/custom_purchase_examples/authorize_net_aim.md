@@ -13,7 +13,7 @@ _**Note**: We assume you followed all steps in [get it started](https://github.c
 Run the following command:
 
 ```bash
-$ php composer.phar require "payum/authorize-net-aim:*@stable"
+$ php composer.phar require "payum/authorize-net-aim"
 ```
 
 ## Configure context

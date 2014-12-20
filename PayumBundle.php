@@ -9,8 +9,8 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaCheckoutP
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaInvoicePaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OfflinePaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\CustomPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayOnsitePaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayOffsitePaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayDirectPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCheckoutNvpPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PayexPaymentFactory;
@@ -38,8 +38,8 @@ class PayumBundle extends Bundle
         $extension->addPaymentFactory(new Be2BillOffsitePaymentFactory);
         $extension->addPaymentFactory(new AuthorizeNetAimPaymentFactory);
         $extension->addPaymentFactory(new PayexPaymentFactory);
-        $extension->addPaymentFactory(new OmnipayPaymentFactory);
-        $extension->addPaymentFactory(new OmnipayOnsitePaymentFactory);
+        $extension->addPaymentFactory(new OmnipayDirectPaymentFactory);
+        $extension->addPaymentFactory(new OmnipayOffsitePaymentFactory);
         $extension->addPaymentFactory(new CustomPaymentFactory);
         $extension->addPaymentFactory(new OfflinePaymentFactory);
         $extension->addPaymentFactory(new KlarnaCheckoutPaymentFactory);

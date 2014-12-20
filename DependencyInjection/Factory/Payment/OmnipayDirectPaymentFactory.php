@@ -2,7 +2,6 @@
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
 use Omnipay\Omnipay;
-use Omnipay\Common\GatewayFactory;
 use Payum\Core\Exception\RuntimeException;
 use Payum\Core\Exception\LogicException;
 use Symfony\Component\Config\FileLocator;
@@ -12,7 +11,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-class OmnipayPaymentFactory extends AbstractPaymentFactory
+class OmnipayDirectPaymentFactory extends AbstractPaymentFactory
 {
     /**
      * {@inheritdoc}
@@ -23,9 +22,6 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
             throw new RuntimeException('Cannot find OmnipayBridge payment factory class. Have you installed payum/omnipay-bridge package?');
         }
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/payment'));
-        $loader->load('omnipay_bridge.xml');
-
         return parent::create($container, $contextName, $config);
     }
 
@@ -34,7 +30,7 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
      */
     public function getName()
     {
-        return 'omnipay';
+        return 'omnipay_direct';
     }
 
     /**
@@ -76,56 +72,12 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
     /**
      * {@inheritDoc}
      */
-    protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
-    {
-        $gatewayDefinition = new Definition();
-        $gatewayDefinition->setClass('Omnipay\Common\GatewayInterface');
-        $gatewayDefinition->setFactoryService('payum.omnipay_bridge.gateway_factory');
-        $gatewayDefinition->setFactoryMethod('create');
-
-        if (class_exists($config['type']) && 0 !== strpos($config['type'], '\\')) {
-            $config['type'] = '\\'.$config['type'];
-        }
-
-        $gatewayDefinition->addArgument($config['type']);
-        $gatewayDefinition->setPublic(true);
-        foreach ($config['options'] as $name => $value) {
-            $gatewayDefinition->addMethodCall('set'.strtoupper($name), array($value));
-        }
-
-        $gatewayId = 'payum.context.'.$contextName.'.gateway';
-        $container->setDefinition($gatewayId, $gatewayDefinition);
-
-        $paymentDefinition->addMethodCall('addApi', array(new Reference($gatewayId)));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
     {
-        $gateway = new Definition();
-        $gateway->setClass('Omnipay\Common\GatewayInterface');
-        $gateway->setFactoryService('payum.omnipay_bridge.gateway_factory');
-        $gateway->setFactoryMethod('create');
-        $gateway->addArgument($config['type']);
-        $gateway->setPublic(true);
-        foreach ($config['options'] as $name => $value) {
-            $gateway->addMethodCall('set'.strtoupper($name), array($value));
-        }
-
-        $gatewayId = 'payum.context.'.$contextName.'.gateway';
-        $container->setDefinition($gatewayId, $gateway);
-
         $factoryId = 'payum.omnipay_bridge.factory';
-        $container->setDefinition($factoryId, new Definition('Payum\OmnipayBridge\PaymentFactory'));
-
-        $config['buzz.client'] = new Reference('payum.buzz.client');
-        $config['twig.env'] = new Reference('twig');
-        $config['payum.action.get_http_request'] = new Reference('payum.action.get_http_request');
-        $config['payum.action.obtain_credit_card'] = new Reference('payum.action.obtain_credit_card');
-        $config['payum.extension.log_executed_actions'] = new Reference('payum.extension.log_executed_actions');
-        $config['payum.extension.logger'] = new Reference('payum.extension.logger');
+        $container->setDefinition($factoryId, new Definition('Payum\OmnipayBridge\PaymentFactory', array(
+            new Reference('payum.payment_factory'),
+        )));
 
         $payment = new Definition('Payum\Core\Payment', array($config));
         $payment->setFactoryService($factoryId);

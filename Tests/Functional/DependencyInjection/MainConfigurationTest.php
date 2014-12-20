@@ -4,7 +4,7 @@ namespace Payum\Bundle\PayumBundle\Tests\Functional\DependencyInjection;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AuthorizeNetAimPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillDirectPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaCheckoutPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayDirectPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -30,7 +30,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             new PaypalProCheckoutNvpPaymentFactory,
             new AuthorizeNetAimPaymentFactory,
             new Be2BillDirectPaymentFactory,
-            new OmnipayPaymentFactory,
+            new OmnipayDirectPaymentFactory,
             new KlarnaCheckoutPaymentFactory,
         );
         

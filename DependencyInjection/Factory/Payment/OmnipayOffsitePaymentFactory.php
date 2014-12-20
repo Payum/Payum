@@ -12,13 +12,13 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-class OmnipayOnsitePaymentFactory extends OmnipayPaymentFactory
+class OmnipayOffsitePaymentFactory extends OmnipayDirectPaymentFactory
 {
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'omnipay_onsite';
+        return 'omnipay_offsite';
     }
 }

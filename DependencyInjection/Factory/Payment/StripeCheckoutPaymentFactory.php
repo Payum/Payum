@@ -62,24 +62,10 @@ class StripeCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
      */
     protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
     {
-        $container->setParameter('payum.stripe.template.obtain_checkout_token', '@PayumStripe/Action/obtain_checkout_token.html.twig');
-
-        $keys = new Definition('Payum\Stripe\Keys', array(
-            $config['publishable_key'],
-            $config['secret_key']
-        ));
-        $container->setDefinition('payum.context.'.$contextName.'.keys', $keys);
-
         $factoryId = 'payum.stripe.checkout_factory';
-        $container->setDefinition($factoryId, new Definition('Payum\Stripe\CheckoutPaymentFactory'));
-
-        $config['payum.template.obtain_token'] = '%payum.stripe.template.obtain_checkout_token%';
-        $config['buzz.client'] = new Reference('payum.buzz.client');
-        $config['twig.env'] = new Reference('twig');
-        $config['payum.action.get_http_request'] = new Reference('payum.action.get_http_request');
-        $config['payum.action.obtain_credit_card'] = new Reference('payum.action.obtain_credit_card');
-        $config['payum.extension.log_executed_actions'] = new Reference('payum.extension.log_executed_actions');
-        $config['payum.extension.logger'] = new Reference('payum.extension.logger');
+        $container->setDefinition($factoryId, new Definition('Payum\Stripe\CheckoutPaymentFactory', array(
+            new Reference('payum.payment_factory'),
+        )));
 
         $payment = new Definition('Payum\Core\Payment', array($config));
         $payment->setFactoryService($factoryId);

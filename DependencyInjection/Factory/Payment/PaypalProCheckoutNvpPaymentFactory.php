@@ -55,23 +55,10 @@ class PaypalProCheckoutNvpPaymentFactory extends AbstractPaymentFactory
      */
     protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
     {
-        $config['tender'] = isset($config['tender']) ? $config['tender'] : Api::TRXTYPE_CREDIT;
-
-        $api = new Definition('Payum\Paypal\ProCheckout\Nvp\Api', array(
-            $config,
-            new Reference('payum.buzz.client')
-        ));
-        $container->setDefinition('payum.context.'.$contextName.'.api', $api);
-
         $factoryId = 'payum.paypal.pro_checkout.factory';
-        $container->setDefinition($factoryId, new Definition('Payum\Paypal\ProCheckout\Nvp\PaymentFactory'));
-
-        $config['buzz.client'] = new Reference('payum.buzz.client');
-        $config['twig.env'] = new Reference('twig');
-        $config['payum.action.get_http_request'] = new Reference('payum.action.get_http_request');
-        $config['payum.action.obtain_credit_card'] = new Reference('payum.action.obtain_credit_card');
-        $config['payum.extension.log_executed_actions'] = new Reference('payum.extension.log_executed_actions');
-        $config['payum.extension.logger'] = new Reference('payum.extension.logger');
+        $container->setDefinition($factoryId, new Definition('Payum\Paypal\ProCheckout\Nvp\PaymentFactory', array(
+            new Reference('payum.payment_factory'),
+        )));
 
         $payment = new Definition('Payum\Core\Payment', array($config));
         $payment->setFactoryService($factoryId);

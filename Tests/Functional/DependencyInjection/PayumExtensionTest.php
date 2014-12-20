@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AuthorizeNetAimPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillDirectPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PayexPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayDirectPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCheckoutNvpPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\PayumExtension;
@@ -274,7 +274,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $containerBuilder = new ContainerBuilder(new ParameterBag);
 
         $extension = new PayumExtension;
-        $extension->addPaymentFactory(new OmnipayPaymentFactory);
+        $extension->addPaymentFactory(new OmnipayDirectPaymentFactory);
         $extension->addStorageFactory(new FilesystemStorageFactory);
 
         $extension->load($configs, $containerBuilder);

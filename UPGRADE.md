@@ -1,5 +1,10 @@
 # Upgrades
 
+## 0.13 to 0.14
+
+* `be2bill_onsite` payment was renamed to `be2bill_offsite`.
+* `omnipay_onsite` payment was renamed to `omnipay_offsite`.
+
 ## 0.11 to 0.13
 
 * `CreditCardType` was removed use one from bridge.
