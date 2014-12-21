@@ -37,7 +37,7 @@ payum_capture:
     resource: "@PayumBundle/Resources/config/routing/capture.xml"
     
 payum_authorize:
-    resource: "@PayumBundle/Resources/config/routing/notify.xml"
+    resource: "@PayumBundle/Resources/config/routing/authorize.xml"
     
 payum_notify:
     resource: "@PayumBundle/Resources/config/routing/notify.xml"
