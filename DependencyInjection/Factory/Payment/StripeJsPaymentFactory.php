@@ -23,9 +23,6 @@ class StripeJsPaymentFactory extends AbstractPaymentFactory implements PrependEx
             throw new RuntimeException('Cannot find stripe payment factory class. Have you installed payum/stripe package?');
         }
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/payment'));
-        $loader->load('stripe.xml');
-
         return parent::create($container, $contextName, $config);
     }
 

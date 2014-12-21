@@ -65,26 +65,6 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
     /**
      * {@inheritDoc}
      */
-    protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
-    {
-        $klarnaConfig = new DefinitionDecorator('payum.klarna.checkout.config.prototype');
-        $klarnaConfig->setProperty('merchantId', $config['merchant_id']);
-        $klarnaConfig->setProperty('secret', $config['secret']);
-        $klarnaConfig->setProperty('baseUri', $config['sandbox'] ?
-            Constants::BASE_URI_SANDBOX :
-            Constants::BASE_URI_LIVE
-        );
-
-        $klarnaConfig->setPublic(true);
-        $klarnaConfigId = 'payum.context.'.$contextName.'.config';
-
-        $container->setDefinition($klarnaConfigId, $klarnaConfig);
-        $paymentDefinition->addMethodCall('addApi', array(new Reference($klarnaConfigId)));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
     {
         $factoryId = 'payum.klarna_checkout.factory';
