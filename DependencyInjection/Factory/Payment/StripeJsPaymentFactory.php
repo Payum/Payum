@@ -19,7 +19,7 @@ class StripeJsPaymentFactory extends AbstractPaymentFactory implements PrependEx
      */
     public function create(ContainerBuilder $container, $contextName, array $config)
     {
-        if (false == class_exists('Payum\Stripe\PaymentFactory')) {
+        if (false == class_exists('Payum\Stripe\JsPaymentFactory')) {
             throw new RuntimeException('Cannot find stripe payment factory class. Have you installed payum/stripe package?');
         }
 
