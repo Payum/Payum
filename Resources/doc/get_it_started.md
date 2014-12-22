@@ -166,7 +166,7 @@ class PaymentController extends Controller
             'done' // the route to redirect after capture;
         );
         
-        return $this->redirect($captureToken->getTargetUrl())    
+        return $this->redirect($captureToken->getTargetUrl());
     }
 }
 ```
