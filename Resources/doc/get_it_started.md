@@ -205,7 +205,7 @@ class PaymentController extends Controller
         
         // or Payum can fetch the model for you while executing a request (Preferred).
         $payment->execute($status = new GetHumanStatus($token));
-        $order = $status->getFirstModel();
+        $order = $status->getModel();
         
         // you have order and payment status 
         // so you can do whatever you want for example you can just print status and payment details.
