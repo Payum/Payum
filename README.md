@@ -2,7 +2,6 @@
 [![Build Status](https://travis-ci.org/Payum/PayumBundle.png?branch=master)](https://travis-ci.org/Payum/PayumBundle) 
 [![Total Downloads](https://poser.pugx.org/payum/payum-bundle/d/total.png)](https://packagist.org/packages/payum/payum-bundle) 
 [![Latest Stable Version](https://poser.pugx.org/payum/payum-bundle/version.png)](https://packagist.org/packages/payum/payum-bundle)
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Payum/payumbundle/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 The bundle integrate [payum](https://github.com/Payum/Payum) into [symfony](http://www.symfony.com) framework.
 It already supports [+35 payments](http://payum.org/doc/Core/supported-payments).
