@@ -58,7 +58,7 @@
         "omnipay/paypal": "~2.0"
     },
     "autoload": {
-        "psr-0": { "Payum\\Bundle\\PayumBundle": "" }
+        "psr-4": { "Payum\\Bundle\\PayumBundle\\": "" }
     },
     "extra": {
         "branch-alias": {
@@ -67,6 +67,5 @@
     },
     "config": {
         "bin-dir": "bin"
-    },
-    "target-dir": "Payum/Bundle/PayumBundle"
+    }
 }
