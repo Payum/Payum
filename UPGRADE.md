@@ -1,5 +1,11 @@
 # Upgrades
 
+## 0.11 to 0.13
+
+* `CreditCardType` was removed use one from bridge.
+* `CreditCardExpirationDateType` was removed use one from bridge.
+* `ObtainCreditCardAction` was removed use one from bridge.
+
 ## 0.10 to 0.11
 
 * `InteractiveRequestListener` was renamed to `ReplyToHttpResponseListener`. The container service and related parameter was changed too. Now it takes replies and convert that to http response.
