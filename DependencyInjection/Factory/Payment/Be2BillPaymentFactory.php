@@ -17,7 +17,7 @@ class Be2BillPaymentFactory extends AbstractPaymentFactory
      */
     public function create(ContainerBuilder $container, $contextName, array $config)
     {
-        if (false == class_exists('Payum\Be2Bill\PaymentFactory')) {
+        if (false == class_exists('Payum\Be2Bill\DirectPaymentFactory')) {
             throw new RuntimeException('Cannot find be2bill payment factory class. Have you installed payum/be2bill package?');
         }
 

@@ -19,7 +19,7 @@ class StripeJsPaymentFactory extends AbstractPaymentFactory implements PrependEx
      */
     public function create(ContainerBuilder $container, $contextName, array $config)
     {
-        if (false == class_exists('Payum\Stripe\PaymentFactory')) {
+        if (false == class_exists('Payum\Stripe\JsPaymentFactory')) {
             throw new RuntimeException('Cannot find stripe payment factory class. Have you installed payum/stripe package?');
         }
 
@@ -58,7 +58,7 @@ class StripeJsPaymentFactory extends AbstractPaymentFactory implements PrependEx
         $container->prependExtensionConfig('twig', array(
             'paths' => array_flip(array_filter(array(
                 'PayumCore' => TwigFactory::guessViewsPath('Payum\Core\Payment'),
-                'PayumStripe' => TwigFactory::guessViewsPath('Payum\Stripe\PaymentFactory'),
+                'PayumStripe' => TwigFactory::guessViewsPath('Payum\Stripe\JsPaymentFactory'),
             )))
         ));
     }
