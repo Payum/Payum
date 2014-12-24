@@ -9,44 +9,24 @@ The preferred way to install the library is using [composer](http://getcomposer.
 Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require "payum/payum:0.6.*@dev" "payum/paypal-rest:0.6.*@dev"
+php composer.phar require "payum/paypal-rest"
 ```
 
-_**Note**: It is advised to use stable versions. Visit [packagist](https://packagist.org/packages/payum/) to find out more about versions available._
-
-Now you have all required code downloaded, autoload configured.
-
-
 ## Configuration
-
-First we have modify `config.php` a bit.
-We have to configure `paypal/rest-api-sdk`.
-Then add paypal rest payment to registry.
-At last setup a model storage.
 
 ```php
 <?php
 //config.php
 
-// You way want to modify it to suite your needs
-$paypalRestPaymentDetailsClass = 'Payum\Paypal\Rest\Model\PaymentDetails';
+// ...
 
-$storages[$paypalRestPaymentDetailsClass] = new FilesystemStorage(
-    __DIR__.'/storage', 
-    $paypalRestPaymentDetailsClass, 
-    'idStorage'
-);
+$paypalRestFactory = new \Payum\Paypal\Rest\PaymentFactory();
 
-define("PP_CONFIG_PATH", __DIR__);
-
-$configManager = \PPConfigManager::getInstance();
-
-$cred = new OAuthTokenCredential(
-    $configManager->get('acct1.ClientId'),
-    $configManager->get('acct1.ClientSecret')
-);
-
-$payments['paypalRest'] = RestPaymentFactory::create(new ApiContext($cred, 'Request' . time()));
+$payments['paypal_rest'] = $paypalRestFactory->create(array(
+    'client_id' => 'REPLACE IT',
+    'client_secret' => 'REPLACE IT',
+    'config_path' => 'REPLACE IT',
+));
 ```
 
 ## Prepare payment
