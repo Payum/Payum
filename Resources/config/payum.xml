@@ -16,7 +16,7 @@
 
         <parameter key="payum.action.execute_same_request_with_model_details.class">Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction</parameter>
         <parameter key="payum.action.get_http_request.class">Payum\Core\Bridge\Symfony\Action\GetHttpRequestAction</parameter>
-        <parameter key="payum.action.obtain_credit_card.class">Payum\Bundle\PayumBundle\Action\ObtainCreditCardAction</parameter>
+        <parameter key="payum.action.obtain_credit_card.class">Payum\Core\Bridge\Symfony\Action\ObtainCreditCardAction</parameter>
         <parameter key="payum.action.render_template.class">Payum\Core\Bridge\Twig\Action\RenderTemplateAction</parameter>
         <parameter key="payum.action.capture_order.class">Payum\Core\Action\CaptureOrderAction</parameter>
 
@@ -24,7 +24,7 @@
         <parameter key="payum.security.token_factory.class">Payum\Core\Bridge\Symfony\Security\TokenFactory</parameter>
 
         <parameter key="payum.template.layout">@PayumCore\layout.html.twig</parameter>
-        <parameter key="payum.template.obtain_credit_card">PayumBundle:Action:obtainCreditCard.html.twig</parameter>
+        <parameter key="payum.template.obtain_credit_card">@PayumSymfonyBridge\obtainCreditCard.html.twig</parameter>
     </parameters>
 
     <services>
@@ -150,11 +150,11 @@
             <argument>payum_refund_do</argument>
         </service>
 
-        <service id="payum.form.type.credit_card_expiration_date" class="Payum\Bundle\PayumBundle\Form\Type\CreditCardExpirationDateType">
+        <service id="payum.form.type.credit_card_expiration_date" class="Payum\Core\Bridge\Symfony\Form\Type\CreditCardExpirationDateType">
             <tag name="form.type" alias="payum_credit_card_expiration_date" />
         </service>
 
-        <service id="payum.form.type.credit_card" class="Payum\Bundle\PayumBundle\Form\Type\CreditCardType">
+        <service id="payum.form.type.credit_card" class="Payum\Core\Bridge\Symfony\Form\Type\CreditCardType">
             <tag name="form.type" alias="payum_credit_card" />
         </service>
     </services>
