@@ -2,6 +2,7 @@
 
 ## 0.12 to 0.13
 
+* [request] `markSuspended` method added to `GetStatusInterface` interface. 
 * [omnipay-bridge] Omnipay bridge is not shipped with `payum\payum` code any more. Install it separatly by requiring `payum/omnipay-bridge` package.
 * [paypal-pro] Remove `PaymentDetails` class.
 * [paypal-pro] Remove `Request` and `Response` classes. Use ones from Buzz.

@@ -59,7 +59,7 @@ interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterfac
     /**
      * @return void
      */
-    public function markExpired();
+    public function markSuspended();
 
     /**
      * @return boolean
@@ -69,7 +69,7 @@ interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterfac
     /**
      * @return void
      */
-    public function markCanceled();
+    public function markExpired();
 
     /**
      * @return boolean
@@ -79,7 +79,7 @@ interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterfac
     /**
      * @return void
      */
-    public function markPending();
+    public function markCanceled();
 
     /**
      * @return boolean
@@ -89,7 +89,7 @@ interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterfac
     /**
      * @return void
      */
-    public function markFailed();
+    public function markPending();
 
     /**
      * @return boolean
@@ -99,10 +99,15 @@ interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterfac
     /**
      * @return void
      */
-    public function markUnknown();
+    public function markFailed();
 
     /**
      * @return boolean
      */
     public function isUnknown();
+
+    /**
+     * @return void
+     */
+    public function markUnknown();
 }
