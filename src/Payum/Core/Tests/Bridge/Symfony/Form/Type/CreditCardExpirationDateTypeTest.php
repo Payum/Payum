@@ -58,6 +58,38 @@ class CreditCardExpirationDateTypeTest extends \PHPUnit_Framework_TestCase
         $options = $resolver->resolve();
 
         $this->assertArrayHasKey('years', $options);
-        $this->assertCount(10, $options['years']);
+        $this->assertCount(11, $options['years']);
+
+        $this->assertArrayHasKey('min_expiration_year', $options);
+        $this->assertEquals(date('Y'), $options['min_expiration_year']);
+
+        $this->assertArrayHasKey('max_expiration_year', $options);
+        $this->assertEquals(date('Y') + 10, $options['max_expiration_year']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldTakeMinAndMaxExprationYearsWhileCalcYearsRange()
+    {
+        $type = new CreditCardExpirationDateType();
+
+        $resolver = new OptionsResolver();
+
+        $type->setDefaultOptions($resolver);
+
+        $options = $resolver->resolve(array(
+            'min_expiration_year' => 2000,
+            'max_expiration_year' => 2002,
+        ));
+
+        $this->assertArrayHasKey('years', $options);
+        $this->assertCount(3, $options['years']);
+
+        $this->assertArrayHasKey('min_expiration_year', $options);
+        $this->assertEquals(2000, $options['min_expiration_year']);
+
+        $this->assertArrayHasKey('max_expiration_year', $options);
+        $this->assertEquals(2002, $options['max_expiration_year']);
     }
 }
