@@ -17,9 +17,10 @@ class FillOrderDetailsAction implements ActionInterface
         RequestNotSupportedException::assertSupports($this, $request);
 
         $order = $request->getOrder();
+        $divisor = pow(10, $order->getCurrencyDigitsAfterDecimalPoint());
 
         $details = $order->getDetails();
-        $details['amount'] = $order->getTotalAmount();
+        $details['amount'] = $order->getTotalAmount() / $divisor;
         $details['invoice_number'] = $order->getNumber();
         $details['description'] = $order->getDescription();
         $details['email_address'] = $order->getClientEmail();

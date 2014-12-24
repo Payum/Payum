@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.12.9 (2014-12-24)
+
+* [authorize.net] Amount must be decimal.
+* [request] add `getFirstModel` method to `Generic` request.
+
 ## 0.12.8 (2014-12-13)
 
 * [action] Back port from master a `GenericOrderAction`. Fixes "Attempted to call method "getClientId" in done script but got array instead of order" 

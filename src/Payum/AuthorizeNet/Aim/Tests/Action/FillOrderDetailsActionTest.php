@@ -53,7 +53,7 @@ class FillOrderDetailsActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('amount', $details);
-        $this->assertEquals(123, $details['amount']);
+        $this->assertEquals(1.23, $details['amount']);
 
         $this->assertArrayHasKey('invoice_number', $details);
         $this->assertEquals('theNumber', $details['invoice_number']);
