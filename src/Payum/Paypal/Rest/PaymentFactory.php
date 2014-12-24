@@ -9,6 +9,7 @@ use Payum\Core\PaymentFactoryInterface;
 use Payum\Paypal\Rest\Action\CaptureAction;
 use Payum\Paypal\Rest\Action\StatusAction;
 use Payum\Paypal\Rest\Action\SyncAction;
+use Payum\Core\Exception\InvalidArgumentException;
 
 class PaymentFactory implements PaymentFactoryInterface
 {
@@ -52,7 +53,12 @@ class PaymentFactory implements PaymentFactoryInterface
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['options.required']);
 
-                define("PP_CONFIG_PATH", $config['config_path']);
+                if (!defined('PP_CONFIG_PATH')) {
+                    define('PP_CONFIG_PATH', $config['config_path']);
+                } elseif (PP_CONFIG_PATH !== $config['config_path']) {
+                    throw new InvalidArgumentException(sprintf('Given "config_path" is invalid. Should be equal to the defined "PP_CONFIG_PATH": %s.', PP_CONFIG_PATH));
+                }
+
                 $credential = new OAuthTokenCredential($config['client_id'], $config['client_secret']);
                 $config['payum.api'] = new ApiContext($credential);
             };

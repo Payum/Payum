@@ -89,4 +89,24 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory->create();
     }
+
+    /**
+     * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     *
+     * @expectedException \Payum\Core\Exception\InvalidArgumentException
+     * @expectedExceptionMessageRegExp /Given \"config_path\" is invalid. \w+/
+     */
+    public function shouldThrowIfConfigPathOptionsNotEqualPaypalPath()
+    {
+        define('PP_CONFIG_PATH', __DIR__);
+
+        $factory = new PaymentFactory();
+        $factory->create(array(
+            'client_id' => 'cId',
+            'client_secret' => 'cSecret',
+            'config_path' => dirname(__DIR__),
+        ));
+    }
 }
