@@ -202,7 +202,7 @@ class Be2BillOnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAddPayumActionTagToCaptureOnsiteAction()
+    public function shouldAddPayumActionTagToCaptureOffsiteAction()
     {
         $factory = new Be2BillOnsitePaymentFactory;
 

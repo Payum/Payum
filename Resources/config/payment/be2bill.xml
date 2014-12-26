@@ -7,7 +7,7 @@
     <parameters>
         <parameter key="payum.be2bill.api.class">Payum\Be2Bill\Api</parameter>        
         <parameter key="payum.be2bill.action.capture.class">Payum\Be2Bill\Action\CaptureAction</parameter>
-        <parameter key="payum.be2bill.action.capture_onsite.class">Payum\Be2Bill\Action\CaptureOnsiteAction</parameter>
+        <parameter key="payum.be2bill.action.capture_onsite.class">Payum\Be2Bill\Action\CaptureOffsiteAction</parameter>
         <parameter key="payum.be2bill.action.status.class">Payum\Be2Bill\Action\StatusAction</parameter>
         <parameter key="payum.be2bill.action.fill_order_details.class">Payum\Be2Bill\Action\FillOrderDetailsAction</parameter>
     </parameters>
