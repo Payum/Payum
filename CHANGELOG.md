@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.13.0 (2014-12-26)
+
+* [ssl] Added cURL Options for the PayPal Sandbox SSL 3.0 Vulnerability (POODLE)
+* [payment] remove all addXXX methods from PaymentInterface.
+* [payment] Introduce `PaymentFactoryInterface`. Simplify exist factories.
+* [request] Add missed markSuspended method to GetStatusInterface.
+* [request] Allow get raw content of the request.
+* [reply] Add ability to set Http StatusCode and headers.
+* [action] Remove generic order action. Improve execute same request with details action.
+* [action] Execute same request with details has to be the last action.
+* [storage] Rename methods. Improve usage of Identity.
+* [doctrine] fix mapping of `details` field in the order model. It has to be object.
+* [buzz] Create default curl client, if no client is passed
+* [security] Reuse league/url while manipulation with tokens urls.
+* [security] Making `afterPath` optional on `TokenFactoryInterface`.
+* [paypal-pro] Add support of refunds.
+* [paypal-pro] Refactor Paypal Pro, remove not used stuff, simplify logic.
+* [omnipay] Allow install Omnipay bridge ONLY as a standalone package. Not shipped with payum/payum any more.
+* [symfony] Allow configure min max expiration years.
+* [docs] Add chapter about refund.
+
 ## 0.12.9 (2014-12-24)
 
 * [authorize.net] Amount must be decimal.
