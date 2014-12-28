@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.13.0 (2014-12.28)
+
+* [action] Delete `ObtainCreditCardAction` action. Use one from bridge
+* [action] remove generic order action.
+* [forms] remove deprecated forms. Use same from from bridge.
+* [forms] Fix form `setDefaultOptions` method. Fix for Symfony 2.6.
+* [buzz] use buzz client with ssl fix, sync with latesty changes in the lib.
+* [paypal-pro] add refund action.
+* [controller] add refund controller.
+* [composer] change loader to psr4.
+* [composer] add Omnipay bridge and JmsPaymentBridge to require-dev section.
+
 ## 0.12.4 (2014-12-13)
 
 * [action] back port `GenericOrderAction` from master. Fixes "Attempted to call method "getClientId" in done script but got array instead of order"
