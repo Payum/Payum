@@ -75,6 +75,15 @@ class PaymentFactory implements PaymentFactoryInterface
         ));
 
         if (false == $config['payum.api']) {
+            $config['options.default'] = array(
+                'eid' => '',
+                'secret' => '',
+                'country' => '',
+                'language' => '',
+                'currency' => '',
+                'sandbox' => true,
+            );
+            $config->defaults($config['options.default']);
             $config['options.required'] = array('eid', 'secret', 'country', 'language', 'currency');
             $config->defaults(array(
                 'sandbox' => true,

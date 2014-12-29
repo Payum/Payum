@@ -53,4 +53,19 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $config);
         $this->assertNotEmpty($config);
     }
+
+    /**
+     * @test
+     */
+    public function shouldConfigContainDefaultOptions()
+    {
+        $factory = new PaymentFactory();
+
+        $config = $factory->createConfig();
+
+        $this->assertInternalType('array', $config);
+
+        $this->assertArrayHasKey('options.default', $config);
+        $this->assertEquals(array(), $config['options.default']);
+    }
 }

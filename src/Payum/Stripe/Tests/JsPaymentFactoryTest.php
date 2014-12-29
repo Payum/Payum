@@ -74,6 +74,21 @@ class JsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function shouldConfigContainDefaultOptions()
+    {
+        $factory = new JsPaymentFactory();
+
+        $config = $factory->createConfig();
+
+        $this->assertInternalType('array', $config);
+
+        $this->assertArrayHasKey('options.default', $config);
+        $this->assertEquals(array('publishable_key' => '', 'secret_key' => ''), $config['options.default']);
+    }
+
+    /**
+     * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage The publishable_key, secret_key fields are required.

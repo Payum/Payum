@@ -74,6 +74,21 @@ class OffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function shouldConfigContainDefaultOptions()
+    {
+        $factory = new OffsitePaymentFactory();
+
+        $config = $factory->createConfig();
+
+        $this->assertInternalType('array', $config);
+
+        $this->assertArrayHasKey('options.default', $config);
+        $this->assertEquals(array('identifier' => '', 'password' => '', 'sandbox' => true), $config['options.default']);
+    }
+
+    /**
+     * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage The identifier, password fields are required.

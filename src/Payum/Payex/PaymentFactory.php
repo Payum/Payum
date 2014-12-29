@@ -55,14 +55,18 @@ class PaymentFactory implements PaymentFactoryInterface
     public function createConfig(array $config = array())
     {
         $config = ArrayObject::ensureArrayObject($config);
-
         $config->defaults($this->corePaymentFactory->createConfig());
 
+        $config['options.default'] = array(
+            'accountNumber' => '',
+            'encryptionKey' => '',
+            'sandbox' => true,
+        );
+        $config->defaults($config['options.default']);
         $config['options.required'] = array('accountNumber', 'encryptionKey');
 
         $config->defaults(array(
             'soap.client_factory' => new SoapClientFactory(),
-            'sandbox' => true,
 
             'payum.api.order' => function (ArrayObject $config) {
                 $config->validateNotEmpty($config['options.required']);

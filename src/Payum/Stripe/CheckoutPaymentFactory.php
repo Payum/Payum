@@ -54,6 +54,11 @@ class CheckoutPaymentFactory implements PaymentFactoryInterface
         ));
 
         if (false == $config['payum.api']) {
+            $config['options.default'] = array(
+                'publishable_key' => '',
+                'secret_key' => ''
+            );
+            $config->defaults($config['options.default']);
             $config['options.required'] = array('publishable_key', 'secret_key');
 
             $config['payum.api'] = function (ArrayObject $config) {
