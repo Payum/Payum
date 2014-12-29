@@ -70,7 +70,7 @@ class CreditCardExpirationDateTypeTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldTakeMinAndMaxExprationYearsWhileCalcYearsRange()
+    public function shouldTakeMinAndMaxExpirationYearsWhileCalcYearsRange()
     {
         $type = new CreditCardExpirationDateType();
 
