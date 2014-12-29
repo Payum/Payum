@@ -39,6 +39,8 @@ class PaymentFactory implements PaymentFactoryInterface
         $config = ArrayObject::ensureArrayObject($config);
 
         $config->defaults($this->corePaymentFactory->createConfig());
+        $config['options.default'] = array();
+        $config['options.required'] = array();
 
         $config->defaults(array(
             'payum.action.capture' => new CaptureAction(),

@@ -39,7 +39,6 @@ class PaymentFactory implements PaymentFactoryInterface
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->corePaymentFactory->createConfig());
-
         $config->defaults(array(
             'payum.action.capture' => new CaptureAction(),
             'payum.action.status' => new StatusAction(),
@@ -47,11 +46,13 @@ class PaymentFactory implements PaymentFactoryInterface
         ));
 
         if (false == $config['payum.api']) {
-            $config['options.required'] = array('loginId', 'transactionKey');
-
-            $config->defaults(array(
+            $config['options.default'] = array(
+                'loginId' => '',
+                'transactionKey' => '',
                 'sandbox' => true,
-            ));
+            );
+            $config->defaults($config['options.default']);
+            $config['options.required'] = array('loginId', 'transactionKey');
 
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['options.required']);

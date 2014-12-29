@@ -48,11 +48,16 @@ class PaymentFactory implements PaymentFactoryInterface
         ));
 
         if (false == $config['payum.api']) {
-            $config['options.required'] = array('username', 'password', 'partner', 'vendor', 'tender');
-
-            $config->defaults(array(
+            $config['options.default'] = array(
+                'username' => '',
+                'password' => '',
+                'partner' => '',
+                'vendor' => '',
+                'tender' => '',
                 'sandbox' => true,
-            ));
+            );
+            $config->defaults($config['options.default']);
+            $config['options.required'] = array('username', 'password', 'partner', 'vendor', 'tender');
 
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['options.required']);

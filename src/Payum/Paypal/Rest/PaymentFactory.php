@@ -49,6 +49,13 @@ class PaymentFactory implements PaymentFactoryInterface
         ));
 
         if (false == $config['payum.api']) {
+            $config['options.default'] = array(
+                'client_id' => '',
+                'client_secret' => '',
+                'config_path' => '',
+            );
+            $config->defaults($config['options.default']);
+
             $config['options.required'] = array('client_id', 'client_secret', 'config_path');
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['options.required']);

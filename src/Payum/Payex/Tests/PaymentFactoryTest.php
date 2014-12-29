@@ -78,6 +78,21 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function shouldConfigContainDefaultOptions()
+    {
+        $factory = new PaymentFactory();
+
+        $config = $factory->createConfig();
+
+        $this->assertInternalType('array', $config);
+
+        $this->assertArrayHasKey('options.default', $config);
+        $this->assertEquals(array('accountNumber' => '', 'encryptionKey' => '', 'sandbox' => true), $config['options.default']);
+    }
+
+    /**
+     * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage The accountNumber, encryptionKey fields are required.
