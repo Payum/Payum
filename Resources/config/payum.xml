@@ -71,5 +71,9 @@
 
             <tag name="payum.action" all="true" alias="obtain_credit_card" />
         </service>
+
+        <service id="payum.form.type.credit_card" class="Payum\Core\Bridge\Symfony\Form\Type\PaymentConfigType">
+            <tag name="form.type" alias="payum_payment_config" />
+        </service>
     </services>
 </container>
