@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 
 class DebugPaymentCommand extends ContainerAwareCommand
 {
@@ -19,7 +20,10 @@ class DebugPaymentCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('payum:payment:debug')
+            ->setName('debug:payum:payment')
+            ->setAliases(array(
+                'payum:payment:debug',
+            ))
             ->addArgument('payment-name', InputArgument::OPTIONAL, 'The payment name you want to get information about.')
             ->addOption('show-supports', null, InputOption::VALUE_NONE, 'Show what actions supports.')
         ;
@@ -30,18 +34,18 @@ class DebugPaymentCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $payments = $this->getPayum()->getPayments();
+
         if ($paymentName = $input->getArgument('payment-name')) {
+            $paymentName = $this->findProperPaymentName($input, $output, $payments, $paymentName);
             $payments = array(
-                $paymentName => $this->getPayum()->getPayment($paymentName)
+                $paymentName => $this->getPayum()->getPayment($paymentName),
             );
-        } else {
-            $payments = $this->getPayum()->getPayments();
         }
 
         $output->writeln('<info>Order of actions, apis, extensions matters</info>');
 
         $output->writeln(sprintf('Found <info>%d</info> payments', count($payments)));
-
 
         foreach ($payments as $name => $payment) {
             $output->writeln('');
@@ -62,7 +66,7 @@ class DebugPaymentCommand extends ContainerAwareCommand
 
                 if ($input->getOption('show-supports')) {
                     $rm = new \ReflectionMethod($action, 'supports');
-                    $output->write("\n\t" . implode("\n\t", $this->getMethodCode($rm)));
+                    $output->write("\n\t".implode("\n\t", $this->getMethodCode($rm)));
                 }
             }
 
@@ -79,7 +83,6 @@ class DebugPaymentCommand extends ContainerAwareCommand
             $output->writeln("");
             $output->writeln("\t<info>Extensions:</info>");
             foreach ($extensions as $extension) {
-
                 $output->writeln(sprintf("\t%s", get_class($extension)));
 
                 if ($extension instanceof StorageExtension) {
@@ -146,4 +149,39 @@ class DebugPaymentCommand extends ContainerAwareCommand
     {
         return $this->getContainer()->get('payum');
     }
-} 
+
+    private function findProperPaymentName(InputInterface $input, OutputInterface $output, $payments, $name)
+    {
+        $helperSet = $this->getHelperSet();
+        if (!$helperSet->has('question') || isset($payments[$name]) || !$input->isInteractive()) {
+            return $name;
+        }
+
+        $matchingPayments = $this->findPaymentsContaining($payments, $name);
+        if (empty($matchingPayments)) {
+            throw new \InvalidArgumentException(sprintf('No Payum payments found that match "%s".', $name));
+        }
+        $question = new ChoiceQuestion('Choose a number for more information on the payum payment', $matchingPayments);
+        $question->setErrorMessage('Payum payment %s is invalid.');
+
+        return $this->getHelper('question')->ask($input, $output, $question);
+    }
+
+    private function findPaymentsContaining($payments, $name)
+    {
+        $threshold = 1e3;
+        $foundPayments = array();
+
+        foreach ($payments as $paymentName => $payment) {
+            $lev = levenshtein($name, $paymentName);
+            if ($lev <= strlen($name) / 3 || false !== strpos($paymentName, $name)) {
+                $foundPayments[$paymentName] = isset($foundPayments[$paymentName]) ? $foundPayments[$payment] - $lev : $lev;
+            }
+        }
+
+        $foundPayments = array_filter($foundPayments, function ($lev) use ($threshold) { return $lev < 2*$threshold; });
+        asort($foundPayments);
+
+        return array_keys($foundPayments);
+    }
+}
