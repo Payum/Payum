@@ -15,7 +15,7 @@ class DebugPaymentCommandTest extends WebTestCase
      */
     public function shouldOutputDebugInfoAboutSinglePayment()
     {
-        $output = $this->executeConsole(new DebugPaymentCommand, array(
+        $output = $this->executeConsole(new DebugPaymentCommand(), array(
             'payment-name' => 'fooPayment',
         ));
 
@@ -37,7 +37,7 @@ class DebugPaymentCommandTest extends WebTestCase
      */
     public function shouldOutputDebugInfoAboutAllPayments()
     {
-        $output = $this->executeConsole(new DebugPaymentCommand);
+        $output = $this->executeConsole(new DebugPaymentCommand());
 
         $this->assertContains('Found 2 payments', $output);
         $this->assertContains('fooPayment (Payum\Core\Payment):', $output);
@@ -49,7 +49,7 @@ class DebugPaymentCommandTest extends WebTestCase
      */
     public function shouldOutputInfoWhatActionsSupports()
     {
-        $output = $this->executeConsole(new DebugPaymentCommand, array(
+        $output = $this->executeConsole(new DebugPaymentCommand(), array(
             'payment-name' => 'fooPayment',
             '--show-supports' => true,
         ));
@@ -62,6 +62,24 @@ class DebugPaymentCommandTest extends WebTestCase
     }
 
     /**
+     * @test
+     */
+    public function shouldOutputChoiceListPaymentsForNameGiven()
+    {
+        $command = new DebugPaymentCommand();
+        $command->setApplication(new Application($this->client->getKernel()));
+        $helper = $command->getHelper('question');
+        $helper->setInputStream($this->getInputStream('0'));
+
+        $output = $this->executeConsole($command, array(
+            'payment-name' => 'foo',
+        ));
+
+        $this->assertContains('Choose a number for more information on the payum payment', $output);
+        $this->assertContains('[0] fooPayment', $output);
+    }
+
+    /**
      * @param Command  $command
      * @param string[] $arguments
      *
@@ -69,19 +87,31 @@ class DebugPaymentCommandTest extends WebTestCase
      */
     protected function executeConsole(Command $command, array $arguments = array())
     {
-        $command->setApplication(new Application($this->client->getKernel()));
+        if (!$command->getApplication()) {
+            $command->setApplication(new Application($this->client->getKernel()));
+        }
+
         if ($command instanceof ContainerAwareCommand) {
             $command->setContainer($this->client->getContainer());
         }
 
         $arguments = array_replace(array(
             '--env' => 'test',
-            'command' => $command->getName()
+            'command' => $command->getName(),
         ), $arguments);
 
         $commandTester = new CommandTester($command);
         $commandTester->execute($arguments);
 
         return $commandTester->getDisplay();
+    }
+
+    protected function getInputStream($input)
+    {
+        $stream = fopen('php://memory', 'r+', false);
+        fputs($stream, $input);
+        rewind($stream);
+
+        return $stream;
     }
 }
