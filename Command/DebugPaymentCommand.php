@@ -152,7 +152,8 @@ class DebugPaymentCommand extends ContainerAwareCommand
 
     private function findProperPaymentName(InputInterface $input, OutputInterface $output, $payments, $name)
     {
-        if (isset($payments[$name]) || !$input->isInteractive()) {
+        $helperSet = $this->getHelperSet();
+        if (!$helperSet->has('question') || isset($payments[$name]) || !$input->isInteractive()) {
             return $name;
         }
 

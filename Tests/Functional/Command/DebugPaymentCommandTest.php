@@ -68,7 +68,13 @@ class DebugPaymentCommandTest extends WebTestCase
     {
         $command = new DebugPaymentCommand();
         $command->setApplication(new Application($this->client->getKernel()));
-        $helper = $command->getHelper('question');
+
+        $helperSet = $command->getHelperSet();
+        if (!$helperSet->has('question')) {
+            $this->markTestSkipped('The symfony have a version <2.5');
+        }
+
+        $helper = $helperSet->get('question');
         $helper->setInputStream($this->getInputStream('0'));
 
         $output = $this->executeConsole($command, array(
