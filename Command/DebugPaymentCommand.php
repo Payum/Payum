@@ -168,15 +168,19 @@ class DebugPaymentCommand extends ContainerAwareCommand
 
     private function findPaymentsContaining($payments, $name)
     {
+        $threshold = 1e3;
         $foundPayments = array();
-        $name = strtolower($name);
+
         foreach ($payments as $paymentName => $payment) {
-            if (false === strpos($paymentName, $name)) {
-                continue;
+            $lev = levenshtein($name, $paymentName);
+            if ($lev <= strlen($name) / 3 || false !== strpos($paymentName, $name)) {
+                $foundPayments[$paymentName] = isset($foundPayments[$paymentName]) ? $foundPayments[$payment] - $lev : $lev;
             }
-            $foundPayments[] = $paymentName;
         }
 
-        return $foundPayments;
+        $foundPayments = array_filter($foundPayments, function ($lev) use ($threshold) { return $lev < 2*$threshold; });
+        asort($foundPayments);
+
+        return array_keys($foundPayments);
     }
 }
