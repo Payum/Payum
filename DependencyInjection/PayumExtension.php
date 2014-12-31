@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\DependencyInjection;
 
+use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface;
@@ -46,13 +47,18 @@ class PayumExtension extends Extension implements PrependExtensionInterface
      */
     public function prepend(ContainerBuilder $container)
     {
-        // TODO: The logic is disabled due to bug in TwigBundle. See https://github.com/symfony/symfony/pull/9719
+        $container->prependExtensionConfig('twig', array(
+            'paths' => array_flip(array_filter(array(
+                'PayumCore' => TwigFactory::guessViewsPath('Payum\Core\Payment'),
+                'PayumSymfonyBridge' => TwigFactory::guessViewsPath('Payum\Core\Bridge\Symfony\ReplyToSymfonyResponseConverter'),
+            )))
+        ));
 
-//        foreach ($this->paymentFactories as $factory) {
-//            if ($factory instanceof PrependExtensionInterface) {
-//                $factory->prepend($container);
-//            }
-//        }
+        foreach ($this->paymentFactories as $factory) {
+            if ($factory instanceof PrependExtensionInterface) {
+                $factory->prepend($container);
+            }
+        }
     }
 
     /**

@@ -181,8 +181,6 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldPassContainerToPaymentFactoryPrependMethodIfImplementsPrependFactoryInterface()
     {
-        $this->markTestSkipped('The logic was disabled because of the bug. See https://github.com/symfony/symfony/pull/9719');
-
         $container = new ContainerBuilder;
 
         $factoryMock = $this->getMock('Payum\Bundle\PayumBundle\Tests\DependencyInjection\FactoryPlusPrependExtension');
