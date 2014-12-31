@@ -52,6 +52,8 @@ class PaymentFactory implements PaymentFactoryInterface
         $config->defaults($this->corePaymentFactory->createConfig());
 
         $config->defaults(array(
+            'factory.name' => 'klarna_invoice',
+            'factory.title' => 'Klarna Invoice',
             'sandbox' => true,
             'pClassStorage' => 'json',
             'pClassStoragePath' => './pclasses.json',

@@ -89,6 +89,24 @@ class DirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function shouldConfigContainFactoryNameAndTitle()
+    {
+        $factory = new DirectPaymentFactory();
+
+        $config = $factory->createConfig();
+
+        $this->assertInternalType('array', $config);
+
+        $this->assertArrayHasKey('factory.name', $config);
+        $this->assertEquals('be2bill_direct', $config['factory.name']);
+
+        $this->assertArrayHasKey('factory.title', $config);
+        $this->assertEquals('Be2Bill Direct', $config['factory.title']);
+    }
+
+    /**
+     * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage The identifier, password fields are required.

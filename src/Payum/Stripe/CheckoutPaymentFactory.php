@@ -42,6 +42,9 @@ class CheckoutPaymentFactory implements PaymentFactoryInterface
         $config->defaults($this->corePaymentFactory->createConfig());
 
         $config->defaults(array(
+            'factory.name' => 'stripe_checkout',
+            'factory.title' => 'Stripe Checkout',
+
             'payum.template.obtain_token' => '@PayumStripe/Action/obtain_checkout_token.html.twig',
 
             'payum.action.capture' => new CaptureAction(),

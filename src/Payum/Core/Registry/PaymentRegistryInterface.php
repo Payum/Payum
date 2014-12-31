@@ -1,9 +1,6 @@
 <?php
 namespace Payum\Core\Registry;
 
-use Payum\Core\PaymentInterface;
-use Payum\Core\Exception\InvalidArgumentException;
-
 interface PaymentRegistryInterface
 {
     /**

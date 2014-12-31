@@ -41,6 +41,9 @@ class PaymentFactory implements PaymentFactoryInterface
         $config->defaults($this->corePaymentFactory->createConfig());
 
         $config->defaults(array(
+            'factory.name' => 'paypal_pro_checkout_nvp',
+            'factory.title' => 'PayPal ProCheckout',
+
             'payum.action.capture' => new CaptureAction(),
             'payum.action.refund' => new RefundAction(),
             'payum.action.fill_order_details' => new FillOrderDetailsAction(),

@@ -89,6 +89,24 @@ class CheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function shouldConfigContainFactoryNameAndTitle()
+    {
+        $factory = new CheckoutPaymentFactory();
+
+        $config = $factory->createConfig();
+
+        $this->assertInternalType('array', $config);
+
+        $this->assertArrayHasKey('factory.name', $config);
+        $this->assertEquals('stripe_checkout', $config['factory.name']);
+
+        $this->assertArrayHasKey('factory.title', $config);
+        $this->assertEquals('Stripe Checkout', $config['factory.title']);
+    }
+
+    /**
+     * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage The publishable_key, secret_key fields are required.

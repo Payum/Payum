@@ -98,6 +98,24 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function shouldConfigContainFactoryNameAndTitle()
+    {
+        $factory = new PaymentFactory();
+
+        $config = $factory->createConfig();
+
+        $this->assertInternalType('array', $config);
+
+        $this->assertArrayHasKey('factory.name', $config);
+        $this->assertEquals('klarna_invoice', $config['factory.name']);
+
+        $this->assertArrayHasKey('factory.title', $config);
+        $this->assertEquals('Klarna Invoice', $config['factory.title']);
+    }
+
+    /**
+     * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage The eid, secret, country, language, currency fields are required.

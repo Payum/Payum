@@ -12,6 +12,9 @@ class JsPaymentFactory extends CheckoutPaymentFactory
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults(array(
+            'factory.name' => 'stripe_js',
+            'factory.title' => 'Stripe.Js',
+
             'payum.template.obtain_token' => '@PayumStripe/Action/obtain_js_token.html.twig',
         ));
 

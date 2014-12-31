@@ -43,6 +43,9 @@ class PaymentFactory implements PaymentFactoryInterface
         $config->defaults($this->corePaymentFactory->createConfig());
 
         $config->defaults(array(
+            'factory.name' => 'paypal_rest',
+            'factory.title' => 'PayPal Rest',
+
             'payum.action.capture' => new CaptureAction(),
             'payum.action.sync' => new SyncAction(),
             'payum.action.status' => new StatusAction(),

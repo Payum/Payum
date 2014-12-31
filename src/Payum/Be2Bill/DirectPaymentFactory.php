@@ -40,6 +40,9 @@ class DirectPaymentFactory implements PaymentFactoryInterface
         $config->defaults($this->corePaymentFactory->createConfig());
 
         $config->defaults(array(
+            'factory.name' => 'be2bill_direct',
+            'factory.title' => 'Be2Bill Direct',
+
             'payum.action.capture' => new CaptureAction(),
             'payum.action.status' => new StatusAction(),
             'payum.action.fill_order_details' => new FillOrderDetailsAction(),

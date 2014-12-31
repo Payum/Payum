@@ -45,6 +45,8 @@ class PaymentFactory implements PaymentFactoryInterface
         $config->defaults($this->corePaymentFactory->createConfig());
 
         $config->defaults(array(
+            'factory.name' => 'klarna_checkout',
+            'factory.title' => 'Klarna Checkout',
             'payum.template.authorize' => '@PayumKlarnaCheckout/Action/capture.html.twig',
             'contentType' => Constants::CONTENT_TYPE_V2_PLUS_JSON,
             'sandbox' => true,
