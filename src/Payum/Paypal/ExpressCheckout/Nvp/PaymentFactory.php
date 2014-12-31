@@ -54,6 +54,9 @@ class PaymentFactory implements PaymentFactoryInterface
         $config->defaults($this->corePaymentFactory->createConfig());
 
         $config->defaults(array(
+            'factory.name' => 'paypal_express_checkout_nvp',
+            'factory.title' => 'PayPal ExpressCheckout',
+
             'payum.action.capture' => new CaptureAction(),
             'payum.action.fill_order_details' => new FillOrderDetailsAction(),
             'payum.action.notify' => new NotifyAction(),

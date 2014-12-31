@@ -66,6 +66,9 @@ class PaymentFactory implements PaymentFactoryInterface
         $config['options.required'] = array('accountNumber', 'encryptionKey');
 
         $config->defaults(array(
+            'factory.name' => 'payex',
+            'factory.title' => 'Payex',
+
             'soap.client_factory' => new SoapClientFactory(),
 
             'payum.api.order' => function (ArrayObject $config) {

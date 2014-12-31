@@ -68,4 +68,22 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('options.default', $config);
         $this->assertEquals(array(), $config['options.default']);
     }
+
+    /**
+     * @test
+     */
+    public function shouldConfigContainFactoryNameAndTitle()
+    {
+        $factory = new PaymentFactory();
+
+        $config = $factory->createConfig();
+
+        $this->assertInternalType('array', $config);
+
+        $this->assertArrayHasKey('factory.name', $config);
+        $this->assertEquals('offline', $config['factory.name']);
+
+        $this->assertArrayHasKey('factory.title', $config);
+        $this->assertEquals('Offline', $config['factory.title']);
+    }
 }

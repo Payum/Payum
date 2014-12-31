@@ -89,6 +89,24 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function shouldConfigContainFactoryNameAndTitle()
+    {
+        $factory = new PaymentFactory();
+
+        $config = $factory->createConfig();
+
+        $this->assertInternalType('array', $config);
+
+        $this->assertArrayHasKey('factory.name', $config);
+        $this->assertEquals('klarna_checkout', $config['factory.name']);
+
+        $this->assertArrayHasKey('factory.title', $config);
+        $this->assertEquals('Klarna Checkout', $config['factory.title']);
+    }
+
+    /**
+     * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage The merchantId, secret fields are required.

@@ -43,6 +43,8 @@ class PaymentFactory implements PaymentFactoryInterface
         $config['options.required'] = array();
 
         $config->defaults(array(
+            'factory.name' => 'offline',
+            'factory.title' => 'Offline',
             'payum.action.capture' => new CaptureAction(),
             'payum.action.status' => new StatusAction(),
             'payum.action.fill_order_details' => new FillOrderDetailsAction(),
