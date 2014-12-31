@@ -6,7 +6,6 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
-
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentFactory;
 
 class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
@@ -26,7 +25,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new OmnipayPaymentFactory;
+        new OmnipayPaymentFactory();
     }
 
     /**
@@ -34,39 +33,35 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetName()
     {
-        $factory = new OmnipayPaymentFactory;
+        $factory = new OmnipayPaymentFactory();
 
         $this->assertEquals('omnipay', $factory->getName());
     }
 
     /**
      * @test
+     *
+     * @dataProvider provideConfigs
      */
-    public function shouldAllowAddConfiguration()
+    public function shouldAllowAddConfiguration($config)
     {
-        $factory = new OmnipayPaymentFactory;
+        $factory = new OmnipayPaymentFactory();
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
-        
+
         $factory->addConfiguration($rootNode);
 
         $processor = new Processor();
-        $config = $processor->process($tb->buildTree(), array(array(
-            'type' => 'PayPal_Express',
-            'options' => array(
-                'foo' => 'foo',
-                'bar' => 'bar',
-            )
-        )));
+        $config = $processor->process($tb->buildTree(), array($config));
 
         $this->assertArrayHasKey('type', $config);
 
         $this->assertArrayHasKey('options', $config);
-        
+
         $this->assertArrayHasKey('foo', $config['options']);
         $this->assertEquals('foo', $config['options']['foo']);
-        
+
         $this->assertArrayHasKey('bar', $config['options']);
         $this->assertEquals('bar', $config['options']['bar']);
 
@@ -78,13 +73,13 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "type" at path "foo" must be configured.
      */
     public function thrownIfTypeSectionMissing()
     {
-        $factory = new OmnipayPaymentFactory;
+        $factory = new OmnipayPaymentFactory();
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -97,13 +92,13 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage Invalid configuration for path "foo": Given type notSupportedGatewayType is not supported.
      */
     public function thrownIfTypeNotSupportedByOmnipay()
     {
-        $factory = new OmnipayPaymentFactory;
+        $factory = new OmnipayPaymentFactory();
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -113,7 +108,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
             'type' => 'notSupportedGatewayType',
-            'options' => array()
+            'options' => array(),
         )));
     }
 
@@ -125,7 +120,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfApiOptionsSectionMissing()
     {
-        $factory = new OmnipayPaymentFactory;
+        $factory = new OmnipayPaymentFactory();
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -134,7 +129,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
-            'type' => 'PayPal_Express'
+            'type' => 'PayPal_Express',
         )));
     }
 
@@ -143,9 +138,9 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePaymentAndReturnItsId()
     {
-        $factory = new OmnipayPaymentFactory;
+        $factory = new OmnipayPaymentFactory();
 
-        $container = new ContainerBuilder;
+        $container = new ContainerBuilder();
 
         $paymentId = $factory->create($container, 'aContextName', array(
             'obtain_credit_card' => false,
@@ -158,7 +153,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'apis' => array(),
             'extensions' => array(),
         ));
-        
+
         $this->assertEquals('payum.context.aContextName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
     }
@@ -168,9 +163,9 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new OmnipayPaymentFactory;
+        $factory = new OmnipayPaymentFactory();
 
-        $container = new ContainerBuilder;
+        $container = new ContainerBuilder();
 
         $paymentId = $factory->create($container, 'aContextName', array(
             'obtain_credit_card' => false,
@@ -185,8 +180,8 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId), 
-            'addAction', 
+            $container->getDefinition($paymentId),
+            'addAction',
             new Reference('payum.action.foo')
         );
         $this->assertDefinitionContainsMethodCall(
@@ -206,9 +201,9 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldDecorateBasicApiDefinitionAndAddItToPayment()
     {
-        $factory = new OmnipayPaymentFactory;
+        $factory = new OmnipayPaymentFactory();
 
-        $container = new ContainerBuilder;
+        $container = new ContainerBuilder();
 
         $paymentId = $factory->create($container, 'aContextName', array(
             'obtain_credit_card' => false,
@@ -236,9 +231,9 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAddPayumActionTagCaptureAction()
     {
-        $factory = new OmnipayPaymentFactory;
+        $factory = new OmnipayPaymentFactory();
 
-        $container = new ContainerBuilder;
+        $container = new ContainerBuilder();
 
         $factory->create($container, 'aContextName', array(
             'obtain_credit_card' => false,
@@ -264,9 +259,9 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAddPayumActionTagStatusAction()
     {
-        $factory = new OmnipayPaymentFactory;
+        $factory = new OmnipayPaymentFactory();
 
-        $container = new ContainerBuilder;
+        $container = new ContainerBuilder();
 
         $factory->create($container, 'aContextName', array(
             'obtain_credit_card' => false,
@@ -292,9 +287,9 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAddPayumActionTagToFillOrderDetailsAction()
     {
-        $factory = new OmnipayPaymentFactory;
+        $factory = new OmnipayPaymentFactory();
 
-        $container = new ContainerBuilder;
+        $container = new ContainerBuilder();
 
         $factory->create($container, 'aContextName', array(
             'obtain_credit_card' => false,
@@ -329,5 +324,29 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             $expectedMethod,
             $expectedFirstArgument
         ));
+    }
+
+    public static function provideConfigs()
+    {
+        return array(
+            array(
+                array(
+                    'type' => 'PayPal_Express',
+                    'options' => array(
+                        'foo' => 'foo',
+                        'bar' => 'bar',
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    'type' => '\Omnipay\PayPal\ExpressGateway',
+                    'options' => array(
+                        'foo' => 'foo',
+                        'bar' => 'bar',
+                    ),
+                ),
+            ),
+        );
     }
 }
