@@ -154,7 +154,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldDoNothingIfPaymentFactoryNotImeplementPreprendFactoryInterface()
+    public function shouldAddGenericTwigPathsIfPaymentFactoryNotImplementPrependFactoryInterface()
     {
         $factoryMock = $this->getMock('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface');
         $factoryMock
@@ -173,7 +173,10 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension->prepend($container);
 
-        $this->assertEmpty($container->getExtensionConfig('twig'));
+        $twigConfig = $container->getExtensionConfig('twig');
+
+        $this->assertContains('PayumCore', $twigConfig[0]['paths']);
+        $this->assertContains('PayumSymfonyBridge', $twigConfig[0]['paths']);
     }
 
     /**
@@ -208,7 +211,12 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension->prepend($container);
 
-        $this->assertEquals(array(array('bar' => 'barVal'), array('foo' => 'fooVal')), $container->getExtensionConfig('twig'));
+        $twigConfig = $container->getExtensionConfig('twig');
+
+        $this->assertContains('barVal', $twigConfig[0]['bar']);
+        $this->assertContains('fooVal', $twigConfig[1]['foo']);
+        $this->assertContains('PayumCore', $twigConfig[2]['paths']);
+        $this->assertContains('PayumSymfonyBridge', $twigConfig[2]['paths']);
     }
 }
 

@@ -48,10 +48,10 @@ class PayumExtension extends Extension implements PrependExtensionInterface
     public function prepend(ContainerBuilder $container)
     {
         $container->prependExtensionConfig('twig', array(
-            'paths' => array_flip(array_filter(array(
-                'PayumCore' => TwigFactory::guessViewsPath('Payum\Core\Payment'),
-                'PayumSymfonyBridge' => TwigFactory::guessViewsPath('Payum\Core\Bridge\Symfony\ReplyToSymfonyResponseConverter'),
-            )))
+            'paths' => array(
+                TwigFactory::guessViewsPath('Payum\Core\Payment') => 'PayumCore',
+                TwigFactory::guessViewsPath('Payum\Core\Bridge\Symfony\ReplyToSymfonyResponseConverter') => 'PayumSymfonyBridge',
+            )
         ));
 
         foreach ($this->paymentFactories as $factory) {
