@@ -47,6 +47,7 @@
     "require-dev": {
         "phpunit/phpunit": "~4.0",
         "symfony/expression-language": "~2.3",
+        "symfony/twig-bridge": "~2.3",
         "doctrine/orm": "*",
         "payum/payum": "0.14.*@dev",
         "symfony/browser-kit": "~2.3",
