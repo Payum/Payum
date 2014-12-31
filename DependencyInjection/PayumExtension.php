@@ -7,6 +7,7 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryI
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface;
 use Payum\Core\Exception\LogicException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -47,7 +48,12 @@ class PayumExtension extends Extension implements PrependExtensionInterface
 
         $this->loadStorages($config['storages'], $container);
         $this->loadSecurity($config['security'], $container);
+
         $this->loadPayments($config['payments'], $container);
+
+        if (isset($config['dynamic_payments'])) {
+            $this->loadDynamicPayments($config['dynamic_payments'], $container);
+        };
     }
 
     /**
@@ -151,6 +157,42 @@ class PayumExtension extends Extension implements PrependExtensionInterface
             );
 
             $container->setDefinition('payum.security.token_storage', new DefinitionDecorator($storageId));
+        }
+    }
+
+    /**
+     * @param array $dynamicPaymentsConfig
+     * @param ContainerBuilder $container
+     */
+    protected function loadDynamicPayments(array $dynamicPaymentsConfig, ContainerBuilder $container)
+    {
+        $configClass = null;
+        foreach ($dynamicPaymentsConfig['config_storage'] as $configClass => $configStorageConfig) {
+            $storageFactoryName = $this->findSelectedStorageFactoryNameInStorageConfig($configStorageConfig);
+
+            $storageId = $this->storageFactories[$storageFactoryName]->create(
+                $container,
+                $configClass,
+                $configStorageConfig[$storageFactoryName]
+            );
+
+            $container->setDefinition('payum.dynamic_payments.config_storage', new DefinitionDecorator($storageId));
+        }
+
+        if (isset($dynamicPaymentsConfig['sonata_admin'])) {
+            $paymentConfigAdmin =  new Definition('Payum\Bundle\PayumBundle\Sonata\PaymentConfigAdmin', array(
+                null,
+                $configClass,
+                null
+            ));
+            $paymentConfigAdmin->addMethodCall('setFormFactory', array(new Reference('form.factory')));
+            $paymentConfigAdmin->addTag('sonata.admin', array(
+                'manager_type' => 'orm',
+                'group' => "Payments",
+                'label' =>  "Configs",
+            ));
+
+            $container->setDefinition('payum.dynamic_payments.config_admin', $paymentConfigAdmin);
         }
     }
 
