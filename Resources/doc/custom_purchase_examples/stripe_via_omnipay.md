@@ -35,6 +35,8 @@ _**Note:** You have to changed `your_payment_name` to something more descriptive
 
 _**Note:** If you have to use onsite payment like paypal express checkout use `omnipay_onsite` factory._
 
+_**Note:** The `type` option can be set directly with a class name to register an unofficial gateway._
+
 ## Prepare payment
 
 Now we are ready to prepare the payment. Here we set price, currency, cart items details and so.
@@ -59,7 +61,7 @@ class PaymentController extends Controller
         /** @var \Acme\PaymentBundle\Entity\PaymentDetails */
         $details = $storage->create();
         $details['amount'] = 10;
-        
+
         $storage->update($details);
 
         $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(

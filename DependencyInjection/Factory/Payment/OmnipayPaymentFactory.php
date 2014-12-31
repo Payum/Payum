@@ -61,7 +61,7 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
                 $supportedTypes = $gatewayFactory->all();
                 if (false == in_array($v['type'], $supportedTypes) && !class_exists($v['type'])) {
                     throw new LogicException(sprintf(
-                        'Given type %s is not supported. Try one of supported types: %s.',
+                        'Given type %s is not supported. Try one of supported types: %s or use the gateway full class name.',
                         $v['type'],
                         implode(', ', $supportedTypes)
                     ));
@@ -82,6 +82,11 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
         $gatewayDefinition->setClass('Omnipay\Common\GatewayInterface');
         $gatewayDefinition->setFactoryService('payum.omnipay_bridge.gateway_factory');
         $gatewayDefinition->setFactoryMethod('create');
+
+        if (class_exists($config['type']) && 0 !== strpos($config['type'], '\\')) {
+            $config['type'] = '\\'.$config['type'];
+        }
+
         $gatewayDefinition->addArgument($config['type']);
         $gatewayDefinition->setPublic(true);
         foreach ($config['options'] as $name => $value) {
