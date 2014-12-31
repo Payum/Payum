@@ -8,7 +8,6 @@ use Payum\Core\Exception\LogicException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -44,7 +43,7 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
         parent::addConfiguration($builder);
-        
+
         $builder->children()
             ->scalarNode('type')->isRequired()->cannotBeEmpty()->end()
             ->arrayNode('options')->isRequired()
@@ -52,22 +51,22 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
                 ->prototype('scalar')->end()
             ->end()
         ->end();
-        
+
         $builder
             ->validate()
-            ->ifTrue(function($v) {
+            ->ifTrue(function ($v) {
                 $gatewayFactory = Omnipay::getFactory();
                 $gatewayFactory->find();
 
                 $supportedTypes = $gatewayFactory->all();
-                if (false == in_array($v['type'], $supportedTypes)) {
+                if (false == in_array($v['type'], $supportedTypes) && !class_exists($v['type'])) {
                     throw new LogicException(sprintf(
-                        'Given type %s is not supported. Try one of supported types: %s.',
+                        'Given type %s is not supported. Try one of supported types: %s or use the gateway full class name.',
                         $v['type'],
                         implode(', ', $supportedTypes)
                     ));
                 }
-                
+
                 return false;
             })
             ->thenInvalid('A message')
@@ -83,6 +82,11 @@ class OmnipayPaymentFactory extends AbstractPaymentFactory
         $gatewayDefinition->setClass('Omnipay\Common\GatewayInterface');
         $gatewayDefinition->setFactoryService('payum.omnipay_bridge.gateway_factory');
         $gatewayDefinition->setFactoryMethod('create');
+
+        if (class_exists($config['type']) && 0 !== strpos($config['type'], '\\')) {
+            $config['type'] = '\\'.$config['type'];
+        }
+
         $gatewayDefinition->addArgument($config['type']);
         $gatewayDefinition->setPublic(true);
         foreach ($config['options'] as $name => $value) {
