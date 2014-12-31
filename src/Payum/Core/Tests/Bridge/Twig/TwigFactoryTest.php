@@ -31,4 +31,26 @@ class TwigFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNull(TwigFactory::guessViewsPath('Foo\Bar\Baz'));
     }
+
+    /**
+     * @test
+     */
+    public function shouldAllowCreateGenericPaths()
+    {
+        $paths = TwigFactory::createGenericPaths();
+
+        $paths = array_flip($paths);
+
+        $this->assertArrayHasKey('PayumCore', $paths);
+        $this->assertStringEndsWith('Payum/Core/Resources/views', $paths['PayumCore']);
+
+        $this->assertArrayHasKey('PayumKlarnaCheckout', $paths);
+        $this->assertStringEndsWith('Payum/Klarna/Checkout/Resources/views', $paths['PayumKlarnaCheckout']);
+
+        $this->assertArrayHasKey('PayumStripe', $paths);
+        $this->assertStringEndsWith('Payum/Stripe/Resources/views', $paths['PayumStripe']);
+
+        $this->assertArrayHasKey('PayumSymfonyBridge', $paths);
+        $this->assertStringEndsWith('Payum/Core/Bridge/Symfony/Resources/views', $paths['PayumSymfonyBridge']);
+    }
 }
