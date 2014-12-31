@@ -8,14 +8,8 @@ class TwigFactory
      */
     public static function createGeneric()
     {
-        $paths = array_filter(array(
-            'PayumCore' => self::guessViewsPath('Payum\Core\Payment'),
-            'PayumStripe' => self::guessViewsPath('Payum\Stripe\JsPaymentFactory'),
-            'PayumKlarnaCheckout' => self::guessViewsPath('Payum\Klarna\Checkout\PaymentFactory'),
-        ));
-
         $loader = new \Twig_Loader_Filesystem();
-        foreach ($paths as $namespace => $path) {
+        foreach (static::createGenericPaths() as $path => $namespace) {
             $loader->addPath($path, $namespace);
         }
 
@@ -36,5 +30,18 @@ class TwigFactory
         $rc = new \ReflectionClass($paymentFactoryOrRootClass);
 
         return dirname($rc->getFileName()).'/Resources/views';
+    }
+
+    /**
+     * @return string[]
+     */
+    protected static function createGenericPaths()
+    {
+        return array_flip(array_filter(array(
+            'PayumCore' => self::guessViewsPath('Payum\Core\Payment'),
+            'PayumStripe' => self::guessViewsPath('Payum\Stripe\JsPaymentFactory'),
+            'PayumKlarnaCheckout' => self::guessViewsPath('Payum\Klarna\Checkout\PaymentFactory'),
+            'PayumSymfonyBridge' => self::guessViewsPath('Payum\Core\Bridge\Symfony\ReplyToSymfonyResponseConverter'),
+        )));
     }
 }
