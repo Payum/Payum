@@ -10,7 +10,7 @@ php:
 env:
   - SYMFONY_VERSION="2.3.*,>=2.3.18"
   - SYMFONY_VERSION="2.4.*,>=2.4.8"
-  - SYMFONY_VERSION=2.5.*
+  - SYMFONY_VERSION="2.5.*,>=2.5.2"
   - SYMFONY_VERSION=2.6.*
 
 sudo: false
