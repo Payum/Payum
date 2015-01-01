@@ -29,7 +29,7 @@ before_script:
   - php composer.phar require symfony/twig-bridge:${SYMFONY_VERSION} --no-update
   - php composer.phar require symfony/browser-kit:${SYMFONY_VERSION} --no-update
   - php composer.phar require symfony/class-loader:${SYMFONY_VERSION} --no-update
-  - php composer.phar install --prefer-stable --prefer-lowest
+  - php composer.phar update --prefer-stable --prefer-lowest
 
 notifications:
   email:
