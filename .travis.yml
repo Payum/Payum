@@ -8,9 +8,9 @@ php:
   - hhvm
 
 env:
-  - SYMFONY_VERSION=2.3.*
-  - SYMFONY_VERSION=2.4.*
-  - SYMFONY_VERSION=2.5.*
+  - SYMFONY_VERSION="2.3.*,>=2.3.18"
+  - SYMFONY_VERSION="2.4.*,>=2.4.8"
+  - SYMFONY_VERSION="2.5.*,>=2.5.2"
   - SYMFONY_VERSION=2.6.*
 
 sudo: false
@@ -20,8 +20,9 @@ matrix:
     - php: hhvm
 
 before_script:
-  - composer require symfony/symfony:${SYMFONY_VERSION} --prefer-source --no-update
-  - composer install --dev --prefer-source
+  - curl -sS https://getcomposer.org/installer | php
+  - php composer.phar require symfony/symfony:${SYMFONY_VERSION} --no-update
+  - php composer.phar update --prefer-stable --prefer-lowest
 
 notifications:
   email:

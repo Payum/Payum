@@ -21,11 +21,6 @@ $ php composer.phar require "payum/klarna-checkout:@stable"
 ```yaml
 #app/config/config.yml
 
-twig:
-    paths:
-        %kernel.root_dir%/../vendor/payum/payum/src/Payum/Core/Resources/views: PayumCore
-        %kernel.root_dir%/../vendor/payum/payum/src/Payum/Klarna/Checkout/Resources/views: PayumKlarnaCheckout
-
 payum:
     contexts:
         your_context_here:
