@@ -25,7 +25,6 @@ before_script:
   - php composer.phar require symfony/twig-bundle:${SYMFONY_VERSION} --no-update
   - php composer.phar require symfony/form:${SYMFONY_VERSION} --no-update
   - php composer.phar require symfony/validator:${SYMFONY_VERSION} --no-update
-  - php composer.phar require symfony/expression-language:${SYMFONY_VERSION} --no-update
   - php composer.phar require symfony/twig-bridge:${SYMFONY_VERSION} --no-update
   - php composer.phar require symfony/browser-kit:${SYMFONY_VERSION} --no-update
   - php composer.phar require symfony/class-loader:${SYMFONY_VERSION} --no-update
