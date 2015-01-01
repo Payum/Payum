@@ -20,8 +20,16 @@ matrix:
     - php: hhvm
 
 before_script:
-  - composer require symfony/symfony:${SYMFONY_VERSION} --prefer-source --no-update
-  - composer install --dev --prefer-source
+  - curl -sS https://getcomposer.org/installer | php
+  - php composer.phar require symfony/framework-bundle:${SYMFONY_VERSION} --no-update
+  - php composer.phar require symfony/twig-bundle:${SYMFONY_VERSION} --no-update
+  - php composer.phar require symfony/form:${SYMFONY_VERSION} --no-update
+  - php composer.phar require symfony/validator:${SYMFONY_VERSION} --no-update
+  - php composer.phar require symfony/expression-language:${SYMFONY_VERSION} --no-update
+  - php composer.phar require symfony/twig-bridge:${SYMFONY_VERSION} --no-update
+  - php composer.phar require symfony/browser-kit:${SYMFONY_VERSION} --no-update
+  - php composer.phar require symfony/class-loader:${SYMFONY_VERSION} --no-update
+  - php composer.phar install --prefer-stable --prefer-lowest
 
 notifications:
   email:
