@@ -34,7 +34,7 @@ $payment = OfflinePaymentFactory::create();
 if ($reply = $payment->execute(new Capture($order), true)) {
     if ($reply instanceof HttpRedirect) {
         header("Location: ".$reply->getUrl());
-    } elseif () {
+    } elseif ($reply instanceof HttpResponse) {
         echo $reply->getContent();
     } else {
         throw new \LogicException('Unsupported reply.', null, $reply);
