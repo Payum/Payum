@@ -40,8 +40,8 @@ class DirectPaymentFactory implements PaymentFactoryInterface
         $config->defaults($this->corePaymentFactory->createConfig());
 
         $config->defaults(array(
-            'factory.name' => 'be2bill_direct',
-            'factory.title' => 'Be2Bill Direct',
+            'payum.factory_name' => 'be2bill_direct',
+            'payum.factory_title' => 'Be2Bill Direct',
 
             'payum.action.capture' => new CaptureAction(),
             'payum.action.status' => new StatusAction(),
@@ -49,16 +49,16 @@ class DirectPaymentFactory implements PaymentFactoryInterface
         ));
 
         if (false == $config['payum.api']) {
-            $config['options.default'] = array(
+            $config['payum.default_options'] = array(
                 'identifier' => '',
                 'password' => '',
                 'sandbox' => true,
             );
-            $config->defaults($config['options.default']);
-            $config['options.required'] = array('identifier', 'password');
+            $config->defaults($config['payum.default_options']);
+            $config['payum.required_options'] = array('identifier', 'password');
 
             $config['payum.api'] = function (ArrayObject $config) {
-                $config->validateNotEmpty($config['options.required']);
+                $config->validateNotEmpty($config['payum.required_options']);
 
                 return new Api(array(
                     'identifier' => $config['identifier'],

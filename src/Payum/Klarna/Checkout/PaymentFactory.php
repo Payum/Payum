@@ -45,8 +45,8 @@ class PaymentFactory implements PaymentFactoryInterface
         $config->defaults($this->corePaymentFactory->createConfig());
 
         $config->defaults(array(
-            'factory.name' => 'klarna_checkout',
-            'factory.title' => 'Klarna Checkout',
+            'payum.factory_name' => 'klarna_checkout',
+            'payum.factory_title' => 'Klarna Checkout',
             'payum.template.authorize' => '@PayumKlarnaCheckout/Action/capture.html.twig',
             'contentType' => Constants::CONTENT_TYPE_V2_PLUS_JSON,
             'sandbox' => true,
@@ -64,16 +64,16 @@ class PaymentFactory implements PaymentFactoryInterface
         ));
 
         if (false == $config['payum.api']) {
-            $config['options.default'] = array(
+            $config['payum.default_options'] = array(
                 'merchantId' => '',
                 'secret' => '',
                 'sandbox' => true,
             );
-            $config->defaults($config['options.default']);
-            $config['options.required'] = array('merchantId', 'secret');
+            $config->defaults($config['payum.default_options']);
+            $config['payum.required_options'] = array('merchantId', 'secret');
 
             $config['payum.api'] = function (ArrayObject $config) {
-                $config->validateNotEmpty($config['options.required']);
+                $config->validateNotEmpty($config['payum.required_options']);
 
                 $klarnaConfig = new Config();
                 $klarnaConfig->merchantId = $config['merchantId'];

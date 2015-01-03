@@ -41,8 +41,8 @@ class PaymentFactory implements PaymentFactoryInterface
         $config->defaults($this->corePaymentFactory->createConfig());
 
         $config->defaults(array(
-            'factory.name' => 'paypal_pro_checkout_nvp',
-            'factory.title' => 'PayPal ProCheckout',
+            'payum.factory_name' => 'paypal_pro_checkout_nvp',
+            'payum.factory_title' => 'PayPal ProCheckout',
 
             'payum.action.capture' => new CaptureAction(),
             'payum.action.refund' => new RefundAction(),
@@ -51,7 +51,7 @@ class PaymentFactory implements PaymentFactoryInterface
         ));
 
         if (false == $config['payum.api']) {
-            $config['options.default'] = array(
+            $config['payum.default_options'] = array(
                 'username' => '',
                 'password' => '',
                 'partner' => '',
@@ -59,11 +59,11 @@ class PaymentFactory implements PaymentFactoryInterface
                 'tender' => '',
                 'sandbox' => true,
             );
-            $config->defaults($config['options.default']);
-            $config['options.required'] = array('username', 'password', 'partner', 'vendor', 'tender');
+            $config->defaults($config['payum.default_options']);
+            $config['payum.required_options'] = array('username', 'password', 'partner', 'vendor', 'tender');
 
             $config['payum.api'] = function (ArrayObject $config) {
-                $config->validateNotEmpty($config['options.required']);
+                $config->validateNotEmpty($config['payum.required_options']);
 
                 $paypalConfig = array(
                     'username' => $config['username'],

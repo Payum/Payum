@@ -13,8 +13,8 @@ class OffsitePaymentFactory extends DirectPaymentFactory
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults(array(
-            'factory.name' => 'be2bill_offsite',
-            'factory.title' => 'Be2Bill Offsite',
+            'payum.factory_name' => 'be2bill_offsite',
+            'payum.factory_title' => 'Be2Bill Offsite',
             'payum.action.capture' => new CaptureOffsiteAction(),
         ));
 

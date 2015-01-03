@@ -42,8 +42,8 @@ class CheckoutPaymentFactory implements PaymentFactoryInterface
         $config->defaults($this->corePaymentFactory->createConfig());
 
         $config->defaults(array(
-            'factory.name' => 'stripe_checkout',
-            'factory.title' => 'Stripe Checkout',
+            'payum.factory_name' => 'stripe_checkout',
+            'payum.factory_title' => 'Stripe Checkout',
 
             'payum.template.obtain_token' => '@PayumStripe/Action/obtain_checkout_token.html.twig',
 
@@ -57,15 +57,15 @@ class CheckoutPaymentFactory implements PaymentFactoryInterface
         ));
 
         if (false == $config['payum.api']) {
-            $config['options.default'] = array(
+            $config['payum.default_options'] = array(
                 'publishable_key' => '',
                 'secret_key' => ''
             );
-            $config->defaults($config['options.default']);
-            $config['options.required'] = array('publishable_key', 'secret_key');
+            $config->defaults($config['payum.default_options']);
+            $config['payum.required_options'] = array('publishable_key', 'secret_key');
 
             $config['payum.api'] = function (ArrayObject $config) {
-                $config->validateNotEmpty($config['options.required']);
+                $config->validateNotEmpty($config['payum.required_options']);
 
                 return new Keys($config['publishable_key'], $config['secret_key']);
             };

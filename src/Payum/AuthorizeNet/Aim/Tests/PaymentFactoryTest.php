@@ -83,8 +83,8 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInternalType('array', $config);
 
-        $this->assertArrayHasKey('options.default', $config);
-        $this->assertEquals(array('loginId' => '', 'transactionKey' => '', 'sandbox' => true), $config['options.default']);
+        $this->assertArrayHasKey('payum.default_options', $config);
+        $this->assertEquals(array('loginId' => '', 'transactionKey' => '', 'sandbox' => true), $config['payum.default_options']);
     }
 
     /**
@@ -98,11 +98,11 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInternalType('array', $config);
 
-        $this->assertArrayHasKey('factory.name', $config);
-        $this->assertEquals('authorize_net_aim', $config['factory.name']);
+        $this->assertArrayHasKey('payum.factory_name', $config);
+        $this->assertEquals('authorize_net_aim', $config['payum.factory_name']);
 
-        $this->assertArrayHasKey('factory.title', $config);
-        $this->assertEquals('Authorize.NET AIM', $config['factory.title']);
+        $this->assertArrayHasKey('payum.factory_title', $config);
+        $this->assertEquals('Authorize.NET AIM', $config['payum.factory_title']);
     }
 
     /**

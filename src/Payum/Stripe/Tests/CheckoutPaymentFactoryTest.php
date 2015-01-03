@@ -83,8 +83,8 @@ class CheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInternalType('array', $config);
 
-        $this->assertArrayHasKey('options.default', $config);
-        $this->assertEquals(array('publishable_key' => '', 'secret_key' => ''), $config['options.default']);
+        $this->assertArrayHasKey('payum.default_options', $config);
+        $this->assertEquals(array('publishable_key' => '', 'secret_key' => ''), $config['payum.default_options']);
     }
 
     /**
@@ -98,11 +98,11 @@ class CheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInternalType('array', $config);
 
-        $this->assertArrayHasKey('factory.name', $config);
-        $this->assertEquals('stripe_checkout', $config['factory.name']);
+        $this->assertArrayHasKey('payum.factory_name', $config);
+        $this->assertEquals('stripe_checkout', $config['payum.factory_name']);
 
-        $this->assertArrayHasKey('factory.title', $config);
-        $this->assertEquals('Stripe Checkout', $config['factory.title']);
+        $this->assertArrayHasKey('payum.factory_title', $config);
+        $this->assertEquals('Stripe Checkout', $config['payum.factory_title']);
     }
 
     /**
