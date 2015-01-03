@@ -5,10 +5,12 @@ use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface;
+use Payum\Core\Exception\LogicException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Config\FileLocator;
 
@@ -73,31 +75,19 @@ class PayumExtension extends Extension implements PrependExtensionInterface
      */
     protected function loadPayments(array $config, ContainerBuilder $container)
     {
-        $paymentsIds = array();
-        $defaultName = null;
         foreach ($config as $paymentName => $paymentConfig) {
-            //use first defined payment as default.
-            if (false == $defaultName) {
-                $defaultName = $paymentName;
-            }
-
             $paymentFactoryName = $this->findSelectedPaymentFactoryNameInPaymentConfig($paymentConfig);
             $paymentId = $this->paymentFactories[$paymentFactoryName]->create(
                 $container,
                 $paymentName,
                 $paymentConfig[$paymentFactoryName]
             );
-            $paymentsIds[$paymentName] = $paymentId;
 
             $container->getDefinition($paymentId)->addTag('payum.payment', array(
                 'factory' => $paymentFactoryName,
                 'payment' => $paymentName
             ));
         }
-
-        $registryDefinition = $container->getDefinition('payum');
-        $registryDefinition->replaceArgument(0, $paymentsIds);
-        $registryDefinition->replaceArgument(2, $defaultName);
     }
 
     /**
@@ -106,7 +96,6 @@ class PayumExtension extends Extension implements PrependExtensionInterface
      */
     protected function loadStorages(array $config, ContainerBuilder $container)
     {
-        $storagesIds = array();
         foreach ($config as $modelClass => $storageConfig) {
             $storageFactoryName = $this->findSelectedStorageFactoryNameInStorageConfig($storageConfig);
             $storageId = $this->storageFactories[$storageFactoryName]->create(
@@ -115,24 +104,31 @@ class PayumExtension extends Extension implements PrependExtensionInterface
                 $storageConfig[$storageFactoryName]
             );
 
-            $storagesIds[$modelClass] = $storageId;
+            $container->getDefinition($storageId)->addTag('payum.storage', array('model_class' => $modelClass));
+
+            if (false !== strpos($storageId, '.storage.')) {
+                $storageExtensionId = str_replace('.storage.', '.extension.storage.', $storageId);
+            } else {
+                throw new LogicException(sprintf('In order to add storage to extension the storage %id has to contains ".storage." inside.', $storageId));
+            }
+
+            $storageExtension = new DefinitionDecorator('payum.extension.storage.prototype');
+            $storageExtension->replaceArgument(0, new Reference($storageId));
+            $storageExtension->setPublic(true);
+            $container->setDefinition($storageExtensionId, $storageExtension);
 
             if ($storageConfig['extension']['all']) {
-                $container->getDefinition($storageId)->addTag('payum.storage_extension',  array('all' => true));
+                $storageExtension->addTag('payum.extension', array('all' => true));
             } else {
                 foreach ($storageConfig['extension']['payments'] as $paymentName) {
-                    $container->getDefinition($storageId)->addTag('payum.storage_extension',  array('payment' => $paymentName));
+                    $storageExtension->addTag('payum.extension', array('payment' => $paymentName));
                 }
 
                 foreach ($storageConfig['extension']['factories'] as $factory) {
-                    $container->getDefinition($storageId)->addTag('payum.storage_extension',  array('factory' => $factory));
+                    $storageExtension->addTag('payum.extension', array('factory' => $factory));
                 }
             }
         }
-
-        $registryDefinition = $container->getDefinition('payum');
-
-        $registryDefinition->replaceArgument(1, $storagesIds);
     }
 
     /**

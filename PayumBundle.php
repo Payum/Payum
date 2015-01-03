@@ -2,7 +2,7 @@
 namespace Payum\Bundle\PayumBundle;
 
 use Payum\Bundle\PayumBundle\DependencyInjection\Compiler\BuildPaymentFactoryPass;
-use Payum\Bundle\PayumBundle\DependencyInjection\Compiler\PayumStorageExtensionsPass;
+use Payum\Bundle\PayumBundle\DependencyInjection\Compiler\BuildRegistryPass;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillOffsitePaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillDirectPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaCheckoutPaymentFactory;
@@ -51,7 +51,7 @@ class PayumBundle extends Bundle
         $extension->addStorageFactory(new DoctrineStorageFactory);
         $extension->addStorageFactory(new CustomStorageFactory);
 
-        $container->addCompilerPass(new PayumStorageExtensionsPass);
+        $container->addCompilerPass(new BuildRegistryPass());
         $container->addCompilerPass(new BuildPaymentFactoryPass);
     }
 }

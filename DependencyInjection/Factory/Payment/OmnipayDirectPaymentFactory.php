@@ -2,27 +2,11 @@
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
 use Omnipay\Omnipay;
-use Payum\Core\Exception\RuntimeException;
 use Payum\Core\Exception\LogicException;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 class OmnipayDirectPaymentFactory extends AbstractPaymentFactory
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function create(ContainerBuilder $container, $contextName, array $config)
-    {
-        if (false == class_exists('Payum\OmnipayBridge\DirectPaymentFactory')) {
-            throw new RuntimeException('Cannot find OmnipayBridge payment factory class. Have you installed payum/omnipay-bridge package?');
-        }
-
-        return parent::create($container, $contextName, $config);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -70,20 +54,16 @@ class OmnipayDirectPaymentFactory extends AbstractPaymentFactory
     /**
      * {@inheritDoc}
      */
-    protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
+    protected function getPayumPaymentFactoryClass()
     {
-        $factoryId = 'payum.omnipay_bridge.factory';
-        $container->setDefinition($factoryId, new Definition('Payum\OmnipayBridge\DirectPaymentFactory', array(
-            new Reference('payum.payment_factory'),
-        )));
+        return 'Payum\OmnipayBridge\DirectPaymentFactory';
+    }
 
-        $config['payum.factory'] = $this->getName();
-        $config['payum.context'] = $contextName;
-
-        $payment = new Definition('Payum\Core\Payment', array($config));
-        $payment->setFactoryService($factoryId);
-        $payment->setFactoryMethod('create');
-
-        return $payment;
+    /**
+     * {@inheritDoc}
+     */
+    protected function getComposerPackage()
+    {
+        return 'payum/omnipay-bridge';
     }
 }

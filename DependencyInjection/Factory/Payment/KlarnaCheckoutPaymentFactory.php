@@ -2,27 +2,12 @@
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
 use Payum\Core\Bridge\Twig\TwigFactory;
-use Payum\Core\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory implements PrependExtensionInterface
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function create(ContainerBuilder $container, $contextName, array $config)
-    {
-        if (false == class_exists('Payum\Klarna\Checkout\PaymentFactory')) {
-            throw new RuntimeException('Cannot find klarna checkout payment factory class. Have you installed payum/klarna-checkout package?');
-        }
-
-        return parent::create($container, $contextName, $config);
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -61,20 +46,16 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
     /**
      * {@inheritDoc}
      */
-    protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
+    protected function getPayumPaymentFactoryClass()
     {
-        $factoryId = 'payum.klarna_checkout.factory';
-        $container->setDefinition($factoryId, new Definition('Payum\Klarna\Checkout\PaymentFactory', array(
-            new Reference('payum.payment_factory'),
-        )));
+        return 'Payum\Klarna\Checkout\PaymentFactory';
+    }
 
-        $config['payum.factory'] = $this->getName();
-        $config['payum.context'] = $contextName;
-
-        $payment = new Definition('Payum\Core\Payment', array($config));
-        $payment->setFactoryService($factoryId);
-        $payment->setFactoryMethod('create');
-
-        return $payment;
+    /**
+     * {@inheritDoc}
+     */
+    protected function getComposerPackage()
+    {
+        return 'payum/klarna-checkout';
     }
 }

@@ -3,8 +3,6 @@ namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
 use Payum\Core\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 class KlarnaInvoicePaymentFactory extends AbstractPaymentFactory
@@ -52,20 +50,16 @@ class KlarnaInvoicePaymentFactory extends AbstractPaymentFactory
     /**
      * {@inheritDoc}
      */
-    protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
+    protected function getPayumPaymentFactoryClass()
     {
-        $factoryId = 'payum.klarna_invoice.factory';
-        $container->setDefinition($factoryId, new Definition('Payum\Klarna\Invoice\PaymentFactory', array(
-            new Reference('payum.payment_factory'),
-        )));
+        return 'Payum\Klarna\Invoice\PaymentFactory';
+    }
 
-        $config['payum.factory'] = $this->getName();
-        $config['payum.context'] = $contextName;
-
-        $payment = new Definition('Payum\Core\Payment', array($config));
-        $payment->setFactoryService($factoryId);
-        $payment->setFactoryMethod('create');
-
-        return $payment;
+    /**
+     * {@inheritDoc}
+     */
+    protected function getComposerPackage()
+    {
+        return 'payum/klarna-invoice';
     }
 }

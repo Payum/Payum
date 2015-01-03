@@ -12,19 +12,7 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 class StripeCheckoutPaymentFactory extends AbstractPaymentFactory implements PrependExtensionInterface
 {
     /**
-     * {@inheritdoc}
-     */
-    public function create(ContainerBuilder $container, $contextName, array $config)
-    {
-        if (false == class_exists('Payum\Stripe\CheckoutPaymentFactory')) {
-            throw new RuntimeException('Cannot find stripe payment factory class. Have you installed payum/stripe package?');
-        }
-
-        return parent::create($container, $contextName, $config);
-    }
-
-    /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getName()
     {
@@ -32,7 +20,7 @@ class StripeCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
@@ -60,20 +48,16 @@ class StripeCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
     /**
      * {@inheritDoc}
      */
-    protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
+    protected function getPayumPaymentFactoryClass()
     {
-        $factoryId = 'payum.stripe.checkout_factory';
-        $container->setDefinition($factoryId, new Definition('Payum\Stripe\CheckoutPaymentFactory', array(
-            new Reference('payum.payment_factory'),
-        )));
+        return 'Payum\Stripe\CheckoutPaymentFactory';
+    }
 
-        $config['payum.factory'] = $this->getName();
-        $config['payum.context'] = $contextName;
-
-        $payment = new Definition('Payum\Core\Payment', array($config));
-        $payment->setFactoryService($factoryId);
-        $payment->setFactoryMethod('create');
-
-        return $payment;
+    /**
+     * {@inheritDoc}
+     */
+    protected function getComposerPackage()
+    {
+        return 'payum/stripe';
     }
 }

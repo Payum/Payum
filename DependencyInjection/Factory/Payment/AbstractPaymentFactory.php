@@ -1,12 +1,13 @@
 <?php
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
+use Payum\Core\Exception\RuntimeException;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-abstract class AbstractPaymentFactory implements PaymentFactoryInterface  
+abstract class AbstractPaymentFactory implements PaymentFactoryInterface
 {
     /**
      * {@inheritDoc}
@@ -18,17 +19,26 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
         $paymentId = 'payum.context.'.$contextName.'.payment';
         $container->setDefinition($paymentId, $paymentDefinition);
 
-        $this->addCommonApis($paymentDefinition, $container, $contextName, $config);
-        $this->addApis($paymentDefinition, $container, $contextName, $config);
-        $this->addCustomApis($paymentDefinition, $container, $contextName, $config);
+        foreach (array_reverse($config['apis']) as $apiId) {
+            $paymentDefinition->addMethodCall(
+                'addApi',
+                array(new Reference($apiId), $forcePrepend = true)
+            );
+        }
 
-        $this->addCommonActions($paymentDefinition, $container, $contextName, $config);
-        $this->addActions($paymentDefinition, $container, $contextName, $config);
-        $this->addCustomActions($paymentDefinition, $container, $contextName, $config);
+        foreach (array_reverse($config['actions']) as $actionId) {
+            $paymentDefinition->addMethodCall(
+                'addAction',
+                array(new Reference($actionId), $forcePrepend = true)
+            );
+        }
 
-        $this->addCommonExtensions($paymentDefinition, $container, $contextName, $config);
-        $this->addExtensions($paymentDefinition, $container, $contextName, $config);
-        $this->addCustomExtensions($paymentDefinition, $container, $contextName, $config);
+        foreach (array_reverse($config['extensions']) as $extensionId) {
+            $paymentDefinition->addMethodCall(
+                'addExtension',
+                array(new Reference($extensionId), $forcePrepend = true)
+            );
+        }
 
         return $paymentId;
     }
@@ -60,136 +70,44 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
      * @param ContainerBuilder $container
      * @param $contextName
      * @param array $config
-     * 
+     *
      * @return Definition
      */
     protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
     {
-        return new Definition('Payum\Core\Payment');
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     * @param string $contextName
-     * @param string $parameter
-     * @param string $contextParameter
-     * 
-     * @return string
-     */
-    protected function createContextParameter(ContainerBuilder $container, $contextName, $parameter, $contextParameter)
-    {
-        $contextParameter = sprintf('payum.context.%s.%s', $contextName, $contextParameter);
-        
-        $container->setParameter($contextParameter, $parameter);
-        
-        return "%{$contextParameter}%";
-    }
-
-    /**
-     * @param Definition $paymentDefinition
-     * @param ContainerBuilder $container
-     * @param $contextName
-     * @param array $config
-     */
-    protected function addCustomApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
-    {
-        foreach (array_reverse($config['apis']) as $apiId) {
-            $paymentDefinition->addMethodCall(
-                'addApi',
-                array(new Reference($apiId), $forcePrepend = true)
-            );
+        $paymentFactoryClass = $this->getPayumPaymentFactoryClass();
+        if (false == class_exists($paymentFactoryClass)) {
+            throw new RuntimeException(sprintf('Cannot find payment factory class. Have you installed %s or payum/payum package?', $this->getComposerPackage()));
         }
+
+        $factoryId = sprintf('payum.paypal.%s.factory', $this->getName());
+        $container->setDefinition($factoryId, new Definition($this->getPayumPaymentFactoryClass(), array(
+            new Reference('payum.payment_factory'),
+        )));
+
+        $config['payum.factory_name'] = $this->getName();
+        $config['payum.payment_name'] = $contextName;
+
+        $payment = new Definition('Payum\Core\Payment', array($config));
+        $payment->setFactoryService($factoryId);
+        $payment->setFactoryMethod('create');
+
+        return $payment;
     }
 
     /**
-     * @param Definition $paymentDefinition
-     * @param ContainerBuilder $container
-     * @param $contextName
-     * @param array $config
+     * {@inheritDoc}
      */
-    protected function addCustomActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    protected function getPayumPaymentFactoryClass()
     {
-        foreach (array_reverse($config['actions']) as $actionId) {
-            $paymentDefinition->addMethodCall(
-                'addAction',
-                array(new Reference($actionId), $forcePrepend = true)
-            );
-        }
+        return 'Payum\Core\PaymentFactory';
     }
 
     /**
-     * @param Definition $paymentDefinition
-     * @param ContainerBuilder $container
-     * @param $contextName
-     * @param array $config
+     * {@inheritDoc}
      */
-    protected function addCustomExtensions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    protected function getComposerPackage()
     {
-        foreach (array_reverse($config['extensions']) as $extensionId) {
-            $paymentDefinition->addMethodCall(
-                'addExtension',
-                array(new Reference($extensionId), $forcePrepend = true)
-            );
-        }
-    }
-
-    /**
-     * @param Definition $paymentDefinition
-     * @param ContainerBuilder $container
-     * @param $contextName
-     * @param array $config
-     */
-    protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
-    {
-    }
-
-    /**
-     * @param Definition $paymentDefinition
-     * @param ContainerBuilder $container
-     * @param $contextName
-     * @param array $config
-     */
-    protected function addActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
-    {
-    }
-
-    /**
-     * @param Definition $paymentDefinition
-     * @param ContainerBuilder $container
-     * @param $contextName
-     * @param array $config
-     */
-    protected function addExtensions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
-    {
-    }
-
-    /**
-     * @param Definition $paymentDefinition
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param $contextName
-     * @param array $config
-     */
-    protected function addCommonApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
-    {
-    }
-
-    /**
-     * @param Definition $paymentDefinition
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string $contextName
-     * @param array $config
-     */
-    protected function addCommonActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
-    {
-    }
-
-    /**
-     * @param Definition $paymentDefinition
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string $contextName
-     * @param array $config
-     */
-    protected function addCommonExtensions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
-    {
+        return 'payum/core';
     }
 }
