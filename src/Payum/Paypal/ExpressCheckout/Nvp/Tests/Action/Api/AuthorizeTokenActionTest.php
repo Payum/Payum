@@ -117,8 +117,8 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getAuthorizeTokenUrl')
             ->with('aToken', array(
-                'USERACTION' => 'theUserAction',
-                'CMD' => 'theCmd',
+                'useraction' => 'theUserAction',
+                'cmd' => 'theCmd',
             ))
             ->will($this->returnValue('theRedirectUrl'))
         ;
