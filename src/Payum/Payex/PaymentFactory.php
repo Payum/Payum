@@ -5,6 +5,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\PaymentFactory as CorePaymentFactory;
 use Payum\Core\PaymentFactoryInterface;
 use Payum\Payex\Action\AgreementDetailsStatusAction;
+use Payum\Payex\Action\AgreementDetailsSyncAction;
 use Payum\Payex\Action\Api\AutoPayAgreementAction;
 use Payum\Payex\Action\Api\CheckAgreementAction;
 use Payum\Payex\Action\Api\CheckOrderAction;
@@ -106,14 +107,15 @@ class PaymentFactory implements PaymentFactoryInterface
             },
 
             'payum.action.capture' => new PaymentDetailsCaptureAction(),
-            'payum.action.fill_order_details' => new FillOrderDetailsAction(),
             'payum.action.status' => new PaymentDetailsStatusAction(),
             'payum.action.sync' => new PaymentDetailsSyncAction(),
             'payum.action.auto_pay_capture' => new AutoPayPaymentDetailsCaptureAction(),
             'payum.action.auto_pay_status' => new AutoPayPaymentDetailsStatusAction(),
+            'payum.action.fill_order_details' => new FillOrderDetailsAction(),
 
             // agreement actions
             'payum.action.api.agreement_details_status' => new AgreementDetailsStatusAction(),
+            'payum.action.api.agreement_details_sync' => new AgreementDetailsSyncAction(),
             'payum.action.api.create_agreement' => new CreateAgreementAction(),
             'payum.action.api.delete_agreement' => new DeleteAgreementAction(),
             'payum.action.api.check_agreement' => new CheckAgreementAction(),
