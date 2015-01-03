@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="payum.capture_path">payum_capture_do</parameter>
+        <parameter key="payum.notify_path">payum_notify_do</parameter>
+        <parameter key="payum.authorize_path">payum_authorize_do</parameter>
+        <parameter key="payum.refund_path">payum_refund_do</parameter>
+    </parameters>
+
+    <services>
+        <!-- Should be replaced by PayumExtension -->
+        <service id="payum.security.token_storage" abstract="true" />
+
+        <service id="payum.security.http_request_verifier" class="Payum\Core\Bridge\Symfony\Security\HttpRequestVerifier">
+            <argument type="service" id="payum.security.token_storage" />
+        </service>
+
+        <service id="payum.security.token_factory" class="Payum\Core\Bridge\Symfony\Security\TokenFactory">
+            <argument type="service" id="router" />
+            <argument type="service" id="payum.security.token_storage" />
+            <argument type="service" id="payum" />
+            <argument>%payum.capture_path%</argument>
+            <argument>%payum.notify_path%</argument>
+            <argument>%payum.authorize_path%</argument>
+            <argument>%payum.refund_path%</argument>
+        </service>
+    </services>
+</container>

@@ -22,7 +22,7 @@ $ php composer.phar require "payum/paypal-pro-checkout-nvp"
 #app/config/config.yml
 
 payum:
-    contexts:
+    payments:
         your_context_here:
             paypal_pro_checkout_nvp:
                 username: 'EDIT ME'

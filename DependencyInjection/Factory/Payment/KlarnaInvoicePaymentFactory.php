@@ -1,18 +1,11 @@
 <?php
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
-use Payum\Core\Bridge\Twig\TwigFactory;
-use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RuntimeException;
-use Payum\Klarna\Checkout\Constants;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
-use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\FileLocator;
 
 class KlarnaInvoicePaymentFactory extends AbstractPaymentFactory
 {
@@ -65,6 +58,9 @@ class KlarnaInvoicePaymentFactory extends AbstractPaymentFactory
         $container->setDefinition($factoryId, new Definition('Payum\Klarna\Invoice\PaymentFactory', array(
             new Reference('payum.payment_factory'),
         )));
+
+        $config['payum.factory'] = $this->getName();
+        $config['payum.context'] = $contextName;
 
         $payment = new Definition('Payum\Core\Payment', array($config));
         $payment->setFactoryService($factoryId);

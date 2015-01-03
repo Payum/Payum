@@ -22,7 +22,7 @@ $ php composer.phar require "payum/klarna-invoice:@stable"
 #app/config/config.yml
 
 payum:
-    contexts:
+    payments:
         your_context_here:
             klarna_invoice:
                 secret: 'EDIT ME'

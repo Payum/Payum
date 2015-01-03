@@ -2,7 +2,6 @@
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
 use Payum\Core\Exception\RuntimeException;
-use Payum\Paypal\ProCheckout\Nvp\Api;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Definition;
@@ -59,6 +58,9 @@ class PaypalProCheckoutNvpPaymentFactory extends AbstractPaymentFactory
         $container->setDefinition($factoryId, new Definition('Payum\Paypal\ProCheckout\Nvp\PaymentFactory', array(
             new Reference('payum.payment_factory'),
         )));
+
+        $config['payum.factory'] = $this->getName();
+        $config['payum.context'] = $contextName;
 
         $payment = new Definition('Payum\Core\Payment', array($config));
         $payment->setFactoryService($factoryId);

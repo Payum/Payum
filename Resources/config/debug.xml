@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!-- Extensions -->
+
+        <service id="payum.extension.log_executed_actions" class="Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension">
+            <argument type="service" id="logger" on-invalid="ignore" />
+
+            <tag name="payum.extension" all="true" alias="log_executed_actions" />
+        </service>
+    </services>
+</container>

@@ -61,7 +61,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'contexts' => array(
+                'payments' => array(
                     'a_context' => array(
                         'paypal_express_checkout_nvp' => array(
                             'username' => 'aUsername',
@@ -96,7 +96,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'contexts' => array(
+                'payments' => array(
                     'a_context' => array(
                         'klarna_checkout' => array(
                             'secret' => 'aSecret',
@@ -137,7 +137,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'contexts' => array(
+                'payments' => array(
                     'a_context' => array(
                         'omnipay' => array(
                             'type' => 'PayPal_Express',
@@ -178,7 +178,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'contexts' => array(
+                'payments' => array(
                     'a_context' => array(
                         'omnipay' => array(
                             'type' => 'PayPal_Express',

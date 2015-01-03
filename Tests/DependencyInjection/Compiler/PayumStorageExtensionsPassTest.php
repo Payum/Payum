@@ -349,7 +349,7 @@ class PayumStorageExtensionsPassTest extends \Phpunit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotaddExtensionTwiceIfAllAndContextSet()
+    public function shouldNotaddExtensionTwiceIfAllAndPaymentSet()
     {
         $container = new ContainerBuilder;
 

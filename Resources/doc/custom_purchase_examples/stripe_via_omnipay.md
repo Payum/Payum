@@ -22,7 +22,7 @@ $ php composer.phar require "payum/omnipay-bridge" "omnipay/stripe:~2.0"
 #app/config/config.yml
 
 payum:
-    contexts:
+    payments:
         your_context_here:
             omnipay:
                 type: Stripe

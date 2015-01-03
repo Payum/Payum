@@ -54,6 +54,9 @@ class PaypalExpressCheckoutNvpPaymentFactory extends AbstractPaymentFactory
             new Reference('payum.payment_factory'),
         )));
 
+        $config['payum.factory'] = $this->getName();
+        $config['payum.context'] = $contextName;
+
         $payment = new Definition('Payum\Core\Payment', array($config));
         $payment->setFactoryService($factoryId);
         $payment->setFactoryMethod('create');

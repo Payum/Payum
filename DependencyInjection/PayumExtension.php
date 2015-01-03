@@ -36,10 +36,16 @@ class PayumExtension extends Extension implements PrependExtensionInterface
         // load services
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('payum.xml');
+        $loader->load('security.xml');
+        $loader->load('form.xml');
+
+        if ($container->getParameter('kernel.debug')) {
+            $loader->load('debug.xml');
+        }
 
         $this->loadStorages($config['storages'], $container);
         $this->loadSecurity($config['security'], $container);
-        $this->loadContexts($config['contexts'], $container);
+        $this->loadPayments($config['payments'], $container);
     }
 
     /**
@@ -65,27 +71,27 @@ class PayumExtension extends Extension implements PrependExtensionInterface
      * @param array $config
      * @param ContainerBuilder $container
      */
-    protected function loadContexts(array $config, ContainerBuilder $container)
+    protected function loadPayments(array $config, ContainerBuilder $container)
     {
         $paymentsIds = array();
         $defaultName = null;
-        foreach ($config as $contextName => $contextConfig) {
-            //use first defined context as default.
+        foreach ($config as $paymentName => $paymentConfig) {
+            //use first defined payment as default.
             if (false == $defaultName) {
-                $defaultName = $contextName;
+                $defaultName = $paymentName;
             }
 
-            $paymentFactoryName = $this->findSelectedPaymentFactoryNameInContextConfig($contextConfig);
+            $paymentFactoryName = $this->findSelectedPaymentFactoryNameInPaymentConfig($paymentConfig);
             $paymentId = $this->paymentFactories[$paymentFactoryName]->create(
                 $container,
-                $contextName,
-                $contextConfig[$paymentFactoryName]
+                $paymentName,
+                $paymentConfig[$paymentFactoryName]
             );
-            $paymentsIds[$contextName] = $paymentId;
+            $paymentsIds[$paymentName] = $paymentId;
 
             $container->getDefinition($paymentId)->addTag('payum.payment', array(
                 'factory' => $paymentFactoryName,
-                'context' => $contextName
+                'payment' => $paymentName
             ));
         }
 
@@ -111,14 +117,14 @@ class PayumExtension extends Extension implements PrependExtensionInterface
 
             $storagesIds[$modelClass] = $storageId;
 
-            if ($storageConfig['payment']['all']) {
+            if ($storageConfig['extension']['all']) {
                 $container->getDefinition($storageId)->addTag('payum.storage_extension',  array('all' => true));
             } else {
-                foreach ($storageConfig['payment']['contexts'] as $contextName) {
-                    $container->getDefinition($storageId)->addTag('payum.storage_extension',  array('context' => $contextName));
+                foreach ($storageConfig['extension']['payments'] as $paymentName) {
+                    $container->getDefinition($storageId)->addTag('payum.storage_extension',  array('payment' => $paymentName));
                 }
 
-                foreach ($storageConfig['payment']['factories'] as $factory) {
+                foreach ($storageConfig['extension']['factories'] as $factory) {
                     $container->getDefinition($storageId)->addTag('payum.storage_extension',  array('factory' => $factory));
                 }
             }
@@ -193,13 +199,13 @@ class PayumExtension extends Extension implements PrependExtensionInterface
     }
 
     /**
-     * @param array $contextConfig
+     * @param array $paymentConfig
      *
      * @return string
      */
-    protected function findSelectedPaymentFactoryNameInContextConfig($contextConfig)
+    protected function findSelectedPaymentFactoryNameInPaymentConfig($paymentConfig)
     {
-        foreach ($contextConfig as $name => $value) {
+        foreach ($paymentConfig as $name => $value) {
             if (isset($this->paymentFactories[$name])) {
                 return $name;
             }

@@ -1,16 +1,9 @@
 <?php
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
-use Omnipay\Common\GatewayFactory;
-use Payum\Core\Exception\RuntimeException;
-use Payum\Core\Exception\LogicException;
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 class OmnipayOffsitePaymentFactory extends OmnipayDirectPaymentFactory
 {
@@ -20,5 +13,25 @@ class OmnipayOffsitePaymentFactory extends OmnipayDirectPaymentFactory
     public function getName()
     {
         return 'omnipay_offsite';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
+    {
+        $factoryId = 'payum.omnipay_bridge.factory';
+        $container->setDefinition($factoryId, new Definition('Payum\OmnipayBridge\OffsitePaymentFactory', array(
+            new Reference('payum.payment_factory'),
+        )));
+
+        $config['payum.factory'] = $this->getName();
+        $config['payum.context'] = $contextName;
+
+        $payment = new Definition('Payum\Core\Payment', array($config));
+        $payment->setFactoryService($factoryId);
+        $payment->setFactoryMethod('create');
+
+        return $payment;
     }
 }

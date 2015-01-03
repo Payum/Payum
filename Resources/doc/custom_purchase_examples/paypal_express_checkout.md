@@ -22,7 +22,7 @@ $ php composer.phar require "payum/paypal-express-checkout-nvp"
 #app/config/config.yml
 
 payum:
-    contexts:
+    payments:
         your_context_here:
             paypal_express_checkout_nvp:
                 username:  'get this from gateway side'

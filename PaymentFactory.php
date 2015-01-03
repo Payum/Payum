@@ -14,6 +14,33 @@ class PaymentFactory extends CorePaymentFactory implements ContainerAwareInterfa
     protected $container;
 
     /**
+     * @var array
+     */
+    private $actionsTags;
+
+    /**
+     * @var array
+     */
+    private $extensionsTags;
+
+    /**
+     * @var array
+     */
+    private $apisTags;
+
+    /**
+     * @param array $actionsTags
+     * @param array $extensionsTags
+     * @param array $apisTags
+     */
+    public function __construct(array $actionsTags, array $extensionsTags, array $apisTags)
+    {
+        $this->actionsTags = $actionsTags;
+        $this->extensionsTags = $extensionsTags;
+        $this->apisTags = $apisTags;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function setContainer(ContainerInterface $container = null)
@@ -30,20 +57,99 @@ class PaymentFactory extends CorePaymentFactory implements ContainerAwareInterfa
         $config->defaults(array(
             'payum.template.layout' => $this->container->getParameter('payum.template.layout'),
             'payum.template.obtain_credit_card' => $this->container->getParameter('payum.template.obtain_credit_card'),
-
             'buzz.client' => $this->container->get('payum.buzz.client'),
             'twig.env' => $this->container->get('twig'),
-
-            'payum.action.get_http_request' => $this->container->get('payum.action.get_http_request'),
-            'payum.action.obtain_credit_card' => $this->container->get('payum.action.obtain_credit_card'),
-
-            'payum.extension.logger' => $this->container->get('payum.extension.logger'),
         ));
+        $config->defaults(parent::createConfig((array) $config));
 
-        if ($this->container->getParameter('kernel.debug')) {
-            $config->defaults(array(
-                'payum.extension.log_executed_actions' => $this->container->get('payum.extension.log_executed_actions'),
-            ));
+        foreach ($this->actionsTags as $id => $tagAttributes) {
+            foreach ($tagAttributes as $attributes) {
+                $name = isset($attributes['alias']) ? $attributes['alias'] : $id;
+
+                if (isset($attributes['all']) && $attributes['all']) {
+                    $config["payum.action.$name"] = $this->container->get($id);
+                }
+
+                if (
+                    isset($attributes['factory']) &&
+                    isset($config['payum.factory_name']) &&
+                    $config['payum.factory_name'] === $attributes['factory']
+                ) {
+                    $config["payum.action.$name"] = $this->container->get($id);
+                }
+
+                if (
+                    isset($attributes['payment']) &&
+                    isset($config['payum.payment_name']) &&
+                    $config['payum.payment_name'] === $attributes['payment']
+                ) {
+                    $config["payum.action.$name"] = $this->container->get($id);
+                }
+
+                if (isset($attributes['prepend'])) {
+                    $config['payum.prepend_actions'][] = "payum.action.$name";
+                }
+            }
+        }
+
+        foreach ($this->extensionsTags as $id => $tagAttributes) {
+            foreach ($tagAttributes as $attributes) {
+                $name = isset($attributes['alias']) ? $attributes['alias'] : $id;
+
+                if (isset($attributes['all']) && $attributes['all']) {
+                    $config["payum.extension.$name"] = $this->container->get($id);
+                }
+
+                if (
+                    isset($attributes['factory']) &&
+                    isset($config['payum.factory_name']) &&
+                    $config['payum.factory_name'] === $attributes['factory']
+                ) {
+                    $config["payum.extension.$name"] = $this->container->get($id);
+                }
+
+                if (
+                    isset($attributes['payment']) &&
+                    isset($config['payum.payment_name']) &&
+                    $config['payum.payment_name'] === $attributes['payment']
+                ) {
+                    $config["payum.extension.$name"] = $this->container->get($id);
+                }
+
+                if (isset($attributes['prepend'])) {
+                    $config['payum.prepend_extensions'][] = "payum.extension.$name";
+                }
+            }
+        }
+
+        foreach ($this->apisTags as $id => $tagAttributes) {
+            foreach ($tagAttributes as $attributes) {
+                $name = isset($attributes['alias']) ? $attributes['alias'] : $id;
+
+                if (isset($attributes['all']) && $attributes['all']) {
+                    $config["payum.api.$name"] = $this->container->get($id);
+                }
+
+                if (
+                    isset($attributes['factory']) &&
+                    isset($config['payum.factory_name']) &&
+                    $config['payum.factory_name'] === $attributes['factory']
+                ) {
+                    $config["payum.api.$name"] = $this->container->get($id);
+                }
+
+                if (
+                    isset($attributes['payment']) &&
+                    isset($config['payum.payment_name']) &&
+                    $config['payum.payment_name'] === $attributes['payment']
+                ) {
+                    $config["payum.api.$name"] = $this->container->get($id);
+                }
+
+                if (isset($attributes['prepend'])) {
+                    $config['payum.prepend_apis'][] = "payum.api.$name";
+                }
+            }
         }
 
         return (array) $config;

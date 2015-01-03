@@ -18,7 +18,7 @@ There are several ways to add it to a payment:
     # app/config/config.yml
 
     payum:
-        contexts:
+        payments:
             a_context:
                 a_factory:
                     actions:
@@ -36,7 +36,7 @@ There are several ways to add it to a payment:
     # app/config/config.yml
 
     payum:
-        contexts:
+        payments:
             a_context:
                 a_factory: ~
     ```
@@ -59,7 +59,7 @@ There are several ways to add it to a payment:
     # app/config/config.yml
 
     payum:
-        contexts:
+        payments:
             a_context:
                 a_factory: ~
     ```

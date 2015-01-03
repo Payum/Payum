@@ -22,7 +22,7 @@ $ php composer.phar require "payum/payex"
 #app/config/config.yml
 
 payum:
-    contexts:
+    payments:
         your_context_here:
             payex:
                 account_number:  'get this from gateway side'

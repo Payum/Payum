@@ -4,7 +4,6 @@ namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 use Payum\Core\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
@@ -53,6 +52,9 @@ class Be2BillDirectPaymentFactory extends AbstractPaymentFactory
         $container->setDefinition($factoryId, new Definition('Payum\Be2bill\DirectPaymentFactory', array(
             new Reference('payum.payment_factory'),
         )));
+
+        $config['payum.factory'] = $this->getName();
+        $config['payum.context'] = $contextName;
 
         $payment = new Definition('Payum\Core\Payment', array($config));
         $payment->setFactoryService($factoryId);

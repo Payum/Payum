@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Compiler\PayumActionsPass;
+use Payum\Bundle\PayumBundle\DependencyInjection\Compiler\BuildPaymentFactoryPass;
 use Payum\Bundle\PayumBundle\DependencyInjection\Compiler\PayumStorageExtensionsPass;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillOffsitePaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillDirectPaymentFactory;
@@ -51,7 +51,7 @@ class PayumBundle extends Bundle
         $extension->addStorageFactory(new DoctrineStorageFactory);
         $extension->addStorageFactory(new CustomStorageFactory);
 
-        $container->addCompilerPass(new PayumActionsPass);
         $container->addCompilerPass(new PayumStorageExtensionsPass);
+        $container->addCompilerPass(new BuildPaymentFactoryPass);
     }
 }

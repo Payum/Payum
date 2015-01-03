@@ -53,69 +53,68 @@ class MainConfiguration implements ConfigurationInterface
 
         $this->addSecuritySection($securityNode);
         
-        $contextsPrototypeNode = $rootNode
+        $paymentsPrototypeNode = $rootNode
             ->children()
-                ->arrayNode('contexts')
+                ->arrayNode('payments')
                     ->useAttributeAsKey('name')
                     ->prototype('array')
         ;
 
-        $this->addPaymentsSection($contextsPrototypeNode, $this->paymentFactories);
-        $this->addStoragesSection($rootNode, $this->storageFactories);
+        $this->addPaymentsSection($paymentsPrototypeNode);
+        $this->addStoragesSection($rootNode);
 
-        $contextsPrototypeNode
-                    ->validate()
-                    ->ifTrue(function($v) use($paymentFactories) {
-                        $selectedPayments = array();
-                        foreach ($v as $name => $value) {
-                            if (isset($paymentFactories[$name])) {
-                                $selectedPayments[$name] = $paymentFactories[$name];
-                            }
+        $paymentsPrototypeNode
+                ->validate()
+                ->ifTrue(function($v) use($paymentFactories) {
+                    $selectedPayments = array();
+                    foreach ($v as $name => $value) {
+                        if (isset($paymentFactories[$name])) {
+                            $selectedPayments[$name] = $paymentFactories[$name];
                         }
-                
-                        if (0 == count($selectedPayments)) {
-                            throw new LogicException(sprintf(
-                                'One payment from the %s payments available must be selected',
-                                implode(', ', array_keys($selectedPayments))
-                            ));
-                        }
-                        if (count($selectedPayments) > 1) {
-                            throw new LogicException('Only one payment per context could be selected');
-                        }
-                
-                        return false;
-                    })
-                    ->thenInvalid('A message')
-                ->end()
+                    }
+
+                    if (0 == count($selectedPayments)) {
+                        throw new LogicException(sprintf(
+                            'One payment from the %s payments available must be selected',
+                            implode(', ', array_keys($selectedPayments))
+                        ));
+                    }
+                    if (count($selectedPayments) > 1) {
+                        throw new LogicException('Only one payment per context could be selected');
+                    }
+
+                    return false;
+                })
+                ->thenInvalid('A message')
             ->end()
-        ;
+        ->end();
         
         return $tb;
     }
 
     /**
-     * @param ArrayNodeDefinition $contextsPrototypeNode
+     * @param ArrayNodeDefinition $paymentsPrototypeNode
      */
-    protected function addPaymentsSection(ArrayNodeDefinition $contextsPrototypeNode)
+    protected function addPaymentsSection(ArrayNodeDefinition $paymentsPrototypeNode)
     {
         foreach ($this->paymentFactories as $factory) {
             $factory->addConfiguration(
-                $contextsPrototypeNode->children()->arrayNode($factory->getName())
+                $paymentsPrototypeNode->children()->arrayNode($factory->getName())
             );
         }
     }
 
     /**
-     * @param ArrayNodeDefinition $contextsPrototypeNode
+     * @param ArrayNodeDefinition $rootPrototypeNode
      */
-    protected function addStoragesSection(ArrayNodeDefinition $contextsPrototypeNode)
+    protected function addStoragesSection(ArrayNodeDefinition $rootPrototypeNode)
     {
-        $storageNode = $contextsPrototypeNode->children()
+        $storageNode = $rootPrototypeNode->children()
                 ->arrayNode('storages')
                 ->validate()
                     ->ifTrue(function($v) {
                         $storages = $v;
-                        unset($storages['payment']);
+                        unset($storages['extension']);
 
                         foreach($storages as $key => $value) {
                             if (false == class_exists($key)) {
@@ -138,7 +137,7 @@ class MainConfiguration implements ConfigurationInterface
             ->validate()
                 ->ifTrue(function($v) {
                     $storages = $v;
-                    unset($storages['payment']);
+                    unset($storages['extension']);
 
                     if (count($storages) == 0) {
                         throw new LogicException('At least one storage must be configured.');
@@ -154,11 +153,11 @@ class MainConfiguration implements ConfigurationInterface
         ;
 
         $storageNode->children()
-            ->arrayNode('payment')
+            ->arrayNode('extension')
                 ->addDefaultsIfNotSet()
                 ->children()
                     ->booleanNode('all')->defaultValue(true)->end()
-                    ->arrayNode('contexts')
+                    ->arrayNode('payments')
                         ->useAttributeAsKey('key')
                         ->prototype('scalar')
                     ->end()->end()

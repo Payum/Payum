@@ -22,7 +22,7 @@ $ php composer.phar require "payum/be2bill"
 #app/config/config.yml
 
 payum:
-    contexts:
+    payments:
         your_context_here:
             be2bill_onsite:
                 identifier: 'get this from gateway'

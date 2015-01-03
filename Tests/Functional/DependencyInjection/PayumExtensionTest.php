@@ -36,7 +36,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     )
                 )
             ),
-            'contexts' => array(
+            'payments' => array(
                 'a_context' => array(
                     'paypal_express_checkout_nvp' => array(
                         'username' => 'a_username',
@@ -84,7 +84,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     )
                 )
             ),
-            'contexts' => array(
+            'payments' => array(
                 'a_context' => array(
                     'paypal_pro_checkout_nvp' => array(
                         'username' => 'a_username',
@@ -127,7 +127,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     )
                 )
             ),
-            'contexts' => array(
+            'payments' => array(
                 'a_context' => array(
                     'be2bill' => array(
                         'identifier' => 'a_identifier',
@@ -174,7 +174,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     )
                 )
             ),
-            'contexts' => array(
+            'payments' => array(
                 'a_context' => array(
                     'offline' => true
                 )
@@ -210,7 +210,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     )
                 )
             ),
-            'contexts' => array(
+            'payments' => array(
                 'a_context' => array(
                     'authorize_net_aim' => array(
                         'login_id' => 'a_login',
@@ -257,7 +257,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     )
                 )
             ),
-            'contexts' => array(
+            'payments' => array(
                 'a_context' => array(
                     'omnipay' => array(
                         'type' => 'Stripe',
@@ -305,7 +305,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     )
                 )
             ),
-            'contexts' => array(
+            'payments' => array(
                 'a_context' => array(
                     'payex' => array(
                         'encryption_key' => 'aKey',
@@ -351,7 +351,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     )
                 )
             ),
-            'contexts' => array(
+            'payments' => array(
                 'a_context' => array(
                     'klarna_checkout' => array(
                         'secret' => 'aSecret',
@@ -397,7 +397,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     )
                 )
             ),
-            'contexts' => array(
+            'payments' => array(
                 'a_context' => array(
                     'klarna_invoice' => array(
                         'secret' => 'aSecret',
@@ -443,7 +443,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     )
                 )
             ),
-            'contexts' => array(
+            'payments' => array(
                 'the_paypal_context' => array(
                     'paypal_express_checkout_nvp' => array(
                         'username' => 'a_username',

@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Compiler;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Compiler\PayumActionsPass;
+use Payum\Bundle\PayumBundle\DependencyInjection\Compiler\BuildPaymentFactoryPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
@@ -22,7 +22,7 @@ class PayumActionsPassTest extends \Phpunit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new PayumActionsPass();
+        new BuildPaymentFactoryPass();
     }
 
     /**
@@ -56,7 +56,7 @@ class PayumActionsPassTest extends \Phpunit_Framework_TestCase
         ));
         $container->setDefinition('action.bar', $actionBar);
 
-        $pass = new PayumActionsPass;
+        $pass = new BuildPaymentFactoryPass;
 
         $pass->process($container);
 
@@ -98,7 +98,7 @@ class PayumActionsPassTest extends \Phpunit_Framework_TestCase
         ));
         $container->setDefinition('action.foo2', $actionFoo2);
 
-        $pass = new PayumActionsPass;
+        $pass = new BuildPaymentFactoryPass;
 
         $pass->process($container);
 
@@ -133,7 +133,7 @@ class PayumActionsPassTest extends \Phpunit_Framework_TestCase
         ));
         $container->setDefinition('action.foo', $actionFoo);
 
-        $pass = new PayumActionsPass;
+        $pass = new BuildPaymentFactoryPass;
 
         $pass->process($container);
 
@@ -165,7 +165,7 @@ class PayumActionsPassTest extends \Phpunit_Framework_TestCase
         ));
         $container->setDefinition('action.foo', $actionFoo);
 
-        $pass = new PayumActionsPass;
+        $pass = new BuildPaymentFactoryPass;
 
         $pass->process($container);
 
@@ -209,7 +209,7 @@ class PayumActionsPassTest extends \Phpunit_Framework_TestCase
         ));
         $container->setDefinition('action.bar', $actionBar);
 
-        $pass = new PayumActionsPass;
+        $pass = new BuildPaymentFactoryPass;
 
         $pass->process($container);
 
@@ -245,7 +245,7 @@ class PayumActionsPassTest extends \Phpunit_Framework_TestCase
         ));
         $container->setDefinition('action.foo', $actionFoo);
 
-        $pass = new PayumActionsPass;
+        $pass = new BuildPaymentFactoryPass;
 
         $pass->process($container);
 
@@ -274,7 +274,7 @@ class PayumActionsPassTest extends \Phpunit_Framework_TestCase
         ));
         $container->setDefinition('action.foo', $actionFoo);
 
-        $pass = new PayumActionsPass;
+        $pass = new BuildPaymentFactoryPass;
 
         $pass->process($container);
 
@@ -308,7 +308,7 @@ class PayumActionsPassTest extends \Phpunit_Framework_TestCase
         ));
         $container->setDefinition('action.foo', $actionFoo);
 
-        $pass = new PayumActionsPass;
+        $pass = new BuildPaymentFactoryPass;
 
         $pass->process($container);
 
@@ -322,7 +322,7 @@ class PayumActionsPassTest extends \Phpunit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotAddActionTwiceIfAllAndContextSet()
+    public function shouldNotAddActionTwiceIfAllAndPaymentSet()
     {
         $container = new ContainerBuilder;
 
@@ -342,7 +342,7 @@ class PayumActionsPassTest extends \Phpunit_Framework_TestCase
         ));
         $container->setDefinition('action.foo', $actionFoo);
 
-        $pass = new PayumActionsPass;
+        $pass = new BuildPaymentFactoryPass;
 
         $pass->process($container);
 

@@ -10,6 +10,8 @@
     </parameters>
 
     <services>
+        <!-- Generic -->
+
         <service id="payum" class="Payum\Bundle\PayumBundle\Registry\ContainerAwareRegistry">
             <argument type="collection" /> <!-- payments services. this should be replaced while container is built -->
             <argument type="collection" /> <!-- storages services. this should be replaced while container is built -->
@@ -21,6 +23,9 @@
         </service>
 
         <service id="payum.payment_factory" class="Payum\Bundle\PayumBundle\PaymentFactory">
+            <argument type="collection" /> <!-- this should be replaced in compiler pass -->
+            <argument type="collection" /> <!-- this should be replaced in compiler pass -->
+            <argument type="collection" /> <!-- this should be replaced in compiler pass -->
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
@@ -32,18 +37,6 @@
             </call>
         </service>
 
-        <service id="payum.extension.storage.prototype" class="Payum\Core\Extension\StorageExtension" abstract="true" public="false">
-            <argument/> <!-- this should be replaced with real storage service -->
-        </service>
-
-        <service id="payum.extension.log_executed_actions" class="Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension">
-            <argument type="service" id="logger" on-invalid="ignore" />
-        </service>
-
-        <service id="payum.extension.logger" class="Payum\Core\Bridge\Psr\Log\LoggerExtension">
-            <argument type="service" id="logger" on-invalid="ignore" />
-        </service>
-
         <service id="payum.converter.reply_to_http_response" class="Payum\Core\Bridge\Symfony\ReplyToSymfonyResponseConverter" />
 
         <service id="payum.listener.reply_to_http_response" class="Payum\Bundle\PayumBundle\EventListener\ReplyToHttpResponseListener">
@@ -52,51 +45,36 @@
             <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" priority="128" />
         </service>
 
+        <!-- Extensions -->
+
+        <service id="payum.extension.storage.prototype" class="Payum\Core\Extension\StorageExtension" abstract="true" public="false">
+            <argument/> <!-- this should be replaced with real storage service -->
+        </service>
+
+        <service id="payum.extension.logger" class="Payum\Core\Bridge\Psr\Log\LoggerExtension">
+            <argument type="service" id="logger" on-invalid="ignore" />
+
+            <tag name="payum.extension" all="true" alias="psr_logger" />
+        </service>
+
+        <!-- Actions -->
+
         <service id="payum.action.get_http_request" class="Payum\Core\Bridge\Symfony\Action\GetHttpRequestAction">
             <call method="setHttpRequest">
                 <argument type="service" id="request" on-invalid="null" strict="false" />
             </call>
 
-            <tag name="payum.action" all="true" />
+            <tag name="payum.action" all="true" alias="get_http_request" />
         </service>
 
-        <service id="payum.action.obtain_credit_card" class="Payum\Bundle\PayumBundle\Action\ObtainCreditCardAction">
+        <service id="payum.action.obtain_credit_card" class="Payum\Core\Bridge\Symfony\Action\ObtainCreditCardAction">
             <argument type="service" id="form.factory" />
             <argument>%payum.template.obtain_credit_card%</argument>
             <call method="setRequest">
                 <argument type="service" id="request" on-invalid="null" strict="false" />
             </call>
-        </service>
 
-        <!-- Should be replaced by PayumExtension -->
-        <service id="payum.security.token_storage" abstract="true" />
-
-        <service
-            id="payum.security.http_request_verifier"
-            class="Payum\Core\Bridge\Symfony\Security\HttpRequestVerifier"
-        >
-            <argument type="service" id="payum.security.token_storage" />
-        </service>
-
-        <service
-            id="payum.security.token_factory"
-            class="Payum\Core\Bridge\Symfony\Security\TokenFactory"
-        >
-            <argument type="service" id="router" />
-            <argument type="service" id="payum.security.token_storage" />
-            <argument type="service" id="payum" />
-            <argument>payum_capture_do</argument>
-            <argument>payum_notify_do</argument>
-            <argument>payum_authorize_do</argument>
-            <argument>payum_refund_do</argument>
-        </service>
-
-        <service id="payum.form.type.credit_card_expiration_date" class="Payum\Core\Bridge\Symfony\Form\Type\CreditCardExpirationDateType">
-            <tag name="form.type" alias="payum_credit_card_expiration_date" />
-        </service>
-
-        <service id="payum.form.type.credit_card" class="Payum\Core\Bridge\Symfony\Form\Type\CreditCardType">
-            <tag name="form.type" alias="payum_credit_card" />
+            <tag name="payum.action" all="true" alias="obtain_credit_card" />
         </service>
     </services>
 </container>

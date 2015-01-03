@@ -118,14 +118,14 @@ payum:
     storages:
         Acme\PaymentBundle\Entity\Order: { doctrine: orm }
             
-    contexts:
+    payments:
         offline:
             offline: ~
 ```
 
 _**Note**: You should use commented path if you install payum/payum package._
 
-_**Note**: You can add other payments to the contexts too._
+_**Note**: You can add other payments to the payments section too._
 
 ## Prepare order
 

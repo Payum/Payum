@@ -22,7 +22,7 @@ $ php composer.phar require "payum/klarna-checkout:@stable"
 #app/config/config.yml
 
 payum:
-    contexts:
+    payments:
         your_context_here:
             klarna_checkout:
                 secret:  'get this from gateway side'

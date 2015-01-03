@@ -5,12 +5,9 @@ use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\FileLocator;
 
 class StripeJsPaymentFactory extends AbstractPaymentFactory implements PrependExtensionInterface
 {
@@ -69,6 +66,9 @@ class StripeJsPaymentFactory extends AbstractPaymentFactory implements PrependEx
         $container->setDefinition($factoryId, new Definition('Payum\Stripe\JsPaymentFactory', array(
             new Reference('payum.payment_factory'),
         )));
+
+        $config['payum.factory'] = $this->getName();
+        $config['payum.context'] = $contextName;
 
         $payment = new Definition('Payum\Core\Payment', array($config));
         $payment->setFactoryService($factoryId);

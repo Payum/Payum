@@ -76,7 +76,7 @@ When we are done we can tell payum to use this service instead of default one:
 # app/config/config.yml
 
 payum:
-    contexts:
+    payments:
         your_context_name_here:
             paypal_express_checkout_nvp:
                 api:

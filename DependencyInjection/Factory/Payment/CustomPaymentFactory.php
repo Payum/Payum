@@ -17,6 +17,9 @@ class CustomPaymentFactory extends AbstractPaymentFactory
             return new DefinitionDecorator($config['service']);
         }
 
+        $config['payum.factory'] = $this->getName();
+        $config['payum.context'] = $contextName;
+
         $payment = new Definition('Payum\Core\Payment', array($config));
         $payment->setFactoryService('payum.payment_factory');
         $payment->setFactoryMethod('create');

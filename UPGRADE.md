@@ -5,6 +5,8 @@
 * `be2bill_onsite` payment was renamed to `be2bill_offsite`.
 * `omnipay_onsite` payment was renamed to `omnipay_offsite`.
 * `omnipay` payment was renamed to `omnipay_direct`.
+* tag attribute `context` was renamed to `payment`.
+* [config] `contexts` section was renamed to `payments`.
 
 ## 0.11 to 0.13
 
