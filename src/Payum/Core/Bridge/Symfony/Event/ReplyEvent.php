@@ -22,12 +22,4 @@ class ReplyEvent extends RequestEvent
     {
         return $this->reply;
     }
-
-    /**
-     * @param ReplyInterface $reply
-     */
-    public function setReply(ReplyInterface $reply)
-    {
-        $this->reply = $reply;
-    }
 }

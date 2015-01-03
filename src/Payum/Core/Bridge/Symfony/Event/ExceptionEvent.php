@@ -22,12 +22,4 @@ class ExceptionEvent extends RequestEvent
     {
         return $this->reply;
     }
-
-    /**
-     * @param Exception $exception
-     */
-    public function setException(Exception $exception)
-    {
-        $this->exception = $exception;
-    }
 }

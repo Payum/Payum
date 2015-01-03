@@ -21,24 +21,11 @@ class RequestEvent extends Event
         return $this->request;
     }
 
-    public function setRequest($request)
-    {
-        $this->request = $request;
-    }
-
     /**
      * @return ActionInterface
      */
     public function getAction()
     {
         return $this->action;
-    }
-
-    /**
-     * @param ActionInterface $action
-     */
-    public function setAction(ActionInterface $action)
-    {
-        $this->action = $action;
     }
 }
