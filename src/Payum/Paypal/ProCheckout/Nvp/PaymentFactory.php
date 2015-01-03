@@ -74,7 +74,7 @@ class PaymentFactory implements PaymentFactoryInterface
                     'sandbox' => $config['sandbox'],
                 );
 
-                $config['payum.api'] = new Api($paypalConfig, $config['buzz.client']);
+                return new Api($paypalConfig, $config['buzz.client']);
             };
         }
 
