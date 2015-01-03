@@ -30,7 +30,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new PaymentFactory();
 
-        $payment = $factory->create(array('merchantId' => 'aMerchId', 'secret' => 'aSecret'));
+        $payment = $factory->create(array('merchant_id' => 'aMerchId', 'secret' => 'aSecret'));
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
 
@@ -84,7 +84,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
-        $this->assertEquals(array('merchantId' => '', 'secret' => '', 'sandbox' => true), $config['payum.default_options']);
+        $this->assertEquals(array('merchant_id' => '', 'secret' => '', 'sandbox' => true), $config['payum.default_options']);
     }
 
     /**
@@ -109,7 +109,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The merchantId, secret fields are required.
+     * @expectedExceptionMessage The merchant_id, secret fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {

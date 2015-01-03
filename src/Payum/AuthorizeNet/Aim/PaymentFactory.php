@@ -49,17 +49,17 @@ class PaymentFactory implements PaymentFactoryInterface
 
         if (false == $config['payum.api']) {
             $config['payum.default_options'] = array(
-                'loginId' => '',
-                'transactionKey' => '',
+                'login_id' => '',
+                'transaction_key' => '',
                 'sandbox' => true,
             );
             $config->defaults($config['payum.default_options']);
-            $config['payum.required_options'] = array('loginId', 'transactionKey');
+            $config['payum.required_options'] = array('login_id', 'transaction_key');
 
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
 
-                $api = new AuthorizeNetAIM($config['loginId'], $config['transactionKey']);
+                $api = new AuthorizeNetAIM($config['login_id'], $config['transaction_key']);
                 $api->setSandbox($config['sandbox']);
 
                 return $api;

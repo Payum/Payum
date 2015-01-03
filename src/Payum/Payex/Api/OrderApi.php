@@ -83,7 +83,7 @@ class OrderApi extends BaseApi
      */
     public function initialize(array $parameters)
     {
-        $parameters['accountNumber'] = $this->options['accountNumber'];
+        $parameters['accountNumber'] = $this->options['account_number'];
 
         //DEPRICATED. Send in as empty string.
         $parameters['externalID'] = '';
@@ -127,7 +127,7 @@ class OrderApi extends BaseApi
      */
     public function complete(array $parameters)
     {
-        $parameters['accountNumber'] = $this->options['accountNumber'];
+        $parameters['accountNumber'] = $this->options['account_number'];
 
         $parameters['hash'] = $this->calculateHash($parameters, array(
             'accountNumber',
@@ -146,7 +146,7 @@ class OrderApi extends BaseApi
      */
     public function check(array $parameters)
     {
-        $parameters['accountNumber'] = $this->options['accountNumber'];
+        $parameters['accountNumber'] = $this->options['account_number'];
 
         $parameters['hash'] = $this->calculateHash($parameters, array(
             'accountNumber',

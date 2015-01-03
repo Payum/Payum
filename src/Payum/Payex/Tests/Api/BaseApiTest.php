@@ -19,7 +19,7 @@ class BaseApiTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The accountNumber option must be set.
+     * @expectedExceptionMessage The account_number option must be set.
      */
     public function throwIfAccountNumberOptionNotSet()
     {
@@ -33,14 +33,14 @@ class BaseApiTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The encryptionKey option must be set.
+     * @expectedExceptionMessage The encryption_key option must be set.
      */
     public function throwIfEncryptionKeyOptionNotSet()
     {
         $this->getMockForAbstractClass('Payum\Payex\Api\BaseApi', array(
             new SoapClientFactory(),
             array(
-                'accountNumber' => 'aNumber',
+                'account_number' => 'aNumber',
             ),
         ));
     }
@@ -56,8 +56,8 @@ class BaseApiTest extends \PHPUnit_Framework_TestCase
         $this->getMockForAbstractClass('Payum\Payex\Api\BaseApi', array(
             new SoapClientFactory(),
             array(
-                'accountNumber' => 'aNumber',
-                'encryptionKey' => 'aKey',
+                'account_number' => 'aNumber',
+                'encryption_key' => 'aKey',
                 'sandbox' => 'not a bool',
             ),
         ));
@@ -71,8 +71,8 @@ class BaseApiTest extends \PHPUnit_Framework_TestCase
         $this->getMockForAbstractClass('Payum\Payex\Api\BaseApi', array(
             new SoapClientFactory(),
             array(
-                'accountNumber' => 'aNumber',
-                'encryptionKey' => 'aKey',
+                'account_number' => 'aNumber',
+                'encryption_key' => 'aKey',
                 'sandbox' => true,
             ),
         ));

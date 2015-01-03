@@ -26,8 +26,8 @@ We have to only add the payment factory. All the rest remain the same:
 $authorizeNetAimFactory = new \Payum\AuthorizeNet\Aim\PaymentFactory;
 
 $payments['authorize-net-aim'] = $authorizeNetAimFactory->create(array(
-    'loginId' => 'REPLACE IT',
-    'transactionKey' => 'REPLACE IT',
+    'login_id' => 'REPLACE IT',
+    'transaction_key' => 'REPLACE IT',
     'sandbox' => true,
 ));
 

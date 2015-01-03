@@ -16,7 +16,7 @@ class AgreementApi extends BaseApi
      */
     public function create(array $parameters)
     {
-        $parameters['accountNumber'] = $this->options['accountNumber'];
+        $parameters['accountNumber'] = $this->options['account_number'];
 
         //Deprecated, set to blank.
         $parameters['notifyUrl'] = '';
@@ -42,7 +42,7 @@ class AgreementApi extends BaseApi
      */
     public function check(array $parameters)
     {
-        $parameters['accountNumber'] = $this->options['accountNumber'];
+        $parameters['accountNumber'] = $this->options['account_number'];
 
         $parameters['hash'] = $this->calculateHash($parameters, array(
             'accountNumber',
@@ -59,7 +59,7 @@ class AgreementApi extends BaseApi
      */
     public function delete(array $parameters)
     {
-        $parameters['accountNumber'] = $this->options['accountNumber'];
+        $parameters['accountNumber'] = $this->options['account_number'];
 
         $parameters['hash'] = $this->calculateHash($parameters, array(
             'accountNumber',
@@ -76,7 +76,7 @@ class AgreementApi extends BaseApi
      */
     public function autoPay(array $parameters)
     {
-        $parameters['accountNumber'] = $this->options['accountNumber'];
+        $parameters['accountNumber'] = $this->options['account_number'];
 
         $parameters['hash'] = $this->calculateHash($parameters, array(
             'accountNumber',

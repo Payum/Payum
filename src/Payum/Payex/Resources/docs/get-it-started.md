@@ -25,8 +25,8 @@ We have to only add the payment factory. All the rest remain the same:
 
 $payexFactory = new \Payum\Payex\PaymentFactory();
 $payments['payex'] = $payexFactory->create(array(
-    'accountNumber' => 'REPLACE IT',
-    'encryptionKey' => 'REPLACE IT',
+    'account_number' => 'REPLACE IT',
+    'encryption_key' => 'REPLACE IT',
     'sandbox' => true
 ));
 ```

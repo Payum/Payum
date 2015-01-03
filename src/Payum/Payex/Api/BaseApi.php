@@ -40,12 +40,12 @@ abstract class BaseApi
         $this->clientFactory = $clientFactory;
         $this->options = $options;
 
-        if (true == empty($this->options['accountNumber'])) {
-            throw new InvalidArgumentException('The accountNumber option must be set.');
+        if (true == empty($this->options['account_number'])) {
+            throw new InvalidArgumentException('The account_number option must be set.');
         }
 
-        if (true == empty($this->options['encryptionKey'])) {
-            throw new InvalidArgumentException('The encryptionKey option must be set.');
+        if (true == empty($this->options['encryption_key'])) {
+            throw new InvalidArgumentException('The encryption_key option must be set.');
         }
 
         if (false == is_bool($this->options['sandbox'])) {
@@ -93,7 +93,7 @@ abstract class BaseApi
             $orderedParameters[$parametersKey] = $parameters[$parametersKey];
         }
 
-        return md5(trim(implode("", $orderedParameters)).$this->options['encryptionKey']);
+        return md5(trim(implode("", $orderedParameters)).$this->options['encryption_key']);
     }
 
     /**
