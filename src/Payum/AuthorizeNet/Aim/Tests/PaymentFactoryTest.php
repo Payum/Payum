@@ -30,7 +30,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new PaymentFactory();
 
-        $payment = $factory->create(array('loginId' => 'aLoginId', 'transactionKey' => 'aTransKey'));
+        $payment = $factory->create(array('login_id' => 'aLoginId', 'transaction_key' => 'aTransKey'));
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
 
@@ -84,7 +84,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
-        $this->assertEquals(array('loginId' => '', 'transactionKey' => '', 'sandbox' => true), $config['payum.default_options']);
+        $this->assertEquals(array('login_id' => '', 'transaction_key' => '', 'sandbox' => true), $config['payum.default_options']);
     }
 
     /**
@@ -109,7 +109,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The loginId, transactionKey fields are required.
+     * @expectedExceptionMessage The login_id, transaction_key fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {

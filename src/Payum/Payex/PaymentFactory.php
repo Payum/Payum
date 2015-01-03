@@ -58,12 +58,12 @@ class PaymentFactory implements PaymentFactoryInterface
         $config->defaults($this->corePaymentFactory->createConfig());
 
         $config['payum.default_options'] = array(
-            'accountNumber' => '',
-            'encryptionKey' => '',
+            'account_number' => '',
+            'encryption_key' => '',
             'sandbox' => true,
         );
         $config->defaults($config['payum.default_options']);
-        $config['payum.required_options'] = array('accountNumber', 'encryptionKey');
+        $config['payum.required_options'] = array('account_number', 'encryption_key');
 
         $config->defaults(array(
             'payum.factory_name' => 'payex',
@@ -75,8 +75,8 @@ class PaymentFactory implements PaymentFactoryInterface
                 $config->validateNotEmpty($config['payum.required_options']);
 
                 $payexConfig = array(
-                    'accountNumber' => $config['accountNumber'],
-                    'encryptionKey' => $config['encryptionKey'],
+                    'account_number' => $config['account_number'],
+                    'encryption_key' => $config['encryption_key'],
                     'sandbox' => $config['sandbox'],
                 );
 
@@ -86,8 +86,8 @@ class PaymentFactory implements PaymentFactoryInterface
                 $config->validateNotEmpty($config['payum.required_options']);
 
                 $payexConfig = array(
-                    'accountNumber' => $config['accountNumber'],
-                    'encryptionKey' => $config['encryptionKey'],
+                    'account_number' => $config['account_number'],
+                    'encryption_key' => $config['encryption_key'],
                     'sandbox' => $config['sandbox'],
                 );
 
@@ -97,8 +97,8 @@ class PaymentFactory implements PaymentFactoryInterface
                 $config->validateNotEmpty($config['payum.required_options']);
 
                 $payexConfig = array(
-                    'accountNumber' => $config['accountNumber'],
-                    'encryptionKey' => $config['encryptionKey'],
+                    'account_number' => $config['account_number'],
+                    'encryption_key' => $config['encryption_key'],
                     'sandbox' => $config['sandbox'],
                 );
 

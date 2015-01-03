@@ -30,7 +30,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new PaymentFactory();
 
-        $payment = $factory->create(array('accountNumber' => 'aNum', 'encryptionKey' => 'aKey'));
+        $payment = $factory->create(array('account_number' => 'aNum', 'encryption_key' => 'aKey'));
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
 
@@ -88,7 +88,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
-        $this->assertEquals(array('accountNumber' => '', 'encryptionKey' => '', 'sandbox' => true), $config['payum.default_options']);
+        $this->assertEquals(array('account_number' => '', 'encryption_key' => '', 'sandbox' => true), $config['payum.default_options']);
     }
 
     /**
@@ -113,7 +113,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The accountNumber, encryptionKey fields are required.
+     * @expectedExceptionMessage The account_number, encryption_key fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {

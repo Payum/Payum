@@ -36,7 +36,7 @@ class RecurringApi extends BaseApi
      */
     public function start(array $parameters)
     {
-        $parameters['accountNumber'] = $this->options['accountNumber'];
+        $parameters['accountNumber'] = $this->options['account_number'];
 
         if (isset($parameters['orderId'])) {
             $parameters['orderID'] = $parameters['orderId'];
@@ -72,7 +72,7 @@ class RecurringApi extends BaseApi
      */
     public function stop(array $parameters)
     {
-        $parameters['accountNumber'] = $this->options['accountNumber'];
+        $parameters['accountNumber'] = $this->options['account_number'];
 
         $parameters['hash'] = $this->calculateHash($parameters, array(
             'accountNumber',
@@ -91,7 +91,7 @@ class RecurringApi extends BaseApi
      */
     public function check(array $parameters)
     {
-        $parameters['accountNumber'] = $this->options['accountNumber'];
+        $parameters['accountNumber'] = $this->options['account_number'];
 
         $parameters['hash'] = $this->calculateHash($parameters, array(
             'accountNumber',

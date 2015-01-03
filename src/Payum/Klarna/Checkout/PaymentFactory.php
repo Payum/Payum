@@ -65,18 +65,18 @@ class PaymentFactory implements PaymentFactoryInterface
 
         if (false == $config['payum.api']) {
             $config['payum.default_options'] = array(
-                'merchantId' => '',
+                'merchant_id' => '',
                 'secret' => '',
                 'sandbox' => true,
             );
             $config->defaults($config['payum.default_options']);
-            $config['payum.required_options'] = array('merchantId', 'secret');
+            $config['payum.required_options'] = array('merchant_id', 'secret');
 
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
 
                 $klarnaConfig = new Config();
-                $klarnaConfig->merchantId = $config['merchantId'];
+                $klarnaConfig->merchantId = $config['merchant_id'];
                 $klarnaConfig->secret = $config['secret'];
                 $klarnaConfig->contentType = $config['contentType'];
                 $klarnaConfig->baseUri = $config['sandbox'] ?

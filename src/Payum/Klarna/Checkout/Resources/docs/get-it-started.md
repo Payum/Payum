@@ -71,7 +71,7 @@ $payments = array();
 
 $klarnaCheckoutFactory = new \Payum\Klarna\Checkout\PaymentFactory();
 $payments['klarna_checkout'] => $klarnaCheckoutFactory->create(array(
-    'merchantId' => 'EDIT IT',
+    'merchant_id' => 'EDIT IT',
     'secret' => 'EDIT IT',
 ));
 
