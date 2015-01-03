@@ -57,22 +57,22 @@ class PaymentFactory implements PaymentFactoryInterface
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->corePaymentFactory->createConfig());
 
-        $config['options.default'] = array(
+        $config['payum.default_options'] = array(
             'accountNumber' => '',
             'encryptionKey' => '',
             'sandbox' => true,
         );
-        $config->defaults($config['options.default']);
-        $config['options.required'] = array('accountNumber', 'encryptionKey');
+        $config->defaults($config['payum.default_options']);
+        $config['payum.required_options'] = array('accountNumber', 'encryptionKey');
 
         $config->defaults(array(
-            'factory.name' => 'payex',
-            'factory.title' => 'Payex',
+            'payum.factory_name' => 'payex',
+            'payum.factory_title' => 'Payex',
 
             'soap.client_factory' => new SoapClientFactory(),
 
             'payum.api.order' => function (ArrayObject $config) {
-                $config->validateNotEmpty($config['options.required']);
+                $config->validateNotEmpty($config['payum.required_options']);
 
                 $payexConfig = array(
                     'accountNumber' => $config['accountNumber'],
@@ -83,7 +83,7 @@ class PaymentFactory implements PaymentFactoryInterface
                 return new OrderApi($config['soap.client_factory'], $payexConfig);
             },
             'payum.api.agreement' => function (ArrayObject $config) {
-                $config->validateNotEmpty($config['options.required']);
+                $config->validateNotEmpty($config['payum.required_options']);
 
                 $payexConfig = array(
                     'accountNumber' => $config['accountNumber'],
@@ -94,7 +94,7 @@ class PaymentFactory implements PaymentFactoryInterface
                 return new AgreementApi($config['soap.client_factory'], $payexConfig);
             },
             'payum.api.recurring' => function (ArrayObject $config) {
-                $config->validateNotEmpty($config['options.required']);
+                $config->validateNotEmpty($config['payum.required_options']);
 
                 $payexConfig = array(
                     'accountNumber' => $config['accountNumber'],

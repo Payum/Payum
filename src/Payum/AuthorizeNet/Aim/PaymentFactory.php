@@ -40,24 +40,24 @@ class PaymentFactory implements PaymentFactoryInterface
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->corePaymentFactory->createConfig());
         $config->defaults(array(
-            'factory.name' => 'authorize_net_aim',
-            'factory.title' => 'Authorize.NET AIM',
+            'payum.factory_name' => 'authorize_net_aim',
+            'payum.factory_title' => 'Authorize.NET AIM',
             'payum.action.capture' => new CaptureAction(),
             'payum.action.status' => new StatusAction(),
             'payum.action.fill_order_details' => new FillOrderDetailsAction(),
         ));
 
         if (false == $config['payum.api']) {
-            $config['options.default'] = array(
+            $config['payum.default_options'] = array(
                 'loginId' => '',
                 'transactionKey' => '',
                 'sandbox' => true,
             );
-            $config->defaults($config['options.default']);
-            $config['options.required'] = array('loginId', 'transactionKey');
+            $config->defaults($config['payum.default_options']);
+            $config['payum.required_options'] = array('loginId', 'transactionKey');
 
             $config['payum.api'] = function (ArrayObject $config) {
-                $config->validateNotEmpty($config['options.required']);
+                $config->validateNotEmpty($config['payum.required_options']);
 
                 $api = new AuthorizeNetAIM($config['loginId'], $config['transactionKey']);
                 $api->setSandbox($config['sandbox']);

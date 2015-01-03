@@ -43,8 +43,8 @@ class PaymentFactory implements PaymentFactoryInterface
         $config->defaults($this->corePaymentFactory->createConfig());
 
         $config->defaults(array(
-            'factory.name' => 'paypal_rest',
-            'factory.title' => 'PayPal Rest',
+            'payum.factory_name' => 'paypal_rest',
+            'payum.factory_title' => 'PayPal Rest',
 
             'payum.action.capture' => new CaptureAction(),
             'payum.action.sync' => new SyncAction(),
@@ -52,16 +52,16 @@ class PaymentFactory implements PaymentFactoryInterface
         ));
 
         if (false == $config['payum.api']) {
-            $config['options.default'] = array(
+            $config['payum.default_options'] = array(
                 'client_id' => '',
                 'client_secret' => '',
                 'config_path' => '',
             );
-            $config->defaults($config['options.default']);
+            $config->defaults($config['payum.default_options']);
 
-            $config['options.required'] = array('client_id', 'client_secret', 'config_path');
+            $config['payum.required_options'] = array('client_id', 'client_secret', 'config_path');
             $config['payum.api'] = function (ArrayObject $config) {
-                $config->validateNotEmpty($config['options.required']);
+                $config->validateNotEmpty($config['payum.required_options']);
 
                 if (!defined('PP_CONFIG_PATH')) {
                     define('PP_CONFIG_PATH', $config['config_path']);

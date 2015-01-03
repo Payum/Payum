@@ -89,8 +89,8 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInternalType('array', $config);
 
-        $this->assertArrayHasKey('options.default', $config);
-        $this->assertEquals(array('username' => '', 'password' => '', 'partner' => '', 'vendor' => '', 'tender' => '', 'sandbox' => true), $config['options.default']);
+        $this->assertArrayHasKey('payum.default_options', $config);
+        $this->assertEquals(array('username' => '', 'password' => '', 'partner' => '', 'vendor' => '', 'tender' => '', 'sandbox' => true), $config['payum.default_options']);
     }
 
     /**
@@ -104,11 +104,11 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInternalType('array', $config);
 
-        $this->assertArrayHasKey('factory.name', $config);
-        $this->assertEquals('paypal_pro_checkout_nvp', $config['factory.name']);
+        $this->assertArrayHasKey('payum.factory_name', $config);
+        $this->assertEquals('paypal_pro_checkout_nvp', $config['payum.factory_name']);
 
-        $this->assertArrayHasKey('factory.title', $config);
-        $this->assertEquals('PayPal ProCheckout', $config['factory.title']);
+        $this->assertArrayHasKey('payum.factory_title', $config);
+        $this->assertEquals('PayPal ProCheckout', $config['payum.factory_title']);
     }
 
     /**

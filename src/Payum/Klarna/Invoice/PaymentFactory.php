@@ -52,8 +52,8 @@ class PaymentFactory implements PaymentFactoryInterface
         $config->defaults($this->corePaymentFactory->createConfig());
 
         $config->defaults(array(
-            'factory.name' => 'klarna_invoice',
-            'factory.title' => 'Klarna Invoice',
+            'payum.factory_name' => 'klarna_invoice',
+            'payum.factory_title' => 'Klarna Invoice',
             'sandbox' => true,
             'pClassStorage' => 'json',
             'pClassStoragePath' => './pclasses.json',
@@ -77,7 +77,7 @@ class PaymentFactory implements PaymentFactoryInterface
         ));
 
         if (false == $config['payum.api']) {
-            $config['options.default'] = array(
+            $config['payum.default_options'] = array(
                 'eid' => '',
                 'secret' => '',
                 'country' => '',
@@ -85,14 +85,14 @@ class PaymentFactory implements PaymentFactoryInterface
                 'currency' => '',
                 'sandbox' => true,
             );
-            $config->defaults($config['options.default']);
-            $config['options.required'] = array('eid', 'secret', 'country', 'language', 'currency');
+            $config->defaults($config['payum.default_options']);
+            $config['payum.required_options'] = array('eid', 'secret', 'country', 'language', 'currency');
             $config->defaults(array(
                 'sandbox' => true,
             ));
 
             $config['payum.api'] = function (ArrayObject $config) {
-                $config->validateNotEmpty($config['options.required']);
+                $config->validateNotEmpty($config['payum.required_options']);
 
                 $config['mode'] = null === $config['sandbox'] ? \Klarna::BETA : \Klarna::LIVE;
 
