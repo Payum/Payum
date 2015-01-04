@@ -1,14 +1,14 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Tests\Functional\DependencyInjection;
 
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillOffsitePaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaCheckoutPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaInvoicePaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OfflinePaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayOffsitePaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\StripeCheckoutPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\StripeJsPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\FilesystemStorageFactory;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
-
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AuthorizeNetAimPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillDirectPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PayexPaymentFactory;
@@ -16,6 +16,8 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayDirectPa
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCheckoutNvpPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\PayumExtension;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
@@ -50,7 +52,8 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $configs = array($config);
 
-        $containerBuilder = new ContainerBuilder(new ParameterBag);
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->setParameter('kernel.debug', false);
         
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new PaypalExpressCheckoutNvpPaymentFactory);
@@ -58,14 +61,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         
         $extension->load($configs, $containerBuilder);
         
-        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.api'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
-
-        $this->assertDefinitionContainsMethodCall(
-            $containerBuilder->getDefinition('payum.context.a_context.payment'),
-            'addApi',
-            new Reference('payum.context.a_context.api')
-        );
     }
 
     /**
@@ -99,7 +95,8 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $configs = array($config);
 
-        $containerBuilder = new ContainerBuilder(new ParameterBag);
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->setParameter('kernel.debug', false);
 
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new PaypalProCheckoutNvpPaymentFactory);
@@ -107,14 +104,13 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension->load($configs, $containerBuilder);
 
-        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.api'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
     }
 
     /**
      * @test
      */
-    public function shouldLoadExtensionWithBe2billConfiguredPayment()
+    public function shouldLoadExtensionWithBe2billDirectConfiguredPayment()
     {
         $config = array(
             'security' => array(
@@ -129,7 +125,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
             ),
             'payments' => array(
                 'a_context' => array(
-                    'be2bill' => array(
+                    'be2bill_direct' => array(
                         'identifier' => 'a_identifier',
                         'password' => 'a_password',
                         'sandbox' => true
@@ -140,7 +136,8 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $configs = array($config);
 
-        $containerBuilder = new ContainerBuilder(new ParameterBag);
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->setParameter('kernel.debug', false);
 
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new Be2BillDirectPaymentFactory);
@@ -148,17 +145,51 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension->load($configs, $containerBuilder);
 
-        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.api'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
-
-        $this->assertDefinitionContainsMethodCall(
-            $containerBuilder->getDefinition('payum.context.a_context.payment'),
-            'addApi',
-            new Reference('payum.context.a_context.api')
-        );
     }
 
-        /**
+    /**
+     * @test
+     */
+    public function shouldLoadExtensionWithBe2billOffsiteConfiguredPayment()
+    {
+        $config = array(
+            'security' => array(
+                'token_storage' => array(
+                    'Payum\Core\Model\Token' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
+            'payments' => array(
+                'a_context' => array(
+                    'be2bill_offsite' => array(
+                        'identifier' => 'a_identifier',
+                        'password' => 'a_password',
+                        'sandbox' => true
+                    ),
+                )
+            )
+        );
+
+        $configs = array($config);
+
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->setParameter('kernel.debug', false);
+
+        $extension = new PayumExtension;
+        $extension->addPaymentFactory(new Be2BillOffsitePaymentFactory);
+        $extension->addStorageFactory(new FilesystemStorageFactory);
+
+        $extension->load($configs, $containerBuilder);
+
+        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
+    }
+
+    /**
      * @test
      */
     public function shouldLoadExtensionWithOfflineConfiguredPayment()
@@ -183,7 +214,8 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $configs = array($config);
 
-        $containerBuilder = new ContainerBuilder(new ParameterBag);
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->setParameter('kernel.debug', false);
 
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new OfflinePaymentFactory);
@@ -223,7 +255,8 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $configs = array($config);
 
-        $containerBuilder = new ContainerBuilder(new ParameterBag);
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->setParameter('kernel.debug', false);
 
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new AuthorizeNetAimPaymentFactory);
@@ -231,20 +264,13 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension->load($configs, $containerBuilder);
 
-        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.api'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
-
-        $this->assertDefinitionContainsMethodCall(
-            $containerBuilder->getDefinition('payum.context.a_context.payment'),
-            'addApi',
-            new Reference('payum.context.a_context.api')
-        );
     }
 
     /**
      * @test
      */
-    public function shouldLoadExtensionWithOmnipayConfiguredPayment()
+    public function shouldLoadExtensionWithOmnipayDirectConfiguredPayment()
     {
         $config = array(
             'security' => array(
@@ -259,7 +285,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
             ),
             'payments' => array(
                 'a_context' => array(
-                    'omnipay' => array(
+                    'omnipay_direct' => array(
                         'type' => 'Stripe',
                         'options' => array(
                             'apiKey' => 'abc123',
@@ -271,7 +297,8 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $configs = array($config);
 
-        $containerBuilder = new ContainerBuilder(new ParameterBag);
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->setParameter('kernel.debug', false);
 
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new OmnipayDirectPaymentFactory);
@@ -279,14 +306,52 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension->load($configs, $containerBuilder);
 
-        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.gateway'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
+    }
 
-        $this->assertDefinitionContainsMethodCall(
-            $containerBuilder->getDefinition('payum.context.a_context.payment'),
-            'addApi',
-            new Reference('payum.context.a_context.gateway')
+    /**
+     * @test
+     */
+    public function shouldLoadExtensionWithOmnipayOffsiteConfiguredPayment()
+    {
+        $config = array(
+            'security' => array(
+                'token_storage' => array(
+                    'Payum\Core\Model\Token' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
+            'payments' => array(
+                'a_context' => array(
+                    'omnipay_offsite' => array(
+                        'type' => 'PayPal_Express',
+                        'options' => array(
+                            'username' => 'abc123',
+                            'passowrd' => 'abc123',
+                            'signature' => 'abc123',
+                            'testMode' => true,
+                        )
+                    ),
+                )
+            )
         );
+
+        $configs = array($config);
+
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->setParameter('kernel.debug', false);
+
+        $extension = new PayumExtension;
+        $extension->addPaymentFactory(new OmnipayOffsitePaymentFactory);
+        $extension->addStorageFactory(new FilesystemStorageFactory);
+
+        $extension->load($configs, $containerBuilder);
+
+        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
     }
 
     /**
@@ -317,7 +382,8 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $configs = array($config);
 
-        $containerBuilder = new ContainerBuilder(new ParameterBag);
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->setParameter('kernel.debug', false);
 
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new PayexPaymentFactory);
@@ -325,14 +391,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension->load($configs, $containerBuilder);
 
-        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.api.order'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
-
-        $this->assertDefinitionContainsMethodCall(
-            $containerBuilder->getDefinition('payum.context.a_context.payment'),
-            'addApi',
-            new Reference('payum.context.a_context.api.order')
-        );
     }
 
     /**
@@ -363,7 +422,8 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $configs = array($config);
 
-        $containerBuilder = new ContainerBuilder(new ParameterBag);
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->setParameter('kernel.debug', false);
 
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new KlarnaCheckoutPaymentFactory);
@@ -371,14 +431,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension->load($configs, $containerBuilder);
 
-        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.config'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
-
-        $this->assertDefinitionContainsMethodCall(
-            $containerBuilder->getDefinition('payum.context.a_context.payment'),
-            'addApi',
-            new Reference('payum.context.a_context.config')
-        );
     }
 
     /**
@@ -409,7 +462,8 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $configs = array($config);
 
-        $containerBuilder = new ContainerBuilder(new ParameterBag);
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->setParameter('kernel.debug', false);
 
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new KlarnaInvoicePaymentFactory);
@@ -417,14 +471,87 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension->load($configs, $containerBuilder);
 
-        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.config'));
         $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
+    }
 
-        $this->assertDefinitionContainsMethodCall(
-            $containerBuilder->getDefinition('payum.context.a_context.payment'),
-            'addApi',
-            new Reference('payum.context.a_context.config')
+    /**
+     * @test
+     */
+    public function shouldLoadExtensionWithStripeJsConfiguredPayment()
+    {
+        $config = array(
+            'security' => array(
+                'token_storage' => array(
+                    'Payum\Core\Model\Token' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
+            'payments' => array(
+                'a_context' => array(
+                    'stripe_js' => array(
+                        'publishable_key' => 'aKey',
+                        'secret_key' => 'aKey'
+                    ),
+                )
+            )
         );
+
+        $configs = array($config);
+
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->setParameter('kernel.debug', false);
+
+        $extension = new PayumExtension;
+        $extension->addPaymentFactory(new StripeJsPaymentFactory());
+        $extension->addStorageFactory(new FilesystemStorageFactory);
+
+        $extension->load($configs, $containerBuilder);
+
+        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLoadExtensionWithStripeCheckoutConfiguredPayment()
+    {
+        $config = array(
+            'security' => array(
+                'token_storage' => array(
+                    'Payum\Core\Model\Token' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
+            'payments' => array(
+                'a_context' => array(
+                    'stripe_checkout' => array(
+                        'publishable_key' => 'aKey',
+                        'secret_key' => 'aKey'
+                    ),
+                )
+            )
+        );
+
+        $configs = array($config);
+
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->setParameter('kernel.debug', false);
+
+        $extension = new PayumExtension;
+        $extension->addPaymentFactory(new StripeCheckoutPaymentFactory());
+        $extension->addStorageFactory(new FilesystemStorageFactory);
+
+        $extension->load($configs, $containerBuilder);
+
+        $this->assertTrue($containerBuilder->hasDefinition('payum.context.a_context.payment'));
     }
 
     /**
@@ -457,7 +584,8 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $configs = array($config);
 
-        $containerBuilder = new ContainerBuilder(new ParameterBag);
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->setParameter('kernel.debug', false);
 
         $extension = new PayumExtension;
         $extension->addPaymentFactory(new PaypalExpressCheckoutNvpPaymentFactory);
@@ -476,8 +604,8 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('factory', $attributes);
         $this->assertEquals('paypal_express_checkout_nvp', $attributes['factory']);
 
-        $this->assertArrayHasKey('context', $attributes);
-        $this->assertEquals('the_paypal_context', $attributes['context']);
+        $this->assertArrayHasKey('payment', $attributes);
+        $this->assertEquals('the_paypal_context', $attributes['payment']);
     }
 
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)

@@ -7,16 +7,16 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillDirectPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillOffsitePaymentFactory;
 
-class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
+class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfAbstractPaymentFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillPaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillOffsitePaymentFactory');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory'));
     }
@@ -24,9 +24,19 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldBeSubClassOfBe2BillDirectPaymentFactory()
+    {
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillOffsitePaymentFactory');
+
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillDirectPaymentFactory'));
+    }
+
+    /**
+     * @test
+     */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new Be2BillDirectPaymentFactory;
+        new Be2BillOffsitePaymentFactory;
     }
 
     /**
@@ -34,9 +44,9 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetName()
     {
-        $factory = new Be2BillDirectPaymentFactory;
+        $factory = new Be2BillOffsitePaymentFactory;
 
-        $this->assertEquals('be2bill', $factory->getName());
+        $this->assertEquals('be2bill_offsite', $factory->getName());
     }
 
     /**
@@ -44,11 +54,11 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfiguration()
     {
-        $factory = new Be2BillDirectPaymentFactory;
+        $factory = new Be2BillOffsitePaymentFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
-        
+
         $factory->addConfiguration($rootNode);
 
         $processor = new Processor();
@@ -59,7 +69,7 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('identifier', $config);
         $this->assertEquals('anIdentifier', $config['identifier']);
-        
+
         $this->assertArrayHasKey('password', $config);
         $this->assertEquals('aPassword', $config['password']);
 
@@ -78,9 +88,9 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "identifier" at path "foo" must be configured.
      */
-    public function thrownIfApiOptionsIdentifierSectionMissing()
+    public function thrownIfIdentifierOptionNotSet()
     {
-        $factory = new Be2BillDirectPaymentFactory;
+        $factory = new Be2BillOffsitePaymentFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -97,9 +107,9 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "password" at path "foo" must be configured.
      */
-    public function thrownIfApiOptionsPasswordSectionMissing()
+    public function thrownIfPasswordOptionNotSet()
     {
-        $factory = new Be2BillDirectPaymentFactory;
+        $factory = new Be2BillOffsitePaymentFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -117,12 +127,11 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePaymentAndReturnItsId()
     {
-        $factory = new Be2BillDirectPaymentFactory;
+        $factory = new Be2BillOffsitePaymentFactory;
 
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
             'identifier' => 'anIdentifier',
             'password' => 'aPassword',
             'sandbox' => true,
@@ -130,7 +139,7 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'apis' => array(),
             'extensions' => array(),
         ));
-        
+
         $this->assertEquals('payum.context.aContextName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
     }
@@ -140,12 +149,11 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new Be2BillDirectPaymentFactory;
+        $factory = new Be2BillOffsitePaymentFactory;
 
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
             'identifier' => 'anIdentifier',
             'password' => 'aPassword',
             'sandbox' => true,
@@ -155,8 +163,8 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId), 
-            'addAction', 
+            $container->getDefinition($paymentId),
+            'addAction',
             new Reference('payum.action.foo')
         );
         $this->assertDefinitionContainsMethodCall(
@@ -169,112 +177,6 @@ class Be2BillPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'addExtension',
             new Reference('payum.extension.ololo')
         );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagApiDefinitionAndAddItToPayment()
-    {
-        $factory = new Be2BillDirectPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'identifier' => 'anIdentifier',
-            'password' => 'aPassword',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $this->assertTrue($container->hasDefinition('payum.context.aContextName.api'));
-
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addApi',
-            new Reference('payum.context.aContextName.api')
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToCaptureAction()
-    {
-        $factory = new Be2BillDirectPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'identifier' => 'anIdentifier',
-            'password' => 'aPassword',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.be2bill.action.capture');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToStatusAction()
-    {
-        $factory = new Be2BillDirectPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'identifier' => 'anIdentifier',
-            'password' => 'aPassword',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.be2bill.action.status');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(2, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToFillOrderDetailsAction()
-    {
-        $factory = new Be2BillDirectPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'identifier' => 'anIdentifier',
-            'password' => 'aPassword',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.be2bill.action.fill_order_details');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(2, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)

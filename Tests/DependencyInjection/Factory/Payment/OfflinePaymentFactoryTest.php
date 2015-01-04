@@ -52,7 +52,6 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $config = $processor->process($tb->buildTree(), array(array(
-            'obtain_credit_card' => false,
         )));
 
         //come from abstract payment factory
@@ -71,7 +70,6 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -91,7 +89,6 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
             'actions' => array('payum.action.foo'),
             'apis' => array('payum.api.bar'),
             'extensions' => array('payum.extension.ololo'),
@@ -112,75 +109,6 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'addExtension',
             new Reference('payum.extension.ololo')
         );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagCaptureAction()
-    {
-        $factory = new OfflinePaymentFactory;
-
-        $container = new ContainerBuilder;
-
-         $factory->create($container, 'aContextName', array(
-             'obtain_credit_card' => false,
-             'actions' => array(),
-             'apis' => array(),
-             'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.offline.action.capture');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagStatusAction()
-    {
-        $factory = new OfflinePaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.offline.action.status');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToFillOrderDetailsAction()
-    {
-        $factory = new OfflinePaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.offline.action.fill_order_details');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)

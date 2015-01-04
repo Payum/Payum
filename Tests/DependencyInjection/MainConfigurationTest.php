@@ -112,14 +112,14 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             )
         ));
 
-        $this->assertTrue(isset($config['storages'][$fooModelClass]['payment']['all']));
-        $this->assertTrue($config['storages'][$fooModelClass]['payment']['all']);
+        $this->assertTrue(isset($config['storages'][$fooModelClass]['extension']['all']));
+        $this->assertTrue($config['storages'][$fooModelClass]['extension']['all']);
 
-        $this->assertTrue(isset($config['storages'][$fooModelClass]['payment']['factories']));
-        $this->assertEquals(array(), $config['storages'][$fooModelClass]['payment']['factories']);
+        $this->assertTrue(isset($config['storages'][$fooModelClass]['extension']['factories']));
+        $this->assertEquals(array(), $config['storages'][$fooModelClass]['extension']['factories']);
 
-        $this->assertTrue(isset($config['storages'][$fooModelClass]['payment']['payments']));
-        $this->assertEquals(array(), $config['storages'][$fooModelClass]['payment']['payments']);
+        $this->assertTrue(isset($config['storages'][$fooModelClass]['extension']['payments']));
+        $this->assertEquals(array(), $config['storages'][$fooModelClass]['extension']['payments']);
     }
 
     /**
@@ -137,7 +137,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'storages' => array(
                     $fooModelClass => array(
-                        'payment' => array(
+                        'extension' => array(
                             'all' => false,
                         ),
                         'bar_storage' => array(
@@ -157,8 +157,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             )
         ));
 
-        $this->assertTrue(isset($config['storages'][$fooModelClass]['payment']['all']));
-        $this->assertFalse($config['storages'][$fooModelClass]['payment']['all']);
+        $this->assertTrue(isset($config['storages'][$fooModelClass]['extension']['all']));
+        $this->assertFalse($config['storages'][$fooModelClass]['extension']['all']);
     }
 
     /**
@@ -176,7 +176,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'storages' => array(
                     $fooModelClass => array(
-                        'payment' => array(
+                        'extension' => array(
                             'payments' => array(
                                 'foo', 'bar'
                             )
@@ -198,8 +198,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             )
         ));
 
-        $this->assertTrue(isset($config['storages'][$fooModelClass]['payment']['payments']));
-        $this->assertEquals(array('foo', 'bar'), $config['storages'][$fooModelClass]['payment']['payments']);
+        $this->assertTrue(isset($config['storages'][$fooModelClass]['extension']['payments']));
+        $this->assertEquals(array('foo', 'bar'), $config['storages'][$fooModelClass]['extension']['payments']);
     }
 
     /**
@@ -217,7 +217,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'storages' => array(
                     $fooModelClass => array(
-                        'payment' => array(
+                        'extension' => array(
                             'factories' => array(
                                 'foo', 'bar'
                             )
@@ -239,8 +239,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             )
         ));
 
-        $this->assertTrue(isset($config['storages'][$fooModelClass]['payment']['factories']));
-        $this->assertEquals(array('foo', 'bar'), $config['storages'][$fooModelClass]['payment']['factories']);
+        $this->assertTrue(isset($config['storages'][$fooModelClass]['extension']['factories']));
+        $this->assertEquals(array('foo', 'bar'), $config['storages'][$fooModelClass]['extension']['factories']);
     }
 
     /**

@@ -78,7 +78,7 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "login_id" at path "foo" must be configured.
      */
-    public function thrownIfApiOptionsLoginIdSectionMissing()
+    public function thrownIfLoginIdOptionNotSet()
     {
         $factory = new AuthorizeNetAimPaymentFactory;
 
@@ -97,7 +97,7 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "transaction_key" at path "foo" must be configured.
      */
-    public function thrownIfApiOptionsTransactionKeySectionMissing()
+    public function thrownIfTransactionKeyOptionNotSet()
     {
         $factory = new AuthorizeNetAimPaymentFactory;
 
@@ -122,7 +122,6 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
             'login_id' => 'aLoginId',
             'transaction_key' => 'aTransactionKey',
             'sandbox' => true,
@@ -145,7 +144,6 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
             'login_id' => 'aLoginId',
             'transaction_key' => 'aTransactionKey',
             'sandbox' => true,
@@ -169,112 +167,6 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'addExtension',
             new Reference('payum.extension.ololo')
         );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagApiDefinitionAndAddItToPayment()
-    {
-        $factory = new AuthorizeNetAimPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'login_id' => 'aLoginId',
-            'transaction_key' => 'aTransactionKey',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $this->assertTrue($container->hasDefinition('payum.context.aContextName.api'));
-
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addApi',
-            new Reference('payum.context.aContextName.api')
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToCaptureAction()
-    {
-        $factory = new AuthorizeNetAimPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'login_id' => 'aLoginId',
-            'transaction_key' => 'aTransactionKey',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.authorize_net_aim.action.capture');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToStatusAction()
-    {
-        $factory = new AuthorizeNetAimPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'login_id' => 'aLoginId',
-            'transaction_key' => 'aTransactionKey',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.authorize_net_aim.action.status');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToFillOrderDetailsAction()
-    {
-        $factory = new AuthorizeNetAimPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'login_id' => 'aLoginId',
-            'transaction_key' => 'aTransactionKey',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.authorize_net_aim.action.fill_order_details');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)

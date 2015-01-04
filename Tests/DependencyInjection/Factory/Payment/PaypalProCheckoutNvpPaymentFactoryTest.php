@@ -86,7 +86,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "username" at path "foo" must be configured.
      */
-    public function thrownIfApiOptionUsernameSectionMissing()
+    public function thrownIfUsernameOptionNotSet()
     {
         $factory = new PaypalProCheckoutNvpPaymentFactory;
 
@@ -105,7 +105,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "password" at path "foo" must be configured.
      */
-    public function thrownIfApiOptionPasswordSectionMissing()
+    public function thrownIfPasswordOptionNotSet()
     {
         $factory = new PaypalProCheckoutNvpPaymentFactory;
 
@@ -126,7 +126,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "partner" at path "foo" must be configured.
      */
-    public function thrownIfApiOptionPartnerSectionMissing()
+    public function thrownIfPartnerOptionNotSet()
     {
         $factory = new PaypalProCheckoutNvpPaymentFactory;
 
@@ -148,7 +148,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "vendor" at path "foo" must be configured.
      */
-    public function thrownIfApiOptionVendorSectionMissing()
+    public function thrownIfVendorOptionNotSet()
     {
         $factory = new PaypalProCheckoutNvpPaymentFactory;
 
@@ -175,7 +175,6 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
             'username' => 'aUsername',
             'password' => 'aPassword',
             'partner' => 'aPartner',
@@ -200,7 +199,6 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
             'username' => 'aUsername',
             'password' => 'aPassword',
             'partner' => 'aPartner',
@@ -226,147 +224,6 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'addExtension',
             new Reference('payum.extension.ololo')
         );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldDecorateBasicApiDefinitionAndAddItToPayment()
-    {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'username' => 'aUsername',
-            'password' => 'aPassword',
-            'partner' => 'aPartner',
-            'vendor' => 'aVendor',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $this->assertTrue($container->hasDefinition('payum.context.aContextName.api'));
-
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addApi',
-            new Reference('payum.context.aContextName.api')
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagCaptureAction()
-    {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'username' => 'aUsername',
-            'password' => 'aPassword',
-            'partner' => 'aPartner',
-            'vendor' => 'aVendor',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.paypal.pro_checkout_nvp.action.capture');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagRefundAction()
-    {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'username' => 'aUsername',
-            'password' => 'aPassword',
-            'partner' => 'aPartner',
-            'vendor' => 'aVendor',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.paypal.pro_checkout_nvp.action.refund');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagStatusAction()
-    {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'username' => 'aUsername',
-            'password' => 'aPassword',
-            'partner' => 'aPartner',
-            'vendor' => 'aVendor',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.paypal.pro_checkout_nvp.action.status');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToFillOrderDetailsAction()
-    {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'username' => 'aUsername',
-            'password' => 'aPassword',
-            'partner' => 'aPartner',
-            'vendor' => 'aVendor',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),        ));
-
-        $actionDefinition = $container->getDefinition('payum.paypal.pro_checkout_nvp.action.fill_order_details');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)

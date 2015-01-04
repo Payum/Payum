@@ -87,7 +87,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "secret" at path "foo" must be configured.
      */
-    public function thrownIfApiOptionsIdentifierSectionMissing()
+    public function thrownIfIdentifierOptionNotSet()
     {
         $factory = new KlarnaCheckoutPaymentFactory;
 
@@ -106,7 +106,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "merchant_id" at path "foo" must be configured.
      */
-    public function thrownIfApiOptionsPasswordSectionMissing()
+    public function thrownIfPasswordOptionNotSet()
     {
         $factory = new KlarnaCheckoutPaymentFactory;
 
@@ -117,7 +117,6 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
-            'obtain_credit_card' => false,
             'secret' => 'aSecret'
         )));
     }
@@ -132,7 +131,6 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
             'secret' => 'aSecret',
             'merchant_id' => 'aMerchantId',
             'sandbox' => true,
@@ -155,7 +153,6 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder;
 
         $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
             'secret' => 'aSecret',
             'merchant_id' => 'aMerchantId',
             'sandbox' => true,
@@ -179,138 +176,6 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'addExtension',
             new Reference('payum.extension.ololo')
         );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldDecorateBasicApiDefinitionAndAddItToPayment()
-    {
-        $factory = new KlarnaCheckoutPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'merchant_id' => 'aEid',
-            'secret' => 'aSecret',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $this->assertTrue($container->hasDefinition('payum.context.aContextName.config'));
-
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addApi',
-            new Reference('payum.context.aContextName.config')
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToAuthorizeAction()
-    {
-        $factory = new KlarnaCheckoutPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'secret' => 'aSecret',
-            'merchant_id' => 'aMerchantId',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.klarna.checkout.action.authorize');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToStatusAction()
-    {
-        $factory = new KlarnaCheckoutPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'secret' => 'aSecret',
-            'merchant_id' => 'aMerchantId',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.klarna.checkout.action.status');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToSyncAction()
-    {
-        $factory = new KlarnaCheckoutPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'secret' => 'aSecret',
-            'merchant_id' => 'aMerchantId',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.klarna.checkout.action.sync');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagNotifyAction()
-    {
-        $factory = new KlarnaCheckoutPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'secret' => 'aSecret',
-            'merchant_id' => 'aMerchantId',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.klarna.checkout.action.notify');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     /**

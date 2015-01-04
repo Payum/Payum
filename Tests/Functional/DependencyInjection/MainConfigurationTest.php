@@ -1,19 +1,19 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Tests\Functional\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Processor;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AuthorizeNetAimPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillDirectPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillOffsitePaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaCheckoutPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaInvoicePaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayDirectPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayOffsitePaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory;
-use Symfony\Component\Config\Definition\Processor;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\StripeCheckoutPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\StripeJsPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\MainConfiguration;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCheckoutNvpPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\DoctrineStorageFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\FilesystemStorageFactory;
 
@@ -30,8 +30,13 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             new PaypalProCheckoutNvpPaymentFactory,
             new AuthorizeNetAimPaymentFactory,
             new Be2BillDirectPaymentFactory,
+            new Be2BillOffsitePaymentFactory(),
             new OmnipayDirectPaymentFactory,
+            new OmnipayOffsitePaymentFactory(),
             new KlarnaCheckoutPaymentFactory,
+            new KlarnaInvoicePaymentFactory(),
+            new StripeJsPaymentFactory(),
+            new StripeCheckoutPaymentFactory(),
         );
         
         $this->storageFactories = array(
@@ -139,7 +144,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                 ),
                 'payments' => array(
                     'a_context' => array(
-                        'omnipay' => array(
+                        'omnipay_direct' => array(
                             'type' => 'PayPal_Express',
                             'options' => array(),
                         )
@@ -180,7 +185,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                 ),
                 'payments' => array(
                     'a_context' => array(
-                        'omnipay' => array(
+                        'omnipay_offsite' => array(
                             'type' => 'PayPal_Express',
                             'options' => array(),
                         )

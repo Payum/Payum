@@ -64,7 +64,6 @@ class StripeJsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $config = $processor->process($tb->buildTree(), array(array(
             'publishable_key' => 'thePubKey',
             'secret_key' => 'theSecretKey',
-            'obtain_credit_card' => false,
         )));
 
         $this->assertArrayHasKey('publishable_key', $config);
@@ -131,7 +130,6 @@ class StripeJsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $paymentId = $factory->create($container, 'aContextName', array(
             'publishable_key' => 'aPubKey',
             'secret_key' => 'aSecretKey',
-            'obtain_credit_card' => false,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
@@ -153,7 +151,6 @@ class StripeJsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $paymentId = $factory->create($container, 'aContextName', array(
             'publishable_key' => 'aPubKey',
             'secret_key' => 'aSecretKey',
-            'obtain_credit_card' => false,
             'actions' => array('payum.action.foo'),
             'apis' => array('payum.api.bar'),
             'extensions' => array('payum.extension.ololo'),
@@ -175,159 +172,6 @@ class StripeJsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             new Reference('payum.extension.ololo')
         );
     }
-
-    /**
-     * @test
-     */
-    public function shouldDecorateBasicKeysDefinitionAndAddItToPaymentAsApi()
-    {
-        $factory = new StripeJsPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'publishable_key' => 'aPubKey',
-            'secret_key' => 'aSecretKey',
-            'obtain_credit_card' => false,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $this->assertTrue($container->hasDefinition('payum.context.aContextName.keys'));
-
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addApi',
-            new Reference('payum.context.aContextName.keys')
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToCaptureAction()
-    {
-        $factory = new StripeJsPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'publishable_key' => 'aPubKey',
-            'secret_key' => 'aSecretKey',
-            'obtain_credit_card' => false,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.stripe.action.capture');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(2, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToStatusAction()
-    {
-        $factory = new StripeJsPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'publishable_key' => 'aPubKey',
-            'secret_key' => 'aSecretKey',
-            'obtain_credit_card' => false,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.stripe.action.status');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(2, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToApiCreateChargeAction()
-    {
-        $factory = new StripeJsPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'publishable_key' => 'aPubKey',
-            'secret_key' => 'aSecretKey',
-            'obtain_credit_card' => false,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.stripe.action.api.create_charge');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(2, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToApiObtainJsTokenAction()
-    {
-        $factory = new StripeJsPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'publishable_key' => 'aPubKey',
-            'secret_key' => 'aSecretKey',
-            'obtain_credit_card' => false,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.stripe.action.api.obtain_js_token');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToFillOrderDetailsAction()
-    {
-        $factory = new StripeJsPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'publishable_key' => 'aPubKey',
-            'secret_key' => 'aSecretKey',
-            'obtain_credit_card' => false,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.stripe.action.fill_order_details');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(2, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
 
     /**
      * @test

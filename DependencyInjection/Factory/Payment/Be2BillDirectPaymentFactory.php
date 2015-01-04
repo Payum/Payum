@@ -10,7 +10,7 @@ class Be2BillDirectPaymentFactory extends AbstractPaymentFactory
      */
     public function getName()
     {
-        return 'be2bill';
+        return 'be2bill_direct';
     }
 
     /**
