@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit color="true">
+<phpunit bootstrap="./Tests/bootstrap.php" color="true">
     <testsuites>
         <testsuite name="PayumBundle">
             <directory suffix="Test.php">./Tests</directory>
