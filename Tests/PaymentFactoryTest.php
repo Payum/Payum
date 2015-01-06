@@ -97,7 +97,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $payment = $factory->create();
 
-        $this->assertInstanceOf(PaymentInterface::class, $payment);
+        $this->assertInstanceOf('Payum\Core\PaymentInterface', $payment);
     }
 
     /**
