@@ -11,7 +11,7 @@ interface StorageFactoryInterface
      * @param string $modelClass
      * @param array $config
      *
-     * @return string The context serviceId
+     * @return string The payment serviceId
      */
     function create(ContainerBuilder $container, $modelClass, array $config);
 

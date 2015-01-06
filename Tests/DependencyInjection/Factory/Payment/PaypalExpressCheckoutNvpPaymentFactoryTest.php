@@ -145,7 +145,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'username' => 'aUsername',
             'password' => 'aPassword',
             'signature' => 'aSignature',
@@ -155,7 +155,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
             'extensions' => array(),
         ));
         
-        $this->assertEquals('payum.context.aContextName.payment', $paymentId);
+        $this->assertEquals('payum.payment.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
     }
 
@@ -168,7 +168,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'username' => 'aUsername',
             'password' => 'aPassword',
             'signature' => 'aSignature',

@@ -80,7 +80,7 @@ class MainConfiguration implements ConfigurationInterface
                         ));
                     }
                     if (count($selectedPayments) > 1) {
-                        throw new LogicException('Only one payment per context could be selected');
+                        throw new LogicException('Only one payment per payment could be selected');
                     }
 
                     return false;

@@ -75,6 +75,10 @@ class PayumExtension extends Extension implements PrependExtensionInterface
      */
     protected function loadPayments(array $config, ContainerBuilder $container)
     {
+        foreach ($this->paymentFactories as $factory) {
+            $factory->load($container);
+        }
+
         foreach ($config as $paymentName => $paymentConfig) {
             $paymentFactoryName = $this->findSelectedPaymentFactoryNameInPaymentConfig($paymentConfig);
             $paymentId = $this->paymentFactories[$paymentFactoryName]->create(

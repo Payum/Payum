@@ -3,7 +3,7 @@
 Steps:
 
 * [Download libraries](#download-libraries)
-* [Configure context](#configure-context)
+* [Configure payment](#configure-context)
 * [Prepare payment](#prepare-payment)
 
 _**Note**: We assume you followed all steps in [get it started](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/get_it_started.md) and your basic configuration same as described there._
@@ -16,14 +16,14 @@ Run the following command:
 $ php composer.phar require "payum/payex"
 ```
 
-## Configure context
+## Configure payment
 
 ```yaml
 #app/config/config.yml
 
 payum:
     payments:
-        your_context_here:
+        your_payment_here:
             payex:
                 account_number:  'get this from gateway side'
                 encryption_key:  'get this from gateway side'

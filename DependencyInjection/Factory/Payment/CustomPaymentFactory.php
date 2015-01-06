@@ -11,14 +11,14 @@ class CustomPaymentFactory extends AbstractPaymentFactory
     /**
      * {@inheritDoc}
      */
-    public function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
+    public function createPaymentDefinition(ContainerBuilder $container, $paymentName, array $config)
     {
         if (isset($config['service'])) {
             return new DefinitionDecorator($config['service']);
         }
 
         $config['payum.factory'] = $this->getName();
-        $config['payum.context'] = $contextName;
+        $config['payum.payment'] = $paymentName;
 
         $payment = new Definition('Payum\Core\Payment', array($config));
         $payment->setFactoryService('payum.payment_factory');

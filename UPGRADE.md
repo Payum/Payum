@@ -7,6 +7,7 @@
 * `omnipay` payment was renamed to `omnipay_direct`.
 * tag attribute `context` was renamed to `payment`.
 * [config] `contexts` section was renamed to `payments`.
+* [factory] New method `load` was added to `PaymentFactoryInterface`.
 
 ## 0.11 to 0.13
 

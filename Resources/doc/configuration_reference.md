@@ -26,13 +26,13 @@ payum:
             # storage specific options
 
     payments:
-        foo_payment_context:
-            xxx_payment:
-                # payment specific options
+        foo_payment:
+            factory:
+                # options
                 
-        bar_payment_context:
-            xxx_payment:
-                # payment specific options
+        bar_payment:
+            factory:
+                # options
                 
                 actions:
                     - action.foo

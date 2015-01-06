@@ -143,7 +143,7 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder();
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'type' => 'PayPal_Express',
             'options' => array(
                 'foo' => 'foo',
@@ -154,7 +154,7 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
 
-        $this->assertEquals('payum.context.aContextName.payment', $paymentId);
+        $this->assertEquals('payum.payment.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
     }
 
@@ -167,7 +167,7 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder();
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'type' => 'PayPal_Express',
             'options' => array(
                 'foo' => 'foo',

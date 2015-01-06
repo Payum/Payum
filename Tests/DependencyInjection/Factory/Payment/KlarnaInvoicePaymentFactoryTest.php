@@ -174,7 +174,7 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'eid' => 'aEid',
             'secret' => 'aSecret',
             'country' => 'SV',
@@ -186,7 +186,7 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
 
-        $this->assertEquals('payum.context.aContextName.payment', $paymentId);
+        $this->assertEquals('payum.payment.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
     }
 
@@ -199,7 +199,7 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'eid' => 'aEid',
             'secret' => 'aSecret',
             'country' => 'SV',

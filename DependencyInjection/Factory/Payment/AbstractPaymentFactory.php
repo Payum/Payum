@@ -12,35 +12,53 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function create(ContainerBuilder $container, $contextName, array $config)
+    public function create(ContainerBuilder $container, $paymentName, array $config)
     {
-        $paymentDefinition = $this->createPaymentDefinition($container, $contextName, $config);
-        $paymentDefinition->setPublic(true);
-        $paymentId = 'payum.context.'.$contextName.'.payment';
-        $container->setDefinition($paymentId, $paymentDefinition);
+        $payment = $this->createPaymentDefinition($container, $paymentName, $config);
+        $payment->setPublic(true);
+        $paymentId = 'payum.payment.'.$paymentName.'.payment';
+        $container->setDefinition($paymentId, $payment);
 
         foreach (array_reverse($config['apis']) as $apiId) {
-            $paymentDefinition->addMethodCall(
+            $payment->addMethodCall(
                 'addApi',
                 array(new Reference($apiId), $forcePrepend = true)
             );
         }
 
         foreach (array_reverse($config['actions']) as $actionId) {
-            $paymentDefinition->addMethodCall(
+            $payment->addMethodCall(
                 'addAction',
                 array(new Reference($actionId), $forcePrepend = true)
             );
         }
 
         foreach (array_reverse($config['extensions']) as $extensionId) {
-            $paymentDefinition->addMethodCall(
+            $payment->addMethodCall(
                 'addExtension',
                 array(new Reference($extensionId), $forcePrepend = true)
             );
         }
 
         return $paymentId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ContainerBuilder $container)
+    {
+        $paymentFactoryClass = $this->getPayumPaymentFactoryClass();
+        if (class_exists($paymentFactoryClass)) {
+            $factory = new Definition($paymentFactoryClass, array(
+                new Reference('payum.payment_factory'),
+            ));
+            $factory->addTag('payum.payment_factory', array('name' => $this->getName()));
+
+            $factoryId = sprintf('payum.%s.factory', $this->getName());
+
+            $container->setDefinition($factoryId, $factory);
+        }
     }
     
     /**
@@ -68,28 +86,23 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
 
     /**
      * @param ContainerBuilder $container
-     * @param $contextName
+     * @param $paymentName
      * @param array $config
      *
      * @return Definition
      */
-    protected function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
+    protected function createPaymentDefinition(ContainerBuilder $container, $paymentName, array $config)
     {
         $paymentFactoryClass = $this->getPayumPaymentFactoryClass();
         if (false == class_exists($paymentFactoryClass)) {
             throw new RuntimeException(sprintf('Cannot find payment factory class. Have you installed %s or payum/payum package?', $this->getComposerPackage()));
         }
 
-        $factoryId = sprintf('payum.paypal.%s.factory', $this->getName());
-        $container->setDefinition($factoryId, new Definition($this->getPayumPaymentFactoryClass(), array(
-            new Reference('payum.payment_factory'),
-        )));
-
         $config['payum.factory_name'] = $this->getName();
-        $config['payum.payment_name'] = $contextName;
+        $config['payum.payment_name'] = $paymentName;
 
         $payment = new Definition('Payum\Core\Payment', array($config));
-        $payment->setFactoryService($factoryId);
+        $payment->setFactoryService(sprintf('payum.%s.factory', $this->getName()));
         $payment->setFactoryMethod('create');
 
         return $payment;

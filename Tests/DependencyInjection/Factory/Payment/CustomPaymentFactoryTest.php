@@ -95,13 +95,13 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
         ));
         
-        $this->assertEquals('payum.context.aContextName.payment', $paymentId);
+        $this->assertEquals('payum.payment.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
         $this->assertInstanceOf(
             'Symfony\Component\DependencyInjection\Definition', 
@@ -118,14 +118,14 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'service' => 'foo.payment.service',
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
         ));
 
-        $this->assertEquals('payum.context.aContextName.payment', $paymentId);
+        $this->assertEquals('payum.payment.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
         $this->assertInstanceOf(
             'Symfony\Component\DependencyInjection\DefinitionDecorator',
@@ -142,7 +142,7 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'actions' => array('payum.action.foo'),
             'apis' => array('payum.api.bar'),
             'extensions' => array('payum.extension.ololo'),

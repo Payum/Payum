@@ -144,13 +144,13 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
         ));
         
-        $this->assertEquals('payum.context.aContextName.payment', $paymentId);
+        $this->assertEquals('payum.payment.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
     }
 
@@ -163,7 +163,7 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'actions' => array(
                 'payum.action.foo',
                 'payum.action.bar',
@@ -193,7 +193,7 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'actions' => array(),
             'apis' => array(
                 'payum.api.foo',
@@ -223,7 +223,7 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(

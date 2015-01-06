@@ -10,7 +10,7 @@ class KlarnaInvoicePaymentFactory extends AbstractPaymentFactory
     /**
      * {@inheritDoc}
      */
-    public function create(ContainerBuilder $container, $contextName, array $config)
+    public function create(ContainerBuilder $container, $paymentName, array $config)
     {
         if (false == class_exists('Payum\Klarna\Invoice\PaymentFactory')) {
             throw new RuntimeException('Cannot find Klarna Invoice payment factory class. Have you installed payum/klarna-invoice package?');
@@ -19,7 +19,7 @@ class KlarnaInvoicePaymentFactory extends AbstractPaymentFactory
         //autoload Klarna
         \Klarna::BETA;
 
-        return parent::create($container, $contextName, $config);
+        return parent::create($container, $paymentName, $config);
     }
 
     /**

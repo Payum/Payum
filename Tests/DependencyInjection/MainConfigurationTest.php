@@ -70,7 +70,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'payments' => array(
-                    'a_context' => array(
+                    'a_payment' => array(
                         'foo_payment' => array( 
                             'foo_opt' => 'foo'
                         ),
@@ -274,7 +274,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'payments' => array(
-                    'a_context' => array(
+                    'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         ),
@@ -318,7 +318,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'payments' => array(
-                    'a_context' => array(
+                    'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         ),
@@ -355,7 +355,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'payments' => array(
-                    'a_context' => array(
+                    'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         ),
@@ -369,7 +369,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @test
      * 
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "payum.payments.a_context": One payment from the  payments available must be selected
+     * @expectedExceptionMessage Invalid configuration for path "payum.payments.a_payment": One payment from the  payments available must be selected
      */
     public function throwIfNonePaymentSelected()
     {
@@ -389,7 +389,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'payments' => array(
-                    'a_context' => array()
+                    'a_payment' => array()
                 )
             )
         ));
@@ -416,7 +416,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'payments' => array(
-                    'a_context' => array(
+                    'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         )
@@ -430,7 +430,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "payum.payments.a_context": Only one payment per context could be selected
+     * @expectedExceptionMessage Invalid configuration for path "payum.payments.a_payment": Only one payment per payment could be selected
      */
     public function throwIfMoreThenOnePaymentSelected()
     {
@@ -450,7 +450,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'payments' => array(
-                    'a_context' => array(
+                    'a_payment' => array(
                         'bar_payment' => array(
                             'bar_opt' => 'bar'
                         ),
@@ -492,7 +492,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'payments' => array(
-                    'a_context' => array(
+                    'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         ),
@@ -526,7 +526,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'payments' => array(
-                    'a_context' => array(
+                    'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         ),
@@ -560,7 +560,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'payments' => array(
-                    'a_context' => array(
+                    'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         ),
@@ -585,7 +585,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $processor->processConfiguration($configuration, array(
             'payum' => array(
                 'payments' => array(
-                    'a_context' => array(
+                    'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         ),
@@ -612,7 +612,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                 'security' => array(
                 ),
                 'payments' => array(
-                    'a_context' => array(
+                    'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         ),
@@ -625,7 +625,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
 class FooPaymentFactory implements PaymentFactoryInterface
 {
-    public function create(ContainerBuilder $container, $contextName, array $config)
+    public function create(ContainerBuilder $container, $paymentName, array $config)
     {
     }
 
@@ -642,11 +642,15 @@ class FooPaymentFactory implements PaymentFactoryInterface
             ->end()
         ;
     }
+
+    public function load(ContainerBuilder $container)
+    {
+    }
 }
 
 class BarPaymentFactory implements PaymentFactoryInterface
 {
-    public function create(ContainerBuilder $container, $contextName, array $config)
+    public function create(ContainerBuilder $container, $paymentName, array $config)
     {
     }
 
@@ -662,6 +666,10 @@ class BarPaymentFactory implements PaymentFactoryInterface
                 ->scalarNode('bar_opt')->isRequired()->cannotBeEmpty()->end()
             ->end()
         ;
+    }
+
+    public function load(ContainerBuilder $container)
+    {
     }
 }
 
