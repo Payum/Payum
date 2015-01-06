@@ -62,6 +62,7 @@ class PaymentFactory extends CorePaymentFactory implements ContainerAwareInterfa
         ));
         $config->defaults(parent::createConfig((array) $config));
 
+        $prependActions = array();
         foreach ($this->actionsTags as $id => $tagAttributes) {
             foreach ($tagAttributes as $attributes) {
                 $name = isset($attributes['alias']) ? $attributes['alias'] : $id;
@@ -87,11 +88,14 @@ class PaymentFactory extends CorePaymentFactory implements ContainerAwareInterfa
                 }
 
                 if (isset($attributes['prepend'])) {
-                    $config['payum.prepend_actions'][] = "payum.action.$name";
+                    $prependActions[] = "payum.action.$name";
                 }
             }
         }
+        $config['payum.prepend_actions'] = $prependActions;
 
+
+        $prependExtensions = array();
         foreach ($this->extensionsTags as $id => $tagAttributes) {
             foreach ($tagAttributes as $attributes) {
                 $name = isset($attributes['alias']) ? $attributes['alias'] : $id;
@@ -117,11 +121,13 @@ class PaymentFactory extends CorePaymentFactory implements ContainerAwareInterfa
                 }
 
                 if (isset($attributes['prepend'])) {
-                    $config['payum.prepend_extensions'][] = "payum.extension.$name";
+                    $prependExtensions[] = "payum.extension.$name";
                 }
             }
         }
+        $config['payum.prepend_extensions'] = $prependExtensions;
 
+        $prependApis = array();
         foreach ($this->apisTags as $id => $tagAttributes) {
             foreach ($tagAttributes as $attributes) {
                 $name = isset($attributes['alias']) ? $attributes['alias'] : $id;
@@ -147,10 +153,11 @@ class PaymentFactory extends CorePaymentFactory implements ContainerAwareInterfa
                 }
 
                 if (isset($attributes['prepend'])) {
-                    $config['payum.prepend_apis'][] = "payum.api.$name";
+                    $prependApis[] = "payum.api.$name";
                 }
             }
         }
+        $config['payum.prepend_apis'] = $prependApis;
 
         return (array) $config;
     }
