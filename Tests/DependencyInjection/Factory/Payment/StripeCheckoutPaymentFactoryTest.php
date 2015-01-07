@@ -135,8 +135,66 @@ class StripeCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
         
-        $this->assertEquals('payum.payment.aPaymentName.payment', $paymentId);
+        $this->assertEquals('payum.stripe_checkout.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowCreatePaymentWithExpectedConfig()
+    {
+        $factory = new StripeCheckoutPaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $paymentId = $factory->create($container, 'aPaymentName', array(
+            'actions' => array(),
+            'apis' => array(),
+            'extensions' => array(),
+        ));
+
+        $this->assertEquals('payum.stripe_checkout.aPaymentName.payment', $paymentId);
+
+        $payment = $container->getDefinition($paymentId);
+
+        //guard
+        $this->assertNotEmpty($payment->getFactoryMethod());
+        $this->assertNotEmpty($payment->getFactoryService());
+        $this->assertNotEmpty($payment->getArguments());
+
+        $config = $payment->getArgument(0);
+
+        $this->assertEquals('stripe_checkout', $config['payum.factory_name']);
+        $this->assertEquals('aPaymentName', $config['payum.payment_name']);
+        $this->assertArrayHasKey('buzz.client', $config);
+        $this->assertArrayHasKey('twig.env', $config);
+        $this->assertArrayHasKey('payum.template.layout', $config);
+        $this->assertArrayHasKey('payum.template.obtain_token', $config);
+        $this->assertArrayHasKey('payum.template.obtain_credit_card', $config);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLoadFactoryAndTemplates()
+    {
+        $factory = new StripeCheckoutPaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->load($container);
+
+        $this->assertTrue($container->hasDefinition('payum.stripe_checkout.factory'));
+
+        $factoryService = $container->getDefinition('payum.stripe_checkout.factory');
+        $this->assertEquals('Payum\Stripe\CheckoutPaymentFactory', $factoryService->getClass());
+        $this->assertEquals(array(array('name' => 'stripe_checkout')), $factoryService->getTag('payum.payment_factory'));
+
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(0));
+        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(0));
+
+        $this->assertEquals('@PayumStripe/Action/obtain_checkout_token.html.twig', $container->getParameter('payum.stripe_checkout.template.obtain_checkout_token'));
     }
 
     /**

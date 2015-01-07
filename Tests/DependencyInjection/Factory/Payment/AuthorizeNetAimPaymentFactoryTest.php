@@ -130,8 +130,29 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
         
-        $this->assertEquals('payum.payment.aPaymentName.payment', $paymentId);
+        $this->assertEquals('payum.authorize_net_aim.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLoadFactory()
+    {
+        $factory = new AuthorizeNetAimPaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->load($container);
+
+        $this->assertTrue($container->hasDefinition('payum.authorize_net_aim.factory'));
+
+        $factoryService = $container->getDefinition('payum.authorize_net_aim.factory');
+        $this->assertEquals('Payum\AuthorizeNet\Aim\PaymentFactory', $factoryService->getClass());
+        $this->assertEquals(array(array('name' => 'authorize_net_aim')), $factoryService->getTag('payum.payment_factory'));
+
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(0));
+        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(0));
     }
 
     /**

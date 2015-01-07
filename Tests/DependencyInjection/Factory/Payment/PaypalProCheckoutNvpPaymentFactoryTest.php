@@ -185,8 +185,29 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
         
-        $this->assertEquals('payum.payment.aPaymentName.payment', $paymentId);
+        $this->assertEquals('payum.paypal_pro_checkout_nvp.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLoadFactory()
+    {
+        $factory = new PaypalProCheckoutNvpPaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->load($container);
+
+        $this->assertTrue($container->hasDefinition('payum.paypal_pro_checkout_nvp.factory'));
+
+        $factoryService = $container->getDefinition('payum.paypal_pro_checkout_nvp.factory');
+        $this->assertEquals('Payum\Paypal\ProCheckout\Nvp\PaymentFactory', $factoryService->getClass());
+        $this->assertEquals(array(array('name' => 'paypal_pro_checkout_nvp')), $factoryService->getTag('payum.payment_factory'));
+
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(0));
+        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(0));
     }
 
     /**

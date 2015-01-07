@@ -168,12 +168,12 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $extension->load($configs, $container);
 
         $this->assertTrue($container->hasDefinition('payum.'.$paymentFactory->getName().'.factory'));
-        $this->assertTrue($container->hasDefinition('payum.payment.a_payment.payment'));
+        $this->assertTrue($container->hasDefinition('payum.'.$paymentFactory->getName().'.a_payment.payment'));
         $this->assertEquals(
             'payum.'.$paymentFactory->getName().'.factory',
-            $container->getDefinition('payum.payment.a_payment.payment')->getFactoryService()
+            $container->getDefinition('payum.'.$paymentFactory->getName().'.a_payment.payment')->getFactoryService()
         );
-        $this->assertEquals('create', $container->getDefinition('payum.payment.a_payment.payment')->getFactoryMethod());
+        $this->assertEquals('create', $container->getDefinition('payum.'.$paymentFactory->getName().'.a_payment.payment')->getFactoryMethod());
     }
 
     /**
@@ -212,7 +212,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension->load($configs, $container);
 
-        $this->assertTrue($container->hasDefinition('payum.payment.a_payment.payment'));
+        $this->assertTrue($container->hasDefinition('payum.custom.a_payment.payment'));
     }
 
     /**
@@ -254,7 +254,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension->load($configs, $containerBuilder);
 
-        $paymentDefinition = $containerBuilder->getDefinition('payum.payment.the_paypal_payment.payment');
+        $paymentDefinition = $containerBuilder->getDefinition('payum.paypal_express_checkout_nvp.the_paypal_payment.payment');
 
         $tagAttributes = $paymentDefinition->getTag('payum.payment');
 

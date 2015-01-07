@@ -6,7 +6,6 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
-
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayDirectPaymentFactory;
 
 class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
@@ -154,8 +153,29 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
 
-        $this->assertEquals('payum.payment.aPaymentName.payment', $paymentId);
+        $this->assertEquals('payum.omnipay_direct.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLoadFactory()
+    {
+        $factory = new OmnipayDirectPaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->load($container);
+
+        $this->assertTrue($container->hasDefinition('payum.omnipay_direct.factory'));
+
+        $factoryService = $container->getDefinition('payum.omnipay_direct.factory');
+        $this->assertEquals('Payum\OmnipayBridge\DirectPaymentFactory', $factoryService->getClass());
+        $this->assertEquals(array(array('name' => 'omnipay_direct')), $factoryService->getTag('payum.payment_factory'));
+
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(0));
+        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(0));
     }
 
     /**

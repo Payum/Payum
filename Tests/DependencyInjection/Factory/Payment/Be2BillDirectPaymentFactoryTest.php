@@ -130,8 +130,29 @@ class Be2BillDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
         
-        $this->assertEquals('payum.payment.aPaymentName.payment', $paymentId);
+        $this->assertEquals('payum.be2bill_direct.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLoadFactory()
+    {
+        $factory = new Be2BillDirectPaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->load($container);
+
+        $this->assertTrue($container->hasDefinition('payum.be2bill_direct.factory'));
+
+        $factoryService = $container->getDefinition('payum.be2bill_direct.factory');
+        $this->assertEquals('Payum\Be2Bill\DirectPaymentFactory', $factoryService->getClass());
+        $this->assertEquals(array(array('name' => 'be2bill_direct')), $factoryService->getTag('payum.payment_factory'));
+
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(0));
+        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(0));
     }
 
     /**

@@ -75,8 +75,29 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
         
-        $this->assertEquals('payum.payment.aPaymentName.payment', $paymentId);
+        $this->assertEquals('payum.offline.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLoadFactory()
+    {
+        $factory = new OfflinePaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->load($container);
+
+        $this->assertTrue($container->hasDefinition('payum.offline.factory'));
+
+        $factoryService = $container->getDefinition('payum.offline.factory');
+        $this->assertEquals('Payum\Offline\PaymentFactory', $factoryService->getClass());
+        $this->assertEquals(array(array('name' => 'offline')), $factoryService->getTag('payum.payment_factory'));
+
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(0));
+        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(0));
     }
 
     /**

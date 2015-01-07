@@ -5,6 +5,7 @@ use Payum\Core\Bridge\Twig\TwigFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\DependencyInjection\Parameter;
 
 class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory implements PrependExtensionInterface
 {
@@ -41,6 +42,29 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
                 'PayumKlarnaCheckout' => TwigFactory::guessViewsPath('Payum\Klarna\Checkout\PaymentFactory'),
             )))
         ));
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ContainerBuilder $container)
+    {
+        parent::load($container);
+
+        $container->setParameter('payum.klarna_checkout.template.capture', '@PayumKlarnaCheckout/Action/capture.html.twig');
+    }
+
+    /**
+     * @param array $config
+     *
+     * @return array
+     */
+    protected function createPaymentConfig(array $config)
+    {
+        $config['payum.template.authorize'] = new Parameter('payum.klarna_checkout.template.capture');
+
+        return $config;
     }
 
     /**

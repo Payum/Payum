@@ -11,7 +11,7 @@ class CustomPaymentFactory extends AbstractPaymentFactory
     /**
      * {@inheritDoc}
      */
-    public function createPaymentDefinition(ContainerBuilder $container, $paymentName, array $config)
+    public function createPayment(ContainerBuilder $container, $paymentName, array $config)
     {
         if (isset($config['service'])) {
             return new DefinitionDecorator($config['service']);

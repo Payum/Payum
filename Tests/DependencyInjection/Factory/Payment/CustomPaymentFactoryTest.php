@@ -101,12 +101,33 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
         
-        $this->assertEquals('payum.payment.aPaymentName.payment', $paymentId);
+        $this->assertEquals('payum.custom.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
         $this->assertInstanceOf(
             'Symfony\Component\DependencyInjection\Definition', 
             $container->getDefinition($paymentId)
         );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLoadFactory()
+    {
+        $factory = new CustomPaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->load($container);
+
+        $this->assertTrue($container->hasDefinition('payum.custom.factory'));
+
+        $factoryService = $container->getDefinition('payum.custom.factory');
+        $this->assertEquals('Payum\Core\PaymentFactory', $factoryService->getClass());
+        $this->assertEquals(array(array('name' => 'custom')), $factoryService->getTag('payum.payment_factory'));
+
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(0));
+        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(0));
     }
 
     /**
@@ -125,7 +146,7 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
 
-        $this->assertEquals('payum.payment.aPaymentName.payment', $paymentId);
+        $this->assertEquals('payum.custom.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
         $this->assertInstanceOf(
             'Symfony\Component\DependencyInjection\DefinitionDecorator',

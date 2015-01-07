@@ -158,8 +158,29 @@ class OmnipayOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
         
-        $this->assertEquals('payum.payment.aPaymentName.payment', $paymentId);
+        $this->assertEquals('payum.omnipay_offsite.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLoadFactory()
+    {
+        $factory = new OmnipayOffsitePaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->load($container);
+
+        $this->assertTrue($container->hasDefinition('payum.omnipay_offsite.factory'));
+
+        $factoryService = $container->getDefinition('payum.omnipay_offsite.factory');
+        $this->assertEquals('Payum\OmnipayBridge\OffsitePaymentFactory', $factoryService->getClass());
+        $this->assertEquals(array(array('name' => 'omnipay_offsite')), $factoryService->getTag('payum.payment_factory'));
+
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(0));
+        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(0));
     }
 
     /**

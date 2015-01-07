@@ -54,12 +54,6 @@ class PaymentFactory extends CorePaymentFactory implements ContainerAwareInterfa
     public function createConfig(array $config = array())
     {
         $config = ArrayObject::ensureArrayObject($config);
-        $config->defaults(array(
-            'payum.template.layout' => $this->container->getParameter('payum.template.layout'),
-            'payum.template.obtain_credit_card' => $this->container->getParameter('payum.template.obtain_credit_card'),
-            'buzz.client' => $this->container->get('payum.buzz.client'),
-            'twig.env' => $this->container->get('twig'),
-        ));
         $config->defaults(parent::createConfig((array) $config));
 
         $prependActions = array();

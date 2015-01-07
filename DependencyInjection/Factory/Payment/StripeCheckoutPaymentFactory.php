@@ -2,11 +2,9 @@
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
 use Payum\Core\Bridge\Twig\TwigFactory;
-use Payum\Core\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 class StripeCheckoutPaymentFactory extends AbstractPaymentFactory implements PrependExtensionInterface
@@ -43,6 +41,26 @@ class StripeCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
                 'PayumStripe' => TwigFactory::guessViewsPath('Payum\Stripe\CheckoutPaymentFactory'),
             )))
         ));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ContainerBuilder $container)
+    {
+        parent::load($container);
+
+        $container->setParameter('payum.stripe_checkout.template.obtain_checkout_token', '@PayumStripe/Action/obtain_checkout_token.html.twig');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function createPaymentConfig(array $config)
+    {
+        $config['payum.template.obtain_token'] = new Parameter('payum.stripe_checkout.template.obtain_checkout_token');
+
+        return $config;
     }
 
     /**

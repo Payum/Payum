@@ -6,9 +6,7 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
-
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory;
-use Symfony\Component\HttpKernel\Kernel;
 
 class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -141,6 +139,11 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     public function shouldAllowCreatePaymentAndReturnItsId()
     {
         $factory = $this->createAbstractPaymentFactory();
+        $factory
+            ->expects($this->any())
+            ->method('getName')
+            ->willReturn('foo')
+        ;
 
         $container = new ContainerBuilder;
 
@@ -150,8 +153,76 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
         
-        $this->assertEquals('payum.payment.aPaymentName.payment', $paymentId);
+        $this->assertEquals('payum.foo.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowCreatePaymentWithExpectedConfig()
+    {
+        $factory = $this->createAbstractPaymentFactory();
+        $factory
+            ->expects($this->any())
+            ->method('getName')
+            ->willReturn('foo')
+        ;
+
+        $container = new ContainerBuilder;
+
+        $paymentId = $factory->create($container, 'aPaymentName', array(
+            'actions' => array(),
+            'apis' => array(),
+            'extensions' => array(),
+        ));
+
+        $this->assertEquals('payum.foo.aPaymentName.payment', $paymentId);
+
+        $payment = $container->getDefinition($paymentId);
+
+        //guard
+        $this->assertNotEmpty($payment->getFactoryMethod());
+        $this->assertNotEmpty($payment->getFactoryService());
+        $this->assertNotEmpty($payment->getArguments());
+
+        $config = $payment->getArgument(0);
+
+        $this->assertEquals('foo', $config['payum.factory_name']);
+        $this->assertEquals('aPaymentName', $config['payum.payment_name']);
+        $this->assertArrayHasKey('buzz.client', $config);
+        $this->assertArrayHasKey('twig.env', $config);
+        $this->assertArrayHasKey('payum.template.layout', $config);
+        $this->assertArrayHasKey('payum.template.obtain_credit_card', $config);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLoadFactoryAndTemplateParameters()
+    {
+        $factory = $this->createAbstractPaymentFactory();
+        $factory
+            ->expects($this->any())
+            ->method('getName')
+            ->willReturn('foo')
+        ;
+
+        $container = new ContainerBuilder;
+
+        $factory->load($container);
+
+        $this->assertTrue($container->hasDefinition('payum.foo.factory'));
+
+        $factoryService = $container->getDefinition('payum.foo.factory');
+        $this->assertEquals('Payum\Core\PaymentFactory', $factoryService->getClass());
+        $this->assertEquals(array(array('name' => 'foo')), $factoryService->getTag('payum.payment_factory'));
+
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(0));
+        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(0));
+
+        $this->assertEquals('@PayumCore\layout.html.twig', $container->getParameter('payum.template.layout'));
+        $this->assertEquals('@PayumSymfonyBridge\obtainCreditCard.html.twig', $container->getParameter('payum.template.obtain_credit_card'));
     }
 
     /**

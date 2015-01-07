@@ -74,22 +74,6 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldReplaceSomeOptionsFromCoreFactoryConfig()
-    {
-        $factory = new PaymentFactory(array(), array(), array());
-        $factory->setContainer($this->container);
-
-        $config = $factory->createConfig();
-
-        $this->assertSame($this->container->get('payum.buzz.client'), $config['buzz.client']);
-        $this->assertSame($this->container->get('twig'), $config['twig.env']);
-        $this->assertSame($this->container->getParameter('payum.template.layout'), $config['payum.template.layout']);
-        $this->assertSame($this->container->getParameter('payum.template.obtain_credit_card'), $config['payum.template.obtain_credit_card']);
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetPaymentWithoutAnyAdditionalOptions()
     {
         $factory = new PaymentFactory(array(), array(), array());

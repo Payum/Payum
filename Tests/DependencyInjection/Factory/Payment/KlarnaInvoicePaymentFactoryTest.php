@@ -186,8 +186,29 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
 
-        $this->assertEquals('payum.payment.aPaymentName.payment', $paymentId);
+        $this->assertEquals('payum.klarna_invoice.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLoadFactory()
+    {
+        $factory = new KlarnaInvoicePaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->load($container);
+
+        $this->assertTrue($container->hasDefinition('payum.klarna_invoice.factory'));
+
+        $factoryService = $container->getDefinition('payum.klarna_invoice.factory');
+        $this->assertEquals('Payum\Klarna\Invoice\PaymentFactory', $factoryService->getClass());
+        $this->assertEquals(array(array('name' => 'klarna_invoice')), $factoryService->getTag('payum.payment_factory'));
+
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(0));
+        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(0));
     }
 
     /**

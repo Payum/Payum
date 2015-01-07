@@ -4,11 +4,6 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="payum.template.layout">@PayumCore\layout.html.twig</parameter>
-        <parameter key="payum.template.obtain_credit_card">@PayumSymfonyBridge\obtainCreditCard.html.twig</parameter>
-    </parameters>
-
     <services>
         <!-- Generic -->
 
