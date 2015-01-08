@@ -15,7 +15,7 @@ php composer.phar require payum/paypal-express-checkout-nvp
 
 ## config.php
 
-We have to only add the payment factory. All the rest remain the same:
+We only have to add the payment factory. All the rest remains the same:
 
 ```php
 <?php
@@ -35,7 +35,7 @@ $payments['paypal_express_checkout'] = $paypalExpressCheckoutFactory->create(arr
 
 ## prepare.php
 
-Here you have to modify a `paymentName` value. Set it to `paypal_express_checkout`.
+Here you have to modify the `paymentName` value. Set it to `paypal_express_checkout`.
 
 ## Next 
 
