@@ -56,12 +56,11 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
     }
 
     /**
-     * @param array $config
-     *
      * @return array
      */
-    protected function createPaymentConfig(array $config)
+    protected function createFactoryConfig()
     {
+        $config = parent::createFactoryConfig();
         $config['payum.template.authorize'] = new Parameter('payum.klarna_checkout.template.capture');
 
         return $config;

@@ -56,6 +56,7 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
         $paymentFactoryClass = $this->getPayumPaymentFactoryClass();
         if (class_exists($paymentFactoryClass)) {
             $factory = new Definition($paymentFactoryClass, array(
+                $this->createFactoryConfig(),
                 new Reference('payum.payment_factory'),
             ));
             $factory->addTag('payum.payment_factory', array('name' => $this->getName()));
@@ -103,14 +104,9 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
             throw new RuntimeException(sprintf('Cannot find payment factory class. Have you installed %s or payum/payum package?', $this->getComposerPackage()));
         }
 
-        $config['payum.factory_name'] = $this->getName();
         $config['payum.payment_name'] = $paymentName;
-        $config['payum.template.layout'] = new Parameter('payum.template.layout');
-        $config['payum.template.obtain_credit_card'] = new Parameter('payum.template.obtain_credit_card');
-        $config['buzz.client'] = new Reference('payum.buzz.client');
-        $config['twig.env'] = new Reference('twig');
 
-        $payment = new Definition('Payum\Core\Payment', array($this->createPaymentConfig($config)));
+        $payment = new Definition('Payum\Core\Payment', array($config));
         $payment->setFactoryService(sprintf('payum.%s.factory', $this->getName()));
         $payment->setFactoryMethod('create');
 
@@ -118,12 +114,18 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
     }
 
     /**
-     * @param array $config
-     *
      * @return array
      */
-    protected function createPaymentConfig(array $config)
+    protected function createFactoryConfig()
     {
+        $config = array();
+
+        $config['payum.factory_name'] = $this->getName();
+        $config['payum.template.layout'] = new Parameter('payum.template.layout');
+        $config['payum.template.obtain_credit_card'] = new Parameter('payum.template.obtain_credit_card');
+        $config['buzz.client'] = new Reference('payum.buzz.client');
+        $config['twig.env'] = new Reference('twig');
+
         return $config;
     }
 

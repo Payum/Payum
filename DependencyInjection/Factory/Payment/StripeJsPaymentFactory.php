@@ -20,8 +20,9 @@ class StripeJsPaymentFactory extends StripeCheckoutPaymentFactory implements Pre
     /**
      * {@inheritDoc}
      */
-    protected function createPaymentConfig(array $config)
+    protected function createFactoryConfig()
     {
+        $config = parent::createFactoryConfig();
         $config['payum.template.obtain_token'] = new Parameter('payum.stripe_js.template.obtain_checkout_token');
 
         return $config;

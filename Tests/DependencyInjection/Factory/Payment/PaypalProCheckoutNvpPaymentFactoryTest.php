@@ -187,6 +187,17 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         
         $this->assertEquals('payum.paypal_pro_checkout_nvp.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
+
+        $payment = $container->getDefinition($paymentId);
+
+        //guard
+        $this->assertNotEmpty($payment->getFactoryMethod());
+        $this->assertNotEmpty($payment->getFactoryService());
+        $this->assertNotEmpty($payment->getArguments());
+
+        $config = $payment->getArgument(0);
+
+        $this->assertEquals('aPaymentName', $config['payum.payment_name']);
     }
 
     /**
@@ -206,8 +217,15 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Payum\Paypal\ProCheckout\Nvp\PaymentFactory', $factoryService->getClass());
         $this->assertEquals(array(array('name' => 'paypal_pro_checkout_nvp')), $factoryService->getTag('payum.payment_factory'));
 
-        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(0));
-        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(0));
+        $factoryConfig = $factoryService->getArgument(0);
+        $this->assertEquals('paypal_pro_checkout_nvp', $factoryConfig['payum.factory_name']);
+        $this->assertArrayHasKey('buzz.client', $factoryConfig);
+        $this->assertArrayHasKey('twig.env', $factoryConfig);
+        $this->assertArrayHasKey('payum.template.layout', $factoryConfig);
+        $this->assertArrayHasKey('payum.template.obtain_credit_card', $factoryConfig);
+
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(1));
+        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(1));
     }
 
     /**

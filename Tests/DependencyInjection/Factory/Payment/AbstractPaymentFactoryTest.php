@@ -188,12 +188,8 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $config = $payment->getArgument(0);
 
-        $this->assertEquals('foo', $config['payum.factory_name']);
         $this->assertEquals('aPaymentName', $config['payum.payment_name']);
-        $this->assertArrayHasKey('buzz.client', $config);
-        $this->assertArrayHasKey('twig.env', $config);
-        $this->assertArrayHasKey('payum.template.layout', $config);
-        $this->assertArrayHasKey('payum.template.obtain_credit_card', $config);
+
     }
 
     /**
@@ -218,8 +214,8 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Payum\Core\PaymentFactory', $factoryService->getClass());
         $this->assertEquals(array(array('name' => 'foo')), $factoryService->getTag('payum.payment_factory'));
 
-        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(0));
-        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(0));
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(1));
+        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(1));
 
         $this->assertEquals('@PayumCore\layout.html.twig', $container->getParameter('payum.template.layout'));
         $this->assertEquals('@PayumSymfonyBridge\obtainCreditCard.html.twig', $container->getParameter('payum.template.obtain_credit_card'));

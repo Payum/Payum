@@ -38,6 +38,8 @@ class PaymentFactory extends CorePaymentFactory implements ContainerAwareInterfa
         $this->actionsTags = $actionsTags;
         $this->extensionsTags = $extensionsTags;
         $this->apisTags = $apisTags;
+
+        $this->defaultConfig = array();
     }
 
     /**

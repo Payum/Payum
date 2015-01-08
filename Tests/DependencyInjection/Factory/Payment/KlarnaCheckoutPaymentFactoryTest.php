@@ -169,13 +169,18 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $config = $payment->getArgument(0);
 
-        $this->assertEquals('klarna_checkout', $config['payum.factory_name']);
         $this->assertEquals('aPaymentName', $config['payum.payment_name']);
-        $this->assertArrayHasKey('buzz.client', $config);
-        $this->assertArrayHasKey('twig.env', $config);
-        $this->assertArrayHasKey('payum.template.layout', $config);
-        $this->assertArrayHasKey('payum.template.authorize', $config);
-        $this->assertArrayHasKey('payum.template.obtain_credit_card', $config);
+
+        $payment = $container->getDefinition($paymentId);
+
+        //guard
+        $this->assertNotEmpty($payment->getFactoryMethod());
+        $this->assertNotEmpty($payment->getFactoryService());
+        $this->assertNotEmpty($payment->getArguments());
+
+        $config = $payment->getArgument(0);
+
+        $this->assertEquals('aPaymentName', $config['payum.payment_name']);
     }
 
     /**
@@ -195,8 +200,16 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Payum\Klarna\Checkout\PaymentFactory', $factoryService->getClass());
         $this->assertEquals(array(array('name' => 'klarna_checkout')), $factoryService->getTag('payum.payment_factory'));
 
-        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(0));
-        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(0));
+        $factoryConfig = $factoryService->getArgument(0);
+        $this->assertEquals('klarna_checkout', $factoryConfig['payum.factory_name']);
+        $this->assertArrayHasKey('buzz.client', $factoryConfig);
+        $this->assertArrayHasKey('twig.env', $factoryConfig);
+        $this->assertArrayHasKey('payum.template.authorize', $factoryConfig);
+        $this->assertArrayHasKey('payum.template.layout', $factoryConfig);
+        $this->assertArrayHasKey('payum.template.obtain_credit_card', $factoryConfig);
+
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(1));
+        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(1));
 
         $this->assertEquals('@PayumKlarnaCheckout/Action/capture.html.twig', $container->getParameter('payum.klarna_checkout.template.capture'));
     }
