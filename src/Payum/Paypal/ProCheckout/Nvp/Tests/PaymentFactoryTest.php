@@ -26,6 +26,28 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldCreateCorePaymentFactoryIfNotPassed()
+    {
+        $factory = new PaymentFactory();
+
+        $this->assertAttributeInstanceOf('Payum\Core\PaymentFactory', 'corePaymentFactory', $factory);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldUseCorePaymentFactoryPassedAsSecondArgument()
+    {
+        $corePaymentFactory = $this->getMock('Payum\Core\PaymentFactoryInterface');
+
+        $factory = new PaymentFactory(array(), $corePaymentFactory);
+
+        $this->assertAttributeSame($corePaymentFactory, 'corePaymentFactory', $factory);
+    }
+
+    /**
+     * @test
+     */
     public function shouldAllowCreatePayment()
     {
         $factory = new PaymentFactory();
@@ -76,6 +98,27 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInternalType('array', $config);
         $this->assertNotEmpty($config);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAddDefaultConfigPassedInConstructorWhileCreatingPaymentConfig()
+    {
+        $factory = new PaymentFactory(array(
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ));
+
+        $config = $factory->createConfig();
+
+        $this->assertInternalType('array', $config);
+
+        $this->assertArrayHasKey('foo', $config);
+        $this->assertEquals('fooVal', $config['foo']);
+
+        $this->assertArrayHasKey('bar', $config);
+        $this->assertEquals('barVal', $config['bar']);
     }
 
     /**

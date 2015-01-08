@@ -19,7 +19,10 @@ class ReplyToSymfonyResponseConverter
         if ($reply instanceof SymfonyHttpResponse) {
             return $reply->getResponse();
         } elseif ($reply instanceof HttpResponse) {
-            return new Response($reply->getContent(), $reply->getStatusCode(), $reply->getHeaders());
+            $headers = $reply->getHeaders();
+            $headers['X-Status-Code'] = $reply->getStatusCode();
+
+            return new Response($reply->getContent(), $reply->getStatusCode(), $headers);
         }
 
         $ro = new \ReflectionObject($reply);

@@ -2,7 +2,6 @@
 namespace Payum\Core\Tests;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Extension\ExtensionCollection;
 use Payum\Core\PaymentFactory;
 
 class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
@@ -89,6 +88,27 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(), $config['payum.prepend_apis']);
         $this->assertEquals(array(), $config['payum.default_options']);
         $this->assertEquals(array(), $config['payum.required_options']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAddDefaultConfigPassedInConstructorWhileCreatingPaymentConfig()
+    {
+        $factory = new PaymentFactory(array(
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ));
+
+        $config = $factory->createConfig();
+
+        $this->assertInternalType('array', $config);
+
+        $this->assertArrayHasKey('foo', $config);
+        $this->assertEquals('fooVal', $config['foo']);
+
+        $this->assertArrayHasKey('bar', $config);
+        $this->assertEquals('barVal', $config['bar']);
     }
 
     /**

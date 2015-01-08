@@ -13,6 +13,19 @@ use Payum\Core\Extension\EndlessCycleDetectorExtension;
 class PaymentFactory implements PaymentFactoryInterface
 {
     /**
+     * @var array
+     */
+    protected $defaultConfig;
+
+    /**
+     * @param array $defaultConfig
+     */
+    public function __construct(array $defaultConfig = array())
+    {
+        $this->defaultConfig = $defaultConfig;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function create(array $config = array())
@@ -35,6 +48,7 @@ class PaymentFactory implements PaymentFactoryInterface
     public function createConfig(array $config = array())
     {
         $config = ArrayObject::ensureArrayObject($config);
+        $config->defaults($this->defaultConfig);
         $config->defaults(array(
             'payum.template.layout' => '@PayumCore/layout.html.twig',
 
