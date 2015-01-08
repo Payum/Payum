@@ -11,31 +11,6 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PayexPaymentFac
 
 class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    public static function provideTaggedActions()
-    {
-        return array(
-            'api.initialize_order' => array('payum.payex.action.api.initialize_order'),
-            'api.complete_order' => array('payum.payex.action.api.complete_order'),
-            'api.check_order' => array('payum.payex.action.api.check_order'),
-            'api.create_agreement' => array('payum.payex.action.api.create_agreement'),
-            'api.delete_agreement' => array('payum.payex.action.api.delete_agreement'),
-            'api.check_agreement' => array('payum.payex.action.api.check_agreement'),
-            'api.autopay_agreement' => array('payum.payex.action.api.autopay_agreement'),
-            'api.start_recurring_payment' => array('payum.payex.action.api.start_recurring_payment'),
-            'api.stop_recurring_payment' => array('payum.payex.action.api.stop_recurring_payment'),
-            'api.check_recurring_payment' => array('payum.payex.action.api.check_recurring_payment'),
-
-            'payment_details_capture' => array('payum.payex.action.payment_details_capture'),
-            'fill_order_details' => array('payum.payex.action.fill_order_details'),
-            'payment_details_status' => array('payum.payex.action.payment_details_status'),
-            'payment_details_sync' => array('payum.payex.action.payment_details_sync'),
-            'autopay_payment_details_capture' => array('payum.payex.action.autopay_payment_details_capture'),
-            'autopay_payment_details_status' => array('payum.payex.action.autopay_payment_details_status'),
-            'agreement_details_status' => array('payum.payex.action.agreement_details_status'),
-            'agreement_details_sync' => array('payum.payex.action.agreement_details_sync'),
-        );
-    }
-    
     /**
      * @test
      */
@@ -78,7 +53,6 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $config = $processor->process($tb->buildTree(), array(array(
-            'obtain_credit_card' => false,
             'encryption_key' => 'aKey',
             'account_number' => 'aNum',
             'sandbox' => true,
@@ -102,7 +76,7 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "encryption_key" at path "foo" must be configured.
      */
-    public function thrownIfApiOptionEncryptionKeySectionMissing()
+    public function thrownIfEncryptionKeyOptionNotSet()
     {
         $factory = new PayexPaymentFactory;
 
@@ -113,7 +87,6 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
-            'obtain_credit_card' => false,
         )));
     }
 
@@ -123,7 +96,7 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "account_number" at path "foo" must be configured.
      */
-    public function thrownIfApiOptionAccountNumberSectionMissing()
+    public function thrownIfAccountNumberOptionNotSet()
     {
         $factory = new PayexPaymentFactory;
 
@@ -134,7 +107,6 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
-            'obtain_credit_card' => false,
             'encryption_key' => 'aKey'
         )));
     }
@@ -148,8 +120,7 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'encryption_key' => 'aKey',
             'account_number' => 'aNum',
             'sandbox' => true,
@@ -158,8 +129,47 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
         
-        $this->assertEquals('payum.context.aContextName.payment', $paymentId);
+        $this->assertEquals('payum.payex.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
+
+        $payment = $container->getDefinition($paymentId);
+
+        //guard
+        $this->assertNotEmpty($payment->getFactoryMethod());
+        $this->assertNotEmpty($payment->getFactoryService());
+        $this->assertNotEmpty($payment->getArguments());
+
+        $config = $payment->getArgument(0);
+
+        $this->assertEquals('aPaymentName', $config['payum.payment_name']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLoadFactory()
+    {
+        $factory = new PayexPaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->load($container);
+
+        $this->assertTrue($container->hasDefinition('payum.payex.factory'));
+
+        $factoryService = $container->getDefinition('payum.payex.factory');
+        $this->assertEquals('Payum\Payex\PaymentFactory', $factoryService->getClass());
+        $this->assertEquals(array(array('name' => 'payex')), $factoryService->getTag('payum.payment_factory'));
+
+        $factoryConfig = $factoryService->getArgument(0);
+        $this->assertEquals('payex', $factoryConfig['payum.factory_name']);
+        $this->assertArrayHasKey('buzz.client', $factoryConfig);
+        $this->assertArrayHasKey('twig.env', $factoryConfig);
+        $this->assertArrayHasKey('payum.template.layout', $factoryConfig);
+        $this->assertArrayHasKey('payum.template.obtain_credit_card', $factoryConfig);
+
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(1));
+        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(1));
     }
 
     /**
@@ -171,8 +181,7 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'encryption_key' => 'aKey',
             'account_number' => 'aNum',
             'sandbox' => true,
@@ -196,72 +205,6 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'addExtension',
             new Reference('payum.extension.ololo')
         );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddExpectedApisToPayment()
-    {
-        $factory = new PayexPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'encryption_key' => 'aKey',
-            'account_number' => 'aNum',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addApi',
-            new Reference('payum.context.aContextName.api.order')
-        );
-
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addApi',
-            new Reference('payum.context.aContextName.api.agreement')
-        );
-
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addApi',
-            new Reference('payum.context.aContextName.api.recurring')
-        );
-    }
-
-    /**
-     * @test
-     * 
-     * @dataProvider provideTaggedActions
-     */
-    public function shouldAddPayumActionTagToActions($actionId)
-    {
-        $factory = new PayexPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'encryption_key' => 'aKey',
-            'account_number' => 'aNum',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition($actionId);
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)

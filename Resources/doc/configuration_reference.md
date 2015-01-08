@@ -14,25 +14,25 @@ payum:
             payment:
                 all: true 
                 factories: []
-                contexts: []
+                payments: []
 
             # storage specific options
         Another\Model\Class:
             payment:
                 all: true 
                 factories: []
-                contexts: []
+                payments: []
 
             # storage specific options
 
-    contexts:
-        foo_payment_context:
-            xxx_payment:
-                # payment specific options
+    payments:
+        foo_payment:
+            factory:
+                # options
                 
-        bar_payment_context:
-            xxx_payment:
-                # payment specific options
+        bar_payment:
+            factory:
+                # options
                 
                 actions:
                     - action.foo
@@ -70,7 +70,7 @@ payum:
 
 ```yaml
 payum:
-    contexts:
+    payments:
         aName:
             paypal_express_checkout_nvp:
                 username:  'required'
@@ -83,7 +83,7 @@ payum:
 
 ```yaml
 payum:
-    contexts:
+    payments:
         aName:
             paypal_express_checkout_nvp:
                 username:  'required'
@@ -99,7 +99,7 @@ payum:
 
 ```yaml
 payum:
-    contexts:
+    payments:
         aName:
             stripe_js:
                 publishable_key: 'required'
@@ -110,7 +110,7 @@ payum:
 
 ```yaml
 payum:
-    contexts:
+    payments:
         aName:
             stripe_checkout:
                 publishable_key: 'required'
@@ -121,7 +121,7 @@ payum:
 
 ```yaml
 payum:
-    contexts:
+    payments:
         aName:
             authorize_net_aim:
                 login_id: 'required'
@@ -133,7 +133,7 @@ payum:
 
 ```yml
 payum:
-    contexts:
+    payments:
         aName:
             be2bill:
                 identifier: 'required'
@@ -145,7 +145,7 @@ payum:
 
 ```yml
 payum:
-    contexts:
+    payments:
         aName:
             be2bill_onsite:
                 identifier: 'required'
@@ -157,7 +157,7 @@ payum:
 
 ```yml
 payum:
-    contexts:
+    payments:
         aName:
             payex:
                 encryption_key: 'required'
@@ -169,7 +169,7 @@ payum:
 
 ```yml
 payum:
-    contexts:
+    payments:
         aName:
             klarna_checkout:
                 secret:  'required'
@@ -181,7 +181,7 @@ payum:
 
 ```yml
 payum:
-    contexts:
+    payments:
         aName:
             klarna_invoice:
                 secret: 'required'
@@ -196,7 +196,7 @@ payum:
 
 ```yml
 payum:
-    contexts:
+    payments:
         aName:
             omnipay:
                 type: 'required'
@@ -209,7 +209,7 @@ payum:
 
 ```yaml
 payum:
-    contexts:
+    payments:
         aName:
             custom:
                 # if service not set an empty payment will be created.

@@ -2,34 +2,13 @@
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
 use Payum\Core\Bridge\Twig\TwigFactory;
-use Payum\Core\Exception\RuntimeException;
-use Payum\Klarna\Checkout\Constants;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Parameter;
 
 class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory implements PrependExtensionInterface
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function create(ContainerBuilder $container, $contextName, array $config)
-    {
-        if (false == class_exists('Payum\Klarna\Checkout\PaymentFactory')) {
-            throw new RuntimeException('Cannot find klarna checkout payment factory class. Have you installed payum/klarna-checkout package?');
-        }
-
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/payment'));
-        $loader->load('klarna_checkout.xml');
-
-        return parent::create($container, $contextName, $config);
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -65,23 +44,41 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
         ));
     }
 
+
     /**
      * {@inheritDoc}
      */
-    protected function addApis(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
+    public function load(ContainerBuilder $container)
     {
-        $klarnaConfig = new DefinitionDecorator('payum.klarna.checkout.config.prototype');
-        $klarnaConfig->setProperty('merchantId', $config['merchant_id']);
-        $klarnaConfig->setProperty('secret', $config['secret']);
-        $klarnaConfig->setProperty('baseUri', $config['sandbox'] ?
-            Constants::BASE_URI_SANDBOX :
-            Constants::BASE_URI_LIVE
-        );
+        parent::load($container);
 
-        $klarnaConfig->setPublic(true);
-        $klarnaConfigId = 'payum.context.'.$contextName.'.config';
+        $container->setParameter('payum.klarna_checkout.template.capture', '@PayumKlarnaCheckout/Action/capture.html.twig');
+    }
 
-        $container->setDefinition($klarnaConfigId, $klarnaConfig);
-        $paymentDefinition->addMethodCall('addApi', array(new Reference($klarnaConfigId)));
+    /**
+     * @return array
+     */
+    protected function createFactoryConfig()
+    {
+        $config = parent::createFactoryConfig();
+        $config['payum.template.authorize'] = new Parameter('payum.klarna_checkout.template.capture');
+
+        return $config;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getPayumPaymentFactoryClass()
+    {
+        return 'Payum\Klarna\Checkout\PaymentFactory';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getComposerPackage()
+    {
+        return 'payum/klarna-checkout';
     }
 }

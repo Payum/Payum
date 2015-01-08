@@ -1,14 +1,14 @@
 <?php
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
-class OfflinePaymentFactory extends AbstractPaymentFactory
+class OmnipayOffsitePaymentFactory extends OmnipayDirectPaymentFactory
 {
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'offline';
+        return 'omnipay_offsite';
     }
 
     /**
@@ -16,14 +16,6 @@ class OfflinePaymentFactory extends AbstractPaymentFactory
      */
     protected function getPayumPaymentFactoryClass()
     {
-        return 'Payum\Offline\PaymentFactory';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function getComposerPackage()
-    {
-        return 'payum/offline';
+        return 'Payum\OmnipayBridge\OffsitePaymentFactory';
     }
 }

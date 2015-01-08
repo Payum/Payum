@@ -3,7 +3,7 @@
 Steps:
 
 * [Download libraries](#download-libraries)
-* [Configure context](#configure-context)
+* [Configure payment](#configure-context)
 * [Prepare payment](#prepare-payment)
 
 _**Note**: We assume you followed all steps in [get it started](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/get_it_started.md) and your basic configuration same as described there._
@@ -13,17 +13,17 @@ _**Note**: We assume you followed all steps in [get it started](https://github.c
 Run the following command:
 
 ```bash
-$ php composer.phar require "payum/authorize-net-aim:*@stable"
+$ php composer.phar require "payum/authorize-net-aim"
 ```
 
-## Configure context
+## Configure payment
 
 ```yaml
 #app/config/config.yml
 
 payum:
-    contexts:
-        your_context_here:
+    payments:
+        your_payment_here:
             authorize_net_aim:
                 login_id: 'get it from gateway'
                 transaction_key: 'get it from gateway'

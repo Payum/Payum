@@ -5,6 +5,7 @@ namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Storage;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\CustomStorageFactory;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class CustomStorageFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -143,22 +144,14 @@ class CustomStorageFactoryTest extends \PHPUnit_Framework_TestCase
     public function shouldCreateServiceDefinition()
     {
         $serviceName = 'service.name';
-        $that = $this;
 
-        $containerBuilder = $this->createContainerBuilderMock();
-        $containerBuilder
-            ->expects($this->once())
-            ->method('setDefinition')
-            ->with($this->anything(), $this->callback(function($definition) use ($serviceName, $that) {
-                $that->assertInstanceOf('Symfony\Component\DependencyInjection\Definition', $definition);
-                $that->assertEquals($serviceName, $definition->getParent());
-
-                return true;
-            }))
-        ;
+        $containerBuilder = new ContainerBuilder();
 
         $factory = new CustomStorageFactory();
-        $factory->create($containerBuilder, 'class', array('service' => $serviceName));
+        $storageId = $factory->create($containerBuilder, 'stdClass', array('service' => $serviceName));
+
+        $this->assertTrue($containerBuilder->hasDefinition($storageId));
+        $this->assertSame($serviceName, $containerBuilder->getDefinition($storageId)->getParent());
     }
 
     /**

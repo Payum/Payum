@@ -6,7 +6,7 @@ The preferred way to install the library is using [composer](http://getcomposer.
 Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require "payum/payum-bundle:*@stable" "payum/offline:*@stable"
+php composer.phar require "payum/payum-bundle" "payum/offline"
 ```
 
 _**Note**: Where payum/offline is a php payum extension, you can for example change it to payum/paypal-express-checkout-nvp or payum/stripe. Look at [supported payments](https://github.com/Payum/Core/blob/master/Resources/docs/supported-payments.md) to find out what you can use._
@@ -118,14 +118,14 @@ payum:
     storages:
         Acme\PaymentBundle\Entity\Order: { doctrine: orm }
             
-    contexts:
+    payments:
         offline:
             offline: ~
 ```
 
 _**Note**: You should use commented path if you install payum/payum package._
 
-_**Note**: You can add other payments to the contexts too._
+_**Note**: You can add other payments to the payments section too._
 
 ## Prepare order
 

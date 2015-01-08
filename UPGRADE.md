@@ -1,5 +1,14 @@
 # Upgrades
 
+## 0.13 to 0.14
+
+* `be2bill_onsite` payment was renamed to `be2bill_offsite`.
+* `omnipay_onsite` payment was renamed to `omnipay_offsite`.
+* `omnipay` payment was renamed to `omnipay_direct`.
+* tag attribute `context` was renamed to `payment`.
+* [config] `contexts` section was renamed to `payments`.
+* [factory] New method `load` was added to `PaymentFactoryInterface`.
+
 ## 0.11 to 0.13
 
 * `CreditCardType` was removed use one from bridge.

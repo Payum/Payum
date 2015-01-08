@@ -131,7 +131,7 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "eid" at path "foo" must be configured.
      */
-    public function thrownIfApiOptionsIdentifierSectionMissing()
+    public function thrownIfEIDOptionNotSet()
     {
         $factory = new KlarnaInvoicePaymentFactory;
 
@@ -150,7 +150,7 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "secret" at path "foo" must be configured.
      */
-    public function thrownIfApiOptionsPasswordSectionMissing()
+    public function thrownIfSecretOptionNotSet()
     {
         $factory = new KlarnaInvoicePaymentFactory;
 
@@ -174,8 +174,7 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'eid' => 'aEid',
             'secret' => 'aSecret',
             'country' => 'SV',
@@ -187,8 +186,47 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
 
-        $this->assertEquals('payum.context.aContextName.payment', $paymentId);
+        $this->assertEquals('payum.klarna_invoice.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
+
+        $payment = $container->getDefinition($paymentId);
+
+        //guard
+        $this->assertNotEmpty($payment->getFactoryMethod());
+        $this->assertNotEmpty($payment->getFactoryService());
+        $this->assertNotEmpty($payment->getArguments());
+
+        $config = $payment->getArgument(0);
+
+        $this->assertEquals('aPaymentName', $config['payum.payment_name']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLoadFactory()
+    {
+        $factory = new KlarnaInvoicePaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->load($container);
+
+        $this->assertTrue($container->hasDefinition('payum.klarna_invoice.factory'));
+
+        $factoryService = $container->getDefinition('payum.klarna_invoice.factory');
+        $this->assertEquals('Payum\Klarna\Invoice\PaymentFactory', $factoryService->getClass());
+        $this->assertEquals(array(array('name' => 'klarna_invoice')), $factoryService->getTag('payum.payment_factory'));
+
+        $factoryConfig = $factoryService->getArgument(0);
+        $this->assertEquals('klarna_invoice', $factoryConfig['payum.factory_name']);
+        $this->assertArrayHasKey('buzz.client', $factoryConfig);
+        $this->assertArrayHasKey('twig.env', $factoryConfig);
+        $this->assertArrayHasKey('payum.template.layout', $factoryConfig);
+        $this->assertArrayHasKey('payum.template.obtain_credit_card', $factoryConfig);
+
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(1));
+        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(1));
     }
 
     /**
@@ -200,8 +238,7 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'eid' => 'aEid',
             'secret' => 'aSecret',
             'country' => 'SV',
@@ -228,153 +265,6 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'addExtension',
             new Reference('payum.extension.ololo')
         );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldDecorateBasicApiDefinitionAndAddItToPayment()
-    {
-        $factory = new KlarnaInvoicePaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'eid' => 'aEid',
-            'secret' => 'aSecret',
-            'country' => 'SV',
-            'language' => 'SE',
-            'currency' => 'SEK',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $this->assertTrue($container->hasDefinition('payum.context.aContextName.config'));
-
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addApi',
-            new Reference('payum.context.aContextName.config')
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToCaptureAction()
-    {
-        $factory = new KlarnaInvoicePaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'eid' => 'aEid',
-            'secret' => 'aSecret',
-            'country' => 'SV',
-            'language' => 'SE',
-            'currency' => 'SEK',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.klarna.invoice.action.capture');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToStatusAction()
-    {
-        $factory = new KlarnaInvoicePaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'eid' => 'aEid',
-            'secret' => 'aSecret',
-            'country' => 'SV',
-            'language' => 'SE',
-            'currency' => 'SEK',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.klarna.invoice.action.status');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToSyncAction()
-    {
-        $factory = new KlarnaInvoicePaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'eid' => 'aEid',
-            'secret' => 'aSecret',
-            'country' => 'SV',
-            'language' => 'SE',
-            'currency' => 'SEK',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.klarna.invoice.action.sync');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToAuthorizeAction()
-    {
-        $factory = new KlarnaInvoicePaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'eid' => 'aEid',
-            'secret' => 'aSecret',
-            'country' => 'SV',
-            'language' => 'SE',
-            'currency' => 'SEK',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.klarna.invoice.action.authorize');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)

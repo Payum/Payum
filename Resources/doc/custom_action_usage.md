@@ -18,8 +18,8 @@ There are several ways to add it to a payment:
     # app/config/config.yml
 
     payum:
-        contexts:
-            a_context:
+        payments:
+            a_payment:
                 a_factory:
                     actions:
                         - acme.payum.action.foo
@@ -36,8 +36,8 @@ There are several ways to add it to a payment:
     # app/config/config.yml
 
     payum:
-        contexts:
-            a_context:
+        payments:
+            a_payment:
                 a_factory: ~
     ```
 
@@ -52,15 +52,15 @@ There are several ways to add it to a payment:
 
     ```
 
-    Or you can set concrete `context` name. 
-    In this case the action will be added only to the payment with requested context name.
+    Or you can set concrete `payment` name. 
+    In this case the action will be added only to the payment with requested payment name.
 
     ```yaml
     # app/config/config.yml
 
     payum:
-        contexts:
-            a_context:
+        payments:
+            a_payment:
                 a_factory: ~
     ```
 
@@ -71,7 +71,7 @@ There are several ways to add it to a payment:
         acme.payum.action.foo:
             class: Acme\PaymentBundle\Payum\Action\FooAction
             tags:
-                - {payum.action, {context: a_context}}
+                - {payum.action, {payment: a_payment}}
     ```
 
     If `prepend` set to true the action is added before the rest. 

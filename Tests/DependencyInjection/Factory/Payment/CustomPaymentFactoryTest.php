@@ -74,7 +74,6 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $config = $processor->process($tb->buildTree(), array(array(
-            'obtain_credit_card' => false,
             'service' => 'foo.payment.service'
         )));
 
@@ -96,19 +95,57 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
         ));
         
-        $this->assertEquals('payum.context.aContextName.payment', $paymentId);
+        $this->assertEquals('payum.custom.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
         $this->assertInstanceOf(
             'Symfony\Component\DependencyInjection\Definition', 
             $container->getDefinition($paymentId)
         );
+
+        $payment = $container->getDefinition($paymentId);
+
+        //guard
+        $this->assertNotEmpty($payment->getFactoryMethod());
+        $this->assertNotEmpty($payment->getFactoryService());
+        $this->assertNotEmpty($payment->getArguments());
+
+        $config = $payment->getArgument(0);
+
+        $this->assertEquals('aPaymentName', $config['payum.payment_name']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLoadFactory()
+    {
+        $factory = new CustomPaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->load($container);
+
+        $this->assertTrue($container->hasDefinition('payum.custom.factory'));
+
+        $factoryService = $container->getDefinition('payum.custom.factory');
+        $this->assertEquals('Payum\Core\PaymentFactory', $factoryService->getClass());
+        $this->assertEquals(array(array('name' => 'custom')), $factoryService->getTag('payum.payment_factory'));
+
+        $factoryConfig = $factoryService->getArgument(0);
+        $this->assertEquals('custom', $factoryConfig['payum.factory_name']);
+        $this->assertArrayHasKey('buzz.client', $factoryConfig);
+        $this->assertArrayHasKey('twig.env', $factoryConfig);
+        $this->assertArrayHasKey('payum.template.layout', $factoryConfig);
+        $this->assertArrayHasKey('payum.template.obtain_credit_card', $factoryConfig);
+
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(1));
+        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(1));
     }
 
     /**
@@ -120,15 +157,14 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'service' => 'foo.payment.service',
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
         ));
 
-        $this->assertEquals('payum.context.aContextName.payment', $paymentId);
+        $this->assertEquals('payum.custom.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
         $this->assertInstanceOf(
             'Symfony\Component\DependencyInjection\DefinitionDecorator',
@@ -145,8 +181,7 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'actions' => array('payum.action.foo'),
             'apis' => array('payum.api.bar'),
             'extensions' => array('payum.extension.ololo'),

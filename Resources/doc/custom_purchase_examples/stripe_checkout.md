@@ -3,7 +3,7 @@
 Steps:
 
 * [Download libraries](#download-libraries)
-* [Configure context](#configure-context)
+* [Configure payment](#configure-context)
 * [Prepare payment](#prepare-payment)
 
 _**Note**: We assume you followed all steps in [get it started](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/get_it_started.md) and your basic configuration same as described there._
@@ -13,17 +13,17 @@ _**Note**: We assume you followed all steps in [get it started](https://github.c
 Run the following command:
 
 ```bash
-$ php composer.phar require "payum/stripe:*@stable"
+$ php composer.phar require "payum/stripe"
 ```
 
-## Configure context
+## Configure payment
 
 ```yaml
 #app/config/config.yml
 
 payum:
-    contexts:
-        your_context_here:
+    payments:
+        your_payment_here:
             stripe_checkout:
                 publishable_key: 'get this from gateway'
                 secret_key:      'get this from gateway'

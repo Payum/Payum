@@ -69,8 +69,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'contexts' => array(
-                    'a_context' => array(
+                'payments' => array(
+                    'a_payment' => array(
                         'foo_payment' => array( 
                             'foo_opt' => 'foo'
                         ),
@@ -112,14 +112,14 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             )
         ));
 
-        $this->assertTrue(isset($config['storages'][$fooModelClass]['payment']['all']));
-        $this->assertTrue($config['storages'][$fooModelClass]['payment']['all']);
+        $this->assertTrue(isset($config['storages'][$fooModelClass]['extension']['all']));
+        $this->assertTrue($config['storages'][$fooModelClass]['extension']['all']);
 
-        $this->assertTrue(isset($config['storages'][$fooModelClass]['payment']['factories']));
-        $this->assertEquals(array(), $config['storages'][$fooModelClass]['payment']['factories']);
+        $this->assertTrue(isset($config['storages'][$fooModelClass]['extension']['factories']));
+        $this->assertEquals(array(), $config['storages'][$fooModelClass]['extension']['factories']);
 
-        $this->assertTrue(isset($config['storages'][$fooModelClass]['payment']['contexts']));
-        $this->assertEquals(array(), $config['storages'][$fooModelClass]['payment']['contexts']);
+        $this->assertTrue(isset($config['storages'][$fooModelClass]['extension']['payments']));
+        $this->assertEquals(array(), $config['storages'][$fooModelClass]['extension']['payments']);
     }
 
     /**
@@ -137,7 +137,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'storages' => array(
                     $fooModelClass => array(
-                        'payment' => array(
+                        'extension' => array(
                             'all' => false,
                         ),
                         'bar_storage' => array(
@@ -157,8 +157,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             )
         ));
 
-        $this->assertTrue(isset($config['storages'][$fooModelClass]['payment']['all']));
-        $this->assertFalse($config['storages'][$fooModelClass]['payment']['all']);
+        $this->assertTrue(isset($config['storages'][$fooModelClass]['extension']['all']));
+        $this->assertFalse($config['storages'][$fooModelClass]['extension']['all']);
     }
 
     /**
@@ -176,8 +176,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'storages' => array(
                     $fooModelClass => array(
-                        'payment' => array(
-                            'contexts' => array(
+                        'extension' => array(
+                            'payments' => array(
                                 'foo', 'bar'
                             )
                         ),
@@ -198,8 +198,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             )
         ));
 
-        $this->assertTrue(isset($config['storages'][$fooModelClass]['payment']['contexts']));
-        $this->assertEquals(array('foo', 'bar'), $config['storages'][$fooModelClass]['payment']['contexts']);
+        $this->assertTrue(isset($config['storages'][$fooModelClass]['extension']['payments']));
+        $this->assertEquals(array('foo', 'bar'), $config['storages'][$fooModelClass]['extension']['payments']);
     }
 
     /**
@@ -217,7 +217,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'storages' => array(
                     $fooModelClass => array(
-                        'payment' => array(
+                        'extension' => array(
                             'factories' => array(
                                 'foo', 'bar'
                             )
@@ -239,8 +239,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             )
         ));
 
-        $this->assertTrue(isset($config['storages'][$fooModelClass]['payment']['factories']));
-        $this->assertEquals(array('foo', 'bar'), $config['storages'][$fooModelClass]['payment']['factories']);
+        $this->assertTrue(isset($config['storages'][$fooModelClass]['extension']['factories']));
+        $this->assertEquals(array('foo', 'bar'), $config['storages'][$fooModelClass]['extension']['factories']);
     }
 
     /**
@@ -273,8 +273,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'contexts' => array(
-                    'a_context' => array(
+                'payments' => array(
+                    'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         ),
@@ -317,8 +317,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'contexts' => array(
-                    'a_context' => array(
+                'payments' => array(
+                    'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         ),
@@ -354,8 +354,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'contexts' => array(
-                    'a_context' => array(
+                'payments' => array(
+                    'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         ),
@@ -369,7 +369,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @test
      * 
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "payum.contexts.a_context": One payment from the  payments available must be selected
+     * @expectedExceptionMessage Invalid configuration for path "payum.payments.a_payment": One payment from the  payments available must be selected
      */
     public function throwIfNonePaymentSelected()
     {
@@ -388,8 +388,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'contexts' => array(
-                    'a_context' => array()
+                'payments' => array(
+                    'a_payment' => array()
                 )
             )
         ));
@@ -415,8 +415,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'contexts' => array(
-                    'a_context' => array(
+                'payments' => array(
+                    'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         )
@@ -430,7 +430,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "payum.contexts.a_context": Only one payment per context could be selected
+     * @expectedExceptionMessage Invalid configuration for path "payum.payments.a_payment": Only one payment per payment could be selected
      */
     public function throwIfMoreThenOnePaymentSelected()
     {
@@ -449,8 +449,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'contexts' => array(
-                    'a_context' => array(
+                'payments' => array(
+                    'a_payment' => array(
                         'bar_payment' => array(
                             'bar_opt' => 'bar'
                         ),
@@ -491,8 +491,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'contexts' => array(
-                    'a_context' => array(
+                'payments' => array(
+                    'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         ),
@@ -525,8 +525,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'contexts' => array(
-                    'a_context' => array(
+                'payments' => array(
+                    'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         ),
@@ -559,8 +559,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'contexts' => array(
-                    'a_context' => array(
+                'payments' => array(
+                    'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         ),
@@ -584,8 +584,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
-                'contexts' => array(
-                    'a_context' => array(
+                'payments' => array(
+                    'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         ),
@@ -611,8 +611,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                 ),
-                'contexts' => array(
-                    'a_context' => array(
+                'payments' => array(
+                    'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
                         ),
@@ -625,7 +625,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
 class FooPaymentFactory implements PaymentFactoryInterface
 {
-    public function create(ContainerBuilder $container, $contextName, array $config)
+    public function create(ContainerBuilder $container, $paymentName, array $config)
     {
     }
 
@@ -642,11 +642,15 @@ class FooPaymentFactory implements PaymentFactoryInterface
             ->end()
         ;
     }
+
+    public function load(ContainerBuilder $container)
+    {
+    }
 }
 
 class BarPaymentFactory implements PaymentFactoryInterface
 {
-    public function create(ContainerBuilder $container, $contextName, array $config)
+    public function create(ContainerBuilder $container, $paymentName, array $config)
     {
     }
 
@@ -662,6 +666,10 @@ class BarPaymentFactory implements PaymentFactoryInterface
                 ->scalarNode('bar_opt')->isRequired()->cannotBeEmpty()->end()
             ->end()
         ;
+    }
+
+    public function load(ContainerBuilder $container)
+    {
     }
 }
 

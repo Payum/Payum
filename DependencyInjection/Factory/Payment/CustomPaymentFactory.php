@@ -3,6 +3,7 @@ namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
 class CustomPaymentFactory extends AbstractPaymentFactory
@@ -10,12 +11,13 @@ class CustomPaymentFactory extends AbstractPaymentFactory
     /**
      * {@inheritDoc}
      */
-    public function createPaymentDefinition(ContainerBuilder $container, $contextName, array $config)
+    public function createPayment(ContainerBuilder $container, $paymentName, array $config)
     {
-        return isset($config['service']) ?
-            new DefinitionDecorator($config['service']) :
-            parent::createPaymentDefinition($container, $contextName, $config)
-        ;
+        if (isset($config['service'])) {
+            return new DefinitionDecorator($config['service']);
+        }
+
+        return parent::createPayment($container, $paymentName, $config);
     }
 
     /**

@@ -35,7 +35,7 @@ payum:
                 storage_dir: %kernel.root_dir%/Resources/payments
                 id_property: hash
                 
-    contexts:
+    payments:
         offline:
             offline: ~
 ```

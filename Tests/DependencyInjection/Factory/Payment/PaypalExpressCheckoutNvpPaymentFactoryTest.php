@@ -11,29 +11,6 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCh
 
 class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    public static function provideTaggedActions()
-    {
-        return array(
-            'api.authorize_token' => array('payum.paypal.express_checkout_nvp.action.api.authorize_token'),
-            'api.do_express_checkout_payment' => array('payum.paypal.express_checkout_nvp.action.api.do_express_checkout_payment'),
-            'api.get_express_checkout_details' => array('payum.paypal.express_checkout_nvp.action.api.get_express_checkout_details'),
-            'api.get_transaction_details' => array('payum.paypal.express_checkout_nvp.action.api.get_transaction_details'),
-            'api.set_express_checkout' => array('payum.paypal.express_checkout_nvp.action.api.set_express_checkout'),
-            'api.create_recurring_payment_profile' => array('payum.paypal.express_checkout_nvp.action.api.create_recurring_payment_profile'),
-            'api.get_recurring_payments_profile_details' => array('payum.paypal.express_checkout_nvp.action.api.get_recurring_payments_profile_details'),
-            'api.create_billing_agreement' => array('payum.paypal.express_checkout_nvp.action.api.create_billing_agreement'),
-            'api.do_reference_transaction' => array('payum.paypal.express_checkout_nvp.action.api.do_reference_transaction'),
-
-            'capture' => array('payum.paypal.express_checkout_nvp.action.capture'),
-            'fill_order_details' => array('payum.paypal.express_checkout_nvp.action.fill_order_details'),
-            'notify' => array('payum.paypal.express_checkout_nvp.action.notify'),
-            'payment_details_status' => array('payum.paypal.express_checkout_nvp.action.payment_details_status'),
-            'payment_details_sync' => array('payum.paypal.express_checkout_nvp.action.payment_details_sync'),
-            'recurring_payment_details_status' => array('payum.paypal.express_checkout_nvp.action.recurring_payment_details_status'),
-            'recurring_payment_details_sync' => array('payum.paypal.express_checkout_nvp.action.recurring_payment_details_sync'),
-        );
-    }
-    
     /**
      * @test
      */
@@ -103,7 +80,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "username" at path "foo" must be configured.
      */
-    public function thrownIfApiOptionUsernameSectionMissing()
+    public function thrownIfUsernameOptionNotSet()
     {
         $factory = new PaypalExpressCheckoutNvpPaymentFactory;
 
@@ -122,7 +99,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "password" at path "foo" must be configured.
      */
-    public function thrownIfApiOptionPasswordSectionMissing()
+    public function thrownIfPasswordOptionNotSet()
     {
         $factory = new PaypalExpressCheckoutNvpPaymentFactory;
 
@@ -133,7 +110,6 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
-            'obtain_credit_card' => false,
             'username' => 'aUsername'
         )));
     }
@@ -144,7 +120,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "signature" at path "foo" must be configured.
      */
-    public function thrownIfApiOptionSignatureSectionMissing()
+    public function thrownIfSignatureOptionNotSet()
     {
         $factory = new PaypalExpressCheckoutNvpPaymentFactory;
 
@@ -155,7 +131,6 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
-            'obtain_credit_card' => false,
             'username' => 'aUsername',
             'password' => 'aPassword',
         )));
@@ -170,8 +145,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'username' => 'aUsername',
             'password' => 'aPassword',
             'signature' => 'aSignature',
@@ -181,8 +155,47 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
             'extensions' => array(),
         ));
         
-        $this->assertEquals('payum.context.aContextName.payment', $paymentId);
+        $this->assertEquals('payum.paypal_express_checkout_nvp.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
+
+        $payment = $container->getDefinition($paymentId);
+
+        //guard
+        $this->assertNotEmpty($payment->getFactoryMethod());
+        $this->assertNotEmpty($payment->getFactoryService());
+        $this->assertNotEmpty($payment->getArguments());
+
+        $config = $payment->getArgument(0);
+
+        $this->assertEquals('aPaymentName', $config['payum.payment_name']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLoadFactory()
+    {
+        $factory = new PaypalExpressCheckoutNvpPaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->load($container);
+
+        $this->assertTrue($container->hasDefinition('payum.paypal_express_checkout_nvp.factory'));
+
+        $factoryService = $container->getDefinition('payum.paypal_express_checkout_nvp.factory');
+        $this->assertEquals('Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory', $factoryService->getClass());
+        $this->assertEquals(array(array('name' => 'paypal_express_checkout_nvp')), $factoryService->getTag('payum.payment_factory'));
+
+        $factoryConfig = $factoryService->getArgument(0);
+        $this->assertEquals('paypal_express_checkout_nvp', $factoryConfig['payum.factory_name']);
+        $this->assertArrayHasKey('buzz.client', $factoryConfig);
+        $this->assertArrayHasKey('twig.env', $factoryConfig);
+        $this->assertArrayHasKey('payum.template.layout', $factoryConfig);
+        $this->assertArrayHasKey('payum.template.obtain_credit_card', $factoryConfig);
+
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(1));
+        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(1));
     }
 
     /**
@@ -194,8 +207,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'username' => 'aUsername',
             'password' => 'aPassword',
             'signature' => 'aSignature',
@@ -220,35 +232,6 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
             'addExtension',
             new Reference('payum.extension.ololo')
         );
-    }
-
-    /**
-     * @test
-     * 
-     * @dataProvider provideTaggedActions
-     */
-    public function shouldAddPayumActionTagToActions($actionId)
-    {
-        $factory = new PaypalExpressCheckoutNvpPaymentFactory;
-
-        $container = new ContainerBuilder;
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'username' => 'aUsername',
-            'password' => 'aPassword',
-            'signature' => 'aSignature',
-            'sandbox' => true,
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition($actionId);
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)

@@ -6,16 +6,16 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayDirectPaymentFactory;
 
-class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
+class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfAbstractPaymentFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayDirectPaymentFactory');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory'));
     }
@@ -25,7 +25,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new OmnipayPaymentFactory();
+        new OmnipayDirectPaymentFactory;
     }
 
     /**
@@ -33,9 +33,9 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetName()
     {
-        $factory = new OmnipayPaymentFactory();
+        $factory = new OmnipayDirectPaymentFactory;
 
-        $this->assertEquals('omnipay', $factory->getName());
+        $this->assertEquals('omnipay_direct', $factory->getName());
     }
 
     /**
@@ -45,7 +45,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfiguration($config)
     {
-        $factory = new OmnipayPaymentFactory();
+        $factory = new OmnipayDirectPaymentFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -79,7 +79,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfTypeSectionMissing()
     {
-        $factory = new OmnipayPaymentFactory();
+        $factory = new OmnipayDirectPaymentFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -98,7 +98,7 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfTypeNotSupportedByOmnipay()
     {
-        $factory = new OmnipayPaymentFactory();
+        $factory = new OmnipayDirectPaymentFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -118,9 +118,9 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "options" at path "foo" must be configured.
      */
-    public function thrownIfApiOptionsSectionMissing()
+    public function thrownIfOptionsSectionMissing()
     {
-        $factory = new OmnipayPaymentFactory();
+        $factory = new OmnipayDirectPaymentFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -138,12 +138,11 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePaymentAndReturnItsId()
     {
-        $factory = new OmnipayPaymentFactory();
+        $factory = new OmnipayDirectPaymentFactory;
 
         $container = new ContainerBuilder();
 
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'type' => 'PayPal_Express',
             'options' => array(
                 'foo' => 'foo',
@@ -154,8 +153,47 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
 
-        $this->assertEquals('payum.context.aContextName.payment', $paymentId);
+        $this->assertEquals('payum.omnipay_direct.aPaymentName.payment', $paymentId);
         $this->assertTrue($container->hasDefinition($paymentId));
+
+        $payment = $container->getDefinition($paymentId);
+
+        //guard
+        $this->assertNotEmpty($payment->getFactoryMethod());
+        $this->assertNotEmpty($payment->getFactoryService());
+        $this->assertNotEmpty($payment->getArguments());
+
+        $config = $payment->getArgument(0);
+
+        $this->assertEquals('aPaymentName', $config['payum.payment_name']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldLoadFactory()
+    {
+        $factory = new OmnipayDirectPaymentFactory;
+
+        $container = new ContainerBuilder;
+
+        $factory->load($container);
+
+        $this->assertTrue($container->hasDefinition('payum.omnipay_direct.factory'));
+
+        $factoryService = $container->getDefinition('payum.omnipay_direct.factory');
+        $this->assertEquals('Payum\OmnipayBridge\DirectPaymentFactory', $factoryService->getClass());
+        $this->assertEquals(array(array('name' => 'omnipay_direct')), $factoryService->getTag('payum.payment_factory'));
+
+        $factoryConfig = $factoryService->getArgument(0);
+        $this->assertEquals('omnipay_direct', $factoryConfig['payum.factory_name']);
+        $this->assertArrayHasKey('buzz.client', $factoryConfig);
+        $this->assertArrayHasKey('twig.env', $factoryConfig);
+        $this->assertArrayHasKey('payum.template.layout', $factoryConfig);
+        $this->assertArrayHasKey('payum.template.obtain_credit_card', $factoryConfig);
+
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(1));
+        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(1));
     }
 
     /**
@@ -163,12 +201,11 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new OmnipayPaymentFactory();
+        $factory = new OmnipayDirectPaymentFactory;
 
         $container = new ContainerBuilder();
 
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
+        $paymentId = $factory->create($container, 'aPaymentName', array(
             'type' => 'PayPal_Express',
             'options' => array(
                 'foo' => 'foo',
@@ -194,120 +231,6 @@ class OmnipayPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'addExtension',
             new Reference('payum.extension.ololo')
         );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldDecorateBasicApiDefinitionAndAddItToPayment()
-    {
-        $factory = new OmnipayPaymentFactory();
-
-        $container = new ContainerBuilder();
-
-        $paymentId = $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'type' => 'PayPal_Express',
-            'options' => array(
-                'foo' => 'foo',
-                'bar' => 'bar',
-            ),
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $this->assertTrue($container->hasDefinition('payum.context.aContextName.gateway'));
-
-        $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addApi',
-            new Reference('payum.context.aContextName.gateway')
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagCaptureAction()
-    {
-        $factory = new OmnipayPaymentFactory();
-
-        $container = new ContainerBuilder();
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'type' => 'PayPal_Express',
-            'options' => array(
-                'foo' => 'foo',
-                'bar' => 'bar',
-            ),
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.omnipay_bridge.action.capture');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(1, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagStatusAction()
-    {
-        $factory = new OmnipayPaymentFactory();
-
-        $container = new ContainerBuilder();
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'type' => 'PayPal_Express',
-            'options' => array(
-                'foo' => 'foo',
-                'bar' => 'bar',
-            ),
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.omnipay_bridge.action.status');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(2, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddPayumActionTagToFillOrderDetailsAction()
-    {
-        $factory = new OmnipayPaymentFactory();
-
-        $container = new ContainerBuilder();
-
-        $factory->create($container, 'aContextName', array(
-            'obtain_credit_card' => false,
-            'type' => 'PayPal_Express',
-            'options' => array(
-                'foo' => 'foo',
-                'bar' => 'bar',
-            ),
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $actionDefinition = $container->getDefinition('payum.omnipay_bridge.action.fill_order_details');
-
-        $tagAttributes = $actionDefinition->getTag('payum.action');
-        $this->assertCount(2, $tagAttributes);
-        $this->assertEquals($factory->getName(), $tagAttributes[0]['factory']);
     }
 
     protected function assertDefinitionContainsMethodCall(Definition $serviceDefinition, $expectedMethod, $expectedFirstArgument)

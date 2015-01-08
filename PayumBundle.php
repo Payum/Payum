@@ -1,16 +1,16 @@
 <?php
 namespace Payum\Bundle\PayumBundle;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Compiler\PayumActionsPass;
-use Payum\Bundle\PayumBundle\DependencyInjection\Compiler\PayumStorageExtensionsPass;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillOnsitePaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Compiler\BuildPaymentFactoryPass;
+use Payum\Bundle\PayumBundle\DependencyInjection\Compiler\BuildRegistryPass;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillOffsitePaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillDirectPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaCheckoutPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaInvoicePaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OfflinePaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\CustomPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayOnsitePaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayOffsitePaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayDirectPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCheckoutNvpPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PayexPaymentFactory;
@@ -34,12 +34,12 @@ class PayumBundle extends Bundle
 
         $extension->addPaymentFactory(new PaypalExpressCheckoutNvpPaymentFactory);
         $extension->addPaymentFactory(new PaypalProCheckoutNvpPaymentFactory);
-        $extension->addPaymentFactory(new Be2BillPaymentFactory);
-        $extension->addPaymentFactory(new Be2BillOnsitePaymentFactory);
+        $extension->addPaymentFactory(new Be2BillDirectPaymentFactory);
+        $extension->addPaymentFactory(new Be2BillOffsitePaymentFactory);
         $extension->addPaymentFactory(new AuthorizeNetAimPaymentFactory);
         $extension->addPaymentFactory(new PayexPaymentFactory);
-        $extension->addPaymentFactory(new OmnipayPaymentFactory);
-        $extension->addPaymentFactory(new OmnipayOnsitePaymentFactory);
+        $extension->addPaymentFactory(new OmnipayDirectPaymentFactory);
+        $extension->addPaymentFactory(new OmnipayOffsitePaymentFactory);
         $extension->addPaymentFactory(new CustomPaymentFactory);
         $extension->addPaymentFactory(new OfflinePaymentFactory);
         $extension->addPaymentFactory(new KlarnaCheckoutPaymentFactory);
@@ -51,7 +51,7 @@ class PayumBundle extends Bundle
         $extension->addStorageFactory(new DoctrineStorageFactory);
         $extension->addStorageFactory(new CustomStorageFactory);
 
-        $container->addCompilerPass(new PayumActionsPass);
-        $container->addCompilerPass(new PayumStorageExtensionsPass);
+        $container->addCompilerPass(new BuildRegistryPass());
+        $container->addCompilerPass(new BuildPaymentFactoryPass);
     }
 }
