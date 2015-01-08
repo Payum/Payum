@@ -18,11 +18,18 @@ class CheckoutPaymentFactory implements PaymentFactoryInterface
     protected $corePaymentFactory;
 
     /**
+     * @var array
+     */
+    private $defaultConfig;
+
+    /**
+     * @param array $defaultConfig
      * @param PaymentFactoryInterface $corePaymentFactory
      */
-    public function __construct(PaymentFactoryInterface $corePaymentFactory = null)
+    public function __construct(array $defaultConfig = array(), PaymentFactoryInterface $corePaymentFactory = null)
     {
         $this->corePaymentFactory = $corePaymentFactory ?: new CorePaymentFactory();
+        $this->defaultConfig = $defaultConfig;
     }
 
     /**
@@ -39,6 +46,7 @@ class CheckoutPaymentFactory implements PaymentFactoryInterface
     public function createConfig(array $config = array())
     {
         $config = ArrayObject::ensureArrayObject($config);
+        $config->defaults($this->defaultConfig);
         $config->defaults($this->corePaymentFactory->createConfig());
 
         $config->defaults(array(
