@@ -16,6 +16,8 @@ interface StorageRegistryInterface
     public function getStorage($class);
 
     /**
+     * The key must be a model class
+     *
      * @throws InvalidArgumentException if storages with such name not exist
      *
      * @return StorageInterface

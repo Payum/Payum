@@ -14,7 +14,7 @@ class SimpleRegistry extends AbstractRegistry
     /**
      * {@inheritDoc}
      */
-    public function getPayment($name = null)
+    public function getPayment($name)
     {
         $payment = parent::getPayment($name);
 
@@ -36,10 +36,6 @@ class SimpleRegistry extends AbstractRegistry
      */
     protected function addStorageToPayment($name)
     {
-        if (null === $name) {
-            $name = $this->defaultPayment;
-        }
-
         if (isset($this->initializedStorageExtensions[$name])) {
             return;
         }

@@ -16,21 +16,20 @@ abstract class AbstractRegistry implements RegistryInterface
     protected $storages;
 
     /**
-     * @var string
+     * @var array
      */
-    protected $defaultPayment;
+    protected $paymentFactories;
 
     /**
-     * @param array  $payments
-     * @param array  $storages
-     * @param string $defaultPayment
+     * @param array $payments
+     * @param array $storages
+     * @param array $paymentFactories
      */
-    public function __construct($payments, $storages, $defaultPayment = 'default')
+    public function __construct(array $payments = array(), array $storages = array(), array $paymentFactories = array())
     {
         $this->payments = $payments;
         $this->storages = $storages;
-
-        $this->defaultPayment = $defaultPayment;
+        $this->paymentFactories = $paymentFactories;
     }
 
     /**
@@ -86,22 +85,10 @@ abstract class AbstractRegistry implements RegistryInterface
     /**
      * {@inheritDoc}
      */
-    public function getDefaultPaymentName()
+    public function getPayment($name)
     {
-        return $this->defaultPayment;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getPayment($name = null)
-    {
-        if (null === $name) {
-            $name = $this->defaultPayment;
-        }
-
         if (!isset($this->payments[$name])) {
-            throw new InvalidArgumentException(sprintf('Payum payment named %s does not exist.', $name));
+            throw new InvalidArgumentException(sprintf('Payment "%s" does not exist.', $name));
         }
 
         return $this->getService($this->payments[$name]);
@@ -112,11 +99,36 @@ abstract class AbstractRegistry implements RegistryInterface
      */
     public function getPayments()
     {
-        $registeredPayments = array();
+        $payments = array();
         foreach ($this->payments as $name => $id) {
-            $registeredPayments[$name] = $this->getPayment($name);
+            $payments[$name] = $this->getPayment($name);
         }
 
-        return $registeredPayments;
+        return $payments;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPaymentFactory($name)
+    {
+        if (!isset($this->paymentFactories[$name])) {
+            throw new InvalidArgumentException(sprintf('Payment factory "%s" does not exist.', $name));
+        }
+
+        return $this->getService($this->paymentFactories[$name]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPaymentFactories()
+    {
+        $paymentFactories = array();
+        foreach ($this->paymentFactories as $name => $id) {
+            $paymentFactories[$name] = $this->getPaymentFactory($name);
+        }
+
+        return $paymentFactories;
     }
 }
