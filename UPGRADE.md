@@ -1,5 +1,11 @@
 # Upgrades
 
+## 0.13 to 0.14
+
+* [registry] `PaymentRegistryInterface::getDefaultPaymentName` method was removed.
+* [registry] `PaymentRegistryInterface::getPayment` the argument `name` is always required.
+* [registry] `AbstractRegistry::__construct` third `$defaultPayment` argument was removed.
+
 ## 0.12 to 0.13
 
 * [request] `markSuspended` method added to `GetStatusInterface` interface. 

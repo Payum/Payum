@@ -4,20 +4,17 @@ namespace Payum\Core\Registry;
 interface PaymentRegistryInterface
 {
     /**
-     * @return string
-     */
-    public function getDefaultPaymentName();
-
-    /**
-     * @param string|null $name
+     * @param string $name
      *
      * @throws \Payum\Core\Exception\InvalidArgumentException if payment with such name not exist
      *
      * @return \Payum\Core\PaymentInterface
      */
-    public function getPayment($name = null);
+    public function getPayment($name);
 
     /**
+     * The key must be a payment name
+     *
      * @return \Payum\Core\PaymentInterface[]
      */
     public function getPayments();
