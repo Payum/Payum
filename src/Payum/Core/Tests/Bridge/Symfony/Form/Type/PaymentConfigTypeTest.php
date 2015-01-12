@@ -19,17 +19,17 @@ class PaymentConfigTypeTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
+    public function couldBeConstructedWithPaymentFactoryRegistryAsFirstArgument()
     {
-        new PaymentConfigType();
+        new PaymentConfigType($this->getMock('Payum\Core\Registry\PaymentFactoryRegistryInterface'));
     }
 
     /**
      * @test
      */
-    public function shouldExtendDateType()
+    public function shouldExtendFormType()
     {
-        $type = new PaymentConfigType();
+        $type = new PaymentConfigType($this->getMock('Payum\Core\Registry\PaymentFactoryRegistryInterface'));
 
         $this->assertEquals('form', $type->getParent());
     }
@@ -39,7 +39,7 @@ class PaymentConfigTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnExpectedName()
     {
-        $type = new PaymentConfigType();
+        $type = new PaymentConfigType($this->getMock('Payum\Core\Registry\PaymentFactoryRegistryInterface'));
 
         $this->assertEquals('payum_payment_config', $type->getName());
     }
@@ -49,7 +49,7 @@ class PaymentConfigTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowResolveOptions()
     {
-        $type = new PaymentConfigType();
+        $type = new PaymentConfigType($this->getMock('Payum\Core\Registry\PaymentFactoryRegistryInterface'));
 
         $resolver = new OptionsResolver();
 

@@ -1,46 +1,37 @@
 <?php
 namespace Payum\Core\Bridge\Symfony\Form\Type;
 
-use Payum\Core\PaymentFactoryInterface;
-use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory as PaypalExpressCheckoutPaymentFactory;
-use Payum\Stripe\JsPaymentFactory as StripeJsPaymentFactory;
+use Payum\Core\Registry\PaymentFactoryRegistryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 class PaymentConfigType extends AbstractType
 {
     /**
-     * @var PaymentFactoryInterface[]
+     * @var PaymentFactoryRegistryInterface
      */
-    protected $factories = array();
+    private $registry;
+
+    /**
+     * @param PaymentFactoryRegistryInterface $registry
+     */
+    public function __construct(PaymentFactoryRegistryInterface $registry)
+    {
+        $this->registry = $registry;
+    }
 
     /**
      * {@inheritDoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this->factories = array(
-            'paypal_express_checkout_nvp' => new PaypalExpressCheckoutPaymentFactory(),
-            'stripe_js' => new StripeJsPaymentFactory()
-        );
-
         $builder
-            ->add('paymentName', null, array(
-                'constraints' => array(new NotBlank),
-            ))
-            ->add('factoryName', 'choice', array(
-                'choices' => array(
-                    'paypal_express_checkout_nvp' => 'Paypal ExpressCheckout',
-                    'stripe_js' => 'Stripe.Js',
-                ),
-                'empty_data' => false,
-                'constraints' => array(new NotBlank),
-            ))
+            ->add('paymentName')
+            ->add('factoryName', 'payum_payment_factories_choice')
         ;
 
         $builder->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'buildCredentials'));
@@ -54,6 +45,9 @@ class PaymentConfigType extends AbstractType
     {
         /** @var array $data */
         $data = $event->getData();
+        if (is_null($data)) {
+            return;
+        }
 
         $propertyPath = is_array($data) ? '[factoryName]' : 'factoryName';
         $factoryName = PropertyAccess::createPropertyAccessor()->getValue($data, $propertyPath);
@@ -66,14 +60,11 @@ class PaymentConfigType extends AbstractType
         $form->add('config', 'form');
         $configForm = $form->get('config');
 
-        $paymentFactory = $this->factories[$factoryName];
+        $paymentFactory = $this->registry->getPaymentFactory($factoryName);
         $config = $paymentFactory->createConfig();
-        foreach ($config['options.default'] as $name => $value) {
-            $isRequired = in_array($name, $config['options.required']);
+        foreach ($config['payum.default_options'] as $name => $value) {
+            $isRequired = in_array($name, $config['payum.required_options']);
             $configForm->add($name, is_bool($value) ? 'checkbox' : 'text', array(
-                'constraints' => array_filter(array(
-                    $isRequired ? new NotBlank : null
-                )),
                 'empty_data' => $value,
                 'required' => $isRequired,
             ));
@@ -86,7 +77,7 @@ class PaymentConfigType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Payum\Core\Model\PaymentConfigInterface'
+            'data_class' => 'Payum\Core\Model\PaymentConfig'
         ));
     }
 
