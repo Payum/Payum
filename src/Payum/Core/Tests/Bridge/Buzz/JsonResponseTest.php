@@ -32,4 +32,20 @@ class JsonResponseTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($obj, $response->getContentJson());
     }
+
+    /**
+     * @test
+     */
+    public function shouldDecodeJsonInArray()
+    {
+        $array = array('foo' => 'bar');
+
+        $response = new JsonResponse();
+        $response->setContent(json_encode($array));
+
+        $content = $response->getContentJson(true);
+
+        $this->assertInternalType('array', $content);
+        $this->assertEquals($array, $content);
+    }
 }

@@ -7,11 +7,13 @@ use Payum\Core\Exception\LogicException;
 class JsonResponse extends Response
 {
     /**
+     * @param bool $array Whether to decode json in array (default false)
+     *
      * @throws \Payum\Core\Exception\LogicException
      *
      * @return array|object
      */
-    public function getContentJson()
+    public function getContentJson($array = false)
     {
         $content = $this->getContent();
 
@@ -20,7 +22,7 @@ class JsonResponse extends Response
             $content = substr($content, 3);
         }
 
-        $json = json_decode($content);
+        $json = json_decode($content, $array);
         if (null === $json) {
             throw new LogicException("Response content is not valid json: \n\n".$content);
         }
