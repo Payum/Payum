@@ -26,6 +26,14 @@ class DoctrineStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
+    public function findBy(array $criteria)
+    {
+        return $this->objectManager->getRepository($this->modelClass)->findOneBy($criteria);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function doFind($id)
     {
         return $this->objectManager->find($this->modelClass, $id);

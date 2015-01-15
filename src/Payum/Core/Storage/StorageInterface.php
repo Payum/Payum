@@ -41,6 +41,13 @@ interface StorageInterface
     public function find($id);
 
     /**
+     * @param array $criteria
+     *
+     * @return null|object
+     */
+    public function findBy(array $criteria);
+
+    /**
      * @param object $model
      *
      * @throws \Payum\Core\Exception\InvalidArgumentException if not supported model given.

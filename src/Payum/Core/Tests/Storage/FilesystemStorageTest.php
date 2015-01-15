@@ -219,6 +219,23 @@ class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage Method is not supported by the storage.
+     */
+    public function throwIfTryToUseNotSupportedFindByMethod()
+    {
+        $storage = new FilesystemStorage(
+            sys_get_temp_dir(),
+            'Payum\Core\Tests\Mocks\Model\TestModel',
+            'id'
+        );
+
+        $storage->findBy(array());
+    }
+
+    /**
+     * @test
      */
     public function shouldFindModelById()
     {
