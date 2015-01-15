@@ -41,13 +41,13 @@ class BuildRegistryPassTest extends \Phpunit_Framework_TestCase
 
         $this->assertEquals(array(), $registry->getArgument(0));
         $this->assertEquals(array(), $registry->getArgument(1));
-        $this->assertEquals('', $registry->getArgument(2));
+        $this->assertEquals(array(), $registry->getArgument(2));
     }
 
     /**
      * @test
      */
-    public function shouldPassPayumPaymentTagsAsFirstArgument()
+    public function shouldPassPayumTaggedPaymentsAsFirstArgument()
     {
         $registry = new Definition('Payum\Bundle\PayumBundle\Regitry\ContainerAwareRegistry', array(null, null, null));
 
@@ -72,13 +72,13 @@ class BuildRegistryPassTest extends \Phpunit_Framework_TestCase
             'bazVal' => 'payum.payment.baz',
         ), $registry->getArgument(0));
         $this->assertEquals(array(), $registry->getArgument(1));
-        $this->assertEquals('', $registry->getArgument(2));
+        $this->assertEquals(array(), $registry->getArgument(2));
     }
 
     /**
      * @test
      */
-    public function shouldPassPayumStorageTagsAsFirstArgument()
+    public function shouldPassPayumTaggedStoragesAsSecondArgument()
     {
         $registry = new Definition('Payum\Bundle\PayumBundle\Regitry\ContainerAwareRegistry', array(null, null, null));
 
@@ -103,13 +103,44 @@ class BuildRegistryPassTest extends \Phpunit_Framework_TestCase
             'barVal' => 'payum.storage.foo',
             'bazVal' => 'payum.storage.baz',
         ), $registry->getArgument(1));
-        $this->assertEquals('', $registry->getArgument(2));
+        $this->assertEquals(array(), $registry->getArgument(2));
     }
 
     /**
      * @test
      */
-    public function shouldPassPaymentStoragesAtOnce()
+    public function shouldPassPayumTaggedPaymentFactoriesAsThirdArgument()
+    {
+        $registry = new Definition('Payum\Bundle\PayumBundle\Regitry\ContainerAwareRegistry', array(null, null, null));
+
+        $container = new ContainerBuilder;
+        $container->setDefinition('payum', $registry);
+
+        $container->setDefinition('payum.payment_factory.foo', new Definition());
+        $container->getDefinition('payum.payment_factory.foo')->addTag('payum.payment_factory', array('name' => 'fooVal'));
+        $container->getDefinition('payum.payment_factory.foo')->addTag('payum.payment_factory', array('name' => 'barVal'));
+
+        $container->setDefinition('payum.payment_factory.baz', new Definition());
+        $container->getDefinition('payum.payment_factory.baz')->addTag('payum.payment_factory', array('name' => 'bazVal'));
+
+
+        $pass = new BuildRegistryPass;
+
+        $pass->process($container);
+
+        $this->assertEquals(array(), $registry->getArgument(0));
+        $this->assertEquals(array(), $registry->getArgument(1));
+        $this->assertEquals(array(
+            'fooVal' => 'payum.payment_factory.foo',
+            'barVal' => 'payum.payment_factory.foo',
+            'bazVal' => 'payum.payment_factory.baz',
+        ), $registry->getArgument(2));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldPassPaymentsAndStoragesAndPaymentsFactoriesSameTime()
     {
         $registry = new Definition('Payum\Bundle\PayumBundle\Regitry\ContainerAwareRegistry', array(null, null, null));
 
@@ -122,6 +153,9 @@ class BuildRegistryPassTest extends \Phpunit_Framework_TestCase
         $container->setDefinition('payum.payment.baz', new Definition());
         $container->getDefinition('payum.payment.baz')->addTag('payum.payment', array('payment' => 'bazVal'));
 
+        $container->setDefinition('payum.payment_factory.baz', new Definition());
+        $container->getDefinition('payum.payment_factory.baz')->addTag('payum.payment_factory', array('name' => 'bazVal'));
+
 
         $pass = new BuildRegistryPass;
 
@@ -129,6 +163,6 @@ class BuildRegistryPassTest extends \Phpunit_Framework_TestCase
 
         $this->assertNotEmpty($registry->getArgument(0));
         $this->assertNotEmpty($registry->getArgument(1));
-        $this->assertEquals('', $registry->getArgument(2));
+        $this->assertNotEmpty($registry->getArgument(2));
     }
 }
