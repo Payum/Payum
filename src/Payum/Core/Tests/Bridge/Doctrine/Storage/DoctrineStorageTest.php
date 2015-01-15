@@ -4,15 +4,8 @@ namespace Payum\Core\Tests\Bridge\Doctrine\Storage;
 use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
 use Payum\Core\Tests\Mocks\Model\TestModel;
 
-class DoctrineModelStorageTest extends \PHPUnit_Framework_TestCase
+class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        if (false == class_exists('Doctrine\ORM\Version', $autoload = true)) {
-            throw new \PHPUnit_Framework_SkippedTestError('Doctrine ORM lib not installed. Have you run composer with --dev option?');
-        }
-    }
-
     /**
      * @test
      */
@@ -81,6 +74,40 @@ class DoctrineModelStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldProxyCriteriaToRepositoryFindOneByMethodOnFindByCall()
+    {
+        $modelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
+        $model = new TestModel();
+
+        $criteria = array('foo' => 'fooVal', 'bar' => 'barVal');
+
+        $objectRepositoryMock = $this->createObjectRepositoryMock();
+        $objectRepositoryMock
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->with($criteria)
+            ->willReturn($model)
+        ;
+
+        $objectManagerMock = $this->createObjectManagerMock();
+        $objectManagerMock
+            ->expects($this->once())
+            ->method('getRepository')
+            ->with($modelClass)
+            ->willReturn($objectRepositoryMock)
+        ;
+
+        $storage = new DoctrineStorage(
+            $objectManagerMock,
+            'Payum\Core\Tests\Mocks\Model\TestModel'
+        );
+
+        $this->assertSame($model, $storage->findBy($criteria));
+    }
+
+    /**
+     * @test
+     */
     public function shouldFindModelById()
     {
         $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
@@ -111,5 +138,13 @@ class DoctrineModelStorageTest extends \PHPUnit_Framework_TestCase
     protected function createObjectManagerMock()
     {
         return $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Doctrine\Common\Persistence\ObjectRepository
+     */
+    protected function createObjectRepositoryMock()
+    {
+        return $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
     }
 }

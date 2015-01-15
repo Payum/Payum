@@ -37,6 +37,14 @@ class FilesystemStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
+    public function findBy(array $criteria)
+    {
+        throw new LogicException('Method is not supported by the storage.');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function doFind($id)
     {
         if (isset($this->identityMap[$id])) {

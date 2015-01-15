@@ -69,6 +69,14 @@ class TableGatewayStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
+    public function findBy(array $criteria)
+    {
+        throw new LogicException('Method is not supported by the storage.');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function doFind($id)
     {
         return $this->tableGateway->select(array("{$this->idField} = ?" => $id))->current();

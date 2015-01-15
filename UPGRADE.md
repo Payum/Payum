@@ -5,6 +5,7 @@
 * [registry] `PaymentRegistryInterface::getDefaultPaymentName` method was removed.
 * [registry] `PaymentRegistryInterface::getPayment` the argument `name` is always required.
 * [registry] `AbstractRegistry::__construct` third `$defaultPayment` argument was removed.
+* [storage] A new method `StorageInterface::findBy` was added.
 
 ## 0.12 to 0.13
 
