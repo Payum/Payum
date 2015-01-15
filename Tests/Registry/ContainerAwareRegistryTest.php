@@ -35,10 +35,7 @@ class ContainerAwareRegistryTest extends \PHPUnit_Framework_TestCase
         $payments = array('fooName' => 'fooPayment', 'barName' => 'barPayment');
         $storages = array('barName' => array('stdClass' => 'barStorage'));
 
-        $paymentName = 'fooName';
-        $storageName = 'barName';
-        
-        new ContainerAwareRegistry($payments, $storages, $paymentName, $storageName);
+        new ContainerAwareRegistry($payments, $storages);
     }
 
     /**
@@ -49,13 +46,10 @@ class ContainerAwareRegistryTest extends \PHPUnit_Framework_TestCase
         $payments = array('fooPayment' => 'fooPaymentServiceId');
         $storages = array();
 
-        $paymentName = 'fooName';
-        $storageName = 'barName';
-        
         $container = new Container;
         $container->set('fooPaymentServiceId', $this->getMock('Payum\Core\PaymentInterface'));
 
-        $registry = new ContainerAwareRegistry($payments, $storages, $paymentName, $storageName);
+        $registry = new ContainerAwareRegistry($payments, $storages);
         $registry->setContainer($container);
         
         $this->assertSame(
@@ -74,15 +68,28 @@ class ContainerAwareRegistryTest extends \PHPUnit_Framework_TestCase
             'stdClass' =>  'fooStorageServiceId'
         );
 
-        $paymentName = 'fooName';
-        $storageName = 'barName';
-
         $container = new Container;
         $container->set('fooStorageServiceId', $this->getMock('Payum\Core\Storage\StorageInterface'));
 
-        $registry = new ContainerAwareRegistry($payments, $storages, $paymentName, $storageName);
+        $registry = new ContainerAwareRegistry($payments, $storages);
         $registry->setContainer($container);
 
         $this->assertSame($container->get('fooStorageServiceId'), $registry->getStorage('stdClass'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnPaymentFactorySetToContainer()
+    {
+        $container = new Container;
+        $container->set('fooFactoryServiceId', $this->getMock('Payum\Core\Storage\StorageInterface'));
+
+        $registry = new ContainerAwareRegistry(array(), array(), array(
+            'fooName' => 'fooFactoryServiceId',
+        ));
+        $registry->setContainer($container);
+
+        $this->assertSame($container->get('fooFactoryServiceId'), $registry->getPaymentFactory('fooName'));
     }
 }

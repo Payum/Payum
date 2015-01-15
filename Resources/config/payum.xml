@@ -10,7 +10,7 @@
         <service id="payum" class="Payum\Bundle\PayumBundle\Registry\ContainerAwareRegistry">
             <argument type="collection" /> <!-- payments services. this should be replaced while container is built -->
             <argument type="collection" /> <!-- storages services. this should be replaced while container is built -->
-            <argument /> <!-- payment default name. this should be replaced while container is built -->
+            <argument type="collection" /> <!-- payments factories services. this should be replaced while container is built -->
 
             <call method="setContainer">
                 <argument type="service" id="service_container" />

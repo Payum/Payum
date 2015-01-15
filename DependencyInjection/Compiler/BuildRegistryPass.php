@@ -27,8 +27,15 @@ class BuildRegistryPass implements CompilerPassInterface
             }
         }
 
+        $paymentsFactoriesIds = array();
+        foreach ($container->findTaggedServiceIds('payum.payment_factory') as $paymentFactoryId => $tagAttributes) {
+            foreach ($tagAttributes as $attributes) {
+                $paymentsFactoriesIds[$attributes['name']] = $paymentFactoryId;
+            }
+        }
+
         $registry->replaceArgument(0, $paymentsIds);
         $registry->replaceArgument(1, $storagesIds);
-        $registry->replaceArgument(2, ''); // todo remove default payment
+        $registry->replaceArgument(2, $paymentsFactoriesIds);
     }
 }
