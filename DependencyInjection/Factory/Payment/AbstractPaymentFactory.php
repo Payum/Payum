@@ -58,7 +58,10 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
                 $this->createFactoryConfig(),
                 new Reference('payum.payment_factory'),
             ));
-            $factory->addTag('payum.payment_factory', array('name' => $this->getName()));
+            $factory->addTag('payum.payment_factory', array(
+                'name' => $this->getName(),
+                'human_name' => $this->getHumanName(),
+            ));
 
             $factoryId = sprintf('payum.%s.factory', $this->getName());
 
@@ -152,5 +155,13 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
     protected function getFactoryParameter($name)
     {
         return sprintf('payum.%s.%s', $this->getName(), $name);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getHumanName()
+    {
+        return ucwords(str_replace(array('-', '_'), ' ', $this->getName()));
     }
 }

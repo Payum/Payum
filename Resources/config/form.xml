@@ -12,5 +12,15 @@
         <service id="payum.form.type.credit_card" class="Payum\Core\Bridge\Symfony\Form\Type\CreditCardType">
             <tag name="form.type" alias="payum_credit_card" />
         </service>
+
+        <service id="payum.form.type.payment_conifg" class="Payum\Core\Bridge\Symfony\Form\Type\PaymentConfigType">
+            <tag name="form.type" alias="payum_payment_config" />
+        </service>
+
+        <service id="payum.form.type.payment_factories_choice" class="Payum\Core\Bridge\Symfony\Form\Type\PaymentFactoriesChoiceType">
+            <tag name="form.type" alias="payum_payment_factories_choice" />
+
+            <argument>%payum.available_payment_factories%</argument>
+        </service>
     </services>
 </container>

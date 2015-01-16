@@ -3,6 +3,10 @@
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    
+    <parameters>
+        <parameter key="payum.available_payment_factories" type="collection" />
+    </parameters>
 
     <services>
         <!-- Generic -->
@@ -70,10 +74,6 @@
             </call>
 
             <tag name="payum.action" all="true" alias="obtain_credit_card" />
-        </service>
-
-        <service id="payum.form.type.credit_card" class="Payum\Core\Bridge\Symfony\Form\Type\PaymentConfigType">
-            <tag name="form.type" alias="payum_payment_config" />
         </service>
     </services>
 </container>
