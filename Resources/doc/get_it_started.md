@@ -218,6 +218,14 @@ class PaymentController extends Controller
 }
 ```
 
-## Next Step
+## Next Steps
 
+* [Custom purchase examples](custom_purchase_examples.md).
+* [Configure payment in backend](configure-payment-in-backend.md)
+* [Done action](purchase_done_action.md)
+* [Sandbox](sandbox.md)
+* [Console commands](console_commands.md)
+* [Debugging](debugging.md)
+* [Container tags](container_tags.md).
 * [Payment configurations](configuration_reference.md)
+* [Back to index](index.md).
