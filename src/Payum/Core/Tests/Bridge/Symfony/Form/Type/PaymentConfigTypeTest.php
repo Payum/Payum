@@ -58,6 +58,6 @@ class PaymentConfigTypeTest extends \PHPUnit_Framework_TestCase
         $options = $resolver->resolve();
 
         $this->assertArrayHasKey('data_class', $options);
-        $this->assertEquals('Payum\Core\Model\PaymentConfigInterface', $options['data_class']);
+        $this->assertEquals('Payum\Core\Model\PaymentConfig', $options['data_class']);
     }
 }

@@ -36,15 +36,15 @@ class PaymentConfigTest extends OrmTest
         $this->em->persist($paymentConfig);
         $this->em->flush();
 
-        $paymentName = $paymentConfig->getPaymentName();
+        $id = $paymentConfig->getId();
 
         $this->em->clear();
 
-        $foundPaymentConfig = $this->em->find(get_class($paymentConfig), $paymentName);
+        $foundPaymentConfig = $this->em->find(get_class($paymentConfig), $id);
 
         //guard
         $this->assertNotSame($paymentConfig, $foundPaymentConfig);
 
-        $this->assertEquals($paymentConfig->getPaymentName(), $foundPaymentConfig->getPaymentName());
+        $this->assertEquals($paymentConfig->getId(), $foundPaymentConfig->getId());
     }
 }

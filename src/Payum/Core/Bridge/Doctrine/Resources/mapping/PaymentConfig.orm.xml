@@ -6,7 +6,7 @@
 >
     <mapped-superclass name="Payum\Core\Model\PaymentConfig">
 
-        <id name="paymentName" column="payment_name" type="string" />
+        <field name="paymentName" column="payment_name" type="string" />
 
         <field name="factoryName" column="factory_name" type="string" />
 

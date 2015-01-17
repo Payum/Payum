@@ -16,20 +16,20 @@ interface PaymentConfigInterface
     /**
      * @return string
      */
-    function getFactoryName();
+    public function getFactoryName();
 
     /**
      * @param string $name
      */
-    function setFactoryName($name);
+    public function setFactoryName($name);
 
     /**
      * @param array $config
      */
-    function setConfig(array $config);
+    public function setConfig(array $config);
 
     /**
      * @return array
      */
-    function getConfig();
+    public function getConfig();
 }
