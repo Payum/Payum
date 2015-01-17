@@ -160,7 +160,10 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factoryService = $container->getDefinition('payum.authorize_net_aim.factory');
         $this->assertEquals('Payum\AuthorizeNet\Aim\PaymentFactory', $factoryService->getClass());
-        $this->assertEquals(array(array('name' => 'authorize_net_aim')), $factoryService->getTag('payum.payment_factory'));
+        $this->assertEquals(
+            array(array('name' => 'authorize_net_aim', 'human_name' => 'Authorize Net Aim')),
+            $factoryService->getTag('payum.payment_factory')
+        );
 
         $factoryConfig = $factoryService->getArgument(0);
         $this->assertEquals('authorize_net_aim', $factoryConfig['payum.factory_name']);

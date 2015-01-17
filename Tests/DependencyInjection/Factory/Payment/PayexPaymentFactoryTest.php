@@ -159,7 +159,10 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factoryService = $container->getDefinition('payum.payex.factory');
         $this->assertEquals('Payum\Payex\PaymentFactory', $factoryService->getClass());
-        $this->assertEquals(array(array('name' => 'payex')), $factoryService->getTag('payum.payment_factory'));
+        $this->assertEquals(
+            array(array('name' => 'payex', 'human_name' => 'Payex')),
+            $factoryService->getTag('payum.payment_factory')
+        );
 
         $factoryConfig = $factoryService->getArgument(0);
         $this->assertEquals('payex', $factoryConfig['payum.factory_name']);

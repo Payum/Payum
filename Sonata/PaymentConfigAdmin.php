@@ -35,7 +35,7 @@ class PaymentConfigAdmin extends Admin
     protected function configureListFields(ListMapper $list)
     {
         $list
-            ->addIdentifier('paymentName')
+            ->add('paymentName')
             ->add('factoryName')
             ->add('config', 'array')
             ->add('_action', 'actions', [

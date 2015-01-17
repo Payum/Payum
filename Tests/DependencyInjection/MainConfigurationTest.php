@@ -71,7 +71,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                 ),
                 'payments' => array(
                     'a_payment' => array(
-                        'foo_payment' => array( 
+                        'foo_payment' => array(
                             'foo_opt' => 'foo'
                         ),
                     )
@@ -245,7 +245,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage Invalid configuration for path "payum.storages": The storage entry must be a valid model class. It is set notExistClass
      */
@@ -286,7 +286,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage Invalid configuration for path "payum.storages.stdClass": Only one storage per entry could be selected
      */
@@ -367,7 +367,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage Invalid configuration for path "payum.payments.a_payment": One payment from the  payments available must be selected
      */
@@ -610,6 +610,176 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $processor->processConfiguration($configuration, array(
             'payum' => array(
                 'security' => array(
+                ),
+                'payments' => array(
+                    'a_payment' => array(
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo'
+                        ),
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Invalid configuration for path "payum.dynamic_payments.config_storage": Only one config storage could be configured.
+     */
+    public function throwIfMoreThenOnePaymentConfigStorageConfigured()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'dynamic_payments' => array(
+                    'config_storage' => array(
+                        'Payum\Core\Model\PaymentConfig' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        ),
+                        'stdClass' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Core\Model\Token' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
+                'payments' => array(
+                    'a_payment' => array(
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo'
+                        ),
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Invalid configuration for path "payum.dynamic_payments.config_storage": The config class must implement `Payum\Core\Model\PaymentConfigInterface` interface
+     */
+    public function throwIfPaymentConfigStorageConfiguredWithModelNotImplementingPaymentConfigInterface()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'dynamic_payments' => array(
+                    'config_storage' => array(
+                        'stdClass' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Core\Model\Token' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
+                'payments' => array(
+                    'a_payment' => array(
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo'
+                        ),
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Invalid configuration for path "payum.dynamic_payments.config_storage": The storage entry must be a valid model class.
+     */
+    public function throwIfPaymentConfigStorageConfiguredWithNotModelClass()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'dynamic_payments' => array(
+                    'config_storage' => array(
+                        'foo' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Core\Model\Token' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
+                'payments' => array(
+                    'a_payment' => array(
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo'
+                        ),
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The child node "config_storage" at path "payum.dynamic_payments" must be configured.
+     */
+    public function throwIfPaymentConfigStorageNotConfigured()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'dynamic_payments' => array(
+                ),
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Core\Model\Token' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
                 ),
                 'payments' => array(
                     'a_payment' => array(

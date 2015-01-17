@@ -14,13 +14,15 @@
         </service>
 
         <service id="payum.form.type.payment_conifg" class="Payum\Core\Bridge\Symfony\Form\Type\PaymentConfigType">
+            <argument id="payum" type="service" />
+
             <tag name="form.type" alias="payum_payment_config" />
         </service>
 
         <service id="payum.form.type.payment_factories_choice" class="Payum\Core\Bridge\Symfony\Form\Type\PaymentFactoriesChoiceType">
-            <tag name="form.type" alias="payum_payment_factories_choice" />
-
             <argument>%payum.available_payment_factories%</argument>
+
+            <tag name="form.type" alias="payum_payment_factories_choice" />
         </service>
     </services>
 </container>

@@ -170,7 +170,10 @@ class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factoryService = $container->getDefinition('payum.be2bill_offsite.factory');
         $this->assertEquals('Payum\Be2Bill\OffsitePaymentFactory', $factoryService->getClass());
-        $this->assertEquals(array(array('name' => 'be2bill_offsite')), $factoryService->getTag('payum.payment_factory'));
+        $this->assertEquals(
+            array(array('name' => 'be2bill_offsite', 'human_name' => 'Be2bill Offsite')),
+            $factoryService->getTag('payum.payment_factory')
+        );
 
         $factoryConfig = $factoryService->getArgument(0);
         $this->assertEquals('be2bill_offsite', $factoryConfig['payum.factory_name']);

@@ -6,6 +6,7 @@ use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface;
 use Payum\Core\Exception\LogicException;
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
@@ -167,17 +168,25 @@ class PayumExtension extends Extension implements PrependExtensionInterface
     protected function loadDynamicPayments(array $dynamicPaymentsConfig, ContainerBuilder $container)
     {
         $configClass = null;
+        $configStorage = null;
         foreach ($dynamicPaymentsConfig['config_storage'] as $configClass => $configStorageConfig) {
             $storageFactoryName = $this->findSelectedStorageFactoryNameInStorageConfig($configStorageConfig);
 
-            $storageId = $this->storageFactories[$storageFactoryName]->create(
+            $configStorage = $this->storageFactories[$storageFactoryName]->create(
                 $container,
                 $configClass,
                 $configStorageConfig[$storageFactoryName]
             );
 
-            $container->setDefinition('payum.dynamic_payments.config_storage', new DefinitionDecorator($storageId));
+            $container->setDefinition('payum.dynamic_payments.config_storage', new DefinitionDecorator($configStorage));
         }
+
+        $registry =  new Definition('Payum\Core\Registry\DynamicRegistry', array(
+            new Reference('payum.dynamic_payments.config_storage'),
+            new Reference('payum.static_registry')
+        ));
+        $container->setDefinition('payum.dynamic_registry', $registry);
+        $container->setAlias('payum', new Alias('payum.dynamic_registry'));
 
         if (isset($dynamicPaymentsConfig['sonata_admin'])) {
             $paymentConfigAdmin =  new Definition('Payum\Bundle\PayumBundle\Sonata\PaymentConfigAdmin', array(
@@ -192,7 +201,7 @@ class PayumExtension extends Extension implements PrependExtensionInterface
                 'label' =>  "Configs",
             ));
 
-            $container->setDefinition('payum.dynamic_payments.config_admin', $paymentConfigAdmin);
+            $container->setDefinition('payum.dynamic_payments.payment_config_admin', $paymentConfigAdmin);
         }
     }
 

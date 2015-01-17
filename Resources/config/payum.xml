@@ -11,7 +11,9 @@
     <services>
         <!-- Generic -->
 
-        <service id="payum" class="Payum\Bundle\PayumBundle\Registry\ContainerAwareRegistry">
+        <service id="payum" alias="payum.static_registry" />
+
+        <service id="payum.static_registry" class="Payum\Bundle\PayumBundle\Registry\ContainerAwareRegistry">
             <argument type="collection" /> <!-- payments services. this should be replaced while container is built -->
             <argument type="collection" /> <!-- storages services. this should be replaced while container is built -->
             <argument type="collection" /> <!-- payments factories services. this should be replaced while container is built -->

@@ -11,7 +11,7 @@ class BuildRegistryPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $registry = $container->getDefinition('payum');
+        $registry = $container->getDefinition('payum.static_registry');
 
         $paymentsIds = array();
         foreach ($container->findTaggedServiceIds('payum.payment') as $paymentsId => $tagAttributes) {

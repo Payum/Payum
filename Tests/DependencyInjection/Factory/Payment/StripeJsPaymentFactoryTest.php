@@ -184,7 +184,10 @@ class StripeJsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $factoryService = $container->getDefinition('payum.stripe_js.factory');
         $this->assertEquals('Payum\Stripe\JsPaymentFactory', $factoryService->getClass());
 
-        $this->assertEquals(array(array('name' => 'stripe_js')), $factoryService->getTag('payum.payment_factory'));
+        $this->assertEquals(
+            array(array('name' => 'stripe_js', 'human_name' => 'Stripe Js')),
+            $factoryService->getTag('payum.payment_factory')
+        );
 
         $factoryConfig = $factoryService->getArgument(0);
         $this->assertEquals('stripe_js', $factoryConfig['payum.factory_name']);
