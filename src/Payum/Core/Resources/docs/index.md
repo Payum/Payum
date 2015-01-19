@@ -7,6 +7,7 @@
 * [Done script](done-script.md)
 * [Architecture](the-architecture.md)
 * [Storages](storages.md)
+* [Configure payment in backend](configure-payment-in-backend.md)
 * [Working with sensitive information](working-with-sensitive-information.md)
 * [Mask credit card number](mask-credit-card-number.md)
 * [Instant payment notification](instant-payment-notification.md)
