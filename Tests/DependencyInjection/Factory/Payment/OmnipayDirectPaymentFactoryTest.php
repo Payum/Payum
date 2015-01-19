@@ -183,7 +183,10 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factoryService = $container->getDefinition('payum.omnipay_direct.factory');
         $this->assertEquals('Payum\OmnipayBridge\DirectPaymentFactory', $factoryService->getClass());
-        $this->assertEquals(array(array('name' => 'omnipay_direct')), $factoryService->getTag('payum.payment_factory'));
+        $this->assertEquals(
+            array(array('name' => 'omnipay_direct', 'human_name' => 'Omnipay Direct')),
+            $factoryService->getTag('payum.payment_factory')
+        );
 
         $factoryConfig = $factoryService->getArgument(0);
         $this->assertEquals('omnipay_direct', $factoryConfig['payum.factory_name']);

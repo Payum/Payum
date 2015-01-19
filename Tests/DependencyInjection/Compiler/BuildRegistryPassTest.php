@@ -33,7 +33,8 @@ class BuildRegistryPassTest extends \Phpunit_Framework_TestCase
         $registry = new Definition('Payum\Bundle\PayumBundle\Regitry\ContainerAwareRegistry', array(null, null, null));
 
         $container = new ContainerBuilder;
-        $container->setDefinition('payum', $registry);
+        $container->setParameter('payum.available_payment_factories', array());
+        $container->setDefinition('payum.static_registry', $registry);
 
         $pass = new BuildRegistryPass;
 
@@ -52,7 +53,8 @@ class BuildRegistryPassTest extends \Phpunit_Framework_TestCase
         $registry = new Definition('Payum\Bundle\PayumBundle\Regitry\ContainerAwareRegistry', array(null, null, null));
 
         $container = new ContainerBuilder;
-        $container->setDefinition('payum', $registry);
+        $container->setParameter('payum.available_payment_factories', array());
+        $container->setDefinition('payum.static_registry', $registry);
 
         $container->setDefinition('payum.payment.foo', new Definition());
         $container->getDefinition('payum.payment.foo')->addTag('payum.payment', array('payment' => 'fooVal'));
@@ -83,7 +85,8 @@ class BuildRegistryPassTest extends \Phpunit_Framework_TestCase
         $registry = new Definition('Payum\Bundle\PayumBundle\Regitry\ContainerAwareRegistry', array(null, null, null));
 
         $container = new ContainerBuilder;
-        $container->setDefinition('payum', $registry);
+        $container->setParameter('payum.available_payment_factories', array());
+        $container->setDefinition('payum.static_registry', $registry);
 
         $container->setDefinition('payum.storage.foo', new Definition());
         $container->getDefinition('payum.storage.foo')->addTag('payum.storage', array('model_class' => 'fooVal'));
@@ -114,7 +117,8 @@ class BuildRegistryPassTest extends \Phpunit_Framework_TestCase
         $registry = new Definition('Payum\Bundle\PayumBundle\Regitry\ContainerAwareRegistry', array(null, null, null));
 
         $container = new ContainerBuilder;
-        $container->setDefinition('payum', $registry);
+        $container->setParameter('payum.available_payment_factories', array());
+        $container->setDefinition('payum.static_registry', $registry);
 
         $container->setDefinition('payum.payment_factory.foo', new Definition());
         $container->getDefinition('payum.payment_factory.foo')->addTag('payum.payment_factory', array('name' => 'fooVal'));
@@ -145,7 +149,8 @@ class BuildRegistryPassTest extends \Phpunit_Framework_TestCase
         $registry = new Definition('Payum\Bundle\PayumBundle\Regitry\ContainerAwareRegistry', array(null, null, null));
 
         $container = new ContainerBuilder;
-        $container->setDefinition('payum', $registry);
+        $container->setParameter('payum.available_payment_factories', array());
+        $container->setDefinition('payum.static_registry', $registry);
 
         $container->setDefinition('payum.storage.foo', new Definition());
         $container->getDefinition('payum.storage.foo')->addTag('payum.storage', array('model_class' => 'fooVal'));

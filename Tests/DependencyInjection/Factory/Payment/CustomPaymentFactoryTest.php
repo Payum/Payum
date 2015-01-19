@@ -135,7 +135,10 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factoryService = $container->getDefinition('payum.custom.factory');
         $this->assertEquals('Payum\Core\PaymentFactory', $factoryService->getClass());
-        $this->assertEquals(array(array('name' => 'custom')), $factoryService->getTag('payum.payment_factory'));
+        $this->assertEquals(
+            array(array('name' => 'custom', 'human_name' => 'Custom')),
+            $factoryService->getTag('payum.payment_factory')
+        );
 
         $factoryConfig = $factoryService->getArgument(0);
         $this->assertEquals('custom', $factoryConfig['payum.factory_name']);

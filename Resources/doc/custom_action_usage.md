@@ -48,7 +48,7 @@ There are several ways to add it to a payment:
         acme.payum.action.foo:
             class: Acme\PaymentBundle\Payum\Action\FooAction
             tags:
-                - {payum.action, { factory: a_factory }}
+                - { name: payum.action, factory: a_factory }
 
     ```
 
@@ -84,7 +84,7 @@ There are several ways to add it to a payment:
         acme.payum.action.foo:
             class: Acme\PaymentBundle\Payum\Action\FooAction
             tags:
-                - {payum.action, { prepend: true, all: true }}
+                - {name: payum.action, prepend: true, all: true }
     ```
 
 Back to [index](index.md).

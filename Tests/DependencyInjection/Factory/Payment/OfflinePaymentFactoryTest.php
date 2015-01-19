@@ -105,7 +105,10 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factoryService = $container->getDefinition('payum.offline.factory');
         $this->assertEquals('Payum\Offline\PaymentFactory', $factoryService->getClass());
-        $this->assertEquals(array(array('name' => 'offline')), $factoryService->getTag('payum.payment_factory'));
+        $this->assertEquals(
+            array(array('name' => 'offline', 'human_name' => 'Offline')),
+            $factoryService->getTag('payum.payment_factory')
+        );
 
         $factoryConfig = $factoryService->getArgument(0);
         $this->assertEquals('offline', $factoryConfig['payum.factory_name']);

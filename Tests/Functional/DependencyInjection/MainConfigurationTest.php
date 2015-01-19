@@ -48,7 +48,33 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldPassConfigurationProcessingWithPaypalExpressCheckoutNvpPaymentFactory()
+    public function shouldPassConfigurationProcessingWithMinimumConfig()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Core\Model\Token' => array(
+                            'filesystem' => array(
+                                'storage_dir' => sys_get_temp_dir(),
+                                'id_property' => 'hash'
+                            )
+                        )
+                    )
+                ),
+                'payments' => array()
+            )
+        ));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldPassConfigurationProcessingWithMinimumConfigPlusPayment()
     {
         $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
 
@@ -75,6 +101,75 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                             'sandbox' => true
                         )
                     )
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldPassConfigurationProcessingWithDynamicPayments()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Core\Model\Token' => array(
+                            'filesystem' => array(
+                                'storage_dir' => sys_get_temp_dir(),
+                                'id_property' => 'hash'
+                            )
+                        )
+                    )
+                ),
+                'dynamic_payments' => array(
+                    'config_storage' => array(
+                        'Payum\Core\Model\PaymentConfig' => array(
+                            'doctrine' => array(
+                                'driver' => 'aDriver',
+                            )
+                        ),
+                    ),
+                )
+            )
+        ));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldPassConfigurationProcessingWithDynamicPaymentsPlusSonataAdmin()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $processor->processConfiguration($configuration, array(
+            'payum' => array(
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Core\Model\Token' => array(
+                            'filesystem' => array(
+                                'storage_dir' => sys_get_temp_dir(),
+                                'id_property' => 'hash'
+                            )
+                        )
+                    )
+                ),
+                'dynamic_payments' => array(
+                    'sonata_admin' => true,
+                    'config_storage' => array(
+                        'Payum\Core\Model\PaymentConfig' => array(
+                            'doctrine' => array(
+                                'driver' => 'aDriver',
+                            )
+                        ),
+                    ),
                 )
             )
         ));

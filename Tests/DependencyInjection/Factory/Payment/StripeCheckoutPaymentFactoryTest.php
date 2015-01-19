@@ -183,7 +183,10 @@ class StripeCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factoryService = $container->getDefinition('payum.stripe_checkout.factory');
         $this->assertEquals('Payum\Stripe\CheckoutPaymentFactory', $factoryService->getClass());
-        $this->assertEquals(array(array('name' => 'stripe_checkout')), $factoryService->getTag('payum.payment_factory'));
+        $this->assertEquals(
+            array(array('name' => 'stripe_checkout', 'human_name' => 'Stripe Checkout')),
+            $factoryService->getTag('payum.payment_factory')
+        );
 
         $factoryConfig = $factoryService->getArgument(0);
         $this->assertEquals('stripe_checkout', $factoryConfig['payum.factory_name']);

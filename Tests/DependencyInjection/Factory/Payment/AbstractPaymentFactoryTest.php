@@ -212,7 +212,7 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factoryService = $container->getDefinition('payum.foo.factory');
         $this->assertEquals('Payum\Core\PaymentFactory', $factoryService->getClass());
-        $this->assertEquals(array(array('name' => 'foo')), $factoryService->getTag('payum.payment_factory'));
+        $this->assertEquals(array(array('name' => 'foo', 'human_name' => 'Foo')), $factoryService->getTag('payum.payment_factory'));
 
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(1));
         $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(1));

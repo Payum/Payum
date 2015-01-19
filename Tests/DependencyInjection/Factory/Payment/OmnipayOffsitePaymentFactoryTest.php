@@ -188,7 +188,10 @@ class OmnipayOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factoryService = $container->getDefinition('payum.omnipay_offsite.factory');
         $this->assertEquals('Payum\OmnipayBridge\OffsitePaymentFactory', $factoryService->getClass());
-        $this->assertEquals(array(array('name' => 'omnipay_offsite')), $factoryService->getTag('payum.payment_factory'));
+        $this->assertEquals(
+            array(array('name' => 'omnipay_offsite', 'human_name' => 'Omnipay Offsite')),
+            $factoryService->getTag('payum.payment_factory')
+        );
 
         $factoryConfig = $factoryService->getArgument(0);
         $this->assertEquals('omnipay_offsite', $factoryConfig['payum.factory_name']);

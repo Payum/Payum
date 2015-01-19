@@ -18,6 +18,8 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayDirectPa
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCheckoutNvpPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\PayumExtension;
+use Payum\Core\Model\PaymentConfig;
+use Payum\Core\Model\PaymentConfigInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
@@ -267,5 +269,164 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('payment', $attributes);
         $this->assertEquals('the_paypal_payment', $attributes['payment']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSetPayumAsAliasToStaticRegistryIfDynamicPaymentsNotConfigured()
+    {
+        $config = array(
+            // 'dynamic_payments' => array()
+            'security' => array(
+                'token_storage' => array(
+                    'Payum\Core\Model\Token' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
+            'payments' => array(),
+        );
+
+        $configs = array($config);
+
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->setParameter('kernel.debug', false);
+
+        $extension = new PayumExtension;
+        $extension->addStorageFactory(new FilesystemStorageFactory);
+
+        $extension->load($configs, $containerBuilder);
+
+        $this->assertEquals('payum.static_registry', $containerBuilder->getAlias('payum'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSetPayumAsAliasToDynamicRegistryAndPassStatisOneToDynamicOne()
+    {
+        $config = array(
+            'dynamic_payments' => array(
+                'config_storage' => array(
+                    'Payum\Core\Model\PaymentConfig' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
+            'security' => array(
+                'token_storage' => array(
+                    'Payum\Core\Model\Token' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
+            'payments' => array(),
+        );
+
+        $configs = array($config);
+
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->setParameter('kernel.debug', false);
+
+        $extension = new PayumExtension;
+        $extension->addStorageFactory(new FilesystemStorageFactory);
+
+        $extension->load($configs, $containerBuilder);
+
+        $this->assertEquals('payum.dynamic_registry', $containerBuilder->getAlias('payum'));
+
+        $registry = $containerBuilder->getDefinition('payum.dynamic_registry');
+        $this->assertEquals('Payum\Core\Registry\DynamicRegistry', $registry->getClass());
+        $this->assertEquals('payum.dynamic_payments.config_storage', (string) $registry->getArgument(0));
+        $this->assertEquals('payum.static_registry', (string) $registry->getArgument(1));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldConfigureSonataAdminClassForPaymentConfigModelSetInStorageSection()
+    {
+        $config = array(
+            'dynamic_payments' => array(
+                'sonata_admin' => true,
+                'config_storage' => array(
+                    'Payum\Bundle\PayumBundle\Tests\Functional\DependencyInjection\TestPaymentConfig' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
+            'security' => array(
+                'token_storage' => array(
+                    'Payum\Core\Model\Token' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
+            'payments' => array(),
+        );
+
+        $configs = array($config);
+
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->setParameter('kernel.debug', false);
+
+        $extension = new PayumExtension;
+        $extension->addStorageFactory(new FilesystemStorageFactory);
+
+        $extension->load($configs, $containerBuilder);
+
+        $configAdmin = $containerBuilder->getDefinition('payum.dynamic_payments.payment_config_admin');
+
+        $this->assertEquals('Payum\Bundle\PayumBundle\Sonata\PaymentConfigAdmin', $configAdmin->getClass());
+        $this->assertEquals('Payum\Bundle\PayumBundle\Tests\Functional\DependencyInjection\TestPaymentConfig', $configAdmin->getArgument(1));
+
+        $this->assertEquals(
+            array(array('manager_type' => 'orm', 'group' => 'Payments', 'label' => 'Configs')),
+            $configAdmin->getTag('sonata.admin')
+        );
+
+    }
+}
+
+class TestPaymentConfig implements PaymentConfigInterface
+{
+    public function getPaymentName()
+    {
+    }
+
+    public function setPaymentName($paymentName)
+    {
+    }
+
+    public function getFactoryName()
+    {
+    }
+
+    public function setFactoryName($name)
+    {
+    }
+
+    public function setConfig(array $config)
+    {
+    }
+
+    public function getConfig()
+    {
     }
 }
