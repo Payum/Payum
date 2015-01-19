@@ -2,7 +2,8 @@
 namespace Payum\Core\Bridge\Propel\Storage;
 
 use Payum\Core\Storage\AbstractStorage;
-use Payum\Core\Model\Identificator;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Model\Identity;
 
 class PropelStorage extends AbstractStorage
 {
@@ -22,13 +23,13 @@ class PropelStorage extends AbstractStorage
     {
         parent::__construct($modelClass);
 
-        $this->modelQuery = $modelClass . 'Query';
+        $this->modelQuery = $modelClass.'Query';
     }
 
     /**
      * {@inheritDoc}
      */
-    public function findModelById($id)
+    protected function doFind($id)
     {
         $modelQuery = $this->modelQuery;
         return $modelQuery::create()
@@ -54,15 +55,15 @@ class PropelStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
-    protected function doGetIdentificator($model)
+    protected function doGetIdentity($model)
     {
         $id = $this->getModelId($model);
 
         if (count($id) > 1) {
-            throw new \LogicException('Storage not support composite primary ids');
+            throw new LogicException('Storage not support composite primary ids');
         }
 
-        return new Identificator(array_shift($id), $model);
+        return new Identity(array_shift($id), $model);
     }
 
     /**
@@ -73,7 +74,7 @@ class PropelStorage extends AbstractStorage
     protected function getModelId($model)
     {
         $id = array();
-        $modelPeer = get_class($model) . 'Peer';
+        $modelPeer = get_class($model).'Peer';
         $modelColumns = $modelPeer::getTableMap()->getColumns();
         foreach ($modelColumns as $column) {
             if ($column->isPrimaryKey()) {
