@@ -26,7 +26,7 @@ class PaymentConfigAdmin extends Admin
      */
     protected function configureFormFields(FormMapper $form)
     {
-        $form->reorder([]); //hack!
+        $form->reorder(array()); //hack!
     }
 
     /**
@@ -38,12 +38,12 @@ class PaymentConfigAdmin extends Admin
             ->add('paymentName')
             ->add('factoryName')
             ->add('config', 'array')
-            ->add('_action', 'actions', [
-                'actions' => [
-                    'edit' => [],
-                    'delete' => [],
-                ]
-            ])
+            ->add('_action', 'actions', array(
+                'actions' => array(
+                    'edit' => array(),
+                    'delete' => array(),
+                )
+            ))
         ;
     }
 
