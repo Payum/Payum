@@ -18,12 +18,23 @@ class PropelStorage extends AbstractStorage
 
     /**
      * @param string $modelClass
+     * @param string $modelPeer
+     * @param string $modelQuery
      */
-    public function __construct($modelClass)
+    public function __construct($modelClass, $modelPeer = null, $modelQuery = null)
     {
         parent::__construct($modelClass);
 
-        $this->modelQuery = $modelClass.'Query';
+        $this->modelQuery = $modelQuery ?: $modelClass.'Query';
+        $this->modelPeer = $modelPeer ?: $modelClass.'Peer';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function findBy(array $criteria)
+    {
+        throw new LogicException('Method is not supported by the storage.');
     }
 
     /**
@@ -32,8 +43,8 @@ class PropelStorage extends AbstractStorage
     protected function doFind($id)
     {
         $modelQuery = $this->modelQuery;
-        return $modelQuery::create()
-            ->findPk($id);
+
+        return $modelQuery::create()->findPk($id);
     }
 
     /**
