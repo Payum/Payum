@@ -154,6 +154,21 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldNotAddGenericTwigPathsIfTwigBundleNotRegistered()
+    {
+        $container = new ContainerBuilder;
+        $container->setParameter('kernel.bundles', array());
+
+        $extension = new PayumExtension;
+
+        $extension->prepend($container);
+
+        $this->assertEmpty($container->getExtensionConfig('twig'));
+    }
+
+    /**
+     * @test
+     */
     public function shouldAddGenericTwigPathsIfPaymentFactoryNotImplementPrependFactoryInterface()
     {
         $factoryMock = $this->getMock('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface');
@@ -170,6 +185,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $extension->addPaymentFactory($factoryMock);
 
         $container = new ContainerBuilder;
+        $container->setParameter('kernel.bundles', array('TwigBundle' => 'TwigBundle'));
 
         $extension->prepend($container);
 
@@ -185,6 +201,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
     public function shouldPassContainerToPaymentFactoryPrependMethodIfImplementsPrependFactoryInterface()
     {
         $container = new ContainerBuilder;
+        $container->setParameter('kernel.bundles', array('TwigBundle' => 'TwigBundle'));
 
         $factoryMock = $this->getMock('Payum\Bundle\PayumBundle\Tests\DependencyInjection\FactoryPlusPrependExtension');
         $factoryMock
@@ -217,6 +234,48 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $this->assertContains('fooVal', $twigConfig[1]['foo']);
         $this->assertContains('PayumCore', $twigConfig[2]['paths']);
         $this->assertContains('PayumSymfonyBridge', $twigConfig[2]['paths']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotAddPayumMappingIfDoctrineBundleNotRegistered()
+    {
+        $container = new ContainerBuilder;
+        $container->setParameter('kernel.bundles', array());
+
+        $extension = new PayumExtension;
+
+        $extension->prepend($container);
+
+        $this->assertEmpty($container->getExtensionConfig('doctrine'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAddPayumMappingIfDoctrineBundleRegistered()
+    {
+        $extension = new PayumExtension;
+
+        $container = new ContainerBuilder;
+        $container->setParameter('kernel.bundles', array('DoctrineBundle' => 'DoctrineBundle'));
+
+        $extension->prepend($container);
+
+        $rc = new \ReflectionClass('Payum\Core\Payment');
+        $payumRootDir = dirname($rc->getFileName());
+
+        $this->assertEquals(array(array(
+            'orm' => array('mappings' => array(
+                'payum' => array(
+                    'is_bundle' => false,
+                    'type' => 'xml',
+                    'dir' => $payumRootDir.'/Bridge/Doctrine/Resources/mapping',
+                    'prefix' => 'Payum\Core\Model',
+                )
+            )),
+        )), $container->getExtensionConfig('doctrine'));
     }
 }
 
