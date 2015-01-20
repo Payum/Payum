@@ -38,7 +38,8 @@
         "php": ">=5.3.2",
         "kriswallsmith/buzz": "~0.13",
         "league/url": "~3.0",
-        "twig/twig": "~1.0"
+        "twig/twig": "~1.0",
+        "propel/propel1": "~1.7"
     },
     "require-dev": {
         "ext-curl": "*",

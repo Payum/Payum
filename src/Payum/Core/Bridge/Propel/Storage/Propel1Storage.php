@@ -5,7 +5,7 @@ use Payum\Core\Storage\AbstractStorage;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\Identity;
 
-class PropelStorage extends AbstractStorage
+class Propel1Storage extends AbstractStorage
 {
     /**
      * @var string

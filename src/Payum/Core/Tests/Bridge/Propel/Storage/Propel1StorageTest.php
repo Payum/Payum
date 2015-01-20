@@ -2,16 +2,16 @@
 
 namespace Payum\Core\Tests\Bridge\Propel\Storage;
 
-use Payum\Core\Bridge\Propel\Storage\PropelStorage;
-use Payum\Core\Tests\Mocks\Model\TestModel;
+use Payum\Core\Bridge\Propel\Storage\Propel1Storage as PropelStorage;
+use Payum\Core\Tests\Mocks\Model\PropelModel;
 
-class PropelModelStorageTest extends \PHPUnit_Framework_TestCase
+class Propel1StorageTest extends \PHPUnit_Framework_TestCase
 {
     public static function setUpBeforeClass()
     {
-        /*if (false == class_exists('Propel\PropelBundle\PropelBundle', $autoload = true)) {
+        if (false == class_exists('Propel', $autoload = true)) {
             throw new \PHPUnit_Framework_SkippedTestError('Propel ORM lib not installed. Have you run composer with --dev option?');
-        }*/
+        }
     }
 
     /**
@@ -19,7 +19,7 @@ class PropelModelStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfAbstractStorage()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Propel\Storage\PropelStorage');
+        $rc = new \ReflectionClass('Payum\Core\Bridge\Propel\Storage\Propel1Storage');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Storage\AbstractStorage'));
     }
@@ -30,9 +30,9 @@ class PropelModelStorageTest extends \PHPUnit_Framework_TestCase
     public function couldBeConstructedWithModelClassesAsArguments()
     {
         new PropelStorage(
-            'Payum\Core\Tests\Mocks\Model\TestModel',
-            'Payum\Core\Tests\Mocks\Model\TestModelPeer',
-            'Payum\Core\Tests\Mocks\Model\TestModelQuery'
+            'Payum\Core\Tests\Mocks\Model\PropelModel',
+            'Payum\Core\Tests\Mocks\Model\PropelModelPeer',
+            'Payum\Core\Tests\Mocks\Model\PropelModelQuery'
         );
     }
 
@@ -44,7 +44,7 @@ class PropelModelStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfTryToUseNotSupportedFindByMethod()
     {
-        $storage = new PropelStorage('Payum\Core\Tests\Mocks\Model\TestModel');
+        $storage = new PropelStorage('Payum\Core\Tests\Mocks\Model\PropelModel');
 
         $storage->findBy(array());
     }
@@ -54,7 +54,7 @@ class PropelModelStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCreateInstanceOfModelClassGivenInConstructor()
     {
-        $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
+        $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\PropelModel';
 
         $storage = new PropelStorage($expectedModelClass);
 
@@ -69,10 +69,28 @@ class PropelModelStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallModelClassSaveOnUpdateModel()
     {
-        $storage = new PropelStorage('Payum\Core\Tests\Mocks\Model\TestModel');
+        $storage = new PropelStorage('Payum\Core\Tests\Mocks\Model\PropelModel');
 
         $model = $storage->create();
 
         $storage->update($model);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldFindModelById()
+    {
+        $expectedModelId = 123;
+        $expectedFoundModel = new PropelModel();
+        $expectedFoundModel->findPk($expectedModelId);
+
+        $storage = new PropelStorage(
+            'Payum\Core\Tests\Mocks\Model\PropelModel'
+        );
+
+        $actualModel = $storage->find($expectedModelId);
+
+        $this->assertEquals($expectedFoundModel, $actualModel);
     }
 }
