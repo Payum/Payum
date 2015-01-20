@@ -62,17 +62,39 @@ class PayumExtension extends Extension implements PrependExtensionInterface
      */
     public function prepend(ContainerBuilder $container)
     {
-        $container->prependExtensionConfig('twig', array(
-            'paths' => array(
-                TwigFactory::guessViewsPath('Payum\Core\Payment') => 'PayumCore',
-                TwigFactory::guessViewsPath('Payum\Core\Bridge\Symfony\ReplyToSymfonyResponseConverter') => 'PayumSymfonyBridge',
-            )
-        ));
+        $bundles = $container->getParameter('kernel.bundles');
 
-        foreach ($this->paymentFactories as $factory) {
-            if ($factory instanceof PrependExtensionInterface) {
-                $factory->prepend($container);
+        if (isset($bundles['TwigBundle'])) {
+            $container->prependExtensionConfig('twig', array(
+                'paths' => array(
+                    TwigFactory::guessViewsPath('Payum\Core\Payment') => 'PayumCore',
+                    TwigFactory::guessViewsPath('Payum\Core\Bridge\Symfony\ReplyToSymfonyResponseConverter') => 'PayumSymfonyBridge',
+                )
+            ));
+
+            foreach ($this->paymentFactories as $factory) {
+                if ($factory instanceof PrependExtensionInterface) {
+                    $factory->prepend($container);
+                }
             }
+        }
+
+        if (isset($bundles['DoctrineBundle'])) {
+            $rc = new \ReflectionClass('Payum\Core\Payment');
+            $payumRootDir = dirname($rc->getFileName());
+
+            $container->prependExtensionConfig('doctrine', array(
+                'orm' => array(
+                    'mappings' => array(
+                        'payum' => array(
+                            'is_bundle' => false,
+                            'type' => 'xml',
+                            'dir' => $payumRootDir.'/Bridge/Doctrine/Resources/mapping',
+                            'prefix' => 'Payum\Core\Model',
+                        ),
+                    ),
+                ),
+            ));
         }
     }
 

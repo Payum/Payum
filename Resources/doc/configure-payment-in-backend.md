@@ -42,30 +42,12 @@ next, you have to add mapping of the basic entity you've just extended, and conf
 ```yml
 #app/config/config.yml
 
-doctrine:
-    orm:
-        entity_managers:
-            default:
-                mappings:
-                    payum:
-                        is_bundle: false
-                        type: xml
-                        dir: %kernel.root_dir%/../vendor/payum/core/Payum/Core/Bridge/Doctrine/Resources/mapping
-
-                        # set this dir instead if you use `payum/payum` library
-                        #dir: %kernel.root_dir%/../vendor/payum/payum/src/Payum/Core/Bridge/Doctrine/Resources/mapping
-
-                        prefix: Payum\Core\Model
-
 payum:
     dynaminc_payments:
         sonata_admin: true
         config_storage: 
             Acme\PaymentBundle\Entity\PaymentConfig: { doctrine: orm }
 ```
-
-_**Note**: You should use commented path if you install payum/payum package._
-
 
 ## Backend
 
