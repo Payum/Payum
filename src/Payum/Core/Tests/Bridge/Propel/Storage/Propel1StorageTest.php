@@ -7,13 +7,6 @@ use Payum\Core\Tests\Mocks\Model\PropelModel;
 
 class Propel1StorageTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        if (false == class_exists('Propel', $autoload = true)) {
-            throw new \PHPUnit_Framework_SkippedTestError('Propel ORM lib not installed. Have you run composer with --dev option?');
-        }
-    }
-
     /**
      * @test
      */
@@ -38,19 +31,6 @@ class Propel1StorageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage Method is not supported by the storage.
-     */
-    public function throwIfTryToUseNotSupportedFindByMethod()
-    {
-        $storage = new PropelStorage('Payum\Core\Tests\Mocks\Model\PropelModel');
-
-        $storage->findBy(array());
-    }
-
-    /**
-     * @test
      */
     public function shouldCreateInstanceOfModelClassGivenInConstructor()
     {
@@ -65,9 +45,10 @@ class Propel1StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage Save method was triggered.
      */
-    public function shouldCallModelClassSaveOnUpdateModel()
+    public function throwForModelClassSaveOnUpdateModel()
     {
         $storage = new PropelStorage('Payum\Core\Tests\Mocks\Model\PropelModel');
 
@@ -85,11 +66,25 @@ class Propel1StorageTest extends \PHPUnit_Framework_TestCase
         $expectedFoundModel = new PropelModel();
         $expectedFoundModel->findPk($expectedModelId);
 
-        $storage = new PropelStorage(
-            'Payum\Core\Tests\Mocks\Model\PropelModel'
-        );
+        $storage = new PropelStorage('Payum\Core\Tests\Mocks\Model\PropelModel');
 
         $actualModel = $storage->find($expectedModelId);
+
+        $this->assertEquals($expectedFoundModel, $actualModel);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldFindModelByCriteria()
+    {
+        $expectedModelId = 123;
+        $expectedFoundModel = new PropelModel();
+        $expectedFoundModel->findPk($expectedModelId);
+
+        $storage = new PropelStorage('Payum\Core\Tests\Mocks\Model\PropelModel');
+
+        $actualModel = $storage->findBy(array('id' => $expectedModelId));
 
         $this->assertEquals($expectedFoundModel, $actualModel);
     }

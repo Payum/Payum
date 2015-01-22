@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Core\Bridge\Propel\Storage;
 
+use \Criteria;
+
 use Payum\Core\Storage\AbstractStorage;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\Identity;
@@ -34,7 +36,14 @@ class Propel1Storage extends AbstractStorage
      */
     public function findBy(array $criteria)
     {
-        throw new LogicException('Method is not supported by the storage.');
+        $crit = new Criteria();
+        foreach ($criteria as $column => $value) {
+            $crit->add($column, $value);
+        }
+
+        $modelPeer = $this->modelPeer;
+
+        return $modelPeer::doSelectOne($crit);
     }
 
     /**

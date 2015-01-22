@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Core\Tests\Mocks\Model;
 
+use Payum\Core\Exception\LogicException;
+
 class PropelModel
 {
     protected $id;
@@ -43,5 +45,6 @@ class PropelModel
 
     public function save()
     {
+        throw new LogicException('Save method was triggered.');
     }
 }
