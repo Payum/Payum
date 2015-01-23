@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Bridge\Propel\Storage;
 
-use \Criteria;
+use Criteria;
 
 use Payum\Core\Storage\AbstractStorage;
 use Payum\Core\Exception\LogicException;
