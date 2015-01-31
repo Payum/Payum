@@ -55,17 +55,17 @@ class FillOrderDetailsActionTest extends GenericActionTest
         $this->assertArrayHasKey('amount', $details);
         $this->assertEquals(1.23, $details['amount']);
 
-        $this->assertArrayHasKey('invoice_number', $details);
-        $this->assertEquals('theNumber', $details['invoice_number']);
+        $this->assertArrayHasKey('invoice_num', $details);
+        $this->assertEquals('theNumber', $details['invoice_num']);
 
         $this->assertArrayHasKey('description', $details);
         $this->assertEquals('the description', $details['description']);
 
-        $this->assertArrayHasKey('customer_id', $details);
-        $this->assertEquals('theClientId', $details['customer_id']);
+        $this->assertArrayHasKey('cust_id', $details);
+        $this->assertEquals('theClientId', $details['cust_id']);
 
-        $this->assertArrayHasKey('email_address', $details);
-        $this->assertEquals('theClientEmail', $details['email_address']);
+        $this->assertArrayHasKey('email', $details);
+        $this->assertEquals('theClientEmail', $details['email']);
     }
 
     /**
