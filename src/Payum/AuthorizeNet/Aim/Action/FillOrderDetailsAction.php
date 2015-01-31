@@ -21,10 +21,10 @@ class FillOrderDetailsAction implements ActionInterface
 
         $details = $order->getDetails();
         $details['amount'] = $order->getTotalAmount() / $divisor;
-        $details['invoice_number'] = $order->getNumber();
+        $details['invoice_num'] = $order->getNumber();
         $details['description'] = $order->getDescription();
-        $details['email_address'] = $order->getClientEmail();
-        $details['customer_id'] = $order->getClientId();
+        $details['email'] = $order->getClientEmail();
+        $details['cust_id'] = $order->getClientId();
 
         $order->setDetails($details);
     }
