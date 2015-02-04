@@ -16,10 +16,6 @@ class FillOrderDetailsAction implements ActionInterface
     public function execute($request)
     {
         RequestNotSupportedException::assertSupports($this, $request);
-        
-        if($request->getToken()->getDetails()) {
-            return;
-        }
 
         $order = $request->getOrder();
 
