@@ -22,6 +22,9 @@ class FillOrderDetailsAction implements ActionInterface
         }
 
         $order = $request->getOrder();
+        $details->defaults([
+            Constants::FIELD_PAID => true,
+        ]);
 
         $details = $order->getDetails();
         $details['amount'] = $order->getTotalAmount();
@@ -30,7 +33,7 @@ class FillOrderDetailsAction implements ActionInterface
         $details['description'] = $order->getDescription();
         $details['client_email'] = $order->getClientEmail();
         $details['client_id'] = $order->getClientId();
-        $details[Constants::FIELD_PAID] = true;
+        $details[Constants::FIELD_PAID] = $details['paid'];
 
         $order->setDetails($details);
     }
