@@ -27,9 +27,9 @@ class FillOrderDetailsAction implements ActionInterface
         $details['client_email'] = $order->getClientEmail();
         $details['client_id'] = $order->getClientId();
         
-        $details->defaults([
+        $details->defaults(array(
             Constants::FIELD_PAID => true,
-        ]);
+        ));
 
         $order->setDetails($details);
     }
