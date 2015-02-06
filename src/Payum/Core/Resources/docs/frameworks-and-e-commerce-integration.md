@@ -11,6 +11,7 @@
 ## Storages.
 
 * Doctrine ORM\MongoODM
+* Propel1
 * Zend Db Gateway
 * Filesystem
 
