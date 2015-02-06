@@ -5,6 +5,7 @@ use Payum\Offline\Action\FillOrderDetailsAction;
 use Payum\Core\Model\Order;
 use Payum\Core\Request\FillOrderDetails;
 use Payum\Core\Tests\GenericActionTest;
+use Payum\Offline\Constants;
 
 class FillOrderDetailsActionTest extends GenericActionTest
 {
@@ -69,6 +70,31 @@ class FillOrderDetailsActionTest extends GenericActionTest
 
         $this->assertArrayHasKey('client_email', $details);
         $this->assertEquals('theClientEmail', $details['client_email']);
+
+        $this->assertArrayHasKey(Constants::FIELD_PAID, $details);
+        $this->assertEquals(true, $details[Constants::FIELD_PAID]);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldForcePaidFalseIfAlreadySet()
+    {
+        $order = new Order();
+        $order->setDetails(array(
+            Constants::FIELD_PAID => false,
+        ));
+
+        $action = new FillOrderDetailsAction();
+
+        $action->execute(new FillOrderDetails($order));
+
+        $details = $order->getDetails();
+
+        $this->assertNotEmpty($details);
+
+        $this->assertArrayHasKey(Constants::FIELD_PAID, $details);
+        $this->assertEquals(false, $details[Constants::FIELD_PAID]);
     }
 
     /**
