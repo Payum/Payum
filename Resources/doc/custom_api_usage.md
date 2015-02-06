@@ -78,12 +78,10 @@ payum:
     payments:
         your_payment_name_here:
             paypal_express_checkout_nvp:
-                api:
-                    options:
-                        username:  NOT USED
-                        password:  NOT USED
-                        signature: NOT USED
-                        sandbox: true
+                username:  NOT USED
+                password:  NOT USED
+                signature: NOT USED
+                sandbox: true
                 apis:
                     - acme.payment.payum.paypal_express_checkout_api
 
