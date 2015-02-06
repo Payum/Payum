@@ -2,6 +2,7 @@
 namespace Payum\Offline\Action;
 
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\FillOrderDetails;
 use Payum\Offline\Constants;
@@ -19,7 +20,7 @@ class FillOrderDetailsAction implements ActionInterface
 
         $order = $request->getOrder();
 
-        $details = $order->getDetails();
+        $details = ArrayObject::ensureArrayObject($order->getDetails());
         $details['amount'] = $order->getTotalAmount();
         $details['currency'] = $order->getCurrencyCode();
         $details['number'] = $order->getNumber();
@@ -31,7 +32,7 @@ class FillOrderDetailsAction implements ActionInterface
             Constants::FIELD_PAID => true,
         ));
 
-        $order->setDetails($details);
+        $order->setDetails((array) $details);
     }
 
     /**
