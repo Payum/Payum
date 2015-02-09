@@ -1,10 +1,12 @@
 <?php
-namespace Payum\Core\Security;
+namespace Payum\Core\Bridge\PlainPhp\Security;
 
 use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\Security\HttpRequestVerifierInterface;
+use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 
-class PlainHttpRequestVerifier implements HttpRequestVerifierInterface
+class HttpRequestVerifier implements HttpRequestVerifierInterface
 {
     /**
      * @var \Payum\Core\Storage\StorageInterface

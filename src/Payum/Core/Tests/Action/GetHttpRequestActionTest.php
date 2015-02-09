@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Action;
 
-use Payum\Core\Action\GetHttpRequestAction;
+use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Tests\GenericActionTest;
 
@@ -9,7 +9,7 @@ class GetHttpRequestActionTest extends GenericActionTest
 {
     protected $requestClass = 'Payum\Core\Request\GetHttpRequest';
 
-    protected $actionClass = 'Payum\Core\Action\GetHttpRequestAction';
+    protected $actionClass = 'Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction';
 
     public function provideSupportedRequests()
     {

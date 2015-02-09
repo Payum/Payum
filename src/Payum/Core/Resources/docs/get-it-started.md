@@ -38,9 +38,10 @@ Here we can put our payments, storages. Also we can configure security component
 <?php
 //config.php
 
+use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
+use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Storage\FilesystemStorage;
-use Payum\Core\Security\PlainHttpRequestVerifier;
 use Payum\Core\Security\GenericTokenFactory;
 use Payum\Offline\PaymentFactory as OfflinePaymentFactory;
 
@@ -63,15 +64,16 @@ $payum = new SimpleRegistry($payments, $storages);
 
 $tokenStorage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Token', 'hash');
 
-$requestVerifier = new PlainHttpRequestVerifier($tokenStorage);
+$requestVerifier = new HttpRequestVerifier($tokenStorage);
 
 $tokenFactory = new GenericTokenFactory(
-    $tokenStorage,
-    $payum,
-    'http://'.$_SERVER['HTTP_HOST'],
-    'capture.php',
-    'notify.php',
-    'authorize.php'
+    new TokenFactory($tokenStorage, $payum), 
+    array(
+        'capture' => 'capture.php',
+        'notify' => 'notify.php',
+        'authorize' => 'authorize.php',
+        'refund' => 'refund.php',
+    )
 );
 ```
 

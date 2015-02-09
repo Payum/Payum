@@ -1,21 +1,20 @@
 <?php
-namespace Payum\Core\Tests\Bridge\Symfony\Security;
+namespace Payum\Core\Tests\Security;
 
-use Payum\Core\Bridge\Symfony\Security\TokenFactory;
 use Payum\Core\Model\Identity;
 use Payum\Core\Model\Token;
 use Payum\Core\Registry\StorageRegistryInterface;
+use Payum\Core\Security\AbstractTokenFactory;
 use Payum\Core\Storage\StorageInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class TokenFactoryTest extends \PHPUnit_Framework_TestCase
+class AbstractTokenFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldImplementsTokenFactoryInterface()
+    public function shouldImplementsGenericTokenFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Security\TokenFactory');
+        $rc = new \ReflectionClass('Payum\Core\Security\AbstractTokenFactory');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Security\TokenFactoryInterface'));
     }
@@ -23,11 +22,11 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfAbtractTokenFactory()
+    public function shouldBeAbstract()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Security\TokenFactory');
+        $rc = new \ReflectionClass('Payum\Core\Security\AbstractTokenFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Security\AbstractTokenFactory'));
+        $this->assertFalse($rc->isInstantiable());
     }
 
     /**
@@ -35,11 +34,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithExpectedArguments()
     {
-        new TokenFactory(
-            $this->createStorageMock(),
-            $this->createStorageRegistryMock(),
-            $this->createUrlGeneratorStub()
-        );
+        $this->createTokenFactoryMock($this->createStorageMock(), $this->createStorageRegistryMock());
     }
 
     /**
@@ -81,7 +76,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($modelStorage))
         ;
 
-        $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, $this->createUrlGeneratorStub());
+        $factory = $this->createTokenFactoryMock($tokenStorageMock, $storageRegistryMock);
 
         $actualToken = $factory->createToken(
             $paymentName,
@@ -139,7 +134,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($modelStorage))
         ;
 
-        $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, $this->createUrlGeneratorStub());
+        $factory = $this->createTokenFactoryMock($tokenStorageMock, $storageRegistryMock);
 
         $actualToken = $factory->createToken(
             $paymentName,
@@ -188,7 +183,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('getStorage')
         ;
 
-        $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, $this->createUrlGeneratorStub());
+        $factory = $this->createTokenFactoryMock($tokenStorageMock, $storageRegistryMock);
 
         $actualToken = $factory->createToken(
             $paymentName,
@@ -230,7 +225,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('getStorage')
         ;
 
-        $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, $this->createUrlGeneratorStub());
+        $factory = $this->createTokenFactoryMock($tokenStorageMock, $storageRegistryMock);
 
         $actualToken = $factory->createToken(
             $paymentName,
@@ -284,7 +279,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($modelStorage))
         ;
 
-        $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, $this->createUrlGeneratorStub());
+        $factory = $this->createTokenFactoryMock($tokenStorageMock, $storageRegistryMock);
 
         $actualToken = $factory->createToken(
             $paymentName,
@@ -344,7 +339,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($modelStorage))
         ;
 
-        $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, $this->createUrlGeneratorStub());
+        $factory = $this->createTokenFactoryMock($tokenStorageMock, $storageRegistryMock);
 
         $actualToken = $factory->createToken(
             $paymentName,
@@ -407,7 +402,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($modelStorage))
         ;
 
-        $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, $this->createUrlGeneratorStub());
+        $factory = $this->createTokenFactoryMock($tokenStorageMock, $storageRegistryMock);
 
         $actualToken = $factory->createToken(
             $paymentName,
@@ -470,7 +465,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($modelStorage))
         ;
 
-        $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, $this->createUrlGeneratorStub());
+        $factory = $this->createTokenFactoryMock($tokenStorageMock, $storageRegistryMock);
 
         $actualToken = $factory->createToken(
             $paymentName,
@@ -495,6 +490,26 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param StorageInterface $tokenStorage
+     * @param StorageRegistryInterface $registry
+     *
+     * @return AbstractTokenFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function createTokenFactoryMock(StorageInterface $tokenStorage, StorageRegistryInterface $registry)
+    {
+        $factoryMock = $this->getMockForAbstractClass('Payum\Core\Security\AbstractTokenFactory', array($tokenStorage, $registry));
+        $factoryMock
+            ->expects($this->any())
+            ->method('generateUrl')
+            ->willReturnCallback(function($path, array $args) {
+                return $path.'?'.http_build_query($args);
+            })
+        ;
+
+        return $factoryMock;
+    }
+
+    /**
      * @return \PHPUnit_Framework_MockObject_MockObject|StorageInterface
      */
     protected function createStorageMock()
@@ -508,23 +523,5 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
     protected function createStorageRegistryMock()
     {
         return $this->getMock('Payum\Core\Registry\StorageRegistryInterface');
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|UrlGeneratorInterface
-     */
-    protected function createUrlGeneratorStub()
-    {
-        $urlGenerator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
-
-        $urlGenerator
-            ->expects($this->any())
-            ->method('generate')
-            ->willReturnCallback(function($route, $parameters) {
-                return $route.'?'.http_build_query($parameters);
-            })
-        ;
-
-        return $urlGenerator;
     }
 }

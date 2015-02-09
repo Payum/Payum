@@ -2,16 +2,16 @@
 namespace Payum\Core\Tests\Security;
 
 use Payum\Core\Model\Token;
-use Payum\Core\Security\PlainHttpRequestVerifier;
+use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 
-class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
+class HttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldImplementHttpRequestVerifierInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Security\PlainHttpRequestVerifier');
+        $rc = new \ReflectionClass('Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Security\HttpRequestVerifierInterface'));
     }
@@ -21,7 +21,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithTokenStorageAsFirstArgument()
     {
-        new PlainHttpRequestVerifier($this->createStorageMock());
+        new HttpRequestVerifier($this->createStorageMock());
     }
 
     /**
@@ -32,7 +32,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfRequestIsNotArrayOnVerify()
     {
-        $verifier = new PlainHttpRequestVerifier($this->createStorageMock());
+        $verifier = new HttpRequestVerifier($this->createStorageMock());
 
         $verifier->verify('not array');
     }
@@ -45,7 +45,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfRequestNotContainTokenParameterOnVerify()
     {
-        $verifier = new PlainHttpRequestVerifier($this->createStorageMock());
+        $verifier = new HttpRequestVerifier($this->createStorageMock());
 
         $verifier->verify(array());
     }
@@ -68,7 +68,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(null))
         ;
 
-        $verifier = new PlainHttpRequestVerifier($storageMock);
+        $verifier = new HttpRequestVerifier($storageMock);
 
         $verifier->verify(array('payum_token' => $invalidHash));
     }
@@ -95,7 +95,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($token))
         ;
 
-        $verifier = new PlainHttpRequestVerifier($storageMock);
+        $verifier = new HttpRequestVerifier($storageMock);
 
         $verifier->verify(array('payum_token' => 'theHash'));
     }
@@ -119,7 +119,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($expectedToken))
         ;
 
-        $verifier = new PlainHttpRequestVerifier($storageMock);
+        $verifier = new HttpRequestVerifier($storageMock);
 
         $actualToken = $verifier->verify(array('payum_token' => 'theHash'));
 
@@ -133,7 +133,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
     {
         $expectedToken = new Token();
 
-        $verifier = new PlainHttpRequestVerifier($this->createStorageMock());
+        $verifier = new HttpRequestVerifier($this->createStorageMock());
 
         $actualToken = $verifier->verify(array('payum_token' => $expectedToken));
 
@@ -147,7 +147,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
     {
         $expectedToken = new Token();
 
-        $verifier = new PlainHttpRequestVerifier($this->createStorageMock(), 'custom_token');
+        $verifier = new HttpRequestVerifier($this->createStorageMock(), 'custom_token');
 
         $actualToken = $verifier->verify(array('custom_token' => $expectedToken));
 
@@ -168,7 +168,7 @@ class PlainHttpRequestVerifierTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo($token))
         ;
 
-        $verifier = new PlainHttpRequestVerifier($storageMock);
+        $verifier = new HttpRequestVerifier($storageMock);
 
         $verifier->invalidate($token);
     }

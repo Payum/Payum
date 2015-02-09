@@ -2,11 +2,11 @@
 namespace Payum\Core\Bridge\Symfony\Security;
 
 use Payum\Core\Registry\StorageRegistryInterface;
-use Payum\Core\Security\AbstractGenericTokenFactory;
+use Payum\Core\Security\AbstractTokenFactory;
 use Payum\Core\Storage\StorageInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class TokenFactory extends AbstractGenericTokenFactory
+class TokenFactory extends AbstractTokenFactory
 {
     /**
      * @var \Symfony\Component\Routing\RouterInterface
@@ -14,19 +14,15 @@ class TokenFactory extends AbstractGenericTokenFactory
     protected $urlGenerator;
 
     /**
-     * @param UrlGeneratorInterface    $urlGenerator
      * @param StorageInterface         $tokenStorage
      * @param StorageRegistryInterface $storageRegistry
-     * @param string                   $capturePath
-     * @param string                   $notifyPath
-     * @param string                   $autorizePath
-     * @param string                   $refundPath
+     * @param UrlGeneratorInterface    $urlGenerator
      */
-    public function __construct(UrlGeneratorInterface $urlGenerator, StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $capturePath, $notifyPath, $autorizePath, $refundPath)
+    public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
 
-        parent::__construct($tokenStorage, $storageRegistry, $capturePath, $notifyPath, $autorizePath, $refundPath);
+        parent::__construct($tokenStorage, $storageRegistry);
     }
 
     /**
