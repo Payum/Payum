@@ -19,14 +19,20 @@
             <argument type="service" id="payum.security.token_storage" />
         </service>
 
-        <service id="payum.security.token_factory" class="Payum\Core\Bridge\Symfony\Security\TokenFactory">
-            <argument type="service" id="router" />
+        <service id="payum.security.token_factory_internal" class="Payum\Core\Bridge\Symfony\Security\TokenFactory" public="false">
             <argument type="service" id="payum.security.token_storage" />
             <argument type="service" id="payum" />
-            <argument>%payum.capture_path%</argument>
-            <argument>%payum.notify_path%</argument>
-            <argument>%payum.authorize_path%</argument>
-            <argument>%payum.refund_path%</argument>
+            <argument type="service" id="router" />
+        </service>
+
+        <service id="payum.security.token_factory" class="Payum\Core\Security\GenericTokenFactory">
+            <argument type="service" id="payum.security.token_factory_internal" />
+            <argument type="collection">
+                <argument key="capture">%payum.capture_path%</argument>
+                <argument key="notify">%payum.notify_path%</argument>
+                <argument key="authorize">%payum.authorize_path%</argument>
+                <argument key="refund">%payum.refund_path%</argument>
+            </argument>
         </service>
     </services>
 </container>
