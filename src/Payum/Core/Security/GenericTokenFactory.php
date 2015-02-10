@@ -1,42 +1,113 @@
 <?php
 namespace Payum\Core\Security;
 
-use League\Url\Url;
-use Payum\Core\Registry\StorageRegistryInterface;
-use Payum\Core\Storage\StorageInterface;
+use Payum\Core\Exception\LogicException;
 
-class GenericTokenFactory extends AbstractGenericTokenFactory
+class GenericTokenFactory implements GenericTokenFactoryInterface
 {
     /**
-     * @var string
+     * @var TokenFactoryInterface
      */
-    protected $baseUrl;
+    protected $tokenFactory;
 
     /**
-     * @param StorageInterface         $tokenStorage
-     * @param StorageRegistryInterface $storageRegistry
-     * @param string                   $baseUrl
-     * @param string                   $capturePath
-     * @param string                   $notifyPath
-     * @param string                   $authorizePath
-     * @param string                   $refundPath
+     * @var string[]
      */
-    public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $baseUrl, $capturePath, $notifyPath, $authorizePath, $refundPath)
-    {
-        parent::__construct($tokenStorage, $storageRegistry, $capturePath, $notifyPath, $authorizePath, $refundPath);
+    protected $paths;
 
-        $this->baseUrl = $baseUrl;
+    /**
+     * @param TokenFactoryInterface $tokenFactory
+     * @param string[] $paths
+     */
+    public function __construct(TokenFactoryInterface $tokenFactory, array $paths)
+    {
+        $this->tokenFactory = $tokenFactory;
+        $this->paths = $paths;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function generateUrl($path, array $parameters = array())
+    public function createToken($paymentName, $model, $targetPath, array $targetParameters = array(), $afterPath = null, array $afterParameters = array())
     {
-        $url = Url::createFromUrl($this->baseUrl);
-        $url->getPath()->set($path);
-        $url->getQuery()->set($parameters);
+        return $this->tokenFactory->createToken(
+            $paymentName,
+            $model,
+            $targetPath,
+            $targetParameters,
+            $afterPath,
+            $afterParameters
+        );
+    }
 
-        return (string) $url;
+    /**
+     * {@inheritDoc}
+     */
+    public function createCaptureToken($paymentName, $model, $afterPath, array $afterParameters = array())
+    {
+        $capturePath = $this->getPath('capture');
+
+        $afterToken = $this->createToken($paymentName, $model, $afterPath, $afterParameters);
+
+        return $this->createToken(
+            $paymentName,
+            $model,
+            $capturePath,
+            array(),
+            $afterToken->getTargetUrl()
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createAuthorizeToken($paymentName, $model, $afterPath, array $afterParameters = array())
+    {
+        $authorizePath = $this->getPath('authorize');
+
+        $afterToken = $this->createToken($paymentName, $model, $afterPath, $afterParameters);
+
+        return $this->createToken($paymentName, $model, $authorizePath, array(), $afterToken->getTargetUrl());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createRefundToken($paymentName, $model, $afterPath = null, array $afterParameters = array())
+    {
+        $refundPath = $this->getPath('refund');
+
+        $afterUrl = null;
+        if ($afterPath) {
+            $afterUrl = $this->createToken($paymentName, $model, $afterPath, $afterParameters)->getTargetUrl();
+        }
+
+        return $this->createToken($paymentName, $model, $refundPath, array(), $afterUrl);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createNotifyToken($paymentName, $model = null)
+    {
+        return $this->createToken($paymentName, $model, $this->getPath('notify'));
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return string
+     */
+    protected function getPath($name)
+    {
+        if (empty($this->paths[$name])) {
+            throw new LogicException(sprintf(
+                'The path "%s" is not found. Possible paths are %s',
+                $name,
+                implode(', ', array_keys($this->paths))
+            ));
+        }
+
+        return $this->paths[$name];
     }
 }

@@ -1,6 +1,7 @@
 <?php
-namespace Payum\Core\Action;
+namespace Payum\Core\Bridge\PlainPhp\Action;
 
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetHttpRequest;
 

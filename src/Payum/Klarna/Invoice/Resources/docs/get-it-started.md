@@ -52,13 +52,14 @@ Now we are ready to configure all the stuff:
 <?php
 //config.php
 
+use Payum\Core\Bridge\PlainPhp\Security\PlainHttpRequestVerifier;
+use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
 use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Storage\FilesystemStorage;
-use Payum\Core\Security\PlainHttpRequestVerifier;
 use Payum\Core\Security\GenericTokenFactory;
 
 $tokenStorage = new FilesystemStorage('/path/to/storage', 'App\Model\PaymentSecurityToken', 'hash');
-$requestVerifier = new PlainHttpRequestVerifier($tokenStorage);
+$requestVerifier = new HttpRequestVerifier($tokenStorage);
 
 $detailsClass = 'App\Model\PaymentDetails';
 
@@ -86,12 +87,13 @@ $payments['klarna_invoice'] => $klarnaInvoiceFactory->create(array(
 $payum = new SimpleRegistry($payments, $storages);
 
 $tokenFactory = new GenericTokenFactory(
-    $tokenStorage,
-    $payum,
-    'http://'.$_SERVER['HTTP_HOST'],
-    'capture.php',
-    'notify.php',
-    'authorize.php'
+    new TokenFactory($tokenStorage, $payum),
+    array(
+        'capture' => 'capture.php',
+        'notify' => 'notify.php',
+        'authorize' => authorize.php',
+        'refund' => 'refund.php',
+    )
 );
 ```
 
