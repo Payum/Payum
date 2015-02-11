@@ -25,7 +25,7 @@ class Propel2ModelQuery
             ));
         }
 
-        $this->filters[] = [$column, $value];
+        $this->filters[] = array($column, $value);
 
         return $this;
     }
