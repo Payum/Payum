@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<config>
+    <propel>
+        <database>
+            <connections>
+                <!-- We don't care if the connection is valid, propel only needs it to generate the model -->
+                <connection id="default">
+                    <adapter>mysql</adapter>
+                    <classname>Propel\Runtime\Connection\ConnectionWrapper</classname>
+                    <dsn>mysql:host=localhost;dbname=foo</dsn>
+                    <user>bar</user>
+                    <password>baz</password>
+                </connection>
+            </connections>
+        </database>
+        <runtime>
+            <defaultConnection>default</defaultConnection>
+            <connection>default</connection>
+        </runtime>
+        <generator>
+            <defaultConnection>default</defaultConnection>
+            <connection>default</connection>
+        </generator>
+    </propel>
+</config>
+

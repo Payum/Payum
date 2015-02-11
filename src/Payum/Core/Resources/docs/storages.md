@@ -272,6 +272,56 @@ $storage = new FilesystemStorage(
 );
 ```
 
+## Propel 2
+
+First, install Propel 2:
+
+```sh
+$ php composer.phar require propel/propel dev-master
+```
+
+Then, you have to insert the file ```src/Payum/Core/Bridge/Propel2/Resources/install/default.sql``` into a database, and
+generate the model using the following command:
+
+```sh
+$ bin/propel --config-dir=src/Payum/Core/Bridge/Propel2/Resources/config --schema-dir=src/Payum/Core/Bridge/Propel2/Resources/config --output-dir=src/ build 
+```
+
+You have to start the connection to the database.
+
+```php
+<?php
+
+use Propel\Runtime\Propel;
+use Propel\Runtime\Connection\ConnectionManagerSingle;
+$serviceContainer = Propel::getServiceContainer();
+$serviceContainer->setAdapterClass('default', 'mysql');
+$manager = new ConnectionManagerSingle();
+$manager->setConfiguration(array (
+  'dsn'      => 'mysql:host=localhost;dbname=my_db_name',
+  'user'     => 'my_db_user',
+  'password' => 's3cr3t',
+));
+$serviceContainer->setConnectionManager('default', $manager);
+```
+
+Finally you can declare your storages:
+
+```php
+<?php
+
+use Payum\Core\Bridge\Propel2\Storage\Propel2Storage;
+
+$orderStorage = new Propel2Storage(
+    "Payum\\Core\\Bridge\\Propel2\\Model\\PayumOrder"
+);
+
+$tokenStorage = new Propel2Storage(
+    "Payum\\Core\\Bridge\\Propel2\\Model\\PayumToken"
+);
+
+```
+
 ## Custom.
 
 You can create your own custom storage. To do so just implement `StorageInterface`.
