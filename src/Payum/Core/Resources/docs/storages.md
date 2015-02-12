@@ -276,15 +276,18 @@ $storage = new FilesystemStorage(
 
 First, you have to generate the model base classes.
 
-To do that, you have to run:
+To do that, you have to create a configuration file. 
+Please take a look at [propel's documentation](http://propelorm.org/documentation/02-buildtime.html#building-the-model) to write that file.
+
+Then run:
 ```sh
-$ bin/propel --config-dir=src/Payum/Core/Bridge/Propel2/Resources/config --schema-dir=src/Payum/Core/Bridge/Propel2/Resources/config --output-dir=src/ build
+$ bin/propel --config-dir=path/where/you/created/propel.ext --schema-dir=src/Payum/Core/Bridge/Propel2/Resources/config --output-dir=src/ build
 ```
 
 Then you can insert ```src/Payum/Core/Bridge/Propel2/Resources/install/order.sql``` and ```src/Payum/Core/Bridge/Propel2/Resources/install/token.sql```
 in your database(s).
 
-You can copy the ```schema.xml``` and ```propel.xml.dist``` files into your project resources and customize them.
+You can copy the ```schema.xml``` file into your project resources and customize it.
 If you customize your ```schema.xml``` you'll have to generate the table creation sql file.
 You only have to run:
 ```sh
