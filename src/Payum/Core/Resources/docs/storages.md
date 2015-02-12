@@ -274,20 +274,34 @@ $storage = new FilesystemStorage(
 
 ## Propel 2
 
-First, install Propel 2:
+First, you have to generate the model base classes.
 
+To do that, you have to run:
 ```sh
-$ php composer.phar require propel/propel dev-master
+$ bin/propel --config-dir=src/Payum/Core/Bridge/Propel2/Resources/config --schema-dir=src/Payum/Core/Bridge/Propel2/Resources/config --output-dir=src/ build
 ```
 
-Then, you have to insert the file ```src/Payum/Core/Bridge/Propel2/Resources/install/default.sql``` into a database, and
-generate the model using the following command:
+Then you can insert ```src/Payum/Core/Bridge/Propel2/Resources/install/order.sql``` and ```src/Payum/Core/Bridge/Propel2/Resources/install/token.sql```
+in your database(s).
 
+You can copy the ```schema.xml``` and ```propel.xml.dist``` files into your project resources and customize them.
+If you customize your ```schema.xml``` you'll have to generate the table creation sql file.
+You only have to run:
 ```sh
-$ bin/propel --config-dir=src/Payum/Core/Bridge/Propel2/Resources/config --schema-dir=src/Payum/Core/Bridge/Propel2/Resources/config --output-dir=src/ build 
+$ bin/propel --config-dir=your/path/to/propel.xml/directory --schema-dir=your/path/to/schema.xml/directory --output-dir=your-application/resources/ sql:build
 ```
 
-You have to start the connection to the database.
+If you want to add your own logic to the model classes, you can extend the following classes:
+- ```Payum\Core\Bridge\Propel2\Model\Order```
+- ```Payum\Core\Bridge\Propel2\Model\OrderQuery```
+- ```Payum\Core\Bridge\Propel2\Model\Token```
+- ```Payum\Core\Bridge\Propel2\Model\TokenQuery```
+
+If you don't want to, you only have to use them.
+
+Then, you have to configure a connection.
+
+Here's a snippet adapted from propel [documentation](http://propelorm.org/documentation/02-buildtime.html#runtime-connection-settings):
 
 ```php
 <?php
@@ -303,23 +317,6 @@ $manager->setConfiguration(array (
   'password' => 's3cr3t',
 ));
 $serviceContainer->setConnectionManager('default', $manager);
-```
-
-Finally you can declare your storages:
-
-```php
-<?php
-
-use Payum\Core\Bridge\Propel2\Storage\Propel2Storage;
-
-$orderStorage = new Propel2Storage(
-    "Payum\\Core\\Bridge\\Propel2\\Model\\PayumOrder"
-);
-
-$tokenStorage = new Propel2Storage(
-    "Payum\\Core\\Bridge\\Propel2\\Model\\PayumToken"
-);
-
 ```
 
 ## Custom.

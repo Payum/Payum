@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Based on Propel1 Bridge schema -->
-<database defaultIdMethod="native" name="default">
+<database defaultIdMethod="native" namespace="Payum\Core\Bridge\Propel2\Model" name="default">
     <vendor type="mysql">
         <parameter name="Engine" value="InnoDB"/>
         <parameter name="Charset" value="utf8"/>
     </vendor>
 
-    <table name="payum_order" namespace="Payum\Core\Bridge\Propel2\Model">
+    <table name="payum_order" phpName="Order">
         <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true" />
 
         <column name="number" type="VARCHAR" size="255"/>
@@ -19,8 +18,9 @@
         <column name="details" type="ARRAY"/>
     </table>
 
-    <table name="payum_token" namespace="Payum\Core\Bridge\Propel2\Model">
+    <table name="payum_token"  phpName="Token">
         <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true" />
+
         <column name="hash" type="VARCHAR"/>
         <column name="details" type="OBJECT"/>
         <column name="after_url" type="VARCHAR" size="255"/>

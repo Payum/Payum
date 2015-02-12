@@ -7,9 +7,9 @@
                 <connection id="default">
                     <adapter>mysql</adapter>
                     <classname>Propel\Runtime\Connection\ConnectionWrapper</classname>
-                    <dsn>mysql:host=localhost;dbname=foo</dsn>
-                    <user>bar</user>
-                    <password>baz</password>
+                    <dsn>mysql:host=localhost;dbname=YOUR_DB_NAME</dsn>
+                    <user>YOUR_USERNAME</user>
+                    <password>YOU_PASSWORD</password>
                 </connection>
             </connections>
         </database>

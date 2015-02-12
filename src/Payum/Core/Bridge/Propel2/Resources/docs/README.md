@@ -4,7 +4,32 @@ Propel2 Bridge for Payum
 Getting started with Propel2 bridge
 ---
 
-In order to use the Propel2 bridge, you have to configure a connection.
+First, you have to generate the model base classes.
+
+To do that, you have to run:
+```sh
+$ bin/propel --config-dir=src/Payum/Core/Bridge/Propel2/Resources/config --schema-dir=src/Payum/Core/Bridge/Propel2/Resources/config --output-dir=src/ build
+```
+
+Then you can insert ```src/Payum/Core/Bridge/Propel2/Resources/install/order.sql``` and ```src/Payum/Core/Bridge/Propel2/Resources/install/token.sql```
+in your database(s).
+
+You can copy the ```schema.xml``` and ```propel.xml.dist``` files into your project resources and customize them.
+If you customize your ```schema.xml``` you'll have to generate the table creation sql file.
+You only have to run:
+```sh
+$ bin/propel --config-dir=your/path/to/propel.xml/directory --schema-dir=your/path/to/schema.xml/directory --output-dir=your-application/resources/ sql:build
+```
+
+If you want to add your own logic to the model classes, you can extend the following classes:
+- ```Payum\Core\Bridge\Propel2\Model\Order```
+- ```Payum\Core\Bridge\Propel2\Model\OrderQuery```
+- ```Payum\Core\Bridge\Propel2\Model\Token```
+- ```Payum\Core\Bridge\Propel2\Model\TokenQuery```
+
+If you don't want to, you only have to use them.
+
+Then, you have to configure a connection.
 
 Here's a snippet adapted from propel [documentation](http://propelorm.org/documentation/02-buildtime.html#runtime-connection-settings):
 
@@ -23,23 +48,3 @@ $manager->setConfiguration(array (
 ));
 $serviceContainer->setConnectionManager('default', $manager);
 ```
-
-How to generate the model ?
----
-
-Go to payum root and launch:
-
-```sh
-$ bin/propel --config-dir=src/Payum/Core/Bridge/Propel2/Resources/config --schema-dir=src/Payum/Core/Bridge/Propel2/Resources/config --output-dir=src/ build 
-```
-
-How to generate the default.sql file ?
----
-
-Go to payum root and launch:
-
-```sh
-$ bin/propel --config-dir=src/Payum/Core/Bridge/Propel2/Resources/config --schema-dir=src/Payum/Core/Bridge/Propel2/Resources/config --output-dir=src/Payum/Core/Bridge/Propel2/Resources/install sql:build
-```
-
-You may remove the generated sqldb.map file as it isn't used anymore after.
