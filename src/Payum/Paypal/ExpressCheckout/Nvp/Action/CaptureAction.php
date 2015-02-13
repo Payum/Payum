@@ -6,13 +6,30 @@ use Payum\Core\Request\Capture;
 use Payum\Core\Request\Sync;
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Security\GenericTokenFactoryAwareInterface;
+use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
-class CaptureAction extends PaymentAwareAction
+class CaptureAction extends PaymentAwareAction implements GenericTokenFactoryAwareInterface
 {
+    /**
+     * @var GenericTokenFactoryInterface
+     */
+    protected $tokenFactory;
+
+    /**
+     * @param GenericTokenFactoryInterface $genericTokenFactory
+     *
+     * @return void
+     */
+    public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null)
+    {
+        $this->tokenFactory = $genericTokenFactory;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -34,6 +51,15 @@ class CaptureAction extends PaymentAwareAction
 
             if (false == $model['CANCELURL'] && $request->getToken()) {
                 $model['CANCELURL'] = $request->getToken()->getTargetUrl();
+            }
+
+            if (empty($details['PAYMENTREQUEST_0_NOTIFYURL']) && $request->getToken() && $this->tokenFactory) {
+                $notifyToken = $this->tokenFactory->createNotifyToken(
+                    $request->getToken()->getPaymentName(),
+                    $request->getToken()->getDetails()
+                );
+
+                $details['PAYMENTREQUEST_0_NOTIFYURL'] = $notifyToken->getTargetUrl();
             }
 
             $this->payment->execute(new SetExpressCheckout($model));
