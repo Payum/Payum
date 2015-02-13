@@ -68,6 +68,7 @@
         "doctrine/mongodb-odm": "If you want to store models to mongo doctrin2 ODM",
         "zendframework/zend-db": "If you want to store models to Zend Db ORM",
         "propel/propel1": "If you want to store models to Propel1 ORM",
+        "propel/propel": "If you want to store models to Propel2 ORM",
         "symfony/routing": "If you want to use TokenFactory from symfony's bridge",
         "symfony/http-kernel": "If you want to use HttpRequestVerifier from symfony's bridge",
         "symfony/http-foundation": "If you want to use HttpRequestVerifier or HttpResponse reply from symfony's bridge",
