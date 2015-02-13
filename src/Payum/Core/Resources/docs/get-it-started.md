@@ -43,7 +43,6 @@ use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Security\GenericTokenFactory;
-use Payum\Offline\PaymentFactory as OfflinePaymentFactory;
 
 $orderClass = 'Payum\Core\Model\Order';
 
@@ -54,7 +53,10 @@ $storages = array(
 );
 
 $payments = array();
-$payments['offline'] = OfflinePaymentFactory::create();
+
+
+$offlinePaymentFactory = new \Payum\Offline\PaymentFactory();
+$payments['offline'] = $offlinePaymentFactory->create();
 
 //put here other payments
 

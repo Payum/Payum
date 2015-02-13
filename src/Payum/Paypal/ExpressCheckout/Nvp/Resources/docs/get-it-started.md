@@ -21,6 +21,7 @@ We only have to add the payment factory. All the rest remains the same:
 <?php
 //config.php
 
+use Payum\Core\Extension\GenericTokenFactoryExtension;
 use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory as PaypalExpressPaymentFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
@@ -30,6 +31,9 @@ $payments['paypal_express_checkout'] = $paypalExpressCheckoutFactory->create(arr
    'password'  => 'change it',
    'signature' => 'change it',
    'sandbox'   => true,
+   
+   // uncomment if you want notify url to be generated automatically.
+   // 'payum.extension.token_factory' => new GenericTokenFactoryExtension($tokenFactory), 
 ));
 ```
 
