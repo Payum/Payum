@@ -6,13 +6,30 @@ use Payum\Core\Request\Capture;
 use Payum\Core\Request\Sync;
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Security\GenericTokenFactoryAwareInterface;
+use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
-class CaptureAction extends PaymentAwareAction
+class CaptureAction extends PaymentAwareAction implements GenericTokenFactoryAwareInterface
 {
+    /**
+     * @var GenericTokenFactoryInterface
+     */
+    protected $tokenFactory;
+
+    /**
+     * @param GenericTokenFactoryInterface $genericTokenFactory
+     *
+     * @return void
+     */
+    public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null)
+    {
+        $this->tokenFactory = $genericTokenFactory;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -21,41 +38,49 @@ class CaptureAction extends PaymentAwareAction
         /** @var $request Capture */
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $model = ArrayObject::ensureArrayObject($request->getModel());
+        $details = ArrayObject::ensureArrayObject($request->getModel());
+        $details->defaults(array(
+            'PAYMENTREQUEST_0_PAYMENTACTION' => Api::PAYMENTACTION_SALE,
+        ));
 
-        if (false == $model['PAYMENTREQUEST_0_PAYMENTACTION']) {
-            $model['PAYMENTREQUEST_0_PAYMENTACTION'] = Api::PAYMENTACTION_SALE;
-        }
-
-        if (false == $model['TOKEN']) {
-            if (false == $model['RETURNURL'] && $request->getToken()) {
-                $model['RETURNURL'] = $request->getToken()->getTargetUrl();
+        if (false == $details['TOKEN']) {
+            if (false == $details['RETURNURL'] && $request->getToken()) {
+                $details['RETURNURL'] = $request->getToken()->getTargetUrl();
             }
 
-            if (false == $model['CANCELURL'] && $request->getToken()) {
-                $model['CANCELURL'] = $request->getToken()->getTargetUrl();
+            if (false == $details['CANCELURL'] && $request->getToken()) {
+                $details['CANCELURL'] = $request->getToken()->getTargetUrl();
             }
 
-            $this->payment->execute(new SetExpressCheckout($model));
+            if (empty($details['PAYMENTREQUEST_0_NOTIFYURL']) && $request->getToken() && $this->tokenFactory) {
+                $notifyToken = $this->tokenFactory->createNotifyToken(
+                    $request->getToken()->getPaymentName(),
+                    $request->getToken()->getDetails()
+                );
 
-            if ($model['L_ERRORCODE0']) {
+                $details['PAYMENTREQUEST_0_NOTIFYURL'] = $notifyToken->getTargetUrl();
+            }
+
+            $this->payment->execute(new SetExpressCheckout($details));
+
+            if ($details['L_ERRORCODE0']) {
                 return;
             }
 
-            $this->payment->execute(new AuthorizeToken($model));
+            $this->payment->execute(new AuthorizeToken($details));
         }
 
-        $this->payment->execute(new Sync($model));
+        $this->payment->execute(new Sync($details));
 
         if (
-            $model['PAYERID'] &&
-            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $model['CHECKOUTSTATUS'] &&
-            $model['PAYMENTREQUEST_0_AMT'] > 0
+            $details['PAYERID'] &&
+            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $details['CHECKOUTSTATUS'] &&
+            $details['PAYMENTREQUEST_0_AMT'] > 0
         ) {
-            $this->payment->execute(new DoExpressCheckoutPayment($model));
+            $this->payment->execute(new DoExpressCheckoutPayment($details));
         }
 
-        $this->payment->execute(new Sync($model));
+        $this->payment->execute(new Sync($details));
     }
 
     /**

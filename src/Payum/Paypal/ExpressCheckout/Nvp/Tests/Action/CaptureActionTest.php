@@ -278,6 +278,156 @@ class CaptureActionTest extends GenericActionTest
     }
 
     /**
+     * @test
+     */
+    public function shouldAddNotifyUrlIfTokenFactorySetAndCaptureTokenPassed()
+    {
+        $details = new \ArrayObject(array(
+            'foo' => 'fooVal',
+        ));
+
+        $captureToken = new Token();
+        $captureToken->setPaymentName('thePaymentName');
+        $captureToken->setDetails($details);
+
+        $notifyToken = new Token();
+        $notifyToken->setTargetUrl('theNotifyUrl');
+
+        $tokenFactoryMock = $this->getMock('Payum\Core\Security\GenericTokenFactoryInterface');
+        $tokenFactoryMock
+            ->expects($this->once())
+            ->method('createNotifyToken')
+            ->with('thePaymentName', $this->identicalTo($details))
+            ->will($this->returnValue($notifyToken))
+        ;
+
+        $action = new CaptureAction();
+        $action->setPayment($this->createPaymentMock());
+        $action->setGenericTokenFactory($tokenFactoryMock);
+
+        $request = new Capture($captureToken);
+        $request->setModel($details);
+
+        $action->execute($request);
+
+        $this->assertArrayHasKey('PAYMENTREQUEST_0_NOTIFYURL', $details);
+        $this->assertEquals('theNotifyUrl', $details['PAYMENTREQUEST_0_NOTIFYURL']);
+
+        $this->assertArrayHasKey('foo', $details);
+        $this->assertEquals('fooVal', $details['foo']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotAddNotifyUrlIfAlreadySet()
+    {
+        $details = new \ArrayObject(array(
+            'PAYMENTREQUEST_0_NOTIFYURL' => 'alreadySetUrl',
+        ));
+
+        $captureToken = new Token();
+        $captureToken->setPaymentName('thePaymentName');
+        $captureToken->setDetails($details);
+
+        $tokenFactoryMock = $this->getMock('Payum\Core\Security\GenericTokenFactoryInterface');
+        $tokenFactoryMock
+            ->expects($this->never())
+            ->method('createNotifyToken')
+        ;
+
+        $action = new CaptureAction();
+        $action->setPayment($this->createPaymentMock());
+        $action->setGenericTokenFactory($tokenFactoryMock);
+
+        $request = new Capture($captureToken);
+        $request->setModel($details);
+
+        $action->execute($request);
+
+        $this->assertArrayHasKey('PAYMENTREQUEST_0_NOTIFYURL', $details);
+        $this->assertEquals('alreadySetUrl', $details['PAYMENTREQUEST_0_NOTIFYURL']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotAddNotifyUrlIfPaypalTokenAlreadySet()
+    {
+        $details = new \ArrayObject(array(
+            'TOKEN' => 'foo',
+        ));
+
+        $captureToken = new Token();
+        $captureToken->setPaymentName('thePaymentName');
+        $captureToken->setDetails($details);
+
+        $tokenFactoryMock = $this->getMock('Payum\Core\Security\GenericTokenFactoryInterface');
+        $tokenFactoryMock
+            ->expects($this->never())
+            ->method('createNotifyToken')
+        ;
+
+        $action = new CaptureAction();
+        $action->setPayment($this->createPaymentMock());
+        $action->setGenericTokenFactory($tokenFactoryMock);
+
+        $request = new Capture($captureToken);
+        $request->setModel($details);
+
+        $action->execute($request);
+
+        $this->assertArrayNotHasKey('PAYMENTREQUEST_0_NOTIFYURL', $details);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotAddNotifyUrlIfTokenFactoryNotSet()
+    {
+        $details = new \ArrayObject(array(
+        ));
+
+        $captureToken = new Token();
+        $captureToken->setPaymentName('thePaymentName');
+        $captureToken->setDetails($details);
+
+        $action = new CaptureAction();
+        $action->setPayment($this->createPaymentMock());
+
+        $request = new Capture($captureToken);
+        $request->setModel($details);
+
+        $action->execute($request);
+
+        $this->assertArrayNotHasKey('PAYMENTREQUEST_0_NOTIFYURL', $details);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotAddNotifyUrlIfCaptureTokenNotSet()
+    {
+        $details = new \ArrayObject();
+
+        $tokenFactoryMock = $this->getMock('Payum\Core\Security\GenericTokenFactoryInterface');
+        $tokenFactoryMock
+            ->expects($this->never())
+            ->method('createNotifyToken')
+        ;
+
+        $action = new CaptureAction();
+        $action->setPayment($this->createPaymentMock());
+        $action->setGenericTokenFactory($tokenFactoryMock);
+
+        $action->execute(new Capture($details));
+
+        $this->assertNotEmpty($details);
+
+        $this->assertArrayNotHasKey('PAYMENTREQUEST_0_NOTIFYURL', $details);
+    }
+
+    /**
      * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\PaymentInterface
      */
     protected function createPaymentMock()
