@@ -12,6 +12,7 @@
 
 * Doctrine ORM\MongoODM
 * Propel1
+* Propel2
 * Zend Db Gateway
 * Filesystem
 
