@@ -58,6 +58,12 @@
             <tag name="payum.extension" all="true" alias="psr_logger" />
         </service>
 
+        <service id="payum.extension.token_factory" class="Payum\Core\Extension\GenericTokenFactoryExtension">
+            <argument type="service" id="payum.security.token_factory" />
+
+            <tag name="payum.extension" all="true" alias="token_factory" />
+        </service>
+
         <!-- Actions -->
 
         <service id="payum.action.get_http_request" class="Payum\Core\Bridge\Symfony\Action\GetHttpRequestAction">
