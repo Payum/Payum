@@ -14,6 +14,7 @@
 * Propel1
 * Propel2
 * Zend Db Gateway
+* Elouqent
 * Filesystem
 
 ## E-Commerce
