@@ -54,7 +54,7 @@ $factory = PaypalPaymentFactory();
 $payment = $factory->create();
 
 try {
-    $payment->execute(new Capture($order), true);
+    $payment->execute(new Capture($order));
     $payment->execute($status = new GetHumanStatus($order));
     
     $status->isCaptured();
@@ -63,7 +63,6 @@ try {
     exit;
 }
 ```
-
 
 ### Other operations.
 
