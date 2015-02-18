@@ -62,7 +62,14 @@ try {
 }
 ```
 
-### Other operations.
+### Get Payment details
+
+```php
+<?php
+var_dump($order->getDetails());
+```
+
+### Authorize, Refund and so on
 
 ```php
 <?php
