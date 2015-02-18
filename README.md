@@ -19,39 +19,51 @@ It would be handy tool not only for basic tasks like capture or refund but for r
 
 ```php
 <?php
-use Payum\Core\Model\Order;
-use Payum\Core\Reply\HttpRedirect;
-use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetHumanStatus;
+use Payum\Core\Model\Order;
 use Payum\Offline\PaymentFactory as OfflinePaymentFactory;
 
 $order = new Order;
 $order->setTotalAmount(100);
 $order->setCurrencyCode('USD');
 
-$payment = OfflinePaymentFactory::create();
+$factory = OfflinePaymentFactory();
+$payment = $factory->create();
 
-if ($reply = $payment->execute(new Capture($order), true)) {
-    if ($reply instanceof HttpRedirect) {
-        header("Location: ".$reply->getUrl());
-    } elseif ($reply instanceof HttpResponse) {
-        echo $reply->getContent();
-    } else {
-        throw new \LogicException('Unsupported reply.', null, $reply);
-    }
-}
+$payment->execute(new Capture($order));
+$payment->execute($status = new GetHumanStatus($order));
+
+$status->isCaptured();
 ```
 
-### Get status
+### Paypal Purchase
 
 ```php
 <?php
+use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHumanStatus;
+use Payum\Core\Model\Order;
+use Payum\Paypal\ExpressCheckout\PaymentFactory as PaypalPaymentFactory;
 
-$payment->execute($status = new GetHumanStatus($order));
+$order = new Order;
+$order->setTotalAmount(100);
+$order->setCurrencyCode('USD');
 
-echo $status->getValue();
+$factory = PaypalPaymentFactory();
+$payment = $factory->create();
+
+try {
+    $payment->execute(new Capture($order), true);
+    $payment->execute($status = new GetHumanStatus($order));
+    
+    $status->isCaptured();
+} catch (HttpRedirectReply $reply) {
+    header("Location: ".$reply->getUrl());
+    exit;
+}
 ```
+
 
 ### Other operations.
 
