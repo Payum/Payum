@@ -28,8 +28,7 @@ $order = new Order;
 $order->setTotalAmount(100);
 $order->setCurrencyCode('USD');
 
-$factory = OfflinePaymentFactory();
-$payment = $factory->create();
+$payment = (new OfflinePaymentFactory())->create();
 
 $payment->execute(new Capture($order));
 $payment->execute($status = new GetHumanStatus($order));
@@ -50,8 +49,7 @@ $order = new Order;
 $order->setTotalAmount(100);
 $order->setCurrencyCode('USD');
 
-$factory = PaypalPaymentFactory();
-$payment = $factory->create();
+$payment = (new PaypalPaymentFactory())->create();
 
 try {
     $payment->execute(new Capture($order));
