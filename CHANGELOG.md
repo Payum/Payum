@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.14.0 (2015-02-20)
+
+* [payment-factory] pass config to core payment factory too.
+* [payment-factory] allow set default config to payment factory.
+* [payment-factory] add factory name and title to the payment config.
+* [payment-factory] return default options when call createConfig.
+* [doc] add EloquentStorage to list of support storages.
+* [doc] add Propel2Storage to list of supported storages.
+* [doc] add Propel1Storage to supported storages.
+* [security] add token factory extension.
+* [security] use composition of token factories. move some code to plain php bridge.
+* [offline] if order details are set don't set it again.
+* [storage] Add storage method findBy code improve tests include base models and example schema.
+* [registry] Add DynamicRegistry registry.
+* [symfony][form] Add payment config form, and payment factories choice.
+* [registry] Introduce payment factories registry interface.
+* [payex] add missed action to factory.
+* [paypal-express-checkout] Paypal request parameters should be lowercased.
+* [paypal-pro] fix api in factory.
+* [payment-factory] options lower case
+* [payment-factory] allow set which actions\apis\extensions must be prepend.
+
 ## 0.13.0 (2014-12-26)
 
 * [ssl] Added cURL Options for the PayPal Sandbox SSL 3.0 Vulnerability (POODLE)
