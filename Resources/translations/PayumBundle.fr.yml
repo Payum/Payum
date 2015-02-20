@@ -1,0 +1,6 @@
+form:
+    credit_card:
+        holder: Nom du propriétaire
+        expire_at: Date d'expiration
+        number: Numéro de carte
+        security_code: Code de sécurité (CVV)
