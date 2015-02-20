@@ -45,7 +45,7 @@ class DirectPaymentFactory implements PaymentFactoryInterface
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->defaultConfig);
-        $config->defaults($this->corePaymentFactory->createConfig());
+        $config->defaults($this->corePaymentFactory->createConfig((array) $config));
 
         $config->defaults(array(
             'payum.factory_name' => 'be2bill_direct',
