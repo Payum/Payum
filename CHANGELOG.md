@@ -1,6 +1,27 @@
 # Changelog
 
-## 0.13.0 (2014-12.28)
+## 0.14.0 (2015-02-23
+
+* [form] Add french translations
+* [security] token factory extension.
+* [security] use token factories composition.
+* [doctrine] prepend doctrine config with correct path to Payum mappings files.
+* [docs] add docs about container tabs and payment configuration in a backend
+* Dynamic payments.
+* [registry] add support of payment factory registry.
+* [payment-facotry] reuse default configure while creating factories.
+* add tests, replace context with payment, add payment_factory tag.
+* [factory] cleanup AbstractPaymentFactory. DRY.
+* pass actions\apis\extensions tags to payment factory.
+* [payment-factory] reuse factories from the lib.
+* [twig] require twig bundle with the bug fixed.
+* [twig] automatically add paths to twig bundle via prepend config
+* [Omnipay] added note about custom gateway.
+* [Omnipay] allow user to add custom gateway.
+* [Debug cmd] skip get choice list payments for <= sf 2.4.
+* [Debug cmd] get choice list payments  if no payment found.
+
+## 0.13.0 (2014-12-28)
 
 * [action] Delete `ObtainCreditCardAction` action. Use one from bridge
 * [action] remove generic order action.
