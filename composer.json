@@ -38,7 +38,7 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "payum/core": "0.14.*",
+        "payum/core": "0.15.*@dev",
         "symfony/framework-bundle": "~2.3",
         "symfony/twig-bundle": "2.3.*,>=2.3.18|2.4.*,>=2.4.8|2.5.*,>=2.5.2|~2.6",
         "symfony/form": "~2.3",
@@ -52,9 +52,9 @@
         "symfony/class-loader": "~2.3",
         "sonata-project/admin-bundle": "~2.0",
         "doctrine/orm": "*",
-        "payum/payum": "0.14.*",
-        "payum/omnipay-bridge": "0.14.*",
-        "payum/jms-payment-bridge": "0.14.*",
+        "payum/payum": "0.15.*@dev",
+        "payum/omnipay-bridge": "0.15.*@dev",
+        "payum/jms-payment-bridge": "0.15.*@dev",
         "omnipay/dummy": "~2.0",
         "omnipay/stripe": "~2.0",
         "omnipay/paypal": "~2.0"
@@ -67,7 +67,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.14-dev"
+            "dev-master": "0.15-dev"
         }
     },
     "config": {
