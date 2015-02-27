@@ -1,6 +1,10 @@
 # Changelog
 
-## 0.14.0 (2015-02-23
+## 0.14.1 (2015-02-27)
+ 
+* [factory] fix custom factory. actions\apis\extensions were not added to it.
+
+## 0.14.0 (2015-02-23)
 
 * [form] Add french translations
 * [security] token factory extension.
