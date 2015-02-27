@@ -31,6 +31,14 @@ class CustomPaymentFactory extends AbstractPaymentFactory
     /**
      * {@inheritDoc}
      */
+    protected function getPayumPaymentFactoryClass()
+    {
+        return 'Payum\Bundle\PayumBundle\FixedPaymentFactory';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
         parent::addConfiguration($builder);
