@@ -254,7 +254,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAddPayumMappingIfDoctrineBundleRegistered()
+    public function shouldNotAddPayumMappingIfDoctrineBundleRegisteredButDbalNotConfigured()
     {
         $extension = new PayumExtension;
 
@@ -263,19 +263,46 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension->prepend($container);
 
+        $this->assertEquals(array(), $container->getExtensionConfig('doctrine'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAddPayumMappingIfDoctrineBundleRegisteredAndDbalConfigured()
+    {
+        $extension = new PayumExtension;
+
+        $container = new ContainerBuilder;
+        $container->setParameter('kernel.bundles', array('DoctrineBundle' => 'DoctrineBundle'));
+
+        $container->prependExtensionConfig('doctrine', array());
+        $container->prependExtensionConfig('doctrine', array(
+            'dbal' => 'not empty'
+        ));
+
+        $extension->prepend($container);
+
         $rc = new \ReflectionClass('Payum\Core\Payment');
         $payumRootDir = dirname($rc->getFileName());
 
-        $this->assertEquals(array(array(
-            'orm' => array('mappings' => array(
-                'payum' => array(
-                    'is_bundle' => false,
-                    'type' => 'xml',
-                    'dir' => $payumRootDir.'/Bridge/Doctrine/Resources/mapping',
-                    'prefix' => 'Payum\Core\Model',
-                )
-            )),
-        )), $container->getExtensionConfig('doctrine'));
+        $this->assertEquals(
+            array(
+                array(
+                    'orm' => array('mappings' => array(
+                        'payum' => array(
+                            'is_bundle' => false,
+                            'type' => 'xml',
+                            'dir' => $payumRootDir.'/Bridge/Doctrine/Resources/mapping',
+                            'prefix' => 'Payum\Core\Model',
+                        )
+                    )),
+                ),
+                array('dbal' => 'not empty'),
+                array(),
+            ),
+            $container->getExtensionConfig('doctrine')
+        );
     }
 }
 
