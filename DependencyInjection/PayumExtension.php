@@ -80,21 +80,28 @@ class PayumExtension extends Extension implements PrependExtensionInterface
         }
 
         if (isset($bundles['DoctrineBundle'])) {
-            $rc = new \ReflectionClass('Payum\Core\Payment');
-            $payumRootDir = dirname($rc->getFileName());
+            foreach ($container->getExtensionConfig('doctrine') as $config) {
+                // do not register mappings if dbal not configured.
+                if (false == empty($config['dbal'])) {
+                    $rc = new \ReflectionClass('Payum\Core\Payment');
+                    $payumRootDir = dirname($rc->getFileName());
 
-            $container->prependExtensionConfig('doctrine', array(
-                'orm' => array(
-                    'mappings' => array(
-                        'payum' => array(
-                            'is_bundle' => false,
-                            'type' => 'xml',
-                            'dir' => $payumRootDir.'/Bridge/Doctrine/Resources/mapping',
-                            'prefix' => 'Payum\Core\Model',
+                    $container->prependExtensionConfig('doctrine', array(
+                        'orm' => array(
+                            'mappings' => array(
+                                'payum' => array(
+                                    'is_bundle' => false,
+                                    'type' => 'xml',
+                                    'dir' => $payumRootDir.'/Bridge/Doctrine/Resources/mapping',
+                                    'prefix' => 'Payum\Core\Model',
+                                ),
+                            ),
                         ),
-                    ),
-                ),
-            ));
+                    ));
+
+                    break;
+                }
+            }
         }
     }
 

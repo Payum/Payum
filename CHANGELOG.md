@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.14.2 (2015-03-02)
+ 
+* [config] Do not prepend Doctrine config with mappings if dbal not configured.
+
 ## 0.14.1 (2015-02-27)
  
 * [factory] fix custom factory. actions\apis\extensions were not added to it.
