@@ -11,6 +11,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetRecurringPaymentsProfileDetai
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetTransactionDetailsAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\SetExpressCheckoutAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\AuthorizeTokenAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CancelRecurringPaymentsProfileAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\ManageRecurringPaymentsProfileStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateBillingAgreementAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoReferenceTransactionAction;
