@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.14.1 (2015-03-12)
+
+* [paypal-ec] Add CancelRecurringPaymentsProfileAction. 
+* [doc] update list of supported payments
+
 ## 0.14.0 (2015-02-20)
 
 * [payment-factory] pass config to core payment factory too.
