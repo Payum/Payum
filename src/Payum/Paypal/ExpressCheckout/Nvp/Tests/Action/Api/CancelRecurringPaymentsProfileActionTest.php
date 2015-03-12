@@ -1,9 +1,10 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Request\Cancel;
+use Payum\Core\Request\Generic;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CancelRecurringPaymentsProfileAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ManageRecurringPaymentsProfileStatus;
 use Payum\Core\Tests\GenericActionTest;
 
 class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
@@ -99,31 +100,13 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The PROFILEID, ACTION fields are required.
+     * @expectedExceptionMessage The PROFILEID fields are required.
      */
     public function throwIfProfileIdNotSetInModel()
     {
         $action = new CancelRecurringPaymentsProfileAction();
 
         $request = new Cancel(array('BILLINGPERIOD' => 'foo'));
-
-        $action->execute($request);
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The ACTION fields are required.
-     */
-    public function throwIfTokenNotSetInModel()
-    {
-        $action = new CancelRecurringPaymentsProfileAction();
-
-        $request = new Cancel(array(
-            'PROFILEID' => 'aProfId',
-            'BILLINGPERIOD' => 'aBillingPeriod'
-        ));
 
         $action->execute($request);
     }

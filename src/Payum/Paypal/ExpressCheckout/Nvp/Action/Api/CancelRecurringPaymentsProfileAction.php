@@ -17,7 +17,7 @@ class CancelRecurringPaymentsProfileAction extends BaseApiAwareAction
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        $model->validateNotEmpty(array('PROFILEID', 'ACTION', 'BILLINGPERIOD'));
+        $model->validateNotEmpty(array('PROFILEID', 'BILLINGPERIOD'));
 
         $model['ACTION'] = Api::RECURRINGPAYMENTACTION_CANCEL;
 
