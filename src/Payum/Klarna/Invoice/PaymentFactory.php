@@ -101,7 +101,7 @@ class PaymentFactory implements PaymentFactoryInterface
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
 
-                $config['mode'] = null === $config['sandbox'] ? \Klarna::BETA : \Klarna::LIVE;
+                $config['mode'] = $config['sandbox'] ? \Klarna::BETA : \Klarna::LIVE;
 
                 if (null === $country = \KlarnaCountry::fromCode($config['country'])) {
                     throw new LogicException(sprintf('Given %s country code is not valid. Klarna cannot recognize it.', $config['country']));
