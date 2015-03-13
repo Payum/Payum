@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.14.2 (2015-03-13)
+
+* [klarna-invoice] Fix payment factory. Always runs in live mode. 
+
 ## 0.14.1 (2015-03-12)
 
 * [paypal-ec] Add CancelRecurringPaymentsProfileAction. 
