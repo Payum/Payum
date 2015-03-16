@@ -109,10 +109,10 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $action = new AuthorizeRecurringAction();
         $action->setPayment($paymentMock);
 
-        $action->execute(new Authorize([
+        $action->execute(new Authorize(array(
             'reservation' => 'aReservation',
             'recurring_token' => 'aToken',
-        ]));
+        )));
     }
 
     public function testShouldCreateOrderIfReservationNotSet()
@@ -136,9 +136,9 @@ class AuthorizeRecurringActionTest extends GenericActionTest
             }))
         ;
 
-        $model = new \ArrayObject([
+        $model = new \ArrayObject(array(
             'recurring_token' => 'theToken',
-        ]);
+        ));
 
         $action = new AuthorizeRecurringAction();
         $action->setPayment($paymentMock);
@@ -187,9 +187,9 @@ class AuthorizeRecurringActionTest extends GenericActionTest
             }))
         ;
 
-        $model = new \ArrayObject([
+        $model = new \ArrayObject(array(
             'recurring_token' => 'theToken',
-        ]);
+        ));
 
         $action = new AuthorizeRecurringAction();
         $action->setPayment($paymentMock);
