@@ -8,6 +8,7 @@ use Payum\Klarna\Checkout\Action\Api\CreateOrderAction;
 use Payum\Klarna\Checkout\Action\Api\FetchOrderAction;
 use Payum\Klarna\Checkout\Action\Api\UpdateOrderAction;
 use Payum\Klarna\Checkout\Action\AuthorizeAction;
+use Payum\Klarna\Checkout\Action\AuthorizeRecurringAction;
 use Payum\Klarna\Checkout\Action\NotifyAction;
 use Payum\Klarna\Checkout\Action\StatusAction;
 use Payum\Klarna\Checkout\Action\SyncAction;
@@ -55,12 +56,15 @@ class PaymentFactory implements PaymentFactoryInterface
             'payum.factory_name' => 'klarna_checkout',
             'payum.factory_title' => 'Klarna Checkout',
             'payum.template.authorize' => '@PayumKlarnaCheckout/Action/capture.html.twig',
-            'contentType' => Constants::CONTENT_TYPE_V2_PLUS_JSON,
+            'contentType' => Constants::CONTENT_TYPE_AGGREGATED_ORDER_V2,
             'sandbox' => true,
         ));
 
         $config->defaults(array(
             'payum.action.authorize' => new AuthorizeAction($config['payum.template.authorize']),
+
+            // must be before authorize.
+            'payum.action.authorize_recurring' => new AuthorizeRecurringAction(),
             'payum.action.notify' => new NotifyAction(),
             'payum.action.status' => new StatusAction(),
             'payum.action.sync' => new SyncAction(),
