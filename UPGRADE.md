@@ -1,5 +1,9 @@
 # Upgrades
 
+## 0.14 to 0.15 
+
+* [order] The method getCreditCard was added to `OrderInterface` interface.
+
 ## 0.13 to 0.14
 
 * [registry] `PaymentRegistryInterface::getDefaultPaymentName` method was removed.

@@ -40,4 +40,9 @@ interface OrderInterface extends DetailsAggregateInterface, DetailsAwareInterfac
      * @return int
      */
     public function getCurrencyDigitsAfterDecimalPoint();
+
+    /**
+     * @return CreditCardInterface|null
+     */
+    public function getCreditCard();
 }

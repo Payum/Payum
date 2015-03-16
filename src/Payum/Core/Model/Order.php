@@ -43,6 +43,11 @@ class Order implements OrderInterface
      */
     protected $details;
 
+    /**
+     * @var CreditCardInterface|null
+     */
+    protected $creditCard;
+
     public function __construct()
     {
         $this->details = array();
@@ -174,5 +179,21 @@ class Order implements OrderInterface
         }
 
         $this->details = $details;
+    }
+
+    /**
+     * @return CreditCardInterface|null
+     */
+    public function getCreditCard()
+    {
+        return $this->creditCard;
+    }
+
+    /**
+     * @param CreditCardInterface|null $creditCard
+     */
+    public function setCreditCard(CreditCardInterface $creditCard = null)
+    {
+        $this->creditCard = $creditCard;
     }
 }
