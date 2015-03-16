@@ -57,11 +57,17 @@ class AuthorizeRecurringAction extends PaymentAwareAction implements ApiAwareInt
             $this->payment->execute($createOrderRequest = new CreateOrder($model));
 
             $model->replace($createOrderRequest->getOrder()->marshal());
-        } finally {
+        } catch (\Exception $e) {
             $this->config->contentType = $backupConfig->contentType;
             $this->config->acceptHeader = $backupConfig->acceptHeader;
             $this->config->baseUri = $backupConfig->baseUri;
+
+            throw $e;
         }
+
+        $this->config->contentType = $backupConfig->contentType;
+        $this->config->acceptHeader = $backupConfig->acceptHeader;
+        $this->config->baseUri = $backupConfig->baseUri;
     }
 
     /**
