@@ -22,7 +22,6 @@ class CreateOrderAction extends BaseApiAwareAction
 
         $order = new \Klarna_Checkout_Order($this->getConnector());
         $order->create($model->toUnsafeArray());
-        $order->fetch();
 
         $request->setOrder($order);
     }

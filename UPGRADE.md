@@ -3,6 +3,7 @@
 ## 0.14 to 0.15 
 
 * [order] The method getCreditCard was added to `OrderInterface` interface.
+* [klarna-checkout] `CreateOrderAction` and `UpdateOrderAction` do not do fetch any more.
 
 ## 0.13 to 0.14
 

@@ -61,10 +61,11 @@ class PaymentFactory implements PaymentFactoryInterface
         ));
 
         $config->defaults(array(
-            'payum.action.authorize' => new AuthorizeAction($config['payum.template.authorize']),
+            'payum.action.authorize_recurring' => new AuthorizeRecurringAction(),
 
             // must be before authorize.
-            'payum.action.authorize_recurring' => new AuthorizeRecurringAction(),
+            'payum.action.authorize' => new AuthorizeAction($config['payum.template.authorize']),
+
             'payum.action.notify' => new NotifyAction(),
             'payum.action.status' => new StatusAction(),
             'payum.action.sync' => new SyncAction(),

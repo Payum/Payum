@@ -62,16 +62,6 @@ class UpdateOrderActionTest extends GenericActionTest
                 $testCase->assertEquals(array('cart' => $model['cart']), $options['data']);
             }))
         ;
-        $connector
-            ->expects($this->at(1))
-            ->method('apply')
-            ->with('GET')
-            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, $model) {
-                $testCase->assertInternalType('array', $options);
-                $testCase->assertArrayHasKey('url', $options);
-                $testCase->assertEquals($model['location'], $options['url']);
-            }))
-        ;
 
         $action = new UpdateOrderAction($connector);
         $action->setApi(new Config());
@@ -79,44 +69,6 @@ class UpdateOrderActionTest extends GenericActionTest
         $action->execute($request);
 
         $this->assertInstanceOf('Klarna_Checkout_Order', $request->getOrder());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldReturnSameOrderUsedWhileFetchAndUpdateCallsOnExecute()
-    {
-        $model = array(
-            'location' => 'theKlarnaOrderLocation',
-            'cart' => array(
-                'items' => array(
-                    array('foo'),
-                    array('bar'),
-                ),
-            ),
-        );
-
-        $request = new UpdateOrder($model);
-
-        $testCase = $this;
-        $expectedOrder = null;
-
-        $connector = $this->createConnectorMock();
-        $connector
-            ->expects($this->at(1))
-            ->method('apply')
-            ->with('GET')
-            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, &$expectedOrder) {
-                $expectedOrder = $order;
-            }))
-        ;
-
-        $action = new UpdateOrderAction($connector);
-        $action->setApi(new Config());
-
-        $action->execute($request);
-
-        $this->assertSame($expectedOrder, $request->getOrder());
     }
 
     /**

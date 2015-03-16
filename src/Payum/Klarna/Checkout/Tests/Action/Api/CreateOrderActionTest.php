@@ -45,11 +45,6 @@ class CreateOrderActionTest extends GenericActionTest
             ->method('apply')
             ->with('POST')
         ;
-        $connector
-            ->expects($this->at(1))
-            ->method('apply')
-            ->with('GET')
-        ;
 
         $action = new CreateOrderAction($connector);
         $action->setApi(new Config());
