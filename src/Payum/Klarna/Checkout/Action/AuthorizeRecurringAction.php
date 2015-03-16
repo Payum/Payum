@@ -49,10 +49,14 @@ class AuthorizeRecurringAction extends PaymentAwareAction implements ApiAwareInt
 
         $backupConfig = clone $this->config;
 
+        $token = $model['recurring_token'];
+
         try {
+            unset($model['recurring_token']);
+
             $this->config->contentType = Constants::CONTENT_TYPE_RECURRING_ORDER_V1;
             $this->config->acceptHeader = Constants::ACCEPT_HEADER_RECURRING_ORDER_ACCEPTED_V1;
-            $this->config->baseUri = str_replace('{recurring_token}', $model['recurring_token'], Constants::BASE_URI_RECURRING_LIVE);
+            $this->config->baseUri = str_replace('{recurring_token}', $token, Constants::BASE_URI_RECURRING_LIVE);
 
             $this->payment->execute($createOrderRequest = new CreateOrder($model));
 
@@ -62,8 +66,12 @@ class AuthorizeRecurringAction extends PaymentAwareAction implements ApiAwareInt
             $this->config->acceptHeader = $backupConfig->acceptHeader;
             $this->config->baseUri = $backupConfig->baseUri;
 
+            $model['recurring_token'] = $token;
+
             throw $e;
         }
+
+        $model['recurring_token'] = $token;
 
         $this->config->contentType = $backupConfig->contentType;
         $this->config->acceptHeader = $backupConfig->acceptHeader;
