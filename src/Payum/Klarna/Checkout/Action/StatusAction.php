@@ -32,6 +32,12 @@ class StatusAction implements ActionInterface
             return;
         }
 
+        if ($model['reservation']) {
+            $request->markAuthorized();
+
+            return;
+        }
+
         if (false == $model['status'] || Constants::STATUS_CHECKOUT_INCOMPLETE == $model['status']) {
             $request->markNew();
 
@@ -44,6 +50,7 @@ class StatusAction implements ActionInterface
             return;
         }
 
+        // @deprecated
         if (Constants::STATUS_CREATED == $model['status']) {
             $request->markAuthorized();
 

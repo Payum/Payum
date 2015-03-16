@@ -25,7 +25,6 @@ class UpdateOrderAction extends BaseApiAwareAction
         unset($data['location']);
 
         $order->update($data);
-        $order->fetch();
 
         $request->setOrder($order);
     }
