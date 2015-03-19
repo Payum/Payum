@@ -31,11 +31,18 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        // means we have only received a stripe token but have not done a payment.
+         // means we have only received a stripe token but have not done a payment.
         if (is_string($model['card'])) {
-            $request->markPending();
+            //we now check is payment is succeeded so we can set the status on Authorized
+            if ( !$model['refunded'] && $model['status'] === 'succeeded'){
+                $request->markAuthorized ();
+                return;
+            }else{
+                $request->markPending();
+                return;
+            }
 
-            return;
+            
         }
 
         if (is_array($model['card']) && $model['captured'] && $model['paid']) {
