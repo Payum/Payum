@@ -5,6 +5,7 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetStatusInterface;
+use Payum\Stripe\Constants;
 
 class StatusAction implements ActionInterface
 {
@@ -19,34 +20,50 @@ class StatusAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if ($model['error']) {
-            $request->markFailed();
-
-            return;
-        }
-
-        if (false == $model['card']) {
+        if (false == $model['status'] && false == $model['card']) {
             $request->markNew();
 
             return;
         }
 
-         // means we have only received a stripe token but have not done a payment.
-        if (is_string($model['card'])) {
-            //we now check is payment is succeeded so we can set the status on Authorized
-            if ( !$model['refunded'] && $model['status'] === 'succeeded'){
-                $request->markAuthorized ();
-                return;
-            }else{
-                $request->markPending();
-                return;
-            }
+        if (false == $model['status'] && $model['card']) {
+            $request->markPending();
 
-            
+            return;
         }
 
-        if (is_array($model['card']) && $model['captured'] && $model['paid']) {
+        if (Constants::STATUS_FAILED == $model['status']) {
+            $request->markFailed();
+
+            return;
+        }
+
+        if ($model['refunded']) {
+            $request->markRefunded();
+
+            return;
+        }
+
+        if (Constants::STATUS_SUCCEEDED == $model['status'] && $model['captured'] && $model['paid']) {
             $request->markCaptured();
+
+            return;
+        }
+
+        if (Constants::STATUS_PAID == $model['status'] && $model['captured'] && $model['paid']) {
+            $request->markCaptured();
+
+            return;
+        }
+
+
+        if (Constants::STATUS_SUCCEEDED == $model['status'] && false == $model['captured']) {
+            $request->markAuthorized();
+
+            return;
+        }
+        if (Constants::STATUS_PAID == $model['status'] && false == $model['captured']) {
+            $request->markAuthorized();
 
             return;
         }
