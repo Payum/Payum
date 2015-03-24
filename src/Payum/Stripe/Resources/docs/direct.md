@@ -20,6 +20,8 @@ $payments['stripe'] = $stripeFactory->create(array(
 
 ## prepare.php
 
+Do next:
+
 ```
 use Payum\Core\Model\CreditCard;
 
