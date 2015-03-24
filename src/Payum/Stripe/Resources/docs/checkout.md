@@ -1,7 +1,7 @@
 # Checkout.
 
 In this chapter we are going to talk about the most common task: purchase of a product using [Stripe Checkout](https://stripe.com/docs/checkout).
-We assume you already read [get it started](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md) from core.
+We assume you already read [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) from core.
 Here we just show you modifications you have to put to the files shown there.
 
 ## Installation
@@ -24,14 +24,14 @@ We have to only add the payment factory. All the rest remain the same:
 // ..
 
 $stripeCheckoutFactory = new \Payum\Stripe\CheckoutPaymentFactory();
-$payments['stripe_checkout'] = $stripeJsFactory->create(array(
+$payments['stripe_checkout'] = $stripeCheckoutFactory->create(array(
     'publishable_key' => 'EDIT IT', 'secret_key' => 'EDIT IT'
 ));
 ```
 
 ## prepare.php
 
-Here you have to modify a `paymentName` value. Set it to `stripe_checkout`.
+Here you have to modify a `paymentName` value. Set it to `stripe_checkout`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
 
 ## Next 
 

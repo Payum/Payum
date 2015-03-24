@@ -50,7 +50,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
         try {
             \Stripe::setApiKey($this->keys->getSecretKey());
 
-            $charge = \Stripe_Charge::create((array) $model);
+            $charge = \Stripe_Charge::create($model->toUnsafeArray());
 
             $model->replace($charge->__toArray(true));
         } catch (\Stripe_CardError $e) {
