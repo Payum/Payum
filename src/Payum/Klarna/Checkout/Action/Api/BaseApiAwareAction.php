@@ -46,8 +46,8 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
 
         \Klarna_Checkout_Order::$contentType = $this->config->contentType;
         \Klarna_Checkout_Order::$baseUri = $this->config->baseUri;
-        if (property_exists('Klarna_Checkout_Order', 'acceptHeader')) {
-            \Klarna_Checkout_Order::$acceptHeader = $this->config->acceptHeader;
+        if (property_exists('Klarna_Checkout_Order', 'accept')) {
+            \Klarna_Checkout_Order::$accept = $this->config->acceptHeader;
         }
 
         return \Klarna_Checkout_Connector::create($this->config->secret);
