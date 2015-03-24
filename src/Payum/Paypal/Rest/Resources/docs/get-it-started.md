@@ -1,7 +1,7 @@
 # Get it started.
 
 In this chapter we are going to talk about the most common task: purchasing a product.
-We assume you already read [payum's get it started documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md).
+We assume you already read [payum's get it started documentation](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
 
 ## Installation
 
