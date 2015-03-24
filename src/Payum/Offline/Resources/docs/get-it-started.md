@@ -1,7 +1,7 @@
 # Get it started.
 
 In this chapter we are going to talk about offline payments. The offline may be used in case of cash, cheque or wire transfer.
-We assume you already read [get it started](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md) from core.
+We assume you already read [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) from core.
 Here we just show you modifications you have to put to the files shown there.
 
 ## Installation
@@ -31,7 +31,8 @@ $payments['offline'] = $offlineFactory->create();
 
 ## prepare.php
 
-Here you have to modify a `paymentName` value. Set it to `offline`.
+Here you have to modify a `paymentName` value. Set it to `offline`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
+
 
 ## Next 
 

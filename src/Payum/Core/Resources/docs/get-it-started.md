@@ -107,6 +107,13 @@ $order->setDescription('A description');
 $order->setClientId('anId');
 $order->setClientEmail('foo@example.com');
 
+$order->setDetails(array(
+  // put here any fields in a payment format.
+  // for example if you use Paypal ExpressCheckout you can define a description of the first item:
+  // 'L_PAYMENTREQUEST_0_DESC0' => 'A desc',
+));
+
+
 $storage->update($order);
 
 $captureToken = $tokenFactory->createCaptureToken($paymentName, $order, 'done.php');

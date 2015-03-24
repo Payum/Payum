@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Stripe\Tests\Action\Api;
 
+use Payum\Core\Model\CreditCard;
 use Payum\Core\Model\Order;
 use Payum\Core\Request\FillOrderDetails;
 use Payum\Core\Tests\GenericActionTest;
@@ -49,6 +50,8 @@ class FillOrderDetailsActionTest extends GenericActionTest
 
         $this->assertNotEmpty($details);
 
+        $this->assertArrayNotHasKey('card', $details);
+
         $this->assertArrayHasKey('amount', $details);
         $this->assertEquals(123, $details['amount']);
 
@@ -82,5 +85,46 @@ class FillOrderDetailsActionTest extends GenericActionTest
 
         $this->assertArrayHasKey('foo', $details);
         $this->assertEquals('fooVal', $details['foo']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCorrectlyConvertCreditCard()
+    {
+        $creditCard = new CreditCard();
+        $creditCard->setNumber('4111111111111111');
+        $creditCard->setExpireAt(new \DateTime('2018-05-12'));
+        $creditCard->setSecurityCode(123);
+        $creditCard->setHolder('John Doe');
+
+        $order = new Order();
+        $order->setCreditCard($creditCard);
+
+        $action = new FillOrderDetailsAction();
+
+        $action->execute(new FillOrderDetails($order));
+
+        $details = $order->getDetails();
+
+        $this->assertNotEmpty($details);
+
+        $this->assertArrayHasKey('card', $details);
+        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $details['card']);
+
+        $card = $details['card']->peek();
+        $this->assertInternalType('array', $card);
+
+        $this->assertArrayHasKey('number', $card);
+        $this->assertEquals('4111111111111111', $card['number']);
+
+        $this->assertArrayHasKey('exp_month', $card);
+        $this->assertEquals('05', $card['exp_month']);
+
+        $this->assertArrayHasKey('exp_year', $card);
+        $this->assertEquals('2018', $card['exp_year']);
+
+        $this->assertArrayHasKey('cvc', $card);
+        $this->assertEquals('123', $card['cvc']);
     }
 }

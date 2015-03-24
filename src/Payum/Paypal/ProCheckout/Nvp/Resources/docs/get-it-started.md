@@ -1,7 +1,7 @@
 # Get it started.
 
 In this chapter we are going to talk about the most common task: purchase of a product using [Paypal Pro Checkout](https://www.paypal.com/webapps/mpp/paypal-payments-pro).
-We assume you already read [get it started](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md) from core.
+We assume you already read [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) from core.
 Here we just show you modifications you have to put to the files shown there.
 
 ## Installation
@@ -37,7 +37,7 @@ $payments['paypal_pro_checkout'] = $paypalProCheckoutFactory->create(array(
 
 ## prepare.php
 
-Here you have to modify a `paymentName` value. Set it to `paypal_pro_checkout`.
+Here you have to modify a `paymentName` value. Set it to `paypal_pro_checkout`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
 
 ## Next 
 

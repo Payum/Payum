@@ -1,7 +1,7 @@
 # Get it started. Stripe.js.
 
 In this chapter we are going to talk about the most common task: purchase of a product using [Stripe.js](https://stripe.com/docs/stripe.js).
-We assume you already read [get it started](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md) from core.
+We assume you already read [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) from core.
 Here we just show you modifications you have to put to the files shown there.
 
 ## Installation
@@ -31,7 +31,7 @@ $payments['stripe_js'] = $stripeJsFactory->create(array(
 
 ## prepare.php
 
-Here you have to modify a `paymentName` value. Set it to `stripe_js`.
+Here you have to modify a `paymentName` value. Set it to `stripe_js`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
 
 ## Next 
 
