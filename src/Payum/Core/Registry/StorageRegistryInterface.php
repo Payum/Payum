@@ -18,9 +18,7 @@ interface StorageRegistryInterface
     /**
      * The key must be a model class
      *
-     * @throws InvalidArgumentException if storages with such name not exist
-     *
-     * @return StorageInterface
+     * @return StorageInterface[]
      */
     public function getStorages();
 }
