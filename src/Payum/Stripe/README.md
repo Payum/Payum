@@ -7,19 +7,11 @@ The lib implements [stripe](https://stripe.com) payment.
 
 ## Resources
 
+* [Examples](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/examples)
 * [Documentation](http://payum.org/doc#Stripe)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)
-
-## Contributing
-
-PayumStripe is an open source, community-driven project. Pull requests are very welcome.
-
-## Like it? Spread the word!
-
-Star payum on [github](https://github.com/Payum/Stripe) or [packagist](https://packagist.org/packages/payum/stripe).
-You may also drop a message on Twitter.
 
 ## License
 
