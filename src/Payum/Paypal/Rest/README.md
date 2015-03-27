@@ -7,20 +7,12 @@ Provide integration of PayPal REST API to payum.
 
 ## Resources
 
+* [Examples](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/examples)
 * [Documentation](http://payum.org/doc#PaypalRest)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)
 * [Sandbox](https://github.com/Skadabr/startPayum)
-
-## Contributing
-
-PaypalRest is an open source, community-driven project. Pull requests are very welcome.
-
-## Like it? Spread the word!
-
-Star payum on [github](https://github.com/Payum/PaypalRest) or [packagist](https://packagist.org/packages/payum/paypal-rest).
-You may also drop a message on Twitter.
 
 ## License
 

@@ -5,18 +5,11 @@ Provide integration of offline payments to Payum.
 
 ## Resources
 
+* [Examples](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/examples)
 * [Documentation](http://payum.org/doc#Offline)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)
-
-## Contributing
-
-Offline is an open source, community-driven project. Pull requests are very welcome.
-
-## Like it? Spread the word!
-
-Star payum on [github](https://github.com/Payum/Offline) or [packagist](https://packagist.org/packages/payum/offline).
 
 ## License
 
