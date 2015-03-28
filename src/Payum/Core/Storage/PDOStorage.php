@@ -145,9 +145,9 @@ class PDOStorage extends AbstractStorage
         $model = serialize($model);
 
         if($data !== false){
-            $this->dbh->exec("UPDATE `payum-storage` SET `payum-data-model` = '$model' WHERE `$this->idkey` = '$id'");
+            $this->dbh->exec("UPDATE `$this->table` SET `payum-data-model` = '$model' WHERE `$this->idkey` = '$id'");
         }else{
-            $this->dbh->exec("INSERT INTO `payum-storage` (`$this->idkey`, `payum-data-model`) VALUES ('$id', '$model')");
+            $this->dbh->exec("INSERT INTO `$this->table` (`$this->idkey`, `payum-data-model`) VALUES ('$id', '$model')");
         }
     }
 
@@ -156,6 +156,6 @@ class PDOStorage extends AbstractStorage
      */
     private function _deleteModel($id)
     {
-        $this->dbh->exec("DELETE FROM `payum-storage` WHERE `$this->idkey` = '$id'");
+        $this->dbh->exec("DELETE FROM `$this->table` WHERE `$this->idkey` = '$id'");
     }
 }
