@@ -31,7 +31,6 @@ class PDOStorage extends AbstractStorage
      * @param object $pdo
      * @param string $table
      * @param string $idkey
-     * @param array $options
      */
     public function __construct($pdo, $table, $idkey)
     {
