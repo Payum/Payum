@@ -27,23 +27,16 @@ class PDOStorage extends AbstractStorage
     protected $identityMap;
 
     /**
-     * @param string $dsn
-     * @param string $user
-     * @param string $pass
+     * @param object $pdo
      * @param string $table
      * @param string $idkey
      * @param array $options
      */
-    public function __construct($dsn, $user, $pass, $table, $idkey, $options = array())
+    public function __construct($pdo, $table, $idkey)
     {
+        $this->dbh = $pdo;
         $this->table = $table;
         $this->idkey = $idkey;
-
-        try {
-            $this->dbh = new \PDO($dsn, $user, $pass, $options);
-        } catch (\PDOException $e) {
-            throw new LogicException('Error trying to create a PDO storage (' . $e->getMessage() . ').');
-        }
     }
 
     /**
