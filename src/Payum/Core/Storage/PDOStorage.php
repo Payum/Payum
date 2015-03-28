@@ -1,6 +1,7 @@
 <?php
-namespace Payum\Core\Storage;
+namespace Payum\Core\Bridge\PlainPhp\Storage;
 
+use Payum\Core\Storage\AbstractStorage;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\Identity;
 
