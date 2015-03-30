@@ -61,7 +61,7 @@ class CreditCardTypeTest extends WebTestCase
         $this->assertEquals('John Doe', $card->getHolder());
         $this->assertEquals('4111111111111111', $card->getNumber());
         $this->assertEquals('123', $card->getSecurityCode());
-        $this->assertEquals('2020-10-01', $card->getExpireAt()->format('Y-m-d'));
+        $this->assertEquals('2020-10-31', $card->getExpireAt()->format('Y-m-d'));
     }
 
     /**

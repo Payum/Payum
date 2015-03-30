@@ -31,6 +31,9 @@ class CreditCardDateValidator extends ConstraintValidator
             return;
         }
 
+        /**
+         * The Credit Card is not expired until last day of the month
+         */
         $value->modify('last day of this month');
 
         if (null !== $constraint->min && $value < $constraint->min) {
