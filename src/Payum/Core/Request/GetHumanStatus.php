@@ -184,12 +184,12 @@ class GetHumanStatus extends BaseGetStatus
     }
 
     /**
-     * @param int $expectedStatus
+     * @param string $expectedStatus
      *
      * @return boolean
      */
     protected function isCurrentStatusEqualTo($expectedStatus)
     {
-        return ($expectedStatus | $this->getValue()) == $expectedStatus;
+        return $this->getValue() === $expectedStatus;
     }
 }
