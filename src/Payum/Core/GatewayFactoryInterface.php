@@ -1,10 +1,7 @@
 <?php
 namespace Payum\Core;
 
-/**
- * @deprecated use GatewayFactoryInterface
- */
-interface PaymentFactoryInterface
+interface GatewayFactoryInterface extends PaymentFactoryInterface
 {
     /**
      * @param array $config
@@ -16,7 +13,7 @@ interface PaymentFactoryInterface
     /**
      * @param array $config
      *
-     * @return PaymentInterface
+     * @return GatewayInterface
      */
     public function create(array $config = array());
 }

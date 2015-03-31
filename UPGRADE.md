@@ -1,5 +1,18 @@
 # Upgrades
 
+## 0.14 to 0.15
+
+* `Payment` class deprecated and will be removed in 0.15. Use `Gateway`.
+* `PaymentInterface` interface deprecated and will be removed in 0.15. Use `GatewayInterface`.
+* `PaymentFactoryInterface` interface deprecated and will be removed in 0.15. Use `GatewayFactoryInterface`.
+* `PaymentFactoryInterface` interface deprecated and will be removed in 0.15. Use `GatewayFactoryInterface`.
+* `PaymentFactory` class deprecated and will be removed in 0.15. Use `GatewayFactory`.
+* `PaymentAwareInterface` interface deprecated and will be removed in 0.15. Use `GatewayAwareInterface`.
+* `PaymentFactoryRegistryInterface` interface deprecated and will be removed in 0.15. Use `GatewayFactoryRegistryInterface`.
+* `PaymentRegistryInterface` interface deprecated and will be removed in 0.15. Use `GatewayRegistryInterface`.
+* `PaymentConfigInterface` interface deprecated and will be removed in 0.15. Use `GatewayConfigInterface`.
+* `PaymentConfig` class deprecated and will be removed in 0.15. Use `GatewayConfig`.
+
 ## 0.13 to 0.14
 
 * [registry] `PaymentRegistryInterface::getDefaultPaymentName` method was removed.
