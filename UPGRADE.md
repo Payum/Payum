@@ -12,6 +12,9 @@
 * `PaymentRegistryInterface` interface deprecated and will be removed in 0.15. Use `GatewayRegistryInterface`.
 * `PaymentConfigInterface` interface deprecated and will be removed in 0.15. Use `GatewayConfigInterface`.
 * `PaymentConfig` class deprecated and will be removed in 0.15. Use `GatewayConfig`.
+* `Order` class deprecated and will be removed in 0.15. Use `Payment`.
+* `OrderInterface` interface deprecated and will be removed in 0.15. Use `PaymentInterface`.
+
 
 ## 0.13 to 0.14
 
