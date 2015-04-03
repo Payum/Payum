@@ -15,8 +15,6 @@
 * `Order` class deprecated and will be removed in 0.15. Use `Payment`.
 * `OrderInterface` interface deprecated and will be removed in 0.15. Use `PaymentInterface`.
 
->>>>>>> 0.14
-
 ## 0.13 to 0.14
 
 * [registry] `PaymentRegistryInterface::getDefaultPaymentName` method was removed.
