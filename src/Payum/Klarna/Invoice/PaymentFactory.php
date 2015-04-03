@@ -13,6 +13,7 @@ use Payum\Klarna\Invoice\Action\Api\CreditPartAction;
 use Payum\Klarna\Invoice\Action\Api\GetAddressesAction;
 use Payum\Klarna\Invoice\Action\Api\PopulateKlarnaFromDetailsAction;
 use Payum\Klarna\Invoice\Action\Api\ReserveAmountAction;
+use Payum\Klarna\Invoice\Action\Api\ReturnAmountAction;
 use Payum\Klarna\Invoice\Action\AuthorizeAction;
 use Payum\Klarna\Invoice\Action\CaptureAction;
 use Payum\Klarna\Invoice\Action\RefundAction;
@@ -81,6 +82,7 @@ class PaymentFactory implements PaymentFactoryInterface
             'payum.action.api.populate_klarna_from_details' => new PopulateKlarnaFromDetailsAction(),
             'payum.action.api.credit_part' => new CreditPartAction(),
             'payum.action.api.reserve_amount' => new ReserveAmountAction(),
+            'payum.action.api.return_amount' => new ReturnAmountAction(),
         ));
 
         if (false == $config['payum.api']) {
