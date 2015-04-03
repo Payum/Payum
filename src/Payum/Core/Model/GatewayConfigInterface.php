@@ -1,20 +1,17 @@
 <?php
 namespace Payum\Core\Model;
 
-/**
- * @deprecated
- */
-interface PaymentConfigInterface
+interface GatewayConfigInterface
 {
     /**
      * @return string
      */
-    public function getPaymentName();
+    public function getGatewayName();
 
     /**
-     * @param string $paymentName
+     * @param string $gatewayName
      */
-    public function setPaymentName($paymentName);
+    public function setGatewayName($gatewayName);
 
     /**
      * @return string

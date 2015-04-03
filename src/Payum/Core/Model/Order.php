@@ -1,6 +1,9 @@
 <?php
 namespace Payum\Core\Model;
 
+/**
+ * @deprecated since 0.14.3 use Payment instead
+ */
 class Order implements OrderInterface
 {
     /**

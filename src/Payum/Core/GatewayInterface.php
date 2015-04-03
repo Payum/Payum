@@ -1,17 +1,14 @@
 <?php
 namespace Payum\Core;
 
-/**
- * @deprecated use GatewayInterface
- */
-interface PaymentInterface
+interface GatewayInterface extends PaymentInterface
 {
     /**
      * @param mixed   $request
      * @param boolean $catchReply
      *
      * @throws \Payum\Core\Exception\RequestNotSupportedException if there is not an action which able to process the request.
-     * @throws \Payum\Core\Reply\ReplyInterface                   when payment needs some external tasks to be executed. like a redirect to a gateway site or a page with credit card form. if $catchReply set to false the reply will be returned.
+     * @throws \Payum\Core\Reply\ReplyInterface                   when a gateway needs some external tasks to be executed. like a redirect to a gateway site or a page with credit card form. if $catchReply set to false the reply will be returned.
      *
      * @return \Payum\Core\Reply\ReplyInterface|null
      */

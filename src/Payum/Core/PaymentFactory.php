@@ -10,6 +10,9 @@ use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
 use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 
+/**
+ * @deprecated use GatewayFactory
+ */
 class PaymentFactory implements PaymentFactoryInterface
 {
     /**

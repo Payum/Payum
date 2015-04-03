@@ -1,10 +1,7 @@
 <?php
 namespace Payum\Core\Model;
 
-/**
- * @deprecated
- */
-class PaymentConfig implements PaymentConfigInterface
+class GatewayConfig implements GatewayConfigInterface
 {
     /**
      * @var string
@@ -14,7 +11,7 @@ class PaymentConfig implements PaymentConfigInterface
     /**
      * @var string
      */
-    protected $paymentName;
+    protected $gatewayName;
 
     /**
      * @var array
@@ -45,17 +42,17 @@ class PaymentConfig implements PaymentConfigInterface
     /**
      * @return string
      */
-    public function getPaymentName()
+    public function getGatewayName()
     {
-        return $this->paymentName;
+        return $this->gatewayName;
     }
 
     /**
-     * @param string $paymentName
+     * @param string $gatewayName
      */
-    public function setPaymentName($paymentName)
+    public function setGatewayName($gatewayName)
     {
-        $this->paymentName = $paymentName;
+        $this->gatewayName = $gatewayName;
     }
 
     /**
