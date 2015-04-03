@@ -4,6 +4,9 @@ namespace Payum\Core\Request;
 use Payum\Core\Model\OrderInterface;
 use Payum\Core\Security\TokenInterface;
 
+/**
+ * @deprecated since 0.14.3 Use Convert request
+ */
 class FillOrderDetails
 {
     /**
