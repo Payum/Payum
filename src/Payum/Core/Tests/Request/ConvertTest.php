@@ -23,7 +23,7 @@ class ConvertTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithSourceModelAndToAndOptionnalToken()
     {
-        $request = new Convert($source = new \stdClass(), $to = 'array', $token = $this->getMock('Payum\Core\Security\TokenInteface'));
+        $request = new Convert($source = new \stdClass(), $to = 'array', $token = $this->getMock('Payum\Core\Security\TokenInterface'));
 
         $this->assertSame($source, $request->getSource());
         $this->assertSame($to, $request->getTo());
