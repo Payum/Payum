@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.14.3 (2015-04-03)
+
+* Introduce Payment model. Deprecate Order model.
+* Introduce Gateway interfaces and classes. Deprecate Payment ones.
+* [doc] add basic examples.
+
 ## 0.14.2 (2015-03-13)
 
 * [klarna-invoice] Fix payment factory. Always runs in live mode. 
