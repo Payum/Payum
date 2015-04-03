@@ -2,6 +2,8 @@
 namespace Payum\Core\Model;
 
 /**
+ * @deprecated since 0.14.3 use PaymentInterface instead
+ *
  * @method array getDetails
  */
 interface OrderInterface extends DetailsAggregateInterface, DetailsAwareInterface

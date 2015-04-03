@@ -1,6 +1,9 @@
 <?php
 namespace Payum\Core;
 
+/**
+ * @deprecated use GatewayAwareInterface
+ */
 interface PaymentAwareInterface
 {
     /**

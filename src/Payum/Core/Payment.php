@@ -9,6 +9,9 @@ use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 
+/**
+ * @deprecated use Gateway instead
+ */
 class Payment implements PaymentInterface
 {
     /**

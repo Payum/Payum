@@ -1,6 +1,9 @@
 <?php
 namespace Payum\Core\Registry;
 
+/**
+ * @deprecated
+ */
 interface PaymentFactoryRegistryInterface
 {
     /**
