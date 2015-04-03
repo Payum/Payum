@@ -40,7 +40,7 @@
             <constraint name="DateTime">
                 <option name="groups">Payum</option>
             </constraint>
-            <constraint name="Payum\Bundle\PayumBundle\Validator\Constraints\CreditCardDate">
+            <constraint name="Payum\Core\Bridge\Symfony\Validator\Constraints\CreditCardDate">
                 <option name="min">today</option>
                 <option name="groups">Payum</option>
             </constraint>
