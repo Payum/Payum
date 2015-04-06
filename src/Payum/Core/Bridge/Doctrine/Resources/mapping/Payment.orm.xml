@@ -4,7 +4,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                   http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
 >
-    <mapped-superclass name="Payum\Core\Model\Order">
+    <mapped-superclass name="Payum\Core\Model\Payment">
 
         <field name="number" column="number" type="string" nullable="true" />
 

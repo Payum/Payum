@@ -1,9 +1,9 @@
 <?php
 namespace Payum\Core\Tests\Model;
 
-use Payum\Core\Model\Order;
+use Payum\Core\Model\Payment;
 
-class OrderTest extends \PHPUnit_Framework_TestCase
+class PaymentTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -20,7 +20,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new Order();
+        new Payment();
     }
 
     /**
@@ -28,7 +28,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetCreditCardPreviouslySet()
     {
-        $order = new Order();
+        $order = new Payment();
 
         $creditCardMock = $this->getMock('Payum\Core\Model\CreditCardInterface');
 
