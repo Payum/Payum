@@ -2,7 +2,7 @@
 namespace Payum\Be2Bill\Tests\Action;
 
 use Payum\Be2Bill\Api;
-use Payum\Core\PaymentInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Capture;
 use Payum\Be2Bill\Action\CaptureOffsiteAction;
 use Payum\Core\Request\GetHttpRequest;
@@ -17,11 +17,11 @@ class CaptureOffsiteActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldBeSubClassOfPaymentAwareAction()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Be2Bill\Action\CaptureOffsiteAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
@@ -69,7 +69,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
         $model = array(
             'AMOUNT' => 1000,
             'CLIENTIDENT' => 'payerId',
-            'DESCRIPTION' => 'Payment for digital stuff',
+            'DESCRIPTION' => 'Gateway for digital stuff',
             'ORDERID' => 'orderId',
         );
 
@@ -80,13 +80,13 @@ class CaptureOffsiteActionTest extends GenericActionTest
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
-            ->method('prepareOnsitePayment')
+            ->method('prepareOffsitePayment')
             ->with($model)
             ->will($this->returnValue($postArray))
         ;
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
@@ -94,7 +94,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
 
         $action = new CaptureOffsiteAction();
         $action->setApi($apiMock);
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $request = new Capture($model);
 
@@ -109,18 +109,18 @@ class CaptureOffsiteActionTest extends GenericActionTest
         $model = array(
             'AMOUNT' => 1000,
             'CLIENTIDENT' => 'payerId',
-            'DESCRIPTION' => 'Payment for digital stuff',
+            'DESCRIPTION' => 'Gateway for digital stuff',
             'ORDERID' => 'orderId',
         );
 
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->never())
-            ->method('prepareOnsitePayment')
+            ->method('prepareOffsitePayment')
         ;
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
@@ -132,7 +132,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
 
         $action = new CaptureOffsiteAction();
         $action->setApi($apiMock);
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $request = new Capture($model);
 
@@ -158,10 +158,10 @@ class CaptureOffsiteActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

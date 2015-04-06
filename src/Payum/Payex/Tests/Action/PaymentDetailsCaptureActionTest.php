@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Payex\Tests\Action;
 
-use Payum\Core\PaymentInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Payex\Action\PaymentDetailsCaptureAction;
@@ -11,11 +11,11 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfPaymentAwareAction()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Payex\Action\PaymentDetailsCaptureAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
@@ -110,15 +110,15 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldDoSubExecuteInitializeOrderApiRequestIfOrderRefNotSet()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Payex\Request\Api\InitializeOrder'))
         ;
 
         $action = new PaymentDetailsCaptureAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $request = new Capture(array(
             'clientIPAddress' => 'anIp',
@@ -132,15 +132,15 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldDoSubExecuteCompleteOrderApiRequestIfOrderRefSet()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Payex\Request\Api\CompleteOrder'))
         ;
 
         $action = new PaymentDetailsCaptureAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $request = new Capture(array(
             'orderRef' => 'aRef',
@@ -155,15 +155,15 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldDoSubExecuteStartRecurringPaymentApiRequestIfRecurringSet()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Payex\Request\Api\StartRecurringPayment'))
         ;
 
         $action = new PaymentDetailsCaptureAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $request = new Capture(array(
             'orderRef' => 'aRef',
@@ -179,8 +179,8 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldDoSubGetHttpRequestAndSetClientIpFromIt()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
@@ -190,7 +190,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new PaymentDetailsCaptureAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $request = new Capture(array());
 
@@ -203,10 +203,10 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

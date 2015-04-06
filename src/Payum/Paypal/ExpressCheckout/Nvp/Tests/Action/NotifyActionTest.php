@@ -15,11 +15,11 @@ class NotifyActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldBeSubClassOfPaymentAwareAction()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\NotifyAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
@@ -31,24 +31,24 @@ class NotifyActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
 
         $action = new NotifyAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute(new Notify($expectedModel));
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

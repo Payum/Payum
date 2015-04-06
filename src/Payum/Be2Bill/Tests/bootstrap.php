@@ -14,7 +14,7 @@ EOM;
     exit(1);
 }
 
-$rc = new \ReflectionClass('Payum\Core\PaymentInterface');
+$rc = new \ReflectionClass('Payum\Core\GatewayInterface');
 $coreDir = dirname($rc->getFileName()).'/Tests';
 
 $loader->add('Payum\Be2bill\Tests', __DIR__);

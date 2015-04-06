@@ -25,11 +25,11 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldBeSubClassOfPaymentAwareAction()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass($this->actionClass);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
@@ -46,8 +46,8 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $paymentMock = $this->getMock('Payum\Core\PaymentInterface');
-        $paymentMock
+        $gatewayMock = $this->getMock('Payum\Core\GatewayInterface');
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->identicalTo($request))
@@ -57,7 +57,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
         ;
 
         $action = new ExecuteSameRequestWithModelDetailsAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute($request);
 
@@ -78,8 +78,8 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $paymentMock = $this->getMock('Payum\Core\PaymentInterface');
-        $paymentMock
+        $gatewayMock = $this->getMock('Payum\Core\GatewayInterface');
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->identicalTo($request))
@@ -94,7 +94,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
         ;
 
         $action = new ExecuteSameRequestWithModelDetailsAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute($request);
 
@@ -116,8 +116,8 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $paymentMock = $this->getMock('Payum\Core\PaymentInterface');
-        $paymentMock
+        $gatewayMock = $this->getMock('Payum\Core\GatewayInterface');
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->identicalTo($request))
@@ -132,7 +132,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
         ;
 
         $action = new ExecuteSameRequestWithModelDetailsAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute($request);
 
@@ -158,8 +158,8 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $paymentMock = $this->getMock('Payum\Core\PaymentInterface');
-        $paymentMock
+        $gatewayMock = $this->getMock('Payum\Core\GatewayInterface');
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->identicalTo($request))
@@ -176,7 +176,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
         ;
 
         $action = new ExecuteSameRequestWithModelDetailsAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         try {
             $action->execute($request);

@@ -3,21 +3,21 @@ namespace Payum\Core\Tests;
 
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\UnsupportedApiException;
-use Payum\Core\Payment;
+use Payum\Core\Gateway;
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Reply\ReplyInterface;
 
-class PaymentTest extends \PHPUnit_Framework_TestCase
+class GatewayTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldImplementPaymentInterface()
+    public function shouldImplementGatewayInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Payment');
+        $rc = new \ReflectionClass('Payum\Core\Gateway');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayInterface'));
     }
 
     /**
@@ -25,7 +25,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new Payment();
+        new Gateway();
     }
 
     /**
@@ -33,9 +33,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCreateExtensionCollectionInstanceInConstructor()
     {
-        $payment = new Payment();
+        $gateway = new Gateway();
 
-        $this->assertAttributeInstanceOf('Payum\Core\Extension\ExtensionCollection', 'extensions', $payment);
+        $this->assertAttributeInstanceOf('Payum\Core\Extension\ExtensionCollection', 'extensions', $gateway);
     }
 
     /**
@@ -43,11 +43,11 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddExtension()
     {
-        $payment = new Payment();
+        $gateway = new Gateway();
 
-        $payment->addExtension($this->createExtensionMock());
+        $gateway->addExtension($this->createExtensionMock());
 
-        $extensions = $this->readAttribute($payment, 'extensions');
+        $extensions = $this->readAttribute($gateway, 'extensions');
 
         $this->assertAttributeCount(1, 'extensions', $extensions);
     }
@@ -60,12 +60,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $expectedFirstAction = $this->createActionMock();
         $expectedSecondAction = $this->createActionMock();
 
-        $payment = new Payment();
+        $gateway = new Gateway();
 
-        $payment->addAction($expectedFirstAction);
-        $payment->addAction($expectedSecondAction);
+        $gateway->addAction($expectedFirstAction);
+        $gateway->addAction($expectedSecondAction);
 
-        $actualActions = $this->readAttribute($payment, 'actions');
+        $actualActions = $this->readAttribute($gateway, 'actions');
 
         $this->assertInternalType('array', $actualActions);
         $this->assertCount(2, $actualActions);
@@ -81,12 +81,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $expectedFirstAction = $this->createActionMock();
         $expectedSecondAction = $this->createActionMock();
 
-        $payment = new Payment();
+        $gateway = new Gateway();
 
-        $payment->addAction($expectedSecondAction);
-        $payment->addAction($expectedFirstAction, $forcePrepend = true);
+        $gateway->addAction($expectedSecondAction);
+        $gateway->addAction($expectedFirstAction, $forcePrepend = true);
 
-        $actualActions = $this->readAttribute($payment, 'actions');
+        $actualActions = $this->readAttribute($gateway, 'actions');
 
         $this->assertInternalType('array', $actualActions);
         $this->assertCount(2, $actualActions);
@@ -99,12 +99,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddApi()
     {
-        $payment = new Payment();
+        $gateway = new Gateway();
 
-        $payment->addApi(new \stdClass());
-        $payment->addApi(new \stdClass());
+        $gateway->addApi(new \stdClass());
+        $gateway->addApi(new \stdClass());
 
-        $this->assertAttributeCount(2, 'apis', $payment);
+        $this->assertAttributeCount(2, 'apis', $gateway);
     }
 
     /**
@@ -115,12 +115,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $expectedFirstApi = new \stdClass();
         $expectedSecondApi = new \stdClass();
 
-        $payment = new Payment();
+        $gateway = new Gateway();
 
-        $payment->addApi($expectedSecondApi);
-        $payment->addApi($expectedFirstApi, $forcePrepend = true);
+        $gateway->addApi($expectedSecondApi);
+        $gateway->addApi($expectedFirstApi, $forcePrepend = true);
 
-        $actualApis = $this->readAttribute($payment, 'apis');
+        $actualApis = $this->readAttribute($gateway, 'apis');
 
         $this->assertInternalType('array', $actualApis);
         $this->assertCount(2, $actualApis);
@@ -133,10 +133,10 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSetFirstApiToActionApiAwareOnExecute()
     {
-        $payment = new Payment();
+        $gateway = new Gateway();
 
-        $payment->addApi($firstApi = new \stdClass());
-        $payment->addApi($secondApi = new \stdClass());
+        $gateway->addApi($firstApi = new \stdClass());
+        $gateway->addApi($secondApi = new \stdClass());
 
         $action = $this->getMockForAbstractClass('Payum\Core\Tests\ApiAwareAction');
         $action
@@ -150,9 +150,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo($firstApi))
         ;
 
-        $payment->addAction($action);
+        $gateway->addAction($action);
 
-        $payment->execute(new \stdClass());
+        $gateway->execute(new \stdClass());
     }
 
     /**
@@ -160,10 +160,10 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSetSecondApiToActionApiAwareIfFirstUnsupportedOnExecute()
     {
-        $payment = new Payment();
+        $gateway = new Gateway();
 
-        $payment->addApi($firstApi = new \stdClass());
-        $payment->addApi($secondApi = new \stdClass());
+        $gateway->addApi($firstApi = new \stdClass());
+        $gateway->addApi($secondApi = new \stdClass());
 
         $action = $this->getMockForAbstractClass('Payum\Core\Tests\ApiAwareAction');
         $action
@@ -183,9 +183,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo($secondApi))
         ;
 
-        $payment->addAction($action);
+        $gateway->addAction($action);
 
-        $payment->execute(new \stdClass());
+        $gateway->execute(new \stdClass());
     }
 
     /**
@@ -194,12 +194,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage Cannot find right api supported by
      */
-    public function throwIfPaymentNotHaveApiSupportedByActionOnExecute()
+    public function throwIfGatewayNotHaveApiSupportedByActionOnExecute()
     {
-        $payment = new Payment();
+        $gateway = new Gateway();
 
-        $payment->addApi($firstApi = new \stdClass());
-        $payment->addApi($secondApi = new \stdClass());
+        $gateway->addApi($firstApi = new \stdClass());
+        $gateway->addApi($secondApi = new \stdClass());
 
         $action = $this->getMockForAbstractClass('Payum\Core\Tests\ApiAwareAction');
         $action
@@ -220,9 +220,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->will($this->throwException(new UnsupportedApiException('second api not supported')))
         ;
 
-        $payment->addAction($action);
+        $gateway->addAction($action);
 
-        $payment->execute(new \stdClass());
+        $gateway->execute(new \stdClass());
     }
 
     /**
@@ -234,9 +234,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     {
         $request = new \stdClass();
 
-        $payment = new Payment();
+        $gateway = new Gateway();
 
-        $payment->execute($request);
+        $gateway->execute($request);
     }
 
     /**
@@ -259,10 +259,10 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->with($request)
         ;
 
-        $payment = new Payment();
-        $payment->addAction($actionMock);
+        $gateway = new Gateway();
+        $gateway->addAction($actionMock);
 
-        $payment->execute($request);
+        $gateway->execute($request);
     }
 
     /**
@@ -285,10 +285,10 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->will($this->throwException($expectedReply))
         ;
 
-        $payment = new Payment();
-        $payment->addAction($actionMock);
+        $gateway = new Gateway();
+        $gateway->addAction($actionMock);
 
-        $actualReply = $payment->execute($request, $catchReply = true);
+        $actualReply = $gateway->execute($request, $catchReply = true);
 
         $this->assertSame($expectedReply, $actualReply);
     }
@@ -312,21 +312,21 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $secondAction->setSupportedRequest($secondRequest);
         $secondAction->setReply($replyMock);
 
-        $payment = new Payment();
-        $payment->addAction($firstAction);
-        $payment->addAction($secondAction);
+        $gateway = new Gateway();
+        $gateway->addAction($firstAction);
+        $gateway->addAction($secondAction);
 
-        $payment->execute($firstRequest);
+        $gateway->execute($firstRequest);
     }
 
     /**
      * @test
      */
-    public function shouldSetPaymentToActionIfActionAwareOfPaymentOnExecute()
+    public function shouldSetGatewayToActionIfActionAwareOfGatewayOnExecute()
     {
-        $payment = new Payment();
+        $gateway = new Gateway();
 
-        $actionMock = $this->getMock('Payum\Core\Action\PaymentAwareAction');
+        $actionMock = $this->getMock('Payum\Core\Action\GatewayAwareAction');
         $actionMock
             ->expects($this->at(0))
             ->method('supports')
@@ -334,13 +334,13 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         ;
         $actionMock
             ->expects($this->at(1))
-            ->method('setPayment')
-            ->with($this->identicalTo($payment))
+            ->method('setGateway')
+            ->with($this->identicalTo($gateway))
         ;
 
-        $payment->addAction($actionMock);
+        $gateway->addAction($actionMock);
 
-        $payment->execute(new \stdClass());
+        $gateway->execute(new \stdClass());
     }
 
     /**
@@ -376,11 +376,11 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             )
         ;
 
-        $payment = new Payment();
-        $payment->addAction($actionMock);
-        $payment->addExtension($extensionMock);
+        $gateway = new Gateway();
+        $gateway->addAction($actionMock);
+        $gateway->addExtension($extensionMock);
 
-        $payment->execute($expectedRequest);
+        $gateway->execute($expectedRequest);
     }
 
     /**
@@ -414,11 +414,11 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             )
         ;
 
-        $payment = new Payment();
-        $payment->addAction($actionMock);
-        $payment->addExtension($extensionMock);
+        $gateway = new Gateway();
+        $gateway->addAction($actionMock);
+        $gateway->addExtension($extensionMock);
 
-        $actualReply = $payment->execute($expectedRequest, true);
+        $actualReply = $gateway->execute($expectedRequest, true);
 
         $this->assertSame($expectedReplyMock, $actualReply);
     }
@@ -456,11 +456,11 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($expectedReplyMock))
         ;
 
-        $payment = new Payment();
-        $payment->addAction($actionMock);
-        $payment->addExtension($extensionMock);
+        $gateway = new Gateway();
+        $gateway->addAction($actionMock);
+        $gateway->addExtension($extensionMock);
 
-        $actualReply = $payment->execute($expectedRequest, true);
+        $actualReply = $gateway->execute($expectedRequest, true);
 
         $this->assertSame($expectedReplyMock, $actualReply);
     }
@@ -488,11 +488,11 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             )
         ;
 
-        $payment = new Payment();
-        $payment->addAction($actionMock);
-        $payment->addExtension($extensionMock);
+        $gateway = new Gateway();
+        $gateway->addAction($actionMock);
+        $gateway->addExtension($extensionMock);
 
-        $payment->execute($expectedRequest);
+        $gateway->execute($expectedRequest);
     }
 
     /**
@@ -519,11 +519,11 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             )
         ;
 
-        $payment = new Payment();
-        $payment->addAction($actionMock);
-        $payment->addExtension($extensionMock);
+        $gateway = new Gateway();
+        $gateway->addAction($actionMock);
+        $gateway->addExtension($extensionMock);
 
-        $payment->execute($expectedRequest);
+        $gateway->execute($expectedRequest);
     }
 
     /**
@@ -550,11 +550,11 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             )
         ;
 
-        $payment = new Payment();
-        $payment->addAction($actionMock);
-        $payment->addExtension($extensionMock);
+        $gateway = new Gateway();
+        $gateway->addAction($actionMock);
+        $gateway->addExtension($extensionMock);
 
-        $payment->execute($expectedRequest);
+        $gateway->execute($expectedRequest);
     }
 
     /**
@@ -576,10 +576,10 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             )
         ;
 
-        $payment = new Payment();
-        $payment->addExtension($extensionMock);
+        $gateway = new Gateway();
+        $gateway->addExtension($extensionMock);
 
-        $payment->execute($notSupportedRequest);
+        $gateway->execute($notSupportedRequest);
     }
 
     /**
@@ -607,7 +607,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-class RequireOtherRequestAction extends PaymentAwareAction
+class RequireOtherRequestAction extends GatewayAwareAction
 {
     protected $supportedRequest;
 
@@ -631,7 +631,7 @@ class RequireOtherRequestAction extends PaymentAwareAction
 
     public function execute($request)
     {
-        $this->payment->execute($this->requiredRequest);
+        $this->gateway->execute($this->requiredRequest);
     }
 
     public function supports($request)

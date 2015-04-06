@@ -1,7 +1,7 @@
 <?php
 namespace Payum\AuthorizeNet\Aim\Action;
 
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -12,7 +12,7 @@ use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Security\SensitiveValue;
 
-class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
+class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
 {
     /**
      * @var AuthorizeNetAIM
@@ -48,7 +48,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
 
         if (false == $model->validateNotEmpty(array('card_num', 'exp_date'), false)) {
             try {
-                $this->payment->execute($obtainCreditCard = new ObtainCreditCard());
+                $this->gateway->execute($obtainCreditCard = new ObtainCreditCard());
 
                 $card = $obtainCreditCard->obtain();
 

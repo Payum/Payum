@@ -8,7 +8,7 @@ use Payum\Core\Model\DetailsAwareInterface;
 use Payum\Core\Model\ModelAggregateInterface;
 use Payum\Core\Model\ModelAwareInterface;
 
-class ExecuteSameRequestWithModelDetailsAction extends PaymentAwareAction
+class ExecuteSameRequestWithModelDetailsAction extends GatewayAwareAction
 {
     /**
      * {@inheritDoc}
@@ -29,7 +29,7 @@ class ExecuteSameRequestWithModelDetailsAction extends PaymentAwareAction
 
         $request->setModel($details);
         try {
-            $this->payment->execute($request);
+            $this->gateway->execute($request);
 
             if ($model instanceof DetailsAwareInterface) {
                 $model->setDetails($details);

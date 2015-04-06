@@ -3,24 +3,24 @@ namespace Payum\Klarna\Invoice\Action\Api;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\PaymentAwareInterface;
-use Payum\Core\PaymentInterface;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Klarna\Invoice\Request\Api\CreditPart;
 use Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails;
 
-class CreditPartAction extends BaseApiAwareAction implements PaymentAwareInterface
+class CreditPartAction extends BaseApiAwareAction implements GatewayAwareInterface
 {
     /**
-     * @var PaymentInterface
+     * @var GatewayInterface
      */
-    protected $payment;
+    protected $gateway;
 
     /**
      * {@inheritDoc}
      */
-    public function setPayment(PaymentInterface $payment)
+    public function setGateway(GatewayInterface $gateway)
     {
-        $this->payment = $payment;
+        $this->gateway = $gateway;
     }
 
     /**
@@ -39,7 +39,7 @@ class CreditPartAction extends BaseApiAwareAction implements PaymentAwareInterfa
         $klarna = $this->getKlarna();
 
         try {
-            $this->payment->execute(new PopulateKlarnaFromDetails($details, $klarna));
+            $this->gateway->execute(new PopulateKlarnaFromDetails($details, $klarna));
 
             $details['refund_invoice_number'] = $klarna->creditPart($details['invoice_number']);
         } catch (\KlarnaException $e) {

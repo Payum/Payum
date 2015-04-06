@@ -211,7 +211,7 @@ class Api
      * @param  array $params
      * @return array
      */
-    public function prepareOnsitePayment(array $params)
+    public function prepareOffsitePayment(array $params)
     {
         $supportedParams = array(
             'CLIENTIDENT' => null,

@@ -63,11 +63,11 @@ class AuthorizeRecurringActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldBeSubClassOfPaymentAwareAction()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\AuthorizeRecurringAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
@@ -100,14 +100,14 @@ class AuthorizeRecurringActionTest extends GenericActionTest
 
     public function testShouldDoNothingIfReservationAlreadySet()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->never())
             ->method('execute')
         ;
 
         $action = new AuthorizeRecurringAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute(new Authorize(array(
             'reservation' => 'aReservation',
@@ -126,8 +126,8 @@ class AuthorizeRecurringActionTest extends GenericActionTest
             )))
         ;
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\CreateOrder'))
@@ -141,7 +141,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         ));
 
         $action = new AuthorizeRecurringAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
         $action->setApi(new Config());
 
         $action->execute(new Authorize($model));
@@ -171,8 +171,8 @@ class AuthorizeRecurringActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\CreateOrder'))
@@ -192,7 +192,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         ));
 
         $action = new AuthorizeRecurringAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
         $action->setApi($config);
 
         $action->execute(new Authorize($model));

@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Be2Bill\Action;
 
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
@@ -13,7 +13,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Be2Bill\Api;
 use Payum\Core\Security\SensitiveValue;
 
-class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
+class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
 {
     /**
      * @var Api
@@ -48,18 +48,18 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         }
 
         if (false == $model['CLIENTUSERAGENT']) {
-            $this->payment->execute($httpRequest = new GetHttpRequest());
+            $this->gateway->execute($httpRequest = new GetHttpRequest());
             $model['CLIENTUSERAGENT'] = $httpRequest->userAgent;
         }
         if (false == $model['CLIENTIP']) {
-            $this->payment->execute($httpRequest = new GetHttpRequest());
+            $this->gateway->execute($httpRequest = new GetHttpRequest());
             $model['CLIENTIP'] = $httpRequest->clientIp;
         }
 
         $cardFields = array('CARDCODE', 'CARDCVV', 'CARDVALIDITYDATE', 'CARDFULLNAME');
         if (false == $model->validateNotEmpty($cardFields, false) && false == $model['ALIAS']) {
             try {
-                $this->payment->execute($creditCardRequest = new ObtainCreditCard());
+                $this->gateway->execute($creditCardRequest = new ObtainCreditCard());
                 $card = $creditCardRequest->obtain();
 
                 $model['CARDVALIDITYDATE'] = new SensitiveValue($card->getExpireAt()->format('m-y'));

@@ -1,13 +1,13 @@
 <?php
 namespace Payum\Klarna\Invoice\Action;
 
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Sync;
 use Payum\Klarna\Invoice\Request\Api\CheckOrderStatus;
 
-class SyncAction extends PaymentAwareAction
+class SyncAction extends GatewayAwareAction
 {
     /**
      * {@inheritDoc}
@@ -21,7 +21,7 @@ class SyncAction extends PaymentAwareAction
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
         if ($details['rno'] && false == $details['invoice_number']) {
-            $this->payment->execute(new CheckOrderStatus($request->getModel()));
+            $this->gateway->execute(new CheckOrderStatus($request->getModel()));
         }
     }
 

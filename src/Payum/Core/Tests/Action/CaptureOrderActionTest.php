@@ -28,11 +28,11 @@ class CaptureOrderActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldImplementPaymentAwareInterface()
+    public function shouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass($this->actionClass);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentAwareInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayAwareInterface'));
     }
 
     /**
@@ -44,8 +44,8 @@ class CaptureOrderActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHumanStatus'))
@@ -53,7 +53,7 @@ class CaptureOrderActionTest extends GenericActionTest
                 $request->markNew();
             }))
         ;
-        $paymentMock
+        $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\FillOrderDetails'))
@@ -64,7 +64,7 @@ class CaptureOrderActionTest extends GenericActionTest
         ;
 
         $action = new CaptureOrderAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute($capture = new Capture($order));
 
@@ -82,8 +82,8 @@ class CaptureOrderActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHumanStatus'))
@@ -91,7 +91,7 @@ class CaptureOrderActionTest extends GenericActionTest
                 $request->markNew();
             }))
         ;
-        $paymentMock
+        $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\FillOrderDetails'))
@@ -106,7 +106,7 @@ class CaptureOrderActionTest extends GenericActionTest
         ;
 
         $action = new CaptureOrderAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute($capture = new Capture($order));
 
@@ -130,8 +130,8 @@ class CaptureOrderActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHumanStatus'))
@@ -139,7 +139,7 @@ class CaptureOrderActionTest extends GenericActionTest
                 $request->markNew();
             }))
         ;
-        $paymentMock
+        $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\FillOrderDetails'))
@@ -150,7 +150,7 @@ class CaptureOrderActionTest extends GenericActionTest
         ;
 
         $action = new CaptureOrderAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $capture = new Capture($token);
         $capture->setModel($order);
@@ -174,8 +174,8 @@ class CaptureOrderActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHumanStatus'))
@@ -183,7 +183,7 @@ class CaptureOrderActionTest extends GenericActionTest
                 $request->markPending();
             }))
         ;
-        $paymentMock
+        $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Capture'))
@@ -198,7 +198,7 @@ class CaptureOrderActionTest extends GenericActionTest
         ;
 
         $action = new CaptureOrderAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute($capture = new Capture($order));
 
@@ -217,8 +217,8 @@ class CaptureOrderActionTest extends GenericActionTest
         $order = new Order();
         $order->setDetails($expectedDetails);
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHumanStatus'))
@@ -226,7 +226,7 @@ class CaptureOrderActionTest extends GenericActionTest
                 $request->markPending();
             }))
         ;
-        $paymentMock
+        $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Capture'))
@@ -239,7 +239,7 @@ class CaptureOrderActionTest extends GenericActionTest
         ;
 
         $action = new CaptureOrderAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $this->setExpectedException('Exception');
         $action->execute($capture = new Capture($order));

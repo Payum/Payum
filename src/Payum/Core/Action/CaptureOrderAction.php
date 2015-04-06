@@ -8,7 +8,7 @@ use Payum\Core\Request\Capture;
 use Payum\Core\Request\FillOrderDetails;
 use Payum\Core\Request\GetHumanStatus;
 
-class CaptureOrderAction extends PaymentAwareAction
+class CaptureOrderAction extends GatewayAwareAction
 {
     /**
      * {@inheritDoc}
@@ -22,16 +22,16 @@ class CaptureOrderAction extends PaymentAwareAction
         /** @var $order OrderInterface */
         $order = $request->getModel();
 
-        $this->payment->execute($status = new GetHumanStatus($order));
+        $this->gateway->execute($status = new GetHumanStatus($order));
         if ($status->isNew()) {
-            $this->payment->execute(new FillOrderDetails($order, $request->getToken()));
+            $this->gateway->execute(new FillOrderDetails($order, $request->getToken()));
         }
 
         $details = ArrayObject::ensureArrayObject($order->getDetails());
 
         $request->setModel($details);
         try {
-            $this->payment->execute($request);
+            $this->gateway->execute($request);
 
             $order->setDetails($details);
         } catch (\Exception $e) {

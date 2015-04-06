@@ -14,7 +14,7 @@ abstract class OrmTest extends BaseOrmTest
     protected function getMetadataDriverImpl(Configuration $config)
     {
         $rootDir = realpath(__DIR__.'/../../../..');
-        if (false === $rootDir || false === is_file($rootDir.'/Payment.php')) {
+        if (false === $rootDir || false === is_file($rootDir.'/Gateway.php')) {
             throw new \RuntimeException('Cannot guess Payum root dir.');
         }
 

@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests\Action;
 
-use Payum\Core\PaymentInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Authorize;
 use Payum\Core\Request\RenderTemplate;
@@ -14,11 +14,11 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfPaymentAwareAction()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\AuthorizeAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
@@ -78,20 +78,20 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSubExecuteSyncIfModelHasLocationSet()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
-        $paymentMock
+        $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
         ;
 
         $action = new AuthorizeAction('aTemplate');
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute(new Authorize(array(
             'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
@@ -119,8 +119,8 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('theLocation'))
         ;
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\CreateOrder'))
@@ -128,14 +128,14 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
                 $request->setOrder($orderMock);
             }))
         ;
-        $paymentMock
+        $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
 
         $action = new AuthorizeAction('aTemplate');
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $model = new \ArrayObject();
 
@@ -158,8 +158,8 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
 
         $testCase = $this;
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
@@ -172,7 +172,7 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new AuthorizeAction($expectedTemplateName);
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         try {
             $action->execute(new Authorize(array(
@@ -195,7 +195,7 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
     public function shouldNotThrowReplyWhenStatusNotSet()
     {
         $action = new AuthorizeAction('aTemplate');
-        $action->setPayment($this->createPaymentMock());
+        $action->setGateway($this->createGatewayMock());
 
         $action->execute(new Authorize(array(
             'location' => 'aLocation',
@@ -209,7 +209,7 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
     public function shouldNotThrowReplyWhenStatusCreated()
     {
         $action = new AuthorizeAction('aTemplate');
-        $action->setPayment($this->createPaymentMock());
+        $action->setGateway($this->createGatewayMock());
 
         $action->execute(new Authorize(array(
             'location' => 'aLocation',
@@ -219,11 +219,11 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 
     /**
