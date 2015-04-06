@@ -3,7 +3,7 @@
 ```php
 <?php
 
-$model = new \Payum\Model\Order();
+$model = new \Payum\Model\Payment();
 $model->setCurrencyCode('USD');
 $model->setTotalAmount(1);
 

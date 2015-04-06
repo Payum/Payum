@@ -5,7 +5,7 @@
         <parameter name="Charset" value="utf8"/>
     </vendor>
 
-    <table name="payum_order" phpName="Order">
+    <table name="payum_payment" phpName="Payment">
         <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true" />
 
         <column name="number" type="VARCHAR" size="255"/>

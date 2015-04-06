@@ -10,9 +10,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementsOrderInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Model\Order');
+        $rc = new \ReflectionClass('Payum\Core\Model\Payment');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Model\OrderInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Model\PaymentInterface'));
     }
 
     /**

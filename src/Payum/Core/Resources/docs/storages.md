@@ -12,7 +12,7 @@ Explicitly used example:
 <?php
 use Payum\Core\Storage\FilesystemStorage;
 
-$storage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Order', 'number');
+$storage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Payment', 'number');
 
 $order = $storage->create();
 $order->setTotalAmount(123);
@@ -32,7 +32,7 @@ use Payum\Core\Gateway;
 use Payum\Core\Storage\FilesystemStorage;
 
 $gateway->addExtension(new StorageExtension(
-   new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Order', 'number')
+   new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Payment', 'number')
 ));
 ```
 
@@ -46,7 +46,7 @@ use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Gateway;
 use Payum\Core\Request\Capture;
 
-$storage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Order', 'number');
+$storage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Payment', 'number');
 
 $order = $storage->create();
 $storage->update($order);
@@ -58,7 +58,7 @@ $gateway->execute($capture = new Capture(
 ));
 
 echo get_class($capture->getModel());
-// -> Payum\Core\Model\Order
+// -> Payum\Core\Model\Payment
 ```
 
 ## Doctrine ORM
@@ -90,13 +90,13 @@ class PaymentToken extends Token
 namespace Acme\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Payum\Core\Model\Order as BaseOrder;
+use Payum\Core\Model\Payment as BasePayment;
 
 /**
  * @ORM\Table
  * @ORM\Entity
  */
-class Order extends BaseOrder
+class Payment extends BasePayment
 {
     /**
      * @ORM\Column(name="id", type="integer")
@@ -146,7 +146,7 @@ $connection = array('driver' => 'pdo_sqlite', 'path' => ':memory:');
 
 $orderStorage = new DoctrineStorage(
    EntityManager::create($connection, $config),
-   'Payum\Entity\Order'
+   'Payum\Entity\Payment'
 );
 
 $tokenStorage = new DoctrineStorage(
@@ -181,12 +181,12 @@ class PaymentToken extends Token
 namespace Acme\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as Mongo;
-use Payum\Core\Model\Order as BaseOrder;
+use Payum\Core\Model\Payment as BasePayment;
 
 /**
  * @Mongo\Document
  */
-class Order extends BaseOrder
+class Payment extends BasePayment
 {
     /**
      * @Mongo\Id
@@ -250,7 +250,7 @@ $connection = new Connection(null, array(), $config);
 
 $orderStorage = new DoctrineStorage(
     DocumentManager::create($connection, $config),
-    'Acme\Document\Order'
+    'Acme\Document\Payment'
 );
 
 $tokenStorage = new DoctrineStorage(
@@ -267,7 +267,7 @@ use Payum\Core\Storage\FilesystemStorage;
 
 $storage = new FilesystemStorage(
     '/path/to/storage', 
-    'Payum\Core\Model\Order', 
+    'Payum\Core\Model\Payment', 
     'number'
 );
 ```
@@ -295,7 +295,7 @@ $ bin/propel --config-dir=your/path/to/propel.xml/directory --schema-dir=your/pa
 ```
 
 If you want to add your own logic to the model classes, you can extend the following classes:
-- ```Payum\Core\Bridge\Propel2\Model\Order```
+- ```Payum\Core\Bridge\Propel2\Model\Payment```
 - ```Payum\Core\Bridge\Propel2\Model\OrderQuery```
 - ```Payum\Core\Bridge\Propel2\Model\Token```
 - ```Payum\Core\Bridge\Propel2\Model\TokenQuery```

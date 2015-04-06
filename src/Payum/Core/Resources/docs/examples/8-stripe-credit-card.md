@@ -8,7 +8,7 @@ $card->setNumber('4111111111111111');
 $card->setExpireAt(new \DateTime('2018-10-10'));
 $card->setSecurityCode('123');
 
-$model = new \Payum\Model\Order();
+$model = new \Payum\Model\Payment();
 $model->setCurrencyCode('USD');
 $model->setTotalAmount(1);
 $model->setCreditCard($card);

@@ -2,12 +2,12 @@
 namespace Payum\Core\Tests\Mocks\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as Mongo;
-use Payum\Core\Model\Order as BaseOrder;
+use Payum\Core\Model\Payment as BasePayment;
 
 /**
  * @Mongo\Document
  */
-class Order extends BaseOrder
+class Payment extends BasePayment
 {
     /**
      * @Mongo\Id

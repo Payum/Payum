@@ -1,14 +1,14 @@
 # Your order integration
 
-In this chapter we would talk about purchase using Order class.
-The Order class is defined by you and have any possible methods.
+In this chapter we would talk about purchase using Payment class.
+The Payment class is defined by you and have any possible methods.
 To simply things let's suppose it looks like this:
 
 ```php
 <?php
 namespace App\Model;
 
-class Order
+class Payment
 {
     public $details;
 
@@ -18,7 +18,7 @@ class Order
 }
 ```
 
-To allow purchase using this Order we have to create payum's action.
+To allow purchase using this Payment we have to create payum's action.
 The action is like a driver between your domain and a gateway.
 As an example we created a capture action that can capture order using foo gateway.
 
@@ -26,7 +26,7 @@ As an example we created a capture action that can capture order using foo gatew
 <?php
 namespace App\Payum\Action;
 
-use App\Model\Order;
+use App\Model\Payment;
 use Payum\Core\Request\Capture;
 use Payum\Core\Exception\RequestNotSupportedException;
 
@@ -53,13 +53,13 @@ class CaptureOrderUsingFooAction extends GatewayAwareAction
     {
         return
             $request instanceof Capture &&
-            $request->getModel() instanceof Order
+            $request->getModel() instanceof Payment
         ;
     }
 }
 ```
 
-Now we have to add this action to gateway object. Also you have to register a storage that able to store Order.
+Now we have to add this action to gateway object. Also you have to register a storage that able to store Payment.
 You have to add to `config.php` that was described in [get it started](get-it-started.md) chapter.
 
 ```php
@@ -72,7 +72,7 @@ use App\Payum\Action\CaptureOrderUsingFooAction;
 
 $gateways['foo']->addAction(new CaptureOrderUsingFooAction);
 
-$storages['App\Model\Order'] = new FilesystemStorage('/path/to/storage', 'App\Model\Order');
+$storages['App\Model\Payment'] = new FilesystemStorage('/path/to/storage', 'App\Model\Payment');
 
 // ...
 ```
@@ -81,14 +81,14 @@ $storages['App\Model\Order'] = new FilesystemStorage('/path/to/storage', 'App\Mo
 <?php
 // prepare.php
 
-use App\Model\Order;
+use App\Model\Payment;
 
 include 'config.php';
 
-$storage = $payum->getStorage('App\Model\Order');
+$storage = $payum->getStorage('App\Model\Payment');
 
 $order = $storage->create();
-$order = new Order;
+$order = new Payment;
 $order->price = 1;
 $order->currency = 'USD';
 $storage->update($order);

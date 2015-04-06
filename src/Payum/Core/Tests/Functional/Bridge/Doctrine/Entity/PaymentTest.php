@@ -3,16 +3,16 @@ namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Entity;
 
 use Payum\Core\Security\SensitiveValue;
 use Payum\Core\Tests\Functional\Bridge\Doctrine\OrmTest;
-use Payum\Core\Tests\Mocks\Entity\Order;
+use Payum\Core\Tests\Mocks\Entity\Payment;
 
-class OrderTest extends OrmTest
+class PaymentTest extends OrmTest
 {
     /**
      * @test
      */
     public function shouldAllowPersistEmpty()
     {
-        $this->em->persist(new Order());
+        $this->em->persist(new Payment());
         $this->em->flush();
     }
 
@@ -21,7 +21,7 @@ class OrderTest extends OrmTest
      */
     public function shouldAllowPersistWithSomeFieldsSet()
     {
-        $order = new Order();
+        $order = new Payment();
         $order->setTotalAmount(100);
         $order->setCurrencyCode('USD');
         $order->setNumber('aNum');
@@ -39,7 +39,7 @@ class OrderTest extends OrmTest
      */
     public function shouldAllowFindPersistedOrder()
     {
-        $order = new Order();
+        $order = new Payment();
 
         $this->em->persist($order);
         $this->em->flush();
@@ -61,7 +61,7 @@ class OrderTest extends OrmTest
      */
     public function shouldNotStoreSensitiveValue()
     {
-        $order = new Order();
+        $order = new Payment();
         $order->setDetails(array('cardNumber' => new SensitiveValue('theCardNumber')));
 
         $this->em->persist($order);

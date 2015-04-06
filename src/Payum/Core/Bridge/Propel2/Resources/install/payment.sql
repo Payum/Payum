@@ -3,12 +3,12 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ---------------------------------------------------------------------
--- payum_order
+-- payum_payment
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `payum_order`;
+DROP TABLE IF EXISTS `payum_payment`;
 
-CREATE TABLE `payum_order`
+CREATE TABLE `payum_payment`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `number` VARCHAR(255),

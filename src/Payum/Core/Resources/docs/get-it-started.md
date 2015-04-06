@@ -44,7 +44,7 @@ use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Security\GenericTokenFactory;
 
-$orderClass = 'Payum\Core\Model\Order';
+$orderClass = 'Payum\Core\Model\Payment';
 
 $storages = array(
     $orderClass => new FilesystemStorage('/path/to/storage', $orderClass, 'number'),

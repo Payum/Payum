@@ -1,8 +1,8 @@
 <?php
 namespace Payum\Core\Bridge\Propel2\Model;
 
-use Payum\Core\Bridge\Propel2\Model\Base\OrderQuery as BaseOrderQuery;
+use Payum\Core\Bridge\Propel2\Model\Base\PaymentQuery as BasePaymentQuery;
 
-class OrderQuery extends BaseOrderQuery
+class PaymentQuery extends BasePaymentQuery
 {
 }

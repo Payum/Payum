@@ -3,16 +3,16 @@ namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Document;
 
 use Payum\Core\Security\SensitiveValue;
 use Payum\Core\Tests\Functional\Bridge\Doctrine\MongoTest;
-use Payum\Core\Tests\Mocks\Document\Order;
+use Payum\Core\Tests\Mocks\Document\Payment;
 
-class OrderTest extends MongoTest
+class PaymentTest extends MongoTest
 {
     /**
      * @test
      */
     public function shouldAllowPersistEmpty()
     {
-        $this->dm->persist(new Order());
+        $this->dm->persist(new Payment());
         $this->dm->flush();
     }
 
@@ -21,7 +21,7 @@ class OrderTest extends MongoTest
      */
     public function shouldAllowPersistWithSomeFieldsSet()
     {
-        $order = new Order();
+        $order = new Payment();
         $order->setTotalAmount(100);
         $order->setCurrencyCode('USD');
         $order->setNumber('aNum');
@@ -39,7 +39,7 @@ class OrderTest extends MongoTest
      */
     public function shouldAllowFindPersistedOrder()
     {
-        $order = new Order();
+        $order = new Payment();
 
         $this->dm->persist($order);
         $this->dm->flush();
@@ -61,7 +61,7 @@ class OrderTest extends MongoTest
      */
     public function shouldNotStoreSensitiveValue()
     {
-        $order = new Order();
+        $order = new Payment();
         $order->setDetails(array('cardNumber' => new SensitiveValue('theCardNumber')));
 
         $this->dm->persist($order);
