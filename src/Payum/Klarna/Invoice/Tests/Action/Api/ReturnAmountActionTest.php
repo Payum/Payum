@@ -165,9 +165,9 @@ class ReturnAmountActionTest extends \PHPUnit_Framework_TestCase
 
         $action->execute($reserve = new ReturnAmount($details));
 
-        $reserved = $reserve->getModel();
-        $this->assertEquals(123, $reserved['error_code']);
-        $this->assertEquals('theMessage', $reserved['error_message']);
+        $postDetails = $reserve->getModel();
+        $this->assertEquals(123, $postDetails['error_code']);
+        $this->assertEquals('theMessage', $postDetails['error_message']);
     }
 
     /**
@@ -175,7 +175,7 @@ class ReturnAmountActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock =  $this->getMock('Klarna', array('config', 'activate', 'cancelReservation', 'checkOrderStatus', 'reserveAmount'));
+        $klarnaMock =  $this->getMock('Klarna', array('config', 'returnAmount'));
 
         $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);
