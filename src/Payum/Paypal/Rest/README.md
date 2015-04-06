@@ -3,6 +3,7 @@
 [![Total Downloads](https://poser.pugx.org/payum/paypal-rest/d/total.png)](https://packagist.org/packages/payum/paypal-rest)
 [![Latest Stable Version](https://poser.pugx.org/payum/paypal-rest/version.png)](https://packagist.org/packages/payum/paypal-rest)
 
+The Payum extension. It provides [Paypal Rest](https://developer.paypal.com/docs/api/) payment integration.
 Provide integration of PayPal REST API to payum.
 
 ## Resources

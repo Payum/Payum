@@ -62,7 +62,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
 
         $model = new \stdClass();
         $identity = new Identity('anId', 'stdClass');
-        $paymentName = 'thePaymentName';
+        $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
         $modelStorage
@@ -83,14 +83,14 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, 'http://example.com:80');
 
         $actualToken = $factory->createToken(
-            $paymentName,
+            $gatewayName,
             $model,
             'theTargetPath',
             array('target' => 'val')
         );
 
         $this->assertSame($token, $actualToken);
-        $this->assertEquals($paymentName, $token->getPaymentName());
+        $this->assertEquals($gatewayName, $token->getGatewayName());
         $this->assertSame($identity, $token->getDetails());
         $this->assertEquals(
             'http://example.com:80/theTargetPath?payum_token='.$token->getHash().'&target=val',
@@ -120,7 +120,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
 
         $model = new \stdClass();
         $identity = new Identity('anId', 'stdClass');
-        $paymentName = 'thePaymentName';
+        $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
         $modelStorage
@@ -141,7 +141,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, 'http://example.com:80');
 
         $actualToken = $factory->createToken(
-            $paymentName,
+            $gatewayName,
             $model,
             'theTargetPath',
             array('target' => 'val'),
@@ -150,7 +150,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertSame($token, $actualToken);
-        $this->assertEquals($paymentName, $token->getPaymentName());
+        $this->assertEquals($gatewayName, $token->getGatewayName());
         $this->assertSame($identity, $token->getDetails());
         $this->assertEquals(
             'http://example.com:80/theTargetPath?payum_token='.$token->getHash().'&target=val',
@@ -178,7 +178,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo($token))
         ;
 
-        $paymentName = 'thePaymentName';
+        $gatewayName = 'theGatewayName';
         $identity = new Identity('anId', 'stdClass');
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -190,7 +190,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, 'http://example.com:80');
 
         $actualToken = $factory->createToken(
-            $paymentName,
+            $gatewayName,
             $identity,
             'theTargetPath',
             array('target' => 'val'),
@@ -221,7 +221,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo($token))
         ;
 
-        $paymentName = 'thePaymentName';
+        $gatewayName = 'theGatewayName';
 
         $storageRegistryMock = $this->createStorageRegistryMock();
         $storageRegistryMock
@@ -232,7 +232,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, 'http://example.com:80');
 
         $actualToken = $factory->createToken(
-            $paymentName,
+            $gatewayName,
             null,
             'theTargetPath',
             array('target' => 'val'),
@@ -265,7 +265,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
 
         $model = new \stdClass();
         $identity = new Identity('anId', 'stdClass');
-        $paymentName = 'thePaymentName';
+        $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
         $modelStorage
@@ -286,7 +286,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, 'http://example.com:80');
 
         $actualToken = $factory->createToken(
-            $paymentName,
+            $gatewayName,
             $model,
             'http://google.com?foo=fooVal',
             array('target' => 'val'),
@@ -295,7 +295,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertSame($token, $actualToken);
-        $this->assertEquals($paymentName, $token->getPaymentName());
+        $this->assertEquals($gatewayName, $token->getGatewayName());
         $this->assertSame($identity, $token->getDetails());
         $this->assertEquals(
             'http://google.com/?payum_token='.$token->getHash().'&foo=fooVal&target=val',
@@ -325,7 +325,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
 
         $model = new \stdClass();
         $identity = new Identity('anId', 'stdClass');
-        $paymentName = 'thePaymentName';
+        $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
         $modelStorage
@@ -346,7 +346,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, 'http://example.com:80');
 
         $actualToken = $factory->createToken(
-            $paymentName,
+            $gatewayName,
             $model,
             'http://example.com/authorize.php',
             array(),
@@ -355,7 +355,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertSame($authorizeToken, $actualToken);
-        $this->assertEquals($paymentName, $authorizeToken->getPaymentName());
+        $this->assertEquals($gatewayName, $authorizeToken->getGatewayName());
         $this->assertSame($identity, $authorizeToken->getDetails());
         $this->assertEquals(
             'http://example.com/authorize.php?payum_token='.$authorizeToken->getHash(),
@@ -388,7 +388,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
 
         $model = new \stdClass();
         $identity = new Identity('anId', 'stdClass');
-        $paymentName = 'thePaymentName';
+        $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
         $modelStorage
@@ -409,7 +409,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, 'http://example.com:80');
 
         $actualToken = $factory->createToken(
-            $paymentName,
+            $gatewayName,
             $model,
             'http://example.com/authorize.php',
             array(),
@@ -418,7 +418,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertSame($authorizeToken, $actualToken);
-        $this->assertEquals($paymentName, $authorizeToken->getPaymentName());
+        $this->assertEquals($gatewayName, $authorizeToken->getGatewayName());
         $this->assertSame($identity, $authorizeToken->getDetails());
         $this->assertEquals(
             'http://example.com/authorize.php?payum_token='.$authorizeToken->getHash(),
@@ -451,7 +451,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
 
         $model = new \stdClass();
         $identity = new Identity('anId', 'stdClass');
-        $paymentName = 'thePaymentName';
+        $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
         $modelStorage
@@ -472,7 +472,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, 'http://example.com:80');
 
         $actualToken = $factory->createToken(
-            $paymentName,
+            $gatewayName,
             $model,
             'http://example.com/authorize.php',
             array(),
@@ -481,7 +481,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertSame($authorizeToken, $actualToken);
-        $this->assertEquals($paymentName, $authorizeToken->getPaymentName());
+        $this->assertEquals($gatewayName, $authorizeToken->getGatewayName());
         $this->assertSame($identity, $authorizeToken->getDetails());
         $this->assertEquals(
             'http://example.com/authorize.php?payum_token='.$authorizeToken->getHash(),

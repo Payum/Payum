@@ -1,6 +1,6 @@
 # Working with sensitive information
 
-All sensitive information (credit card number, cvv, card owner name etc) should be passed directly to a payment gateway.
+All sensitive information (credit card number, cvv, card owner name etc) should be passed directly to a gateway.
 It is not allowed to store such information even temporally.
 If you want to store it you have to do it according to [PCI SSC Data Security Standards](https://www.pcisecuritystandards.org/security_standards/).
 It is very a challenging task and it is out of scope of this chapter.
@@ -35,6 +35,6 @@ json_encode($model['cardNumber']);
 // {}
 ```
 
-All supported payments are aware of this class and will handle it safely.
+All supported gateways are aware of this class and will handle it safely.
 
 Back to [index](index.md).

@@ -54,7 +54,7 @@ class CaptureAction extends GatewayAwareAction implements GenericTokenFactoryAwa
 
             if (empty($details['PAYMENTREQUEST_0_NOTIFYURL']) && $request->getToken() && $this->tokenFactory) {
                 $notifyToken = $this->tokenFactory->createNotifyToken(
-                    $request->getToken()->getPaymentName(),
+                    $request->getToken()->getGatewayName(),
                     $request->getToken()->getDetails()
                 );
 

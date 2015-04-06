@@ -23,8 +23,10 @@
 * `Payum\AuthorizeNet\Aim\PaymentFactory` renamed to `AuthorizeNetAimGatewayFactory`.
 * `Payum\Core\Bridge\Symfony\Form\Type\PaymentConfigType` renamed to `GatewayConfigType`.
 * `Payum\Core\Bridge\Symfony\Form\Type\PaymentFactoriesChoiceType` renamed to `GatewayFactoriesChoiceType`.
-* [doctrine] PaymentConfig::paymentName property renamed to `gatewayName`. The column renamed to `gateway_name`. **You have to migrate your database**.
-* [propel] PaymentConfig::paymentName property renamed to `gatewayName`. The column renamed to `gateway_name`. **You have to migrate your database**.
+* [doctrine] PaymentConfig::paymentName property renamed to `gatewayName`. **You have to migrate your database**.
+* [doctrine] Token::paymentName property renamed to `gatewayName`. **You have to migrate your database**.
+* [propel] PaymentConfig::paymentName property renamed to `gatewayName`. **You have to migrate your database**.
+* [propel] Token::paymentName property renamed to `gatewayName`. **You have to migrate your database**.
 * [be2bill] Method `Api::prepareOnsitePayment` was renamed to `Api::prepareOffsitePayment`.
 
 ## 0.13 to 0.14

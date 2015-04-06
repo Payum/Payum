@@ -1,12 +1,12 @@
-# Configure payment in backend
+# Configure gateway in backend
 
-In [get it started](get_it_started.md) we showed you how to configure payments in the code. 
-Sometimes you may asked to store payments (mostly gateway credentials) to a database for example. 
+In [get it started](get_it_started.md) we showed you how to configure gateways in the code. 
+Sometimes you may asked to store gateways (mostly gateway credentials) to a database for example. 
 So the admin can edit them in the backend. Here's the basic example how to do it in plain php. 
    
 ## Configure
 
-First we have to create an entity where we store information about a payment. 
+First we have to create an entity where we store information about a gateway. 
 The model must implement `Payum\Core\Model\GatewayConfigInterface`.
 
 _**Note**: In this chapter we use DoctrineStorage._
@@ -16,13 +16,13 @@ _**Note**: In this chapter we use DoctrineStorage._
 namespace Acme\Payment\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Payum\Core\Model\PaymentConfig as BasePaymentConfig;
+use Payum\Core\Model\GatewayConfig as BaseGatewayConfig;
 
 /**
  * @ORM\Table
  * @ORM\Entity
  */
-class PaymentConfig extends BasePaymentConfig
+class GatewayConfig extends BaseGatewayConfig
 {
     /**
      * @ORM\Column(name="id", type="integer")
@@ -48,12 +48,12 @@ use Payum\Core\Registry\DynamicRegistry;
 
 // $objectManager is an instance of doctrine object manager.
 
-$paymentConfigStorage = new DoctrineStorage($objectManager, 'Acme\Payment\Entity\PaymentConfig');
+$gatewayConfigStorage = new DoctrineStorage($objectManager, 'Acme\Payment\Entity\GatewayConfig');
 
-$payum = new DynamicRegistry($paymentConfigStorage, $payum);
+$payum = new DynamicRegistry($gatewayConfigStorage, $payum);
 ```
 
-## Store payment config
+## Store gateway config
 
 ```php
 <?php
@@ -61,20 +61,20 @@ $payum = new DynamicRegistry($paymentConfigStorage, $payum);
 
 include 'config.php';
 
-$paymentConfig = $paymentConfigStorage->create();
-$paymentConfig->setPaymentName('paypal');
-$paymentConfig->setFactoryName('paypal_express_checkout_nvp');
-$paymentConfig->setConfig(array(
+$gatewayConfig = $gatewayConfigStorage->create();
+$gatewayConfig->setGatewayName('paypal');
+$gatewayConfig->setFactoryName('paypal_express_checkout_nvp');
+$gatewayConfig->setConfig(array(
     'username' => 'EDIT ME',
     'password' => 'EDIT ME',
     'signature' => 'EDIT ME',
     'sandbox' => true,
 ));
 
-$paymentConfigStorage->update($paymentConfig);
+$gatewayConfigStorage->update($gatewayConfig);
 ```
 
-## Use payment
+## Use gateway
 
 ```php
 <?php
@@ -82,7 +82,7 @@ $paymentConfigStorage->update($paymentConfig);
 
 include 'config.php';
 
-$payment = $payum->getPayment('paypal');
+$gateway = $payum->getGateway('paypal');
 ```
 
 Back to [index](index.md).

@@ -1,9 +1,9 @@
-# Develop payment gateway with payum
+# Develop a custom Payum gateway.
 
 This chapter could be useful for a developer who wants to create a gateway on top of payum.
 Here we would briefly describe general approaches, and things you should start from.
 Let's assume you want to implement the most common task: purchase a product and get payment status.
-For this you would send a request to a payment gateway using username and password provided.
+For this you would send a request to a gateway using username and password provided.
 
 _**Note**: Before you start we would suggest to read [the architecture](the-architecture.md) chapter._
 
@@ -37,7 +37,7 @@ class CaptureAction implements ActionInterface
 
         if (isset($model['amount']) && isset($model['currency'])) {
 
-            //do purchase call to the payment gateway using username and password.
+            //do purchase call to the gateway using username and password.
 
             $model['status'] = 'success';
         } else {
@@ -108,7 +108,7 @@ class StatusAction implements ActionInterface
 # Usage
 
 Now you want knit all things together and start use it. Okay,
-To make it work we have to create a payment object and put all we did into it.
+To make it work we have to create a gateway object and put all we did into it.
 
 ```php
 <?php
@@ -116,21 +116,21 @@ namespace App;
 
 App\Payum\Action\CaptureAction;
 App\Payum\Action\StatusAction;
-use Payum\Core\Payment;
+use Payum\Core\Gateway;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHumanStatus;
 
-$payment = new Payment;
-$payment->addAction(new CaptureAction('aUsername', 'aPassword'));
-$payment->addAction(new StatusAction);
+$gateway = new Gateway;
+$gateway->addAction(new CaptureAction('aUsername', 'aPassword'));
+$gateway->addAction(new StatusAction);
 
 $model = new ArrayObject(array(
     'amount' => 10,
     'currency' => 'USD',
 ));
 
-$payment->execute(new Capture($model));
-$payment->execute($status = new GetHumanStatus($model));
+$gateway->execute(new Capture($model));
+$gateway->execute($status = new GetHumanStatus($model));
 
 if ($status->isCaptured()) {
     echo 'We purchase staff successfully';

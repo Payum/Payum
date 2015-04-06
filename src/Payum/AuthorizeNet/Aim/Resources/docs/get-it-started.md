@@ -15,7 +15,7 @@ php composer.phar require payum/authorize-net-aim
 
 ## config.php
 
-We have to only add the payment factory. All the rest remain the same:
+We have to only add the gateway factory. All the rest remain the same:
 
 ```php
 <?php
@@ -23,9 +23,9 @@ We have to only add the payment factory. All the rest remain the same:
 
 // ...
 
-$authorizeNetAimFactory = new \Payum\AuthorizeNet\Aim\PaymentFactory;
+$authorizeNetAimFactory = new \Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
 
-$payments['authorize-net-aim'] = $authorizeNetAimFactory->create(array(
+$gateways['authorize-net-aim'] = $authorizeNetAimFactory->create(array(
     'login_id' => 'REPLACE IT',
     'transaction_key' => 'REPLACE IT',
     'sandbox' => true,
@@ -37,13 +37,13 @@ $payments['authorize-net-aim'] = $authorizeNetAimFactory->create(array(
 
 ## prepare.php
 
-Here you have to modify a `paymentName` value. Set it to `authorize-net-aim`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
+Here you have to modify a `gatewayName` value. Set it to `authorize-net-aim`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
 
 ## Next 
 
 * [Core's Get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
 * [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
-* [Supported payments](https://github.com/Payum/Core/blob/master/Resources/docs/supported-payments.md).
+* [Supported gateways](https://github.com/Payum/Core/blob/master/Resources/docs/supported-gateways.md).
 * [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
 * [Capture script](https://github.com/Payum/Core/blob/master/Resources/docs/capture-script.md).
 * [Authorize script](https://github.com/Payum/Core/blob/master/Resources/docs/authorize-script.md).

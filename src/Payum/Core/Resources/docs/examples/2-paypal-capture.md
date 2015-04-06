@@ -11,7 +11,7 @@ $model->setDetails(array(
     'CANCELURL' => 'http://cancel.url',
 ));
 
-$payment->execute(new \Payum\Core\Request\Capture($model);
+$gateway->execute(new \Payum\Core\Request\Capture($model);
 
 // or using raw format
  
@@ -22,5 +22,5 @@ $model = array(
    'CANCELURL' => 'http://cancel.url',
 ));
 
-$payment->execute(new \Payum\Core\Request\Capture($model);
+$gateway->execute(new \Payum\Core\Request\Capture($model);
 ```

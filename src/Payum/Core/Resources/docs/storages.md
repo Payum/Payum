@@ -2,8 +2,8 @@
 
 Storage allow you save,fetch payment related information. 
 They could be used explicitly, it means you have to call save or fetch methods when it is required. 
-Or you can integrate a storage to a payment using `StorageExtension`. 
-In this case every time payment finish to execute a request it stores the information. 
+Or you can integrate a storage to a gateway using `StorageExtension`. 
+In this case every time gateway finish to execute a request it stores the information. 
 `StorageExtension` could also load a model by it is `Identificator` so you do not have to care about that.
 
 Explicitly used example:
@@ -28,10 +28,10 @@ Implicitly used example:
 ```php
 <?php
 use Payum\Core\Extension\StorageExtension;
-use Payum\Core\Payment;
+use Payum\Core\Gateway;
 use Payum\Core\Storage\FilesystemStorage;
 
-$payment->addExtension(new StorageExtension(
+$gateway->addExtension(new StorageExtension(
    new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Order', 'number')
 ));
 ```
@@ -43,7 +43,7 @@ Usage of a model identity with the extension:
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Model\Identity;
 use Payum\Core\Storage\FilesystemStorage;
-use Payum\Core\Payment;
+use Payum\Core\Gateway;
 use Payum\Core\Request\Capture;
 
 $storage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Order', 'number');
@@ -51,9 +51,9 @@ $storage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Order', '
 $order = $storage->create();
 $storage->update($order);
 
-$payment->addExtension(new StorageExtension($storage));
+$gateway->addExtension(new StorageExtension($storage));
 
-$payment->execute($capture = new Capture(
+$gateway->execute($capture = new Capture(
     $storage->identify($order)
 ));
 

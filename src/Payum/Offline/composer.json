@@ -2,10 +2,11 @@
 {
     "name": "payum/offline",
     "type": "library",
-    "description": "Offline Payments",
+    "description": "The Payum extension. It provides Offline payment integration.",
     "keywords": [
         "payment",
-        "offlile"
+        "offlile",
+        "invoice"
     ],
     "homepage": "http://payum.org",
     "license": "MIT",

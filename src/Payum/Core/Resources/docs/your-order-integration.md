@@ -19,8 +19,8 @@ class Order
 ```
 
 To allow purchase using this Order we have to create payum's action.
-The action is like a driver between your domain and a payment gateway.
-As an example we created a capture action that can capture order using foo payment.
+The action is like a driver between your domain and a gateway.
+As an example we created a capture action that can capture order using foo gateway.
 
 ```php
 <?php
@@ -30,7 +30,7 @@ use App\Model\Order;
 use Payum\Core\Request\Capture;
 use Payum\Core\Exception\RequestNotSupportedException;
 
-class CaptureOrderUsingFooAction extends PaymentAwareAction
+class CaptureOrderUsingFooAction extends GatewayAwareAction
 {
     public function execute($request)
     {
@@ -43,7 +43,7 @@ class CaptureOrderUsingFooAction extends PaymentAwareAction
             'foo_currency' => $order->currency
         )));
 
-        $this->payment->execute($request);
+        $this->gateway->execute($request);
 
         $order->details = $request->getModel();
         $request->setModel($order);
@@ -59,7 +59,7 @@ class CaptureOrderUsingFooAction extends PaymentAwareAction
 }
 ```
 
-Now we have to add this action to payment object. Also you have to register a storage that able to store Order.
+Now we have to add this action to gateway object. Also you have to register a storage that able to store Order.
 You have to add to `config.php` that was described in [get it started](get-it-started.md) chapter.
 
 ```php
@@ -70,7 +70,7 @@ use App\Payum\Action\CaptureOrderUsingFooAction;
 
 // ...
 
-$payments['foo']->addAction(new CaptureOrderUsingFooAction);
+$gateways['foo']->addAction(new CaptureOrderUsingFooAction);
 
 $storages['App\Model\Order'] = new FilesystemStorage('/path/to/storage', 'App\Model\Order');
 

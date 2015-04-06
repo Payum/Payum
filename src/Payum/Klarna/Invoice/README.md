@@ -3,7 +3,7 @@
 [![Total Downloads](https://poser.pugx.org/payum/klarna-invoice/d/total.png)](https://packagist.org/packages/payum/klarna-invoice)
 [![Latest Stable Version](https://poser.pugx.org/payum/klarna-invoice/version.png)](https://packagist.org/packages/payum/klarna-invoice)
 
-Provide integration of Klarna Invoice to Payum.
+The Payum extension. It provides [Klarna Invoice](https://klarna.com/buy-klarna/our-services/klarna-invoice) payment integration.
 
 ## Resources
 

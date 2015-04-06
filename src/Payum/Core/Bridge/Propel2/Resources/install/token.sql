@@ -15,7 +15,7 @@ CREATE TABLE `payum_token`
     `details` TEXT,
     `after_url` VARCHAR(255),
     `target_url` VARCHAR(255),
-    `payment_name` VARCHAR(255),
+    `gateway_name` VARCHAR(255),
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB CHARACTER SET='utf8';
 

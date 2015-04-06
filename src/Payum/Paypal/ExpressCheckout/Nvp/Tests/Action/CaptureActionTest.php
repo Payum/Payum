@@ -287,7 +287,7 @@ class CaptureActionTest extends GenericActionTest
         ));
 
         $captureToken = new Token();
-        $captureToken->setPaymentName('theGatewayName');
+        $captureToken->setGatewayName('theGatewayName');
         $captureToken->setDetails($details);
 
         $notifyToken = new Token();
@@ -327,7 +327,7 @@ class CaptureActionTest extends GenericActionTest
         ));
 
         $captureToken = new Token();
-        $captureToken->setPaymentName('theGatewayName');
+        $captureToken->setGatewayName('theGatewayName');
         $captureToken->setDetails($details);
 
         $tokenFactoryMock = $this->getMock('Payum\Core\Security\GenericTokenFactoryInterface');
@@ -359,7 +359,7 @@ class CaptureActionTest extends GenericActionTest
         ));
 
         $captureToken = new Token();
-        $captureToken->setPaymentName('theGatewayName');
+        $captureToken->setGatewayName('theGatewayName');
         $captureToken->setDetails($details);
 
         $tokenFactoryMock = $this->getMock('Payum\Core\Security\GenericTokenFactoryInterface');
@@ -389,7 +389,7 @@ class CaptureActionTest extends GenericActionTest
         ));
 
         $captureToken = new Token();
-        $captureToken->setPaymentName('theGatewayName');
+        $captureToken->setGatewayName('theGatewayName');
         $captureToken->setDetails($details);
 
         $action = new CaptureAction();

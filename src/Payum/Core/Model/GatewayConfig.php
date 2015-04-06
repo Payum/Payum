@@ -1,9 +1,6 @@
 <?php
 namespace Payum\Core\Model;
 
-/**
- * @deprecated
- */
 class GatewayConfig implements GatewayConfigInterface
 {
     /**

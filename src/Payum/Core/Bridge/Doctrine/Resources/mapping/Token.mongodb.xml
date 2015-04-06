@@ -14,7 +14,7 @@
 
       <field name="targetUrl" type="string" />
 
-      <field name="paymentName" type="string" />
+      <field name="gatewayName" type="string" />
 
     </mapped-superclass>
 

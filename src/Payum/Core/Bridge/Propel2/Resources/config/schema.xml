@@ -25,6 +25,6 @@
         <column name="details" type="OBJECT"/>
         <column name="after_url" type="VARCHAR" size="255"/>
         <column name="target_url" type="VARCHAR" size="255"/>
-        <column name="payment_name" type="VARCHAR" size="255"/>
+        <column name="gateway_name" type="VARCHAR" size="255"/>
     </table>
 </database>

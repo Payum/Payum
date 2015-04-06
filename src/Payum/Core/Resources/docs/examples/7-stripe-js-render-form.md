@@ -4,7 +4,7 @@
 <?php
 
 try {
-    $payment->execute(new \Payum\Core\Request\Capture($model);
+    $gateway->execute(new \Payum\Core\Request\Capture($model);
 } catch (Reply) {
     if ($reply instanceof Payum\Core\Reply\HttpResponse) {
         echo $reply->getContent();

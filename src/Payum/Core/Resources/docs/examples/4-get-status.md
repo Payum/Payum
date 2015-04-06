@@ -1,9 +1,9 @@
-# 3. Get payment. 
+# 3. Get gateway. 
 
 ```php
 <?php
 
-$payment->execute($status = new \Payum\Core\Request\GetHumanStatus($model));
+$gateway->execute($status = new \Payum\Core\Request\GetHumanStatus($model));
 
 $status->isNew();
 $status->isPending();

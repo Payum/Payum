@@ -1,4 +1,4 @@
-# Supported payments.
+# Supported gateways.
 
 ## Official
 
