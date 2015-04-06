@@ -8,11 +8,11 @@ class AbstractRegistryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementPaymentRegistryInterface()
+    public function shouldImplementGatewayRegistryInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Registry\AbstractRegistry');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Registry\PaymentRegistryInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Registry\GatewayRegistryInterface'));
     }
 
     /**
@@ -28,11 +28,11 @@ class AbstractRegistryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementPaymentFactoryInterface()
+    public function shouldImplementGatewayFactoryInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Registry\AbstractRegistry');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Registry\PaymentFactoryRegistryInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Registry\GatewayFactoryRegistryInterface'));
     }
 
     /**
@@ -52,23 +52,23 @@ class AbstractRegistryTest extends \PHPUnit_Framework_TestCase
     {
         $registry = $this->createAbstractRegistryMock(array());
 
-        $this->assertAttributeEquals(array(), 'payments', $registry);
+        $this->assertAttributeEquals(array(), 'gateways', $registry);
         $this->assertAttributeEquals(array(), 'storages', $registry);
-        $this->assertAttributeEquals(array(), 'paymentFactories', $registry);
+        $this->assertAttributeEquals(array(), 'gatewayFactories', $registry);
     }
 
     /**
      * @test
      */
-    public function couldConstructedWithPaymentsOnly()
+    public function couldConstructedWithGatewaysOnly()
     {
-        $payments = array('fooName' => 'fooPayment');
+        $gateways = array('fooName' => 'fooGateway');
 
-        $registry = $this->createAbstractRegistryMock(array($payments));
+        $registry = $this->createAbstractRegistryMock(array($gateways));
 
-        $this->assertAttributeEquals($payments, 'payments', $registry);
+        $this->assertAttributeEquals($gateways, 'gateways', $registry);
         $this->assertAttributeEquals(array(), 'storages', $registry);
-        $this->assertAttributeEquals(array(), 'paymentFactories', $registry);
+        $this->assertAttributeEquals(array(), 'gatewayFactories', $registry);
     }
 
     /**
@@ -80,137 +80,137 @@ class AbstractRegistryTest extends \PHPUnit_Framework_TestCase
 
         $registry = $this->createAbstractRegistryMock(array(array(), $storages));
 
-        $this->assertAttributeEquals(array(), 'payments', $registry);
+        $this->assertAttributeEquals(array(), 'gateways', $registry);
         $this->assertAttributeEquals($storages, 'storages', $registry);
-        $this->assertAttributeEquals(array(), 'paymentFactories', $registry);
+        $this->assertAttributeEquals(array(), 'gatewayFactories', $registry);
     }
 
     /**
      * @test
      */
-    public function couldConstructedWithPaymentFactoriesOnly()
+    public function couldConstructedWithGatewayFactoriesOnly()
     {
         $factories = array('bar' => 'barFactory');
 
         $registry = $this->createAbstractRegistryMock(array(array(), array(), $factories));
 
-        $this->assertAttributeEquals(array(), 'payments', $registry);
+        $this->assertAttributeEquals(array(), 'gateways', $registry);
         $this->assertAttributeEquals(array(), 'storages', $registry);
-        $this->assertAttributeEquals($factories, 'paymentFactories', $registry);
+        $this->assertAttributeEquals($factories, 'gatewayFactories', $registry);
     }
 
     /**
      * @test
      */
-    public function shouldAllowGetPaymentWithNamePassedExplicitly()
+    public function shouldAllowGetGatewayWithNamePassedExplicitly()
     {
-        $payments = array('fooName' => 'fooPayment', 'barName' => 'barPayment');
+        $gateways = array('fooName' => 'fooGateway', 'barName' => 'barGateway');
 
         $registry = $this->createAbstractRegistryMock(array(
-            $payments,
+            $gateways,
         ));
 
-        $this->assertEquals('barPayment', $registry->getPayment('barName'));
+        $this->assertEquals('barGateway', $registry->getGateway('barName'));
     }
 
     /**
      * @test
      */
-    public function shouldAllowGetAllPayments()
+    public function shouldAllowGetAllGateways()
     {
-        $payments = array('fooName' => 'fooPayment', 'barName' => 'barPayment');
+        $gateways = array('fooName' => 'fooGateway', 'barName' => 'barGateway');
 
         $registry = $this->createAbstractRegistryMock(array(
-            $payments,
+            $gateways,
         ));
 
-        $payments = $registry->getPayments();
+        $gateways = $registry->getGateways();
 
-        $this->assertInternalType('array', $payments);
-        $this->assertCount(2, $payments);
+        $this->assertInternalType('array', $gateways);
+        $this->assertCount(2, $gateways);
 
-        $this->assertArrayHasKey('fooName', $payments);
-        $this->assertEquals('fooPayment', $payments['fooName']);
+        $this->assertArrayHasKey('fooName', $gateways);
+        $this->assertEquals('fooGateway', $gateways['fooName']);
 
-        $this->assertArrayHasKey('barName', $payments);
-        $this->assertEquals('barPayment', $payments['barName']);
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Payment "notExistName" does not exist.
-     */
-    public function throwIfTryToGetPaymentWithNotExistName()
-    {
-        $payments = array('fooName' => 'fooPayment', 'barName' => 'barPayment');
-
-        $registry = $this->createAbstractRegistryMock(array(
-            $payments,
-        ));
-
-        $registry->getPayment('notExistName');
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetPaymentFactoryByName()
-    {
-        $paymentFactories = array('foo' => 'fooPaymentFactory', 'bar' => 'barPaymentFactory');
-
-        $registry = $this->createAbstractRegistryMock(array(
-            array(),
-            array(),
-            $paymentFactories,
-        ));
-
-        $this->assertEquals('barPaymentFactory', $registry->getPaymentFactory('bar'));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetAllPaymentFactories()
-    {
-        $paymentFactories = array('foo' => 'fooPaymentFactory', 'bar' => 'barPaymentFactory');
-
-        $registry = $this->createAbstractRegistryMock(array(
-            array(),
-            array(),
-            $paymentFactories,
-        ));
-
-        $payments = $registry->getPaymentFactories();
-
-        $this->assertInternalType('array', $payments);
-        $this->assertCount(2, $payments);
-
-        $this->assertArrayHasKey('foo', $payments);
-        $this->assertEquals('fooPaymentFactory', $payments['foo']);
-
-        $this->assertArrayHasKey('bar', $payments);
-        $this->assertEquals('barPaymentFactory', $payments['bar']);
+        $this->assertArrayHasKey('barName', $gateways);
+        $this->assertEquals('barGateway', $gateways['barName']);
     }
 
     /**
      * @test
      *
      * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Payment factory "notExistName" does not exist.
+     * @expectedExceptionMessage Gateway "notExistName" does not exist.
      */
-    public function throwIfTryToGetPaymentFactoryWithNotExistName()
+    public function throwIfTryToGetGatewayWithNotExistName()
     {
-        $paymentFactories = array('foo' => 'fooPaymentFactory', 'bar' => 'barPaymentFactory');
+        $gateways = array('fooName' => 'fooGateway', 'barName' => 'barGateway');
+
+        $registry = $this->createAbstractRegistryMock(array(
+            $gateways,
+        ));
+
+        $registry->getGateway('notExistName');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetGatewayFactoryByName()
+    {
+        $gatewayFactories = array('foo' => 'fooGatewayFactory', 'bar' => 'barGatewayFactory');
 
         $registry = $this->createAbstractRegistryMock(array(
             array(),
             array(),
-            $paymentFactories
+            $gatewayFactories,
         ));
 
-        $registry->getPaymentFactory('notExistName');
+        $this->assertEquals('barGatewayFactory', $registry->getGatewayFactory('bar'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetAllGatewayFactories()
+    {
+        $gatewayFactories = array('foo' => 'fooGatewayFactory', 'bar' => 'barGatewayFactory');
+
+        $registry = $this->createAbstractRegistryMock(array(
+            array(),
+            array(),
+            $gatewayFactories,
+        ));
+
+        $gateways = $registry->getGatewayFactories();
+
+        $this->assertInternalType('array', $gateways);
+        $this->assertCount(2, $gateways);
+
+        $this->assertArrayHasKey('foo', $gateways);
+        $this->assertEquals('fooGatewayFactory', $gateways['foo']);
+
+        $this->assertArrayHasKey('bar', $gateways);
+        $this->assertEquals('barGatewayFactory', $gateways['bar']);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Gateway factory "notExistName" does not exist.
+     */
+    public function throwIfTryToGetGatewayFactoryWithNotExistName()
+    {
+        $gatewayFactories = array('foo' => 'fooGatewayFactory', 'bar' => 'barGatewayFactory');
+
+        $registry = $this->createAbstractRegistryMock(array(
+            array(),
+            array(),
+            $gatewayFactories
+        ));
+
+        $registry->getGatewayFactory('notExistName');
     }
 
     /**
@@ -218,11 +218,11 @@ class AbstractRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetStorageForGivenModelClass()
     {
-        $payments = array('fooName' => 'fooPayment', 'barName' => 'barPayment');
+        $gateways = array('fooName' => 'fooGateway', 'barName' => 'barGateway');
         $storages = array('stdClass' => 'barStorage');
 
         $registry = $this->createAbstractRegistryMock(array(
-            $payments,
+            $gateways,
             $storages,
         ));
 
@@ -234,11 +234,11 @@ class AbstractRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetStorageIfDoctrineProxyClassGiven()
     {
-        $payments = array('fooName' => 'fooPayment', 'barName' => 'barPayment');
+        $gateways = array('fooName' => 'fooGateway', 'barName' => 'barGateway');
         $storages = array('Payum\Core\Tests\Registry\DoctrineModel' => 'barStorage');
 
         $registry = $this->createAbstractRegistryMock(array(
-            $payments,
+            $gateways,
             $storages,
         ));
 
@@ -250,11 +250,11 @@ class AbstractRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetStorageIfDoctrineProxyObjectGiven()
     {
-        $payments = array('fooName' => 'fooPayment', 'barName' => 'barPayment');
+        $gateways = array('fooName' => 'fooGateway', 'barName' => 'barGateway');
         $storages = array('Payum\Core\Tests\Registry\DoctrineModel' => 'barStorage');
 
         $registry = $this->createAbstractRegistryMock(array(
-            $payments,
+            $gateways,
             $storages,
         ));
 
@@ -269,11 +269,11 @@ class AbstractRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfTryToGetStorageWithNotRegisteredModelClass()
     {
-        $payments = array('fooName' => 'fooPayment', 'barName' => 'barPayment');
+        $gateways = array('fooName' => 'fooGateway', 'barName' => 'barGateway');
         $storages = array('stdClass' => 'barStorage');
 
         $registry = $this->createAbstractRegistryMock(array(
-            $payments,
+            $gateways,
             $storages,
         ));
 
@@ -285,11 +285,11 @@ class AbstractRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetStorageWithObjectModel()
     {
-        $payments = array('fooName' => 'fooPayment', 'barName' => 'barPayment');
+        $gateways = array('fooName' => 'fooGateway', 'barName' => 'barGateway');
         $storages = array('stdClass' => 'barStorage');
 
         $registry = $this->createAbstractRegistryMock(array(
-            $payments,
+            $gateways,
             $storages,
         ));
 
@@ -301,13 +301,13 @@ class AbstractRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetStorages()
     {
-        $payments = array('fooName' => 'fooPayment', 'barName' => 'barPayment');
+        $gateways = array('fooName' => 'fooGateway', 'barName' => 'barGateway');
         $storages = array(
             'stdClass' => 'barStorage', 'FooClass' => 'FooStorage',
         );
 
         $registry = $this->createAbstractRegistryMock(array(
-            $payments,
+            $gateways,
             $storages,
         ));
 

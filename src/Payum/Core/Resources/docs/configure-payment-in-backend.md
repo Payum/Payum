@@ -7,7 +7,7 @@ So the admin can edit them in the backend. Here's the basic example how to do it
 ## Configure
 
 First we have to create an entity where we store information about a payment. 
-The model must implement `Payum\Core\Model\PaymentConfigInterface`.
+The model must implement `Payum\Core\Model\GatewayConfigInterface`.
 
 _**Note**: In this chapter we use DoctrineStorage._
 

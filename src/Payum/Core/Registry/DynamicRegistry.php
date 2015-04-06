@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Registry;
 
-use Payum\Core\Model\PaymentConfigInterface;
+use Payum\Core\Model\GatewayConfigInterface;
 use Payum\Core\Storage\StorageInterface;
 
 class DynamicRegistry implements RegistryInterface
@@ -9,7 +9,7 @@ class DynamicRegistry implements RegistryInterface
     /**
      * @var StorageInterface
      */
-    private $paymentConfigStore;
+    private $gatewayConfigStore;
 
     /**
      * @var RegistryInterface
@@ -17,52 +17,52 @@ class DynamicRegistry implements RegistryInterface
     private $staticRegistry;
 
     /**
-     * @param StorageInterface $paymentConfigStore
+     * @param StorageInterface $gatewayConfigStore
      * @param RegistryInterface $staticRegistry
      */
-    public function __construct(StorageInterface $paymentConfigStore, RegistryInterface $staticRegistry)
+    public function __construct(StorageInterface $gatewayConfigStore, RegistryInterface $staticRegistry)
     {
-        $this->paymentConfigStore = $paymentConfigStore;
+        $this->gatewayConfigStore = $gatewayConfigStore;
         $this->staticRegistry = $staticRegistry;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getPaymentFactory($name)
+    public function getGatewayFactory($name)
     {
-        return $this->staticRegistry->getPaymentFactory($name);
+        return $this->staticRegistry->getGatewayFactory($name);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getPaymentFactories()
+    public function getGatewayFactories()
     {
-        return $this->staticRegistry->getPaymentFactories();
+        return $this->staticRegistry->getGatewayFactories();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getPayment($name)
+    public function getGateway($name)
     {
-        /** @var PaymentConfigInterface $config */
-        if ($config = $this->paymentConfigStore->findBy(array('paymentName' => $name))) {
-            $factory = $this->getPaymentFactory($config->getFactoryName());
+        /** @var GatewayConfigInterface $config */
+        if ($config = $this->gatewayConfigStore->findBy(array('gatewayName' => $name))) {
+            $factory = $this->getGatewayFactory($config->getFactoryName());
 
             return $factory->create($config->getConfig());
         }
 
-        return $this->staticRegistry->getPayment($name);
+        return $this->staticRegistry->getGateway($name);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getPayments()
+    public function getGateways()
     {
-        return $this->staticRegistry->getPayments();
+        return $this->staticRegistry->getGateways();
     }
 
     /**

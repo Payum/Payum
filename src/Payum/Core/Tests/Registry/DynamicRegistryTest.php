@@ -2,8 +2,8 @@
 namespace Payum\Core\Tests\Registry;
 
 use Payum\Core\Extension\StorageExtension;
-use Payum\Core\Model\PaymentConfig;
-use Payum\Core\Payment;
+use Payum\Core\Model\GatewayConfig;
+use Payum\Core\Gateway;
 use Payum\Core\Registry\DynamicRegistry;
 use Payum\Core\Registry\RegistryInterface;
 use Payum\Core\Storage\StorageInterface;
@@ -23,7 +23,7 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithPaymentConfigAndStaticStorageAsArguments()
+    public function couldBeConstructedWithGatewayConfigAndStaticStorageAsArguments()
     {
         new DynamicRegistry($this->createStorageMock(), $this->createRegistryMock());
     }
@@ -31,13 +31,13 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldCallStaticRegistryOnGetPayments()
+    public function shouldCallStaticRegistryOnGetGateways()
     {
         $staticRegistryMock = $this->createRegistryMock();
         $staticRegistryMock
             ->expects($this->once())
-            ->method('getPayments')
-            ->willReturn('thePayments')
+            ->method('getGateways')
+            ->willReturn('theGateways')
         ;
 
         $registry = new DynamicRegistry(
@@ -45,90 +45,90 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
             $staticRegistryMock
         );
         
-        $this->assertEquals('thePayments', $registry->getPayments());
+        $this->assertEquals('theGateways', $registry->getGateways());
     }
 
     /**
      * @test
      */
-    public function shouldCreatePaymentUsingConfigOnGetPayment()
+    public function shouldCreateGatewayUsingConfigOnGetGateway()
     {
-        $paymentConfig = new PaymentConfig();
-        $paymentConfig->setConfig($config = array('foo' => 'fooVal', 'bar' => 'barVal'));
-        $paymentConfig->setFactoryName($factoryName = 'theFactoryName');
-        $paymentConfig->setPaymentName($paymentName = 'thePaymentName');
+        $gatewayConfig = new GatewayConfig();
+        $gatewayConfig->setConfig($config = array('foo' => 'fooVal', 'bar' => 'barVal'));
+        $gatewayConfig->setFactoryName($factoryName = 'theFactoryName');
+        $gatewayConfig->setGatewayName($gatewayName = 'theGatewayName');
 
-        $payment = new Payment();
+        $gateway = new Gateway();
 
-        $paymentFactoryMock = $this->getMock('Payum\Core\PaymentFactoryInterface');
-        $paymentFactoryMock
+        $gatewayFactoryMock = $this->getMock('Payum\Core\GatewayFactoryInterface');
+        $gatewayFactoryMock
             ->expects($this->once())
             ->method('create')
             ->with($config)
-            ->willReturn($payment)
+            ->willReturn($gateway)
         ;
 
         $staticRegistryMock = $this->createRegistryMock();
         $staticRegistryMock
             ->expects($this->once())
-            ->method('getPaymentFactory')
+            ->method('getGatewayFactory')
             ->with($factoryName)
-            ->willReturn($paymentFactoryMock)
+            ->willReturn($gatewayFactoryMock)
         ;
 
         $storageMock = $this->createStorageMock();
         $storageMock
             ->expects($this->once())
             ->method('findBy')
-            ->with(array('paymentName' => $paymentName))
-            ->willReturn($paymentConfig)
+            ->with(array('gatewayName' => $gatewayName))
+            ->willReturn($gatewayConfig)
         ;
 
         $registry = new DynamicRegistry($storageMock, $staticRegistryMock);
 
-        $this->assertSame($payment, $registry->getPayment($paymentName));
+        $this->assertSame($gateway, $registry->getGateway($gatewayName));
     }
 
     /**
      * @test
      */
-    public function shouldCallStaticRegistryIfPaymentConfigNotFoundOnGetPayment()
+    public function shouldCallStaticRegistryIfGatewayConfigNotFoundOnGetGateway()
     {
         $staticRegistryMock = $this->createRegistryMock();
         $staticRegistryMock
             ->expects($this->once())
-            ->method('getPayment')
-            ->with('thePaymentName')
-            ->willReturn('thePayment')
+            ->method('getGateway')
+            ->with('theGatewayName')
+            ->willReturn('theGateway')
         ;
         $staticRegistryMock
             ->expects($this->never())
-            ->method('getPaymentFactory')
+            ->method('getGatewayFactory')
         ;
 
         $storageMock = $this->createStorageMock();
         $storageMock
             ->expects($this->once())
             ->method('findBy')
-            ->with(array('paymentName' => 'thePaymentName'))
+            ->with(array('gatewayName' => 'theGatewayName'))
             ->willReturn(null)
         ;
 
         $registry = new DynamicRegistry($storageMock, $staticRegistryMock);
 
-        $this->assertSame('thePayment', $registry->getPayment('thePaymentName'));
+        $this->assertSame('theGateway', $registry->getGateway('theGatewayName'));
     }
 
     /**
      * @test
      */
-    public function shouldCallStaticRegistryOnGetPaymentFactories()
+    public function shouldCallStaticRegistryOnGetGatewayFactories()
     {
         $staticRegistryMock = $this->createRegistryMock();
         $staticRegistryMock
             ->expects($this->once())
-            ->method('getPaymentFactories')
-            ->willReturn('thePaymentsFactories')
+            ->method('getGatewayFactories')
+            ->willReturn('theGatewaysFactories')
         ;
 
         $registry = new DynamicRegistry(
@@ -136,20 +136,20 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
             $staticRegistryMock
         );
 
-        $this->assertEquals('thePaymentsFactories', $registry->getPaymentFactories());
+        $this->assertEquals('theGatewaysFactories', $registry->getGatewayFactories());
     }
 
     /**
      * @test
      */
-    public function shouldCallStaticRegistryOnGetPaymentFactory()
+    public function shouldCallStaticRegistryOnGetGatewayFactory()
     {
         $staticRegistryMock = $this->createRegistryMock();
         $staticRegistryMock
             ->expects($this->once())
-            ->method('getPaymentFactory')
+            ->method('getGatewayFactory')
             ->with('theName')
-            ->willReturn('thePaymentFactory')
+            ->willReturn('theGatewayFactory')
         ;
 
         $registry = new DynamicRegistry(
@@ -157,7 +157,7 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
             $staticRegistryMock
         );
 
-        $this->assertEquals('thePaymentFactory', $registry->getPaymentFactory('theName'));
+        $this->assertEquals('theGatewayFactory', $registry->getGatewayFactory('theName'));
     }
 
     /**

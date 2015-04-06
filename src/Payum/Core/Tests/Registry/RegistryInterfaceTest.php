@@ -6,11 +6,11 @@ class RegistryInterfaceTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementPaymentRegistryInterface()
+    public function shouldImplementGatewayRegistryInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Registry\RegistryInterface');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Registry\PaymentRegistryInterface'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Registry\GatewayRegistryInterface'));
     }
 
     /**
@@ -26,10 +26,10 @@ class RegistryInterfaceTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementPaymentFactoryInterface()
+    public function shouldImplementGatewayFactoryInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Registry\RegistryInterface');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Registry\PaymentFactoryRegistryInterface'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Registry\GatewayFactoryRegistryInterface'));
     }
 }

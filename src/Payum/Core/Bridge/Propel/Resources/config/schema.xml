@@ -25,7 +25,7 @@
         <column name="details" type="OBJECT"/>
         <column name="afterUrl" type="VARCHAR"/>
         <column name="targetUrl" type="VARCHAR"/>
-        <column name="paymentName" type="VARCHAR"/>
+        <column name="gatewayName" type="VARCHAR"/>
 
         <vendor type="mysql">
             <parameter name="Engine" value="InnoDB"/>

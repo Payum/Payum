@@ -9,9 +9,9 @@ class TwigFactory
     public static function createGenericPaths()
     {
         return array_flip(array_filter(array(
-            'PayumCore' => self::guessViewsPath('Payum\Core\Payment'),
-            'PayumStripe' => self::guessViewsPath('Payum\Stripe\JsPaymentFactory'),
-            'PayumKlarnaCheckout' => self::guessViewsPath('Payum\Klarna\Checkout\PaymentFactory'),
+            'PayumCore' => self::guessViewsPath('Payum\Core\Gateway'),
+            'PayumStripe' => self::guessViewsPath('Payum\Stripe\StripeJsGatewayFactory'),
+            'PayumKlarnaCheckout' => self::guessViewsPath('Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory'),
             'PayumSymfonyBridge' => self::guessViewsPath('Payum\Core\Bridge\Symfony\ReplyToSymfonyResponseConverter'),
         )));
     }
@@ -30,17 +30,17 @@ class TwigFactory
     }
 
     /**
-     * @param string $paymentFactoryOrRootClass
+     * @param string $gatewayFactoryOrRootClass
      *
      * @return string|null
      */
-    public static function guessViewsPath($paymentFactoryOrRootClass)
+    public static function guessViewsPath($gatewayFactoryOrRootClass)
     {
-        if (false == class_exists($paymentFactoryOrRootClass)) {
+        if (false == class_exists($gatewayFactoryOrRootClass)) {
             return;
         }
 
-        $rc = new \ReflectionClass($paymentFactoryOrRootClass);
+        $rc = new \ReflectionClass($gatewayFactoryOrRootClass);
 
         return dirname($rc->getFileName()).'/Resources/views';
     }
