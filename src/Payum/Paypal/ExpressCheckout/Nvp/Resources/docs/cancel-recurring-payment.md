@@ -10,10 +10,10 @@ use Payum\Core\Request\Sync;
 use Payum\Core\Request\GetHumanStatus;
 
 
-$payment->execute(new Cancel($recurringPayment));
-$payment->execute(new Sync($recurringPayment));
+$gateway->execute(new Cancel($recurringPayment));
+$gateway->execute(new Sync($recurringPayment));
 
-$payment->execute($status = new GetHumanStatus($recurringPayment));
+$gateway->execute($status = new GetHumanStatus($recurringPayment));
 
 if ($status->isCanceled()) {
     // yes it is cancelled

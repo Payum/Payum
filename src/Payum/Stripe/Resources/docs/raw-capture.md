@@ -5,7 +5,7 @@ Sometimes you need completely custom solution.
 
 ## config.php
 
-Add a storage for the payment model:
+Add a storage for the gateway model:
 
 ```php
 <?php
@@ -26,7 +26,7 @@ $storages = array(
 
 Installation and configuration are same and we have to modify only a prepare part. 
 
-Here you have to modify a `paymentName` value. Set it to `stripe_js` or any other you want.
+Here you have to modify a `gatewayName` value. Set it to `stripe_js` or any other you want.
 The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
 
 ```php
@@ -35,7 +35,7 @@ The rest remain the same as described basic [get it started](https://github.com/
 
 include 'config.php';
 
-$paymentName = 'stripe_js';
+$gatewayName = 'stripe_js';
 
 $storage = $payum->getStorage($detailsClass);
 
@@ -65,7 +65,7 @@ $details["card"] = 'aStripeToken';
 
 $storage->update($details);
 
-$captureToken = $tokenFactory->createCaptureToken($paymentName, $details, 'done.php');
+$captureToken = $tokenFactory->createCaptureToken($gatewayName, $details, 'done.php');
 
 header("Location: ".$captureToken->getTargetUrl());
 ```
@@ -74,7 +74,7 @@ header("Location: ".$captureToken->getTargetUrl());
 
 * [Core's Get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
 * [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
-* [Supported payments](https://github.com/Payum/Core/blob/master/Resources/docs/supported-payments.md).
+* [Supported gateways](https://github.com/Payum/Core/blob/master/Resources/docs/supported-gateways.md).
 * [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
 * [Capture script](https://github.com/Payum/Core/blob/master/Resources/docs/capture-script.md).
 * [Authorize script](https://github.com/Payum/Core/blob/master/Resources/docs/authorize-script.md).

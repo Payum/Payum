@@ -20,9 +20,8 @@ php composer.phar require "payum/paypal-rest"
 
 // ...
 
-$paypalRestFactory = new \Payum\Paypal\Rest\PaymentFactory();
-
-$payments['paypal_rest'] = $paypalRestFactory->create(array(
+$factory = new \Payum\Paypal\Rest\PaypalRestGatewayFactory();
+$gateways['paypal_rest'] = $factory->create(array(
     'client_id' => 'REPLACE IT',
     'client_secret' => 'REPLACE IT',
     'config_path' => 'REPLACE IT',
@@ -44,8 +43,8 @@ use PayPal\Api\Transaction;
 
 $storage = $payum->getStorage($paypalRestPaymentDetailsClass);
 
-$paymentDetails = $storage->create();
-$storage->update($paymentDetails);
+$payment = $storage->create();
+$storage->update($payment);
 
 $payer = new Payer();
 $payer->payment_method = "paypal";
@@ -58,18 +57,18 @@ $transaction = new Transaction();
 $transaction->amount = $amount;
 $transaction->description = "This is the payment description.";
 
-$captureToken = $tokenFactory->createCaptureToken('paypalRest', $paymentDetails, 'create_recurring_payment.php');
+$captureToken = $tokenFactory->createCaptureToken('paypalRest', $payment, 'create_recurring_payment.php');
 
 $redirectUrls = new RedirectUrls();
 $redirectUrls->return_url = $captureToken->getTargetUrl();
 $redirectUrls->cancel_url = $captureToken->getTargetUrl();
 
-$paymentDetails->intent = "sale";
-$paymentDetails->payer = $payer;
-$paymentDetails->redirect_urls = $redirectUrls;
-$paymentDetails->transactions = array($transaction);
+$payment->intent = "sale";
+$payment->payer = $payer;
+$payment->redirect_urls = $redirectUrls;
+$payment->transactions = array($transaction);
 
-$storage->update($paymentDetails);
+$storage->update($payment);
 
 header("Location: ".$captureToken->getTargetUrl());
 ```
