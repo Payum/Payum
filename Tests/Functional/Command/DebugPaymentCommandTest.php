@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Tests\Functional\Command;
 
-use Payum\Bundle\PayumBundle\Command\DebugPaymentCommand;
+use Payum\Bundle\PayumBundle\Command\DebugGatewayCommand;
 use Payum\Bundle\PayumBundle\Tests\Functional\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -15,7 +15,7 @@ class DebugPaymentCommandTest extends WebTestCase
      */
     public function shouldOutputDebugInfoAboutSinglePayment()
     {
-        $output = $this->executeConsole(new DebugPaymentCommand(), array(
+        $output = $this->executeConsole(new DebugGatewayCommand(), array(
             'payment-name' => 'fooPayment',
         ));
 
@@ -37,7 +37,7 @@ class DebugPaymentCommandTest extends WebTestCase
      */
     public function shouldOutputDebugInfoAboutAllPayments()
     {
-        $output = $this->executeConsole(new DebugPaymentCommand());
+        $output = $this->executeConsole(new DebugGatewayCommand());
 
         $this->assertContains('Found 2 payments', $output);
         $this->assertContains('fooPayment (Payum\Core\Payment):', $output);
@@ -49,7 +49,7 @@ class DebugPaymentCommandTest extends WebTestCase
      */
     public function shouldOutputInfoWhatActionsSupports()
     {
-        $output = $this->executeConsole(new DebugPaymentCommand(), array(
+        $output = $this->executeConsole(new DebugGatewayCommand(), array(
             'payment-name' => 'fooPayment',
             '--show-supports' => true,
         ));
@@ -58,7 +58,7 @@ class DebugPaymentCommandTest extends WebTestCase
         $this->assertContains('fooPayment (Payum\Core\Payment):', $output);
         $this->assertContains('Payum\Offline\Action\CaptureAction', $output);
         $this->assertContains('$request instanceof Capture &&', $output);
-        $this->assertContains('$request->getModel() instanceof OrderInterface', $output);
+        $this->assertContains('$request->getModel() instanceof PaymentInterface', $output);
     }
 
     /**
@@ -66,7 +66,7 @@ class DebugPaymentCommandTest extends WebTestCase
      */
     public function shouldOutputChoiceListPaymentsForNameGiven()
     {
-        $command = new DebugPaymentCommand();
+        $command = new DebugGatewayCommand();
         $command->setApplication(new Application($this->client->getKernel()));
 
         $helperSet = $command->getHelperSet();

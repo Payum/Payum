@@ -9,7 +9,7 @@ Well, let's assume you created capture token this way while preparing payment.
 ```php
 <?php
 $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
-    $paymentName,
+    $gatewayName,
     $details,
     'acme_payment_done'
 );
@@ -29,7 +29,7 @@ It is the route of url you will be redirected after capture done its job. Let's 
         $identity = $token->getDetails();
         $model = $payum->getStorage($identity->getClass())->find($identity);
 
-        $payment = $this->get('payum')->getPayment($token->getPaymentName());
+        $gateway = $this->get('payum')->getGateway($token->getGatewayName());
 
         // you can invalidate the token. The url could not be requested any more.
         // $this->get('payum.security.http_request_verifier')->invalidate($token);
@@ -39,7 +39,7 @@ It is the route of url you will be redirected after capture done its job. Let's 
         //$details = $payum->getStorage($identity->getClass())->find($identity);
         
         // or Payum can fetch the model for you while executing a request (Preferred).
-        $payment->execute($status = new GetHumanStatus($token));
+        $gateway->execute($status = new GetHumanStatus($token));
         $details = $status->getFirstModel());
         
         // you have order and payment status 

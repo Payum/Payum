@@ -1,7 +1,7 @@
 <?php
-namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway;
 
-class OfflinePaymentFactory extends AbstractPaymentFactory
+class OfflineGatewayFactory extends AbstractGatewayFactory
 {
     /**
      * {@inheritdoc}
@@ -14,9 +14,9 @@ class OfflinePaymentFactory extends AbstractPaymentFactory
     /**
      * {@inheritDoc}
      */
-    protected function getPayumPaymentFactoryClass()
+    protected function getPayumGatewayFactoryClass()
     {
-        return 'Payum\Offline\PaymentFactory';
+        return 'Payum\Offline\OfflineGatewayFactory';
     }
 
     /**

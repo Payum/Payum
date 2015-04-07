@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Gateway;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillOffsitePaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\Be2BillOffsiteGatewayFactory;
 
 class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,9 +16,9 @@ class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfAbstractPaymentFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillOffsitePaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\Be2BillOffsitePaymentFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractPaymentFactory'));
     }
 
     /**
@@ -26,9 +26,9 @@ class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfBe2BillDirectPaymentFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillOffsitePaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\Be2BillOffsitePaymentFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillDirectPaymentFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\Be2BillDirectPaymentFactory'));
     }
 
     /**
@@ -36,7 +36,7 @@ class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new Be2BillOffsitePaymentFactory;
+        new Be2BillOffsiteGatewayFactory;
     }
 
     /**
@@ -44,7 +44,7 @@ class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetName()
     {
-        $factory = new Be2BillOffsitePaymentFactory;
+        $factory = new Be2BillOffsiteGatewayFactory;
 
         $this->assertEquals('be2bill_offsite', $factory->getName());
     }
@@ -54,7 +54,7 @@ class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfiguration()
     {
-        $factory = new Be2BillOffsitePaymentFactory;
+        $factory = new Be2BillOffsiteGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -90,7 +90,7 @@ class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfIdentifierOptionNotSet()
     {
-        $factory = new Be2BillOffsitePaymentFactory;
+        $factory = new Be2BillOffsiteGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -109,7 +109,7 @@ class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfPasswordOptionNotSet()
     {
-        $factory = new Be2BillOffsitePaymentFactory;
+        $factory = new Be2BillOffsiteGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -127,7 +127,7 @@ class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePaymentAndReturnItsId()
     {
-        $factory = new Be2BillOffsitePaymentFactory;
+        $factory = new Be2BillOffsiteGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -160,7 +160,7 @@ class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLoadFactory()
     {
-        $factory = new Be2BillOffsitePaymentFactory;
+        $factory = new Be2BillOffsiteGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -191,7 +191,7 @@ class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new Be2BillOffsitePaymentFactory;
+        $factory = new Be2BillOffsiteGatewayFactory;
 
         $container = new ContainerBuilder;
 

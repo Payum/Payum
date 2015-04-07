@@ -1,30 +1,30 @@
 <?php
-namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-interface PaymentFactoryInterface
+interface GatewayFactoryInterface
 {
     /**
-     * Method could be used to create a payment service. Must return the service id.
+     * Method could be used to create a gateway service. Must return the service id.
      *
      * @param ContainerBuilder $container
-     * @param string $paymentName
+     * @param string $gatewayName
      * @param array $config
      * 
-     * @return string The payment serviceId
+     * @return string The gateway serviceId
      */
-    function create(ContainerBuilder $container, $paymentName, array $config);
+    function create(ContainerBuilder $container, $gatewayName, array $config);
 
     /**
-     * Method could be used to load services which you need always, even if you do not create any payments with this factory riht now.
-     * It could a payment factory service for example
+     * Method could be used to load services which you need always, even if you do not create any gateways with this factory riht now.
+     * It could a gateway factory service for example
      */
     function load(ContainerBuilder $container);
 
     /**
-     * The payment name, 
+     * The gateway name,
      * For example paypal_express_checkout_nvp or authorize_net_aim
      * 
      * @return string

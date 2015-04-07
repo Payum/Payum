@@ -6,7 +6,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Form\FormFactoryInterface;
 
-class PaymentConfigAdmin extends Admin
+class GatewayConfigAdmin extends Admin
 {
     /**
      * @var FormFactoryInterface
@@ -35,7 +35,7 @@ class PaymentConfigAdmin extends Admin
     protected function configureListFields(ListMapper $list)
     {
         $list
-            ->add('paymentName')
+            ->add('gatewayName')
             ->add('factoryName')
             ->add('config', 'array')
             ->add('_action', 'actions', array(
@@ -52,7 +52,7 @@ class PaymentConfigAdmin extends Admin
      */
     public function getFormBuilder()
     {
-        $formBuilder = $this->formFactory->createBuilder('payum_payment_config', $this->getSubject(), array(
+        $formBuilder = $this->formFactory->createBuilder('payum_gateway_config', $this->getSubject(), array(
             'data_class' => get_class($this->getSubject()),
         ));
 

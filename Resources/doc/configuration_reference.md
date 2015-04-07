@@ -11,7 +11,7 @@ payum:
 
     storages:
         A\Model\Class:
-            payment:
+            gateway:
                 all: true 
                 factories: []
                 payments: []
@@ -66,11 +66,11 @@ payum:
                 id_property: 'required'
 ```
 
-## Paypal express checkout payment
+## Paypal express checkout gateway
 
 ```yaml
 payum:
-    payments:
+    gateways:
         aName:
             paypal_express_checkout_nvp:
                 username:  'required'
@@ -79,11 +79,11 @@ payum:
                 sandbox: true
 ```
 
-## Paypal pro checkout payment
+## Paypal pro checkout gateway
 
 ```yaml
 payum:
-    payments:
+    gateways:
         aName:
             paypal_express_checkout_nvp:
                 username:  'required'
@@ -99,7 +99,7 @@ payum:
 
 ```yaml
 payum:
-    payments:
+    gateways:
         aName:
             stripe_js:
                 publishable_key: 'required'
@@ -110,18 +110,18 @@ payum:
 
 ```yaml
 payum:
-    payments:
+    gateways:
         aName:
             stripe_checkout:
                 publishable_key: 'required'
                 secret_key: 'required'
 ```
 
-## Authorize.Net AIM payment
+## Authorize.Net AIM gateway
 
 ```yaml
 payum:
-    payments:
+    gateways:
         aName:
             authorize_net_aim:
                 login_id: 'required'
@@ -129,11 +129,11 @@ payum:
                 sandbox: true
 ```
 
-## Be2Bill payment
+## Be2Bill gateway
 
 ```yml
 payum:
-    payments:
+    gateways:
         aName:
             be2bill:
                 identifier: 'required'
@@ -141,11 +141,11 @@ payum:
                 sandbox: true
 ```
 
-## Be2Bill onsite payment
+## Be2Bill onsite gateway
 
 ```yml
 payum:
-    payments:
+    gateways:
         aName:
             be2bill_onsite:
                 identifier: 'required'
@@ -153,11 +153,11 @@ payum:
                 sandbox: true
 ```
 
-## Payex payment
+## Payex gateway
 
 ```yml
 payum:
-    payments:
+    gateways:
         aName:
             payex:
                 encryption_key: 'required'
@@ -165,11 +165,11 @@ payum:
                 sandbox: true
 ```
 
-## Klarna checkout payment
+## Klarna checkout gateway
 
 ```yml
 payum:
-    payments:
+    gateways:
         aName:
             klarna_checkout:
                 secret:  'required'
@@ -177,11 +177,11 @@ payum:
                 sandbox: true
 ```
 
-## Klarna invoice payment
+## Klarna invoice gateway
 
 ```yml
 payum:
-    payments:
+    gateways:
         aName:
             klarna_invoice:
                 secret: 'required'
@@ -192,11 +192,11 @@ payum:
                 sandbox: true
 ```
 
-## Omnipay payment
+## Omnipay gateway
 
 ```yml
 payum:
-    payments:
+    gateways:
         aName:
             omnipay:
                 type: 'required'
@@ -205,14 +205,14 @@ payum:
                     bar: barOpt
 ```
 
-## Custom payment
+## Custom gateway
 
 ```yaml
 payum:
-    payments:
+    gateways:
         aName:
             custom:
-                # if service not set an empty payment will be created.
+                # if service not set an empty gateway will be created.
                 service: ~ 
 ```
 

@@ -8,16 +8,16 @@ Let's say you already purchased an order and now you want to refund it.
 use Payum\Core\Request\Refund;
 use Payum\Core\Request\GetHumanStatus;
 
-$payment = $this->get('payum')->getPayment('offline');
+$gateway = $this->get('payum')->getGateway('offline');
 
-$payment->execute(new Refund($order));
-$payment->execute($status = new GetHumanStatus($order));
+$gateway->execute(new Refund($payment));
+$gateway->execute($status = new GetHumanStatus($payment));
 
 if ($status->isRefunded()) {
     // Refund went well
 } else {
     // Something went wrong. Lets check details to find out why
      
-    var_dump($order->getDetails());
+    var_dump($payment->getDetails());
 }
 ```

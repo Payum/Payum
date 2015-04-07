@@ -1,28 +1,29 @@
 <?php
-namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-class Be2BillDirectPaymentFactory extends AbstractPaymentFactory
+class PaypalExpressCheckoutNvpGatewayFactory extends AbstractGatewayFactory
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getName()
     {
-        return 'be2bill_direct';
+        return 'paypal_express_checkout_nvp';
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
         parent::addConfiguration($builder);
-        
+
         $builder->children()
-            ->scalarNode('identifier')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('username')->isRequired()->cannotBeEmpty()->end()
             ->scalarNode('password')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('signature')->isRequired()->cannotBeEmpty()->end()
             ->booleanNode('sandbox')->defaultTrue()->end()
         ->end();
     }
@@ -30,9 +31,9 @@ class Be2BillDirectPaymentFactory extends AbstractPaymentFactory
     /**
      * {@inheritDoc}
      */
-    protected function getPayumPaymentFactoryClass()
+    protected function getPayumGatewayFactoryClass()
     {
-        return 'Payum\Be2Bill\DirectPaymentFactory';
+        return 'Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory';
     }
 
     /**
@@ -40,6 +41,6 @@ class Be2BillDirectPaymentFactory extends AbstractPaymentFactory
      */
     protected function getComposerPackage()
     {
-        return 'payum/be2bill';
+        return 'payum/paypal-express-checkout-nvp';
     }
 }

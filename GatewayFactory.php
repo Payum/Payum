@@ -2,11 +2,11 @@
 namespace Payum\Bundle\PayumBundle;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\PaymentFactory as CorePaymentFactory;
+use Payum\Core\GatewayFactory as CoreGatewayFactory;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class PaymentFactory extends CorePaymentFactory implements ContainerAwareInterface
+class GatewayFactory extends CoreGatewayFactory implements ContainerAwareInterface
 {
     /**
      * @var ContainerInterface
@@ -76,9 +76,9 @@ class PaymentFactory extends CorePaymentFactory implements ContainerAwareInterfa
                 }
 
                 if (
-                    isset($attributes['payment']) &&
-                    isset($config['payum.payment_name']) &&
-                    $config['payum.payment_name'] === $attributes['payment']
+                    isset($attributes['gateway']) &&
+                    isset($config['payum.gateway_name']) &&
+                    $config['payum.gateway_name'] === $attributes['gateway']
                 ) {
                     $config["payum.action.$name"] = $this->container->get($id);
                 }
@@ -109,9 +109,9 @@ class PaymentFactory extends CorePaymentFactory implements ContainerAwareInterfa
                 }
 
                 if (
-                    isset($attributes['payment']) &&
-                    isset($config['payum.payment_name']) &&
-                    $config['payum.payment_name'] === $attributes['payment']
+                    isset($attributes['gateway']) &&
+                    isset($config['payum.gateway_name']) &&
+                    $config['payum.gateway_name'] === $attributes['gateway']
                 ) {
                     $config["payum.extension.$name"] = $this->container->get($id);
                 }
@@ -141,9 +141,9 @@ class PaymentFactory extends CorePaymentFactory implements ContainerAwareInterfa
                 }
 
                 if (
-                    isset($attributes['payment']) &&
-                    isset($config['payum.payment_name']) &&
-                    $config['payum.payment_name'] === $attributes['payment']
+                    isset($attributes['gateway']) &&
+                    isset($config['payum.gateway_name']) &&
+                    $config['payum.gateway_name'] === $attributes['gateway']
                 ) {
                     $config["payum.api.$name"] = $this->container->get($id);
                 }

@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Gateway;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\CustomPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\CustomGatewayFactory;
 
 class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,9 +16,9 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfAbstractPaymentFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\CustomPaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\CustomPaymentFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractPaymentFactory'));
     }
 
     /**
@@ -26,7 +26,7 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new CustomPaymentFactory;
+        new CustomGatewayFactory;
     }
 
     /**
@@ -34,7 +34,7 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetName()
     {
-        $factory = new CustomPaymentFactory;
+        $factory = new CustomGatewayFactory;
 
         $this->assertEquals('custom', $factory->getName());
     }
@@ -44,7 +44,7 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfiguration()
     {
-        $factory = new CustomPaymentFactory;
+        $factory = new CustomGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -65,7 +65,7 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfigurationWithCustomPaymentService()
     {
-        $factory = new CustomPaymentFactory;
+        $factory = new CustomGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -91,7 +91,7 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePaymentAndReturnItsId()
     {
-        $factory = new CustomPaymentFactory;
+        $factory = new CustomGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -125,7 +125,7 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLoadFactory()
     {
-        $factory = new CustomPaymentFactory;
+        $factory = new CustomGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -156,7 +156,7 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePaymentAndReturnItsIdWhenCustomPaymentServiceSet()
     {
-        $factory = new CustomPaymentFactory;
+        $factory = new CustomGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -180,7 +180,7 @@ class CustomPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new CustomPaymentFactory;
+        $factory = new CustomGatewayFactory;
 
         $container = new ContainerBuilder;
 

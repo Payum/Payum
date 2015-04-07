@@ -1,29 +1,31 @@
 <?php
-namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-class PaypalExpressCheckoutNvpPaymentFactory extends AbstractPaymentFactory
+class PaypalProCheckoutNvpGatewayFactory extends AbstractGatewayFactory
 {
     /**
      * {@inheritDoc}
      */
     public function getName()
     {
-        return 'paypal_express_checkout_nvp';
+        return 'paypal_pro_checkout_nvp';
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
         parent::addConfiguration($builder);
-
+        
         $builder->children()
             ->scalarNode('username')->isRequired()->cannotBeEmpty()->end()
             ->scalarNode('password')->isRequired()->cannotBeEmpty()->end()
-            ->scalarNode('signature')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('partner')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('vendor')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('tender')->defaultValue('C')->cannotBeEmpty()->end()
             ->booleanNode('sandbox')->defaultTrue()->end()
         ->end();
     }
@@ -31,9 +33,9 @@ class PaypalExpressCheckoutNvpPaymentFactory extends AbstractPaymentFactory
     /**
      * {@inheritDoc}
      */
-    protected function getPayumPaymentFactoryClass()
+    protected function getPayumGatewayFactoryClass()
     {
-        return 'Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory';
+        return 'Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory';
     }
 
     /**
@@ -41,6 +43,6 @@ class PaypalExpressCheckoutNvpPaymentFactory extends AbstractPaymentFactory
      */
     protected function getComposerPackage()
     {
-        return 'payum/paypal-express-checkout-nvp';
+        return 'payum/paypal-pro-checkout-nvp';
     }
 }

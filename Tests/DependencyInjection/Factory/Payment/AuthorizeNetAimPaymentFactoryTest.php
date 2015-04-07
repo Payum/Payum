@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Gateway;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AuthorizeNetAimPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AuthorizeNetAimGatewayFactory;
 
 class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,9 +16,9 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfAbstractPaymentFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AuthorizeNetAimPaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AuthorizeNetAimPaymentFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractPaymentFactory'));
     }
 
     /**
@@ -26,7 +26,7 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new AuthorizeNetAimPaymentFactory;
+        new AuthorizeNetAimGatewayFactory;
     }
 
     /**
@@ -34,7 +34,7 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetName()
     {
-        $factory = new AuthorizeNetAimPaymentFactory;
+        $factory = new AuthorizeNetAimGatewayFactory;
 
         $this->assertEquals('authorize_net_aim', $factory->getName());
     }
@@ -44,7 +44,7 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfiguration()
     {
-        $factory = new AuthorizeNetAimPaymentFactory;
+        $factory = new AuthorizeNetAimGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -80,7 +80,7 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfLoginIdOptionNotSet()
     {
-        $factory = new AuthorizeNetAimPaymentFactory;
+        $factory = new AuthorizeNetAimGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -99,7 +99,7 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfTransactionKeyOptionNotSet()
     {
-        $factory = new AuthorizeNetAimPaymentFactory;
+        $factory = new AuthorizeNetAimGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -117,7 +117,7 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePaymentAndReturnItsId()
     {
-        $factory = new AuthorizeNetAimPaymentFactory;
+        $factory = new AuthorizeNetAimGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -150,7 +150,7 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLoadFactory()
     {
-        $factory = new AuthorizeNetAimPaymentFactory;
+        $factory = new AuthorizeNetAimGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -181,7 +181,7 @@ class AuthorizeNetAimPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new AuthorizeNetAimPaymentFactory;
+        $factory = new AuthorizeNetAimGatewayFactory;
 
         $container = new ContainerBuilder;
 

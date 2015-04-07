@@ -1,20 +1,20 @@
 <?php
-namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway;
 
 use Payum\Core\Bridge\Twig\TwigFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\Parameter;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory implements PrependExtensionInterface
+class StripeCheckoutGatewayFactory extends AbstractGatewayFactory implements PrependExtensionInterface
 {
     /**
      * {@inheritDoc}
      */
     public function getName()
     {
-        return 'klarna_checkout';
+        return 'stripe_checkout';
     }
 
     /**
@@ -25,9 +25,8 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
         parent::addConfiguration($builder);
         
         $builder->children()
-            ->scalarNode('secret')->isRequired()->cannotBeEmpty()->end()
-            ->scalarNode('merchant_id')->isRequired()->cannotBeEmpty()->end()
-            ->booleanNode('sandbox')->defaultTrue()->end()
+            ->scalarNode('publishable_key')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('secret_key')->isRequired()->cannotBeEmpty()->end()
         ->end();
     }
 
@@ -38,12 +37,11 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
     {
         $container->prependExtensionConfig('twig', array(
             'paths' => array_flip(array_filter(array(
-                'PayumCore' => TwigFactory::guessViewsPath('Payum\Core\Payment'),
-                'PayumKlarnaCheckout' => TwigFactory::guessViewsPath('Payum\Klarna\Checkout\PaymentFactory'),
+                'PayumCore' => TwigFactory::guessViewsPath('Payum\Core\Gateway'),
+                'PayumStripe' => TwigFactory::guessViewsPath('Payum\Stripe\CheckoutGatewayFactory'),
             )))
         ));
     }
-
 
     /**
      * {@inheritDoc}
@@ -52,16 +50,16 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
     {
         parent::load($container);
 
-        $container->setParameter('payum.klarna_checkout.template.capture', '@PayumKlarnaCheckout/Action/capture.html.twig');
+        $container->setParameter('payum.stripe_checkout.template.obtain_checkout_token', '@PayumStripe/Action/obtain_checkout_token.html.twig');
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
     protected function createFactoryConfig()
     {
         $config = parent::createFactoryConfig();
-        $config['payum.template.authorize'] = new Parameter('payum.klarna_checkout.template.capture');
+        $config['payum.template.obtain_token'] = new Parameter('payum.stripe_checkout.template.obtain_checkout_token');
 
         return $config;
     }
@@ -69,9 +67,9 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
     /**
      * {@inheritDoc}
      */
-    protected function getPayumPaymentFactoryClass()
+    protected function getPayumGatewayFactoryClass()
     {
-        return 'Payum\Klarna\Checkout\PaymentFactory';
+        return 'Payum\Stripe\StripeCheckoutGatewayFactory';
     }
 
     /**
@@ -79,6 +77,6 @@ class KlarnaCheckoutPaymentFactory extends AbstractPaymentFactory implements Pre
      */
     protected function getComposerPackage()
     {
-        return 'payum/klarna-checkout';
+        return 'payum/stripe';
     }
 }

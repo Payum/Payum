@@ -1,7 +1,7 @@
 <?php
-namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Gateway;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaCheckoutPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\KlarnaCheckoutGatewayFactory;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,9 +15,9 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfAbstractPaymentFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaCheckoutPaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\KlarnaCheckoutPaymentFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractPaymentFactory'));
     }
 
     /**
@@ -25,7 +25,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementPrependExtensionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaCheckoutPaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\KlarnaCheckoutPaymentFactory');
 
         $this->assertTrue($rc->implementsInterface('Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface'));
     }
@@ -35,7 +35,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new KlarnaCheckoutPaymentFactory;
+        new KlarnaCheckoutGatewayFactory;
     }
 
     /**
@@ -43,7 +43,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetName()
     {
-        $factory = new KlarnaCheckoutPaymentFactory;
+        $factory = new KlarnaCheckoutGatewayFactory;
 
         $this->assertEquals('klarna_checkout', $factory->getName());
     }
@@ -53,7 +53,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfiguration()
     {
-        $factory = new KlarnaCheckoutPaymentFactory;
+        $factory = new KlarnaCheckoutGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -89,7 +89,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfIdentifierOptionNotSet()
     {
-        $factory = new KlarnaCheckoutPaymentFactory;
+        $factory = new KlarnaCheckoutGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -108,7 +108,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfPasswordOptionNotSet()
     {
-        $factory = new KlarnaCheckoutPaymentFactory;
+        $factory = new KlarnaCheckoutGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -126,7 +126,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePaymentAndReturnItsId()
     {
-        $factory = new KlarnaCheckoutPaymentFactory;
+        $factory = new KlarnaCheckoutGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -148,7 +148,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePaymentWithExpectedConfig()
     {
-        $factory = new KlarnaCheckoutPaymentFactory;
+        $factory = new KlarnaCheckoutGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -188,7 +188,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLoadFactoryAndTemplateParameters()
     {
-        $factory = new KlarnaCheckoutPaymentFactory;
+        $factory = new KlarnaCheckoutGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -222,7 +222,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new KlarnaCheckoutPaymentFactory;
+        $factory = new KlarnaCheckoutGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -257,7 +257,7 @@ class KlarnaCheckoutPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldPrependTwigsExtensionConfig()
     {
-        $factory = new KlarnaCheckoutPaymentFactory;
+        $factory = new KlarnaCheckoutGatewayFactory;
 
         $container = new ContainerBuilder;
 

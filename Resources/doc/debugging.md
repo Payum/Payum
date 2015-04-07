@@ -6,7 +6,7 @@ This could be helpful when you want to find out what actions were added to payme
 Also it will show extensions and apis added too.  
 
 ```bash
-$ php app/console payum:payment:debug
+$ php app/console payum:gateway:debug
 ```
 
 ## Logs

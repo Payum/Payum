@@ -27,7 +27,7 @@ class RefundControllerTest extends \PHPUnit_Framework_TestCase
         $request->query->set('foo', 'fooVal');
 
         $token = new Token;
-        $token->setPaymentName('thePayment');
+        $token->setGatewayName('thePayment');
         $token->setAfterUrl('http://example.com/theAfterUrl');
 
         $tokenVerifierMock = $this->getMock('Payum\Core\Security\HttpRequestVerifierInterface');
@@ -80,7 +80,7 @@ class RefundControllerTest extends \PHPUnit_Framework_TestCase
         $request->query->set('foo', 'fooVal');
 
         $token = new Token;
-        $token->setPaymentName('thePayment');
+        $token->setGatewayName('thePayment');
         $token->setAfterUrl(null);
 
         $tokenVerifierMock = $this->getMock('Payum\Core\Security\HttpRequestVerifierInterface');

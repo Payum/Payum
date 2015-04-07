@@ -17,23 +17,23 @@ class PaymentController extends Controller
 {
     public function prepareAction() 
     {
-        $paymentName = 'offline';
+        $gatewayName = 'offline';
         
-        $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\Order');
+        $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\Payment');
         
-        $order = $storage->create();
-        $order->setNumber(uniqid());
-        $order->setCurrencyCode('EUR');
-        $order->setTotalAmount(123); // 1.23 EUR
-        $order->setDescription('A description');
-        $order->setClientId('anId');
-        $order->setClientEmail('foo@example.com');
+        $payment = $storage->create();
+        $payment->setNumber(uniqid());
+        $payment->setCurrencyCode('EUR');
+        $payment->setTotalAmount(123); // 1.23 EUR
+        $payment->setDescription('A description');
+        $payment->setClientId('anId');
+        $payment->setClientEmail('foo@example.com');
         
-        $storage->update($order);
+        $storage->update($payment);
         
         $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
-            $paymentName, 
-            $order, 
+            $gatewayName, 
+            $payment, 
             'done' // the route to redirect after capture;
         );
         

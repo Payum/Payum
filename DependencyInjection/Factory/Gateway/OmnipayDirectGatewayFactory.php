@@ -1,11 +1,11 @@
 <?php
-namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway;
 
 use Omnipay\Omnipay;
 use Payum\Core\Exception\LogicException;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-class OmnipayDirectPaymentFactory extends AbstractPaymentFactory
+class OmnipayDirectGatewayFactory extends AbstractGatewayFactory
 {
     /**
      * {@inheritdoc}
@@ -54,9 +54,9 @@ class OmnipayDirectPaymentFactory extends AbstractPaymentFactory
     /**
      * {@inheritDoc}
      */
-    protected function getPayumPaymentFactoryClass()
+    protected function getPayumGatewayFactoryClass()
     {
-        return 'Payum\OmnipayBridge\DirectPaymentFactory';
+        return 'Payum\OmnipayBridge\OmnipayDirectGatewayFactory';
     }
 
     /**

@@ -2,7 +2,7 @@
 namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection;
 
 use Payum\Bundle\PayumBundle\DependencyInjection\MainConfiguration;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\GatewayFactoryInterface;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -17,8 +17,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->paymentFactories = array(
-            new FooPaymentFactory(),
-            new BarPaymentFactory()
+            new FooGatewayFactory(),
+            new BarGatewayFactory()
         );
         $this->storageFactories = array(
             new FooStorageFactory(),
@@ -674,9 +674,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "payum.dynamic_payments.config_storage": The config class must implement `Payum\Core\Model\PaymentConfigInterface` interface
+     * @expectedExceptionMessage Invalid configuration for path "payum.dynamic_payments.config_storage": The config class must implement `Payum\Core\Model\GatewayConfigInterface` interface
      */
-    public function throwIfPaymentConfigStorageConfiguredWithModelNotImplementingPaymentConfigInterface()
+    public function throwIfPaymentConfigStorageConfiguredWithModelNotImplementingGatewayConfigInterface()
     {
         $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
 
@@ -793,7 +793,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
     }
 }
 
-class FooPaymentFactory implements PaymentFactoryInterface
+class FooGatewayFactory implements GatewayFactoryInterface
 {
     public function create(ContainerBuilder $container, $paymentName, array $config)
     {
@@ -818,7 +818,7 @@ class FooPaymentFactory implements PaymentFactoryInterface
     }
 }
 
-class BarPaymentFactory implements PaymentFactoryInterface
+class BarGatewayFactory implements GatewayFactoryInterface
 {
     public function create(ContainerBuilder $container, $paymentName, array $config)
     {

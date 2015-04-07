@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Gateway;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PaypalProCheckoutNvpGatewayFactory;
 
 class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,9 +16,9 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfAbstractPaymentFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PaypalProCheckoutNvpPaymentFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractPaymentFactory'));
     }
 
     /**
@@ -26,7 +26,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new PaypalProCheckoutNvpPaymentFactory;
+        new PaypalProCheckoutNvpGatewayFactory;
     }
 
     /**
@@ -34,7 +34,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetName()
     {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
+        $factory = new PaypalProCheckoutNvpGatewayFactory;
 
         $this->assertEquals('paypal_pro_checkout_nvp', $factory->getName());
     }
@@ -44,7 +44,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfiguration()
     {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
+        $factory = new PaypalProCheckoutNvpGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -88,7 +88,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfUsernameOptionNotSet()
     {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
+        $factory = new PaypalProCheckoutNvpGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -107,7 +107,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfPasswordOptionNotSet()
     {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
+        $factory = new PaypalProCheckoutNvpGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -128,7 +128,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfPartnerOptionNotSet()
     {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
+        $factory = new PaypalProCheckoutNvpGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -150,7 +150,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfVendorOptionNotSet()
     {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
+        $factory = new PaypalProCheckoutNvpGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -170,7 +170,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePaymentAndReturnItsId()
     {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
+        $factory = new PaypalProCheckoutNvpGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -205,7 +205,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLoadFactory()
     {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
+        $factory = new PaypalProCheckoutNvpGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -236,7 +236,7 @@ class PaypalProCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new PaypalProCheckoutNvpPaymentFactory;
+        $factory = new PaypalProCheckoutNvpGatewayFactory;
 
         $container = new ContainerBuilder;
 

@@ -3,7 +3,7 @@
 Steps:
 
 * [Download libraries](#download-libraries)
-* [Configure payment](#configure-context)
+* [Configure gateway](#configure-context)
 * [Prepare payment](#prepare-payment)
 
 _**Note**: We assume you followed all steps in [get it started](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/get_it_started.md) and your basic configuration same as described there._
@@ -16,20 +16,20 @@ Run the following command:
 $ php composer.phar require "payum/stripe"
 ```
 
-## Configure payment
+## Configure gateway
 
 ```yaml
 #app/config/config.yml
 
 payum:
-    payments:
-        your_payment_here:
+    gateways:
+        your_gateway_here:
             stripe_checkout:
                 publishable_key: 'get this from gateway'
                 secret_key:      'get this from gateway'
 ```
 
-_**Attention**: You have to changed `your_payment_name` to something more descriptive and domain related, for example `post_a_job_with_stripe`._
+_**Attention**: You have to changed `your_gateway_name` to something more descriptive and domain related, for example `post_a_job_with_stripe`._
 
 ## Prepare payment
 
@@ -49,7 +49,7 @@ class PaymentController extends Controller
 {
     public function prepareStripeJsPaymentAction(Request $request)
     {
-        $paymentName = 'your_payment_name';
+        $gatewayName = 'your_gateway_name';
 
         $storage = $this->getPayum()->getStorage('Acme\PaymentBundle\Entity\PaymentDetails');
 
@@ -61,7 +61,7 @@ class PaymentController extends Controller
         $storage->update($details);
         
         $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
-            $paymentName,
+            $gatewayName,
             $details,
             'acme_payment_done' // the route to redirect after capture;
         );

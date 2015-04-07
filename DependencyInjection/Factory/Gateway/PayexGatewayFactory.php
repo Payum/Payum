@@ -1,16 +1,16 @@
 <?php
-namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-class AuthorizeNetAimPaymentFactory extends AbstractPaymentFactory
+class PayexGatewayFactory extends AbstractGatewayFactory
 {
     /**
      * {@inheritDoc}
      */
     public function getName()
     {
-        return 'authorize_net_aim';
+        return 'payex';
     }
 
     /**
@@ -21,8 +21,8 @@ class AuthorizeNetAimPaymentFactory extends AbstractPaymentFactory
         parent::addConfiguration($builder);
         
         $builder->children()
-            ->scalarNode('login_id')->isRequired()->cannotBeEmpty()->end()
-            ->scalarNode('transaction_key')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('encryption_key')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('account_number')->isRequired()->cannotBeEmpty()->end()
             ->booleanNode('sandbox')->defaultTrue()->end()
         ->end();
     }
@@ -30,9 +30,9 @@ class AuthorizeNetAimPaymentFactory extends AbstractPaymentFactory
     /**
      * {@inheritDoc}
      */
-    protected function getPayumPaymentFactoryClass()
+    protected function getPayumGatewayFactoryClass()
     {
-        return 'Payum\AuthorizeNet\Aim\PaymentFactory';
+        return 'Payum\Payex\PayexGatewayFactory';
     }
 
     /**
@@ -40,6 +40,6 @@ class AuthorizeNetAimPaymentFactory extends AbstractPaymentFactory
      */
     protected function getComposerPackage()
     {
-        return 'payum/authorize-net-aim';
+        return 'payum/payex';
     }
 }

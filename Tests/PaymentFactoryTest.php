@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Tests;
 
-use Payum\Bundle\PayumBundle\PaymentFactory;
+use Payum\Bundle\PayumBundle\GatewayFactory;
 use Payum\Core\PaymentInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -39,7 +39,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\PaymentFactory');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayFactoryInterface'));
     }
 
     /**
@@ -57,7 +57,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithTagsAsArguments()
     {
-        new PaymentFactory(array(), array(), array());
+        new GatewayFactory(array(), array(), array());
     }
 
     /**
@@ -65,7 +65,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetContainer()
     {
-        $factory = new PaymentFactory(array(), array(), array());
+        $factory = new GatewayFactory(array(), array(), array());
         $factory->setContainer($container = new Container());
 
         $this->assertAttributeSame($container, 'container', $factory);
@@ -76,7 +76,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPaymentWithoutAnyAdditionalOptions()
     {
-        $factory = new PaymentFactory(array(), array(), array());
+        $factory = new GatewayFactory(array(), array(), array());
         $factory->setContainer($this->container);
 
         $payment = $factory->create();
@@ -91,7 +91,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->container->set('the_action', $this->getMock('Payum\Core\Action\ActionInterface'));
 
-        $factory = new PaymentFactory(array('the_action' => array(
+        $factory = new GatewayFactory(array('the_action' => array(
             array('payment' => 'thePayment'),
         )), array(), array());
         $factory->setContainer($this->container);
@@ -111,7 +111,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->container->set('the_action', $this->getMock('Payum\Core\Action\ActionInterface'));
 
-        $factory = new PaymentFactory(array('the_action' => array(
+        $factory = new GatewayFactory(array('the_action' => array(
             array('factory' => 'theFactory'),
         )), array(), array());
         $factory->setContainer($this->container);
@@ -131,7 +131,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->container->set('the_action', $this->getMock('Payum\Core\Action\ActionInterface'));
 
-        $factory = new PaymentFactory(array('the_action' => array(
+        $factory = new GatewayFactory(array('the_action' => array(
             array('all' => true),
         )), array(), array());
         $factory->setContainer($this->container);
@@ -149,7 +149,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->container->set('the_action', $this->getMock('Payum\Core\Action\ActionInterface'));
 
-        $factory = new PaymentFactory(array('the_action' => array(
+        $factory = new GatewayFactory(array('the_action' => array(
             array('all' => true, 'alias' => 'the_action_alias'),
         )), array(), array());
         $factory->setContainer($this->container);
@@ -167,7 +167,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->container->set('the_action', $this->getMock('Payum\Core\Action\ActionInterface'));
 
-        $factory = new PaymentFactory(array('the_action' => array(
+        $factory = new GatewayFactory(array('the_action' => array(
             array('all' => true, 'prepend' => true),
         )), array(), array());
         $factory->setContainer($this->container);
@@ -187,7 +187,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->container->set('the_action', $this->getMock('Payum\Core\Action\ActionInterface'));
 
-        $factory = new PaymentFactory(array('the_action' => array(
+        $factory = new GatewayFactory(array('the_action' => array(
             array('factory' => 'theFactory'),
             array('payment' => 'thePayment'),
             array('all' => true, 'prepend' => true),
@@ -212,7 +212,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->container->set('the_extension', $this->getMock('Payum\Core\Extension\ExtensionInterface'));
 
-        $factory = new PaymentFactory(array(), array('the_extension' => array(
+        $factory = new GatewayFactory(array(), array('the_extension' => array(
             array('factory' => 'theFactory'),
         )), array());
         $factory->setContainer($this->container);
@@ -232,7 +232,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->container->set('the_extension', $this->getMock('Payum\Core\Extension\ExtensionInterface'));
 
-        $factory = new PaymentFactory(array(), array('the_extension' => array(
+        $factory = new GatewayFactory(array(), array('the_extension' => array(
             array('all' => true),
         )), array());
         $factory->setContainer($this->container);
@@ -250,7 +250,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->container->set('the_extension', $this->getMock('Payum\Core\Extension\ExtensionInterface'));
 
-        $factory = new PaymentFactory(array(), array('the_extension' => array(
+        $factory = new GatewayFactory(array(), array('the_extension' => array(
             array('all' => true, 'alias' => 'the_extension_alias'),
         )), array());
         $factory->setContainer($this->container);
@@ -268,7 +268,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->container->set('the_extension', $this->getMock('Payum\Core\Extension\ExtensionInterface'));
 
-        $factory = new PaymentFactory(array(), array('the_extension' => array(
+        $factory = new GatewayFactory(array(), array('the_extension' => array(
             array('all' => true, 'prepend' => true),
         )), array());
         $factory->setContainer($this->container);
@@ -288,7 +288,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->container->set('the_extension', $this->getMock('Payum\Core\Extension\ExtensionInterface'));
 
-        $factory = new PaymentFactory(array(), array('the_extension' => array(
+        $factory = new GatewayFactory(array(), array('the_extension' => array(
             array('factory' => 'theFactory'),
             array('payment' => 'thePayment'),
             array('all' => true, 'prepend' => true),
@@ -313,7 +313,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->container->set('the_api', new \stdClass);
 
-        $factory = new PaymentFactory(array(), array(), array('the_api' => array(
+        $factory = new GatewayFactory(array(), array(), array('the_api' => array(
             array('factory' => 'theFactory'),
         )));
         $factory->setContainer($this->container);
@@ -333,7 +333,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->container->set('the_api', new \stdClass);
 
-        $factory = new PaymentFactory(array(), array(), array('the_api' => array(
+        $factory = new GatewayFactory(array(), array(), array('the_api' => array(
             array('all' => true),
         )));
         $factory->setContainer($this->container);
@@ -351,7 +351,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->container->set('the_api', new \stdClass);
 
-        $factory = new PaymentFactory(array(), array(), array('the_api' => array(
+        $factory = new GatewayFactory(array(), array(), array('the_api' => array(
             array('all' => true, 'alias' => 'the_api_alias'),
         )));
         $factory->setContainer($this->container);
@@ -369,7 +369,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->container->set('the_api', new \stdClass);
 
-        $factory = new PaymentFactory(array(), array(), array('the_api' => array(
+        $factory = new GatewayFactory(array(), array(), array('the_api' => array(
             array('all' => true, 'prepend' => true),
         )));
         $factory->setContainer($this->container);
@@ -389,7 +389,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->container->set('the_api', new \stdClass);
 
-        $factory = new PaymentFactory(array(), array(), array('the_api' => array(
+        $factory = new GatewayFactory(array(), array(), array('the_api' => array(
             array('factory' => 'theFactory'),
             array('payment' => 'thePayment'),
             array('all' => true, 'prepend' => true),

@@ -1,7 +1,7 @@
 <?php
-namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Gateway;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\StripeJsPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\StripeJsGatewayFactory;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,9 +15,9 @@ class StripeJsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfAbstractPaymentFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\StripeJsPaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\StripeJsPaymentFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractPaymentFactory'));
     }
 
     /**
@@ -25,7 +25,7 @@ class StripeJsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementPrependExtensionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\StripeJsPaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\StripeJsPaymentFactory');
 
         $this->assertTrue($rc->implementsInterface('Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface'));
     }
@@ -35,7 +35,7 @@ class StripeJsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new StripeJsPaymentFactory;
+        new StripeJsGatewayFactory;
     }
 
     /**
@@ -43,7 +43,7 @@ class StripeJsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetName()
     {
-        $factory = new StripeJsPaymentFactory;
+        $factory = new StripeJsGatewayFactory;
 
         $this->assertEquals('stripe_js', $factory->getName());
     }
@@ -53,7 +53,7 @@ class StripeJsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfiguration()
     {
-        $factory = new StripeJsPaymentFactory;
+        $factory = new StripeJsGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -86,7 +86,7 @@ class StripeJsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfPublishableKeyOptionMissed()
     {
-        $factory = new StripeJsPaymentFactory;
+        $factory = new StripeJsGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -105,7 +105,7 @@ class StripeJsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfSecretKeyOptionMissed()
     {
-        $factory = new StripeJsPaymentFactory;
+        $factory = new StripeJsGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -123,7 +123,7 @@ class StripeJsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePaymentAndReturnItsId()
     {
-        $factory = new StripeJsPaymentFactory;
+        $factory = new StripeJsGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -144,7 +144,7 @@ class StripeJsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePaymentWithExpectedConfig()
     {
-        $factory = new StripeJsPaymentFactory;
+        $factory = new StripeJsGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -173,7 +173,7 @@ class StripeJsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLoadFactoryAndTemplates()
     {
-        $factory = new StripeJsPaymentFactory;
+        $factory = new StripeJsGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -208,7 +208,7 @@ class StripeJsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new StripeJsPaymentFactory;
+        $factory = new StripeJsGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -242,7 +242,7 @@ class StripeJsPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldPrependTwigsExtensionConfig()
     {
-        $factory = new StripeJsPaymentFactory;
+        $factory = new StripeJsGatewayFactory;
 
         $container = new ContainerBuilder;
 

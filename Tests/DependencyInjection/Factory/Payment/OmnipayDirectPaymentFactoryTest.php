@@ -1,12 +1,12 @@
 <?php
-namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Gateway;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayDirectPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OmnipayDirectGatewayFactory;
 
 class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,9 +15,9 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfAbstractPaymentFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayDirectPaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OmnipayDirectPaymentFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractPaymentFactory'));
     }
 
     /**
@@ -25,7 +25,7 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new OmnipayDirectPaymentFactory;
+        new OmnipayDirectGatewayFactory;
     }
 
     /**
@@ -33,7 +33,7 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetName()
     {
-        $factory = new OmnipayDirectPaymentFactory;
+        $factory = new OmnipayDirectGatewayFactory;
 
         $this->assertEquals('omnipay_direct', $factory->getName());
     }
@@ -45,7 +45,7 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfiguration($config)
     {
-        $factory = new OmnipayDirectPaymentFactory;
+        $factory = new OmnipayDirectGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -79,7 +79,7 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfTypeSectionMissing()
     {
-        $factory = new OmnipayDirectPaymentFactory;
+        $factory = new OmnipayDirectGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -98,7 +98,7 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfTypeNotSupportedByOmnipay()
     {
-        $factory = new OmnipayDirectPaymentFactory;
+        $factory = new OmnipayDirectGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -120,7 +120,7 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfOptionsSectionMissing()
     {
-        $factory = new OmnipayDirectPaymentFactory;
+        $factory = new OmnipayDirectGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -138,7 +138,7 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePaymentAndReturnItsId()
     {
-        $factory = new OmnipayDirectPaymentFactory;
+        $factory = new OmnipayDirectGatewayFactory;
 
         $container = new ContainerBuilder();
 
@@ -173,7 +173,7 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLoadFactory()
     {
-        $factory = new OmnipayDirectPaymentFactory;
+        $factory = new OmnipayDirectGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -204,7 +204,7 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new OmnipayDirectPaymentFactory;
+        $factory = new OmnipayDirectGatewayFactory;
 
         $container = new ContainerBuilder();
 

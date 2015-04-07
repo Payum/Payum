@@ -1,25 +1,25 @@
 <?php
-namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway;
 
 use Payum\Core\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-class KlarnaInvoicePaymentFactory extends AbstractPaymentFactory
+class KlarnaInvoiceGatewayFactory extends AbstractGatewayFactory
 {
     /**
      * {@inheritDoc}
      */
-    public function create(ContainerBuilder $container, $paymentName, array $config)
+    public function create(ContainerBuilder $container, $gatewayName, array $config)
     {
-        if (false == class_exists('Payum\Klarna\Invoice\PaymentFactory')) {
-            throw new RuntimeException('Cannot find Klarna Invoice payment factory class. Have you installed payum/klarna-invoice package?');
+        if (false == class_exists('Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory')) {
+            throw new RuntimeException('Cannot find Klarna Invoice gateway factory class. Have you installed payum/klarna-invoice package?');
         }
 
         //autoload Klarna
         \Klarna::BETA;
 
-        return parent::create($container, $paymentName, $config);
+        return parent::create($container, $gatewayName, $config);
     }
 
     /**
@@ -50,9 +50,9 @@ class KlarnaInvoicePaymentFactory extends AbstractPaymentFactory
     /**
      * {@inheritDoc}
      */
-    protected function getPayumPaymentFactoryClass()
+    protected function getPayumGatewayFactoryClass()
     {
-        return 'Payum\Klarna\Invoice\PaymentFactory';
+        return 'Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory';
     }
 
     /**

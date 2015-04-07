@@ -1,11 +1,11 @@
 <?php
-namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Parameter;
 
-class StripeJsPaymentFactory extends StripeCheckoutPaymentFactory implements PrependExtensionInterface
+class StripeJsGatewayFactory extends StripeCheckoutGatewayFactory implements PrependExtensionInterface
 {
     /**
      * {@inheritDoc}
@@ -39,8 +39,8 @@ class StripeJsPaymentFactory extends StripeCheckoutPaymentFactory implements Pre
     /**
      * {@inheritDoc}
      */
-    protected function getPayumPaymentFactoryClass()
+    protected function getPayumGatewayFactoryClass()
     {
-        return 'Payum\Stripe\JsPaymentFactory';
+        return 'Payum\Stripe\StripeJsGatewayFactory';
     }
 }

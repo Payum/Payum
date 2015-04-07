@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Gateway;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PayexPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PayexGatewayFactory;
 
 class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,9 +16,9 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfAbstractPaymentFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PayexPaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PayexPaymentFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractPaymentFactory'));
     }
 
     /**
@@ -26,7 +26,7 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new PayexPaymentFactory;
+        new PayexGatewayFactory;
     }
 
     /**
@@ -34,7 +34,7 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetName()
     {
-        $factory = new PayexPaymentFactory;
+        $factory = new PayexGatewayFactory;
 
         $this->assertEquals('payex', $factory->getName());
     }
@@ -44,7 +44,7 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfiguration()
     {
-        $factory = new PayexPaymentFactory;
+        $factory = new PayexGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -78,7 +78,7 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfEncryptionKeyOptionNotSet()
     {
-        $factory = new PayexPaymentFactory;
+        $factory = new PayexGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -98,7 +98,7 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfAccountNumberOptionNotSet()
     {
-        $factory = new PayexPaymentFactory;
+        $factory = new PayexGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -116,7 +116,7 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePaymentAndReturnItsId()
     {
-        $factory = new PayexPaymentFactory;
+        $factory = new PayexGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -149,7 +149,7 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLoadFactory()
     {
-        $factory = new PayexPaymentFactory;
+        $factory = new PayexGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -180,7 +180,7 @@ class PayexPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new PayexPaymentFactory;
+        $factory = new PayexGatewayFactory;
 
         $container = new ContainerBuilder;
 

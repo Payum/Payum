@@ -1,7 +1,7 @@
 <?php
-namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Gateway;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaInvoicePaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\KlarnaInvoiceGatewayFactory;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,9 +15,9 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfAbstractPaymentFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaInvoicePaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\KlarnaInvoicePaymentFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractPaymentFactory'));
     }
 
     /**
@@ -25,7 +25,7 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new KlarnaInvoicePaymentFactory;
+        new KlarnaInvoiceGatewayFactory;
     }
 
     /**
@@ -33,7 +33,7 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetName()
     {
-        $factory = new KlarnaInvoicePaymentFactory;
+        $factory = new KlarnaInvoiceGatewayFactory;
 
         $this->assertEquals('klarna_invoice', $factory->getName());
     }
@@ -43,7 +43,7 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfiguration()
     {
-        $factory = new KlarnaInvoicePaymentFactory;
+        $factory = new KlarnaInvoiceGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -85,7 +85,7 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfigurationAndOverwriteDefaults()
     {
-        $factory = new KlarnaInvoicePaymentFactory;
+        $factory = new KlarnaInvoiceGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -133,7 +133,7 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfEIDOptionNotSet()
     {
-        $factory = new KlarnaInvoicePaymentFactory;
+        $factory = new KlarnaInvoiceGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -152,7 +152,7 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfSecretOptionNotSet()
     {
-        $factory = new KlarnaInvoicePaymentFactory;
+        $factory = new KlarnaInvoiceGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -170,7 +170,7 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePaymentAndReturnItsId()
     {
-        $factory = new KlarnaInvoicePaymentFactory;
+        $factory = new KlarnaInvoiceGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -206,7 +206,7 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLoadFactory()
     {
-        $factory = new KlarnaInvoicePaymentFactory;
+        $factory = new KlarnaInvoiceGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -237,7 +237,7 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new KlarnaInvoicePaymentFactory;
+        $factory = new KlarnaInvoiceGatewayFactory;
 
         $container = new ContainerBuilder;
 

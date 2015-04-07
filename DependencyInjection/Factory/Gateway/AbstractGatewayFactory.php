@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway;
 
 use Payum\Core\Exception\RuntimeException;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -8,40 +8,40 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 
-abstract class AbstractPaymentFactory implements PaymentFactoryInterface
+abstract class AbstractGatewayFactory implements GatewayFactoryInterface
 {
     /**
      * {@inheritDoc}
      */
-    public function create(ContainerBuilder $container, $paymentName, array $config)
+    public function create(ContainerBuilder $container, $gatewayName, array $config)
     {
-        $payment = $this->createPayment($container, $paymentName, $config);
-        $payment->setPublic(true);
-        $paymentId = "payum.{$this->getName()}.{$paymentName}.payment";
-        $container->setDefinition($paymentId, $payment);
+        $gateway = $this->createGateway($container, $gatewayName, $config);
+        $gateway->setPublic(true);
+        $gatewayId = "payum.{$this->getName()}.{$gatewayName}.gateway";
+        $container->setDefinition($gatewayId, $gateway);
 
         foreach (array_reverse($config['apis']) as $apiId) {
-            $payment->addMethodCall(
+            $gateway->addMethodCall(
                 'addApi',
                 array(new Reference($apiId), $forcePrepend = true)
             );
         }
 
         foreach (array_reverse($config['actions']) as $actionId) {
-            $payment->addMethodCall(
+            $gateway->addMethodCall(
                 'addAction',
                 array(new Reference($actionId), $forcePrepend = true)
             );
         }
 
         foreach (array_reverse($config['extensions']) as $extensionId) {
-            $payment->addMethodCall(
+            $gateway->addMethodCall(
                 'addExtension',
                 array(new Reference($extensionId), $forcePrepend = true)
             );
         }
 
-        return $paymentId;
+        return $gatewayId;
     }
 
     /**
@@ -52,13 +52,13 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
         $container->setParameter('payum.template.layout', '@PayumCore\layout.html.twig');
         $container->setParameter('payum.template.obtain_credit_card', '@PayumSymfonyBridge\obtainCreditCard.html.twig');
 
-        $paymentFactoryClass = $this->getPayumPaymentFactoryClass();
-        if (class_exists($paymentFactoryClass)) {
-            $factory = new Definition($paymentFactoryClass, array(
+        $gatewayFactoryClass = $this->getPayumGatewayFactoryClass();
+        if (class_exists($gatewayFactoryClass)) {
+            $factory = new Definition($gatewayFactoryClass, array(
                 $this->createFactoryConfig(),
-                new Reference('payum.payment_factory'),
+                new Reference('payum.gateway_factory'),
             ));
-            $factory->addTag('payum.payment_factory', array(
+            $factory->addTag('payum.gateway_factory', array(
                 'name' => $this->getName(),
                 'human_name' => $this->getHumanName(),
             ));
@@ -94,25 +94,25 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
 
     /**
      * @param ContainerBuilder $container
-     * @param $paymentName
+     * @param $gatewayName
      * @param array $config
      *
      * @return Definition
      */
-    protected function createPayment(ContainerBuilder $container, $paymentName, array $config)
+    protected function createGateway(ContainerBuilder $container, $gatewayName, array $config)
     {
-        $paymentFactoryClass = $this->getPayumPaymentFactoryClass();
-        if (false == class_exists($paymentFactoryClass)) {
-            throw new RuntimeException(sprintf('Cannot find payment factory class. Have you installed %s or payum/payum package?', $this->getComposerPackage()));
+        $gatewayFactoryClass = $this->getPayumGatewayFactoryClass();
+        if (false == class_exists($gatewayFactoryClass)) {
+            throw new RuntimeException(sprintf('Cannot find gateway factory class. Have you installed %s or payum/payum package?', $this->getComposerPackage()));
         }
 
-        $config['payum.payment_name'] = $paymentName;
+        $config['payum.gateway_name'] = $gatewayName;
 
-        $payment = new Definition('Payum\Core\Payment', array($config));
-        $payment->setFactoryService(sprintf('payum.%s.factory', $this->getName()));
-        $payment->setFactoryMethod('create');
+        $gateway = new Definition('Payum\Core\Gateway', array($config));
+        $gateway->setFactoryService(sprintf('payum.%s.factory', $this->getName()));
+        $gateway->setFactoryMethod('create');
 
-        return $payment;
+        return $gateway;
     }
 
     /**
@@ -134,9 +134,9 @@ abstract class AbstractPaymentFactory implements PaymentFactoryInterface
     /**
      * {@inheritDoc}
      */
-    protected function getPayumPaymentFactoryClass()
+    protected function getPayumGatewayFactoryClass()
     {
-        return 'Payum\Core\PaymentFactory';
+        return 'Payum\Core\GatewayFactory';
     }
 
     /**

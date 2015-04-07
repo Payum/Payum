@@ -4,7 +4,7 @@
 [![Latest Stable Version](https://poser.pugx.org/payum/payum-bundle/version.png)](https://packagist.org/packages/payum/payum-bundle)
 
 The bundle integrate [payum](https://github.com/Payum/Payum) into [symfony](http://www.symfony.com) framework.
-It already supports [+35 payments](http://payum.org/doc/Core/supported-payments).
+It already supports [+35 gateways](http://payum.org/doc/Core/supported-gateways).
 Provide nice configuration layer, secured capture controller, storages integration and lots of more features.
 
 [Sylius e-commerce platform](http://sylius.com) base its payment solutions on top of the bundle.
@@ -24,7 +24,7 @@ Provide nice configuration layer, secured capture controller, storages integrati
 ```yaml
 payum:
     storages:
-        Payum\Core\Model\Order:
+        Payum\Core\Model\Payment:
             filesystem:
                 storage_dir: %kernel.root_dir%/Resources/payments
                 id_property: number
@@ -32,10 +32,10 @@ payum:
     security:
         token_storage:
             Payum\Core\Model\Token:
-                storage_dir: %kernel.root_dir%/Resources/payments
+                storage_dir: %kernel.root_dir%/Resources/gateways
                 id_property: hash
                 
-    payments:
+    gateways:
         offline:
             offline: ~
 ```
@@ -44,22 +44,21 @@ payum:
 
 ```php
 <?php
-use Payum\Core\Model\Order;
+use Payum\Core\Model\Payment;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Capture;
-use Payum\Offline\PaymentFactory as OfflinePaymentFactory;
 
-$order = new Order;
-$order->setNumber(uniqid());
-$order->setCurrencyCode('EUR');
-$order->setTotalAmount(123); // 1.23 EUR
-$order->setDescription('A description');
-$order->setClientId('anId');
-$order->setClientEmail('foo@example.com');
+$payment = new Payment;
+$payment->setNumber(uniqid());
+$payment->setCurrencyCode('EUR');
+$payment->setTotalAmount(123); // 1.23 EUR
+$payment->setDescription('A description');
+$payment->setClientId('anId');
+$payment->setClientEmail('foo@example.com');
 
-$payment = $this->get('payum')->getPayment('offline');
-$payment->execute(new Capture($order));
+$gateway = $this->get('payum')->getGateway('offline');
+$gateway->execute(new Capture($payment));
 ```
 
 ### Get status
@@ -68,7 +67,7 @@ $payment->execute(new Capture($order));
 <?php
 use Payum\Core\Request\GetHumanStatus;
 
-$payment->execute($status = new GetHumanStatus($order));
+$gateway->execute($status = new GetHumanStatus($payment));
 
 echo $status->getValue();
 ```
@@ -81,11 +80,11 @@ use Payum\Core\Request\Authorize;
 use Payum\Core\Request\Cancel;
 use Payum\Core\Request\Refund;
 
-$payment->execute(new Authorize($order));
+$gateway->execute(new Authorize($payment));
 
-$payment->execute(new Refund($order));
+$gateway->execute(new Refund($payment));
 
-$payment->execute(new Cancel($order));
+$gateway->execute(new Cancel($payment));
 ```
 
 ## Contributing

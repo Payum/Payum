@@ -1,28 +1,28 @@
 <?php
-namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-class PayexPaymentFactory extends AbstractPaymentFactory
+class Be2BillDirectGatewayFactory extends AbstractGatewayFactory
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
-        return 'payex';
+        return 'be2bill_direct';
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
         parent::addConfiguration($builder);
         
         $builder->children()
-            ->scalarNode('encryption_key')->isRequired()->cannotBeEmpty()->end()
-            ->scalarNode('account_number')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('identifier')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('password')->isRequired()->cannotBeEmpty()->end()
             ->booleanNode('sandbox')->defaultTrue()->end()
         ->end();
     }
@@ -30,9 +30,9 @@ class PayexPaymentFactory extends AbstractPaymentFactory
     /**
      * {@inheritDoc}
      */
-    protected function getPayumPaymentFactoryClass()
+    protected function getPayumGatewayFactoryClass()
     {
-        return 'Payum\Payex\PaymentFactory';
+        return 'Payum\Be2Bill\Be2BillDirectGatewayFactory';
     }
 
     /**
@@ -40,6 +40,6 @@ class PayexPaymentFactory extends AbstractPaymentFactory
      */
     protected function getComposerPackage()
     {
-        return 'payum/payex';
+        return 'payum/be2bill';
     }
 }

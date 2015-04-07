@@ -31,7 +31,7 @@ class CaptureController extends PayumController
     {
         $token = $this->getHttpRequestVerifier()->verify($request);
 
-        $payment = $this->getPayum()->getPayment($token->getPaymentName());
+        $payment = $this->getPayum()->getPayment($token->getGatewayName());
         $payment->execute(new Capture($token));
         
         $this->getHttpRequestVerifier()->invalidate($token);

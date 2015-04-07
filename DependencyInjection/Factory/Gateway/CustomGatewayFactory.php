@@ -1,23 +1,23 @@
 <?php
-namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
-class CustomPaymentFactory extends AbstractPaymentFactory
+class CustomGatewayFactory extends AbstractGatewayFactory
 {
     /**
      * {@inheritDoc}
      */
-    public function createPayment(ContainerBuilder $container, $paymentName, array $config)
+    public function createGateway(ContainerBuilder $container, $gatewayName, array $config)
     {
         if (isset($config['service'])) {
             return new DefinitionDecorator($config['service']);
         }
 
-        return parent::createPayment($container, $paymentName, $config);
+        return parent::createGateway($container, $gatewayName, $config);
     }
 
     /**
@@ -31,9 +31,9 @@ class CustomPaymentFactory extends AbstractPaymentFactory
     /**
      * {@inheritDoc}
      */
-    protected function getPayumPaymentFactoryClass()
+    protected function getPayumGatewayFactoryClass()
     {
-        return 'Payum\Bundle\PayumBundle\FixedPaymentFactory';
+        return 'Payum\Bundle\PayumBundle\FixedGatewayFactory';
     }
 
     /**

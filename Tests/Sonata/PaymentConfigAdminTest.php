@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Sonata\Tests;
 
-use Payum\Bundle\PayumBundle\Sonata\PaymentConfigAdmin;
+use Payum\Bundle\PayumBundle\Sonata\GatewayConfigAdmin;
 
 class PaymentConfigAdminTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +20,7 @@ class PaymentConfigAdminTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithExpectedArguments()
     {
-        new PaymentConfigAdmin('code', 'class', 'baseControllerName');
+        new GatewayConfigAdmin('code', 'class', 'baseControllerName');
     }
 
     /**
@@ -28,7 +28,7 @@ class PaymentConfigAdminTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetFormFactory()
     {
-        $admin = new PaymentConfigAdmin('code', 'class', 'baseControllerName');
+        $admin = new GatewayConfigAdmin('code', 'class', 'baseControllerName');
 
         $formFactoryMock = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
 

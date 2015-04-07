@@ -1,7 +1,7 @@
 <?php
-namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Gateway;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OfflinePaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OfflineGatewayFactory;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,9 +15,9 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfAbstractPaymentFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OfflinePaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OfflinePaymentFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractPaymentFactory'));
     }
 
     /**
@@ -25,7 +25,7 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new OfflinePaymentFactory;
+        new OfflineGatewayFactory;
     }
 
     /**
@@ -33,7 +33,7 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetName()
     {
-        $factory = new OfflinePaymentFactory;
+        $factory = new OfflineGatewayFactory;
 
         $this->assertEquals('offline', $factory->getName());
     }
@@ -43,7 +43,7 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotRequireAnyConfiguration()
     {
-        $factory = new OfflinePaymentFactory;
+        $factory = new OfflineGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -65,7 +65,7 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePaymentAndReturnItsId()
     {
-        $factory = new OfflinePaymentFactory;
+        $factory = new OfflineGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -95,7 +95,7 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLoadFactory()
     {
-        $factory = new OfflinePaymentFactory;
+        $factory = new OfflineGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -126,7 +126,7 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new OfflinePaymentFactory;
+        $factory = new OfflineGatewayFactory;
 
         $container = new ContainerBuilder;
 

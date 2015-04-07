@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Payment;
+namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Gateway;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCheckoutNvpPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PaypalExpressCheckoutNvpGatewayFactory;
 
 class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,9 +16,9 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
      */
     public function shouldBeSubClassOfAbstractPaymentFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCheckoutNvpPaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PaypalExpressCheckoutNvpPaymentFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractPaymentFactory'));
     }
 
     /**
@@ -26,7 +26,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new PaypalExpressCheckoutNvpPaymentFactory;
+        new PaypalExpressCheckoutNvpGatewayFactory;
     }
 
     /**
@@ -34,7 +34,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
      */
     public function shouldAllowGetName()
     {
-        $factory = new PaypalExpressCheckoutNvpPaymentFactory;
+        $factory = new PaypalExpressCheckoutNvpGatewayFactory;
 
         $this->assertEquals('paypal_express_checkout_nvp', $factory->getName());
     }
@@ -44,7 +44,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
      */
     public function shouldAllowAddConfiguration()
     {
-        $factory = new PaypalExpressCheckoutNvpPaymentFactory;
+        $factory = new PaypalExpressCheckoutNvpGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -82,7 +82,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
      */
     public function thrownIfUsernameOptionNotSet()
     {
-        $factory = new PaypalExpressCheckoutNvpPaymentFactory;
+        $factory = new PaypalExpressCheckoutNvpGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -101,7 +101,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
      */
     public function thrownIfPasswordOptionNotSet()
     {
-        $factory = new PaypalExpressCheckoutNvpPaymentFactory;
+        $factory = new PaypalExpressCheckoutNvpGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -122,7 +122,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
      */
     public function thrownIfSignatureOptionNotSet()
     {
-        $factory = new PaypalExpressCheckoutNvpPaymentFactory;
+        $factory = new PaypalExpressCheckoutNvpGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -141,7 +141,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
      */
     public function shouldAllowCreatePaymentAndReturnItsId()
     {
-        $factory = new PaypalExpressCheckoutNvpPaymentFactory;
+        $factory = new PaypalExpressCheckoutNvpGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -175,7 +175,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
      */
     public function shouldLoadFactory()
     {
-        $factory = new PaypalExpressCheckoutNvpPaymentFactory;
+        $factory = new PaypalExpressCheckoutNvpGatewayFactory;
 
         $container = new ContainerBuilder;
 
@@ -206,7 +206,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new PaypalExpressCheckoutNvpPaymentFactory;
+        $factory = new PaypalExpressCheckoutNvpGatewayFactory;
 
         $container = new ContainerBuilder;
 

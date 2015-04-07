@@ -2,7 +2,7 @@
 namespace Payum\Bundle\PayumBundle\Command;
 
 use Payum\Core\Extension\StorageExtension;
-use Payum\Core\Payment;
+use Payum\Core\Gateway;
 use Payum\Core\Registry\RegistryInterface;
 use Payum\Core\Storage\AbstractStorage;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 
-class DebugPaymentCommand extends ContainerAwareCommand
+class DebugGatewayCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritDoc}
@@ -20,11 +20,11 @@ class DebugPaymentCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('debug:payum:payment')
+            ->setName('debug:payum:gateway')
             ->setAliases(array(
-                'payum:payment:debug',
+                'payum:gateway:debug',
             ))
-            ->addArgument('payment-name', InputArgument::OPTIONAL, 'The payment name you want to get information about.')
+            ->addArgument('gateway-name', InputArgument::OPTIONAL, 'The gateway name you want to get information about.')
             ->addOption('show-supports', null, InputOption::VALUE_NONE, 'Show what actions supports.')
         ;
     }
@@ -34,30 +34,30 @@ class DebugPaymentCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $payments = $this->getPayum()->getPayments();
+        $gateways = $this->getPayum()->getGateways();
 
-        if ($paymentName = $input->getArgument('payment-name')) {
-            $paymentName = $this->findProperPaymentName($input, $output, $payments, $paymentName);
-            $payments = array(
-                $paymentName => $this->getPayum()->getPayment($paymentName),
+        if ($gatewayName = $input->getArgument('gateway-name')) {
+            $gatewayName = $this->findProperGatewayName($input, $output, $gateways, $gatewayName);
+            $gateways = array(
+                $gatewayName => $this->getPayum()->getGateway($gatewayName),
             );
         }
 
         $output->writeln('<info>Order of actions, apis, extensions matters</info>');
 
-        $output->writeln(sprintf('Found <info>%d</info> payments', count($payments)));
+        $output->writeln(sprintf('Found <info>%d</info> gateways', count($gateways)));
 
-        foreach ($payments as $name => $payment) {
+        foreach ($gateways as $name => $gateway) {
             $output->writeln('');
-            $output->writeln(sprintf('%s (%s):', $name, get_class($payment)));
+            $output->writeln(sprintf('%s (%s):', $name, get_class($gateway)));
 
-            if (false == $payment instanceof Payment) {
+            if (false == $gateway instanceof Gateway) {
                 continue;
             }
 
-            $rp = new \ReflectionProperty($payment, 'actions');
+            $rp = new \ReflectionProperty($gateway, 'actions');
             $rp->setAccessible(true);
-            $actions = $rp->getValue($payment);
+            $actions = $rp->getValue($gateway);
             $rp->setAccessible(false);
 
             $output->writeln("\t<info>Actions:</info>");
@@ -70,9 +70,9 @@ class DebugPaymentCommand extends ContainerAwareCommand
                 }
             }
 
-            $rp = new \ReflectionProperty($payment, 'extensions');
+            $rp = new \ReflectionProperty($gateway, 'extensions');
             $rp->setAccessible(true);
-            $collection = $rp->getValue($payment);
+            $collection = $rp->getValue($gateway);
             $rp->setAccessible(false);
 
             $rp = new \ReflectionProperty($collection, 'extensions');
@@ -104,9 +104,9 @@ class DebugPaymentCommand extends ContainerAwareCommand
                 }
             }
 
-            $rp = new \ReflectionProperty($payment, 'apis');
+            $rp = new \ReflectionProperty($gateway, 'apis');
             $rp->setAccessible(true);
-            $apis = $rp->getValue($payment);
+            $apis = $rp->getValue($gateway);
             $rp->setAccessible(false);
 
             $output->writeln("");
@@ -131,14 +131,6 @@ class DebugPaymentCommand extends ContainerAwareCommand
             $methodCodeLines[] = $file[$line];
         }
 
-//        if (trim($methodCodeLines[count($methodCodeLines) - 1]) == '}') {
-//            unset($methodCodeLines[count($methodCodeLines) - 1]);
-//        }
-//
-//        if (trim($methodCodeLines[0]) == '{') {
-//            unset($methodCodeLines[0]);
-//        }
-
         return array_values($methodCodeLines);
     }
 
@@ -150,38 +142,38 @@ class DebugPaymentCommand extends ContainerAwareCommand
         return $this->getContainer()->get('payum');
     }
 
-    private function findProperPaymentName(InputInterface $input, OutputInterface $output, $payments, $name)
+    private function findProperGatewayName(InputInterface $input, OutputInterface $output, $gateways, $name)
     {
         $helperSet = $this->getHelperSet();
-        if (!$helperSet->has('question') || isset($payments[$name]) || !$input->isInteractive()) {
+        if (!$helperSet->has('question') || isset($gateways[$name]) || !$input->isInteractive()) {
             return $name;
         }
 
-        $matchingPayments = $this->findPaymentsContaining($payments, $name);
-        if (empty($matchingPayments)) {
-            throw new \InvalidArgumentException(sprintf('No Payum payments found that match "%s".', $name));
+        $matchingGateways = $this->findGatewaysContaining($gateways, $name);
+        if (empty($matchingGateways)) {
+            throw new \InvalidArgumentException(sprintf('No Payum gateways found that match "%s".', $name));
         }
-        $question = new ChoiceQuestion('Choose a number for more information on the payum payment', $matchingPayments);
-        $question->setErrorMessage('Payum payment %s is invalid.');
+        $question = new ChoiceQuestion('Choose a number for more information on the payum gateway', $matchingGateways);
+        $question->setErrorMessage('Payum gateway %s is invalid.');
 
         return $this->getHelper('question')->ask($input, $output, $question);
     }
 
-    private function findPaymentsContaining($payments, $name)
+    private function findGatewaysContaining($gateways, $name)
     {
         $threshold = 1e3;
-        $foundPayments = array();
+        $foundGateways = array();
 
-        foreach ($payments as $paymentName => $payment) {
-            $lev = levenshtein($name, $paymentName);
-            if ($lev <= strlen($name) / 3 || false !== strpos($paymentName, $name)) {
-                $foundPayments[$paymentName] = isset($foundPayments[$paymentName]) ? $foundPayments[$payment] - $lev : $lev;
+        foreach ($gateways as $gatewayName => $gateway) {
+            $lev = levenshtein($name, $gatewayName);
+            if ($lev <= strlen($name) / 3 || false !== strpos($gatewayName, $name)) {
+                $foundGateways[$gatewayName] = isset($foundGateways[$gatewayName]) ? $foundGateways[$gateway] - $lev : $lev;
             }
         }
 
-        $foundPayments = array_filter($foundPayments, function ($lev) use ($threshold) { return $lev < 2*$threshold; });
-        asort($foundPayments);
+        $foundGateways = array_filter($foundGateways, function ($lev) use ($threshold) { return $lev < 2*$threshold; });
+        asort($foundGateways);
 
-        return array_keys($foundPayments);
+        return array_keys($foundGateways);
     }
 }

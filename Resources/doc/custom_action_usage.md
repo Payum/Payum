@@ -1,6 +1,6 @@
 # Custom action usage
 
-Payment comes with built in actions but sometime you have to add your own. First you have to define a service:
+Gateway comes with built in actions but sometime you have to add your own. First you have to define a service:
 
 ```yaml
 # src/Acme/PaymentBundle/Resources/config/services.yml
@@ -10,7 +10,7 @@ services:
         class: Acme\PaymentBundle\Payum\Action\FooAction
 ```
 
-There are several ways to add it to a payment:
+There are several ways to add it to a gateway:
 
 * Set it explicitly in config.yml. 
 
@@ -18,8 +18,8 @@ There are several ways to add it to a payment:
     # app/config/config.yml
 
     payum:
-        payments:
-            a_payment:
+        gateways:
+            a_gateway:
                 a_factory:
                     actions:
                         - acme.payum.action.foo
@@ -30,14 +30,14 @@ There are several ways to add it to a payment:
     
     More powerful method is to add a tag `payum.action` to action server. Payum will do the reset.
     You can define a `factory` attribute inside that tag. 
-    In this case the action will be added to all payments created by requested factory.
+    In this case the action will be added to all gateways created by requested factory.
  
     ```yaml
     # app/config/config.yml
 
     payum:
-        payments:
-            a_payment:
+        gateways:
+            a_gateway:
                 a_factory: ~
     ```
 
@@ -52,15 +52,15 @@ There are several ways to add it to a payment:
 
     ```
 
-    Or you can set concrete `payment` name. 
-    In this case the action will be added only to the payment with requested payment name.
+    Or you can set concrete `gateway` name. 
+    In this case the action will be added only to the gateway with requested gateway name.
 
     ```yaml
     # app/config/config.yml
 
     payum:
-        payments:
-            a_payment:
+        gateways:
+            a_gateway:
                 a_factory: ~
     ```
 
@@ -71,11 +71,11 @@ There are several ways to add it to a payment:
         acme.payum.action.foo:
             class: Acme\PaymentBundle\Payum\Action\FooAction
             tags:
-                - {payum.action, {payment: a_payment}}
+                - {payum.action, {gateway: a_gateway}}
     ```
 
     If `prepend` set to true the action is added before the rest. 
-    If you want to add the action to all configured payments set `all` to true.
+    If you want to add the action to all configured gateways set `all` to true.
 
     ```yaml
     # src/Acme/PaymentBundle/Resources/config/services.yml
