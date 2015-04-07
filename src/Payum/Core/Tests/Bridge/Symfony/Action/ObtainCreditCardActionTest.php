@@ -4,7 +4,7 @@ namespace Payum\Core\Tests\Bridge\Symfony\Action;
 use Payum\Core\Bridge\Symfony\Action\ObtainCreditCardAction;
 use Payum\Core\Bridge\Symfony\Reply\HttpResponse;
 use Payum\Core\Model\CreditCard;
-use Payum\Core\PaymentInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Request\RenderTemplate;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -17,11 +17,11 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfPaymentAwareAction()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Action\ObtainCreditCardAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
@@ -118,8 +118,8 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
 
         $testCase = $this;
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
@@ -133,7 +133,7 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new ObtainCreditCardAction($formFactoryMock, 'theTemplateName');
         $action->setRequest($httpRequest);
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         try {
             $action->execute(new ObtainCreditCard());
@@ -200,8 +200,8 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
 
         $testCase = $this;
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
@@ -215,7 +215,7 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new ObtainCreditCardAction($formFactoryMock, 'theTemplateName');
         $action->setRequest($httpRequest);
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         try {
             $action->execute(new ObtainCreditCard());
@@ -300,10 +300,10 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

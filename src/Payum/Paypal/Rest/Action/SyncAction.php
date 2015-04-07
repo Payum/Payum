@@ -3,11 +3,11 @@
 namespace Payum\Paypal\Rest\Action;
 
 use PayPal\Api\Payment;
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Sync;
 
-class SyncAction extends PaymentAwareAction
+class SyncAction extends GatewayAwareAction
 {
     /**
      * {@inheritDoc}

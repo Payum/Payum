@@ -3,8 +3,7 @@
 [![Total Downloads](https://poser.pugx.org/payum/payum/d/total.png)](https://packagist.org/packages/payum/payum)
 [![Latest Stable Version](https://poser.pugx.org/payum/payum/version.png)](https://packagist.org/packages/payum/payum)
 
-It is all about payments. The vision is to provide end solution keeping high level of a customization.
-It would be handy tool not only for basic tasks like capture or refund but for recurring payments or instant notifications as well.
+Payum offers everything you need to work with payments. From simplest use cases to very advanced ones.
 
 ## Resources
 

@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action;
 
-use Payum\Core\PaymentInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Authorize;
 use Payum\Klarna\Invoice\Action\AuthorizeAction;
 
@@ -10,11 +10,11 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfPaymentAwareAction()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\AuthorizeAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
@@ -72,15 +72,15 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSubExecuteReserveAmountIfRnoNotSet()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Klarna\Invoice\Request\Api\ReserveAmount'))
         ;
 
         $action = new AuthorizeAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $request = new Authorize(array());
 
@@ -92,14 +92,14 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSubExecuteReserveAmountIfRnoAlreadySet()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->never())
             ->method('execute')
         ;
 
         $action = new AuthorizeAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $request = new Authorize(array(
             'rno' => 'aRno',
@@ -109,10 +109,10 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

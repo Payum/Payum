@@ -2,7 +2,7 @@
 namespace Payum\Payex\Tests\Action;
 
 use Payum\Payex\Api\AgreementApi;
-use Payum\Core\PaymentInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\GetBinaryStatus;
 use Payum\Payex\Action\AgreementDetailsStatusAction;
 
@@ -206,10 +206,10 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

@@ -3,7 +3,7 @@
 [![Total Downloads](https://poser.pugx.org/payum/klarna-checkout/d/total.png)](https://packagist.org/packages/payum/klarna-checkout)
 [![Latest Stable Version](https://poser.pugx.org/payum/klarna-checkout/version.png)](https://packagist.org/packages/payum/klarna-checkout)
 
-Provide integration of Klarna Checkout to Payum.
+The Payum extension. It provides [Klarna Checkout](https://klarna.com/sv/salj-med-klarna/klarna-checkout) payment integration.
 
 ## Resources
 

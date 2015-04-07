@@ -1,13 +1,16 @@
 <?php
 namespace Payum\Core\Request;
 
-use Payum\Core\Model\OrderInterface;
+use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Security\TokenInterface;
 
+/**
+ * @deprecated since 0.14.3 Use Convert request
+ */
 class FillOrderDetails
 {
     /**
-     * @var OrderInterface
+     * @var PaymentInterface
      */
     protected $order;
 
@@ -22,10 +25,10 @@ class FillOrderDetails
     protected $details;
 
     /**
-     * @param OrderInterface $order
+     * @param PaymentInterface $order
      * @param TokenInterface $token
      */
-    public function __construct(OrderInterface $order, TokenInterface $token = null)
+    public function __construct(PaymentInterface $order, TokenInterface $token = null)
     {
         $this->order = $order;
         $this->token = $token;
@@ -33,7 +36,7 @@ class FillOrderDetails
     }
 
     /**
-     * @return OrderInterface
+     * @return PaymentInterface
      */
     public function getOrder()
     {

@@ -15,7 +15,7 @@ php composer.phar require payum/be2bill
 
 ## config.php
 
-We have to only add the payment factory. All the rest remain the same:
+We have to only add the gateway factory. All the rest remain the same:
 
 ```php
 <?php
@@ -24,8 +24,8 @@ We have to only add the payment factory. All the rest remain the same:
 // ...
 
 // direct payment, credit card form at your app side
-$directBe2billFactory = new \Payum\Be2Bill\DirectPaymentFactory();
-$payments['be2bill'] = $directBe2billFactory->create(array(
+$directBe2billFactory = new \Payum\Be2Bill\DirectGatewayFactory();
+$gateways['be2bill'] = $directBe2billFactory->create(array(
    'identifier' => 'REPLACE WITH YOURS',
    'password' => 'REPLACE WITH YOURS',
    'sandbox' => true
@@ -33,8 +33,8 @@ $payments['be2bill'] = $directBe2billFactory->create(array(
 
 // or offsite 
 
-$offsiteBe2billFactory = new \Payum\Be2Bill\OffsitePaymentFactory();
-$payments['be2bill_offsite'] = $offsiteBe2billFactory->create(array(
+$offsiteBe2billFactory = new \Payum\Be2Bill\OffsiteGatewayFactory();
+$gateways['be2bill_offsite'] = $offsiteBe2billFactory->create(array(
    'identifier' => 'REPLACE WITH YOURS',
    'password' => 'REPLACE WITH YOURS',
    'sandbox' => true
@@ -43,14 +43,14 @@ $payments['be2bill_offsite'] = $offsiteBe2billFactory->create(array(
 
 ## prepare.php
 
-Here you have to modify a `paymentName` value. Set it to `be2bill` or `be2bill_onsite`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
+Here you have to modify a `gatewayName` value. Set it to `be2bill` or `be2bill_offsite`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
 
 
 ## Next 
 
 * [Core's Get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
 * [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
-* [Supported payments](https://github.com/Payum/Core/blob/master/Resources/docs/supported-payments.md).
+* [Supported gateways](https://github.com/Payum/Core/blob/master/Resources/docs/supported-gateways.md).
 * [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
 * [Capture script](https://github.com/Payum/Core/blob/master/Resources/docs/capture-script.md).
 * [Authorize script](https://github.com/Payum/Core/blob/master/Resources/docs/authorize-script.md).

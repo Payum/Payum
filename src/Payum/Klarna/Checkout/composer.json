@@ -1,7 +1,7 @@
 {
     "name": "payum/klarna-checkout",
     "type": "library",
-    "description": "Klarna checkout",
+    "description": "The Payum extension. It provides Klarna Checkout payment integration.",
     "keywords": [
         "payment",
         "klarna"

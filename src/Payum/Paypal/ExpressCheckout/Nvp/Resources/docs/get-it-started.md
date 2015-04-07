@@ -15,18 +15,17 @@ php composer.phar require payum/paypal-express-checkout-nvp
 
 ## config.php
 
-We only have to add the payment factory. All the rest remains the same:
+We only have to add the factory factory. All the rest remains the same:
 
 ```php
 <?php
 //config.php
 
 use Payum\Core\Extension\GenericTokenFactoryExtension;
-use Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory as PaypalExpressPaymentFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
-$paypalExpressCheckoutFactory = new \Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory; 
-$payments['paypal_express_checkout'] = $paypalExpressCheckoutFactory->create(array(
+$factory = new \Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory; 
+$gateways['paypal_express_checkout'] = $factory->create(array(
    'username'  => 'change it',
    'password'  => 'change it',
    'signature' => 'change it',
@@ -39,13 +38,13 @@ $payments['paypal_express_checkout'] = $paypalExpressCheckoutFactory->create(arr
 
 ## prepare.php
 
-Here you have to modify the `paymentName` value. Set it to `paypal_express_checkout`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
+Here you have to modify the `gatewayName` value. Set it to `paypal_express_checkout`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
 
 ## Next 
 
 * [Core's Get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
 * [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
-* [Supported payments](https://github.com/Payum/Core/blob/master/Resources/docs/supported-payments.md).
+* [Supported gateways](https://github.com/Payum/Core/blob/master/Resources/docs/supported-gateways.md).
 * [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
 * [Capture script](https://github.com/Payum/Core/blob/master/Resources/docs/capture-script.md).
 * [Authorize script](https://github.com/Payum/Core/blob/master/Resources/docs/authorize-script.md).

@@ -89,7 +89,7 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
     {
         $this->logger->debug(sprintf('[Payum] %d# %s::execute(%s) throws exception %s',
             $this->stackLevel,
-            $action ? Humanify::value($action) : 'Payment',
+            $action ? Humanify::value($action) : 'Gateway',
             Humanify::request($request),
             Humanify::value($exception)
         ));

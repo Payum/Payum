@@ -15,7 +15,7 @@ php composer.phar require "payum/paypal-pro-checkout-nvp"
 
 ## config.php
 
-We have to only add the payment factory. All the rest remain the same:
+We have to only add the gateway factory. All the rest remain the same:
 
 
 ```php
@@ -24,9 +24,8 @@ We have to only add the payment factory. All the rest remain the same:
 
 // ...
 
-$paypalProCheckoutFactory = new \Payum\Paypal\ProCheckout\Nvp\PaymentFactory();
-
-$payments['paypal_pro_checkout'] = $paypalProCheckoutFactory->create(array(
+$factory = new \Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory();
+$gateways['paypal_pro_checkout'] = $factory->create(array(
     'username' => 'REPLACE IT',
     'password' => 'REPLACE IT',
     'partner' => 'REPLACE IT',
@@ -37,13 +36,13 @@ $payments['paypal_pro_checkout'] = $paypalProCheckoutFactory->create(array(
 
 ## prepare.php
 
-Here you have to modify a `paymentName` value. Set it to `paypal_pro_checkout`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
+Here you have to modify a `gatewayName` value. Set it to `paypal_pro_checkout`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
 
 ## Next 
 
 * [Core's Get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
 * [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
-* [Supported payments](https://github.com/Payum/Core/blob/master/Resources/docs/supported-payments.md).
+* [Supported gateways](https://github.com/Payum/Core/blob/master/Resources/docs/supported-gateways.md).
 * [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
 * [Capture script](https://github.com/Payum/Core/blob/master/Resources/docs/capture-script.md).
 * [Authorize script](https://github.com/Payum/Core/blob/master/Resources/docs/authorize-script.md).

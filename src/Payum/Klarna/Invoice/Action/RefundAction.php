@@ -1,13 +1,13 @@
 <?php
 namespace Payum\Klarna\Invoice\Action;
 
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Refund;
 use Payum\Klarna\Invoice\Request\Api\CreditPart;
 
-class RefundAction extends PaymentAwareAction
+class RefundAction extends GatewayAwareAction
 {
     /**
      * {@inheritDoc}
@@ -26,7 +26,7 @@ class RefundAction extends PaymentAwareAction
 
         $details->validateNotEmpty(array('invoice_number'));
 
-        $this->payment->execute(new CreditPart($details));
+        $this->gateway->execute(new CreditPart($details));
     }
 
     /**

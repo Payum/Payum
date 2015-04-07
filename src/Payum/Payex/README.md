@@ -3,7 +3,7 @@
 [![Total Downloads](https://poser.pugx.org/payum/payex/d/total.png)](https://packagist.org/packages/payum/payex)
 [![Latest Stable Version](https://poser.pugx.org/payum/payex/version.png)](https://packagist.org/packages/payum/payex)
 
-The lib implements [Payex](http://www.payexpim.com/) payment.
+The Payum extension. It provides [Payex](http://www.payexpim.com/) payment integration.
 
 ## Resources
 

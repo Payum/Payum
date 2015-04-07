@@ -70,23 +70,23 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowSetPaymentName()
+    public function shouldAllowSetGatewayName()
     {
         $token = new Token();
 
-        $token->setPaymentName('aName');
+        $token->setGatewayName('aName');
     }
 
     /**
      * @test
      */
-    public function shouldAllowGetPreviouslySetPaymentName()
+    public function shouldAllowGetPreviouslySetGatewayName()
     {
         $token = new Token();
 
-        $token->setPaymentName('theName');
+        $token->setGatewayName('theName');
 
-        $this->assertSame('theName', $token->getPaymentName());
+        $this->assertSame('theName', $token->getGatewayName());
     }
 
     /**

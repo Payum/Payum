@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core;
 
-interface GatewayFactoryInterface extends PaymentFactoryInterface
+interface GatewayFactoryInterface
 {
     /**
      * @param array $config

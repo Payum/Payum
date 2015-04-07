@@ -108,10 +108,10 @@ include 'config.php';
 $token = $requestVerifier->verify($_REQUEST);
 $requestVerifier->invalidate($token);
 
-$payment = $payum->getPayment($token->getPaymentName());
+$gateway = $payum->getGateway($token->getGatewayName());
 
 $agreementStatus = new GetHumanStatus($token);
-$payment->execute($agreementStatus);
+$gateway->execute($agreementStatus);
 
 if (!$agreementStatus->isCaptured()) {
     header('HTTP/1.1 400 Bad Request', true, 400);
@@ -132,8 +132,8 @@ $recurringPayment['BILLINGFREQUENCY'] = 7;
 $recurringPayment['PROFILESTARTDATE'] = date(DATE_ATOM);
 $recurringPayment['BILLINGPERIOD'] = Api::BILLINGPERIOD_DAY;
 
-$payment->execute(new CreateRecurringPaymentProfile($recurringPayment));
-$payment->execute(new Sync($recurringPayment));
+$gateway->execute(new CreateRecurringPaymentProfile($recurringPayment));
+$gateway->execute(new Sync($recurringPayment));
 
 $doneToken = $tokenFactory->createToken('paypal', $recurringPayment, 'done.php');
 

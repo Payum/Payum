@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Paypal\ProCheckout\Nvp\Action;
 
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -15,7 +15,7 @@ use Payum\Core\Request\Capture;
 /**
  * @author Ton Sharp <Forma-PRO@66ton99.org.ua>
  */
-class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
+class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
 {
     /**
      * @var Api
@@ -51,7 +51,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         $cardFields = array('ACCT', 'CVV2', 'EXPDATE');
         if (false == $model->validateNotEmpty($cardFields, false)) {
             try {
-                $this->payment->execute($obtainCreditCard = new ObtainCreditCard());
+                $this->gateway->execute($obtainCreditCard = new ObtainCreditCard());
 
                 $card = $obtainCreditCard->obtain();
 

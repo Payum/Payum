@@ -1,7 +1,7 @@
 {
     "name": "payum/authorize-net-aim",
     "type": "library",
-    "description": "Authorize.net advanced integration method (AIM).",
+    "description": "The Payum extension. It provides Authorize.Net AIM payment integration.",
     "keywords": ["payment", "authorize.net", "authorizenet"],
     "homepage": "http://payum.org",
     "license": "MIT",

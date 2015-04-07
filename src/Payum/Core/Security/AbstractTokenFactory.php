@@ -21,12 +21,12 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createToken($paymentName, $model, $targetPath, array $targetParameters = array(), $afterPath = null, array $afterParameters = array())
+    public function createToken($gatewayName, $model, $targetPath, array $targetParameters = array(), $afterPath = null, array $afterParameters = array())
     {
         /** @var TokenInterface $token */
         $token = $this->tokenStorage->create();
 
-        $token->setPaymentName($paymentName);
+        $token->setGatewayName($gatewayName);
 
         if ($model instanceof IdentityInterface) {
             $token->setDetails($model);

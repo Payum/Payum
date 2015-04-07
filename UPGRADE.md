@@ -1,19 +1,35 @@
 # Upgrades
 
+## 0.14 to 0.15
+
 * [order] The method getCreditCard was added to `OrderInterface` interface.
 * [klarna-checkout] `CreateOrderAction` and `UpdateOrderAction` do not do fetch any more.
 * `Payment` class deprecated and will be removed in 0.15. Use `Gateway`.
 * `PaymentInterface` interface deprecated and will be removed in 0.15. Use `GatewayInterface`.
 * `PaymentFactoryInterface` interface deprecated and will be removed in 0.15. Use `GatewayFactoryInterface`.
-* `PaymentFactoryInterface` interface deprecated and will be removed in 0.15. Use `GatewayFactoryInterface`.
 * `PaymentFactory` class deprecated and will be removed in 0.15. Use `GatewayFactory`.
 * `PaymentAwareInterface` interface deprecated and will be removed in 0.15. Use `GatewayAwareInterface`.
 * `PaymentFactoryRegistryInterface` interface deprecated and will be removed in 0.15. Use `GatewayFactoryRegistryInterface`.
+* Use `GatewayFactoryRegistryInterface::getGatewayFactory` method instead of `PaymentRegistryInterface::getPaymentFactory`.
+* Use `GatewayFactoryRegistryInterface::getGatewayFactories` method instead of `PaymentRegistryInterface::getPaymentFactories`.
 * `PaymentRegistryInterface` interface deprecated and will be removed in 0.15. Use `GatewayRegistryInterface`.
+* Use `GatewayRegistryInterface::getGateway` method instead of `PaymentRegistryInterface::getPayment`.
+* Use `GatewayRegistryInterface::getGateways` method instead of `PaymentRegistryInterface::getPayments`.
 * `PaymentConfigInterface` interface deprecated and will be removed in 0.15. Use `GatewayConfigInterface`.
 * `PaymentConfig` class deprecated and will be removed in 0.15. Use `GatewayConfig`.
+* `PaymentConfig::getPaymentName` and related property renamed to `GatewayConfig::getGatewayName`. 
 * `Order` class deprecated and will be removed in 0.15. Use `Payment`.
 * `OrderInterface` interface deprecated and will be removed in 0.15. Use `PaymentInterface`.
+* `Payum\AuthorizeNet\Aim\PaymentFactory` renamed to `AuthorizeNetAimGatewayFactory`.
+* `Payum\Core\Bridge\Symfony\Form\Type\PaymentConfigType` renamed to `GatewayConfigType`.
+* `Payum\Core\Bridge\Symfony\Form\Type\PaymentFactoriesChoiceType` renamed to `GatewayFactoriesChoiceType`.
+* [doctrine] PaymentConfig::paymentName property renamed to `gatewayName`. **You have to migrate your database**.
+* [doctrine] Token::paymentName property renamed to `gatewayName`. **You have to migrate your database**.
+* [doctrine] Order renamed to `Payment`. Database schema was changed. **You have to migrate your database**.
+* [propel] PaymentConfig::paymentName property renamed to `gatewayName`. **You have to migrate your database**.
+* [propel] Token::paymentName property renamed to `gatewayName`. **You have to migrate your database**.
+* [propel] Order renamed to `Payment`. Database schema was changed. **You have to migrate your database**.
+* [be2bill] Method `Api::prepareOnsitePayment` was renamed to `Api::prepareOffsitePayment`.
 
 ## 0.13 to 0.14
 

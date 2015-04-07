@@ -8,46 +8,45 @@ class Convert
     /**
      * @var mixed
      */
-    protected $from;
+    protected $source;
 
     /**
      * @var mixed
      */
+    protected $result;
+
+    /**
+     * @var string
+     */
     protected $to;
 
     /**
-     * @var TokenInterface|null
+     * @var TokenInterface
      */
-    protected $token;
+    private $token;
 
     /**
-     * @param mixed $from
+     * @param mixed $source
+     * @param string $to
      * @param TokenInterface $token
      */
-    public function __construct($from, TokenInterface $token = null)
+    public function __construct($source, $to, TokenInterface $token = null)
     {
-        $this->from = $from;
+        $this->source = $source;
+        $this->to = $to;
         $this->token = $token;
     }
 
     /**
      * @return mixed
      */
-    public function getFrom()
+    public function getSource()
     {
-        return $this->from;
+        return $this->source;
     }
 
     /**
-     * @return null|TokenInterface
-     */
-    public function getToken()
-    {
-        return $this->token;
-    }
-
-    /**
-     * @return array
+     * @return string
      */
     public function getTo()
     {
@@ -55,10 +54,26 @@ class Convert
     }
 
     /**
-     * @param array $to
+     * @return TokenInterface
      */
-    public function setTo(array $to)
+    public function getToken()
     {
-        $this->to = $to;
+        return $this->token;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResult()
+    {
+        return $this->result;
+    }
+
+    /**
+     * @param mixed $result
+     */
+    public function setResult($result)
+    {
+        $this->result = $result;
     }
 }

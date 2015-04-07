@@ -1,13 +1,13 @@
 <?php
 namespace Payum\Payex\Action;
 
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Payex\Request\Api\CheckOrder;
 use Payum\Core\Request\Sync;
 use Payum\Core\Exception\RequestNotSupportedException;
 
-class PaymentDetailsSyncAction extends PaymentAwareAction
+class PaymentDetailsSyncAction extends GatewayAwareAction
 {
     /**
      * {@inheritDoc}
@@ -20,7 +20,7 @@ class PaymentDetailsSyncAction extends PaymentAwareAction
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         if ($model['transactionNumber']) {
-            $this->payment->execute(new CheckOrder($request->getModel()));
+            $this->gateway->execute(new CheckOrder($request->getModel()));
         }
     }
 

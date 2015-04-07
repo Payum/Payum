@@ -2,7 +2,7 @@
 namespace Payum\Core\Tests;
 
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\PaymentInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Generic;
 use Payum\Core\Security\TokenInterface;
 
@@ -95,11 +95,11 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 
     /**

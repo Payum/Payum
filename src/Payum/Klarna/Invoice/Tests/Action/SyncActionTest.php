@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action;
 
-use Payum\Core\PaymentInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Sync;
 use Payum\Klarna\Invoice\Action\SyncAction;
 
@@ -10,11 +10,11 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfPaymentAwareAction()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\SyncAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
@@ -72,15 +72,15 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSubExecuteCheckOrderStatusIfReservedButNotActivated()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Klarna\Invoice\Request\Api\CheckOrderStatus'))
         ;
 
         $action = new SyncAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $request = new Sync(array(
             'rno' => 'aRno',
@@ -94,14 +94,14 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSubExecuteCheckOrderStatusIfNotReserved()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->never())
             ->method('execute')
         ;
 
         $action = new SyncAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $request = new Sync(array());
 
@@ -113,14 +113,14 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSubExecuteCheckOrderStatusIfReservedAndActivated()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->never())
             ->method('execute')
         ;
 
         $action = new SyncAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $request = new Sync(array(
             'rno' => 'aRno',
@@ -131,10 +131,10 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

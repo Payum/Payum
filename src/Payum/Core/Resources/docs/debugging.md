@@ -8,14 +8,14 @@ _**Council**: You can filter log by `[Payum]`. For example using `grep` tool._
 <?php
 use Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension;
 use Payum\Core\Tests\Mocks\Action\CaptureAction;
-use Payum\Core\Payment;
+use Payum\Core\Gateway;
 use Payum\Core\Request\Capture;
 
-$payment = new Payment;
-$payment->addExtension(new LogExecutedActionsExtension($logger));
-$payment->addAction(new CaptureAction);
+$gateway = new Gateway;
+$gateway->addExtension(new LogExecutedActionsExtension($logger));
+$gateway->addAction(new CaptureAction);
 
-$payment->execute(new Capture($model = new \stdClass));
+$gateway->execute(new Capture($model = new \stdClass));
 ```
 
 Here's an example of what the log may contain:

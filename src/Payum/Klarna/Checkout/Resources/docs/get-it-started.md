@@ -57,7 +57,7 @@ use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
 use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Security\GenericTokenFactory;
-use Payum\Klarn\Checkout\PaymentFactory as KlarnaPaymentFactory;
+use Payum\Klarn\Checkout\KlarnaCheckoutGatewayFactory;
 
 $tokenStorage = new FilesystemStorage('/path/to/storage', 'App\Model\PaymentSecurityToken', 'hash');
 $requestVerifier = new HttpRequestVerifier($tokenStorage);
@@ -68,15 +68,15 @@ $storages = array(
     $detailsClass => new FilesystemStorage('/path/to/storage', $detailsClass, 'id')
 );
 
-$payments = array();
+$gateways = array();
 
-$klarnaCheckoutFactory = new \Payum\Klarna\Checkout\PaymentFactory();
-$payments['klarna_checkout'] => $klarnaCheckoutFactory->create(array(
+$klarnaCheckoutFactory = new KlarnaCheckoutGatewayFactory();
+$gateways['klarna_checkout'] => $klarnaCheckoutFactory->create(array(
     'merchant_id' => 'EDIT IT',
     'secret' => 'EDIT IT',
 ));
 
-$payum = new SimpleRegistry($payments, $storages);
+$payum = new SimpleRegistry($gateways, $storages);
 
 $tokenFactory = new GenericTokenFactory(
     new TokenFactory($tokenStorage, $payum),
@@ -90,12 +90,12 @@ $tokenFactory = new GenericTokenFactory(
 ```
 
 An initial configuration for Payum basically wants to ensure we have things ready to be stored such as
-a token, or a payment details. We also would like to have a registry of various payments supported and the place where they can store their information (e.g. payment details).
+a token, or a payment details. We also would like to have a registry of various gateways supported and the place where they can store their information (e.g. payment details).
 
 _**Note**: Consider using something other than `FilesystemStorage` in production. `DoctrineStorage` may be a good alternative._
 
 First we have modify `config.php` a bit.
-We need to add payment factory and payment details storage.
+We need to add gateway factory and payment details storage.
 
 ## prepare.php
 
@@ -156,7 +156,7 @@ That's it. As you see we configured Klarna Checkout `config.php` and set details
 
 * [Core's Get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
 * [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
-* [Supported payments](https://github.com/Payum/Core/blob/master/Resources/docs/supported-payments.md).
+* [Supported gateways](https://github.com/Payum/Core/blob/master/Resources/docs/supported-gateways.md).
 * [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
 * [Capture script](https://github.com/Payum/Core/blob/master/Resources/docs/capture-script.md).
 * [Authorize script](https://github.com/Payum/Core/blob/master/Resources/docs/authorize-script.md).

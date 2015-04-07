@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Payex\Tests\Action;
 
-use Payum\Core\PaymentInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Sync;
 use Payum\Payex\Action\PaymentDetailsSyncAction;
 
@@ -14,7 +14,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Payex\Action\PaymentDetailsSyncAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
@@ -80,15 +80,15 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldDoSubExecuteCheckOrderApiRequest()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Payex\Request\Api\CheckOrder'))
         ;
 
         $action = new PaymentDetailsSyncAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute(new Sync(array(
             'transactionNumber' => 'aNum',
@@ -96,10 +96,10 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

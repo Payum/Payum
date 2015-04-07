@@ -3,24 +3,24 @@ namespace Payum\Klarna\Invoice\Action\Api;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\PaymentAwareInterface;
-use Payum\Core\PaymentInterface;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails;
 use Payum\Klarna\Invoice\Request\Api\ReserveAmount;
 
-class ReserveAmountAction extends BaseApiAwareAction implements PaymentAwareInterface
+class ReserveAmountAction extends BaseApiAwareAction implements GatewayAwareInterface
 {
     /**
-     * @var PaymentInterface
+     * @var GatewayInterface
      */
-    protected $payment;
+    protected $gateway;
 
     /**
      * {@inheritDoc}
      */
-    public function setPayment(PaymentInterface $payment)
+    public function setGateway(GatewayInterface $gateway)
     {
-        $this->payment = $payment;
+        $this->gateway = $gateway;
     }
 
     /**
@@ -37,7 +37,7 @@ class ReserveAmountAction extends BaseApiAwareAction implements PaymentAwareInte
         $klarna = $this->getKlarna();
 
         try {
-            $this->payment->execute(new PopulateKlarnaFromDetails($details, $klarna));
+            $this->gateway->execute(new PopulateKlarnaFromDetails($details, $klarna));
 
             $result = $klarna->reserveAmount(
                 $details['pno'],

@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Stripe\Action\Api;
 
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -10,7 +10,7 @@ use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateCharge;
 use Payum\Stripe\Request\Api\ObtainToken;
 
-class CreateCustomerAction extends PaymentAwareAction implements ApiAwareInterface
+class CreateCustomerAction extends GatewayAwareAction implements ApiAwareInterface
 {
     /**
      * @var Keys
@@ -42,7 +42,7 @@ class CreateCustomerAction extends PaymentAwareAction implements ApiAwareInterfa
         $model->validateNotEmpty(array('plan'));
 
         if (false == $model['card']) {
-            $this->payment->execute(new ObtainToken($model));
+            $this->gateway->execute(new ObtainToken($model));
         }
 
         try {

@@ -3,7 +3,7 @@
 [![Total Downloads](https://poser.pugx.org/payum/paypal-express-checkout-nvp/d/total.png)](https://packagist.org/packages/payum/paypal-express-checkout-nvp)
 [![Latest Stable Version](https://poser.pugx.org/payum/paypal-express-checkout-nvp/version.png)](https://packagist.org/packages/payum/paypal-express-checkout-nvp)
 
-Provide integration of PayPal Express Checkout API to payum.
+The Payum extension. It provides [Paypal ExpressCheckout](https://www.paypal.com/ua/webapps/mpp/express-checkout) payment integration.
 
 ## Resources
 

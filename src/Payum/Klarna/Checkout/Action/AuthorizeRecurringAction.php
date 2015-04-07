@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Klarna\Checkout\Action;
 
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -11,7 +11,7 @@ use Payum\Klarna\Checkout\Config;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\CreateOrder;
 
-class AuthorizeRecurringAction extends PaymentAwareAction implements ApiAwareInterface
+class AuthorizeRecurringAction extends GatewayAwareAction implements ApiAwareInterface
 {
     /**
      * @var Config
@@ -58,7 +58,7 @@ class AuthorizeRecurringAction extends PaymentAwareAction implements ApiAwareInt
             $this->config->acceptHeader = Constants::ACCEPT_HEADER_RECURRING_ORDER_ACCEPTED_V1;
             $this->config->baseUri = str_replace('{recurring_token}', $token, Constants::BASE_URI_RECURRING_LIVE);
 
-            $this->payment->execute($createOrderRequest = new CreateOrder($model));
+            $this->gateway->execute($createOrderRequest = new CreateOrder($model));
 
             $model->replace($createOrderRequest->getOrder()->marshal());
         } catch (\Exception $e) {

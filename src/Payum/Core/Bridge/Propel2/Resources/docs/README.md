@@ -14,7 +14,7 @@ Then run:
 $ bin/propel --config-dir=path/where/you/created/propel.ext --schema-dir=src/Payum/Core/Bridge/Propel2/Resources/config --output-dir=src/ build
 ```
 
-Then you can insert ```src/Payum/Core/Bridge/Propel2/Resources/install/order.sql``` and ```src/Payum/Core/Bridge/Propel2/Resources/install/token.sql```
+Then you can insert ```src/Payum/Core/Bridge/Propel2/Resources/install/payment.sql``` and ```src/Payum/Core/Bridge/Propel2/Resources/install/token.sql```
 in your database(s).
 
 You can copy the ```schema.xml``` file into your project resources and customize it.
@@ -25,8 +25,8 @@ $ bin/propel --config-dir=your/path/to/propel.xml/directory --schema-dir=your/pa
 ```
 
 If you want to add your own logic to the model classes, you can extend the following classes:
-- ```Payum\Core\Bridge\Propel2\Model\Order```
-- ```Payum\Core\Bridge\Propel2\Model\OrderQuery```
+- ```Payum\Core\Bridge\Propel2\Model\Payment```
+- ```Payum\Core\Bridge\Propel2\Model\PaymentQuery```
 - ```Payum\Core\Bridge\Propel2\Model\Token```
 - ```Payum\Core\Bridge\Propel2\Model\TokenQuery```
 

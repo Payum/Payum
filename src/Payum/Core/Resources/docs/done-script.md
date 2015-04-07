@@ -17,7 +17,7 @@ $token = $requestVerifier->verify($_REQUEST);
 $identity = $token->getDetails();
 $model = $payum->getStorage($identity->getClass())->find($identity);
 
-$payment = $payum->getPayment($token->getPaymentName());
+$gateway = $payum->getGateway($token->getPaymentName());
 
 // you can invalidate the token. The url could not be requested any more.
 // $requestVerifier->invalidate($token);
@@ -27,7 +27,7 @@ $payment = $payum->getPayment($token->getPaymentName());
 //$model = $payum->getStorage($identity->getClass())->find($identity);
 
 // or Payum can fetch the model for you while executing a request (Preferred).
-$payment->execute($status = new GetHumanStatus($token));
+$gateway->execute($status = new GetHumanStatus($token));
 $model = $status->getFirstModel());
 
 header('Content-Type: application/json');

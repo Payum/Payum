@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="http://xsd.propelorm.org/1.7/database.xsd">
 
-    <table name="Order">
+    <table name="Payment">
         <behavior name="auto_add_pk"/>
 
         <column name="number" type="VARCHAR"/>
@@ -25,7 +25,7 @@
         <column name="details" type="OBJECT"/>
         <column name="afterUrl" type="VARCHAR"/>
         <column name="targetUrl" type="VARCHAR"/>
-        <column name="paymentName" type="VARCHAR"/>
+        <column name="gatewayName" type="VARCHAR"/>
 
         <vendor type="mysql">
             <parameter name="Engine" value="InnoDB"/>

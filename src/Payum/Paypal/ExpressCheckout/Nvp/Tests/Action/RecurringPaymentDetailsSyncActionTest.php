@@ -9,11 +9,11 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfPaymentAwareAction()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsSyncAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
@@ -67,14 +67,14 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldDoNothingIfProfileIdNotSet()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->never())
             ->method('execute')
         ;
 
         $action = new RecurringPaymentDetailsSyncAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $request = new Sync(array(
             'BILLINGPERIOD' => 12,
@@ -88,15 +88,15 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldRequestGetRecurringPaymentsProfileDetailsActionIfProfileIdSetInModel()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetRecurringPaymentsProfileDetails'))
         ;
 
         $action = new RecurringPaymentDetailsSyncAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute(new Sync(array(
             'BILLINGPERIOD' => 'aBillingPeriod',
@@ -105,10 +105,10 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

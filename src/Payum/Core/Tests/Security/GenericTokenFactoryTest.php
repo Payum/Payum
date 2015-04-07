@@ -30,7 +30,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreateCustomTokenWithAfterPath()
     {
-        $paymentName = 'thePaymentName';
+        $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $targetPath = 'theTargetPath';
         $targetParameters = array('target' => 'val');
@@ -44,7 +44,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('createToken')
             ->with(
-                $paymentName,
+                $gatewayName,
                 $this->identicalTo($model),
                 $targetPath,
                 $targetParameters,
@@ -58,7 +58,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new GenericTokenFactory($tokenFactoryMock, array());
 
         $actualToken = $factory->createToken(
-            $paymentName,
+            $gatewayName,
             $model,
             $targetPath,
             $targetParameters,
@@ -74,7 +74,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreateCustomTokenWithoutAfterPath()
     {
-        $paymentName = 'thePaymentName';
+        $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $targetPath = 'theTargetPath';
         $targetParameters = array('target' => 'val');
@@ -86,7 +86,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('createToken')
             ->with(
-                $paymentName,
+                $gatewayName,
                 $this->identicalTo($model),
                 $targetPath,
                 $targetParameters,
@@ -100,7 +100,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new GenericTokenFactory($tokenFactoryMock, array());
 
         $actualToken = $factory->createToken(
-            $paymentName,
+            $gatewayName,
             $model,
             $targetPath,
             $targetParameters
@@ -117,7 +117,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfCapturePathNotConfigured()
     {
-        $paymentName = 'thePaymentName';
+        $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $afterPath = 'theAfterPath';
         $afterParameters = array('after' => 'val');
@@ -132,7 +132,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
 
         $factory->createCaptureToken(
-            $paymentName,
+            $gatewayName,
             $model,
             $afterPath,
             $afterParameters
@@ -144,7 +144,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreateCaptureToken()
     {
-        $paymentName = 'thePaymentName';
+        $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $capturePath = 'theCapturePath';
         $afterPath = 'theAfterPath';
@@ -161,7 +161,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(0))
             ->method('createToken')
             ->with(
-                $paymentName,
+                $gatewayName,
                 $this->identicalTo($model),
                 $afterPath,
                 $afterParameters,
@@ -174,7 +174,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(1))
             ->method('createToken')
             ->with(
-                $paymentName,
+                $gatewayName,
                 $this->identicalTo($model),
                 $capturePath,
                 array(),
@@ -190,7 +190,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
         ));
 
         $actualToken = $factory->createCaptureToken(
-            $paymentName,
+            $gatewayName,
             $model,
             $afterPath,
             $afterParameters
@@ -207,7 +207,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfAuthorizePathNotConfigured()
     {
-        $paymentName = 'thePaymentName';
+        $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $afterPath = 'theAfterPath';
         $afterParameters = array('after' => 'val');
@@ -222,7 +222,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
 
         $factory->createAuthorizeToken(
-            $paymentName,
+            $gatewayName,
             $model,
             $afterPath,
             $afterParameters
@@ -234,7 +234,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreateAuthorizeToken()
     {
-        $paymentName = 'thePaymentName';
+        $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $authorizePath = 'theAuthorizePath';
         $afterPath = 'theAfterPath';
@@ -251,7 +251,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(0))
             ->method('createToken')
             ->with(
-                $paymentName,
+                $gatewayName,
                 $this->identicalTo($model),
                 $afterPath,
                 $afterParameters,
@@ -264,7 +264,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(1))
             ->method('createToken')
             ->with(
-                $paymentName,
+                $gatewayName,
                 $this->identicalTo($model),
                 $authorizePath,
                 array(),
@@ -280,7 +280,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
         ));
 
         $actualToken = $factory->createAuthorizeToken(
-            $paymentName,
+            $gatewayName,
             $model,
             $afterPath,
             $afterParameters
@@ -297,7 +297,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfRefundPathNotConfigured()
     {
-        $paymentName = 'thePaymentName';
+        $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $afterPath = 'theAfterPath';
         $afterParameters = array('after' => 'val');
@@ -312,7 +312,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
 
         $factory->createRefundToken(
-            $paymentName,
+            $gatewayName,
             $model,
             $afterPath,
             $afterParameters
@@ -324,7 +324,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreateRefundToken()
     {
-        $paymentName = 'thePaymentName';
+        $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $refundPath = 'theRefundPath';
         $afterPath = 'theAfterPath';
@@ -341,7 +341,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(0))
             ->method('createToken')
             ->with(
-                $paymentName,
+                $gatewayName,
                 $this->identicalTo($model),
                 $afterPath,
                 $afterParameters,
@@ -354,7 +354,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(1))
             ->method('createToken')
             ->with(
-                $paymentName,
+                $gatewayName,
                 $this->identicalTo($model),
                 $refundPath,
                 array(),
@@ -370,7 +370,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
         ));
 
         $actualToken = $factory->createRefundToken(
-            $paymentName,
+            $gatewayName,
             $model,
             $afterPath,
             $afterParameters
@@ -384,7 +384,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreateRefundTokenWithoutAfterPath()
     {
-        $paymentName = 'thePaymentName';
+        $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $refundPath = 'theRefundPath';
 
@@ -395,7 +395,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('createToken')
             ->with(
-                $paymentName,
+                $gatewayName,
                 $this->identicalTo($model),
                 $refundPath,
                 array(),
@@ -409,7 +409,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             'refund' => $refundPath
         ));
 
-        $actualToken = $factory->createRefundToken($paymentName, $model);
+        $actualToken = $factory->createRefundToken($gatewayName, $model);
 
         $this->assertSame($refundToken, $actualToken);
     }
@@ -422,7 +422,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotifyPathNotConfigured()
     {
-        $paymentName = 'thePaymentName';
+        $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $afterPath = 'theAfterPath';
         $afterParameters = array('after' => 'val');
@@ -437,7 +437,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
 
         $factory->createNotifyToken(
-            $paymentName,
+            $gatewayName,
             $model,
             $afterPath,
             $afterParameters
@@ -449,7 +449,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreateNotifyToken()
     {
-        $paymentName = 'thePaymentName';
+        $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $notifyPath = 'theNotifyPath';
 
@@ -460,7 +460,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('createToken')
             ->with(
-                $paymentName,
+                $gatewayName,
                 $this->identicalTo($model),
                 $notifyPath,
                 array(),
@@ -474,7 +474,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             'notify' => $notifyPath
         ));
 
-        $actualToken = $factory->createNotifyToken($paymentName, $model);
+        $actualToken = $factory->createNotifyToken($gatewayName, $model);
 
         $this->assertSame($notifyToken, $actualToken);
     }
@@ -484,7 +484,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreateNotifyTokenWithoutModel()
     {
-        $paymentName = 'thePaymentName';
+        $gatewayName = 'theGatewayName';
         $notifyPath = 'theNotifyPath';
 
         $notifyToken = new Token();
@@ -494,7 +494,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('createToken')
             ->with(
-                $paymentName,
+                $gatewayName,
                 null,
                 $notifyPath,
                 array(),
@@ -508,7 +508,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
             'notify' => $notifyPath
         ));
 
-        $actualToken = $factory->createNotifyToken($paymentName);
+        $actualToken = $factory->createNotifyToken($gatewayName);
 
         $this->assertSame($notifyToken, $actualToken);
     }

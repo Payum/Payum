@@ -67,15 +67,15 @@ $storages = array(
     $detailsClass => new FilesystemStorage('/path/to/storage', $detailsClass, 'id')
 );
 
-$payments = array();
+$gateways = array();
 
 $config = new Config;
 $config->secret = 'EDIT IT';
 $config->eid = 'EDIT IT';
 $config->mode = ;
 
-$klarnaInvoiceFactory = new \Payum\Klarna\Invoice\PaymentFactory();
-$payments['klarna_invoice'] => $klarnaInvoiceFactory->create(array(
+$klarnaInvoiceFactory = new \Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory();
+$gateways['klarna_invoice'] => $klarnaInvoiceFactory->create(array(
     'eid' => 'EDIT IT',
     'secret' => 'EDIT IT',
     'country' => 'SE',
@@ -84,7 +84,7 @@ $payments['klarna_invoice'] => $klarnaInvoiceFactory->create(array(
     'sandbox' => true,
 ));
 
-$payum = new SimpleRegistry($payments, $storages);
+$payum = new SimpleRegistry($gateways, $storages);
 
 $tokenFactory = new GenericTokenFactory(
     new TokenFactory($tokenStorage, $payum),
@@ -98,12 +98,12 @@ $tokenFactory = new GenericTokenFactory(
 ```
 
 An initial configuration for Payum basically wants to ensure we have things ready to be stored such as
-a token, or a payment details. We also would like to have a registry of various payments supported and the place where they can store their information (e.g. payment details).
+a token, or a payment details. We also would like to have a registry of various gateways supported and the place where they can store their information (e.g. payment details).
 
 _**Note**: Consider using something other than `FilesystemStorage` in production. `DoctrineStorage` may be a good alternative._
 
 First we have modify `config.php` a bit.
-We need to add payment factory and payment details storage.
+We need to add gateway factory and payment details storage.
 
 ## prepare.php
 
@@ -114,8 +114,8 @@ We need to add payment factory and payment details storage.
 
 include 'config.php';
 
-$payment = $payum->getPayment('klarna_invoice');
-$payment->execute($getAddresses = new GetAddresses($pno));
+$gateway = $payum->getGateway('klarna_invoice');
+$gateway->execute($getAddresses = new GetAddresses($pno));
 
 $storage = $payum->getStorage($detailsClass);
 $storage = $this->getPayum()->getStorage('Acme\PaymentBundle\Model\PaymentDetails');
@@ -156,7 +156,7 @@ That's it. As you see we configured Klarna Invoice `config.php` and set details 
 
 * [Core's Get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
 * [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
-* [Supported payments](https://github.com/Payum/Core/blob/master/Resources/docs/supported-payments.md).
+* [Supported gateways](https://github.com/Payum/Core/blob/master/Resources/docs/supported-gateways.md).
 * [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
 * [Capture script](https://github.com/Payum/Core/blob/master/Resources/docs/capture-script.md).
 * [Authorize script](https://github.com/Payum/Core/blob/master/Resources/docs/authorize-script.md).

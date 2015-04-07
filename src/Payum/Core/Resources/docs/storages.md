@@ -2,8 +2,8 @@
 
 Storage allow you save,fetch payment related information. 
 They could be used explicitly, it means you have to call save or fetch methods when it is required. 
-Or you can integrate a storage to a payment using `StorageExtension`. 
-In this case every time payment finish to execute a request it stores the information. 
+Or you can integrate a storage to a gateway using `StorageExtension`. 
+In this case every time gateway finish to execute a request it stores the information. 
 `StorageExtension` could also load a model by it is `Identificator` so you do not have to care about that.
 
 Explicitly used example:
@@ -12,7 +12,7 @@ Explicitly used example:
 <?php
 use Payum\Core\Storage\FilesystemStorage;
 
-$storage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Order', 'number');
+$storage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Payment', 'number');
 
 $order = $storage->create();
 $order->setTotalAmount(123);
@@ -28,11 +28,11 @@ Implicitly used example:
 ```php
 <?php
 use Payum\Core\Extension\StorageExtension;
-use Payum\Core\Payment;
+use Payum\Core\Gateway;
 use Payum\Core\Storage\FilesystemStorage;
 
-$payment->addExtension(new StorageExtension(
-   new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Order', 'number')
+$gateway->addExtension(new StorageExtension(
+   new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Payment', 'number')
 ));
 ```
 
@@ -43,22 +43,22 @@ Usage of a model identity with the extension:
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Model\Identity;
 use Payum\Core\Storage\FilesystemStorage;
-use Payum\Core\Payment;
+use Payum\Core\Gateway;
 use Payum\Core\Request\Capture;
 
-$storage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Order', 'number');
+$storage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Payment', 'number');
 
 $order = $storage->create();
 $storage->update($order);
 
-$payment->addExtension(new StorageExtension($storage));
+$gateway->addExtension(new StorageExtension($storage));
 
-$payment->execute($capture = new Capture(
+$gateway->execute($capture = new Capture(
     $storage->identify($order)
 ));
 
 echo get_class($capture->getModel());
-// -> Payum\Core\Model\Order
+// -> Payum\Core\Model\Payment
 ```
 
 ## Doctrine ORM
@@ -90,13 +90,13 @@ class PaymentToken extends Token
 namespace Acme\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Payum\Core\Model\Order as BaseOrder;
+use Payum\Core\Model\Payment as BasePayment;
 
 /**
  * @ORM\Table
  * @ORM\Entity
  */
-class Order extends BaseOrder
+class Payment extends BasePayment
 {
     /**
      * @ORM\Column(name="id", type="integer")
@@ -146,7 +146,7 @@ $connection = array('driver' => 'pdo_sqlite', 'path' => ':memory:');
 
 $orderStorage = new DoctrineStorage(
    EntityManager::create($connection, $config),
-   'Payum\Entity\Order'
+   'Payum\Entity\Payment'
 );
 
 $tokenStorage = new DoctrineStorage(
@@ -181,12 +181,12 @@ class PaymentToken extends Token
 namespace Acme\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as Mongo;
-use Payum\Core\Model\Order as BaseOrder;
+use Payum\Core\Model\Payment as BasePayment;
 
 /**
  * @Mongo\Document
  */
-class Order extends BaseOrder
+class Payment extends BasePayment
 {
     /**
      * @Mongo\Id
@@ -250,7 +250,7 @@ $connection = new Connection(null, array(), $config);
 
 $orderStorage = new DoctrineStorage(
     DocumentManager::create($connection, $config),
-    'Acme\Document\Order'
+    'Acme\Document\Payment'
 );
 
 $tokenStorage = new DoctrineStorage(
@@ -267,7 +267,7 @@ use Payum\Core\Storage\FilesystemStorage;
 
 $storage = new FilesystemStorage(
     '/path/to/storage', 
-    'Payum\Core\Model\Order', 
+    'Payum\Core\Model\Payment', 
     'number'
 );
 ```
@@ -295,7 +295,7 @@ $ bin/propel --config-dir=your/path/to/propel.xml/directory --schema-dir=your/pa
 ```
 
 If you want to add your own logic to the model classes, you can extend the following classes:
-- ```Payum\Core\Bridge\Propel2\Model\Order```
+- ```Payum\Core\Bridge\Propel2\Model\Payment```
 - ```Payum\Core\Bridge\Propel2\Model\OrderQuery```
 - ```Payum\Core\Bridge\Propel2\Model\Token```
 - ```Payum\Core\Bridge\Propel2\Model\TokenQuery```

@@ -3,7 +3,7 @@
 [![Total Downloads](https://poser.pugx.org/payum/Stripe/d/total.png)](https://packagist.org/packages/payum/Stripe)
 [![Latest Stable Version](https://poser.pugx.org/payum/Stripe/version.png)](https://packagist.org/packages/payum/Stripe)
 
-The lib implements [stripe](https://stripe.com) payment.
+The Payum extension. It provides [Stripe](https://stripe.com) payment integration.
 
 ## Resources
 

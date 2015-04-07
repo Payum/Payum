@@ -3,7 +3,7 @@
 [![Total Downloads](https://poser.pugx.org/payum/be2bill/d/total.png)](https://packagist.org/packages/payum/be2bill)
 [![Latest Stable Version](https://poser.pugx.org/payum/be2bill/version.png)](https://packagist.org/packages/payum/be2bill)
 
-The lib implements [Be2Bill](http://www.be2bill.com/) payment.
+The Payum extension. It provides [Be2Bill](http://www.be2bill.com/) payment integration.
 
 ## Resources
 
