@@ -1,14 +1,14 @@
 <?php
 namespace Payum\Core\Tests\Action;
 
-class PaymentAwareActionTest extends \PHPUnit_Framework_TestCase
+class GatewayAwareActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Action\PaymentAwareAction');
+        $rc = new \ReflectionClass('Payum\Core\Action\GatewayAwareAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
@@ -16,24 +16,24 @@ class PaymentAwareActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementPaymentAwareInterface()
+    public function shouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Action\PaymentAwareAction');
+        $rc = new \ReflectionClass('Payum\Core\Action\GatewayAwareAction');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentAwareInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayAwareInterface'));
     }
 
     /**
      * @test
      */
-    public function shouldSetPaymentToProperty()
+    public function shouldSetGatewayToProperty()
     {
-        $payment = $this->getMock('Payum\Core\PaymentInterface');
+        $gateway = $this->getMock('Payum\Core\GatewayInterface');
 
-        $action = $this->getMockForAbstractClass('Payum\Core\Action\PaymentAwareAction');
+        $action = $this->getMockForAbstractClass('Payum\Core\Action\GatewayAwareAction');
 
-        $action->setPayment($payment);
+        $action->setGateway($gateway);
 
-        $this->assertAttributeSame($payment, 'payment', $action);
+        $this->assertAttributeSame($gateway, 'gateway', $action);
     }
 }

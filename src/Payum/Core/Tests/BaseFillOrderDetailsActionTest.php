@@ -2,7 +2,7 @@
 namespace Payum\Core\Tests;
 
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\Model\Order;
+use Payum\Core\Model\Payment;
 use Payum\Core\Request\Generic;
 
 abstract class BaseFillOrderDetailsActionTest extends \PHPUnit_Framework_TestCase
@@ -20,9 +20,9 @@ abstract class BaseFillOrderDetailsActionTest extends \PHPUnit_Framework_TestCas
     public function provideSupportedRequests()
     {
         return array(
-            array(new $this->requestClass(new Order())),
-            array(new $this->requestClass($this->getMock('Payum\Core\Model\OrderInterface'))),
-            array(new $this->requestClass(new Order(), $this->getMock('Payum\Core\Security\TokenInterface'))),
+            array(new $this->requestClass(new Payment())),
+            array(new $this->requestClass($this->getMock('Payum\Core\Model\PaymentInterface'))),
+            array(new $this->requestClass(new Payment(), $this->getMock('Payum\Core\Security\TokenInterface'))),
         );
     }
 

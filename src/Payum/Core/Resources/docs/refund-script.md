@@ -8,11 +8,11 @@ To perform a refund you just have to do:
 <?php
 use Payum\Core\Request\Refund;
 
-$payment->execute(new Refund($order));
+$gateway->execute(new Refund($order));
 
 // or
 
-$payment->execute(new Refund($details));
+$gateway->execute(new Refund($details));
 ```
 
 _**Note**: If you've got the "RequestNotSupported" it either means Payum or a gateway do not support the refund._
@@ -23,13 +23,13 @@ To use that you have to configure token factory and create a refund script:
 
 ```php
 <?php
-$token = $tokenFactory->createRefundToken($paymentName, $details, 'afterRefundUrl');
+$token = $tokenFactory->createRefundToken($gatewayName, $details, 'afterRefundUrl');
 
 header("Location: ".$token->getTargetUrl());
 ```
 
 This is the script which does all the job related to capturing payments. 
-It may show a credit card form, an iframe or redirect a user to payment side. 
+It may show a credit card form, an iframe or redirect a user to gateway side. 
 The action provides some basic security features. 
 Each capture url is completely unique for each purchase, and once we done the url is invalidated.
 After a user will be redirected to after url, in our case it will be `done.php` script. 
@@ -45,9 +45,9 @@ use Payum\Core\Reply\HttpRedirect;
 include 'config.php';
 
 $token = $requestVerifier->verify($_REQUEST);
-$payment = $payum->getPayment($token->getPaymentName());
+$gateway = $payum->getGateway($token->getGatewayName());
 
-if ($reply = $payment->execute(new Refund($token), true)) {
+if ($reply = $gateway->execute(new Refund($token), true)) {
     if ($reply instanceof HttpRedirect) {
         header("Location: ".$reply->getUrl());
         die();

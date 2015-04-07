@@ -4,7 +4,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 use Payum\Core\Model\Token;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\FillOrderDetailsAction;
-use Payum\Core\Model\Order;
+use Payum\Core\Model\Payment;
 use Payum\Core\Request\FillOrderDetails;
 
 class FillOrderDetailsActionTest extends GenericActionTest
@@ -16,9 +16,9 @@ class FillOrderDetailsActionTest extends GenericActionTest
     public function provideSupportedRequests()
     {
         return array(
-            array(new $this->requestClass(new Order())),
-            array(new $this->requestClass($this->getMock('Payum\Core\Model\OrderInterface'))),
-            array(new $this->requestClass(new Order(), $this->getMock('Payum\Core\Security\TokenInterface'))),
+            array(new $this->requestClass(new Payment())),
+            array(new $this->requestClass($this->getMock('Payum\Core\Model\PaymentInterface'))),
+            array(new $this->requestClass(new Payment(), $this->getMock('Payum\Core\Security\TokenInterface'))),
         );
     }
 
@@ -37,7 +37,7 @@ class FillOrderDetailsActionTest extends GenericActionTest
      */
     public function shouldCorrectlyConvertOrderToDetailsAndSetItBack()
     {
-        $order = new Order();
+        $order = new Payment();
         $order->setNumber('theNumber');
         $order->setCurrencyCode('USD');
         $order->setTotalAmount(123);
@@ -68,7 +68,7 @@ class FillOrderDetailsActionTest extends GenericActionTest
      */
     public function shouldNotOverwriteAlreadySetExtraDetails()
     {
-        $order = new Order();
+        $order = new Payment();
         $order->setCurrencyCode('USD');
         $order->setTotalAmount(123);
         $order->setDescription('the description');

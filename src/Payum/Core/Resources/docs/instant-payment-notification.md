@@ -1,6 +1,6 @@
 # Instant payment notification.
 
-A notification is a callback. A payment gateway can send it back to us to let us know about changes.
+A notification is a callback. A gateway can send it back to us to let us know about changes.
 It could be [Paypal Instant Payment Notification (IPN)](https://developer.paypal.com/webapps/developer/docs/classic/products/instant-payment-notification/) or [Payex Transaction Callback](http://www.payexpim.com/quick-guide/9-transaction-callback/) for example.
 Here in this chapter we show you how to store it somewhere and process it later (with a cron script for example).
 
@@ -23,10 +23,10 @@ Then we have to do our notification action which would actually do all the job:
 
 ```php
 <?php
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Request\Notify;
 
-class StoreNotificationAction extends PaymentAwareAction
+class StoreNotificationAction extends GatewayAwareAction
 {
     protected $notificationStorage;
 
@@ -39,12 +39,12 @@ class StoreNotificationAction extends PaymentAwareAction
     {
         $notification = $this->notificationStorage->create();
 
-        $this->payment->execute($getHttpRequest = new GetHttpRequest);
+        $this->gateway->execute($getHttpRequest = new GetHttpRequest);
         foreach ($getHttpRequest->query as $name => $value) {
-            $paymentNotification[$name] => $value;
+            $notification[$name] => $value;
         }
         foreach ($getHttpRequest->request as $name => $value) {
-            $paymentNotification[$name] => $value;
+            $notification[$name] => $value;
         }
 
         $this->notificationStorage->update($notification);
@@ -73,7 +73,7 @@ $storeNotificationAction = new StoreNotificationAction(
     new FilesystemStorage('/path/to/storage', 'Notification')
 );
 
-$payum->getPayment('paypal')->addAction($storeNotificationAction);
+$payum->getGateway('paypal')->addAction($storeNotificationAction);
 ```
 
 Now we have to implement `notify.php` script which must be accessible from the internet.
@@ -87,14 +87,14 @@ use Payum\Core\Request\Notify;
 include 'config.php';
 
 $token = $requestVerifier->verify();
-$payment = $payum->getPayment($token->getPaymentName());
+$gateway = $payum->getGateway($token->getGatewayName());
 
-$payment->execute(new Notify($token));
+$gateway->execute(new Notify($token));
 ```
 
 ## Setup Paypal IPN.
 
-The code above could be reused by any payment.
+The code above could be reused with any other gateway.
 Now I want to show changes need to enable Paypal IPN. To do so we have to modify `prepare.php` a bit:
 
 ```php

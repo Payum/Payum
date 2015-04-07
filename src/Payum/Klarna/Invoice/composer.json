@@ -1,7 +1,7 @@
 {
     "name": "payum/klarna-invoice",
     "type": "library",
-    "description": "Klarna Invoice",
+    "description": "The Payum extension. It provides Klarna Invoice payment integration.",
     "keywords": [
         "payment",
         "klarna"

@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Bridge\Symfony\Action;
 
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Symfony\Reply\HttpResponse;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -13,7 +13,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ObtainCreditCardAction extends PaymentAwareAction
+class ObtainCreditCardAction extends GatewayAwareAction
 {
     /**
      * @var FormFactoryInterface
@@ -79,7 +79,7 @@ class ObtainCreditCardAction extends PaymentAwareAction
         $renderTemplate = new RenderTemplate($this->templateName, array(
             'form' => $form->createView(),
         ));
-        $this->payment->execute($renderTemplate);
+        $this->gateway->execute($renderTemplate);
 
         throw new HttpResponse(new Response($renderTemplate->getResult(), 200, array(
             'Cache-Control' => 'no-store, no-cache, max-age=0, post-check=0, pre-check=0',

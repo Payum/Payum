@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
-use Payum\Core\PaymentInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Klarna\Invoice\Action\Api\ReserveAmountAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\ReserveAmount;
@@ -21,11 +21,11 @@ class ReserveAmountActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementsPaymentAwareInterface()
+    public function shouldImplementsGatewayAwareInterface()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\ReserveAmountAction');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentAwareInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayAwareInterface'));
     }
 
     /**
@@ -47,13 +47,13 @@ class ReserveAmountActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowSetPayment()
+    public function shouldAllowSetGateway()
     {
         $action = new ReserveAmountAction($this->createKlarnaMock());
 
-        $action->setPayment($payment = $this->getMock('Payum\Core\PaymentInterface'));
+        $action->setGateway($gateway = $this->getMock('Payum\Core\GatewayInterface'));
 
-        $this->assertAttributeSame($payment, 'payment', $action);
+        $this->assertAttributeSame($gateway, 'gateway', $action);
     }
 
     /**
@@ -135,8 +135,8 @@ class ReserveAmountActionTest extends \PHPUnit_Framework_TestCase
             'reservation_flags' => 'theFlags',
         );
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails'))
@@ -157,7 +157,7 @@ class ReserveAmountActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new ReserveAmountAction($klarnaMock);
         $action->setApi(new Config());
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute($reserve = new ReserveAmount($details));
 
@@ -178,8 +178,8 @@ class ReserveAmountActionTest extends \PHPUnit_Framework_TestCase
             'reservation_flags' => 'theFlags',
         );
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails'))
@@ -200,7 +200,7 @@ class ReserveAmountActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new ReserveAmountAction($klarnaMock);
         $action->setApi(new Config());
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute($reserve = new ReserveAmount($details));
 
@@ -225,10 +225,10 @@ class ReserveAmountActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

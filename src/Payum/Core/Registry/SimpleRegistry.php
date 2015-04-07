@@ -2,7 +2,7 @@
 namespace Payum\Core\Registry;
 
 use Payum\Core\Extension\StorageExtension;
-use Payum\Core\Payment;
+use Payum\Core\Gateway;
 
 class SimpleRegistry extends AbstractRegistry
 {
@@ -14,13 +14,13 @@ class SimpleRegistry extends AbstractRegistry
     /**
      * {@inheritDoc}
      */
-    public function getPayment($name)
+    public function getGateway($name)
     {
-        $payment = parent::getPayment($name);
+        $gateway = parent::getGateway($name);
 
-        $this->addStorageToPayment($name);
+        $this->addStorageToGateway($name);
 
-        return $payment;
+        return $gateway;
     }
 
     /**
@@ -34,7 +34,7 @@ class SimpleRegistry extends AbstractRegistry
     /**
      * @param string|null $name
      */
-    protected function addStorageToPayment($name)
+    protected function addStorageToGateway($name)
     {
         if (isset($this->initializedStorageExtensions[$name])) {
             return;
@@ -42,13 +42,13 @@ class SimpleRegistry extends AbstractRegistry
 
         $this->initializedStorageExtensions[$name] = true;
 
-        $payment = $this->getPayment($name);
-        if (false == $payment instanceof Payment) {
+        $gateway = $this->getGateway($name);
+        if (false == $gateway instanceof Gateway) {
             return;
         }
 
         foreach ($this->getStorages() as $storage) {
-            $payment->addExtension(new StorageExtension($storage));
+            $gateway->addExtension(new StorageExtension($storage));
         }
     }
 }

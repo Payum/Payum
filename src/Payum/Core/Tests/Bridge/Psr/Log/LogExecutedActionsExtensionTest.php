@@ -384,7 +384,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
         $logger
             ->expects($this->at(0))
             ->method('debug')
-            ->with('[Payum] 1# Payment::execute(string) throws exception LogicException')
+            ->with('[Payum] 1# Gateway::execute(string) throws exception LogicException')
         ;
 
         $extension = new LogExecutedActionsExtension($logger);

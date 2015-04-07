@@ -21,12 +21,10 @@ Let's modify `config.php` a bit.
 <?php
 //config.php
 
-use Payum\Offline\PaymentFactory as OfflinePaymentFactory;
-
 // ...
 
-$offlineFactory = new OfflinePaymentFactory();
-$payments['offline'] = $offlineFactory->create();
+$factory = new \Payum\Offline\OfflinePaymentFactory();
+$gateways['offline'] = $factory->create();
 ```
 
 ## prepare.php

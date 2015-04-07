@@ -17,20 +17,20 @@ class CaptureActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldBeSubClassOfPaymentAwareAction()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
      * @test
      */
-    public function shouldSetZeroPaymentActionAsSell()
+    public function shouldSetZeroGatewayActionAsSell()
     {
         $action = new CaptureAction();
-        $action->setPayment($this->createPaymentMock());
+        $action->setGateway($this->createGatewayMock());
 
         $action->execute($request = new Capture(array()));
 
@@ -44,20 +44,20 @@ class CaptureActionTest extends GenericActionTest
      */
     public function shouldRequestSetExpressCheckoutActionAndAuthorizeActionIfTokenNotSetInModel()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout'))
         ;
-        $paymentMock
+        $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken'))
         ;
 
         $action = new CaptureAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute(new Capture(array()));
     }
@@ -67,8 +67,8 @@ class CaptureActionTest extends GenericActionTest
      */
     public function shouldNotExecuteAnythingIfSetExpressCheckoutActionFails()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout'))
@@ -80,7 +80,7 @@ class CaptureActionTest extends GenericActionTest
         ;
 
         $action = new CaptureAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute(new Capture(array()));
     }
@@ -98,8 +98,8 @@ class CaptureActionTest extends GenericActionTest
         $token->setTargetUrl($expectedTargetUrl);
         $token->setDetails(array());
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout'))
@@ -111,7 +111,7 @@ class CaptureActionTest extends GenericActionTest
         ;
 
         $action = new CaptureAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $request = new Capture($token);
         $request->setModel(array());
@@ -132,8 +132,8 @@ class CaptureActionTest extends GenericActionTest
         $token->setTargetUrl($expectedCancelUrl);
         $token->setDetails(array());
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout'))
@@ -145,7 +145,7 @@ class CaptureActionTest extends GenericActionTest
         ;
 
         $action = new CaptureAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $request = new Capture($token);
         $request->setModel(array());
@@ -158,15 +158,15 @@ class CaptureActionTest extends GenericActionTest
      */
     public function shouldNotRequestSetExpressCheckoutActionAndAuthorizeActionIfTokenSetInModel()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
 
         $action = new CaptureAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute(new Capture(array(
             'TOKEN' => 'aToken',
@@ -176,22 +176,22 @@ class CaptureActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldRequestDoExpressCheckoutPaymentActionIfCheckoutStatusNotInitiatedAndPayerIdSetInModel()
+    public function shouldRequestDoExpressCheckoutGatewayActionIfCheckoutStatusNotInitiatedAndPayerIdSetInModel()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment'))
         ;
-        $paymentMock
+        $gatewayMock
             ->expects($this->at(2))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
 
         $action = new CaptureAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute(new Capture(array(
             'TOKEN' => 'aToken',
@@ -204,17 +204,17 @@ class CaptureActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldNotRequestDoExpressCheckoutPaymentActionIfPayerIdNotSetInModel()
+    public function shouldNotRequestDoExpressCheckoutGatewayActionIfPayerIdNotSetInModel()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
 
         $action = new CaptureAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute(new Capture(array(
             'TOKEN' => 'aToken',
@@ -226,22 +226,22 @@ class CaptureActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldNotRequestDoExpressCheckoutPaymentActionIfCheckoutStatusOtherThenNotInitiatedSetInModel()
+    public function shouldNotRequestDoExpressCheckoutGatewayActionIfCheckoutStatusOtherThenNotInitiatedSetInModel()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
-        $paymentMock
+        $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
 
         $action = new CaptureAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute(new Capture(array(
             'TOKEN' => 'aToken',
@@ -252,22 +252,22 @@ class CaptureActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldNotRequestDoExpressCheckoutPaymentActionIfAmountZero()
+    public function shouldNotRequestDoExpressCheckoutGatewayActionIfAmountZero()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
-        $paymentMock
+        $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
 
         $action = new CaptureAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute(new Capture(array(
             'TOKEN' => 'aToken',
@@ -287,7 +287,7 @@ class CaptureActionTest extends GenericActionTest
         ));
 
         $captureToken = new Token();
-        $captureToken->setPaymentName('thePaymentName');
+        $captureToken->setGatewayName('theGatewayName');
         $captureToken->setDetails($details);
 
         $notifyToken = new Token();
@@ -297,12 +297,12 @@ class CaptureActionTest extends GenericActionTest
         $tokenFactoryMock
             ->expects($this->once())
             ->method('createNotifyToken')
-            ->with('thePaymentName', $this->identicalTo($details))
+            ->with('theGatewayName', $this->identicalTo($details))
             ->will($this->returnValue($notifyToken))
         ;
 
         $action = new CaptureAction();
-        $action->setPayment($this->createPaymentMock());
+        $action->setGateway($this->createGatewayMock());
         $action->setGenericTokenFactory($tokenFactoryMock);
 
         $request = new Capture($captureToken);
@@ -327,7 +327,7 @@ class CaptureActionTest extends GenericActionTest
         ));
 
         $captureToken = new Token();
-        $captureToken->setPaymentName('thePaymentName');
+        $captureToken->setGatewayName('theGatewayName');
         $captureToken->setDetails($details);
 
         $tokenFactoryMock = $this->getMock('Payum\Core\Security\GenericTokenFactoryInterface');
@@ -337,7 +337,7 @@ class CaptureActionTest extends GenericActionTest
         ;
 
         $action = new CaptureAction();
-        $action->setPayment($this->createPaymentMock());
+        $action->setGateway($this->createGatewayMock());
         $action->setGenericTokenFactory($tokenFactoryMock);
 
         $request = new Capture($captureToken);
@@ -359,7 +359,7 @@ class CaptureActionTest extends GenericActionTest
         ));
 
         $captureToken = new Token();
-        $captureToken->setPaymentName('thePaymentName');
+        $captureToken->setGatewayName('theGatewayName');
         $captureToken->setDetails($details);
 
         $tokenFactoryMock = $this->getMock('Payum\Core\Security\GenericTokenFactoryInterface');
@@ -369,7 +369,7 @@ class CaptureActionTest extends GenericActionTest
         ;
 
         $action = new CaptureAction();
-        $action->setPayment($this->createPaymentMock());
+        $action->setGateway($this->createGatewayMock());
         $action->setGenericTokenFactory($tokenFactoryMock);
 
         $request = new Capture($captureToken);
@@ -389,11 +389,11 @@ class CaptureActionTest extends GenericActionTest
         ));
 
         $captureToken = new Token();
-        $captureToken->setPaymentName('thePaymentName');
+        $captureToken->setGatewayName('theGatewayName');
         $captureToken->setDetails($details);
 
         $action = new CaptureAction();
-        $action->setPayment($this->createPaymentMock());
+        $action->setGateway($this->createGatewayMock());
 
         $request = new Capture($captureToken);
         $request->setModel($details);
@@ -417,7 +417,7 @@ class CaptureActionTest extends GenericActionTest
         ;
 
         $action = new CaptureAction();
-        $action->setPayment($this->createPaymentMock());
+        $action->setGateway($this->createGatewayMock());
         $action->setGenericTokenFactory($tokenFactoryMock);
 
         $action->execute(new Capture($details));
@@ -428,10 +428,10 @@ class CaptureActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

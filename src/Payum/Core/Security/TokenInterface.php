@@ -43,10 +43,10 @@ interface TokenInterface extends DetailsAggregateInterface, DetailsAwareInterfac
     /**
      * @return string
      */
-    public function getPaymentName();
+    public function getGatewayName();
 
     /**
-     * @param string $paymentName
+     * @param string $gatewayName
      */
-    public function setPaymentName($paymentName);
+    public function setGatewayName($gatewayName);
 }

@@ -14,7 +14,7 @@ class TokenTest extends MongoTest
     {
         $token = new Token();
         $token->setTargetUrl('anUrl');
-        $token->setPaymentName('aName');
+        $token->setGatewayName('aName');
 
         $this->dm->persist($token);
         $this->dm->flush();
@@ -27,7 +27,7 @@ class TokenTest extends MongoTest
     {
         $token = new Token();
         $token->setTargetUrl('anUrl');
-        $token->setPaymentName('aName');
+        $token->setGatewayName('aName');
         $token->setAfterUrl('anAfterUrl');
         $token->setDetails(new Identity('anId', 'stdClass'));
 

@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Stripe\Tests\Action\Api;
 
-use Payum\Core\PaymentInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\RenderTemplate;
@@ -14,11 +14,11 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfPaymentAwareAction()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Stripe\Action\Api\ObtainTokenAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
@@ -130,8 +130,8 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
 
         $testCase = $this;
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
@@ -139,7 +139,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
                 $request->method = 'GET';
             }))
         ;
-        $paymentMock
+        $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
@@ -156,7 +156,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new ObtainTokenAction($templateName);
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
         $action->setApi(new Keys($publishableKey, 'secretKey'));
 
         try {
@@ -179,8 +179,8 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
         $templateName = 'aTemplateName';
         $publishableKey = 'aPubKey';
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
@@ -188,14 +188,14 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
                 $request->method = 'POST';
             }))
         ;
-        $paymentMock
+        $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
         ;
 
         $action = new ObtainTokenAction($templateName);
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
         $action->setApi(new Keys($publishableKey, 'secretKey'));
 
         try {
@@ -216,8 +216,8 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
         $templateName = 'aTemplateName';
         $publishableKey = 'aPubKey';
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
@@ -228,7 +228,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new ObtainTokenAction($templateName);
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
         $action->setApi(new Keys($publishableKey, 'secretKey'));
 
         $action->execute($obtainToken = new ObtainToken($model));
@@ -238,10 +238,10 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

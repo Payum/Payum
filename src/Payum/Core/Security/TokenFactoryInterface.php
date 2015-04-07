@@ -4,7 +4,7 @@ namespace Payum\Core\Security;
 interface TokenFactoryInterface
 {
     /**
-     * @param string      $paymentName
+     * @param string      $gatewayName
      * @param object|null $model
      * @param string      $targetPath
      * @param array       $targetParameters
@@ -13,5 +13,5 @@ interface TokenFactoryInterface
      *
      * @return TokenInterface
      */
-    public function createToken($paymentName, $model, $targetPath, array $targetParameters = array(), $afterPath = null, array $afterParameters = array());
+    public function createToken($gatewayName, $model, $targetPath, array $targetParameters = array(), $afterPath = null, array $afterParameters = array());
 }

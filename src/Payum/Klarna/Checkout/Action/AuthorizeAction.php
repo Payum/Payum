@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Klarna\Checkout\Action;
 
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Reply\HttpResponse;
@@ -11,7 +11,7 @@ use Payum\Core\Request\Sync;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\CreateOrder;
 
-class AuthorizeAction extends PaymentAwareAction
+class AuthorizeAction extends GatewayAwareAction
 {
     /**
      * @var string
@@ -39,19 +39,19 @@ class AuthorizeAction extends PaymentAwareAction
 
         if (false == $model['location']) {
             $createOrderRequest = new CreateOrder($model);
-            $this->payment->execute($createOrderRequest);
+            $this->gateway->execute($createOrderRequest);
 
             $model->replace($createOrderRequest->getOrder()->marshal());
             $model['location'] = $createOrderRequest->getOrder()->getLocation();
         }
 
-        $this->payment->execute(new Sync($model));
+        $this->gateway->execute(new Sync($model));
 
         if (Constants::STATUS_CHECKOUT_INCOMPLETE == $model['status']) {
             $renderTemplate = new RenderTemplate($this->templateName, array(
                 'snippet' => $model['gui']['snippet'],
             ));
-            $this->payment->execute($renderTemplate);
+            $this->gateway->execute($renderTemplate);
 
             throw new HttpResponse($renderTemplate->getResult());
         }

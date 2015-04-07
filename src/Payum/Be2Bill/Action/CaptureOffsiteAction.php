@@ -2,7 +2,7 @@
 namespace Payum\Be2Bill\Action;
 
 use Payum\Be2Bill\Api;
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -11,7 +11,7 @@ use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Reply\HttpPostRedirect;
 
-class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterface
+class CaptureOffsiteAction extends GatewayAwareAction implements ApiAwareInterface
 {
     /**
      * @var Api
@@ -42,7 +42,7 @@ class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterfa
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         $httpRequest = new GetHttpRequest();
-        $this->payment->execute($httpRequest);
+        $this->gateway->execute($httpRequest);
 
         //we are back from be2bill site so we have to just update model.
         if (isset($httpRequest->query['EXECCODE'])) {
@@ -50,7 +50,7 @@ class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterfa
         } else {
             throw new HttpPostRedirect(
                 $this->api->getOnsiteUrl(),
-                $this->api->prepareOnsitePayment($model->toUnsafeArray())
+                $this->api->prepareOffsitePayment($model->toUnsafeArray())
             );
         }
     }

@@ -1,14 +1,14 @@
 <?php
 namespace Payum\Stripe\Action;
 
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Capture;
 use Payum\Stripe\Request\Api\CreateCharge;
 use Payum\Stripe\Request\Api\ObtainToken;
 
-class CaptureAction extends PaymentAwareAction
+class CaptureAction extends GatewayAwareAction
 {
     /**
      * {@inheritDoc}
@@ -26,10 +26,10 @@ class CaptureAction extends PaymentAwareAction
         }
 
         if (false == $model['card']) {
-            $this->payment->execute(new ObtainToken($model));
+            $this->gateway->execute(new ObtainToken($model));
         }
 
-        $this->payment->execute(new CreateCharge($model));
+        $this->gateway->execute(new CreateCharge($model));
     }
 
     /**

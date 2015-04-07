@@ -25,7 +25,7 @@ class TokenTest extends OrmTest
     {
         $token = new Token();
         $token->setTargetUrl('anUrl');
-        $token->setPaymentName('aName');
+        $token->setGatewayName('aName');
 
         $this->em->persist($token);
         $this->em->flush();
@@ -38,7 +38,7 @@ class TokenTest extends OrmTest
     {
         $token = new Token();
         $token->setTargetUrl('anUrl');
-        $token->setPaymentName('aName');
+        $token->setGatewayName('aName');
         $token->setAfterUrl('anAfterUrl');
         $token->setDetails(new Identity('anId', 'stdClass'));
 

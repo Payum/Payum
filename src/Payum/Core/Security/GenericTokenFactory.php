@@ -28,10 +28,10 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createToken($paymentName, $model, $targetPath, array $targetParameters = array(), $afterPath = null, array $afterParameters = array())
+    public function createToken($gatewayName, $model, $targetPath, array $targetParameters = array(), $afterPath = null, array $afterParameters = array())
     {
         return $this->tokenFactory->createToken(
-            $paymentName,
+            $gatewayName,
             $model,
             $targetPath,
             $targetParameters,
@@ -43,14 +43,14 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createCaptureToken($paymentName, $model, $afterPath, array $afterParameters = array())
+    public function createCaptureToken($gatewayName, $model, $afterPath, array $afterParameters = array())
     {
         $capturePath = $this->getPath('capture');
 
-        $afterToken = $this->createToken($paymentName, $model, $afterPath, $afterParameters);
+        $afterToken = $this->createToken($gatewayName, $model, $afterPath, $afterParameters);
 
         return $this->createToken(
-            $paymentName,
+            $gatewayName,
             $model,
             $capturePath,
             array(),
@@ -61,36 +61,36 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createAuthorizeToken($paymentName, $model, $afterPath, array $afterParameters = array())
+    public function createAuthorizeToken($gatewayName, $model, $afterPath, array $afterParameters = array())
     {
         $authorizePath = $this->getPath('authorize');
 
-        $afterToken = $this->createToken($paymentName, $model, $afterPath, $afterParameters);
+        $afterToken = $this->createToken($gatewayName, $model, $afterPath, $afterParameters);
 
-        return $this->createToken($paymentName, $model, $authorizePath, array(), $afterToken->getTargetUrl());
+        return $this->createToken($gatewayName, $model, $authorizePath, array(), $afterToken->getTargetUrl());
     }
 
     /**
      * {@inheritDoc}
      */
-    public function createRefundToken($paymentName, $model, $afterPath = null, array $afterParameters = array())
+    public function createRefundToken($gatewayName, $model, $afterPath = null, array $afterParameters = array())
     {
         $refundPath = $this->getPath('refund');
 
         $afterUrl = null;
         if ($afterPath) {
-            $afterUrl = $this->createToken($paymentName, $model, $afterPath, $afterParameters)->getTargetUrl();
+            $afterUrl = $this->createToken($gatewayName, $model, $afterPath, $afterParameters)->getTargetUrl();
         }
 
-        return $this->createToken($paymentName, $model, $refundPath, array(), $afterUrl);
+        return $this->createToken($gatewayName, $model, $refundPath, array(), $afterUrl);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function createNotifyToken($paymentName, $model = null)
+    public function createNotifyToken($gatewayName, $model = null)
     {
-        return $this->createToken($paymentName, $model, $this->getPath('notify'));
+        return $this->createToken($gatewayName, $model, $this->getPath('notify'));
     }
 
     /**

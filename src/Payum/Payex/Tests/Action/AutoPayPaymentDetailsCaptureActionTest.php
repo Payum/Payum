@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Payex\Tests\Action;
 
-use Payum\Core\PaymentInterface;
 use Payum\Core\Request\Capture;
 use Payum\Payex\Action\AutoPayPaymentDetailsCaptureAction;
 
@@ -10,11 +9,11 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfPaymentAwareAction()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Payex\Action\AutoPayPaymentDetailsCaptureAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
@@ -109,15 +108,15 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldDoSubExecuteAutoPayAgreementApiRequest()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Payex\Request\Api\AutoPayAgreement'))
         ;
 
         $action = new AutoPayPaymentDetailsCaptureAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $request = new Capture(array(
             'autoPay' => true,
@@ -127,10 +126,10 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

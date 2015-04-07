@@ -1,7 +1,7 @@
 {
     "name": "payum/paypal-rest",
     "type": "library",
-    "description": "Paypal rest",
+    "description": "The Payum extension. It provides Paypal REST payment integration.",
     "keywords": ["payment", "paypal", "rest"],
     "homepage": "http://payum.org/",
     "license": "MIT",

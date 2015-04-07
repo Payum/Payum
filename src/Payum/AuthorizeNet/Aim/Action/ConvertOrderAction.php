@@ -3,7 +3,7 @@ namespace Payum\AuthorizeNet\Aim\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Model\OrderInterface;
+use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
 use Payum\Core\Request\FillOrderDetails;
 
@@ -18,7 +18,7 @@ class ConvertOrderAction implements ActionInterface
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        /** @var OrderInterface $order */
+        /** @var PaymentInterface $order */
         $order = $request->getFrom();
         $divisor = pow(10, $order->getCurrencyDigitsAfterDecimalPoint());
 
@@ -39,7 +39,7 @@ class ConvertOrderAction implements ActionInterface
     {
         return
             $request instanceof Convert &&
-            $request->getFrom() instanceof OrderInterface
+            $request->getFrom() instanceof PaymentInterface
         ;
     }
 }

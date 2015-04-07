@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests\Action;
 
-use Payum\Core\PaymentInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Notify;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Klarna\Checkout\Action\NotifyAction;
@@ -17,11 +17,11 @@ class NotifyActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldBeSubClassOfPaymentAwareAction()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\NotifyAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
@@ -31,13 +31,13 @@ class NotifyActionTest extends GenericActionTest
     {
         $testCase = $this;
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
-        $paymentMock
+        $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\UpdateOrder'))
@@ -49,14 +49,14 @@ class NotifyActionTest extends GenericActionTest
                 $testCase->assertEquals('theOrderId', $model['merchant_reference']['orderid1']);
             }))
         ;
-        $paymentMock
+        $gatewayMock
             ->expects($this->at(2))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
 
         $action = new NotifyAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute(new Notify(array(
             'status' => Constants::STATUS_CHECKOUT_COMPLETE,
@@ -72,15 +72,15 @@ class NotifyActionTest extends GenericActionTest
      */
     public function shouldNotUpdateOrderWithStatusCreatedIfCurrentStatusCheckoutInCompleteOnExecute()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
 
         $action = new NotifyAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute(new Notify(array(
             'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
@@ -93,15 +93,15 @@ class NotifyActionTest extends GenericActionTest
      */
     public function shouldNotUpdateOrderWithStatusCreatedIfCurrentStatusCreatedOnExecute()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
         ;
 
         $action = new NotifyAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute(new Notify(array(
             'status' => Constants::STATUS_CREATED,
@@ -110,11 +110,11 @@ class NotifyActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 
     /**

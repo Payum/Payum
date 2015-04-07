@@ -1,9 +1,9 @@
 <?php
 namespace Payum\Core\Tests\Functional\Extension;
 
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
-use Payum\Core\Payment;
+use Payum\Core\Gateway;
 
 class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,15 +21,15 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
         $action->setSupportedRequest($cycledRequest);
         $action->setRequiredRequest($cycledRequest);
 
-        $payment = new Payment();
-        $payment->addExtension(new EndlessCycleDetectorExtension($limit = 10));
-        $payment->addAction($action);
+        $gateway = new Gateway();
+        $gateway->addExtension(new EndlessCycleDetectorExtension($limit = 10));
+        $gateway->addAction($action);
 
-        $payment->execute($cycledRequest);
+        $gateway->execute($cycledRequest);
     }
 }
 
-class RequireOtherRequestAction extends PaymentAwareAction
+class RequireOtherRequestAction extends GatewayAwareAction
 {
     protected $supportedRequest;
 
@@ -53,7 +53,7 @@ class RequireOtherRequestAction extends PaymentAwareAction
 
     public function execute($request)
     {
-        $this->payment->execute($this->requiredRequest);
+        $this->gateway->execute($this->requiredRequest);
     }
 
     public function supports($request)

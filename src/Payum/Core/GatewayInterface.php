@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core;
 
-interface GatewayInterface extends PaymentInterface
+interface GatewayInterface
 {
     /**
      * @param mixed   $request

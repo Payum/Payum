@@ -1,7 +1,7 @@
 {
     "name": "payum/be2bill",
     "type": "library",
-    "description": "Be2Bill payment lib",
+    "description": "The Payum extension. It provides Be2Bill payment integration.",
     "keywords": ["payment", "be2bill"],
     "homepage": "http://payum.org",
     "license": "MIT",

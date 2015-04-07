@@ -3,7 +3,7 @@
 [![Total Downloads](https://poser.pugx.org/payum/authorize-net-aim/d/total.png)](https://packagist.org/packages/payum/authorize-net-aim)
 [![Latest Stable Version](https://poser.pugx.org/payum/authorize-net-aim/version.png)](https://packagist.org/packages/payum/authorize-net-aim)
 
-The lib implements [Authorize.Net AIM](http://www.authorize.net/) payment.
+The Payum extension. It provides [Authorize.Net AIM](http://www.authorize.net/) payment integration.
 
 ## Resources
 

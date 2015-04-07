@@ -8,7 +8,7 @@ abstract class AbstractRegistry implements RegistryInterface
     /**
      * @var array
      */
-    protected $payments;
+    protected $gateways;
 
     /**
      * @var array
@@ -18,24 +18,24 @@ abstract class AbstractRegistry implements RegistryInterface
     /**
      * @var array
      */
-    protected $paymentFactories;
+    protected $gatewayFactories;
 
     /**
-     * @param array $payments
+     * @param array $gateways
      * @param array $storages
-     * @param array $paymentFactories
+     * @param array $gatewayFactories
      */
-    public function __construct(array $payments = array(), array $storages = array(), array $paymentFactories = array())
+    public function __construct(array $gateways = array(), array $storages = array(), array $gatewayFactories = array())
     {
-        $this->payments = $payments;
+        $this->gateways = $gateways;
         $this->storages = $storages;
-        $this->paymentFactories = $paymentFactories;
+        $this->gatewayFactories = $gatewayFactories;
     }
 
     /**
      * Fetches/creates the given services
      *
-     * A service in this context is a storage or a payment instance
+     * A service in this context is a storage or a gateway or gateway factory instance
      *
      * @param string $id name of the service
      *
@@ -85,50 +85,50 @@ abstract class AbstractRegistry implements RegistryInterface
     /**
      * {@inheritDoc}
      */
-    public function getPayment($name)
+    public function getGateway($name)
     {
-        if (!isset($this->payments[$name])) {
-            throw new InvalidArgumentException(sprintf('Payment "%s" does not exist.', $name));
+        if (!isset($this->gateways[$name])) {
+            throw new InvalidArgumentException(sprintf('Gateway "%s" does not exist.', $name));
         }
 
-        return $this->getService($this->payments[$name]);
+        return $this->getService($this->gateways[$name]);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getPayments()
+    public function getGateways()
     {
-        $payments = array();
-        foreach ($this->payments as $name => $id) {
-            $payments[$name] = $this->getPayment($name);
+        $gateways = array();
+        foreach ($this->gateways as $name => $id) {
+            $gateways[$name] = $this->getGateway($name);
         }
 
-        return $payments;
+        return $gateways;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getPaymentFactory($name)
+    public function getGatewayFactory($name)
     {
-        if (!isset($this->paymentFactories[$name])) {
-            throw new InvalidArgumentException(sprintf('Payment factory "%s" does not exist.', $name));
+        if (!isset($this->gatewayFactories[$name])) {
+            throw new InvalidArgumentException(sprintf('Gateway factory "%s" does not exist.', $name));
         }
 
-        return $this->getService($this->paymentFactories[$name]);
+        return $this->getService($this->gatewayFactories[$name]);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getPaymentFactories()
+    public function getGatewayFactories()
     {
-        $paymentFactories = array();
-        foreach ($this->paymentFactories as $name => $id) {
-            $paymentFactories[$name] = $this->getPaymentFactory($name);
+        $gatewayFactories = array();
+        foreach ($this->gatewayFactories as $name => $id) {
+            $gatewayFactories[$name] = $this->getGatewayFactory($name);
         }
 
-        return $paymentFactories;
+        return $gatewayFactories;
     }
 }

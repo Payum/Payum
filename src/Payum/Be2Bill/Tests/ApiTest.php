@@ -21,7 +21,7 @@ class ApiTest extends \Phpunit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldReturnPostArrayWithOperationTypeAddedOnPrepareOnsitePayment()
+    public function shouldReturnPostArrayWithOperationTypeAddedOnPrepareOffsitePayment()
     {
         $api = new Api(array(
             'identifier' => 'anId',
@@ -29,7 +29,7 @@ class ApiTest extends \Phpunit_Framework_TestCase
             'sandbox' => true,
         ), $this->createClientMock());
 
-        $post = $api->prepareOnsitePayment(array(
+        $post = $api->prepareOffsitePayment(array(
             'AMOUNT' => 100,
         ));
 
@@ -41,7 +41,7 @@ class ApiTest extends \Phpunit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldReturnPostArrayWithGlobalsAddedOnPrepareOnsitePayment()
+    public function shouldReturnPostArrayWithGlobalsAddedOnPrepareOffsitePayment()
     {
         $api = new Api(array(
             'identifier' => 'anId',
@@ -49,7 +49,7 @@ class ApiTest extends \Phpunit_Framework_TestCase
             'sandbox' => true,
         ), $this->createClientMock());
 
-        $post = $api->prepareOnsitePayment(array(
+        $post = $api->prepareOffsitePayment(array(
             'AMOUNT' => 100,
         ));
 
@@ -62,7 +62,7 @@ class ApiTest extends \Phpunit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldFilterNotSupportedOnPrepareOnsitePayment()
+    public function shouldFilterNotSupportedOnPrepareOffsitePayment()
     {
         $api = new Api(array(
             'identifier' => 'anId',
@@ -70,7 +70,7 @@ class ApiTest extends \Phpunit_Framework_TestCase
             'sandbox' => true,
         ), $this->createClientMock());
 
-        $post = $api->prepareOnsitePayment(array(
+        $post = $api->prepareOffsitePayment(array(
             'AMOUNT' => 100,
             'FOO' => 'fooVal',
             'BAR' => 'barVal',
@@ -84,7 +84,7 @@ class ApiTest extends \Phpunit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldKeepSupportedOnPrepareOnsitePayment()
+    public function shouldKeepSupportedOnPrepareOffsitePayment()
     {
         $api = new Api(array(
             'identifier' => 'anId',
@@ -92,7 +92,7 @@ class ApiTest extends \Phpunit_Framework_TestCase
             'sandbox' => true,
         ), $this->createClientMock());
 
-        $post = $api->prepareOnsitePayment(array(
+        $post = $api->prepareOffsitePayment(array(
             'AMOUNT' => 100,
             'DESCRIPTION' => 'a desc',
         ));

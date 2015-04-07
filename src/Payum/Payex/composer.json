@@ -1,7 +1,7 @@
 {
     "name": "payum/payex",
     "type": "library",
-    "description": "Payex payment lib",
+    "description": "The Payum extension. It provides Payex payment integration.",
     "keywords": ["payment", "payex"],
     "homepage": "http://payum.org",
     "license": "MIT",

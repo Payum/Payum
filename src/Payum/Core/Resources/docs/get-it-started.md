@@ -1,6 +1,6 @@
 # Get it started.
 
-Here we describe basic steps required by all supported payments. We are going to setup models, storages, a security layer and so on.
+Here we describe basic steps required by all supported gateways. We are going to setup models, storages, a security layer and so on.
 All that stuff will be used later.
 
 _**Note**: If you are working with Symfony2 framework look read the bundle's [documentation](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md) instead._
@@ -16,23 +16,23 @@ Run composer require to add dependencies to _composer.json_:
 php composer.phar require payum/offline
 ```
 
-_**Note**: Where payum/offline is a php payum extension, you can for example change it to payum/paypal-express-checkout-nvp or payum/stripe. Look at [supported payments](supported-payments.md) to find out what you can use._
+_**Note**: Where payum/offline is a php payum extension, you can for example change it to payum/paypal-express-checkout-nvp or payum/stripe. Look at [supported gateways](supported-gateways.md) to find out what you can use._
 
-_**Note**: Use payum/payum if you want to install all payments at once._
+_**Note**: Use payum/payum if you want to install all gateways at once._
 
 Before we configure the payum let's look at the flow diagram.
-This flow is same all payments so once you familiar with it any other payments could be added easily.
+This flow is same for all gateways so once you familiar with it any other gateways could be added easily.
 
 ![How payum works](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=cGFydGljaXBhbnQgcGF5cGFsLmNvbQoACwxVc2VyAAQNcHJlcGFyZS5waHAAHA1jYXB0dQAFE2RvbgAnBgpVc2VyLT4ANQs6AEUIIGEgcGF5bWVudAoAVAstLT4rAEsLOgBbCCB0b2tlbgoKAGcLLS0-AIE2CjogcmVxdWVzdCBhdXRoZW50aWNhdGlvbgoAgVkKLS0-AE0NZ2l2ZSBjb250cm9sIGJhY2sATg8tAIE-CDoAgUsFAHsHAIFTCC0-VXNlcjogc2hvdwCBQQggcmVzdWx0Cg&s=default)
 
 As you can see we have to create some php files: `config.php`, `prepare.php`, `capture.php` and `done.php`.
-At the end you will have the complete payment solution and 
-it would be [much easier to add](https://github.com/Payum/PaypalExpressCheckoutNvp/blob/master/Resources/docs/get-it-started.md) other payments.
+At the end you will have the complete solution and 
+it would be [much easier to add](https://github.com/Payum/PaypalExpressCheckoutNvp/blob/master/Resources/docs/get-it-started.md) other gateways.
 Let's start from the `config.php` and continue with rest after:
 
 ## config.php
 
-Here we can put our payments, storages. Also we can configure security components. The `config.php` has to be included to all left files.
+Here we can put our gateways, storages. Also we can configure security components. The `config.php` has to be included to all left files.
 
 ```php
 <?php
@@ -44,7 +44,7 @@ use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Security\GenericTokenFactory;
 
-$orderClass = 'Payum\Core\Model\Order';
+$orderClass = 'Payum\Core\Model\Payment';
 
 $storages = array(
     $orderClass => new FilesystemStorage('/path/to/storage', $orderClass, 'number'),
@@ -52,15 +52,15 @@ $storages = array(
     //put other storages
 );
 
-$payments = array();
+$gateways = array();
 
 
-$offlinePaymentFactory = new \Payum\Offline\PaymentFactory();
-$payments['offline'] = $offlinePaymentFactory->create();
+$offlineGatewayFactory = new \Payum\Offline\GatewayFactory();
+$gateways['offline'] = $offlineGatewayFactory->create();
 
-//put here other payments
+//put here other gateways
 
-$payum = new SimpleRegistry($payments, $storages);
+$payum = new SimpleRegistry($gateways, $storages);
 
 //security
 
@@ -87,7 +87,7 @@ _**Note**: Consider using something other than `FilesystemStorage` in production
 
 At this stage we have to create an order. Add some information into it. 
 Create a capture token and delegate the job to [capture.php](capture-script.md) script.
-Here's an offline payment example:
+Here's an offline gateway example:
 
 ```php
 <?php
@@ -95,7 +95,7 @@ Here's an offline payment example:
 
 include 'config.php';
 
-$paymentName = 'offline';
+$gatewayName = 'offline';
 
 $storage = $payum->getStorage($orderClass);
 
@@ -108,7 +108,7 @@ $order->setClientId('anId');
 $order->setClientEmail('foo@example.com');
 
 $order->setDetails(array(
-  // put here any fields in a payment format.
+  // put here any fields in a gateway format.
   // for example if you use Paypal ExpressCheckout you can define a description of the first item:
   // 'L_PAYMENTREQUEST_0_DESC0' => 'A desc',
 ));
@@ -116,17 +116,17 @@ $order->setDetails(array(
 
 $storage->update($order);
 
-$captureToken = $tokenFactory->createCaptureToken($paymentName, $order, 'done.php');
+$captureToken = $tokenFactory->createCaptureToken($gatewayName, $order, 'done.php');
 
 header("Location: ".$captureToken->getTargetUrl());
 ```
 
-_**Note**: There are examples for all [supported payments](supported-payments.md)._
+_**Note**: There are examples for all [supported gateways](supported-gateways.md)._
 
 ## capture.php
 
 When the preparation is done a user is redirect to `capture.php`. Here's an example of this file. You can just copy\past the code. 
-It has to work for all payments without any modification from your side. 
+It has to work for all gateways without any modification from your side. 
 
 ```php
 <?php
@@ -138,9 +138,9 @@ use Payum\Core\Reply\HttpRedirect;
 include 'config.php';
 
 $token = $requestVerifier->verify($_REQUEST);
-$payment = $payum->getPayment($token->getPaymentName());
+$gateway = $payum->getGateway($token->getPaymentName());
 
-if ($reply = $payment->execute(new Capture($token), true)) {
+if ($reply = $gateway->execute(new Capture($token), true)) {
     if ($reply instanceof HttpRedirect) {
         header("Location: ".$reply->getUrl());
         die();
@@ -172,7 +172,7 @@ include 'config.php';
 
 $token = $requestVerifier->verify($_REQUEST);
 
-$payment = $payum->getPayment($token->getPaymentName());
+$gateway = $payum->getGateway($token->getGatewayName());
 
 // you can invalidate the token. The url could not be requested any more.
 // $requestVerifier->invalidate($token);
@@ -182,7 +182,7 @@ $payment = $payum->getPayment($token->getPaymentName());
 //$order = $payum->getStorage($identity->getClass())->find($identity);
 
 // or Payum can fetch the model for you while executing a request (Preferred).
-$payment->execute($status = new GetHumanStatus($token));
+$gateway->execute($status = new GetHumanStatus($token));
 $order = $status->getFirstModel());
 
 header('Content-Type: application/json');
@@ -201,7 +201,7 @@ _**Note**: Find out more about done script in the [dedicated chapter](done-scrip
 ## Next 
 
 * [The architecture](the-architecture.md).
-* [Supported payments](supported-payments.md).
+* [Supported gateways](supported-gateways.md).
 * [Storages](storages.md).
 * [Capture script](capture-script.md).
 * [Authorize script](authorize-script.md).

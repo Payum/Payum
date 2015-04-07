@@ -1,7 +1,7 @@
 {
     "name": "payum/paypal-express-checkout-nvp",
     "type": "library",
-    "description": "Paypal express checkout",
+    "description": "The Payum extension. It provides Paypal ExpressCheckout payment integration.",
     "keywords": ["payment", "paypal", "express checkout", "digital goods", "recurring payment"],
     "homepage": "http://payum.org/",
     "license": "MIT",

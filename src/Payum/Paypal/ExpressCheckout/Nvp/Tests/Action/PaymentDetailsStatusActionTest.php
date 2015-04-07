@@ -32,11 +32,11 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $paymentDetails = array(
+        $payment = array(
            'PAYMENTREQUEST_0_AMT' => 1,
         );
 
-        $request = new GetHumanStatus($paymentDetails);
+        $request = new GetHumanStatus($payment);
 
         $this->assertTrue($action->supports($request));
     }
@@ -60,11 +60,11 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $paymentDetails = array(
+        $payment = array(
             'PAYMENTREQUEST_0_AMT' => 0,
         );
 
-        $request = new GetHumanStatus($paymentDetails);
+        $request = new GetHumanStatus($payment);
 
         $this->assertTrue($action->supports($request));
     }

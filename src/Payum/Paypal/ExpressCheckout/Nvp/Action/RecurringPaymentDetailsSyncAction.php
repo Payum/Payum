@@ -4,10 +4,10 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetRecurringPaymentsProfileDetails;
 use Payum\Core\Request\Sync;
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
 
-class RecurringPaymentDetailsSyncAction extends PaymentAwareAction
+class RecurringPaymentDetailsSyncAction extends GatewayAwareAction
 {
     /**
      * {@inheritDoc}
@@ -23,7 +23,7 @@ class RecurringPaymentDetailsSyncAction extends PaymentAwareAction
             return;
         }
 
-        $this->payment->execute(new GetRecurringPaymentsProfileDetails($model));
+        $this->gateway->execute(new GetRecurringPaymentsProfileDetails($model));
     }
 
     /**
