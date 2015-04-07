@@ -8,16 +8,16 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OmnipayDirectGatewayFactory;
 
-class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
+class OmnipayDirectGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldBeSubClassOfAbstractPaymentFactory()
+    public function shouldBeSubClassOfAbstractGatewayFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OmnipayDirectPaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OmnipayDirectGatewayFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractPaymentFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractGatewayFactory'));
     }
 
     /**
@@ -65,7 +65,7 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('bar', $config['options']);
         $this->assertEquals('bar', $config['options']['bar']);
 
-        //come from abstract payment factory
+        //come from abstract gateway factory
         $this->assertArrayHasKey('actions', $config);
         $this->assertArrayHasKey('apis', $config);
         $this->assertArrayHasKey('extensions', $config);
@@ -136,13 +136,13 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowCreatePaymentAndReturnItsId()
+    public function shouldAllowCreateGatewayAndReturnItsId()
     {
         $factory = new OmnipayDirectGatewayFactory;
 
         $container = new ContainerBuilder();
 
-        $paymentId = $factory->create($container, 'aPaymentName', array(
+        $gatewayId = $factory->create($container, 'aGatewayName', array(
             'type' => 'PayPal_Express',
             'options' => array(
                 'foo' => 'foo',
@@ -153,19 +153,19 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
 
-        $this->assertEquals('payum.omnipay_direct.aPaymentName.payment', $paymentId);
-        $this->assertTrue($container->hasDefinition($paymentId));
+        $this->assertEquals('payum.omnipay_direct.aGatewayName.gateway', $gatewayId);
+        $this->assertTrue($container->hasDefinition($gatewayId));
 
-        $payment = $container->getDefinition($paymentId);
+        $gateway = $container->getDefinition($gatewayId);
 
         //guard
-        $this->assertNotEmpty($payment->getFactoryMethod());
-        $this->assertNotEmpty($payment->getFactoryService());
-        $this->assertNotEmpty($payment->getArguments());
+        $this->assertNotEmpty($gateway->getFactoryMethod());
+        $this->assertNotEmpty($gateway->getFactoryService());
+        $this->assertNotEmpty($gateway->getArguments());
 
-        $config = $payment->getArgument(0);
+        $config = $gateway->getArgument(0);
 
-        $this->assertEquals('aPaymentName', $config['payum.payment_name']);
+        $this->assertEquals('aGatewayName', $config['payum.gateway_name']);
     }
 
     /**
@@ -182,10 +182,10 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($container->hasDefinition('payum.omnipay_direct.factory'));
 
         $factoryService = $container->getDefinition('payum.omnipay_direct.factory');
-        $this->assertEquals('Payum\OmnipayBridge\DirectPaymentFactory', $factoryService->getClass());
+        $this->assertEquals('Payum\OmnipayBridge\OmnipayDirectGatewayFactory', $factoryService->getClass());
         $this->assertEquals(
             array(array('name' => 'omnipay_direct', 'human_name' => 'Omnipay Direct')),
-            $factoryService->getTag('payum.payment_factory')
+            $factoryService->getTag('payum.gateway_factory')
         );
 
         $factoryConfig = $factoryService->getArgument(0);
@@ -196,7 +196,7 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('payum.template.obtain_credit_card', $factoryConfig);
 
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(1));
-        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(1));
+        $this->assertEquals('payum.gateway_factory', (string) $factoryService->getArgument(1));
     }
 
     /**
@@ -208,7 +208,7 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder();
 
-        $paymentId = $factory->create($container, 'aPaymentName', array(
+        $gatewayId = $factory->create($container, 'aGatewayName', array(
             'type' => 'PayPal_Express',
             'options' => array(
                 'foo' => 'foo',
@@ -220,17 +220,17 @@ class OmnipayDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
+            $container->getDefinition($gatewayId),
             'addAction',
             new Reference('payum.action.foo')
         );
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
+            $container->getDefinition($gatewayId),
             'addApi',
             new Reference('payum.api.bar')
         );
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
+            $container->getDefinition($gatewayId),
             'addExtension',
             new Reference('payum.extension.ololo')
         );

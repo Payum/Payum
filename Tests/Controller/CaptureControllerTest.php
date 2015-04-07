@@ -97,7 +97,7 @@ class CaptureControllerTest extends \PHPUnit_Framework_TestCase
         $request->query->set('foo', 'fooVal');
 
         $token = new Token;
-        $token->setGatewayName('thePayment');
+        $token->setGatewayName('theGateway');
         $token->setAfterUrl('http://example.com/theAfterUrl');
 
         $tokenVerifierMock = $this->getMock('Payum\Core\Security\HttpRequestVerifierInterface');
@@ -113,8 +113,8 @@ class CaptureControllerTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo($token))
         ;
 
-        $paymentMock = $this->getMock('Payum\Core\PaymentInterface');
-        $paymentMock
+        $gatewayMock = $this->getMock('Payum\Core\GatewayInterface');
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Capture'))
@@ -123,9 +123,9 @@ class CaptureControllerTest extends \PHPUnit_Framework_TestCase
         $registryMock = $this->getMock('Payum\Core\Registry\RegistryInterface');
         $registryMock
             ->expects($this->once())
-            ->method('getPayment')
-            ->with('thePayment')
-            ->will($this->returnValue($paymentMock))
+            ->method('getGateway')
+            ->with('theGateway')
+            ->will($this->returnValue($gatewayMock))
         ;
 
         $container = new Container;

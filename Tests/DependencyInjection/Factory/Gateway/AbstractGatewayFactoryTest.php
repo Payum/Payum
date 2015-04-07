@@ -8,16 +8,16 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractGatewayFactory;
 
-class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
+class AbstractGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldImplementPaymentFactoryInterface()
+    public function shouldImplementGatewayFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractPaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractGatewayFactory');
         
-        $this->assertTrue($rc->implementsInterface('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PaymentFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\GatewayFactoryInterface'));
     }
 
     /**
@@ -25,7 +25,7 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeAbstract()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractPaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractGatewayFactory');
 
         $this->assertTrue($rc->isAbstract());
     }
@@ -35,7 +35,7 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfiguration()
     {
-        $factory = $this->createAbstractPaymentFactory();
+        $factory = $this->createAbstractGatewayFactory();
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -51,7 +51,7 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowConfigureCustomActions()
     {
-        $factory = $this->createAbstractPaymentFactory();
+        $factory = $this->createAbstractGatewayFactory();
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -80,7 +80,7 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowConfigureCustomApis()
     {
-        $factory = $this->createAbstractPaymentFactory();
+        $factory = $this->createAbstractGatewayFactory();
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -109,7 +109,7 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowConfigureCustomExtensions()
     {
-        $factory = $this->createAbstractPaymentFactory();
+        $factory = $this->createAbstractGatewayFactory();
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -136,9 +136,9 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowCreatePaymentAndReturnItsId()
+    public function shouldAllowCreateGatewayAndReturnItsId()
     {
-        $factory = $this->createAbstractPaymentFactory();
+        $factory = $this->createAbstractGatewayFactory();
         $factory
             ->expects($this->any())
             ->method('getName')
@@ -147,22 +147,22 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aPaymentName', array(
+        $gatewayId = $factory->create($container, 'aGatewayName', array(
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
         ));
         
-        $this->assertEquals('payum.foo.aPaymentName.payment', $paymentId);
-        $this->assertTrue($container->hasDefinition($paymentId));
+        $this->assertEquals('payum.foo.aGatewayName.gateway', $gatewayId);
+        $this->assertTrue($container->hasDefinition($gatewayId));
     }
 
     /**
      * @test
      */
-    public function shouldAllowCreatePaymentWithExpectedConfig()
+    public function shouldAllowCreateGatewayWithExpectedConfig()
     {
-        $factory = $this->createAbstractPaymentFactory();
+        $factory = $this->createAbstractGatewayFactory();
         $factory
             ->expects($this->any())
             ->method('getName')
@@ -171,24 +171,24 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aPaymentName', array(
+        $gatewayId = $factory->create($container, 'aGatewayName', array(
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
         ));
 
-        $this->assertEquals('payum.foo.aPaymentName.payment', $paymentId);
+        $this->assertEquals('payum.foo.aGatewayName.gateway', $gatewayId);
 
-        $payment = $container->getDefinition($paymentId);
+        $gateway = $container->getDefinition($gatewayId);
 
         //guard
-        $this->assertNotEmpty($payment->getFactoryMethod());
-        $this->assertNotEmpty($payment->getFactoryService());
-        $this->assertNotEmpty($payment->getArguments());
+        $this->assertNotEmpty($gateway->getFactoryMethod());
+        $this->assertNotEmpty($gateway->getFactoryService());
+        $this->assertNotEmpty($gateway->getArguments());
 
-        $config = $payment->getArgument(0);
+        $config = $gateway->getArgument(0);
 
-        $this->assertEquals('aPaymentName', $config['payum.payment_name']);
+        $this->assertEquals('aGatewayName', $config['payum.gateway_name']);
 
     }
 
@@ -197,7 +197,7 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLoadFactoryAndTemplateParameters()
     {
-        $factory = $this->createAbstractPaymentFactory();
+        $factory = $this->createAbstractGatewayFactory();
         $factory
             ->expects($this->any())
             ->method('getName')
@@ -211,11 +211,11 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($container->hasDefinition('payum.foo.factory'));
 
         $factoryService = $container->getDefinition('payum.foo.factory');
-        $this->assertEquals('Payum\Core\PaymentFactory', $factoryService->getClass());
-        $this->assertEquals(array(array('name' => 'foo', 'human_name' => 'Foo')), $factoryService->getTag('payum.payment_factory'));
+        $this->assertEquals('Payum\Core\GatewayFactory', $factoryService->getClass());
+        $this->assertEquals(array(array('name' => 'foo', 'human_name' => 'Foo')), $factoryService->getTag('payum.gateway_factory'));
 
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(1));
-        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(1));
+        $this->assertEquals('payum.gateway_factory', (string) $factoryService->getArgument(1));
 
         $this->assertEquals('@PayumCore\layout.html.twig', $container->getParameter('payum.template.layout'));
         $this->assertEquals('@PayumSymfonyBridge\obtainCreditCard.html.twig', $container->getParameter('payum.template.obtain_credit_card'));
@@ -226,11 +226,11 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAddCustomActions()
     {
-        $factory = $this->createAbstractPaymentFactory();
+        $factory = $this->createAbstractGatewayFactory();
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aPaymentName', array(
+        $gatewayId = $factory->create($container, 'aGatewayName', array(
             'actions' => array(
                 'payum.action.foo',
                 'payum.action.bar',
@@ -240,12 +240,12 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId), 
+            $container->getDefinition($gatewayId),
             'addAction', 
             new Reference('payum.action.foo')
         );
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
+            $container->getDefinition($gatewayId),
             'addAction',
             new Reference('payum.action.bar')
         );
@@ -256,11 +256,11 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAddCustomApis()
     {
-        $factory = $this->createAbstractPaymentFactory();
+        $factory = $this->createAbstractGatewayFactory();
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aPaymentName', array(
+        $gatewayId = $factory->create($container, 'aGatewayName', array(
             'actions' => array(),
             'apis' => array(
                 'payum.api.foo',
@@ -270,12 +270,12 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
+            $container->getDefinition($gatewayId),
             'addApi',
             new Reference('payum.api.foo')
         );
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
+            $container->getDefinition($gatewayId),
             'addApi',
             new Reference('payum.api.bar')
         );
@@ -286,11 +286,11 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAddCustomExtensions()
     {
-        $factory = $this->createAbstractPaymentFactory();
+        $factory = $this->createAbstractGatewayFactory();
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aPaymentName', array(
+        $gatewayId = $factory->create($container, 'aGatewayName', array(
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(
@@ -300,12 +300,12 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
+            $container->getDefinition($gatewayId),
             'addExtension',
             new Reference('payum.extension.foo')
         );
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
+            $container->getDefinition($gatewayId),
             'addExtension',
             new Reference('payum.extension.bar')
         );
@@ -330,8 +330,8 @@ class AbstractPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|AbstractGatewayFactory
      */
-    protected function createAbstractPaymentFactory()
+    protected function createAbstractGatewayFactory()
     {
-        return $this->getMockForAbstractClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractPaymentFactory');
+        return $this->getMockForAbstractClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractGatewayFactory');
     }
 }

@@ -8,16 +8,16 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
+class OfflineGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldBeSubClassOfAbstractPaymentFactory()
+    public function shouldBeSubClassOfAbstractGatewayFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OfflinePaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OfflineGatewayFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractPaymentFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractGatewayFactory'));
     }
 
     /**
@@ -54,7 +54,7 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $config = $processor->process($tb->buildTree(), array(array(
         )));
 
-        //come from abstract payment factory
+        //come from abstract gateway factory
         $this->assertArrayHasKey('actions', $config);
         $this->assertArrayHasKey('apis', $config);
         $this->assertArrayHasKey('extensions', $config);
@@ -63,31 +63,31 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowCreatePaymentAndReturnItsId()
+    public function shouldAllowCreateGatewayAndReturnItsId()
     {
         $factory = new OfflineGatewayFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aPaymentName', array(
+        $gatewayId = $factory->create($container, 'aGatewayName', array(
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
         ));
         
-        $this->assertEquals('payum.offline.aPaymentName.payment', $paymentId);
-        $this->assertTrue($container->hasDefinition($paymentId));
+        $this->assertEquals('payum.offline.aGatewayName.gateway', $gatewayId);
+        $this->assertTrue($container->hasDefinition($gatewayId));
 
-        $payment = $container->getDefinition($paymentId);
+        $gateway = $container->getDefinition($gatewayId);
 
         //guard
-        $this->assertNotEmpty($payment->getFactoryMethod());
-        $this->assertNotEmpty($payment->getFactoryService());
-        $this->assertNotEmpty($payment->getArguments());
+        $this->assertNotEmpty($gateway->getFactoryMethod());
+        $this->assertNotEmpty($gateway->getFactoryService());
+        $this->assertNotEmpty($gateway->getArguments());
 
-        $config = $payment->getArgument(0);
+        $config = $gateway->getArgument(0);
 
-        $this->assertEquals('aPaymentName', $config['payum.payment_name']);
+        $this->assertEquals('aGatewayName', $config['payum.gateway_name']);
     }
 
     /**
@@ -104,10 +104,10 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($container->hasDefinition('payum.offline.factory'));
 
         $factoryService = $container->getDefinition('payum.offline.factory');
-        $this->assertEquals('Payum\Offline\PaymentFactory', $factoryService->getClass());
+        $this->assertEquals('Payum\Offline\OfflineGatewayFactory', $factoryService->getClass());
         $this->assertEquals(
             array(array('name' => 'offline', 'human_name' => 'Offline')),
-            $factoryService->getTag('payum.payment_factory')
+            $factoryService->getTag('payum.gateway_factory')
         );
 
         $factoryConfig = $factoryService->getArgument(0);
@@ -118,7 +118,7 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('payum.template.obtain_credit_card', $factoryConfig);
 
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(1));
-        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(1));
+        $this->assertEquals('payum.gateway_factory', (string) $factoryService->getArgument(1));
     }
 
     /**
@@ -130,24 +130,24 @@ class OfflinePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aPaymentName', array(
+        $gatewayId = $factory->create($container, 'aGatewayName', array(
             'actions' => array('payum.action.foo'),
             'apis' => array('payum.api.bar'),
             'extensions' => array('payum.extension.ololo'),
         ));
 
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId), 
+            $container->getDefinition($gatewayId),
             'addAction', 
             new Reference('payum.action.foo')
         );
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
+            $container->getDefinition($gatewayId),
             'addApi',
             new Reference('payum.api.bar')
         );
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
+            $container->getDefinition($gatewayId),
             'addExtension',
             new Reference('payum.extension.ololo')
         );

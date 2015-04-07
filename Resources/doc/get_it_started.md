@@ -71,13 +71,13 @@ class PaymentToken extends Token
 namespace Acme\PaymentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Payum\Core\Model\Payment as BaseOrder;
+use Payum\Core\Model\Payment as BasePayment;
 
 /**
  * @ORM\Table
  * @ORM\Entity
  */
-class Payment extends BaseOrder
+class Payment extends BasePayment
 {
     /**
      * @ORM\Column(name="id", type="integer")

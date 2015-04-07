@@ -8,16 +8,16 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
+class KlarnaInvoiceGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldBeSubClassOfAbstractPaymentFactory()
+    public function shouldBeSubClassOfAbstractGatewayFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\KlarnaInvoicePaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\KlarnaInvoiceGatewayFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractPaymentFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractGatewayFactory'));
     }
 
     /**
@@ -74,7 +74,7 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('sandbox', $config);
         $this->assertTrue($config['sandbox']);
 
-        //come from abstract payment factory
+        //come from abstract gateway factory
         $this->assertArrayHasKey('actions', $config);
         $this->assertArrayHasKey('apis', $config);
         $this->assertArrayHasKey('extensions', $config);
@@ -119,7 +119,7 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('sandbox', $config);
         $this->assertTrue($config['sandbox']);
 
-        //come from abstract payment factory
+        //come from abstract gateway factory
         $this->assertArrayHasKey('actions', $config);
         $this->assertArrayHasKey('apis', $config);
         $this->assertArrayHasKey('extensions', $config);
@@ -168,13 +168,13 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowCreatePaymentAndReturnItsId()
+    public function shouldAllowCreateGatewayAndReturnItsId()
     {
         $factory = new KlarnaInvoiceGatewayFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aPaymentName', array(
+        $gatewayId = $factory->create($container, 'aGatewayName', array(
             'eid' => 'aEid',
             'secret' => 'aSecret',
             'country' => 'SV',
@@ -186,19 +186,19 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
             'extensions' => array(),
         ));
 
-        $this->assertEquals('payum.klarna_invoice.aPaymentName.payment', $paymentId);
-        $this->assertTrue($container->hasDefinition($paymentId));
+        $this->assertEquals('payum.klarna_invoice.aGatewayName.gateway', $gatewayId);
+        $this->assertTrue($container->hasDefinition($gatewayId));
 
-        $payment = $container->getDefinition($paymentId);
+        $gateway = $container->getDefinition($gatewayId);
 
         //guard
-        $this->assertNotEmpty($payment->getFactoryMethod());
-        $this->assertNotEmpty($payment->getFactoryService());
-        $this->assertNotEmpty($payment->getArguments());
+        $this->assertNotEmpty($gateway->getFactoryMethod());
+        $this->assertNotEmpty($gateway->getFactoryService());
+        $this->assertNotEmpty($gateway->getArguments());
 
-        $config = $payment->getArgument(0);
+        $config = $gateway->getArgument(0);
 
-        $this->assertEquals('aPaymentName', $config['payum.payment_name']);
+        $this->assertEquals('aGatewayName', $config['payum.gateway_name']);
     }
 
     /**
@@ -215,10 +215,10 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($container->hasDefinition('payum.klarna_invoice.factory'));
 
         $factoryService = $container->getDefinition('payum.klarna_invoice.factory');
-        $this->assertEquals('Payum\Klarna\Invoice\PaymentFactory', $factoryService->getClass());
+        $this->assertEquals('Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory', $factoryService->getClass());
         $this->assertEquals(
             array(array('name' => 'klarna_invoice', 'human_name' => 'Klarna Invoice')),
-            $factoryService->getTag('payum.payment_factory')
+            $factoryService->getTag('payum.gateway_factory')
         );
 
         $factoryConfig = $factoryService->getArgument(0);
@@ -229,7 +229,7 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('payum.template.obtain_credit_card', $factoryConfig);
 
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(1));
-        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(1));
+        $this->assertEquals('payum.gateway_factory', (string) $factoryService->getArgument(1));
     }
 
     /**
@@ -241,7 +241,7 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aPaymentName', array(
+        $gatewayId = $factory->create($container, 'aGatewayName', array(
             'eid' => 'aEid',
             'secret' => 'aSecret',
             'country' => 'SV',
@@ -254,17 +254,17 @@ class KlarnaInvoicePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
+            $container->getDefinition($gatewayId),
             'addAction',
             new Reference('payum.action.foo')
         );
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
+            $container->getDefinition($gatewayId),
             'addApi',
             new Reference('payum.api.bar')
         );
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
+            $container->getDefinition($gatewayId),
             'addExtension',
             new Reference('payum.extension.ololo')
         );

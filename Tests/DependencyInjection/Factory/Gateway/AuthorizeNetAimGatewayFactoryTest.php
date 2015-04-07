@@ -7,28 +7,18 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\Be2BillOffsiteGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AuthorizeNetAimGatewayFactory;
 
-class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
+class AuthorizeNetAimGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldBeSubClassOfAbstractPaymentFactory()
+    public function shouldBeSubClassOfAbstractGatewayFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\Be2BillOffsitePaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AuthorizeNetAimGatewayFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractPaymentFactory'));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBe2BillDirectPaymentFactory()
-    {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\Be2BillOffsitePaymentFactory');
-
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\Be2BillDirectPaymentFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractGatewayFactory'));
     }
 
     /**
@@ -36,7 +26,7 @@ class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new Be2BillOffsiteGatewayFactory;
+        new AuthorizeNetAimGatewayFactory;
     }
 
     /**
@@ -44,9 +34,9 @@ class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetName()
     {
-        $factory = new Be2BillOffsiteGatewayFactory;
+        $factory = new AuthorizeNetAimGatewayFactory;
 
-        $this->assertEquals('be2bill_offsite', $factory->getName());
+        $this->assertEquals('authorize_net_aim', $factory->getName());
     }
 
     /**
@@ -54,29 +44,29 @@ class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfiguration()
     {
-        $factory = new Be2BillOffsiteGatewayFactory;
+        $factory = new AuthorizeNetAimGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
-
+        
         $factory->addConfiguration($rootNode);
 
         $processor = new Processor();
         $config = $processor->process($tb->buildTree(), array(array(
-            'identifier' => 'anIdentifier',
-            'password' => 'aPassword',
+            'login_id' => 'aLoginId',
+            'transaction_key' => 'aTransactionKey',
         )));
 
-        $this->assertArrayHasKey('identifier', $config);
-        $this->assertEquals('anIdentifier', $config['identifier']);
-
-        $this->assertArrayHasKey('password', $config);
-        $this->assertEquals('aPassword', $config['password']);
+        $this->assertArrayHasKey('login_id', $config);
+        $this->assertEquals('aLoginId', $config['login_id']);
+        
+        $this->assertArrayHasKey('transaction_key', $config);
+        $this->assertEquals('aTransactionKey', $config['transaction_key']);
 
         $this->assertArrayHasKey('sandbox', $config);
         $this->assertTrue($config['sandbox']);
 
-        //come from abstract payment factory
+        //come from abstract gateway factory
         $this->assertArrayHasKey('actions', $config);
         $this->assertArrayHasKey('apis', $config);
         $this->assertArrayHasKey('extensions', $config);
@@ -86,11 +76,11 @@ class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "identifier" at path "foo" must be configured.
+     * @expectedExceptionMessage The child node "login_id" at path "foo" must be configured.
      */
-    public function thrownIfIdentifierOptionNotSet()
+    public function thrownIfLoginIdOptionNotSet()
     {
-        $factory = new Be2BillOffsiteGatewayFactory;
+        $factory = new AuthorizeNetAimGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -105,11 +95,11 @@ class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "password" at path "foo" must be configured.
+     * @expectedExceptionMessage The child node "transaction_key" at path "foo" must be configured.
      */
-    public function thrownIfPasswordOptionNotSet()
+    public function thrownIfTransactionKeyOptionNotSet()
     {
-        $factory = new Be2BillOffsiteGatewayFactory;
+        $factory = new AuthorizeNetAimGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -118,41 +108,41 @@ class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
-            'identifier' => 'anIdentifier'
+            'login_id' => 'aLoginId'
         )));
     }
 
     /**
      * @test
      */
-    public function shouldAllowCreatePaymentAndReturnItsId()
+    public function shouldAllowCreateGatewayAndReturnItsId()
     {
-        $factory = new Be2BillOffsiteGatewayFactory;
+        $factory = new AuthorizeNetAimGatewayFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aPaymentName', array(
-            'identifier' => 'anIdentifier',
-            'password' => 'aPassword',
+        $gatewayId = $factory->create($container, 'aGatewayName', array(
+            'login_id' => 'aLoginId',
+            'transaction_key' => 'aTransactionKey',
             'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
         ));
+        
+        $this->assertEquals('payum.authorize_net_aim.aGatewayName.gateway', $gatewayId);
+        $this->assertTrue($container->hasDefinition($gatewayId));
 
-        $this->assertEquals('payum.be2bill_offsite.aPaymentName.payment', $paymentId);
-        $this->assertTrue($container->hasDefinition($paymentId));
-
-        $payment = $container->getDefinition($paymentId);
+        $gateway = $container->getDefinition($gatewayId);
 
         //guard
-        $this->assertNotEmpty($payment->getFactoryMethod());
-        $this->assertNotEmpty($payment->getFactoryService());
-        $this->assertNotEmpty($payment->getArguments());
+        $this->assertNotEmpty($gateway->getFactoryMethod());
+        $this->assertNotEmpty($gateway->getFactoryService());
+        $this->assertNotEmpty($gateway->getArguments());
 
-        $config = $payment->getArgument(0);
+        $config = $gateway->getArgument(0);
 
-        $this->assertEquals('aPaymentName', $config['payum.payment_name']);
+        $this->assertEquals('aGatewayName', $config['payum.gateway_name']);
     }
 
     /**
@@ -160,30 +150,30 @@ class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLoadFactory()
     {
-        $factory = new Be2BillOffsiteGatewayFactory;
+        $factory = new AuthorizeNetAimGatewayFactory;
 
         $container = new ContainerBuilder;
 
         $factory->load($container);
 
-        $this->assertTrue($container->hasDefinition('payum.be2bill_offsite.factory'));
+        $this->assertTrue($container->hasDefinition('payum.authorize_net_aim.factory'));
 
-        $factoryService = $container->getDefinition('payum.be2bill_offsite.factory');
-        $this->assertEquals('Payum\Be2Bill\OffsitePaymentFactory', $factoryService->getClass());
+        $factoryService = $container->getDefinition('payum.authorize_net_aim.factory');
+        $this->assertEquals('Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory', $factoryService->getClass());
         $this->assertEquals(
-            array(array('name' => 'be2bill_offsite', 'human_name' => 'Be2bill Offsite')),
-            $factoryService->getTag('payum.payment_factory')
+            array(array('name' => 'authorize_net_aim', 'human_name' => 'Authorize Net Aim')),
+            $factoryService->getTag('payum.gateway_factory')
         );
 
         $factoryConfig = $factoryService->getArgument(0);
-        $this->assertEquals('be2bill_offsite', $factoryConfig['payum.factory_name']);
+        $this->assertEquals('authorize_net_aim', $factoryConfig['payum.factory_name']);
         $this->assertArrayHasKey('buzz.client', $factoryConfig);
         $this->assertArrayHasKey('twig.env', $factoryConfig);
         $this->assertArrayHasKey('payum.template.layout', $factoryConfig);
         $this->assertArrayHasKey('payum.template.obtain_credit_card', $factoryConfig);
 
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(1));
-        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(1));
+        $this->assertEquals('payum.gateway_factory', (string) $factoryService->getArgument(1));
     }
 
     /**
@@ -191,13 +181,13 @@ class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new Be2BillOffsiteGatewayFactory;
+        $factory = new AuthorizeNetAimGatewayFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aPaymentName', array(
-            'identifier' => 'anIdentifier',
-            'password' => 'aPassword',
+        $gatewayId = $factory->create($container, 'aGatewayName', array(
+            'login_id' => 'aLoginId',
+            'transaction_key' => 'aTransactionKey',
             'sandbox' => true,
             'actions' => array('payum.action.foo'),
             'apis' => array('payum.api.bar'),
@@ -205,17 +195,17 @@ class Be2BillOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
-            'addAction',
+            $container->getDefinition($gatewayId),
+            'addAction', 
             new Reference('payum.action.foo')
         );
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
+            $container->getDefinition($gatewayId),
             'addApi',
             new Reference('payum.api.bar')
         );
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
+            $container->getDefinition($gatewayId),
             'addExtension',
             new Reference('payum.extension.ololo')
         );

@@ -69,7 +69,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
+                'gateways' => array(
                     'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
@@ -118,8 +118,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $this->assertTrue(isset($config['storages'][$fooModelClass]['extension']['factories']));
         $this->assertEquals(array(), $config['storages'][$fooModelClass]['extension']['factories']);
 
-        $this->assertTrue(isset($config['storages'][$fooModelClass]['extension']['payments']));
-        $this->assertEquals(array(), $config['storages'][$fooModelClass]['extension']['payments']);
+        $this->assertTrue(isset($config['storages'][$fooModelClass]['extension']['gateways']));
+        $this->assertEquals(array(), $config['storages'][$fooModelClass]['extension']['gateways']);
     }
 
     /**
@@ -177,7 +177,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                 'storages' => array(
                     $fooModelClass => array(
                         'extension' => array(
-                            'payments' => array(
+                            'gateways' => array(
                                 'foo', 'bar'
                             )
                         ),
@@ -198,8 +198,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             )
         ));
 
-        $this->assertTrue(isset($config['storages'][$fooModelClass]['extension']['payments']));
-        $this->assertEquals(array('foo', 'bar'), $config['storages'][$fooModelClass]['extension']['payments']);
+        $this->assertTrue(isset($config['storages'][$fooModelClass]['extension']['gateways']));
+        $this->assertEquals(array('foo', 'bar'), $config['storages'][$fooModelClass]['extension']['gateways']);
     }
 
     /**
@@ -273,7 +273,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
+                'gateways' => array(
                     'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
@@ -317,7 +317,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
+                'gateways' => array(
                     'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
@@ -354,7 +354,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
+                'gateways' => array(
                     'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
@@ -388,7 +388,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
+                'gateways' => array(
                     'a_payment' => array()
                 )
             )
@@ -415,7 +415,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
+                'gateways' => array(
                     'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
@@ -449,7 +449,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
+                'gateways' => array(
                     'a_payment' => array(
                         'bar_payment' => array(
                             'bar_opt' => 'bar'
@@ -491,7 +491,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
+                'gateways' => array(
                     'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
@@ -525,7 +525,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
+                'gateways' => array(
                     'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
@@ -559,7 +559,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
+                'gateways' => array(
                     'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
@@ -584,7 +584,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
-                'payments' => array(
+                'gateways' => array(
                     'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
@@ -611,7 +611,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'security' => array(
                 ),
-                'payments' => array(
+                'gateways' => array(
                     'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
@@ -626,7 +626,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "payum.dynamic_payments.config_storage": Only one config storage could be configured.
+     * @expectedExceptionMessage Invalid configuration for path "payum.dynamic_gateways.config_storage": Only one config storage could be configured.
      */
     public function throwIfMoreThenOnePaymentConfigStorageConfigured()
     {
@@ -636,7 +636,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
-                'dynamic_payments' => array(
+                'dynamic_gateways' => array(
                     'config_storage' => array(
                         'Payum\Core\Model\PaymentConfig' => array(
                             'foo_storage' => array(
@@ -659,7 +659,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
+                'gateways' => array(
                     'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
@@ -674,7 +674,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "payum.dynamic_payments.config_storage": The config class must implement `Payum\Core\Model\GatewayConfigInterface` interface
+     * @expectedExceptionMessage Invalid configuration for path "payum.dynamic_gateways.config_storage": The config class must implement `Payum\Core\Model\GatewayConfigInterface` interface
      */
     public function throwIfPaymentConfigStorageConfiguredWithModelNotImplementingGatewayConfigInterface()
     {
@@ -684,7 +684,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
-                'dynamic_payments' => array(
+                'dynamic_gateways' => array(
                     'config_storage' => array(
                         'stdClass' => array(
                             'foo_storage' => array(
@@ -702,7 +702,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
+                'gateways' => array(
                     'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
@@ -717,7 +717,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "payum.dynamic_payments.config_storage": The storage entry must be a valid model class.
+     * @expectedExceptionMessage Invalid configuration for path "payum.dynamic_gateways.config_storage": The storage entry must be a valid model class.
      */
     public function throwIfPaymentConfigStorageConfiguredWithNotModelClass()
     {
@@ -727,7 +727,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
-                'dynamic_payments' => array(
+                'dynamic_gateways' => array(
                     'config_storage' => array(
                         'foo' => array(
                             'foo_storage' => array(
@@ -745,7 +745,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
+                'gateways' => array(
                     'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'
@@ -760,7 +760,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "config_storage" at path "payum.dynamic_payments" must be configured.
+     * @expectedExceptionMessage The child node "config_storage" at path "payum.dynamic_gateways" must be configured.
      */
     public function throwIfPaymentConfigStorageNotConfigured()
     {
@@ -770,7 +770,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
-                'dynamic_payments' => array(
+                'dynamic_gateways' => array(
                 ),
                 'security' => array(
                     'token_storage' => array(
@@ -781,7 +781,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
+                'gateways' => array(
                     'a_payment' => array(
                         'foo_payment' => array(
                             'foo_opt' => 'foo'

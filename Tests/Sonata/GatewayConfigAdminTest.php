@@ -3,14 +3,14 @@ namespace Payum\Bundle\PayumBundle\Sonata\Tests;
 
 use Payum\Bundle\PayumBundle\Sonata\GatewayConfigAdmin;
 
-class PaymentConfigAdminTest extends \PHPUnit_Framework_TestCase
+class GatewayConfigAdminTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassSonataAdmin()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\Sonata\PaymentConfigAdmin');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\Sonata\GatewayConfigAdmin');
 
         $this->assertTrue($rc->isSubclassOf('Sonata\AdminBundle\Admin\Admin'));
     }

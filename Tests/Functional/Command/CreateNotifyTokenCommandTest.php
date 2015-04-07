@@ -18,7 +18,7 @@ class CreateNotifyTokenCommandTest extends WebTestCase
     public function shouldCreateNotifyTokenWithoutModel()
     {
         $output = $this->executeConsole(new CreateNotifyTokenCommand, array(
-            'payment-name' => 'fooPayment'
+            'gateway-name' => 'fooGateway'
         ));
 
         $this->assertContains('Hash: ', $output);
@@ -43,7 +43,7 @@ class CreateNotifyTokenCommandTest extends WebTestCase
         $modelId = $storage->identify($model)->getId();
 
         $output = $this->executeConsole(new CreateNotifyTokenCommand, array(
-            'payment-name' => 'fooPayment',
+            'gateway-name' => 'fooGateway',
             '--model-class' => $modelClass,
             '--model-id' => $modelId
         ));

@@ -8,19 +8,19 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class DebugPaymentCommandTest extends WebTestCase
+class DebugGatewayCommandTest extends WebTestCase
 {
     /**
      * @test
      */
-    public function shouldOutputDebugInfoAboutSinglePayment()
+    public function shouldOutputDebugInfoAboutSingleGateway()
     {
         $output = $this->executeConsole(new DebugGatewayCommand(), array(
-            'payment-name' => 'fooPayment',
+            'gateway-name' => 'fooGateway',
         ));
 
-        $this->assertContains('Found 1 payments', $output);
-        $this->assertContains('fooPayment (Payum\Core\Payment):', $output);
+        $this->assertContains('Found 1 gateways', $output);
+        $this->assertContains('fooGateway (Payum\Core\Gateway):', $output);
         $this->assertContains('Actions:', $output);
         $this->assertContains('Extensions:', $output);
         $this->assertContains('Apis:', $output);
@@ -35,13 +35,13 @@ class DebugPaymentCommandTest extends WebTestCase
     /**
      * @test
      */
-    public function shouldOutputDebugInfoAboutAllPayments()
+    public function shouldOutputDebugInfoAboutAllGateways()
     {
         $output = $this->executeConsole(new DebugGatewayCommand());
 
-        $this->assertContains('Found 2 payments', $output);
-        $this->assertContains('fooPayment (Payum\Core\Payment):', $output);
-        $this->assertContains('barPayment (Payum\Core\Payment):', $output);
+        $this->assertContains('Found 2 gateways', $output);
+        $this->assertContains('fooGateway (Payum\Core\Gateway):', $output);
+        $this->assertContains('barGateway (Payum\Core\Gateway):', $output);
     }
 
     /**
@@ -50,21 +50,21 @@ class DebugPaymentCommandTest extends WebTestCase
     public function shouldOutputInfoWhatActionsSupports()
     {
         $output = $this->executeConsole(new DebugGatewayCommand(), array(
-            'payment-name' => 'fooPayment',
+            'gateway-name' => 'fooGateway',
             '--show-supports' => true,
         ));
 
-        $this->assertContains('Found 1 payments', $output);
-        $this->assertContains('fooPayment (Payum\Core\Payment):', $output);
+        $this->assertContains('Found 1 gateways', $output);
+        $this->assertContains('fooGateway (Payum\Core\Gateway):', $output);
         $this->assertContains('Payum\Offline\Action\CaptureAction', $output);
         $this->assertContains('$request instanceof Capture &&', $output);
-        $this->assertContains('$request->getModel() instanceof PaymentInterface', $output);
+        $this->assertContains('$request->getModel() instanceof GatewayInterface', $output);
     }
 
     /**
      * @test
      */
-    public function shouldOutputChoiceListPaymentsForNameGiven()
+    public function shouldOutputChoiceListGatewaysForNameGiven()
     {
         $command = new DebugGatewayCommand();
         $command->setApplication(new Application($this->client->getKernel()));
@@ -78,11 +78,11 @@ class DebugPaymentCommandTest extends WebTestCase
         $helper->setInputStream($this->getInputStream('0'));
 
         $output = $this->executeConsole($command, array(
-            'payment-name' => 'foo',
+            'gateway-name' => 'foo',
         ));
 
-        $this->assertContains('Choose a number for more information on the payum payment', $output);
-        $this->assertContains('[0] fooPayment', $output);
+        $this->assertContains('Choose a number for more information on the payum gateway', $output);
+        $this->assertContains('[0] fooGateway', $output);
     }
 
     /**

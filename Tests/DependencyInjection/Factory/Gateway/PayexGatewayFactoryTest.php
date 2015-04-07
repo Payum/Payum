@@ -7,18 +7,18 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\Be2BillDirectGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PayexGatewayFactory;
 
-class Be2BillDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
+class PayexGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldBeSubClassOfAbstractPaymentFactory()
+    public function shouldBeSubClassOfAbstractGatewayFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\Be2BillDirectPaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PayexGatewayFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractPaymentFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractGatewayFactory'));
     }
 
     /**
@@ -26,7 +26,7 @@ class Be2BillDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new Be2BillDirectGatewayFactory;
+        new PayexGatewayFactory;
     }
 
     /**
@@ -34,9 +34,9 @@ class Be2BillDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetName()
     {
-        $factory = new Be2BillDirectGatewayFactory;
+        $factory = new PayexGatewayFactory;
 
-        $this->assertEquals('be2bill_direct', $factory->getName());
+        $this->assertEquals('payex', $factory->getName());
     }
 
     /**
@@ -44,7 +44,7 @@ class Be2BillDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfiguration()
     {
-        $factory = new Be2BillDirectGatewayFactory;
+        $factory = new PayexGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -53,20 +53,18 @@ class Be2BillDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $config = $processor->process($tb->buildTree(), array(array(
-            'identifier' => 'anIdentifier',
-            'password' => 'aPassword',
+            'encryption_key' => 'aKey',
+            'account_number' => 'aNum',
+            'sandbox' => true,
         )));
-
-        $this->assertArrayHasKey('identifier', $config);
-        $this->assertEquals('anIdentifier', $config['identifier']);
         
-        $this->assertArrayHasKey('password', $config);
-        $this->assertEquals('aPassword', $config['password']);
+        $this->assertArrayHasKey('encryption_key', $config);
+        $this->assertEquals('aKey', $config['encryption_key']);
 
-        $this->assertArrayHasKey('sandbox', $config);
-        $this->assertTrue($config['sandbox']);
+        $this->assertArrayHasKey('account_number', $config);
+        $this->assertEquals('aNum', $config['account_number']);
 
-        //come from abstract payment factory
+        //come from abstract gateway factory
         $this->assertArrayHasKey('actions', $config);
         $this->assertArrayHasKey('apis', $config);
         $this->assertArrayHasKey('extensions', $config);
@@ -76,30 +74,11 @@ class Be2BillDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "identifier" at path "foo" must be configured.
+     * @expectedExceptionMessage The child node "encryption_key" at path "foo" must be configured.
      */
-    public function thrownIfIdentifierOptionNotSet()
+    public function thrownIfEncryptionKeyOptionNotSet()
     {
-        $factory = new Be2BillDirectGatewayFactory;
-
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('foo');
-
-        $factory->addConfiguration($rootNode);
-
-        $processor = new Processor();
-        $processor->process($tb->buildTree(), array(array()));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "password" at path "foo" must be configured.
-     */
-    public function thrownIfPasswordOptionNotSet()
-    {
-        $factory = new Be2BillDirectGatewayFactory;
+        $factory = new PayexGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -108,41 +87,61 @@ class Be2BillDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
-            'identifier' => 'anIdentifier'
+        )));
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The child node "account_number" at path "foo" must be configured.
+     */
+    public function thrownIfAccountNumberOptionNotSet()
+    {
+        $factory = new PayexGatewayFactory;
+
+        $tb = new TreeBuilder();
+        $rootNode = $tb->root('foo');
+
+        $factory->addConfiguration($rootNode);
+
+        $processor = new Processor();
+        $processor->process($tb->buildTree(), array(array(
+            'encryption_key' => 'aKey'
         )));
     }
 
     /**
      * @test
      */
-    public function shouldAllowCreatePaymentAndReturnItsId()
+    public function shouldAllowCreateGatewayAndReturnItsId()
     {
-        $factory = new Be2BillDirectGatewayFactory;
+        $factory = new PayexGatewayFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aPaymentName', array(
-            'identifier' => 'anIdentifier',
-            'password' => 'aPassword',
+        $gatewayId = $factory->create($container, 'aGatewayName', array(
+            'encryption_key' => 'aKey',
+            'account_number' => 'aNum',
             'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
         ));
         
-        $this->assertEquals('payum.be2bill_direct.aPaymentName.payment', $paymentId);
-        $this->assertTrue($container->hasDefinition($paymentId));
+        $this->assertEquals('payum.payex.aGatewayName.gateway', $gatewayId);
+        $this->assertTrue($container->hasDefinition($gatewayId));
 
-        $payment = $container->getDefinition($paymentId);
+        $gateway = $container->getDefinition($gatewayId);
 
         //guard
-        $this->assertNotEmpty($payment->getFactoryMethod());
-        $this->assertNotEmpty($payment->getFactoryService());
-        $this->assertNotEmpty($payment->getArguments());
+        $this->assertNotEmpty($gateway->getFactoryMethod());
+        $this->assertNotEmpty($gateway->getFactoryService());
+        $this->assertNotEmpty($gateway->getArguments());
 
-        $config = $payment->getArgument(0);
+        $config = $gateway->getArgument(0);
 
-        $this->assertEquals('aPaymentName', $config['payum.payment_name']);
+        $this->assertEquals('aGatewayName', $config['payum.gateway_name']);
     }
 
     /**
@@ -150,30 +149,30 @@ class Be2BillDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLoadFactory()
     {
-        $factory = new Be2BillDirectGatewayFactory;
+        $factory = new PayexGatewayFactory;
 
         $container = new ContainerBuilder;
 
         $factory->load($container);
 
-        $this->assertTrue($container->hasDefinition('payum.be2bill_direct.factory'));
+        $this->assertTrue($container->hasDefinition('payum.payex.factory'));
 
-        $factoryService = $container->getDefinition('payum.be2bill_direct.factory');
-        $this->assertEquals('Payum\Be2Bill\DirectPaymentFactory', $factoryService->getClass());
+        $factoryService = $container->getDefinition('payum.payex.factory');
+        $this->assertEquals('Payum\Payex\PayexGatewayFactory', $factoryService->getClass());
         $this->assertEquals(
-            array(array('name' => 'be2bill_direct', 'human_name' => 'Be2bill Direct')),
-            $factoryService->getTag('payum.payment_factory')
+            array(array('name' => 'payex', 'human_name' => 'Payex')),
+            $factoryService->getTag('payum.gateway_factory')
         );
 
         $factoryConfig = $factoryService->getArgument(0);
-        $this->assertEquals('be2bill_direct', $factoryConfig['payum.factory_name']);
+        $this->assertEquals('payex', $factoryConfig['payum.factory_name']);
         $this->assertArrayHasKey('buzz.client', $factoryConfig);
         $this->assertArrayHasKey('twig.env', $factoryConfig);
         $this->assertArrayHasKey('payum.template.layout', $factoryConfig);
         $this->assertArrayHasKey('payum.template.obtain_credit_card', $factoryConfig);
 
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(1));
-        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(1));
+        $this->assertEquals('payum.gateway_factory', (string) $factoryService->getArgument(1));
     }
 
     /**
@@ -181,13 +180,13 @@ class Be2BillDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new Be2BillDirectGatewayFactory;
+        $factory = new PayexGatewayFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aPaymentName', array(
-            'identifier' => 'anIdentifier',
-            'password' => 'aPassword',
+        $gatewayId = $factory->create($container, 'aGatewayName', array(
+            'encryption_key' => 'aKey',
+            'account_number' => 'aNum',
             'sandbox' => true,
             'actions' => array('payum.action.foo'),
             'apis' => array('payum.api.bar'),
@@ -195,17 +194,17 @@ class Be2BillDirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId), 
+            $container->getDefinition($gatewayId),
             'addAction', 
             new Reference('payum.action.foo')
         );
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
+            $container->getDefinition($gatewayId),
             'addApi',
             new Reference('payum.api.bar')
         );
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
+            $container->getDefinition($gatewayId),
             'addExtension',
             new Reference('payum.extension.ololo')
         );

@@ -26,10 +26,10 @@ class NotifyControllerTest extends \PHPUnit_Framework_TestCase
     public function shouldExecuteNotifyRequestOnDoUnsafe()
     {
         $request = Request::create('/');
-        $request->query->set('payment_name', 'thePaymentName');
+        $request->query->set('gateway', 'theGatewayName');
 
-        $paymentMock = $this->getMock('Payum\Core\PaymentInterface');
-        $paymentMock
+        $gatewayMock = $this->getMock('Payum\Core\GatewayInterface');
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Notify'))
@@ -38,9 +38,9 @@ class NotifyControllerTest extends \PHPUnit_Framework_TestCase
         $registryMock = $this->getMock('Payum\Core\Registry\RegistryInterface');
         $registryMock
             ->expects($this->once())
-            ->method('getPayment')
-            ->with('thePaymentName')
-            ->will($this->returnValue($paymentMock))
+            ->method('getGateway')
+            ->with('theGatewayName')
+            ->will($this->returnValue($gatewayMock))
         ;
 
         $container = new Container;

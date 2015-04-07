@@ -66,7 +66,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array()
+                'gateways' => array()
             )
         ));
     }
@@ -92,7 +92,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
+                'gateways' => array(
                     'a_payment' => array(
                         'paypal_express_checkout_nvp' => array(
                             'username' => 'aUsername',
@@ -127,7 +127,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'dynamic_payments' => array(
+                'dynamic_gateways' => array(
                     'config_storage' => array(
                         'Payum\Core\Model\PaymentConfig' => array(
                             'doctrine' => array(
@@ -161,7 +161,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'dynamic_payments' => array(
+                'dynamic_gateways' => array(
                     'sonata_admin' => true,
                     'config_storage' => array(
                         'Payum\Core\Model\PaymentConfig' => array(
@@ -178,7 +178,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldPassConfigurationProcessingWithKlarnaCheckoutPaymentFactory()
+    public function shouldPassConfigurationProcessingWithKlarnaCheckoutGatewayFactory()
     {
         $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
 
@@ -196,7 +196,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
+                'gateways' => array(
                     'a_payment' => array(
                         'klarna_checkout' => array(
                             'secret' => 'aSecret',
@@ -237,7 +237,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
+                'gateways' => array(
                     'a_payment' => array(
                         'omnipay_direct' => array(
                             'type' => 'PayPal_Express',
@@ -278,7 +278,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
+                'gateways' => array(
                     'a_payment' => array(
                         'omnipay_offsite' => array(
                             'type' => 'PayPal_Express',

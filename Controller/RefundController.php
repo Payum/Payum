@@ -11,8 +11,8 @@ class RefundController extends PayumController
     {
         $token = $this->getHttpRequestVerifier()->verify($request);
 
-        $payment = $this->getPayum()->getPayment($token->getGatewayName());
-        $payment->execute(new Refund($token));
+        $gateway = $this->getPayum()->getGateway($token->getGatewayName());
+        $gateway->execute(new Refund($token));
         
         $this->getHttpRequestVerifier()->invalidate($token);
         

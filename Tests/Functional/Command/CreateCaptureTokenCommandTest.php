@@ -29,7 +29,7 @@ class CreateCaptureTokenCommandTest extends WebTestCase
         $modelId = $storage->identify($model)->getId();
 
         $output = $this->executeConsole(new CreateCaptureTokenCommand, array(
-            'payment-name' => 'fooPayment',
+            'gateway-name' => 'fooGateway',
             '--model-class' => $modelClass,
             '--model-id' => $modelId,
             '--after-url' => 'http://google.com'
@@ -58,7 +58,7 @@ class CreateCaptureTokenCommandTest extends WebTestCase
         $modelId = $storage->identify($model)->getId();
 
         $output = $this->executeConsole(new CreateCaptureTokenCommand, array(
-            'payment-name' => 'fooPayment',
+            'gateway-name' => 'fooGateway',
             '--model-class' => $modelClass,
             '--model-id' => $modelId,
             '--after-url' => 'foo'

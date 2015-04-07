@@ -7,18 +7,28 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PaypalExpressCheckoutNvpGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\Be2BillOffsiteGatewayFactory;
 
-class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_TestCase
+class Be2BillOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldBeSubClassOfAbstractPaymentFactory()
+    public function shouldBeSubClassOfAbstractGatewayFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PaypalExpressCheckoutNvpPaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\Be2BillOffsiteGatewayFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractPaymentFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractGatewayFactory'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldBeSubClassOfBe2BillDirectGatewayFactory()
+    {
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\Be2BillOffsiteGatewayFactory');
+
+        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\Be2BillDirectGatewayFactory'));
     }
 
     /**
@@ -26,7 +36,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new PaypalExpressCheckoutNvpGatewayFactory;
+        new Be2BillOffsiteGatewayFactory;
     }
 
     /**
@@ -34,9 +44,9 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
      */
     public function shouldAllowGetName()
     {
-        $factory = new PaypalExpressCheckoutNvpGatewayFactory;
+        $factory = new Be2BillOffsiteGatewayFactory;
 
-        $this->assertEquals('paypal_express_checkout_nvp', $factory->getName());
+        $this->assertEquals('be2bill_offsite', $factory->getName());
     }
 
     /**
@@ -44,31 +54,29 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
      */
     public function shouldAllowAddConfiguration()
     {
-        $factory = new PaypalExpressCheckoutNvpGatewayFactory;
+        $factory = new Be2BillOffsiteGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
-        
+
         $factory->addConfiguration($rootNode);
 
         $processor = new Processor();
         $config = $processor->process($tb->buildTree(), array(array(
-            'username' => 'aUsername',
+            'identifier' => 'anIdentifier',
             'password' => 'aPassword',
-            'signature' => 'aSignature',
         )));
-        
 
-        $this->assertArrayHasKey('username', $config);
-        $this->assertEquals('aUsername', $config['username']);
+        $this->assertArrayHasKey('identifier', $config);
+        $this->assertEquals('anIdentifier', $config['identifier']);
 
         $this->assertArrayHasKey('password', $config);
         $this->assertEquals('aPassword', $config['password']);
 
-        $this->assertArrayHasKey('signature', $config);
-        $this->assertEquals('aSignature', $config['signature']);
+        $this->assertArrayHasKey('sandbox', $config);
+        $this->assertTrue($config['sandbox']);
 
-        //come from abstract payment factory
+        //come from abstract gateway factory
         $this->assertArrayHasKey('actions', $config);
         $this->assertArrayHasKey('apis', $config);
         $this->assertArrayHasKey('extensions', $config);
@@ -78,11 +86,11 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "username" at path "foo" must be configured.
+     * @expectedExceptionMessage The child node "identifier" at path "foo" must be configured.
      */
-    public function thrownIfUsernameOptionNotSet()
+    public function thrownIfIdentifierOptionNotSet()
     {
-        $factory = new PaypalExpressCheckoutNvpGatewayFactory;
+        $factory = new Be2BillOffsiteGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -101,7 +109,7 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
      */
     public function thrownIfPasswordOptionNotSet()
     {
-        $factory = new PaypalExpressCheckoutNvpGatewayFactory;
+        $factory = new Be2BillOffsiteGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -110,64 +118,41 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array(array(
-            'username' => 'aUsername'
-        )));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The child node "signature" at path "foo" must be configured.
-     */
-    public function thrownIfSignatureOptionNotSet()
-    {
-        $factory = new PaypalExpressCheckoutNvpGatewayFactory;
-
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('foo');
-
-        $factory->addConfiguration($rootNode);
-
-        $processor = new Processor();
-        $processor->process($tb->buildTree(), array(array(
-            'username' => 'aUsername',
-            'password' => 'aPassword',
+            'identifier' => 'anIdentifier'
         )));
     }
 
     /**
      * @test
      */
-    public function shouldAllowCreatePaymentAndReturnItsId()
+    public function shouldAllowCreateGatewayAndReturnItsId()
     {
-        $factory = new PaypalExpressCheckoutNvpGatewayFactory;
+        $factory = new Be2BillOffsiteGatewayFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aPaymentName', array(
-            'username' => 'aUsername',
+        $gatewayId = $factory->create($container, 'aGatewayName', array(
+            'identifier' => 'anIdentifier',
             'password' => 'aPassword',
-            'signature' => 'aSignature',
             'sandbox' => true,
             'actions' => array(),
             'apis' => array(),
             'extensions' => array(),
         ));
-        
-        $this->assertEquals('payum.paypal_express_checkout_nvp.aPaymentName.payment', $paymentId);
-        $this->assertTrue($container->hasDefinition($paymentId));
 
-        $payment = $container->getDefinition($paymentId);
+        $this->assertEquals('payum.be2bill_offsite.aGatewayName.gateway', $gatewayId);
+        $this->assertTrue($container->hasDefinition($gatewayId));
+
+        $gateway = $container->getDefinition($gatewayId);
 
         //guard
-        $this->assertNotEmpty($payment->getFactoryMethod());
-        $this->assertNotEmpty($payment->getFactoryService());
-        $this->assertNotEmpty($payment->getArguments());
+        $this->assertNotEmpty($gateway->getFactoryMethod());
+        $this->assertNotEmpty($gateway->getFactoryService());
+        $this->assertNotEmpty($gateway->getArguments());
 
-        $config = $payment->getArgument(0);
+        $config = $gateway->getArgument(0);
 
-        $this->assertEquals('aPaymentName', $config['payum.payment_name']);
+        $this->assertEquals('aGatewayName', $config['payum.gateway_name']);
     }
 
     /**
@@ -175,30 +160,30 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
      */
     public function shouldLoadFactory()
     {
-        $factory = new PaypalExpressCheckoutNvpGatewayFactory;
+        $factory = new Be2BillOffsiteGatewayFactory;
 
         $container = new ContainerBuilder;
 
         $factory->load($container);
 
-        $this->assertTrue($container->hasDefinition('payum.paypal_express_checkout_nvp.factory'));
+        $this->assertTrue($container->hasDefinition('payum.be2bill_offsite.factory'));
 
-        $factoryService = $container->getDefinition('payum.paypal_express_checkout_nvp.factory');
-        $this->assertEquals('Payum\Paypal\ExpressCheckout\Nvp\PaymentFactory', $factoryService->getClass());
+        $factoryService = $container->getDefinition('payum.be2bill_offsite.factory');
+        $this->assertEquals('Payum\Be2Bill\Be2BillOffsiteGatewayFactory', $factoryService->getClass());
         $this->assertEquals(
-            array(array('name' => 'paypal_express_checkout_nvp', 'human_name' => 'Paypal Express Checkout Nvp')),
-            $factoryService->getTag('payum.payment_factory')
+            array(array('name' => 'be2bill_offsite', 'human_name' => 'Be2bill Offsite')),
+            $factoryService->getTag('payum.gateway_factory')
         );
 
         $factoryConfig = $factoryService->getArgument(0);
-        $this->assertEquals('paypal_express_checkout_nvp', $factoryConfig['payum.factory_name']);
+        $this->assertEquals('be2bill_offsite', $factoryConfig['payum.factory_name']);
         $this->assertArrayHasKey('buzz.client', $factoryConfig);
         $this->assertArrayHasKey('twig.env', $factoryConfig);
         $this->assertArrayHasKey('payum.template.layout', $factoryConfig);
         $this->assertArrayHasKey('payum.template.obtain_credit_card', $factoryConfig);
 
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(1));
-        $this->assertEquals('payum.payment_factory', (string) $factoryService->getArgument(1));
+        $this->assertEquals('payum.gateway_factory', (string) $factoryService->getArgument(1));
     }
 
     /**
@@ -206,14 +191,13 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new PaypalExpressCheckoutNvpGatewayFactory;
+        $factory = new Be2BillOffsiteGatewayFactory;
 
         $container = new ContainerBuilder;
 
-        $paymentId = $factory->create($container, 'aPaymentName', array(
-            'username' => 'aUsername',
+        $gatewayId = $factory->create($container, 'aGatewayName', array(
+            'identifier' => 'anIdentifier',
             'password' => 'aPassword',
-            'signature' => 'aSignature',
             'sandbox' => true,
             'actions' => array('payum.action.foo'),
             'apis' => array('payum.api.bar'),
@@ -221,17 +205,17 @@ class PaypalExpressCheckoutNvpPaymentFactoryTest extends \PHPUnit_Framework_Test
         ));
 
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId), 
-            'addAction', 
+            $container->getDefinition($gatewayId),
+            'addAction',
             new Reference('payum.action.foo')
         );
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
+            $container->getDefinition($gatewayId),
             'addApi',
             new Reference('payum.api.bar')
         );
         $this->assertDefinitionContainsMethodCall(
-            $container->getDefinition($paymentId),
+            $container->getDefinition($gatewayId),
             'addExtension',
             new Reference('payum.extension.ololo')
         );

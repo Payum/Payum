@@ -2,11 +2,10 @@
 namespace Payum\Bundle\PayumBundle\Tests;
 
 use Payum\Bundle\PayumBundle\GatewayFactory;
-use Payum\Core\PaymentInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
+class GatewayFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ContainerInterface
@@ -25,19 +24,19 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassCorePaymentFactory()
+    public function shouldBeSubClassCoreGatewayFactory()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\PaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\GatewayFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\PaymentFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\GatewayFactory'));
     }
 
     /**
      * @test
      */
-    public function shouldImplementsPaymentFactoryInterface()
+    public function shouldImplementsGatewayFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\PaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\GatewayFactory');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayFactoryInterface'));
     }
@@ -47,7 +46,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementContainerAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\PaymentFactory');
+        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\GatewayFactory');
 
         $this->assertTrue($rc->implementsInterface('Symfony\Component\DependencyInjection\ContainerAwareInterface'));
     }
@@ -81,7 +80,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $payment = $factory->create();
 
-        $this->assertInstanceOf('Payum\Core\PaymentInterface', $payment);
+        $this->assertInstanceOf('Payum\Core\GatewayInterface', $payment);
     }
 
     /**
