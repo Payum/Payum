@@ -1,6 +1,7 @@
 <?php
 namespace Payum\AuthorizeNet\Aim;
 
+use Payum\AuthorizeNet\Aim\Action\ConvertPaymentAction;
 use Payum\AuthorizeNet\Aim\Action\FillOrderDetailsAction;
 use Payum\AuthorizeNet\Aim\Action\CaptureAction;
 use Payum\AuthorizeNet\Aim\Action\StatusAction;
@@ -52,7 +53,7 @@ class AuthorizeNetAimGatewayFactory implements GatewayFactoryInterface
             'payum.factory_title' => 'Authorize.NET AIM',
             'payum.action.capture' => new CaptureAction(),
             'payum.action.status' => new StatusAction(),
-            'payum.action.fill_order_details' => new FillOrderDetailsAction(),
+            'payum.action.convert_payment' => new ConvertPaymentAction(),
         ));
 
         if (false == $config['payum.api']) {
