@@ -5,7 +5,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Capture;
-use Payum\Core\Request\FillOrderDetails;
+use Payum\Core\Request\Convert;
 use Payum\Core\Request\GetHumanStatus;
 
 class CapturePaymentAction extends GatewayAwareAction
@@ -19,23 +19,25 @@ class CapturePaymentAction extends GatewayAwareAction
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        /** @var $order PaymentInterface */
-        $order = $request->getModel();
+        /** @var $payment PaymentInterface */
+        $payment = $request->getModel();
 
-        $this->gateway->execute($status = new GetHumanStatus($order));
+        $this->gateway->execute($status = new GetHumanStatus($payment));
         if ($status->isNew()) {
-            $this->gateway->execute(new FillOrderDetails($order, $request->getToken()));
+            $this->gateway->execute($convert = new Convert($payment, 'array', $request->getToken()));
+
+            $payment->setDetails($convert->getResult());
         }
 
-        $details = ArrayObject::ensureArrayObject($order->getDetails());
+        $details = ArrayObject::ensureArrayObject($payment->getDetails());
 
         $request->setModel($details);
         try {
             $this->gateway->execute($request);
 
-            $order->setDetails($details);
+            $payment->setDetails($details);
         } catch (\Exception $e) {
-            $order->setDetails($details);
+            $payment->setDetails($details);
 
             throw $e;
         }
