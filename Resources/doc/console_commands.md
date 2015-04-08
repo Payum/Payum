@@ -53,7 +53,7 @@ Found 1 gateways
 
 > fooGateway (Payum\Core\Gateway):
 >	Actions:
->	Payum\Core\Action\CaptureOrderAction
+>	Payum\Core\Action\CapturePaymentAction
 >	Payum\Core\Action\NotifyOrderAction
 >	Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction
 >	Payum\Core\Bridge\Symfony\Action\GetHttpRequestAction

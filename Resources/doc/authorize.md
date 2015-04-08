@@ -3,7 +3,7 @@
 In [get it started](get_it_started.md) we showed you an example of how to capture the payment. 
 It is not always the case, sometimes you want to just authorize it and capture a bit later.
    
-## Prepare order
+## Prepare payment
 
 We have to caThe only difference from capture one example 
 
