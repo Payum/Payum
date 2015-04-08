@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     
     <parameters>
-        <parameter key="payum.available_payment_factories" type="collection" />
+        <parameter key="payum.available_gateway_factories" type="collection" />
     </parameters>
 
     <services>
@@ -14,16 +14,16 @@
         <service id="payum" alias="payum.static_registry" />
 
         <service id="payum.static_registry" class="Payum\Bundle\PayumBundle\Registry\ContainerAwareRegistry">
-            <argument type="collection" /> <!-- payments services. this should be replaced while container is built -->
+            <argument type="collection" /> <!-- gateways services. this should be replaced while container is built -->
             <argument type="collection" /> <!-- storages services. this should be replaced while container is built -->
-            <argument type="collection" /> <!-- payments factories services. this should be replaced while container is built -->
+            <argument type="collection" /> <!-- gateways factories services. this should be replaced while container is built -->
 
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
         </service>
 
-        <service id="payum.payment_factory" class="Payum\Bundle\PayumBundle\PaymentFactory">
+        <service id="payum.gateway_factory" class="Payum\Bundle\PayumBundle\GatewayFactory">
             <argument type="collection" /> <!-- this should be replaced in compiler pass -->
             <argument type="collection" /> <!-- this should be replaced in compiler pass -->
             <argument type="collection" /> <!-- this should be replaced in compiler pass -->

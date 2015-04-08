@@ -1,25 +1,26 @@
 <?php
 namespace Payum\Bundle\PayumBundle;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Compiler\BuildPaymentFactoryPass;
+use Payum\Bundle\PayumBundle\DependencyInjection\Compiler\BuildGatewayFactoryPass;
 use Payum\Bundle\PayumBundle\DependencyInjection\Compiler\BuildRegistryPass;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillOffsitePaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillDirectPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaCheckoutPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaInvoicePaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OfflinePaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\CustomPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayOffsitePaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayDirectPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCheckoutNvpPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PayexPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AuthorizeNetAimPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\StripeCheckoutPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\StripeJsPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\Be2BillOffsiteGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\Be2BillDirectGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\KlarnaCheckoutGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\KlarnaInvoiceGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OfflineGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\CustomGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OmnipayOffsiteGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OmnipayDirectGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PaypalExpressCheckoutNvpGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PaypalProCheckoutNvpGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PayexGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AuthorizeNetAimGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\StripeCheckoutGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\StripeJsGatewayFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\CustomStorageFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\DoctrineStorageFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\FilesystemStorageFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\PayumExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -29,29 +30,29 @@ class PayumBundle extends Bundle
     {
         parent::build($container);
 
-        /** @var $extension DependencyInjection\PayumExtension */
+        /** @var $extension PayumExtension */
         $extension = $container->getExtension('payum');
 
-        $extension->addPaymentFactory(new PaypalExpressCheckoutNvpPaymentFactory);
-        $extension->addPaymentFactory(new PaypalProCheckoutNvpPaymentFactory);
-        $extension->addPaymentFactory(new Be2BillDirectPaymentFactory);
-        $extension->addPaymentFactory(new Be2BillOffsitePaymentFactory);
-        $extension->addPaymentFactory(new AuthorizeNetAimPaymentFactory);
-        $extension->addPaymentFactory(new PayexPaymentFactory);
-        $extension->addPaymentFactory(new OmnipayDirectPaymentFactory);
-        $extension->addPaymentFactory(new OmnipayOffsitePaymentFactory);
-        $extension->addPaymentFactory(new CustomPaymentFactory);
-        $extension->addPaymentFactory(new OfflinePaymentFactory);
-        $extension->addPaymentFactory(new KlarnaCheckoutPaymentFactory);
-        $extension->addPaymentFactory(new KlarnaInvoicePaymentFactory);
-        $extension->addPaymentFactory(new StripeJsPaymentFactory);
-        $extension->addPaymentFactory(new StripeCheckoutPaymentFactory);
+        $extension->addGatewayFactory(new PaypalExpressCheckoutNvpGatewayFactory);
+        $extension->addGatewayFactory(new PaypalProCheckoutNvpGatewayFactory);
+        $extension->addGatewayFactory(new Be2BillDirectGatewayFactory);
+        $extension->addGatewayFactory(new Be2BillOffsiteGatewayFactory);
+        $extension->addGatewayFactory(new AuthorizeNetAimGatewayFactory);
+        $extension->addGatewayFactory(new PayexGatewayFactory);
+        $extension->addGatewayFactory(new OmnipayDirectGatewayFactory);
+        $extension->addGatewayFactory(new OmnipayOffsiteGatewayFactory);
+        $extension->addGatewayFactory(new CustomGatewayFactory);
+        $extension->addGatewayFactory(new OfflineGatewayFactory);
+        $extension->addGatewayFactory(new KlarnaCheckoutGatewayFactory);
+        $extension->addGatewayFactory(new KlarnaInvoiceGatewayFactory);
+        $extension->addGatewayFactory(new StripeJsGatewayFactory);
+        $extension->addGatewayFactory(new StripeCheckoutGatewayFactory);
 
         $extension->addStorageFactory(new FilesystemStorageFactory);
         $extension->addStorageFactory(new DoctrineStorageFactory);
         $extension->addStorageFactory(new CustomStorageFactory);
 
         $container->addCompilerPass(new BuildRegistryPass());
-        $container->addCompilerPass(new BuildPaymentFactoryPass);
+        $container->addCompilerPass(new BuildGatewayFactoryPass);
     }
 }

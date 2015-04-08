@@ -1,10 +1,10 @@
 <?php
 namespace Payum\Bundle\PayumBundle\DependencyInjection;
 
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\GatewayFactoryInterface;
 use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface;
 use Payum\Core\Exception\LogicException;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -21,12 +21,12 @@ class PayumExtension extends Extension implements PrependExtensionInterface
     /**
      * @var StorageFactoryInterface[]
      */
-    protected $storageFactories = array();
+    protected $storagesFactories = array();
 
     /**
-     * @var PaymentFactoryInterface[]
+     * @var GatewayFactoryInterface[]
      */
-    protected $paymentFactories = array();
+    protected $gatewaysFactories = array();
 
     /**
      * {@inheritDoc}
@@ -50,10 +50,10 @@ class PayumExtension extends Extension implements PrependExtensionInterface
         $this->loadStorages($config['storages'], $container);
         $this->loadSecurity($config['security'], $container);
 
-        $this->loadPayments($config['payments'], $container);
+        $this->loadGateways($config['gateways'], $container);
 
-        if (isset($config['dynamic_payments'])) {
-            $this->loadDynamicPayments($config['dynamic_payments'], $container);
+        if (isset($config['dynamic_gateways'])) {
+            $this->loadDynamicGateways($config['dynamic_gateways'], $container);
         };
     }
 
@@ -67,12 +67,12 @@ class PayumExtension extends Extension implements PrependExtensionInterface
         if (isset($bundles['TwigBundle'])) {
             $container->prependExtensionConfig('twig', array(
                 'paths' => array(
-                    TwigFactory::guessViewsPath('Payum\Core\Payment') => 'PayumCore',
+                    TwigFactory::guessViewsPath('Payum\Core\Gateway') => 'PayumCore',
                     TwigFactory::guessViewsPath('Payum\Core\Bridge\Symfony\ReplyToSymfonyResponseConverter') => 'PayumSymfonyBridge',
                 )
             ));
 
-            foreach ($this->paymentFactories as $factory) {
+            foreach ($this->gatewaysFactories as $factory) {
                 if ($factory instanceof PrependExtensionInterface) {
                     $factory->prepend($container);
                 }
@@ -83,7 +83,7 @@ class PayumExtension extends Extension implements PrependExtensionInterface
             foreach ($container->getExtensionConfig('doctrine') as $config) {
                 // do not register mappings if dbal not configured.
                 if (false == empty($config['dbal'])) {
-                    $rc = new \ReflectionClass('Payum\Core\Payment');
+                    $rc = new \ReflectionClass('Payum\Core\Gateway');
                     $payumRootDir = dirname($rc->getFileName());
 
                     $container->prependExtensionConfig('doctrine', array(
@@ -109,23 +109,23 @@ class PayumExtension extends Extension implements PrependExtensionInterface
      * @param array $config
      * @param ContainerBuilder $container
      */
-    protected function loadPayments(array $config, ContainerBuilder $container)
+    protected function loadGateways(array $config, ContainerBuilder $container)
     {
-        foreach ($this->paymentFactories as $factory) {
+        foreach ($this->gatewaysFactories as $factory) {
             $factory->load($container);
         }
 
-        foreach ($config as $paymentName => $paymentConfig) {
-            $paymentFactoryName = $this->findSelectedPaymentFactoryNameInPaymentConfig($paymentConfig);
-            $paymentId = $this->paymentFactories[$paymentFactoryName]->create(
+        foreach ($config as $gatewayName => $gatewayConfig) {
+            $gatewayFactoryName = $this->findSelectedGatewayFactoryNameInGatewayConfig($gatewayConfig);
+            $gatewayId = $this->gatewaysFactories[$gatewayFactoryName]->create(
                 $container,
-                $paymentName,
-                $paymentConfig[$paymentFactoryName]
+                $gatewayName,
+                $gatewayConfig[$gatewayFactoryName]
             );
 
-            $container->getDefinition($paymentId)->addTag('payum.payment', array(
-                'factory' => $paymentFactoryName,
-                'payment' => $paymentName
+            $container->getDefinition($gatewayId)->addTag('payum.gateway', array(
+                'factory' => $gatewayFactoryName,
+                'gateway' => $gatewayName
             ));
         }
     }
@@ -138,7 +138,7 @@ class PayumExtension extends Extension implements PrependExtensionInterface
     {
         foreach ($config as $modelClass => $storageConfig) {
             $storageFactoryName = $this->findSelectedStorageFactoryNameInStorageConfig($storageConfig);
-            $storageId = $this->storageFactories[$storageFactoryName]->create(
+            $storageId = $this->storagesFactories[$storageFactoryName]->create(
                 $container,
                 $modelClass,
                 $storageConfig[$storageFactoryName]
@@ -160,8 +160,8 @@ class PayumExtension extends Extension implements PrependExtensionInterface
             if ($storageConfig['extension']['all']) {
                 $storageExtension->addTag('payum.extension', array('all' => true));
             } else {
-                foreach ($storageConfig['extension']['payments'] as $paymentName) {
-                    $storageExtension->addTag('payum.extension', array('payment' => $paymentName));
+                foreach ($storageConfig['extension']['gateways'] as $gatewayName) {
+                    $storageExtension->addTag('payum.extension', array('gateway' => $gatewayName));
                 }
 
                 foreach ($storageConfig['extension']['factories'] as $factory) {
@@ -180,7 +180,7 @@ class PayumExtension extends Extension implements PrependExtensionInterface
         foreach ($securityConfig['token_storage'] as $tokenClass => $tokenStorageConfig) {
             $storageFactoryName = $this->findSelectedStorageFactoryNameInStorageConfig($tokenStorageConfig);
 
-            $storageId = $this->storageFactories[$storageFactoryName]->create(
+            $storageId = $this->storagesFactories[$storageFactoryName]->create(
                 $container,
                 $tokenClass,
                 $tokenStorageConfig[$storageFactoryName]
@@ -191,46 +191,46 @@ class PayumExtension extends Extension implements PrependExtensionInterface
     }
 
     /**
-     * @param array $dynamicPaymentsConfig
+     * @param array $dynamicGatewaysConfig
      * @param ContainerBuilder $container
      */
-    protected function loadDynamicPayments(array $dynamicPaymentsConfig, ContainerBuilder $container)
+    protected function loadDynamicGateways(array $dynamicGatewaysConfig, ContainerBuilder $container)
     {
         $configClass = null;
         $configStorage = null;
-        foreach ($dynamicPaymentsConfig['config_storage'] as $configClass => $configStorageConfig) {
+        foreach ($dynamicGatewaysConfig['config_storage'] as $configClass => $configStorageConfig) {
             $storageFactoryName = $this->findSelectedStorageFactoryNameInStorageConfig($configStorageConfig);
 
-            $configStorage = $this->storageFactories[$storageFactoryName]->create(
+            $configStorage = $this->storagesFactories[$storageFactoryName]->create(
                 $container,
                 $configClass,
                 $configStorageConfig[$storageFactoryName]
             );
 
-            $container->setDefinition('payum.dynamic_payments.config_storage', new DefinitionDecorator($configStorage));
+            $container->setDefinition('payum.dynamic_gateways.config_storage', new DefinitionDecorator($configStorage));
         }
 
         $registry =  new Definition('Payum\Core\Registry\DynamicRegistry', array(
-            new Reference('payum.dynamic_payments.config_storage'),
+            new Reference('payum.dynamic_gateways.config_storage'),
             new Reference('payum.static_registry')
         ));
         $container->setDefinition('payum.dynamic_registry', $registry);
         $container->setAlias('payum', new Alias('payum.dynamic_registry'));
 
-        if (isset($dynamicPaymentsConfig['sonata_admin'])) {
-            $paymentConfigAdmin =  new Definition('Payum\Bundle\PayumBundle\Sonata\PaymentConfigAdmin', array(
+        if (isset($dynamicGatewaysConfig['sonata_admin'])) {
+            $gatewayConfigAdmin =  new Definition('Payum\Bundle\PayumBundle\Sonata\GatewayConfigAdmin', array(
                 null,
                 $configClass,
                 null
             ));
-            $paymentConfigAdmin->addMethodCall('setFormFactory', array(new Reference('form.factory')));
-            $paymentConfigAdmin->addTag('sonata.admin', array(
+            $gatewayConfigAdmin->addMethodCall('setFormFactory', array(new Reference('form.factory')));
+            $gatewayConfigAdmin->addTag('sonata.admin', array(
                 'manager_type' => 'orm',
-                'group' => "Payments",
+                'group' => "Gateways",
                 'label' =>  "Configs",
             ));
 
-            $container->setDefinition('payum.dynamic_payments.payment_config_admin', $paymentConfigAdmin);
+            $container->setDefinition('payum.dynamic_gateways.gateway_config_admin', $gatewayConfigAdmin);
         }
     }
 
@@ -245,29 +245,29 @@ class PayumExtension extends Extension implements PrependExtensionInterface
         if (empty($factoryName)) {
             throw new InvalidArgumentException(sprintf('The storage factory %s has empty name', get_class($factory)));
         }
-        if (array_key_exists($factoryName, $this->storageFactories)) {
+        if (array_key_exists($factoryName, $this->storagesFactories)) {
             throw new InvalidArgumentException(sprintf('The storage factory with such name %s already registered', $factoryName));
         }
         
-        $this->storageFactories[$factoryName] = $factory;
+        $this->storagesFactories[$factoryName] = $factory;
     }
 
     /**
-     * @param Factory\Payment\PaymentFactoryInterface $factory
+     * @param GatewayFactoryInterface $factory
      *
      * @throws \Payum\Core\Exception\InvalidArgumentException
      */
-    public function addPaymentFactory(PaymentFactoryInterface $factory)
+    public function addGatewayFactory(GatewayFactoryInterface $factory)
     {
         $factoryName = $factory->getName();
         if (empty($factoryName)) {
-            throw new InvalidArgumentException(sprintf('The payment factory %s has empty name', get_class($factory)));
+            throw new InvalidArgumentException(sprintf('The gateway factory %s has empty name', get_class($factory)));
         }
-        if (isset($this->paymentFactories[$factoryName])) {
-            throw new InvalidArgumentException(sprintf('The payment factory with such name %s already registered', $factoryName));
+        if (isset($this->gatewaysFactories[$factoryName])) {
+            throw new InvalidArgumentException(sprintf('The gateway factory with such name %s already registered', $factoryName));
         }
         
-        $this->paymentFactories[$factory->getName()] = $factory;
+        $this->gatewaysFactories[$factory->getName()] = $factory;
     }
 
     /**
@@ -275,18 +275,18 @@ class PayumExtension extends Extension implements PrependExtensionInterface
      */
     public function getConfiguration(array $config, ContainerBuilder $container)
     {
-        return new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        return new MainConfiguration($this->gatewaysFactories, $this->storagesFactories);
     }
 
     /**
-     * @param array $paymentConfig
+     * @param array $gatewayConfig
      *
      * @return string
      */
-    protected function findSelectedPaymentFactoryNameInPaymentConfig($paymentConfig)
+    protected function findSelectedGatewayFactoryNameInGatewayConfig($gatewayConfig)
     {
-        foreach ($paymentConfig as $name => $value) {
-            if (isset($this->paymentFactories[$name])) {
+        foreach ($gatewayConfig as $name => $value) {
+            if (isset($this->gatewaysFactories[$name])) {
                 return $name;
             }
         }
@@ -300,7 +300,7 @@ class PayumExtension extends Extension implements PrependExtensionInterface
     protected function findSelectedStorageFactoryNameInStorageConfig($storageConfig)
     {
         foreach ($storageConfig as $name => $value) {
-            if (isset($this->storageFactories[$name])) {
+            if (isset($this->storagesFactories[$name])) {
                 return $name;
             }
         }

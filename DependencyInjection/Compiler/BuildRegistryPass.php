@@ -13,10 +13,10 @@ class BuildRegistryPass implements CompilerPassInterface
     {
         $registry = $container->getDefinition('payum.static_registry');
 
-        $paymentsIds = array();
-        foreach ($container->findTaggedServiceIds('payum.payment') as $paymentsId => $tagAttributes) {
+        $gatewaysIds = array();
+        foreach ($container->findTaggedServiceIds('payum.gateway') as $gatewaysId => $tagAttributes) {
             foreach ($tagAttributes as $attributes) {
-                $paymentsIds[$attributes['payment']] = $paymentsId;
+                $gatewaysIds[$attributes['gateway']] = $gatewaysId;
             }
         }
 
@@ -27,26 +27,26 @@ class BuildRegistryPass implements CompilerPassInterface
             }
         }
 
-        $availablePaymentFactories = array();
-        $paymentsFactoriesIds = array();
-        foreach ($container->findTaggedServiceIds('payum.payment_factory') as $paymentFactoryId => $tagAttributes) {
+        $availableGatewayFactories = array();
+        $gatewaysFactoriesIds = array();
+        foreach ($container->findTaggedServiceIds('payum.gateway_factory') as $gatewayFactoryId => $tagAttributes) {
             foreach ($tagAttributes as $attributes) {
-                $paymentsFactoriesIds[$attributes['name']] = $paymentFactoryId;
+                $gatewaysFactoriesIds[$attributes['name']] = $gatewayFactoryId;
 
-                $availablePaymentFactories[$attributes['name']] = isset($attributes['human_name']) ?
+                $availableGatewayFactories[$attributes['name']] = isset($attributes['human_name']) ?
                     $attributes['human_name'] :
                     $attributes['name']
                 ;
             }
         }
 
-        $container->setParameter('payum.available_payment_factories', array_replace(
-            $availablePaymentFactories,
-            $container->getParameter('payum.available_payment_factories')
+        $container->setParameter('payum.available_gateway_factories', array_replace(
+            $availableGatewayFactories,
+            $container->getParameter('payum.available_gateway_factories')
         ));
 
-        $registry->replaceArgument(0, $paymentsIds);
+        $registry->replaceArgument(0, $gatewaysIds);
         $registry->replaceArgument(1, $storagesIds);
-        $registry->replaceArgument(2, $paymentsFactoriesIds);
+        $registry->replaceArgument(2, $gatewaysFactoriesIds);
     }
 }

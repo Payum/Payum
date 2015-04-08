@@ -2,26 +2,26 @@
 
 The bundle supports\reuse several Symfony container tags. You may find them useful too.
  
-## Payment tag
+## Gateway tag
 
-The tag `payum.payment` could be used if you want to register your service as a payment gateway. 
-The service must implement `Payum\Core\PaymentInterface`.
+The tag `payum.gateway` could be used if you want to register your service as a gateway gateway. 
+The service must implement `Payum\Core\GatewayInterface`.
 
 ```yaml
 # app/config/config.yml
 
 services:
-    acme.foo_payment:
-        class: Payum\Core\Payment
+    acme.foo_gateway:
+        class: Payum\Core\Gateway
         tags:
-            - { name: payum.payment, factory: custom, payment: foo }
+            - { name: payum.gateway, factory: custom, gateway: foo }
 ```
 
 Attributes:
 
-* factory - define if you want later add actions or extensions to all payments created by this factory.
+* factory - define if you want later add actions or extensions to all gateways created by this factory.
 
-* payment - define if you want later add actions or extensions to this payment.
+* gateway - define if you want later add actions or extensions to this gateway.
 
 ## Action tag
 
@@ -35,16 +35,16 @@ services:
     acme.foo_action:
         class: Payum\Core\Action\ActionInterface
         tags:
-            - { name: payum.action, factory: foo, payment: bar, all: true, prepend: false }
+            - { name: payum.action, factory: foo, gateway: bar, all: true, prepend: false }
 ```
 
 Attributes:
 
-* factory - define if you want to add the action to payments created by the factory with given name.
+* factory - define if you want to add the action to gateways created by the factory with given name.
 
-* payment - define if you want to add the action to a payment with given name
+* gateway - define if you want to add the action to a gateway with given name
 
-* all - define if you want to add the action to all payments
+* all - define if you want to add the action to all gateways
 
 * prepend - define if want your action to be put at the begging.
 
@@ -60,32 +60,32 @@ services:
     acme.foo_extension:
         class: Payum\Core\Extension\ExtensionInterface
         tags:
-            - { name: payum.extension, factory: foo, payment: bar, all: true, prepend: false }
+            - { name: payum.extension, factory: foo, gateway: bar, all: true, prepend: false }
 ```
 
 Attributes:
 
-* factory - define if you want to add the extension to payments created by the factory with given name.
+* factory - define if you want to add the extension to gateways created by the factory with given name.
 
-* payment - define if you want to add the extension to a payment with given name
+* gateway - define if you want to add the extension to a gateway with given name
 
-* all - define if you want to add the extension to all payments
+* all - define if you want to add the extension to all gateways
 
 * prepend - define if want your extension to be put at the begging.
 
-## Payment factory tag
+## Gateway factory tag
 
-The tag `payum.payment_factory` could be used if you want to register your service as a payment factory. 
-The service must implement `Payum\Core\PaymentFactoryInterface`.
+The tag `payum.gateway_factory` could be used if you want to register your service as a gateway factory. 
+The service must implement `Payum\Core\GatewayFactoryInterface`.
 
 ```yaml
 # app/config/config.yml
 
 services:
-    acme.foo_payment_factory:
-        class: Payum\Core\PaymentFactory
+    acme.foo_gateway_factory:
+        class: Payum\Core\GatewayFactory
         tags:
-            - { name: payum.payment, name: foo, human_name: Foo }
+            - { name: payum.gateway, name: foo, human_name: Foo }
 ```
 
 Attributes:

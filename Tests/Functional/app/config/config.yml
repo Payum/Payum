@@ -31,11 +31,11 @@ payum:
                     id_property: hash
                     storage_dir: %kernel.cache_dir%
 
-    payments:
-        fooPayment:
+    gateways:
+        fooGateway:
             offline: ~
 
-        barPayment:
+        barGateway:
             paypal_express_checkout_nvp:
                 username: aUsername
                 password: aPassword

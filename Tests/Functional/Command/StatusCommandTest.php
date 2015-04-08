@@ -29,7 +29,7 @@ class StatusCommandTest extends WebTestCase
         $modelId = $storage->identify($model)->getId();
 
         $output = $this->executeConsole(new StatusCommand, array(
-            'payment-name' => 'fooPayment',
+            'gateway-name' => 'fooGateway',
             '--model-class' => $modelClass,
             '--model-id' => $modelId
         ));

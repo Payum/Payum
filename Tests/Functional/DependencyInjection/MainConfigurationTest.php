@@ -2,41 +2,41 @@
 namespace Payum\Bundle\PayumBundle\Tests\Functional\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Processor;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AuthorizeNetAimPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillDirectPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillOffsitePaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaCheckoutPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaInvoicePaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayDirectPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayOffsitePaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\StripeCheckoutPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\StripeJsPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AuthorizeNetAimGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\Be2BillDirectGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\Be2BillOffsiteGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\KlarnaCheckoutGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\KlarnaInvoiceGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OmnipayDirectGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OmnipayOffsiteGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PaypalProCheckoutNvpGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\StripeCheckoutGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\StripeJsGatewayFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\MainConfiguration;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCheckoutNvpPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PaypalExpressCheckoutNvpGatewayFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\DoctrineStorageFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\FilesystemStorageFactory;
 
 class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 {
-    protected $paymentFactories = array();
+    protected $gatewayFactories = array();
 
     protected $storageFactories = array();
     
     protected function setUp()
     {
-        $this->paymentFactories = array(
-            new PaypalExpressCheckoutNvpPaymentFactory,
-            new PaypalProCheckoutNvpPaymentFactory,
-            new AuthorizeNetAimPaymentFactory,
-            new Be2BillDirectPaymentFactory,
-            new Be2BillOffsitePaymentFactory(),
-            new OmnipayDirectPaymentFactory,
-            new OmnipayOffsitePaymentFactory(),
-            new KlarnaCheckoutPaymentFactory,
-            new KlarnaInvoicePaymentFactory(),
-            new StripeJsPaymentFactory(),
-            new StripeCheckoutPaymentFactory(),
+        $this->gatewayFactories = array(
+            new PaypalExpressCheckoutNvpGatewayFactory,
+            new PaypalProCheckoutNvpGatewayFactory,
+            new AuthorizeNetAimGatewayFactory,
+            new Be2BillDirectGatewayFactory,
+            new Be2BillOffsiteGatewayFactory(),
+            new OmnipayDirectGatewayFactory,
+            new OmnipayOffsiteGatewayFactory(),
+            new KlarnaCheckoutGatewayFactory,
+            new KlarnaInvoiceGatewayFactory(),
+            new StripeJsGatewayFactory(),
+            new StripeCheckoutGatewayFactory(),
         );
         
         $this->storageFactories = array(
@@ -50,7 +50,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldPassConfigurationProcessingWithMinimumConfig()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -66,7 +66,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array()
+                'gateways' => array()
             )
         ));
     }
@@ -74,9 +74,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldPassConfigurationProcessingWithMinimumConfigPlusPayment()
+    public function shouldPassConfigurationProcessingWithMinimumConfigPlusGateway()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -92,8 +92,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
-                    'a_payment' => array(
+                'gateways' => array(
+                    'a_gateway' => array(
                         'paypal_express_checkout_nvp' => array(
                             'username' => 'aUsername',
                             'password' => 'aPassword',
@@ -109,9 +109,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldPassConfigurationProcessingWithDynamicPayments()
+    public function shouldPassConfigurationProcessingWithDynamicGateways()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -127,9 +127,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'dynamic_payments' => array(
+                'dynamic_gateways' => array(
                     'config_storage' => array(
-                        'Payum\Core\Model\PaymentConfig' => array(
+                        'Payum\Core\Model\GatewayConfig' => array(
                             'doctrine' => array(
                                 'driver' => 'aDriver',
                             )
@@ -143,9 +143,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldPassConfigurationProcessingWithDynamicPaymentsPlusSonataAdmin()
+    public function shouldPassConfigurationProcessingWithDynamicGatewaysPlusSonataAdmin()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -161,10 +161,10 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'dynamic_payments' => array(
+                'dynamic_gateways' => array(
                     'sonata_admin' => true,
                     'config_storage' => array(
-                        'Payum\Core\Model\PaymentConfig' => array(
+                        'Payum\Core\Model\GatewayConfig' => array(
                             'doctrine' => array(
                                 'driver' => 'aDriver',
                             )
@@ -178,9 +178,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldPassConfigurationProcessingWithKlarnaCheckoutPaymentFactory()
+    public function shouldPassConfigurationProcessingWithKlarnaCheckoutGatewayFactory()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -196,8 +196,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
-                    'a_payment' => array(
+                'gateways' => array(
+                    'a_gateway' => array(
                         'klarna_checkout' => array(
                             'secret' => 'aSecret',
                             'merchant_id' => 'anId',
@@ -214,7 +214,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldPassConfigurationProcessingWithDoctrineStorageFactory()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -237,8 +237,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
-                    'a_payment' => array(
+                'gateways' => array(
+                    'a_gateway' => array(
                         'omnipay_direct' => array(
                             'type' => 'PayPal_Express',
                             'options' => array(),
@@ -254,7 +254,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldPassConfigurationProcessingWithFilesystemStorageFactory()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -278,8 +278,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                         )
                     )
                 ),
-                'payments' => array(
-                    'a_payment' => array(
+                'gateways' => array(
+                    'a_gateway' => array(
                         'omnipay_offsite' => array(
                             'type' => 'PayPal_Express',
                             'options' => array(),

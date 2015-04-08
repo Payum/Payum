@@ -1,30 +1,29 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Tests\Functional\DependencyInjection;
 
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillOffsitePaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\CustomPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaCheckoutPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\KlarnaInvoicePaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OfflinePaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayOffsitePaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaymentFactoryInterface;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\StripeCheckoutPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\StripeJsPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\Be2BillOffsiteGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\CustomGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\KlarnaCheckoutGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\KlarnaInvoiceGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OfflineGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OmnipayOffsiteGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\GatewayFactoryInterface;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\StripeCheckoutGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\StripeJsGatewayFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\FilesystemStorageFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AuthorizeNetAimPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\Be2BillDirectPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PayexPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\OmnipayDirectPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalExpressCheckoutNvpPaymentFactory;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\PaypalProCheckoutNvpPaymentFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AuthorizeNetAimGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\Be2BillDirectGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PayexGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OmnipayDirectGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PaypalExpressCheckoutNvpGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PaypalProCheckoutNvpGatewayFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\PayumExtension;
-use Payum\Core\Model\PaymentConfig;
-use Payum\Core\Model\PaymentConfigInterface;
+use Payum\Core\Model\GatewayConfigInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 {
-    public function providePayments()
+    public function provideGateways()
     {
         return array(
             'papyla express checkout' => array(
@@ -34,7 +33,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     'signature' => 'a_signature',
                     'sandbox' => true
                 ),
-                new PaypalExpressCheckoutNvpPaymentFactory(),
+                new PaypalExpressCheckoutNvpGatewayFactory(),
             ),
             'paypal pro checkout' => array(
                 array(
@@ -44,7 +43,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     'vendor' => 'a_vendor',
                     'sandbox' => true
                 ),
-                new PaypalProCheckoutNvpPaymentFactory(),
+                new PaypalProCheckoutNvpGatewayFactory(),
             ),
             'be2bill direct' => array(
                 array(
@@ -52,7 +51,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     'password' => 'a_password',
                     'sandbox' => true
                 ),
-                new Be2BillDirectPaymentFactory(),
+                new Be2BillDirectGatewayFactory(),
             ),
             'be2bill offsite' => array(
                 array(
@@ -60,25 +59,25 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     'password' => 'a_password',
                     'sandbox' => true
                 ),
-                new Be2BillOffsitePaymentFactory(),
+                new Be2BillOffsiteGatewayFactory(),
             ),
             'offline' => array(
                 array(),
-                new OfflinePaymentFactory(),
+                new OfflineGatewayFactory(),
             ),
             'stripe js' => array(
                 array(
                     'publishable_key' => 'a_key',
                     'secret_key' => 'a_key'
                 ),
-                new StripeJsPaymentFactory(),
+                new StripeJsGatewayFactory(),
             ),
             'stripe checkout' => array(
                 array(
                     'publishable_key' => 'a_key',
                     'secret_key' => 'a_key'
                 ),
-                new StripeCheckoutPaymentFactory(),
+                new StripeCheckoutGatewayFactory(),
             ),
             'authorize net aim' => array(
                 array(
@@ -86,7 +85,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     'transaction_key' => 'a_transaction_key',
                     'sandbox' => true
                 ),
-                new AuthorizeNetAimPaymentFactory(),
+                new AuthorizeNetAimGatewayFactory(),
             ),
             'omnipay direct' => array(
                 array(
@@ -95,7 +94,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                         'apiKey' => 'abc123',
                     )
                 ),
-                new OmnipayDirectPaymentFactory(),
+                new OmnipayDirectGatewayFactory(),
             ),
             'omnipay offsite' => array(
                 array(
@@ -107,28 +106,28 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                         'testMode' => true,
                     ),
                 ),
-                new OmnipayOffsitePaymentFactory(),
+                new OmnipayOffsiteGatewayFactory(),
             ),
             'payex' => array(
                 array(
                     'encryption_key' => 'aKey',
                     'account_number' => 'aNum'
                 ),
-                new PayexPaymentFactory(),
+                new PayexGatewayFactory(),
             ),
             'klarna checkout' => array(
                 array(
                     'secret' => 'aSecret',
                     'merchant_id' => 'anId'
                 ),
-                new KlarnaCheckoutPaymentFactory(),
+                new KlarnaCheckoutGatewayFactory(),
             ),
             'klarna invoice' => array(
                 array(
                     'eid' => 'anId',
                     'secret' => 'aSecret',
                 ),
-                new KlarnaInvoicePaymentFactory(),
+                new KlarnaInvoiceGatewayFactory(),
             ),
         );
     }
@@ -136,9 +135,9 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @dataProvider providePayments
+     * @dataProvider provideGateways
      */
-    public function shouldLoadExtensionWithPayment($config, PaymentFactoryInterface $paymentFactory)
+    public function shouldLoadExtensionWithGateway($config, GatewayFactoryInterface $gatewayFactory)
     {
         $config = array(
             'security' => array(
@@ -151,9 +150,9 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     )
                 )
             ),
-            'payments' => array(
-                'a_payment' => array(
-                    $paymentFactory->getName() => $config,
+            'gateways' => array(
+                'a_gateway' => array(
+                    $gatewayFactory->getName() => $config,
                 )
             )
         );
@@ -164,24 +163,24 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $container->setParameter('kernel.debug', false);
         
         $extension = new PayumExtension;
-        $extension->addPaymentFactory($paymentFactory);
+        $extension->addGatewayFactory($gatewayFactory);
         $extension->addStorageFactory(new FilesystemStorageFactory);
         
         $extension->load($configs, $container);
 
-        $this->assertTrue($container->hasDefinition('payum.'.$paymentFactory->getName().'.factory'));
-        $this->assertTrue($container->hasDefinition('payum.'.$paymentFactory->getName().'.a_payment.payment'));
+        $this->assertTrue($container->hasDefinition('payum.'.$gatewayFactory->getName().'.factory'));
+        $this->assertTrue($container->hasDefinition('payum.'.$gatewayFactory->getName().'.a_gateway.gateway'));
         $this->assertEquals(
-            'payum.'.$paymentFactory->getName().'.factory',
-            $container->getDefinition('payum.'.$paymentFactory->getName().'.a_payment.payment')->getFactoryService()
+            'payum.'.$gatewayFactory->getName().'.factory',
+            $container->getDefinition('payum.'.$gatewayFactory->getName().'.a_gateway.gateway')->getFactoryService()
         );
-        $this->assertEquals('create', $container->getDefinition('payum.'.$paymentFactory->getName().'.a_payment.payment')->getFactoryMethod());
+        $this->assertEquals('create', $container->getDefinition('payum.'.$gatewayFactory->getName().'.a_gateway.gateway')->getFactoryMethod());
     }
 
     /**
      * @test
      */
-    public function shouldLoadExtensionWithCustomPayment()
+    public function shouldLoadExtensionWithCustomGateway()
     {
         $config = array(
             'security' => array(
@@ -194,8 +193,8 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     )
                 )
             ),
-            'payments' => array(
-                'a_payment' => array(
+            'gateways' => array(
+                'a_gateway' => array(
                     'custom' => array(
                         'service' => 'aServiceId',
                     ),
@@ -209,18 +208,18 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $container->setParameter('kernel.debug', false);
 
         $extension = new PayumExtension;
-        $extension->addPaymentFactory(new CustomPaymentFactory());
+        $extension->addGatewayFactory(new CustomGatewayFactory());
         $extension->addStorageFactory(new FilesystemStorageFactory);
 
         $extension->load($configs, $container);
 
-        $this->assertTrue($container->hasDefinition('payum.custom.a_payment.payment'));
+        $this->assertTrue($container->hasDefinition('payum.custom.a_gateway.gateway'));
     }
 
     /**
      * @test
      */
-    public function shouldAddPaymentTagWithCorrectPaymentAndFactoryNamesSet()
+    public function shouldAddGatewayTagWithCorrectGatewayAndFactoryNamesSet()
     {
         $config = array(
             'security' => array(
@@ -233,8 +232,8 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     )
                 )
             ),
-            'payments' => array(
-                'the_paypal_payment' => array(
+            'gateways' => array(
+                'the_paypal_gateway' => array(
                     'paypal_express_checkout_nvp' => array(
                         'username' => 'a_username',
                         'password' => 'a_password',
@@ -251,14 +250,14 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $containerBuilder->setParameter('kernel.debug', false);
 
         $extension = new PayumExtension;
-        $extension->addPaymentFactory(new PaypalExpressCheckoutNvpPaymentFactory);
+        $extension->addGatewayFactory(new PaypalExpressCheckoutNvpGatewayFactory);
         $extension->addStorageFactory(new FilesystemStorageFactory);
 
         $extension->load($configs, $containerBuilder);
 
-        $paymentDefinition = $containerBuilder->getDefinition('payum.paypal_express_checkout_nvp.the_paypal_payment.payment');
+        $gatewayDefinition = $containerBuilder->getDefinition('payum.paypal_express_checkout_nvp.the_paypal_gateway.gateway');
 
-        $tagAttributes = $paymentDefinition->getTag('payum.payment');
+        $tagAttributes = $gatewayDefinition->getTag('payum.gateway');
 
         $this->assertCount(1, $tagAttributes);
 
@@ -267,17 +266,17 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('factory', $attributes);
         $this->assertEquals('paypal_express_checkout_nvp', $attributes['factory']);
 
-        $this->assertArrayHasKey('payment', $attributes);
-        $this->assertEquals('the_paypal_payment', $attributes['payment']);
+        $this->assertArrayHasKey('gateway', $attributes);
+        $this->assertEquals('the_paypal_gateway', $attributes['gateway']);
     }
 
     /**
      * @test
      */
-    public function shouldSetPayumAsAliasToStaticRegistryIfDynamicPaymentsNotConfigured()
+    public function shouldSetPayumAsAliasToStaticRegistryIfDynamicGatewaysNotConfigured()
     {
         $config = array(
-            // 'dynamic_payments' => array()
+            // 'dynamic_gateways' => array()
             'security' => array(
                 'token_storage' => array(
                     'Payum\Core\Model\Token' => array(
@@ -288,7 +287,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     )
                 )
             ),
-            'payments' => array(),
+            'gateways' => array(),
         );
 
         $configs = array($config);
@@ -310,9 +309,9 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
     public function shouldSetPayumAsAliasToDynamicRegistryAndPassStatisOneToDynamicOne()
     {
         $config = array(
-            'dynamic_payments' => array(
+            'dynamic_gateways' => array(
                 'config_storage' => array(
-                    'Payum\Core\Model\PaymentConfig' => array(
+                    'Payum\Core\Model\GatewayConfig' => array(
                         'filesystem' => array(
                             'storage_dir' => sys_get_temp_dir(),
                             'id_property' => 'hash'
@@ -330,7 +329,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     )
                 )
             ),
-            'payments' => array(),
+            'gateways' => array(),
         );
 
         $configs = array($config);
@@ -347,20 +346,20 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $registry = $containerBuilder->getDefinition('payum.dynamic_registry');
         $this->assertEquals('Payum\Core\Registry\DynamicRegistry', $registry->getClass());
-        $this->assertEquals('payum.dynamic_payments.config_storage', (string) $registry->getArgument(0));
+        $this->assertEquals('payum.dynamic_gateways.config_storage', (string) $registry->getArgument(0));
         $this->assertEquals('payum.static_registry', (string) $registry->getArgument(1));
     }
 
     /**
      * @test
      */
-    public function shouldConfigureSonataAdminClassForPaymentConfigModelSetInStorageSection()
+    public function shouldConfigureSonataAdminClassForGatewayConfigModelSetInStorageSection()
     {
         $config = array(
-            'dynamic_payments' => array(
+            'dynamic_gateways' => array(
                 'sonata_admin' => true,
                 'config_storage' => array(
-                    'Payum\Bundle\PayumBundle\Tests\Functional\DependencyInjection\TestPaymentConfig' => array(
+                    'Payum\Bundle\PayumBundle\Tests\Functional\DependencyInjection\TestGatewayConfig' => array(
                         'filesystem' => array(
                             'storage_dir' => sys_get_temp_dir(),
                             'id_property' => 'hash'
@@ -378,7 +377,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
                     )
                 )
             ),
-            'payments' => array(),
+            'gateways' => array(),
         );
 
         $configs = array($config);
@@ -391,26 +390,26 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension->load($configs, $containerBuilder);
 
-        $configAdmin = $containerBuilder->getDefinition('payum.dynamic_payments.payment_config_admin');
+        $configAdmin = $containerBuilder->getDefinition('payum.dynamic_gateways.gateway_config_admin');
 
-        $this->assertEquals('Payum\Bundle\PayumBundle\Sonata\PaymentConfigAdmin', $configAdmin->getClass());
-        $this->assertEquals('Payum\Bundle\PayumBundle\Tests\Functional\DependencyInjection\TestPaymentConfig', $configAdmin->getArgument(1));
+        $this->assertEquals('Payum\Bundle\PayumBundle\Sonata\GatewayConfigAdmin', $configAdmin->getClass());
+        $this->assertEquals('Payum\Bundle\PayumBundle\Tests\Functional\DependencyInjection\TestGatewayConfig', $configAdmin->getArgument(1));
 
         $this->assertEquals(
-            array(array('manager_type' => 'orm', 'group' => 'Payments', 'label' => 'Configs')),
+            array(array('manager_type' => 'orm', 'group' => 'Gateways', 'label' => 'Configs')),
             $configAdmin->getTag('sonata.admin')
         );
 
     }
 }
 
-class TestPaymentConfig implements PaymentConfigInterface
+class TestGatewayConfig implements GatewayConfigInterface
 {
-    public function getPaymentName()
+    public function getGatewayName()
     {
     }
 
-    public function setPaymentName($paymentName)
+    public function setGatewayName($gatewayName)
     {
     }
 

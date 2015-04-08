@@ -19,7 +19,7 @@ class CreateNotifyTokenCommand extends ContainerAwareCommand
     {
         $this
             ->setName('payum:security:create-notify-token')
-            ->addArgument('payment-name', InputArgument::REQUIRED, 'The payment name associated with the token')
+            ->addArgument('gateway-name', InputArgument::REQUIRED, 'The gateway name associated with the token')
             ->addOption('model-class', null, InputOption::VALUE_OPTIONAL, 'The model class associated with the token')
             ->addOption('model-id', null, InputOption::VALUE_OPTIONAL, 'The model id associated with the token')
         ;
@@ -30,7 +30,7 @@ class CreateNotifyTokenCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $paymentName = $input->getArgument('payment-name');
+        $gatewayName = $input->getArgument('gateway-name');
         $modelClass = $input->getOption('model-class');
         $modelId = $input->getOption('model-id');
         $model = null;
@@ -45,7 +45,7 @@ class CreateNotifyTokenCommand extends ContainerAwareCommand
             }
         }
 
-        $token = $this->getTokenFactory()->createNotifyToken($paymentName, $model);
+        $token = $this->getTokenFactory()->createNotifyToken($gatewayName, $model);
 
         $output->writeln(sprintf('Hash: <info>%s</info>', $token->getHash()));
         $output->writeln(sprintf('Url: <info>%s</info>', $token->getTargetUrl()));

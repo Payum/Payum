@@ -20,7 +20,7 @@ class StatusCommand extends ContainerAwareCommand
         $this
             ->setName('payum:status')
             ->setDescription('Allows to get a payment status.')
-            ->addArgument('payment-name', InputArgument::REQUIRED, 'The payment name')
+            ->addArgument('gateway-name', InputArgument::REQUIRED, 'The gateway name')
             ->addOption('model-class', null, InputOption::VALUE_REQUIRED, 'The model class')
             ->addOption('model-id', null, InputOption::VALUE_REQUIRED, 'The model id')
         ;
@@ -31,7 +31,7 @@ class StatusCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $paymentName = $input->getArgument('payment-name');
+        $gatewayName = $input->getArgument('gateway-name');
         $modelClass = $input->getOption('model-class');
         $modelId = $input->getOption('model-id');
 
@@ -45,7 +45,7 @@ class StatusCommand extends ContainerAwareCommand
         }
 
         $status = new GetHumanStatus($model);
-        $this->getPayum()->getPayment($paymentName)->execute($status);
+        $this->getPayum()->getGateway($gatewayName)->execute($status);
 
         $output->writeln(sprintf('Status: %s', $status->getValue()));
     }

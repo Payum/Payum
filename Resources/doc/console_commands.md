@@ -7,7 +7,7 @@ In the following examples, we will show you how to [get a payment status](#get-p
 ## Get Payment Status
 
 ```bash
-$ php app/console payum:status paypal --model-class=Acme\PaymentBundle\Entity\Order --model-id=1
+$ php app/console payum:status paypal --model-class=Acme\PaymentBundle\Entity\Payment --model-id=1
 
 > Status: success
 ```
@@ -18,11 +18,11 @@ Some payment gateways do not allow you to set a callback URL per model. You can 
 This command allows you to generate a secure URL. Optionally, you can associate a model with this token.
 
 ```bash
-$ php app/console payum:security:create-notify-token paypal --model-class=Acme\PaymentBundle\Entity\Order --model-id=1
+$ php app/console payum:security:create-notify-token paypal --model-class=Acme\PaymentBundle\Entity\Payment --model-id=1
 
 > Hash: oTA0w-SRaVY8U1pRr6MVshAtdjiogRENTlnJit6lYLg
 > Url: http://localhost/payment/notify/oTA0w-SRaVY8U1pRr6MVshAtdjiogRENTlnJit6lYLg
-> Details: Acme\PaymentBundle\Entity\Order#1
+> Details: Acme\PaymentBundle\Entity\Payment#1
 ```
 
 ## Create Purchase Token
@@ -31,14 +31,14 @@ This could be helpful when you want to send user a purchase link (via email) man
 
 ```bash
 $ php app/console payum:security:create-capture-token paypal \
- --model-class=Acme\PaymentBundle\Entity\Order \
+ --model-class=Acme\PaymentBundle\Entity\Payment \
  --model-id=1 \
  --after-url="url-or-route-to-go-after-purchase"
 
 > Hash: oTA0w-SRaVY8U1pRr6MVshAtdjiogRENTlnJit6lYLg
 > Url: http://localhost/payment/capture/oTA0w-SRaVY8U1pRr6MVshAtdjiogRENTlnJit6lYLg
 > After Url: url-or-route-to-go-after-purchase
-> Details: Acme\PaymentBundle\Entity\Order#1
+> Details: Acme\PaymentBundle\Entity\Payment#1
 ```
 
 ## Debug payment
@@ -47,11 +47,11 @@ This could be helpful when you want to find out what actions were added to payme
 Also it will show extensions and apis added too.  
 
 ```bash
-$ php app/console payum:payment:debug
+$ php app/console payum:gateway:debug
 
-Found 1 payments
+Found 1 gateways
 
-> fooPayment (Payum\Core\Payment):
+> fooGateway (Payum\Core\Gateway):
 >	Actions:
 >	Payum\Core\Action\CaptureOrderAction
 >	Payum\Core\Action\NotifyOrderAction

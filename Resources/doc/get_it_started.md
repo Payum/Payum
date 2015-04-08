@@ -9,9 +9,9 @@ Run composer require to add dependencies to _composer.json_:
 php composer.phar require "payum/payum-bundle" "payum/offline"
 ```
 
-_**Note**: Where payum/offline is a php payum extension, you can for example change it to payum/paypal-express-checkout-nvp or payum/stripe. Look at [supported payments](https://github.com/Payum/Core/blob/master/Resources/docs/supported-payments.md) to find out what you can use._
+_**Note**: Where payum/offline is a php payum extension, you can for example change it to payum/paypal-express-checkout-nvp or payum/stripe. Look at [supported gateways](https://github.com/Payum/Core/blob/master/Resources/docs/supported-gateways.md) to find out what you can use._
 
-_**Note**: Use payum/payum if you want to install all payments at once._
+_**Note**: Use payum/payum if you want to install all gateways at once._
 
 Enable the bundle in the kernel:
 
@@ -71,13 +71,13 @@ class PaymentToken extends Token
 namespace Acme\PaymentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Payum\Core\Model\Order as BaseOrder;
+use Payum\Core\Model\Payment as BasePayment;
 
 /**
  * @ORM\Table
  * @ORM\Entity
  */
-class Order extends BaseOrder
+class Payment extends BasePayment
 {
     /**
      * @ORM\Column(name="id", type="integer")
@@ -101,14 +101,14 @@ payum:
             Acme\PaymentBundle\Entity\PaymentToken: { doctrine: orm }
 
     storages:
-        Acme\PaymentBundle\Entity\Order: { doctrine: orm }
+        Acme\PaymentBundle\Entity\Payment: { doctrine: orm }
             
-    payments:
+    gateways:
         offline:
             offline: ~
 ```
 
-_**Note**: You can add other payments to the payments section too._
+_**Note**: You can add other gateways to the gateways section too._
 
 ## Prepare order
 
@@ -125,23 +125,23 @@ class PaymentController extends Controller
 {
     public function prepareAction() 
     {
-        $paymentName = 'offline';
+        $gatewayName = 'offline';
         
-        $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\Order');
+        $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\Payment');
         
-        $order = $storage->create();
-        $order->setNumber(uniqid());
-        $order->setCurrencyCode('EUR');
-        $order->setTotalAmount(123); // 1.23 EUR
-        $order->setDescription('A description');
-        $order->setClientId('anId');
-        $order->setClientEmail('foo@example.com');
+        $payment = $storage->create();
+        $payment->setNumber(uniqid());
+        $payment->setCurrencyCode('EUR');
+        $payment->setTotalAmount(123); // 1.23 EUR
+        $payment->setDescription('A description');
+        $payment->setClientId('anId');
+        $payment->setClientEmail('foo@example.com');
         
-        $storage->update($order);
+        $storage->update($payment);
         
         $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
-            $paymentName, 
-            $order, 
+            $gatewayName, 
+            $payment, 
             'done' // the route to redirect after capture
         );
         
@@ -173,28 +173,28 @@ class PaymentController extends Controller
     {
         $token = $this->get('payum.security.http_request_verifier')->verify($request);
         
-        $payment = $this->get('payum')->getPayment($token->getPaymentName());
+        $gateway = $this->get('payum')->getGateway($token->getGatewayName());
         
         // you can invalidate the token. The url could not be requested any more.
         // $this->get('payum.security.http_request_verifier')->invalidate($token);
         
         // Once you have token you can get the model from the storage directly. 
         //$identity = $token->getDetails();
-        //$order = $payum->getStorage($identity->getClass())->find($identity);
+        //$payment = $payum->getStorage($identity->getClass())->find($identity);
         
         // or Payum can fetch the model for you while executing a request (Preferred).
-        $payment->execute($status = new GetHumanStatus($token));
-        $order = $status->getFirstModel();
+        $gateway->execute($status = new GetHumanStatus($token));
+        $payment = $status->getFirstModel();
         
         // you have order and payment status 
         // so you can do whatever you want for example you can just print status and payment details.
         
         return new JsonResponse(array(
             'status' => $status->getValue(),
-            'order' => array(
-                'total_amount' => $order->getTotalAmount(),
-                'currency_code' => $order->getCurrencyCode(),
-                'details' => $order->getDetails(),
+            'payment' => array(
+                'total_amount' => $payment->getTotalAmount(),
+                'currency_code' => $payment->getCurrencyCode(),
+                'details' => $payment->getDetails(),
             ),
         ));
     }

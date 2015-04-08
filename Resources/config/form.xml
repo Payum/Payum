@@ -13,16 +13,16 @@
             <tag name="form.type" alias="payum_credit_card" />
         </service>
 
-        <service id="payum.form.type.payment_conifg" class="Payum\Core\Bridge\Symfony\Form\Type\PaymentConfigType">
+        <service id="payum.form.type.gateway_conifg" class="Payum\Core\Bridge\Symfony\Form\Type\GatewayConfigType">
             <argument id="payum" type="service" />
 
-            <tag name="form.type" alias="payum_payment_config" />
+            <tag name="form.type" alias="payum_gateway_config" />
         </service>
 
-        <service id="payum.form.type.payment_factories_choice" class="Payum\Core\Bridge\Symfony\Form\Type\PaymentFactoriesChoiceType">
-            <argument>%payum.available_payment_factories%</argument>
+        <service id="payum.form.type.gateway_factories_choice" class="Payum\Core\Bridge\Symfony\Form\Type\GatewayFactoriesChoiceType">
+            <argument>%payum.available_gateway_factories%</argument>
 
-            <tag name="form.type" alias="payum_payment_factories_choice" />
+            <tag name="form.type" alias="payum_gateway_factories_choice" />
         </service>
     </services>
 </container>

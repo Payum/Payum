@@ -19,7 +19,7 @@ class CreateCaptureTokenCommand extends ContainerAwareCommand
     {
         $this
             ->setName('payum:security:create-capture-token')
-            ->addArgument('payment-name', InputArgument::REQUIRED, 'The payment name associated with the token')
+            ->addArgument('gateway-name', InputArgument::REQUIRED, 'The gateway name associated with the token')
             ->addOption('model-class', null, InputOption::VALUE_REQUIRED, 'The model class associated with the token')
             ->addOption('model-id', null, InputOption::VALUE_REQUIRED, 'The model id associated with the token')
             ->addOption('after-url', null, InputOption::VALUE_REQUIRED, 'The url\route user will be redirected after the purchase is done.', null)
@@ -31,7 +31,7 @@ class CreateCaptureTokenCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $paymentName = $input->getArgument('payment-name');
+        $gatewayName = $input->getArgument('gateway-name');
         $modelClass = $input->getOption('model-class');
         $modelId = $input->getOption('model-id');
         $model = null;
@@ -45,7 +45,7 @@ class CreateCaptureTokenCommand extends ContainerAwareCommand
             ));
         }
 
-        $token = $this->getTokenFactory()->createCaptureToken($paymentName, $model, $afterUrl);
+        $token = $this->getTokenFactory()->createCaptureToken($gatewayName, $model, $afterUrl);
 
         $output->writeln(sprintf('Hash: <info>%s</info>', $token->getHash()));
         $output->writeln(sprintf('Url: <info>%s</info>', $token->getTargetUrl()));

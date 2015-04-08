@@ -30,31 +30,31 @@ class ContainerAwareRegistryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithPaymentsStoragesAndTheirDefaultNames()
+    public function couldBeConstructedWithGatewaysStoragesAndTheirDefaultNames()
     {
-        $payments = array('fooName' => 'fooPayment', 'barName' => 'barPayment');
+        $gateways = array('fooName' => 'fooGateway', 'barName' => 'barGateway');
         $storages = array('barName' => array('stdClass' => 'barStorage'));
 
-        new ContainerAwareRegistry($payments, $storages);
+        new ContainerAwareRegistry($gateways, $storages);
     }
 
     /**
      * @test
      */
-    public function shouldReturnPaymentSetToContainer()
+    public function shouldReturnGatewaySetToContainer()
     {
-        $payments = array('fooPayment' => 'fooPaymentServiceId');
+        $gateways = array('fooGateway' => 'fooGatewayServiceId');
         $storages = array();
 
         $container = new Container;
-        $container->set('fooPaymentServiceId', $this->getMock('Payum\Core\PaymentInterface'));
+        $container->set('fooGatewayServiceId', $this->getMock('Payum\Core\GatewayInterface'));
 
-        $registry = new ContainerAwareRegistry($payments, $storages);
+        $registry = new ContainerAwareRegistry($gateways, $storages);
         $registry->setContainer($container);
         
         $this->assertSame(
-            $container->get('fooPaymentServiceId'),
-            $registry->getPayment('fooPayment')
+            $container->get('fooGatewayServiceId'),
+            $registry->getGateway('fooGateway')
         );
     }
 
@@ -63,7 +63,7 @@ class ContainerAwareRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnStorageSetToContainer()
     {
-        $payments = array();
+        $gateways = array();
         $storages = array(
             'stdClass' =>  'fooStorageServiceId'
         );
@@ -71,7 +71,7 @@ class ContainerAwareRegistryTest extends \PHPUnit_Framework_TestCase
         $container = new Container;
         $container->set('fooStorageServiceId', $this->getMock('Payum\Core\Storage\StorageInterface'));
 
-        $registry = new ContainerAwareRegistry($payments, $storages);
+        $registry = new ContainerAwareRegistry($gateways, $storages);
         $registry->setContainer($container);
 
         $this->assertSame($container->get('fooStorageServiceId'), $registry->getStorage('stdClass'));
@@ -80,7 +80,7 @@ class ContainerAwareRegistryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldReturnPaymentFactorySetToContainer()
+    public function shouldReturnGatewayFactorySetToContainer()
     {
         $container = new Container;
         $container->set('fooFactoryServiceId', $this->getMock('Payum\Core\Storage\StorageInterface'));
@@ -90,6 +90,6 @@ class ContainerAwareRegistryTest extends \PHPUnit_Framework_TestCase
         ));
         $registry->setContainer($container);
 
-        $this->assertSame($container->get('fooFactoryServiceId'), $registry->getPaymentFactory('fooName'));
+        $this->assertSame($container->get('fooFactoryServiceId'), $registry->getGatewayFactory('fooName'));
     }
 }
