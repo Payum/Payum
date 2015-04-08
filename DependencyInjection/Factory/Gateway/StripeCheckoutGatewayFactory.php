@@ -38,7 +38,7 @@ class StripeCheckoutGatewayFactory extends AbstractGatewayFactory implements Pre
         $container->prependExtensionConfig('twig', array(
             'paths' => array_flip(array_filter(array(
                 'PayumCore' => TwigFactory::guessViewsPath('Payum\Core\Gateway'),
-                'PayumStripe' => TwigFactory::guessViewsPath('Payum\Stripe\CheckoutGatewayFactory'),
+                'PayumStripe' => TwigFactory::guessViewsPath('Payum\Stripe\StripeCheckoutGatewayFactory'),
             )))
         ));
     }

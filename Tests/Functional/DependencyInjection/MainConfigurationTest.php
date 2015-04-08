@@ -19,13 +19,13 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\FilesystemStora
 
 class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 {
-    protected $paymentFactories = array();
+    protected $gatewayFactories = array();
 
     protected $storageFactories = array();
     
     protected function setUp()
     {
-        $this->paymentFactories = array(
+        $this->gatewayFactories = array(
             new PaypalExpressCheckoutNvpGatewayFactory,
             new PaypalProCheckoutNvpGatewayFactory,
             new AuthorizeNetAimGatewayFactory,
@@ -50,7 +50,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldPassConfigurationProcessingWithMinimumConfig()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -74,9 +74,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldPassConfigurationProcessingWithMinimumConfigPlusPayment()
+    public function shouldPassConfigurationProcessingWithMinimumConfigPlusGateway()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -93,7 +93,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'gateways' => array(
-                    'a_payment' => array(
+                    'a_gateway' => array(
                         'paypal_express_checkout_nvp' => array(
                             'username' => 'aUsername',
                             'password' => 'aPassword',
@@ -109,9 +109,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldPassConfigurationProcessingWithDynamicPayments()
+    public function shouldPassConfigurationProcessingWithDynamicGateways()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -129,7 +129,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                 ),
                 'dynamic_gateways' => array(
                     'config_storage' => array(
-                        'Payum\Core\Model\PaymentConfig' => array(
+                        'Payum\Core\Model\GatewayConfig' => array(
                             'doctrine' => array(
                                 'driver' => 'aDriver',
                             )
@@ -143,9 +143,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldPassConfigurationProcessingWithDynamicPaymentsPlusSonataAdmin()
+    public function shouldPassConfigurationProcessingWithDynamicGatewaysPlusSonataAdmin()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -164,7 +164,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                 'dynamic_gateways' => array(
                     'sonata_admin' => true,
                     'config_storage' => array(
-                        'Payum\Core\Model\PaymentConfig' => array(
+                        'Payum\Core\Model\GatewayConfig' => array(
                             'doctrine' => array(
                                 'driver' => 'aDriver',
                             )
@@ -180,7 +180,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldPassConfigurationProcessingWithKlarnaCheckoutGatewayFactory()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -197,7 +197,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'gateways' => array(
-                    'a_payment' => array(
+                    'a_gateway' => array(
                         'klarna_checkout' => array(
                             'secret' => 'aSecret',
                             'merchant_id' => 'anId',
@@ -214,7 +214,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldPassConfigurationProcessingWithDoctrineStorageFactory()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -238,7 +238,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'gateways' => array(
-                    'a_payment' => array(
+                    'a_gateway' => array(
                         'omnipay_direct' => array(
                             'type' => 'PayPal_Express',
                             'options' => array(),
@@ -254,7 +254,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldPassConfigurationProcessingWithFilesystemStorageFactory()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -279,7 +279,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'gateways' => array(
-                    'a_payment' => array(
+                    'a_gateway' => array(
                         'omnipay_offsite' => array(
                             'type' => 'PayPal_Express',
                             'options' => array(),

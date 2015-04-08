@@ -10,13 +10,13 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 {
-    protected $paymentFactories = array();
+    protected $gatewayFactories = array();
 
     protected $storageFactories = array();
     
     protected function setUp()
     {
-        $this->paymentFactories = array(
+        $this->gatewayFactories = array(
             new FooGatewayFactory(),
             new BarGatewayFactory()
         );
@@ -29,9 +29,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithArrayOfPaymentFactoriesAndStorageFactories()
+    public function couldBeConstructedWithArrayOfGatewayFactoriesAndStorageFactories()
     {
-        new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        new MainConfiguration($this->gatewayFactories, $this->storageFactories);
     }
 
     /**
@@ -39,7 +39,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldPassConfigurationProcessing()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
         
         $processor = new Processor();
         
@@ -70,8 +70,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'gateways' => array(
-                    'a_payment' => array(
-                        'foo_payment' => array(
+                    'a_gateway' => array(
+                        'foo_gateway' => array(
                             'foo_opt' => 'foo'
                         ),
                     )
@@ -83,9 +83,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAddStoragesToAllPaymentByDefault()
+    public function shouldAddStoragesToAllGatewayByDefault()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -125,9 +125,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowDisableAddStoragesToAllPaymentFeature()
+    public function shouldAllowDisableAddStoragesToAllGatewayFeature()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -164,9 +164,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowSetConcretePaymentsWhereToAddStorages()
+    public function shouldAllowSetConcreteGatewaysWhereToAddStorages()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -205,9 +205,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowSetPaymentsCreatedWithFactoriesWhereToAddStorages()
+    public function shouldAllowSetGatewaysCreatedWithFactoriesWhereToAddStorages()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -251,7 +251,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function throwIfTryToUseNotValidClassAsStorageEntry()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -274,8 +274,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'gateways' => array(
-                    'a_payment' => array(
-                        'foo_payment' => array(
+                    'a_gateway' => array(
+                        'foo_gateway' => array(
                             'foo_opt' => 'foo'
                         ),
                     )
@@ -292,7 +292,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function throwIfTryToAddMoreThenOneStorageForOneEntry()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -318,8 +318,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'gateways' => array(
-                    'a_payment' => array(
-                        'foo_payment' => array(
+                    'a_gateway' => array(
+                        'foo_gateway' => array(
                             'foo_opt' => 'foo'
                         ),
                     )
@@ -336,7 +336,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function throwIfStorageEntryDefinedWithoutConcreteStorage()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -355,8 +355,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'gateways' => array(
-                    'a_payment' => array(
-                        'foo_payment' => array(
+                    'a_gateway' => array(
+                        'foo_gateway' => array(
                             'foo_opt' => 'foo'
                         ),
                     )
@@ -369,11 +369,11 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "payum.payments.a_payment": One payment from the  payments available must be selected
+     * @expectedExceptionMessage Invalid configuration for path "payum.gateways.a_gateway": One gateway from the  gateways available must be selected
      */
-    public function throwIfNonePaymentSelected()
+    public function throwIfNoneGatewaySelected()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -389,7 +389,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'gateways' => array(
-                    'a_payment' => array()
+                    'a_gateway' => array()
                 )
             )
         ));
@@ -400,7 +400,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function shouldPassIfNoneStorageSelected()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -416,8 +416,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'gateways' => array(
-                    'a_payment' => array(
-                        'foo_payment' => array(
+                    'a_gateway' => array(
+                        'foo_gateway' => array(
                             'foo_opt' => 'foo'
                         )
                     )
@@ -430,11 +430,11 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "payum.payments.a_payment": Only one payment per payment could be selected
+     * @expectedExceptionMessage Invalid configuration for path "payum.gateways.a_gateway": Only one gateway per gateway could be selected
      */
-    public function throwIfMoreThenOnePaymentSelected()
+    public function throwIfMoreThenOneGatewaySelected()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -450,11 +450,11 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'gateways' => array(
-                    'a_payment' => array(
-                        'bar_payment' => array(
+                    'a_gateway' => array(
+                        'bar_gateway' => array(
                             'bar_opt' => 'bar'
                         ),
-                        'foo_payment' => array(
+                        'foo_gateway' => array(
                             'foo_opt' => 'foo'
                         )
                     )
@@ -471,7 +471,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function throwIfMoreThenOneTokenStorageConfigured()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -492,8 +492,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'gateways' => array(
-                    'a_payment' => array(
-                        'foo_payment' => array(
+                    'a_gateway' => array(
+                        'foo_gateway' => array(
                             'foo_opt' => 'foo'
                         ),
                     )
@@ -510,7 +510,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function throwIfTokenStorageConfiguredWithModelNotImplementingTokenInterface()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -526,8 +526,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'gateways' => array(
-                    'a_payment' => array(
-                        'foo_payment' => array(
+                    'a_gateway' => array(
+                        'foo_gateway' => array(
                             'foo_opt' => 'foo'
                         ),
                     )
@@ -544,7 +544,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function throwIfTokenStorageConfiguredWithNotModelClass()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -560,8 +560,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'gateways' => array(
-                    'a_payment' => array(
-                        'foo_payment' => array(
+                    'a_gateway' => array(
+                        'foo_gateway' => array(
                             'foo_opt' => 'foo'
                         ),
                     )
@@ -578,15 +578,15 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function throwIfSecurityNotConfigured()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
         $processor->processConfiguration($configuration, array(
             'payum' => array(
                 'gateways' => array(
-                    'a_payment' => array(
-                        'foo_payment' => array(
+                    'a_gateway' => array(
+                        'foo_gateway' => array(
                             'foo_opt' => 'foo'
                         ),
                     )
@@ -603,7 +603,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      */
     public function throwIfTokenStorageNotConfigured()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -612,8 +612,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                 'security' => array(
                 ),
                 'gateways' => array(
-                    'a_payment' => array(
-                        'foo_payment' => array(
+                    'a_gateway' => array(
+                        'foo_gateway' => array(
                             'foo_opt' => 'foo'
                         ),
                     )
@@ -628,9 +628,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage Invalid configuration for path "payum.dynamic_gateways.config_storage": Only one config storage could be configured.
      */
-    public function throwIfMoreThenOnePaymentConfigStorageConfigured()
+    public function throwIfMoreThenOneGatewayConfigStorageConfigured()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -638,7 +638,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
             'payum' => array(
                 'dynamic_gateways' => array(
                     'config_storage' => array(
-                        'Payum\Core\Model\PaymentConfig' => array(
+                        'Payum\Core\Model\GatewayConfig' => array(
                             'foo_storage' => array(
                                 'foo_opt' => 'foo'
                             )
@@ -660,8 +660,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'gateways' => array(
-                    'a_payment' => array(
-                        'foo_payment' => array(
+                    'a_gateway' => array(
+                        'foo_gateway' => array(
                             'foo_opt' => 'foo'
                         ),
                     )
@@ -676,9 +676,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage Invalid configuration for path "payum.dynamic_gateways.config_storage": The config class must implement `Payum\Core\Model\GatewayConfigInterface` interface
      */
-    public function throwIfPaymentConfigStorageConfiguredWithModelNotImplementingGatewayConfigInterface()
+    public function throwIfGatewayConfigStorageConfiguredWithModelNotImplementingGatewayConfigInterface()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -703,8 +703,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'gateways' => array(
-                    'a_payment' => array(
-                        'foo_payment' => array(
+                    'a_gateway' => array(
+                        'foo_gateway' => array(
                             'foo_opt' => 'foo'
                         ),
                     )
@@ -719,9 +719,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage Invalid configuration for path "payum.dynamic_gateways.config_storage": The storage entry must be a valid model class.
      */
-    public function throwIfPaymentConfigStorageConfiguredWithNotModelClass()
+    public function throwIfGatewayConfigStorageConfiguredWithNotModelClass()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -746,8 +746,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'gateways' => array(
-                    'a_payment' => array(
-                        'foo_payment' => array(
+                    'a_gateway' => array(
+                        'foo_gateway' => array(
                             'foo_opt' => 'foo'
                         ),
                     )
@@ -762,9 +762,9 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "config_storage" at path "payum.dynamic_gateways" must be configured.
      */
-    public function throwIfPaymentConfigStorageNotConfigured()
+    public function throwIfGatewayConfigStorageNotConfigured()
     {
-        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+        $configuration = new MainConfiguration($this->gatewayFactories, $this->storageFactories);
 
         $processor = new Processor();
 
@@ -782,8 +782,8 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                     )
                 ),
                 'gateways' => array(
-                    'a_payment' => array(
-                        'foo_payment' => array(
+                    'a_gateway' => array(
+                        'foo_gateway' => array(
                             'foo_opt' => 'foo'
                         ),
                     )
@@ -795,13 +795,13 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
 
 class FooGatewayFactory implements GatewayFactoryInterface
 {
-    public function create(ContainerBuilder $container, $paymentName, array $config)
+    public function create(ContainerBuilder $container, $gatewayName, array $config)
     {
     }
 
     public function getName()
     {
-        return 'foo_payment';
+        return 'foo_gateway';
     }
 
     public function addConfiguration(ArrayNodeDefinition $builder)
@@ -820,13 +820,13 @@ class FooGatewayFactory implements GatewayFactoryInterface
 
 class BarGatewayFactory implements GatewayFactoryInterface
 {
-    public function create(ContainerBuilder $container, $paymentName, array $config)
+    public function create(ContainerBuilder $container, $gatewayName, array $config)
     {
     }
 
     public function getName()
     {
-        return 'bar_payment';
+        return 'bar_gateway';
     }
 
     public function addConfiguration(ArrayNodeDefinition $builder)

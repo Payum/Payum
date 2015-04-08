@@ -39,7 +39,7 @@ class KlarnaCheckoutGatewayFactory extends AbstractGatewayFactory implements Pre
         $container->prependExtensionConfig('twig', array(
             'paths' => array_flip(array_filter(array(
                 'PayumCore' => TwigFactory::guessViewsPath('Payum\Core\Gateway'),
-                'PayumKlarnaCheckout' => TwigFactory::guessViewsPath('Payum\Klarna\Checkout\GatewayFactory'),
+                'PayumKlarnaCheckout' => TwigFactory::guessViewsPath('Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory'),
             )))
         ));
     }

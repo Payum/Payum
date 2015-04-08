@@ -58,7 +58,7 @@ class DebugGatewayCommandTest extends WebTestCase
         $this->assertContains('fooGateway (Payum\Core\Gateway):', $output);
         $this->assertContains('Payum\Offline\Action\CaptureAction', $output);
         $this->assertContains('$request instanceof Capture &&', $output);
-        $this->assertContains('$request->getModel() instanceof GatewayInterface', $output);
+        $this->assertContains('$request->getModel() instanceof PaymentInterface', $output);
     }
 
     /**

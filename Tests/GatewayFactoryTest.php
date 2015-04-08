@@ -73,30 +73,30 @@ class GatewayFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowGetPaymentWithoutAnyAdditionalOptions()
+    public function shouldAllowGetGatewayWithoutAnyAdditionalOptions()
     {
         $factory = new GatewayFactory(array(), array(), array());
         $factory->setContainer($this->container);
 
-        $payment = $factory->create();
+        $gateway = $factory->create();
 
-        $this->assertInstanceOf('Payum\Core\GatewayInterface', $payment);
+        $this->assertInstanceOf('Payum\Core\GatewayInterface', $gateway);
     }
 
     /**
      * @test
      */
-    public function shouldAddTaggedActionIfPaymentNameMatch()
+    public function shouldAddTaggedActionIfGatewayNameMatch()
     {
         $this->container->set('the_action', $this->getMock('Payum\Core\Action\ActionInterface'));
 
         $factory = new GatewayFactory(array('the_action' => array(
-            array('payment' => 'thePayment'),
+            array('gateway' => 'theGateway'),
         )), array(), array());
         $factory->setContainer($this->container);
 
         $config = $factory->createConfig(array(
-            'payum.payment_name' => 'thePayment'
+            'payum.gateway_name' => 'theGateway'
         ));
 
         $this->assertArrayHasKey('payum.action.the_action', $config);
@@ -188,13 +188,13 @@ class GatewayFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory = new GatewayFactory(array('the_action' => array(
             array('factory' => 'theFactory'),
-            array('payment' => 'thePayment'),
+            array('gateway' => 'theGateway'),
             array('all' => true, 'prepend' => true),
         )), array() , array());
         $factory->setContainer($this->container);
 
         $config = $factory->createConfig(array(
-            'payum.payment_name' => 'thePayment',
+            'payum.gateway_name' => 'theGateway',
             'payum.factory_name' => 'theFactory',
         ));
 
@@ -289,13 +289,13 @@ class GatewayFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory = new GatewayFactory(array(), array('the_extension' => array(
             array('factory' => 'theFactory'),
-            array('payment' => 'thePayment'),
+            array('gateway' => 'theGateway'),
             array('all' => true, 'prepend' => true),
         )), array());
         $factory->setContainer($this->container);
 
         $config = $factory->createConfig(array(
-            'payum.payment_name' => 'thePayment',
+            'payum.gateway_name' => 'theGateway',
             'payum.factory_name' => 'theFactory',
         ));
 
@@ -390,13 +390,13 @@ class GatewayFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory = new GatewayFactory(array(), array(), array('the_api' => array(
             array('factory' => 'theFactory'),
-            array('payment' => 'thePayment'),
+            array('gateway' => 'theGateway'),
             array('all' => true, 'prepend' => true),
         )));
         $factory->setContainer($this->container);
 
         $config = $factory->createConfig(array(
-            'payum.payment_name' => 'thePayment',
+            'payum.gateway_name' => 'theGateway',
             'payum.factory_name' => 'theFactory',
         ));
 

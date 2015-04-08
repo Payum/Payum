@@ -51,7 +51,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $extension = new PayumExtension;
         $extension->addGatewayFactory($factory);
         
-        $this->assertAttributeContains($factory, 'paymentFactories', $extension);
+        $this->assertAttributeContains($factory, 'gatewaysFactories', $extension);
     }
     
 
@@ -59,7 +59,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
      * @test
      * 
      * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The payment factory Mock_GatewayFactoryInterface
+     * @expectedExceptionMessage The gateway factory Mock_GatewayFactoryInterface
      */
     public function throwIfTryToAddGatewayFactoryWithEmptyName()
     {
@@ -78,7 +78,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The payment factory with such name theFoo already registered
+     * @expectedExceptionMessage The gateway factory with such name theFoo already registered
      */
     public function throwIfTryToAddGatewayFactoryWithNameAlreadyAdded()
     {
@@ -109,7 +109,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $extension = new PayumExtension;
         $extension->addStorageFactory($factory);
 
-        $this->assertAttributeContains($factory, 'storageFactories', $extension);
+        $this->assertAttributeContains($factory, 'storagesFactories', $extension);
     }
 
     /**
@@ -283,7 +283,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension->prepend($container);
 
-        $rc = new \ReflectionClass('Payum\Core\Payment');
+        $rc = new \ReflectionClass('Payum\Core\Gateway');
         $payumRootDir = dirname($rc->getFileName());
 
         $this->assertEquals(

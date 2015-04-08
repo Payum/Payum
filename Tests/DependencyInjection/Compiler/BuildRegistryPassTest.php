@@ -33,7 +33,7 @@ class BuildRegistryPassTest extends \Phpunit_Framework_TestCase
         $registry = new Definition('Payum\Bundle\PayumBundle\Regitry\ContainerAwareRegistry', array(null, null, null));
 
         $container = new ContainerBuilder;
-        $container->setParameter('payum.available_payment_factories', array());
+        $container->setParameter('payum.available_gateway_factories', array());
         $container->setDefinition('payum.static_registry', $registry);
 
         $pass = new BuildRegistryPass;
@@ -48,20 +48,20 @@ class BuildRegistryPassTest extends \Phpunit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldPassPayumTaggedPaymentsAsFirstArgument()
+    public function shouldPassPayumTaggedGatewaysAsFirstArgument()
     {
         $registry = new Definition('Payum\Bundle\PayumBundle\Regitry\ContainerAwareRegistry', array(null, null, null));
 
         $container = new ContainerBuilder;
-        $container->setParameter('payum.available_payment_factories', array());
+        $container->setParameter('payum.available_gateway_factories', array());
         $container->setDefinition('payum.static_registry', $registry);
 
-        $container->setDefinition('payum.payment.foo', new Definition());
-        $container->getDefinition('payum.payment.foo')->addTag('payum.payment', array('payment' => 'fooVal'));
-        $container->getDefinition('payum.payment.foo')->addTag('payum.payment', array('payment' => 'barVal'));
+        $container->setDefinition('payum.gateway.foo', new Definition());
+        $container->getDefinition('payum.gateway.foo')->addTag('payum.gateway', array('gateway' => 'fooVal'));
+        $container->getDefinition('payum.gateway.foo')->addTag('payum.gateway', array('gateway' => 'barVal'));
 
-        $container->setDefinition('payum.payment.baz', new Definition());
-        $container->getDefinition('payum.payment.baz')->addTag('payum.payment', array('payment' => 'bazVal'));
+        $container->setDefinition('payum.gateway.baz', new Definition());
+        $container->getDefinition('payum.gateway.baz')->addTag('payum.gateway', array('gateway' => 'bazVal'));
 
 
         $pass = new BuildRegistryPass;
@@ -69,9 +69,9 @@ class BuildRegistryPassTest extends \Phpunit_Framework_TestCase
         $pass->process($container);
 
         $this->assertEquals(array(
-            'fooVal' => 'payum.payment.foo',
-            'barVal' => 'payum.payment.foo',
-            'bazVal' => 'payum.payment.baz',
+            'fooVal' => 'payum.gateway.foo',
+            'barVal' => 'payum.gateway.foo',
+            'bazVal' => 'payum.gateway.baz',
         ), $registry->getArgument(0));
         $this->assertEquals(array(), $registry->getArgument(1));
         $this->assertEquals(array(), $registry->getArgument(2));
@@ -85,7 +85,7 @@ class BuildRegistryPassTest extends \Phpunit_Framework_TestCase
         $registry = new Definition('Payum\Bundle\PayumBundle\Regitry\ContainerAwareRegistry', array(null, null, null));
 
         $container = new ContainerBuilder;
-        $container->setParameter('payum.available_payment_factories', array());
+        $container->setParameter('payum.available_gateway_factories', array());
         $container->setDefinition('payum.static_registry', $registry);
 
         $container->setDefinition('payum.storage.foo', new Definition());
@@ -112,20 +112,20 @@ class BuildRegistryPassTest extends \Phpunit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldPassPayumTaggedPaymentFactoriesAsThirdArgument()
+    public function shouldPassPayumTaggedGatewayFactoriesAsThirdArgument()
     {
         $registry = new Definition('Payum\Bundle\PayumBundle\Regitry\ContainerAwareRegistry', array(null, null, null));
 
         $container = new ContainerBuilder;
-        $container->setParameter('payum.available_payment_factories', array());
+        $container->setParameter('payum.available_gateway_factories', array());
         $container->setDefinition('payum.static_registry', $registry);
 
-        $container->setDefinition('payum.payment_factory.foo', new Definition());
-        $container->getDefinition('payum.payment_factory.foo')->addTag('payum.payment_factory', array('name' => 'fooVal'));
-        $container->getDefinition('payum.payment_factory.foo')->addTag('payum.payment_factory', array('name' => 'barVal'));
+        $container->setDefinition('payum.gateway_factory.foo', new Definition());
+        $container->getDefinition('payum.gateway_factory.foo')->addTag('payum.gateway_factory', array('name' => 'fooVal'));
+        $container->getDefinition('payum.gateway_factory.foo')->addTag('payum.gateway_factory', array('name' => 'barVal'));
 
-        $container->setDefinition('payum.payment_factory.baz', new Definition());
-        $container->getDefinition('payum.payment_factory.baz')->addTag('payum.payment_factory', array('name' => 'bazVal'));
+        $container->setDefinition('payum.gateway_factory.baz', new Definition());
+        $container->getDefinition('payum.gateway_factory.baz')->addTag('payum.gateway_factory', array('name' => 'bazVal'));
 
 
         $pass = new BuildRegistryPass;
@@ -135,31 +135,31 @@ class BuildRegistryPassTest extends \Phpunit_Framework_TestCase
         $this->assertEquals(array(), $registry->getArgument(0));
         $this->assertEquals(array(), $registry->getArgument(1));
         $this->assertEquals(array(
-            'fooVal' => 'payum.payment_factory.foo',
-            'barVal' => 'payum.payment_factory.foo',
-            'bazVal' => 'payum.payment_factory.baz',
+            'fooVal' => 'payum.gateway_factory.foo',
+            'barVal' => 'payum.gateway_factory.foo',
+            'bazVal' => 'payum.gateway_factory.baz',
         ), $registry->getArgument(2));
     }
 
     /**
      * @test
      */
-    public function shouldPassPaymentsAndStoragesAndPaymentsFactoriesSameTime()
+    public function shouldPassGatewaysAndStoragesAndGatewaysFactoriesSameTime()
     {
         $registry = new Definition('Payum\Bundle\PayumBundle\Regitry\ContainerAwareRegistry', array(null, null, null));
 
         $container = new ContainerBuilder;
-        $container->setParameter('payum.available_payment_factories', array());
+        $container->setParameter('payum.available_gateway_factories', array());
         $container->setDefinition('payum.static_registry', $registry);
 
         $container->setDefinition('payum.storage.foo', new Definition());
         $container->getDefinition('payum.storage.foo')->addTag('payum.storage', array('model_class' => 'fooVal'));
 
-        $container->setDefinition('payum.payment.baz', new Definition());
-        $container->getDefinition('payum.payment.baz')->addTag('payum.payment', array('payment' => 'bazVal'));
+        $container->setDefinition('payum.gateway.baz', new Definition());
+        $container->getDefinition('payum.gateway.baz')->addTag('payum.gateway', array('gateway' => 'bazVal'));
 
-        $container->setDefinition('payum.payment_factory.baz', new Definition());
-        $container->getDefinition('payum.payment_factory.baz')->addTag('payum.payment_factory', array('name' => 'bazVal'));
+        $container->setDefinition('payum.gateway_factory.baz', new Definition());
+        $container->getDefinition('payum.gateway_factory.baz')->addTag('payum.gateway_factory', array('name' => 'bazVal'));
 
 
         $pass = new BuildRegistryPass;
