@@ -46,8 +46,7 @@
         "fp/klarna-invoice": "0.1.*",
         "stripe/stripe-php": "~1.0",
         "ext-soap": "*",
-        "twig/twig": "~1.0",
-        "symfony/validator": "~2.6"
+        "twig/twig": "~1.0"
     },
     "require-dev": {
         "ext-curl": "*",
