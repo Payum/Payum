@@ -46,8 +46,7 @@
         "fp/klarna-invoice": "0.1.*",
         "stripe/stripe-php": "~1.0",
         "ext-soap": "*",
-        "twig/twig": "~1.0",
-        "symfony/validator": "~2.6"
+        "twig/twig": "~1.0"
     },
     "require-dev": {
         "ext-curl": "*",
@@ -62,7 +61,8 @@
         "symfony/routing": "~2.3",
         "symfony/http-kernel": "~2.3",
         "symfony/http-foundation": "~2.3",
-        "symfony/form": "~2.3"
+        "symfony/form": "~2.3",
+        "symfony/validator": "~2.6"
     },
     "replace": {
         "payum/core": "self.version",
