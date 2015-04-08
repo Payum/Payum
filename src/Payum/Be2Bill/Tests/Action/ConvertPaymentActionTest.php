@@ -2,10 +2,8 @@
 namespace Payum\Be2bill\Tests\Action\Api;
 
 use Payum\Be2Bill\Action\ConvertPaymentAction;
-use Payum\Be2Bill\Action\FillOrderDetailsAction;
 use Payum\Core\Model\Payment;
 use Payum\Core\Request\Convert;
-use Payum\Core\Request\FillOrderDetails;
 use Payum\Core\Tests\GenericActionTest;
 
 class ConvertPaymentActionTest extends GenericActionTest
@@ -30,6 +28,7 @@ class ConvertPaymentActionTest extends GenericActionTest
             array(array('foo')),
             array(new \stdClass()),
             array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
+            array(new $this->requestClass(new \stdClass(), 'array')),
             array(new $this->requestClass(new Payment(), 'foobar')),
             array(new $this->requestClass($this->getMock('Payum\Core\Model\PaymentInterface'), 'foobar')),
         );

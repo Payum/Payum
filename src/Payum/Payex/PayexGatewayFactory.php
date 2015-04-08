@@ -14,7 +14,7 @@ use Payum\Payex\Action\Api\CreateAgreementAction;
 use Payum\Payex\Action\Api\DeleteAgreementAction;
 use Payum\Payex\Action\Api\StartRecurringPaymentAction;
 use Payum\Payex\Action\Api\StopRecurringPaymentAction;
-use Payum\Payex\Action\FillOrderDetailsAction;
+use Payum\Payex\Action\ConvertPaymentAction;
 use Payum\Payex\Action\PaymentDetailsSyncAction;
 use Payum\Payex\Action\Api\CompleteOrderAction;
 use Payum\Payex\Action\Api\InitializeOrderAction;
@@ -119,7 +119,7 @@ class PayexGatewayFactory implements GatewayFactoryInterface
             'payum.action.sync' => new PaymentDetailsSyncAction(),
             'payum.action.auto_pay_capture' => new AutoPayPaymentDetailsCaptureAction(),
             'payum.action.auto_pay_status' => new AutoPayPaymentDetailsStatusAction(),
-            'payum.action.fill_order_details' => new FillOrderDetailsAction(),
+            'payum.action.convert_payment' => new ConvertPaymentAction(),
 
             // agreement actions
             'payum.action.api.agreement_details_status' => new AgreementDetailsStatusAction(),

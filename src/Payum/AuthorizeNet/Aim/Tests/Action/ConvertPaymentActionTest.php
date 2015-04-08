@@ -28,6 +28,7 @@ class ConvertPaymentActionTest extends GenericActionTest
             array(array('foo')),
             array(new \stdClass()),
             array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
+            array(new $this->requestClass(new \stdClass(), 'array')),
             array(new $this->requestClass(new Payment(), 'foobar')),
             array(new $this->requestClass($this->getMock('Payum\Core\Model\PaymentInterface'), 'foobar')),
         );
