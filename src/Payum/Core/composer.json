@@ -53,7 +53,8 @@
         "symfony/routing": "~2.3",
         "symfony/http-kernel": "~2.3",
         "symfony/http-foundation": "~2.3",
-        "symfony/form": "~2.3"
+        "symfony/form": "~2.3",
+        "symfony/validator": "~2.6"
     },
     "suggest": {
         "payum/paypal-express-checkout-nvp": "If you want to use paypal express checkout, digital goods or recurring payments",
