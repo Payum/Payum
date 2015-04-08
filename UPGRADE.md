@@ -31,6 +31,8 @@
 * [propel] Order renamed to `Payment`. Database schema was changed. **You have to migrate your database**.
 * [be2bill] Method `Api::prepareOnsitePayment` was renamed to `Api::prepareOffsitePayment`.
 * [action] Action `CaptureOrderAction` was renamed to `CapturePaymentAction`.
+* [action] Actions `FillOrderDetailsAction` removed. Use `ConvertPaymentAction` ones instead.
+* [request] Request `FillOrderDetails` removed. Use `Convert` one instead.
 
 ## 0.13 to 0.14
 
