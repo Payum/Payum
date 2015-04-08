@@ -55,8 +55,8 @@ $storages = array(
 $gateways = array();
 
 
-$offlineGatewayFactory = new \Payum\Offline\GatewayFactory();
-$gateways['offline'] = $offlineGatewayFactory->create();
+$factory = new \Payum\Offline\OfflineGatewayFactory();
+$gateways['offline'] = $factory->create();
 
 //put here other gateways
 

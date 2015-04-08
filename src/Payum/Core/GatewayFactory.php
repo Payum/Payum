@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core;
 
-use Payum\Core\Action\CaptureOrderAction;
+use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Buzz\ClientFactory;
@@ -56,7 +56,7 @@ class GatewayFactory implements GatewayFactoryInterface
             'twig.env' => TwigFactory::createGeneric(),
 
             'payum.action.get_http_request' => new GetHttpRequestAction(),
-            'payum.action.capture_order' => new CaptureOrderAction(),
+            'payum.action.capture_payment' => new CapturePaymentAction(),
             'payum.action.execute_same_request_with_model_details' => new ExecuteSameRequestWithModelDetailsAction(),
             'payum.action.render_template' => function (ArrayObject $config) {
                 return new RenderTemplateAction($config['twig.env'], $config['payum.template.layout']);
