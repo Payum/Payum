@@ -30,6 +30,7 @@
 * [propel] Token::paymentName property renamed to `gatewayName`. **You have to migrate your database**.
 * [propel] Order renamed to `Payment`. Database schema was changed. **You have to migrate your database**.
 * [be2bill] Method `Api::prepareOnsitePayment` was renamed to `Api::prepareOffsitePayment`.
+* [action] Action `CaptureOrderAction` was renamed to `CapturePaymentAction`.
 
 ## 0.13 to 0.14
 

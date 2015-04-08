@@ -1,18 +1,18 @@
 <?php
 namespace Payum\Core\Tests\Action;
 
-use Payum\Core\Action\CaptureOrderAction;
+use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\Model\Payment;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\FillOrderDetails;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Tests\GenericActionTest;
 
-class CaptureOrderActionTest extends GenericActionTest
+class CapturePaymentActionTest extends GenericActionTest
 {
     protected $requestClass = 'Payum\Core\Request\Capture';
 
-    protected $actionClass = 'Payum\Core\Action\CaptureOrderAction';
+    protected $actionClass = 'Payum\Core\Action\CapturePaymentAction';
 
     public function provideSupportedRequests()
     {
@@ -63,7 +63,7 @@ class CaptureOrderActionTest extends GenericActionTest
             }))
         ;
 
-        $action = new CaptureOrderAction();
+        $action = new CapturePaymentAction();
         $action->setGateway($gatewayMock);
 
         $action->execute($capture = new Capture($order));
@@ -105,7 +105,7 @@ class CaptureOrderActionTest extends GenericActionTest
             }))
         ;
 
-        $action = new CaptureOrderAction();
+        $action = new CapturePaymentAction();
         $action->setGateway($gatewayMock);
 
         $action->execute($capture = new Capture($order));
@@ -149,7 +149,7 @@ class CaptureOrderActionTest extends GenericActionTest
             }))
         ;
 
-        $action = new CaptureOrderAction();
+        $action = new CapturePaymentAction();
         $action->setGateway($gatewayMock);
 
         $capture = new Capture($token);
@@ -197,7 +197,7 @@ class CaptureOrderActionTest extends GenericActionTest
             }))
         ;
 
-        $action = new CaptureOrderAction();
+        $action = new CapturePaymentAction();
         $action->setGateway($gatewayMock);
 
         $action->execute($capture = new Capture($order));
@@ -238,7 +238,7 @@ class CaptureOrderActionTest extends GenericActionTest
             }))
         ;
 
-        $action = new CaptureOrderAction();
+        $action = new CapturePaymentAction();
         $action->setGateway($gatewayMock);
 
         $this->setExpectedException('Exception');

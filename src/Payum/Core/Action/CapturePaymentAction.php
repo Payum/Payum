@@ -8,7 +8,7 @@ use Payum\Core\Request\Capture;
 use Payum\Core\Request\FillOrderDetails;
 use Payum\Core\Request\GetHumanStatus;
 
-class CaptureOrderAction extends GatewayAwareAction
+class CapturePaymentAction extends GatewayAwareAction
 {
     /**
      * {@inheritDoc}
