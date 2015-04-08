@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.14.4 (2015-04-08)
+
+* [symfony] Add `CreditCardDate` constraint. Checks that expiration date is greater than today.
+
 ## 0.14.3 (2015-04-03)
 
 * Introduce Payment model. Deprecate Order model.
