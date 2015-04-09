@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Be2Bill;
 
-use Payum\Be2Bill\Action\FillOrderDetailsAction;
+use Payum\Be2Bill\Action\ConvertPaymentAction;
 use Payum\Be2Bill\Action\CaptureAction;
 use Payum\Be2Bill\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -53,7 +53,7 @@ class Be2BillDirectGatewayFactory implements GatewayFactoryInterface
 
             'payum.action.capture' => new CaptureAction(),
             'payum.action.status' => new StatusAction(),
-            'payum.action.fill_order_details' => new FillOrderDetailsAction(),
+            'payum.action.convert_payment' => new ConvertPaymentAction(),
         ));
 
         if (false == $config['payum.api']) {

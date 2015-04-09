@@ -4,7 +4,7 @@ namespace Payum\Core\Tests\Action;
 use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\Model\Payment;
 use Payum\Core\Request\Capture;
-use Payum\Core\Request\FillOrderDetails;
+use Payum\Core\Request\Convert;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Tests\GenericActionTest;
 
@@ -38,9 +38,9 @@ class CapturePaymentActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldExecuteFillOrderDetailsIfStatusNew()
+    public function shouldExecuteConvertRequestIfStatusNew()
     {
-        $order = new Payment();
+        $payment = new Payment();
 
         $testCase = $this;
 
@@ -56,19 +56,22 @@ class CapturePaymentActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\FillOrderDetails'))
-            ->will($this->returnCallback(function (FillOrderDetails $request) use ($testCase, $order) {
-                $testCase->assertSame($order, $request->getOrder());
+            ->with($this->isInstanceOf('Payum\Core\Request\Convert'))
+            ->will($this->returnCallback(function (Convert $request) use ($testCase, $payment) {
+                $testCase->assertSame($payment, $request->getSource());
+                $testCase->assertSame('array', $request->getTo());
                 $testCase->assertNull($request->getToken());
+
+                $request->setResult(array());
             }))
         ;
 
         $action = new CapturePaymentAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute($capture = new Capture($order));
+        $action->execute($capture = new Capture($payment));
 
-        $this->assertSame($order, $capture->getFirstModel());
+        $this->assertSame($payment, $capture->getFirstModel());
         $this->assertInstanceOf('ArrayAccess', $capture->getModel());
         $this->assertNull($capture->getToken());
     }
@@ -76,9 +79,9 @@ class CapturePaymentActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldKeepFilledDetailsInsideOrder()
+    public function shouldSetConvertedResultToPaymentAsDetails()
     {
-        $order = new Payment();
+        $payment = new Payment();
 
         $testCase = $this;
 
@@ -94,26 +97,25 @@ class CapturePaymentActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\FillOrderDetails'))
-            ->will($this->returnCallback(function (FillOrderDetails $request) use ($testCase, $order) {
-                $testCase->assertSame($order, $request->getOrder());
-
-                $details = $order->getDetails();
+            ->with($this->isInstanceOf('Payum\Core\Request\Convert'))
+            ->will($this->returnCallback(function (Convert $request) use ($testCase, $payment) {
                 $details['foo'] = 'fooVal';
 
-                $order->setDetails($details);
+                $request->setResult(array(
+                    'foo' => 'fooVal',
+                ));
             }))
         ;
 
         $action = new CapturePaymentAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute($capture = new Capture($order));
+        $action->execute($capture = new Capture($payment));
 
-        $this->assertSame($order, $capture->getFirstModel());
+        $this->assertSame($payment, $capture->getFirstModel());
         $this->assertInstanceOf('ArrayAccess', $capture->getModel());
 
-        $details = $order->getDetails();
+        $details = $payment->getDetails();
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('foo', $details);
@@ -123,9 +125,9 @@ class CapturePaymentActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldExecuteFillOrderDetailsWithTokenIfStatusNew()
+    public function shouldExecuteConvertRequestWithTokenIfOnePresent()
     {
-        $order = new Payment();
+        $payment = new Payment();
         $token = $this->createTokenMock();
 
         $testCase = $this;
@@ -142,10 +144,12 @@ class CapturePaymentActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\FillOrderDetails'))
-            ->will($this->returnCallback(function (FillOrderDetails $request) use ($testCase, $order, $token) {
-                $testCase->assertSame($order, $request->getOrder());
+            ->with($this->isInstanceOf('Payum\Core\Request\Convert'))
+            ->will($this->returnCallback(function (Convert $request) use ($testCase, $payment, $token) {
+                $testCase->assertSame($payment, $request->getSource());
                 $testCase->assertSame($token, $request->getToken());
+
+                $request->setResult(array());
             }))
         ;
 
@@ -153,11 +157,11 @@ class CapturePaymentActionTest extends GenericActionTest
         $action->setGateway($gatewayMock);
 
         $capture = new Capture($token);
-        $capture->setModel($order);
+        $capture->setModel($payment);
 
         $action->execute($capture);
 
-        $this->assertSame($order, $capture->getFirstModel());
+        $this->assertSame($payment, $capture->getFirstModel());
         $this->assertInstanceOf('ArrayAccess', $capture->getModel());
         $this->assertSame($token, $capture->getToken());
     }
@@ -165,12 +169,12 @@ class CapturePaymentActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldSetDetailsBackToOrderAfterCaptureDetailsExecution()
+    public function shouldSetDetailsBackToPaymentAfterCaptureDetailsExecution()
     {
         $expectedDetails = array('foo' => 'fooVal');
 
-        $order = new Payment();
-        $order->setDetails($expectedDetails);
+        $payment = new Payment();
+        $payment->setDetails($expectedDetails);
 
         $testCase = $this;
 
@@ -200,22 +204,22 @@ class CapturePaymentActionTest extends GenericActionTest
         $action = new CapturePaymentAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute($capture = new Capture($order));
+        $action->execute($capture = new Capture($payment));
 
-        $this->assertSame($order, $capture->getFirstModel());
+        $this->assertSame($payment, $capture->getFirstModel());
         $this->assertInstanceOf('ArrayAccess', $capture->getModel());
-        $this->assertEquals(array('foo' => 'fooVal', 'bar' => 'barVal'), $order->getDetails());
+        $this->assertEquals(array('foo' => 'fooVal', 'bar' => 'barVal'), $payment->getDetails());
     }
 
     /**
      * @test
      */
-    public function shouldSetDetailsBackToOrderEvenIfExceptionThrown()
+    public function shouldSetDetailsBackToPaymentEvenIfExceptionThrown()
     {
         $expectedDetails = array('foo' => 'fooVal');
 
-        $order = new Payment();
-        $order->setDetails($expectedDetails);
+        $payment = new Payment();
+        $payment->setDetails($expectedDetails);
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -242,10 +246,10 @@ class CapturePaymentActionTest extends GenericActionTest
         $action->setGateway($gatewayMock);
 
         $this->setExpectedException('Exception');
-        $action->execute($capture = new Capture($order));
+        $action->execute($capture = new Capture($payment));
 
-        $this->assertSame($order, $capture->getFirstModel());
+        $this->assertSame($payment, $capture->getFirstModel());
         $this->assertInstanceOf('ArrayAccess', $capture->getModel());
-        $this->assertEquals(array('foo' => 'fooVal', 'bar' => 'barVal'), $order->getDetails());
+        $this->assertEquals(array('foo' => 'fooVal', 'bar' => 'barVal'), $payment->getDetails());
     }
 }

@@ -6,7 +6,7 @@ use Payum\Core\GatewayFactory as CoreGatewayFactory;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Paypal\ProCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ProCheckout\Nvp\Action\RefundAction;
-use Payum\Paypal\ProCheckout\Nvp\Action\FillOrderDetailsAction;
+use Payum\Paypal\ProCheckout\Nvp\Action\ConvertPaymentAction;
 use Payum\Paypal\ProCheckout\Nvp\Action\StatusAction;
 
 class PaypalProCheckoutGatewayFactory implements GatewayFactoryInterface
@@ -54,7 +54,7 @@ class PaypalProCheckoutGatewayFactory implements GatewayFactoryInterface
 
             'payum.action.capture' => new CaptureAction(),
             'payum.action.refund' => new RefundAction(),
-            'payum.action.fill_order_details' => new FillOrderDetailsAction(),
+            'payum.action.convert_payment' => new ConvertPaymentAction(),
             'payum.action.status' => new StatusAction(),
         ));
 

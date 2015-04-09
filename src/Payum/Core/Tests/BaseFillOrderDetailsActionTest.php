@@ -5,12 +5,12 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\Model\Payment;
 use Payum\Core\Request\Generic;
 
-abstract class BaseFillOrderDetailsActionTest extends \PHPUnit_Framework_TestCase
+abstract class BaseConvertPaymentActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Generic
      */
-    protected $requestClass = 'Payum\Core\Request\FillOrderDetails';
+    protected $requestClass = 'Payum\Core\Request\Convert';
 
     /**
      * @var ActionInterface

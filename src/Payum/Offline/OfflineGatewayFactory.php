@@ -5,7 +5,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory as CoreGatewayFactory;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Offline\Action\CaptureAction;
-use Payum\Offline\Action\FillOrderDetailsAction;
+use Payum\Offline\Action\ConvertPaymentAction;
 use Payum\Offline\Action\StatusAction;
 
 class OfflineGatewayFactory implements GatewayFactoryInterface
@@ -52,7 +52,7 @@ class OfflineGatewayFactory implements GatewayFactoryInterface
             'payum.factory_title' => 'Offline',
             'payum.action.capture' => new CaptureAction(),
             'payum.action.status' => new StatusAction(),
-            'payum.action.fill_order_details' => new FillOrderDetailsAction(),
+            'payum.action.convert_payment' => new ConvertPaymentAction(),
         ));
 
         return (array) $config;
