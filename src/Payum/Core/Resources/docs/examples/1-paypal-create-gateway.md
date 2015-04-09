@@ -3,7 +3,9 @@
 ```php
 <?php
 
-$factory = new Payum\Paypal\ExpressCheckout\PaypalExpressCheckoutGatewayFactory();
+use Payum\Paypal\ExpressCheckout\PaypalExpressCheckoutGatewayFactory;
+
+$factory = new PaypalExpressCheckoutGatewayFactory();
 
 $gateway = $factory->create(array(
     'username' => 'aUsername',
