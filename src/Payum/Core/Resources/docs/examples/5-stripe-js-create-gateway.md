@@ -3,7 +3,9 @@
 ```php
 <?php
 
-$factory = new Payum\Stripe\StripeJsGatewayFactory();
+use Payum\Stripe\StripeJsGatewayFactory;
+
+$factory = new StripeJsGatewayFactory();
 
 $gateway = $factory->create(array(
     'publishable_key' => 'aKey', 
