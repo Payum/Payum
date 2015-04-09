@@ -62,7 +62,7 @@ class CapturePaymentActionTest extends GenericActionTest
                 $testCase->assertSame('array', $request->getTo());
                 $testCase->assertNull($request->getToken());
 
-                $request->setResult([]);
+                $request->setResult(array());
             }))
         ;
 
@@ -149,7 +149,7 @@ class CapturePaymentActionTest extends GenericActionTest
                 $testCase->assertSame($payment, $request->getSource());
                 $testCase->assertSame($token, $request->getToken());
 
-                $request->setResult([]);
+                $request->setResult(array());
             }))
         ;
 
