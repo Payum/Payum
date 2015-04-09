@@ -37,7 +37,7 @@ class CreditCardTypeTest extends WebTestCase
     public function shouldSubmitDataCorrectly()
     {
         $form = $this->formFactory->create('payum_credit_card', null, array(
-            'csrf_protection' => false
+            'csrf_protection' => false,
         ));
 
         $form->submit(array(
@@ -47,8 +47,8 @@ class CreditCardTypeTest extends WebTestCase
             'expireAt' => array(
                 'day' => 1,
                 'month' => 10,
-                'year' => 2020
-            )
+                'year' => 2020,
+            ),
         ));
 
         $this->assertTrue($form->isValid(), $form->getErrors(true, false));
@@ -70,7 +70,7 @@ class CreditCardTypeTest extends WebTestCase
     public function shouldRequireHolderNotBlank()
     {
         $form = $this->formFactory->create('payum_credit_card', null, array(
-            'csrf_protection' => false
+            'csrf_protection' => false,
         ));
 
         $form->submit(array(
@@ -80,8 +80,8 @@ class CreditCardTypeTest extends WebTestCase
             'expireAt' => array(
                 'day' => 1,
                 'month' => 10,
-                'year' => 2020
-            )
+                'year' => 2020,
+            ),
         ));
 
         $this->assertFalse($form->isValid());
@@ -94,7 +94,7 @@ class CreditCardTypeTest extends WebTestCase
     public function shouldRequireNumberNotBlank()
     {
         $form = $this->formFactory->create('payum_credit_card', null, array(
-            'csrf_protection' => false
+            'csrf_protection' => false,
         ));
 
         $form->submit(array(
@@ -104,8 +104,8 @@ class CreditCardTypeTest extends WebTestCase
             'expireAt' => array(
                 'day' => 1,
                 'month' => 10,
-                'year' => 2020
-            )
+                'year' => 2020,
+            ),
         ));
 
         $this->assertFalse($form->isValid());
@@ -118,7 +118,7 @@ class CreditCardTypeTest extends WebTestCase
     public function shouldNumberPassLuchValidation()
     {
         $form = $this->formFactory->create('payum_credit_card', null, array(
-            'csrf_protection' => false
+            'csrf_protection' => false,
         ));
 
         $form->submit(array(
@@ -128,8 +128,8 @@ class CreditCardTypeTest extends WebTestCase
             'expireAt' => array(
                 'day' => 1,
                 'month' => 10,
-                'year' => 2020
-            )
+                'year' => 2020,
+            ),
         ));
 
         $this->assertFalse($form->isValid());
@@ -142,7 +142,7 @@ class CreditCardTypeTest extends WebTestCase
     public function shouldRequireSecurityCodeNotBlank()
     {
         $form = $this->formFactory->create('payum_credit_card', null, array(
-            'csrf_protection' => false
+            'csrf_protection' => false,
         ));
 
         $form->submit(array(
@@ -152,8 +152,8 @@ class CreditCardTypeTest extends WebTestCase
             'expireAt' => array(
                 'day' => 1,
                 'month' => 10,
-                'year' => 2020
-            )
+                'year' => 2020,
+            ),
         ));
 
         $this->assertFalse($form->isValid());
@@ -166,7 +166,7 @@ class CreditCardTypeTest extends WebTestCase
     public function shouldRequireExpireAtNotBlank()
     {
         $form = $this->formFactory->create('payum_credit_card', null, array(
-            'csrf_protection' => false
+            'csrf_protection' => false,
         ));
 
         $form->submit(array(
@@ -176,8 +176,32 @@ class CreditCardTypeTest extends WebTestCase
             'expireAt' => array(
                 'day' => '',
                 'month' => '',
-                'year' => ''
-            )
+                'year' => '',
+            ),
+        ));
+
+        $this->assertFalse($form->isValid());
+        $this->assertFalse($form->get('expireAt')->isValid());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldRequireExpireAtInFuture()
+    {
+        $form = $this->formFactory->create('payum_credit_card', null, array(
+            'csrf_protection' => false,
+        ));
+
+        $form->submit(array(
+            'holder' => 'John Doe',
+            'number' => '4111111111111111',
+            'securityCode' => '',
+            'expireAt' => array(
+                'day' => '1',
+                'month' => '1',
+                'year' => '1970',
+            ),
         ));
 
         $this->assertFalse($form->isValid());
