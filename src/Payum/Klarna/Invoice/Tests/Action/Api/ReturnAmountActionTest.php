@@ -184,12 +184,4 @@ class ReturnAmountActionTest extends \PHPUnit_Framework_TestCase
 
         return $klarnaMock;
     }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PaymentInterface
-     */
-    protected function createPaymentMock()
-    {
-        return $this->getMock('Payum\Core\PaymentInterface');
-    }
 }
