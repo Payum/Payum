@@ -62,7 +62,8 @@
         "symfony/http-kernel": "~2.3",
         "symfony/http-foundation": "~2.3",
         "symfony/form": "~2.3",
-        "symfony/validator": "~2.6"
+        "symfony/validator": "~2.6",
+        "alcohol/iso4217": "dev-rework as 3.0"
     },
     "replace": {
         "payum/core": "self.version",
@@ -100,5 +101,11 @@
         "branch-alias": {
             "dev-master": "0.15-dev"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:formapro-forks/iso4217.git"
+        }
+    ]
 }

@@ -34,11 +34,6 @@ class Payment implements PaymentInterface
     protected $currencyCode;
 
     /**
-     * @var int
-     */
-    protected $currencyDigitsAfterDecimalPoint;
-
-    /**
      * @var array
      */
     protected $details;
@@ -143,20 +138,10 @@ class Payment implements PaymentInterface
 
     /**
      * @param string $currencyCode
-     * @param int    $digitsAfterDecimalPoint
      */
-    public function setCurrencyCode($currencyCode, $digitsAfterDecimalPoint = 2)
+    public function setCurrencyCode($currencyCode)
     {
         $this->currencyCode = $currencyCode;
-        $this->currencyDigitsAfterDecimalPoint = $digitsAfterDecimalPoint;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getCurrencyDigitsAfterDecimalPoint()
-    {
-        return $this->currencyDigitsAfterDecimalPoint;
     }
 
     /**

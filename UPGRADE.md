@@ -33,6 +33,7 @@
 * [action] Action `CaptureOrderAction` was renamed to `CapturePaymentAction`.
 * [action] Actions `FillOrderDetailsAction` removed. Use `ConvertPaymentAction` ones instead.
 * [request] Request `FillOrderDetails` removed. Use `Convert` one instead.
+* [model] The method `PaymentInterface::getCurrencyDigitsAfterDecimalPoint` was removed. Use `GetCurrency::getIso4217` request method to get same info.
 
 ## 0.13 to 0.14
 
