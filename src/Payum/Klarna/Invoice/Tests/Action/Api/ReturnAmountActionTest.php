@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
-use Payum\Core\PaymentInterface;
 use Payum\Klarna\Invoice\Action\Api\ReturnAmountAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\ReturnAmount;
