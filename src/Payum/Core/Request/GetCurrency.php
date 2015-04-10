@@ -10,7 +10,7 @@ class GetCurrency
      */
     protected $code;
 
-    protected $iso4217;
+    protected $ISO4217;
 
     /**
      * @param string|int $code
@@ -31,16 +31,16 @@ class GetCurrency
     /**
      * @return ISO4217
      */
-    public function getIso4217()
+    public function getISO4217()
     {
-        return $this->iso4217;
+        return $this->ISO4217;
     }
 
     /**
-     * @param ISO4217 $iso4217
+     * @param ISO4217 $ISO4217
      */
-    public function setIso4217(ISO4217 $iso4217)
+    public function setISO4217(ISO4217 $ISO4217)
     {
-        $this->iso4217 = $iso4217;
+        $this->ISO4217 = $ISO4217;
     }
 }

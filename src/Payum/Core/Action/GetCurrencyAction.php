@@ -20,7 +20,7 @@ class GetCurrencyAction extends GatewayAwareAction
         /** @var $payment PaymentInterface */
         $currency = $request->getCode();
 
-        $request->setIso4217(is_numeric($currency) ? ISO4217::findByNumeric($currency) : ISO4217::findByAlpha3($currency));
+        $request->setISO4217(is_numeric($currency) ? ISO4217::findByNumeric($currency) : ISO4217::findByAlpha3($currency));
     }
 
     /**
