@@ -1,18 +1,18 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
-use Payum\Klarna\Invoice\Action\Api\ReturnAmountAction;
+use Payum\Klarna\Invoice\Action\Api\CreditInvoiceAction;
 use Payum\Klarna\Invoice\Config;
-use Payum\Klarna\Invoice\Request\Api\ReturnAmount;
+use Payum\Klarna\Invoice\Request\Api\CreditInvoice;
 
-class ReturnAmountActionTest extends \PHPUnit_Framework_TestCase
+class CreditInvoiceActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\ReturnAmountAction');
+        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\CreditInvoiceAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
     }
@@ -22,7 +22,7 @@ class ReturnAmountActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new ReturnAmountAction();
+        new CreditInvoiceAction();
     }
 
     /**
@@ -30,7 +30,7 @@ class ReturnAmountActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithKlarnaAsArgument()
     {
-        new ReturnAmountAction($this->createKlarnaMock());
+        new CreditInvoiceAction($this->createKlarnaMock());
     }
 
     /**
@@ -38,7 +38,7 @@ class ReturnAmountActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetConfigAsApi()
     {
-        $action = new ReturnAmountAction($this->createKlarnaMock());
+        $action = new CreditInvoiceAction($this->createKlarnaMock());
 
         $action->setApi($config = new Config());
 
@@ -53,7 +53,7 @@ class ReturnAmountActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwApiNotSupportedIfNotConfigGivenAsApi()
     {
-        $action = new ReturnAmountAction($this->createKlarnaMock());
+        $action = new CreditInvoiceAction($this->createKlarnaMock());
 
         $action->setApi(new \stdClass());
     }
@@ -61,19 +61,19 @@ class ReturnAmountActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportReserveAmountWithArrayAsModel()
+    public function shouldSupportCreditInvoiceWithArrayAsModel()
     {
-        $action = new ReturnAmountAction();
+        $action = new CreditInvoiceAction();
 
-        $this->assertTrue($action->supports(new ReturnAmount(array())));
+        $this->assertTrue($action->supports(new CreditInvoice(array())));
     }
 
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotReserveAmount()
+    public function shouldNotSupportAnythingNotCreditInvoice()
     {
-        $action = new ReturnAmountAction();
+        $action = new CreditInvoiceAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -81,11 +81,11 @@ class ReturnAmountActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportReturnAmountWithNotArrayAccessModel()
+    public function shouldNotSupportCreditInvoiceWithNotArrayAccessModel()
     {
-        $action = new ReturnAmountAction();
+        $action = new CreditInvoiceAction();
 
-        $this->assertFalse($action->supports(new ReturnAmount(new \stdClass())));
+        $this->assertFalse($action->supports(new CreditInvoice(new \stdClass())));
     }
 
     /**
@@ -95,7 +95,7 @@ class ReturnAmountActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $action = new ReturnAmountAction();
+        $action = new CreditInvoiceAction();
 
         $action->execute(new \stdClass());
     }
@@ -103,33 +103,25 @@ class ReturnAmountActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldCallKlarnaReturnAmount()
+    public function shouldCallKlarnaCreditInvoice()
     {
         $details = array(
             'invoice_number' => 'invoice number',
-            'amount' => 100,
-            'vat' => 50,
-            'flags' => 123,
-            'description' => 'description',
         );
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
             ->expects($this->once())
-            ->method('returnAmount')
+            ->method('creditInvoice')
             ->with(
-                $details['invoice_number'],
-                $details['amount'],
-                $details['vat'],
-                $details['flags'],
-                $details['description']
+                $details['invoice_number']
             )
         ;
 
-        $action = new ReturnAmountAction($klarnaMock);
+        $action = new CreditInvoiceAction($klarnaMock);
         $action->setApi(new Config());
 
-        $action->execute(new ReturnAmount($details));
+        $action->execute(new CreditInvoice($details));
     }
 
     /**
@@ -139,30 +131,22 @@ class ReturnAmountActionTest extends \PHPUnit_Framework_TestCase
     {
         $details = array(
             'invoice_number' => 'invoice number',
-            'amount' => 100,
-            'vat' => 50,
-            'flags' => 123,
-            'description' => 'description',
         );
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
             ->expects($this->once())
-            ->method('returnAmount')
+            ->method('creditInvoice')
             ->with(
-                $details['invoice_number'],
-                $details['amount'],
-                $details['vat'],
-                $details['flags'],
-                $details['description']
+                $details['invoice_number']
             )
             ->will($this->throwException(new \KlarnaException('theMessage', 123)))
         ;
 
-        $action = new ReturnAmountAction($klarnaMock);
+        $action = new CreditInvoiceAction($klarnaMock);
         $action->setApi(new Config());
 
-        $action->execute($reserve = new ReturnAmount($details));
+        $action->execute($reserve = new CreditInvoice($details));
 
         $postDetails = $reserve->getModel();
         $this->assertEquals(123, $postDetails['error_code']);
@@ -174,7 +158,7 @@ class ReturnAmountActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock =  $this->getMock('Klarna', array('config', 'returnAmount'));
+        $klarnaMock =  $this->getMock('Klarna', array('config', 'creditInvoice'));
 
         $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);
