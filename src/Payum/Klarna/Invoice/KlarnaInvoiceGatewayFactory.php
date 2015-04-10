@@ -9,6 +9,7 @@ use Payum\Klarna\Invoice\Action\Api\ActivateAction;
 use Payum\Klarna\Invoice\Action\Api\ActivateReservationAction;
 use Payum\Klarna\Invoice\Action\Api\CancelReservationAction;
 use Payum\Klarna\Invoice\Action\Api\CheckOrderStatusAction;
+use Payum\Klarna\Invoice\Action\Api\CreditInvoiceAction;
 use Payum\Klarna\Invoice\Action\Api\CreditPartAction;
 use Payum\Klarna\Invoice\Action\Api\GetAddressesAction;
 use Payum\Klarna\Invoice\Action\Api\PopulateKlarnaFromDetailsAction;
@@ -80,6 +81,7 @@ class KlarnaInvoiceGatewayFactory implements GatewayFactoryInterface
             'payum.action.api.check_order_status' => new CheckOrderStatusAction(),
             'payum.action.api.get_addresses' => new GetAddressesAction(),
             'payum.action.api.populate_klarna_from_details' => new PopulateKlarnaFromDetailsAction(),
+            'payum.action.api.credit_invoice' => new CreditInvoiceAction(),
             'payum.action.api.credit_part' => new CreditPartAction(),
             'payum.action.api.reserve_amount' => new ReserveAmountAction(),
             'payum.action.api.return_amount' => new ReturnAmountAction(),
