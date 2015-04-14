@@ -63,8 +63,9 @@ class GatewayFactory implements GatewayFactoryInterface
                 return new RenderTemplateAction($config['twig.env'], $config['payum.template.layout']);
             },
             'payum.extension.endless_cycle_detector' => new EndlessCycleDetectorExtension(),
-            'payum.action.get_currency' => new GetCurrencyAction(),
-
+            'payum.action.get_currency' => function (ArrayObject $config) {
+                return new GetCurrencyAction($config['payum.iso4217']);
+            },
             'payum.prepend_actions' => array(),
             'payum.prepend_extensions' => array(),
             'payum.prepend_apis' => array(),
