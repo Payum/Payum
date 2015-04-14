@@ -26,9 +26,11 @@
 * [doctrine] PaymentConfig::paymentName property renamed to `gatewayName`. **You have to migrate your database**.
 * [doctrine] Token::paymentName property renamed to `gatewayName`. **You have to migrate your database**.
 * [doctrine] Order renamed to `Payment`. Database schema was changed. **You have to migrate your database**.
+* [doctrine] The `currencyDigitsAfterDecimalPoint` property removed from ORM\ODM schema.
 * [propel] PaymentConfig::paymentName property renamed to `gatewayName`. **You have to migrate your database**.
 * [propel] Token::paymentName property renamed to `gatewayName`. **You have to migrate your database**.
 * [propel] Order renamed to `Payment`. Database schema was changed. **You have to migrate your database**.
+* [propel] The `currencyDigitsAfterDecimalPoint` property removed from schema.
 * [be2bill] Method `Api::prepareOnsitePayment` was renamed to `Api::prepareOffsitePayment`.
 * [action] Action `CaptureOrderAction` was renamed to `CapturePaymentAction`.
 * [action] Actions `FillOrderDetailsAction` removed. Use `ConvertPaymentAction` ones instead.

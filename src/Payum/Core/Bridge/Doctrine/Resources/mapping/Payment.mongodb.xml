@@ -18,8 +18,6 @@
 
         <field name="currencyCode" type="string" />
 
-        <field name="currencyDigitsAfterDecimalPoint" type="string" />
-
         <field name="details" type="object" />
 
     </mapped-superclass>

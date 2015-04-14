@@ -18,8 +18,6 @@
 
         <field name="currencyCode" column="currency_code" type="string" nullable="true" />
 
-        <field name="currencyDigitsAfterDecimalPoint" column="currency_digits_after_decimal_point" type="string" nullable="true" />
-
         <field name="details" column="details" type="json_array" />
 
     </mapped-superclass>

@@ -2,7 +2,9 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Core\Model\Token;
+use Payum\Core\Request\GetCurrency;
 use Payum\Core\Tests\GenericActionTest;
+use Payum\ISO4217\Currency;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\ConvertPaymentAction;
 use Payum\Core\Model\Payment;
 use Payum\Core\Request\Convert;
@@ -40,6 +42,16 @@ class ConvertPaymentActionTest extends GenericActionTest
      */
     public function shouldCorrectlyConvertOrderToDetailsAndSetItBack()
     {
+        $gatewayMock = $this->getMock('Payum\Core\GatewayInterface');
+        $gatewayMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Core\Request\GetCurrency'))
+            ->willReturnCallback(function(GetCurrency $request) {
+                $request->setCurrency(new Currency('US Dollar', 'USD', 123, 2, 'US'));
+            })
+        ;
+
         $order = new Payment();
         $order->setNumber('theNumber');
         $order->setCurrencyCode('USD');
@@ -49,6 +61,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         $order->setClientEmail('theClientEmail');
 
         $action = new ConvertPaymentAction();
+        $action->setGateway($gatewayMock);
 
         $action->execute($convert = new Convert($order, 'array'));
 
@@ -71,6 +84,16 @@ class ConvertPaymentActionTest extends GenericActionTest
      */
     public function shouldNotOverwriteAlreadySetExtraDetails()
     {
+        $gatewayMock = $this->getMock('Payum\Core\GatewayInterface');
+        $gatewayMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Core\Request\GetCurrency'))
+            ->willReturnCallback(function(GetCurrency $request) {
+                $request->setCurrency(new Currency('US Dollar', 'USD', 123, 2, 'US'));
+            })
+        ;
+
         $order = new Payment();
         $order->setCurrencyCode('USD');
         $order->setTotalAmount(123);
@@ -80,6 +103,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         ));
 
         $action = new ConvertPaymentAction();
+        $action->setGateway($gatewayMock);
 
         $action->execute($convert = new Convert($order, 'array'));
 

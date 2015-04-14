@@ -12,7 +12,6 @@
         <column name="clientId" type="VARCHAR"/>
         <column name="totalAmount" phpName="TotalAmount" type="INTEGER"/>
         <column name="currencyCode" type="VARCHAR"/>
-        <column name="currencyDigitsAfterDecimalPoint" type="INTEGER"/>
         <column name="details" type="ARRAY"/>
 
         <vendor type="mysql">
