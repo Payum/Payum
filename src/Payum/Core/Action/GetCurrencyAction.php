@@ -1,13 +1,20 @@
 <?php
 namespace Payum\Core\Action;
 
-use Alcohol\ISO4217;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\GetCurrency;
+use Payum\ISO4217\ISO4217;
 
 class GetCurrencyAction extends GatewayAwareAction
 {
+    protected $iso4217;
+
+    public function __construct(ISO4217 $iso4217 = null)
+    {
+        $this->iso4217 = $iso4217 ?: new ISO4217();
+    }
+
     /**
      * {@inheritDoc}
      *
@@ -20,7 +27,9 @@ class GetCurrencyAction extends GatewayAwareAction
         /** @var $payment PaymentInterface */
         $currency = $request->getCode();
 
-        $request->setISO4217(is_numeric($currency) ? ISO4217::findByNumeric($currency) : ISO4217::findByAlpha3($currency));
+        $request->setCurrency(
+            is_numeric($currency) ? $this->iso4217->findByNumeric($currency) : $this->iso4217->findByAlpha3($currency)
+        );
     }
 
     /**

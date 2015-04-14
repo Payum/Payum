@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Request;
 
-use Alcohol\ISO4217;
+use Payum\ISO4217\Currency;
 
 class GetCurrency
 {
@@ -10,7 +10,7 @@ class GetCurrency
      */
     protected $code;
 
-    protected $ISO4217;
+    protected $currency;
 
     /**
      * @param string|int $code
@@ -29,18 +29,18 @@ class GetCurrency
     }
 
     /**
-     * @return ISO4217
+     * @return Currency
      */
-    public function getISO4217()
+    public function getCurrency()
     {
-        return $this->ISO4217;
+        return $this->currency;
     }
 
     /**
-     * @param ISO4217 $ISO4217
+     * @param Currency $currency
      */
-    public function setISO4217(ISO4217 $ISO4217)
+    public function setCurrency(Currency $currency)
     {
-        $this->ISO4217 = $ISO4217;
+        $this->currency = $currency;
     }
 }
