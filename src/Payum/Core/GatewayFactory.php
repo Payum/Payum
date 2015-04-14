@@ -3,6 +3,7 @@ namespace Payum\Core;
 
 use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+use Payum\Core\Action\GetCurrencyAction;
 use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Buzz\ClientFactory;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -62,7 +63,9 @@ class GatewayFactory implements GatewayFactoryInterface
                 return new RenderTemplateAction($config['twig.env'], $config['payum.template.layout']);
             },
             'payum.extension.endless_cycle_detector' => new EndlessCycleDetectorExtension(),
-
+            'payum.action.get_currency' => function (ArrayObject $config) {
+                return new GetCurrencyAction($config['payum.iso4217']);
+            },
             'payum.prepend_actions' => array(),
             'payum.prepend_extensions' => array(),
             'payum.prepend_apis' => array(),

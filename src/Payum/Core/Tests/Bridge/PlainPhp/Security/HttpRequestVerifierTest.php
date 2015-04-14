@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Core\Tests\Security;
+namespace Payum\Core\Tests\Bridge\PlainPhp\Security;
 
 use Payum\Core\Model\Token;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;

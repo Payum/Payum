@@ -37,11 +37,6 @@ interface PaymentInterface extends DetailsAggregateInterface, DetailsAwareInterf
     public function getCurrencyCode();
 
     /**
-     * @return int
-     */
-    public function getCurrencyDigitsAfterDecimalPoint();
-
-    /**
      * @return CreditCardInterface|null
      */
     public function getCreditCard();

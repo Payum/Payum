@@ -36,6 +36,7 @@
     ],
     "require": {
         "php": ">=5.3.2",
+        "payum/iso4217": "~1.0",
         "kriswallsmith/buzz": "~0.13",
         "league/url": "~3.0",
         "twig/twig": "~1.0"
