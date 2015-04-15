@@ -24,7 +24,7 @@ class ConvertPaymentAction extends GatewayAwareAction
         $payment = $request->getSource();
 
         $this->gateway->execute($currency = new GetCurrency($payment->getCurrencyCode()));
-        $divisor = pow(10, $currency->getCurrency()->getExp());
+        $divisor = pow(10, $currency->exp);
 
         $details = ArrayObject::ensureArrayObject($payment->getDetails());
         $details['INVNUM'] = $payment->getNumber();

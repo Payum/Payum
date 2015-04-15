@@ -1,16 +1,37 @@
 <?php
 namespace Payum\Core\Request;
 
-use Payum\ISO4217\Currency;
-
 class GetCurrency
 {
     /**
      * @var string
      */
-    protected $code;
+    public $code;
 
-    protected $currency;
+    /**
+     * @var string
+     */
+    public $name;
+
+    /**
+     * @var string
+     */
+    public $alpha3;
+
+    /**
+     * @var int
+     */
+    public $numeric;
+
+    /**
+     * @var int
+     */
+    public $exp;
+
+    /**
+     * @var string|string[]
+     */
+    public $country;
 
     /**
      * @param string|int $code
@@ -18,29 +39,5 @@ class GetCurrency
     public function __construct($code)
     {
         $this->code = $code;
-    }
-
-    /**
-     * @return string|int
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
-     * @return Currency
-     */
-    public function getCurrency()
-    {
-        return $this->currency;
-    }
-
-    /**
-     * @param Currency $currency
-     */
-    public function setCurrency(Currency $currency)
-    {
-        $this->currency = $currency;
     }
 }
