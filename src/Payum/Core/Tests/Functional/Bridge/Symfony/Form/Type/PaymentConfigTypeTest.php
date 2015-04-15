@@ -98,9 +98,8 @@ class PaymentConfigTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($form->get('config')->has('password'));
         $this->assertEquals('defaultPass', $form->get('config')->get('password')->getData());
 
-        // TODO why it is null??
         $this->assertTrue($form->get('config')->has('sandbox'));
-        $this->assertEquals(null, $form->get('config')->get('sandbox')->getData());
+        $this->assertEquals(true, $form->get('config')->get('sandbox')->getData());
     }
 
     /**
@@ -131,6 +130,49 @@ class PaymentConfigTypeTest extends \PHPUnit_Framework_TestCase
                 'username' => 'submitName',
                 'password' => 'submitPass',
                 'sandbox' => false,
+            )
+
+        ));
+
+        $this->assertTrue($form->has('config'));
+
+        $this->assertTrue($form->get('config')->has('username'));
+        $this->assertEquals('submitName', $form->get('config')->get('username')->getData());
+
+        $this->assertTrue($form->get('config')->has('password'));
+        $this->assertEquals('submitPass', $form->get('config')->get('password')->getData());
+
+        $this->assertTrue($form->get('config')->has('sandbox'));
+        $this->assertEquals(false, $form->get('config')->get('sandbox')->getData());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSetSandboxToFalseIfCheckboxUnset()
+    {
+        $this->fooPaymentFactoryMock
+            ->expects($this->once())
+            ->method('createConfig')
+            ->with(array())
+            ->willReturn(array(
+                'payum.default_options' => array(
+                    'username' => 'defaultName',
+                    'password' => 'defaultPass',
+                    'sandbox' => true,
+                ),
+                'payum.required_options' => array(),
+            ))
+        ;
+
+        $form = $this->formFactory->create('payum_payment_config');
+
+        $form->submit(array(
+            'paymentName' => 'foo',
+            'factoryName' => 'foo',
+            'config' => array(
+                'username' => 'submitName',
+                'password' => 'submitPass',
             )
 
         ));
