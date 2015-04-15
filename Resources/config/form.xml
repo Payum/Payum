@@ -13,7 +13,7 @@
             <tag name="form.type" alias="payum_credit_card" />
         </service>
 
-        <service id="payum.form.type.payment_conifg" class="Payum\Core\Bridge\Symfony\Form\Type\PaymentConfigType">
+        <service id="payum.form.type.payment_config" class="Payum\Core\Bridge\Symfony\Form\Type\PaymentConfigType">
             <argument id="payum" type="service" />
 
             <tag name="form.type" alias="payum_payment_config" />
