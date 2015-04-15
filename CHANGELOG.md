@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.14.3 (2015-03-15)
+
+[sonata] do not load sonata admin class if the feature disabled (when sonata_admin config option is set to false). 
+[form] fix typo in form service name.
+
 ## 0.14.2 (2015-03-02)
  
 * [config] Do not prepend Doctrine config with mappings if dbal not configured.
