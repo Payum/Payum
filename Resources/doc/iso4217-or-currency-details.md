@@ -41,7 +41,7 @@ Or directly ISO4217 service:
 /** @var \Payum\ISO4216\ISO4217 $iso4217
 $iso4217 = $container->get('payum.iso4217');
 
-/** @var \Payum\ISO4216\Currency $currency
+/** @var \Payum\ISO4216\Currency $currency **/
 $currency = $iso4217->findByAlpha3('USD');
 
 echo $currency->getAlpha3();  // USD
