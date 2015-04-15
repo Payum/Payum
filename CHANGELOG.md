@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.14.5 (2015-04-15)
+
+* [bridge][symfony] allow unset checkbox field (sandbox for example) on payment config form.
+* [composer] add symfony\validator package to dev dependencies.
+
 ## 0.14.4 (2015-04-08)
 
 * [symfony] Add `CreditCardDate` constraint. Checks that expiration date is greater than today.

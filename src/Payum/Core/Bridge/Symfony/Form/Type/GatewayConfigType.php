@@ -62,13 +62,23 @@ class GatewayConfigType extends AbstractType
 
         $gatewayFactory = $this->registry->getGatewayFactory($factoryName);
         $config = $gatewayFactory->createConfig();
+        $propertyPath = is_array($data) ? '[config]' : 'config';
+        $firstTime = false == PropertyAccess::createPropertyAccessor()->getValue($data, $propertyPath);
         foreach ($config['payum.default_options'] as $name => $value) {
-            $isRequired = in_array($name, $config['payum.required_options']);
-            $configForm->add($name, is_bool($value) ? 'checkbox' : 'text', array(
-                'empty_data' => $value,
-                'required' => $isRequired,
-            ));
+            $propertyPath = is_array($data) ? "[config][$name]" : "config[$name]";
+            if ($firstTime) {
+                PropertyAccess::createPropertyAccessor()->setValue($data, $propertyPath, $value);
+            }
+
+            $type = is_bool($value) ? 'checkbox' : 'text';
+
+            $options = array();
+            $options['required'] = in_array($name, $config['payum.required_options']);
+
+            $configForm->add($name, $type, $options);
         }
+
+        $event->setData($data);
     }
 
     /**
