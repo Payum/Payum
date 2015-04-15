@@ -390,6 +390,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension->load($configs, $containerBuilder);
 
+        $this->assertTrue($containerBuilder->hasDefinition('payum.dynamic_gateways.gateway_config_admin'));
         $configAdmin = $containerBuilder->getDefinition('payum.dynamic_gateways.gateway_config_admin');
 
         $this->assertEquals('Payum\Bundle\PayumBundle\Sonata\GatewayConfigAdmin', $configAdmin->getClass());
@@ -399,7 +400,49 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
             array(array('manager_type' => 'orm', 'group' => 'Gateways', 'label' => 'Configs')),
             $configAdmin->getTag('sonata.admin')
         );
+    }
 
+    /**
+     * @test
+     */
+    public function shouldNotConfigureSonataAdminClassForGatewayConfigIfDisabled()
+    {
+        $config = array(
+            'dynamic_gateways' => array(
+                'sonata_admin' => false,
+                'config_storage' => array(
+                    'Payum\Bundle\PayumBundle\Tests\Functional\DependencyInjection\TestGatewayConfig' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
+            'security' => array(
+                'token_storage' => array(
+                    'Payum\Core\Model\Token' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
+            'gateways' => array(),
+        );
+
+        $configs = array($config);
+
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->setParameter('kernel.debug', false);
+
+        $extension = new PayumExtension;
+        $extension->addStorageFactory(new FilesystemStorageFactory);
+
+        $extension->load($configs, $containerBuilder);
+
+        $this->assertFalse($containerBuilder->hasDefinition('payum.dynamic_gateways.gateway_config_admin'));
     }
 }
 
