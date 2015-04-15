@@ -179,6 +179,7 @@ class Be2BillOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('be2bill_offsite', $factoryConfig['payum.factory_name']);
         $this->assertArrayHasKey('buzz.client', $factoryConfig);
         $this->assertArrayHasKey('twig.env', $factoryConfig);
+        $this->assertArrayHasKey('payum.iso4217', $factoryConfig);
         $this->assertArrayHasKey('payum.template.layout', $factoryConfig);
         $this->assertArrayHasKey('payum.template.obtain_credit_card', $factoryConfig);
 

@@ -127,6 +127,7 @@ abstract class AbstractGatewayFactory implements GatewayFactoryInterface
         $config['payum.template.obtain_credit_card'] = new Parameter('payum.template.obtain_credit_card');
         $config['buzz.client'] = new Reference('payum.buzz.client');
         $config['twig.env'] = new Reference('twig');
+        $config['payum.iso4217'] = new Reference('payum.iso4217');
 
         return $config;
     }

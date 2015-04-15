@@ -38,6 +38,8 @@
             </call>
         </service>
 
+        <service id="payum.iso4217" class="Payum\ISO4217\ISO4217" />
+
         <service id="payum.converter.reply_to_http_response" class="Payum\Core\Bridge\Symfony\ReplyToSymfonyResponseConverter" />
 
         <service id="payum.listener.reply_to_http_response" class="Payum\Bundle\PayumBundle\EventListener\ReplyToHttpResponseListener">

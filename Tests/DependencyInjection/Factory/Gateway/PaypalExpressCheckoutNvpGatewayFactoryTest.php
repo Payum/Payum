@@ -194,6 +194,7 @@ class PaypalExpressCheckoutNvpGatewayFactoryTest extends \PHPUnit_Framework_Test
         $this->assertEquals('paypal_express_checkout_nvp', $factoryConfig['payum.factory_name']);
         $this->assertArrayHasKey('buzz.client', $factoryConfig);
         $this->assertArrayHasKey('twig.env', $factoryConfig);
+        $this->assertArrayHasKey('payum.iso4217', $factoryConfig);
         $this->assertArrayHasKey('payum.template.layout', $factoryConfig);
         $this->assertArrayHasKey('payum.template.obtain_credit_card', $factoryConfig);
 
