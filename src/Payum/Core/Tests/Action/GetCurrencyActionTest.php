@@ -38,8 +38,7 @@ class GetCurrencyActionTest extends GenericActionTest
 
         $action->execute($getCurrency = new GetCurrency('USD'));
 
-        $this->assertInstanceOf('Payum\ISO4217\Currency', $getCurrency->getCurrency());
-        $this->assertEquals('USD', $getCurrency->getCurrency()->getAlpha3());
+        $this->assertEquals('USD', $getCurrency->alpha3);
     }
 
     /**
@@ -51,8 +50,7 @@ class GetCurrencyActionTest extends GenericActionTest
 
         $action->execute($getCurrency = new GetCurrency($euro = 978));
 
-        $this->assertInstanceOf('Payum\ISO4217\Currency', $getCurrency->getCurrency());
-        $this->assertEquals('EUR', $getCurrency->getCurrency()->getAlpha3());
+        $this->assertEquals('EUR', $getCurrency->alpha3);
     }
 
     /**

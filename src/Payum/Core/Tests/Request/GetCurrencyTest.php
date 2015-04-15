@@ -2,7 +2,6 @@
 namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\GetCurrency;
-use Payum\ISO4217\Currency;
 
 class GetCurrencyTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,16 +20,22 @@ class GetCurrencyTest extends \PHPUnit_Framework_TestCase
     {
         $request = new GetCurrency('theCode');
 
-        $this->assertEquals('theCode', $request->getCode());
+        $this->assertEquals('theCode', $request->code);
     }
 
     public function shouldAllowGetPreviouslySetCurrency()
     {
-        $currency = new Currency('aName', 'anAlpha3', 'aNumeric', 'anExp', 'aCountry');
-
         $request = new GetCurrency('aCode');
-        $request->setCurrency($currency);
+        $request->numeric = 'aNumeric';
+        $request->name = 'aName';
+        $request->exp = 'anExp';
+        $request->country = 'aCountry';
+        $request->code = 'aCode';
 
-        $this->assertSame($currency, $request->getCurrency());
+        $this->assertEquals('aNumeric', $request->numeric);
+        $this->assertEquals('aName', $request->name);
+        $this->assertEquals('anExp', $request->exp);
+        $this->assertEquals('aCountry', $request->country);
+        $this->assertEquals('aCode', $request->code);
     }
 }

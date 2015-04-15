@@ -3,7 +3,6 @@ namespace Payum\Paypal\ProCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Core\Request\GetCurrency;
 use Payum\Core\Tests\GenericActionTest;
-use Payum\ISO4217\Currency;
 use Payum\Paypal\ProCheckout\Nvp\Action\ConvertPaymentAction;
 use Payum\Core\Model\Payment;
 use Payum\Core\Request\Convert;
@@ -47,7 +46,11 @@ class ConvertPaymentActionTest extends GenericActionTest
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetCurrency'))
             ->willReturnCallback(function(GetCurrency $request) {
-                $request->setCurrency(new Currency('US Dollar', 'USD', 123, 2, 'US'));
+                $request->name = 'US Dollar';
+                $request->alpha3 = 'USD';
+                $request->numeric = 123;
+                $request->exp = 2;
+                $request->country = 'US';
             })
         ;
 
@@ -86,7 +89,11 @@ class ConvertPaymentActionTest extends GenericActionTest
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetCurrency'))
             ->willReturnCallback(function(GetCurrency $request) {
-                $request->setCurrency(new Currency('US Dollar', 'USD', 123, 2, 'US'));
+                $request->name = 'US Dollar';
+                $request->alpha3 = 'USD';
+                $request->numeric = 123;
+                $request->exp = 2;
+                $request->country = 'US';
             })
         ;
 
