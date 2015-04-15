@@ -217,7 +217,7 @@ class PayumExtension extends Extension implements PrependExtensionInterface
         $container->setDefinition('payum.dynamic_registry', $registry);
         $container->setAlias('payum', new Alias('payum.dynamic_registry'));
 
-        if (isset($dynamicPaymentsConfig['sonata_admin'])) {
+        if ($dynamicPaymentsConfig['sonata_admin']) {
             $paymentConfigAdmin =  new Definition('Payum\Bundle\PayumBundle\Sonata\PaymentConfigAdmin', array(
                 null,
                 $configClass,

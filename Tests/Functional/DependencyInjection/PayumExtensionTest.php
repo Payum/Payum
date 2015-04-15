@@ -391,6 +391,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $extension->load($configs, $containerBuilder);
 
+        $this->assertTrue($containerBuilder->hasDefinition('payum.dynamic_payments.payment_config_admin'));
         $configAdmin = $containerBuilder->getDefinition('payum.dynamic_payments.payment_config_admin');
 
         $this->assertEquals('Payum\Bundle\PayumBundle\Sonata\PaymentConfigAdmin', $configAdmin->getClass());
@@ -400,7 +401,49 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
             array(array('manager_type' => 'orm', 'group' => 'Payments', 'label' => 'Configs')),
             $configAdmin->getTag('sonata.admin')
         );
+    }
 
+    /**
+     * @test
+     */
+    public function shouldNotConfigureSonataAdminClassForPaymentConfigIfDisabled()
+    {
+        $config = array(
+            'dynamic_payments' => array(
+                'sonata_admin' => false,
+                'config_storage' => array(
+                    'Payum\Bundle\PayumBundle\Tests\Functional\DependencyInjection\TestPaymentConfig' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
+            'security' => array(
+                'token_storage' => array(
+                    'Payum\Core\Model\Token' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
+            'payments' => array(),
+        );
+
+        $configs = array($config);
+
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->setParameter('kernel.debug', false);
+
+        $extension = new PayumExtension;
+        $extension->addStorageFactory(new FilesystemStorageFactory);
+
+        $extension->load($configs, $containerBuilder);
+
+        $this->assertFalse($containerBuilder->hasDefinition('payum.dynamic_payments.payment_config_admin'));
     }
 }
 
