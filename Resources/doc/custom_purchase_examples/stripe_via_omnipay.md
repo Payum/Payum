@@ -24,7 +24,7 @@ $ php composer.phar require "payum/omnipay-bridge" "omnipay/stripe:~2.0"
 payum:
     payments:
         your_payment_here:
-            omnipay:
+            omnipay_direct:
                 type: Stripe
                 options:
                     apiKey: abc123
