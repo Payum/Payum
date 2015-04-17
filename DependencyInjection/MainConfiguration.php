@@ -60,6 +60,7 @@ class MainConfiguration implements ConfigurationInterface
                 ->arrayNode('payments')
                     ->useAttributeAsKey('name')
                     ->prototype('array')
+                        ->performNoDeepMerging()
         ;
 
         $this->addPaymentsSection($paymentsPrototypeNode);
