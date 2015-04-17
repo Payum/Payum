@@ -47,7 +47,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $barModelClass = get_class($this->getMock('stdClass'));
 
         $processor->processConfiguration($configuration, array(
-            'payum' => array(
+            array(
                 'storages' => array(
                     $fooModelClass => array(
                         'bar_storage' => array(
@@ -92,7 +92,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $fooModelClass = get_class($this->getMock('stdClass'));
 
         $config = $processor->processConfiguration($configuration, array(
-            'payum' => array(
+            array(
                 'storages' => array(
                     $fooModelClass => array(
                         'bar_storage' => array(
@@ -134,7 +134,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $fooModelClass = get_class($this->getMock('stdClass'));
 
         $config = $processor->processConfiguration($configuration, array(
-            'payum' => array(
+            array(
                 'storages' => array(
                     $fooModelClass => array(
                         'extension' => array(
@@ -173,7 +173,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $fooModelClass = get_class($this->getMock('stdClass'));
 
         $config = $processor->processConfiguration($configuration, array(
-            'payum' => array(
+            array(
                 'storages' => array(
                     $fooModelClass => array(
                         'extension' => array(
@@ -214,7 +214,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $fooModelClass = get_class($this->getMock('stdClass'));
 
         $config = $processor->processConfiguration($configuration, array(
-            'payum' => array(
+            array(
                 'storages' => array(
                     $fooModelClass => array(
                         'extension' => array(
@@ -256,7 +256,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $processor = new Processor();
 
         $processor->processConfiguration($configuration, array(
-            'payum' => array(
+            array(
                 'storages' => array(
                     'notExistClass' => array(
                         'foo_storage' => array(
@@ -297,7 +297,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $processor = new Processor();
 
         $processor->processConfiguration($configuration, array(
-            'payum' => array(
+            array(
                 'storages' => array(
                     'stdClass' => array(
                         'foo_storage' => array(
@@ -341,7 +341,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $processor = new Processor();
 
         $processor->processConfiguration($configuration, array(
-            'payum' => array(
+            array(
                 'storages' => array(
                     'stdClass' => array(),
                 ),
@@ -378,7 +378,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $processor = new Processor();
 
         $processor->processConfiguration($configuration, array(
-            'payum' => array(
+            array(
                 'security' => array(
                     'token_storage' => array(
                         'Payum\Core\Model\Token' => array(
@@ -405,7 +405,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $processor = new Processor();
 
         $processor->processConfiguration($configuration, array(
-            'payum' => array(
+            array(
                 'security' => array(
                     'token_storage' => array(
                         'Payum\Core\Model\Token' => array(
@@ -439,7 +439,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $processor = new Processor();
 
         $processor->processConfiguration($configuration, array(
-            'payum' => array(
+            array(
                 'security' => array(
                     'token_storage' => array(
                         'Payum\Core\Model\Token' => array(
@@ -476,7 +476,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $processor = new Processor();
 
         $processor->processConfiguration($configuration, array(
-            'payum' => array(
+            array(
                 'security' => array(
                     'token_storage' => array(
                         'Payum\Core\Model\Token' => array(
@@ -515,7 +515,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $processor = new Processor();
 
         $processor->processConfiguration($configuration, array(
-            'payum' => array(
+            array(
                 'security' => array(
                     'token_storage' => array(
                         'stdClass' => array(
@@ -549,7 +549,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $processor = new Processor();
 
         $processor->processConfiguration($configuration, array(
-            'payum' => array(
+            array(
                 'security' => array(
                     'token_storage' => array(
                         'foo' => array(
@@ -583,7 +583,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $processor = new Processor();
 
         $processor->processConfiguration($configuration, array(
-            'payum' => array(
+            array(
                 'payments' => array(
                     'a_payment' => array(
                         'foo_payment' => array(
@@ -608,7 +608,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $processor = new Processor();
 
         $processor->processConfiguration($configuration, array(
-            'payum' => array(
+            array(
                 'security' => array(
                 ),
                 'payments' => array(
@@ -635,7 +635,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $processor = new Processor();
 
         $processor->processConfiguration($configuration, array(
-            'payum' => array(
+            array(
                 'dynamic_payments' => array(
                     'config_storage' => array(
                         'Payum\Core\Model\PaymentConfig' => array(
@@ -683,7 +683,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $processor = new Processor();
 
         $processor->processConfiguration($configuration, array(
-            'payum' => array(
+            array(
                 'dynamic_payments' => array(
                     'config_storage' => array(
                         'stdClass' => array(
@@ -726,7 +726,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $processor = new Processor();
 
         $processor->processConfiguration($configuration, array(
-            'payum' => array(
+            array(
                 'dynamic_payments' => array(
                     'config_storage' => array(
                         'foo' => array(
@@ -769,7 +769,7 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
         $processor = new Processor();
 
         $processor->processConfiguration($configuration, array(
-            'payum' => array(
+            array(
                 'dynamic_payments' => array(
                 ),
                 'security' => array(
@@ -790,6 +790,112 @@ class MainConfigurationTest extends  \PHPUnit_Framework_TestCase
                 )
             )
         ));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldOverwriteGatewaysWithSameNameDefinedInDifferentConfigFiles()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $config = $processor->processConfiguration($configuration, array(
+            array(
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Core\Model\Token' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
+                'payments' => array(
+                    'a_payment' => array(
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo'
+                        ),
+                    )
+                )
+            ),
+            array(
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Core\Model\Token' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
+                'payments' => array(
+                    'a_payment' => array(
+                        'bar_payment' => array(
+                            'bar_opt' => 'bar'
+                        ),
+                    )
+                )
+            )
+        ));
+
+        $this->assertCount(1, $config['payments']);
+        $this->assertCount(1, $config['payments']['a_payment']);
+        $this->assertArrayHasKey('bar_payment', $config['payments']['a_payment']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMergeGatewaysWithDifferentNameDefinedInDifferentConfigFiles()
+    {
+        $configuration = new MainConfiguration($this->paymentFactories, $this->storageFactories);
+
+        $processor = new Processor();
+
+        $config = $processor->processConfiguration($configuration, array(
+            array(
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Core\Model\Token' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
+                'payments' => array(
+                    'a_foo_payment' => array(
+                        'foo_payment' => array(
+                            'foo_opt' => 'foo'
+                        ),
+                    )
+                )
+            ),
+            array(
+                'security' => array(
+                    'token_storage' => array(
+                        'Payum\Core\Model\Token' => array(
+                            'foo_storage' => array(
+                                'foo_opt' => 'foo'
+                            )
+                        )
+                    )
+                ),
+                'payments' => array(
+                    'a_bar_payment' => array(
+                        'bar_payment' => array(
+                            'bar_opt' => 'bar'
+                        ),
+                    )
+                )
+            )
+        ));
+
+        $this->assertCount(2, $config['payments']);
+        $this->assertArrayHasKey('a_foo_payment', $config['payments']);
+        $this->assertArrayHasKey('a_bar_payment', $config['payments']);
     }
 }
 
