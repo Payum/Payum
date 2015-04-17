@@ -60,6 +60,7 @@ class MainConfiguration implements ConfigurationInterface
                 ->arrayNode('gateways')
                     ->useAttributeAsKey('name')
                     ->prototype('array')
+                        ->performNoDeepMerging()
         ;
 
         $this->addGatewaysSection($gatewaysPrototypeNode);
