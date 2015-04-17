@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.14.4 (2015-03-17)
+
+* [config] should merge different payments in different config files and overwrite payments with same name.
+
 ## 0.14.3 (2015-03-15)
 
 [sonata] do not load sonata admin class if the feature disabled (when sonata_admin config option is set to false). 
