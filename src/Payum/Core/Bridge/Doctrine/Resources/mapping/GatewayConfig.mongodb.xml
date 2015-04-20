@@ -10,7 +10,7 @@
 
         <field name="factoryName" type="string" />
 
-        <field name="config" type="collection" />
+        <field name="config" type="hash" />
 
     </mapped-superclass>
 

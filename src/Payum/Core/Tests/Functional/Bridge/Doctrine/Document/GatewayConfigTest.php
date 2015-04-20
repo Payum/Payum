@@ -47,4 +47,27 @@ class GatewayConfigTest extends MongoTest
 
         $this->assertEquals($gatewayConfig->getId(), $foundGatewayConfig->getId());
     }
+
+    /**
+     * @test
+     */
+    public function shouldStoreConfigAsAssocArray()
+    {
+        $gatewayConfig = new GatewayConfig();
+        $gatewayConfig->setGatewayName('fooGateway');
+        $gatewayConfig->setFactoryName('fooGatewayFactory');
+        $gatewayConfig->setConfig(array(
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ));
+
+        $this->dm->persist($gatewayConfig);
+        $this->dm->flush();
+        $this->dm->refresh($gatewayConfig);
+
+        $this->assertEquals(array(
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ), $gatewayConfig->getConfig());
+    }
 }
