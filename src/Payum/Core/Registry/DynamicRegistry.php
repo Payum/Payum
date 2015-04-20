@@ -47,8 +47,10 @@ class DynamicRegistry implements RegistryInterface
      */
     public function getGateway($name)
     {
-        /** @var GatewayConfigInterface $config */
-        if ($config = $this->gatewayConfigStore->findBy(array('gatewayName' => $name))) {
+        /** @var GatewayConfigInterface[] $configs */
+        if ($configs = $this->gatewayConfigStore->findBy(array('gatewayName' => $name))) {
+            $config = array_shift($configs);
+
             $factory = $this->getGatewayFactory($config->getFactoryName());
 
             return $factory->create($config->getConfig());

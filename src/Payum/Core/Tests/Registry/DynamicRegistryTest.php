@@ -81,7 +81,7 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('findBy')
             ->with(array('gatewayName' => $gatewayName))
-            ->willReturn($gatewayConfig)
+            ->willReturn(array($gatewayConfig))
         ;
 
         $registry = new DynamicRegistry($storageMock, $staticRegistryMock);

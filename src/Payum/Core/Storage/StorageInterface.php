@@ -43,7 +43,7 @@ interface StorageInterface
     /**
      * @param array $criteria
      *
-     * @return null|object
+     * @return object[]
      */
     public function findBy(array $criteria);
 

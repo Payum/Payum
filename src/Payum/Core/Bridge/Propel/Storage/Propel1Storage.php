@@ -43,7 +43,7 @@ class Propel1Storage extends AbstractStorage
 
         $modelPeer = $this->modelPeer;
 
-        return $modelPeer::doSelectOne($crit);
+        return $modelPeer::doSelect($crit);
     }
 
     /**

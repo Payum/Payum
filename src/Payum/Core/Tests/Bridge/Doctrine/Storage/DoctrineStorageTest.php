@@ -74,7 +74,7 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldProxyCriteriaToRepositoryFindOneByMethodOnFindByCall()
+    public function shouldProxyCriteriaToRepositoryFindByMethodOnFindByCall()
     {
         $modelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
         $model = new TestModel();
@@ -84,7 +84,7 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
         $objectRepositoryMock = $this->createObjectRepositoryMock();
         $objectRepositoryMock
             ->expects($this->once())
-            ->method('findOneBy')
+            ->method('findBy')
             ->with($criteria)
             ->willReturn($model)
         ;
