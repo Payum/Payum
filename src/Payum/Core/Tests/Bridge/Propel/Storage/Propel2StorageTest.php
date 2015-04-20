@@ -99,7 +99,7 @@ class Propel2StorageTest extends \PHPUnit_Framework_TestCase
         $expectedFoundModel = $expectedModelQuery
             ->filterBy("id", $expectedModelId)
             ->filterBy("currency", $expectedModelCurrency)
-            ->findOne()
+            ->find()
         ;
 
         $storage = new PropelStorage('Payum\Core\Tests\Mocks\Model\Propel2Model');

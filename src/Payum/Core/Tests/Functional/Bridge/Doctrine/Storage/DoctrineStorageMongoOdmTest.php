@@ -3,6 +3,7 @@ namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Storage;
 
 use Payum\Core\Tests\Functional\Bridge\Doctrine\MongoTest;
 use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
+use Payum\Core\Tests\Mocks\Document\TestModel;
 
 class DoctrineStorageMongoOdmTest extends MongoTest
 {
@@ -94,5 +95,78 @@ class DoctrineStorageMongoOdmTest extends MongoTest
 
         $this->assertInstanceOf('Payum\Core\Tests\Mocks\Document\TestModel', $foundModel);
         $this->assertEquals($requestId, $foundModel->getId());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldFindByCurrency()
+    {
+        $storage = new DoctrineStorage(
+            $this->dm,
+            'Payum\Core\Tests\Mocks\Document\TestModel'
+        );
+
+        /** @var TestModel $model */
+        $model = $storage->create();
+        $model->setCurrency('USD');
+        $storage->update($model);
+
+        /** @var TestModel $model */
+        $model = $storage->create();
+        $model->setCurrency('USD');
+        $storage->update($model);
+
+        /** @var TestModel $model */
+        $model = $storage->create();
+        $model->setCurrency('EUR');
+        $storage->update($model);
+
+
+        $result = $storage->findBy(array(
+            'currency' => 'USD'
+        ));
+
+        $this->assertCount(2, $result);
+        $this->assertContainsOnly('Payum\Core\Tests\Mocks\Document\TestModel', $result);
+
+        $result = $storage->findBy(array(
+            'currency' => 'EUR'
+        ));
+
+        $this->assertCount(1, $result);
+        $this->assertContainsOnly('Payum\Core\Tests\Mocks\Document\TestModel', $result);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldFindByAllIfCriteriaIsEmpty()
+    {
+        $storage = new DoctrineStorage(
+            $this->dm,
+            'Payum\Core\Tests\Mocks\Document\TestModel'
+        );
+
+        /** @var TestModel $model */
+        $model = $storage->create();
+        $model->setCurrency('USD');
+        $storage->update($model);
+
+        /** @var TestModel $model */
+        $model = $storage->create();
+        $model->setCurrency('USD');
+        $storage->update($model);
+
+        /** @var TestModel $model */
+        $model = $storage->create();
+        $model->setCurrency('EUR');
+        $storage->update($model);
+
+
+        $result = $storage->findBy(array());
+
+        $this->assertCount(3, $result);
+        $this->assertContainsOnly('Payum\Core\Tests\Mocks\Document\TestModel', $result);
     }
 }

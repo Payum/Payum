@@ -30,7 +30,7 @@ class Propel2ModelQuery
         return $this;
     }
 
-    public function findOne()
+    public function find()
     {
         $model = new Propel2Model();
         $this->applyFilters($model);

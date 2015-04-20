@@ -68,6 +68,6 @@ class Propel2Storage extends AbstractStorage
             $query->filterBy($column, $value);
         }
 
-        return $query->findOne();
+        return $query->find();
     }
 }
