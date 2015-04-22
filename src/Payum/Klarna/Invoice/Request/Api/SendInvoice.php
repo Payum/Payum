@@ -5,5 +5,4 @@ use Payum\Core\Request\Generic;
 
 class SendInvoice extends Generic
 {
-
 }
