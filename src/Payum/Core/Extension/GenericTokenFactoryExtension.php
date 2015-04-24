@@ -24,15 +24,16 @@ class GenericTokenFactoryExtension implements ExtensionInterface
     /**
      * {@inheritDoc}
      */
-    public function onPreExecute($request)
+    public function onPreExecute(Context $context)
     {
     }
 
     /**
      * {@inheritDoc}
      */
-    public function onExecute($request, ActionInterface $action)
+    public function onExecute(Context $context)
     {
+        $action = $context->getAction();
         if ($action instanceof GenericTokenFactoryAwareInterface) {
             $action->setGenericTokenFactory($this->genericTokenFactory);
         }
@@ -41,21 +42,11 @@ class GenericTokenFactoryExtension implements ExtensionInterface
     /**
      * {@inheritDoc}
      */
-    public function onException(\Exception $exception, $request, ActionInterface $action = null)
+    public function onPostExecute(Context $context)
     {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function onPostExecute($request, ActionInterface $action)
-    {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function onReply(ReplyInterface $reply, $request, ActionInterface $action)
-    {
+        $action = $context->getAction();
+        if ($action instanceof GenericTokenFactoryAwareInterface) {
+            $action->setGenericTokenFactory(null);
+        }
     }
 }

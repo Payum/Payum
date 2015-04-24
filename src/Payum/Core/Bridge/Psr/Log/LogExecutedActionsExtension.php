@@ -1,10 +1,9 @@
 <?php
 namespace Payum\Core\Bridge\Psr\Log;
 
-use Payum\Core\Action\ActionInterface;
 use Payum\Core\Debug\Humanify;
+use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionInterface;
-use Payum\Core\Reply\ReplyInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -17,17 +16,11 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
     protected $logger;
 
     /**
-     * @var int
-     */
-    protected $stackLevel;
-
-    /**
      * @param LoggerInterface $logger
      */
     public function __construct(LoggerInterface $logger = null)
     {
         $this->logger = $logger ?: new NullLogger();
-        $this->stackLevel = 0;
     }
 
     /**
@@ -41,59 +34,42 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
     /**
      * {@inheritDoc}
      */
-    public function onPreExecute($request)
+    public function onPreExecute(Context $context)
     {
-        $this->stackLevel++;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function onExecute($request, ActionInterface $action)
+    public function onExecute(Context $context)
     {
         $this->logger->debug(sprintf(
             '[Payum] %d# %s::execute(%s)',
-            $this->stackLevel,
-            Humanify::value($action, false),
-            Humanify::request($request)
+            count($context->getPrevious()),
+            Humanify::value($context->getAction(), false),
+            Humanify::request($context->getRequest())
         ));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function onPostExecute($request, ActionInterface $action)
+    public function onPostExecute(Context $context)
     {
-        $this->stackLevel--;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function onReply(ReplyInterface $reply, $request, ActionInterface $action)
-    {
-        $this->logger->debug(sprintf('[Payum] %d# %s::execute(%s) throws reply %s',
-            $this->stackLevel,
-            Humanify::value($action),
-            Humanify::request($request),
-            Humanify::request($reply)
-        ));
-
-        $this->stackLevel--;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function onException(\Exception $exception, $request, ActionInterface $action = null)
-    {
-        $this->logger->debug(sprintf('[Payum] %d# %s::execute(%s) throws exception %s',
-            $this->stackLevel,
-            $action ? Humanify::value($action) : 'Gateway',
-            Humanify::request($request),
-            Humanify::value($exception)
-        ));
-
-        $this->stackLevel--;
+        if ($context->getReply()) {
+            $this->logger->debug(sprintf('[Payum] %d# %s::execute(%s) throws reply %s',
+                count($context->getPrevious()),
+                Humanify::value($context->getAction()),
+                Humanify::request($context->getRequest()),
+                Humanify::request($context->getReply())
+            ));
+        } elseif ($context->getException()) {
+            $this->logger->debug(sprintf('[Payum] %d# %s::execute(%s) throws exception %s',
+                count($context->getPrevious()),
+                $context->getAction() ? Humanify::value($context->getAction()) : 'Gateway',
+                Humanify::request($context->getRequest()),
+                Humanify::value($context->getException())
+            ));
+        }
     }
 }
