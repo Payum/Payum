@@ -45,7 +45,7 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
     {
         $this->logger->debug(sprintf(
             '[Payum] %d# %s::execute(%s)',
-            count($context->getPrevious()),
+            count($context->getPrevious()) + 1,
             Humanify::value($context->getAction(), false),
             Humanify::request($context->getRequest())
         ));
@@ -58,14 +58,14 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
     {
         if ($context->getReply()) {
             $this->logger->debug(sprintf('[Payum] %d# %s::execute(%s) throws reply %s',
-                count($context->getPrevious()),
+                count($context->getPrevious()) + 1,
                 Humanify::value($context->getAction()),
                 Humanify::request($context->getRequest()),
                 Humanify::request($context->getReply())
             ));
         } elseif ($context->getException()) {
             $this->logger->debug(sprintf('[Payum] %d# %s::execute(%s) throws exception %s',
-                count($context->getPrevious()),
+                count($context->getPrevious()) + 1,
                 $context->getAction() ? Humanify::value($context->getAction()) : 'Gateway',
                 Humanify::request($context->getRequest()),
                 Humanify::value($context->getException())

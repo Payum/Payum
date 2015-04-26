@@ -1,8 +1,12 @@
 <?php
 namespace Payum\Core\Tests\Extension;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Extension\Context;
 use Payum\Core\Extension\StorageExtension;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Model\Identity;
+use Payum\Core\Storage\StorageInterface;
 
 class StorageExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -40,11 +44,11 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('find')
         ;
 
-        $request = new \stdClass();
+        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
 
         $extension = new StorageExtension($neverUsedStorageMock);
 
-        $extension->onPreExecute($request);
+        $extension->onPreExecute($context);
     }
 
     /**
@@ -64,20 +68,22 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(null))
         ;
 
-        $modelRequestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface');
-        $modelRequestMock
+        $requestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface');
+        $requestMock
             ->expects($this->any())
             ->method('getModel')
             ->will($this->returnValue($identity))
         ;
-        $modelRequestMock
+        $requestMock
             ->expects($this->never())
             ->method('setModel')
         ;
 
+        $context = new Context($this->createGatewayMock(), $requestMock, array());
+
         $extension = new StorageExtension($storageMock);
 
-        $extension->onPreExecute($modelRequestMock);
+        $extension->onPreExecute($context);
     }
 
     /**
@@ -96,20 +102,22 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('find')
         ;
 
-        $modelRequestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface');
-        $modelRequestMock
+        $requestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface');
+        $requestMock
             ->expects($this->any())
             ->method('getModel')
             ->will($this->returnValue(new \stdClass()))
         ;
-        $modelRequestMock
+        $requestMock
             ->expects($this->never())
             ->method('setModel')
         ;
 
+        $context = new Context($this->createGatewayMock(), $requestMock, array());
+
         $extension = new StorageExtension($storageMock);
 
-        $extension->onPreExecute($modelRequestMock);
+        $extension->onPreExecute($context);
     }
 
     /**
@@ -127,11 +135,13 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('find')
         ;
 
-        $notModelRequestMock = $this->getMock('Payum\Core\Request\RequestInterface');
+        $requestMock = $this->getMock('Payum\Core\Request\RequestInterface');
+
+        $context = new Context($this->createGatewayMock(), $requestMock, array());
 
         $extension = new StorageExtension($storageMock);
 
-        $extension->onPreExecute($notModelRequestMock);
+        $extension->onPreExecute($context);
     }
 
     /**
@@ -151,21 +161,23 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($expectedModel))
         ;
 
-        $modelRequestMock = $this->getMock('Payum\Core\Request\Generic', array(), array(), '', false);
-        $modelRequestMock
+        $requestMock = $this->getMock('Payum\Core\Request\Generic', array(), array(), '', false);
+        $requestMock
             ->expects($this->any())
             ->method('getModel')
             ->will($this->returnValue($identity))
         ;
-        $modelRequestMock
+        $requestMock
             ->expects($this->any())
             ->method('setModel')
             ->with($this->identicalTo($expectedModel))
         ;
 
+        $context = new Context($this->createGatewayMock(), $requestMock, array());
+
         $extension = new StorageExtension($storageMock);
 
-        $extension->onPreExecute($modelRequestMock);
+        $extension->onPreExecute($context);
     }
 
     /**
@@ -187,8 +199,8 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true))
         ;
 
-        $modelRequestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface', array('getModel', 'setModel'));
-        $modelRequestMock
+        $requestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface', array('getModel', 'setModel'));
+        $requestMock
             ->expects($this->any())
             ->method('getModel')
             ->will($this->returnValue($model))
@@ -198,7 +210,9 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertAttributeCount(0, 'scheduledForUpdateModels', $extension);
 
-        $extension->onPreExecute($modelRequestMock);
+        $context = new Context($this->createGatewayMock(), $requestMock, array());
+
+        $extension->onPreExecute($context);
 
         $this->assertAttributeCount(1, 'scheduledForUpdateModels', $extension);
         $this->assertAttributeContains($model, 'scheduledForUpdateModels', $extension);
@@ -223,18 +237,22 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true))
         ;
 
-        $modelRequestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface', array('getModel', 'setModel'));
-        $modelRequestMock
+        $requestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface', array('getModel', 'setModel'));
+        $requestMock
             ->expects($this->any())
             ->method('getModel')
             ->will($this->returnValue($model))
         ;
 
+        $context = new Context($this->createGatewayMock(), $requestMock, array(
+            new Context($this->createGatewayMock(), $requestMock, array())
+        ));
+
         $extension = new StorageExtension($storageMock);
 
         $this->assertAttributeCount(0, 'scheduledForUpdateModels', $extension);
 
-        $extension->onPostExecute($modelRequestMock, $this->createActionMock());
+        $extension->onPostExecute($context);
 
         $this->assertAttributeCount(1, 'scheduledForUpdateModels', $extension);
         $this->assertAttributeContains($model, 'scheduledForUpdateModels', $extension);
@@ -243,179 +261,69 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldScheduleForUpdateRequestModelIfStorageSupportItOnReply()
+    public function shouldUpdateModelOneTimeOnLatestOnPostExecute()
     {
-        $model = new \stdClass();
+        //when previous is empty
+
+        $expectedModel = new \stdClass();
 
         $storageMock = $this->createStorageMock();
+        $storageMock
+            ->expects($this->atLeastOnce())
+            ->method('support')
+            ->with($this->identicalTo($expectedModel))
+            ->will($this->returnValue(true))
+        ;
+        $storageMock
+            ->expects($this->once())
+            ->method('update')
+            ->with($this->identicalTo($expectedModel))
+        ;
+
+        $requestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface');
+        $requestMock
+            ->expects($this->any())
+            ->method('getModel')
+            ->will($this->returnValue($expectedModel))
+        ;
+
+        $extension = new StorageExtension($storageMock);
+
+        $context = new Context($this->createGatewayMock(), $requestMock, array());
+
+        $extension->onPreExecute($context);
+
+        //guard
+        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
+
+        $extension->onPostExecute($context);
+        $this->assertAttributeEmpty('scheduledForUpdateModels', $extension);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotUpdateModelIfNotLatestOnPostExecute()
+    {
+        //when previous is NOT empty
+
+        $expectedModel = new \stdClass();
+
+        $storageMock = $this->createStorageMock();
+        $storageMock
+            ->expects($this->atLeastOnce())
+            ->method('support')
+            ->with($this->identicalTo($expectedModel))
+            ->will($this->returnValue(true))
+        ;
         $storageMock
             ->expects($this->never())
-            ->method('find')
-        ;
-        $storageMock
-            ->expects($this->once())
-            ->method('support')
-            ->with($this->identicalTo($model))
-            ->will($this->returnValue(true))
-        ;
-
-        $modelRequestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface', array('getModel', 'setModel'));
-        $modelRequestMock
-            ->expects($this->any())
-            ->method('getModel')
-            ->will($this->returnValue($model))
-        ;
-
-        $extension = new StorageExtension($storageMock);
-
-        $this->assertAttributeCount(0, 'scheduledForUpdateModels', $extension);
-
-        $extension->onReply($this->createReplyMock(), $modelRequestMock, $this->createActionMock());
-
-        $this->assertAttributeCount(1, 'scheduledForUpdateModels', $extension);
-        $this->assertAttributeContains($model, 'scheduledForUpdateModels', $extension);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldScheduleForUpdateRequestModelIfStorageSupportItOnException()
-    {
-        $model = new \stdClass();
-
-        $storageMock = $this->createStorageMock();
-        $storageMock
-            ->expects($this->never())
-            ->method('find')
-        ;
-        $storageMock
-            ->expects($this->once())
-            ->method('support')
-            ->with($this->identicalTo($model))
-            ->will($this->returnValue(true))
-        ;
-
-        $modelRequestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface', array('getModel', 'setModel'));
-        $modelRequestMock
-            ->expects($this->any())
-            ->method('getModel')
-            ->will($this->returnValue($model))
-        ;
-
-        $extension = new StorageExtension($storageMock);
-
-        $this->assertAttributeCount(0, 'scheduledForUpdateModels', $extension);
-
-        $extension->onException(new \Exception(), $modelRequestMock, $this->createActionMock());
-
-        $this->assertAttributeCount(1, 'scheduledForUpdateModels', $extension);
-        $this->assertAttributeContains($model, 'scheduledForUpdateModels', $extension);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldIncreaseStackLevelOnEveryOnPreExecuteCall()
-    {
-        $extension = new StorageExtension($this->createStorageMock());
-
-        $this->assertAttributeEquals(0, 'stackLevel', $extension);
-
-        $extension->onPreExecute(new \stdClass());
-        $this->assertAttributeEquals(1, 'stackLevel', $extension);
-
-        $extension->onPreExecute(new \stdClass());
-        $this->assertAttributeEquals(2, 'stackLevel', $extension);
-
-        $extension->onPreExecute(new \stdClass());
-        $this->assertAttributeEquals(3, 'stackLevel', $extension);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldDecreaseStackLevelOnEveryOnPostExecuteCall()
-    {
-        $extension = new StorageExtension($this->createStorageMock());
-
-        $extension->onPreExecute(new \stdClass());
-        $extension->onPreExecute(new \stdClass());
-        $extension->onPreExecute(new \stdClass());
-
-        //guard
-        $this->assertAttributeEquals(3, 'stackLevel', $extension);
-
-        $extension->onPostExecute(new \stdClass(), $this->createActionMock());
-        $this->assertAttributeEquals(2, 'stackLevel', $extension);
-
-        $extension->onPostExecute(new \stdClass(), $this->createActionMock());
-        $this->assertAttributeEquals(1, 'stackLevel', $extension);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldDecreaseStackLevelOnEveryOnReply()
-    {
-        $extension = new StorageExtension($this->createStorageMock());
-
-        $extension->onPreExecute(new \stdClass());
-        $extension->onPreExecute(new \stdClass());
-        $extension->onPreExecute(new \stdClass());
-
-        //guard
-        $this->assertAttributeEquals(3, 'stackLevel', $extension);
-
-        $extension->onReply($this->createReplyMock(), new \stdClass(), $this->createActionMock());
-        $this->assertAttributeEquals(2, 'stackLevel', $extension);
-
-        $extension->onReply($this->createReplyMock(), new \stdClass(), $this->createActionMock());
-        $this->assertAttributeEquals(1, 'stackLevel', $extension);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldDecreaseStackLevelOnEveryOnExceptionCall()
-    {
-        $extension = new StorageExtension($this->createStorageMock());
-
-        $extension->onPreExecute(new \stdClass());
-        $extension->onPreExecute(new \stdClass());
-        $extension->onPreExecute(new \stdClass());
-
-        //guard
-        $this->assertAttributeEquals(3, 'stackLevel', $extension);
-
-        $extension->onException(new \Exception(), new \stdClass());
-        $this->assertAttributeEquals(2, 'stackLevel', $extension);
-
-        $extension->onException(new \Exception(), new \stdClass(), $this->createActionMock());
-        $this->assertAttributeEquals(1, 'stackLevel', $extension);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldUpdateModelOneTimeOnLastStackLevelOnPostExecute()
-    {
-        $expectedModel = new \stdClass();
-
-        $storageMock = $this->createStorageMock();
-        $storageMock
-            ->expects($this->atLeastOnce())
-            ->method('support')
-            ->with($this->identicalTo($expectedModel))
-            ->will($this->returnValue(true))
-        ;
-        $storageMock
-            ->expects($this->once())
             ->method('update')
             ->with($this->identicalTo($expectedModel))
         ;
 
-        $modelRequestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface');
-        $modelRequestMock
+        $requestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface');
+        $requestMock
             ->expects($this->any())
             ->method('getModel')
             ->will($this->returnValue($expectedModel))
@@ -423,116 +331,17 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension = new StorageExtension($storageMock);
 
-        $extension->onPreExecute($modelRequestMock);
-        $extension->onPreExecute($modelRequestMock);
-        $extension->onPreExecute($modelRequestMock);
+
+        $previousContext = new Context($this->createGatewayMock(), $requestMock, array());
+        $context = new Context($this->createGatewayMock(), $requestMock, array($previousContext));
+
+        $extension->onPreExecute($context);
 
         //guard
-        $this->assertAttributeEquals(3, 'stackLevel', $extension);
         $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
 
-        $extension->onPostExecute(new \stdClass(), $this->createActionMock());
+        $extension->onPostExecute($context);
         $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
-
-        $extension->onPostExecute(new \stdClass(), $this->createActionMock());
-        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
-
-        $extension->onPostExecute(new \stdClass(), $this->createActionMock());
-        $this->assertAttributeEmpty('scheduledForUpdateModels', $extension);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldUpdateModelOneTimeOnLastStackLevelOnReply()
-    {
-        $expectedModel = new \stdClass();
-
-        $storageMock = $this->createStorageMock();
-        $storageMock
-            ->expects($this->atLeastOnce())
-            ->method('support')
-            ->with($this->identicalTo($expectedModel))
-            ->will($this->returnValue(true))
-        ;
-        $storageMock
-            ->expects($this->once())
-            ->method('update')
-            ->with($this->identicalTo($expectedModel))
-        ;
-
-        $modelRequestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface');
-        $modelRequestMock
-            ->expects($this->any())
-            ->method('getModel')
-            ->will($this->returnValue($expectedModel))
-        ;
-
-        $extension = new StorageExtension($storageMock);
-
-        $extension->onPreExecute($modelRequestMock);
-        $extension->onPreExecute($modelRequestMock);
-        $extension->onPreExecute($modelRequestMock);
-
-        //guard
-        $this->assertAttributeEquals(3, 'stackLevel', $extension);
-        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
-
-        $extension->onReply($this->createReplyMock(), $modelRequestMock, $this->createActionMock());
-        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
-
-        $extension->onReply($this->createReplyMock(), $modelRequestMock, $this->createActionMock());
-        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
-
-        $extension->onReply($this->createReplyMock(), $modelRequestMock, $this->createActionMock());
-        $this->assertAttributeEmpty('scheduledForUpdateModels', $extension);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldUpdateModelOneTimeOnLastStackLevelOnException()
-    {
-        $expectedModel = new \stdClass();
-
-        $storageMock = $this->createStorageMock();
-        $storageMock
-            ->expects($this->atLeastOnce())
-            ->method('support')
-            ->with($this->identicalTo($expectedModel))
-            ->will($this->returnValue(true))
-        ;
-        $storageMock
-            ->expects($this->once())
-            ->method('update')
-            ->with($this->identicalTo($expectedModel))
-        ;
-
-        $modelRequestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface');
-        $modelRequestMock
-            ->expects($this->any())
-            ->method('getModel')
-            ->will($this->returnValue($expectedModel))
-        ;
-
-        $extension = new StorageExtension($storageMock);
-
-        $extension->onPreExecute($modelRequestMock);
-        $extension->onPreExecute($modelRequestMock);
-        $extension->onPreExecute($modelRequestMock);
-
-        //guard
-        $this->assertAttributeEquals(3, 'stackLevel', $extension);
-        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
-
-        $extension->onException(new \Exception(), new \stdClass(), $this->createActionMock());
-        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
-
-        $extension->onException(new \Exception(), new \stdClass(), $this->createActionMock());
-        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
-
-        $extension->onException(new \Exception(), new \stdClass(), $this->createActionMock());
-        $this->assertAttributeEmpty('scheduledForUpdateModels', $extension);
     }
 
     protected function createModelRequestWithModel($model)
@@ -547,18 +356,27 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
         return $modelRequestMock;
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|StorageInterface
+     */
     protected function createStorageMock()
     {
         return $this->getMock('Payum\Core\Storage\StorageInterface');
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|ActionInterface
+     */
     protected function createActionMock()
     {
         return $this->getMock('Payum\Core\Action\ActionInterface');
     }
 
-    protected function createReplyMock()
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     */
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\Reply\ReplyInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

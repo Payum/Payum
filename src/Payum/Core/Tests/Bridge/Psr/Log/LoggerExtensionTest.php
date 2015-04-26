@@ -3,7 +3,8 @@ namespace Payum\Core\Tests\Bridge\Psr\Log;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Psr\Log\LoggerExtension;
-use Payum\Core\Reply\ReplyInterface;
+use Payum\Core\Extension\Context;
+use Payum\Core\GatewayInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
@@ -49,7 +50,7 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithCustomLoggergivenAsFirstArgument()
+    public function couldBeConstructedWithCustomLoggerGivenAsFirstArgument()
     {
         $expectedLogger = $this->createLoggerMock();
 
@@ -86,7 +87,10 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
 
         $action = new LoggerAwareAction();
 
-        $extension->onExecute(new \stdClass(), $action);
+        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context->setAction($action);
+
+        $extension->onExecute($context);
 
         $this->assertSame($logger, $action->logger);
     }
@@ -100,13 +104,16 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension = new LoggerExtension($logger);
 
-        $extension->onExecute(new \stdClass(), $this->createActionMock());
+        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context->setAction($this->createActionMock());
+
+        $extension->onExecute($context);
     }
 
     /**
      * @test
      */
-    public function shouldNotInjectLoggerToLoggerAwareActionOnPostExecute()
+    public function shouldInjectNullLoggerToLoggerAwareActionOnPostExecute()
     {
         $logger = $this->createLoggerMock();
 
@@ -114,15 +121,33 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
 
         $action = new LoggerAwareAction();
 
-        $extension->onPostExecute(new \stdClass(), $action);
+        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context->setAction($action);
 
-        $this->assertNull($action->logger);
+        $extension->onPostExecute($context);
+
+        $this->assertInstanceOf('Psr\Log\NullLogger', $action->logger);
     }
 
     /**
      * @test
      */
-    public function shouldNotInjectLoggerToLoggerAwareActionOnReply()
+    public function shouldNotInjectNullLoggerToNotLoggerAwareActionOnPostExecute()
+    {
+        $logger = $this->createLoggerMock();
+
+        $extension = new LoggerExtension($logger);
+
+        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context->setAction($this->createActionMock());
+
+        $extension->onPostExecute($context);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldDoNothingOnPreExecute()
     {
         $logger = $this->createLoggerMock();
 
@@ -130,23 +155,10 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
 
         $action = new LoggerAwareAction();
 
-        $extension->onReply($this->createReplyMock(), new \stdClass(), $action);
+        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context->setAction($action);
 
-        $this->assertNull($action->logger);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotInjectLoggerToLoggerAwareActionOnException()
-    {
-        $logger = $this->createLoggerMock();
-
-        $extension = new LoggerExtension($logger);
-
-        $action = new LoggerAwareAction();
-
-        $extension->onException(new \Exception(), new \stdClass(), $action);
+        $extension->onPreExecute($context);
 
         $this->assertNull($action->logger);
     }
@@ -160,19 +172,19 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\Reply\ReplyInterface
-     */
-    protected function createReplyMock()
-    {
-        return $this->getMock('Payum\Core\Reply\ReplyInterface');
-    }
-
-    /**
      * @return \PHPUnit_Framework_MockObject_MockObject|ActionInterface
      */
     protected function createActionMock()
     {
         return $this->getMock('Payum\Core\Action\ActionInterface');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     */
+    protected function createGatewayMock()
+    {
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }
 

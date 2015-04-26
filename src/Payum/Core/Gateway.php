@@ -106,25 +106,27 @@ class Gateway implements GatewayInterface
 
             $this->extensions->onPostExecute($context);
 
-            array_pop($this->stack, $context);
+            array_pop($this->stack);
         } catch (ReplyInterface $reply) {
             $context->setReply($reply);
 
             $this->extensions->onPostExecute($context);
 
+            array_pop($this->stack);
+
             if ($catchReply && $context->getReply()) {
                 return $context->getReply();
             }
 
-            array_pop($this->stack, $context);
-
-            throw $context->getReply();
+            if ($context->getReply()) {
+                throw $context->getReply();
+            }
         } catch (\Exception $e) {
             $context->setException($e);
 
             $this->extensions->onPostExecute($context);
 
-            array_pop($this->stack, $context);
+            array_pop($this->stack);
 
             if ($context->getException()) {
                 throw $context->getException();
