@@ -94,15 +94,17 @@ class Gateway implements GatewayInterface
         try {
             $this->extensions->onPreExecute($context);
 
-            if (false == $action = $this->findActionSupported($context->getRequest())) {
-                throw RequestNotSupportedException::create($context->getRequest());
-            }
+            if (false == $context->getAction()) {
+                if (false == $action = $this->findActionSupported($context->getRequest())){
+                    throw RequestNotSupportedException::create($context->getRequest());
+                }
 
-            $context->setAction($action);
+                $context->setAction($action);
+            }
 
             $this->extensions->onExecute($context);
 
-            $action->execute($request);
+            $context->getAction()->execute($request);
 
             $this->extensions->onPostExecute($context);
 

@@ -484,6 +484,91 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldExecuteActionSetByExtensionOnExecute()
+    {
+        $expectedRequest = new \stdClass();
+
+        $actionMock = $this->createActionMock();
+        $actionMock
+            ->expects($this->never())
+            ->method('execute')
+        ;
+        $actionMock
+            ->expects($this->any())
+            ->method('supports')
+            ->will($this->returnValue(true))
+        ;
+
+        $anotherActionMock = $this->createActionMock();
+        $anotherActionMock
+            ->expects($this->once())
+            ->method('execute')
+        ;
+
+        $testCase = $this;
+
+        $gateway = new Gateway();
+
+        $extensionMock = $this->createExtensionMock();
+        $extensionMock
+            ->expects($this->once())
+            ->method('onExecute')
+            ->with($this->isInstanceOf('Payum\Core\Extension\Context'))
+            ->willReturnCallback(function(Context $context) use ($testCase, $actionMock, $anotherActionMock) {
+                $testCase->assertSame($actionMock, $context->getAction());
+
+                $context->setAction($anotherActionMock);
+            })
+        ;
+
+        $gateway->addAction($actionMock);
+        $gateway->addExtension($extensionMock);
+
+        $gateway->execute($expectedRequest, true);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldUseActionSetOnPreExecuteByExtensionOnExecute()
+    {
+        $expectedRequest = new \stdClass();
+
+        $actionMock = $this->createActionMock();
+        $actionMock
+            ->expects($this->once())
+            ->method('execute')
+        ;
+        $actionMock
+            ->expects($this->never())
+            ->method('supports')
+            ->will($this->returnValue(true))
+        ;
+
+        $testCase = $this;
+
+        $gateway = new Gateway();
+
+        $extensionMock = $this->createExtensionMock();
+        $extensionMock
+            ->expects($this->once())
+            ->method('onPreExecute')
+            ->with($this->isInstanceOf('Payum\Core\Extension\Context'))
+            ->willReturnCallback(function(Context $context) use ($testCase, $actionMock) {
+                $testCase->assertNull($context->getAction());
+
+                $context->setAction($actionMock);
+            })
+        ;
+
+        $gateway->addExtension($extensionMock);
+
+        $gateway->execute($expectedRequest, true);
+    }
+
+    /**
+     * @test
+     */
     public function shouldCallOnPostExecuteWithReplyWhenReplyThrown()
     {
         $reply = $this->createReplyMock();
