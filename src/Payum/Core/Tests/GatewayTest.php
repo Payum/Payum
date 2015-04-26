@@ -812,7 +812,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(0))
             ->method('onPreExecute')
             ->willReturnCallback(function(Context $context) use ($testCase, $firstRequest) {
-                $this->assertSame($firstRequest, $context->getRequest());
+                $testCase->assertSame($firstRequest, $context->getRequest());
 
                 $testCase->assertEmpty($context->getPrevious());
             })
@@ -821,7 +821,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(1))
             ->method('onPreExecute')
             ->willReturnCallback(function(Context $context) use ($testCase, $secondRequest) {
-                $this->assertSame($secondRequest, $context->getRequest());
+                $testCase->assertSame($secondRequest, $context->getRequest());
 
                 $testCase->assertCount(1, $context->getPrevious());
                 $this->assertContainsOnly('Payum\Core\Extension\Context', $context->getPrevious());
