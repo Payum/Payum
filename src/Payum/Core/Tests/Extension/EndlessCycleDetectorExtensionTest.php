@@ -55,11 +55,11 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $gatewayMock = $this->createGatewayMock();
 
-        $context = new Context($gatewayMock, new \stdClass(), [
-            new Context($gatewayMock, new \stdClass(), []),
-            new Context($gatewayMock, new \stdClass(), []),
-            new Context($gatewayMock, new \stdClass(), []),
-        ]);
+        $context = new Context($gatewayMock, new \stdClass(), array(
+            new Context($gatewayMock, new \stdClass(), array()),
+            new Context($gatewayMock, new \stdClass(), array()),
+            new Context($gatewayMock, new \stdClass(), array()),
+        ));
 
         $extension = new EndlessCycleDetectorExtension($expectedLimit = 2);
 
@@ -73,11 +73,11 @@ class EndlessCycleDetectorExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $gatewayMock = $this->createGatewayMock();
 
-        $context = new Context($gatewayMock, new \stdClass(), [
-            new Context($gatewayMock, new \stdClass(), []),
-            new Context($gatewayMock, new \stdClass(), []),
-            new Context($gatewayMock, new \stdClass(), []),
-        ]);
+        $context = new Context($gatewayMock, new \stdClass(), array(
+            new Context($gatewayMock, new \stdClass(), array()),
+            new Context($gatewayMock, new \stdClass(), array()),
+            new Context($gatewayMock, new \stdClass(), array()),
+        ));
 
         $extension = new EndlessCycleDetectorExtension($expectedLimit = 5);
 
