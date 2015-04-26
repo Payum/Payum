@@ -1,4 +1,4 @@
-# Stripe.js
+# Stripe checkout
 
 Steps:
 
