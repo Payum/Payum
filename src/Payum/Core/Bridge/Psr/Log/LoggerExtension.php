@@ -1,9 +1,8 @@
 <?php
 namespace Payum\Core\Bridge\Psr\Log;
 
-use Payum\Core\Action\ActionInterface;
+use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionInterface;
-use Payum\Core\Reply\ReplyInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -16,11 +15,17 @@ class LoggerExtension implements ExtensionInterface, LoggerAwareInterface
     protected $logger;
 
     /**
+     * @var NullLogger
+     */
+    protected $nullLogger;
+
+    /**
      * @param LoggerInterface $logger
      */
     public function __construct(LoggerInterface $logger = null)
     {
-        $this->logger = $logger ?: new NullLogger();
+        $this->nullLogger = new NullLogger();
+        $this->logger = $logger ?: $this->nullLogger;
     }
 
     /**
@@ -34,15 +39,16 @@ class LoggerExtension implements ExtensionInterface, LoggerAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function onPreExecute($request)
+    public function onPreExecute(Context $context)
     {
     }
 
     /**
      * {@inheritDoc}
      */
-    public function onExecute($request, ActionInterface $action)
+    public function onExecute(Context $context)
     {
+        $action = $context->getAction();
         if ($action instanceof LoggerAwareInterface) {
             $action->setLogger($this->logger);
         }
@@ -51,21 +57,11 @@ class LoggerExtension implements ExtensionInterface, LoggerAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function onPostExecute($request, ActionInterface $action)
+    public function onPostExecute(Context $context)
     {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function onReply(ReplyInterface $reply, $request, ActionInterface $action)
-    {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function onException(\Exception $exception, $request, ActionInterface $action = null)
-    {
+        $action = $context->getAction();
+        if ($action instanceof LoggerAwareInterface) {
+            $action->setLogger($this->nullLogger);
+        }
     }
 }

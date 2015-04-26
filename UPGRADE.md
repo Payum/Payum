@@ -37,6 +37,11 @@
 * [request] Request `FillOrderDetails` removed. Use `Convert` one instead.
 * [model] The method `PaymentInterface::getCurrencyDigitsAfterDecimalPoint` was removed. Use `GetCurrency::getIso4217` request method to get same info.
 * [storage] `StorageInterface::findBy` returned value is changed. It was a model or null now it is always an array.
+* [extension] The method `ExtensionInterface::onReply` was removed. Use `ExtensionInterface::onPostExecute` and check whether context contains reply or not.
+* [extension] The method `ExtensionInterface::onException` was removed. Use `ExtensionInterface::onPostExecute` and check whether context contains exception or not.
+* [extension] The method `ExtensionInterface::onPreExecute` signature was changed. Now it takes instance of `Context`.
+* [extension] The method `ExtensionInterface::onExecute` signature was changed. Now it takes instance of `Context`.
+* [extension] The method `ExtensionInterface::onPostExecute` signature was changed. Now it takes instance of `Context`.
 
 ## 0.13 to 0.14
 

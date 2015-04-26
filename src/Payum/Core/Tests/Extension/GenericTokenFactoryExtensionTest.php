@@ -2,8 +2,9 @@
 namespace Payum\Core\Tests\Extension;
 
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Extension\Context;
 use Payum\Core\Extension\GenericTokenFactoryExtension;
-use Payum\Core\Reply\ReplyInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 
@@ -38,7 +39,10 @@ class GenericTokenFactoryExtensionTest extends \PHPUnit_Framework_TestCase
 
         $action = new ActionGenericTokenFactoryAware();
 
-        $extension->onExecute(new \stdClass(), $action);
+        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context->setAction($action);
+
+        $extension->onExecute($context);
 
         $this->assertSame($tokenFactory, $action->tokenFactory);
     }
@@ -54,7 +58,10 @@ class GenericTokenFactoryExtensionTest extends \PHPUnit_Framework_TestCase
 
         $action = $this->createActionMock();
 
-        $extension->onExecute(new \stdClass(), $action);
+        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context->setAction($action);
+
+        $extension->onExecute($context);
     }
 
     /**
@@ -66,22 +73,27 @@ class GenericTokenFactoryExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension = new GenericTokenFactoryExtension($tokenFactory);
 
-        $extension->onPreExecute(new \stdClass());
+        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+
+        $extension->onPreExecute($context);
     }
 
     /**
      * @test
      */
-    public function shouldDoNothingOnReply()
+    public function shouldUnsetGenericTokenFactoryOnPostExecute()
     {
-        $request = new \stdClass();
-
         $tokenFactory = $this->createGenericTokenFactoryMock();
 
         $extension = new GenericTokenFactoryExtension($tokenFactory);
 
-        $extension->onReply($this->createReplyMock(), $request, $this->createActionMock());
-        $extension->onReply($this->createReplyMock(), $request, $action = new ActionGenericTokenFactoryAware());
+        $action = new ActionGenericTokenFactoryAware();
+        $action->tokenFactory = $tokenFactory;
+
+        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context->setAction($action);
+
+        $extension->onPostExecute($context);
 
         $this->assertNull($action->tokenFactory);
     }
@@ -89,43 +101,18 @@ class GenericTokenFactoryExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldDoNothingOnException()
+    public function shouldDoNothingIfActionNotImplementsGenericTokenFactoryAwareInterfaceOnPostExecute()
     {
-        $request = new \stdClass();
-
         $tokenFactory = $this->createGenericTokenFactoryMock();
 
         $extension = new GenericTokenFactoryExtension($tokenFactory);
 
-        $extension->onException(new \Exception(), $request, $this->createActionMock());
-        $extension->onException(new \Exception(), $request, $action = new ActionGenericTokenFactoryAware());
+        $action = $this->createActionMock();
 
-        $this->assertNull($action->tokenFactory);
-    }
+        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context->setAction($action);
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingOnPostExecute()
-    {
-        $request = new \stdClass();
-
-        $tokenFactory = $this->createGenericTokenFactoryMock();
-
-        $extension = new GenericTokenFactoryExtension($tokenFactory);
-
-        $extension->onPostExecute($request, $this->createActionMock());
-        $extension->onPostExecute($request, $action = new ActionGenericTokenFactoryAware());
-
-        $this->assertNull($action->tokenFactory);
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ReplyInterface
-     */
-    protected function createReplyMock()
-    {
-        return $this->getMock('Payum\Core\Reply\ReplyInterface');
+        $extension->onPostExecute($context);
     }
 
     /**
@@ -142,6 +129,14 @@ class GenericTokenFactoryExtensionTest extends \PHPUnit_Framework_TestCase
     protected function createGenericTokenFactoryMock()
     {
         return $this->getMock('Payum\Core\Security\GenericTokenFactoryInterface');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     */
+    protected function createGatewayMock()
+    {
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }
 

@@ -1,22 +1,10 @@
 <?php
 namespace Payum\Core\Extension;
 
-use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\LogicException;
-use Payum\Core\Reply\ReplyInterface;
 
 class EndlessCycleDetectorExtension implements ExtensionInterface
 {
-    /**
-     * @var mixed
-     */
-    protected $firstRequest;
-
-    /**
-     * @var int
-     */
-    protected $cyclesCounter;
-
     /**
      * @var int
      */
@@ -33,61 +21,27 @@ class EndlessCycleDetectorExtension implements ExtensionInterface
     /**
      * {@inheritDoc}
      */
-    public function onPreExecute($request)
+    public function onPreExecute(Context $context)
     {
-        if (null === $this->firstRequest) {
-            $this->firstRequest = $request;
-            $this->cyclesCounter = 0;
-        }
-
-        if ($this->cyclesCounter == $this->limit) {
-            $cycles = $this->cyclesCounter;
-            $this->firstRequest = null;
-            $this->cyclesCounter = 0;
-
+        if (count($context->getPrevious()) >= $this->limit) {
             throw new LogicException(sprintf(
                 'Possible endless cycle detected. ::onPreExecute was called %d times before reach the limit.',
-                $cycles
+                $this->limit
             ));
         }
-
-        $this->cyclesCounter++;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function onExecute($request, ActionInterface $action)
+    public function onExecute(Context $context)
     {
     }
 
     /**
      * {@inheritDoc}
      */
-    public function onPostExecute($request, ActionInterface $action)
+    public function onPostExecute(Context $context)
     {
-        if ($request === $this->firstRequest) {
-            $this->firstRequest = null;
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function onReply(ReplyInterface $reply, $request, ActionInterface $action)
-    {
-        if ($request === $this->firstRequest) {
-            $this->firstRequest = null;
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function onException(\Exception $exception, $request, ActionInterface $action = null)
-    {
-        if ($request === $this->firstRequest) {
-            $this->firstRequest = null;
-        }
     }
 }

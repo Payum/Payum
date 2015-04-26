@@ -5,6 +5,7 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionCollection;
 use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Reply\ReplyInterface;
@@ -14,12 +15,12 @@ class Gateway implements GatewayInterface
     /**
      * @var Action\ActionInterface[]
      */
-    protected $actions = array();
+    protected $actions;
 
     /**
      * @var mixed[]
      */
-    protected $apis = array();
+    protected $apis;
 
     /**
      * @var \Payum\Core\Extension\ExtensionCollection
@@ -27,9 +28,18 @@ class Gateway implements GatewayInterface
     protected $extensions;
 
     /**
+     * @var Context[]
+     */
+    protected $stack;
+
+    /**
      */
     public function __construct()
     {
+        $this->stack = array();
+        $this->actions = array();
+        $this->apis = array();
+
         $this->extensions = new ExtensionCollection();
     }
 
@@ -77,34 +87,52 @@ class Gateway implements GatewayInterface
      */
     public function execute($request, $catchReply = false)
     {
-        $action = null;
+        $context = new Context($this, $request, $this->stack);
+
+        array_push($this->stack, $context);
+
         try {
-            $this->extensions->onPreExecute($request);
+            $this->extensions->onPreExecute($context);
 
-            if (false == $action = $this->findActionSupported($request)) {
-                throw RequestNotSupportedException::create($request);
+            if (false == $context->getAction()) {
+                if (false == $action = $this->findActionSupported($context->getRequest())){
+                    throw RequestNotSupportedException::create($context->getRequest());
+                }
+
+                $context->setAction($action);
             }
 
-            $this->extensions->onExecute($request, $action);
+            $this->extensions->onExecute($context);
 
-            $action->execute($request);
+            $context->getAction()->execute($request);
 
-            $this->extensions->onPostExecute($request, $action);
+            $this->extensions->onPostExecute($context);
+
+            array_pop($this->stack);
         } catch (ReplyInterface $reply) {
-            $reply =
-                $this->extensions->onReply($reply, $request, $action) ?:
-                    $reply
-            ;
+            $context->setReply($reply);
 
-            if ($catchReply) {
-                return $reply;
+            $this->extensions->onPostExecute($context);
+
+            array_pop($this->stack);
+
+            if ($catchReply && $context->getReply()) {
+                return $context->getReply();
             }
 
-            throw $reply;
+            if ($context->getReply()) {
+                throw $context->getReply();
+            }
         } catch (\Exception $e) {
-            $this->extensions->onException($e, $request, $action ?: null);
+            $context->setException($e);
 
-            throw $e;
+            $this->extensions->onPostExecute($context);
+
+            array_pop($this->stack);
+
+            if ($context->getException()) {
+                throw $context->getException();
+            }
         }
 
         return;

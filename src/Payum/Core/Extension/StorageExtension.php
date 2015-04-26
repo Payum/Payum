@@ -1,9 +1,7 @@
 <?php
 namespace Payum\Core\Extension;
 
-use Payum\Core\Action\ActionInterface;
 use Payum\Core\Model\ModelAggregateInterface;
-use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Storage\IdentityInterface;
 use Payum\Core\Storage\StorageInterface;
 
@@ -13,11 +11,6 @@ class StorageExtension implements ExtensionInterface
      * @var \Payum\Core\Storage\StorageInterface
      */
     protected $storage;
-
-    /**
-     * @var int
-     */
-    protected $stackLevel = 0;
 
     /**
      * @var object[]
@@ -35,9 +28,9 @@ class StorageExtension implements ExtensionInterface
     /**
      * {@inheritDoc}
      */
-    public function onPreExecute($request)
+    public function onPreExecute(Context $context)
     {
-        $this->stackLevel++;
+        $request = $context->getRequest();
 
         if (false == $request instanceof ModelAggregateInterface) {
             return;
@@ -59,43 +52,22 @@ class StorageExtension implements ExtensionInterface
     /**
      * {@inheritDoc}
      */
-    public function onExecute($request, ActionInterface $action)
+    public function onExecute(Context $context)
     {
     }
 
     /**
      * {@inheritDoc}
      */
-    public function onException(\Exception $exception, $request, ActionInterface $action = null)
+    public function onPostExecute(Context $context)
     {
-        $this->onPostXXX($request);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function onPostExecute($request, ActionInterface $action)
-    {
-        $this->onPostXXX($request);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function onReply(ReplyInterface $reply, $request, ActionInterface $action)
-    {
-        $this->onPostXXX($request);
-    }
-
-    protected function onPostXXX($request)
-    {
-        $this->stackLevel--;
+        $request = $context->getRequest();
 
         if ($request instanceof ModelAggregateInterface) {
             $this->scheduleForUpdateIfSupported($request->getModel());
         }
 
-        if (0 === $this->stackLevel) {
+        if (false == $context->getPrevious()) {
             foreach ($this->scheduledForUpdateModels as $modelHash => $model) {
                 $this->storage->update($model);
                 unset($this->scheduledForUpdateModels[$modelHash]);
