@@ -54,18 +54,18 @@ class ConvertPaymentActionTest extends GenericActionTest
             })
         ;
 
-        $order = new Payment();
-        $order->setNumber('theNumber');
-        $order->setCurrencyCode('USD');
-        $order->setTotalAmount(123);
-        $order->setDescription('the description');
-        $order->setClientId('theClientId');
-        $order->setClientEmail('theClientEmail');
+        $payment = new Payment();
+        $payment->setNumber('theNumber');
+        $payment->setCurrencyCode('USD');
+        $payment->setTotalAmount(123);
+        $payment->setDescription('the description');
+        $payment->setClientId('theClientId');
+        $payment->setClientEmail('theClientEmail');
 
         $action = new ConvertPaymentAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute($convert = new Convert($order, 'array'));
+        $action->execute($convert = new Convert($payment, 'array'));
 
         $details = $convert->getResult();
 
@@ -100,18 +100,18 @@ class ConvertPaymentActionTest extends GenericActionTest
             })
         ;
 
-        $order = new Payment();
-        $order->setCurrencyCode('USD');
-        $order->setTotalAmount(123);
-        $order->setDescription('the description');
-        $order->setDetails(array(
+        $payment = new Payment();
+        $payment->setCurrencyCode('USD');
+        $payment->setTotalAmount(123);
+        $payment->setDescription('the description');
+        $payment->setDetails(array(
             'foo' => 'fooVal',
         ));
 
         $action = new ConvertPaymentAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute($convert = new Convert($order, 'array'));
+        $action->execute($convert = new Convert($payment, 'array'));
 
         $details = $convert->getResult();
 
