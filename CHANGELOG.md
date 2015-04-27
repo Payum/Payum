@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.15.0 (2015-04-27)
+
+* [extension] Rework extension. Introduce context.
+* [storage] Change `StorageInterface::findBy` returned value. It must be an array of object. or empty.
+* [doctrine][mongo] add a mapping for GatewayConfig.
+* [doc] document iso4217 use cases.
+* [request] decouple GetCurrency request from Payum\ISO4217 lib.
+* [gateway] Allow pass custom instance of iso4217.
+* [travis] sudo: false
+* Add payum/iso4217 to composr deps.
+* Rename Order to Payment
+* Rename Payment and PaymentXXX classes to Gateway and GatewayXXX ones.
+* [action] Add ability to get ISO4217 info. Add a request and action for that. Simply payment interface.
+* [action] use Convert request in CapturePaymentAction.
+* [request] Add convert request. Remove FillOrderDetails one.
+* [symfony] Add `CreditCardDateValidator` validator.
+* [request] Make `GetHumanStatus` request compatible with interface.
+* [payment] add setter and getter for credit card on payment.
+* [stripe] add support of direct payments.
+* [stripe] improve payment status handling, add support of authorize\refund. better handling of pending.
+* [klarna] Klarna return amount
+* [klarna] Klarna credit invoice
+* [klarna] Klarna resend invoice
+* [klarna-checkout] allow use of v2.0 SDK.
+* [klarna-checkout] check if acceptHeader property exists.
+* [klarna-checkout] change constant names
+* [klarna-checkout] add support of klarna checkout recurring payments.
+
 ## 0.14.5 (2015-04-15)
 
 * [bridge][symfony] allow unset checkbox field (sandbox for example) on payment config form.
