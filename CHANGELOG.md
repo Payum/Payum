@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.15.1 (2015-04-28)
+
+* [composer] Require stable versions
+
 ## 0.15.0 (2015-04-27)
 
 * [extension] Rework extension. Introduce context.
