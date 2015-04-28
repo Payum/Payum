@@ -60,7 +60,7 @@ Found 1 gateways
 >	Payum\Bundle\PayumBundle\Action\ObtainCreditCardAction
 >	Payum\Core\Bridge\Twig\Action\RenderTemplateAction
 >	Payum\Offline\Action\CaptureAction
->	Payum\Offline\Action\FillOrderDetailsAction
+>	Payum\Offline\Action\ConvertPaymentAction
 >	Payum\Offline\Action\StatusAction
 >
 >	Extensions:
