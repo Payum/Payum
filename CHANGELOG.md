@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.15.0 (2015-04-28)
+
+* [doc][stripe] Fix misleading title
+* [doc] document iso4217 use case.
+* [iso4217] add iso4217 service, use it in factory config.
+* Rename Payment and PaymentXXX classes to Gateway and GatewayXXX ones.
+* Rename Order to Payment.
+* Update configure-payment-in-backend.md
+
 ## 0.14.4 (2015-03-17)
 
 * [config] should merge different payments in different config files and overwrite payments with same name.
