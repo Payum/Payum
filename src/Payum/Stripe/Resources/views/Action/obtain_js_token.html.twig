@@ -5,7 +5,7 @@
 {% block payum_body %}
     {{ parent() }}
 
-    <form action="" method="POST" id="payment-form">
+    <form action="{{ captureActionUrl|default('') }}" method="POST" id="payment-form">
         <span class="payment-errors"></span>
 
         <div class="form-row">
