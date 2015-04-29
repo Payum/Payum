@@ -44,4 +44,17 @@ class RenderTemplateTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('theResult', $request->getResult());
     }
+
+    /**
+     * @test
+     */
+    public function shouldAllowAddParameterToContext()
+    {
+        $request = new RenderTemplate('aTemplate', array());
+
+        $request->addParameter('newParameter', 'parameterValue');
+
+        $this->assertArrayHasKey('newParameter', $request->getContext());
+        $this->assertSame(array('newParameter' => 'parameterValue'), $request->getContext());
+    }
 }

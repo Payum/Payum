@@ -60,4 +60,13 @@ class RenderTemplate
     {
         $this->result = $result;
     }
+
+    /**
+     * @param string $name
+     * @param mixed  $value
+     */
+    public function addParameter($name, $value)
+    {
+        $this->context[$name] = $value;
+    }
 }
