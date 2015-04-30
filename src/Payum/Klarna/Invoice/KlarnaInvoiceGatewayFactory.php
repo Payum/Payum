@@ -17,6 +17,7 @@ use Payum\Klarna\Invoice\Action\Api\PopulateKlarnaFromDetailsAction;
 use Payum\Klarna\Invoice\Action\Api\ReserveAmountAction;
 use Payum\Klarna\Invoice\Action\Api\ReturnAmountAction;
 use Payum\Klarna\Invoice\Action\Api\SendInvoiceAction;
+use Payum\Klarna\Invoice\Action\Api\UpdateAction;
 use Payum\Klarna\Invoice\Action\AuthorizeAction;
 use Payum\Klarna\Invoice\Action\CaptureAction;
 use Payum\Klarna\Invoice\Action\RefundAction;
@@ -89,6 +90,7 @@ class KlarnaInvoiceGatewayFactory implements GatewayFactoryInterface
             'payum.action.api.return_amount' => new ReturnAmountAction(),
             'payum.action.api.email_invoice' => new EmailInvoiceAction(),
             'payum.action.api.send_invoice' => new SendInvoiceAction(),
+            'payum.action.api.update' => new UpdateAction(),
         ));
 
         if (false == $config['payum.api']) {
