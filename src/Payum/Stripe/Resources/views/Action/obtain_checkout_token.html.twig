@@ -3,7 +3,7 @@
 {% block payum_body %}
     {{ parent() }}
 
-    <form action="" method="POST">
+    <form action="{{ actionUrl|default('') }}" method="POST">
         <script
             src="https://checkout.stripe.com/checkout.js" class="stripe-button"
             data-key="{{ publishable_key }}"

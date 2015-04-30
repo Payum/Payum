@@ -37,7 +37,7 @@ class RenderTemplateAction implements ActionInterface
 
         $request->setResult($this->twig->render($request->getTemplateName(), array_replace(
             array('layout' => $this->layout),
-            $request->getContext()
+            $request->getParameters()
         )));
     }
 

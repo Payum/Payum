@@ -165,7 +165,7 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
             ->will($this->returnCallback(function (RenderTemplate $request) use ($testCase, $expectedTemplateName, $expectedContext, $expectedContent) {
                 $testCase->assertEquals($expectedTemplateName, $request->getTemplateName());
-                $testCase->assertEquals($expectedContext, $request->getContext());
+                $testCase->assertEquals($expectedContext, $request->getParameters());
 
                 $request->setResult($expectedContent);
             }))

@@ -125,7 +125,7 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
             ->will($this->returnCallback(function (RenderTemplate $request) use ($testCase, $formView) {
                 $testCase->assertEquals('theTemplateName', $request->getTemplateName());
-                $testCase->assertEquals(array('form' => $formView), $request->getContext());
+                $testCase->assertEquals(array('form' => $formView), $request->getParameters());
 
                 $request->setResult('theObtainCreditCardPageWithForm');
             }))
@@ -207,7 +207,7 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
             ->will($this->returnCallback(function (RenderTemplate $request) use ($testCase, $formView) {
                 $testCase->assertEquals('theTemplateName', $request->getTemplateName());
-                $testCase->assertEquals(array('form' => $formView), $request->getContext());
+                $testCase->assertEquals(array('form' => $formView), $request->getParameters());
 
                 $request->setResult('theObtainCreditCardPageWithForm');
             }))

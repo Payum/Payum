@@ -146,7 +146,7 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnCallback(function (RenderTemplate $request) use ($templateName, $publishableKey, $model, $testCase) {
                 $testCase->assertEquals($templateName, $request->getTemplateName());
 
-                $context = $request->getContext();
+                $context = $request->getParameters();
                 $testCase->assertArrayHasKey('model', $context);
                 $testCase->assertArrayHasKey('publishable_key', $context);
                 $testCase->assertEquals($publishableKey, $context['publishable_key']);
