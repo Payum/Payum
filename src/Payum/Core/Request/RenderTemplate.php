@@ -11,7 +11,7 @@ class RenderTemplate
     /**
      * @var array
      */
-    protected $context;
+    protected $parameters;
 
     /**
      * @var string
@@ -20,12 +20,12 @@ class RenderTemplate
 
     /**
      * @param string $templateName
-     * @param array  $context
+     * @param array  $parameters
      */
-    public function __construct($templateName, array $context = array())
+    public function __construct($templateName, array $parameters = array())
     {
         $this->templateName = $templateName;
-        $this->context = $context;
+        $this->parameters = $parameters;
         $this->result = '';
     }
 
@@ -40,9 +40,19 @@ class RenderTemplate
     /**
      * @return array
      */
+    public function getParameters()
+    {
+        return $this->parameters;
+    }
+
+    /**
+     * @deprecated this method will be removed. Use getParameters instead.
+     *
+     * @return array
+     */
     public function getContext()
     {
-        return $this->context;
+        return $this->getParameters();
     }
 
     /**
@@ -59,5 +69,27 @@ class RenderTemplate
     public function setResult($result)
     {
         $this->result = $result;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed  $value
+     */
+    public function setParameter($name, $value)
+    {
+        $this->parameters[$name] = $value;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed  $value
+     */
+    public function addParameter($name, $value)
+    {
+        if (array_key_exists($name, $this->parameters)) {
+            throw new \InvalidArgumentException(sprintf('Parameter with given name "%s" already exists', $name));
+        }
+
+        $this->parameters[$name] = $value;
     }
 }
