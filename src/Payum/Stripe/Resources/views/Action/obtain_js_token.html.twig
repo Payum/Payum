@@ -35,7 +35,7 @@
     </form>
 {% endblock %}
 
-{% block payum_javascripts %}
+{% block payum_vendor_javascripts %}
     {{ parent() }}
 
     <!-- The required Stripe lib -->
@@ -43,6 +43,10 @@
 
     <!-- jQuery is used only for this example; it isn't required to use Stripe -->
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+{% endblock %}
+
+{% block payum_javascripts %}
+    {{ parent() }}
 
     <script type="text/javascript">
         jQuery(function($) {
