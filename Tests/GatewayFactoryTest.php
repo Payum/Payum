@@ -28,7 +28,7 @@ class GatewayFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\GatewayFactory');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\GatewayFactory'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\CoreGatewayFactory'));
     }
 
     /**
