@@ -12,7 +12,7 @@ class GatewayFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\GatewayFactory');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\CoreGatewayFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayFactoryInterface'));
     }
 
     /**
@@ -76,4 +76,6 @@ class GatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $config);
         $this->assertNotEmpty($config);
     }
+
+
 }

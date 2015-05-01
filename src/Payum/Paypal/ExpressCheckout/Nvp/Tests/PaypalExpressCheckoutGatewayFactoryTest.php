@@ -8,11 +8,11 @@ class PaypalExpressCheckoutGatewayFactoryTest extends \PHPUnit_Framework_TestCas
     /**
      * @test
      */
-    public function shouldImplementGatewayFactoryInterface()
+    public function shouldSubClassGatewayFactory()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayFactoryInterface'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\GatewayFactory'));
     }
 
     /**
