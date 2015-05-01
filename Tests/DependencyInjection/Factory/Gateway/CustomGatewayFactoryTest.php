@@ -134,7 +134,7 @@ class CustomGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($container->hasDefinition('payum.custom.factory'));
 
         $factoryService = $container->getDefinition('payum.custom.factory');
-        $this->assertEquals('Payum\Bundle\PayumBundle\FixedGatewayFactory', $factoryService->getClass());
+        $this->assertEquals('Payum\Core\GatewayFactory', $factoryService->getClass());
         $this->assertEquals(
             array(array('name' => 'custom', 'human_name' => 'Custom')),
             $factoryService->getTag('payum.gateway_factory')

@@ -33,7 +33,7 @@ class CustomGatewayFactory extends AbstractGatewayFactory
      */
     protected function getPayumGatewayFactoryClass()
     {
-        return 'Payum\Bundle\PayumBundle\FixedGatewayFactory';
+        return 'Payum\Core\GatewayFactory';
     }
 
     /**
