@@ -30,7 +30,7 @@ class PaypalExpressCheckoutGatewayFactoryTest extends \PHPUnit_Framework_TestCas
     {
         $factory = new PaypalExpressCheckoutGatewayFactory();
 
-        $this->assertAttributeInstanceOf('Payum\Core\GatewayFactory', 'coreGatewayFactory', $factory);
+        $this->assertAttributeInstanceOf('Payum\Core\CoreGatewayFactory', 'coreGatewayFactory', $factory);
     }
 
     /**

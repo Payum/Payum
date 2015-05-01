@@ -30,7 +30,7 @@ class PayexGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new PayexGatewayFactory();
 
-        $this->assertAttributeInstanceOf('Payum\Core\GatewayFactory', 'coreGatewayFactory', $factory);
+        $this->assertAttributeInstanceOf('Payum\Core\CoreGatewayFactory', 'coreGatewayFactory', $factory);
     }
 
     /**

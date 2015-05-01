@@ -30,7 +30,7 @@ class Be2billOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new Be2BillOffsiteGatewayFactory();
 
-        $this->assertAttributeInstanceOf('Payum\Core\GatewayFactory', 'coreGatewayFactory', $factory);
+        $this->assertAttributeInstanceOf('Payum\Core\CoreGatewayFactory', 'coreGatewayFactory', $factory);
     }
 
     /**

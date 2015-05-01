@@ -30,7 +30,7 @@ class StripeJsGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new StripeJsGatewayFactory();
 
-        $this->assertAttributeInstanceOf('Payum\Core\GatewayFactory', 'coreGatewayFactory', $factory);
+        $this->assertAttributeInstanceOf('Payum\Core\CoreGatewayFactory', 'coreGatewayFactory', $factory);
     }
 
     /**
