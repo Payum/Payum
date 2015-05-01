@@ -10,7 +10,7 @@ class GatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementGatewayFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\GatewayFactory');
+        $rc = new \ReflectionClass('Payum\Core\GatewayFactory');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayFactoryInterface'));
     }
