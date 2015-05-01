@@ -2,7 +2,7 @@
 namespace Payum\Bundle\PayumBundle;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\GatewayFactory as CoreGatewayFactory;
+use Payum\Core\CoreGatewayFactory;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
