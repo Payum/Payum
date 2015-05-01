@@ -2,8 +2,7 @@
 namespace Payum\Payex;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\GatewayFactory as CoreGatewayFactory;
-use Payum\Core\GatewayFactoryInterface;
+use Payum\Core\GatewayFactory;
 use Payum\Payex\Action\AgreementDetailsStatusAction;
 use Payum\Payex\Action\AgreementDetailsSyncAction;
 use Payum\Payex\Action\Api\AutoPayAgreementAction;
@@ -27,45 +26,13 @@ use Payum\Payex\Api\OrderApi;
 use Payum\Payex\Api\RecurringApi;
 use Payum\Payex\Api\SoapClientFactory;
 
-class PayexGatewayFactory implements GatewayFactoryInterface
+class PayexGatewayFactory extends GatewayFactory
 {
     /**
-     * @var GatewayFactoryInterface
-     */
-    protected $coreGatewayFactory;
-
-    /**
-     * @var array
-     */
-    private $defaultConfig;
-
-    /**
-     * @param array $defaultConfig
-     * @param GatewayFactoryInterface $coreGatewayFactory
-     */
-    public function __construct(array $defaultConfig = array(), GatewayFactoryInterface $coreGatewayFactory = null)
-    {
-        $this->coreGatewayFactory = $coreGatewayFactory ?: new CoreGatewayFactory();
-        $this->defaultConfig = $defaultConfig;
-    }
-
-    /**
      * {@inheritDoc}
      */
-    public function create(array $config = array())
+    protected function populateConfig(ArrayObject $config)
     {
-        return $this->coreGatewayFactory->create($this->createConfig($config));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function createConfig(array $config = array())
-    {
-        $config = ArrayObject::ensureArrayObject($config);
-        $config->defaults($this->defaultConfig);
-        $config->defaults($this->coreGatewayFactory->createConfig((array) $config));
-
         $config['payum.default_options'] = array(
             'account_number' => '',
             'encryption_key' => '',
@@ -139,7 +106,5 @@ class PayexGatewayFactory implements GatewayFactoryInterface
             'payum.action.api.complete_order' => new CompleteOrderAction(),
             'payum.action.api.check_order' => new CheckOrderAction(),
         ));
-
-        return (array) $config;
     }
 }
