@@ -5,48 +5,15 @@ use Payum\Be2Bill\Action\ConvertPaymentAction;
 use Payum\Be2Bill\Action\CaptureAction;
 use Payum\Be2Bill\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\GatewayFactory as CoreGatewayFactory;
-use Payum\Core\GatewayFactoryInterface;
+use Payum\Core\GatewayFactory;
 
-class Be2BillDirectGatewayFactory implements GatewayFactoryInterface
+class Be2BillDirectGatewayFactory extends GatewayFactory
 {
     /**
-     * @var GatewayFactoryInterface
-     */
-    protected $coreGatewayFactory;
-
-    /**
-     * @var array
-     */
-    private $defaultConfig;
-
-    /**
-     * @param array $defaultConfig
-     * @param GatewayFactoryInterface $coreGatewayFactory
-     */
-    public function __construct(array $defaultConfig = array(), GatewayFactoryInterface $coreGatewayFactory = null)
-    {
-        $this->coreGatewayFactory = $coreGatewayFactory ?: new CoreGatewayFactory();
-        $this->defaultConfig = $defaultConfig;
-    }
-
-    /**
      * {@inheritDoc}
      */
-    public function create(array $config = array())
+    protected function populateConfig(ArrayObject $config)
     {
-        return $this->coreGatewayFactory->create($this->createConfig($config));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function createConfig(array $config = array())
-    {
-        $config = ArrayObject::ensureArrayObject($config);
-        $config->defaults($this->defaultConfig);
-        $config->defaults($this->coreGatewayFactory->createConfig((array) $config));
-
         $config->defaults(array(
             'payum.factory_name' => 'be2bill_direct',
             'payum.factory_title' => 'Be2Bill Direct',
@@ -75,7 +42,5 @@ class Be2BillDirectGatewayFactory implements GatewayFactoryInterface
                 ));
             };
         }
-
-        return (array) $config;
     }
 }

@@ -2,8 +2,7 @@
 namespace Payum\Klarna\Checkout;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\GatewayFactory as CoreGatewayFactory;
-use Payum\Core\GatewayFactoryInterface;
+use Payum\Core\GatewayFactory;
 use Payum\Klarna\Checkout\Action\Api\CreateOrderAction;
 use Payum\Klarna\Checkout\Action\Api\FetchOrderAction;
 use Payum\Klarna\Checkout\Action\Api\UpdateOrderAction;
@@ -13,45 +12,13 @@ use Payum\Klarna\Checkout\Action\NotifyAction;
 use Payum\Klarna\Checkout\Action\StatusAction;
 use Payum\Klarna\Checkout\Action\SyncAction;
 
-class KlarnaCheckoutGatewayFactory implements GatewayFactoryInterface
+class KlarnaCheckoutGatewayFactory extends GatewayFactory
 {
     /**
-     * @var GatewayFactoryInterface
-     */
-    protected $coreGatewayFactory;
-
-    /**
-     * @var array
-     */
-    private $defaultConfig;
-
-    /**
-     * @param array $defaultConfig
-     * @param GatewayFactoryInterface $coreGatewayFactory
-     */
-    public function __construct(array $defaultConfig = array(), GatewayFactoryInterface $coreGatewayFactory = null)
-    {
-        $this->coreGatewayFactory = $coreGatewayFactory ?: new CoreGatewayFactory();
-        $this->defaultConfig = $defaultConfig;
-    }
-
-    /**
      * {@inheritDoc}
      */
-    public function create(array $config = array())
+    protected function populateConfig(ArrayObject $config)
     {
-        return $this->coreGatewayFactory->create($this->createConfig($config));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function createConfig(array $config = array())
-    {
-        $config = ArrayObject::ensureArrayObject($config);
-        $config->defaults($this->defaultConfig);
-        $config->defaults($this->coreGatewayFactory->createConfig((array) $config));
-
         $config->defaults(array(
             'payum.factory_name' => 'klarna_checkout',
             'payum.factory_title' => 'Klarna Checkout',
@@ -99,7 +66,5 @@ class KlarnaCheckoutGatewayFactory implements GatewayFactoryInterface
                 return $klarnaConfig;
             };
         }
-
-        return (array) $config;
     }
 }

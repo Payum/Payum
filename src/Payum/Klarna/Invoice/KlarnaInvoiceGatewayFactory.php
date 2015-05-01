@@ -3,8 +3,7 @@ namespace Payum\Klarna\Invoice;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
-use Payum\Core\GatewayFactory as CoreGatewayFactory;
-use Payum\Core\GatewayFactoryInterface;
+use Payum\Core\GatewayFactory;
 use Payum\Klarna\Invoice\Action\Api\ActivateAction;
 use Payum\Klarna\Invoice\Action\Api\ActivateReservationAction;
 use Payum\Klarna\Invoice\Action\Api\CancelReservationAction;
@@ -23,45 +22,13 @@ use Payum\Klarna\Invoice\Action\RefundAction;
 use Payum\Klarna\Invoice\Action\StatusAction;
 use Payum\Klarna\Invoice\Action\SyncAction;
 
-class KlarnaInvoiceGatewayFactory implements GatewayFactoryInterface
+class KlarnaInvoiceGatewayFactory extends GatewayFactory
 {
     /**
-     * @var GatewayFactoryInterface
-     */
-    protected $coreGatewayFactory;
-
-    /**
-     * @var array
-     */
-    private $defaultConfig;
-
-    /**
-     * @param array $defaultConfig
-     * @param GatewayFactoryInterface $coreGatewayFactory
-     */
-    public function __construct(array $defaultConfig = array(), GatewayFactoryInterface $coreGatewayFactory = null)
-    {
-        $this->coreGatewayFactory = $coreGatewayFactory ?: new CoreGatewayFactory();
-        $this->defaultConfig = $defaultConfig;
-    }
-
-    /**
      * {@inheritDoc}
      */
-    public function create(array $config = array())
+    protected function populateConfig(ArrayObject $config)
     {
-        return $this->coreGatewayFactory->create($this->createConfig($config));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function createConfig(array $config = array())
-    {
-        $config = ArrayObject::ensureArrayObject($config);
-        $config->defaults($this->defaultConfig);
-        $config->defaults($this->coreGatewayFactory->createConfig((array) $config));
-
         $config->defaults(array(
             'payum.factory_name' => 'klarna_invoice',
             'payum.factory_title' => 'Klarna Invoice',
@@ -136,7 +103,5 @@ class KlarnaInvoiceGatewayFactory implements GatewayFactoryInterface
                 return $klarnaConfig;
             };
         }
-
-        return (array) $config;
     }
 }

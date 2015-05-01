@@ -8,11 +8,11 @@ class Be2billOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementGatewayFactoryInterface()
+    public function shouldSubClassGatewayFactory()
     {
         $rc = new \ReflectionClass('Payum\Be2Bill\Be2BillOffsiteGatewayFactory');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayFactoryInterface'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\GatewayFactory'));
     }
 
     /**
@@ -30,7 +30,7 @@ class Be2billOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new Be2BillOffsiteGatewayFactory();
 
-        $this->assertAttributeInstanceOf('Payum\Core\GatewayFactory', 'coreGatewayFactory', $factory);
+        $this->assertAttributeInstanceOf('Payum\Core\CoreGatewayFactory', 'coreGatewayFactory', $factory);
     }
 
     /**

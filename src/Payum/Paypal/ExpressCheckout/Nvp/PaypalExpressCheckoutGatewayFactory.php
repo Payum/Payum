@@ -2,8 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\GatewayFactory as CoreGatewayFactory;
-use Payum\Core\GatewayFactoryInterface;
+use Payum\Core\GatewayFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoExpressCheckoutPaymentAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction;
@@ -23,45 +22,13 @@ use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsSyncAction;
 
-class PaypalExpressCheckoutGatewayFactory implements GatewayFactoryInterface
+class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
 {
     /**
-     * @var GatewayFactoryInterface
-     */
-    protected $coreGatewayFactory;
-
-    /**
-     * @var array
-     */
-    private $defaultConfig;
-
-    /**
-     * @param array $defaultConfig
-     * @param GatewayFactoryInterface $coreGatewayFactory
-     */
-    public function __construct(array $defaultConfig = array(), GatewayFactoryInterface $coreGatewayFactory = null)
-    {
-        $this->coreGatewayFactory = $coreGatewayFactory ?: new CoreGatewayFactory();
-        $this->defaultConfig = $defaultConfig;
-    }
-
-    /**
      * {@inheritDoc}
      */
-    public function create(array $config = array())
+    protected function populateConfig(ArrayObject $config)
     {
-        return $this->coreGatewayFactory->create($this->createConfig($config));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function createConfig(array $config = array())
-    {
-        $config = ArrayObject::ensureArrayObject($config);
-        $config->defaults($this->defaultConfig);
-        $config->defaults($this->coreGatewayFactory->createConfig((array) $config));
-
         $config->defaults(array(
             'payum.factory_name' => 'paypal_express_checkout_nvp',
             'payum.factory_title' => 'PayPal ExpressCheckout',
@@ -110,7 +77,5 @@ class PaypalExpressCheckoutGatewayFactory implements GatewayFactoryInterface
                 return new Api($paypalConfig, $config['buzz.client']);
             };
         }
-
-        return (array) $config;
     }
 }

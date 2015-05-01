@@ -2,53 +2,20 @@
 namespace Payum\Stripe;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\GatewayFactory as CoreGatewayFactory;
-use Payum\Core\GatewayFactoryInterface;
+use Payum\Core\GatewayFactory;
 use Payum\Stripe\Action\Api\CreateChargeAction;
 use Payum\Stripe\Action\Api\ObtainTokenAction;
 use Payum\Stripe\Action\CaptureAction;
 use Payum\Stripe\Action\ConvertPaymentAction;
 use Payum\Stripe\Action\StatusAction;
 
-class StripeCheckoutGatewayFactory implements GatewayFactoryInterface
+class StripeCheckoutGatewayFactory extends GatewayFactory
 {
     /**
-     * @var GatewayFactoryInterface
-     */
-    protected $coreGatewayFactory;
-
-    /**
-     * @var array
-     */
-    private $defaultConfig;
-
-    /**
-     * @param array $defaultConfig
-     * @param GatewayFactoryInterface $coreGatewayFactory
-     */
-    public function __construct(array $defaultConfig = array(), GatewayFactoryInterface $coreGatewayFactory = null)
-    {
-        $this->coreGatewayFactory = $coreGatewayFactory ?: new CoreGatewayFactory();
-        $this->defaultConfig = $defaultConfig;
-    }
-
-    /**
      * {@inheritDoc}
      */
-    public function create(array $config = array())
+    protected function populateConfig(ArrayObject $config)
     {
-        return $this->coreGatewayFactory->create($this->createConfig($config));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function createConfig(array $config = array())
-    {
-        $config = ArrayObject::ensureArrayObject($config);
-        $config->defaults($this->defaultConfig);
-        $config->defaults($this->coreGatewayFactory->createConfig((array) $config));
-
         $config->defaults(array(
             'payum.factory_name' => 'stripe_checkout',
             'payum.factory_title' => 'Stripe Checkout',
@@ -78,7 +45,5 @@ class StripeCheckoutGatewayFactory implements GatewayFactoryInterface
                 return new Keys($config['publishable_key'], $config['secret_key']);
             };
         }
-
-        return (array) $config;
     }
 }

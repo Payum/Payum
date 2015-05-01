@@ -8,11 +8,11 @@ class PaypalProCheckoutGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementGatewayFactoryInterface()
+    public function shouldSubClassGatewayFactory()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayFactoryInterface'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\GatewayFactory'));
     }
 
     /**
@@ -30,7 +30,7 @@ class PaypalProCheckoutGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new PaypalProCheckoutGatewayFactory();
 
-        $this->assertAttributeInstanceOf('Payum\Core\GatewayFactory', 'coreGatewayFactory', $factory);
+        $this->assertAttributeInstanceOf('Payum\Core\CoreGatewayFactory', 'coreGatewayFactory', $factory);
     }
 
     /**

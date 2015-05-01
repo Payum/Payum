@@ -8,11 +8,11 @@ class AuthorizeNetAimGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldImplementGatewayFactoryInterface()
+    public function shouldSubClassGatewayFactory()
     {
         $rc = new \ReflectionClass('Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayFactoryInterface'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\GatewayFactory'));
     }
 
     /**
@@ -30,7 +30,7 @@ class AuthorizeNetAimGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new AuthorizeNetAimGatewayFactory();
 
-        $this->assertAttributeInstanceOf('Payum\Core\GatewayFactory', 'coreGatewayFactory', $factory);
+        $this->assertAttributeInstanceOf('Payum\Core\CoreGatewayFactory', 'coreGatewayFactory', $factory);
     }
 
     /**

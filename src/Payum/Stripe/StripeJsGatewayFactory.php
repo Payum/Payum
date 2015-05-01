@@ -8,9 +8,8 @@ class StripeJsGatewayFactory extends StripeCheckoutGatewayFactory
     /**
      * {@inheritDoc}
      */
-    public function createConfig(array $config = array())
+    protected function populateConfig(ArrayObject $config)
     {
-        $config = ArrayObject::ensureArrayObject($config);
         $config->defaults(array(
             'payum.factory_name' => 'stripe_js',
             'payum.factory_title' => 'Stripe.Js',
@@ -18,6 +17,6 @@ class StripeJsGatewayFactory extends StripeCheckoutGatewayFactory
             'payum.template.obtain_token' => '@PayumStripe/Action/obtain_js_token.html.twig',
         ));
 
-        return parent::createConfig((array) $config);
+        parent::populateConfig($config);
     }
 }
