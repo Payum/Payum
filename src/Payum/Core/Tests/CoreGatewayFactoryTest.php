@@ -13,7 +13,7 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Core\CoreGatewayFactory');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\CoreGatewayFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayFactoryInterface'));
     }
 
     /**
