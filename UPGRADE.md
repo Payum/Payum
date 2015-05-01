@@ -6,7 +6,7 @@ Library [upgrades](https://github.com/Payum/Payum/blob/master/UPGRADE.md).
 
 * Everything that were Payment and PaymentXX were renamed to Gateway and GatewayXXX.
 * Order was renamed to Payment.
-* [config] `contexts` section was renamed to `payments`.
+* [config] `payments` section was renamed to `gateways`.
 
 ## 0.13 to 0.14
 
