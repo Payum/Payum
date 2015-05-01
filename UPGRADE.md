@@ -1,5 +1,13 @@
 # Upgrades
 
+Library [upgrades](https://github.com/Payum/Payum/blob/master/UPGRADE.md).
+
+## 0.14 to 0.15
+
+* Everything that were Payment and PaymentXX were renamed to Gateway and GatewayXXX.
+* Order was renamed to Payment.
+* [config] `contexts` section was renamed to `payments`.
+
 ## 0.13 to 0.14
 
 * `be2bill_onsite` payment was renamed to `be2bill_offsite`.
