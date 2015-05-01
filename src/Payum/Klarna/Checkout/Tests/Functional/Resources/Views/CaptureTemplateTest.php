@@ -23,7 +23,7 @@ class CaptureTemplateTest extends \PHPUnit_Framework_TestCase
             </head>
     <body>
             theSnippet
-            </body>
+                    </body>
 </html>
 
 HTML;
