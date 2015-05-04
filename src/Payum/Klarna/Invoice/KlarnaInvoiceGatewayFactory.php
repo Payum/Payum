@@ -29,6 +29,10 @@ class KlarnaInvoiceGatewayFactory extends GatewayFactory
      */
     protected function populateConfig(ArrayObject $config)
     {
+        if (!class_exists('KlarnaCurrency')) {
+            throw new \LogicException('You must install "fp/klarna-invoice" library.');
+        }
+
         $config->defaults(array(
             'payum.factory_name' => 'klarna_invoice',
             'payum.factory_title' => 'Klarna Invoice',

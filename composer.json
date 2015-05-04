@@ -41,12 +41,6 @@
         "payum/iso4217": "~1.0",
         "kriswallsmith/buzz": "~0.13",
         "league/url": "~3.0",
-        "ajbdev/authorizenet-php-api": "1.1.*",
-        "paypal/rest-api-sdk-php" : "0.5.*",
-        "klarna/checkout": "~1|~2.0",
-        "fp/klarna-invoice": "0.1.*",
-        "stripe/stripe-php": "~1.0",
-        "ext-soap": "*",
         "twig/twig": "~1.0"
     },
     "require-dev": {
@@ -63,7 +57,13 @@
         "symfony/http-kernel": "~2.3",
         "symfony/http-foundation": "~2.3",
         "symfony/form": "~2.3",
-        "symfony/validator": "~2.6"
+        "symfony/validator": "~2.6",
+        "ajbdev/authorizenet-php-api": "1.1.*",
+        "paypal/rest-api-sdk-php" : "0.5.*",
+        "klarna/checkout": "~1|~2.0",
+        "fp/klarna-invoice": "0.1.*",
+        "stripe/stripe-php": "~1.0",
+        "ext-soap": "*"
     },
     "replace": {
         "payum/core": "self.version",
@@ -89,7 +89,13 @@
         "symfony/http-kernel": "If you want to use HttpRequestVerifier from symfony's bridge",
         "symfony/http-foundation": "If you want to use HttpRequestVerifier or HttpResponse reply from symfony's bridge",
         "symfony/form": "If you want to use forms",
-        "monolog/monolog": "In case you want to use PSR-3 logger"
+        "monolog/monolog": "In case you want to use PSR-3 logger",
+        "ajbdev/authorizenet-php-api": "If you want to use Authorizenet.NET install ajbdev/authorizenet-php-api:1.1.* library",
+        "paypal/rest-api-sdk-php" : "If you want to use PayPal REST API install paypal/rest-api-sdk-php:0.5.* library",
+        "klarna/checkout": "If you want to use Klarna Checkout install klarna/checkout:~1|~2.0 library",
+        "fp/klarna-invoice": "If you want to use Klarna Invoice install fp/klarna-invoice:0.1.* library",
+        "stripe/stripe-php": "If you want to use Stripe install stripe/stripe-php:~1.0 library",
+        "ext-soap": "If you want to use Payex install ext-soap:* library"
     },
     "config": {
         "bin-dir": "bin"

@@ -1,5 +1,16 @@
 # Upgrades
 
+## 0.15 to never
+
+Libraries and extension dependencies are not required now. You must install them if you need.
+This make sense for:
+* "Authorizenet.NET"
+* "PayPal REST API"
+* "Klarna Checkout"
+* "Klarna Invoice"
+* "Stripe"
+* "Payex"
+
 ## 0.14 to 0.15
 
 * [order] The method getCreditCard was added to `OrderInterface` interface.
