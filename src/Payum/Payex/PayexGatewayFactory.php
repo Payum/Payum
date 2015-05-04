@@ -34,7 +34,7 @@ class PayexGatewayFactory extends GatewayFactory
     protected function populateConfig(ArrayObject $config)
     {
         if (!class_exists('SoapClient')) {
-            throw new \LogicException('You must install "ext-soap" library.');
+            throw new \LogicException('You must install "ext-soap" extension.');
         }
 
         $config['payum.default_options'] = array(
