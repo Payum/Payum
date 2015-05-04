@@ -30,7 +30,7 @@ class KlarnaInvoiceGatewayFactory extends GatewayFactory
     protected function populateConfig(ArrayObject $config)
     {
         if (!class_exists('KlarnaException')) {
-            throw new LogicException('You must install "fp/klarna-invoice" library.');
+            throw new \LogicException('You must install "fp/klarna-invoice" library.');
         }
 
         $config->defaults(array(
