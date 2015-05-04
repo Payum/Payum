@@ -19,7 +19,7 @@ class KlarnaCheckoutGatewayFactory extends GatewayFactory
      */
     protected function populateConfig(ArrayObject $config)
     {
-        if (!class_exists('\\Klarna\\Checkout\\Klarna_Checkout_Exception')) {
+        if (!class_exists('\Klarna\Checkout\Order')) {
             throw new \LogicException('You must install "klarna/checkout" library.');
         }
 
