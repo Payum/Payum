@@ -19,6 +19,10 @@ class PaypalRestGatewayFactory extends GatewayFactory
      */
     protected function populateConfig(ArrayObject $config)
     {
+        if (!class_exists('\\PayPal\\Auth\\OAuthTokenCredential')) {
+            throw new LogicException('You must install "paypal/rest-api-sdk-php" library.');
+        }
+
         $config->defaults(array(
             'payum.factory_name' => 'paypal_rest',
             'payum.factory_title' => 'PayPal Rest',

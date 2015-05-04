@@ -15,6 +15,10 @@ class AuthorizeNetAimGatewayFactory extends GatewayFactory
      */
     protected function populateConfig(ArrayObject $config)
     {
+        if (!class_exists('AuthorizeNetException')) {
+            throw new LogicException('You must install "ajbdev/authorizenet-php-api" library.');
+        }
+
         $config->defaults(array(
             'payum.factory_name' => 'authorize_net_aim',
             'payum.factory_title' => 'Authorize.NET AIM',

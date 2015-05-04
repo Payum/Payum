@@ -16,6 +16,10 @@ class StripeCheckoutGatewayFactory extends GatewayFactory
      */
     protected function populateConfig(ArrayObject $config)
     {
+        if (!class_exists('Stripe')) {
+            throw new LogicException('You must install "stripe/stripe-php" library.');
+        }
+
         $config->defaults(array(
             'payum.factory_name' => 'stripe_checkout',
             'payum.factory_title' => 'Stripe Checkout',
