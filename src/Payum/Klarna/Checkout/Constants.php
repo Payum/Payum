@@ -17,6 +17,8 @@ final class Constants
 
     const BASE_URI_SANDBOX = 'https://checkout.testdrive.klarna.com/checkout/orders';
 
+    const BASE_URI_RECURRING_SANDBOX = 'https://checkout.testdrive.klarna.com/checkout/recurring/{recurring_token}/orders';
+
     const BASE_URI_RECURRING_LIVE = 'https://checkout.klarna.com/checkout/recurring/{recurring_token}/orders';
 
     /**
