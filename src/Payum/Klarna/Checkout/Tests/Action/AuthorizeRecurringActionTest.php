@@ -151,12 +151,12 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $this->assertEquals('theToken', $model['recurring_token']);
     }
 
-    public function testShouldForceRecurringConfigAndRollbackBackAfterExecte()
+    public function testShouldForceRecurringConfigAndRollbackBackAfterExecution()
     {
         $config = new Config();
         $config->acceptHeader = 'anAcceptHeader';
         $config->contentType = 'aContentType';
-        $config->baseUri = 'aBaseUri';
+        $config->baseUri = Constants::BASE_URI_SANDBOX;
         $config->merchantId = 'aMerchantId';
         $config->secret = 'aSecret';
 
@@ -181,7 +181,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
 
                 $testCase->assertEquals(Constants::ACCEPT_HEADER_RECURRING_ORDER_ACCEPTED_V1, $config->acceptHeader);
                 $testCase->assertEquals(Constants::CONTENT_TYPE_RECURRING_ORDER_V1, $config->contentType);
-                $testCase->assertEquals('https://checkout.klarna.com/checkout/recurring/theToken/orders', $config->baseUri);
+                $testCase->assertEquals('https://checkout.testdrive.klarna.com/checkout/recurring/theToken/orders', $config->baseUri);
                 $testCase->assertEquals('aMerchantId', $config->merchantId);
                 $testCase->assertEquals('aSecret', $config->secret);
             }))
@@ -199,7 +199,56 @@ class AuthorizeRecurringActionTest extends GenericActionTest
 
         $testCase->assertEquals('anAcceptHeader', $config->acceptHeader);
         $testCase->assertEquals('aContentType', $config->contentType);
-        $testCase->assertEquals('aBaseUri', $config->baseUri);
+        $testCase->assertEquals(Constants::BASE_URI_SANDBOX, $config->baseUri);
+        $testCase->assertEquals('aMerchantId', $config->merchantId);
+        $testCase->assertEquals('aSecret', $config->secret);
+    }
+
+    public function testShouldUseLiveRecurringBaseUriIfConfigHasLiveBaseUri()
+    {
+        $config = new Config();
+        $config->acceptHeader = 'anAcceptHeader';
+        $config->contentType = 'aContentType';
+        $config->baseUri = Constants::BASE_URI_LIVE;
+        $config->merchantId = 'aMerchantId';
+        $config->secret = 'aSecret';
+
+        $orderMock = $this->createOrderMock();
+        $orderMock
+            ->expects($this->once())
+            ->method('marshal')
+            ->will($this->returnValue(array(
+                'reservation' => 'theReservation',
+            )))
+        ;
+
+        $testCase = $this;
+
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\CreateOrder'))
+            ->will($this->returnCallback(function (CreateOrder $request) use ($orderMock, $config, $testCase) {
+                $request->setOrder($orderMock);
+
+                $testCase->assertEquals('https://checkout.klarna.com/checkout/recurring/theToken/orders', $config->baseUri);
+            }))
+        ;
+
+        $model = new \ArrayObject(array(
+            'recurring_token' => 'theToken',
+        ));
+
+        $action = new AuthorizeRecurringAction();
+        $action->setGateway($gatewayMock);
+        $action->setApi($config);
+
+        $action->execute(new Authorize($model));
+
+        $testCase->assertEquals('anAcceptHeader', $config->acceptHeader);
+        $testCase->assertEquals('aContentType', $config->contentType);
+        $testCase->assertEquals(Constants::BASE_URI_LIVE, $config->baseUri);
         $testCase->assertEquals('aMerchantId', $config->merchantId);
         $testCase->assertEquals('aSecret', $config->secret);
     }

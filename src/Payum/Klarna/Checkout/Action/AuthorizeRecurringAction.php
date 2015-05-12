@@ -54,9 +54,14 @@ class AuthorizeRecurringAction extends GatewayAwareAction implements ApiAwareInt
         try {
             unset($model['recurring_token']);
 
+            $baseUri = Constants::BASE_URI_LIVE == $backupConfig->baseUri ?
+                Constants::BASE_URI_RECURRING_LIVE :
+                Constants::BASE_URI_RECURRING_SANDBOX
+            ;
+
             $this->config->contentType = Constants::CONTENT_TYPE_RECURRING_ORDER_V1;
             $this->config->acceptHeader = Constants::ACCEPT_HEADER_RECURRING_ORDER_ACCEPTED_V1;
-            $this->config->baseUri = str_replace('{recurring_token}', $token, Constants::BASE_URI_RECURRING_LIVE);
+            $this->config->baseUri = str_replace('{recurring_token}', $token, $baseUri);
 
             $this->gateway->execute($createOrderRequest = new CreateOrder($model));
 
