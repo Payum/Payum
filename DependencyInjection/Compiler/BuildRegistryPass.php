@@ -31,11 +31,11 @@ class BuildRegistryPass implements CompilerPassInterface
         $gatewaysFactoriesIds = array();
         foreach ($container->findTaggedServiceIds('payum.gateway_factory') as $gatewayFactoryId => $tagAttributes) {
             foreach ($tagAttributes as $attributes) {
-                $gatewaysFactoriesIds[$attributes['name']] = $gatewayFactoryId;
+                $gatewaysFactoriesIds[$attributes['factory_name']] = $gatewayFactoryId;
 
-                $availableGatewayFactories[$attributes['name']] = isset($attributes['human_name']) ?
+                $availableGatewayFactories[$attributes['factory_name']] = isset($attributes['human_name']) ?
                     $attributes['human_name'] :
-                    $attributes['name']
+                    $attributes['factory_name']
                 ;
             }
         }
