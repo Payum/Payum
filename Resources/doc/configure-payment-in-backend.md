@@ -43,7 +43,7 @@ next, you have to add mapping of the basic entity you've just extended, and conf
 #app/config/config.yml
 
 payum:
-    dynaminc_gateways:
+    dynamic_gateways:
         sonata_admin: true
         config_storage: 
             Acme\PaymentBundle\Entity\GatewayConfig: { doctrine: orm }
