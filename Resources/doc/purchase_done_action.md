@@ -40,7 +40,7 @@ It is the route of url you will be redirected after capture done its job. Let's 
         
         // or Payum can fetch the model for you while executing a request (Preferred).
         $gateway->execute($status = new GetHumanStatus($token));
-        $details = $status->getFirstModel());
+        $details = $status->getFirstModel();
         
         // you have order and payment status 
         // so you can do whatever you want for example you can just print status and payment details.
