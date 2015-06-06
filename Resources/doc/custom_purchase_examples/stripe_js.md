@@ -49,7 +49,7 @@ class PaymentController extends Controller
 {
     public function prepareStripeJsPaymentAction(Request $request)
     {
-        $paymentName = 'your_gateway_name';
+        $gatewayName = 'your_gateway_name';
 
         $storage = $this->getPayum()->getStorage('Acme\GatewayBundle\Entity\PaymentDetails');
 
