@@ -18,6 +18,7 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AuthorizeNetAim
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\StripeCheckoutGatewayFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\StripeJsGatewayFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\CustomStorageFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\Propel1StorageFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\DoctrineStorageFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\FilesystemStorageFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\PayumExtension;
@@ -51,6 +52,7 @@ class PayumBundle extends Bundle
         $extension->addStorageFactory(new FilesystemStorageFactory);
         $extension->addStorageFactory(new DoctrineStorageFactory);
         $extension->addStorageFactory(new CustomStorageFactory);
+        $extension->addStorageFactory(new Propel1StorageFactory);
 
         $container->addCompilerPass(new BuildRegistryPass());
         $container->addCompilerPass(new BuildGatewayFactoryPass);
