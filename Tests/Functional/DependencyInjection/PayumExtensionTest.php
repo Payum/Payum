@@ -20,6 +20,7 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PaypalProChecko
 use Payum\Bundle\PayumBundle\DependencyInjection\PayumExtension;
 use Payum\Core\Model\GatewayConfigInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Kernel;
 
 class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 {
@@ -137,8 +138,12 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
      *
      * @dataProvider provideGateways
      */
-    public function shouldLoadExtensionWithGateway($config, GatewayFactoryInterface $gatewayFactory)
+    public function shouldLoadExtensionWithGatewayBC($config, GatewayFactoryInterface $gatewayFactory)
     {
+        if (version_compare(Kernel::VERSION_ID, '20600') >= 0) {
+            $this->markTestSkipped('No need to test on symfony >= 2.6');
+        }
+
         $config = array(
             'security' => array(
                 'token_storage' => array(
@@ -175,6 +180,56 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
             $container->getDefinition('payum.'.$gatewayFactory->getName().'.a_gateway.gateway')->getFactoryService()
         );
         $this->assertEquals('create', $container->getDefinition('payum.'.$gatewayFactory->getName().'.a_gateway.gateway')->getFactoryMethod());
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider provideGateways
+     */
+    public function shouldLoadExtensionWithGateway($config, GatewayFactoryInterface $gatewayFactory)
+    {
+        if (version_compare(Kernel::VERSION_ID, '20600') < 0) {
+            $this->markTestSkipped('No need to test on symfony < 2.6');
+        }
+
+        $config = array(
+            'security' => array(
+                'token_storage' => array(
+                    'Payum\Core\Model\Token' => array(
+                        'filesystem' => array(
+                            'storage_dir' => sys_get_temp_dir(),
+                            'id_property' => 'hash'
+                        )
+                    )
+                )
+            ),
+            'gateways' => array(
+                'a_gateway' => array(
+                    $gatewayFactory->getName() => $config,
+                )
+            )
+        );
+
+        $configs = array($config);
+
+        $container = new ContainerBuilder();
+        $container->setParameter('kernel.debug', false);
+
+        $extension = new PayumExtension;
+        $extension->addGatewayFactory($gatewayFactory);
+        $extension->addStorageFactory(new FilesystemStorageFactory);
+
+        $extension->load($configs, $container);
+
+        $this->assertTrue($container->hasDefinition('payum.'.$gatewayFactory->getName().'.factory'));
+        $this->assertTrue($container->hasDefinition('payum.'.$gatewayFactory->getName().'.a_gateway.gateway'));
+
+        $factory = $container->getDefinition('payum.'.$gatewayFactory->getName().'.a_gateway.gateway')->getFactory();
+        $this->assertNotEmpty($factory);
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factory[0]);
+        $this->assertEquals('payum.'.$gatewayFactory->getName().'.factory', (string) $factory[0]);
+        $this->assertEquals('create', $factory[1]);
     }
 
     /**

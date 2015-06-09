@@ -51,13 +51,22 @@
         "symfony/browser-kit": "~2.3",
         "symfony/class-loader": "~2.3",
         "sonata-project/admin-bundle": "~2.0",
-        "doctrine/orm": "*",
+        "doctrine/orm": "2.3.*",
         "payum/payum": "1.0.*@dev",
         "payum/omnipay-bridge": "1.0.*@dev",
         "payum/jms-payment-bridge": "1.0.*@dev",
         "omnipay/dummy": "~2.0",
         "omnipay/stripe": "~2.0",
-        "omnipay/paypal": "~2.0"
+        "omnipay/paypal": "~2.0",
+
+        "ext-curl": "*",
+        "ext-pdo_sqlite": "*",
+        "ajbdev/authorizenet-php-api": "1.1.*",
+        "paypal/rest-api-sdk-php" : "0.5.*",
+        "klarna/checkout": "~1|~2.0",
+        "fp/klarna-invoice": "0.1.*",
+        "stripe/stripe-php": "~1.0",
+        "ext-soap": "*"
     },
     "suggest": {
         "sonata-project/admin-bundle": "If you want to configure payments in the backend."

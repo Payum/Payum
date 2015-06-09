@@ -12,6 +12,7 @@ env:
   - SYMFONY_VERSION="2.4.*,>=2.4.8"
   - SYMFONY_VERSION="2.5.*,>=2.5.2"
   - SYMFONY_VERSION=2.6.*
+  - SYMFONY_VERSION=2.7.*
 
 sudo: false
 

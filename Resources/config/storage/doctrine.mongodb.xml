@@ -16,11 +16,10 @@
 
         <service
             id="payum.document_manager"
-            factory-service="doctrine_mongodb"
-            factory-method="getManager"
             class="Doctrine\ODM\MongoDB\DocumentManager"
             public="false"
         >
+            <factory service="doctrine_mongodb" method="getManager" />
         </service>
     </services>
 </container>

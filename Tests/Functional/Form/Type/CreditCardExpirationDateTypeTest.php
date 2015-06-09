@@ -47,7 +47,7 @@ class CreditCardExpirationDateTypeTest extends WebTestCase
             'year' => 2020,
         ));
 
-        $this->assertTrue($form->isValid(), $form->getErrorsAsString());
+        $this->assertTrue($form->isValid(), $form->getErrors(true, false));
 
         $data = $form->getData();
         $this->assertInstanceOf('DateTime', $data);

@@ -51,7 +51,7 @@ class CreditCardTypeTest extends WebTestCase
             )
         ));
 
-        $this->assertTrue($form->isValid(), $form->getErrorsAsString());
+        $this->assertTrue($form->isValid(), $form->getErrors(true, false));
 
         /** @var CreditCardInterface $card */
         $card = $form->getData();

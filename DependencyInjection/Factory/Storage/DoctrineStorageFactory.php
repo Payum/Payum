@@ -6,6 +6,7 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\HttpKernel\Kernel;
 
 class DoctrineStorageFactory extends AbstractStorageFactory
 {
@@ -39,7 +40,12 @@ class DoctrineStorageFactory extends AbstractStorageFactory
     protected function createStorage(ContainerBuilder $container, $modelClass, array $config)
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/storage'));
-        $loader->load('doctrine.'.$config['driver'].'.xml');
+
+        if (version_compare(Kernel::VERSION_ID, '20600') >= 0) {
+            $loader->load('doctrine.'.$config['driver'].'.xml');
+        } else {
+            $loader->load('doctrine.'.$config['driver'].'-bc-26.xml');
+        }
 
         $storage = new DefinitionDecorator(sprintf('payum.storage.doctrine.%s', $config['driver']));
         $storage->setPublic(true);
