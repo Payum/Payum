@@ -19,15 +19,7 @@ class Propel1StorageFactory  extends AbstractStorageFactory{
     {
         return "propel1";
     }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public function addConfiguration(ArrayNodeDefinition $builder)
-    {
-        parent::addConfiguration($builder);     
-    }
-    
+        
     /**
      * {@inheritDoc}
      */

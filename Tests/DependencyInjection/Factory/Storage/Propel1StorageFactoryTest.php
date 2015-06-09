@@ -44,31 +44,6 @@ class Propel1StorageFactoryTest extends \PHPUnit_Framework_TestCase
     
     /**
      * @test
-     */
-    public function shouldAllowAddConfiguration()
-    {
-        $factory = new Propel1StorageFactory;
-
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('foo');
-
-        $factory->addConfiguration($rootNode);
-
-        $processor = new Processor();
-        $config = $processor->process($tb->buildTree(), array(array(
-            'id_property' => 'id',
-            'storage_dir' => '/the/path/to/store/models',
-        )));
-
-        $this->assertArrayHasKey('id_property', $config);
-        $this->assertEquals('id', $config['id_property']);
-
-        $this->assertArrayHasKey('storage_dir', $config);
-        $this->assertEquals('/the/path/to/store/models', $config['storage_dir']);
-    }
-    
-    /**
-     * @test
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "storage_dir" at path "foo" must be configured.

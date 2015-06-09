@@ -23,14 +23,6 @@ class Propel2StorageFactory  extends AbstractStorageFactory{
     /**
      * {@inheritDoc}
      */
-    public function addConfiguration(ArrayNodeDefinition $builder)
-    {
-        parent::addConfiguration($builder);     
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
     protected function createStorage(ContainerBuilder $container, $modelClass, array $config)
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/storage'));
