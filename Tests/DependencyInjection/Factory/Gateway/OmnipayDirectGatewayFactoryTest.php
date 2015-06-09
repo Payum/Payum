@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OmnipayDirectGatewayFactory;
+use Symfony\Component\HttpKernel\Kernel;
 
 class OmnipayDirectGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -136,8 +137,12 @@ class OmnipayDirectGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowCreateGatewayAndReturnItsId()
+    public function shouldAllowCreateGatewayAndReturnItsIdBC()
     {
+        if (version_compare(Kernel::VERSION_ID, '20600') >= 0) {
+            $this->markTestSkipped('No need to test on symfony >= 2.6');
+        }
+
         $factory = new OmnipayDirectGatewayFactory;
 
         $container = new ContainerBuilder();
@@ -161,6 +166,44 @@ class OmnipayDirectGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         //guard
         $this->assertNotEmpty($gateway->getFactoryMethod());
         $this->assertNotEmpty($gateway->getFactoryService());
+        $this->assertNotEmpty($gateway->getArguments());
+
+        $config = $gateway->getArgument(0);
+
+        $this->assertEquals('aGatewayName', $config['payum.gateway_name']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowCreateGatewayAndReturnItsId()
+    {
+        if (version_compare(Kernel::VERSION_ID, '20600') < 0) {
+            $this->markTestSkipped('No need to test on symfony < 2.6');
+        }
+
+        $factory = new OmnipayDirectGatewayFactory;
+
+        $container = new ContainerBuilder();
+
+        $gatewayId = $factory->create($container, 'aGatewayName', array(
+            'type' => 'PayPal_Express',
+            'options' => array(
+                'foo' => 'foo',
+                'bar' => 'bar',
+            ),
+            'actions' => array(),
+            'apis' => array(),
+            'extensions' => array(),
+        ));
+
+        $this->assertEquals('payum.omnipay_direct.aGatewayName.gateway', $gatewayId);
+        $this->assertTrue($container->hasDefinition($gatewayId));
+
+        $gateway = $container->getDefinition($gatewayId);
+
+        //guard
+        $this->assertNotEmpty($gateway->getFactory());
         $this->assertNotEmpty($gateway->getArguments());
 
         $config = $gateway->getArgument(0);

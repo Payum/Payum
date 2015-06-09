@@ -11,4 +11,4 @@ _payum_notify:
     prefix:   /
 
 foo:
-    pattern:      /foo/url
+    path:      /foo/url

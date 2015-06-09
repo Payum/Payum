@@ -4,7 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="payum_authorize_do" pattern="/payment/authorize/{payum_token}">
+    <route id="payum_authorize_do" path="/payment/authorize/{payum_token}">
         <default key="_controller">PayumBundle:Authorize:do</default>
     </route>
 </routes>

@@ -16,11 +16,10 @@
 
         <service 
             id="payum.entity_manager" 
-            factory-service="doctrine" 
-            factory-method="getManager" 
-            class="Doctrine\ORM\EntityManager" 
+            class="Doctrine\ORM\EntityManager"
             public="false"
         >
+            <factory service="doctrine" method="getManager" />
         </service>
     </services>
 </container>

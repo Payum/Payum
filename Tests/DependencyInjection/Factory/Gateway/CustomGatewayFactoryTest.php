@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\CustomGatewayFactory;
+use Symfony\Component\HttpKernel\Kernel;
 
 class CustomGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -89,8 +90,12 @@ class CustomGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowCreateGatewayAndReturnItsId()
+    public function shouldAllowCreateGatewayAndReturnItsIdBC()
     {
+        if (version_compare(Kernel::VERSION_ID, '20600') >= 0) {
+            $this->markTestSkipped('No need to test on symfony >= 2.6');
+        }
+
         $factory = new CustomGatewayFactory;
 
         $container = new ContainerBuilder;
@@ -113,6 +118,43 @@ class CustomGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         //guard
         $this->assertNotEmpty($gateway->getFactoryMethod());
         $this->assertNotEmpty($gateway->getFactoryService());
+        $this->assertNotEmpty($gateway->getArguments());
+
+        $config = $gateway->getArgument(0);
+
+        $this->assertEquals('aGatewayName', $config['payum.gateway_name']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowCreateGatewayAndReturnItsId()
+    {
+        if (version_compare(Kernel::VERSION_ID, '20600') < 0) {
+            $this->markTestSkipped('No need to test on symfony < 2.6');
+        }
+
+        $factory = new CustomGatewayFactory;
+
+        $container = new ContainerBuilder;
+
+        $gatewayId = $factory->create($container, 'aGatewayName', array(
+            'actions' => array(),
+            'apis' => array(),
+            'extensions' => array(),
+        ));
+
+        $this->assertEquals('payum.custom.aGatewayName.gateway', $gatewayId);
+        $this->assertTrue($container->hasDefinition($gatewayId));
+        $this->assertInstanceOf(
+            'Symfony\Component\DependencyInjection\Definition',
+            $container->getDefinition($gatewayId)
+        );
+
+        $gateway = $container->getDefinition($gatewayId);
+
+        //guard
+        $this->assertNotEmpty($gateway->getFactory());
         $this->assertNotEmpty($gateway->getArguments());
 
         $config = $gateway->getArgument(0);
