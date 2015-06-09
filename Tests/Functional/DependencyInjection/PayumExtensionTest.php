@@ -20,7 +20,6 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PaypalProChecko
 use Payum\Bundle\PayumBundle\DependencyInjection\PayumExtension;
 use Payum\Core\Model\GatewayConfigInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Kernel;
 
 class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
@@ -228,7 +227,7 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
 
         $factory = $container->getDefinition('payum.'.$gatewayFactory->getName().'.a_gateway.gateway')->getFactory();
         $this->assertNotEmpty($factory);
-        $this->assertInstanceOf(Reference::class, $factory[0]);
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factory[0]);
         $this->assertEquals('payum.'.$gatewayFactory->getName().'.factory', (string) $factory[0]);
         $this->assertEquals('create', $factory[1]);
     }
