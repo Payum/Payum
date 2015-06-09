@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpKernel\Kernel;
 
 abstract class AbstractGatewayFactory implements GatewayFactoryInterface
 {
@@ -108,9 +109,17 @@ abstract class AbstractGatewayFactory implements GatewayFactoryInterface
 
         $config['payum.gateway_name'] = $gatewayName;
 
+
         $gateway = new Definition('Payum\Core\Gateway', array($config));
-        $gateway->setFactoryService(sprintf('payum.%s.factory', $this->getName()));
-        $gateway->setFactoryMethod('create');
+        if (version_compare(Kernel::VERSION_ID, '20600') < 0) {
+            $gateway->setFactoryService(sprintf('payum.%s.factory', $this->getName()));
+            $gateway->setFactoryMethod('create');
+        } else {
+            $gateway->setFactory(array(
+                new Reference(sprintf('payum.%s.factory', $this->getName())),
+                'create'
+            ));
+        }
 
         return $gateway;
     }
