@@ -226,11 +226,10 @@ class PayumExtensionTest extends  \PHPUnit_Framework_TestCase
         $this->assertTrue($container->hasDefinition('payum.'.$gatewayFactory->getName().'.factory'));
         $this->assertTrue($container->hasDefinition('payum.'.$gatewayFactory->getName().'.a_gateway.gateway'));
 
-        $this->assertNotEmpty($container->getDefinition('payum.'.$gatewayFactory->getName().'.a_gateway.gateway')->getFactory());
-
         $factory = $container->getDefinition('payum.'.$gatewayFactory->getName().'.a_gateway.gateway')->getFactory();
+        $this->assertNotEmpty($factory);
         $this->assertInstanceOf(Reference::class, $factory[0]);
-        $this->assertEquals('payum.'.$gatewayFactory->getName().'.factory', $factory[0]);
+        $this->assertEquals('payum.'.$gatewayFactory->getName().'.factory', (string) $factory[0]);
         $this->assertEquals('create', $factory[1]);
     }
 
