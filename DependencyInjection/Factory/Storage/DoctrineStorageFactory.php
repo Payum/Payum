@@ -40,9 +40,10 @@ class DoctrineStorageFactory extends AbstractStorageFactory
     protected function createStorage(ContainerBuilder $container, $modelClass, array $config)
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/storage'));
-        $loader->load('doctrine.'.$config['driver'].'.xml');
 
-        if (version_compare(Kernel::VERSION_ID, '20600') < 0) {
+        if (version_compare(Kernel::VERSION_ID, '20600') >= 0) {
+            $loader->load('doctrine.'.$config['driver'].'.xml');
+        } else {
             $loader->load('doctrine.'.$config['driver'].'-bc-26.xml');
         }
 
