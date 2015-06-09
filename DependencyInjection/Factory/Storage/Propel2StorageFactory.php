@@ -10,14 +10,14 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\Config\FileLocator;
 
 
-class PropelStorageFactory  extends AbstractStorageFactory{
+class Propel2StorageFactory  extends AbstractStorageFactory{
     
     /**
      * {@inheritDoc}
      */
     public function getName()
     {
-        return "propel";
+        return "propel2";
     }
     
     /**
@@ -25,15 +25,7 @@ class PropelStorageFactory  extends AbstractStorageFactory{
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
-        parent::addConfiguration($builder);
-        $builder
-            ->beforeNormalization()->ifString()->then(function($v) {
-                
-                return array('v' => $v);
-            })->end()
-            ->children()
-                ->scalarNode('driver')->isRequired()->cannotBeEmpty()->end()
-            ->end();        
+        parent::addConfiguration($builder);     
     }
     
     /**
@@ -42,9 +34,9 @@ class PropelStorageFactory  extends AbstractStorageFactory{
     protected function createStorage(ContainerBuilder $container, $modelClass, array $config)
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/storage'));
-        $loader->load('propel.'.$config['driver'].'.xml');
+        $loader->load('propel2.xml');
         
-        $storage = new DefinitionDecorator('payum.storage.propel.%s', $config['driver']);
+        $storage = new DefinitionDecorator('payum.storage.propel2');
         $storage->setPublic(true);
         $storage->replaceArgument(1, $modelClass);
         
