@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.15.2 (2015-06-10)
+
+* [paypal-ec] Add `UpdateRecurringPaymentsProfile` require and an action for it.
+
 ## 0.15.1 (2015-04-28)
 
 * [composer] Require stable versions
@@ -31,6 +35,10 @@
 * [klarna-checkout] check if acceptHeader property exists.
 * [klarna-checkout] change constant names
 * [klarna-checkout] add support of klarna checkout recurring payments.
+
+## 0.14.6 (2015-06-10)
+
+* [paypal-ec] Add `UpdateRecurringPaymentsProfile` require and an action for it.
 
 ## 0.14.5 (2015-04-15)
 
