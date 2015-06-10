@@ -149,6 +149,56 @@ payum:
 _**Note**: You should use commented path if you install payum/payum package._
 
 
+## Propel.
+
+Firstly, you will need to build your schema schema. You can either use your own schema or you can copy the schema into your resources\config file from Payum\Core\Bridge\Propel\Resources\config\schema.xml
+Once this has been done you will need to implement the required classes
+
+```php
+<?php
+
+namespace Payum\Core\Bridge\Propel\Model;
+
+use path\to\your\om\BaseToken;
+use Payum\Core\Security\TokenInterface;
+use Payum\Core\Security\Util\Random;
+
+class Token extends BaseToken implements TokenInterface
+{
+    public function __construct()
+    {
+        $this->setHash(Random::generateToken());
+    }
+}
+```
+
+```php
+<?php
+
+namespace Payum\Core\Bridge\Propel\Model;
+
+use path\to\your\om\BasePayment;
+use Payum\Core\Model\PaymentInterface;
+
+class Payment extends BasePayment implements PaymentInterface
+{
+}
+
+```
+
+Next, you will need to add the mapping of the models you are extending, and configure payum's storages:
+
+```yaml
+payum:
+    security:
+        token_storage:
+            Acme\DemoBundle\Model\Token: { propel1: ~ }
+    storages:
+        Acme\DemoBundle\Model\Payment: { propel1: ~ }
+```
+
+_**Note**: If you are using propel2 you can change propel1 to propel2._
+
 ## Custom.
 
 We have several built in storages which cover all your needs. Sometimes you need completely custom storage.

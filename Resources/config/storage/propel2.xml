@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="payum.storage.propel2" class="Payum\Core\Bridge\Propel2\Storage\Propel2Storage" public="false" abstract="true">
+        <argument><!-- should be set in Propel2StorageFactory --></argument>
+        <argument><!-- should be set in Propel2StorageFactory --></argument>
+        </service>
+    </services>
+</container>
