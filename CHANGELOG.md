@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.15.2 (2015-06-10)
+
+* [paypal-ec] Add `UpdateRecurringPaymentsProfile` require and an action for it.
+
 ## 0.15.1 (2015-04-28)
 
 * [composer] Require stable versions
