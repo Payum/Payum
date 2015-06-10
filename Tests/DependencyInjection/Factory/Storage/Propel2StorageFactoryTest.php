@@ -1,10 +1,5 @@
 <?php
 
-/* Copyright Astral Game Servers Ltd 2013-2014
- * Developed By
- * Liam Sorsby
- */
-
 namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Storage;
 
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\Propel2StorageFactory;
@@ -16,7 +11,8 @@ class Propel2StorageFactoryTest extends \PHPUnit_Framework_TestCase {
     /**
      * @test
      */
-    public function shouldBeSubClassOfAbstractStorageFactory() {
+    public function shouldBeSubClassOfAbstractStorageFactory()
+    {
         $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\Propel2StorageFactory');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\AbstractStorageFactory'));
@@ -25,14 +21,16 @@ class Propel2StorageFactoryTest extends \PHPUnit_Framework_TestCase {
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments() {
+    public function couldBeConstructedWithoutAnyArguments()
+    {
         new Propel2StorageFactory;
     }
 
     /**
      * @test
      */
-    public function shouldAllowGetName() {
+    public function shouldAllowGetName()
+    {
         $factory = new Propel2StorageFactory;
 
         $this->assertEquals('propel2', $factory->getName());

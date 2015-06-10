@@ -1,10 +1,5 @@
 <?php
 
-/* Copyright Astral Game Servers Ltd 2013-2014
- * Developed By
- * Liam Sorsby
- */
-
 namespace Payum\Bundle\PayumBundle\Tests\DependencyInjection\Factory\Storage;
 
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\Propel1StorageFactory;
