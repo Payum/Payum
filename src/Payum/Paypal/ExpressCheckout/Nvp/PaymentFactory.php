@@ -15,6 +15,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CancelRecurringPaymentsProfileAc
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\ManageRecurringPaymentsProfileStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateBillingAgreementAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoReferenceTransactionAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\UpdateRecurringPaymentProfileAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\FillOrderDetailsAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\NotifyAction;
@@ -79,6 +80,7 @@ class PaymentFactory implements PaymentFactoryInterface
             'payum.action.api.get_transaction_details' => new GetTransactionDetailsAction(),
             'payum.action.api.do_express_checkout_payment' => new DoExpressCheckoutPaymentAction(),
             'payum.action.api.create_recurring_payment_profile' => new CreateRecurringPaymentProfileAction(),
+            'payum.action.api.update_recurring_payment_profile' => new UpdateRecurringPaymentProfileAction(),
             'payum.action.api.get_recurring_payments_profile_details' => new GetRecurringPaymentsProfileDetailsAction(),
             'payum.action.api.cancel_recurring_payments_profile' => new CancelRecurringPaymentsProfileAction(),
             'payum.action.api.manage_recurring_payments_profile_status' => new ManageRecurringPaymentsProfileStatusAction(),
