@@ -30,7 +30,7 @@ class Propel2StorageFactory  extends AbstractStorageFactory
         
         $storage = new DefinitionDecorator('payum.storage.propel2');
         $storage->setPublic(true);
-        $storage->replaceArgument(1, $modelClass);
+        $storage->replaceArgument(0, $modelClass);
         
         return $storage;
     }
