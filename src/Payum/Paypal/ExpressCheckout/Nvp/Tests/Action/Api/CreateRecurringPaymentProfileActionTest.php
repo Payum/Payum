@@ -60,7 +60,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The TOKEN, PROFILESTARTDATE, DESC, BILLINGPERIOD, BILLINGFREQUENCY, AMT, CURRENCYCODE
+     * @expectedExceptionMessage The TOKEN, PROFILESTARTDATE, DESC, BILLINGPERIOD, BILLINGFREQUENCY, AMT, CURRENCYCODE fields are required.
      */
     public function throwIfTokenNotSetInModel()
     {
@@ -73,7 +73,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The PROFILESTARTDATE, DESC, BILLINGPERIOD, BILLINGFREQUENCY, AMT, CURRENCYCODE
+     * @expectedExceptionMessage The PROFILESTARTDATE, DESC, BILLINGPERIOD, BILLINGFREQUENCY, AMT, CURRENCYCODE fields are required.
      */
     public function throwIfRequiredFieldMissing()
     {

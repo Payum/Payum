@@ -16,6 +16,7 @@ use Payum\Core\Exception\RuntimeException;
  * @link https://www.x.com/developers/paypal/documentation-tools/api/gettransactiondetails-api-operation-nvp
  * @link https://www.x.com/developers/paypal/documentation-tools/api/createrecurringpaymentsprofile-api-operation-nvp
  * @link https://www.x.com/developers/paypal/documentation-tools/api/getrecurringpaymentsprofiledetails-api-operation-nvp
+ * @link https://developer.paypal.com/webapps/developer/docs/classic/api/merchant/UpdateRecurringPaymentsProfile_API_Operation_NVP/
  *
  * L_ERRORCODE: @link https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_nvp_errorcodes
  * ACK: @link https://www.x.com/content/paypal-nvp-api-overview
@@ -432,6 +433,24 @@ class Api
         $request->setFields($fields);
 
         $request->setField('METHOD', 'CreateRecurringPaymentsProfile');
+
+        $this->addVersionField($request);
+        $this->addAuthorizeFields($request);
+
+        return $this->doRequest($request);
+    }
+
+    /**
+     * @param array $fields
+     *
+     * @return array
+     */
+    public function updateRecurringPaymentsProfile(array $fields)
+    {
+        $request = new FormRequest();
+        $request->setFields($fields);
+
+        $request->setField('METHOD', 'UpdateRecurringPaymentsProfile');
 
         $this->addVersionField($request);
         $this->addAuthorizeFields($request);
