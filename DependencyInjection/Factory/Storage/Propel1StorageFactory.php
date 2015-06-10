@@ -9,7 +9,8 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\Config\FileLocator;
 
 
-class Propel1StorageFactory  extends AbstractStorageFactory{
+class Propel1StorageFactory  extends AbstractStorageFactory
+{
     
     /**
      * {@inheritDoc}
