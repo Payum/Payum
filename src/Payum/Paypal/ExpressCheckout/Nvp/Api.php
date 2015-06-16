@@ -1,13 +1,11 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
-use Buzz\Client\ClientInterface;
-use Buzz\Message\Form\FormRequest;
-use Buzz\Message\Response;
-use Payum\Core\Bridge\Buzz\ClientFactory;
-use Payum\Core\Exception\Http\HttpException;
+use GuzzleHttp\Client as CuzzleClient;
+use GuzzleHttp\Psr7;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\RuntimeException;
+
 
 /**
  * @link https://www.x.com/developers/paypal/documentation-tools/api/getexpresscheckoutdetails-api-operation-nvp
@@ -16,7 +14,6 @@ use Payum\Core\Exception\RuntimeException;
  * @link https://www.x.com/developers/paypal/documentation-tools/api/gettransactiondetails-api-operation-nvp
  * @link https://www.x.com/developers/paypal/documentation-tools/api/createrecurringpaymentsprofile-api-operation-nvp
  * @link https://www.x.com/developers/paypal/documentation-tools/api/getrecurringpaymentsprofiledetails-api-operation-nvp
- * @link https://developer.paypal.com/webapps/developer/docs/classic/api/merchant/UpdateRecurringPaymentsProfile_API_Operation_NVP/
  *
  * L_ERRORCODE: @link https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_nvp_errorcodes
  * ACK: @link https://www.x.com/content/paypal-nvp-api-overview
@@ -291,6 +288,8 @@ class Api
 
     protected $client;
 
+
+
     protected $options = array(
         'username' => null,
         'password' => null,
@@ -303,10 +302,10 @@ class Api
     );
 
     /**
-     * @param array                $options
-     * @param ClientInterface|null $client
+     * @param array $options
+     * @param CuzzleClient $client
      */
-    public function __construct(array $options, ClientInterface $client = null)
+    public function __construct(array $options, CuzzleClient $client )
     {
         $this->options = array_replace($this->options, $options);
 
@@ -323,237 +322,144 @@ class Api
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
         }
 
-        $this->client = $client ?: ClientFactory::createCurl();
+        $this->client = $client;
     }
 
     /**
-     * Require: PAYMENTREQUEST_0_AMT
-     *
      * @param array $fields
-     *
      * @return array
      */
     public function setExpressCheckout(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
-
         if (false == isset($fields['RETURNURL'])) {
             if (false == $this->options['return_url']) {
                 throw new RuntimeException('The return_url must be set either to FormRequest or to options.');
             }
-
-            $request->setField('RETURNURL', $this->options['return_url']);
+            $field['RETURNURL'] = $this->options['return_url'];
         }
-
         if (false == isset($fields['CANCELURL'])) {
             if (false == $this->options['cancel_url']) {
                 throw new RuntimeException('The cancel_url must be set either to FormRequest or to options.');
             }
 
-            $request->setField('CANCELURL', $this->options['cancel_url']);
+            $field['CANCELURL'] = $this->options['cancel_url'];
         }
 
-        $request->setField('METHOD', 'SetExpressCheckout');
+        $fields['METHOD'] = 'SetExpressCheckout';
+        $fields = array_replace($fields, $this->getVersionFields());
+        $fields = array_replace($fields, $this->getAuthorizeFields());
 
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
+        return $this->doRequest('POST', $fields);
 
-        return $this->doRequest($request);
     }
 
     /**
-     * Require: TOKEN
-     *
      * @param array $fields
-     *
      * @return array
      */
     public function getExpressCheckoutDetails(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
-
-        $request->setField('METHOD', 'GetExpressCheckoutDetails');
-
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
-
-        return $this->doRequest($request);
+        $fields['METHOD'] = 'GetExpressCheckoutDetails';
+        return $this->doRequest('GET', $fields);
     }
 
+
+
     /**
-     * Require: TRANSACTIONID
-     *
      * @param array $fields
-     *
-     * @return array
+     * @return Psr7\Stream|\Psr\Http\Message\StreamInterface
      */
     public function getTransactionDetails(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
-
-        $request->setField('METHOD', 'GetTransactionDetails');
-
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
-
-        return $this->doRequest($request);
+        $fields['METHOD'] = 'GetTransactionDetails';
+        return $this->doRequest('GET', $fields);
     }
 
     /**
-     * Require: PAYMENTREQUEST_0_AMT, PAYMENTREQUEST_0_PAYMENTACTION, PAYERID, TOKEN
-     *
      * @param array $fields
-     *
-     * @return array
+     * @return Psr7\Stream|\Psr\Http\Message\StreamInterface
      */
     public function doExpressCheckoutPayment(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
-
-        $request->setField('METHOD', 'DoExpressCheckoutPayment');
-
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
-
-        return $this->doRequest($request);
+        $fields['METHOD'] = 'DoExpressCheckoutPayment';
+        return $this->doRequest('POST', $fields);
     }
 
     /**
      * @param array $fields
-     *
      * @return array
      */
     public function createRecurringPaymentsProfile(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
-
-        $request->setField('METHOD', 'CreateRecurringPaymentsProfile');
-
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
-
-        return $this->doRequest($request);
+        $fields['METHOD'] = 'CreateRecurringPaymentsProfile';
+        return $this->doRequest('POST', $fields);
     }
+
 
     /**
      * @param array $fields
-     *
-     * @return array
-     */
-    public function updateRecurringPaymentsProfile(array $fields)
-    {
-        $request = new FormRequest();
-        $request->setFields($fields);
-
-        $request->setField('METHOD', 'UpdateRecurringPaymentsProfile');
-
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
-
-        return $this->doRequest($request);
-    }
-
-    /**
-     * @param array $fields
-     *
      * @return array
      */
     public function getRecurringPaymentsProfileDetails(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
-
-        $request->setField('METHOD', 'GetRecurringPaymentsProfileDetails');
-
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
-
-        return $this->doRequest($request);
+        $fields['METHOD'] = 'GetRecurringPaymentsProfileDetails';
+        return $this->doRequest('GET', $fields);
     }
 
     /**
      * @param array $fields
-     *
      * @return array
      */
     public function manageRecurringPaymentsProfileStatus(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
-
-        $request->setField('METHOD', 'ManageRecurringPaymentsProfileStatus');
-
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
-
-        return $this->doRequest($request);
+        $fields['METHOD'] = 'ManageRecurringPaymentsProfileStatus';
+        return $this->doRequest('POST', $fields);
     }
 
     /**
-     * Require: PAYERID, TOKEN
-     *
      * @param array $fields
-     *
      * @return array
      */
     public function createBillingAgreement(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
+        $fields['METHOD'] = 'CreateBillingAgreement';
+        return $this->doRequest('POST', $fields);
 
-        $request->setField('METHOD', 'CreateBillingAgreement');
-
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
-
-        return $this->doRequest($request);
     }
 
+
     /**
-     * Require: AMT, PAYMENTACTION, REFERENCEID
-     *
      * @param array $fields
-     *
      * @return array
      */
     public function doReferenceTransaction(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
-
-        $request->setField('METHOD', 'DoReferenceTransaction');
-
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
-
-        return $this->doRequest($request);
+        $fields['METHOD'] = 'DoReferenceTransaction';
+        return $this->doRequest('POST', $fields);
     }
 
+
+
+
     /**
-     * @param FormRequest $request
-     *
-     * @throws HttpException
-     *
+     * @param $method
+     * @param $fields
      * @return array
      */
-    protected function doRequest(FormRequest $request)
+    protected function doRequest($method, $fields)
     {
-        $request->setMethod('POST');
-        $request->fromUrl($this->getApiEndpoint());
-
-        $this->client->send($request, $response = new Response());
-
-        if (false == $response->isSuccessful()) {
-            throw HttpException::factory($request, $response);
+        $headers = array();
+        if ('POST' == $method) {
+            $headers['Content-Type'] = 'application/x-www-form-urlencoded';
         }
 
-        $result = array();
-        parse_str($response->getContent(), $result);
+        $request = new Psr7\Request($this->$method, $this->getApiEndpoint(), $headers, $fields);
+        $response = new Psr7\Response();
+
+        $response = $this->client->send($request);
+
+        $result = [];
+        parse_str($response->getBody(), $result);
         foreach ($result as &$value) {
             $value = urldecode($value);
         }
@@ -562,9 +468,8 @@ class Api
     }
 
     /**
-     * @param string $token
-     * @param array  $query
-     *
+     * @param $token
+     * @param array $query
      * @return string
      */
     public function getAuthorizeTokenUrl($token, array $query = array())
@@ -592,24 +497,28 @@ class Api
         return $this->options['sandbox'] ?
             'https://api-3t.sandbox.paypal.com/nvp' :
             'https://api-3t.paypal.com/nvp'
-        ;
+            ;
+    }
+
+
+    /**
+     * @param $fields
+     */
+    protected function addAuthorizeFields($fields)
+    {
+        $fields['PWD'] = $this->options['password'];
+        $fields['USER'] = $this->options['username'];
+        $fields['SIGNATURE'] = $this->options['signature'];
+        $this->doRequest('POST', $fields);
     }
 
     /**
-     * @param FormRequest $request
+     * @param $fields
      */
-    protected function addAuthorizeFields(FormRequest $request)
+    protected function addVersionField($fields)
     {
-        $request->setField('PWD', $this->options['password']);
-        $request->setField('USER', $this->options['username']);
-        $request->setField('SIGNATURE', $this->options['signature']);
+        $fields['VERSION'] = self::VERSION;
+        $this->doRequest('POST', $fields);
     }
 
-    /**
-     * @param FormRequest $request
-     */
-    protected function addVersionField(FormRequest $request)
-    {
-        $request->setField('VERSION', self::VERSION);
-    }
 }
