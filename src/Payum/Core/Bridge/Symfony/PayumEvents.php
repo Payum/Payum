@@ -12,8 +12,4 @@ final class PayumEvents
     const PAYMENT_EXECUTE = 'payum.payment.execute';
 
     const PAYMENT_POST_EXECUTE = 'payum.payment.post_execute';
-
-    const PAYMENT_REPLY = 'payum.payment.reply';
-
-    const PAYMENT_EXCEPTION = 'payum.payment.exception';
 }

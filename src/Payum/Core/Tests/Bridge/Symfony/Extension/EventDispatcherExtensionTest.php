@@ -23,7 +23,7 @@ class EventDispatcherExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithEventDispatcherAsArgument()
+    public function shouldBeConstructedWithEventDispatcherAsArgument()
     {
         new EventDispatcherExtension($this->createEventDispatcherMock());
     }
@@ -37,12 +37,12 @@ class EventDispatcherExtensionTest extends \PHPUnit_Framework_TestCase
         $dispatcherMock
             ->expects($this->once())
             ->method('dispatch')
-            ->with(PayumEvents::PAYMENT_PRE_EXECUTE, $this->isInstanceOf('Payum\Core\Bridge\Symfony\Event\RequestEvent'))
+            ->with(PayumEvents::PAYMENT_PRE_EXECUTE, $this->isInstanceOf('Payum\Core\Bridge\Symfony\Event\ExecuteEvent'))
         ;
 
         $extension = new EventDispatcherExtension($dispatcherMock);
 
-        $extension->onPreExecute($this->createRequestMock());
+        $extension->onPreExecute($this->createContextMock());
     }
 
     /**
@@ -54,12 +54,12 @@ class EventDispatcherExtensionTest extends \PHPUnit_Framework_TestCase
         $dispatcherMock
             ->expects($this->once())
             ->method('dispatch')
-            ->with(PayumEvents::PAYMENT_EXECUTE, $this->isInstanceOf('Payum\Core\Bridge\Symfony\Event\RequestEvent'))
+            ->with(PayumEvents::PAYMENT_EXECUTE, $this->isInstanceOf('Payum\Core\Bridge\Symfony\Event\ExecuteEvent'))
         ;
 
         $extension = new EventDispatcherExtension($dispatcherMock);
 
-        $extension->onExecute($this->createRequestMock(), $this->createActionMock());
+        $extension->onExecute($this->createContextMock());
     }
 
     /**
@@ -71,46 +71,12 @@ class EventDispatcherExtensionTest extends \PHPUnit_Framework_TestCase
         $dispatcherMock
             ->expects($this->once())
             ->method('dispatch')
-            ->with(PayumEvents::PAYMENT_POST_EXECUTE, $this->isInstanceOf('Payum\Core\Bridge\Symfony\Event\RequestEvent'))
+            ->with(PayumEvents::PAYMENT_POST_EXECUTE, $this->isInstanceOf('Payum\Core\Bridge\Symfony\Event\ExecuteEvent'))
         ;
 
         $extension = new EventDispatcherExtension($dispatcherMock);
 
-        $extension->onPostExecute($this->createRequestMock(), $this->createActionMock());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldTriggerEventWhenCallOnReply()
-    {
-        $dispatcherMock = $this->createEventDispatcherMock();
-        $dispatcherMock
-            ->expects($this->once())
-            ->method('dispatch')
-            ->with(PayumEvents::PAYMENT_REPLY, $this->isInstanceOf('Payum\Core\Bridge\Symfony\Event\ReplyEvent'))
-        ;
-
-        $extension = new EventDispatcherExtension($dispatcherMock);
-
-        $extension->onReply($this->createReplyMock(), new \stdClass(), $this->createActionMock());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldTriggerEventWhenCallOnException()
-    {
-        $dispatcherMock = $this->createEventDispatcherMock();
-        $dispatcherMock
-            ->expects($this->once())
-            ->method('dispatch')
-            ->with(PayumEvents::PAYMENT_EXCEPTION, $this->isInstanceOf('Payum\Core\Bridge\Symfony\Event\ExceptionEvent'))
-        ;
-
-        $extension = new EventDispatcherExtension($dispatcherMock);
-
-        $extension->onException(new \Exception(), new \stdClass());
+        $extension->onPostExecute($this->createContextMock());
     }
 
     protected function createEventDispatcherMock()
@@ -118,18 +84,8 @@ class EventDispatcherExtensionTest extends \PHPUnit_Framework_TestCase
         return $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
     }
 
-    protected function createRequestMock()
+    protected function createContextMock()
     {
-        return $this->getMock('Payum\Core\Request\Generic', array(), array(), '', false);
-    }
-
-    protected function createActionMock()
-    {
-        return $this->getMock('Payum\Core\Action\ActionInterface');
-    }
-
-    protected function createReplyMock()
-    {
-        return $this->getMock('Payum\Core\Reply\ReplyInterface');
+        return $this->getMock('Payum\Core\Extension\Context', array(), array(), '', false);
     }
 }
