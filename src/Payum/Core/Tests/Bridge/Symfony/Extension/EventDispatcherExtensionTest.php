@@ -1,5 +1,4 @@
 <?php
-
 namespace Payum\Core\Tests\Extension;
 
 use Payum\Core\Bridge\Symfony\Extension\EventDispatcherExtension;
@@ -37,7 +36,7 @@ class EventDispatcherExtensionTest extends \PHPUnit_Framework_TestCase
         $dispatcherMock
             ->expects($this->once())
             ->method('dispatch')
-            ->with(PayumEvents::PAYMENT_PRE_EXECUTE, $this->isInstanceOf('Payum\Core\Bridge\Symfony\Event\ExecuteEvent'))
+            ->with(PayumEvents::GATEWAY_PRE_EXECUTE, $this->isInstanceOf('Payum\Core\Bridge\Symfony\Event\ExecuteEvent'))
         ;
 
         $extension = new EventDispatcherExtension($dispatcherMock);
@@ -54,7 +53,7 @@ class EventDispatcherExtensionTest extends \PHPUnit_Framework_TestCase
         $dispatcherMock
             ->expects($this->once())
             ->method('dispatch')
-            ->with(PayumEvents::PAYMENT_EXECUTE, $this->isInstanceOf('Payum\Core\Bridge\Symfony\Event\ExecuteEvent'))
+            ->with(PayumEvents::GATEWAY_EXECUTE, $this->isInstanceOf('Payum\Core\Bridge\Symfony\Event\ExecuteEvent'))
         ;
 
         $extension = new EventDispatcherExtension($dispatcherMock);
@@ -71,7 +70,7 @@ class EventDispatcherExtensionTest extends \PHPUnit_Framework_TestCase
         $dispatcherMock
             ->expects($this->once())
             ->method('dispatch')
-            ->with(PayumEvents::PAYMENT_POST_EXECUTE, $this->isInstanceOf('Payum\Core\Bridge\Symfony\Event\ExecuteEvent'))
+            ->with(PayumEvents::GATEWAY_POST_EXECUTE, $this->isInstanceOf('Payum\Core\Bridge\Symfony\Event\ExecuteEvent'))
         ;
 
         $extension = new EventDispatcherExtension($dispatcherMock);

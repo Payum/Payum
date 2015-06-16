@@ -1,5 +1,4 @@
 <?php
-
 namespace Payum\Core\Bridge\Symfony\Extension;
 
 use Payum\Core\Bridge\Symfony\Event\ExecuteEvent;
@@ -15,6 +14,9 @@ class EventDispatcherExtension implements ExtensionInterface
      */
     private $dispatcher;
 
+    /**
+     * @param EventDispatcherInterface $dispatcher
+     */
     public function __construct(EventDispatcherInterface $dispatcher)
     {
         $this->dispatcher = $dispatcher;
@@ -26,7 +28,7 @@ class EventDispatcherExtension implements ExtensionInterface
     public function onPreExecute(Context $context)
     {
         $event = new ExecuteEvent($context);
-        $this->dispatcher->dispatch(PayumEvents::PAYMENT_PRE_EXECUTE, $event);
+        $this->dispatcher->dispatch(PayumEvents::GATEWAY_PRE_EXECUTE, $event);
     }
 
     /**
@@ -35,7 +37,7 @@ class EventDispatcherExtension implements ExtensionInterface
     public function onExecute(Context $context)
     {
         $event = new ExecuteEvent($context);
-        $this->dispatcher->dispatch(PayumEvents::PAYMENT_EXECUTE, $event);
+        $this->dispatcher->dispatch(PayumEvents::GATEWAY_EXECUTE, $event);
     }
 
     /**
@@ -44,6 +46,6 @@ class EventDispatcherExtension implements ExtensionInterface
     public function onPostExecute(Context $context)
     {
         $event = new ExecuteEvent($context);
-        $this->dispatcher->dispatch(PayumEvents::PAYMENT_POST_EXECUTE, $event);
+        $this->dispatcher->dispatch(PayumEvents::GATEWAY_POST_EXECUTE, $event);
     }
 }

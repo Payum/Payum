@@ -1,17 +1,9 @@
 <?php
-
-
 namespace Payum\Core\Bridge\Symfony\Event;
 
 use Payum\Core\Extension\Context;
 use Symfony\Component\EventDispatcher\Event;
 
-
-/**
- * Class ExecuteEvent
- * 
- * @package Payum\Core\Bridge\Symfony\Event
- */
 class ExecuteEvent extends Event
 {
     /**

@@ -1,15 +1,11 @@
 <?php
-
 namespace Payum\Core\Bridge\Symfony;
 
-/**
- * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
- */
 final class PayumEvents
 {
-    const PAYMENT_PRE_EXECUTE = 'payum.payment.pre_execute';
+    const GATEWAY_PRE_EXECUTE = 'payum.gateway.pre_execute';
 
-    const PAYMENT_EXECUTE = 'payum.payment.execute';
+    const GATEWAY_EXECUTE = 'payum.gateway.execute';
 
-    const PAYMENT_POST_EXECUTE = 'payum.payment.post_execute';
+    const GATEWAY_POST_EXECUTE = 'payum.gateway.post_execute';
 }
