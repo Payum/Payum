@@ -10,6 +10,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
 use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
+use GuzzleHttp\Client as GuzzleHttpClient;
 
 class CoreGatewayFactory implements GatewayFactoryInterface
 {
@@ -55,6 +56,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
 
             'buzz.client' => ClientFactory::createCurl(),
             'twig.env' => TwigFactory::createGeneric(),
+            'http.client' => new \Payum\Core\Bridge\Guzzle\Client(new GuzzleHttpClient),
 
             'payum.action.get_http_request' => new GetHttpRequestAction(),
             'payum.action.capture_payment' => new CapturePaymentAction(),

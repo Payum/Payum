@@ -1,111 +1,115 @@
 {
-    "name": "payum/payum",
-    "type": "library",
-    "description": "Payum offers everything you need to work with payments. From simplest use cases to very advanced ones.",
-    "keywords": [
-        "payment",
-        "recurring payment",
-        "instant payment notification",
-        "ipn",
-        "paypal",
-        "paypal express",
-        "paypal pro",
-        "paypal rest",
-        "paypal digital goods",
-        "authorize.net",
-        "be2bill",
-        "payex",
-        "stripe",
-        "stripe.js",
-        "stripe checkout",
-        "jms payment"
-    ],
-    "homepage": "http://payum.org",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Kotlyar Maksim",
-            "email": "kotlyar.maksim@gmail.com"
-        },
-        {
-            "name":     "Payum project",
-            "homepage": "http://payum.org/"
-        },
-        {
-            "name":     "Community contributions",
-            "homepage": "https://github.com/Payum/Payum/contributors"
-        }
-    ],
-    "require": {
-        "php": ">=5.3.2",
-        "payum/iso4217": "~1.0",
-        "kriswallsmith/buzz": "~0.13",
-        "league/url": "~3.0",
-        "twig/twig": "~1.0"
+  "name": "payum/payum",
+  "type": "library",
+  "description": "Payum offers everything you need to work with payments. From simplest use cases to very advanced ones.",
+  "keywords": [
+    "payment",
+    "recurring payment",
+    "instant payment notification",
+    "ipn",
+    "paypal",
+    "paypal express",
+    "paypal pro",
+    "paypal rest",
+    "paypal digital goods",
+    "authorize.net",
+    "be2bill",
+    "payex",
+    "stripe",
+    "stripe.js",
+    "stripe checkout",
+    "jms payment"
+  ],
+  "homepage": "http://payum.org",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Kotlyar Maksim",
+      "email": "kotlyar.maksim@gmail.com"
     },
-    "require-dev": {
-        "ext-curl": "*",
-        "ext-pdo_sqlite": "*",
-        "doctrine/orm": "2.3.*",
-        "doctrine/mongodb": "1.0.*@dev",
-        "doctrine/mongodb-odm": "1.0.*@dev",
-        "phpunit/phpunit": "~4.0",
-        "propel/propel1": "~1.7",
-        "psr/log": "~1.0",
-        "zendframework/zend-db": "~2",
-        "symfony/routing": "~2.3",
-        "symfony/http-kernel": "~2.3",
-        "symfony/http-foundation": "~2.3",
-        "symfony/form": "~2.3",
-        "symfony/validator": "~2.6",
-        "ajbdev/authorizenet-php-api": "1.1.*",
-        "paypal/rest-api-sdk-php" : "0.5.*",
-        "klarna/checkout": "~1|~2.0",
-        "fp/klarna-invoice": "0.1.*",
-        "stripe/stripe-php": "~1.0",
-        "ext-soap": "*"
+    {
+      "name":     "Payum project",
+      "homepage": "http://payum.org/"
     },
-    "replace": {
-        "payum/core": "self.version",
-        "payum/paypal-express-checkout-nvp": "self.version",
-        "payum/paypal-pro-checkout-nvp": "self.version",
-        "payum/paypal-rest": "self.version",
-        "payum/paypal-ipn": "self.version",
-        "payum/klarna-checkout": "self.version",
-        "payum/klarna-invoice": "self.version",
-        "payum/authorize-net-aim": "self.version",
-        "payum/be2bill": "self.version",
-        "payum/payex": "self.version",
-        "payum/offline": "self.version",
-        "payum/stripe": "self.version"
-    },
-    "suggest": {
-        "doctrine/orm": "If you want to store models to database using doctrin2 ORM",
-        "doctrine/mongodb-odm": "If you want to store models to mongo doctrin2 ODM",
-        "zendframework/zend-db": "If you want to store models to Zend Db ORM",
-        "propel/propel1": "If you want to store models to Propel1 ORM",
-        "propel/propel": "If you want to store models to Propel2 ORM",
-        "symfony/routing": "If you want to use TokenFactory from symfony's bridge",
-        "symfony/http-kernel": "If you want to use HttpRequestVerifier from symfony's bridge",
-        "symfony/http-foundation": "If you want to use HttpRequestVerifier or HttpResponse reply from symfony's bridge",
-        "symfony/form": "If you want to use forms",
-        "monolog/monolog": "In case you want to use PSR-3 logger",
-        "ajbdev/authorizenet-php-api": "If you want to use Authorizenet.NET install ajbdev/authorizenet-php-api:1.1.* library",
-        "paypal/rest-api-sdk-php" : "If you want to use PayPal REST API install paypal/rest-api-sdk-php:0.5.* library",
-        "klarna/checkout": "If you want to use Klarna Checkout install klarna/checkout:~1|~2.0 library",
-        "fp/klarna-invoice": "If you want to use Klarna Invoice install fp/klarna-invoice:0.1.* library",
-        "stripe/stripe-php": "If you want to use Stripe install stripe/stripe-php:~1.0 library",
-        "ext-soap": "If you want to use Payex install ext-soap:* library"
-    },
-    "config": {
-        "bin-dir": "bin"
-    },
-    "autoload": {
-        "psr-0": { "Payum": "src/" }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
-        }
+    {
+      "name":     "Community contributions",
+      "homepage": "https://github.com/Payum/Payum/contributors"
     }
+  ],
+  "require": {
+    "php": ">=5.3.2",
+    "payum/iso4217": "~1.0",
+    "league/url": "~3.0",
+    "twig/twig": "~1.0",
+    "psr/http-message": "1.0.*@dev",
+    "guzzlehttp/guzzle" : "*"
+  },
+  "require-dev": {
+    "ext-curl": "*",
+    "ext-pdo_sqlite": "*",
+    "doctrine/orm": "2.3.*",
+    "doctrine/mongodb": "1.0.*@dev",
+    "doctrine/mongodb-odm": "1.0.*@dev",
+    "phpunit/phpunit": "~4.0",
+    "propel/propel1": "~1.7",
+    "psr/log": "~1.0",
+    "kriswallsmith/buzz": "~0.13",
+    "zendframework/zend-db": "~2",
+    "symfony/routing": "~2.3",
+    "symfony/http-kernel": "~2.3",
+    "symfony/http-foundation": "~2.3",
+    "symfony/form": "~2.3",
+    "symfony/validator": "~2.6",
+    "ajbdev/authorizenet-php-api": "1.1.*",
+    "paypal/rest-api-sdk-php" : "0.5.*",
+    "klarna/checkout": "~1|~2.0",
+    "fp/klarna-invoice": "0.1.*",
+    "stripe/stripe-php": "~1.0",
+    "ext-soap": "*",
+    "guzzlehttp/psr7": "*"
+  },
+  "replace": {
+    "payum/core": "self.version",
+    "payum/paypal-express-checkout-nvp": "self.version",
+    "payum/paypal-pro-checkout-nvp": "self.version",
+    "payum/paypal-rest": "self.version",
+    "payum/paypal-ipn": "self.version",
+    "payum/klarna-checkout": "self.version",
+    "payum/klarna-invoice": "self.version",
+    "payum/authorize-net-aim": "self.version",
+    "payum/be2bill": "self.version",
+    "payum/payex": "self.version",
+    "payum/offline": "self.version",
+    "payum/stripe": "self.version"
+  },
+  "suggest": {
+    "doctrine/orm": "If you want to store models to database using doctrin2 ORM",
+    "doctrine/mongodb-odm": "If you want to store models to mongo doctrin2 ODM",
+    "kriswallsmith/buzz": "As a http message client (PSR-7)",
+    "zendframework/zend-db": "If you want to store models to Zend Db ORM",
+    "propel/propel1": "If you want to store models to Propel1 ORM",
+    "propel/propel": "If you want to store models to Propel2 ORM",
+    "symfony/routing": "If you want to use TokenFactory from symfony's bridge",
+    "symfony/http-kernel": "If you want to use HttpRequestVerifier from symfony's bridge",
+    "symfony/http-foundation": "If you want to use HttpRequestVerifier or HttpResponse reply from symfony's bridge",
+    "symfony/form": "If you want to use forms",
+    "monolog/monolog": "In case you want to use PSR-3 logger",
+    "ajbdev/authorizenet-php-api": "If you want to use Authorizenet.NET install ajbdev/authorizenet-php-api:1.1.* library",
+    "paypal/rest-api-sdk-php" : "If you want to use PayPal REST API install paypal/rest-api-sdk-php:0.5.* library",
+    "klarna/checkout": "If you want to use Klarna Checkout install klarna/checkout:~1|~2.0 library",
+    "fp/klarna-invoice": "If you want to use Klarna Invoice install fp/klarna-invoice:0.1.* library",
+    "stripe/stripe-php": "If you want to use Stripe install stripe/stripe-php:~1.0 library",
+    "ext-soap": "If you want to use Payex install ext-soap:* library"
+  },
+  "config": {
+    "bin-dir": "bin"
+  },
+  "autoload": {
+    "psr-0": { "Payum": "src/" }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0-dev"
+    }
+  }
 }
