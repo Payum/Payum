@@ -3,6 +3,7 @@ namespace Payum\Be2Bill;
 
 use GuzzleHttp\Psr7\Request;
 use Payum\Core\Bridge\Guzzle\HttpClientFactory;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\LogicException;
@@ -124,18 +125,19 @@ class Api
      */
     public function __construct(array $options, HttpClientInterface $client = null)
     {
-        $this->client = $client = HttpClientFactory::create();
-        $this->options = array_replace($this->options, $options);
+        $options = ArrayObject::ensureArrayObject($options);
+        $options->defaults($this->options);
+        $options->validateNotEmpty(array(
+            'identifier',
+            'password',
+        ));
 
-        if (true == empty($this->options['identifier'])) {
-            throw new InvalidArgumentException('The identifier option must be set.');
+        if (false == is_bool($options['sandbox'])) {
+            throw new LogicException('The boolean sandbox option must be set.');
         }
-        if (true == empty($this->options['password'])) {
-            throw new InvalidArgumentException('The password option must be set.');
-        }
-        if (false == is_bool($this->options['sandbox'])) {
-            throw new InvalidArgumentException('The boolean sandbox option must be set.');
-        }
+
+        $this->options = $options;
+        $this->client = $client ?: HttpClientFactory::create();
     }
 
     /**

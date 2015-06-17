@@ -43,39 +43,12 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The username option must be set.
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The username, password, signature fields are required.
      */
-    public function throwIfUsernameOptionNotSetInConstructor()
+    public function throwIfRequiredOptionsNotSetInConstructor()
     {
         new Api(array());
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The password option must be set.
-     */
-    public function throwIfPasswordOptionNotSetInConstructor()
-    {
-        new Api(array(
-            'username' => 'a_username',
-        ));
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The signature option must be set.
-     */
-    public function throwIfSignatureOptionNotSetInConstructor()
-    {
-        new Api(array(
-            'username' => 'a_username',
-            'password' => 'a_password',
-        ));
     }
 
     /**

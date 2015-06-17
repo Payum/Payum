@@ -9,13 +9,57 @@ class ApiTest extends \Phpunit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithClientAndOptions()
+    public function couldBeConstructedWithOptionsOnly()
+    {
+        $api = new Api(array(
+            'identifier' => 'anId',
+            'password' => 'aPass',
+            'sandbox' => true,
+        ));
+
+        $this->assertAttributeInstanceOf('Payum\Core\HttpClientInterface', 'client', $api);
+    }
+
+    /**
+     * @test
+     */
+    public function couldBeConstructedWithOptionsAndHttpClient()
+    {
+        $client = $this->createHttpClientMock();
+
+        $api = new Api(array(
+            'identifier' => 'anId',
+            'password' => 'aPass',
+            'sandbox' => true,
+        ), $client);
+
+        $this->assertAttributeSame($client, 'client', $api);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The identifier, password fields are required.
+     */
+    public function throwIfRequiredOptionsNotSetInConstructor()
+    {
+        new Api(array());
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The boolean sandbox option must be set.
+     */
+    public function throwIfSandboxOptionsNotBooleanInConstructor()
     {
         new Api(array(
             'identifier' => 'anId',
             'password' => 'aPass',
-            'sandbox' => true,
-        ), $this->createHttpClientMock());
+            'sandbox' => 'notABool'
+        ));
     }
 
     /**

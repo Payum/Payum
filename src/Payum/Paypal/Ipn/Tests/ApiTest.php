@@ -11,7 +11,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithBuzzClientAndOptions()
+    public function couldBeConstructedWithHttpClientAndOptions()
     {
         new Api(array(
             'sandbox' => true,

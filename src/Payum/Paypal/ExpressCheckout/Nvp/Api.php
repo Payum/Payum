@@ -3,6 +3,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp;
 
 use GuzzleHttp\Psr7\Request;
 use Payum\Core\Bridge\Guzzle\HttpClientFactory;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\RuntimeException;
@@ -307,21 +308,19 @@ class Api
      */
     public function __construct(array $options, HttpClientInterface $client = null)
     {
-        $this->options = array_replace($this->options, $options);
+        $options = ArrayObject::ensureArrayObject($options);
+        $options->defaults($this->options);
+        $options->validateNotEmpty(array(
+            'username',
+            'password',
+            'signature',
+        ));
 
-        if (true == empty($this->options['username'])) {
-            throw new InvalidArgumentException('The username option must be set.');
-        }
-        if (true == empty($this->options['password'])) {
-            throw new InvalidArgumentException('The password option must be set.');
-        }
-        if (true == empty($this->options['signature'])) {
-            throw new InvalidArgumentException('The signature option must be set.');
-        }
-        if (false == is_bool($this->options['sandbox'])) {
+        if (false == is_bool($options['sandbox'])) {
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
         }
 
+        $this->options = $options;
         $this->client = $client ?: HttpClientFactory::create();
     }
 
