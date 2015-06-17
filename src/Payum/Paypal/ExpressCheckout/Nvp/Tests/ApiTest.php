@@ -1,9 +1,10 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests;
 
-use Buzz\Message\Response;
+use GuzzleHttp\Psr7\Response;
+use Payum\Core\HttpClientInterface;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
-use Buzz\Message\Form\FormRequest;
+use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,15 +20,15 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'sandbox' => true,
         ));
 
-        $this->assertAttributeInstanceOf('Buzz\Client\Curl', 'client', $api);
+        $this->assertAttributeInstanceOf('Payum\Core\HttpClientInterface', 'client', $api);
     }
 
     /**
      * @test
      */
-    public function couldBeConstructedWithOptionsAndBuzzClient()
+    public function couldBeConstructedWithOptionsAndHttpClient()
     {
-        $client = $this->createClientMock();
+        $client = $this->createHttpClientMock();
 
         $api = new Api(array(
             'username' => 'a_username',
@@ -122,7 +123,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessClientStub());
+        ), $this->createSuccessHttpClientStub());
 
         $result = $api->setExpressCheckout(array('RETURNURL' => 'formRequestReturnUrl'));
 
@@ -141,7 +142,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessClientStub());
+        ), $this->createSuccessHttpClientStub());
 
         $result = $api->setExpressCheckout(array());
 
@@ -161,7 +162,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ), $this->createClientMock());
+        ), $this->createHttpClientMock());
 
         $api->setExpressCheckout(array());
     }
@@ -178,7 +179,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessClientStub());
+        ), $this->createSuccessHttpClientStub());
 
         $result = $api->setExpressCheckout(array('CANCELURL' => 'formRequestCancelUrl'));
 
@@ -197,7 +198,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessClientStub());
+        ), $this->createSuccessHttpClientStub());
 
         $result = $api->setExpressCheckout(array());
 
@@ -216,7 +217,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessClientStub());
+        ), $this->createSuccessHttpClientStub());
 
         $result = $api->setExpressCheckout(array());
 
@@ -236,7 +237,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessClientStub());
+        ), $this->createSuccessHttpClientStub());
 
         $result = $api->setExpressCheckout(array());
 
@@ -262,7 +263,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessClientStub());
+        ), $this->createSuccessHttpClientStub());
 
         $result = $api->setExpressCheckout(array());
 
@@ -280,7 +281,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ), $this->createClientMock());
+        ), $this->createHttpClientMock());
 
         $this->assertEquals(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
@@ -299,7 +300,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
             'useraction' => 'aCustomUserAction',
-        ), $this->createClientMock());
+        ), $this->createHttpClientMock());
 
         $this->assertEquals(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?useraction=aCustomUserAction&cmd=_express-checkout&token=theToken',
@@ -318,7 +319,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
             'useraction' => 'notUsedUseraction',
-        ), $this->createClientMock());
+        ), $this->createHttpClientMock());
 
         $this->assertEquals(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?useraction=theUseraction&cmd=_express-checkout&token=theToken',
@@ -337,7 +338,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
             'cmd' => 'theCmd',
-        ), $this->createClientMock());
+        ), $this->createHttpClientMock());
 
         $this->assertEquals(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=theCmd&token=theToken',
@@ -356,7 +357,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
             'cmd' => 'thisCmdNotUsed',
-        ), $this->createClientMock());
+        ), $this->createHttpClientMock());
 
         $this->assertEquals(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=theCmd&token=theToken',
@@ -374,7 +375,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ), $this->createClientMock());
+        ), $this->createHttpClientMock());
 
         $this->assertEquals(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken&foo=fooVal',
@@ -392,7 +393,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ), $this->createClientMock());
+        ), $this->createHttpClientMock());
 
         $this->assertEquals(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
@@ -410,7 +411,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => false,
-        ), $this->createClientMock());
+        ), $this->createHttpClientMock());
 
         $this->assertEquals(
             'https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
@@ -425,17 +426,14 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     {
         $testCase = $this;
 
-        $clientMock = $this->createClientMock();
+        $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (FormRequest $request, Response $response) use ($testCase) {
-                $testCase->assertEquals('https://api-3t.paypal.com/nvp', $request->getUrl());
+            ->will($this->returnCallback(function (RequestInterface $request) use ($testCase) {
+                $testCase->assertEquals('https://api-3t.paypal.com/nvp', $request->getUri());
 
-                $response->setHeaders(array('HTTP/1.1 200 OK'));
-                $response->setContent('ACK=Success');
-
-                $response->setContent(http_build_query($request->getFields()));
+                return new Response(200, [], $request->getBody());
             }))
         ;
 
@@ -458,17 +456,14 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     {
         $testCase = $this;
 
-        $clientMock = $this->createClientMock();
+        $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (FormRequest $request, Response $response) use ($testCase) {
-                $testCase->assertEquals('https://api-3t.sandbox.paypal.com/nvp', $request->getUrl());
+            ->will($this->returnCallback(function (RequestInterface $request) use ($testCase) {
+                $testCase->assertEquals('https://api-3t.sandbox.paypal.com/nvp', $request->getUri());
 
-                $response->setHeaders(array('HTTP/1.1 200 OK'));
-                $response->setContent('ACK=Success');
-
-                $response->setContent(http_build_query($request->getFields()));
+                return new Response(200, [], $request->getBody());
             }))
         ;
 
@@ -485,27 +480,24 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Buzz\Client\ClientInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|HttpClientInterface
      */
-    protected function createClientMock()
+    protected function createHttpClientMock()
     {
-        return $this->getMock('Buzz\Client\ClientInterface');
+        return $this->getMock('Payum\Core\HttpClientInterface');
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Buzz\Client\ClientInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|HttpClientInterface
      */
-    protected function createSuccessClientStub()
+    protected function createSuccessHttpClientStub()
     {
-        $clientMock = $this->createClientMock();
+        $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->any())
             ->method('send')
-            ->will($this->returnCallback(function (FormRequest $request, Response $response) {
-                $response->setHeaders(array('HTTP/1.1 200 OK'));
-                $response->setContent('ACK=Success');
-
-                $response->setContent(http_build_query($request->getFields()));
+            ->will($this->returnCallback(function (RequestInterface $request) {
+                return new Response(200, [], $request->getBody());
             }))
         ;
 
