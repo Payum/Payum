@@ -35,11 +35,14 @@ class Be2BillDirectGatewayFactory extends GatewayFactory
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
 
-                return new Api(array(
-                    'identifier' => $config['identifier'],
-                    'password' => $config['password'],
-                    'sandbox' => $config['sandbox'],
-                ));
+                return new Api(
+                    array(
+                        'identifier' => $config['identifier'],
+                        'password' => $config['password'],
+                        'sandbox' => $config['sandbox'],
+                    ),
+                    $config['payum.http_client']
+                );
             };
         }
     }

@@ -1,8 +1,8 @@
 <?php
 namespace Payum\Be2Bill\Tests;
 
-use Buzz\Client\ClientInterface;
 use Payum\Be2Bill\Api;
+use Payum\Core\HttpClientInterface;
 
 class ApiTest extends \Phpunit_Framework_TestCase
 {
@@ -15,7 +15,7 @@ class ApiTest extends \Phpunit_Framework_TestCase
             'identifier' => 'anId',
             'password' => 'aPass',
             'sandbox' => true,
-        ), $this->createClientMock());
+        ), $this->createHttpClientMock());
     }
 
     /**
@@ -27,7 +27,7 @@ class ApiTest extends \Phpunit_Framework_TestCase
             'identifier' => 'anId',
             'password' => 'aPass',
             'sandbox' => true,
-        ), $this->createClientMock());
+        ), $this->createHttpClientMock());
 
         $post = $api->prepareOffsitePayment(array(
             'AMOUNT' => 100,
@@ -47,7 +47,7 @@ class ApiTest extends \Phpunit_Framework_TestCase
             'identifier' => 'anId',
             'password' => 'aPass',
             'sandbox' => true,
-        ), $this->createClientMock());
+        ), $this->createHttpClientMock());
 
         $post = $api->prepareOffsitePayment(array(
             'AMOUNT' => 100,
@@ -68,7 +68,7 @@ class ApiTest extends \Phpunit_Framework_TestCase
             'identifier' => 'anId',
             'password' => 'aPass',
             'sandbox' => true,
-        ), $this->createClientMock());
+        ), $this->createHttpClientMock());
 
         $post = $api->prepareOffsitePayment(array(
             'AMOUNT' => 100,
@@ -90,7 +90,7 @@ class ApiTest extends \Phpunit_Framework_TestCase
             'identifier' => 'anId',
             'password' => 'aPass',
             'sandbox' => true,
-        ), $this->createClientMock());
+        ), $this->createHttpClientMock());
 
         $post = $api->prepareOffsitePayment(array(
             'AMOUNT' => 100,
@@ -115,7 +115,7 @@ class ApiTest extends \Phpunit_Framework_TestCase
             'identifier' => 'anId',
             'password' => 'aPass',
             'sandbox' => true,
-        ), $this->createClientMock());
+        ), $this->createHttpClientMock());
 
         $this->assertFalse($api->verifyHash(array()));
     }
@@ -135,7 +135,7 @@ class ApiTest extends \Phpunit_Framework_TestCase
             'identifier' => 'anId',
             'password' => 'aPass',
             'sandbox' => true,
-        ), $this->createClientMock());
+        ), $this->createHttpClientMock());
 
         //guard
         $this->assertNotEquals($invalidHash, $api->calculateHash($params));
@@ -159,7 +159,7 @@ class ApiTest extends \Phpunit_Framework_TestCase
             'identifier' => 'anId',
             'password' => 'aPass',
             'sandbox' => true,
-        ), $this->createClientMock());
+        ), $this->createHttpClientMock());
 
         $params['HASH'] = $api->calculateHash($params);
 
@@ -167,10 +167,10 @@ class ApiTest extends \Phpunit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ClientInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|HttpClientInterface
      */
-    protected function createClientMock()
+    protected function createHttpClientMock()
     {
-        return $this->getMock('Buzz\Client\ClientInterface');
+        return $this->getMock('Payum\Core\HttpClientInterface');
     }
 }

@@ -76,9 +76,9 @@ class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
             throw new LogicException('Either credit card fields or its alias has to be set.');
         }
 
-        $response = $this->api->payment($model->toUnsafeArray());
+        $result = $this->api->payment($model->toUnsafeArray());
 
-        $model->replace((array) $response->getContentJson());
+        $model->replace((array) $result);
     }
 
     /**

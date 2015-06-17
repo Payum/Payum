@@ -49,7 +49,7 @@ class CaptureOffsiteAction extends GatewayAwareAction implements ApiAwareInterfa
             $model->replace($httpRequest->query);
         } else {
             throw new HttpPostRedirect(
-                $this->api->getOnsiteUrl(),
+                $this->api->getOffsiteUrl(),
                 $this->api->prepareOffsitePayment($model->toUnsafeArray())
             );
         }

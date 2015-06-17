@@ -2,7 +2,6 @@
 namespace Payum\Be2Bill\Tests\Action;
 
 use Payum\Be2Bill\Api;
-use Payum\Core\Bridge\Buzz\JsonResponse;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\CreditCard;
 use Payum\Core\GatewayInterface;
@@ -130,17 +129,14 @@ class CaptureActionTest extends GenericActionTest
             ->method('execute')
         ;
 
-        $apiResponse = new JsonResponse();
-        $apiResponse->setContent(json_encode(array(
-            'FOO' => 'FOOVAL',
-            'BAR' => 'BARVAL',
-        )));
-
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('payment')
-            ->will($this->returnValue($apiResponse))
+            ->will($this->returnValue(array(
+                'FOO' => 'FOOVAL',
+                'BAR' => 'BARVAL',
+            )))
         ;
 
         $action = new CaptureAction();
@@ -192,17 +188,14 @@ class CaptureActionTest extends GenericActionTest
             }))
         ;
 
-        $apiResponse = new JsonResponse();
-        $apiResponse->setContent(json_encode(array(
-            'FOO' => 'FOOVAL',
-            'BAR' => 'BARVAL',
-        )));
-
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('payment')
-            ->will($this->returnValue($apiResponse))
+            ->will($this->returnValue(array(
+                'FOO' => 'FOOVAL',
+                'BAR' => 'BARVAL',
+            )))
         ;
 
         $action = new CaptureAction();
