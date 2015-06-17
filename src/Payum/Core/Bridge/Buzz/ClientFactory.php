@@ -3,6 +3,9 @@ namespace Payum\Core\Bridge\Buzz;
 
 use Buzz\Client\Curl;
 
+/**
+ * @deprecated
+ */
 class ClientFactory
 {
     /**

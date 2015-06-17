@@ -4,6 +4,9 @@ namespace Payum\Core\Bridge\Buzz;
 use Buzz\Message\Response;
 use Payum\Core\Exception\LogicException;
 
+/**
+ * @deprecated
+ */
 class JsonResponse extends Response
 {
     /**
