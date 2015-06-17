@@ -72,6 +72,10 @@ class CoreGatewayFactory implements GatewayFactoryInterface
             'payum.prepend_apis' => array(),
             'payum.default_options' => array(),
             'payum.required_options' => array(),
+
+            'payum.api.http_client' => function (ArrayObject $config) {
+                return $config['payum.http_client'];
+            },
         ));
 
         return (array) $config;

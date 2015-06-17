@@ -56,7 +56,7 @@ class OfflineGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
 
-        $this->assertAttributeEmpty('apis', $gateway);
+        $this->assertAttributeNotEmpty('apis', $gateway);
         $this->assertAttributeNotEmpty('actions', $gateway);
 
         $extensions = $this->readAttribute($gateway, 'extensions');
