@@ -39,7 +39,6 @@
     "require": {
         "php": ">=5.5.0",
         "payum/iso4217": "~1.0",
-        "kriswallsmith/buzz": "~0.13",
         "guzzlehttp/guzzle": "~6.0",
         "league/url": "~3.0",
         "twig/twig": "~1.0"
