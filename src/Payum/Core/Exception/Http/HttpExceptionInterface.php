@@ -1,33 +1,33 @@
 <?php
 namespace Payum\Core\Exception\Http;
 
-use Buzz\Message\Response;
-use Buzz\Message\Request;
 use Payum\Core\Exception\ExceptionInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 interface HttpExceptionInterface extends ExceptionInterface
 {
     /**
-     * @param Request $request
+     * @param RequestInterface $request
      *
      * @return void
      */
-    public function setRequest(Request $request);
+    public function setRequest(RequestInterface $request);
 
     /**
-     * @return Request
+     * @return RequestInterface
      */
     public function getRequest();
 
     /**
-     * @param Response $response
+     * @param ResponseInterface $response
      *
      * @return void
      */
-    public function setResponse(Response $response);
+    public function setResponse(ResponseInterface $response);
 
     /**
-     * @return Response
+     * @return ResponseInterface
      */
     public function getResponse();
 }

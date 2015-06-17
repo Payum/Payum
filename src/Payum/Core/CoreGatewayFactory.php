@@ -4,6 +4,7 @@ namespace Payum\Core;
 use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetCurrencyAction;
+use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Buzz\ClientFactory;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -53,6 +54,9 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         $config->defaults(array(
             'payum.template.layout' => '@PayumCore/layout.html.twig',
 
+            'payum.http_client' => HttpClientFactory::create(),
+
+            // @deprecated
             'buzz.client' => ClientFactory::createCurl(),
             'twig.env' => TwigFactory::createGeneric(),
 

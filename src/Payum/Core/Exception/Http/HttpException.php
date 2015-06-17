@@ -1,26 +1,26 @@
 <?php
 namespace Payum\Core\Exception\Http;
 
-use Buzz\Message\Response;
-use Buzz\Message\Request;
 use Payum\Core\Exception\RuntimeException;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class HttpException extends RuntimeException implements HttpExceptionInterface
 {
     /**
-     * @var Request
+     * @var RequestInterface
      */
     protected $request;
 
     /**
-     * @var Response
+     * @var ResponseInterface
      */
     protected $response;
 
     /**
      * {@inheritDoc}
      */
-    public function setRequest(Request $request)
+    public function setRequest(RequestInterface $request)
     {
         $this->request = $request;
     }
@@ -36,7 +36,7 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
     /**
      * {@inheritDoc}
      */
-    public function setResponse(Response $response)
+    public function setResponse(ResponseInterface $response)
     {
         $this->response = $response;
     }
@@ -50,16 +50,16 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
     }
 
     /**
-     * @param Request  $request
-     * @param Response $response
+     * @param RequestInterface  $request
+     * @param ResponseInterface $response
      *
      * @return HttpException
      */
-    public static function factory(Request $request, Response $response)
+    public static function factory(RequestInterface $request, ResponseInterface $response)
     {
-        if ($response->isClientError()) {
+        if ($response->getStatusCode() >= 400 && $response->getStatusCode() < 500) {
             $label = 'Client error response';
-        } elseif ($response->isServerError()) {
+        } elseif ($response->getStatusCode() >= 500 && $response->getStatusCode() < 600) {
             $label = 'Server error response';
         } else {
             $label = 'Unsuccessful response';
@@ -69,7 +69,7 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
             $label,
             '[status code] '.$response->getStatusCode(),
             '[reason phrase] '.$response->getReasonPhrase(),
-            '[url] '.$request->getUrl(),
+            '[url] '.$request->getUri(),
         ));
 
         $e = new static($message, $response->getStatusCode());
