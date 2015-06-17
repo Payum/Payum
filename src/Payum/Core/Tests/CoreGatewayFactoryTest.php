@@ -71,7 +71,7 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($config);
 
         $this->assertInstanceOf('Twig_Environment', $config['twig.env']);
-        $this->assertInstanceOf('Buzz\Client\ClientInterface', $config['buzz.client']);
+        $this->assertInstanceOf('Payum\Core\HttpClientInterface', $config['payum.http_client']);
         $this->assertInstanceOf('Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction', $config['payum.action.get_http_request']);
         $this->assertInstanceOf('Payum\Core\Action\CapturePaymentAction', $config['payum.action.capture_payment']);
         $this->assertInstanceOf('Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction', $config['payum.action.execute_same_request_with_model_details']);
