@@ -13,5 +13,5 @@ $model->setCurrencyCode('USD');
 $model->setTotalAmount(1);
 $model->setCreditCard($card);
 
-$gateway->execute(new \Payum\Core\Request\Capture($model);
+$gateway->execute(new \Payum\Core\Request\Capture($model));
 ```
