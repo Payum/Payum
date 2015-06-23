@@ -1,13 +1,13 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
-use Buzz\Client\ClientInterface;
-use Buzz\Message\Form\FormRequest;
-use Buzz\Message\Response;
-use Payum\Core\Bridge\Buzz\ClientFactory;
+use GuzzleHttp\Psr7\Request;
+use Payum\Core\Bridge\Guzzle\HttpClientFactory;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\RuntimeException;
+use Payum\Core\HttpClientInterface;
 
 /**
  * @link https://www.x.com/developers/paypal/documentation-tools/api/getexpresscheckoutdetails-api-operation-nvp
@@ -304,26 +304,24 @@ class Api
 
     /**
      * @param array                $options
-     * @param ClientInterface|null $client
+     * @param HttpClientInterface|null $client
      */
-    public function __construct(array $options, ClientInterface $client = null)
+    public function __construct(array $options, HttpClientInterface $client = null)
     {
-        $this->options = array_replace($this->options, $options);
+        $options = ArrayObject::ensureArrayObject($options);
+        $options->defaults($this->options);
+        $options->validateNotEmpty(array(
+            'username',
+            'password',
+            'signature',
+        ));
 
-        if (true == empty($this->options['username'])) {
-            throw new InvalidArgumentException('The username option must be set.');
-        }
-        if (true == empty($this->options['password'])) {
-            throw new InvalidArgumentException('The password option must be set.');
-        }
-        if (true == empty($this->options['signature'])) {
-            throw new InvalidArgumentException('The signature option must be set.');
-        }
-        if (false == is_bool($this->options['sandbox'])) {
+        if (false == is_bool($options['sandbox'])) {
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
         }
 
-        $this->client = $client ?: ClientFactory::createCurl();
+        $this->options = $options;
+        $this->client = $client ?: HttpClientFactory::create();
     }
 
     /**
@@ -335,15 +333,12 @@ class Api
      */
     public function setExpressCheckout(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
-
         if (false == isset($fields['RETURNURL'])) {
             if (false == $this->options['return_url']) {
                 throw new RuntimeException('The return_url must be set either to FormRequest or to options.');
             }
 
-            $request->setField('RETURNURL', $this->options['return_url']);
+            $fields['RETURNURL'] = $this->options['return_url'];
         }
 
         if (false == isset($fields['CANCELURL'])) {
@@ -351,15 +346,15 @@ class Api
                 throw new RuntimeException('The cancel_url must be set either to FormRequest or to options.');
             }
 
-            $request->setField('CANCELURL', $this->options['cancel_url']);
+            $fields['CANCELURL'] = $this->options['cancel_url'];
         }
 
-        $request->setField('METHOD', 'SetExpressCheckout');
+        $fields['METHOD'] = 'SetExpressCheckout';
 
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
+        $this->addVersionField($fields);
+        $this->addAuthorizeFields($fields);
 
-        return $this->doRequest($request);
+        return $this->doRequest($fields);
     }
 
     /**
@@ -371,15 +366,12 @@ class Api
      */
     public function getExpressCheckoutDetails(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
-
-        $request->setField('METHOD', 'GetExpressCheckoutDetails');
+        $fields['METHOD'] = 'GetExpressCheckoutDetails';
 
         $this->addVersionField($request);
         $this->addAuthorizeFields($request);
 
-        return $this->doRequest($request);
+        return $this->doRequest($fields);
     }
 
     /**
@@ -391,15 +383,12 @@ class Api
      */
     public function getTransactionDetails(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
-
-        $request->setField('METHOD', 'GetTransactionDetails');
+        $fields['METHOD'] = 'GetTransactionDetails';
 
         $this->addVersionField($request);
         $this->addAuthorizeFields($request);
 
-        return $this->doRequest($request);
+        return $this->doRequest($fields);
     }
 
     /**
@@ -411,15 +400,12 @@ class Api
      */
     public function doExpressCheckoutPayment(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
-
-        $request->setField('METHOD', 'DoExpressCheckoutPayment');
+        $fields['METHOD'] = 'DoExpressCheckoutPayment';
 
         $this->addVersionField($request);
         $this->addAuthorizeFields($request);
 
-        return $this->doRequest($request);
+        return $this->doRequest($fields);
     }
 
     /**
@@ -429,15 +415,12 @@ class Api
      */
     public function createRecurringPaymentsProfile(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
-
-        $request->setField('METHOD', 'CreateRecurringPaymentsProfile');
+        $fields['METHOD'] = 'CreateRecurringPaymentsProfile';
 
         $this->addVersionField($request);
         $this->addAuthorizeFields($request);
 
-        return $this->doRequest($request);
+        return $this->doRequest($fields);
     }
 
     /**
@@ -447,15 +430,12 @@ class Api
      */
     public function updateRecurringPaymentsProfile(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
-
-        $request->setField('METHOD', 'UpdateRecurringPaymentsProfile');
+        $fields['METHOD'] = 'UpdateRecurringPaymentsProfile';
 
         $this->addVersionField($request);
         $this->addAuthorizeFields($request);
 
-        return $this->doRequest($request);
+        return $this->doRequest($fields);
     }
 
     /**
@@ -465,15 +445,12 @@ class Api
      */
     public function getRecurringPaymentsProfileDetails(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
-
-        $request->setField('METHOD', 'GetRecurringPaymentsProfileDetails');
+        $fields['METHOD'] = 'GetRecurringPaymentsProfileDetails';
 
         $this->addVersionField($request);
         $this->addAuthorizeFields($request);
 
-        return $this->doRequest($request);
+        return $this->doRequest($fields);
     }
 
     /**
@@ -483,15 +460,12 @@ class Api
      */
     public function manageRecurringPaymentsProfileStatus(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
-
-        $request->setField('METHOD', 'ManageRecurringPaymentsProfileStatus');
+        $fields['METHOD'] = 'ManageRecurringPaymentsProfileStatus';
 
         $this->addVersionField($request);
         $this->addAuthorizeFields($request);
 
-        return $this->doRequest($request);
+        return $this->doRequest($fields);
     }
 
     /**
@@ -503,15 +477,12 @@ class Api
      */
     public function createBillingAgreement(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
-
-        $request->setField('METHOD', 'CreateBillingAgreement');
+        $fields['METHOD'] = 'CreateBillingAgreement';
 
         $this->addVersionField($request);
         $this->addAuthorizeFields($request);
 
-        return $this->doRequest($request);
+        return $this->doRequest($fields);
     }
 
     /**
@@ -523,37 +494,35 @@ class Api
      */
     public function doReferenceTransaction(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
-
-        $request->setField('METHOD', 'DoReferenceTransaction');
+        $fields['METHOD'] = 'DoReferenceTransaction';
 
         $this->addVersionField($request);
         $this->addAuthorizeFields($request);
 
-        return $this->doRequest($request);
+        return $this->doRequest($fields);
     }
 
     /**
-     * @param FormRequest $request
-     *
-     * @throws HttpException
+     * @param array $fields
      *
      * @return array
      */
-    protected function doRequest(FormRequest $request)
+    protected function doRequest(array $fields)
     {
-        $request->setMethod('POST');
-        $request->fromUrl($this->getApiEndpoint());
+        $headers = array(
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        );
 
-        $this->client->send($request, $response = new Response());
+        $request = new Request('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
 
-        if (false == $response->isSuccessful()) {
+        $response = $this->client->send($request);
+
+        if (false == ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
             throw HttpException::factory($request, $response);
         }
 
         $result = array();
-        parse_str($response->getContent(), $result);
+        parse_str($response->getBody()->getContents(), $result);
         foreach ($result as &$value) {
             $value = urldecode($value);
         }
@@ -596,20 +565,20 @@ class Api
     }
 
     /**
-     * @param FormRequest $request
+     * @param array $fields
      */
-    protected function addAuthorizeFields(FormRequest $request)
+    protected function addAuthorizeFields(array &$fields)
     {
-        $request->setField('PWD', $this->options['password']);
-        $request->setField('USER', $this->options['username']);
-        $request->setField('SIGNATURE', $this->options['signature']);
+        $fields['PWD'] = $this->options['password'];
+        $fields['USER'] = $this->options['username'];
+        $fields['SIGNATURE'] = $this->options['signature'];
     }
 
     /**
-     * @param FormRequest $request
+     * @param array $fields
      */
-    protected function addVersionField(FormRequest $request)
+    protected function addVersionField(array &$fields)
     {
-        $request->setField('VERSION', self::VERSION);
+        $fields['VERSION'] = self::VERSION;
     }
 }

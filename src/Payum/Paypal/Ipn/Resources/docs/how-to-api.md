@@ -2,7 +2,6 @@
 
 ```php
 <?php
-use Buzz\Client\Curl;
 use Payum\Paypal\Ipn\Api;
 
 $api = new Api(array(

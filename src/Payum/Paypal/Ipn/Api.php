@@ -1,12 +1,11 @@
 <?php
 namespace Payum\Paypal\Ipn;
 
-use Buzz\Client\ClientInterface;
-use Buzz\Message\Form\FormRequest;
-use Buzz\Message\Response;
-use Payum\Core\Bridge\Buzz\ClientFactory;
+use GuzzleHttp\Psr7\Request;
+use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\HttpClientInterface;
 
 /**
  * @link https://www.x.com/developers/paypal/documentation-tools/ipn/integration-guide/IPNIntro
@@ -26,7 +25,7 @@ class Api
     const CMD_NOTIFY_VALIDATE = '_notify-validate';
 
     /**
-     * @var \Buzz\Client\ClientInterface
+     * @var HttpClientInterface
      */
     protected $client;
 
@@ -36,12 +35,12 @@ class Api
     protected $options;
 
     /**
-     * @param array           $options
-     * @param ClientInterface $client
+     * @param array               $options
+     * @param HttpClientInterface $client
      */
-    public function __construct(array $options, ClientInterface $client = null)
+    public function __construct(array $options, HttpClientInterface $client = null)
     {
-        $this->client = $client ?: ClientFactory::createCurl();
+        $this->client = $client ?: HttpClientFactory::create();
 
         $this->options = $options;
 
@@ -51,31 +50,29 @@ class Api
     }
 
     /**
-     * @param array $notification
+     * @param array $fields
      *
      * @return string
      */
-    public function notifyValidate(array $notification)
+    public function notifyValidate(array $fields)
     {
-        $request = new FormRequest();
-        $request->setField('cmd', self::CMD_NOTIFY_VALIDATE);
-        $request->addFields($notification);
-        $request->setMethod('POST');
-        $request->fromUrl($this->getIpnEndpoint());
+        $fields['cmd'] = self::CMD_NOTIFY_VALIDATE;
 
-        $response = new Response();
+        $headers = array(
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        );
 
-        $this->client->send($request, $response);
+        $request = new Request('POST', $this->getIpnEndpoint(), $headers, http_build_query($fields));
 
-        if (false == $response->isSuccessful()) {
+        $response = $this->client->send($request);
+
+        if (false == ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
             throw HttpException::factory($request, $response);
         }
 
-        if (self::NOTIFY_VERIFIED === $response->getContent()) {
-            return self::NOTIFY_VERIFIED;
-        }
+        $result = $response->getBody()->getContents();
 
-        return self::NOTIFY_INVALID;
+        return self::NOTIFY_VERIFIED === $result ? self::NOTIFY_VERIFIED : self::NOTIFY_INVALID;
     }
 
     /**

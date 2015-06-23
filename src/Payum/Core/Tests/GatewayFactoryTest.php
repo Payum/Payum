@@ -1,5 +1,5 @@
 <?php
-namespace Payum\AuthorizeNet\Aim\Tests;
+namespace Payum\Core\Tests;
 
 use Payum\Core\GatewayFactory;
 
@@ -56,7 +56,7 @@ class GatewayFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
 
-        $this->assertAttributeEmpty('apis', $gateway);
+        $this->assertAttributeNotEmpty('apis', $gateway);
 
         $this->assertAttributeNotEmpty('actions', $gateway);
 

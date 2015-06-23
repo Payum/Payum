@@ -49,7 +49,7 @@ class PaypalProCheckoutGatewayFactory extends GatewayFactory
                     'sandbox' => $config['sandbox'],
                 );
 
-                return new Api($paypalConfig, $config['buzz.client']);
+                return new Api($paypalConfig, $config['payum.http_client']);
             };
         }
     }

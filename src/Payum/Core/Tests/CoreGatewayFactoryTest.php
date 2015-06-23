@@ -1,8 +1,10 @@
 <?php
 namespace Payum\Core\Tests;
 
+use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\CoreGatewayFactory;
+use Payum\Core\HttpClientInterface;
 
 class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,11 +37,25 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
 
-        $this->assertAttributeEmpty('apis', $gateway);
+        $this->assertAttributeNotEmpty('apis', $gateway);
         $this->assertAttributeNotEmpty('actions', $gateway);
 
         $extensions = $this->readAttribute($gateway, 'extensions');
         $this->assertAttributeNotEmpty('extensions', $extensions);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAlwaysAddHttpClientAsApi()
+    {
+        $factory = new CoreGatewayFactory();
+
+        $config = $factory->createConfig(array());
+        $this->assertArrayHasKey('payum.api.http_client', $config);
+        $this->assertInstanceOf(\Closure::class, $config['payum.api.http_client']);
+
+        $this->assertSame($config['payum.http_client'], $config['payum.api.http_client'](new ArrayObject($config)));
     }
 
     /**
@@ -71,7 +87,7 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($config);
 
         $this->assertInstanceOf('Twig_Environment', $config['twig.env']);
-        $this->assertInstanceOf('Buzz\Client\ClientInterface', $config['buzz.client']);
+        $this->assertInstanceOf('Payum\Core\HttpClientInterface', $config['payum.http_client']);
         $this->assertInstanceOf('Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction', $config['payum.action.get_http_request']);
         $this->assertInstanceOf('Payum\Core\Action\CapturePaymentAction', $config['payum.action.capture_payment']);
         $this->assertInstanceOf('Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction', $config['payum.action.execute_same_request_with_model_details']);

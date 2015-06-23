@@ -1,12 +1,12 @@
 <?php
 namespace Payum\Paypal\ProCheckout\Nvp;
 
-use Buzz\Client\ClientInterface;
-use Buzz\Message\Form\FormRequest;
-use Buzz\Message\Request;
-use Buzz\Message\Response;
+use GuzzleHttp\Psr7\Request;
+use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\Http\HttpException;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\HttpClientInterface;
 
 /**
  * @author Ton Sharp <Forma-PRO@66ton99.org.ua>
@@ -159,7 +159,7 @@ class Api
     const TENDER_PAYPAL = 'P';
 
     /**
-     * @var ClientInterface
+     * @var HttpClientInterface
      */
     protected $client;
 
@@ -176,23 +176,29 @@ class Api
     );
 
     /**
-     * @param ClientInterface $client
-     * @param array           $options
+     * @param array $options
+     * @param HttpClientInterface $client
      *
      * @throw InvalidArgumentException
      */
-    public function __construct(array $options, ClientInterface $client = null)
+    public function __construct(array $options, HttpClientInterface $client = null)
     {
-        $this->client = $client;
-        $this->options = array_replace($this->options, $options);
-
-        ArrayObject::ensureArrayObject($this->options)->validateNotEmpty(array(
+        $options = ArrayObject::ensureArrayObject($options);
+        $options->defaults($this->options);
+        $options->validateNotEmpty(array(
             'username',
             'password',
             'partner',
             'vendor',
             'tender',
         ));
+
+        if (false == is_bool($options['sandbox'])) {
+            throw new LogicException('The boolean sandbox option must be set.');
+        }
+
+        $this->options = $options;
+        $this->client = $client ?: HttpClientFactory::create();
     }
 
     /**
@@ -202,13 +208,10 @@ class Api
      */
     public function doSale(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
-        $request->setField('TRXTYPE', self::TRXTYPE_SALE);
+        $fields['TRXTYPE'] = self::TRXTYPE_SALE;
+        $this->addAuthorizeFields($fields);
 
-        $this->addOptions($request);
-
-        $result = $this->doRequest($request);
+        $result = $this->doRequest($fields);
         $result['TRXTYPE'] = self::TRXTYPE_SALE;
 
         return $result;
@@ -221,38 +224,36 @@ class Api
      */
     public function doCredit(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
-        $request->setField('TRXTYPE', self::TRXTYPE_CREDIT);
+        $fields['TRXTYPE'] = self::TRXTYPE_CREDIT;
+        $this->addAuthorizeFields($fields);
 
-        $this->addOptions($request);
-
-        $result = $this->doRequest($request);
+        $result = $this->doRequest($fields);
         $result['TRXTYPE'] = self::TRXTYPE_CREDIT;
 
         return $result;
     }
 
     /**
-     * @param FormRequest $request
-     *
-     * @throws HttpException
+     * @param array $fields
      *
      * @return array
      */
-    protected function doRequest(FormRequest $request)
+    protected function doRequest(array $fields)
     {
-        $request->setMethod('POST');
-        $request->fromUrl($this->getApiEndpoint());
+        $headers = array(
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        );
 
-        $this->client->send($request, $response = new Response());
+        $request = new Request('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
 
-        if (false == $response->isSuccessful()) {
+        $response = $this->client->send($request);
+
+        if (false == ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
             throw HttpException::factory($request, $response);
         }
 
         $result = array();
-        parse_str($response->getContent(), $result);
+        parse_str($response->getBody()->getContents(), $result);
         foreach ($result as &$value) {
             $value = urldecode($value);
         }
@@ -265,31 +266,21 @@ class Api
      */
     protected function getApiEndpoint()
     {
-        $host = $this->options['sandbox'] ? 'pilot-payflowpro.paypal.com' : 'payflowpro.paypal.com';
-
-        return sprintf(
-            'https://%s/',
-            $host
-        );
+        return $this->options['sandbox'] ?
+            'https://pilot-payflowpro.paypal.com/' :
+            'https://payflowpro.paypal.com/'
+        ;
     }
 
     /**
-     * @param FormRequest $request
+     * @param array $fields
      */
-    protected function addOptions(FormRequest $request)
+    protected function addAuthorizeFields(array &$fields)
     {
-        $request->setField('USER', $this->options['username']);
-        $request->setField('PWD', $this->options['password']);
-        $request->setField('PARTNER', $this->options['partner']);
-        $request->setField('VENDOR', $this->options['vendor']);
-        $request->setField('TENDER', $this->options['tender']);
-    }
-
-    /**
-     * @return Response
-     */
-    protected function createResponse()
-    {
-        return new Response();
+        $fields['USER'] = $this->options['username'];
+        $fields['PWD'] = $this->options['password'];
+        $fields['PARTNER'] = $this->options['partner'];
+        $fields['VENDOR'] = $this->options['vendor'];
+        $fields['TENDER'] = $this->options['tender'];
     }
 }

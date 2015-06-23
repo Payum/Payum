@@ -1,5 +1,12 @@
 # Upgrades
 
+## 1.0
+
+* Php required version is 5.5
+* [be2bill] `Api::getOnsiteUrl` method is renamed to `Api::getOffsiteUrl`
+* [be2bill] `Api` methods are returing array instead of Response
+* [http-client] kriswallsmith/buzz http client was replaced with PSR7 compatible guzzlehttp/guzzle.
+
 ## 0.15 to never
 
 Libraries and extension dependencies are not required now. You must install them if you need.
