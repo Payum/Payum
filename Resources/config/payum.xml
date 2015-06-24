@@ -32,12 +32,8 @@
             </call>
         </service>
 
-        <service id="payum.buzz.client" class="Buzz\Client\ClientInterface">
-            <factory class="Payum\Core\Bridge\Buzz\ClientFactory" method="createCurl" />
-
-            <call method="setTimeout">
-                <argument>200</argument>
-            </call>
+        <service id="payum.http_client" class="Payum\Core\HttpClientInterface">
+            <factory class="Payum\Core\Bridge\Guzzle\HttpClientFactory" method="create" />
         </service>
 
         <service id="payum.iso4217" class="Payum\ISO4217\ISO4217" />

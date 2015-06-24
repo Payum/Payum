@@ -111,15 +111,10 @@ abstract class AbstractGatewayFactory implements GatewayFactoryInterface
 
 
         $gateway = new Definition('Payum\Core\Gateway', array($config));
-        if (version_compare(Kernel::VERSION_ID, '20600') < 0) {
-            $gateway->setFactoryService(sprintf('payum.%s.factory', $this->getName()));
-            $gateway->setFactoryMethod('create');
-        } else {
-            $gateway->setFactory(array(
-                new Reference(sprintf('payum.%s.factory', $this->getName())),
-                'create'
-            ));
-        }
+        $gateway->setFactory(array(
+            new Reference(sprintf('payum.%s.factory', $this->getName())),
+            'create'
+        ));
 
         return $gateway;
     }
@@ -134,7 +129,7 @@ abstract class AbstractGatewayFactory implements GatewayFactoryInterface
         $config['payum.factory_name'] = $this->getName();
         $config['payum.template.layout'] = new Parameter('payum.template.layout');
         $config['payum.template.obtain_credit_card'] = new Parameter('payum.template.obtain_credit_card');
-        $config['buzz.client'] = new Reference('payum.buzz.client');
+        $config['payum.http_client'] = new Reference('payum.http_client');
         $config['twig.env'] = new Reference('twig');
         $config['payum.iso4217'] = new Reference('payum.iso4217');
 

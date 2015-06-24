@@ -40,12 +40,7 @@ class DoctrineStorageFactory extends AbstractStorageFactory
     protected function createStorage(ContainerBuilder $container, $modelClass, array $config)
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config/storage'));
-
-        if (version_compare(Kernel::VERSION_ID, '20600') >= 0) {
-            $loader->load('doctrine.'.$config['driver'].'.xml');
-        } else {
-            $loader->load('doctrine.'.$config['driver'].'-bc-26.xml');
-        }
+        $loader->load('doctrine.'.$config['driver'].'.xml');
 
         $storage = new DefinitionDecorator(sprintf('payum.storage.doctrine.%s', $config['driver']));
         $storage->setPublic(true);

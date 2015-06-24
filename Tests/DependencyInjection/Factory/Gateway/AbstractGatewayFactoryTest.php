@@ -161,51 +161,8 @@ class AbstractGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowCreateGatewayWithExpectedConfigBC()
-    {
-        if (version_compare(Kernel::VERSION_ID, '20600') >= 0) {
-            $this->markTestSkipped('No need to test on symfony >= 2.6');
-        }
-
-        $factory = $this->createAbstractGatewayFactory();
-        $factory
-            ->expects($this->any())
-            ->method('getName')
-            ->willReturn('foo')
-        ;
-
-        $container = new ContainerBuilder;
-
-        $gatewayId = $factory->create($container, 'aGatewayName', array(
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-
-        $this->assertEquals('payum.foo.aGatewayName.gateway', $gatewayId);
-
-        $gateway = $container->getDefinition($gatewayId);
-
-        //guard
-        $this->assertNotEmpty($gateway->getFactoryMethod());
-        $this->assertNotEmpty($gateway->getFactoryService());
-        $this->assertNotEmpty($gateway->getArguments());
-
-        $config = $gateway->getArgument(0);
-
-        $this->assertEquals('aGatewayName', $config['payum.gateway_name']);
-
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowCreateGatewayWithExpectedConfig()
     {
-        if (version_compare(Kernel::VERSION_ID, '20600') < 0) {
-            $this->markTestSkipped('No need to test on symfony < 2.6');
-        }
-
         $factory = $this->createAbstractGatewayFactory();
         $factory
             ->expects($this->any())

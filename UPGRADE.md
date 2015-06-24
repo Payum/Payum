@@ -2,6 +2,12 @@
 
 Library [upgrades](https://github.com/Payum/Payum/blob/master/UPGRADE.md).
 
+## 0.15 to 1.0
+
+* Php minimum version is 5.5
+* Symfony minimum version is 2.7
+* Service `payum.buzz.client` is no longer available. Use `payum.http_client` one.
+
 ## 0.14 to 0.15
 
 * Everything that were Payment and PaymentXX were renamed to Gateway and GatewayXXX.
