@@ -7,7 +7,6 @@
     <services>
         <service id="payum.storage.propel2" class="Payum\Core\Bridge\Propel2\Storage\Propel2Storage" public="false" abstract="true">
         <argument><!-- should be set in Propel2StorageFactory --></argument>
-        <argument><!-- should be set in Propel2StorageFactory --></argument>
         </service>
     </services>
 </container>
