@@ -142,51 +142,8 @@ class OmnipayOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowCreateGatewayAndReturnItsIdBC()
-    {
-        if (version_compare(Kernel::VERSION_ID, '20600') >= 0) {
-            $this->markTestSkipped('No need to test on symfony >= 2.6');
-        }
-
-        $factory = new OmnipayOffsiteGatewayFactory;
-
-        $container = new ContainerBuilder;
-
-        $gatewayId = $factory->create($container, 'aGatewayName', array(
-            'type' => 'PayPal_Express',
-            'options' => array(
-                'foo' => 'foo',
-                'bar' => 'bar',
-            ),
-            'actions' => array(),
-            'apis' => array(),
-            'extensions' => array(),
-        ));
-        
-        $this->assertEquals('payum.omnipay_offsite.aGatewayName.gateway', $gatewayId);
-        $this->assertTrue($container->hasDefinition($gatewayId));
-
-        $gateway = $container->getDefinition($gatewayId);
-
-        //guard
-        $this->assertNotEmpty($gateway->getFactoryMethod());
-        $this->assertNotEmpty($gateway->getFactoryService());
-        $this->assertNotEmpty($gateway->getArguments());
-
-        $config = $gateway->getArgument(0);
-
-        $this->assertEquals('aGatewayName', $config['payum.gateway_name']);
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowCreateGatewayAndReturnItsId()
     {
-        if (version_compare(Kernel::VERSION_ID, '20600') < 0) {
-            $this->markTestSkipped('No need to test on symfony < 2.6');
-        }
-
         $factory = new OmnipayOffsiteGatewayFactory;
 
         $container = new ContainerBuilder;
@@ -238,7 +195,7 @@ class OmnipayOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factoryConfig = $factoryService->getArgument(0);
         $this->assertEquals('omnipay_offsite', $factoryConfig['payum.factory_name']);
-        $this->assertArrayHasKey('buzz.client', $factoryConfig);
+        $this->assertArrayHasKey('payum.http_client', $factoryConfig);
         $this->assertArrayHasKey('twig.env', $factoryConfig);
         $this->assertArrayHasKey('payum.iso4217', $factoryConfig);
         $this->assertArrayHasKey('payum.template.layout', $factoryConfig);

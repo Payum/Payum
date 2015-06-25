@@ -2,6 +2,7 @@
 namespace Payum\Bundle\PayumBundle\Tests;
 
 use Payum\Bundle\PayumBundle\GatewayFactory;
+use Payum\Core\HttpClientInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -17,7 +18,7 @@ class GatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->container = new Container();
         $this->container->setParameter('payum.template.layout', 'theLayout');
         $this->container->setParameter('payum.template.obtain_credit_card', 'theObtainCreditCardTemplate');
-        $this->container->set('payum.buzz.client', $this->getMock('Buzz\Client\ClientInterface'));
+        $this->container->set('payum.http_client', $this->getMock(HttpClientInterface::class));
         $this->container->set('twig', $this->getMock('Twig_Environment'));
     }
 
