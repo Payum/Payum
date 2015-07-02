@@ -44,7 +44,7 @@ class GatewayFactory implements GatewayFactoryInterface
 
         $this->populateConfig($config);
 
-        return (array)$config;
+        return (array) $config;
     }
 
     /**
