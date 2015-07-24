@@ -71,7 +71,7 @@ There are several ways to add it to a gateway:
         acme.payum.action.foo:
             class: Acme\PaymentBundle\Payum\Action\FooAction
             tags:
-                - {payum.action, {gateway: a_gateway}}
+                - { name: payum.action, gateway: a_gateway }
     ```
 
     If `prepend` set to true the action is added before the rest. 
