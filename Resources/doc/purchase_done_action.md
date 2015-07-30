@@ -27,7 +27,7 @@ It is the route of url you will be redirected after capture done its job. Let's 
         $token = $this->get('payum.security.http_request_verifier')->verify($request);
         
         $identity = $token->getDetails();
-        $model = $payum->getStorage($identity->getClass())->find($identity);
+        $model = $this->get('payum')->getStorage($identity->getClass())->find($identity);
 
         $gateway = $this->get('payum')->getGateway($token->getGatewayName());
 
