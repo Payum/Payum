@@ -368,8 +368,8 @@ class Api
     {
         $fields['METHOD'] = 'GetExpressCheckoutDetails';
 
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
+        $this->addVersionField($fields);
+        $this->addAuthorizeFields($fields);
 
         return $this->doRequest($fields);
     }
@@ -385,8 +385,8 @@ class Api
     {
         $fields['METHOD'] = 'GetTransactionDetails';
 
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
+        $this->addVersionField($fields);
+        $this->addAuthorizeFields($fields);
 
         return $this->doRequest($fields);
     }
@@ -402,8 +402,8 @@ class Api
     {
         $fields['METHOD'] = 'DoExpressCheckoutPayment';
 
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
+        $this->addVersionField($fields);
+        $this->addAuthorizeFields($fields);
 
         return $this->doRequest($fields);
     }
@@ -417,8 +417,8 @@ class Api
     {
         $fields['METHOD'] = 'CreateRecurringPaymentsProfile';
 
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
+        $this->addVersionField($fields);
+        $this->addAuthorizeFields($fields);
 
         return $this->doRequest($fields);
     }
@@ -432,8 +432,8 @@ class Api
     {
         $fields['METHOD'] = 'UpdateRecurringPaymentsProfile';
 
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
+        $this->addVersionField($fields);
+        $this->addAuthorizeFields($fields);
 
         return $this->doRequest($fields);
     }
@@ -447,8 +447,8 @@ class Api
     {
         $fields['METHOD'] = 'GetRecurringPaymentsProfileDetails';
 
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
+        $this->addVersionField($fields);
+        $this->addAuthorizeFields($fields);
 
         return $this->doRequest($fields);
     }
@@ -462,8 +462,8 @@ class Api
     {
         $fields['METHOD'] = 'ManageRecurringPaymentsProfileStatus';
 
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
+        $this->addVersionField($fields);
+        $this->addAuthorizeFields($fields);
 
         return $this->doRequest($fields);
     }
@@ -479,8 +479,8 @@ class Api
     {
         $fields['METHOD'] = 'CreateBillingAgreement';
 
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
+        $this->addVersionField($fields);
+        $this->addAuthorizeFields($fields);
 
         return $this->doRequest($fields);
     }
@@ -496,8 +496,8 @@ class Api
     {
         $fields['METHOD'] = 'DoReferenceTransaction';
 
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
+        $this->addVersionField($fields);
+        $this->addAuthorizeFields($fields);
 
         return $this->doRequest($fields);
     }
