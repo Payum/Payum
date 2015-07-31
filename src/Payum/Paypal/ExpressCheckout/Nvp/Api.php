@@ -513,9 +513,9 @@ class Api
             'Content-Type' => 'application/x-www-form-urlencoded',
         );
 
-        $fields = new Request('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
+        $request = new Request('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
 
-        $response = $this->client->send($fields);
+        $response = $this->client->send($request);
 
         if (false == ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
             throw HttpException::factory($fields, $response);
