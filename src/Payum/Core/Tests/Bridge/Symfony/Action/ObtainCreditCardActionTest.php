@@ -125,7 +125,11 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
             ->will($this->returnCallback(function (RenderTemplate $request) use ($testCase, $formView) {
                 $testCase->assertEquals('theTemplateName', $request->getTemplateName());
-                $testCase->assertEquals(array('form' => $formView), $request->getParameters());
+                $testCase->assertEquals(array(
+                    'form' => $formView,
+                    'model' => null,
+                    'firstModel' => null
+                ), $request->getParameters());
 
                 $request->setResult('theObtainCreditCardPageWithForm');
             }))
@@ -207,7 +211,11 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
             ->will($this->returnCallback(function (RenderTemplate $request) use ($testCase, $formView) {
                 $testCase->assertEquals('theTemplateName', $request->getTemplateName());
-                $testCase->assertEquals(array('form' => $formView), $request->getParameters());
+                $testCase->assertEquals(array(
+                    'form' => $formView,
+                    'model' => null,
+                    'firstModel' => null
+                ), $request->getParameters());
 
                 $request->setResult('theObtainCreditCardPageWithForm');
             }))
@@ -281,6 +289,85 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
         $action->execute($obtainCreditCard);
 
         $this->assertSame($creditCard, $obtainCreditCard->obtain());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldPassFirstAndCurrentModelsToTemplate()
+    {
+        $firstModel = new \stdClass();
+        $currentModel = new \stdClass();
+
+        $httpRequest = new Request();
+
+        $formView = new FormView();
+
+        $creditCard = new CreditCard();
+
+        $formMock = $this->createFormMock();
+        $formMock
+            ->expects($this->once())
+            ->method('handleRequest')
+            ->with($this->identicalTo($httpRequest))
+        ;
+        $formMock
+            ->expects($this->once())
+            ->method('isSubmitted')
+            ->will($this->returnValue(true))
+        ;
+        $formMock
+            ->expects($this->once())
+            ->method('createView')
+            ->will($this->returnValue($formView))
+        ;
+        $formMock
+            ->expects($this->once())
+            ->method('isValid')
+            ->will($this->returnValue(false))
+        ;
+        $formMock
+            ->expects($this->once())
+            ->method('getData')
+            ->will($this->returnValue($creditCard))
+        ;
+
+        $formFactoryMock = $this->createFormFactoryMock();
+        $formFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with('payum_credit_card')
+            ->will($this->returnValue($formMock))
+        ;
+
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
+            ->will($this->returnCallback(function (RenderTemplate $request) use ($formView, $firstModel, $currentModel) {
+                $this->assertEquals('theTemplateName', $request->getTemplateName());
+                $this->assertEquals(array(
+                    'form' => $formView,
+                    'model' => $currentModel,
+                    'firstModel' => $firstModel
+                ), $request->getParameters());
+
+                $request->setResult('theObtainCreditCardPageWithForm');
+            }))
+        ;
+
+        $action = new ObtainCreditCardAction($formFactoryMock, 'theTemplateName');
+        $action->setRequest($httpRequest);
+        $action->setGateway($gatewayMock);
+
+        try {
+            $action->execute(new ObtainCreditCard($firstModel, $currentModel));
+        } catch (HttpResponse $e) {
+            return;
+        }
+
+        $this->fail('Reply exception was expected to be thrown');
     }
 
     /**

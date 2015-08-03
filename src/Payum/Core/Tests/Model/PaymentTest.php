@@ -1,7 +1,9 @@
 <?php
 namespace Payum\Core\Tests\Model;
 
+use Payum\Core\Model\CreditCardInterface;
 use Payum\Core\Model\Payment;
+use Payum\Core\Model\PaymentInterface;
 
 class PaymentTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,7 +14,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Core\Model\Payment');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Model\PaymentInterface'));
+        $this->assertTrue($rc->implementsInterface(PaymentInterface::class));
     }
 
     /**
@@ -30,7 +32,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     {
         $order = new Payment();
 
-        $creditCardMock = $this->getMock('Payum\Core\Model\CreditCardInterface');
+        $creditCardMock = $this->getMock(CreditCardInterface::class);
 
         $order->setCreditCard($creditCardMock);
 
