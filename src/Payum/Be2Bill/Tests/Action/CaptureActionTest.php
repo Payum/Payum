@@ -223,6 +223,54 @@ class CaptureActionTest extends GenericActionTest
     }
 
     /**
+     * @test
+     */
+    public function shouldPassFirstAndCurrentModelsWithObtainCreditCardSubRequest()
+    {
+        $firstModel = new \stdClass();
+        $currentModel = new \ArrayObject(array(
+            'AMOUNT' => 10,
+            'CLIENTUSERAGENT' => 'anAgent',
+            'CLIENTIP' => '127.0.0.1',
+        ));
+
+        $apiMock = $this->createApiMock();
+        $apiMock
+            ->expects($this->once())
+            ->method('payment')
+            ->will($this->returnValue(array(
+                'FOO' => 'FOOVAL',
+                'BAR' => 'BARVAL',
+            )))
+        ;
+
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
+            ->will($this->returnCallback(function (ObtainCreditCard $request) use ($firstModel, $currentModel) {
+                $this->assertSame($firstModel, $request->getFirstModel());
+                $this->assertSame($currentModel, $request->getModel());
+
+                $card = new CreditCard();
+                $card->setExpireAt(new \DateTime('2014-10-01'));
+
+                $request->set($card);
+            }))
+        ;
+
+        $action = new CaptureAction();
+        $action->setApi($apiMock);
+        $action->setGateway($gatewayMock);
+
+        $capture = new Capture($firstModel);
+        $capture->setModel($currentModel);
+
+        $action->execute($capture);
+    }
+
+    /**
      * @return \PHPUnit_Framework_MockObject_MockObject|Api
      */
     protected function createApiMock()

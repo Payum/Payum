@@ -51,8 +51,8 @@ class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
         $cardFields = array('ACCT', 'CVV2', 'EXPDATE');
         if (false == $model->validateNotEmpty($cardFields, false)) {
             try {
-                $this->gateway->execute($obtainCreditCard = new ObtainCreditCard());
-
+                $obtainCreditCard = new ObtainCreditCard($request->getFirstModel(), $request->getModel());
+                $this->gateway->execute($obtainCreditCard);
                 $card = $obtainCreditCard->obtain();
 
                 $model['EXPDATE'] = new SensitiveValue($card->getExpireAt()->format('my'));

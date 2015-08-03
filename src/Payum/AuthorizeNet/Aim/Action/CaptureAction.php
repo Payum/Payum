@@ -48,8 +48,8 @@ class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
 
         if (false == $model->validateNotEmpty(array('card_num', 'exp_date'), false)) {
             try {
-                $this->gateway->execute($obtainCreditCard = new ObtainCreditCard());
-
+                $obtainCreditCard = new ObtainCreditCard($request->getFirstModel(), $request->getModel());
+                $this->gateway->execute($obtainCreditCard);
                 $card = $obtainCreditCard->obtain();
 
                 $model['exp_date'] = new SensitiveValue($card->getExpireAt()->format('m/y'));

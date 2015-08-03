@@ -4,12 +4,23 @@ namespace Payum\Core\Request;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\CreditCardInterface;
 
-class ObtainCreditCard
+class ObtainCreditCard extends Generic
 {
     /**
      * @var CreditCardInterface
      */
     protected $creditCard;
+
+    /**
+     * @param object|null $firstModel
+     * @param object|null $currentModel
+     */
+    public function __construct($firstModel = null, $currentModel = null)
+    {
+        parent::__construct($firstModel);
+
+        $this->setModel($currentModel);
+    }
 
     /**
      * @param CreditCardInterface $creditCard

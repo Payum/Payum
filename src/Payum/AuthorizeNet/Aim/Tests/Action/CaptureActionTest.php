@@ -151,6 +151,49 @@ class CaptureActionTest extends GenericActionTest
     /**
      * @test
      */
+    public function shouldPassFirstAndCurrentModelsWithObtainCreditCardSubRequest()
+    {
+        $firstModel = new \stdClass();
+        $currentModel = new \ArrayObject(array(
+            'amount' => 10,
+        ));
+
+        $api = $this->createAuthorizeNetAIMMock();
+        $api
+            ->expects($this->once())
+            ->method('authorizeAndCapture')
+            ->will($this->returnValue($this->createAuthorizeNetAIMResponseMock()))
+        ;
+
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
+            ->will($this->returnCallback(function (ObtainCreditCard $request) use ($firstModel, $currentModel) {
+                $this->assertSame($firstModel, $request->getFirstModel());
+                $this->assertSame($currentModel, $request->getModel());
+
+                $card = new CreditCard();
+                $card->setExpireAt(new \DateTime('2014-10-01'));
+
+                $request->set($card);
+            }))
+        ;
+
+        $action = new CaptureAction();
+        $action->setApi($api);
+        $action->setGateway($gatewayMock);
+
+        $capture = new Capture($firstModel);
+        $capture->setModel($currentModel);
+
+        $action->execute($capture);
+    }
+
+    /**
+     * @test
+     */
     public function shouldCaptureWithObtainedCreditCard()
     {
         $api = $this->createAuthorizeNetAIMMock();
