@@ -77,6 +77,8 @@ class ObtainCreditCardAction extends GatewayAwareAction
         }
 
         $renderTemplate = new RenderTemplate($this->templateName, array(
+            'model' => $request->getModel(),
+            'firstModel' => $request->getFirstModel(),
             'form' => $form->createView(),
         ));
         $this->gateway->execute($renderTemplate);
