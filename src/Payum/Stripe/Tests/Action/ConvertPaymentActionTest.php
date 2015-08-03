@@ -3,6 +3,7 @@ namespace Payum\Stripe\Tests\Action\Api;
 
 use Payum\Core\Model\CreditCard;
 use Payum\Core\Model\Payment;
+use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Stripe\Action\ConvertPaymentAction;
@@ -17,7 +18,7 @@ class ConvertPaymentActionTest extends GenericActionTest
     {
         return array(
             array(new $this->requestClass(new Payment(), 'array')),
-            array(new $this->requestClass($this->getMock('Payum\Core\Model\PaymentInterface'), 'array')),
+            array(new $this->requestClass($this->getMock(PaymentInterface::class), 'array')),
             array(new $this->requestClass(new Payment(), 'array', $this->getMock('Payum\Core\Security\TokenInterface'))),
         );
     }
@@ -31,7 +32,7 @@ class ConvertPaymentActionTest extends GenericActionTest
             array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
             array(new $this->requestClass(new \stdClass(), 'array')),
             array(new $this->requestClass(new Payment(), 'foobar')),
-            array(new $this->requestClass($this->getMock('Payum\Core\Model\PaymentInterface'), 'foobar')),
+            array(new $this->requestClass($this->getMock(PaymentInterface::class), 'foobar')),
         );
     }
 

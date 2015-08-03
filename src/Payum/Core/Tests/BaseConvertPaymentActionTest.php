@@ -3,6 +3,7 @@ namespace Payum\Core\Tests;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Model\Payment;
+use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Generic;
 
 abstract class BaseConvertPaymentActionTest extends \PHPUnit_Framework_TestCase
@@ -21,7 +22,7 @@ abstract class BaseConvertPaymentActionTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(new $this->requestClass(new Payment())),
-            array(new $this->requestClass($this->getMock('Payum\Core\Model\PaymentInterface'))),
+            array(new $this->requestClass($this->getMock(PaymentInterface::class))),
             array(new $this->requestClass(new Payment(), $this->getMock('Payum\Core\Security\TokenInterface'))),
         );
     }
