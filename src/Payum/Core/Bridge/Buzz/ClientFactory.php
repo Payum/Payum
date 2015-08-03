@@ -12,13 +12,15 @@ class ClientFactory
     {
         $client = new Curl();
 
-        //reaction to the ssl3.0 shutdown from paypal
-        //https://www.paypal-community.com/t5/PayPal-Forward/PayPal-Response-to-SSL-3-0-Vulnerability-aka-POODLE/ba-p/891829
-        //http://googleonlinesecurity.blogspot.com/2014/10/this-poodle-bites-exploiting-ssl-30.html
+        // Reaction to the ssl3.0 shutdown from paypal
+        // https://www.paypal-community.com/t5/PayPal-Forward/PayPal-Response-to-SSL-3-0-Vulnerability-aka-POODLE/ba-p/891829
+        // http://googleonlinesecurity.blogspot.com/2014/10/this-poodle-bites-exploiting-ssl-30.html
+
+        // Do not use the Cipher List for NSS
+        // https://github.com/paypal/sdk-core-php/blob/namespace-5.3/lib/PayPal/Core/PPHttpConfig.php#L51
         $curl = curl_version();
         $sslVersion = isset($curl['ssl_version']) ? $curl['ssl_version'] : '';
-        //Do not use the Cipher List for NSS
-        if (substr_compare($sslVersion, "NSS/", 0, strlen("NSS/")) !== 0) {
+        if (false === strpos($sslVersion, "NSS/")) {
             $client->setOption(CURLOPT_SSL_CIPHER_LIST, 'TLSv1');
         }
 
