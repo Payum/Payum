@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.15.3 (2015-08-03)
+
+* [buzz] Do not force TLSv1 Cipher for NSS.
+
 ## 0.15.2 (2015-06-10)
 
 * [paypal-ec] Add `UpdateRecurringPaymentsProfile` require and an action for it.
