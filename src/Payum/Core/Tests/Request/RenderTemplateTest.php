@@ -36,16 +36,6 @@ class RenderTemplateTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowGetContextSetInConstructor()
-    {
-        $request = new RenderTemplate('aTemplate', array('foo' => 'fooVal', 'bar' => 'barVal'));
-
-        $this->assertSame(array('foo' => 'fooVal', 'bar' => 'barVal'), $request->getContext());
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetResultPreviouslySet()
     {
         $request = new RenderTemplate('aTemplate', array());
