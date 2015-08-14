@@ -46,16 +46,6 @@ class RenderTemplate
     }
 
     /**
-     * @deprecated this method will be removed. Use getParameters instead.
-     *
-     * @return array
-     */
-    public function getContext()
-    {
-        return $this->getParameters();
-    }
-
-    /**
      * @return string
      */
     public function getResult()

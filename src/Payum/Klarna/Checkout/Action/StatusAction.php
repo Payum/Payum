@@ -50,13 +50,6 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        // @deprecated
-        if (Constants::STATUS_CREATED == $model['status']) {
-            $request->markAuthorized();
-
-            return;
-        }
-
         $request->markUnknown();
     }
 
