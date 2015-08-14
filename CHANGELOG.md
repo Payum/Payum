@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.0.0-BETA1 (2015-08-14)
+
+* Drop support of php5.3 and php5.4
+* [vendors] Make some libraries non required. They are still required but "softly".
+* [http-client] Reuse PSR-7 as http client.
+* [twig] Move javascript vendors to separate twig block
+* [factory] Introduce core gateway factory.
+* [request] Add setter\getter for parameters property in RenderTemplate request. Remove context.
+* [request] Add ability to pass first\current models with obtain credit card request.
+* [symfony] Fix compatibility with Symfony 2.7
+* [symfony] Add EventDispatcherExtension.
+* [payex] Change exception message
+* [paypal][rest] require stable version of sdk.
+* [paypal][api] Replace $request by $fields
+* [klarna] Klarna Invoice Update
+* [klarna] Use sandbox recurring base uri if sandbox mode.
+* [stripe] Add currency to checkout token template
+* [stripe] Set stripe form payment action if variable exists
+* [stripe] Use stripe javascript object only after the script is loaded
+* [tests] use ::class whenever its possible
+* [travis] Run tests on php7
+
 ## 0.15.3 (2015-08-03)
 
 * [buzz] Do not force TLSv1 Cipher for NSS.
