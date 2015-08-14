@@ -106,31 +106,12 @@ class StatusActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldMarkAuthorizedIfReservationSEt()
+    public function shouldMarkAuthorizedIfReservationSet()
     {
         $action = new StatusAction();
 
         $status = new GetBinaryStatus(array(
             'reservation' => 'aNumber',
-        ));
-
-        //guard
-        $status->markUnknown();
-
-        $action->execute($status);
-
-        $this->assertTrue($status->isAuthorized());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldMarkAuthorizedIfStatusCreated()
-    {
-        $action = new StatusAction();
-
-        $status = new GetBinaryStatus(array(
-            'status' => Constants::STATUS_CREATED,
         ));
 
         //guard
