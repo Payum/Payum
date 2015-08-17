@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.0-BETA1 (2015-08-17)
+
+* Php minimum required version is 5.5
+* Symfony minimum required version is 2.7
+* [storage] Add Propel1StorageFactory
+* [storage] Add Propel2StorageFactory
+* [factory] Fix the core factory namespace.
+* [factory] remove FixedGatewayFactory.
+
 ## 0.15.0 (2015-04-28)
 
 * [doc][stripe] Fix misleading title
