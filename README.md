@@ -91,7 +91,7 @@ $gateway->execute(new Cancel($payment));
 
 PayumBundle is an open source, community-driven project. Pull requests are very welcome.
 
-## Like it? Spread the world!
+## Like it? Spread the word!
 
 Star PayumBundle on [github](https://github.com/Payum/PayumBundle) or [packagist](https://packagist.org/packages/payum/payum-bundle).
 
