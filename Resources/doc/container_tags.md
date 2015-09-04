@@ -85,7 +85,7 @@ services:
     acme.foo_gateway_factory:
         class: Payum\Core\GatewayFactory
         tags:
-            - { name: payum.gateway, name: foo, human_name: Foo }
+            - { name: payum.gateway_factory, name: foo, human_name: Foo }
 ```
 
 Attributes:
