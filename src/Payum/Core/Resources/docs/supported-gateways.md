@@ -30,6 +30,8 @@
 * [peterfox/Payum-Bitpay](https://github.com/peterfox/Payum-Bitpay)
 * [winzou/payum-limonetik](https://github.com/winzou/payum-limonetik)
 * [ekipower/payum-nganluong](https://github.com/ekipower/payum-nganluong)
+* [fullpipe/payum-uniteller](https://github.com/fullpipe/payum-uniteller)
+* [fullpipe/payum-flexidengi](https://github.com/fullpipe/payum-flexidengi)
 
 ## Omnipay gateways.
 
