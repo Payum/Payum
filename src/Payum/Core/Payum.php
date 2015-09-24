@@ -24,26 +24,18 @@ class Payum implements RegistryInterface
     protected $tokenFactory;
 
     /**
-     * @var HttpControllerInterface
-     */
-    protected $httpController;
-
-    /**
      * @param RegistryInterface            $registry
      * @param HttpRequestVerifierInterface $httpRequestVerifier
      * @param GenericTokenFactoryInterface $tokenFactory
-     * @param HttpControllerInterface      $httpController
      */
     public function __construct(
         RegistryInterface $registry,
         HttpRequestVerifierInterface $httpRequestVerifier,
-        GenericTokenFactoryInterface $tokenFactory,
-        HttpControllerInterface $httpController
+        GenericTokenFactoryInterface $tokenFactory
     ) {
         $this->registry = $registry;
         $this->httpRequestVerifier = $httpRequestVerifier;
         $this->tokenFactory = $tokenFactory;
-        $this->httpController = $httpController;
     }
 
     /**
@@ -108,13 +100,5 @@ class Payum implements RegistryInterface
     public function getTokenFactory()
     {
         return $this->tokenFactory;
-    }
-
-    /**
-     * @return HttpControllerInterface
-     */
-    public function getHttpController()
-    {
-        return $this->httpController;
     }
 }

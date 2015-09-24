@@ -26,15 +26,43 @@ use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 $factory = new \Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory; 
 $gateways['paypal_express_checkout'] = $factory->create(array(
-   'username'  => 'change it',
-   'password'  => 'change it',
-   'signature' => 'change it',
-   'sandbox'   => true,
+
    
    // uncomment if you want notify url to be generated automatically.
    // 'payum.extension.token_factory' => new GenericTokenFactoryExtension($tokenFactory), 
 ));
 ```
+
+```php
+<?php
+//config.php
+
+use Payum\Core\Bridge\PlainPhp\PayumBuilder;
+use Payum\Core\Storage\FilesystemStorage;
+use Payum\Core\Model\Payment;
+use Payum\Core\Model\Token;
+
+$paymentClass = Payment::class;
+
+/** @var Payum\Core\Bridge\PlainPhp\Payum $payum */
+$payum = (new PayumBuilder())
+    ->addTokenStorage(Token::class, new FilesystemStorage('/path/to/storage', Token::class, 'hash'))
+    ->addStorage($paymentClass, new FilesystemStorage('/path/to/storage', $paymentClass, 'number'))
+
+    ->addGateway('paypal_express_checkout', [
+        'factory' => 'paypal_express_checkout'
+        'username'  => 'change it',
+        'password'  => 'change it',
+        'signature' => 'change it',
+        'sandbox'   => true,
+    ]);
+
+    ->getPayum()
+;
+```
+
+
+
 
 ## prepare.php
 

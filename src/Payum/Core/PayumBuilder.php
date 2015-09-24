@@ -5,12 +5,14 @@ use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
 use Payum\Be2Bill\Be2BillDirectGatewayFactory;
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
 use Payum\Core\Bridge\Guzzle\HttpClientFactory;
-use Payum\Core\Bridge\Guzzle\HttpController;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
+use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Extension\GenericTokenFactoryExtension;
 use Payum\Core\Model\Token;
 use Payum\Core\Registry\DynamicRegistry;
+use Payum\Core\Registry\FallbackRegistry;
+use Payum\Core\Registry\RegistryInterface;
 use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Security\GenericTokenFactory;
 use Payum\Core\Security\HttpRequestVerifierInterface;
@@ -64,6 +66,11 @@ class PayumBuilder
     protected $gateways = [];
 
     /**
+     * @var array
+     */
+    protected $gatewayConfigs = [];
+
+    /**
      * @var GatewayFactoryInterface[]
      */
     protected $gatewayFactories = [];
@@ -74,14 +81,14 @@ class PayumBuilder
     protected $storages = [];
 
     /**
+     * @var RegistryInterface
+     */
+    protected $mainRegistry;
+
+    /**
      * @var HttpClientInterface
      */
     protected $httpClient;
-
-    /**
-     * @var HttpControllerInterface
-     */
-    protected $httpController;
 
     /**
      * @param string           $modelClass
@@ -100,15 +107,37 @@ class PayumBuilder
 
     /**
      * @param string           $name
-     * @param GatewayInterface $gateway
+     * @param GatewayInterface|array $gateway
      *
      * @return static
      */
-    public function addGateway($name, GatewayInterface $gateway)
+    public function addGateway($name, $gateway)
     {
         // TODO add checks
+        if ($gateway instanceof GatewayInterface) {
+            $this->gateways[$name] = $gateway;
+        } elseif (is_array($gateway)) {
+            if (empty($gateway['factory'])) {
+                throw new InvalidArgumentException('Gateway config must have factory key and it must not be empty.');
+            }
 
-        $this->gateways[$name] = $gateway;
+            $this->gatewayConfigs[$name] = $gateway;
+        } else {
+            throw new \LogicException('Gateway argument must be either instance of GatewayInterface or a config array');
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @param array  $gatewayConfig
+     *
+     * @return static
+     */
+    public function addGatewayConfig($name, array $gatewayConfig)
+    {
+
 
         return $this;
     }
@@ -133,9 +162,9 @@ class PayumBuilder
      */
     public function getPayum()
     {
-        $registry = new SimpleRegistry($this->gateways, $this->storages);
+        $fallbackRegistry = new SimpleRegistry($this->gateways, $this->storages);
         if (false == $this->gatewayConfigStorage) {
-            $registry = new DynamicRegistry($this->gatewayConfigStorage, $registry);
+            $fallbackRegistry = new DynamicRegistry($this->gatewayConfigStorage, $fallbackRegistry);
         }
 
         if (false == $tokenStorage = $this->tokenStorage) {
@@ -143,7 +172,7 @@ class PayumBuilder
         }
 
         if (false == $tokenFactory = $this->tokenFactory) {
-            $tokenFactory = new GenericTokenFactory(new TokenFactory($tokenStorage, $registry), [
+            $tokenFactory = new GenericTokenFactory(new TokenFactory($tokenStorage, $fallbackRegistry), [
                 'capture' => 'capture.php',
                 'notify' => 'notify.php',
                 'authorize' => 'authorize.php',
@@ -157,10 +186,6 @@ class PayumBuilder
 
         if (false == $httpClient = $this->httpClient) {
             $httpClient = HttpClientFactory::create();
-        }
-
-        if (false == $httpController = $this->httpController) {
-            $httpController = new HttpController($registry, $httpRequestVerifier, $tokenFactory);
         }
 
         if (false == $coreGatewayFactory = $this->coreGatewayFactory) {
@@ -212,12 +237,37 @@ class PayumBuilder
         }
 
         // again with gateway factories
-        $registry = new SimpleRegistry($this->gateways, $this->storages, array_replace($defaultGatewayFactories, $gatewayFactories));
+        $fallbackRegistry = new SimpleRegistry($this->gateways, $this->storages, array_replace($defaultGatewayFactories, $gatewayFactories));
         if (false == $this->gatewayConfigStorage) {
-            $registry = new DynamicRegistry($this->gatewayConfigStorage, $registry);
+            $fallbackRegistry = new DynamicRegistry($this->gatewayConfigStorage, $fallbackRegistry);
         }
 
-        return new Payum($registry, $httpRequestVerifier, $tokenFactory, $httpController);
+        if ($this->mainRegistry) {
+            $registry = new FallbackRegistry($this->mainRegistry, $fallbackRegistry);
+        } else {
+            $registry = $fallbackRegistry;
+        }
+
+        if ($this->gatewayConfigs) {
+            $gateways = $this->gateways;
+            foreach ($this->gatewayConfigs as $name => $gatewayConfig) {
+                $gatewayFactory = $fallbackRegistry->getGatewayFactory($gatewayConfig['factory']);
+                unset($gatewayConfig['factory']);
+
+                $gateways[$name] = $gatewayFactory->create($gatewayConfig);
+            }
+
+            // again with gateways created from configs
+            $fallbackRegistry = new SimpleRegistry($this->gateways, $this->storages, array_replace($defaultGatewayFactories, $gatewayFactories));
+
+            if ($this->mainRegistry) {
+                $registry = new FallbackRegistry($this->mainRegistry, $fallbackRegistry);
+            } else {
+                $registry = $fallbackRegistry;
+            }
+        }
+
+        return new Payum($registry, $httpRequestVerifier, $tokenFactory);
     }
 
     /**
@@ -305,13 +355,13 @@ class PayumBuilder
     }
 
     /**
-     * @param HttpControllerInterface $httpController
+     * @param RegistryInterface $mainRegistry
      *
-     * @return static
+     * @return PayumBuilder
      */
-    public function setHttpController(HttpControllerInterface $httpController)
+    public function setMainRegistry(RegistryInterface $mainRegistry)
     {
-        $this->httpController = $httpController;
+        $this->mainRegistry = $mainRegistry;
 
         return $this;
     }

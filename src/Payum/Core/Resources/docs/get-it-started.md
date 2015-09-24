@@ -39,11 +39,7 @@ Here we can put our gateways, storages. Also we can configure security component
 //config.php
 
 use Payum\Core\Bridge\PlainPhp\PayumBuilder;
-use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
-use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
-use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Storage\FilesystemStorage;
-use Payum\Core\Security\GenericTokenFactory;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\Token;
 
@@ -53,6 +49,10 @@ $paymentClass = Payment::class;
 $payum = (new PayumBuilder())
     ->addTokenStorage(Token::class, new FilesystemStorage('/path/to/storage', Token::class, 'hash'))
     ->addStorage($paymentClass, new FilesystemStorage('/path/to/storage', $paymentClass, 'number'))
+
+    ->addGatewayConfig('offline', [
+        'factory' => 'offline'
+    ]);
 
     ->getPayum()
 ;
