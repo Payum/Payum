@@ -9,6 +9,8 @@ use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Extension\GenericTokenFactoryExtension;
+use Payum\Core\Model\ArrayObject;
+use Payum\Core\Model\Payment;
 use Payum\Core\Model\Token;
 use Payum\Core\Registry\DynamicRegistry;
 use Payum\Core\Registry\FallbackRegistry;
@@ -89,6 +91,20 @@ class PayumBuilder
      * @var HttpClientInterface
      */
     protected $httpClient;
+
+    /**
+     * @return static
+     */
+    public function addDefaultStorages()
+    {
+        $this
+            ->setTokenStorage(new FilesystemStorage(sys_get_temp_dir().'/payum', Token::class, 'hash'))
+            ->addStorage(Payment::class, new FilesystemStorage(sys_get_temp_dir().'/payum', Payment::class, 'number'))
+            ->addStorage(ArrayObject::class, new FilesystemStorage(sys_get_temp_dir().'/payum', ArrayObject::class))
+        ;
+
+        return $this;
+    }
 
     /**
      * @param string           $modelClass

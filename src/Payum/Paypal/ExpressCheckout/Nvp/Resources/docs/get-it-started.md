@@ -15,53 +15,27 @@ php composer.phar require payum/paypal-express-checkout-nvp
 
 ## config.php
 
-We only have to add the factory factory. All the rest remains the same:
-
-```php
-<?php
-//config.php
-
-use Payum\Core\Extension\GenericTokenFactoryExtension;
-use Payum\Paypal\ExpressCheckout\Nvp\Api;
-
-$factory = new \Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory; 
-$gateways['paypal_express_checkout'] = $factory->create(array(
-
-   
-   // uncomment if you want notify url to be generated automatically.
-   // 'payum.extension.token_factory' => new GenericTokenFactoryExtension($tokenFactory), 
-));
-```
-
 ```php
 <?php
 //config.php
 
 use Payum\Core\Bridge\PlainPhp\PayumBuilder;
-use Payum\Core\Storage\FilesystemStorage;
-use Payum\Core\Model\Payment;
-use Payum\Core\Model\Token;
+use Payum\Core\Bridge\PlainPhp\Payum;
 
-$paymentClass = Payment::class;
-
-/** @var Payum\Core\Bridge\PlainPhp\Payum $payum */
+/** @var Payum $payum */
 $payum = (new PayumBuilder())
-    ->addTokenStorage(Token::class, new FilesystemStorage('/path/to/storage', Token::class, 'hash'))
-    ->addStorage($paymentClass, new FilesystemStorage('/path/to/storage', $paymentClass, 'number'))
-
+    ->addDefaultStorages()
     ->addGateway('paypal_express_checkout', [
         'factory' => 'paypal_express_checkout'
         'username'  => 'change it',
         'password'  => 'change it',
         'signature' => 'change it',
         'sandbox'   => true,
-    ]);
+    ])
 
     ->getPayum()
 ;
 ```
-
-
 
 
 ## prepare.php

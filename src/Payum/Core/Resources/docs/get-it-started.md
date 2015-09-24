@@ -47,12 +47,10 @@ $paymentClass = Payment::class;
 
 /** @var Payum\Core\Bridge\PlainPhp\Payum $payum */
 $payum = (new PayumBuilder())
-    ->addTokenStorage(Token::class, new FilesystemStorage('/path/to/storage', Token::class, 'hash'))
-    ->addStorage($paymentClass, new FilesystemStorage('/path/to/storage', $paymentClass, 'number'))
-
+    ->addDefaultStorages()
     ->addGatewayConfig('offline', [
         'factory' => 'offline'
-    ]);
+    ])
 
     ->getPayum()
 ;
