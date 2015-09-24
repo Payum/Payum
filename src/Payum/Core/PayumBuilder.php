@@ -17,6 +17,7 @@ use Payum\Core\Registry\FallbackRegistry;
 use Payum\Core\Registry\RegistryInterface;
 use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Security\GenericTokenFactory;
+use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Storage\StorageInterface;
@@ -38,7 +39,7 @@ class PayumBuilder
     protected $httpRequestVerifier;
 
     /**
-     * @var GenericTokenFactory
+     * @var GenericTokenFactoryInterface
      */
     protected $tokenFactory;
 
@@ -146,19 +147,6 @@ class PayumBuilder
     }
 
     /**
-     * @param string $name
-     * @param array  $gatewayConfig
-     *
-     * @return static
-     */
-    public function addGatewayConfig($name, array $gatewayConfig)
-    {
-
-
-        return $this;
-    }
-
-    /**
      * @param string           $name
      * @param GatewayFactoryInterface $gatewayFactory
      *
@@ -179,12 +167,12 @@ class PayumBuilder
     public function getPayum()
     {
         $fallbackRegistry = new SimpleRegistry($this->gateways, $this->storages);
-        if (false == $this->gatewayConfigStorage) {
+        if ($this->gatewayConfigStorage) {
             $fallbackRegistry = new DynamicRegistry($this->gatewayConfigStorage, $fallbackRegistry);
         }
 
         if (false == $tokenStorage = $this->tokenStorage) {
-            $tokenStorage = new FilesystemStorage(sys_get_temp_dir().'/payum', Token::class, 'hash');
+            throw new \LogicException('Token storage must be configured.');
         }
 
         if (false == $tokenFactory = $this->tokenFactory) {
@@ -254,7 +242,7 @@ class PayumBuilder
 
         // again with gateway factories
         $fallbackRegistry = new SimpleRegistry($this->gateways, $this->storages, array_replace($defaultGatewayFactories, $gatewayFactories));
-        if (false == $this->gatewayConfigStorage) {
+        if ($this->gatewayConfigStorage) {
             $fallbackRegistry = new DynamicRegistry($this->gatewayConfigStorage, $fallbackRegistry);
         }
 
@@ -274,7 +262,7 @@ class PayumBuilder
             }
 
             // again with gateways created from configs
-            $fallbackRegistry = new SimpleRegistry($this->gateways, $this->storages, array_replace($defaultGatewayFactories, $gatewayFactories));
+            $fallbackRegistry = new SimpleRegistry($gateways, $this->storages, array_replace($defaultGatewayFactories, $gatewayFactories));
 
             if ($this->mainRegistry) {
                 $registry = new FallbackRegistry($this->mainRegistry, $fallbackRegistry);
@@ -299,11 +287,11 @@ class PayumBuilder
     }
 
     /**
-     * @param GenericTokenFactory $tokenFactory
+     * @param GenericTokenFactoryInterface $tokenFactory
      *
      * @return static
      */
-    public function setTokenFactory(GenericTokenFactory $tokenFactory)
+    public function setTokenFactory(GenericTokenFactoryInterface $tokenFactory)
     {
         $this->tokenFactory = $tokenFactory;
 
