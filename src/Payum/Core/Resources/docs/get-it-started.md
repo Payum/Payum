@@ -38,10 +38,9 @@ Here we can put our gateways, storages. Also we can configure security component
 <?php
 //config.php
 
-use Payum\Core\Bridge\PlainPhp\PayumBuilder;
-use Payum\Core\Storage\FilesystemStorage;
+use Payum\Core\PayumBuilder;
+use Payum\Core\Payum;
 use Payum\Core\Model\Payment;
-use Payum\Core\Model\Token;
 
 $paymentClass = Payment::class;
 

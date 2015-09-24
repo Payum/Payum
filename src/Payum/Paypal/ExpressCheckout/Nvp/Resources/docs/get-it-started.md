@@ -19,8 +19,8 @@ php composer.phar require payum/paypal-express-checkout-nvp
 <?php
 //config.php
 
-use Payum\Core\Bridge\PlainPhp\PayumBuilder;
-use Payum\Core\Bridge\PlainPhp\Payum;
+use Payum\Core\PayumBuilder;
+use Payum\Core\Payum;
 
 /** @var Payum $payum */
 $payum = (new PayumBuilder())
