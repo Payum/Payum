@@ -25,7 +25,7 @@ use Payum\Core\Payum;
 /** @var Payum $payum */
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
-    ->addGateway('paypal_express_checkout', [
+    ->addGateway('gatewayName', [
         'factory' => 'paypal_express_checkout'
         'username'  => 'change it',
         'password'  => 'change it',
@@ -36,7 +36,6 @@ $payum = (new PayumBuilder())
     ->getPayum()
 ;
 ```
-
 
 ## prepare.php
 

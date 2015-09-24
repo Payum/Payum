@@ -1,26 +1,7 @@
 # Raw capture 
 
-In the [get it started](https://github.com/Payum/Stripe/blob/master/Resources/docs/get-it-started.md) we showed how to use the library with unified interface or in other words Order model. 
-Sometimes you need completely custom solution.  
-
-## config.php
-
-Add a storage for the gateway model:
-
-```php
-<?php
-// config.php
-
-// ...
-
-$detailsClass = 'Payum\Core\Model\ArrayObject';
-
-$storages = array(
-    $detailsClass => new FilesystemStorage('/path/to/storage', $detailsClass),
-    
-    //put other storages
-);
-```
+In the [get it started](https://github.com/Payum/Stripe/blob/master/Resources/docs/get-it-started.md) we showed how to use the library with unified interface or in other words Payment model.
+Sometimes you need completely custom solution.
 
 ## prepare.php
 
@@ -33,13 +14,15 @@ The rest remain the same as described basic [get it started](https://github.com/
 <?php
 // prepare.php
 
+use Payum\Core\Model\ArrayObject;
+
 include 'config.php';
 
 $gatewayName = 'stripe_js';
 
-$storage = $payum->getStorage($detailsClass);
+$storage = $payum->getStorage(ArrayObject::class);
 
-$details = $storage->createNew();
+$details = $storage->create();
 $details['amount'] = '10.00'; 
 $details['currency'] = 'USD';
 $details['card'] = new SensitiveValue(
@@ -65,7 +48,7 @@ $details["card"] = 'aStripeToken';
 
 $storage->update($details);
 
-$captureToken = $tokenFactory->createCaptureToken($gatewayName, $details, 'done.php');
+$captureToken = $payum->getTokenFactory()->createCaptureToken($gatewayName, $details, 'done.php');
 
 header("Location: ".$captureToken->getTargetUrl());
 ```

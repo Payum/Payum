@@ -86,7 +86,7 @@ use Payum\Core\Request\Notify;
 
 include 'config.php';
 
-$token = $requestVerifier->verify();
+$token = $payum->getRequestVerifier()->verify($_REQUEST);
 $gateway = $payum->getGateway($token->getGatewayName());
 
 $gateway->execute(new Notify($token));
@@ -101,7 +101,9 @@ Now I want to show changes need to enable Paypal IPN. To do so we have to modify
 <?php
 // prepare.php
 
-$notifyToken = $tokenFactory->createNotifyToken('paypal', $paymentDetails);
+include 'config.php';
+
+$notifyToken = $payum->getTokenFactory()->createNotifyToken('paypal', $paymentDetails);
 
 $paymentDetails['NOTIFYURL'] = $notifyToken->getTargetUrl();
 

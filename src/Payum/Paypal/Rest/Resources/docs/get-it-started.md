@@ -18,14 +18,21 @@ php composer.phar require "payum/paypal-rest"
 <?php
 //config.php
 
-// ...
+use Payum\Core\PayumBuilder;
+use Payum\Core\Payum;
 
-$factory = new \Payum\Paypal\Rest\PaypalRestGatewayFactory();
-$gateways['paypal_rest'] = $factory->create(array(
-    'client_id' => 'REPLACE IT',
-    'client_secret' => 'REPLACE IT',
-    'config_path' => 'REPLACE IT',
-));
+/** @var Payum $payum */
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+    ->addGateway('gatewayName', [
+        'factory' => 'paypal_rest'
+        'client_id' => 'REPLACE IT',
+        'client_secret' => 'REPLACE IT',
+        'config_path' => 'REPLACE IT',
+    ])
+
+    ->getPayum()
+;
 ```
 
 ## Prepare payment
@@ -57,7 +64,7 @@ $transaction = new Transaction();
 $transaction->amount = $amount;
 $transaction->description = "This is the payment description.";
 
-$captureToken = $tokenFactory->createCaptureToken('paypalRest', $payment, 'create_recurring_payment.php');
+$captureToken = $payum->getTokenFactory()->createCaptureToken('paypalRest', $payment, 'create_recurring_payment.php');
 
 $redirectUrls = new RedirectUrls();
 $redirectUrls->return_url = $captureToken->getTargetUrl();
@@ -75,5 +82,16 @@ header("Location: ".$captureToken->getTargetUrl());
 
 That's it. As you see we configured Paypal Rest `config.php` and set details `prepare.php`.
 [capture.php](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/capture-script.md) and [done.php](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/done-script.md) scripts remain same.
+Here you have to modify a `gatewayName` value. Set it to `paypal_pro_checkout`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
+
+## Next
+
+* [Core's Get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
+* [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
+* [Supported gateways](https://github.com/Payum/Core/blob/master/Resources/docs/supported-gateways.md).
+* [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
+* [Capture script](https://github.com/Payum/Core/blob/master/Resources/docs/capture-script.md).
+* [Authorize script](https://github.com/Payum/Core/blob/master/Resources/docs/authorize-script.md).
+* [Done script](https://github.com/Payum/Core/blob/master/Resources/docs/done-script.md).
 
 Back to [index](index.md).

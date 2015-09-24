@@ -23,7 +23,9 @@ To use that you have to configure token factory and create a refund script:
 
 ```php
 <?php
-$token = $tokenFactory->createRefundToken($gatewayName, $details, 'afterRefundUrl');
+include 'config.php';
+
+$token = $payum->getTokenFactory()->createRefundToken($gatewayName, $details, 'afterRefundUrl');
 
 header("Location: ".$token->getTargetUrl());
 ```
@@ -44,7 +46,7 @@ use Payum\Core\Reply\HttpRedirect;
 
 include 'config.php';
 
-$token = $requestVerifier->verify($_REQUEST);
+$token = $payum->getRequestVerifier()->verify($_REQUEST);
 $gateway = $payum->getGateway($token->getGatewayName());
 
 if ($reply = $gateway->execute(new Refund($token), true)) {
@@ -56,7 +58,7 @@ if ($reply = $gateway->execute(new Refund($token), true)) {
     throw new \LogicException('Unsupported reply', null, $reply);
 }
 
-$requestVerifier->invalidate($token);
+$payum->getRequestVerifier()->invalidate($token);
 
 header("Location: ".$token->getAfterUrl());
 ```

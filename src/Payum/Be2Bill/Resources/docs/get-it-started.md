@@ -21,24 +21,27 @@ We have to only add the gateway factory. All the rest remain the same:
 <?php
 //config.php
 
-// ...
+use Payum\Core\PayumBuilder;
+use Payum\Core\Payum;
 
-// direct payment, credit card form at your app side
-$directBe2billFactory = new \Payum\Be2Bill\DirectGatewayFactory();
-$gateways['be2bill'] = $directBe2billFactory->create(array(
-   'identifier' => 'REPLACE WITH YOURS',
-   'password' => 'REPLACE WITH YOURS',
-   'sandbox' => true
-));
+/** @var Payum $payum */
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+    ->addGatewayConfig('be2bill', [
+        'factory' => 'be2bill_direct'
+        'identifier' => 'REPLACE WITH YOURS',
+        'password' => 'REPLACE WITH YOURS',
+        'sandbox' => true
+    ])
+    ->addGatewayConfig('be2bill_offsite', [
+        'factory' => 'be2bill_offsite'
+        'identifier' => 'REPLACE WITH YOURS',
+        'password' => 'REPLACE WITH YOURS',
+        'sandbox' => true
+    ])
 
-// or offsite 
-
-$offsiteBe2billFactory = new \Payum\Be2Bill\OffsiteGatewayFactory();
-$gateways['be2bill_offsite'] = $offsiteBe2billFactory->create(array(
-   'identifier' => 'REPLACE WITH YOURS',
-   'password' => 'REPLACE WITH YOURS',
-   'sandbox' => true
-));
+    ->getPayum()
+;
 ```
 
 ## prepare.php

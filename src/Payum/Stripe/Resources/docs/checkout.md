@@ -21,12 +21,20 @@ We have to only add the gateway factory. All the rest remain the same:
 <?php
 //config.php
 
-// ..
+use Payum\Core\PayumBuilder;
+use Payum\Core\Payum;
 
-$factory = new \Payum\Stripe\StripeCheckoutGatewayFactory();
-$gateways['stripe_checkout'] = $factory->create(array(
-    'publishable_key' => 'EDIT IT', 'secret_key' => 'EDIT IT'
-));
+/** @var Payum $payum */
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+    ->addGateway('gatewayName', [
+        'factory' => 'stripe_checkout'
+        'publishable_key' => 'EDIT IT',
+        'secret_key' => 'EDIT IT'
+    ])
+
+    ->getPayum()
+;
 ```
 
 ## prepare.php

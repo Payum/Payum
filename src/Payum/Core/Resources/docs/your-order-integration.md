@@ -93,7 +93,7 @@ $order->price = 1;
 $order->currency = 'USD';
 $storage->update($order);
 
-$captureToken = $tokenFactory->createCaptureToken('foo', $order, 'done.php');
+$captureToken = $payum->getTokenFactory->createCaptureToken('foo', $order, 'done.php');
 
 header("Location: ".$captureToken->getTargetUrl());
 ```

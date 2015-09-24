@@ -60,7 +60,7 @@ $payment->intent = "sale";
 $payment->payer = $payer;
 $payment->transactions = array($transaction);
 
-$captureToken = $tokenFactory->createCaptureToken('paypalRest', $payment, 'create_recurring_payment.php');
+$captureToken = $payum->getTokenFactory->createCaptureToken('paypalRest', $payment, 'create_recurring_payment.php');
 
 header("Location: ".$captureToken->getTargetUrl());
 ```

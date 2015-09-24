@@ -42,8 +42,8 @@ use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
 
 include 'config.php';
 
-$token = $requestVerifier->verify($_REQUEST);
-$gateway = $payum->getGateway($token->getPaymentName());
+$token = $payum->getRequestVerifier()->verify($_REQUEST);
+$gateway = $payum->getGateway($token->getGatewayName());
 
 if ($interactiveRequest = $gateway->execute(new Authorize($token), true)) {
     if ($interactiveRequest instanceof RedirectUrlInteractiveRequest) {
@@ -54,7 +54,7 @@ if ($interactiveRequest = $gateway->execute(new Authorize($token), true)) {
     throw new \LogicException('Unsupported interactive request', null, $interactiveRequest);
 }
 
-$requestVerifier->invalidate($token);
+$payum->getRequestVerifier()->invalidate($token);
 
 header("Location: ".$token->getAfterUrl());
 ```

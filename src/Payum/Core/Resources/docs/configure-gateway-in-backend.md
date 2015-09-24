@@ -35,20 +35,29 @@ class GatewayConfig extends BaseGatewayConfig
 }
 ```
 
-Now, we have to create a storage for it and change the simple registry with dynamic one.
+Now, we have to create a storage for it and build payum with gateway config storage.
 
 ```php
 <?php
 //config.php
 
-// ...
-
 use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
+use Payum\Core\PayumBuilder;
+use Payum\Core\Payum;
 use Payum\Core\Registry\DynamicRegistry;
 
 // $objectManager is an instance of doctrine object manager.
 
 $gatewayConfigStorage = new DoctrineStorage($objectManager, 'Acme\Payment\Entity\GatewayConfig');
+
+/** @var Payum $payum */
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+    ->setGatewayConfigStorage($gatewayConfigStorage)
+
+    ->getPayum()
+;
+
 
 $payum = new DynamicRegistry($gatewayConfigStorage, $payum);
 ```

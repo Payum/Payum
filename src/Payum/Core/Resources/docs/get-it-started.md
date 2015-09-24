@@ -44,10 +44,10 @@ use Payum\Core\Model\Payment;
 
 $paymentClass = Payment::class;
 
-/** @var Payum\Core\Bridge\PlainPhp\Payum $payum */
+/** @var Payum $payum */
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
-    ->addGatewayConfig('offline', [
+    ->addGatewayConfig('aGateway', [
         'factory' => 'offline'
     ])
 
@@ -71,7 +71,7 @@ Here's an offline gateway example:
 
 include 'config.php';
 
-$gatewayName = 'offline';
+$gatewayName = 'aGateway';
 
 $storage = $payum->getStorage($paymentClass);
 
@@ -121,7 +121,7 @@ if ($reply = $gateway->execute(new Capture($token), true)) {
     throw new \LogicException('Unsupported reply', null, $reply);
 }
 
-$requestVerifier->invalidate($token);
+$payum->getRequestVerifier()->invalidate($token);
 
 header("Location: ".$token->getAfterUrl());
 ```
@@ -146,7 +146,7 @@ $token = $payum->getRequestVerifier()->verify($_REQUEST);
 $gateway = $payum->getGateway($token->getGatewayName());
 
 // you can invalidate the token. The url could not be requested any more.
-// $requestVerifier->invalidate($token);
+// $payum->getRequestVerifier()->invalidate($token);
 
 // Once you have token you can get the model from the storage directly. 
 //$identity = $token->getDetails();

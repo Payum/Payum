@@ -15,23 +15,27 @@ php composer.phar require "payum/paypal-pro-checkout-nvp"
 
 ## config.php
 
-We have to only add the gateway factory. All the rest remain the same:
-
-
 ```php
 <?php
 //config.php
 
-// ...
+use Payum\Core\PayumBuilder;
+use Payum\Core\Payum;
 
-$factory = new \Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory();
-$gateways['paypal_pro_checkout'] = $factory->create(array(
-    'username' => 'REPLACE IT',
-    'password' => 'REPLACE IT',
-    'partner' => 'REPLACE IT',
-    'vendor' => 'REPLACE IT',
-    'sandbox' => true
-));
+/** @var Payum $payum */
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+    ->addGateway('gatewayName', [
+        'factory' => 'paypal_pro_checkout'
+        'username' => 'REPLACE IT',
+        'password' => 'REPLACE IT',
+        'partner' => 'REPLACE IT',
+        'vendor' => 'REPLACE IT',
+        'sandbox' => true
+    ])
+
+    ->getPayum()
+;
 ```
 
 ## prepare.php

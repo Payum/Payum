@@ -44,8 +44,8 @@ use Payum\Core\Reply\HttpRedirect;
 
 include 'config.php';
 
-$token = $requestVerifier->verify($_REQUEST);
-$gateway = $payum->getGateway($token->getPaymentName());
+$token = $payum->getRequestVerifier()->verify($_REQUEST);
+$gateway = $payum->getGateway($token->getGatewayName());
 
 if ($reply = $gateway->execute(new Capture($token), true)) {
     if ($reply instanceof HttpRedirect) {
@@ -56,7 +56,7 @@ if ($reply = $gateway->execute(new Capture($token), true)) {
     throw new \LogicException('Unsupported reply', null, $reply);
 }
 
-$requestVerifier->invalidate($token);
+$payum->getRequestVerifier()->invalidate($token);
 
 header("Location: ".$token->getAfterUrl());
 ```

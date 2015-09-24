@@ -12,15 +12,15 @@ use Payum\Core\Request\GetHumanStatus;
 
 include 'config.php';
 
-$token = $requestVerifier->verify($_REQUEST);
+$token = $this->getRequestVerifier()->verify($_REQUEST);
 
 $identity = $token->getDetails();
 $model = $payum->getStorage($identity->getClass())->find($identity);
 
-$gateway = $payum->getGateway($token->getPaymentName());
+$gateway = $payum->getGateway($token->getGatewayName());
 
 // you can invalidate the token. The url could not be requested any more.
-// $requestVerifier->invalidate($token);
+// $payum->getRequestVerifier()->invalidate($token);
 
 // Once you have token you can get the model from the storage directly. 
 //$identity = $token->getDetails();
