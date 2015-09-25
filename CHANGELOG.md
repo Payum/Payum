@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0-BETA2 (2015-09-25)
+
+* [di] Fix key conflicts in payum.gateway_factory tag
+* [doc] Update container_tags.md doc.
+* Licence owner is changed
+
 ## 1.0.0-BETA1 (2015-08-17)
 
 * Php minimum required version is 5.5
