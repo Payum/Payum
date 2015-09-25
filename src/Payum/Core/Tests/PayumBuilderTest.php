@@ -144,7 +144,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->setTokenFactory($expectedTokenFactory)
+            ->setGenericTokenFactory($expectedTokenFactory)
             ->getPayum()
         ;
 
