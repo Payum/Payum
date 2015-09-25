@@ -198,7 +198,7 @@ class KlarnaCheckoutGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $factoryService = $container->getDefinition('payum.klarna_checkout.factory');
         $this->assertEquals('Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory', $factoryService->getClass());
         $this->assertEquals(
-            array(array('name' => 'klarna_checkout', 'human_name' => 'Klarna Checkout')),
+            array(array('factory_name' => 'klarna_checkout', 'human_name' => 'Klarna Checkout')),
             $factoryService->getTag('payum.gateway_factory')
         );
 

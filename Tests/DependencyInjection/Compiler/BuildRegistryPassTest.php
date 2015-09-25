@@ -121,11 +121,11 @@ class BuildRegistryPassTest extends \Phpunit_Framework_TestCase
         $container->setDefinition('payum.static_registry', $registry);
 
         $container->setDefinition('payum.gateway_factory.foo', new Definition());
-        $container->getDefinition('payum.gateway_factory.foo')->addTag('payum.gateway_factory', array('name' => 'fooVal'));
-        $container->getDefinition('payum.gateway_factory.foo')->addTag('payum.gateway_factory', array('name' => 'barVal'));
+        $container->getDefinition('payum.gateway_factory.foo')->addTag('payum.gateway_factory', array('factory_name' => 'fooVal'));
+        $container->getDefinition('payum.gateway_factory.foo')->addTag('payum.gateway_factory', array('factory_name' => 'barVal'));
 
         $container->setDefinition('payum.gateway_factory.baz', new Definition());
-        $container->getDefinition('payum.gateway_factory.baz')->addTag('payum.gateway_factory', array('name' => 'bazVal'));
+        $container->getDefinition('payum.gateway_factory.baz')->addTag('payum.gateway_factory', array('factory_name' => 'bazVal'));
 
 
         $pass = new BuildRegistryPass;
@@ -159,7 +159,7 @@ class BuildRegistryPassTest extends \Phpunit_Framework_TestCase
         $container->getDefinition('payum.gateway.baz')->addTag('payum.gateway', array('gateway' => 'bazVal'));
 
         $container->setDefinition('payum.gateway_factory.baz', new Definition());
-        $container->getDefinition('payum.gateway_factory.baz')->addTag('payum.gateway_factory', array('name' => 'bazVal'));
+        $container->getDefinition('payum.gateway_factory.baz')->addTag('payum.gateway_factory', array('factory_name' => 'bazVal'));
 
 
         $pass = new BuildRegistryPass;

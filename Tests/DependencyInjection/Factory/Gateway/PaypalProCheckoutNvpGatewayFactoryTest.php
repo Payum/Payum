@@ -216,7 +216,7 @@ class PaypalProCheckoutNvpGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $factoryService = $container->getDefinition('payum.paypal_pro_checkout_nvp.factory');
         $this->assertEquals('Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory', $factoryService->getClass());
         $this->assertEquals(
-            array(array('name' => 'paypal_pro_checkout_nvp', 'human_name' => 'Paypal Pro Checkout Nvp')),
+            array(array('factory_name' => 'paypal_pro_checkout_nvp', 'human_name' => 'Paypal Pro Checkout Nvp')),
             $factoryService->getTag('payum.gateway_factory')
         );
 

@@ -186,7 +186,7 @@ class PaypalExpressCheckoutNvpGatewayFactoryTest extends \PHPUnit_Framework_Test
         $factoryService = $container->getDefinition('payum.paypal_express_checkout_nvp.factory');
         $this->assertEquals('Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory', $factoryService->getClass());
         $this->assertEquals(
-            array(array('name' => 'paypal_express_checkout_nvp', 'human_name' => 'Paypal Express Checkout Nvp')),
+            array(array('factory_name' => 'paypal_express_checkout_nvp', 'human_name' => 'Paypal Express Checkout Nvp')),
             $factoryService->getTag('payum.gateway_factory')
         );
 

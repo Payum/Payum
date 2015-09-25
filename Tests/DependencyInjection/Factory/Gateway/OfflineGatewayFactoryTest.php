@@ -106,7 +106,7 @@ class OfflineGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $factoryService = $container->getDefinition('payum.offline.factory');
         $this->assertEquals('Payum\Offline\OfflineGatewayFactory', $factoryService->getClass());
         $this->assertEquals(
-            array(array('name' => 'offline', 'human_name' => 'Offline')),
+            array(array('factory_name' => 'offline', 'human_name' => 'Offline')),
             $factoryService->getTag('payum.gateway_factory')
         );
 

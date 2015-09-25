@@ -60,7 +60,7 @@ abstract class AbstractGatewayFactory implements GatewayFactoryInterface
                 new Reference('payum.gateway_factory'),
             ));
             $factory->addTag('payum.gateway_factory', array(
-                'name' => $this->getName(),
+                'factory_name' => $this->getName(),
                 'human_name' => $this->getHumanName(),
             ));
 

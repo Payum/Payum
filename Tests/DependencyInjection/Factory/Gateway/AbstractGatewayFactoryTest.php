@@ -212,7 +212,7 @@ class AbstractGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factoryService = $container->getDefinition('payum.foo.factory');
         $this->assertEquals('Payum\Core\GatewayFactory', $factoryService->getClass());
-        $this->assertEquals(array(array('name' => 'foo', 'human_name' => 'Foo')), $factoryService->getTag('payum.gateway_factory'));
+        $this->assertEquals(array(array('factory_name' => 'foo', 'human_name' => 'Foo')), $factoryService->getTag('payum.gateway_factory'));
 
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(1));
         $this->assertEquals('payum.gateway_factory', (string) $factoryService->getArgument(1));

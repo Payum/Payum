@@ -217,7 +217,7 @@ class KlarnaInvoiceGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $factoryService = $container->getDefinition('payum.klarna_invoice.factory');
         $this->assertEquals('Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory', $factoryService->getClass());
         $this->assertEquals(
-            array(array('name' => 'klarna_invoice', 'human_name' => 'Klarna Invoice')),
+            array(array('factory_name' => 'klarna_invoice', 'human_name' => 'Klarna Invoice')),
             $factoryService->getTag('payum.gateway_factory')
         );
 

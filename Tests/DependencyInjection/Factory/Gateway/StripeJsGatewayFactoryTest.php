@@ -185,7 +185,7 @@ class StripeJsGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Payum\Stripe\StripeJsGatewayFactory', $factoryService->getClass());
 
         $this->assertEquals(
-            array(array('name' => 'stripe_js', 'human_name' => 'Stripe Js')),
+            array(array('factory_name' => 'stripe_js', 'human_name' => 'Stripe Js')),
             $factoryService->getTag('payum.gateway_factory')
         );
 

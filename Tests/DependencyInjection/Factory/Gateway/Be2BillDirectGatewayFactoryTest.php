@@ -161,7 +161,7 @@ class Be2BillDirectGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $factoryService = $container->getDefinition('payum.be2bill_direct.factory');
         $this->assertEquals('Payum\Be2Bill\Be2BillDirectGatewayFactory', $factoryService->getClass());
         $this->assertEquals(
-            array(array('name' => 'be2bill_direct', 'human_name' => 'Be2bill Direct')),
+            array(array('factory_name' => 'be2bill_direct', 'human_name' => 'Be2bill Direct')),
             $factoryService->getTag('payum.gateway_factory')
         );
 
