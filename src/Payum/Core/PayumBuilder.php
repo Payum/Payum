@@ -44,6 +44,11 @@ class PayumBuilder
     protected $tokenFactory;
 
     /**
+     * @var string[]
+     */
+    protected $tokenFactoryPaths = [];
+
+    /**
      * @var StorageInterface
      */
     protected $tokenStorage;
@@ -176,12 +181,14 @@ class PayumBuilder
         }
 
         if (false == $tokenFactory = $this->tokenFactory) {
-            $tokenFactory = new GenericTokenFactory(new TokenFactory($tokenStorage, $fallbackRegistry), [
+            $paths = $this->tokenFactoryPaths ?: [
                 'capture' => 'capture.php',
                 'notify' => 'notify.php',
                 'authorize' => 'authorize.php',
                 'refund' => 'refund.php',
-            ]);
+            ];
+
+            $tokenFactory = new GenericTokenFactory(new TokenFactory($tokenStorage, $fallbackRegistry), $paths);
         }
 
         if (false == $httpRequestVerifier = $this->httpRequestVerifier) {
@@ -294,6 +301,18 @@ class PayumBuilder
     public function setTokenFactory(GenericTokenFactoryInterface $tokenFactory)
     {
         $this->tokenFactory = $tokenFactory;
+
+        return $this;
+    }
+
+    /**
+     * @param \string[] $paths
+     *
+     * @return static
+     */
+    public function setTokenFactoryPaths(array $paths)
+    {
+        $this->tokenFactoryPaths = $paths;
 
         return $this;
     }
