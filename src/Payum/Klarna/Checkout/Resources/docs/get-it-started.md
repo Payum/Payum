@@ -14,79 +14,26 @@ php composer.phar require payum/klarna-checkout
 
 ## config.php
 
-Now configuration. Let's start from defining some models.
-First one is a `PaymentDetails`.
-It will storage all the information related to the payment:
-
-```php
-<?php
-namespace App\Model;
-
-use Payum\Core\Model\ArrayObject;
-
-class PaymentDetails extends ArrayObject
-{
-    protected $id;
-}
-```
-
-The other one is `PaymentSecurityToken`.
-We will use it to secure our payment operations:
-
-```php
-<?php
-namespace App\Model;
-
-use Payum\Core\Model\Token;
-
-class PaymentSecurityToken extends Token
-{
-}
-```
-
-_**Note**: We provide Doctrine ORM\MongoODM mapping for these models to ease usage with doctrine storage._
-
-Now we are ready to configure all the stuff:
+We have to only add the gateway factory. All the rest remain the same:
 
 ```php
 <?php
 //config.php
 
-use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
-use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
-use Payum\Core\Registry\SimpleRegistry;
-use Payum\Core\Storage\FilesystemStorage;
-use Payum\Core\Security\GenericTokenFactory;
-use Payum\Klarn\Checkout\KlarnaCheckoutGatewayFactory;
+use Payum\Core\PayumBuilder;
+use Payum\Core\Payum;
 
-$tokenStorage = new FilesystemStorage('/path/to/storage', 'App\Model\PaymentSecurityToken', 'hash');
-$requestVerifier = new HttpRequestVerifier($tokenStorage);
+/** @var Payum $payum */
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+    ->addGatewayConfig('klarna', [
+        'factory' => 'klarna_checkout'
+        'merchant_id' => 'EDIT IT',
+        'secret' => 'EDIT IT',
+    ])
 
-$detailsClass = 'App\Model\PaymentDetails';
-
-$storages = array(
-    $detailsClass => new FilesystemStorage('/path/to/storage', $detailsClass, 'id')
-);
-
-$gateways = array();
-
-$klarnaCheckoutFactory = new KlarnaCheckoutGatewayFactory();
-$gateways['klarna_checkout'] => $klarnaCheckoutFactory->create(array(
-    'merchant_id' => 'EDIT IT',
-    'secret' => 'EDIT IT',
-));
-
-$payum = new SimpleRegistry($gateways, $storages);
-
-$tokenFactory = new GenericTokenFactory(
-    new TokenFactory($tokenStorage, $payum),
-    array(
-        'capture' => 'capture.php',
-        'notify' => 'notify.php',
-        'authorize' => authorize.php',
-        'refund' => 'refund.php',
-    )
-);
+    ->getPayum()
+;
 ```
 
 An initial configuration for Payum basically wants to ensure we have things ready to be stored such as
@@ -101,13 +48,13 @@ We need to add gateway factory and payment details storage.
 
 ```php
 <?php
-
 // prepare.php
+
+use Payum\Core\Model\ArrayObject;
 
 include 'config.php';
 
-$storage = $payum->getStorage($detailsClass);
-$storage = $this->getPayum()->getStorage('Acme\PaymentBundle\Model\PaymentDetails');
+$storage = $this->getPayum()->getStorage(ArrayObject::class);
 
 $details = $storage->create();
 $details['purchase_country'] = 'SE';
@@ -115,8 +62,8 @@ $details['purchase_currency'] = 'SEK';
 $details['locale'] = 'sv-se';
 $storage->update($details);
 
-$captureToken = $tokenFactory->createCaptureToken('klarna_checkout', $details, 'done.php');
-$notifyToken = $tokenFactory->createNotifyToken('klarna_checkout', $details);
+$captureToken = $payum->getTokenFactory()->createCaptureToken('klarna', $details, 'done.php');
+$notifyToken = $payum->tokenFactory()->createNotifyToken('klarna', $details);
 
 $details['merchant'] = array(
     'terms_uri' => 'http://example.com/terms',

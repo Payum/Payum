@@ -15,21 +15,29 @@ php composer.phar require payum/offline
 
 ## config.php
 
-Let's modify `config.php` a bit.
+We have to only add the gateway factory. All the rest remain the same:
 
 ```php
 <?php
 //config.php
 
-// ...
+use Payum\Core\PayumBuilder;
+use Payum\Core\Payum;
 
-$factory = new \Payum\Offline\OfflinePaymentFactory();
-$gateways['offline'] = $factory->create();
+/** @var Payum $payum */
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+    ->addGatewayConfig('gatewayName', [
+        'factory' => 'offline'
+    ])
+
+    ->getPayum()
+;
 ```
 
 ## prepare.php
 
-Here you have to modify a `paymentName` value. Set it to `offline`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
+Here you have to modify a `gatewayName` value. Set it to `offline`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
 
 
 ## Next 

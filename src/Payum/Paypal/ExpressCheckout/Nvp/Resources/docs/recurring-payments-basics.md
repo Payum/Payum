@@ -76,7 +76,7 @@ $agreement['L_BILLINGAGREEMENTDESCRIPTION0'] = "Insert some description here";
 $agreement['NOSHIPPING'] = 1;
 $storage->update($agreement);
 
-$captureToken = $tokenFactory->createCaptureToken('paypal', $agreement, 'create_recurring_payment.php');
+$captureToken = $payum->getTokenFactory->createCaptureToken('paypal', $agreement, 'create_recurring_payment.php');
 
 $storage->update($agreement);
 
@@ -105,8 +105,8 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfile;
 
 include 'config.php';
 
-$token = $requestVerifier->verify($_REQUEST);
-$requestVerifier->invalidate($token);
+$token = $payum->getRequestVerifier()->verify($_REQUEST);
+$payum->getRequestVerifier()->invalidate($token);
 
 $gateway = $payum->getGateway($token->getGatewayName());
 
@@ -135,7 +135,7 @@ $recurringPayment['BILLINGPERIOD'] = Api::BILLINGPERIOD_DAY;
 $gateway->execute(new CreateRecurringPaymentProfile($recurringPayment));
 $gateway->execute(new Sync($recurringPayment));
 
-$doneToken = $tokenFactory->createToken('paypal', $recurringPayment, 'done.php');
+$doneToken = $payum->geTokenFactory()->createToken('paypal', $recurringPayment, 'done.php');
 
 header("Location: ".$doneToken->getTargetUrl());
 ```

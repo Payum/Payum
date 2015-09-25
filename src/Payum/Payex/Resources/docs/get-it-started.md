@@ -21,14 +21,21 @@ We have to only add the gateway factory. All the rest remain the same:
 <?php
 //config.php
 
-// ...
+use Payum\Core\PayumBuilder;
+use Payum\Core\Payum;
 
-$factory = new \Payum\Payex\PayexGatewayFactory();
-$gateways['payex'] = $factory->create(array(
-    'account_number' => 'REPLACE IT',
-    'encryption_key' => 'REPLACE IT',
-    'sandbox' => true
-));
+/** @var Payum $payum */
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+    ->addGatewayConfig('gatewayName', [
+        'factory' => 'payex',
+        'account_number' => 'REPLACE IT',
+        'encryption_key' => 'REPLACE IT',
+        'sandbox' => true
+    ])
+
+    ->getPayum()
+;
 ```
 
 ## prepare.php

@@ -38,45 +38,21 @@ Here we can put our gateways, storages. Also we can configure security component
 <?php
 //config.php
 
-use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
-use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
-use Payum\Core\Registry\SimpleRegistry;
-use Payum\Core\Storage\FilesystemStorage;
-use Payum\Core\Security\GenericTokenFactory;
+use Payum\Core\PayumBuilder;
+use Payum\Core\Payum;
+use Payum\Core\Model\Payment;
 
-$orderClass = 'Payum\Core\Model\Payment';
+$paymentClass = Payment::class;
 
-$storages = array(
-    $orderClass => new FilesystemStorage('/path/to/storage', $orderClass, 'number'),
-    
-    //put other storages
-);
+/** @var Payum $payum */
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+    ->addGatewayConfig('aGateway', [
+        'factory' => 'offline'
+    ])
 
-$gateways = array();
-
-
-$factory = new \Payum\Offline\OfflineGatewayFactory();
-$gateways['offline'] = $factory->create();
-
-//put here other gateways
-
-$payum = new SimpleRegistry($gateways, $storages);
-
-//security
-
-$tokenStorage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Token', 'hash');
-
-$requestVerifier = new HttpRequestVerifier($tokenStorage);
-
-$tokenFactory = new GenericTokenFactory(
-    new TokenFactory($tokenStorage, $payum), 
-    array(
-        'capture' => 'capture.php',
-        'notify' => 'notify.php',
-        'authorize' => 'authorize.php',
-        'refund' => 'refund.php',
-    )
-);
+    ->getPayum()
+;
 ```
 
 _**Note**: There are other [storages](storages.md) available. Such as Doctrine ORM\MongoODM._
@@ -95,28 +71,28 @@ Here's an offline gateway example:
 
 include 'config.php';
 
-$gatewayName = 'offline';
+$gatewayName = 'aGateway';
 
-$storage = $payum->getStorage($orderClass);
+$storage = $payum->getStorage($paymentClass);
 
-$order = $storage->create();
-$order->setNumber(uniqid());
-$order->setCurrencyCode('EUR');
-$order->setTotalAmount(123); // 1.23 EUR
-$order->setDescription('A description');
-$order->setClientId('anId');
-$order->setClientEmail('foo@example.com');
+$payment = $storage->create();
+$payment->setNumber(uniqid());
+$payment->setCurrencyCode('EUR');
+$payment->setTotalAmount(123); // 1.23 EUR
+$payment->setDescription('A description');
+$payment->setClientId('anId');
+$payment->setClientEmail('foo@example.com');
 
-$order->setDetails(array(
+$payment->setDetails(array(
   // put here any fields in a gateway format.
   // for example if you use Paypal ExpressCheckout you can define a description of the first item:
   // 'L_PAYMENTREQUEST_0_DESC0' => 'A desc',
 ));
 
 
-$storage->update($order);
+$storage->update($payment);
 
-$captureToken = $tokenFactory->createCaptureToken($gatewayName, $order, 'done.php');
+$captureToken = $payum->getTokenFactory()->createCaptureToken($gatewayName, $payment, 'done.php');
 
 header("Location: ".$captureToken->getTargetUrl());
 ```
@@ -132,13 +108,9 @@ It has to work for all gateways without any modification from your side.
 <?php
 //capture.php
 
-use Payum\Core\Request\Capture;
-use Payum\Core\Reply\HttpRedirect;
-
 include 'config.php';
 
-$token = $requestVerifier->verify($_REQUEST);
-$gateway = $payum->getGateway($token->getPaymentName());
+$payum->getHttpController()->capture();
 
 if ($reply = $gateway->execute(new Capture($token), true)) {
     if ($reply instanceof HttpRedirect) {
@@ -149,7 +121,7 @@ if ($reply = $gateway->execute(new Capture($token), true)) {
     throw new \LogicException('Unsupported reply', null, $reply);
 }
 
-$requestVerifier->invalidate($token);
+$payum->getRequestVerifier()->invalidate($token);
 
 header("Location: ".$token->getAfterUrl());
 ```
@@ -170,28 +142,27 @@ use Payum\Core\Request\GetHumanStatus;
 
 include 'config.php';
 
-$token = $requestVerifier->verify($_REQUEST);
-
+$token = $payum->getRequestVerifier()->verify($_REQUEST);
 $gateway = $payum->getGateway($token->getGatewayName());
 
 // you can invalidate the token. The url could not be requested any more.
-// $requestVerifier->invalidate($token);
+// $payum->getRequestVerifier()->invalidate($token);
 
 // Once you have token you can get the model from the storage directly. 
 //$identity = $token->getDetails();
-//$order = $payum->getStorage($identity->getClass())->find($identity);
+//$payment = $payum->getStorage($identity->getClass())->find($identity);
 
 // or Payum can fetch the model for you while executing a request (Preferred).
 $gateway->execute($status = new GetHumanStatus($token));
-$order = $status->getFirstModel());
+$payment = $status->getFirstModel());
 
 header('Content-Type: application/json');
 echo json_encode(array(
     'status' => $status->getValue(),
     'order' => array(
-        'total_amount' => $order->getTotalAmount(),
-        'currency_code' => $order->getCurrencyCode(),
-        'details' => $order->getDetails(),
+        'total_amount' => $payment->getTotalAmount(),
+        'currency_code' => $payment->getCurrencyCode(),
+        'details' => $payment->getDetails(),
     ),
 )));
 ```

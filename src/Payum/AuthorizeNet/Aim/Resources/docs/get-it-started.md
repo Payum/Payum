@@ -21,23 +21,26 @@ We have to only add the gateway factory. All the rest remain the same:
 <?php
 //config.php
 
-// ...
+use Payum\Core\PayumBuilder;
+use Payum\Core\Payum;
 
-$authorizeNetAimFactory = new \Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
+/** @var Payum $payum */
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+    ->addGatewayConfig('authorize_net', [
+        'factory' => 'authorize_net_aim'
+        'login_id' => 'REPLACE IT',
+        'transaction_key' => 'REPLACE IT',
+        'sandbox' => true,
+    ])
 
-$gateways['authorize-net-aim'] = $authorizeNetAimFactory->create(array(
-    'login_id' => 'REPLACE IT',
-    'transaction_key' => 'REPLACE IT',
-    'sandbox' => true,
-));
-
-
-// ...
+    ->getPayum()
+;
 ```
 
 ## prepare.php
 
-Here you have to modify a `gatewayName` value. Set it to `authorize-net-aim`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
+Here you have to modify a `gatewayName` value. Set it to `authorize_net`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
 
 ## Next 
 

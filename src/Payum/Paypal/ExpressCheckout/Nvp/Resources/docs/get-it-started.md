@@ -15,25 +15,26 @@ php composer.phar require payum/paypal-express-checkout-nvp
 
 ## config.php
 
-We only have to add the factory factory. All the rest remains the same:
-
 ```php
 <?php
 //config.php
 
-use Payum\Core\Extension\GenericTokenFactoryExtension;
-use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use Payum\Core\PayumBuilder;
+use Payum\Core\Payum;
 
-$factory = new \Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory; 
-$gateways['paypal_express_checkout'] = $factory->create(array(
-   'username'  => 'change it',
-   'password'  => 'change it',
-   'signature' => 'change it',
-   'sandbox'   => true,
-   
-   // uncomment if you want notify url to be generated automatically.
-   // 'payum.extension.token_factory' => new GenericTokenFactoryExtension($tokenFactory), 
-));
+/** @var Payum $payum */
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+    ->addGateway('gatewayName', [
+        'factory' => 'paypal_express_checkout'
+        'username'  => 'change it',
+        'password'  => 'change it',
+        'signature' => 'change it',
+        'sandbox'   => true,
+    ])
+
+    ->getPayum()
+;
 ```
 
 ## prepare.php

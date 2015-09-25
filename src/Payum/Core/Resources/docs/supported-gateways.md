@@ -32,6 +32,7 @@
 * [ekipower/payum-nganluong](https://github.com/ekipower/payum-nganluong)
 * [fullpipe/payum-uniteller](https://github.com/fullpipe/payum-uniteller)
 * [fullpipe/payum-flexidengi](https://github.com/fullpipe/payum-flexidengi)
+* [paradigm/payum-trustly](https://github.com/Paradigmfi/PayumTrustly)
 
 ## Omnipay gateways.
 

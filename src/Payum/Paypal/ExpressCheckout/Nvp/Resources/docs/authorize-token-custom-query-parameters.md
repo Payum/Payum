@@ -45,8 +45,9 @@ To pass these values using your PaymentDetails models set next fields:
 
 ```php
 <?php
+use Payum\Core\Model\ArrayObject;
 
-$model = new PaymentDetails;
+$model = new ArrayObject;
 $model['AUTHORIZE_TOKEN_CMD'] = Api::CMD_EXPRESS_CHECKOUT_MOBILE;
 $model['AUTHORIZE_TOKEN_USERACTION'] = Api::USERACTION_COMMIT;
 
