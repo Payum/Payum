@@ -12,13 +12,28 @@ class SimpleRegistry extends AbstractRegistry
     protected $initializedStorageExtensions;
 
     /**
+     * @var bool
+     */
+    protected $addStorageExtensions = true;
+
+    /**
+     * @param boolean $bool
+     */
+    public function setAddStorageExtensions($bool)
+    {
+        $this->addStorageExtensions = $bool;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getGateway($name)
     {
         $gateway = parent::getGateway($name);
 
-        $this->addStorageToGateway($name);
+        if ($this->addStorageExtensions) {
+            $this->addStorageToGateway($name);
+        }
 
         return $gateway;
     }
