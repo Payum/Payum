@@ -2,6 +2,7 @@
 namespace Payum\Core\Tests\Registry;
 
 use Payum\Core\Extension\StorageExtension;
+use Payum\Core\Gateway;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Registry\AbstractRegistry;
 use Payum\Core\Registry\SimpleRegistry;
@@ -132,7 +133,7 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
 
         $testCase = $this;
 
-        $gatewayMock = $this->getMock(GatewayInterface::class);
+        $gatewayMock = $this->getMock(Gateway::class);
         $gatewayMock
             ->expects($this->once())
             ->method('addExtension')
@@ -177,13 +178,13 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
         $storageTwoMock = $this->getMock(StorageInterface::class);
         $storageThreeMock = $this->getMock(StorageInterface::class);
 
-        $gatewayFooMock = $this->getMock(GatewayInterface::class);
+        $gatewayFooMock = $this->getMock(Gateway::class);
         $gatewayFooMock
             ->expects($this->exactly(3))
             ->method('addExtension')
         ;
 
-        $gatewayBarMock = $this->getMock(GatewayInterface::class);
+        $gatewayBarMock = $this->getMock(Gateway::class);
         $gatewayBarMock
             ->expects($this->exactly(3))
             ->method('addExtension')
@@ -205,19 +206,19 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotInitializeStorageExtensionsIfAddStorageExtensionsAutomaitcallySetFalse()
+    public function shouldNotInitializeStorageExtensionsIfAddStorageExtensionsSetFalse()
     {
         $storageOneMock = $this->getMock(StorageInterface::class);
         $storageTwoMock = $this->getMock(StorageInterface::class);
         $storageThreeMock = $this->getMock(StorageInterface::class);
 
-        $gatewayFooMock = $this->getMock(GatewayInterface::class);
+        $gatewayFooMock = $this->getMock(Gateway::class);
         $gatewayFooMock
             ->expects($this->never())
             ->method('addExtension')
         ;
 
-        $gatewayBarMock = $this->getMock(GatewayInterface::class);
+        $gatewayBarMock = $this->getMock(Gateway::class);
         $gatewayBarMock
             ->expects($this->never())
             ->method('addExtension')
@@ -244,13 +245,13 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
     {
         $storageOneMock = $this->getMock(StorageInterface::class);
 
-        $gatewayFooMock = $this->getMock(GatewayInterface::class);
+        $gatewayFooMock = $this->getMock(Gateway::class);
         $gatewayFooMock
             ->expects($this->once())
             ->method('addExtension')
         ;
 
-        $gatewayBarMock = $this->getMock(GatewayInterface::class);
+        $gatewayBarMock = $this->getMock(Gateway::class);
         $gatewayBarMock
             ->expects($this->once())
             ->method('addExtension')
