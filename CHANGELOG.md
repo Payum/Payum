@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.0-BETA2 (2015-09-25)
+
+* [registry] add ability to disable auto adding of storage extensions.
+* [registry] Add FallbackRegistry
+* [facade] add Payum facade and its builder
+* [doc] Update supported-gateways.md
+* [paypal-ec] Fix empty paypal description
+* Licence owner is changed
+
 ## 1.0.0-BETA1 (2015-08-14)
 
 * Drop support of php5.3 and php5.4
