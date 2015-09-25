@@ -4,6 +4,7 @@ namespace Payum\Core\Tests;
 use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\CoreGatewayFactory;
+use Payum\Core\GatewayInterface;
 use Payum\Core\HttpClientInterface;
 use Payum\Core\Payum;
 use Payum\Core\Registry\RegistryInterface;
@@ -74,8 +75,8 @@ class PayumTest extends \PHPUnit_Framework_TestCase
     {
         $registry = new SimpleRegistry(
             [
-                'foo' => 'fooGateway',
-                'bar' => 'barGateway',
+                'foo' => $fooGateway = $this->getMock(GatewayInterface::class),
+                'bar' => $barGateway = $this->getMock(GatewayInterface::class),
             ],
             [
                 'foo' => 'fooStorage',
@@ -93,11 +94,11 @@ class PayumTest extends \PHPUnit_Framework_TestCase
             $this->createGenericTokenFactoryMock()
         );
 
-        $this->assertSame('fooGateway', $payum->getGateway('foo'));
-        $this->assertSame('barGateway', $payum->getGateway('bar'));
+        $this->assertSame($fooGateway, $payum->getGateway('foo'));
+        $this->assertSame($barGateway, $payum->getGateway('bar'));
         $this->assertSame([
-            'foo' => 'fooGateway',
-            'bar' => 'barGateway',
+            'foo' => $fooGateway,
+            'bar' => $barGateway,
         ], $payum->getGateways());
     }
 
