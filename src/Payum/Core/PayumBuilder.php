@@ -9,6 +9,7 @@ use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Extension\GenericTokenFactoryExtension;
+use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Model\ArrayObject;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\Token;
@@ -16,6 +17,7 @@ use Payum\Core\Registry\DynamicRegistry;
 use Payum\Core\Registry\FallbackRegistry;
 use Payum\Core\Registry\RegistryInterface;
 use Payum\Core\Registry\SimpleRegistry;
+use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\GenericTokenFactory;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
@@ -37,24 +39,14 @@ use Payum\Stripe\StripeJsGatewayFactory;
 class PayumBuilder
 {
     /**
-     * @var HttpRequestVerifierInterface
+     * @var HttpRequestVerifierInterface|callable|null
      */
     protected $httpRequestVerifier;
 
     /**
-     * @var callable
-     */
-    protected $httpRequestVerifierBuilder;
-
-    /**
-     * @var TokenFactoryInterface
+     * @var TokenFactoryInterface|callable|null
      */
     protected $tokenFactory;
-
-    /**
-     * @var callable
-     */
-    protected $tokenFactoryBuilder;
 
     /**
      * @var GenericTokenFactoryInterface
@@ -72,14 +64,9 @@ class PayumBuilder
     protected $tokenStorage;
 
     /**
-     * @var GatewayFactoryInterface
+     * @var GatewayFactoryInterface|callable|null
      */
     protected $coreGatewayFactory;
-
-    /**
-     * @var callable
-     */
-    protected $coreGatewayFactoryBuilder;
 
     /**
      * @var array
@@ -190,6 +177,150 @@ class PayumBuilder
     }
 
     /**
+     * @param HttpRequestVerifierInterface|callable|null $httpRequestVerifier
+     *
+     * @return static
+     */
+    public function setHttpRequestVerifier($httpRequestVerifier = null)
+    {
+        if (
+            null === $httpRequestVerifier ||
+            $httpRequestVerifier instanceof HttpRequestVerifierInterface ||
+            is_callable($httpRequestVerifier))
+        {
+            $this->httpRequestVerifier = $httpRequestVerifier;
+
+            return $this;
+        }
+
+        throw new InvalidArgumentException('Invalid argument');
+    }
+
+    /**
+     * @param TokenFactoryInterface|callable|null $tokenFactory
+     *
+     * @return static
+     */
+    public function setTokenFactory($tokenFactory = null)
+    {
+        if (
+            null === $tokenFactory ||
+            $tokenFactory instanceof TokenFactoryInterface ||
+            is_callable($tokenFactory))
+        {
+            $this->tokenFactory = $tokenFactory;
+
+            return $this;
+        }
+
+        throw new InvalidArgumentException('Invalid argument');
+    }
+
+    /**
+     * @param GenericTokenFactoryInterface $tokenFactory
+     *
+     * @return static
+     */
+    public function setGenericTokenFactory(GenericTokenFactoryInterface $tokenFactory = null)
+    {
+        $this->genericTokenFactory = $tokenFactory;
+
+        return $this;
+    }
+
+    /**
+     * @param \string[] $paths
+     *
+     * @return static
+     */
+    public function setGenericTokenFactoryPaths(array $paths = [])
+    {
+        $this->genericTokenFactoryPaths = $paths;
+
+        return $this;
+    }
+
+    /**
+     * @param StorageInterface $tokenStorage
+     *
+     * @return static
+     */
+    public function setTokenStorage(StorageInterface $tokenStorage = null)
+    {
+        $this->tokenStorage = $tokenStorage;
+
+        return $this;
+    }
+
+    /**
+     * @param GatewayFactoryInterface|callable|null $coreGatewayFactory
+     *
+     * @return static
+     */
+    public function setCoreGatewayFactory($coreGatewayFactory = null)
+    {
+        if (
+            null === $coreGatewayFactory ||
+            $coreGatewayFactory instanceof GatewayFactoryInterface ||
+            is_callable($coreGatewayFactory))
+        {
+            $this->coreGatewayFactory = $coreGatewayFactory;
+
+            return $this;
+        }
+
+        throw new InvalidArgumentException('Invalid argument');
+    }
+
+    /**
+     * @param array $config
+     *
+     * @return static
+     */
+    public function setCoreGatewayFactoryConfig(array $config = null)
+    {
+        $this->coreGatewayFactoryConfig = $config;
+
+        return $this;
+    }
+
+    /**
+     * @param StorageInterface $gatewayConfigStorage
+     *
+     * @return static
+     */
+    public function setGatewayConfigStorage(StorageInterface $gatewayConfigStorage = null)
+    {
+        $this->gatewayConfigStorage = $gatewayConfigStorage;
+
+        return $this;
+    }
+
+    /**
+     * @param RegistryInterface $mainRegistry
+     *
+     * @return static
+     */
+    public function setMainRegistry(RegistryInterface $mainRegistry = null)
+    {
+        $this->mainRegistry = $mainRegistry;
+
+        return $this;
+    }
+
+    /**
+     * @param HttpClientInterface $httpClient
+     *
+     * @return static
+     */
+    public function setHttpClient(HttpClientInterface $httpClient = null)
+    {
+        $this->httpClient = $httpClient;
+
+        return $this;
+    }
+
+    /**
      * @return Payum
      */
     public function getPayum()
@@ -198,9 +329,10 @@ class PayumBuilder
             throw new \LogicException('Token storage must be configured.');
         }
 
-        $genericTokenFactory = $this->buildGenericTokenFactory();
+        $tokenFactory = $this->buildTokenFactory($this->tokenStorage, $this->buildRegistry([], $this->storages));
+        $genericTokenFactory = $this->buildGenericTokenFactory($tokenFactory);
 
-        $httpRequestVerifier = $this->buildHttpRequestVerifier();
+        $httpRequestVerifier = $this->buildHttpRequestVerifier($this->tokenStorage);
 
         if (false == $httpClient = $this->httpClient) {
             $httpClient = HttpClientFactory::create();
@@ -225,37 +357,92 @@ class PayumBuilder
             }
 
             $registry = $this->buildRegistry($gateways, $this->storages, $gatewayFactories);
+
+
         }
 
         return new Payum($registry, $httpRequestVerifier, $genericTokenFactory);
     }
 
     /**
+     * @param StorageInterface $tokenStorage
+     * @param StorageRegistryInterface $storageRegistry
+     *
+     * @return TokenFactoryInterface
+     */
+    protected function buildTokenFactory(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry)
+    {
+        $tokenFactory = $this->tokenFactory;
+
+        if (is_callable($tokenFactory)) {
+            $tokenFactory = call_user_func($tokenFactory, $tokenStorage, $storageRegistry);
+
+            if (false == $tokenFactory instanceof TokenFactoryInterface) {
+                throw new \LogicException('Builder returned invalid instance');
+            }
+        }
+
+        return $tokenFactory ?: new TokenFactory($tokenStorage, $storageRegistry);
+    }
+
+    /**
+     * @param TokenFactoryInterface $tokenFactory
+     *
      * @return GenericTokenFactoryInterface
      */
-    protected function buildGenericTokenFactory()
+    protected function buildGenericTokenFactory(TokenFactoryInterface $tokenFactory)
     {
-        if ($this->genericTokenFactory) {
-            return $this->genericTokenFactory;
-        }
-
-        $tokenStorage = $this->tokenStorage;
-        $storageRegistry = $this->buildRegistry([], $this->storages);
-
-        if ($this->tokenFactoryBuilder) {
-            $tokenFactory = call_user_func($this->tokenFactoryBuilder, $tokenStorage, $storageRegistry);
-        } else if ($this->tokenFactory) {
-            $tokenFactory = $this->tokenFactory;
-        } else {
-            $tokenFactory = new TokenFactory($tokenStorage, $storageRegistry);
-        }
-
-        return new GenericTokenFactory($tokenFactory, $this->genericTokenFactoryPaths ?: [
+        return $this->genericTokenFactory ?: new GenericTokenFactory($tokenFactory, $this->genericTokenFactoryPaths ?: [
             'capture' => 'capture.php',
             'notify' => 'notify.php',
             'authorize' => 'authorize.php',
             'refund' => 'refund.php',
         ]);
+    }
+
+    /**
+     * @param StorageInterface $tokenStorage
+     *
+     * @return HttpRequestVerifierInterface
+     */
+    private function buildHttpRequestVerifier(StorageInterface $tokenStorage)
+    {
+        $httpRequestVerifier = $this->httpRequestVerifier;
+
+        if (is_callable($httpRequestVerifier)) {
+            $httpRequestVerifier = call_user_func($httpRequestVerifier, $tokenStorage);
+
+            if (false == $httpRequestVerifier instanceof HttpRequestVerifierInterface) {
+                throw new \LogicException('Builder returned invalid instance');
+            }
+        }
+
+        return $httpRequestVerifier ?: new HttpRequestVerifier($tokenStorage);
+    }
+
+    /**
+     * @param array $config
+     * @return GatewayFactoryInterface
+     */
+    private function buildCoreGatewayFactory(array $config)
+    {
+        $coreGatewayFactory = $this->coreGatewayFactory;
+
+        foreach ($this->storages as $modelClass => $storage) {
+            $extensionName = 'payum.extension.storage_'.strtolower(str_replace('\\', '_', $modelClass));
+
+            $config[$extensionName] = new StorageExtension($storage);
+        }
+
+        if (is_callable($coreGatewayFactory)) {
+            $coreGatewayFactory = call_user_func($coreGatewayFactory, $config);
+
+            if (false == $coreGatewayFactory instanceof GatewayFactoryInterface) {
+                throw new \LogicException('Builder returned invalid instance');
+            }
+        }
+
+        return $coreGatewayFactory ?: new CoreGatewayFactory($config);
     }
 
     /**
@@ -268,6 +455,8 @@ class PayumBuilder
     protected function buildRegistry(array $gateways = [], array $storages = [], array $gatewayFactories = [])
     {
         $fallbackRegistry = new SimpleRegistry($gateways, $storages, $gatewayFactories);
+        $fallbackRegistry->setAddStorageExtensions(false);
+
         if ($this->gatewayConfigStorage) {
             $fallbackRegistry = new DynamicRegistry($this->gatewayConfigStorage, $fallbackRegistry);
         }
@@ -279,40 +468,6 @@ class PayumBuilder
         }
 
         return $registry;
-    }
-
-    /**
-     * @return HttpRequestVerifierInterface
-     */
-    private function buildHttpRequestVerifier()
-    {
-        if ($this->httpRequestVerifier) {
-            return $this->httpRequestVerifier;
-        }
-
-        if ($this->httpRequestVerifierBuilder) {
-            return call_user_func($this->httpRequestVerifierBuilder, $this->tokenStorage);
-        }
-
-        return new HttpRequestVerifier($this->tokenStorage);
-    }
-
-    /**
-     * @param array $defaultConfig
-     *
-     * @return GatewayFactoryInterface
-     */
-    private function buildCoreGatewayFactory(array $defaultConfig)
-    {
-        if ($this->coreGatewayFactory) {
-            return $this->coreGatewayFactory;
-        }
-
-        if ($this->coreGatewayFactoryBuilder) {
-            return call_user_func($this->coreGatewayFactoryBuilder, $defaultConfig);
-        }
-
-        return new CoreGatewayFactory($defaultConfig);
     }
 
     /**
@@ -369,161 +524,5 @@ class PayumBuilder
         }
 
         return array_replace($defaultGatewayFactories, $gatewayFactories);
-    }
-
-    /**
-     * @param HttpRequestVerifierInterface $httpRequestVerifier
-     *
-     * @return static
-     */
-    public function setHttpRequestVerifier(HttpRequestVerifierInterface $httpRequestVerifier = null)
-    {
-        $this->httpRequestVerifier = $httpRequestVerifier;
-
-        return $this;
-    }
-
-    /**
-     * @param TokenFactoryInterface $tokenFactory
-     *
-     * @return static
-     */
-    public function setTokenFactory(TokenFactoryInterface $tokenFactory = null)
-    {
-        $this->tokenFactory = $tokenFactory;
-
-        return $this;
-    }
-
-    /**
-     * @param callable $builder
-     *
-     * @return static
-     */
-    public function setTokenFactoryBuilder(callable $builder = null)
-    {
-        $this->tokenFactoryBuilder = $builder;
-
-        return $this;
-    }
-
-    /**
-     * @param GenericTokenFactoryInterface $tokenFactory
-     *
-     * @return static
-     */
-    public function setGenericTokenFactory(GenericTokenFactoryInterface $tokenFactory = null)
-    {
-        $this->genericTokenFactory = $tokenFactory;
-
-        return $this;
-    }
-
-    /**
-     * @param \string[] $paths
-     *
-     * @return static
-     */
-    public function setGenericTokenFactoryPaths(array $paths = [])
-    {
-        $this->genericTokenFactoryPaths = $paths;
-
-        return $this;
-    }
-
-    /**
-     * @param StorageInterface $tokenStorage
-     *
-     * @return static
-     */
-    public function setTokenStorage(StorageInterface $tokenStorage = null)
-    {
-        $this->tokenStorage = $tokenStorage;
-
-        return $this;
-    }
-
-    /**
-     * @param GatewayFactoryInterface $coreGatewayFactory
-     *
-     * @return static
-     */
-    public function setCoreGatewayFactory(GatewayFactoryInterface $coreGatewayFactory = null)
-    {
-        $this->coreGatewayFactory = $coreGatewayFactory;
-
-        return $this;
-    }
-
-    /**
-     * @param array $config
-     *
-     * @return static
-     */
-    public function setCoreGatewayFactoryConfig(array $config = null)
-    {
-        $this->coreGatewayFactoryConfig = $config;
-
-        return $this;
-    }
-
-    /**
-     * @param StorageInterface $gatewayConfigStorage
-     *
-     * @return static
-     */
-    public function setGatewayConfigStorage(StorageInterface $gatewayConfigStorage = null)
-    {
-        $this->gatewayConfigStorage = $gatewayConfigStorage;
-
-        return $this;
-    }
-
-    /**
-     * @param HttpClientInterface $httpClient
-     *
-     * @return static
-     */
-    public function setHttpClient(HttpClientInterface $httpClient = null)
-    {
-        $this->httpClient = $httpClient;
-
-        return $this;
-    }
-
-    /**
-     * @param RegistryInterface $mainRegistry
-     *
-     * @return static
-     */
-    public function setMainRegistry(RegistryInterface $mainRegistry = null)
-    {
-        $this->mainRegistry = $mainRegistry;
-
-        return $this;
-    }
-
-    /**
-     * @param callable $builder
-     *
-     * @return static
-     */
-    public function setHttpRequestVerifierBuilder(callable $builder = null)
-    {
-        $this->httpRequestVerifierBuilder = $builder;
-
-        return $this;
-    }
-
-    /**
-     * @param callable $builder
-     *
-     * @return static
-     */
-    public function setCoreGatewayFactoryBuilder(callable $builder = null)
-    {
-        $this->coreGatewayFactoryBuilder = $builder;
-
-        return $this;
     }
 }
