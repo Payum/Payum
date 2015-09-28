@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.0-BETA3 (2015-09-28)
+
+* [facade] add ability to pass builders (closures) to Payum facade builder, various bug fixes.
+
 ## 1.0.0-BETA2 (2015-09-25)
 
 * [registry] add ability to disable auto adding of storage extensions.
