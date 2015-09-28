@@ -13,6 +13,6 @@ try {
         exit;
     }
     
-    throws \LogicException('Unsupported reply', null, $reply);
+    throw new \LogicException('Unsupported reply', null, $reply);
 }
 ```
