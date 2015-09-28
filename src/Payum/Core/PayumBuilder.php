@@ -49,7 +49,7 @@ class PayumBuilder
     protected $tokenFactory;
 
     /**
-     * @var GenericTokenFactoryInterface
+     * @var GenericTokenFactoryInterface|callable|null
      */
     protected $genericTokenFactory;
 
@@ -217,15 +217,23 @@ class PayumBuilder
     }
 
     /**
-     * @param GenericTokenFactoryInterface $tokenFactory
+     * @param GenericTokenFactoryInterface|callable|null $tokenFactory
      *
      * @return static
      */
-    public function setGenericTokenFactory(GenericTokenFactoryInterface $tokenFactory = null)
+    public function setGenericTokenFactory($tokenFactory = null)
     {
-        $this->genericTokenFactory = $tokenFactory;
+        if (
+            null === $tokenFactory ||
+            $tokenFactory instanceof GenericTokenFactoryInterface ||
+            is_callable($tokenFactory))
+        {
+            $this->genericTokenFactory = $tokenFactory;
 
-        return $this;
+            return $this;
+        }
+
+        throw new InvalidArgumentException('Invalid argument');
     }
 
     /**
@@ -330,7 +338,12 @@ class PayumBuilder
         }
 
         $tokenFactory = $this->buildTokenFactory($this->tokenStorage, $this->buildRegistry([], $this->storages));
-        $genericTokenFactory = $this->buildGenericTokenFactory($tokenFactory);
+        $genericTokenFactory = $this->buildGenericTokenFactory($tokenFactory, array_replace([
+            'capture' => 'capture.php',
+            'notify' => 'notify.php',
+            'authorize' => 'authorize.php',
+            'refund' => 'refund.php',
+        ], $this->genericTokenFactoryPaths));
 
         $httpRequestVerifier = $this->buildHttpRequestVerifier($this->tokenStorage);
 
@@ -387,17 +400,24 @@ class PayumBuilder
 
     /**
      * @param TokenFactoryInterface $tokenFactory
+     * @param string[]              $paths
      *
      * @return GenericTokenFactoryInterface
+     *
      */
-    protected function buildGenericTokenFactory(TokenFactoryInterface $tokenFactory)
+    protected function buildGenericTokenFactory(TokenFactoryInterface $tokenFactory, array $paths)
     {
-        return $this->genericTokenFactory ?: new GenericTokenFactory($tokenFactory, $this->genericTokenFactoryPaths ?: [
-            'capture' => 'capture.php',
-            'notify' => 'notify.php',
-            'authorize' => 'authorize.php',
-            'refund' => 'refund.php',
-        ]);
+        $genericTokenFactory = $this->genericTokenFactory;
+
+        if (is_callable($genericTokenFactory)) {
+            $genericTokenFactory = call_user_func($genericTokenFactory, $tokenFactory, $paths);
+
+            if (false == $genericTokenFactory instanceof GenericTokenFactoryInterface) {
+                throw new \LogicException('Builder returned invalid instance');
+            }
+        }
+
+        return $genericTokenFactory ?: new GenericTokenFactory($tokenFactory, $paths);
     }
 
     /**
