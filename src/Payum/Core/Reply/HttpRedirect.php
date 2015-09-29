@@ -50,7 +50,7 @@ class HttpRedirect extends HttpResponse
         <title>Redirecting to %1$s</title>
     </head>
     <body>
-        Redirecting to <a href="%1$s">%1$s</a>.
+        Redirecting to %1$s.
     </body>
 </html>', htmlspecialchars($url, ENT_QUOTES, 'UTF-8'));
     }

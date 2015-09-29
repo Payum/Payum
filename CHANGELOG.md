@@ -40,6 +40,11 @@
 * [klarna-checkout] change constant names
 * [klarna-checkout] add support of klarna checkout recurring payments.
 
+## 0.14.7 (2015-09-29)
+
+* [reply] remove "continue", clicking on it user can do double payment
+* [factory] Add `UpdateRecurringPaymentProfileAction` config on PaymentFactory.
+
 ## 0.14.6 (2015-06-10)
 
 * [paypal-ec] Add `UpdateRecurringPaymentsProfile` require and an action for it.
