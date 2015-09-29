@@ -69,7 +69,7 @@ class HttpPostRedirect extends HttpResponse
     <body onload="document.forms[0].submit();">
         <form action="%1$s" method="post">
             <p>Redirecting to payment page...</p>
-            <p>%2$s<input type="submit" value="Continue" /></p>
+            <p>%2$s</p>
         </form>
     </body>
 </html>

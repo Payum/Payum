@@ -55,7 +55,7 @@ class HttpPostRedirectTest extends \PHPUnit_Framework_TestCase
     <body onload="document.forms[0].submit();">
         <form action="theUrl" method="post">
             <p>Redirecting to payment page...</p>
-            <p><input type="submit" value="Continue" /></p>
+            <p></p>
         </form>
     </body>
 </html>
@@ -82,7 +82,7 @@ HTML;
             <p>Redirecting to payment page...</p>
             <p><input type="hidden" name="foo" value="fooVal" />
 <input type="hidden" name="bar" value="barVal" />
-<input type="submit" value="Continue" /></p>
+</p>
         </form>
     </body>
 </html>
@@ -108,7 +108,7 @@ HTML;
         <form action="theUrl" method="post">
             <p>Redirecting to payment page...</p>
             <p><input type="hidden" name="foo" value="&lt;&gt;&amp;&quot;" />
-<input type="submit" value="Continue" /></p>
+</p>
         </form>
     </body>
 </html>

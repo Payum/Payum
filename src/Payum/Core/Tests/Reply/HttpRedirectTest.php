@@ -60,7 +60,7 @@ class HttpRedirectTest extends \PHPUnit_Framework_TestCase
         <title>Redirecting to foo</title>
     </head>
     <body>
-        Redirecting to <a href="foo">foo</a>.
+        Redirecting to foo.
     </body>
 </html>
 HTML;

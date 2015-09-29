@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.0-BETA4 (2015-09-29)
+
+* [reply] remove "continue", clicking on it user can do double payment
+* [factory] Add `UpdateRecurringPaymentProfileAction` config on PaymentFactory.
+
 ## 1.0.0-BETA3 (2015-09-28)
 
 * [facade] add ability to pass builders (closures) to Payum facade builder, various bug fixes.
@@ -34,6 +39,11 @@
 * [stripe] Use stripe javascript object only after the script is loaded
 * [tests] use ::class whenever its possible
 * [travis] Run tests on php7
+
+## 0.15.4 (2015-09-29)
+
+* [reply] remove "continue", clicking on it user can do double payment
+* [factory] Add `UpdateRecurringPaymentProfileAction` config on PaymentFactory.
 
 ## 0.15.3 (2015-08-03)
 
@@ -74,6 +84,11 @@
 * [klarna-checkout] check if acceptHeader property exists.
 * [klarna-checkout] change constant names
 * [klarna-checkout] add support of klarna checkout recurring payments.
+
+## 0.14.7 (2015-09-29)
+
+* [reply] remove "continue", clicking on it user can do double payment
+* [factory] Add `UpdateRecurringPaymentProfileAction` config on PaymentFactory.
 
 ## 0.14.6 (2015-06-10)
 
