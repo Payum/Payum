@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.15.4 (2015-09-29)
+
+* [reply] remove "continue", clicking on it user can do double payment
+* [factory] Add `UpdateRecurringPaymentProfileAction` config on PaymentFactory.
+
 ## 0.15.3 (2015-08-03)
 
 * [buzz] Do not force TLSv1 Cipher for NSS.
