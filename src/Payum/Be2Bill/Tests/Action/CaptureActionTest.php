@@ -2,6 +2,8 @@
 namespace Payum\Be2Bill\Tests\Action;
 
 use Payum\Be2Bill\Api;
+use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\CreditCard;
 use Payum\Core\GatewayInterface;
@@ -12,18 +14,18 @@ use Payum\Core\Tests\GenericActionTest;
 
 class CaptureActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\Be2Bill\Action\CaptureAction';
+    protected $actionClass = CaptureAction::class;
 
-    protected $requestClass = 'Payum\Core\Request\Capture';
+    protected $requestClass = Capture::class;
 
     /**
      * @test
      */
     public function shouldBeSubClassOfGatewayAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Be2Bill\Action\CaptureAction');
+        $rc = new \ReflectionClass(CaptureAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
+        $this->assertTrue($rc->isSubclassOf(GatewayAwareAction::class));
     }
 
     /**
@@ -31,9 +33,9 @@ class CaptureActionTest extends GenericActionTest
      */
     public function shouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Be2Bill\Action\CaptureAction');
+        $rc = new \ReflectionClass(CaptureAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
     /**
@@ -275,7 +277,7 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createApiMock()
     {
-        return $this->getMock('Payum\Be2Bill\Api', array(), array(), '', false);
+        return $this->getMock(Api::class, array(), array(), '', false);
     }
 
     /**
@@ -283,6 +285,6 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\GatewayInterface');
+        return $this->getMock(GatewayInterface::class);
     }
 }
