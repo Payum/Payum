@@ -15,8 +15,8 @@ class AuthorizeNetAimGatewayFactory extends GatewayFactory
      */
     protected function populateConfig(ArrayObject $config)
     {
-        if (!class_exists('AuthorizeNetAIM')) {
-            throw new \LogicException('You must install "ajbdev/authorizenet-php-api" library.');
+        if (!class_exists(\AuthorizeNetAIM::class)) {
+            throw new \LogicException('You must install "authorizenet/authorizenet" library.');
         }
 
         $config->defaults(array(
