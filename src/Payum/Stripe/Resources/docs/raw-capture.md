@@ -59,8 +59,5 @@ header("Location: ".$captureToken->getTargetUrl());
 * [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
 * [Supported gateways](https://github.com/Payum/Core/blob/master/Resources/docs/supported-gateways.md).
 * [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
-* [Capture script](https://github.com/Payum/Core/blob/master/Resources/docs/capture-script.md).
-* [Authorize script](https://github.com/Payum/Core/blob/master/Resources/docs/authorize-script.md).
-* [Done script](https://github.com/Payum/Core/blob/master/Resources/docs/done-script.md).
 
 Back to [index](index.md).

@@ -12,3 +12,6 @@ $gateway = $factory->create(array(
     'secret_key' => 'aKey',
 ));
 ```
+
+Back to [examples](examples/index.md).
+Back to [index](index.md).

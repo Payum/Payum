@@ -1,115 +1,69 @@
 # Instant payment notification.
 
-A notification is a callback. A gateway can send it back to us to let us know about changes.
-It could be [Paypal Instant Payment Notification (IPN)](https://developer.paypal.com/webapps/developer/docs/classic/products/instant-payment-notification/) or [Payex Transaction Callback](http://www.payexpim.com/quick-guide/9-transaction-callback/) for example.
-Here in this chapter we show you how to store it somewhere and process it later (with a cron script for example).
-
+A notification is a callback. A gateway sends it back to you to let you know about changes.
+It could be due a refund or pending payment acceptance.
 The diagram shows two examples where notification could be very handy:
 
 ![notification](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=cGFydGljaXBhbnQgUGF5cGFsCgAHDGNhcHR1cmUucGhwAAsNbm90aWZ5ABIFCgAZCy0-KwA_BjogYSBwdXJjYWhzZQoAUgYtPi0AQws6IHBlbmRpbmcAFggtPgBKCjogc3VjY2VzcwBiBmljYXRpb24AMTkARgcAVBZjYW5jZWxlZCAodXNlciB2b2lkIG9uIHAAggcFIHNpZGUp&s=default)
 
-## Preparations
+If you follow [get it started](get-it-started.md) and used a payum builder to create paypal gateway,
+you do not have to care about notify url. Payum does it for you.
+You just have to make sure [notify script](scripts/notify-script.md) is accessible from web.
 
-First we have to create a model where we would store all the info:
+The model will be updated automatically once the notification is sent.
+What you have to do is add an extension to detect payment status changes, and act accordingly.
 
-```php
-<?php
-class Notification extends \ArrayObject
-{
-}
+Here's an example of the extension:
+
 ```
-
-Then we have to do our notification action which would actually do all the job:
-
-```php
 <?php
-use Payum\Core\Action\GatewayAwareAction;
-use Payum\Core\Request\Notify;
 
-class StoreNotificationAction extends GatewayAwareAction
+use Payum\Core\Extension\Context;
+use Payum\Core\Extension\ExtensionInterface;
+use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Request\Generic;
+use Payum\Core\Request\GetHumanStatus;
+use Payum\Core\Request\GetStatusInterface;
+
+class PaymentStatusExtension implements ExtensionInterface
 {
-    protected $notificationStorage;
-
-    public function __constructor(StorageInterface $notificationStorage)
+    /**
+     * {@inheritDoc}
+     */
+    public function onPostExecute(Context $context)
     {
-        $this->notificationStorage = $notificationStorage;
-    }
-
-    public function execute($request)
-    {
-        $notification = $this->notificationStorage->create();
-
-        $this->gateway->execute($getHttpRequest = new GetHttpRequest);
-        foreach ($getHttpRequest->query as $name => $value) {
-            $notification[$name] => $value;
+        $request = $context->getRequest();
+        if (false == $request instanceof Generic) {
+            return;
         }
-        foreach ($getHttpRequest->request as $name => $value) {
-            $notification[$name] => $value;
+        if (false == $request instanceof GetStatusInterface) {
+            return;
         }
 
-        $this->notificationStorage->update($notification);
+        $payment = $request->getModel();
+        if (false == $payment instanceof PaymentInterface) {
+            return;
+        }
+
+        $context->getGateway()->execute($status = new GetHumanStatus($payment));
+
+        // check the status and act accordingly
     }
 
-    public function supports($request)
+    /**
+     * {@inheritDoc}
+     */
+    public function onPreExecute(Context $context)
     {
-        return $request instanceof Notify;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function onExecute(Context $context)
+    {
     }
 }
 ```
-
-In the code above we created payum custom action.
-The main purpose of the action to store notification that with a request.
-To do so it requires a storage.
-Now we can update `config.php` described in [get it started](get-it-started.md).
-
-```php
-<?php
-//config.php
-
-use Payum\Core\Extension\StorageExtension;
-use Payum\Core\Storage\FilesystemStorage;
-
-$storeNotificationAction = new StoreNotificationAction(
-    new FilesystemStorage('/path/to/storage', 'Notification')
-);
-
-$payum->getGateway('paypal')->addAction($storeNotificationAction);
-```
-
-Now we have to implement `notify.php` script which must be accessible from the internet.
-
-```php
-<?php
-//notify.php
-
-use Payum\Core\Request\Notify;
-
-include 'config.php';
-
-$token = $payum->getRequestVerifier()->verify($_REQUEST);
-$gateway = $payum->getGateway($token->getGatewayName());
-
-$gateway->execute(new Notify($token));
-```
-
-## Setup Paypal IPN.
-
-The code above could be reused with any other gateway.
-Now I want to show changes need to enable Paypal IPN. To do so we have to modify `prepare.php` a bit:
-
-```php
-<?php
-// prepare.php
-
-include 'config.php';
-
-$notifyToken = $payum->getTokenFactory()->createNotifyToken('paypal', $paymentDetails);
-
-$paymentDetails['NOTIFYURL'] = $notifyToken->getTargetUrl();
-
-$storage->update($paymentDetails);
-```
-
-Here we created one more token: `notify` and tell paypal to use its target url for notifications.
 
 Back to [index](index.md).

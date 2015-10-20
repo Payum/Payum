@@ -14,3 +14,6 @@ $gateway = $factory->create(array(
     'sandbox' => true,
 ));
 ```
+
+Back to [examples](examples/index.md).
+Back to [index](index.md).
