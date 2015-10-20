@@ -15,3 +15,6 @@ try {
     throws \LogicException('Unsupported reply', null, $reply);
 }
 ```
+
+Back to [examples](examples/index.md).
+Back to [index](index.md).

@@ -1,10 +1,8 @@
 # Documents
 
 * [Get it started](get-it-started.md)
-* [Capture](capture-script.md)
-* [Authorize](authorize-script.md)
-* [Refund](refund-script.md)
-* [Done script](done-script.md)
+* [Scripts](scripts/index.md)
+* [Examples](examples/index.md)
 * [Architecture](the-architecture.md)
 * [Storages](storages.md)
 * [Configure gateway in backend](configure-gateway-in-backend.md)

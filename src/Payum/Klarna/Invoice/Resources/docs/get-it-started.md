@@ -93,7 +93,7 @@ include 'capture.php';
 ```
 
 That's it. As you see we configured Klarna Invoice `config.php` and set details `prepare.php`.
-[capture.php](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/capture-script.md) and [done.php](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/done-script.md) scripts remain same.
+[capture.php](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/scripts/capture-script.md) and [done.php](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/scripts/done-script.md) scripts remain same.
 
 ## Next 
 
@@ -101,8 +101,5 @@ That's it. As you see we configured Klarna Invoice `config.php` and set details 
 * [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
 * [Supported gateways](https://github.com/Payum/Core/blob/master/Resources/docs/supported-gateways.md).
 * [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
-* [Capture script](https://github.com/Payum/Core/blob/master/Resources/docs/capture-script.md).
-* [Authorize script](https://github.com/Payum/Core/blob/master/Resources/docs/authorize-script.md).
-* [Done script](https://github.com/Payum/Core/blob/master/Resources/docs/done-script.md).
 
 Back to [index](index.md).

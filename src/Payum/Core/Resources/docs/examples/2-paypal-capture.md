@@ -24,3 +24,6 @@ $model = array(
 
 $gateway->execute(new \Payum\Core\Request\Capture($model);
 ```
+
+Back to [examples](examples/index.md).
+Back to [index](index.md).

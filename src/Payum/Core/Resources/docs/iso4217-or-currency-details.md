@@ -60,8 +60,5 @@ echo $currency->getCountry(); // US
 * [The architecture](the-architecture.md).
 * [Supported gateways](supported-gateways.md).
 * [Storages](storages.md).
-* [Capture script](capture-script.md).
-* [Authorize script](authorize-script.md).
-* [Done script](done-script.md).
 
 Back to [index](index.md).

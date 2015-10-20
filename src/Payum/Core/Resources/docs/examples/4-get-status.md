@@ -17,3 +17,6 @@ $status->isUnknown();
 
 $status->getValue(); // 'new', 'authorized', 'captured' and so on.
 ```
+
+Back to [examples](examples/index.md).
+Back to [index](index.md).
