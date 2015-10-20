@@ -8,9 +8,9 @@ use Payum\Core\Tests\GenericActionTest;
 
 class StatusActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\Be2Bill\Action\StatusAction';
+    protected $actionClass = StatusAction::class;
 
-    protected $requestClass = 'Payum\Core\Request\GetHumanStatus';
+    protected $requestClass = GetHumanStatus::class;
 
     /**
      * @test
