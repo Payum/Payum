@@ -2,6 +2,9 @@
 namespace Payum\Be2Bill\Tests;
 
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
+use Payum\Core\CoreGatewayFactory;
+use Payum\Core\GatewayFactory;
+use Payum\Core\GatewayFactoryInterface;
 
 class Be2billOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -10,9 +13,9 @@ class Be2billOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSubClassGatewayFactory()
     {
-        $rc = new \ReflectionClass('Payum\Be2Bill\Be2BillOffsiteGatewayFactory');
+        $rc = new \ReflectionClass(Be2BillOffsiteGatewayFactory::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\GatewayFactory'));
+        $this->assertTrue($rc->isSubclassOf(GatewayFactory::class));
     }
 
     /**
@@ -30,7 +33,7 @@ class Be2billOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new Be2BillOffsiteGatewayFactory();
 
-        $this->assertAttributeInstanceOf('Payum\Core\CoreGatewayFactory', 'coreGatewayFactory', $factory);
+        $this->assertAttributeInstanceOf(CoreGatewayFactory::class, 'coreGatewayFactory', $factory);
     }
 
     /**
@@ -38,7 +41,7 @@ class Be2billOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
     {
-        $coreGatewayFactory = $this->getMock('Payum\Core\GatewayFactoryInterface');
+        $coreGatewayFactory = $this->getMock(GatewayFactoryInterface::class);
 
         $factory = new Be2BillOffsiteGatewayFactory(array(), $coreGatewayFactory);
 

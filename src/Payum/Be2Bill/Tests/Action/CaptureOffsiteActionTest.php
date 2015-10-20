@@ -2,6 +2,8 @@
 namespace Payum\Be2Bill\Tests\Action;
 
 use Payum\Be2Bill\Api;
+use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\ApiAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Capture;
 use Payum\Be2Bill\Action\CaptureOffsiteAction;
@@ -10,18 +12,18 @@ use Payum\Core\Tests\GenericActionTest;
 
 class CaptureOffsiteActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\Be2Bill\Action\CaptureOffsiteAction';
+    protected $actionClass = CaptureOffsiteAction::class;
 
-    protected $requestClass = 'Payum\Core\Request\Capture';
+    protected $requestClass = Capture::class;
 
     /**
      * @test
      */
     public function shouldBeSubClassOfGatewayAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Be2Bill\Action\CaptureOffsiteAction');
+        $rc = new \ReflectionClass(CaptureOffsiteAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
+        $this->assertTrue($rc->isSubclassOf(GatewayAwareAction::class));
     }
 
     /**
@@ -29,9 +31,9 @@ class CaptureOffsiteActionTest extends GenericActionTest
      */
     public function shouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Be2Bill\Action\CaptureOffsiteAction');
+        $rc = new \ReflectionClass(CaptureOffsiteAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
     /**
@@ -154,7 +156,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
      */
     protected function createApiMock()
     {
-        return $this->getMock('Payum\Be2Bill\Api', array(), array(), '', false);
+        return $this->getMock(Api::class, array(), array(), '', false);
     }
 
     /**
@@ -162,6 +164,6 @@ class CaptureOffsiteActionTest extends GenericActionTest
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\GatewayInterface');
+        return $this->getMock(GatewayInterface::class);
     }
 }

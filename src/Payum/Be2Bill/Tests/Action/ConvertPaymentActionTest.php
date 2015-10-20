@@ -9,9 +9,9 @@ use Payum\Core\Tests\GenericActionTest;
 
 class ConvertPaymentActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\Be2Bill\Action\ConvertPaymentAction';
+    protected $actionClass = ConvertPaymentAction::class;
 
-    protected $requestClass = 'Payum\Core\Request\Convert';
+    protected $requestClass = Convert::class;
 
     public function provideSupportedRequests()
     {

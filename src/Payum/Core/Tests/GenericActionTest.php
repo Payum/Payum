@@ -14,9 +14,19 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
     protected $requestClass;
 
     /**
-     * @var ActionInterface
+     * @var string
      */
     protected $actionClass;
+
+    /**
+     * @var ActionInterface
+     */
+    protected $action;
+
+    protected function setUp()
+    {
+        $this->action = new $this->actionClass();
+    }
 
     public function provideSupportedRequests()
     {
@@ -34,7 +44,7 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
             array(new \stdClass()),
             array(new $this->requestClass('foo')),
             array(new $this->requestClass(new \stdClass())),
-            array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
+            array($this->getMockForAbstractClass(Generic::class, array(array()))),
         );
     }
 
@@ -45,7 +55,7 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass($this->actionClass);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     /**
@@ -63,9 +73,7 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportRequest($request)
     {
-        $action = new $this->actionClass();
-
-        $this->assertTrue($action->supports($request));
+        $this->assertTrue($this->action->supports($request));
     }
 
     /**
@@ -75,9 +83,7 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportRequest($request)
     {
-        $action = new $this->actionClass();
-
-        $this->assertFalse($action->supports($request));
+        $this->assertFalse($this->action->supports($request));
     }
 
     /**
@@ -89,9 +95,7 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute($request)
     {
-        $action = new $this->actionClass();
-
-        $action->execute($request);
+        $this->action->execute($request);
     }
 
     /**
@@ -99,7 +103,7 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\GatewayInterface');
+        return $this->getMock(GatewayInterface::class);
     }
 
     /**
@@ -107,6 +111,6 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createTokenMock()
     {
-        return $this->getMock('Payum\Core\Security\TokenInterface');
+        return $this->getMock(TokenInterface::class);
     }
 }
