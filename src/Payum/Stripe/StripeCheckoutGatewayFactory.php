@@ -49,5 +49,9 @@ class StripeCheckoutGatewayFactory extends GatewayFactory
                 return new Keys($config['publishable_key'], $config['secret_key']);
             };
         }
+
+        $config['payum.paths'] = array_replace([
+            'PayumStripe' => __DIR__.'/Resources/views',
+        ], $config['payum.paths'] ?: []);
     }
 }

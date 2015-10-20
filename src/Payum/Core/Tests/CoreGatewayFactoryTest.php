@@ -3,6 +3,7 @@ namespace Payum\Core\Tests;
 
 use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\HttpClientInterface;
 
@@ -86,16 +87,11 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $config);
         $this->assertNotEmpty($config);
 
-        $this->assertInstanceOf('Twig_Environment', $config['twig.env']);
         $this->assertInstanceOf('Payum\Core\HttpClientInterface', $config['payum.http_client']);
         $this->assertInstanceOf('Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction', $config['payum.action.get_http_request']);
         $this->assertInstanceOf('Payum\Core\Action\CapturePaymentAction', $config['payum.action.capture_payment']);
         $this->assertInstanceOf('Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction', $config['payum.action.execute_same_request_with_model_details']);
         $this->assertInstanceOf('Closure', $config['payum.action.render_template']);
-        $this->assertInstanceOf(
-            'Payum\Core\Bridge\Twig\Action\RenderTemplateAction',
-            call_user_func_array($config['payum.action.render_template'], array(new ArrayObject($config)))
-        );
         $this->assertInstanceOf('Payum\Core\Extension\EndlessCycleDetectorExtension', $config['payum.extension.endless_cycle_detector']);
 
         $this->assertEquals('@PayumCore/layout.html.twig', $config['payum.template.layout']);
@@ -104,6 +100,95 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(), $config['payum.prepend_apis']);
         $this->assertEquals(array(), $config['payum.default_options']);
         $this->assertEquals(array(), $config['payum.required_options']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldConfigurePaths()
+    {
+        $factory = new CoreGatewayFactory();
+
+        $config = $factory->createConfig();
+
+        $this->assertInternalType('array', $config);
+        $this->assertNotEmpty($config);
+
+        $this->assertInternalType('array', $config['payum.paths']);
+        $this->assertNotEmpty($config['payum.paths']);
+
+        $this->assertArrayHasKey('PayumCore', $config['payum.paths']);
+        $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumCore']);
+        $this->assertTrue(file_exists($config['payum.paths']['PayumCore']));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldConfigurePathsPlusExtraOne()
+    {
+        $factory = new CoreGatewayFactory();
+
+        $config = $factory->createConfig([
+            'payum.paths' => ['FooNamespace' => 'FooPath']
+        ]);
+
+        $this->assertInternalType('array', $config);
+        $this->assertNotEmpty($config);
+
+        $this->assertInternalType('array', $config['payum.paths']);
+        $this->assertNotEmpty($config['payum.paths']);
+
+        $this->assertArrayHasKey('PayumCore', $config['payum.paths']);
+        $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumCore']);
+        $this->assertTrue(file_exists($config['payum.paths']['PayumCore']));
+
+        $this->assertArrayHasKey('FooNamespace', $config['payum.paths']);
+        $this->assertEquals('FooPath', $config['payum.paths']['FooNamespace']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldConfigureTwigEnvironmentGatewayConfig()
+    {
+        $factory = new CoreGatewayFactory();
+
+        $config = $factory->createConfig();
+
+        $this->assertInternalType('array', $config);
+        $this->assertNotEmpty($config);
+
+        $this->assertInstanceOf(\Closure::class, $config['twig.env']);
+
+        $twig = call_user_func($config['twig.env'], ArrayObject::ensureArrayObject($config));
+
+        $this->assertInstanceOf(\Twig_Environment::class, $twig);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldConfigureRenderTemplateAction()
+    {
+        $factory = new CoreGatewayFactory();
+
+        $twig = new \Twig_Environment();
+
+        $config = $factory->createConfig([
+            'twig.env' => $twig,
+        ]);
+
+        $this->assertInternalType('array', $config);
+        $this->assertNotEmpty($config);
+
+        $this->assertInstanceOf(\Closure::class, $config['payum.action.render_template']);
+
+        $action = call_user_func($config['payum.action.render_template'], ArrayObject::ensureArrayObject($config));
+        $this->assertInstanceOf(RenderTemplateAction::class, $action);
+        $this->assertAttributeSame($twig, 'twig', $action);
+
+        $this->assertSame($twig, $config['twig.env']);
     }
 
     /**

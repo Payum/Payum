@@ -36,6 +36,8 @@ class CoreGatewayFactory implements GatewayFactoryInterface
 
         $gateway = new Gateway();
 
+        $this->buildClosures($config);
+
         $this->buildActions($gateway, $config);
         $this->buildApis($gateway, $config);
         $this->buildExtensions($gateway, $config);
@@ -55,8 +57,14 @@ class CoreGatewayFactory implements GatewayFactoryInterface
 
             'payum.http_client' => HttpClientFactory::create(),
 
-            'twig.env' => TwigFactory::createGeneric(),
+            'twig.env' => function(ArrayObject $config) {
+                $loader = new \Twig_Loader_Filesystem();
+                foreach ($config['payum.paths'] as $namespace => $path) {
+                    $loader->addPath($path, $namespace);
+                }
 
+                return new \Twig_Environment($loader);
+            },
             'payum.action.get_http_request' => new GetHttpRequestAction(),
             'payum.action.capture_payment' => new CapturePaymentAction(),
             'payum.action.execute_same_request_with_model_details' => new ExecuteSameRequestWithModelDetailsAction(),
@@ -78,7 +86,24 @@ class CoreGatewayFactory implements GatewayFactoryInterface
             },
         ));
 
+
+        $config['payum.paths'] = array_replace([
+            'PayumCore' => __DIR__.'/Resources/views',
+        ], $config['payum.paths'] ?: []);
+
         return (array) $config;
+    }
+
+    /**
+     * @param ArrayObject $config
+     */
+    protected function buildClosures(ArrayObject $config)
+    {
+        foreach ($config as $name => $value) {
+            if (is_callable($value)) {
+                $config[$name] = call_user_func($value, $config);
+            }
+        }
     }
 
     /**
@@ -92,11 +117,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
             if (0 === strpos($name, 'payum.action')) {
                 $prepend = in_array($name, $config['payum.prepend_actions']);
 
-                if (is_callable($value)) {
-                    $gateway->addAction(call_user_func_array($value, array($config)), $prepend);
-                } else {
-                    $gateway->addAction($value, $prepend);
-                }
+                $gateway->addAction($value, $prepend);
             }
         }
     }
@@ -111,11 +132,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
             if (0 === strpos($name, 'payum.api')) {
                 $prepend = in_array($name, $config['payum.prepend_apis']);
 
-                if (is_callable($value)) {
-                    $gateway->addApi(call_user_func_array($value, array($config)), $prepend);
-                } else {
-                    $gateway->addApi($value, $prepend);
-                }
+                $gateway->addApi($value, $prepend);
             }
         }
     }
@@ -130,11 +147,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
             if (0 === strpos($name, 'payum.extension')) {
                 $prepend = in_array($name, $config['payum.prepend_extensions']);
 
-                if (is_callable($value)) {
-                    $gateway->addExtension(call_user_func_array($value, array($config)), $prepend);
-                } else {
-                    $gateway->addExtension($value, $prepend);
-                }
+                $gateway->addExtension($value, $prepend);
             }
         }
     }

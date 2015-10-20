@@ -160,4 +160,28 @@ class StripeCheckoutGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory->create();
     }
+
+    /**
+     * @test
+     */
+    public function shouldConfigurePaths()
+    {
+        $factory = new StripeCheckoutGatewayFactory();
+
+        $config = $factory->createConfig();
+
+        $this->assertInternalType('array', $config);
+        $this->assertNotEmpty($config);
+
+        $this->assertInternalType('array', $config['payum.paths']);
+        $this->assertNotEmpty($config['payum.paths']);
+
+        $this->assertArrayHasKey('PayumCore', $config['payum.paths']);
+        $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumCore']);
+        $this->assertTrue(file_exists($config['payum.paths']['PayumCore']));
+
+        $this->assertArrayHasKey('PayumStripe', $config['payum.paths']);
+        $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumStripe']);
+        $this->assertTrue(file_exists($config['payum.paths']['PayumStripe']));
+    }
 }

@@ -2,6 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetCurrency;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\ConvertPaymentAction;
@@ -29,7 +30,7 @@ class ConvertPaymentActionTest extends GenericActionTest
             array('foo'),
             array(array('foo')),
             array(new \stdClass()),
-            array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
+            array($this->getMockForAbstractClass(Generic::class, array(array()))),
             array(new $this->requestClass(new \stdClass(), 'array')),
             array(new $this->requestClass(new Payment(), 'foobar')),
             array(new $this->requestClass($this->getMock(PaymentInterface::class), 'foobar')),

@@ -70,5 +70,9 @@ class KlarnaCheckoutGatewayFactory extends GatewayFactory
                 return $klarnaConfig;
             };
         }
+
+        $config['payum.paths'] = array_replace([
+            'PayumKlarnaCheckout' => __DIR__.'/Resources/views',
+        ], $config['payum.paths'] ?: []);
     }
 }

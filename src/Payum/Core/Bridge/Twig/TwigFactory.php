@@ -1,6 +1,9 @@
 <?php
 namespace Payum\Core\Bridge\Twig;
 
+/**
+ * @deprecated since 1.0.0-BETA4
+ */
 class TwigFactory
 {
     /**

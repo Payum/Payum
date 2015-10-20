@@ -8,6 +8,7 @@ use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryInterface;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ConfirmOrder;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment;
@@ -41,6 +42,7 @@ class CaptureAction extends GatewayAwareAction implements GenericTokenFactoryAwa
         $details = ArrayObject::ensureArrayObject($request->getModel());
         $details->defaults(array(
             'PAYMENTREQUEST_0_PAYMENTACTION' => Api::PAYMENTACTION_SALE,
+            'AUTHORIZE_TOKEN_USERACTION' => Api::USERACTION_COMMIT,
         ));
 
         if (false == $details['TOKEN']) {
@@ -77,6 +79,13 @@ class CaptureAction extends GatewayAwareAction implements GenericTokenFactoryAwa
             Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $details['CHECKOUTSTATUS'] &&
             $details['PAYMENTREQUEST_0_AMT'] > 0
         ) {
+            if (Api::USERACTION_COMMIT == $details['AUTHORIZE_TOKEN_USERACTION']) {
+                $confirmOrder = new ConfirmOrder($request->getFirstModel());
+                $confirmOrder->setModel($request->getModel());
+
+                $this->gateway->execute($confirmOrder);
+            }
+
             $this->gateway->execute(new DoExpressCheckoutPayment($details));
         }
 
