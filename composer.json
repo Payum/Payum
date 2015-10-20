@@ -90,7 +90,7 @@
         "symfony/http-foundation": "If you want to use HttpRequestVerifier or HttpResponse reply from symfony's bridge",
         "symfony/form": "If you want to use forms",
         "monolog/monolog": "In case you want to use PSR-3 logger",
-        "ajbdev/authorizenet-php-api": "If you want to use Authorizenet.NET install authorizenet/authorizenet:~1.8 library",
+        "authorizenet/authorizenet": "If you want to use Authorizenet.NET install authorizenet/authorizenet:~1.8 library",
         "paypal/rest-api-sdk-php" : "If you want to use PayPal REST API install paypal/rest-api-sdk-php:0.5.* library",
         "klarna/checkout": "If you want to use Klarna Checkout install klarna/checkout:~1|~2.0 library",
         "fp/klarna-invoice": "If you want to use Klarna Invoice install fp/klarna-invoice:0.1.* library",
