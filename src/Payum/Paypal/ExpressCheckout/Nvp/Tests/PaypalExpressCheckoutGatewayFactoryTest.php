@@ -167,4 +167,28 @@ class PaypalExpressCheckoutGatewayFactoryTest extends \PHPUnit_Framework_TestCas
 
         $factory->create();
     }
+
+    /**
+     * @test
+     */
+    public function shouldConfigurePaths()
+    {
+        $factory = new PaypalExpressCheckoutGatewayFactory();
+
+        $config = $factory->createConfig();
+
+        $this->assertInternalType('array', $config);
+        $this->assertNotEmpty($config);
+
+        $this->assertInternalType('array', $config['payum.paths']);
+        $this->assertNotEmpty($config['payum.paths']);
+
+        $this->assertArrayHasKey('PayumCore', $config['payum.paths']);
+        $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumCore']);
+        $this->assertTrue(file_exists($config['payum.paths']['PayumCore']));
+
+        $this->assertArrayHasKey('PayumPaypalExpressCheckout', $config['payum.paths']);
+        $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumPaypalExpressCheckout']);
+        $this->assertTrue(file_exists($config['payum.paths']['PayumPaypalExpressCheckout']));
+    }
 }

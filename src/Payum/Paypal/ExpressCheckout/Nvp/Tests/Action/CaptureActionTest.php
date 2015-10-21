@@ -3,9 +3,12 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Payum\Core\Model\Token;
 use Payum\Core\Request\Capture;
+use Payum\Core\Request\Sync;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ConfirmOrder;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout;
 
 class CaptureActionTest extends GenericActionTest
@@ -162,7 +165,7 @@ class CaptureActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
+            ->with($this->isInstanceOf(Sync::class))
         ;
 
         $action = new CaptureAction();
@@ -176,24 +179,59 @@ class CaptureActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldRequestDoExpressCheckoutGatewayActionIfCheckoutStatusNotInitiatedAndPayerIdSetInModel()
+    public function shouldRequestDoExpressCheckoutGatewayActionIfCheckoutStatusNotInitiatedAndPayerIdSetInModelAndUserActionCommit()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment'))
+            ->with($this->isInstanceOf(DoExpressCheckoutPayment::class))
         ;
         $gatewayMock
             ->expects($this->at(2))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
+            ->with($this->isInstanceOf(Sync::class))
         ;
 
         $action = new CaptureAction();
         $action->setGateway($gatewayMock);
 
         $action->execute(new Capture(array(
+            'AUTHORIZE_TOKEN_USERACTION' => Api::USERACTION_COMMIT,
+            'TOKEN' => 'aToken',
+            'PAYERID' => 'aPayerId',
+            'PAYMENTREQUEST_0_AMT' => 5,
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
+        )));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldRequestConfirmOrderActionIfCheckoutStatusNotInitiatedAndPayerIdSetInModelAndUserActionNotCommit()
+    {
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
+            ->expects($this->at(1))
+            ->method('execute')
+            ->with($this->isInstanceOf(ConfirmOrder::class))
+        ;
+        $gatewayMock
+            ->expects($this->at(2))
+            ->method('execute')
+            ->with($this->isInstanceOf(DoExpressCheckoutPayment::class))
+        ;
+        $gatewayMock
+            ->expects($this->at(3))
+            ->method('execute')
+            ->with($this->isInstanceOf(Sync::class))
+        ;
+
+        $action = new CaptureAction();
+        $action->setGateway($gatewayMock);
+
+        $action->execute(new Capture(array(
+            'AUTHORIZE_TOKEN_USERACTION' => '',
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
             'PAYMENTREQUEST_0_AMT' => 5,
@@ -210,7 +248,7 @@ class CaptureActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
+            ->with($this->isInstanceOf(Sync::class))
         ;
 
         $action = new CaptureAction();
@@ -232,12 +270,12 @@ class CaptureActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
+            ->with($this->isInstanceOf(Sync::class))
         ;
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
+            ->with($this->isInstanceOf(Sync::class))
         ;
 
         $action = new CaptureAction();
@@ -258,12 +296,12 @@ class CaptureActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
+            ->with($this->isInstanceOf(Sync::class))
         ;
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
+            ->with($this->isInstanceOf(Sync::class))
         ;
 
         $action = new CaptureAction();

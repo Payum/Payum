@@ -9,7 +9,6 @@ use Payum\Core\Tests\GenericActionTest;
 
 class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
 {
-
     /**
      * @var Generic
      */
@@ -36,7 +35,7 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
             array(new \stdClass()),
             array(new $this->requestClass('foo')),
             array(new $this->requestClass(new \stdClass())),
-            array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
+            array($this->getMockForAbstractClass(Generic::class, array(array()))),
         );
     }
 

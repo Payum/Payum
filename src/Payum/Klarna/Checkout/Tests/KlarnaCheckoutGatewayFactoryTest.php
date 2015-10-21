@@ -160,4 +160,28 @@ class KlarnaCheckoutGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory->create();
     }
+
+    /**
+     * @test
+     */
+    public function shouldConfigurePaths()
+    {
+        $factory = new KlarnaCheckoutGatewayFactory();
+
+        $config = $factory->createConfig();
+
+        $this->assertInternalType('array', $config);
+        $this->assertNotEmpty($config);
+
+        $this->assertInternalType('array', $config['payum.paths']);
+        $this->assertNotEmpty($config['payum.paths']);
+
+        $this->assertArrayHasKey('PayumCore', $config['payum.paths']);
+        $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumCore']);
+        $this->assertTrue(file_exists($config['payum.paths']['PayumCore']));
+
+        $this->assertArrayHasKey('PayumKlarnaCheckout', $config['payum.paths']);
+        $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumKlarnaCheckout']);
+        $this->assertTrue(file_exists($config['payum.paths']['PayumKlarnaCheckout']));
+    }
 }

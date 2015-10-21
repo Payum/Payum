@@ -3,6 +3,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\ConfirmOrderAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoExpressCheckoutPaymentAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction;
@@ -34,6 +35,8 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
             'payum.factory_name' => 'paypal_express_checkout_nvp',
             'payum.factory_title' => 'PayPal ExpressCheckout',
 
+            'payum.template.confirm_order' => '@PayumPaypalExpressCheckout/confirmOrder.html.twig',
+
             'payum.action.capture' => new CaptureAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),
             'payum.action.notify' => new NotifyAction(),
@@ -54,6 +57,9 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
             'payum.action.api.create_billing_agreement' => new CreateBillingAgreementAction(),
             'payum.action.api.do_reference_transaction' => new DoReferenceTransactionAction(),
             'payum.action.api.authorize_token' => new AuthorizeTokenAction(),
+            'payum.action.api.confirm_order' => function (ArrayObject $config) {
+                return new ConfirmOrderAction($config['payum.template.confirm_order']);
+            },
         ));
 
         if (false == $config['payum.api']) {
@@ -79,5 +85,9 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
                 return new Api($paypalConfig, $config['payum.http_client']);
             };
         }
+
+        $config['payum.paths'] = array_replace([
+            'PayumPaypalExpressCheckout' => __DIR__.'/Resources/views',
+        ], $config['payum.paths'] ?: []);
     }
 }

@@ -2,6 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request\Api;
 
 use MyProject\Proxies\__CG__\stdClass;
+use Payum\Core\Request\Generic;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
 
 class GetTransactionDetailsTest extends \PHPUnit_Framework_TestCase
@@ -13,7 +14,7 @@ class GetTransactionDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
+        $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
     /**
