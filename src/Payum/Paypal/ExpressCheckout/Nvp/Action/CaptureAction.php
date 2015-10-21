@@ -79,7 +79,7 @@ class CaptureAction extends GatewayAwareAction implements GenericTokenFactoryAwa
             Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $details['CHECKOUTSTATUS'] &&
             $details['PAYMENTREQUEST_0_AMT'] > 0
         ) {
-            if (Api::USERACTION_COMMIT == $details['AUTHORIZE_TOKEN_USERACTION']) {
+            if (Api::USERACTION_COMMIT !== $details['AUTHORIZE_TOKEN_USERACTION']) {
                 $confirmOrder = new ConfirmOrder($request->getFirstModel());
                 $confirmOrder->setModel($request->getModel());
 

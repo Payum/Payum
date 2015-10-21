@@ -179,7 +179,7 @@ class CaptureActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldRequestDoExpressCheckoutGatewayActionIfCheckoutStatusNotInitiatedAndPayerIdSetInModelAndUserActionNotCommit()
+    public function shouldRequestDoExpressCheckoutGatewayActionIfCheckoutStatusNotInitiatedAndPayerIdSetInModelAndUserActionCommit()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -197,7 +197,7 @@ class CaptureActionTest extends GenericActionTest
         $action->setGateway($gatewayMock);
 
         $action->execute(new Capture(array(
-            'AUTHORIZE_TOKEN_USERACTION' => '',
+            'AUTHORIZE_TOKEN_USERACTION' => Api::USERACTION_COMMIT,
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
             'PAYMENTREQUEST_0_AMT' => 5,
@@ -208,7 +208,7 @@ class CaptureActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldRequestConfirmOrderActionIfCheckoutStatusNotInitiatedAndPayerIdSetInModelAndUserActionCommit()
+    public function shouldRequestConfirmOrderActionIfCheckoutStatusNotInitiatedAndPayerIdSetInModelAndUserActionNotCommit()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -231,7 +231,7 @@ class CaptureActionTest extends GenericActionTest
         $action->setGateway($gatewayMock);
 
         $action->execute(new Capture(array(
-            'AUTHORIZE_TOKEN_USERACTION' => Api::USERACTION_COMMIT,
+            'AUTHORIZE_TOKEN_USERACTION' => '',
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
             'PAYMENTREQUEST_0_AMT' => 5,
