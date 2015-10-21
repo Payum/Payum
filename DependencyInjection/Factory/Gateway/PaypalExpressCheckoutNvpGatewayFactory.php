@@ -1,10 +1,29 @@
 <?php
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway;
 
+use Payum\Core\Bridge\Twig\TwigFactory;
+use Payum\Core\GatewayInterface;
+use Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
+use Symfony\Component\DependencyInjection\Parameter;
 
-class PaypalExpressCheckoutNvpGatewayFactory extends AbstractGatewayFactory
+class PaypalExpressCheckoutNvpGatewayFactory extends AbstractGatewayFactory implements PrependExtensionInterface
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function prepend(ContainerBuilder $container)
+    {
+        $container->prependExtensionConfig('twig', array(
+            'paths' => array_flip(array_filter(array(
+                'PayumCore' => TwigFactory::guessViewsPath(GatewayInterface::class),
+                'PayumPaypalExpressCheckout' => TwigFactory::guessViewsPath(PaypalExpressCheckoutGatewayFactory::class),
+            )))
+        ));
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -31,9 +50,30 @@ class PaypalExpressCheckoutNvpGatewayFactory extends AbstractGatewayFactory
     /**
      * {@inheritDoc}
      */
+    public function load(ContainerBuilder $container)
+    {
+        parent::load($container);
+
+        $container->setParameter("payum.{$this->getName()}.template.confirm_order", '@PayumPaypalExpressCheckout/confirmOrder.html.twig');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function createFactoryConfig()
+    {
+        $config = parent::createFactoryConfig();
+        $config['payum.template.confirm_order'] = new Parameter("payum.{$this->getName()}.template.confirm_order");
+
+        return $config;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function getPayumGatewayFactoryClass()
     {
-        return 'Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory';
+        return PaypalExpressCheckoutGatewayFactory::class;
     }
 
     /**
