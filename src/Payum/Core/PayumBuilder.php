@@ -29,6 +29,7 @@ use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
 use Payum\Offline\OfflineGatewayFactory;
 use Payum\OmnipayBridge\OmnipayDirectGatewayFactory;
 use Payum\OmnipayBridge\OmnipayOffsiteGatewayFactory;
+use Payum\OmnipayBridge\OmnipayUniversalGatewayFactory;
 use Payum\Payex\PayexGatewayFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory;
 use Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory;
@@ -356,7 +357,11 @@ class PayumBuilder
             'payum.http_client' => $httpClient,
         ], $this->coreGatewayFactoryConfig));
 
-        $gatewayFactories = $this->buildGatewayFactories($coreGatewayFactory);
+        $gatewayFactories = array_replace(
+            $this->buildGatewayFactories($coreGatewayFactory),
+            $this->buildOmnipayGatewayFactories($coreGatewayFactory),
+            $this->gatewayFactories
+        );
 
         $registry = $this->buildRegistry($this->gateways, $this->storages, $gatewayFactories);
 
@@ -497,52 +502,74 @@ class PayumBuilder
      */
     protected function buildGatewayFactories(GatewayFactoryInterface $coreGatewayFactory)
     {
-        $gatewayFactories = $this->gatewayFactories;
-        $defaultGatewayFactories = [];
+        $gatewayFactories = [];
 
         if (class_exists(PaypalExpressCheckoutGatewayFactory::class)) {
-            $defaultGatewayFactories['paypal_express_checkout'] = new PaypalExpressCheckoutGatewayFactory([], $coreGatewayFactory);
+            $gatewayFactories['paypal_express_checkout'] = new PaypalExpressCheckoutGatewayFactory([], $coreGatewayFactory);
         }
         if (class_exists(PaypalProCheckoutGatewayFactory::class)) {
-            $defaultGatewayFactories['paypal_pro_checkout'] = new PaypalProCheckoutGatewayFactory([], $coreGatewayFactory);
+            $gatewayFactories['paypal_pro_checkout'] = new PaypalProCheckoutGatewayFactory([], $coreGatewayFactory);
         }
         if (class_exists(PaypalRestGatewayFactory::class)) {
-            $defaultGatewayFactories['paypal_rest'] = new PaypalRestGatewayFactory([], $coreGatewayFactory);
+            $gatewayFactories['paypal_rest'] = new PaypalRestGatewayFactory([], $coreGatewayFactory);
         }
         if (class_exists(AuthorizeNetAimGatewayFactory::class)) {
-            $defaultGatewayFactories['authorize_net_aim'] = new AuthorizeNetAimGatewayFactory([], $coreGatewayFactory);
+            $gatewayFactories['authorize_net_aim'] = new AuthorizeNetAimGatewayFactory([], $coreGatewayFactory);
         }
         if (class_exists(Be2BillDirectGatewayFactory::class)) {
-            $defaultGatewayFactories['be2bill_direct'] = new Be2BillDirectGatewayFactory([], $coreGatewayFactory);
+            $gatewayFactories['be2bill_direct'] = new Be2BillDirectGatewayFactory([], $coreGatewayFactory);
         }
         if (class_exists(Be2BillOffsiteGatewayFactory::class)) {
-            $defaultGatewayFactories['be2bill_offsite'] = new Be2BillOffsiteGatewayFactory([], $coreGatewayFactory);
+            $gatewayFactories['be2bill_offsite'] = new Be2BillOffsiteGatewayFactory([], $coreGatewayFactory);
         }
         if (class_exists(KlarnaCheckoutGatewayFactory::class)) {
-            $defaultGatewayFactories['klarna_checkout'] = new KlarnaCheckoutGatewayFactory([], $coreGatewayFactory);
+            $gatewayFactories['klarna_checkout'] = new KlarnaCheckoutGatewayFactory([], $coreGatewayFactory);
         }
         if (class_exists(KlarnaInvoiceGatewayFactory::class)) {
-            $defaultGatewayFactories['klarna_invoice'] = new KlarnaInvoiceGatewayFactory([], $coreGatewayFactory);
+            $gatewayFactories['klarna_invoice'] = new KlarnaInvoiceGatewayFactory([], $coreGatewayFactory);
         }
         if (class_exists(OfflineGatewayFactory::class)) {
-            $defaultGatewayFactories['offline'] = new OfflineGatewayFactory([], $coreGatewayFactory);
+            $gatewayFactories['offline'] = new OfflineGatewayFactory([], $coreGatewayFactory);
         }
         if (class_exists(PayexGatewayFactory::class)) {
-            $defaultGatewayFactories['payex'] = new PayexGatewayFactory([], $coreGatewayFactory);
+            $gatewayFactories['payex'] = new PayexGatewayFactory([], $coreGatewayFactory);
         }
         if (class_exists(StripeCheckoutGatewayFactory::class)) {
-            $defaultGatewayFactories['stripe_checkout'] = new StripeCheckoutGatewayFactory([], $coreGatewayFactory);
+            $gatewayFactories['stripe_checkout'] = new StripeCheckoutGatewayFactory([], $coreGatewayFactory);
         }
         if (class_exists(StripeJsGatewayFactory::class)) {
-            $defaultGatewayFactories['stripe_js'] = new StripeJsGatewayFactory([], $coreGatewayFactory);
+            $gatewayFactories['stripe_js'] = new StripeJsGatewayFactory([], $coreGatewayFactory);
         }
         if (class_exists(OmnipayDirectGatewayFactory::class)) {
-            $defaultGatewayFactories['omnipay_direct'] = new OmnipayDirectGatewayFactory([], $coreGatewayFactory);
+            $gatewayFactories['omnipay_direct'] = new OmnipayDirectGatewayFactory([], $coreGatewayFactory);
         }
         if (class_exists(OmnipayOffsiteGatewayFactory::class)) {
-            $defaultGatewayFactories['omnipay_offsite'] = new OmnipayOffsiteGatewayFactory([], $coreGatewayFactory);
+            $gatewayFactories['omnipay_offsite'] = new OmnipayOffsiteGatewayFactory([], $coreGatewayFactory);
         }
 
-        return array_replace($defaultGatewayFactories, $gatewayFactories);
+        return $gatewayFactories;
+    }
+
+    /**
+     * @param GatewayFactoryInterface $coreGatewayFactory
+     *
+     * @return GatewayFactoryInterface[]
+     */
+    protected function buildOmnipayGatewayFactories(GatewayFactoryInterface $coreGatewayFactory)
+    {
+        $gatewayFactories = [];
+        if (false == class_exists(\Omnipay\Omnipay::class)) {
+            return $gatewayFactories;
+        }
+
+        $factory = \Omnipay\Omnipay::getFactory();
+
+        $gatewayFactories['Omnipay'] = new OmnipayUniversalGatewayFactory('', $factory, [], $coreGatewayFactory);
+
+        foreach ($factory->getSupportedGateways() as $type) {
+            $gatewayFactories['Omnipay_'.$type] = new OmnipayUniversalGatewayFactory($type, $factory, [], $coreGatewayFactory);
+        }
+
+        return $gatewayFactories;
     }
 }

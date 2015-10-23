@@ -7,9 +7,9 @@ use Payum\Core\HttpClientInterface;
 class HttpClientFactory
 {
     /**
-     * @return HttpClientInterface
+     * @return GuzzleClient
      */
-    public static function create()
+    public static function createGuzzle()
     {
         // Reaction to the ssl3.0 shutdown from paypal
         // https://www.paypal-community.com/t5/PayPal-Forward/PayPal-Response-to-SSL-3-0-Vulnerability-aka-POODLE/ba-p/891829
@@ -28,8 +28,16 @@ class HttpClientFactory
             $curlOptions[CURLOPT_SSL_CIPHER_LIST] = 'TLSv1';
         }
 
-        return new HttpClient(new GuzzleClient([
+        return new GuzzleClient([
             'curl' => $curlOptions
-        ]));
+        ]);
+    }
+
+    /**
+     * @return HttpClientInterface
+     */
+    public static function create()
+    {
+        return new HttpClient(static::createGuzzle());
     }
 }

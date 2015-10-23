@@ -56,6 +56,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
             'payum.template.layout' => '@PayumCore/layout.html.twig',
 
             'payum.http_client' => HttpClientFactory::create(),
+            'guzzle.client' => HttpClientFactory::createGuzzle(),
 
             'twig.env' => function(ArrayObject $config) {
                 $loader = new \Twig_Loader_Filesystem();
