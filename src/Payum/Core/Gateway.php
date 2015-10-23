@@ -146,30 +146,30 @@ class Gateway implements GatewayInterface
     protected function findActionSupported($request)
     {
         foreach ($this->actions as $action) {
+            if ($action instanceof GatewayAwareInterface) {
+                $action->setGateway($this);
+            }
+
+            if ($action instanceof ApiAwareInterface) {
+                $apiSet = false;
+                foreach ($this->apis as $api) {
+                    try {
+                        $action->setApi($api);
+                        $apiSet = true;
+                        break;
+                    } catch (UnsupportedApiException $e) {
+                    }
+                }
+
+                if (false == $apiSet) {
+                    throw new LogicException(sprintf(
+                        'Cannot find right api supported by %s',
+                        get_class($action)
+                    ));
+                }
+            }
+
             if ($action->supports($request)) {
-                if ($action instanceof GatewayAwareInterface) {
-                    $action->setGateway($this);
-                }
-
-                if ($action instanceof ApiAwareInterface) {
-                    $apiSet = false;
-                    foreach ($this->apis as $api) {
-                        try {
-                            $action->setApi($api);
-                            $apiSet = true;
-                            break;
-                        } catch (UnsupportedApiException $e) {
-                        }
-                    }
-
-                    if (false == $apiSet) {
-                        throw new LogicException(sprintf(
-                            'Cannot find right api supported by %s',
-                            get_class($action)
-                        ));
-                    }
-                }
-
                 return $action;
             }
         }

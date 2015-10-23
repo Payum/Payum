@@ -4,9 +4,11 @@ namespace Payum\Core\Tests;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Extension\Context;
+use Payum\Core\Extension\ExtensionCollection;
 use Payum\Core\Gateway;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\ReplyInterface;
 
 class GatewayTest extends \PHPUnit_Framework_TestCase
@@ -16,9 +18,9 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementGatewayInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Gateway');
+        $rc = new \ReflectionClass(Gateway::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayInterface'));
+        $this->assertTrue($rc->implementsInterface(GatewayInterface::class));
     }
 
     /**
@@ -36,7 +38,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
     {
         $gateway = new Gateway();
 
-        $this->assertAttributeInstanceOf('Payum\Core\Extension\ExtensionCollection', 'extensions', $gateway);
+        $this->assertAttributeInstanceOf(ExtensionCollection::class, 'extensions', $gateway);
     }
 
     /**
@@ -139,16 +141,16 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
         $gateway->addApi($firstApi = new \stdClass());
         $gateway->addApi($secondApi = new \stdClass());
 
-        $action = $this->getMockForAbstractClass('Payum\Core\Tests\ApiAwareAction');
+        $action = $this->getMockForAbstractClass(ApiAwareAction::class);
         $action
             ->expects($this->at(0))
-            ->method('supports')
-            ->will($this->returnValue(true))
+            ->method('setApi')
+            ->with($this->identicalTo($firstApi))
         ;
         $action
             ->expects($this->at(1))
-            ->method('setApi')
-            ->with($this->identicalTo($firstApi))
+            ->method('supports')
+            ->will($this->returnValue(true))
         ;
 
         $gateway->addAction($action);
@@ -166,23 +168,24 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
         $gateway->addApi($firstApi = new \stdClass());
         $gateway->addApi($secondApi = new \stdClass());
 
-        $action = $this->getMockForAbstractClass('Payum\Core\Tests\ApiAwareAction');
+        $action = $this->getMockForAbstractClass(ApiAwareAction::class);
         $action
             ->expects($this->at(0))
-            ->method('supports')
-            ->will($this->returnValue(true))
-        ;
-        $action
-            ->expects($this->at(1))
             ->method('setApi')
             ->with($this->identicalTo($firstApi))
             ->will($this->throwException(new UnsupportedApiException('first api not supported')))
         ;
         $action
-            ->expects($this->at(2))
+            ->expects($this->at(1))
             ->method('setApi')
             ->with($this->identicalTo($secondApi))
         ;
+        $action
+            ->expects($this->at(2))
+            ->method('supports')
+            ->will($this->returnValue(true))
+        ;
+
 
         $gateway->addAction($action);
 
@@ -202,24 +205,24 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
         $gateway->addApi($firstApi = new \stdClass());
         $gateway->addApi($secondApi = new \stdClass());
 
-        $action = $this->getMockForAbstractClass('Payum\Core\Tests\ApiAwareAction');
+        $action = $this->getMockForAbstractClass(ApiAwareAction::class);
         $action
             ->expects($this->at(0))
-            ->method('supports')
-            ->will($this->returnValue(true))
-        ;
-        $action
-            ->expects($this->at(1))
             ->method('setApi')
             ->with($this->identicalTo($firstApi))
             ->will($this->throwException(new UnsupportedApiException('first api not supported')))
         ;
         $action
-            ->expects($this->at(2))
+            ->expects($this->at(1))
             ->method('setApi')
             ->with($this->identicalTo($secondApi))
             ->will($this->throwException(new UnsupportedApiException('second api not supported')))
         ;
+        $action
+            ->expects($this->never())
+            ->method('supports')
+        ;
+
 
         $gateway->addAction($action);
 
@@ -330,14 +333,15 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
         $actionMock = $this->getMock('Payum\Core\Action\GatewayAwareAction');
         $actionMock
             ->expects($this->at(0))
-            ->method('supports')
-            ->will($this->returnValue(true))
-        ;
-        $actionMock
-            ->expects($this->at(1))
             ->method('setGateway')
             ->with($this->identicalTo($gateway))
         ;
+        $actionMock
+            ->expects($this->at(1))
+            ->method('supports')
+            ->will($this->returnValue(true))
+        ;
+
 
         $gateway->addAction($actionMock);
 
