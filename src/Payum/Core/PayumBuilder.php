@@ -29,7 +29,7 @@ use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
 use Payum\Offline\OfflineGatewayFactory;
 use Payum\OmnipayBridge\OmnipayDirectGatewayFactory;
 use Payum\OmnipayBridge\OmnipayOffsiteGatewayFactory;
-use Payum\OmnipayBridge\OmnipayUniversalGatewayFactory;
+use Payum\OmnipayBridge\OmnipayGatewayFactory;
 use Payum\Payex\PayexGatewayFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory;
 use Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory;
@@ -540,12 +540,6 @@ class PayumBuilder
         if (class_exists(StripeJsGatewayFactory::class)) {
             $gatewayFactories['stripe_js'] = new StripeJsGatewayFactory([], $coreGatewayFactory);
         }
-        if (class_exists(OmnipayDirectGatewayFactory::class)) {
-            $gatewayFactories['omnipay_direct'] = new OmnipayDirectGatewayFactory([], $coreGatewayFactory);
-        }
-        if (class_exists(OmnipayOffsiteGatewayFactory::class)) {
-            $gatewayFactories['omnipay_offsite'] = new OmnipayOffsiteGatewayFactory([], $coreGatewayFactory);
-        }
 
         return $gatewayFactories;
     }
@@ -564,10 +558,12 @@ class PayumBuilder
 
         $factory = \Omnipay\Omnipay::getFactory();
 
-        $gatewayFactories['Omnipay'] = new OmnipayUniversalGatewayFactory('', $factory, [], $coreGatewayFactory);
+        $gatewayFactories['omnipay'] = new OmnipayGatewayFactory('', $factory, [], $coreGatewayFactory);
+        $gatewayFactories['omnipay_direct'] = new OmnipayGatewayFactory('', $factory, [], $coreGatewayFactory);
+        $gatewayFactories['omnipay_offsite'] = new OmnipayGatewayFactory('', $factory, [], $coreGatewayFactory);
 
         foreach ($factory->getSupportedGateways() as $type) {
-            $gatewayFactories['Omnipay_'.$type] = new OmnipayUniversalGatewayFactory($type, $factory, [], $coreGatewayFactory);
+            $gatewayFactories[strtolower('omnipay_'.$type)] = new OmnipayGatewayFactory($type, $factory, [], $coreGatewayFactory);
         }
 
         return $gatewayFactories;

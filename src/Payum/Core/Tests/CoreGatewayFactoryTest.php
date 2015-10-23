@@ -1,11 +1,18 @@
 <?php
 namespace Payum\Core\Tests;
 
-use Payum\Core\Bridge\Guzzle\HttpClientFactory;
+use Payum\Core\Action\CapturePaymentAction;
+use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
 use Payum\Core\CoreGatewayFactory;
+use Payum\Core\Extension\EndlessCycleDetectorExtension;
+use Payum\Core\Extension\ExtensionInterface;
+use Payum\Core\Gateway;
+use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\HttpClientInterface;
+use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 
 class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,9 +21,9 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementCoreGatewayFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\CoreGatewayFactory');
+        $rc = new \ReflectionClass(CoreGatewayFactory::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface(GatewayFactoryInterface::class));
     }
 
     /**
@@ -36,7 +43,7 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 
         $gateway = $factory->create(array());
 
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
+        $this->assertInstanceOf(Gateway::class, $gateway);
 
         $this->assertAttributeNotEmpty('apis', $gateway);
         $this->assertAttributeNotEmpty('actions', $gateway);
@@ -70,7 +77,7 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
             'payum.api' => new \stdClass(),
         ));
 
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
+        $this->assertInstanceOf(Gateway::class, $gateway);
 
         $this->assertAttributeNotEmpty('apis', $gateway);
     }
@@ -87,12 +94,13 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $config);
         $this->assertNotEmpty($config);
 
-        $this->assertInstanceOf('Payum\Core\HttpClientInterface', $config['payum.http_client']);
-        $this->assertInstanceOf('Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction', $config['payum.action.get_http_request']);
-        $this->assertInstanceOf('Payum\Core\Action\CapturePaymentAction', $config['payum.action.capture_payment']);
-        $this->assertInstanceOf('Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction', $config['payum.action.execute_same_request_with_model_details']);
-        $this->assertInstanceOf('Closure', $config['payum.action.render_template']);
-        $this->assertInstanceOf('Payum\Core\Extension\EndlessCycleDetectorExtension', $config['payum.extension.endless_cycle_detector']);
+        $this->assertInstanceOf(HttpClientInterface::class, $config['payum.http_client']);
+        $this->assertInstanceOf(GuzzleClientInterface::class, $config['guzzle.client']);
+        $this->assertInstanceOf(GetHttpRequestAction::class, $config['payum.action.get_http_request']);
+        $this->assertInstanceOf(CapturePaymentAction::class, $config['payum.action.capture_payment']);
+        $this->assertInstanceOf(ExecuteSameRequestWithModelDetailsAction::class, $config['payum.action.execute_same_request_with_model_details']);
+        $this->assertInstanceOf(\Closure::class, $config['payum.action.render_template']);
+        $this->assertInstanceOf(EndlessCycleDetectorExtension::class, $config['payum.extension.endless_cycle_detector']);
 
         $this->assertEquals('@PayumCore/layout.html.twig', $config['payum.template.layout']);
         $this->assertEquals(array(), $config['payum.prepend_actions']);
@@ -281,8 +289,8 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowPrependExtensions()
     {
-        $firstExtension = $this->getMock('Payum\Core\Extension\ExtensionInterface');
-        $secondExtension = $this->getMock('Payum\Core\Extension\ExtensionInterface');
+        $firstExtension = $this->getMock(ExtensionInterface::class);
+        $secondExtension = $this->getMock(ExtensionInterface::class);
 
         $factory = new CoreGatewayFactory();
 

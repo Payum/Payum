@@ -2,12 +2,13 @@
 namespace Payum\Core\Bridge\Guzzle;
 
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use Payum\Core\HttpClientInterface;
 
 class HttpClientFactory
 {
     /**
-     * @return GuzzleClient
+     * @return GuzzleClientInterface
      */
     public static function createGuzzle()
     {

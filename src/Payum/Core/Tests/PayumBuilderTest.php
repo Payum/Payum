@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Core\Tests;
 
+use Omnipay\Dummy\Gateway as OmnipayGateway;
 use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
 use Payum\Be2Bill\Be2BillDirectGatewayFactory;
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
@@ -9,7 +10,6 @@ use Payum\Core\CoreGatewayFactory;
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Gateway;
 use Payum\Core\GatewayFactoryInterface;
-use Payum\Core\GatewayInterface;
 use Payum\Core\Model\ArrayObject;
 use Payum\Core\Model\Payment;
 use Payum\Core\Payum;
@@ -25,6 +25,7 @@ use Payum\Core\Storage\StorageInterface;
 use Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory;
 use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
 use Payum\Offline\OfflineGatewayFactory;
+use Payum\OmnipayBridge\OmnipayGatewayFactory;
 use Payum\Payex\PayexGatewayFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory;
 use Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory;
@@ -88,7 +89,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
 
         $factories = $payum->getGatewayFactories();
         $this->assertInternalType('array', $factories);
-        $this->assertCount(12, $factories);
+        $this->assertCount(67, $factories);
 
         $this->assertArrayHasKey('paypal_express_checkout', $factories);
         $this->assertInstanceOf(PaypalExpressCheckoutGatewayFactory::class, $factories['paypal_express_checkout']);
@@ -581,6 +582,69 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(OfflineGatewayFactory::class, $gatewayFactory);
 
         $this->assertAttributeSame($expectedCoreGateway, 'coreGatewayFactory', $gatewayFactory);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldRegisterOmnipayFactories()
+    {
+        $expectedCoreGatewayFactory = $this->getMock(GatewayFactoryInterface::class);
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->setCoreGatewayFactory($expectedCoreGatewayFactory)
+            ->getPayum()
+        ;
+
+        $gatewayFactories = $payum->getGatewayFactories();
+
+        $this->assertArrayHasKey('omnipay_dummy', $gatewayFactories);
+        $this->assertArrayHasKey('omnipay_stripe', $gatewayFactories);
+        $this->assertArrayHasKey('omnipay_paypal_express', $gatewayFactories);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldInjectCoreGatewayFactoryToOmnipayFactory()
+    {
+        $expectedCoreGatewayFactory = $this->getMock(GatewayFactoryInterface::class);
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->setCoreGatewayFactory($expectedCoreGatewayFactory)
+            ->getPayum()
+        ;
+
+        $gatewayFactory = $payum->getGatewayFactory('omnipay_dummy');
+
+        $this->assertInstanceOf(OmnipayGatewayFactory::class, $gatewayFactory);
+
+        $this->assertAttributeSame($expectedCoreGatewayFactory, 'coreGatewayFactory', $gatewayFactory);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldInjectExpectedOmnipayGatewayInstanceAsApi()
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->getPayum()
+        ;
+
+        $gatewayFactory = $payum->getGatewayFactory('omnipay_dummy');
+
+        $this->assertInstanceOf(OmnipayGatewayFactory::class, $gatewayFactory);
+
+        $gateway = $gatewayFactory->create();
+
+        $apis = $this->readAttribute($gateway, 'apis');
+
+        $this->assertCount(2, $apis);
+        $this->assertInstanceOf(OmnipayGateway::class, $apis[1]);
+        $this->assertEquals('Dummy', $apis[1]->getName());
     }
 
     /**
