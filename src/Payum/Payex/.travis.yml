@@ -18,6 +18,9 @@ before_install:
 install:
     - composer --prefer-source install
 
+script:
+    - ./vendor/bin/phpunit
+
 notifications:
   email:
     - payumsupport@forma-pro.com
