@@ -47,4 +47,5 @@ _**Note**: You should use commented path if you install payum/payum package._
 * [Stripe.Js](custom_purchase_examples/stripe_js.md).
 * [Stripe Checkout](custom_purchase_examples/stripe_checkout.md).
 * [Stripe Direct (via omnipay)](custom_purchase_examples/stripe_via_omnipay.md).
+* [Paypal express checkout (via omnipay)](custom_purchase_examples/paypal_via_omnipay.md).
 * [JMS payment plugins](https://github.com/Payum/JMSPaymentBridge/blob/master/docs/get-it-started.md).

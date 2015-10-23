@@ -1,4 +1,4 @@
-# Stripe via omnipay
+# Paypal via omnipay
 
 Steps:
 
@@ -13,7 +13,7 @@ _**Note**: We assume you followed all steps in [get it started](https://github.c
 Run the following command:
 
 ```bash
-$ php composer.phar require "payum/omnipay-bridge" "omnipay/stripe:~2.0"
+$ php composer.phar require "payum/omnipay-bridge" "omnipay/paypal:~2.0"
 ```
 
 ## Configure gateway
@@ -25,9 +25,11 @@ payum:
     gateways:
         your_gateway_here:
             omnipay:
-                type: Stripe
+                type: Paypal_Express
                 options:
-                    apiKey: abc123
+                    username: 'REPLACE IT',
+                    password: 'REPLACE IT',
+                    signature: 'REPLACE IT',
                     testMode: true
 ```
 
@@ -52,7 +54,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PaymentController extends Controller
 {
-    public function prepareStripePaymentAction(Request $request)
+    public function preparePaypalPaymentAction(Request $request)
     {
         $gatewayName = 'your_gateway_name';
 
