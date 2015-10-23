@@ -55,18 +55,7 @@ abstract class AbstractGatewayFactory implements GatewayFactoryInterface
 
         $gatewayFactoryClass = $this->getPayumGatewayFactoryClass();
         if (class_exists($gatewayFactoryClass)) {
-            $factory = new Definition($gatewayFactoryClass, array(
-                $this->createFactoryConfig(),
-                new Reference('payum.gateway_factory'),
-            ));
-            $factory->addTag('payum.gateway_factory', array(
-                'factory_name' => $this->getName(),
-                'human_name' => $this->getHumanName(),
-            ));
-
-            $factoryId = sprintf('payum.%s.factory', $this->getName());
-
-            $container->setDefinition($factoryId, $factory);
+            $this->createGatewayFactory($container);
         }
     }
     
@@ -120,6 +109,29 @@ abstract class AbstractGatewayFactory implements GatewayFactoryInterface
     }
 
     /**
+     * @param ContainerBuilder $container
+     *
+     * @return string
+     */
+    protected function createGatewayFactory(ContainerBuilder $container)
+    {
+        $factory = new Definition($this->getPayumGatewayFactoryClass(), array(
+            $this->createFactoryConfig(),
+            new Reference('payum.gateway_factory'),
+        ));
+        $factory->addTag('payum.gateway_factory', array(
+            'factory_name' => $this->getName(),
+            'human_name' => $this->getHumanName(),
+        ));
+
+        $factoryId = sprintf('payum.%s.factory', $this->getName());
+
+        $container->setDefinition($factoryId, $factory);
+
+        return $factoryId;
+    }
+
+    /**
      * @return array
      */
     protected function createFactoryConfig()
@@ -130,6 +142,7 @@ abstract class AbstractGatewayFactory implements GatewayFactoryInterface
         $config['payum.template.layout'] = new Parameter('payum.template.layout');
         $config['payum.template.obtain_credit_card'] = new Parameter('payum.template.obtain_credit_card');
         $config['payum.http_client'] = new Reference('payum.http_client');
+        $config['guzzle.client'] = new Reference('payum.guzzle_client');
         $config['twig.env'] = new Reference('twig');
         $config['payum.iso4217'] = new Reference('payum.iso4217');
 

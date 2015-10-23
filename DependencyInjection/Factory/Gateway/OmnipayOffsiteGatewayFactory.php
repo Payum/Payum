@@ -1,6 +1,9 @@
 <?php
 namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway;
 
+/**
+ * @deprecated since 1.0.0-BETA2
+ */
 class OmnipayOffsiteGatewayFactory extends OmnipayDirectGatewayFactory
 {
     /**

@@ -5,6 +5,9 @@ use Omnipay\Omnipay;
 use Payum\Core\Exception\LogicException;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
+/**
+ * @deprecated since 1.0.0-BETA2
+ */
 class OmnipayDirectGatewayFactory extends AbstractGatewayFactory
 {
     /**

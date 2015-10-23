@@ -36,6 +36,10 @@
             <factory class="Payum\Core\Bridge\Guzzle\HttpClientFactory" method="create" />
         </service>
 
+        <service id="payum.guzzle_client" class="GuzzleHttp\ClientInterface">
+            <factory class="Payum\Core\Bridge\Guzzle\HttpClientFactory" method="createGuzzle" />
+        </service>
+
         <service id="payum.iso4217" class="Payum\ISO4217\ISO4217" />
 
         <service id="payum.converter.reply_to_http_response" class="Payum\Core\Bridge\Symfony\ReplyToSymfonyResponseConverter" />

@@ -9,6 +9,7 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\KlarnaCheckoutG
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\KlarnaInvoiceGatewayFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OfflineGatewayFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\CustomGatewayFactory;
+use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OmnipayGatewayFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OmnipayOffsiteGatewayFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OmnipayDirectGatewayFactory;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\PaypalExpressCheckoutNvpGatewayFactory;
@@ -43,6 +44,7 @@ class PayumBundle extends Bundle
         $extension->addGatewayFactory(new PayexGatewayFactory);
         $extension->addGatewayFactory(new OmnipayDirectGatewayFactory);
         $extension->addGatewayFactory(new OmnipayOffsiteGatewayFactory);
+        $extension->addGatewayFactory(new OmnipayGatewayFactory);
         $extension->addGatewayFactory(new CustomGatewayFactory);
         $extension->addGatewayFactory(new OfflineGatewayFactory);
         $extension->addGatewayFactory(new KlarnaCheckoutGatewayFactory);
