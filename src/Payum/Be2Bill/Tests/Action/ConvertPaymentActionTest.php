@@ -2,8 +2,10 @@
 namespace Payum\Be2bill\Tests\Action\Api;
 
 use Payum\Be2Bill\Action\ConvertPaymentAction;
+use Payum\Core\Model\Identity;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Model\Token;
 use Payum\Core\Request\Convert;
 use Payum\Core\Tests\GenericActionTest;
 

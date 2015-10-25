@@ -4,6 +4,7 @@ namespace Payum\Core;
 use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetCurrencyAction;
+use Payum\Core\Action\GetTokenAction;
 use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -85,8 +86,15 @@ class CoreGatewayFactory implements GatewayFactoryInterface
             'payum.api.http_client' => function (ArrayObject $config) {
                 return $config['payum.http_client'];
             },
+
+            'payum.security.token_storage' => null,
         ));
 
+        if ($config['payum.security.token_storage']) {
+            $config['payum.action.get_token'] = function(ArrayObject $config) {
+               return new GetTokenAction($config['payum.security.token_storage']);
+            };
+        }
 
         $config['payum.paths'] = array_replace([
             'PayumCore' => __DIR__.'/Resources/views',

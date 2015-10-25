@@ -14,7 +14,10 @@ $gateway = $payum->getGateway($token->getGatewayName());
 
 try {
     $gateway->execute(new Notify($token));
-    $payum->getHttpRequestVerifier()->invalidate($token);
+
+    if (false == isset($_REQUEST['noinvalidate'])) {
+        $payum->getRequestVerifier()->invalidate($token);
+    }
 
     if ($token->getAfterUrl()) {
         header("Location: ".$token->getAfterUrl());

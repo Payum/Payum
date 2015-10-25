@@ -10,13 +10,20 @@ use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Reply\HttpPostRedirect;
+use Payum\Core\Security\GenericTokenFactoryAwareInterface;
+use Payum\Core\Security\GenericTokenFactoryInterface;
 
-class CaptureOffsiteAction extends GatewayAwareAction implements ApiAwareInterface
+class CaptureOffsiteAction extends GatewayAwareAction implements ApiAwareInterface, GenericTokenFactoryAwareInterface
 {
     /**
      * @var Api
      */
     protected $api;
+
+    /**
+     * @var GenericTokenFactoryInterface
+     */
+    protected $tokenFactory;
 
     /**
      * {@inheritDoc}
@@ -28,6 +35,16 @@ class CaptureOffsiteAction extends GatewayAwareAction implements ApiAwareInterfa
         }
 
         $this->api = $api;
+    }
+
+    /**
+     * @param GenericTokenFactoryInterface $genericTokenFactory
+     *
+     * @return void
+     */
+    public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null)
+    {
+        $this->tokenFactory = $genericTokenFactory;
     }
 
     /**
@@ -48,6 +65,23 @@ class CaptureOffsiteAction extends GatewayAwareAction implements ApiAwareInterfa
         if (isset($httpRequest->query['EXECCODE'])) {
             $model->replace($httpRequest->query);
         } else {
+            $extradata = $model['EXTRADATA'] ? json_decode($model['EXTRADATA']) : [];
+
+            if (false == isset($extradata['capture_token']) && $request->getToken()) {
+                $extradata['capture_token'] = $request->getToken()->getHash();
+            }
+
+            if (false == isset($extradata['notify_token']) && $request->getToken() && $this->tokenFactory) {
+                $notifyToken = $this->tokenFactory->createNotifyToken(
+                    $request->getToken()->getGatewayName(),
+                    $request->getToken()->getDetails()
+                );
+
+                $extradata['notify_token'] = $notifyToken->getHash();
+            }
+
+            $model['EXTRADATA'] = json_encode($extradata);
+
             throw new HttpPostRedirect(
                 $this->api->getOffsiteUrl(),
                 $this->api->prepareOffsitePayment($model->toUnsafeArray())

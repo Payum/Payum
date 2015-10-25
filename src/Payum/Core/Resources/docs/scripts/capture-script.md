@@ -5,6 +5,8 @@ It may show a credit card form, an iframe or redirect a user to gateway side.
 Each capture url is completely unique for each purchase, and once we done the url is invalidated and no more accessible.
 When the capture is done a user is redirected to after url, in our case it is [done script](https://github.com/Payum/Core/tree/master/Resources/docs/scripts/done-script.md).
 
+## Secured script.
+
 ```php
 <?php
 //capture.php
@@ -19,7 +21,10 @@ $gateway = $payum->getGateway($token->getGatewayName());
 
 try {
     $gateway->execute(new Capture($token));
-    $payum->getRequestVerifier()->invalidate($token);
+
+    if (false == isset($_REQUEST['noinvalidate'])) {
+        $payum->getRequestVerifier()->invalidate($token);
+    }
 
     header("Location: ".$token->getAfterUrl());
 } catch (HttpResponse $reply) {
@@ -36,7 +41,11 @@ try {
 }
 ```
 
+
 _**Note**: If you've got the "Unsupported reply" you have to add an if condition for that reply. Inside the If statement you have to convert the reply to http response._
+
+
+
 
 This is how you can create a capture url.
 

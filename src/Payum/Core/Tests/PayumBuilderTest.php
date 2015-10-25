@@ -89,7 +89,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
 
         $factories = $payum->getGatewayFactories();
         $this->assertInternalType('array', $factories);
-        $this->assertCount(67, $factories);
+        $this->assertGreaterThan(40, $factories);
 
         $this->assertArrayHasKey('paypal_express_checkout', $factories);
         $this->assertInstanceOf(PaypalExpressCheckoutGatewayFactory::class, $factories['paypal_express_checkout']);
@@ -645,6 +645,28 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $apis);
         $this->assertInstanceOf(OmnipayGateway::class, $apis[1]);
         $this->assertEquals('Dummy', $apis[1]->getName());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAddTokenStorageToCoreGatewayConfig()
+    {
+        $tokenStorageMock = $this->getMock(StorageInterface::class);
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->setTokenStorage($tokenStorageMock)
+            ->setCoreGatewayFactory(function($config) use ($tokenStorageMock) {
+
+                $this->assertInternalType('array', $config);
+                $this->assertArrayHasKey('payum.security.token_storage', $config);
+                $this->assertSame($tokenStorageMock, $config['payum.security.token_storage']);
+
+                return new CoreGatewayFactory();
+            })
+            ->getPayum()
+        ;
     }
 
     /**

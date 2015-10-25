@@ -73,6 +73,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
             'CLIENTIDENT' => 'payerId',
             'DESCRIPTION' => 'Gateway for digital stuff',
             'ORDERID' => 'orderId',
+            'EXTRADATA' => '[]',
         );
 
         $postArray = array_replace($model, array(
