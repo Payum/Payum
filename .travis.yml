@@ -17,7 +17,7 @@ matrix:
 before_script:
   - curl -sS https://getcomposer.org/installer | php
   - php composer.phar require symfony/symfony:${SYMFONY_VERSION} --no-update
-  - php composer.phar update --prefer-stable --prefer-lowest
+  - php composer.phar update
 
 notifications:
   email:
