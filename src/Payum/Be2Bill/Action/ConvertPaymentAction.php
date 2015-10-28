@@ -6,6 +6,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
+use Payum\Core\Storage\IdentityInterface;
 
 class ConvertPaymentAction implements ActionInterface
 {
@@ -22,11 +23,11 @@ class ConvertPaymentAction implements ActionInterface
         $payment = $request->getSource();
 
         $details = ArrayObject::ensureArrayObject($payment->getDetails());
-        $details['ORDERID'] = $payment->getNumber();
         $details['DESCRIPTION'] = $payment->getDescription();
         $details['AMOUNT'] = $payment->getTotalAmount();
         $details['CLIENTIDENT'] = $payment->getClientId();
         $details['CLIENTEMAIL'] = $payment->getClientEmail();
+        $details['ORDERID'] = $payment->getNumber();
 
         $request->setResult((array) $details);
     }

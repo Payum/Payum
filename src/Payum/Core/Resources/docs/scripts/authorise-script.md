@@ -19,7 +19,10 @@ $gateway = $payum->getGateway($token->getGatewayName());
 
 try {
     $gateway->execute(new Authorize($token));
-    $payum->getRequestVerifier()->invalidate($token);
+
+    if (false == isset($_REQUEST['noinvalidate'])) {
+        $payum->getRequestVerifier()->invalidate($token);
+    }
 
     header("Location: ".$token->getAfterUrl());
 } catch (HttpResponse $reply) {

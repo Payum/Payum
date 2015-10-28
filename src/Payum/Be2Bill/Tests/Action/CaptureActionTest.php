@@ -10,6 +10,7 @@ use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Capture;
 use Payum\Be2Bill\Action\CaptureAction;
 use Payum\Core\Request\ObtainCreditCard;
+use Payum\Core\Security\SensitiveValue;
 use Payum\Core\Tests\GenericActionTest;
 
 class CaptureActionTest extends GenericActionTest
@@ -222,6 +223,65 @@ class CaptureActionTest extends GenericActionTest
 
         $this->assertArrayHasKey('FOO', $model);
         $this->assertEquals('FOOVAL', $model['FOO']);
+
+        $this->assertArrayHasKey('CARDCODE', $model);
+        $this->assertInstanceOf(SensitiveValue::class, $model['CARDCODE']);
+        $this->assertNull($model['CARDCODE']->peek(), 'Already erased');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCaptureWithObtainedCreditCardWhenTokenReturned()
+    {
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
+            ->will($this->returnCallback(function (ObtainCreditCard $request) {
+                $card = new CreditCard();
+                $card->setToken('theCreditCardToken');
+
+                $request->set($card);
+            }))
+        ;
+
+        $apiMock = $this->createApiMock();
+        $apiMock
+            ->expects($this->once())
+            ->method('payment')
+            ->will($this->returnValue(array(
+                'FOO' => 'FOOVAL',
+                'BAR' => 'BARVAL',
+            )))
+        ;
+
+        $action = new CaptureAction();
+        $action->setApi($apiMock);
+        $action->setGateway($gatewayMock);
+
+        $request = new Capture(array(
+            'AMOUNT' => 10,
+            'CLIENTUSERAGENT' => 'anAgent',
+            'CLIENTIP' => '127.0.0.1',
+        ));
+
+        //guard
+        $this->assertTrue($action->supports($request));
+
+        $action->execute($request);
+
+        $model = iterator_to_array($request->getModel());
+
+        $this->assertEquals([
+            'AMOUNT' => 10,
+            'CLIENTUSERAGENT' => 'anAgent',
+            'CLIENTIP' => '127.0.0.1',
+            'ALIAS' => 'theCreditCardToken',
+            'FOO' => 'FOOVAL',
+            'BAR' => 'BARVAL',
+        ], $model);
     }
 
     /**

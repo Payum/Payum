@@ -1,10 +1,13 @@
 <?php
 namespace Payum\Be2Bill\Tests;
 
+use Payum\Core\Action\CaptureNullAction;
+use Payum\Core\Action\NotifyNullAction;
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\GatewayFactory;
 use Payum\Core\GatewayFactoryInterface;
+use Payum\Core\Storage\StorageInterface;
 
 class Be2billOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,6 +3,7 @@ namespace Payum\Core\Tests;
 
 use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+use Payum\Core\Action\GetTokenAction;
 use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
@@ -13,6 +14,7 @@ use Payum\Core\Gateway;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\HttpClientInterface;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
+use Payum\Core\Storage\StorageInterface;
 
 class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -197,6 +199,31 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame($twig, 'twig', $action);
 
         $this->assertSame($twig, $config['twig.env']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldConfigureGetTokenActionIfTokenStorageSet()
+    {
+        $factory = new CoreGatewayFactory();
+
+        $tokenStorageMock = $this->getMock(StorageInterface::class);
+
+        $config = $factory->createConfig([
+            'payum.security.token_storage' => $tokenStorageMock,
+        ]);
+
+        $this->assertInternalType('array', $config);
+        $this->assertNotEmpty($config);
+
+        $this->assertInstanceOf(\Closure::class, $config['payum.action.get_token']);
+
+        $action = call_user_func($config['payum.action.get_token'], ArrayObject::ensureArrayObject($config));
+        $this->assertInstanceOf(GetTokenAction::class, $action);
+        $this->assertAttributeSame($tokenStorageMock, 'tokenStorage', $action);
+
+        $this->assertSame($tokenStorageMock, $config['payum.security.token_storage']);
     }
 
     /**

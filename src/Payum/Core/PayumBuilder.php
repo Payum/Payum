@@ -110,6 +110,11 @@ class PayumBuilder
     protected $httpClient;
 
     /**
+     * @var string
+     */
+    protected $modelIdProperty;
+
+    /**
      * @return static
      */
     public function addDefaultStorages()
@@ -338,7 +343,9 @@ class PayumBuilder
             throw new \LogicException('Token storage must be configured.');
         }
 
-        $tokenFactory = $this->buildTokenFactory($this->tokenStorage, $this->buildRegistry([], $this->storages));
+        $storages = $this->storages;
+
+        $tokenFactory = $this->buildTokenFactory($this->tokenStorage, $this->buildRegistry([], $storages));
         $genericTokenFactory = $this->buildGenericTokenFactory($tokenFactory, array_replace([
             'capture' => 'capture.php',
             'notify' => 'notify.php',
@@ -354,6 +361,7 @@ class PayumBuilder
 
         $coreGatewayFactory = $this->buildCoreGatewayFactory(array_replace([
             'payum.extension.token_factory' => new GenericTokenFactoryExtension($genericTokenFactory),
+            'payum.security.token_storage' => $tokenStorage,
             'payum.http_client' => $httpClient,
         ], $this->coreGatewayFactoryConfig));
 
@@ -363,7 +371,7 @@ class PayumBuilder
             $this->gatewayFactories
         );
 
-        $registry = $this->buildRegistry($this->gateways, $this->storages, $gatewayFactories);
+        $registry = $this->buildRegistry($this->gateways, $storages, $gatewayFactories);
 
         if ($this->gatewayConfigs) {
             $gateways = $this->gateways;
@@ -374,7 +382,7 @@ class PayumBuilder
                 $gateways[$name] = $gatewayFactory->create($gatewayConfig);
             }
 
-            $registry = $this->buildRegistry($gateways, $this->storages, $gatewayFactories);
+            $registry = $this->buildRegistry($gateways, $storages, $gatewayFactories);
 
 
         }
@@ -453,7 +461,8 @@ class PayumBuilder
     {
         $coreGatewayFactory = $this->coreGatewayFactory;
 
-        foreach ($this->storages as $modelClass => $storage) {
+        $storages = $this->storages;
+        foreach ($storages as $modelClass => $storage) {
             $extensionName = 'payum.extension.storage_'.strtolower(str_replace('\\', '_', $modelClass));
 
             $config[$extensionName] = new StorageExtension($storage);
