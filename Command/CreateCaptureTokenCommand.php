@@ -20,8 +20,8 @@ class CreateCaptureTokenCommand extends ContainerAwareCommand
         $this
             ->setName('payum:security:create-capture-token')
             ->addArgument('gateway-name', InputArgument::REQUIRED, 'The gateway name associated with the token')
-            ->addOption('model-class', null, InputOption::VALUE_REQUIRED, 'The model class associated with the token')
-            ->addOption('model-id', null, InputOption::VALUE_REQUIRED, 'The model id associated with the token')
+            ->addOption('model-class', null, InputOption::VALUE_OPTIONAL, 'The model class associated with the token')
+            ->addOption('model-id', null, InputOption::VALUE_OPTIONAL, 'The model id associated with the token')
             ->addOption('after-url', null, InputOption::VALUE_REQUIRED, 'The url\route user will be redirected after the purchase is done.', null)
         ;
     }
@@ -37,12 +37,15 @@ class CreateCaptureTokenCommand extends ContainerAwareCommand
         $model = null;
         $afterUrl = $input->getOption('after-url');
 
-        if (false == $model = $this->getPayum()->getStorage($modelClass)->find($modelId)) {
-            throw new RuntimeException(sprintf(
-                'Cannot find model with class %s and id %s.',
-                $modelClass,
-                $modelId
-            ));
+        $model = null;
+        if ($modelClass && $modelId) {
+            if (false == $model = $this->getPayum()->getStorage($modelClass)->find($modelId)) {
+                throw new RuntimeException(sprintf(
+                    'Cannot find model with class %s and id %s.',
+                    $modelClass,
+                    $modelId
+                ));
+            }
         }
 
         $token = $this->getTokenFactory()->createCaptureToken($gatewayName, $model, $afterUrl);
