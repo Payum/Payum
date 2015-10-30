@@ -3,6 +3,7 @@ namespace Payum\Core\Security;
 
 use League\Url\Url;
 use Payum\Core\Registry\StorageRegistryInterface;
+use Payum\Core\Security\Util\Random;
 use Payum\Core\Storage\IdentityInterface;
 use Payum\Core\Storage\StorageInterface;
 
@@ -25,6 +26,7 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
     {
         /** @var TokenInterface $token */
         $token = $this->tokenStorage->create();
+        $token->setHash($token->getHash() ?: Random::generateToken());
 
         $token->setGatewayName($gatewayName);
 
