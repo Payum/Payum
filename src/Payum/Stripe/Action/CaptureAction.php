@@ -26,7 +26,10 @@ class CaptureAction extends GatewayAwareAction
         }
 
         if (false == $model['card']) {
-            $this->gateway->execute(new ObtainToken($model));
+            $obtainToken = new ObtainToken($request->getToken());
+            $obtainToken->setModel($model);
+
+            $this->gateway->execute($obtainToken);
         }
 
         $this->gateway->execute(new CreateCharge($model));
