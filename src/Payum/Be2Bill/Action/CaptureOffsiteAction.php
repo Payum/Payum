@@ -65,7 +65,7 @@ class CaptureOffsiteAction extends GatewayAwareAction implements ApiAwareInterfa
         if (isset($httpRequest->query['EXECCODE'])) {
             $model->replace($httpRequest->query);
         } else {
-            $extradata = $model['EXTRADATA'] ? json_decode($model['EXTRADATA']) : [];
+            $extradata = $model['EXTRADATA'] ? json_decode($model['EXTRADATA'], true) : [];
 
             if (false == isset($extradata['capture_token']) && $request->getToken()) {
                 $extradata['capture_token'] = $request->getToken()->getHash();
