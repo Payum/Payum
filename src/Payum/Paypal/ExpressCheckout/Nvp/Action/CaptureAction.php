@@ -1,8 +1,10 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
+use League\Url\Url;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Sync;
 use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -45,6 +47,13 @@ class CaptureAction extends GatewayAwareAction implements GenericTokenFactoryAwa
             'AUTHORIZE_TOKEN_USERACTION' => Api::USERACTION_COMMIT,
         ));
 
+        $this->gateway->execute($httpRequest = new GetHttpRequest());
+        if (isset($httpRequest->query['cancelled'])) {
+            $details['CANCELLED'] = true;
+
+            return;
+        }
+
         if (false == $details['TOKEN']) {
             if (false == $details['RETURNURL'] && $request->getToken()) {
                 $details['RETURNURL'] = $request->getToken()->getTargetUrl();
@@ -63,13 +72,18 @@ class CaptureAction extends GatewayAwareAction implements GenericTokenFactoryAwa
                 $details['PAYMENTREQUEST_0_NOTIFYURL'] = $notifyToken->getTargetUrl();
             }
 
+            if ($details['CANCELURL']) {
+                $cancelUrl = Url::createFromUrl($details['CANCELURL']);
+                $cancelUrl->setQuery(['cancelled=1']);
+
+                $details['CANCELURL'] = (string) $cancelUrl;
+            }
+
             $this->gateway->execute(new SetExpressCheckout($details));
 
             if ($details['L_ERRORCODE0']) {
                 return;
             }
-
-            $this->gateway->execute(new AuthorizeToken($details));
         }
 
         $this->gateway->execute(new Sync($details));
@@ -87,6 +101,8 @@ class CaptureAction extends GatewayAwareAction implements GenericTokenFactoryAwa
             }
 
             $this->gateway->execute(new DoExpressCheckoutPayment($details));
+        } else {
+            $this->gateway->execute(new AuthorizeToken($details));
         }
 
         $this->gateway->execute(new Sync($details));
