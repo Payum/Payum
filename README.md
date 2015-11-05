@@ -95,6 +95,10 @@ PayumBundle is an open source, community-driven project. Pull requests are very 
 
 Star PayumBundle on [github](https://github.com/Payum/PayumBundle) or [packagist](https://packagist.org/packages/payum/payum-bundle).
 
+## Donate
+
+<a href='https://pledgie.com/campaigns/30526'><img alt='Click here to lend your support to: Your private payment processing server. Setup it once and rule them all and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/30526.png?skin_name=chrome' border='0' ></a>
+
 ## License
 
 The bundle is released under the [MIT License](Resources/meta/LICENSE).
