@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.0 (2015-11-09)
+
+* [command] allow create a capture token without model
+* [factory] add token storage to default gateway factory config.
+* [omnipay] add support of universal omnipay factory.
+* [validation] Add validation on expire date
+* [paypal][ec] register confirm order template.
+
 ## 1.0.0-BETA2 (2015-09-25)
 
 * [di] Fix key conflicts in payum.gateway_factory tag
