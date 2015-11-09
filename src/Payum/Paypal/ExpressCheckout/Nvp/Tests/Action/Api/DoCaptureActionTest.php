@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoCaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoCapture;
 
@@ -11,9 +12,9 @@ class DoCaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoCaptureAction');
+        $rc = new \ReflectionClass(DoCaptureAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction'));
+        $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
     }
 
     /**
@@ -110,21 +111,19 @@ class DoCaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallApiDoCaptureMethodWithExpectedRequiredArguments()
     {
-        $testCase = $this;
-
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('DoCapture')
-            ->will($this->returnCallback(function (array $fields) use ($testCase) {
-                $testCase->assertArrayHasKey('TRANSACTIONID', $fields);
-                $testCase->assertEquals('theTransactionId', $fields['TRANSACTIONID']);
+            ->will($this->returnCallback(function (array $fields) {
+                $this->assertArrayHasKey('TRANSACTIONID', $fields);
+                $this->assertEquals('theTransactionId', $fields['TRANSACTIONID']);
 
-                $testCase->assertArrayHasKey('AMT', $fields);
-                $testCase->assertEquals('theAmt', $fields['AMT']);
+                $this->assertArrayHasKey('AMT', $fields);
+                $this->assertEquals('theAmt', $fields['AMT']);
 
-                $testCase->assertArrayHasKey('COMPLETETYPE', $fields);
-                $testCase->assertEquals('Complete', $fields['COMPLETETYPE']);
+                $this->assertArrayHasKey('COMPLETETYPE', $fields);
+                $this->assertEquals('Complete', $fields['COMPLETETYPE']);
 
                 return array();
             }))
