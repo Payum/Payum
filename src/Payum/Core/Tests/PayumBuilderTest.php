@@ -670,6 +670,21 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
+     */
+    public function shouldAllowAddCoreGatewayConfig()
+    {
+        $payumBuilder = new PayumBuilder();
+
+        $payumBuilder->setCoreGatewayFactoryConfig(['foo' => 'fooVal', 'bar' => 'barVal']);
+        $this->assertAttributeSame(['foo' => 'fooVal', 'bar' => 'barVal'], 'coreGatewayFactoryConfig', $payumBuilder);
+
+        $payumBuilder->addCoreGatewayFactoryConfig(['baz' => 'bazVal', 'foo' => 'fooNewVal']);
+
+        $this->assertAttributeSame(['foo' => 'fooNewVal', 'bar' => 'barVal', 'baz' => 'bazVal'], 'coreGatewayFactoryConfig', $payumBuilder);
+    }
+
+    /**
      * @return \PHPUnit_Framework_MockObject_MockObject|RegistryInterface
      */
     protected function createRegistryMock()
