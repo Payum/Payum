@@ -299,6 +299,19 @@ class PayumBuilder
     }
 
     /**
+     * @param array $config
+     *
+     * @return static
+     */
+    public function addCoreGatewayFactoryConfig(array $config)
+    {
+        $currentConfig = $this->coreGatewayFactoryConfig ?: [];
+        $this->coreGatewayFactoryConfig = array_replace($currentConfig, $config);
+
+        return $this;
+    }
+
+    /**
      * @param StorageInterface $gatewayConfigStorage
      *
      * @return static
@@ -387,7 +400,7 @@ class PayumBuilder
 
         }
 
-        return new Payum($registry, $httpRequestVerifier, $genericTokenFactory);
+        return new Payum($registry, $httpRequestVerifier, $genericTokenFactory, $tokenStorage);
     }
 
     /**

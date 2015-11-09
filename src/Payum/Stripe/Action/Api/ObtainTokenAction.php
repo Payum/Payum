@@ -70,6 +70,7 @@ class ObtainTokenAction extends GatewayAwareAction implements ApiAwareInterface
         $this->gateway->execute($renderTemplate = new RenderTemplate($this->templateName, array(
             'model' => $model,
             'publishable_key' => $this->keys->getPublishableKey(),
+            'actionUrl' => $request->getToken() ? $request->getToken()->getTargetUrl() : null,
         )));
 
         throw new HttpResponse($renderTemplate->getResult());

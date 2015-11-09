@@ -1,25 +1,29 @@
 <?php
 namespace Payum\Stripe\Tests\Action\Api;
 
+use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Stripe\Action\CaptureAction;
+use Payum\Stripe\Request\Api\CreateCharge;
+use Payum\Stripe\Request\Api\ObtainToken;
 
 class CaptureActionTest extends GenericActionTest
 {
-    protected $requestClass = 'Payum\Core\Request\Capture';
+    protected $requestClass = Capture::class;
 
-    protected $actionClass = 'Payum\Stripe\Action\CaptureAction';
+    protected $actionClass = CaptureAction::class;
 
     /**
      * @test
      */
     public function shouldBeSubClassOfGatewayAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Stripe\Action\CaptureAction');
+        $rc = new \ReflectionClass(CaptureAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
+        $this->assertTrue($rc->isSubclassOf(GatewayAwareAction::class));
     }
 
     /**
@@ -46,7 +50,7 @@ class CaptureActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldSubExecuteObtainTokenReqeustIfTokenNotSet()
+    public function shouldSubExecuteObtainTokenRequestIfTokenNotSet()
     {
         $model = array();
 
@@ -54,7 +58,30 @@ class CaptureActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Stripe\Request\Api\ObtainToken'))
+            ->with($this->isInstanceOf(ObtainToken::class))
+        ;
+
+        $action = new CaptureAction();
+        $action->setGateway($gatewayMock);
+
+        $action->execute(new Capture($model));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSubExecuteObtainTokenRequestWithCurrentModel()
+    {
+        $model = new \ArrayObject(['foo' => 'fooVal']);
+
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
+            ->expects($this->at(0))
+            ->method('execute')
+            ->will($this->returnCallback(function(ObtainToken $request) use ($model) {
+                $this->assertInstanceOf(ArrayObject::class, $request->getModel());
+                $this->assertSame(['foo' => 'fooVal'], (array) $request->getModel());
+            }))
         ;
 
         $action = new CaptureAction();
@@ -76,7 +103,7 @@ class CaptureActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Stripe\Request\Api\CreateCharge'))
+            ->with($this->isInstanceOf(CreateCharge::class))
         ;
 
         $action = new CaptureAction();
@@ -90,6 +117,6 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\GatewayInterface');
+        return $this->getMock(GatewayInterface::class);
     }
 }

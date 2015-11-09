@@ -24,18 +24,26 @@ class Payum implements RegistryInterface
     protected $tokenFactory;
 
     /**
+     * @var StorageInterface
+     */
+    protected $tokenStorage;
+
+    /**
      * @param RegistryInterface            $registry
      * @param HttpRequestVerifierInterface $httpRequestVerifier
      * @param GenericTokenFactoryInterface $tokenFactory
+     * @param StorageInterface             $tokenStorage
      */
     public function __construct(
         RegistryInterface $registry,
         HttpRequestVerifierInterface $httpRequestVerifier,
-        GenericTokenFactoryInterface $tokenFactory
+        GenericTokenFactoryInterface $tokenFactory,
+        StorageInterface $tokenStorage
     ) {
         $this->registry = $registry;
         $this->httpRequestVerifier = $httpRequestVerifier;
         $this->tokenFactory = $tokenFactory;
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -100,5 +108,13 @@ class Payum implements RegistryInterface
     public function getTokenFactory()
     {
         return $this->tokenFactory;
+    }
+
+    /**
+     * @return StorageInterface
+     */
+    public function getTokenStorage()
+    {
+        return $this->tokenStorage;
     }
 }
