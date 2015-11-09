@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.0.0 (2015-11-09)
+
+* [payumBuilder] add `addCoreGatewayFactoryConfig` method
+* [payum] add `getTokenStorage` method to payum object
+* [paypal][ec] better handling of cancelled payments.
+* [paypal][ec] add support of order confirmation step.
+* [stripe] pass payum token to obtain stripe token action.
+* [security] set token hash to token model if not set
+* [symfony] add gateways choice form type.
+* [payumBuilder][omnipay] skip broken gateways.
+* [payumBuilder][builder] auto register omnipay's factories.
+* [be2bill] Improve capture and notify actions, do not rely on session. Fully working solution.
+* [exception] add suggestion on how to troubleshoot request not supported issues.
+* [gateway] Allow use of injected api and gateway in `supports` method.
+* [doc] add Payum vs Omnipay doc.
+* [authorize.net] Use official sdk authorizenet/authorizenet-php deprecation.
+
 ## 1.0.0-BETA4 (2015-09-29)
 
 * [reply] remove "continue", clicking on it user can do double payment

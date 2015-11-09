@@ -1,7 +1,7 @@
 {
     "name": "payum/core",
     "type": "library",
-    "description": "Payum  offers everything you need to work with payments. From simplest use cases to very advanced ones.",
+    "description": "Payum offers everything you need to work with payments. From simplest use cases to very advanced ones.",
     "keywords": [
         "payment",
         "recurring payment",
