@@ -17,6 +17,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\ManageRecurringPaymentsProfileSt
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateBillingAgreementAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoReferenceTransactionAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\UpdateRecurringPaymentProfileAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\AuthorizeAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\ConvertPaymentAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\NotifyAction;
@@ -39,6 +40,7 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
             'payum.template.confirm_order' => '@PayumPaypalExpressCheckout/confirmOrder.html.twig',
 
             'payum.action.capture' => new CaptureAction(),
+            'payum.action.authorize' => new AuthorizeAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),
             'payum.action.notify' => new NotifyAction(),
             'payum.action.status' => new PaymentDetailsStatusAction(),

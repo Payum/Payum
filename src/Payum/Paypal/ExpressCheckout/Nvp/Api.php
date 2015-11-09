@@ -511,15 +511,12 @@ class Api
      */
     public function doCapture(array $fields)
     {
-        $request = new FormRequest();
-        $request->setFields($fields);
+        $fields['METHOD']  = 'DoCapture';
 
-        $request->setField('METHOD', 'DoCapture');
+        $this->addVersionField($fields);
+        $this->addAuthorizeFields($fields);
 
-        $this->addVersionField($request);
-        $this->addAuthorizeFields($request);
-
-        return $this->doRequest($request);
+        return $this->doRequest($fields);
     }
 
     /**
