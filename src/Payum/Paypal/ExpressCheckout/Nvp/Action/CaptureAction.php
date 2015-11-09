@@ -74,7 +74,7 @@ class CaptureAction extends GatewayAwareAction implements GenericTokenFactoryAwa
 
             if ($details['CANCELURL']) {
                 $cancelUrl = Url::createFromUrl($details['CANCELURL']);
-                $cancelUrl->setQuery(['cancelled=1']);
+                $cancelUrl->setQuery(['cancelled' => 1]);
 
                 $details['CANCELURL'] = (string) $cancelUrl;
             }
@@ -101,7 +101,9 @@ class CaptureAction extends GatewayAwareAction implements GenericTokenFactoryAwa
             }
 
             $this->gateway->execute(new DoExpressCheckoutPayment($details));
-        } else {
+        }
+
+        if (false == $details['PAYERID']) {
             $this->gateway->execute(new AuthorizeToken($details));
         }
 

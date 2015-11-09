@@ -11,6 +11,7 @@ use Payum\Core\Registry\RegistryInterface;
 use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
+use Payum\Core\Storage\StorageInterface;
 
 class PayumTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,7 +33,8 @@ class PayumTest extends \PHPUnit_Framework_TestCase
         new Payum(
             $this->createRegistryMock(),
             $this->createHttpRequestVerifierMock(),
-            $this->createGenericTokenFactoryMock()
+            $this->createGenericTokenFactoryMock(),
+            $this->createTokenStorage()
         );
     }
 
@@ -46,7 +48,8 @@ class PayumTest extends \PHPUnit_Framework_TestCase
         $payum = new Payum(
             $this->createRegistryMock(),
             $httpRequestVerifier,
-            $this->createGenericTokenFactoryMock()
+            $this->createGenericTokenFactoryMock(),
+            $this->createTokenStorage()
         );
 
         $this->assertSame($httpRequestVerifier, $payum->getHttpRequestVerifier());
@@ -62,10 +65,28 @@ class PayumTest extends \PHPUnit_Framework_TestCase
         $payum = new Payum(
             $this->createRegistryMock(),
             $this->createHttpRequestVerifierMock(),
-            $tokenFactory
+            $tokenFactory,
+            $this->createTokenStorage()
         );
 
         $this->assertSame($tokenFactory, $payum->getTokenFactory());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetTokenStorageSetInConstructor()
+    {
+        $tokenStorage = $this->createTokenStorage();
+
+        $payum = new Payum(
+            $this->createRegistryMock(),
+            $this->createHttpRequestVerifierMock(),
+            $this->createGenericTokenFactoryMock(),
+            $tokenStorage
+        );
+
+        $this->assertSame($tokenStorage, $payum->getTokenStorage());
     }
 
     /**
@@ -91,7 +112,8 @@ class PayumTest extends \PHPUnit_Framework_TestCase
         $payum = new Payum(
             $registry,
             $this->createHttpRequestVerifierMock(),
-            $this->createGenericTokenFactoryMock()
+            $this->createGenericTokenFactoryMock(),
+            $this->createTokenStorage()
         );
 
         $this->assertSame($fooGateway, $payum->getGateway('foo'));
@@ -125,7 +147,8 @@ class PayumTest extends \PHPUnit_Framework_TestCase
         $payum = new Payum(
             $registry,
             $this->createHttpRequestVerifierMock(),
-            $this->createGenericTokenFactoryMock()
+            $this->createGenericTokenFactoryMock(),
+            $this->createTokenStorage()
         );
 
         $this->assertSame('fooStorage', $payum->getStorage('foo'));
@@ -159,7 +182,8 @@ class PayumTest extends \PHPUnit_Framework_TestCase
         $payum = new Payum(
             $registry,
             $this->createHttpRequestVerifierMock(),
-            $this->createGenericTokenFactoryMock()
+            $this->createGenericTokenFactoryMock(),
+            $this->createTokenStorage()
         );
 
         $this->assertSame('fooGatewayFactory', $payum->getGatewayFactory('foo'));
@@ -192,5 +216,13 @@ class PayumTest extends \PHPUnit_Framework_TestCase
     protected function createGenericTokenFactoryMock()
     {
         return $this->getMock(GenericTokenFactoryInterface::class);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|StorageInterface
+     */
+    protected function createTokenStorage()
+    {
+        return $this->getMock(StorageInterface::class);
     }
 }
