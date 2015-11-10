@@ -2,16 +2,16 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request\Api;
 
 use Payum\Core\Request\Generic;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoCapture;
 
-class GetTransactionDetailsTest extends \PHPUnit_Framework_TestCase
+class DoCaptureTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass(GetTransactionDetails::class);
+        $rc = new \ReflectionClass(DoCapture::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
@@ -21,7 +21,7 @@ class GetTransactionDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithModelAndPaymentRequestNAsArguments()
     {
-        new GetTransactionDetails(new \stdClass(), $paymentRequestN = 5);
+        new DoCapture(new \stdClass(), $paymentRequestN = 5);
     }
 
     /**
@@ -31,7 +31,7 @@ class GetTransactionDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $expectedPaymentRequestN = 7;
 
-        $request = new GetTransactionDetails(new \stdClass(), $expectedPaymentRequestN);
+        $request = new DoCapture(new \stdClass(), $expectedPaymentRequestN);
 
         $this->assertSame($expectedPaymentRequestN, $request->getPaymentRequestN());
     }

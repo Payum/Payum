@@ -21,14 +21,15 @@ class CaptureAction extends PurchaseAction
 
         $details['PAYMENTREQUEST_0_PAYMENTACTION'] = Api::PAYMENTACTION_SALE;
 
+        foreach (range(0, 9) as $index) {
+            if (Api::PENDINGREASON_AUTHORIZATION == $details['PAYMENTREQUEST_'.$index.'_PENDINGREASON']) {
+                $details->defaults(['PAYMENTREQUEST_'.$index.'_COMPLETETYPE' => 'Complete']);
 
-        if (Api::PENDINGREASON_AUTHORIZATION == $details['PAYMENTREQUEST_0_PENDINGREASON']) {
-            $details->defaults(['PAYMENTREQUEST_0_COMPLETETYPE' => 'Complete']);
-
-            $this->gateway->execute(new DoCapture($details, 0));
-        } else {
-            parent::execute($request);
+                $this->gateway->execute(new DoCapture($details, $index));
+            }
         }
+
+        parent::execute($request);
     }
 
     /**

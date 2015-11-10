@@ -4,30 +4,31 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Model\Token;
+use Payum\Core\Request\Authorize;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Sync;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Tests\GenericActionTest;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\AuthorizeAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ConfirmOrder;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout;
 
-class CaptureActionTest extends GenericActionTest
+class AutorizeActionTest extends GenericActionTest
 {
-    protected $requestClass = Capture::class;
+    protected $requestClass = Authorize::class;
 
-    protected $actionClass = CaptureAction::class;
+    protected $actionClass = AuthorizeAction::class;
 
     /**
      * @test
      */
     public function shouldBeSubClassOfGatewayAwareAction()
     {
-        $rc = new \ReflectionClass(CaptureAction::class);
+        $rc = new \ReflectionClass(AuthorizeAction::class);
 
         $this->assertTrue($rc->isSubclassOf(GatewayAwareAction::class));
     }
@@ -37,31 +38,31 @@ class CaptureActionTest extends GenericActionTest
      */
     public function shouldSetZeroGatewayActionAsSell()
     {
-        $action = new CaptureAction();
+        $action = new AuthorizeAction();
         $action->setGateway($this->createGatewayMock());
 
-        $action->execute($request = new Capture([]));
+        $action->execute($request = new Authorize([]));
 
         $model = $request->getModel();
         $this->assertArrayHasKey('PAYMENTREQUEST_0_PAYMENTACTION', $model);
-        $this->assertEquals(Api::PAYMENTACTION_SALE, $model['PAYMENTREQUEST_0_PAYMENTACTION']);
+        $this->assertEquals(Api::PAYMENTACTION_AUTHORIZATION, $model['PAYMENTREQUEST_0_PAYMENTACTION']);
     }
 
     /**
      * @test
      */
-    public function shouldForcePaymentActionSale()
+    public function shouldForcePaymentActionAuthorization()
     {
-        $action = new CaptureAction();
+        $action = new AuthorizeAction();
         $action->setGateway($this->createGatewayMock());
 
-        $action->execute($request = new Capture([
+        $action->execute($request = new Authorize([
             'PAYMENTREQUEST_0_PAYMENTACTION' => 'FooBarBaz',
         ]));
 
         $model = $request->getModel();
         $this->assertArrayHasKey('PAYMENTREQUEST_0_PAYMENTACTION', $model);
-        $this->assertEquals(Api::PAYMENTACTION_SALE, $model['PAYMENTREQUEST_0_PAYMENTACTION']);
+        $this->assertEquals(Api::PAYMENTACTION_AUTHORIZATION, $model['PAYMENTREQUEST_0_PAYMENTACTION']);
     }
 
     /**
@@ -91,10 +92,10 @@ class CaptureActionTest extends GenericActionTest
             ->with($this->isInstanceOf(AuthorizeToken::class))
         ;
 
-        $action = new CaptureAction();
+        $action = new AuthorizeAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Capture([]));
+        $action->execute(new Authorize([]));
     }
 
     /**
@@ -119,10 +120,10 @@ class CaptureActionTest extends GenericActionTest
             ->with($this->isInstanceOf(AuthorizeToken::class))
         ;
 
-        $action = new CaptureAction();
+        $action = new AuthorizeAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Capture([
+        $action->execute(new Authorize([
             'TOKEN' => 'aToken',
             'PAYERID' => null,
         ]));
@@ -145,10 +146,10 @@ class CaptureActionTest extends GenericActionTest
             ->with($this->isInstanceOf(Sync::class))
         ;
 
-        $action = new CaptureAction();
+        $action = new AuthorizeAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Capture([
+        $action->execute(new Authorize([
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
         ]));
@@ -176,10 +177,10 @@ class CaptureActionTest extends GenericActionTest
             }))
         ;
 
-        $action = new CaptureAction();
+        $action = new AuthorizeAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Capture([]));
+        $action->execute(new Authorize([]));
     }
 
     /**
@@ -212,10 +213,10 @@ class CaptureActionTest extends GenericActionTest
             }))
         ;
 
-        $action = new CaptureAction();
+        $action = new AuthorizeAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Capture($token);
+        $request = new Authorize($token);
         $request->setModel(array());
 
         $action->execute($request);
@@ -252,10 +253,10 @@ class CaptureActionTest extends GenericActionTest
             }))
         ;
 
-        $action = new CaptureAction();
+        $action = new AuthorizeAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Capture($token);
+        $request = new Authorize($token);
         $request->setModel(array());
 
         $action->execute($request);
@@ -278,10 +279,10 @@ class CaptureActionTest extends GenericActionTest
             ->with($this->isInstanceOf(Sync::class))
         ;
 
-        $action = new CaptureAction();
+        $action = new AuthorizeAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Capture(array(
+        $action->execute(new Authorize(array(
             'TOKEN' => 'aToken',
         )));
     }
@@ -313,10 +314,10 @@ class CaptureActionTest extends GenericActionTest
             ->with($this->isInstanceOf(Sync::class))
         ;
 
-        $action = new CaptureAction();
+        $action = new AuthorizeAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Capture(array(
+        $action->execute(new Authorize(array(
             'AUTHORIZE_TOKEN_USERACTION' => Api::USERACTION_COMMIT,
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
@@ -357,10 +358,10 @@ class CaptureActionTest extends GenericActionTest
             ->with($this->isInstanceOf(Sync::class))
         ;
 
-        $action = new CaptureAction();
+        $action = new AuthorizeAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Capture(array(
+        $action->execute(new Authorize(array(
             'AUTHORIZE_TOKEN_USERACTION' => '',
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
@@ -396,10 +397,10 @@ class CaptureActionTest extends GenericActionTest
             ->with($this->isInstanceOf(Sync::class))
         ;
 
-        $action = new CaptureAction();
+        $action = new AuthorizeAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Capture(array(
+        $action->execute(new Authorize(array(
             'TOKEN' => 'aToken',
             'PAYERID' => null,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
@@ -428,10 +429,10 @@ class CaptureActionTest extends GenericActionTest
             ->with($this->isInstanceOf(Sync::class))
         ;
 
-        $action = new CaptureAction();
+        $action = new AuthorizeAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Capture(array(
+        $action->execute(new Authorize(array(
             'TOKEN' => 'aToken',
             'PAYERID' => 'anId',
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS,
@@ -460,10 +461,10 @@ class CaptureActionTest extends GenericActionTest
             ->with($this->isInstanceOf(Sync::class))
         ;
 
-        $action = new CaptureAction();
+        $action = new AuthorizeAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Capture(array(
+        $action->execute(new Authorize(array(
             'TOKEN' => 'aToken',
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
             'PAYERID' => 'aPayerId',
@@ -495,11 +496,11 @@ class CaptureActionTest extends GenericActionTest
             ->will($this->returnValue($notifyToken))
         ;
 
-        $action = new CaptureAction();
+        $action = new AuthorizeAction();
         $action->setGateway($this->createGatewayMock());
         $action->setGenericTokenFactory($tokenFactoryMock);
 
-        $request = new Capture($captureToken);
+        $request = new Authorize($captureToken);
         $request->setModel($details);
 
         $action->execute($request);
@@ -530,11 +531,11 @@ class CaptureActionTest extends GenericActionTest
             ->method('createNotifyToken')
         ;
 
-        $action = new CaptureAction();
+        $action = new AuthorizeAction();
         $action->setGateway($this->createGatewayMock());
         $action->setGenericTokenFactory($tokenFactoryMock);
 
-        $request = new Capture($captureToken);
+        $request = new Authorize($captureToken);
         $request->setModel($details);
 
         $action->execute($request);
@@ -562,11 +563,11 @@ class CaptureActionTest extends GenericActionTest
             ->method('createNotifyToken')
         ;
 
-        $action = new CaptureAction();
+        $action = new AuthorizeAction();
         $action->setGateway($this->createGatewayMock());
         $action->setGenericTokenFactory($tokenFactoryMock);
 
-        $request = new Capture($captureToken);
+        $request = new Authorize($captureToken);
         $request->setModel($details);
 
         $action->execute($request);
@@ -586,10 +587,10 @@ class CaptureActionTest extends GenericActionTest
         $captureToken->setGatewayName('theGatewayName');
         $captureToken->setDetails($details);
 
-        $action = new CaptureAction();
+        $action = new AuthorizeAction();
         $action->setGateway($this->createGatewayMock());
 
-        $request = new Capture($captureToken);
+        $request = new Authorize($captureToken);
         $request->setModel($details);
 
         $action->execute($request);
@@ -610,11 +611,11 @@ class CaptureActionTest extends GenericActionTest
             ->method('createNotifyToken')
         ;
 
-        $action = new CaptureAction();
+        $action = new AuthorizeAction();
         $action->setGateway($this->createGatewayMock());
         $action->setGenericTokenFactory($tokenFactoryMock);
 
-        $action->execute(new Capture($details));
+        $action->execute(new Authorize($details));
 
         $this->assertNotEmpty($details);
 
