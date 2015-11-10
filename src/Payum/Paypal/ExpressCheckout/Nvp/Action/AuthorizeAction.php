@@ -2,12 +2,12 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Request\Authorize;
 use Payum\Core\Request\Capture;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoCapture;
 
-class CaptureAction extends PurchaseAction
+class AuthorizeAction extends PurchaseAction
 {
     /**
      * {@inheritDoc}
@@ -19,15 +19,7 @@ class CaptureAction extends PurchaseAction
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        $details['PAYMENTREQUEST_0_PAYMENTACTION'] = Api::PAYMENTACTION_SALE;
-
-        foreach (range(0, 9) as $index) {
-            if (Api::PENDINGREASON_AUTHORIZATION == $details['PAYMENTREQUEST_'.$index.'_PENDINGREASON']) {
-                $details->defaults(['PAYMENTREQUEST_'.$index.'_COMPLETETYPE' => 'Complete']);
-
-                $this->gateway->execute(new DoCapture($details, $index));
-            }
-        }
+        $details['PAYMENTREQUEST_0_PAYMENTACTION'] = Api::PAYMENTACTION_AUTHORIZATION;
 
         parent::execute($request);
     }
@@ -38,7 +30,7 @@ class CaptureAction extends PurchaseAction
     public function supports($request)
     {
         return
-            $request instanceof Capture &&
+            $request instanceof Authorize &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }
