@@ -1,7 +1,7 @@
 {% extends layout ?: "@PayumCore/layout.html.twig" %}
 
 {% block payum_body %}
-    <form method="POST">
+    <form method="POST" action="{{ actionUrl }}">
         {{ form_row(form) }}
 
         {{ form_rest(form) }}

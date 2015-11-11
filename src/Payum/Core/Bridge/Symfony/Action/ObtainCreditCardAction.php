@@ -80,6 +80,7 @@ class ObtainCreditCardAction extends GatewayAwareAction
             'model' => $request->getModel(),
             'firstModel' => $request->getFirstModel(),
             'form' => $form->createView(),
+            'actionUrl' => $request->getToken() ? $request->getToken()->getTargetUrl() : null,
         ));
         $this->gateway->execute($renderTemplate);
 
