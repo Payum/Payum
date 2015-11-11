@@ -563,7 +563,7 @@ class PayumBuilder
 
         foreach ($map as $name => $factoryClass) {
             if (class_exists($factoryClass)) {
-                $gatewayFactories[$name] = new Be2BillDirectGatewayFactory(
+                $gatewayFactories[$name] = new $factoryClass(
                     isset($this->gatewayFactoryConfigs[$name]) ? $this->gatewayFactoryConfigs[$name] : [],
                     $coreGatewayFactory
                 );
