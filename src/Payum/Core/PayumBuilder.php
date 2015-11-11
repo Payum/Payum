@@ -95,6 +95,11 @@ class PayumBuilder
     protected $gatewayFactories = [];
 
     /**
+     * @var array
+     */
+    protected $gatewayFactoryConfigs = [];
+
+    /**
      * @var StorageInterface[]
      */
     protected $storages = [];
@@ -178,6 +183,21 @@ class PayumBuilder
         // TODO add checks
 
         $this->gatewayFactories[$name] = $gatewayFactory;
+
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @param array  $config
+     *
+     * @return static
+     */
+    public function addGatewayFactoryConfig($name, array $config)
+    {
+        // TODO add checks
+
+        $this->gatewayFactoryConfigs[$name] = $config;
 
         return $this;
     }
@@ -524,43 +544,30 @@ class PayumBuilder
      */
     protected function buildGatewayFactories(GatewayFactoryInterface $coreGatewayFactory)
     {
+        $map = [
+            'paypal_express_checkout' => PaypalExpressCheckoutGatewayFactory::class,
+            'paypal_pro_checkout' => PaypalProCheckoutGatewayFactory::class,
+            'paypal_rest' => PaypalRestGatewayFactory::class,
+            'authorize_net_aim' => AuthorizeNetAimGatewayFactory::class,
+            'be2bill_direct' => Be2BillDirectGatewayFactory::class,
+            'be2bill_offsite' => Be2BillOffsiteGatewayFactory::class,
+            'klarna_checkout' => KlarnaCheckoutGatewayFactory::class,
+            'klarna_invoice' => KlarnaInvoiceGatewayFactory::class,
+            'offline' => OfflineGatewayFactory::class,
+            'payex' => PayexGatewayFactory::class,
+            'stripe_checkout' => StripeCheckoutGatewayFactory::class,
+            'stripe_js' => StripeJsGatewayFactory::class,
+        ];
+
         $gatewayFactories = [];
 
-        if (class_exists(PaypalExpressCheckoutGatewayFactory::class)) {
-            $gatewayFactories['paypal_express_checkout'] = new PaypalExpressCheckoutGatewayFactory([], $coreGatewayFactory);
-        }
-        if (class_exists(PaypalProCheckoutGatewayFactory::class)) {
-            $gatewayFactories['paypal_pro_checkout'] = new PaypalProCheckoutGatewayFactory([], $coreGatewayFactory);
-        }
-        if (class_exists(PaypalRestGatewayFactory::class)) {
-            $gatewayFactories['paypal_rest'] = new PaypalRestGatewayFactory([], $coreGatewayFactory);
-        }
-        if (class_exists(AuthorizeNetAimGatewayFactory::class)) {
-            $gatewayFactories['authorize_net_aim'] = new AuthorizeNetAimGatewayFactory([], $coreGatewayFactory);
-        }
-        if (class_exists(Be2BillDirectGatewayFactory::class)) {
-            $gatewayFactories['be2bill_direct'] = new Be2BillDirectGatewayFactory([], $coreGatewayFactory);
-        }
-        if (class_exists(Be2BillOffsiteGatewayFactory::class)) {
-            $gatewayFactories['be2bill_offsite'] = new Be2BillOffsiteGatewayFactory([], $coreGatewayFactory);
-        }
-        if (class_exists(KlarnaCheckoutGatewayFactory::class)) {
-            $gatewayFactories['klarna_checkout'] = new KlarnaCheckoutGatewayFactory([], $coreGatewayFactory);
-        }
-        if (class_exists(KlarnaInvoiceGatewayFactory::class)) {
-            $gatewayFactories['klarna_invoice'] = new KlarnaInvoiceGatewayFactory([], $coreGatewayFactory);
-        }
-        if (class_exists(OfflineGatewayFactory::class)) {
-            $gatewayFactories['offline'] = new OfflineGatewayFactory([], $coreGatewayFactory);
-        }
-        if (class_exists(PayexGatewayFactory::class)) {
-            $gatewayFactories['payex'] = new PayexGatewayFactory([], $coreGatewayFactory);
-        }
-        if (class_exists(StripeCheckoutGatewayFactory::class)) {
-            $gatewayFactories['stripe_checkout'] = new StripeCheckoutGatewayFactory([], $coreGatewayFactory);
-        }
-        if (class_exists(StripeJsGatewayFactory::class)) {
-            $gatewayFactories['stripe_js'] = new StripeJsGatewayFactory([], $coreGatewayFactory);
+        foreach ($map as $name => $factoryClass) {
+            if (class_exists($factoryClass)) {
+                $gatewayFactories[$name] = new Be2BillDirectGatewayFactory(
+                    isset($this->gatewayFactoryConfigs[$name]) ? $this->gatewayFactoryConfigs[$name] : [],
+                    $coreGatewayFactory
+                );
+            }
         }
 
         return $gatewayFactories;
