@@ -50,14 +50,14 @@ class ObtainCreditCardAction extends GatewayAwareAction
 
     /**
      * {@inheritDoc}
+     *
+     * @param ObtainCreditCard $request
      */
     public function execute($request)
     {
-        /** @var $request ObtainCreditCard */
-        if (!$this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
-        if (!$this->httpRequest) {
+        RequestNotSupportedException::assertSupports($this, $request);
+
+        if (false == $this->httpRequest) {
             throw new LogicException('The action can be run only when http request is set.');
         }
 
@@ -85,6 +85,7 @@ class ObtainCreditCardAction extends GatewayAwareAction
 
         throw new HttpResponse(new Response($renderTemplate->getResult(), 200, array(
             'Cache-Control' => 'no-store, no-cache, max-age=0, post-check=0, pre-check=0',
+            'X-Status-Code' => 200,
             'Pragma' => 'no-cache',
         )));
     }
