@@ -9,6 +9,8 @@ abstract class Constants
 
     const STATUS_CAPTURED = 'captured';
 
+    const STATUS_AUTHORIZED = 'authorized';
+
     const STATUS_PENDING = 'pending';
 
     final private function __construct()
