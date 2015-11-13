@@ -13,5 +13,5 @@ $gateway = $factory->create(array(
 ));
 ```
 
-Back to [examples](examples/index.md).
+Back to [examples](index.md).
 Back to [index](https://github.com/Payum/Core/tree/master/Resources/docs/index.md).
