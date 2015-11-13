@@ -16,5 +16,5 @@ $model->setCreditCard($card);
 $gateway->execute(new \Payum\Core\Request\Capture($model));
 ```
 
-Back to [examples](examples/index.md).
+Back to [examples](index.md).
 Back to [index](https://github.com/Payum/Core/tree/master/Resources/docs/index.md).
