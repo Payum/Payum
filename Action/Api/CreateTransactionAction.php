@@ -4,6 +4,7 @@ namespace Invit\PayumSofort\Action\Api;
 
 use Invit\PayumSofort\Request\Api\CreateTransaction;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Reply\HttpRedirect;
 
@@ -18,6 +19,14 @@ class CreateTransactionAction extends BaseApiAwareAction
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
+
+        if (null === $details['amount']) {
+            throw new LogicException('amount must be set.');
+        }
+        
+        if (null === $details['currency_code']) {
+            throw new LogicException('currency_code must be set.');
+        }
 
         $details->replace(
             $this->api->createTransaction((array) $details)
