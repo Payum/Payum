@@ -1,11 +1,11 @@
 <?php
 
-namespace Invit\PayumSofort;
+namespace Invit\PayumSofort\Bridge;
 
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractGatewayFactory;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-class SofortGatewaySymfonyBridge extends AbstractGatewayFactory
+class SymfonySofortGatewayFactory extends AbstractGatewayFactory
 {
     /**
      * {@inheritdoc}

@@ -26,36 +26,32 @@ class Api
         'sandbox' => null,
     );
 
+    /**
+     * @param array $options
+     */
     public function __construct(array $options)
     {
         $this->options = $options;
     }
 
-    private function initRequest()
-    {
-        $sofort = new Sofortueberweisung($this->options['config_key']);
-
-        return $sofort;
-    }
-
+    /**
+     * @param array $fields
+     *
+     * @return array
+     */
     public function createTransaction(array $fields)
     {
-        $sofort = $this->initRequest();
-
+        $sofort = new Sofortueberweisung($this->options['config_key']);
         $sofort->setAmount($fields['amount']);
         $sofort->setCurrencyCode($fields['currency_code']);
-        $sofort->setReason('Testueberweisung', 'Verwendungszweck');
+        $sofort->setReason($fields['reason']);
         $sofort->setSuccessUrl($fields['success_url'], true);
         $sofort->setAbortUrl($fields['success_url']);
         $sofort->setNotificationUrl($fields['notification_url'], 'received');
         $sofort->sendRequest();
 
-        dump($sofort->getData());
-        dump($sofort->getResponse());
-
         if ($sofort->isError()) {
-            //SOFORT-API didn't accept the data
-            echo $sofort->getError();
+            $fields['error'] = $sofort->getError();
         } else {
             $fields['transaction_id'] = $sofort->getTransactionId();
             $fields['payment_url'] = $sofort->getPaymentUrl();
