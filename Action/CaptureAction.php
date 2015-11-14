@@ -1,15 +1,13 @@
 <?php
+
 namespace Invit\PayumSofort\Action;
 
-use Invit\PayumSofort\Request\Api\AuthorizeTransaction;
 use Invit\PayumSofort\Request\Api\CreateTransaction;
-use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\Sync;
-use Payum\Core\Exception\LogicException;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 
@@ -22,8 +20,6 @@ class CaptureAction extends GatewayAwareAction implements GenericTokenFactoryAwa
 
     /**
      * @param GenericTokenFactoryInterface $genericTokenFactory
-     *
-     * @return void
      */
     public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null)
     {
@@ -31,11 +27,11 @@ class CaptureAction extends GatewayAwareAction implements GenericTokenFactoryAwa
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function execute($request)
     {
-        /** @var $request Capture */
+        /* @var $request Capture */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
@@ -61,7 +57,7 @@ class CaptureAction extends GatewayAwareAction implements GenericTokenFactoryAwa
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supports($request)
     {

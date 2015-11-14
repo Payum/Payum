@@ -2,7 +2,6 @@
 
 namespace Invit\PayumSofort;
 
-
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractGatewayFactory;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
@@ -17,7 +16,7 @@ class SofortGatewaySymfonyBridge extends AbstractGatewayFactory
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
@@ -30,7 +29,7 @@ class SofortGatewaySymfonyBridge extends AbstractGatewayFactory
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getPayumGatewayFactoryClass()
     {
@@ -38,7 +37,7 @@ class SofortGatewaySymfonyBridge extends AbstractGatewayFactory
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getComposerPackage()
     {

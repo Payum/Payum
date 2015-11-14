@@ -1,4 +1,5 @@
 <?php
+
 namespace Invit\PayumSofort\Action\Api;
 
 use Invit\PayumSofort\Request\Api\GetTransactionData;
@@ -9,11 +10,11 @@ use Payum\Core\Exception\LogicException;
 class GetTransactionDataAction extends  BaseApiAwareAction
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function execute($request)
     {
-        /** @var $request GetTransactionData */
+        /* @var $request GetTransactionData */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
@@ -28,7 +29,7 @@ class GetTransactionDataAction extends  BaseApiAwareAction
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supports($request)
     {

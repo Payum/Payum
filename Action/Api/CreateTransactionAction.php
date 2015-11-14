@@ -1,4 +1,5 @@
 <?php
+
 namespace Invit\PayumSofort\Action\Api;
 
 use Invit\PayumSofort\Request\Api\CreateTransaction;
@@ -9,11 +10,11 @@ use Payum\Core\Reply\HttpRedirect;
 class CreateTransactionAction extends BaseApiAwareAction
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function execute($request)
     {
-        /** @var $request CreateTransaction */
+        /* @var $request CreateTransaction */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
@@ -30,7 +31,7 @@ class CreateTransactionAction extends BaseApiAwareAction
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supports($request)
     {

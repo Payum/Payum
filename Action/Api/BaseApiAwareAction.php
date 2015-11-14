@@ -1,11 +1,11 @@
 <?php
+
 namespace Invit\PayumSofort\Action\Api;
 
 use Invit\PayumSofort\Api;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\UnsupportedApiException;
-
 
 abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
 {
@@ -15,7 +15,7 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
     protected $api;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setApi($api)
     {

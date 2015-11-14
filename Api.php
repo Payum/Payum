@@ -2,7 +2,6 @@
 
 namespace Invit\PayumSofort;
 
-
 use Sofort\SofortLib\Sofortueberweisung;
 use Sofort\SofortLib\TransactionData;
 
@@ -54,7 +53,7 @@ class Api
         dump($sofort->getData());
         dump($sofort->getResponse());
 
-        if($sofort->isError()) {
+        if ($sofort->isError()) {
             //SOFORT-API didn't accept the data
             echo $sofort->getError();
         } else {
@@ -110,20 +109,20 @@ class Api
             'getSenderIban' => '',
         );
 
-        foreach($methods as $method => $params) {
+        foreach ($methods as $method => $params) {
             $varName = $method;
-            $varName = strtolower(preg_replace('/([^A-Z])([A-Z])/', "$1_$2", substr($varName, 3)));
+            $varName = strtolower(preg_replace('/([^A-Z])([A-Z])/', '$1_$2', substr($varName, 3)));
 
-            if(count($params) == 2) {
+            if (count($params) == 2) {
                 $fields[$varName] = $transactionData->$method($params[0], $params[1]);
-            } else if($params !== '') {
+            } elseif ($params !== '') {
                 $fields[$varName] = $transactionData->$method($params);
             } else {
                 $fields[$varName] = $transactionData->$method();
             }
         }
 
-        if($transactionData->isError()) {
+        if ($transactionData->isError()) {
             $fields['error'] = $transactionData->getError();
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Invit\PayumSofort\Action;
 
 use Invit\PayumSofort\Request\Api\GetTransactionData;
@@ -10,11 +11,11 @@ use Payum\Core\Exception\RequestNotSupportedException;
 class SyncAction extends GatewayAwareAction
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function execute($request)
     {
-        /** @var $request Sync */
+        /* @var $request Sync */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -27,7 +28,7 @@ class SyncAction extends GatewayAwareAction
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supports($request)
     {

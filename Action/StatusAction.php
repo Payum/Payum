@@ -1,4 +1,5 @@
 <?php
+
 namespace Invit\PayumSofort\Action;
 
 use Invit\PayumSofort\Api;
@@ -10,31 +11,34 @@ use Payum\Core\Request\GetStatusInterface;
 class StatusAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function execute($request)
     {
-        /** @var $request GetStatusInterface */
+        /* @var $request GetStatusInterface */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if(!isset($details['status'])
+        if (!isset($details['status'])
            && isset($details['transaction_id'])
            && $details['expires'] < time()) {
             $request->markExpired();
+
             return;
         }
-        if(!isset($details['transaction_id']) || !strlen($details['transaction_id'])) {
+        if (!isset($details['transaction_id']) || !strlen($details['transaction_id'])) {
             $request->markNew();
+
             return;
         }
-        if(!isset($details['status'])) {
+        if (!isset($details['status'])) {
             $request->markNew();
+
             return;
         }
         $subcode = isset($details['statusReason']) ? $details['statusReason'] : null;
-        switch($details['status']) {
+        switch ($details['status']) {
             case Api::STATUS_LOSS:
                 $request->markFailed();
                 break;
@@ -42,7 +46,7 @@ class StatusAction implements ActionInterface
                 $request->markCaptured();
                 break;
             case Api::STATUS_RECEIVED:
-                switch($subcode) {
+                switch ($subcode) {
                     case Api::SUB_PARTIALLY:
                         $request->markUnknown();
                         break;
@@ -53,7 +57,7 @@ class StatusAction implements ActionInterface
                 }
                 break;
             case Api::STATUS_REFUNDED:
-                switch($subcode) {
+                switch ($subcode) {
                     default:
                     case Api::SUB_COMPENSATION:
                         $request->markUnknown();
@@ -73,7 +77,7 @@ class StatusAction implements ActionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supports($request)
     {

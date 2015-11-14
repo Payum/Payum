@@ -1,4 +1,5 @@
 <?php
+
 namespace Invit\PayumSofort\Action;
 
 use Payum\Core\Request\Notify;
@@ -9,18 +10,18 @@ use Payum\Core\Exception\RequestNotSupportedException;
 class NotifyAction extends GatewayAwareAction
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function execute($request)
     {
-        /** @var $request Notify */
+        /* @var $request Notify */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $this->gateway->execute(new Sync($request->getModel()));
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supports($request)
     {

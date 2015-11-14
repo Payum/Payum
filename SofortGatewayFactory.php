@@ -1,4 +1,5 @@
 <?php
+
 namespace Invit\PayumSofort;
 
 use Invit\PayumSofort\Action\Api\CreateTransactionAction;
@@ -24,7 +25,7 @@ class SofortGatewayFactory implements GatewayFactoryInterface
     private $defaultConfig;
 
     /**
-     * @param array $defaultConfig
+     * @param array                   $defaultConfig
      * @param GatewayFactoryInterface $coreGatewayFactory
      */
     public function __construct(array $defaultConfig = array(), GatewayFactoryInterface $coreGatewayFactory = null)
@@ -34,7 +35,7 @@ class SofortGatewayFactory implements GatewayFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function create(array $config = array())
     {
@@ -42,7 +43,7 @@ class SofortGatewayFactory implements GatewayFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function createConfig(array $config = array())
     {
