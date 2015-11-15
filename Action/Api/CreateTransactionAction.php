@@ -23,7 +23,7 @@ class CreateTransactionAction extends BaseApiAwareAction
         if (null === $details['amount']) {
             throw new LogicException('amount must be set.');
         }
-        
+
         if (null === $details['currency_code']) {
             throw new LogicException('currency_code must be set.');
         }

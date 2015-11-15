@@ -4,8 +4,10 @@ namespace Invit\PayumSofort;
 
 use Invit\PayumSofort\Action\Api\CreateTransactionAction;
 use Invit\PayumSofort\Action\Api\GetTransactionDataAction;
+use Invit\PayumSofort\Action\Api\RefundTransactionAction;
 use Invit\PayumSofort\Action\CaptureAction;
 use Invit\PayumSofort\Action\NotifyAction;
+use Invit\PayumSofort\Action\RefundAction;
 use Invit\PayumSofort\Action\StatusAction;
 use Invit\PayumSofort\Action\SyncAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -58,9 +60,11 @@ class SofortGatewayFactory implements GatewayFactoryInterface
             'payum.action.status' => new StatusAction(),
             'payum.action.notify' => new NotifyAction(),
             'payum.action.sync' => new SyncAction(),
+            'payum.action.refund' => new RefundAction(),
 
             'payum.action.api.create_transaction' => new CreateTransactionAction(),
             'payum.action.api.get_transaction_data' => new GetTransactionDataAction(),
+            'payum.action.api.refund_transaction' => new RefundTransactionAction(),
         ));
 
         if (false == $config['payum.api']) {

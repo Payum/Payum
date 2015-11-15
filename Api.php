@@ -2,6 +2,7 @@
 
 namespace Invit\PayumSofort;
 
+use Sofort\SofortLib\Refund;
 use Sofort\SofortLib\Sofortueberweisung;
 use Sofort\SofortLib\TransactionData;
 
@@ -122,6 +123,28 @@ class Api
             $fields['error'] = $transactionData->getError();
         }
 
+        return $fields;
+    }
+
+    /**
+     * @param array $fields
+     *
+     * @return array
+     */
+    public function refundTransaction(array $fields)
+    {
+        $refund = new Refund($this->options['config_key']);
+        $refund->setSenderSepaAccount($fields['recipient_bic'], $fields['recipient_iban'], $fields['recipient_holder']);
+        $refund->addRefund($fields['transaction_id'], $fields['refund_amount']);
+        $refund->setPartialRefundId(md5(uniqid()));
+        $refund->setReason($fields['reason']);
+        $refund->sendRequest();
+
+        if($refund->isError()) {
+            $fields['refund_error'] = $refund->getError();
+        } else {
+            $fields['refund_url'] = $refund->getPaymentUrl();
+        }
         return $fields;
     }
 }
