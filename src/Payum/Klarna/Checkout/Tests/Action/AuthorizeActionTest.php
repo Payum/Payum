@@ -1,11 +1,19 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests\Action;
 
+use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\ApiAwareInterface;
 use Payum\Core\GatewayInterface;
+use Payum\Core\Model\Identity;
+use Payum\Core\Model\Token;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Authorize;
 use Payum\Core\Request\RenderTemplate;
+use Payum\Core\Request\Sync;
+use Payum\Core\Security\GenericTokenFactoryAwareInterface;
+use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Klarna\Checkout\Action\AuthorizeAction;
+use Payum\Klarna\Checkout\Config;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\CreateOrder;
 
@@ -16,9 +24,30 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfGatewayAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\AuthorizeAction');
+        $rc = new \ReflectionClass(AuthorizeAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
+        $this->assertTrue($rc->isSubclassOf(GatewayAwareAction::class));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldImplementsGenericTokenFactoryAwareInterface()
+    {
+        $rc = new \ReflectionClass(AuthorizeAction::class);
+        $rc = new \ReflectionClass(AuthorizeAction::class);
+
+        $this->assertTrue($rc->implementsInterface(GenericTokenFactoryAwareInterface::class));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldImplementsApiAwareInterface()
+    {
+        $rc = new \ReflectionClass(AuthorizeAction::class);
+
+        $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
     /**
@@ -82,20 +111,27 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
         $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
+            ->with($this->isInstanceOf(Sync::class))
         ;
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
+            ->with($this->isInstanceOf(RenderTemplate::class))
         ;
 
         $action = new AuthorizeAction('aTemplate');
         $action->setGateway($gatewayMock);
+        $action->setApi(new Config());
 
         $action->execute(new Authorize(array(
             'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
             'location' => 'aLocation',
+            'merchant' => [
+                'confirmation_uri' => 'theConfirmationUri',
+                'push_uri' => 'thePushUri',
+                'checkout_uri' => 'theCheckoutUri',
+                'terms_uri' => 'theTermsUri',
+            ]
         )));
     }
 
@@ -123,7 +159,7 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
         $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\CreateOrder'))
+            ->with($this->isInstanceOf(CreateOrder::class))
             ->will($this->returnCallback(function (CreateOrder $request) use ($orderMock) {
                 $request->setOrder($orderMock);
             }))
@@ -131,13 +167,21 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
+            ->with($this->isInstanceOf(Sync::class))
         ;
 
         $action = new AuthorizeAction('aTemplate');
         $action->setGateway($gatewayMock);
+        $action->setApi(new Config());
 
-        $model = new \ArrayObject();
+        $model = new \ArrayObject([
+            'merchant' => [
+                'confirmation_uri' => 'theConfirmationUri',
+                'push_uri' => 'thePushUri',
+                'checkout_uri' => 'theCheckoutUri',
+                'terms_uri' => 'theTermsUri',
+            ]
+        ]);
 
         $action->execute(new Authorize($model));
 
@@ -162,7 +206,7 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
+            ->with($this->isInstanceOf(RenderTemplate::class))
             ->will($this->returnCallback(function (RenderTemplate $request) use ($testCase, $expectedTemplateName, $expectedContext, $expectedContent) {
                 $testCase->assertEquals($expectedTemplateName, $request->getTemplateName());
                 $testCase->assertEquals($expectedContext, $request->getParameters());
@@ -179,6 +223,12 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
                 'location' => 'aLocation',
                 'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
                 'gui' => array('snippet' => $snippet),
+                'merchant' => [
+                    'confirmation_uri' => 'theConfirmationUri',
+                    'push_uri' => 'thePushUri',
+                    'checkout_uri' => 'theCheckoutUri',
+                    'terms_uri' => 'theTermsUri',
+                ]
             )));
         } catch (HttpResponse $reply) {
             $this->assertEquals($expectedContent, $reply->getContent());
@@ -200,6 +250,12 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
         $action->execute(new Authorize(array(
             'location' => 'aLocation',
             'gui' => array('snippet' => 'theSnippet'),
+            'merchant' => [
+                'confirmation_uri' => 'theConfirmationUri',
+                'push_uri' => 'thePushUri',
+                'checkout_uri' => 'theCheckoutUri',
+                'terms_uri' => 'theTermsUri',
+            ]
         )));
     }
 
@@ -215,7 +271,210 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
             'location' => 'aLocation',
             'status' => Constants::STATUS_CREATED,
             'gui' => array('snippet' => 'theSnippet'),
+            'merchant' => [
+                'confirmation_uri' => 'theConfirmationUri',
+                'push_uri' => 'thePushUri',
+                'checkout_uri' => 'theCheckoutUri',
+                'terms_uri' => 'theTermsUri',
+            ]
         )));
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The push_uri fields are required.
+     */
+    public function shouldThrowIfPushUriNotSet()
+    {
+        $action = new AuthorizeAction('aTemplate');
+        $action->setGateway($this->createGatewayMock());
+
+        $action->execute(new Authorize([
+            'merchant' => [
+                'confirmation_uri' => 'theConfirmationUri',
+                'checkout_uri' => 'theCheckoutUri',
+                'terms_uri' => 'theTermsUri',
+            ]
+        ]));
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The confirmation_uri fields are required.
+     */
+    public function shouldThrowIfConfirmUriNotSet()
+    {
+        $action = new AuthorizeAction('aTemplate');
+        $action->setGateway($this->createGatewayMock());
+
+        $action->execute(new Authorize([
+            'merchant' => [
+                'checkout_uri' => 'theCheckoutUri',
+                'terms_uri' => 'theTermsUri',
+                'push_uri' => 'thePushUri',
+            ]
+        ]));
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The checkout_uri fields are required.
+     */
+    public function shouldThrowIfCheckoutUriNotSetNeitherInConfigNorPayment()
+    {
+        $action = new AuthorizeAction('aTemplate');
+        $action->setGateway($this->createGatewayMock());
+        $action->setApi(new Config());
+
+        $action->execute(new Authorize([
+            'merchant' => [
+                'confirmation_uri' => 'theConfirmationUri',
+                'terms_uri' => 'theTermsUri',
+                'push_uri' => 'thePushUri',
+            ]
+        ]));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldUseCheckoutUriFromConfig()
+    {
+        $config = new Config();
+        $config->checkoutUri = 'theCheckoutUrl';
+
+        $action = new AuthorizeAction('aTemplate');
+        $action->setGateway($this->createGatewayMock());
+        $action->setApi($config);
+
+        $action->execute(new Authorize([
+            'location' => 'aLocation',
+            'merchant' => [
+                'confirmation_uri' => 'theConfirmationUri',
+                'terms_uri' => 'theTermsUri',
+                'push_uri' => 'thePushUri',
+            ]
+        ]));
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The terms_uri fields are required.
+     */
+    public function shouldThrowIfTermsUriNotSetNeitherInConfigNorPayment()
+    {
+        $action = new AuthorizeAction('aTemplate');
+        $action->setGateway($this->createGatewayMock());
+        $action->setApi(new Config());
+
+        $action->execute(new Authorize([
+            'merchant' => [
+                'confirmation_uri' => 'theConfirmationUri',
+                'push_uri' => 'thePushUri',
+                'checkout_uri' => 'theCheckoutUri',
+            ]
+        ]));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldUseTermsUriFromConfig()
+    {
+        $config = new Config();
+        $config->termsUri = 'theTermsUrl';
+
+        $action = new AuthorizeAction('aTemplate');
+        $action->setGateway($this->createGatewayMock());
+        $action->setApi($config);
+
+        $action->execute(new Authorize([
+            'location' => 'aLocation',
+            'merchant' => [
+                'confirmation_uri' => 'theConfirmationUri',
+                'checkout_uri' => 'theCheckoutUri',
+                'push_uri' => 'thePushUri',
+            ]
+        ]));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldUseTargetUrlFromRequestTokenAsConfirmationIfNotSet()
+    {
+        $config = new Config();
+
+        $action = new AuthorizeAction('aTemplate');
+        $action->setGateway($this->createGatewayMock());
+        $action->setApi($config);
+
+        $token = new Token();
+        $token->setTargetUrl('theTargetUrl');
+
+        $authorize = new Authorize($token);
+        $authorize->setModel([
+            'location' => 'aLocation',
+            'merchant' => [
+                'terms_uri' => 'theTermsUri',
+                'checkout_uri' => 'theCheckoutUri',
+                'push_uri' => 'thePushUri',
+            ]
+        ]);
+
+        $action->execute($authorize);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldGeneratePushUriIfNotSet()
+    {
+        $config = new Config();
+        $config->termsUri = 'theTermsUri';
+
+        $token = new Token();
+        $token->setTargetUrl('theTargetUrl');
+        $token->setGatewayName('theGatewayName');
+        $token->setDetails($identity = new Identity('id', 'class'));
+
+        $notifyToken = new Token();
+        $notifyToken->setTargetUrl('theNotifyUrl');
+
+        $tokenFactory = $this->getMock(GenericTokenFactoryInterface::class);
+        $tokenFactory
+            ->expects($this->once())
+            ->method('createNotifyToken')
+            ->with('theGatewayName', $this->identicalTo($identity))
+            ->will($this->returnValue($notifyToken))
+        ;
+
+        $action = new AuthorizeAction('aTemplate');
+        $action->setGateway($this->createGatewayMock());
+        $action->setApi($config);
+        $action->setGenericTokenFactory($tokenFactory);
+
+
+
+        $authorize = new Authorize($token);
+        $authorize->setModel([
+            'location' => 'aLocation',
+            'merchant' => [
+                'confirmation_uri' => 'theConfirmationUri',
+                'checkout_uri' => 'theCheckoutUri',
+                'terms_uri' => 'theTermsUri',
+            ]
+        ]);
+
+        $action->execute($authorize);
     }
 
     /**

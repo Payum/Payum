@@ -52,8 +52,8 @@ class KlarnaCheckoutGatewayFactory extends GatewayFactory
             $config['payum.default_options'] = array(
                 'merchant_id' => '',
                 'secret' => '',
-                'termsUri' => '',
-                'checkoutUri' => '',
+                'terms_uri' => '',
+                'checkout_uri' => '',
                 'sandbox' => true,
             );
             $config->defaults($config['payum.default_options']);
