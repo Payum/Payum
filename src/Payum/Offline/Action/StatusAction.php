@@ -31,6 +31,12 @@ class StatusAction implements ActionInterface
             return;
         }
 
+        if (Constants::STATUS_AUTHORIZED == $model[Constants::FIELD_STATUS]) {
+            $request->markAuthorized();
+
+            return;
+        }
+
         if (Constants::STATUS_CAPTURED == $model[Constants::FIELD_STATUS]) {
             $request->markCaptured();
 

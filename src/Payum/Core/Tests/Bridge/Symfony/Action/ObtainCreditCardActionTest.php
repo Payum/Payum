@@ -128,7 +128,8 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
                 $testCase->assertEquals(array(
                     'form' => $formView,
                     'model' => null,
-                    'firstModel' => null
+                    'firstModel' => null,
+                    'actionUrl' => null,
                 ), $request->getParameters());
 
                 $request->setResult('theObtainCreditCardPageWithForm');
@@ -214,7 +215,8 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
                 $testCase->assertEquals(array(
                     'form' => $formView,
                     'model' => null,
-                    'firstModel' => null
+                    'firstModel' => null,
+                    'actionUrl' => null,
                 ), $request->getParameters());
 
                 $request->setResult('theObtainCreditCardPageWithForm');
@@ -245,7 +247,7 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldRenderFormWhenSubmitedAndValid()
+    public function shouldRenderFormWhenSubmittedAndValid()
     {
         $httpRequest = new Request();
 
@@ -350,7 +352,8 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
                 $this->assertEquals(array(
                     'form' => $formView,
                     'model' => $currentModel,
-                    'firstModel' => $firstModel
+                    'firstModel' => $firstModel,
+                    'actionUrl' => null,
                 ), $request->getParameters());
 
                 $request->setResult('theObtainCreditCardPageWithForm');

@@ -561,6 +561,31 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function shouldAllowAddGatewayFactorySpecificConfig()
+    {
+        /** @var StorageInterface $expectedStorage */
+        $expectedStorage = $this->getMock(StorageInterface::class);
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGatewayFactoryConfig('offline', ['foo' => 'fooVal'])
+
+            ->getPayum()
+        ;
+
+        $gatewayFactory = $payum->getGatewayFactory('offline');
+
+        $this->assertInstanceOf(OfflineGatewayFactory::class, $gatewayFactory);
+
+        $config = $gatewayFactory->createConfig([]);
+
+        $this->assertArrayHasKey('foo', $config, var_export($config, true));
+        $this->assertEquals('fooVal', $config['foo']);
+    }
+
+    /**
+     * @test
      *
      * @expectedException \LogicException
      * @expectedExceptionMessage Builder returned invalid instance

@@ -27,4 +27,14 @@ class Config
      * @var string
      */
     public $acceptHeader;
+
+    /**
+     * @var string
+     */
+    public $termsUri;
+
+    /**
+     * @var string
+     */
+    public $checkoutUri;
 }

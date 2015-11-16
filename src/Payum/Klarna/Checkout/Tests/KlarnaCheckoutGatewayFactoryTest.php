@@ -1,6 +1,10 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests;
 
+use Payum\Core\CoreGatewayFactory;
+use Payum\Core\Gateway;
+use Payum\Core\GatewayFactory;
+use Payum\Core\GatewayFactoryInterface;
 use Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory;
 
 class KlarnaCheckoutGatewayFactoryTest extends \PHPUnit_Framework_TestCase
@@ -10,9 +14,9 @@ class KlarnaCheckoutGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSubClassGatewayFactory()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory');
+        $rc = new \ReflectionClass(KlarnaCheckoutGatewayFactory::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\GatewayFactory'));
+        $this->assertTrue($rc->isSubclassOf(GatewayFactory::class));
     }
 
     /**
@@ -30,7 +34,7 @@ class KlarnaCheckoutGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new KlarnaCheckoutGatewayFactory();
 
-        $this->assertAttributeInstanceOf('Payum\Core\CoreGatewayFactory', 'coreGatewayFactory', $factory);
+        $this->assertAttributeInstanceOf(CoreGatewayFactory::class, 'coreGatewayFactory', $factory);
     }
 
     /**
@@ -38,7 +42,7 @@ class KlarnaCheckoutGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
     {
-        $coreGatewayFactory = $this->getMock('Payum\Core\GatewayFactoryInterface');
+        $coreGatewayFactory = $this->getMock(GatewayFactoryInterface::class);
 
         $factory = new KlarnaCheckoutGatewayFactory(array(), $coreGatewayFactory);
 
@@ -54,7 +58,7 @@ class KlarnaCheckoutGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 
         $gateway = $factory->create(array('merchant_id' => 'aMerchId', 'secret' => 'aSecret'));
 
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
+        $this->assertInstanceOf(Gateway::class, $gateway);
 
         $this->assertAttributeNotEmpty('apis', $gateway);
         $this->assertAttributeNotEmpty('actions', $gateway);
@@ -72,7 +76,7 @@ class KlarnaCheckoutGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 
         $gateway = $factory->create(array('payum.api' => new \stdClass()));
 
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
+        $this->assertInstanceOf(Gateway::class, $gateway);
 
         $this->assertAttributeNotEmpty('apis', $gateway);
         $this->assertAttributeNotEmpty('actions', $gateway);
@@ -127,7 +131,16 @@ class KlarnaCheckoutGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
-        $this->assertEquals(array('merchant_id' => '', 'secret' => '', 'sandbox' => true), $config['payum.default_options']);
+        $this->assertEquals(
+            array(
+                'merchant_id' => '',
+                'secret' => '',
+                'checkout_uri' => '',
+                'terms_uri' => '',
+                'sandbox' => true,
+            ),
+            $config['payum.default_options']
+        );
     }
 
     /**
