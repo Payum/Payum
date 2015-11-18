@@ -110,8 +110,6 @@ It has to work for all gateways without any modification from your side.
 
 include 'config.php';
 
-$payum->getHttpController()->capture();
-
 if ($reply = $gateway->execute(new Capture($token), true)) {
     if ($reply instanceof HttpRedirect) {
         header("Location: ".$reply->getUrl());
