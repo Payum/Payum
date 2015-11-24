@@ -69,4 +69,28 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
 
         $details['merchant'] = $merchant;
     }
+
+    /**
+     * @param \Closure $function
+     * @param int $maxRetry
+     *
+     * @throws \Klarna_Checkout_ConnectionErrorException
+     *
+     * @return mixed
+     */
+    protected function callWithRetry(\Closure $function, $maxRetry = 3)
+    {
+        $attempts = 1;
+        while (true) {
+            try {
+                return call_user_func($function);
+            } catch (\Klarna_Checkout_ConnectionErrorException $e) {
+                if ($attempts >= $maxRetry) {
+                    throw $e;
+                }
+
+                $attempts++;
+            }
+        }
+    }
 }

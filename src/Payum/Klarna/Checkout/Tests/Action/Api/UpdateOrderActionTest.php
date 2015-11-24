@@ -72,6 +72,78 @@ class UpdateOrderActionTest extends GenericActionTest
     }
 
     /**
+     * @test
+     *
+     * @expectedException \Klarna_Checkout_ConnectionErrorException
+     */
+    public function shouldFailedAfterThreeRetriesOnTimeout()
+    {
+        $model = array(
+            'location' => 'theLocation',
+            'cart' => array(
+                'items' => array(
+                    array('foo'),
+                    array('bar'),
+                ),
+            ),
+        );
+
+        $connector = $this->createConnectorMock();
+        $connector
+            ->expects($this->exactly(3))
+            ->method('apply')
+            ->with('POST')
+            ->will($this->throwException(new \Klarna_Checkout_ConnectionErrorException()))
+        ;
+
+        $action = new UpdateOrderAction($connector);
+        $action->setApi(new Config());
+
+        $action->execute(new UpdateOrder($model));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldRecoverAfterTimeout()
+    {
+        $model = array(
+            'location' => 'theLocation',
+            'cart' => array(
+                'items' => array(
+                    array('foo'),
+                    array('bar'),
+                ),
+            ),
+        );
+
+        $connector = $this->createConnectorMock();
+        $connector
+            ->expects($this->at(0))
+            ->method('apply')
+            ->with('POST')
+            ->will($this->throwException(new \Klarna_Checkout_ConnectionErrorException()))
+        ;
+        $connector
+            ->expects($this->at(1))
+            ->method('apply')
+            ->with('POST')
+            ->will($this->returnCallback(function ($method, $order, $options) use ($model) {
+                $this->assertInternalType('array', $options);
+                $this->assertArrayHasKey('data', $options);
+                $this->assertEquals(array('cart' => $model['cart']), $options['data']);
+            }))
+        ;
+
+        $action = new UpdateOrderAction($connector);
+        $action->setApi(new Config());
+
+        $action->execute($request = new UpdateOrder($model));
+
+        $this->assertInstanceOf('Klarna_Checkout_Order', $request->getOrder());
+    }
+
+    /**
      * @return \PHPUnit_Framework_MockObject_MockObject|\Klarna_Checkout_ConnectorInterface
      */
     protected function createConnectorMock()

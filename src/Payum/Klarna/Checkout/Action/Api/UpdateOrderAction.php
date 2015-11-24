@@ -19,14 +19,16 @@ class UpdateOrderAction extends BaseApiAwareAction
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $order = new \Klarna_Checkout_Order($this->getConnector(), $model['location']);
+        $this->callWithRetry(function() use ($model, $request) {
+            $order = new \Klarna_Checkout_Order($this->getConnector(), $model['location']);
 
-        $data = $model->toUnsafeArray();
-        unset($data['location']);
+            $data = $model->toUnsafeArray();
+            unset($data['location']);
 
-        $order->update($data);
+            $order->update($data);
 
-        $request->setOrder($order);
+            $request->setOrder($order);
+        });
     }
 
     /**
