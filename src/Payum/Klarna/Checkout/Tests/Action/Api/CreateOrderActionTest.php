@@ -158,6 +158,82 @@ class CreateOrderActionTest extends GenericActionTest
     }
 
     /**
+     * @test
+     *
+     * @expectedException \Klarna_Checkout_ConnectionErrorException
+     */
+    public function shouldFailedAfterThreeRetriesOnTimeout()
+    {
+        $model = array(
+            'location' => 'theLocation',
+            'cart' => array(
+                'items' => array(
+                    array('foo'),
+                    array('bar'),
+                ),
+            ),
+        );
+
+        $request = new CreateOrder($model);
+
+        $connector = $this->createConnectorMock();
+        $connector
+            ->expects($this->exactly(3))
+            ->method('apply')
+            ->with('POST')
+            ->will($this->throwException(new \Klarna_Checkout_ConnectionErrorException()))
+        ;
+
+        $action = new CreateOrderAction($connector);
+        $action->setApi(new Config());
+
+        $action->execute($request);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldRecoverAfterTimeout()
+    {
+        $model = array(
+            'location' => 'theLocation',
+            'cart' => array(
+                'items' => array(
+                    array('foo'),
+                    array('bar'),
+                ),
+            ),
+        );
+
+        $request = new CreateOrder($model);
+
+        $expectedOrder = null;
+
+        $connector = $this->createConnectorMock();
+        $connector
+            ->expects($this->at(0))
+            ->method('apply')
+            ->with('POST')
+            ->will($this->throwException(new \Klarna_Checkout_ConnectionErrorException()))
+        ;
+        $connector
+            ->expects($this->at(1))
+            ->method('apply')
+            ->with('POST')
+            ->will($this->returnCallback(function ($method, $order, $options) use (&$expectedOrder) {
+                $expectedOrder = $order;
+            }))
+        ;
+
+        $action = new CreateOrderAction($connector);
+        $action->setApi(new Config());
+
+        $action->execute($request);
+
+        $this->assertSame($expectedOrder, $request->getOrder());
+    }
+
+    /**
      * @return \PHPUnit_Framework_MockObject_MockObject|\Klarna_Checkout_ConnectorInterface
      */
     protected function createConnectorMock()
