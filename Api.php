@@ -24,7 +24,7 @@ class Api
 
     protected $options = array(
         'config_key' => null,
-        'sandbox' => null,
+        'abort_url' => null,
     );
 
     /**
@@ -47,7 +47,7 @@ class Api
         $sofort->setCurrencyCode($fields['currency_code']);
         $sofort->setReason($fields['reason']);
         $sofort->setSuccessUrl($fields['success_url'], true);
-        $sofort->setAbortUrl($fields['success_url']);
+        $sofort->setAbortUrl(isset($fields['abort_url']) ? $fields['abort_url'] : $this->options['abort_url']);
         $sofort->setNotificationUrl($fields['notification_url'], 'received');
         $sofort->sendRequest();
 

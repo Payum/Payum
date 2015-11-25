@@ -24,7 +24,7 @@ class SymfonySofortGatewayFactory extends AbstractGatewayFactory
 
         $builder->children()
                 ->scalarNode('config_key')->isRequired()->cannotBeEmpty()->end()
-                ->booleanNode('sandbox')->defaultTrue()->end()
+                ->scalarNode('abort_url')->isRequired()->cannotBeEmpty()->end()
                 ->end();
     }
 

@@ -70,7 +70,7 @@ class SofortGatewayFactory implements GatewayFactoryInterface
         if (false == $config['payum.api']) {
             $config['payum.default_options'] = array(
                 'config_key' => '',
-                'sandbox' => true,
+                'abort_url' => '',
             );
             $config->defaults($config['payum.default_options']);
             $config['payum.required_options'] = array('config_key');
@@ -80,7 +80,7 @@ class SofortGatewayFactory implements GatewayFactoryInterface
 
                 $paypalConfig = array(
                     'config_key' => $config['config_key'],
-                    'sandbox' => $config['sandbox'],
+                    'abort_url' => $config['abort_url'],
                 );
 
                 return new Api($paypalConfig);
