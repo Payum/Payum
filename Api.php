@@ -48,7 +48,21 @@ class Api
         $sofort->setReason($fields['reason']);
         $sofort->setSuccessUrl($fields['success_url'], true);
         $sofort->setAbortUrl(isset($fields['abort_url']) ? $fields['abort_url'] : $this->options['abort_url']);
-        $sofort->setNotificationUrl($fields['notification_url'], 'received');
+        
+        $sofort->setNotificationUrl(
+            $fields['notification_url'],
+            implode(
+                ',',
+                array(
+                    self::STATUS_PENDING,
+                    self::STATUS_LOSS,
+                    self::STATUS_RECEIVED,
+                    self::STATUS_REFUNDED,
+                    self::STATUS_UNTRACEABLE,
+                    )
+            )
+        );
+
         $sofort->sendRequest();
 
         if ($sofort->isError()) {
