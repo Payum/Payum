@@ -2,6 +2,7 @@
 
 namespace Invit\PayumSofortueberweisung\Action;
 
+use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Notify;
 use Payum\Core\Request\Sync;
 use Payum\Core\Action\GatewayAwareAction;
@@ -18,6 +19,8 @@ class NotifyAction extends GatewayAwareAction
         RequestNotSupportedException::assertSupports($this, $request);
 
         $this->gateway->execute(new Sync($request->getModel()));
+
+        throw new HttpResponse('OK', 200);
     }
 
     /**
