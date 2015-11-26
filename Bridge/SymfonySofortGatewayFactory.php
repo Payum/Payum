@@ -1,6 +1,6 @@
 <?php
 
-namespace Invit\PayumSofort\Bridge;
+namespace Invit\PayumSofortueberweisung\Bridge;
 
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractGatewayFactory;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -33,7 +33,7 @@ class SymfonySofortGatewayFactory extends AbstractGatewayFactory
      */
     protected function getPayumGatewayFactoryClass()
     {
-        return 'Invit\PayumSofort\SofortGatewayFactory';
+        return 'Invit\PayumSofortueberweisung\SofortGatewayFactory';
     }
 
     /**
@@ -41,6 +41,6 @@ class SymfonySofortGatewayFactory extends AbstractGatewayFactory
      */
     protected function getComposerPackage()
     {
-        return 'invit/payum-sofort';
+        return 'invit/payum-sofortueberweisung';
     }
 }

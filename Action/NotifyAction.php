@@ -1,6 +1,6 @@
 <?php
 
-namespace Invit\PayumSofort\Action;
+namespace Invit\PayumSofortueberweisung\Action;
 
 use Payum\Core\Request\Notify;
 use Payum\Core\Request\Sync;

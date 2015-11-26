@@ -1,15 +1,15 @@
 <?php
 
-namespace Invit\PayumSofort;
+namespace Invit\PayumSofortueberweisung;
 
-use Invit\PayumSofort\Action\Api\CreateTransactionAction;
-use Invit\PayumSofort\Action\Api\GetTransactionDataAction;
-use Invit\PayumSofort\Action\Api\RefundTransactionAction;
-use Invit\PayumSofort\Action\CaptureAction;
-use Invit\PayumSofort\Action\NotifyAction;
-use Invit\PayumSofort\Action\RefundAction;
-use Invit\PayumSofort\Action\StatusAction;
-use Invit\PayumSofort\Action\SyncAction;
+use Invit\PayumSofortueberweisung\Action\Api\CreateTransactionAction;
+use Invit\PayumSofortueberweisung\Action\Api\GetTransactionDataAction;
+use Invit\PayumSofortueberweisung\Action\Api\RefundTransactionAction;
+use Invit\PayumSofortueberweisung\Action\CaptureAction;
+use Invit\PayumSofortueberweisung\Action\NotifyAction;
+use Invit\PayumSofortueberweisung\Action\RefundAction;
+use Invit\PayumSofortueberweisung\Action\StatusAction;
+use Invit\PayumSofortueberweisung\Action\SyncAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory as CoreGatewayFactory;
 use Payum\Core\GatewayFactoryInterface;

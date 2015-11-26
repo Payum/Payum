@@ -1,5 +1,5 @@
 {
-  "name": "invit/payum-sofort",
+  "name": "invit/payum-sofortueberweisung",
   "type": "library",
   "description": "The Payum extension. It provides Sofort (Sofortüberweisung) payment integration.",
   "keywords": ["payment", "sofort", "sofortueberweisung"],
@@ -12,7 +12,7 @@
     },
     {
       "name":     "Community contributions",
-      "homepage": "https://github.com/invit/payum-sofort/contributors"
+      "homepage": "https://github.com/invit/payum-sofortueberweisung/contributors"
     }
   ],
   "require": {
@@ -27,9 +27,9 @@
     "bin-dir": "bin"
   },
   "autoload": {
-    "psr-0": { "Invit\\PayumSofort": "" }
+    "psr-0": { "Invit\\PayumSofortueberweisung": "" }
   },
-  "target-dir": "Invit/PayumSofort",
+  "target-dir": "Invit/PayumSofortueberweisung",
   "extra": {
     "branch-alias": {
       "dev-master": "0.15-dev"

@@ -1,8 +1,8 @@
 <?php
 
-namespace Invit\PayumSofort\Action;
+namespace Invit\PayumSofortueberweisung\Action;
 
-use Invit\PayumSofort\Request\Api\GetTransactionData;
+use Invit\PayumSofortueberweisung\Request\Api\GetTransactionData;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\Sync;
 use Payum\Core\Action\GatewayAwareAction;

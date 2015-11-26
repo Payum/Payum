@@ -1,8 +1,8 @@
 <?php
 
-namespace Invit\PayumSofort\Action;
+namespace Invit\PayumSofortueberweisung\Action;
 
-use Invit\PayumSofort\Request\Api\RefundTransaction;
+use Invit\PayumSofortueberweisung\Request\Api\RefundTransaction;
 use Payum\Core\Request\Notify;
 use Payum\Core\Request\Refund;
 use Payum\Core\Request\Sync;

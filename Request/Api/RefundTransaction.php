@@ -1,6 +1,6 @@
 <?php
 
-namespace Invit\PayumSofort\Request\Api;
+namespace Invit\PayumSofortueberweisung\Request\Api;
 
 use Payum\Core\Request\Generic;
 

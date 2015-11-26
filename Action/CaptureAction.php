@@ -1,8 +1,8 @@
 <?php
 
-namespace Invit\PayumSofort\Action;
+namespace Invit\PayumSofortueberweisung\Action;
 
-use Invit\PayumSofort\Request\Api\CreateTransaction;
+use Invit\PayumSofortueberweisung\Request\Api\CreateTransaction;
 use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;

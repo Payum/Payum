@@ -1,4 +1,4 @@
-# payum-sofort
+# payum-sofortueberweisung
 Payum extension to provide a Sofort (Sofortüberweisung) gateway
 
 ## Symfony2 Bridge
@@ -8,7 +8,7 @@ Payum extension to provide a Sofort (Sofortüberweisung) gateway
 <?php
 namespace Acme\Bundle\DemoBundle;
 
-use Invit\PayumSofort\Bridge\SymfonySofortGatewayFactory;
+use Invit\PayumSofortueberweisung\Bridge\SymfonySofortGatewayFactory;
 
 class AcmeDemoBundle extends Bundle
 {

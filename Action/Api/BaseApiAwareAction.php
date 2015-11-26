@@ -1,8 +1,8 @@
 <?php
 
-namespace Invit\PayumSofort\Action\Api;
+namespace Invit\PayumSofortueberweisungueberweisung\Action\Api;
 
-use Invit\PayumSofort\Api;
+use Invit\PayumSofortueberweisungueberweisung\Api;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\UnsupportedApiException;
@@ -10,7 +10,7 @@ use Payum\Core\Exception\UnsupportedApiException;
 abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
 {
     /**
-     * @var \Invit\PayumSofort\Api
+     * @var \Invit\PayumSofortueberweisungueberweisung\Api
      */
     protected $api;
 
