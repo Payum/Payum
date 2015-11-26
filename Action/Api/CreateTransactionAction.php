@@ -21,11 +21,15 @@ class CreateTransactionAction extends BaseApiAwareAction
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
         if (null === $details['amount']) {
-            throw new LogicException('amount must be set.');
+            throw new LogicException('The parameter "Amount" must be set.');
         }
 
         if (null === $details['currency_code']) {
-            throw new LogicException('currency_code must be set.');
+            throw new LogicException('The parameter "currency_code" must be set.');
+        }
+
+        if (null === $details['reason']) {
+            throw new LogicException('The parameter "reason" must be set.');
         }
 
         $details->replace(

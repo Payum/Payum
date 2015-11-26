@@ -45,7 +45,11 @@ class Api
         $sofort = new Sofortueberweisung($this->options['config_key']);
         $sofort->setAmount($fields['amount']);
         $sofort->setCurrencyCode($fields['currency_code']);
-        $sofort->setReason($fields['reason']);
+        $sofort->setReason(
+            $fields['reason'],
+            isset($fields['reason_2']) ? $fields['reason_2'] : ''
+        );
+
         $sofort->setSuccessUrl($fields['success_url'], true);
         $sofort->setAbortUrl(isset($fields['abort_url']) ? $fields['abort_url'] : $this->options['abort_url']);
 

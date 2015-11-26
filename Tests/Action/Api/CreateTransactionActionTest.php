@@ -30,7 +30,7 @@ class CreateTransactionActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportAuthorizeTokenRequestWithArrayAccessAsModel()
+    public function shouldSupportCreateTransactionRequestWithArrayAccessAsModel()
     {
         $action = new CreateTransactionAction();
 
@@ -40,7 +40,7 @@ class CreateTransactionActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportAnythingNotAuthorizeTokenRequest()
+    public function shouldNotSupportAnythingCreateTransactionRequest()
     {
         $action = new CreateTransactionAction($this->createApiMock());
 
@@ -60,7 +60,49 @@ class CreateTransactionActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Paypal\ExpressCheckout\Nvp\Api
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The parameter "Amount" must be set.
+     */
+    public function throwIfAmountParameterIsNotSet()
+    {
+        $action = new CreateTransactionAction();
+
+        $request = new CreateTransaction(array());
+        $action->execute($request);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The parameter "currency_code" must be set.
+     */
+    public function throwIfCurrencyCodeParameterIsNotSet()
+    {
+        $action = new CreateTransactionAction();
+
+        $request = new CreateTransaction(array('amount' => 55));
+        $action->execute($request);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The parameter "reason" must be set.
+     */
+    public function throwIfReasonParameterIsNotSet()
+    {
+        $action = new CreateTransactionAction();
+
+        $request = new CreateTransaction(array('amount' => 55, 'currency_code' => 'CHF'));
+        $action->execute($request);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Invit\PayumSofortueberweisung\Api
      */
     protected function createApiMock()
     {
