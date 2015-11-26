@@ -8,7 +8,7 @@ use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Reply\HttpRedirect;
 
-class CreateTransactionAction extends BaseApiAwareAction
+class CreateTransactionAction extends BaseApiAware
 {
     /**
      * {@inheritdoc}
