@@ -6,7 +6,6 @@ use Invit\PayumSofortueberweisung\Request\Api\RefundTransaction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\LogicException;
-use Payum\Core\Reply\HttpRedirect;
 
 class RefundTransactionAction extends BaseApiAwareAction
 {

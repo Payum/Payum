@@ -48,7 +48,7 @@ class Api
         $sofort->setReason($fields['reason']);
         $sofort->setSuccessUrl($fields['success_url'], true);
         $sofort->setAbortUrl(isset($fields['abort_url']) ? $fields['abort_url'] : $this->options['abort_url']);
-        
+
         $sofort->setNotificationUrl(
             $fields['notification_url'],
             implode(
@@ -154,11 +154,12 @@ class Api
         $refund->setReason($fields['reason']);
         $refund->sendRequest();
 
-        if($refund->isError()) {
+        if ($refund->isError()) {
             $fields['refund_error'] = $refund->getError();
         } else {
             $fields['refund_url'] = $refund->getPaymentUrl();
         }
+
         return $fields;
     }
 }
