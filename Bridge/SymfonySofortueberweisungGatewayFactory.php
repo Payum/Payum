@@ -5,7 +5,7 @@ namespace Invit\PayumSofortueberweisung\Bridge;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractGatewayFactory;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-class SymfonySofortGatewayFactory extends AbstractGatewayFactory
+class SymfonySofortueberweisungGatewayFactory extends AbstractGatewayFactory
 {
     /**
      * {@inheritdoc}
@@ -33,7 +33,7 @@ class SymfonySofortGatewayFactory extends AbstractGatewayFactory
      */
     protected function getPayumGatewayFactoryClass()
     {
-        return 'Invit\PayumSofortueberweisung\SofortGatewayFactory';
+        return 'Invit\PayumSofortueberweisung\SofortueberweisungGatewayFactory';
     }
 
     /**

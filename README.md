@@ -8,7 +8,7 @@ Payum extension to provide a Sofort (Sofortüberweisung) gateway
 <?php
 namespace Acme\Bundle\DemoBundle;
 
-use Invit\PayumSofortueberweisung\Bridge\SymfonySofortGatewayFactory;
+use Invit\PayumSofortueberweisung\Bridge\SymfonySofortueberweisungGatewayFactory;
 
 class AcmeDemoBundle extends Bundle
 {
@@ -17,7 +17,7 @@ class AcmeDemoBundle extends Bundle
         parent::build($container);
         
         $extension = $container->getExtension('payum');
-        $extension->addGatewayFactory(new SymfonySofortGatewayFactory());
+        $extension->addGatewayFactory(new SymfonySofortueberweisungGatewayFactory());
     }
 }
 

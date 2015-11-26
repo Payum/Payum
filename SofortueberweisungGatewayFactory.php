@@ -14,7 +14,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory as CoreGatewayFactory;
 use Payum\Core\GatewayFactoryInterface;
 
-class SofortGatewayFactory implements GatewayFactoryInterface
+class SofortueberweisungGatewayFactory implements GatewayFactoryInterface
 {
     /**
      * @var GatewayFactoryInterface
