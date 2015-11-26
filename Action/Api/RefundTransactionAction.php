@@ -20,10 +20,14 @@ class RefundTransactionAction extends BaseApiAwareAction
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
         if (!isset($details['transaction_id'])) {
-            throw new LogicException('transaction_id must be set. Have you run CreateTransactionDataAction?');
+            throw new LogicException('The parameter "transaction_id" must be set. Have you run CreateTransactionAction?');
         }
 
         if (!isset($details['refund_amount'])) {
+            if (!isset($details['amount'])) {
+                throw new LogicException('One of the parameters "refund_amount" or "amount" must be set.');
+            }
+
             $details['refund_amount'] = $details['amount'];
         }
 
