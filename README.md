@@ -30,4 +30,5 @@ payum:
         sofort_xyz:
             sofort:
                 config_key: 'xxx:yyy:zzzzzzzz'
+                abort_url:  'https://www.nicewebshop.ch/get_me_back_there'
 ```
