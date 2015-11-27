@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1 (2015-11-28)
+
+* [omnipay] Fix fatal error when omnipay offsite factory is used.
+* [sonata] Add exception when sonata_admin option is true but the admin bundle is not installed
+* [dev] Add symfony's phpunit bridge.
+
 ## 1.0.0 (2015-11-09)
 
 * [command] allow create a capture token without model
