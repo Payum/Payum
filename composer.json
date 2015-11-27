@@ -50,6 +50,7 @@
         "symfony/expression-language": "~2.7",
         "symfony/browser-kit": "~2.7",
         "symfony/class-loader": "~2.7",
+        "symfony/phpunit-bridge": "~2.7",
         "sonata-project/admin-bundle": "~2.0",
         "doctrine/orm": "2.3.*",
         "payum/payum": "1.0.*@dev",
@@ -61,7 +62,6 @@
 
         "ext-curl": "*",
         "ext-pdo_sqlite": "*",
-        "ajbdev/authorizenet-php-api": "1.1.*",
         "paypal/rest-api-sdk-php" : "0.5.*",
         "klarna/checkout": "~1|~2.0",
         "fp/klarna-invoice": "0.1.*",
