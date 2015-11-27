@@ -50,7 +50,9 @@ class CaptureAction extends GatewayAwareAction implements GenericTokenFactoryAwa
                 $details['notification_url'] = $notifyToken->getTargetUrl();
             }
 
-            $this->gateway->execute(new CreateTransaction($details));
+            if ($details['amount'] > 0) {
+                $this->gateway->execute(new CreateTransaction($details));
+            }
         }
 
         $this->gateway->execute(new Sync($details));

@@ -2,10 +2,10 @@
 
 namespace Invit\PayumSofortueberweisung\Tests\Action\Api;
 
-use Invit\PayumSofortueberweisung\Action\Api\BaseApiAwareAction;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Invit\PayumSofortueberweisung\Api;
+use Invit\PayumSofortueberweisung\Action\Api\BaseApiAwareAction;
 
 class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
 {

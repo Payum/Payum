@@ -1,6 +1,6 @@
 <?php
 
-namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
+namespace Invit\PayumSofortueberweisung\Tests\Action\Api;
 
 use Invit\PayumSofortueberweisung\Request\Api\CreateTransaction;
 use Invit\PayumSofortueberweisung\Action\Api\CreateTransactionAction;

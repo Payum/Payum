@@ -1,6 +1,6 @@
 <?php
 
-namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
+namespace Invit\PayumSofortueberweisung\Tests\Action\Api;
 
 use Invit\PayumSofortueberweisung\Action\Api\RefundTransactionAction;
 use Invit\PayumSofortueberweisung\Request\Api\RefundTransaction;
@@ -96,12 +96,11 @@ class RefundTransactionActionTest extends \PHPUnit_Framework_TestCase
         $apiMock
             ->expects($this->once())
             ->method('refundTransaction')
-            ->will($this->returnCallback(function($details) {
+            ->will($this->returnCallback(function ($details) {
                 \PHPUnit_Framework_Assert::assertEquals(100, $details['refund_amount']);
+
                 return array();
             }));
-        ;
-        ;
 
         $action = new RefundTransactionAction();
         $action->setApi($apiMock);
@@ -123,11 +122,11 @@ class RefundTransactionActionTest extends \PHPUnit_Framework_TestCase
         $apiMock
             ->expects($this->once())
             ->method('refundTransaction')
-            ->will($this->returnCallback(function($details) {
+            ->will($this->returnCallback(function ($details) {
                 \PHPUnit_Framework_Assert::assertEquals(50, $details['refund_amount']);
+
                 return array();
             }));
-        ;
 
         $action = new RefundTransactionAction();
         $action->setApi($apiMock);
