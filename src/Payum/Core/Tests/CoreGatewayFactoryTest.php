@@ -183,7 +183,7 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new CoreGatewayFactory();
 
-        $twig = new \Twig_Environment();
+        $twig = new \Twig_Environment(new \Twig_Loader_Filesystem());
 
         $config = $factory->createConfig([
             'twig.env' => $twig,

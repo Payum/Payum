@@ -24,7 +24,8 @@
         }
     ],
     "require": {
-        "payum/core": "1.0.*"
+        "payum/core": "1.0.*",
+        "symfony/phpunit-bridge": "~2.7"
     },
     "config": {
         "bin-dir": "bin"
