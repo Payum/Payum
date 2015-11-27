@@ -6,7 +6,7 @@ use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Storage\StorageFactoryInterface;
 use Payum\Core\Exception\LogicException;
-use Sonata\AdminBundle\Admin\AdminInterface;
+use Sonata\AdminBundle\Admin\Admin;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -217,9 +217,9 @@ class PayumExtension extends Extension implements PrependExtensionInterface
         ));
         $container->setDefinition('payum.dynamic_registry', $registry);
         $container->setAlias('payum', new Alias('payum.dynamic_registry'));
-        
+
         if ($dynamicGatewaysConfig['sonata_admin']) {
-            if (false == class_exists(AdminInterface::class)) {
+            if (false == class_exists(Admin::class)) {
                 throw new LogicException('Admin class does not exists. Did you install SonataAdmin bundle?');
             }
 

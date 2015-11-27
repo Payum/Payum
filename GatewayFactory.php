@@ -39,7 +39,7 @@ class GatewayFactory extends CoreGatewayFactory implements ContainerAwareInterfa
         $this->extensionsTags = $extensionsTags;
         $this->apisTags = $apisTags;
 
-        $this->defaultConfig = array();
+        parent::__construct([]);
     }
 
     /**
