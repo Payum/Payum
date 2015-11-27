@@ -26,11 +26,9 @@
     "require-dev": {
         "ext-curl": "*",
         "ext-pdo_sqlite": "*",
-        "doctrine/orm": "2.*",
-        "phpunit/phpunit": "~4.0"
-    },
-    "suggest": {
-        "doctrine/orm": "If you want store models to database using doctrin2 ORM"
+        "doctrine/orm": "2.3",
+        "phpunit/phpunit": "~4.0",
+        "symfony/phpunit-bridge": "~2.7"
     },
     "config": {
         "bin-dir": "bin"
