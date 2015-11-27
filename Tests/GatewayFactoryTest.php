@@ -19,7 +19,7 @@ class GatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->container->setParameter('payum.template.layout', 'theLayout');
         $this->container->setParameter('payum.template.obtain_credit_card', 'theObtainCreditCardTemplate');
         $this->container->set('payum.http_client', $this->getMock(HttpClientInterface::class));
-        $this->container->set('twig', $this->getMock('Twig_Environment'));
+        $this->container->set('twig', $this->getMock(\Twig_Environment::class, [], [], '', false));
     }
 
     /**
