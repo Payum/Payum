@@ -4,7 +4,7 @@ namespace Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway;
 /**
  * @deprecated since 1.0.0-BETA2
  */
-class OmnipayOffsiteGatewayFactory extends OmnipayDirectGatewayFactory
+class OmnipayOffsiteGatewayFactory extends OmnipayGatewayFactory
 {
     /**
      * {@inheritdoc}
@@ -19,6 +19,6 @@ class OmnipayOffsiteGatewayFactory extends OmnipayDirectGatewayFactory
      */
     protected function getPayumGatewayFactoryClass()
     {
-        return 'Payum\OmnipayBridge\OmnipayOffsiteGatewayFactory';
+        return \Payum\OmnipayBridge\OmnipayOffsiteGatewayFactory::class;
     }
 }
