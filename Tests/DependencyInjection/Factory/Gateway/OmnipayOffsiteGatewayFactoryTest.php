@@ -15,16 +15,6 @@ class OmnipayOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfOmnipayDirectGatewayFactory()
-    {
-        $rc = new \ReflectionClass('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OmnipayOffsiteGatewayFactory');
-
-        $this->assertTrue($rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\OmnipayDirectGatewayFactory'));
-    }
-
-    /**
-     * @test
-     */
     public function couldBeConstructedWithoutAnyArguments()
     {
         new OmnipayOffsiteGatewayFactory;
@@ -94,28 +84,6 @@ class OmnipayOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor();
         $processor->process($tb->buildTree(), array());
-    }
-
-    /**
-     * @test
-     * 
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "foo": Given type notSupportedGatewayType is not supported.
-     */
-    public function thrownIfTypeNotSupportedByOmnipay()
-    {
-        $factory = new OmnipayOffsiteGatewayFactory;
-
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('foo');
-
-        $factory->addConfiguration($rootNode);
-
-        $processor = new Processor();
-        $processor->process($tb->buildTree(), array(array(
-            'type' => 'notSupportedGatewayType',
-            'options' => array()
-        )));
     }
 
     /**
@@ -193,7 +161,7 @@ class OmnipayOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
             $factoryService->getTag('payum.gateway_factory')
         );
 
-        $factoryConfig = $factoryService->getArgument(0);
+        $factoryConfig = $factoryService->getArgument(2);
         $this->assertEquals('omnipay_offsite', $factoryConfig['payum.factory_name']);
         $this->assertArrayHasKey('payum.http_client', $factoryConfig);
         $this->assertArrayHasKey('twig.env', $factoryConfig);
@@ -201,8 +169,8 @@ class OmnipayOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('payum.template.layout', $factoryConfig);
         $this->assertArrayHasKey('payum.template.obtain_credit_card', $factoryConfig);
 
-        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(1));
-        $this->assertEquals('payum.gateway_factory', (string) $factoryService->getArgument(1));
+        $this->assertInstanceOf(Reference::class, $factoryService->getArgument(3));
+        $this->assertEquals('payum.gateway_factory', (string) $factoryService->getArgument(3));
     }
 
     /**
