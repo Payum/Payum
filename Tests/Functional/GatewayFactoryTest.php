@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Bundle\PayumBundle\Tests\Functional;
 
+use Payum\Bundle\PayumBundle\GatewayFactory;
+
 class GatewayFactoryTest extends WebTestCase
 {
     /**
@@ -10,6 +12,6 @@ class GatewayFactoryTest extends WebTestCase
     {
         $factory = $this->container->get('payum.gateway_factory');
 
-        $this->assertInstanceOf('Payum\Bundle\PayumBundle\GatewayFactory', $factory);
+        $this->assertInstanceOf(GatewayFactory::class, $factory);
     }
 }
