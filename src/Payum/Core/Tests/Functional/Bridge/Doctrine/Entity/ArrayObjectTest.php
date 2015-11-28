@@ -66,6 +66,6 @@ class ArrayObjectTest extends OrmTest
 
         $this->em->refresh($model);
 
-        $this->assertEquals(array(), $model['cardNumber']);
+        $this->assertEquals(null, $model['cardNumber']);
     }
 }

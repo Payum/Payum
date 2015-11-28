@@ -69,6 +69,6 @@ class PaymentTest extends OrmTest
 
         $this->em->refresh($order);
 
-        $this->assertEquals(array('cardNumber' => array()), $order->getDetails());
+        $this->assertEquals(array('cardNumber' => null), $order->getDetails());
     }
 }
