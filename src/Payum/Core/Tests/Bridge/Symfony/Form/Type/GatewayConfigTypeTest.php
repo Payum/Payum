@@ -29,6 +29,8 @@ class GatewayConfigTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldExtendFormType()
     {
+        $this->markTestSkipped('Undo mark skipp when minimum supported version of Symfony will be 2.8');
+
         $type = new GatewayConfigType($this->getMock('Payum\Core\Registry\GatewayFactoryRegistryInterface'));
 
         $this->assertEquals('form', $type->getParent());

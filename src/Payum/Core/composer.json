@@ -35,7 +35,7 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0",
+        "php": "^5.5.0|^7.0",
         "payum/iso4217": "~1.0",
         "guzzlehttp/guzzle": "~6.0",
         "league/url": "~3.0",

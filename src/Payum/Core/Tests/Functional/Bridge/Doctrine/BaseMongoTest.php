@@ -7,9 +7,12 @@ use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Configuration;
 use Doctrine\MongoDB\Connection;
 use Doctrine\ODM\MongoDB\Types\Type;
+use Payum\Core\Tests\SkipOnPhp7Trait;
 
 abstract class BaseMongoTest extends \PHPUnit_Framework_TestCase
 {
+    use SkipOnPhp7Trait;
+
     /**
      * @var DocumentManager
      */
@@ -17,6 +20,8 @@ abstract class BaseMongoTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $this->skipTestsIfPhp7();
+
         Type::hasType('object') ?
             Type::overrideType('object', 'Payum\Core\Bridge\Doctrine\Types\ObjectType') :
             Type::addType('object', 'Payum\Core\Bridge\Doctrine\Types\ObjectType')

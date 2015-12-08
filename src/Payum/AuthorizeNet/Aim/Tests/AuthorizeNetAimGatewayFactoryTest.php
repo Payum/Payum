@@ -2,14 +2,18 @@
 namespace Payum\AuthorizeNet\Aim\Tests;
 
 use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
+use Payum\Core\Tests\SkipOnPhp7Trait;
 
 class AuthorizeNetAimGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 {
+    use SkipOnPhp7Trait;
+
     /**
      * @test
      */
     public function shouldSubClassGatewayFactory()
     {
+
         $rc = new \ReflectionClass('Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\GatewayFactory'));
