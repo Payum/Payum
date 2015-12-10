@@ -52,7 +52,7 @@ class FilesystemStorage extends AbstractStorage
         }
 
         if (file_exists($this->storageDir.'/payum-model-'.$id)) {
-            return $this->identityMap[$id] = unserialize(file_get_contents($this->storageDir.'/payum-model-'.$id));
+            return $this->identityMap[$id] = unserialize(base64_decode(file_get_contents($this->storageDir.'/payum-model-'.$id)));
         }
     }
 
@@ -78,7 +78,7 @@ class FilesystemStorage extends AbstractStorage
         $rp->setAccessible(false);
 
         $this->identityMap[$id] = $model;
-        file_put_contents($this->storageDir.'/payum-model-'.$id, serialize($model));
+        file_put_contents($this->storageDir.'/payum-model-'.$id, base64_encode(serialize($model)));
     }
 
     /**
