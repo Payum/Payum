@@ -1,42 +1,113 @@
 <?php
 namespace Payum\Core\Security;
 
-use Payum\Core\Registry\StorageRegistryInterface;
-use Payum\Core\Storage\StorageInterface;
+use Payum\Core\Exception\LogicException;
 
-class GenericTokenFactory extends AbstractGenericTokenFactory
+class GenericTokenFactory implements GenericTokenFactoryInterface
 {
     /**
-     * @var string
+     * @var TokenFactoryInterface
      */
-    protected $baseUrl;
+    protected $tokenFactory;
 
     /**
-     * @param StorageInterface $tokenStorage
-     * @param StorageRegistryInterface $storageRegistry
-     * @param string $baseUrl
-     * @param string $capturePath
-     * @param string $notifyPath
-     * @param string $authorizePath
+     * @var string[]
      */
-    public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $baseUrl, $capturePath, $notifyPath, $authorizePath)
-    {
-        parent::__construct($tokenStorage, $storageRegistry, $capturePath, $notifyPath, $authorizePath);
+    protected $paths;
 
-        $this->baseUrl = $baseUrl;
+    /**
+     * @param TokenFactoryInterface $tokenFactory
+     * @param string[] $paths
+     */
+    public function __construct(TokenFactoryInterface $tokenFactory, array $paths)
+    {
+        $this->tokenFactory = $tokenFactory;
+        $this->paths = $paths;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function generateUrl($path, array $parameters = array())
+    public function createToken($gatewayName, $model, $targetPath, array $targetParameters = array(), $afterPath = null, array $afterParameters = array())
     {
-        $url = rtrim($this->baseUrl, '/').'/'.ltrim($path, '/');
+        return $this->tokenFactory->createToken(
+            $gatewayName,
+            $model,
+            $targetPath,
+            $targetParameters,
+            $afterPath,
+            $afterParameters
+        );
+    }
 
-        if (false == empty($parameters)) {
-            $url .= '?'.http_build_query($parameters);
+    /**
+     * {@inheritDoc}
+     */
+    public function createCaptureToken($gatewayName, $model, $afterPath, array $afterParameters = array())
+    {
+        $capturePath = $this->getPath('capture');
+
+        $afterToken = $this->createToken($gatewayName, $model, $afterPath, $afterParameters);
+
+        return $this->createToken(
+            $gatewayName,
+            $model,
+            $capturePath,
+            array(),
+            $afterToken->getTargetUrl()
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createAuthorizeToken($gatewayName, $model, $afterPath, array $afterParameters = array())
+    {
+        $authorizePath = $this->getPath('authorize');
+
+        $afterToken = $this->createToken($gatewayName, $model, $afterPath, $afterParameters);
+
+        return $this->createToken($gatewayName, $model, $authorizePath, array(), $afterToken->getTargetUrl());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createRefundToken($gatewayName, $model, $afterPath = null, array $afterParameters = array())
+    {
+        $refundPath = $this->getPath('refund');
+
+        $afterUrl = null;
+        if ($afterPath) {
+            $afterUrl = $this->createToken($gatewayName, $model, $afterPath, $afterParameters)->getTargetUrl();
         }
 
-        return $url;
+        return $this->createToken($gatewayName, $model, $refundPath, array(), $afterUrl);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createNotifyToken($gatewayName, $model = null)
+    {
+        return $this->createToken($gatewayName, $model, $this->getPath('notify'));
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return string
+     */
+    protected function getPath($name)
+    {
+        if (empty($this->paths[$name])) {
+            throw new LogicException(sprintf(
+                'The path "%s" is not found. Possible paths are %s',
+                $name,
+                implode(', ', array_keys($this->paths))
+            ));
+        }
+
+        return $this->paths[$name];
     }
 }

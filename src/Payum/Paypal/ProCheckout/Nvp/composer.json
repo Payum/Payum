@@ -1,7 +1,7 @@
 {
     "name": "payum/paypal-pro-checkout-nvp",
     "type": "library",
-    "description": "Paypal pro checkout",
+    "description": "The Payum extension. It provides Paypal ProCheckout payment integration.",
     "keywords": ["payment", "paypal", "pro checkout"],
     "homepage": "http://payum.org",
     "license": "MIT",
@@ -24,8 +24,8 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3",
-        "payum/core": "0.13.*@dev"
+        "payum/core": "1.0.*",
+        "symfony/phpunit-bridge": "~2.7"
     },
     "config": {
         "bin-dir": "bin"
@@ -36,7 +36,7 @@
     "target-dir": "Payum/Paypal/ProCheckout/Nvp",
     "extra": {
         "branch-alias": {
-            "dev-master": "0.13-dev"
+            "dev-master": "1.0-dev"
         }
     }
 }

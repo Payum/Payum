@@ -17,7 +17,7 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
      * @var OrderApi
      */
     protected $api;
-    
+
     /**
      * {@inheritDoc}
      */
@@ -26,10 +26,10 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
         if (false == $api instanceof OrderApi) {
             throw new UnsupportedApiException('Expected api must be instance of OrderApi.');
         }
-        
+
         $this->api = $api;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -39,7 +39,7 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        
+
         if ($model['orderRef']) {
             throw new LogicException('The order has already been initialized.');
         }
@@ -62,11 +62,11 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
             'agreementRef',
             'clientLanguage',
         ));
-        
+
         $result = $this->api->initialize((array) $model);
 
         $model->replace($result);
-        
+
         if ($model['redirectUrl']) {
             throw new HttpRedirect($model['redirectUrl']);
         }
@@ -77,7 +77,7 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof InitializeOrder &&
             $request->getModel() instanceof \ArrayAccess
         ;

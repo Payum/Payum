@@ -42,9 +42,9 @@ class UpdateOrderActionTest extends GenericActionTest
             'cart' => array(
                 'items' => array(
                     array('foo'),
-                    array('bar')
-                )
-            )
+                    array('bar'),
+                ),
+            ),
         );
 
         $request = new UpdateOrder($model);
@@ -56,25 +56,15 @@ class UpdateOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function($method, $order, $options) use ($testCase, $model) {
+            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, $model) {
                 $testCase->assertInternalType('array', $options);
                 $testCase->assertArrayHasKey('data', $options);
                 $testCase->assertEquals(array('cart' => $model['cart']), $options['data']);
             }))
         ;
-        $connector
-            ->expects($this->at(1))
-            ->method('apply')
-            ->with('GET')
-            ->will($this->returnCallback(function($method, $order, $options) use ($testCase, $model) {
-                $testCase->assertInternalType('array', $options);
-                $testCase->assertArrayHasKey('url', $options);
-                $testCase->assertEquals($model['location'], $options['url']);
-            }))
-        ;
 
         $action = new UpdateOrderAction($connector);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
 
         $action->execute($request);
 
@@ -83,40 +73,74 @@ class UpdateOrderActionTest extends GenericActionTest
 
     /**
      * @test
+     *
+     * @expectedException \Klarna_Checkout_ConnectionErrorException
      */
-    public function shouldReturnSameOrderUsedWhileFetchAndUpdateCallsOnExecute()
+    public function shouldFailedAfterThreeRetriesOnTimeout()
     {
         $model = array(
-            'location' => 'theKlarnaOrderLocation',
+            'location' => 'theLocation',
             'cart' => array(
                 'items' => array(
                     array('foo'),
-                    array('bar')
-                )
-            )
+                    array('bar'),
+                ),
+            ),
         );
-
-        $request = new UpdateOrder($model);
-
-        $testCase = $this;
-        $expectedOrder = null;
 
         $connector = $this->createConnectorMock();
         $connector
+            ->expects($this->exactly(3))
+            ->method('apply')
+            ->with('POST')
+            ->will($this->throwException(new \Klarna_Checkout_ConnectionErrorException()))
+        ;
+
+        $action = new UpdateOrderAction($connector);
+        $action->setApi(new Config());
+
+        $action->execute(new UpdateOrder($model));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldRecoverAfterTimeout()
+    {
+        $model = array(
+            'location' => 'theLocation',
+            'cart' => array(
+                'items' => array(
+                    array('foo'),
+                    array('bar'),
+                ),
+            ),
+        );
+
+        $connector = $this->createConnectorMock();
+        $connector
+            ->expects($this->at(0))
+            ->method('apply')
+            ->with('POST')
+            ->will($this->throwException(new \Klarna_Checkout_ConnectionErrorException()))
+        ;
+        $connector
             ->expects($this->at(1))
             ->method('apply')
-            ->with('GET')
-            ->will($this->returnCallback(function($method, $order, $options) use ($testCase, &$expectedOrder) {
-                $expectedOrder = $order;
+            ->with('POST')
+            ->will($this->returnCallback(function ($method, $order, $options) use ($model) {
+                $this->assertInternalType('array', $options);
+                $this->assertArrayHasKey('data', $options);
+                $this->assertEquals(array('cart' => $model['cart']), $options['data']);
             }))
         ;
 
         $action = new UpdateOrderAction($connector);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
 
-        $action->execute($request);
+        $action->execute($request = new UpdateOrder($model));
 
-        $this->assertSame($expectedOrder, $request->getOrder());
+        $this->assertInstanceOf('Klarna_Checkout_Order', $request->getOrder());
     }
 
     /**

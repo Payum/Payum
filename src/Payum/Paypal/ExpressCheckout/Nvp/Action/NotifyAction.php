@@ -3,10 +3,10 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Payum\Core\Request\Notify;
 use Payum\Core\Request\Sync;
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
 
-class NotifyAction extends PaymentAwareAction
+class NotifyAction extends GatewayAwareAction
 {
     /**
      * {@inheritDoc}
@@ -16,7 +16,7 @@ class NotifyAction extends PaymentAwareAction
         /** @var $request Notify */
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $this->payment->execute(new Sync($request->getModel()));
+        $this->gateway->execute(new Sync($request->getModel()));
     }
 
     /**
@@ -24,9 +24,9 @@ class NotifyAction extends PaymentAwareAction
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof Notify &&
             $request->getModel() instanceof \ArrayAccess
-        ; 
+        ;
     }
 }

@@ -1,14 +1,14 @@
 <?php
 namespace Payum\Klarna\Invoice\Action;
 
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Authorize;
 use Payum\Core\Request\Capture;
 use Payum\Klarna\Invoice\Request\Api\Activate;
 
-class CaptureAction extends PaymentAwareAction
+class CaptureAction extends GatewayAwareAction
 {
     /**
      * {@inheritDoc}
@@ -22,11 +22,11 @@ class CaptureAction extends PaymentAwareAction
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
         if (false == $details['rno']) {
-            $this->payment->execute(new Authorize($details));
+            $this->gateway->execute(new Authorize($details));
         }
 
         if ($details['rno'] && false == $details['invoice_number']) {
-            $this->payment->execute(new Activate($details));
+            $this->gateway->execute(new Activate($details));
         }
     }
 

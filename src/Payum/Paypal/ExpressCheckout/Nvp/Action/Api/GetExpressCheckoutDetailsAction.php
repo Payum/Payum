@@ -31,7 +31,7 @@ class GetExpressCheckoutDetailsAction extends  BaseApiAwareAction
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof GetExpressCheckoutDetails &&
             $request->getModel() instanceof \ArrayAccess
         ;

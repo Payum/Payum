@@ -3,13 +3,13 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\Sync;
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetails;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
 
-class PaymentDetailsSyncAction extends PaymentAwareAction
+class PaymentDetailsSyncAction extends GatewayAwareAction
 {
     /**
      * {@inheritDoc}
@@ -18,7 +18,7 @@ class PaymentDetailsSyncAction extends PaymentAwareAction
     {
         /** @var $request Sync */
         RequestNotSupportedException::assertSupports($this, $request);
-        
+
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         if (false == $model['TOKEN']) {
@@ -28,15 +28,15 @@ class PaymentDetailsSyncAction extends PaymentAwareAction
         $copiedModel = new ArrayObject(array(
             'TOKEN' => $model['TOKEN'],
         ));
-        
-        $this->payment->execute(new GetExpressCheckoutDetails($copiedModel));
+
+        $this->gateway->execute(new GetExpressCheckoutDetails($copiedModel));
         if (Api::L_ERRORCODE_SESSION_HAS_EXPIRED != $copiedModel['L_ERRORCODE0']) {
             $model->replace($copiedModel);
         }
 
         foreach (range(0, 9) as $index) {
             if ($model['PAYMENTREQUEST_'.$index.'_TRANSACTIONID']) {
-                $this->payment->execute(new GetTransactionDetails($model, $index));
+                $this->gateway->execute(new GetTransactionDetails($model, $index));
             }
         }
     }
@@ -55,6 +55,6 @@ class PaymentDetailsSyncAction extends PaymentAwareAction
             return false;
         }
 
-        return isset($model['PAYMENTREQUEST_0_AMT']) && null !== $model['PAYMENTREQUEST_0_AMT'];
+        return false == isset($model['BILLINGPERIOD']);
     }
 }

@@ -1,13 +1,13 @@
-# Recurring payments basics.
+ # Recurring payments basics.
 
-In this chapter we describe basic steps you have to follow to setup recurring payments.
-We would use weather subscription as example.
-Subscription costs 0.05$ per day and would last for 7 days.
+In this chapter we describe the basic steps you have to follow to set up recurring payments.
+We will use weather subscription as example.
+Subscription costs $0.05 per day and would last for 7 days.
 
 ## Configuration
 
-Recurring payments require two additional models.
-First one would contain agreement details and the second one recurring payment details.
+Recurring payments require two additional models:
+First, one would contain agreement details and the second one recurring payment details.
 Let's define them:
 
 ```php
@@ -41,16 +41,16 @@ Now we have to adjust `config.php` to support paypal recurring payments:
 <?php
 //config.php
 
-$agreementDetailsClass = 'App\Model\AgreementDetails';
-$recurringPaymentDetailsClass = 'App\Model\RecurringPaymentDetails';
+$agreementClass = 'App\Model\AgreementDetails';
+$recurringPaymentClass = 'App\Model\RecurringPaymentDetails';
 
-$storages[$agreementDetailsClass] = new FilesystemStorage(
+$storages[$agreementClass] = new FilesystemStorage(
     __DIR__.'/storage',
-    $agreementDetailsClass
+    $agreementClass
 );
-$storages[$recurringPaymentDetailsClass] = new FilesystemStorage(
+$storages[$recurringPaymentClass] = new FilesystemStorage(
     __DIR__.'/storage',
-    $recurringPaymentDetailsClass
+    $recurringPaymentClass
 );
 ```
 
@@ -67,35 +67,33 @@ include 'config.php';
 
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
-$storage = $payum->getStorage($agreementDetailsClass);
+$storage = $payum->getStorage($agreementClass);
 
-$agreementDetails = $storage->createModel();
-$agreementDetails['PAYMENTREQUEST_0_AMT'] = 0;
-$agreementDetails['L_BILLINGTYPE0'] = Api::BILLINGTYPE_RECURRING_PAYMENTS;
-$agreementDetails['L_BILLINGAGREEMENTDESCRIPTION0'] = "Insert some description here";
-$agreementDetails['NOSHIPPING'] = 1;
-$storage->updateModel($agreementDetails);
+$agreement = $storage->create();
+$agreement['PAYMENTREQUEST_0_AMT'] = 0;
+$agreement['L_BILLINGTYPE0'] = Api::BILLINGTYPE_RECURRING_PAYMENTS;
+$agreement['L_BILLINGAGREEMENTDESCRIPTION0'] = "Insert some description here";
+$agreement['NOSHIPPING'] = 1;
+$storage->update($agreement);
 
-$captureToken = $tokenFactory->createCaptureToken('paypal', $agreementDetails, 'create_recurring_payment.php');
+$captureToken = $payum->getTokenFactory->createCaptureToken('paypal', $agreement, 'create_recurring_payment.php');
 
-$storage->updateModel($agreementDetails);
+$storage->update($agreement);
 
 header("Location: ".$captureToken->getTargetUrl());
 ```
 
-The script is pretty similar to ordinary purchase.
-The only difference here we set some special options to agreementDetails.
-The rest is same. Create capture token.
-Done token in this example renamed to `createRecurringPaymentToken`.
+This script is pretty similar to an ordinary purchase.
+The only difference here is that we set some special options to agreementDetails.
+The rest is the same. Create capture token.
+The 'done' token in this example is renamed to `createRecurringPaymentToken`.
 This is because we have one more step to do before we can go to `done.php`.
 
 ## Create recurring payment
 
-After capture did its job and agreement is created.
-We are redirected back to `create_recurring_payment.php` script.
-Here we have to check status of agreement and if it is good: create recurring payment.
-After all we have to redirect user to some safe page.
-The page that shows payment details could be a good starting place.
+After capture did its job and the agreement has been created we are redirected back to the `create_recurring_payment.php` script.
+Here we will check the status of the agreement and if it is good: create a recurring payment.
+After everything is complete we should redirect the user to a safe page - the page that shows payment details could be a good starting place.
 
 ```php
 <?php
@@ -107,37 +105,37 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfile;
 
 include 'config.php';
 
-$token = $requestVerifier->verify($_REQUEST);
-$requestVerifier->invalidate($token);
+$token = $payum->getRequestVerifier()->verify($_REQUEST);
+$payum->getRequestVerifier()->invalidate($token);
 
-$payment = $payum->getPayment($token->getPaymentName());
+$gateway = $payum->getGateway($token->getGatewayName());
 
 $agreementStatus = new GetHumanStatus($token);
-$payment->execute($agreementStatus);
+$gateway->execute($agreementStatus);
 
 if (!$agreementStatus->isCaptured()) {
     header('HTTP/1.1 400 Bad Request', true, 400);
     exit;
 }
 
-$agreementDetails = $agreementStatus->getModel();
+$agreement = $agreementStatus->getModel();
 
-$storage = $payum->getStorage($recurringPaymentDetailsClass);
+$storage = $payum->getStorage($recurringPaymentClass);
 
-$recurringPaymentDetails = $storage->createModel();
-$recurringPaymentDetails['TOKEN'] = $agreementDetails['TOKEN'];
-$recurringPaymentDetails['DESC'] = 'Subscribe to weather forecast for a week. It is 0.05$ per day.';
-$recurringPaymentDetails['EMAIL'] = $agreementDetails['EMAIL'];
-$recurringPaymentDetails['AMT'] = 0.05;
-$recurringPaymentDetails['CURRENCYCODE'] = 'USD';
-$recurringPaymentDetails['BILLINGFREQUENCY'] = 7;
-$recurringPaymentDetails['PROFILESTARTDATE'] = date(DATE_ATOM);
-$recurringPaymentDetails['BILLINGPERIOD'] = Api::BILLINGPERIOD_DAY;
+$recurringPayment = $storage->create();
+$recurringPayment['TOKEN'] = $agreement['TOKEN'];
+$recurringPayment['DESC'] = 'Subscribe to weather forecast for a week. It is 0.05$ per day.';
+$recurringPayment['EMAIL'] = $agreement['EMAIL'];
+$recurringPayment['AMT'] = 0.05;
+$recurringPayment['CURRENCYCODE'] = 'USD';
+$recurringPayment['BILLINGFREQUENCY'] = 7;
+$recurringPayment['PROFILESTARTDATE'] = date(DATE_ATOM);
+$recurringPayment['BILLINGPERIOD'] = Api::BILLINGPERIOD_DAY;
 
-$payment->execute(new CreateRecurringPaymentProfile($recurringPaymentDetails));
-$payment->execute(new Sync($recurringPaymentDetails));
+$gateway->execute(new CreateRecurringPaymentProfile($recurringPayment));
+$gateway->execute(new Sync($recurringPayment));
 
-$doneToken = $tokenFactory->createToken('paypal', $recurringPaymentDetails, 'done.php');
+$doneToken = $payum->geTokenFactory()->createToken('paypal', $recurringPayment, 'done.php');
 
 header("Location: ".$doneToken->getTargetUrl());
 ```

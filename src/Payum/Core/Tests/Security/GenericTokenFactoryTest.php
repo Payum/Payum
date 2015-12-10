@@ -1,20 +1,16 @@
 <?php
 namespace Payum\Core\Tests\Security;
 
-use Payum\Core\Exception\InvalidArgumentException;
-use Payum\Core\Model\Identificator;
 use Payum\Core\Model\Token;
-use Payum\Core\PaymentInterface;
-use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\GenericTokenFactory;
-use Payum\Core\Storage\StorageInterface;
+use Payum\Core\Security\TokenFactoryInterface;
 
 class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldImplementsGenericTokenFactoryInterface()
+    public function shouldImplementGenericTokenFactoryInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Security\GenericTokenFactory');
 
@@ -24,653 +20,504 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithExpectedArguments()
+    public function couldBeConstructedWithTokenFactoryAndPaths()
     {
-        new GenericTokenFactory(
-            $this->createStorageMock(),
-            $this->createStorageRegistryMock(),
-            'http://example.com',
-            'capture.php',
-            'notify.php',
-            'authorize.php'
-        );
+        new GenericTokenFactory($this->createTokenFactoryMock(), array());
     }
 
     /**
      * @test
      */
-    public function shouldCreateCustomToken()
+    public function shouldAllowCreateCustomTokenWithAfterPath()
     {
-        $token = new Token;
+        $gatewayName = 'theGatewayName';
+        $model = new \stdClass();
+        $targetPath = 'theTargetPath';
+        $targetParameters = array('target' => 'val');
+        $afterPath = 'theAfterPath';
+        $afterParameters = array('after' => 'val');
 
-        $tokenStorageMock = $this->createStorageMock();
-        $tokenStorageMock
-            ->expects($this->once())
-            ->method('createModel')
-            ->will($this->returnValue($token))
-        ;
-        $tokenStorageMock
-            ->expects($this->once())
-            ->method('updateModel')
-            ->with($this->identicalTo($token))
-        ;
+        $token = new Token();
 
-        $model = new \stdClass;
-        $identificator = new Identificator('anId', 'stdClass');
-        $paymentName = 'thePaymentName';
-
-        $modelStorage = $this->createStorageMock();
-        $modelStorage
+        $tokenFactoryMock = $this->createTokenFactoryMock();
+        $tokenFactoryMock
             ->expects($this->once())
-            ->method('getIdentificator')
-            ->with($this->identicalTo($model))
-            ->will($this->returnValue($identificator))
+            ->method('createToken')
+            ->with(
+                $gatewayName,
+                $this->identicalTo($model),
+                $targetPath,
+                $targetParameters,
+                $afterPath,
+                $afterParameters
+            )
+            ->willReturn($token)
         ;
 
-        $storageRegistryMock = $this->createStorageRegistryMock();
-        $storageRegistryMock
-            ->expects($this->once())
-            ->method('getStorage')
-            ->with($this->identicalTo($model))
-            ->will($this->returnValue($modelStorage))
-        ;
 
-        $factory = new GenericTokenFactory(
-            $tokenStorageMock,
-            $storageRegistryMock,
-            'http://example.com',
-            'capture.php',
-            'notify.php',
-            'authorize.php'
-        );
+        $factory = new GenericTokenFactory($tokenFactoryMock, array());
 
         $actualToken = $factory->createToken(
-            $paymentName,
+            $gatewayName,
             $model,
-            'theTargetPath',
-            array('targetPathKey' => 'targetPathVal'),
-            'theAfterPath',
-            array('afterPathKey' => 'afterPathVal')
+            $targetPath,
+            $targetParameters,
+            $afterPath,
+            $afterParameters
         );
 
         $this->assertSame($token, $actualToken);
-        $this->assertEquals($paymentName, $token->getPaymentName());
-        $this->assertSame($identificator, $token->getDetails());
-        $this->assertEquals(
-            'http://example.com/theTargetPath?targetPathKey=targetPathVal&payum_token='.$token->getHash(),
-            $token->getTargetUrl()
-        );
-        $this->assertEquals('http://example.com/theAfterPath?afterPathKey=afterPathVal', $token->getAfterUrl());
     }
 
     /**
      * @test
      */
-    public function shouldCreateCustomTokenWithTargetPathAlreadyUrl()
+    public function shouldAllowCreateCustomTokenWithoutAfterPath()
     {
-        $token = new Token;
+        $gatewayName = 'theGatewayName';
+        $model = new \stdClass();
+        $targetPath = 'theTargetPath';
+        $targetParameters = array('target' => 'val');
 
-        $tokenStorageMock = $this->createStorageMock();
-        $tokenStorageMock
-            ->expects($this->once())
-            ->method('createModel')
-            ->will($this->returnValue($token))
-        ;
-        $tokenStorageMock
-            ->expects($this->once())
-            ->method('updateModel')
-            ->with($this->identicalTo($token))
-        ;
+        $token = new Token();
 
-        $model = new \stdClass;
-        $identificator = new Identificator('anId', 'stdClass');
-        $paymentName = 'thePaymentName';
-
-        $modelStorage = $this->createStorageMock();
-        $modelStorage
+        $tokenFactoryMock = $this->createTokenFactoryMock();
+        $tokenFactoryMock
             ->expects($this->once())
-            ->method('getIdentificator')
-            ->with($this->identicalTo($model))
-            ->will($this->returnValue($identificator))
+            ->method('createToken')
+            ->with(
+                $gatewayName,
+                $this->identicalTo($model),
+                $targetPath,
+                $targetParameters,
+                null,
+                array()
+            )
+            ->willReturn($token)
         ;
 
-        $storageRegistryMock = $this->createStorageRegistryMock();
-        $storageRegistryMock
-            ->expects($this->once())
-            ->method('getStorage')
-            ->with($this->identicalTo($model))
-            ->will($this->returnValue($modelStorage))
-        ;
 
-        $factory = new GenericTokenFactory(
-            $tokenStorageMock,
-            $storageRegistryMock,
-            'http://example.com',
-            'capture.php',
-            'notify.php',
-            'authorize.php'
-        );
+        $factory = new GenericTokenFactory($tokenFactoryMock, array());
 
         $actualToken = $factory->createToken(
-            $paymentName,
+            $gatewayName,
             $model,
-            'http://google.com?foo=fooVal',
-            array('targetPathKey' => 'targetPathVal'),
-            'theAfterPath',
-            array('afterPathKey' => 'afterPathVal')
+            $targetPath,
+            $targetParameters
         );
 
         $this->assertSame($token, $actualToken);
-        $this->assertEquals($paymentName, $token->getPaymentName());
-        $this->assertSame($identificator, $token->getDetails());
-        $this->assertEquals(
-            'http://google.com?foo=fooVal&targetPathKey=targetPathVal&payum_token='.$token->getHash(),
-            $token->getTargetUrl()
-        );
-        $this->assertEquals('http://example.com/theAfterPath?afterPathKey=afterPathVal', $token->getAfterUrl());
     }
 
     /**
      * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The path "capture" is not found. Possible paths are foo, bar
      */
-    public function shouldCreateCustomTokenWithoutAfterUrl()
+    public function throwIfCapturePathNotConfigured()
     {
-        $token = new Token;
+        $gatewayName = 'theGatewayName';
+        $model = new \stdClass();
+        $afterPath = 'theAfterPath';
+        $afterParameters = array('after' => 'val');
 
-        $tokenStorageMock = $this->createStorageMock();
-        $tokenStorageMock
-            ->expects($this->once())
-            ->method('createModel')
-            ->will($this->returnValue($token))
-        ;
-        $tokenStorageMock
-            ->expects($this->once())
-            ->method('updateModel')
-            ->with($this->identicalTo($token))
-        ;
-
-        $model = new \stdClass;
-        $identificator = new Identificator('anId', 'stdClass');
-        $paymentName = 'thePaymentName';
-
-        $modelStorage = $this->createStorageMock();
-        $modelStorage
-            ->expects($this->once())
-            ->method('getIdentificator')
-            ->with($this->identicalTo($model))
-            ->will($this->returnValue($identificator))
-        ;
-
-        $storageRegistryMock = $this->createStorageRegistryMock();
-        $storageRegistryMock
-            ->expects($this->once())
-            ->method('getStorage')
-            ->with($this->identicalTo($model))
-            ->will($this->returnValue($modelStorage))
-        ;
-
-        $factory = new GenericTokenFactory(
-            $tokenStorageMock,
-            $storageRegistryMock,
-            'http://example.com',
-            'capture.php',
-            'notify.php',
-            'authorize.php'
-        );
-
-        $actualToken = $factory->createToken($paymentName, $model, 'theTargetPath');
-
-        $this->assertSame($token, $actualToken);
-        $this->assertEquals($paymentName, $token->getPaymentName());
-        $this->assertSame($identificator, $token->getDetails());
-        $this->assertEquals(
-            'http://example.com/theTargetPath?payum_token='.$token->getHash(),
-            $token->getTargetUrl()
-        );
-        $this->assertNull($token->getAfterUrl());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldCreateNotifyToken()
-    {
-        $token = new Token;
-
-        $tokenStorageMock = $this->createStorageMock();
-        $tokenStorageMock
-            ->expects($this->once())
-            ->method('createModel')
-            ->will($this->returnValue($token))
-        ;
-        $tokenStorageMock
-            ->expects($this->once())
-            ->method('updateModel')
-            ->with($this->identicalTo($token))
-        ;
-
-        $model = new \stdClass;
-        $identificator = new Identificator('anId', 'stdClass');
-        $paymentName = 'thePaymentName';
-
-        $modelStorage = $this->createStorageMock();
-        $modelStorage
-            ->expects($this->once())
-            ->method('getIdentificator')
-            ->with($this->identicalTo($model))
-            ->will($this->returnValue($identificator))
-        ;
-
-        $storageRegistryMock = $this->createStorageRegistryMock();
-        $storageRegistryMock
-            ->expects($this->once())
-            ->method('getStorage')
-            ->with($this->identicalTo($model))
-            ->will($this->returnValue($modelStorage))
-        ;
-
-        $factory = new GenericTokenFactory(
-            $tokenStorageMock,
-            $storageRegistryMock,
-            'http://example.com',
-            'capture.php',
-            'notify.php',
-            'authorize.php'
-        );
-
-        $actualToken = $factory->createNotifyToken($paymentName, $model);
-
-        $this->assertSame($token, $actualToken);
-        $this->assertEquals($paymentName, $token->getPaymentName());
-        $this->assertSame($identificator, $token->getDetails());
-        $this->assertEquals(
-            'http://example.com/notify.php?payum_token='.$token->getHash(),
-            $token->getTargetUrl()
-        );
-        $this->assertNull($token->getAfterUrl());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldCreateNotifyTokenWithoutModel()
-    {
-        $token = new Token;
-
-        $tokenStorageMock = $this->createStorageMock();
-        $tokenStorageMock
-            ->expects($this->once())
-            ->method('createModel')
-            ->will($this->returnValue($token))
-        ;
-        $tokenStorageMock
-            ->expects($this->once())
-            ->method('updateModel')
-            ->with($this->identicalTo($token))
-        ;
-
-        $paymentName = 'thePaymentName';
-
-        $storageRegistryMock = $this->createStorageRegistryMock();
-        $storageRegistryMock
+        $tokenFactoryMock = $this->createTokenFactoryMock();
+        $tokenFactoryMock
             ->expects($this->never())
-            ->method('getStorage')
+            ->method('createToken')
         ;
 
-        $factory = new GenericTokenFactory(
-            $tokenStorageMock,
-            $storageRegistryMock,
-            'http://example.com',
-            'capture.php',
-            'notify.php',
-            'authorize.php'
-        );
 
-        $actualToken = $factory->createNotifyToken($paymentName, null);
+        $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
 
-        $this->assertSame($token, $actualToken);
-        $this->assertEquals($paymentName, $token->getPaymentName());
-        $this->assertNull($token->getDetails());
-        $this->assertEquals(
-            'http://example.com/notify.php?payum_token='.$token->getHash(),
-            $token->getTargetUrl()
+        $factory->createCaptureToken(
+            $gatewayName,
+            $model,
+            $afterPath,
+            $afterParameters
         );
-        $this->assertNull($token->getAfterUrl());
     }
 
     /**
      * @test
      */
-    public function shouldCreateCaptureToken()
+    public function shouldAllowCreateCaptureToken()
     {
-        $captureToken = new Token;
-        $afterToken = new Token;
+        $gatewayName = 'theGatewayName';
+        $model = new \stdClass();
+        $capturePath = 'theCapturePath';
+        $afterPath = 'theAfterPath';
+        $afterUrl = 'theAfterUrl';
+        $afterParameters = array('after' => 'val');
 
-        $tokenStorageMock = $this->createStorageMock();
-        $tokenStorageMock
+        $afterToken = new Token();
+        $afterToken->setTargetUrl($afterUrl);
+
+        $captureToken = new Token();
+
+        $tokenFactoryMock = $this->createTokenFactoryMock();
+        $tokenFactoryMock
             ->expects($this->at(0))
-            ->method('createModel')
-            ->will($this->returnValue($afterToken))
+            ->method('createToken')
+            ->with(
+                $gatewayName,
+                $this->identicalTo($model),
+                $afterPath,
+                $afterParameters,
+                null,
+                array()
+            )
+            ->willReturn($afterToken)
         ;
-        $tokenStorageMock
+        $tokenFactoryMock
             ->expects($this->at(1))
-            ->method('updateModel')
-            ->with($this->identicalTo($afterToken))
-        ;
-        $tokenStorageMock
-            ->expects($this->at(2))
-            ->method('createModel')
-            ->will($this->returnValue($captureToken))
-        ;
-        $tokenStorageMock
-            ->expects($this->at(3))
-            ->method('updateModel')
-            ->with($this->identicalTo($captureToken))
-        ;
-        $tokenStorageMock
-            ->expects($this->at(4))
-            ->method('updateModel')
-            ->with($this->identicalTo($captureToken))
+            ->method('createToken')
+            ->with(
+                $gatewayName,
+                $this->identicalTo($model),
+                $capturePath,
+                array(),
+                $afterUrl,
+                array()
+            )
+            ->willReturn($captureToken)
         ;
 
 
-        $model = new \stdClass;
-        $identificator = new Identificator('anId', 'stdClass');
-        $paymentName = 'thePaymentName';
+        $factory = new GenericTokenFactory($tokenFactoryMock, array(
+            'capture' => $capturePath
+        ));
 
-        $modelStorage = $this->createStorageMock();
-        $modelStorage
-            ->expects($this->exactly(2))
-            ->method('getIdentificator')
-            ->with($this->identicalTo($model))
-            ->will($this->returnValue($identificator))
-        ;
-
-        $storageRegistryMock = $this->createStorageRegistryMock();
-        $storageRegistryMock
-            ->expects($this->exactly(2))
-            ->method('getStorage')
-            ->with($this->identicalTo($model))
-            ->will($this->returnValue($modelStorage))
-        ;
-
-        $factory = new GenericTokenFactory(
-            $tokenStorageMock,
-            $storageRegistryMock,
-            'http://example.com',
-            'capture.php',
-            'notify.php',
-            'authorize.php'
+        $actualToken = $factory->createCaptureToken(
+            $gatewayName,
+            $model,
+            $afterPath,
+            $afterParameters
         );
-
-        $actualToken = $factory->createCaptureToken($paymentName, $model, 'after.php', array('afterKey' => 'afterVal'));
 
         $this->assertSame($captureToken, $actualToken);
-        $this->assertEquals($paymentName, $captureToken->getPaymentName());
-        $this->assertSame($identificator, $captureToken->getDetails());
-        $this->assertEquals(
-            'http://example.com/capture.php?payum_token='.$captureToken->getHash(),
-            $captureToken->getTargetUrl()
-        );
-        $this->assertEquals(
-            'http://example.com/after.php?afterKey=afterVal&payum_token='.$afterToken->getHash(),
-            $captureToken->getAfterUrl()
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The path "authorize" is not found. Possible paths are foo, bar
+     */
+    public function throwIfAuthorizePathNotConfigured()
+    {
+        $gatewayName = 'theGatewayName';
+        $model = new \stdClass();
+        $afterPath = 'theAfterPath';
+        $afterParameters = array('after' => 'val');
+
+        $tokenFactoryMock = $this->createTokenFactoryMock();
+        $tokenFactoryMock
+            ->expects($this->never())
+            ->method('createToken')
+        ;
+
+
+        $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
+
+        $factory->createAuthorizeToken(
+            $gatewayName,
+            $model,
+            $afterPath,
+            $afterParameters
         );
     }
 
     /**
      * @test
      */
-    public function shouldCreateCaptureTokenWithAfterPathAlreadyUrl()
+    public function shouldAllowCreateAuthorizeToken()
     {
-        $captureToken = new Token;
-        $afterToken = new Token;
+        $gatewayName = 'theGatewayName';
+        $model = new \stdClass();
+        $authorizePath = 'theAuthorizePath';
+        $afterPath = 'theAfterPath';
+        $afterUrl = 'theAfterUrl';
+        $afterParameters = array('after' => 'val');
 
-        $tokenStorageMock = $this->createStorageMock();
-        $tokenStorageMock
+        $afterToken = new Token();
+        $afterToken->setTargetUrl($afterUrl);
+
+        $authorizeToken = new Token();
+
+        $tokenFactoryMock = $this->createTokenFactoryMock();
+        $tokenFactoryMock
             ->expects($this->at(0))
-            ->method('createModel')
-            ->will($this->returnValue($afterToken))
+            ->method('createToken')
+            ->with(
+                $gatewayName,
+                $this->identicalTo($model),
+                $afterPath,
+                $afterParameters,
+                null,
+                array()
+            )
+            ->willReturn($afterToken)
         ;
-        $tokenStorageMock
+        $tokenFactoryMock
             ->expects($this->at(1))
-            ->method('updateModel')
-            ->with($this->identicalTo($afterToken))
-        ;
-        $tokenStorageMock
-            ->expects($this->at(2))
-            ->method('createModel')
-            ->will($this->returnValue($captureToken))
-        ;
-        $tokenStorageMock
-            ->expects($this->at(3))
-            ->method('updateModel')
-            ->with($this->identicalTo($captureToken))
-        ;
-        $tokenStorageMock
-            ->expects($this->at(4))
-            ->method('updateModel')
-            ->with($this->identicalTo($captureToken))
+            ->method('createToken')
+            ->with(
+                $gatewayName,
+                $this->identicalTo($model),
+                $authorizePath,
+                array(),
+                $afterUrl,
+                array()
+            )
+            ->willReturn($authorizeToken)
         ;
 
 
-        $model = new \stdClass;
-        $identificator = new Identificator('anId', 'stdClass');
-        $paymentName = 'thePaymentName';
+        $factory = new GenericTokenFactory($tokenFactoryMock, array(
+            'authorize' => $authorizePath
+        ));
 
-        $modelStorage = $this->createStorageMock();
-        $modelStorage
-            ->expects($this->exactly(2))
-            ->method('getIdentificator')
-            ->with($this->identicalTo($model))
-            ->will($this->returnValue($identificator))
-        ;
-
-        $storageRegistryMock = $this->createStorageRegistryMock();
-        $storageRegistryMock
-            ->expects($this->exactly(2))
-            ->method('getStorage')
-            ->with($this->identicalTo($model))
-            ->will($this->returnValue($modelStorage))
-        ;
-
-        $factory = new GenericTokenFactory(
-            $tokenStorageMock,
-            $storageRegistryMock,
-            'http://example.com',
-            'capture.php',
-            'notify.php',
-            'authorize.php'
+        $actualToken = $factory->createAuthorizeToken(
+            $gatewayName,
+            $model,
+            $afterPath,
+            $afterParameters
         );
-
-        $actualToken = $factory->createCaptureToken($paymentName, $model, 'http://google.com', array('afterKey' => 'afterVal'));
-
-        $this->assertSame($captureToken, $actualToken);
-        $this->assertEquals($paymentName, $captureToken->getPaymentName());
-        $this->assertSame($identificator, $captureToken->getDetails());
-        $this->assertEquals(
-            'http://example.com/capture.php?payum_token='.$captureToken->getHash(),
-            $captureToken->getTargetUrl()
-        );
-        $this->assertEquals(
-            'http://google.com?afterKey=afterVal&payum_token='.$afterToken->getHash(),
-            $captureToken->getAfterUrl()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldCreateAuthorizeToken()
-    {
-        $authorizeToken = new Token;
-        $afterToken = new Token;
-
-        $tokenStorageMock = $this->createStorageMock();
-        $tokenStorageMock
-            ->expects($this->at(0))
-            ->method('createModel')
-            ->will($this->returnValue($afterToken))
-        ;
-        $tokenStorageMock
-            ->expects($this->at(1))
-            ->method('updateModel')
-            ->with($this->identicalTo($afterToken))
-        ;
-        $tokenStorageMock
-            ->expects($this->at(2))
-            ->method('createModel')
-            ->will($this->returnValue($authorizeToken))
-        ;
-        $tokenStorageMock
-            ->expects($this->at(3))
-            ->method('updateModel')
-            ->with($this->identicalTo($authorizeToken))
-        ;
-        $tokenStorageMock
-            ->expects($this->at(4))
-            ->method('updateModel')
-            ->with($this->identicalTo($authorizeToken))
-        ;
-
-
-        $model = new \stdClass;
-        $identificator = new Identificator('anId', 'stdClass');
-        $paymentName = 'thePaymentName';
-
-        $modelStorage = $this->createStorageMock();
-        $modelStorage
-            ->expects($this->exactly(2))
-            ->method('getIdentificator')
-            ->with($this->identicalTo($model))
-            ->will($this->returnValue($identificator))
-        ;
-
-        $storageRegistryMock = $this->createStorageRegistryMock();
-        $storageRegistryMock
-            ->expects($this->exactly(2))
-            ->method('getStorage')
-            ->with($this->identicalTo($model))
-            ->will($this->returnValue($modelStorage))
-        ;
-
-        $factory = new GenericTokenFactory(
-            $tokenStorageMock,
-            $storageRegistryMock,
-            'http://example.com',
-            'capture.php',
-            'notify.php',
-            'authorize.php'
-        );
-
-        $actualToken = $factory->createAuthorizeToken($paymentName, $model, 'after.php', array('afterKey' => 'afterVal'));
 
         $this->assertSame($authorizeToken, $actualToken);
-        $this->assertEquals($paymentName, $authorizeToken->getPaymentName());
-        $this->assertSame($identificator, $authorizeToken->getDetails());
-        $this->assertEquals(
-            'http://example.com/authorize.php?payum_token='.$authorizeToken->getHash(),
-            $authorizeToken->getTargetUrl()
-        );
-        $this->assertEquals(
-            'http://example.com/after.php?afterKey=afterVal&payum_token='.$afterToken->getHash(),
-            $authorizeToken->getAfterUrl()
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The path "refund" is not found. Possible paths are foo, bar
+     */
+    public function throwIfRefundPathNotConfigured()
+    {
+        $gatewayName = 'theGatewayName';
+        $model = new \stdClass();
+        $afterPath = 'theAfterPath';
+        $afterParameters = array('after' => 'val');
+
+        $tokenFactoryMock = $this->createTokenFactoryMock();
+        $tokenFactoryMock
+            ->expects($this->never())
+            ->method('createToken')
+        ;
+
+
+        $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
+
+        $factory->createRefundToken(
+            $gatewayName,
+            $model,
+            $afterPath,
+            $afterParameters
         );
     }
 
     /**
      * @test
      */
-    public function shouldCreateAuthorizeTokenWithAfterPathAlreadyUrl()
+    public function shouldAllowCreateRefundToken()
     {
-        $authorizeToken = new Token;
-        $afterToken = new Token;
+        $gatewayName = 'theGatewayName';
+        $model = new \stdClass();
+        $refundPath = 'theRefundPath';
+        $afterPath = 'theAfterPath';
+        $afterUrl = 'theAfterUrl';
+        $afterParameters = array('after' => 'val');
 
-        $tokenStorageMock = $this->createStorageMock();
-        $tokenStorageMock
+        $afterToken = new Token();
+        $afterToken->setTargetUrl($afterUrl);
+
+        $refundToken = new Token();
+
+        $tokenFactoryMock = $this->createTokenFactoryMock();
+        $tokenFactoryMock
             ->expects($this->at(0))
-            ->method('createModel')
-            ->will($this->returnValue($afterToken))
+            ->method('createToken')
+            ->with(
+                $gatewayName,
+                $this->identicalTo($model),
+                $afterPath,
+                $afterParameters,
+                null,
+                array()
+            )
+            ->willReturn($afterToken)
         ;
-        $tokenStorageMock
+        $tokenFactoryMock
             ->expects($this->at(1))
-            ->method('updateModel')
-            ->with($this->identicalTo($afterToken))
-        ;
-        $tokenStorageMock
-            ->expects($this->at(2))
-            ->method('createModel')
-            ->will($this->returnValue($authorizeToken))
-        ;
-        $tokenStorageMock
-            ->expects($this->at(3))
-            ->method('updateModel')
-            ->with($this->identicalTo($authorizeToken))
-        ;
-        $tokenStorageMock
-            ->expects($this->at(4))
-            ->method('updateModel')
-            ->with($this->identicalTo($authorizeToken))
+            ->method('createToken')
+            ->with(
+                $gatewayName,
+                $this->identicalTo($model),
+                $refundPath,
+                array(),
+                $afterUrl,
+                array()
+            )
+            ->willReturn($refundToken)
         ;
 
 
-        $model = new \stdClass;
-        $identificator = new Identificator('anId', 'stdClass');
-        $paymentName = 'thePaymentName';
+        $factory = new GenericTokenFactory($tokenFactoryMock, array(
+            'refund' => $refundPath
+        ));
 
-        $modelStorage = $this->createStorageMock();
-        $modelStorage
-            ->expects($this->exactly(2))
-            ->method('getIdentificator')
-            ->with($this->identicalTo($model))
-            ->will($this->returnValue($identificator))
-        ;
-
-        $storageRegistryMock = $this->createStorageRegistryMock();
-        $storageRegistryMock
-            ->expects($this->exactly(2))
-            ->method('getStorage')
-            ->with($this->identicalTo($model))
-            ->will($this->returnValue($modelStorage))
-        ;
-
-        $factory = new GenericTokenFactory(
-            $tokenStorageMock,
-            $storageRegistryMock,
-            'http://example.com',
-            'capture.php',
-            'notify.php',
-            'authorize.php'
+        $actualToken = $factory->createRefundToken(
+            $gatewayName,
+            $model,
+            $afterPath,
+            $afterParameters
         );
 
-        $actualToken = $factory->createAuthorizeToken($paymentName, $model, 'http://google.com', array('afterKey' => 'afterVal'));
+        $this->assertSame($refundToken, $actualToken);
+    }
 
-        $this->assertSame($authorizeToken, $actualToken);
-        $this->assertEquals($paymentName, $authorizeToken->getPaymentName());
-        $this->assertSame($identificator, $authorizeToken->getDetails());
-        $this->assertEquals(
-            'http://example.com/authorize.php?payum_token='.$authorizeToken->getHash(),
-            $authorizeToken->getTargetUrl()
-        );
-        $this->assertEquals(
-            'http://google.com?afterKey=afterVal&payum_token='.$afterToken->getHash(),
-            $authorizeToken->getAfterUrl()
+    /**
+     * @test
+     */
+    public function shouldAllowCreateRefundTokenWithoutAfterPath()
+    {
+        $gatewayName = 'theGatewayName';
+        $model = new \stdClass();
+        $refundPath = 'theRefundPath';
+
+        $refundToken = new Token();
+
+        $tokenFactoryMock = $this->createTokenFactoryMock();
+        $tokenFactoryMock
+            ->expects($this->once())
+            ->method('createToken')
+            ->with(
+                $gatewayName,
+                $this->identicalTo($model),
+                $refundPath,
+                array(),
+                null,
+                array()
+            )
+            ->willReturn($refundToken)
+        ;
+
+        $factory = new GenericTokenFactory($tokenFactoryMock, array(
+            'refund' => $refundPath
+        ));
+
+        $actualToken = $factory->createRefundToken($gatewayName, $model);
+
+        $this->assertSame($refundToken, $actualToken);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The path "notify" is not found. Possible paths are foo, bar
+     */
+    public function throwIfNotifyPathNotConfigured()
+    {
+        $gatewayName = 'theGatewayName';
+        $model = new \stdClass();
+        $afterPath = 'theAfterPath';
+        $afterParameters = array('after' => 'val');
+
+        $tokenFactoryMock = $this->createTokenFactoryMock();
+        $tokenFactoryMock
+            ->expects($this->never())
+            ->method('createToken')
+        ;
+
+
+        $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
+
+        $factory->createNotifyToken(
+            $gatewayName,
+            $model,
+            $afterPath,
+            $afterParameters
         );
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|StorageInterface
+     * @test
      */
-    protected function createStorageMock()
+    public function shouldAllowCreateNotifyToken()
     {
-        return $this->getMock('Payum\Core\Storage\StorageInterface');
+        $gatewayName = 'theGatewayName';
+        $model = new \stdClass();
+        $notifyPath = 'theNotifyPath';
+
+        $notifyToken = new Token();
+
+        $tokenFactoryMock = $this->createTokenFactoryMock();
+        $tokenFactoryMock
+            ->expects($this->once())
+            ->method('createToken')
+            ->with(
+                $gatewayName,
+                $this->identicalTo($model),
+                $notifyPath,
+                array(),
+                null,
+                array()
+            )
+            ->willReturn($notifyToken)
+        ;
+
+        $factory = new GenericTokenFactory($tokenFactoryMock, array(
+            'notify' => $notifyPath
+        ));
+
+        $actualToken = $factory->createNotifyToken($gatewayName, $model);
+
+        $this->assertSame($notifyToken, $actualToken);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|StorageRegistryInterface
+     * @test
      */
-    protected function createStorageRegistryMock()
+    public function shouldAllowCreateNotifyTokenWithoutModel()
     {
-        return $this->getMock('Payum\Core\Registry\StorageRegistryInterface');
+        $gatewayName = 'theGatewayName';
+        $notifyPath = 'theNotifyPath';
+
+        $notifyToken = new Token();
+
+        $tokenFactoryMock = $this->createTokenFactoryMock();
+        $tokenFactoryMock
+            ->expects($this->once())
+            ->method('createToken')
+            ->with(
+                $gatewayName,
+                null,
+                $notifyPath,
+                array(),
+                null,
+                array()
+            )
+            ->willReturn($notifyToken)
+        ;
+
+        $factory = new GenericTokenFactory($tokenFactoryMock, array(
+            'notify' => $notifyPath
+        ));
+
+        $actualToken = $factory->createNotifyToken($gatewayName);
+
+        $this->assertSame($notifyToken, $actualToken);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|TokenFactoryInterface
+     */
+    protected function createTokenFactoryMock()
+    {
+        return $this->getMock('Payum\Core\Security\TokenFactoryInterface');
     }
 }

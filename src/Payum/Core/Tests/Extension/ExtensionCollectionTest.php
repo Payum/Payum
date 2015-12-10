@@ -1,10 +1,11 @@
 <?php
 namespace Payum\Core\Tests\Extension;
 
+use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionCollection;
 use Payum\Core\Extension\ExtensionInterface;
 
-class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase 
+class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -12,7 +13,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
     public function shouldImplementExtensionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Extension\ExtensionCollection');
-        
+
         $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
     }
 
@@ -21,7 +22,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new ExtensionCollection;
+        new ExtensionCollection();
     }
 
     /**
@@ -31,17 +32,17 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $extensionFirst = $this->createExtensionMock();
         $extensionSecond = $this->createExtensionMock();
-        
-        $collection = new ExtensionCollection;
+
+        $collection = new ExtensionCollection();
 
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
-        
+
         $addedExtensions = $this->readAttribute($collection, 'extensions');
-        
+
         $this->assertInternalType('array', $addedExtensions);
         $this->assertCount(2, $addedExtensions);
-        
+
         $this->assertSame($extensionFirst, $addedExtensions[0]);
         $this->assertSame($extensionSecond, $addedExtensions[1]);
     }
@@ -54,7 +55,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
         $extensionFirst = $this->createExtensionMock();
         $extensionSecond = $this->createExtensionMock();
 
-        $collection = new ExtensionCollection;
+        $collection = new ExtensionCollection();
 
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond, $forcePrepend = true);
@@ -73,27 +74,27 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallOnPreExecuteForAllExtensionsInCollection()
     {
-        $expectedRequest = new \stdClass;
-        
+        $expectedContext = $this->createContextMock();
+
         $extensionFirst = $this->createExtensionMock();
         $extensionFirst
             ->expects($this->once())
             ->method('onPreExecute')
-            ->with($this->identicalTo($expectedRequest))
+            ->with($this->identicalTo($expectedContext))
         ;
-        
+
         $extensionSecond = $this->createExtensionMock();
         $extensionSecond
             ->expects($this->once())
             ->method('onPreExecute')
-            ->with($this->identicalTo($expectedRequest))
+            ->with($this->identicalTo($expectedContext))
         ;
 
-        $collection = new ExtensionCollection;
+        $collection = new ExtensionCollection();
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
 
-        $result = $collection->onPreExecute($expectedRequest);
+        $result = $collection->onPreExecute($expectedContext);
 
         $this->assertNull($result);
     }
@@ -103,34 +104,27 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallOnExecuteForAllExtensionsInCollection()
     {
-        $expectedRequest = new \stdClass;
-        $expectedAction = $this->getMock('Payum\Core\Action\ActionInterface');
+        $expectedContext = $this->createContextMock();
 
         $extensionFirst = $this->createExtensionMock();
         $extensionFirst
             ->expects($this->once())
             ->method('onExecute')
-            ->with(
-                $this->identicalTo($expectedRequest),
-                $this->identicalTo($expectedAction)
-            )
+            ->with($this->identicalTo($expectedContext))
         ;
 
         $extensionSecond = $this->createExtensionMock();
         $extensionSecond
             ->expects($this->once())
             ->method('onExecute')
-            ->with(
-                $this->identicalTo($expectedRequest),
-                $this->identicalTo($expectedAction)
-            )
+            ->with($expectedContext)
         ;
 
-        $collection = new ExtensionCollection;
+        $collection = new ExtensionCollection();
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
 
-        $result = $collection->onExecute($expectedRequest, $expectedAction);
+        $result = $collection->onExecute($expectedContext);
 
         $this->assertNull($result);
     }
@@ -140,158 +134,37 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallOnPostExecuteForAllExtensionsInCollection()
     {
-        $expectedRequest = new \stdClass;
-        $expectedAction = $this->getMock('Payum\Core\Action\ActionInterface');
+        $expectedContext = $this->createContextMock();
 
         $extensionFirst = $this->createExtensionMock();
         $extensionFirst
             ->expects($this->once())
             ->method('onPostExecute')
-            ->with(
-                $this->identicalTo($expectedRequest),
-                $this->identicalTo($expectedAction)
-            )
+            ->with($this->identicalTo($expectedContext))
         ;
 
         $extensionSecond = $this->createExtensionMock();
         $extensionSecond
             ->expects($this->once())
             ->method('onPostExecute')
-            ->with(
-                $this->identicalTo($expectedRequest),
-                $this->identicalTo($expectedAction)
-            )
+            ->with($expectedContext)
         ;
 
-        $collection = new ExtensionCollection;
+        $collection = new ExtensionCollection();
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
 
-        $result = $collection->onPostExecute($expectedRequest, $expectedAction);
+        $result = $collection->onPostExecute($expectedContext);
 
         $this->assertNull($result);
     }
 
     /**
-     * @test
+     * @return \PHPUnit_Framework_MockObject_MockObject|Context
      */
-    public function shouldCallOnReplyForAllExtensionsInCollection()
+    protected function createContextMock()
     {
-        $expectedReply = $this->getMock('Payum\Core\Reply\ReplyInterface');
-        $expectedAction = $this->getMock('Payum\Core\Action\ActionInterface');
-        $expectedRequest = new \stdClass;
-
-        $extensionFirst = $this->createExtensionMock();
-        $extensionFirst
-            ->expects($this->once())
-            ->method('onReply')
-            ->with(
-                $this->identicalTo($expectedReply),
-                $this->identicalTo($expectedRequest),
-                $this->identicalTo($expectedAction)
-            )
-        ;
-
-        $extensionSecond = $this->createExtensionMock();
-        $extensionSecond
-            ->expects($this->once())
-            ->method('onReply')
-            ->with(
-                $this->identicalTo($expectedReply),
-                $this->identicalTo($expectedRequest),
-                $this->identicalTo($expectedAction)
-            )
-        ;
-
-        $collection = new ExtensionCollection;
-        $collection->addExtension($extensionFirst);
-        $collection->addExtension($extensionSecond);
-
-        $result = $collection->onReply($expectedReply, $expectedRequest, $expectedAction);
-
-        $this->assertNull($result);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldCallOnReplyWithNewReplyIfFirstExtensionReturnNew()
-    {
-        $expectedReply = $this->getMock('Payum\Core\Reply\ReplyInterface');
-        $expectedNewReply = $this->getMock('Payum\Core\Reply\ReplyInterface');
-        $expectedAction = $this->getMock('Payum\Core\Action\ActionInterface');
-        $expectedRequest = new \stdClass;
-
-        $extensionFirst = $this->createExtensionMock();
-        $extensionFirst
-            ->expects($this->once())
-            ->method('onReply')
-            ->with(
-                $this->identicalTo($expectedReply),
-                $this->identicalTo($expectedRequest),
-                $this->identicalTo($expectedAction)
-            )
-            ->will($this->returnValue($expectedNewReply))
-        ;
-
-        $extensionSecond = $this->createExtensionMock();
-        $extensionSecond
-            ->expects($this->once())
-            ->method('onReply')
-            ->with(
-                $this->identicalTo($expectedNewReply),
-                $this->identicalTo($expectedRequest),
-                $this->identicalTo($expectedAction)
-            )
-        ;
-
-        $collection = new ExtensionCollection;
-        $collection->addExtension($extensionFirst);
-        $collection->addExtension($extensionSecond);
-
-        $result = $collection->onReply($expectedReply, $expectedRequest, $expectedAction);
-
-        $this->assertSame($expectedNewReply, $result);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldCallOnExceptionForAllExtensionsInCollection()
-    {
-        $expectedException = new \Exception;
-        $expectedRequest = new \stdClass;
-        $expectedAction = $this->getMock('Payum\Core\Action\ActionInterface');
-
-        $extensionFirst = $this->createExtensionMock();
-        $extensionFirst
-            ->expects($this->once())
-            ->method('onException')
-            ->with(
-                $this->identicalTo($expectedException),
-                $this->identicalTo($expectedRequest),
-                $this->identicalTo($expectedAction)
-            )
-        ;
-
-        $extensionSecond = $this->createExtensionMock();
-        $extensionSecond
-            ->expects($this->once())
-            ->method('onException')
-            ->with(
-                $this->identicalTo($expectedException),
-                $this->identicalTo($expectedRequest),
-                $this->identicalTo($expectedAction)
-            )
-        ;
-
-        $collection = new ExtensionCollection;
-        $collection->addExtension($extensionFirst);
-        $collection->addExtension($extensionSecond);
-
-        $result = $collection->onException($expectedException, $expectedRequest, $expectedAction);
-
-        $this->assertNull($result);
+        return $this->getMock('Payum\Core\Extension\Context', array(), array(), '', false);
     }
 
     /**

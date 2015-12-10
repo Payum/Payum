@@ -3,15 +3,11 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\Capture;
-use Payum\Core\Request\Sync;
-use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoCapture;
 
-class CaptureAction extends PaymentAwareAction
+class CaptureAction extends PurchaseAction
 {
     /**
      * {@inheritDoc}
@@ -21,41 +17,19 @@ class CaptureAction extends PaymentAwareAction
         /** @var $request Capture */
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $model = ArrayObject::ensureArrayObject($request->getModel());
+        $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == $model['PAYMENTREQUEST_0_PAYMENTACTION']) {
-            $model['PAYMENTREQUEST_0_PAYMENTACTION'] = Api::PAYMENTACTION_SALE;
+        $details['PAYMENTREQUEST_0_PAYMENTACTION'] = Api::PAYMENTACTION_SALE;
+
+        foreach (range(0, 9) as $index) {
+            if (Api::PENDINGREASON_AUTHORIZATION == $details['PAYMENTREQUEST_'.$index.'_PENDINGREASON']) {
+                $details->defaults(['PAYMENTREQUEST_'.$index.'_COMPLETETYPE' => 'Complete']);
+
+                $this->gateway->execute(new DoCapture($details, $index));
+            }
         }
 
-        if (false == $model['TOKEN']) {
-            if (false == $model['RETURNURL'] && $request->getToken()) {
-                $model['RETURNURL'] = $request->getToken()->getTargetUrl();
-            }
-
-            if (false == $model['CANCELURL'] && $request->getToken()) {
-                $model['CANCELURL'] = $request->getToken()->getTargetUrl();
-            }
-
-            $this->payment->execute(new SetExpressCheckout($model));
-
-            if ($model['L_ERRORCODE0']) {
-                return;
-            }
-
-            $this->payment->execute(new AuthorizeToken($model));
-        }
-
-        $this->payment->execute(new Sync($model));
-
-        if (
-            $model['PAYERID'] &&
-            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $model['CHECKOUTSTATUS'] &&
-            $model['PAYMENTREQUEST_0_AMT'] > 0
-        ) {
-            $this->payment->execute(new DoExpressCheckoutPayment($model));
-        }
-
-        $this->payment->execute(new Sync($model));
+        parent::execute($request);
     }
 
     /**
@@ -66,6 +40,6 @@ class CaptureAction extends PaymentAwareAction
         return
             $request instanceof Capture &&
             $request->getModel() instanceof \ArrayAccess
-        ; 
+        ;
     }
 }

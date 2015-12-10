@@ -9,7 +9,7 @@ class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
     public function shouldImplementActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction');
-        
+
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
     }
 
@@ -19,10 +19,10 @@ class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
     public function shouldImplementApiAwareInterface()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction');
-        
+
         $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
     }
-    
+
     /**
      * @test
      */
@@ -39,9 +39,9 @@ class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
     public function shouldAllowSetApi()
     {
         $expectedApi = $this->createApiMock();
-        
+
         $action = $this->getMockForAbstractClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction');
-        
+
         $action->setApi($expectedApi);
 
         $this->assertAttributeSame($expectedApi, 'api', $action);
@@ -56,7 +56,7 @@ class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = $this->getMockForAbstractClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction');
 
-        $action->setApi(new \stdClass);
+        $action->setApi(new \stdClass());
     }
 
     /**

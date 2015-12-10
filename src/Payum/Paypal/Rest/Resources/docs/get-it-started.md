@@ -1,7 +1,7 @@
 # Get it started.
 
 In this chapter we are going to talk about the most common task: purchasing a product.
-We assume you already read [payum's get it started documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md).
+We assume you already read [payum's get it started documentation](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
 
 ## Installation
 
@@ -9,44 +9,30 @@ The preferred way to install the library is using [composer](http://getcomposer.
 Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require "payum/payum:0.6.*@dev" "payum/paypal-rest:0.6.*@dev"
+php composer.phar require "payum/paypal-rest"
 ```
 
-_**Note**: It is advised to use stable versions. Visit [packagist](https://packagist.org/packages/payum/) to find out more about versions available._
-
-Now you have all required code downloaded, autoload configured.
-
-
 ## Configuration
-
-First we have modify `config.php` a bit.
-We have to configure `paypal/rest-api-sdk`.
-Then add paypal rest payment to registry.
-At last setup a model storage.
 
 ```php
 <?php
 //config.php
 
-// You way want to modify it to suite your needs
-$paypalRestPaymentDetailsClass = 'Payum\Paypal\Rest\Model\PaymentDetails';
+use Payum\Core\PayumBuilder;
+use Payum\Core\Payum;
 
-$storages[$paypalRestPaymentDetailsClass] = new FilesystemStorage(
-    __DIR__.'/storage', 
-    $paypalRestPaymentDetailsClass, 
-    'idStorage'
-);
+/** @var Payum $payum */
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+    ->addGateway('gatewayName', [
+        'factory' => 'paypal_rest'
+        'client_id' => 'REPLACE IT',
+        'client_secret' => 'REPLACE IT',
+        'config_path' => 'REPLACE IT',
+    ])
 
-define("PP_CONFIG_PATH", __DIR__);
-
-$configManager = \PPConfigManager::getInstance();
-
-$cred = new OAuthTokenCredential(
-    $configManager->get('acct1.ClientId'),
-    $configManager->get('acct1.ClientSecret')
-);
-
-$payments['paypalRest'] = RestPaymentFactory::create(new ApiContext($cred, 'Request' . time()));
+    ->getPayum()
+;
 ```
 
 ## Prepare payment
@@ -64,8 +50,8 @@ use PayPal\Api\Transaction;
 
 $storage = $payum->getStorage($paypalRestPaymentDetailsClass);
 
-$paymentDetails = $storage->createModel();
-$storage->updateModel($paymentDetails);
+$payment = $storage->create();
+$storage->update($payment);
 
 $payer = new Payer();
 $payer->payment_method = "paypal";
@@ -78,23 +64,31 @@ $transaction = new Transaction();
 $transaction->amount = $amount;
 $transaction->description = "This is the payment description.";
 
-$captureToken = $tokenFactory->createCaptureToken('paypalRest', $paymentDetails, 'create_recurring_payment.php');
+$captureToken = $payum->getTokenFactory()->createCaptureToken('paypalRest', $payment, 'create_recurring_payment.php');
 
 $redirectUrls = new RedirectUrls();
 $redirectUrls->return_url = $captureToken->getTargetUrl();
 $redirectUrls->cancel_url = $captureToken->getTargetUrl();
 
-$paymentDetails->intent = "sale";
-$paymentDetails->payer = $payer;
-$paymentDetails->redirect_urls = $redirectUrls;
-$paymentDetails->transactions = array($transaction);
+$payment->intent = "sale";
+$payment->payer = $payer;
+$payment->redirect_urls = $redirectUrls;
+$payment->transactions = array($transaction);
 
-$storage->updateModel($paymentDetails);
+$storage->update($payment);
 
 header("Location: ".$captureToken->getTargetUrl());
 ```
 
 That's it. As you see we configured Paypal Rest `config.php` and set details `prepare.php`.
-[capture.php](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/capture-script.md) and [done.php](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/done-script.md) scripts remain same.
+[capture.php](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/scripts/capture-script.md) and [done.php](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/scripts/done-script.md) scripts remain same.
+Here you have to modify a `gatewayName` value. Set it to `paypal_pro_checkout`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
+
+## Next
+
+* [Core's Get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
+* [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
+* [Supported gateways](https://github.com/Payum/Core/blob/master/Resources/docs/supported-gateways.md).
+* [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
 
 Back to [index](index.md).

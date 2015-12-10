@@ -33,6 +33,11 @@ class GetHttpRequest
      */
     public $userAgent;
 
+    /**
+     * @var string
+     */
+    public $content;
+
     public function __construct()
     {
         $this->query = array();
@@ -41,5 +46,6 @@ class GetHttpRequest
         $this->uri = '';
         $this->clientIp = '';
         $this->userAgent = '';
+        $this->content = '';
     }
-} 
+}

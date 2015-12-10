@@ -33,4 +33,34 @@ class ObtainTokenTemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('data-key="theKey"', $result);
         $this->assertContains('https://checkout.stripe.com/checkout.js', $result);
     }
-} 
+
+    /**
+     * @test
+     */
+    public function shouldRenderCheckoutTokenWithCurrencySet()
+    {
+        $twig = TwigFactory::createGeneric();
+
+        $result = $twig->render('@PayumStripe/Action/obtain_checkout_token.html.twig', array(
+            'model' => array('currency' => 'GBP'),
+        ));
+
+        $this->assertContains('data-currency="GBP"', $result);
+
+    }
+
+    /**
+     * @test
+     */
+    public function shouldRenderCheckoutTokenWithDollarsIfNoCurrencySet()
+    {
+        $twig = TwigFactory::createGeneric();
+
+        $result = $twig->render('@PayumStripe/Action/obtain_checkout_token.html.twig', array(
+            'model' => array('currency' => ''),
+        ));
+
+        $this->assertContains('data-currency="USD"', $result);
+
+    }
+}

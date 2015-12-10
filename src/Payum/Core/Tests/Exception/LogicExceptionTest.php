@@ -11,7 +11,7 @@ class LogicExceptionTest extends \PHPUnit_Framework_TestCase
     public function shouldImplementExceptionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\LogicException');
-        
+
         $this->assertTrue($rc->implementsInterface('Payum\Core\Exception\ExceptionInterface'));
     }
 
@@ -30,6 +30,6 @@ class LogicExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new LogicException;
+        new LogicException();
     }
 }

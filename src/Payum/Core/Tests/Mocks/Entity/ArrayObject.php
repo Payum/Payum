@@ -25,5 +25,4 @@ class ArrayObject extends BaseArrayObject
     {
         return $this->id;
     }
-
 }

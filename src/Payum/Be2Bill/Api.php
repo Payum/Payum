@@ -1,12 +1,13 @@
 <?php
 namespace Payum\Be2Bill;
 
-use Buzz\Client\ClientInterface;
-use Buzz\Message\Form\FormRequest;
-
+use GuzzleHttp\Psr7\Request;
+use Payum\Core\Bridge\Guzzle\HttpClientFactory;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\Http\HttpException;
-use Payum\Core\Bridge\Buzz\JsonResponse;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\HttpClientInterface;
 
 class Api
 {
@@ -103,7 +104,7 @@ class Api
     const OPERATION_CREDIT = 'credit';
 
     /**
-     * @var \Buzz\Client\ClientInterface
+     * @var HttpClientInterface
      */
     protected $client;
 
@@ -117,50 +118,50 @@ class Api
     );
 
     /**
-     * @param \Buzz\Client\ClientInterface $client
-     * @param array $options
+     * @param array               $options
+     * @param HttpClientInterface $client
      *
      * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
      */
-    public function __construct(ClientInterface $client, array $options)
+    public function __construct(array $options, HttpClientInterface $client = null)
     {
-        $this->client = $client;
-        $this->options = array_replace($this->options, $options);
+        $options = ArrayObject::ensureArrayObject($options);
+        $options->defaults($this->options);
+        $options->validateNotEmpty(array(
+            'identifier',
+            'password',
+        ));
 
-        if (true == empty($this->options['identifier'])) {
-            throw new InvalidArgumentException('The identifier option must be set.');
+        if (false == is_bool($options['sandbox'])) {
+            throw new LogicException('The boolean sandbox option must be set.');
         }
-        if (true == empty($this->options['password'])) {
-            throw new InvalidArgumentException('The password option must be set.');
-        }
-        if (false == is_bool($this->options['sandbox'])) {
-            throw new InvalidArgumentException('The boolean sandbox option must be set.');
-        }
+
+        $this->options = $options;
+        $this->client = $client ?: HttpClientFactory::create();
     }
 
     /**
      * @param array $params
      *
-     * @return \Payum\Core\Bridge\Buzz\JsonResponse
+     * @return array
      */
     public function payment(array $params)
     {
-        $request = new FormRequest();
-
         $params['OPERATIONTYPE'] = static::OPERATION_PAYMENT;
-        $params = $this->appendGlobalParams($params);
 
-        $request->setField('method', 'payment');
-        $request->setField('params', $params);
+        $this->addGlobalParams($params);
 
-        return $this->doRequest($request);
+        return $this->doRequest([
+            'method' => 'payment',
+            'params' => $params
+        ]);
     }
-    
+
     /**
      * Verify if the hash of the given parameter is correct
-     * 
+     *
      * @param array $params
-     * 
+     *
      * @return bool
      */
     public function verifyHash(array $params)
@@ -168,38 +169,44 @@ class Api
         if (empty($params['HASH'])) {
             return false;
         }
-        
+
         $hash = $params['HASH'];
         unset($params['HASH']);
-        
+
         return $hash === $this->calculateHash($params);
     }
 
     /**
-     * @param \Buzz\Message\Form\FormRequest $request
+     * @param array $fields
      *
-     * @throws \Payum\Core\Exception\Http\HttpException
-     *
-     * @return \Payum\Core\Bridge\Buzz\JsonResponse
+     * @return array
      */
-    protected function doRequest(FormRequest $request)
+    protected function doRequest(array $fields)
     {
-        $request->setMethod('POST');
-        $request->fromUrl($this->getApiEndpoint());
+        $headers = array(
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        );
 
-        $this->client->send($request, $response = new JsonResponse());
+        $request = new Request('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
 
-        if (false == $response->isSuccessful()) {
+        $response = $this->client->send($request);
+
+        if (false == ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
             throw HttpException::factory($request, $response);
         }
 
-        return $response;
+        $result = json_decode($response->getBody()->getContents());
+        if (null === $result) {
+            throw new LogicException("Response content is not valid json: \n\n{$response->getBody()->getContents()}");
+        }
+
+        return $result;
     }
 
     /**
      * @return string
      */
-    public function getOnsiteUrl()
+    public function getOffsiteUrl()
     {
         return $this->options['sandbox'] ?
             'https://secure-test.be2bill.com/front/form/process.php' :
@@ -208,10 +215,11 @@ class Api
     }
 
     /**
-     * @param array $params
+     * @param  array $params
+     *
      * @return array
      */
-    public function prepareOnsitePayment(array $params)
+    public function prepareOffsitePayment(array $params)
     {
         $supportedParams = array(
             'CLIENTIDENT' => null,
@@ -239,22 +247,20 @@ class Api
         ));
 
         $params['OPERATIONTYPE'] = static::OPERATION_PAYMENT;
-        $params = $this->appendGlobalParams($params);
+
+        $this->addGlobalParams($params);
 
         return $params;
     }
 
     /**
-     * @param array $params
-     * @return array
+     * @param  array $params
      */
-    protected function appendGlobalParams(array $params = array())
+    protected function addGlobalParams(array &$params)
     {
         $params['VERSION'] = self::VERSION;
         $params['IDENTIFIER'] = $this->options['identifier'];
         $params['HASH'] = $this->calculateHash($params);
-
-        return $params;
     }
     /**
      * @return string
@@ -279,7 +285,7 @@ class Api
 
         $clearString = $this->options['password'];
         foreach ($params as $key => $value) {
-            $clearString .= $key . '=' . $value . $this->options['password'];
+            $clearString .= $key.'='.$value.$this->options['password'];
         }
 
         return hash('sha256', $clearString);

@@ -4,7 +4,7 @@ namespace Payum\Payex\Tests\Api;
 use Payum\Payex\Api\RecurringApi;
 use Payum\Payex\Api\SoapClientFactory;
 
-class RecurringApiTest extends \PHPUnit_Framework_TestCase 
+class RecurringApiTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -12,33 +12,33 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
     public function shouldBeSubClassOfBaseApi()
     {
         $rc = new \ReflectionClass('Payum\Payex\Api\RecurringApi');
-        
+
         $this->assertTrue($rc->isSubclassOf('Payum\Payex\Api\BaseApi'));
-    }
-    
-    /**
-     * @test 
-     * 
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The accountNumber option must be set.
-     */
-    public function throwIfAccountNumberOptionNotSet()
-    {
-        new RecurringApi(new SoapClientFactory, array());
     }
 
     /**
      * @test
      *
      * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The encryptionKey option must be set.
+     * @expectedExceptionMessage The account_number option must be set.
+     */
+    public function throwIfAccountNumberOptionNotSet()
+    {
+        new RecurringApi(new SoapClientFactory(), array());
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The encryption_key option must be set.
      */
     public function throwIfEncryptionKeyOptionNotSet()
     {
         new RecurringApi(
-            new SoapClientFactory,
+            new SoapClientFactory(),
             array(
-                'accountNumber' => 'aNumber',
+                'account_number' => 'aNumber',
             )
         );
     }
@@ -52,10 +52,10 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
     public function throwIfNotBoolSandboxOptionGiven()
     {
         new RecurringApi(
-            new SoapClientFactory,
+            new SoapClientFactory(),
             array(
-                'accountNumber' => 'aNumber',
-                'encryptionKey' => 'aKey',
+                'account_number' => 'aNumber',
+                'encryption_key' => 'aKey',
                 'sandbox' => 'not a bool',
             )
         );
@@ -67,10 +67,10 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
     public function couldBeConstructedWithValidOptions()
     {
         new RecurringApi(
-            new SoapClientFactory,
+            new SoapClientFactory(),
             array(
-                'encryptionKey' => 'aKey',
-                'accountNumber' => 'aNumber',
+                'encryption_key' => 'aKey',
+                'account_number' => 'aNumber',
                 'sandbox' => true,
             )
         );
@@ -81,9 +81,9 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseSoapClientOnStartRecurringPaymentAndConvertItsResponse()
     {
-        $response = new \stdClass;
+        $response = new \stdClass();
         $response->StartResult = '<foo>fooValue</foo>';
-        
+
         $soapClientMock = $this->getMock('SoapClient', array('Start'), array(), '', false);
         $soapClientMock
             ->expects($this->once())
@@ -91,7 +91,7 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
             ->with($this->isType('array'))
             ->will($this->returnValue($response))
         ;
-        
+
         $clientFactoryMock = $this->getMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
         $clientFactoryMock
             ->expects($this->atLeastOnce())
@@ -102,14 +102,14 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
         $recurringApi = new RecurringApi(
             $clientFactoryMock,
             array(
-                'encryptionKey' => 'aKey',
-                'accountNumber' => 'aNumber',
+                'encryption_key' => 'aKey',
+                'account_number' => 'aNumber',
                 'sandbox' => true,
             )
         );
 
         $result = $recurringApi->start(array());
-        
+
         $this->assertEquals(array('fooValue'),  $result);
     }
 
@@ -118,7 +118,7 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseSoapClientOnStopRecurringPaymentAndConvertItsResponse()
     {
-        $response = new \stdClass;
+        $response = new \stdClass();
         $response->StopResult = '<foo>fooValue</foo>';
 
         $soapClientMock = $this->getMock('SoapClient', array('Stop'), array(), '', false);
@@ -139,8 +139,8 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
         $recurringApi = new RecurringApi(
             $clientFactoryMock,
             array(
-                'encryptionKey' => 'aKey',
-                'accountNumber' => 'aNumber',
+                'encryption_key' => 'aKey',
+                'account_number' => 'aNumber',
                 'sandbox' => true,
             )
         );
@@ -155,7 +155,7 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseSoapClientOnCheckRecurringPaymentAndConvertItsResponse()
     {
-        $response = new \stdClass;
+        $response = new \stdClass();
         $response->CheckResult = '<foo>fooValue</foo>';
 
         $soapClientMock = $this->getMock('SoapClient', array('Check'), array(), '', false);
@@ -176,8 +176,8 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
         $recurringApi = new RecurringApi(
             $clientFactoryMock,
             array(
-                'encryptionKey' => 'aKey',
-                'accountNumber' => 'aNumber',
+                'encryption_key' => 'aKey',
+                'account_number' => 'aNumber',
                 'sandbox' => true,
             )
         );

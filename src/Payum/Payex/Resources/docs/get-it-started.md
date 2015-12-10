@@ -1,7 +1,7 @@
 # Get it started.
 
 In this chapter we are going to talk about the most common task: purchase of a product using [Payex](http://www.payexpim.com/).
-We assume you already read [get it started](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md) from core.
+We assume you already read [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) from core.
 Here we just show you modifications you have to put to the files shown there.
 
 ## Installation
@@ -10,46 +10,43 @@ The preferred way to install the library is using [composer](http://getcomposer.
 Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require "payum/payex:*@stable"
+php composer.phar require payum/payex
 ```
 
 ## config.php
 
-We have to only add a the payment factory. All the rest remain the same:
+We have to only add the gateway factory. All the rest remain the same:
 
 ```php
 <?php
 //config.php
 
-use Buzz\Client\Curl;
+use Payum\Core\PayumBuilder;
+use Payum\Core\Payum;
 
-use Payum\Payex\Api\OrderApi;
-use Payum\Payex\Api\SoapClientFactory;
-use Payum\Payex\PaymentFactory;
+/** @var Payum $payum */
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+    ->addGatewayConfig('gatewayName', [
+        'factory' => 'payex',
+        'account_number' => 'REPLACE IT',
+        'encryption_key' => 'REPLACE IT',
+        'sandbox' => true
+    ])
 
-// ...
-
-$payexOrderApi = new OrderApi(new SoapClientFactory(), array(
-   'accountNumber' => 'REPLACE IT',
-   'encryptionKey' => 'REPLACE IT',
-   'sandbox' => true
-));
-
-$payments['payex'] = PaymentFactory::create($payexOrderApi);
+    ->getPayum()
+;
 ```
 
 ## prepare.php
 
-Here you have to modify a `paymentName` value. Set it to `payex`.
+Here you have to modify a `gatewayName` value. Set it to `payex`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
 
 ## Next 
 
 * [Core's Get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
 * [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
-* [Supported payments](https://github.com/Payum/Core/blob/master/Resources/docs/supported-payments.md).
+* [Supported gateways](https://github.com/Payum/Core/blob/master/Resources/docs/supported-gateways.md).
 * [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
-* [Capture script](https://github.com/Payum/Core/blob/master/Resources/docs/capture-script.md).
-* [Authorize script](https://github.com/Payum/Core/blob/master/Resources/docs/authorize-script.md).
-* [Done script](https://github.com/Payum/Core/blob/master/Resources/docs/done-script.md).
 
 Back to [index](index.md).

@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request\Api;
 
-use MyProject\Proxies\__CG__\stdClass;
+use Payum\Core\Request\Generic;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
 
 class GetTransactionDetailsTest extends \PHPUnit_Framework_TestCase
@@ -11,9 +11,9 @@ class GetTransactionDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails');
+        $rc = new \ReflectionClass(GetTransactionDetails::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
+        $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
     /**
@@ -21,7 +21,7 @@ class GetTransactionDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithModelAndPaymentRequestNAsArguments()
     {
-        new GetTransactionDetails(new \stdClass, $paymentRequestN = 5);
+        new GetTransactionDetails(new \stdClass(), $paymentRequestN = 5);
     }
 
     /**
@@ -31,7 +31,7 @@ class GetTransactionDetailsTest extends \PHPUnit_Framework_TestCase
     {
         $expectedPaymentRequestN = 7;
 
-        $request = new GetTransactionDetails(new \stdClass, $expectedPaymentRequestN);
+        $request = new GetTransactionDetails(new \stdClass(), $expectedPaymentRequestN);
 
         $this->assertSame($expectedPaymentRequestN, $request->getPaymentRequestN());
     }

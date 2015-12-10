@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Payex\Tests\Action;
 
-use Payum\Core\PaymentInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Sync;
 use Payum\Payex\Action\AgreementDetailsSyncAction;
 
@@ -14,7 +14,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass('Payum\Payex\Action\AgreementDetailsSyncAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
@@ -22,7 +22,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new AgreementDetailsSyncAction;
+        new AgreementDetailsSyncAction();
     }
 
     /**
@@ -78,7 +78,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotSync()
     {
-        $action = new AgreementDetailsSyncAction;
+        $action = new AgreementDetailsSyncAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -88,9 +88,9 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportSyncWithNotArrayAccessModel()
     {
-        $action = new AgreementDetailsSyncAction;
+        $action = new AgreementDetailsSyncAction();
 
-        $this->assertFalse($action->supports(new Sync(new \stdClass)));
+        $this->assertFalse($action->supports(new Sync(new \stdClass())));
     }
 
     /**
@@ -100,7 +100,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $action = new AgreementDetailsSyncAction;
+        $action = new AgreementDetailsSyncAction();
 
         $action->execute(new \stdClass());
     }
@@ -110,26 +110,26 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldDoSubExecuteCheckAgreementApiRequest()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Payex\Request\Api\CheckAgreement'))
         ;
-        
+
         $action = new AgreementDetailsSyncAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute(new Sync(array(
-            'agreementRef' => 'aRef'
+            'agreementRef' => 'aRef',
         )));
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

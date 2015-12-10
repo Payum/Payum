@@ -9,17 +9,17 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfPaymentAwareAction()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsSyncAction');
-        
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
+
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()   
+    public function couldBeConstructedWithoutAnyArguments()
     {
         new RecurringPaymentDetailsSyncAction();
     }
@@ -32,9 +32,9 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new RecurringPaymentDetailsSyncAction();
 
         $paymentDetails = array(
-            'BILLINGPERIOD' => 12
+            'BILLINGPERIOD' => 12,
         );
-        
+
         $request = new Sync($paymentDetails);
 
         $this->assertTrue($action->supports($request));
@@ -52,7 +52,7 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
@@ -67,19 +67,19 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldDoNothingIfProfileIdNotSet()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->never())
             ->method('execute')
         ;
-        
+
         $action = new RecurringPaymentDetailsSyncAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $request = new Sync(array(
-            'BILLINGPERIOD' => 12
+            'BILLINGPERIOD' => 12,
         ));
-        
+
         $action->execute($request);
     }
 
@@ -88,27 +88,27 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldRequestGetRecurringPaymentsProfileDetailsActionIfProfileIdSetInModel()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetRecurringPaymentsProfileDetails'))
         ;
 
         $action = new RecurringPaymentDetailsSyncAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $action->execute(new Sync(array(
             'BILLINGPERIOD' => 'aBillingPeriod',
             'PROFILEID' => 'anId',
         )));
     }
-    
+
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

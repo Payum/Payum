@@ -14,7 +14,7 @@ class StatusAction implements ActionInterface
 {
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param GetStatusInterface $request
      */
     public function execute($request)
@@ -22,20 +22,38 @@ class StatusAction implements ActionInterface
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = new ArrayObject($request->getModel());
-        
+
         if (null === $model['RESULT']) {
             $request->markNew();
-            
+
             return;
         }
 
-        if (Api::RESULT_SUCCESS === (int) $model['RESULT']) {
+        if (false == is_numeric($model['RESULT'])) {
+            $request->markUnknown();
+
+            return;
+        }
+
+        if ($model['RESULT'] > 0) {
+            $request->markFailed();
+
+            return;
+        }
+
+        if ($model['ORIGID'] && Api::TRXTYPE_CREDIT == $model['TRXTYPE'] && Api::RESULT_SUCCESS == $model['RESULT']) {
+            $request->markRefunded();
+
+            return;
+        }
+
+        if (Api::TRXTYPE_SALE == $model['TRXTYPE'] && Api::RESULT_SUCCESS == $model['RESULT']) {
             $request->markCaptured();
 
             return;
         }
 
-        $request->markFailed();
+        $request->markUnknown();
     }
 
     /**

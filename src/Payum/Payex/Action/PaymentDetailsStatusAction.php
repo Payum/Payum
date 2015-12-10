@@ -20,11 +20,11 @@ class PaymentDetailsStatusAction implements ActionInterface
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        
+
         //TODO: It may be not correct for all cases. This does NOT indicate wether the transaction requested was successful, only wether the request was carried out successfully.
         if ($model['errorCode'] && OrderApi::ERRORCODE_OK != $model['errorCode']) {
             $request->markFailed();
-            
+
             return;
         }
 
@@ -75,33 +75,33 @@ class PaymentDetailsStatusAction implements ActionInterface
             if (OrderApi::TRANSACTIONSTATUS_FAILURE == $model['transactionStatus']) {
                 $errorDetails = $model['errorDetails'];
                 if (
-                    isset($errorDetails['transactionErrorCode']) && 
+                    isset($errorDetails['transactionErrorCode']) &&
                     $errorDetails['transactionErrorCode'] == OrderApi::TRANSACTIONERRORCODE_OPERATIONCANCELLEDBYCUSTOMER
                 ) {
                     $request->markCanceled();
 
                     return;
                 }
-                
+
                 $request->markFailed();
 
                 return;
             }
-            
+
             //If you are running 2-phase transactions, you should check that the node transactionStatus contains 3 (authorize)
             if (OrderApi::PURCHASEOPERATION_AUTHORIZATION == $model['purchaseOperation']) {
                 if (OrderApi::TRANSACTIONSTATUS_AUTHORIZE == $model['transactionStatus']) {
                     $request->markCaptured();
-    
+
                     return;
                 }
 
                 //Anything else indicates that the transaction has failed or is still processing
                 $request->markFailed();
-            
+
                 return;
             }
-            
+
             //If you are running 1-phase transactions, you should check that the node transactionStatus contains 0 (sale)
             if (OrderApi::PURCHASEOPERATION_SALE == $model['purchaseOperation']) {
                 if (is_numeric($model['transactionStatus']) && OrderApi::TRANSACTIONSTATUS_SALE == $model['transactionStatus']) {
@@ -115,9 +115,9 @@ class PaymentDetailsStatusAction implements ActionInterface
 
                 return;
             }
-            
+
             $request->markUnknown();
-            
+
             return;
         }
 

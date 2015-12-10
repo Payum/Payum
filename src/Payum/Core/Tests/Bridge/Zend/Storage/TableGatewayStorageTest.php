@@ -25,6 +25,19 @@ class TableGatewayStorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage Method is not supported by the storage.
+     */
+    public function throwIfTryToUseNotSupportedFindByMethod()
+    {
+        $storage = new TableGatewayStorage($this->createTableGatewayMock(), 'stdClass');
+
+        $storage->findBy(array());
+    }
+
+    /**
      * @return \PHPUnit_Framework_MockObject_MockObject|TableGateway
      */
     protected function createTableGatewayMock()

@@ -76,24 +76,24 @@ class OrderApi extends BaseApi
 
     /**
      * @link http://www.payexpim.com/technical-reference/pxorder/initialize8/
-     * 
+     *
      * @var array $parameters
-     * 
+     *
      * @return array
      */
     public function initialize(array $parameters)
     {
-        $parameters['accountNumber'] = $this->options['accountNumber'];
+        $parameters['accountNumber'] = $this->options['account_number'];
 
         //DEPRICATED. Send in as empty string.
         $parameters['externalID'] = '';
-        
+
         if (isset($parameters['orderId'])) {
             //On request it requires orderID fields when in response it is orderId.
             $parameters['orderID'] = $parameters['orderId'];
             unset($parameters['orderId']);
         }
-        
+
         $parameters['hash'] = $this->calculateHash($parameters, array(
             'accountNumber',
             'purchaseOperation',
@@ -112,22 +112,22 @@ class OrderApi extends BaseApi
             'view',
             'agreementRef',
             'cancelUrl',
-            'clientLanguage'
+            'clientLanguage',
         ));
-        
+
         return $this->call('Initialize8', $parameters, $this->getPxOrderWsdl());
     }
 
     /**
      * @link http://www.payexpim.com/technical-reference/pxorder/complete-2/
-     * 
+     *
      * @param array $parameters
-     * 
+     *
      * @return array
      */
     public function complete(array $parameters)
     {
-        $parameters['accountNumber'] = $this->options['accountNumber'];
+        $parameters['accountNumber'] = $this->options['account_number'];
 
         $parameters['hash'] = $this->calculateHash($parameters, array(
             'accountNumber',
@@ -146,7 +146,7 @@ class OrderApi extends BaseApi
      */
     public function check(array $parameters)
     {
-        $parameters['accountNumber'] = $this->options['accountNumber'];
+        $parameters['accountNumber'] = $this->options['account_number'];
 
         $parameters['hash'] = $this->calculateHash($parameters, array(
             'accountNumber',

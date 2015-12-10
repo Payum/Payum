@@ -15,7 +15,7 @@ class GetTransactionDetailsAction extends BaseApiAwareAction
     {
         /** @var $request GetTransactionDetails */
         RequestNotSupportedException::assertSupports($this, $request);
-        
+
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         $transactionIndex = 'PAYMENTREQUEST_'.$request->getPaymentRequestN().'_TRANSACTIONID';
@@ -36,7 +36,7 @@ class GetTransactionDetailsAction extends BaseApiAwareAction
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof GetTransactionDetails &&
             $request->getModel() instanceof \ArrayAccess
         ;
@@ -62,7 +62,7 @@ class GetTransactionDetailsAction extends BaseApiAwareAction
             'EXCHANGERATE',
             'PAYMENTSTATUS',
             'PENDINGREASON',
-            'REASONCODE'
+            'REASONCODE',
         );
     }
 }

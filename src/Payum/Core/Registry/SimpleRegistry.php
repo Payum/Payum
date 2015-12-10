@@ -2,7 +2,8 @@
 namespace Payum\Core\Registry;
 
 use Payum\Core\Extension\StorageExtension;
-use Payum\Core\Payment;
+use Payum\Core\Gateway;
+use Payum\Core\GatewayInterface;
 
 class SimpleRegistry extends AbstractRegistry
 {
@@ -12,15 +13,30 @@ class SimpleRegistry extends AbstractRegistry
     protected $initializedStorageExtensions;
 
     /**
+     * @var bool
+     */
+    protected $addStorageExtensions = true;
+
+    /**
+     * @param boolean $bool
+     */
+    public function setAddStorageExtensions($bool)
+    {
+        $this->addStorageExtensions = $bool;
+    }
+
+    /**
      * {@inheritDoc}
      */
-    public function getPayment($name = null)
+    public function getGateway($name)
     {
-        $payment = parent::getPayment($name);
+        $gateway = parent::getGateway($name);
 
-        $this->addStorageToPayment($name);
+        if ($this->addStorageExtensions) {
+            $this->addStorageToGateway($name, $gateway);
+        }
 
-        return $payment;
+        return $gateway;
     }
 
     /**
@@ -32,27 +48,23 @@ class SimpleRegistry extends AbstractRegistry
     }
 
     /**
-     * @param string|null $name
+     * @param string           $name
+     * @param GatewayInterface $gateway
      */
-    protected function addStorageToPayment($name)
+    protected function addStorageToGateway($name, GatewayInterface $gateway)
     {
-        if (null === $name) {
-            $name = $this->defaultPayment;
+        /** @var Gateway $gateway */
+        if (false == $gateway instanceof Gateway) {
+            return;
         }
-
         if (isset($this->initializedStorageExtensions[$name])) {
             return;
         }
 
-        $this->initializedStorageExtensions[$name] = true;
-
-        $payment = $this->getPayment($name);
-        if (false == $payment instanceof Payment) {
-            return;
-        }
-
         foreach ($this->getStorages() as $storage) {
-            $payment->addExtension(new StorageExtension($storage));
+            $gateway->addExtension(new StorageExtension($storage));
         }
+
+        $this->initializedStorageExtensions[$name] = true;
     }
 }

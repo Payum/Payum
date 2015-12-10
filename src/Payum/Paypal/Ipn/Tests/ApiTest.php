@@ -1,31 +1,32 @@
 <?php
 namespace Payum\Paypal\Ipn\Tests;
 
-use Buzz\Client\ClientInterface;
-
+use GuzzleHttp\Psr7\Response;
+use Payum\Core\HttpClientInterface;
 use Payum\Paypal\Ipn\Api;
+use Psr\Http\Message\RequestInterface;
 
-class ApiTest extends \PHPUnit_Framework_TestCase 
+class ApiTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function couldBeConstructedWithBuzzClientAndOptions()
+    public function couldBeConstructedWithHttpClientAndOptions()
     {
-        new Api($this->createClientMock(), array(
-            'sandbox' => true
-        ));
+        new Api(array(
+            'sandbox' => true,
+        ), $this->createHttpClientMock());
     }
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage The boolean sandbox option must be set.
      */
     public function throwIfSandboxOptionNotSetInConstructor()
     {
-        new Api($this->createClientMock(), array());
+        new Api(array(), $this->createHttpClientMock());
     }
 
     /**
@@ -33,9 +34,9 @@ class ApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnSandboxIpnEndpointIfSandboxSetTrueInConstructor()
     {
-        $api = new Api($this->createClientMock(), array(
-            'sandbox' => true
-        ));
+        $api = new Api(array(
+            'sandbox' => true,
+        ), $this->createHttpClientMock());
 
         $this->assertEquals('https://www.sandbox.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
     }
@@ -45,37 +46,33 @@ class ApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnLiveIpnEndpointIfSandboxSetFalseInConstructor()
     {
-        $api = new Api($this->createClientMock(), array(
-            'sandbox' => false
-        ));
+        $api = new Api(array(
+            'sandbox' => false,
+        ), $this->createHttpClientMock());
 
         $this->assertEquals('https://www.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
     }
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\Http\HttpException
      * @expectedExceptionMessage Client error response
      */
     public function throwIfResponseStatusNotOk()
     {
-        $clientMock = $this->createClientMock();
+        $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->with(
-                $this->isInstanceOf('Buzz\Message\Form\FormRequest'),
-                $this->isInstanceOf('Buzz\Message\Response')
-            )
-            ->will($this->returnCallback(function($request, $response) {
-                $response->setHeaders(array('HTTP/1.1 404 Not Found'));
+            ->will($this->returnCallback(function (RequestInterface $request) {
+                return new Response(404);
             }))
         ;
 
-        $api = new Api($clientMock, array(
-            'sandbox' => false
-        ));
+        $api = new Api(array(
+            'sandbox' => false,
+        ), $clientMock);
 
         $api->notifyValidate(array());
     }
@@ -85,41 +82,37 @@ class ApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldProxyWholeNotificationToClientSend()
     {
+        /** @var RequestInterface $actualRequest */
         $actualRequest = null;
-            
-        $clientMock = $this->createClientMock();
+
+        $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->with(
-                $this->isInstanceOf('Buzz\Message\Form\FormRequest'),
-                $this->isInstanceOf('Buzz\Message\Response')
-            )
-            ->will($this->returnCallback(function($request, $response) use (&$actualRequest) {
-                $response->setHeaders(array('HTTP/1.1 200 OK'));
-                $response->setContent('ACK=Success');
-                        
+            ->will($this->returnCallback(function (RequestInterface $request) use (&$actualRequest) {
                 $actualRequest = $request;
+
+                return new Response(200);
             }))
         ;
-        
-        $api = new Api($clientMock, array(
-            'sandbox' => false
-        ));
+
+        $api = new Api(array(
+            'sandbox' => false,
+        ), $clientMock);
 
         $expectedNotification = array(
             'foo' => 'foo',
-            'bar' => 'baz'
+            'bar' => 'baz',
         );
 
         $api->notifyValidate($expectedNotification);
-        
-        $this->assertInstanceOf('Buzz\Message\Form\FormRequest', $actualRequest);
-        $this->assertEquals(
-            array('cmd' => Api::CMD_NOTIFY_VALIDATE) + $expectedNotification, 
-            $actualRequest->getFields()
-        );
-        $this->assertEquals($api->getIpnEndpoint(), $actualRequest->getUrl());
+
+        $content = array();
+        parse_str($actualRequest->getBody()->getContents(), $content);
+
+        $this->assertInstanceOf('Psr\Http\Message\RequestInterface', $actualRequest);
+        $this->assertEquals(array('cmd' => Api::CMD_NOTIFY_VALIDATE) + $expectedNotification, $content);
+        $this->assertEquals($api->getIpnEndpoint(), $actualRequest->getUri());
         $this->assertEquals('POST', $actualRequest->getMethod());
     }
 
@@ -128,23 +121,18 @@ class ApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnVerifiedIfResponseContentVerified()
     {
-        $clientMock = $this->createClientMock();
+        $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->with(
-                $this->isInstanceOf('Buzz\Message\Form\FormRequest'),
-                $this->isInstanceOf('Buzz\Message\Response')
-            )
-            ->will($this->returnCallback(function($request, $response) {
-                $response->setHeaders(array('HTTP/1.1 200 OK'));
-                $response->setContent(Api::NOTIFY_VERIFIED);
+            ->will($this->returnCallback(function (RequestInterface $request) {
+                return new Response(200, array(), Api::NOTIFY_VERIFIED);
             }))
         ;
 
-        $api = new Api($clientMock, array(
-            'sandbox' => false
-        ));
+        $api = new Api(array(
+            'sandbox' => false,
+        ), $clientMock);
 
         $this->assertEquals(Api::NOTIFY_VERIFIED, $api->notifyValidate(array()));
     }
@@ -154,23 +142,18 @@ class ApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnInvalidIfResponseContentInvalid()
     {
-        $clientMock = $this->createClientMock();
+        $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->with(
-                $this->isInstanceOf('Buzz\Message\Form\FormRequest'),
-                $this->isInstanceOf('Buzz\Message\Response')
-            )
-            ->will($this->returnCallback(function($request, $response) {
-                        $response->setHeaders(array('HTTP/1.1 200 OK'));
-                        $response->setContent(Api::NOTIFY_INVALID);
-                    }))
+            ->will($this->returnCallback(function (RequestInterface $request) {
+                return new Response(200, array(), Api::NOTIFY_INVALID);
+            }))
         ;
 
-        $api = new Api($clientMock, array(
-            'sandbox' => false
-        ));
+        $api = new Api(array(
+            'sandbox' => false,
+        ), $clientMock);
 
         $this->assertEquals(Api::NOTIFY_INVALID, $api->notifyValidate(array()));
     }
@@ -180,46 +163,41 @@ class ApiTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnInvalidIfResponseContentContainsSomethingNotEqualToVerified()
     {
-        $clientMock = $this->createClientMock();
+        $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->with(
-                $this->isInstanceOf('Buzz\Message\Form\FormRequest'),
-                $this->isInstanceOf('Buzz\Message\Response')
-            )
-            ->will($this->returnCallback(function($request, $response) {
-                        $response->setHeaders(array('HTTP/1.1 200 OK'));
-                        $response->setContent('foobarbaz');
-                    }))
+            ->will($this->returnCallback(function (RequestInterface $request) {
+                return new Response(200, array(), 'foobarbaz');
+            }))
         ;
 
-        $api = new Api($clientMock, array(
-            'sandbox' => false
-        ));
+        $api = new Api(array(
+            'sandbox' => false,
+        ), $clientMock);
 
         $this->assertEquals(Api::NOTIFY_INVALID, $api->notifyValidate(array()));
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ClientInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|HttpClientInterface
      */
-    protected function createClientMock()
+    protected function createHttpClientMock()
     {
-        return $this->getMock('Buzz\Client\ClientInterface', array('send'));
+        return $this->getMock('Payum\Core\HttpClientInterface', array('send'));
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Buzz\Client\ClientInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|HttpClientInterface
      */
-    protected function createSuccessClientStub()
+    protected function createSuccessHttpClientStub()
     {
-        $clientMock = $this->createClientMock();
+        $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->any())
             ->method('send')
-            ->will($this->returnCallback(function($request, $response) {
-                $response->setHeaders(array('HTTP/1.1 200 OK'));
+            ->will($this->returnCallback(function (RequestInterface $request) {
+                return new Response(200);
             }))
         ;
 

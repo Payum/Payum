@@ -2,7 +2,7 @@
 namespace Payum\Core\Tests;
 
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\PaymentInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Generic;
 use Payum\Core\Security\TokenInterface;
 
@@ -14,15 +14,25 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
     protected $requestClass;
 
     /**
-     * @var ActionInterface
+     * @var string
      */
     protected $actionClass;
+
+    /**
+     * @var ActionInterface
+     */
+    protected $action;
+
+    protected function setUp()
+    {
+        $this->action = new $this->actionClass();
+    }
 
     public function provideSupportedRequests()
     {
         return array(
             array(new $this->requestClass(array())),
-            array(new $this->requestClass(new \ArrayObject)),
+            array(new $this->requestClass(new \ArrayObject())),
         );
     }
 
@@ -33,8 +43,8 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
             array(array('foo')),
             array(new \stdClass()),
             array(new $this->requestClass('foo')),
-            array(new $this->requestClass(new \stdClass)),
-            array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
+            array(new $this->requestClass(new \stdClass())),
+            array($this->getMockForAbstractClass(Generic::class, array(array()))),
         );
     }
 
@@ -45,7 +55,7 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
     {
         $rc = new \ReflectionClass($this->actionClass);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     /**
@@ -53,7 +63,7 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new $this->actionClass;
+        new $this->actionClass();
     }
 
     /**
@@ -63,9 +73,7 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportRequest($request)
     {
-        $action = new $this->actionClass;
-
-        $this->assertTrue($action->supports($request));
+        $this->assertTrue($this->action->supports($request));
     }
 
     /**
@@ -75,9 +83,7 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportRequest($request)
     {
-        $action = new $this->actionClass;
-
-        $this->assertFalse($action->supports($request));
+        $this->assertFalse($this->action->supports($request));
     }
 
     /**
@@ -89,17 +95,15 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute($request)
     {
-        $action = new $this->actionClass;
-
-        $action->execute($request);
+        $this->action->execute($request);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock(GatewayInterface::class);
     }
 
     /**
@@ -107,6 +111,6 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createTokenMock()
     {
-        return $this->getMock('Payum\Core\Security\TokenInterface');
+        return $this->getMock(TokenInterface::class);
     }
 }

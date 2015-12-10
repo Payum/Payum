@@ -21,7 +21,7 @@ class CreditCardExpirationDateTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new CreditCardExpirationDateType;
+        new CreditCardExpirationDateType();
     }
 
     /**
@@ -29,7 +29,7 @@ class CreditCardExpirationDateTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldExtendDateType()
     {
-        $type = new CreditCardExpirationDateType;
+        $type = new CreditCardExpirationDateType();
 
         $this->assertEquals('date', $type->getParent());
     }
@@ -39,7 +39,7 @@ class CreditCardExpirationDateTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnExpectedName()
     {
-        $type = new CreditCardExpirationDateType;
+        $type = new CreditCardExpirationDateType();
 
         $this->assertEquals('payum_credit_card_expiration_date', $type->getName());
     }
@@ -49,16 +49,47 @@ class CreditCardExpirationDateTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowResolveOptions()
     {
-        $type = new CreditCardExpirationDateType;
+        $type = new CreditCardExpirationDateType();
 
-        $resolver = new OptionsResolver;
+        $resolver = new OptionsResolver();
 
         $type->setDefaultOptions($resolver);
 
         $options = $resolver->resolve();
 
         $this->assertArrayHasKey('years', $options);
-        $this->assertCount(10, $options['years']);
+        $this->assertCount(11, $options['years']);
+
+        $this->assertArrayHasKey('min_expiration_year', $options);
+        $this->assertEquals(date('Y'), $options['min_expiration_year']);
+
+        $this->assertArrayHasKey('max_expiration_year', $options);
+        $this->assertEquals(date('Y') + 10, $options['max_expiration_year']);
     }
 
+    /**
+     * @test
+     */
+    public function shouldTakeMinAndMaxExpirationYearsWhileCalcYearsRange()
+    {
+        $type = new CreditCardExpirationDateType();
+
+        $resolver = new OptionsResolver();
+
+        $type->setDefaultOptions($resolver);
+
+        $options = $resolver->resolve(array(
+            'min_expiration_year' => 2000,
+            'max_expiration_year' => 2002,
+        ));
+
+        $this->assertArrayHasKey('years', $options);
+        $this->assertCount(3, $options['years']);
+
+        $this->assertArrayHasKey('min_expiration_year', $options);
+        $this->assertEquals(2000, $options['min_expiration_year']);
+
+        $this->assertArrayHasKey('max_expiration_year', $options);
+        $this->assertEquals(2002, $options['max_expiration_year']);
+    }
 }

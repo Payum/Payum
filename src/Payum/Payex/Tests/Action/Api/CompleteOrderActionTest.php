@@ -9,18 +9,18 @@ class CompleteOrderActionTest extends \PHPUnit_Framework_TestCase
     protected $requiredFields = array(
         'orderRef' => 'aRef',
     );
-    
+
     public function provideRequiredFields()
     {
         $fields = array();
-        
+
         foreach ($this->requiredFields as $name => $value) {
             $fields[] = array($name);
         }
 
         return $fields;
     }
-    
+
     /**
      * @test
      */
@@ -46,7 +46,7 @@ class CompleteOrderActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new CompleteOrderAction;
+        new CompleteOrderAction();
     }
 
     /**
@@ -55,25 +55,25 @@ class CompleteOrderActionTest extends \PHPUnit_Framework_TestCase
     public function shouldAllowSetOrderApiAsApi()
     {
         $orderApi = $this->getMock('Payum\Payex\Api\OrderApi', array(), array(), '', false);
-        
-        $action = new CompleteOrderAction;
+
+        $action = new CompleteOrderAction();
 
         $action->setApi($orderApi);
-        
+
         $this->assertAttributeSame($orderApi, 'api', $action);
     }
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\UnsupportedApiException
      * @expectedExceptionMessage Expected api must be instance of OrderApi.
      */
     public function throwOnTryingSetNotOrderApiAsApi()
     {
-        $action = new CompleteOrderAction;
+        $action = new CompleteOrderAction();
 
-        $action->setApi(new \stdClass);
+        $action->setApi(new \stdClass());
     }
 
     /**
@@ -91,7 +91,7 @@ class CompleteOrderActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotCompleteOrderRequest()
     {
-        $action = new CompleteOrderAction;
+        $action = new CompleteOrderAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -101,9 +101,9 @@ class CompleteOrderActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportCompleteOrderRequestWithNotArrayAccessModel()
     {
-        $action = new CompleteOrderAction;
+        $action = new CompleteOrderAction();
 
-        $this->assertFalse($action->supports(new CompleteOrder(new \stdClass)));
+        $this->assertFalse($action->supports(new CompleteOrder(new \stdClass())));
     }
 
     /**
@@ -120,9 +120,9 @@ class CompleteOrderActionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @dataProvider provideRequiredFields
-     * 
+     *
      * @expectedException \Payum\Core\Exception\LogicException
      */
     public function throwIfTryInitializeWithRequiredFieldNotPresent($requiredField)
@@ -147,13 +147,12 @@ class CompleteOrderActionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(array(
                 'transactionRef' => 'theRef',
             )));
-        ;
 
         $action = new CompleteOrderAction();
         $action->setApi($apiMock);
 
         $request = new CompleteOrder($this->requiredFields);
-        
+
         $action->execute($request);
 
         $model = $request->getModel();

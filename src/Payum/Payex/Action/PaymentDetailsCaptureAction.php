@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Payex\Action;
 
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\Capture;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -10,7 +10,7 @@ use Payum\Payex\Request\Api\StartRecurringPayment;
 use Payum\Payex\Request\Api\InitializeOrder;
 use Payum\Payex\Request\Api\CompleteOrder;
 
-class PaymentDetailsCaptureAction extends PaymentAwareAction
+class PaymentDetailsCaptureAction extends GatewayAwareAction
 {
     /**
      * {@inheritDoc}
@@ -32,20 +32,20 @@ class PaymentDetailsCaptureAction extends PaymentAwareAction
         }
 
         if (false == $details['clientIPAddress']) {
-            $this->payment->execute($httpRequest = new GetHttpRequest);
+            $this->gateway->execute($httpRequest = new GetHttpRequest());
 
             $details['clientIPAddress'] = $httpRequest->clientIp;
         }
-        
+
         if (false == $details['orderRef']) {
-            $this->payment->execute(new InitializeOrder($details));
+            $this->gateway->execute(new InitializeOrder($details));
         }
 
         if ($details['orderRef']) {
-            $this->payment->execute(new CompleteOrder($details));
-            
+            $this->gateway->execute(new CompleteOrder($details));
+
             if ($details['recurring']) {
-                $this->payment->execute(new StartRecurringPayment($details));
+                $this->gateway->execute(new StartRecurringPayment($details));
             }
         }
     }
@@ -63,7 +63,7 @@ class PaymentDetailsCaptureAction extends PaymentAwareAction
         }
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        
+
         if ($model['recurring']) {
             return true;
         }
@@ -72,7 +72,7 @@ class PaymentDetailsCaptureAction extends PaymentAwareAction
         if (false == $model['autoPay']) {
             return true;
         }
-        
+
         return false;
     }
 }

@@ -4,6 +4,8 @@ namespace Payum\Core\Bridge\Symfony\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class CreditCardExpirationDateType extends AbstractType
@@ -30,11 +32,23 @@ class CreditCardExpirationDateType extends AbstractType
     /**
      * {@inheritDoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'years' => range(date('Y'), date('Y') + 9)
+            'max_expiration_year' => date('Y') + 10,
+            'min_expiration_year' => date('Y'),
+            'years' => function(Options $options) {
+                return range($options['min_expiration_year'], $options['max_expiration_year']);
+            },
         ));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $this->configureOptions($resolver);
     }
 
     /**

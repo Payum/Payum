@@ -2,7 +2,6 @@
 namespace Payum\Klarna\Invoice\Action\Api;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Klarna\Invoice\Request\Api\CheckOrderStatus;
 

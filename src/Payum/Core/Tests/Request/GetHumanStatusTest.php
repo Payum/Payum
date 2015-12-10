@@ -17,7 +17,7 @@ class GetHumanStatusTest extends \PHPUnit_Framework_TestCase
             array('isNew'),
             array('isUnknown'),
             array('isSuspended'),
-            array('isExpired')
+            array('isExpired'),
         );
     }
 
@@ -33,7 +33,7 @@ class GetHumanStatusTest extends \PHPUnit_Framework_TestCase
             array('markNew'),
             array('markUnknown'),
             array('markSuspended'),
-            array('markExpired')
+            array('markExpired'),
         );
     }
 
@@ -52,22 +52,22 @@ class GetHumanStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkUnknownInConstructor()
     {
-        $statusRequest = new GetHumanStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass());
 
         $this->assertTrue($statusRequest->isUnknown());
     }
 
     /**
      * @test
-     * 
+     *
      * @dataProvider provideMarkXXXMethods
      */
     public function shouldAllowGetMarkedStatus($markXXXMethod)
     {
-        $statusRequest = new GetHumanStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass());
 
         $statusRequest->$markXXXMethod();
-        
+
         $this->assertNotEmpty($statusRequest->getValue());
     }
 
@@ -78,7 +78,7 @@ class GetHumanStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallIsXXXStatus($isXXXMethod)
     {
-        $statusRequest = new GetHumanStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass());
 
         $this->assertInternalType('boolean', $statusRequest->$isXXXMethod());
     }
@@ -88,12 +88,12 @@ class GetHumanStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenCapturedStatus()
     {
-        $statusRequest = new GetHumanStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass());
 
         $statusRequest->markCaptured();
-        
+
         $this->assertTrue($statusRequest->isCaptured());
-        
+
         $this->assertFalse($statusRequest->isCanceled());
         $this->assertFalse($statusRequest->isSuspended());
         $this->assertFalse($statusRequest->isAuthorized());
@@ -110,12 +110,12 @@ class GetHumanStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenFailedStatus()
     {
-        $statusRequest = new GetHumanStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass());
 
         $statusRequest->markFailed();
 
         $this->assertTrue($statusRequest->isFailed());
-        
+
         $this->assertFalse($statusRequest->isCaptured());
         $this->assertFalse($statusRequest->isSuspended());
         $this->assertFalse($statusRequest->isExpired());
@@ -130,12 +130,12 @@ class GetHumanStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenPendingStatus()
     {
-        $statusRequest = new GetHumanStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass());
 
         $statusRequest->markPending();
 
         $this->assertTrue($statusRequest->isPending());
-        
+
         $this->assertFalse($statusRequest->isFailed());
         $this->assertFalse($statusRequest->isSuspended());
         $this->assertFalse($statusRequest->isExpired());
@@ -150,12 +150,12 @@ class GetHumanStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenCanceledStatus()
     {
-        $statusRequest = new GetHumanStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass());
 
         $statusRequest->markCanceled();
 
         $this->assertTrue($statusRequest->isCanceled());
-        
+
         $this->assertFalse($statusRequest->isPending());
         $this->assertFalse($statusRequest->isSuspended());
         $this->assertFalse($statusRequest->isExpired());
@@ -170,7 +170,7 @@ class GetHumanStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenNewStatus()
     {
-        $statusRequest = new GetHumanStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass());
 
         $statusRequest->markNew();
 
@@ -190,7 +190,7 @@ class GetHumanStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenUnknownStatus()
     {
-        $statusRequest = new GetHumanStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass());
 
         $statusRequest->markUnknown();
 
@@ -210,7 +210,7 @@ class GetHumanStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenExpiredStatus()
     {
-        $statusRequest = new GetHumanStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass());
 
         $statusRequest->markExpired();
 
@@ -230,7 +230,7 @@ class GetHumanStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenSuspendedStatus()
     {
-        $statusRequest = new GetHumanStatus(new \stdClass);
+        $statusRequest = new GetHumanStatus(new \stdClass());
 
         $statusRequest->markSuspended();
 
@@ -245,4 +245,3 @@ class GetHumanStatusTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($statusRequest->isUnknown());
     }
 }
-

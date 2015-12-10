@@ -2,20 +2,20 @@
 
 The code snippets presented below are only for demonstration purposes (pseudo code). Their goal is to illustrate the general approach to various tasks. To see real life examples please follow the links provided when appropriate.
 In general, you have to create a _[request][base-request]_ , implement _[action][action-interface]_ in order to know what to do with such request.
-And use _payment_ that implements _[payment interface][payment-interface]_.
+And use _gateway_ that implements _[gateway interface][gateway-interface]_.
 This is where things get processed.
 This interface forces us to specify route to possible actions and can execute the request.
-So, payment is the place where a request and an action meet together.
+So, gateway is the place where a request and an action meet together.
 
 _**Note**: If you'd like to see real world examples we have provided you with a sandbox: [online][sandbox-online], [code][sandbox-code]._
 
 ```php
 <?php
-$payment = new Payment;
-$payment->addAction(new CaptureAction));
+$gateway = new Gateway;
+$gateway->addAction(new CaptureAction));
 
 //CaptureAction does its job.
-$payment->execute($capture = new Capture(array(
+$gateway->execute($capture = new Capture(array(
     'amount' => 100,
     'currency' => 'USD'
 ));
@@ -50,19 +50,19 @@ _**Link**: See a real world example: [CaptureController][capture-controller]._
 
 ## Sub Requests
 
-An action does not want to do all the job alone, so it delegates some responsibilities to other actions. In order to achieve this the action must be a _payment aware_ action.
-Only then, it can create a sub request and pass it to the payment.
+An action does not want to do all the job alone, so it delegates some responsibilities to other actions. In order to achieve this the action must be a _gateway aware_ action.
+Only then, it can create a sub request and pass it to the gateway.
 
 ```php
 <?php
-class FooAction extends PaymentAwareAction
+class FooAction extends GatewayAwareAction
 {
     public function execute($request)
     {
         //do its jobs
 
         // delegate some job to bar action.
-        $this->payment->execute(new BarRequest);
+        $this->gateway->execute(new BarRequest);
     }
 }
 ```
@@ -71,7 +71,7 @@ _**Link**: See paypal [CaptureAction][paypal-capture-action]._
 
 ## Replys
 
-What about redirects or a credit card form? Some payments, 
+What about redirects or a credit card form? Some gateways, 
 like Paypal ExpressCheckout for instance, require authorization on their side. 
 Payum can handle such cases and for that we use something called _[replys][base-reply]_.
 It is a special object which extends an exception hence could be thrown.
@@ -95,9 +95,9 @@ Next code example demonstrate how you catch and process it.
 ```php
 <?php
 try {
-    $payment->addAction(new FooAction);
+    $gateway->addAction(new FooAction);
 
-    $payment->execute(new FooRequest);
+    $gateway->execute(new FooRequest);
 } catch (HttpRedirect $reply) {
     header( 'Location: '.$reply->getUrl());
     exit;
@@ -137,9 +137,9 @@ class FooAction implements ActionInterface
 ```php
 <?php
 
-$payment->addAction(new FooAction);
+$gateway->addAction(new FooAction);
 
-$payment->execute($status = new GetHumanStatus);
+$gateway->execute($status = new GetHumanStatus);
 
 $status->isCaptured();
 $status->isPending();
@@ -153,7 +153,7 @@ _**Link**: The status logic could be a bit complicated [as paypal one][paypal-st
 
 ## Extensions
 
-There must be a way to extend the payment with custom logic.
+There must be a way to extend the gateway with custom logic.
 _[Extension][extension-interface]_ to the rescue.
 Let's look at the example below.
 Imagine you want to check permissions before a user can capture the payment:
@@ -175,10 +175,10 @@ class PermissionExtension implements ExtensionInterface
 
 ```php
     <?php
-$payment->addExtension(new PermissionExtension);
+$gateway->addExtension(new PermissionExtension);
 
 // here is the place where the exception may be thrown.
-$payment->execute(new FooRequest);
+$gateway->execute(new FooRequest);
 ```
 
 _**Link**: The [storage extension][storage-extension-interface] is a built-in extension._
@@ -187,7 +187,7 @@ _**Link**: The [storage extension][storage-extension-interface] is a built-in ex
 
 Before you are redirected to the gateway side, you may want to store data somewhere, right?
 We take care of that too.
-This is handled by _[storage][storage-interface]_ and its _[storage extension][storage-extension-interface]_ for payment.
+This is handled by _[storage][storage-interface]_ and its _[storage extension][storage-extension-interface]_ for gateway.
 The extension can solve two tasks.
 First it can save a model after the request is processed.
 Second, it can find a model by its id before the request is processed.
@@ -197,19 +197,19 @@ Currently [Doctrine][doctrine-storage] [Zend Table Gateway][zend-table-gateway] 
 <?php
 $storage = new FooStorage;
 
-$payment = new Payment;
-$payment->addExtension(new StorageExtension($storage));
+$gateway = new Gateway;
+$gateway->addExtension(new StorageExtension($storage));
 ```
 
 ## All about API
 
-The payment API has different versions? Or, a payment gateway provide official sdk?
+The gateway API has different versions? Or, a gateway provide official sdk?
 We already thought about these problems and you know what?
 
-Let's say payment have different versions: first and second.
+Let's say gateway have different versions: first and second.
 And in the `FooAction` we want to use first api and `BarAction` second one.
 To solve this problem we have to implement _API aware action_ to the actions.
-When such api aware action is added to a payment it tries to set an API, one by one, to the action until the action accepts one.
+When such api aware action is added to a gateway it tries to set an API, one by one, to the action until the action accepts one.
 
 ```php
 <?php
@@ -240,15 +240,15 @@ class BarAction implements ActionInterface, ApiAwareInterface
 
 ```php
 <?php
-$payment = new Payment;
-$payment->addApi(new FirstApi);
-$payment->addApi(new SecondApi);
+$gateway = new Gateway;
+$gateway->addApi(new FirstApi);
+$gateway->addApi(new SecondApi);
 
 // here the ApiVersionOne will be injected to FooAction
-$payment->addAction(new FooAction);
+$gateway->addAction(new FooAction);
 
 // here the ApiVersionTwo will be injected to BarAction
-$payment->addAction(new BarAction);
+$gateway->addAction(new BarAction);
 ```
 
 _**Link**: See authorize.net [capture action][authorize-capture-action]._
@@ -276,7 +276,7 @@ Back to [index](index.md).
 [doctrine-storage]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Bridge/Doctrine/Storage/DoctrineStorage.php
 [zend-table-gateway]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Bridge/Zend/Storage/TableGatewayStorage.php
 [filesystem-storage]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Storage/FilesystemStorage.php
-[payment-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/PaymentInterface.php
+[gateway-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/GatewayInterface.php
 [capture-controller]: https://github.com/Payum/PayumBundle/blob/master/Controller/CaptureController.php
 [paypal-capture-action]: https://github.com/Payum/PaypalExpressCheckoutNvp/blob/master/src/Payum/Paypal/ExpressCheckout/Nvp/Action/CaptureAction.php
 [paypal-authorize-token-action]: https://github.com/Payum/Payum/blob/master/src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/AuthorizeTokenAction.php
@@ -286,6 +286,4 @@ Back to [index](index.md).
 [omnipay]: https://github.com/adrianmacneil/omnipay
 [omnipay-example]: https://github.com/Payum/PayumBundleSandbox/blob/master/src/Acme/PaymentBundle/Controller/SimplePurchasePaypalExpressViaOmnipayController.php
 [bundle-doc]: https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md
-[payment-factories]: https://github.com/Payum/PayumBundle/tree/master/DependencyInjection/Factory/Payment
-[storage-factories]: https://github.com/Payum/PayumBundle/tree/master/DependencyInjection/Factory/Storage
 [payum-bundle]: https://github.com/Payum/PayumBundle/blob/master/PayumBundle.php

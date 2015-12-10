@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Bridge\Symfony\Action;
 
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Symfony\Reply\HttpResponse;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -13,7 +13,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ObtainCreditCardAction extends PaymentAwareAction
+class ObtainCreditCardAction extends GatewayAwareAction
 {
     /**
      * @var FormFactoryInterface
@@ -32,7 +32,7 @@ class ObtainCreditCardAction extends PaymentAwareAction
 
     /**
      * @param FormFactoryInterface $formFactory
-     * @param string $templateName
+     * @param string               $templateName
      */
     public function __construct(FormFactoryInterface $formFactory, $templateName)
     {
@@ -50,14 +50,14 @@ class ObtainCreditCardAction extends PaymentAwareAction
 
     /**
      * {@inheritDoc}
+     *
+     * @param ObtainCreditCard $request
      */
     public function execute($request)
     {
-        /** @var $request ObtainCreditCard */
-        if (!$this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
-        if (!$this->httpRequest) {
+        RequestNotSupportedException::assertSupports($this, $request);
+
+        if (false == $this->httpRequest) {
             throw new LogicException('The action can be run only when http request is set.');
         }
 
@@ -73,16 +73,20 @@ class ObtainCreditCardAction extends PaymentAwareAction
                 $request->set($card);
 
                 return;
-             }
+            }
         }
 
         $renderTemplate = new RenderTemplate($this->templateName, array(
-            'form' => $form->createView()
+            'model' => $request->getModel(),
+            'firstModel' => $request->getFirstModel(),
+            'form' => $form->createView(),
+            'actionUrl' => $request->getToken() ? $request->getToken()->getTargetUrl() : null,
         ));
-        $this->payment->execute($renderTemplate);
+        $this->gateway->execute($renderTemplate);
 
         throw new HttpResponse(new Response($renderTemplate->getResult(), 200, array(
             'Cache-Control' => 'no-store, no-cache, max-age=0, post-check=0, pre-check=0',
+            'X-Status-Code' => 200,
             'Pragma' => 'no-cache',
         )));
     }

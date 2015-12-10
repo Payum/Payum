@@ -1,30 +1,19 @@
 <?php
 namespace Payum\Core\Storage;
 
-use Payum\Core\Model\Identificator;
-
 interface StorageInterface
 {
     /**
      * @return object
      */
-    function createModel();
+    public function create();
 
     /**
      * @param object $model
-     * 
+     *
      * @return boolean
      */
-    function supportModel($model);
-
-    /**
-     * @param object $model
-     * 
-     * @throws \Payum\Core\Exception\InvalidArgumentException if not supported model given.
-     *
-     * @return void
-     */
-    function updateModel($model);
+    public function support($model);
 
     /**
      * @param object $model
@@ -33,28 +22,37 @@ interface StorageInterface
      *
      * @return void
      */
-    function deleteModel($model);
-
-    /**
-     * @param mixed $id
-     * 
-     * @return object|null
-     */
-    function findModelById($id);
-
-    /**
-     * @param Identificator $identificator
-     *
-     * @return object|null
-     */
-    function findModelByIdentificator(Identificator $identificator);
+    public function update($model);
 
     /**
      * @param object $model
      *
      * @throws \Payum\Core\Exception\InvalidArgumentException if not supported model given.
      *
-     * @return Identificator
+     * @return void
      */
-    function getIdentificator($model);
+    public function delete($model);
+
+    /**
+     * @param mixed|IdentityInterface $id
+     *
+     * @return object|null
+     */
+    public function find($id);
+
+    /**
+     * @param array $criteria
+     *
+     * @return object[]
+     */
+    public function findBy(array $criteria);
+
+    /**
+     * @param object $model
+     *
+     * @throws \Payum\Core\Exception\InvalidArgumentException if not supported model given.
+     *
+     * @return IdentityInterface
+     */
+    public function identify($model);
 }

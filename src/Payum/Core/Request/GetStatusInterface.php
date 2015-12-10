@@ -9,100 +9,105 @@ interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterfac
     /**
      * @return mixed
      */
-    function getValue();
+    public function getValue();
 
     /**
      * @return void
      */
-    function markNew();
+    public function markNew();
 
     /**
      * @return boolean
      */
-    function isNew();
+    public function isNew();
 
     /**
      * @return void
      */
-    function markCaptured();
+    public function markCaptured();
 
     /**
      * @return boolean
      */
-    function isCaptured();
+    public function isCaptured();
 
     /**
      * @return boolean
      */
-    function isAuthorized();
+    public function isAuthorized();
 
     /**
      * @return void
      */
-    function markAuthorized();
+    public function markAuthorized();
 
     /**
      * @return boolean
      */
-    function isRefunded();
+    public function isRefunded();
 
     /**
      * @return void
      */
-    function markRefunded();
+    public function markRefunded();
 
     /**
      * @return boolean
      */
-    function isSuspended();
+    public function isSuspended();
 
     /**
      * @return void
      */
-    function markExpired();
+    public function markSuspended();
 
     /**
      * @return boolean
      */
-    function isExpired();
+    public function isExpired();
 
     /**
      * @return void
      */
-    function markCanceled();
+    public function markExpired();
 
     /**
      * @return boolean
      */
-    function isCanceled();
+    public function isCanceled();
 
     /**
      * @return void
      */
-    function markPending();
+    public function markCanceled();
 
     /**
      * @return boolean
      */
-    function isPending();
+    public function isPending();
 
     /**
      * @return void
      */
-    function markFailed();
+    public function markPending();
 
     /**
      * @return boolean
      */
-    function isFailed();
+    public function isFailed();
 
     /**
      * @return void
      */
-    function markUnknown();
+    public function markFailed();
 
     /**
      * @return boolean
      */
-    function isUnknown();
+    public function isUnknown();
+
+    /**
+     * @return void
+     */
+    public function markUnknown();
 }

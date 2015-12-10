@@ -1,7 +1,7 @@
 {
     "name": "payum/payum",
     "type": "library",
-    "description": "Domain friendly payment framework. Paypal, payex, authorize.net, be2bill, recurring payments, instant notifications and many more",
+    "description": "Payum offers everything you need to work with payments. From simplest use cases to very advanced ones.",
     "keywords": [
         "payment",
         "recurring payment",
@@ -37,29 +37,36 @@
         }
     ],
     "require": {
-        "php": ">=5.3.2",
-        "kriswallsmith/buzz": "*",
-        "ajbdev/authorizenet-php-api": "1.1.*",
-        "paypal/rest-api-sdk-php" : "0.5.*",
-        "klarna/checkout": "~1",
-        "fp/klarna-invoice": "0.1.*",
-        "stripe/stripe-php": "~1.0",
-        "ext-soap": "*",
+        "php": ">=5.5.0",
+        "payum/iso4217": "~1.0",
+        "guzzlehttp/guzzle": "~6.0",
+        "league/url": "~3.0",
         "twig/twig": "~1.0"
     },
     "require-dev": {
         "ext-curl": "*",
         "ext-pdo_sqlite": "*",
+        "payum/omnipay-bridge": "~1.0@dev",
+        "omnipay/dummy": "~2.0",
         "doctrine/orm": "2.3.*",
         "doctrine/mongodb": "1.0.*@dev",
         "doctrine/mongodb-odm": "1.0.*@dev",
         "phpunit/phpunit": "~4.0",
+        "propel/propel1": "~1.7",
         "psr/log": "~1.0",
         "zendframework/zend-db": "~2",
-        "symfony/routing": "~2.3",
-        "symfony/http-kernel": "~2.3",
-        "symfony/http-foundation": "~2.3",
-        "symfony/form": "~2.3"
+        "symfony/routing": "~2.7",
+        "symfony/http-kernel": "~2.7",
+        "symfony/http-foundation": "~2.7",
+        "symfony/form": "~2.7",
+        "symfony/validator": "~2.7",
+        "symfony/phpunit-bridge": "~2.7",
+        "authorizenet/authorizenet": "~1.8",
+        "paypal/rest-api-sdk-php" : "0.5.*",
+        "klarna/checkout": "~1|~2.0",
+        "fp/klarna-invoice": "0.1.*",
+        "stripe/stripe-php": "~1.0",
+        "ext-soap": "*"
     },
     "replace": {
         "payum/core": "self.version",
@@ -76,14 +83,22 @@
         "payum/stripe": "self.version"
     },
     "suggest": {
-        "doctrine/orm": "If you want to store models to database using doctrin2 ORM",
-        "doctrine/mongodb-odm": "If you want to store models to mongo doctrin2 ODM",
-        "zendframework/zend-db": "If you want to store models to Zend Db ORM",
-        "symfony/routing": "If you want to use TokenFactory from symfony's bridge",
-        "symfony/http-kernel": "If you want to use HttpRequestVerifier from symfony's bridge",
-        "symfony/http-foundation": "If you want to use HttpRequestVerifier or HttpResponse reply from symfony's bridge",
-        "symfony/form": "If you want to use forms",
-        "monolog/monolog": "In case you want to use PSR-3 logger"
+        "doctrine/orm": "~2.3 If you want to store models to database using doctrin2 ORM",
+        "doctrine/mongodb-odm": "~1.1 If you want to store models to mongo doctrin2 ODM",
+        "zendframework/zend-db": "~2.0 If you want to store models to Zend Db ORM",
+        "propel/propel1": "~1.7 If you want to store models to Propel1 ORM",
+        "propel/propel": "If you want to store models to Propel2 ORM",
+        "symfony/routing": "~2.7|~3.0 If you want to use TokenFactory from symfony's bridge",
+        "symfony/http-kernel": "~2.7|~3.0 If you want to use HttpRequestVerifier from symfony's bridge",
+        "symfony/http-foundation": "~2.7|~3.0 If you want to use HttpRequestVerifier or HttpResponse reply from symfony's bridge",
+        "symfony/form": "~2.7|~3.0 If you want to use forms",
+        "monolog/monolog": "~1.0 If you want to use PSR-3 logger",
+        "authorizenet/authorizenet": "~1.8 If you want to use Authorizenet.NET install authorizenet/authorizenet:~1.8 library",
+        "paypal/rest-api-sdk-php" : "0.5.* If you want to use PayPal REST API install paypal/rest-api-sdk-php:0.5.* library",
+        "klarna/checkout": "~1.0|~2.0 If you want to use Klarna Checkout install klarna/checkout:~1|~2.0 library",
+        "fp/klarna-invoice": "0.1.* If you want to use Klarna Invoice install fp/klarna-invoice:0.1.* library",
+        "stripe/stripe-php": "~1.0 If you want to use Stripe install stripe/stripe-php:~1.0 library",
+        "ext-soap": "* If you want to use Payex extension you have to install soap extension"
     },
     "config": {
         "bin-dir": "bin"
@@ -93,7 +108,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.13-dev"
+            "dev-master": "1.0-dev"
         }
     }
 }

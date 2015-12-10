@@ -17,7 +17,7 @@ class ArrayObject extends \ArrayObject
         if ($input instanceof \ArrayAccess && false == $input instanceof \ArrayObject) {
             $this->input = $input;
 
-            if (false ==$input instanceof \Traversable) {
+            if (false == $input instanceof \Traversable) {
                 throw new LogicException('Traversable interface must be implemented in case custom ArrayAccess instance given. It is because some php limitations.');
             }
 
@@ -46,34 +46,60 @@ class ArrayObject extends \ArrayObject
     }
 
     /**
-     * @param array $required
+     * @param array|\Traversable $input
+     *
+     * @throws \Payum\Core\Exception\InvalidArgumentException
+     *
+     * @return void
+     */
+    public function defaults($input)
+    {
+        if (false == (is_array($input) || $input instanceof \Traversable)) {
+            throw new InvalidArgumentException('Invalid input given. Should be an array or instance of \Traversable');
+        }
+
+        foreach ($input as $index => $value) {
+            if (null === $this[$index]) {
+                $this[$index] = $value;
+            }
+        }
+    }
+
+    /**
+     * @param array   $required
      * @param boolean $throwOnInvalid
-     * 
+     *
      * @throws LogicException when one of the required fields is empty
-     * 
+     *
      * @return bool
      */
     public function validateNotEmpty($required, $throwOnInvalid = true)
     {
         $required = is_array($required) ? $required : array($required);
-        
-        foreach ($required as $required) {
-            $value = $this[$required];
-            
-            if (empty($value)) {
-                if ($throwOnInvalid) {
-                    throw new LogicException(sprintf('The %s fields is required.', $required));
-                }
 
-                return false;
+        $empty = array();
+
+        foreach ($required as $r) {
+            $value = $this[$r];
+
+            if (empty($value)) {
+                $empty[] = $r;
             }
         }
-        
+
+        if ($empty && $throwOnInvalid) {
+            throw new LogicException(sprintf('The %s fields are required.', implode(', ', $empty)));
+        }
+
+        if ($empty) {
+            return false;
+        }
+
         return true;
     }
 
     /**
-     * @param array $required
+     * @param array   $required
      * @param boolean $throwOnInvalid
      *
      * @throws \Payum\Core\Exception\LogicException when one of the required fields present
@@ -133,7 +159,7 @@ class ArrayObject extends \ArrayObject
             return parent::offsetGet($index);
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -159,7 +185,7 @@ class ArrayObject extends \ArrayObject
 
     /**
      * @param mixed $input
-     * 
+     *
      * @return ArrayObject
      */
     public static function ensureArrayObject($input)

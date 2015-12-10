@@ -19,7 +19,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()   
+    public function couldBeConstructedWithoutAnyArguments()
     {
         new DoExpressCheckoutPaymentAction();
     }
@@ -30,7 +30,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     public function shouldSupportDoExpressCheckoutPaymentRequestAndArrayAccessAsModel()
     {
         $action = new DoExpressCheckoutPaymentAction();
-        
+
         $this->assertTrue($action->supports(new DoExpressCheckoutPayment($this->getMock('ArrayAccess'))));
     }
 
@@ -46,7 +46,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
@@ -65,7 +65,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     public function throwIfTokenNotSetInModel()
     {
         $action = new DoExpressCheckoutPaymentAction();
-        
+
         $action->execute(new DoExpressCheckoutPayment(array()));
     }
 
@@ -80,7 +80,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
         $action = new DoExpressCheckoutPaymentAction();
 
         $request = new DoExpressCheckoutPayment(array(
-            'TOKEN' => 'aToken'
+            'TOKEN' => 'aToken',
         ));
 
         $action->execute($request);
@@ -98,7 +98,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
 
         $request = new DoExpressCheckoutPayment(array(
             'TOKEN' => 'aToken',
-            'PAYERID' => 'aPayerId'
+            'PAYERID' => 'aPayerId',
         ));
 
         $action->execute($request);
@@ -129,12 +129,12 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     public function shouldCallApiDoExpressCheckoutMethodWithExpectedRequiredArguments()
     {
         $testCase = $this;
-        
+
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('doExpressCheckoutPayment')
-            ->will($this->returnCallback(function(array $fields) use ($testCase) {
+            ->will($this->returnCallback(function (array $fields) use ($testCase) {
 
                 $testCase->assertArrayHasKey('TOKEN', $fields);
                 $testCase->assertEquals('theToken', $fields['TOKEN']);
@@ -151,7 +151,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
                 return array();
             }))
         ;
-        
+
         $action = new DoExpressCheckoutPaymentAction();
         $action->setApi($apiMock);
 
@@ -159,7 +159,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
             'TOKEN' => 'theToken',
             'PAYERID' => 'thePayerId',
             'PAYMENTREQUEST_0_PAYMENTACTION' => 'theAction',
-            'PAYMENTREQUEST_0_AMT' => 'theAmt'
+            'PAYMENTREQUEST_0_AMT' => 'theAmt',
         ));
 
         $action->execute($request);
@@ -174,10 +174,10 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
         $apiMock
             ->expects($this->once())
             ->method('doExpressCheckoutPayment')
-            ->will($this->returnCallback(function() {
+            ->will($this->returnCallback(function () {
                 return array(
-                    'FIRSTNAME'=> 'theFirstname',
-                    'EMAIL' => 'the@example.com'
+                    'FIRSTNAME' => 'theFirstname',
+                    'EMAIL' => 'the@example.com',
                 );
             }))
         ;
@@ -189,13 +189,13 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
             'PAYMENTREQUEST_0_PAYMENTACTION' => 'anAction',
-            'PAYMENTREQUEST_0_AMT' => 'anAmt'
+            'PAYMENTREQUEST_0_AMT' => 'anAmt',
         ));
 
         $action->execute($request);
 
         $model = $request->getModel();
-        
+
         $this->assertArrayHasKey('FIRSTNAME', $model);
         $this->assertEquals('theFirstname', $model['FIRSTNAME']);
 

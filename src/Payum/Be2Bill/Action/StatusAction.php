@@ -19,22 +19,22 @@ class StatusAction implements ActionInterface
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = new ArrayObject($request->getModel());
-        
+
         if (null === $model['EXECCODE']) {
             $request->markNew();
-            
+
             return;
         }
-        
+
         if (Api::EXECCODE_SUCCESSFUL === $model['EXECCODE']) {
             $request->markCaptured();
 
             return;
         }
-        
+
         if (Api::EXECCODE_TIME_OUT  === $model['EXECCODE']) {
             $request->markUnknown();
-            
+
             return;
         }
 

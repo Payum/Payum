@@ -15,7 +15,7 @@ class CheckRecurringPaymentAction implements ActionInterface, ApiAwareInterface
      * @var RecurringApi
      */
     protected $api;
-    
+
     /**
      * {@inheritDoc}
      */
@@ -24,10 +24,10 @@ class CheckRecurringPaymentAction implements ActionInterface, ApiAwareInterface
         if (false == $api instanceof RecurringApi) {
             throw new UnsupportedApiException('Expected api must be instance of RecurringApi.');
         }
-        
+
         $this->api = $api;
     }
-    
+
     /**
      * {@inheritDoc}
      */

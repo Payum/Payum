@@ -20,6 +20,6 @@ class NotifyTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithModel()
     {
-        new Notify(new \stdClass);
+        new Notify(new \stdClass());
     }
 }

@@ -1,13 +1,13 @@
 <?php
 namespace Payum\Payex\Action;
 
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\Capture;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Payex\Request\Api\AutoPayAgreement;
 
-class AutoPayPaymentDetailsCaptureAction extends PaymentAwareAction
+class AutoPayPaymentDetailsCaptureAction extends GatewayAwareAction
 {
     /**
      * {@inheritDoc}
@@ -16,8 +16,8 @@ class AutoPayPaymentDetailsCaptureAction extends PaymentAwareAction
     {
         /** @var $request \Payum\Core\Request\Capture */
         RequestNotSupportedException::assertSupports($this, $request);
-        
-        $this->payment->execute(new AutoPayAgreement($request->getModel()));
+
+        $this->gateway->execute(new AutoPayAgreement($request->getModel()));
     }
 
     /**

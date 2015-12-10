@@ -4,17 +4,48 @@ namespace Payum\Core\Reply;
 class HttpPostRedirect extends HttpResponse
 {
     /**
-     * @param string $content
-     * @param array $fields
+     * @var string
      */
-    public function __construct($content, array $fields = array())
+    protected $url;
+
+    /**
+     * @var array
+     */
+    protected $fields;
+
+    /**
+     * @param string   $url
+     * @param array    $fields
+     * @param int      $statusCode
+     * @param string[] $headers
+     */
+    public function __construct($url, array $fields = array(), $statusCode = 200, array $headers = array())
     {
-        parent::__construct($this->prepareContent($content, $fields));
+        $this->url = $url;
+        $this->fields = $fields;
+
+        parent::__construct($this->prepareContent($url, $fields), $statusCode, $headers);
     }
 
     /**
-     * @param $url
-     * @param array $fields
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFields()
+    {
+        return $this->fields;
+    }
+
+    /**
+     * @param string $url
+     * @param array  $fields
      *
      * @return string
      */
@@ -38,12 +69,12 @@ class HttpPostRedirect extends HttpResponse
     <body onload="document.forms[0].submit();">
         <form action="%1$s" method="post">
             <p>Redirecting to payment page...</p>
-            <p>%2$s<input type="submit" value="Continue" /></p>
+            <p>%2$s</p>
         </form>
     </body>
 </html>
 HTML;
 
-       return sprintf($content, htmlspecialchars($url, ENT_QUOTES, 'UTF-8'), $formInputs);
+        return sprintf($content, htmlspecialchars($url, ENT_QUOTES, 'UTF-8'), $formInputs);
     }
 }

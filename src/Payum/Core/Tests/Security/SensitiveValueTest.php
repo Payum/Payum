@@ -46,7 +46,6 @@ class SensitiveValueTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($sensitiveValue->get());
     }
 
-
     /**
      * @test
      */
@@ -108,7 +107,7 @@ class SensitiveValueTest extends \PHPUnit_Framework_TestCase
     {
         $sensitiveValue = new SensitiveValue('cardNumber');
 
-        $this->assertEquals('{}', json_encode($sensitiveValue));
+        $this->assertEquals('null', json_encode($sensitiveValue));
     }
 
     /**

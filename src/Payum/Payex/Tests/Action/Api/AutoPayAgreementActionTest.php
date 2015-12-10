@@ -14,20 +14,20 @@ class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
         'description' => 'aDesc',
         'orderId' => 'anId',
         'purchaseOperation' => AgreementApi::PURCHASEOPERATION_SALE,
-        'currency' => 'NOK'
+        'currency' => 'NOK',
     );
-    
+
     public function provideRequiredFields()
     {
         $fields = array();
-        
+
         foreach ($this->requiredFields as $name => $value) {
             $fields[] = array($name);
         }
 
         return $fields;
     }
-    
+
     /**
      * @test
      */
@@ -53,7 +53,7 @@ class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new AutoPayAgreementAction;
+        new AutoPayAgreementAction();
     }
 
     /**
@@ -62,25 +62,25 @@ class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
     public function shouldAllowSetAgreementApiAsApi()
     {
         $agreementApi = $this->getMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
-        
-        $action = new AutoPayAgreementAction;
+
+        $action = new AutoPayAgreementAction();
 
         $action->setApi($agreementApi);
-        
+
         $this->assertAttributeSame($agreementApi, 'api', $action);
     }
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\UnsupportedApiException
      * @expectedExceptionMessage Expected api must be instance of AgreementApi.
      */
     public function throwOnTryingSetNotAgreementApiAsApi()
     {
-        $action = new AutoPayAgreementAction;
+        $action = new AutoPayAgreementAction();
 
-        $action->setApi(new \stdClass);
+        $action->setApi(new \stdClass());
     }
 
     /**
@@ -98,7 +98,7 @@ class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotAutoPayAgreementRequest()
     {
-        $action = new AutoPayAgreementAction;
+        $action = new AutoPayAgreementAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -108,9 +108,9 @@ class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAutoPayAgreementRequestWithNotArrayAccessModel()
     {
-        $action = new AutoPayAgreementAction;
+        $action = new AutoPayAgreementAction();
 
-        $this->assertFalse($action->supports(new AutoPayAgreement(new \stdClass)));
+        $this->assertFalse($action->supports(new AutoPayAgreement(new \stdClass())));
     }
 
     /**
@@ -127,9 +127,9 @@ class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @dataProvider provideRequiredFields
-     * 
+     *
      * @expectedException \Payum\Core\Exception\LogicException
      */
     public function throwIfTryInitializeWithRequiredFieldNotPresent($requiredField)
@@ -154,13 +154,12 @@ class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(array(
                 'transactionStatus' => 'theStatus',
             )));
-        ;
 
         $action = new AutoPayAgreementAction();
         $action->setApi($apiMock);
 
         $request = new AutoPayAgreement($this->requiredFields);
-        
+
         $action->execute($request);
 
         $model = $request->getModel();

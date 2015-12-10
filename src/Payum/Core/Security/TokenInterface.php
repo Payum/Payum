@@ -3,50 +3,50 @@ namespace Payum\Core\Security;
 
 use Payum\Core\Model\DetailsAggregateInterface;
 use Payum\Core\Model\DetailsAwareInterface;
-use Payum\Core\Model\Identificator;
+use Payum\Core\Storage\IdentityInterface;
 
 /**
- * @method Identificator getDetails
+ * @method IdentityInterface getDetails
  */
 interface TokenInterface extends DetailsAggregateInterface, DetailsAwareInterface
 {
     /**
      * @return string
      */
-    function getHash();
+    public function getHash();
 
     /**
      * @param string $hash
      */
-    function setHash($hash);
+    public function setHash($hash);
 
     /**
      * @return string
      */
-    function getTargetUrl();
+    public function getTargetUrl();
 
     /**
      * @param string $targetUrl
      */
-    function setTargetUrl($targetUrl);
+    public function setTargetUrl($targetUrl);
 
     /**
      * @return string
      */
-    function getAfterUrl();
+    public function getAfterUrl();
 
     /**
      * @param string $afterUrl
      */
-    function setAfterUrl($afterUrl);
+    public function setAfterUrl($afterUrl);
 
     /**
      * @return string
      */
-    function getPaymentName();
+    public function getGatewayName();
 
     /**
-     * @param string $paymentName
+     * @param string $gatewayName
      */
-    function setPaymentName($paymentName);
+    public function setGatewayName($gatewayName);
 }

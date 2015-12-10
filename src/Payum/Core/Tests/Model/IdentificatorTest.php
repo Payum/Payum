@@ -11,7 +11,7 @@ class IdentificatorTest extends \PHPUnit_Framework_TestCase
     public function shouldImplementSerializableInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Model\Identificator');
-        
+
         $this->assertTrue($rc->implementsInterface('Serializable'));
     }
 
@@ -28,7 +28,7 @@ class IdentificatorTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithIdAndModelAsArguments()
     {
-        new Identificator('anId', new \stdClass);
+        new Identificator('anId', new \stdClass());
     }
 
     /**
@@ -36,8 +36,8 @@ class IdentificatorTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetIdSetInConstructor()
     {
-        $id = new Identificator('theId', new \stdClass);
-        
+        $id = new Identificator('theId', new \stdClass());
+
         $this->assertEquals('theId', $id->getId());
     }
 
@@ -46,7 +46,7 @@ class IdentificatorTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetClassSetInConstructor()
     {
-        $id = new Identificator('theId', new \stdClass);
+        $id = new Identificator('theId', new \stdClass());
 
         $this->assertEquals('stdClass', $id->getClass());
     }
@@ -56,12 +56,12 @@ class IdentificatorTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeCorrectlySerializedAndUnserialized()
     {
-        $id = new Identificator('theId', new \stdClass);
+        $id = new Identificator('theId', new \stdClass());
 
         $serializedId = serialize($id);
-        
+
         $unserializedId = unserialize($serializedId);
-        
+
         $this->assertEquals($id, $unserializedId);
     }
 }

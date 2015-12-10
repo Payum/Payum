@@ -3,6 +3,8 @@ namespace Payum\Core\Tests\Bridge\Psr\Log;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension;
+use Payum\Core\Extension\Context;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Reply\HttpRedirect;
@@ -10,13 +12,6 @@ use Psr\Log\LoggerInterface;
 
 class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        if (false == interface_exists('Psr\Log\LoggerInterface')) {
-            throw new \PHPUnit_Framework_SkippedTestError('To run these tests install psr log lib.');
-        }
-    }
-
     /**
      * @test
      */
@@ -42,7 +37,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        $extension = new LogExecutedActionsExtension;
+        $extension = new LogExecutedActionsExtension();
 
         $this->assertAttributeInstanceOf('Psr\Log\NullLogger', 'logger', $extension);
     }
@@ -50,7 +45,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithCustomLoggergivenAsFirstArgument()
+    public function couldBeConstructedWithCustomLoggerGivenAsFirstArgument()
     {
         $expectedLogger = $this->createLoggerMock();
 
@@ -66,7 +61,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $expectedLogger = $this->createLoggerMock();
 
-        $extension = new LogExecutedActionsExtension;
+        $extension = new LogExecutedActionsExtension();
 
         //guard
         $this->assertAttributeInstanceOf('Psr\Log\NullLogger', 'logger', $extension);
@@ -87,9 +82,11 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('debug')
         ;
 
+        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+
         $extension = new LogExecutedActionsExtension($logger);
 
-        $extension->onPreExecute(new \stdClass);
+        $extension->onPreExecute($context);
     }
 
     /**
@@ -102,16 +99,19 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('debug')
         ;
+        
+        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context->setAction($this->createActionMock());
 
         $extension = new LogExecutedActionsExtension($logger);
 
-        $extension->onPostExecute(new \stdClass, $this->createActionMock());
+        $extension->onPostExecute($context);
     }
 
     /**
      * @test
      */
-    public function shouldIncrementStackOnPreExecute()
+    public function shouldUsePreviousToGetPreviousRequestNumberOnExecute()
     {
         $logger = $this->createLoggerMock();
         $logger
@@ -120,93 +120,14 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
             ->with($this->stringStartsWith('[Payum] 2# '))
         ;
 
-        $extension = new LogExecutedActionsExtension($logger);
-
-        $extension->onPreExecute('string');
-        $extension->onPreExecute('string');
-        $extension->onExecute(new \stdClass, $this->createActionMock());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldDecrementStackOnPostExecute()
-    {
-        $request = new \stdClass;
-        $action = $this->createActionMock();
-
-        $logger = $this->createLoggerMock();
-        $logger
-            ->expects($this->at(0))
-            ->method('debug')
-            ->with($this->stringStartsWith('[Payum] 2# '))
-        ;
-        $logger
-            ->expects($this->at(1))
-            ->method('debug')
-            ->with($this->stringStartsWith('[Payum] 1# '))
-        ;
+        $context = new Context($this->createGatewayMock(), new \stdClass(), array(
+            new Context($this->createGatewayMock(), new \stdClass(), array()),
+        ));
+        $context->setAction($this->createActionMock());
 
         $extension = new LogExecutedActionsExtension($logger);
 
-        $extension->onPreExecute($request);
-        $extension->onPreExecute($request);
-
-        $extension->onExecute($request, $action);
-
-        $extension->onPostExecute($request, $action);
-
-        $extension->onExecute($request, $action);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldDecrementStackOnException()
-    {
-        $logger = $this->createLoggerMock();
-        $logger
-            ->expects($this->at(0))
-            ->method('debug')
-            ->with($this->stringStartsWith('[Payum] 2# '))
-        ;
-        $logger
-            ->expects($this->at(1))
-            ->method('debug')
-            ->with($this->stringStartsWith('[Payum] 1# '))
-        ;
-
-        $extension = new LogExecutedActionsExtension($logger);
-
-        $extension->onPreExecute('string');
-        $extension->onPreExecute('string');
-        $extension->onException(new \Exception, new \stdClass);
-        $extension->onException(new \Exception, new \stdClass, $this->createActionMock());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldDecrementStackOnReply()
-    {
-        $logger = $this->createLoggerMock();
-        $logger
-            ->expects($this->at(0))
-            ->method('debug')
-            ->with($this->stringStartsWith('[Payum] 2# '))
-        ;
-        $logger
-            ->expects($this->at(1))
-            ->method('debug')
-            ->with($this->stringStartsWith('[Payum] 1# '))
-        ;
-
-        $extension = new LogExecutedActionsExtension($logger);
-
-        $extension->onPreExecute('string');
-        $extension->onPreExecute('string');
-        $extension->onReply($this->createReplyMock(), new \stdClass, $this->createActionMock());
-        $extension->onReply($this->createReplyMock(), new \stdClass, $this->createActionMock());
+        $extension->onExecute($context);
     }
 
     /**
@@ -216,7 +137,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $stringRequest = 'a string';
         $arrayRequest = array();
-        $action = new FooAction;
+        $action = new FooAction();
 
         $logger = $this->createLoggerMock();
         $logger
@@ -229,13 +150,18 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('debug')
             ->with('[Payum] 1# '.get_class($action).'::execute(array)')
         ;
-
+        
         $extension = new LogExecutedActionsExtension($logger);
 
-        $extension->onPreExecute($stringRequest);
+        $context = new Context($this->createGatewayMock(), $stringRequest, array());
+        $context->setAction($action);
+        
+        $extension->onExecute($context);
 
-        $extension->onExecute($stringRequest, $action);
-        $extension->onExecute($arrayRequest, $action);
+        $context = new Context($this->createGatewayMock(), $arrayRequest, array());
+        $context->setAction($action);
+        
+        $extension->onExecute($context);
     }
 
     /**
@@ -243,9 +169,9 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLogActionAndObjectRequestOnExecute()
     {
-        $action = new FooAction;
-        $stdRequest = new \stdClass;
-        $namespacedRequest = new NamespacedRequest;
+        $action = new FooAction();
+        $stdRequest = new \stdClass();
+        $namespacedRequest = new NamespacedRequest();
 
         $logger = $this->createLoggerMock();
         $logger
@@ -261,10 +187,15 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension = new LogExecutedActionsExtension($logger);
 
-        $extension->onPreExecute($stdRequest);
+        $context = new Context($this->createGatewayMock(), $stdRequest, array());
+        $context->setAction($action);
+        
+        $extension->onExecute($context);
 
-        $extension->onExecute($stdRequest, $action);
-        $extension->onExecute($namespacedRequest, $action);
+        $context = new Context($this->createGatewayMock(), $namespacedRequest, array());
+        $context->setAction($action);
+        
+        $extension->onExecute($context);
     }
 
     /**
@@ -272,7 +203,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLogActionAndModelRequestWithModelNoObjectOnExecute()
     {
-        $action = new FooAction;
+        $action = new FooAction();
         $model = array();
         $modelRequest = new Capture($model);
 
@@ -285,8 +216,10 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension = new LogExecutedActionsExtension($logger);
 
-        $extension->onPreExecute($modelRequest);
-        $extension->onExecute($modelRequest, $action);
+        $context = new Context($this->createGatewayMock(), $modelRequest, array());
+        $context->setAction($action);
+        
+        $extension->onExecute($context);
     }
 
     /**
@@ -294,8 +227,8 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLogActionAndModelRequestWithObjectModelOnExecute()
     {
-        $action = new FooAction;
-        $stdModel = new \stdClass;
+        $action = new FooAction();
+        $stdModel = new \stdClass();
         $stdModelRequest = new Capture($stdModel);
 
         $logger = $this->createLoggerMock();
@@ -307,16 +240,18 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension = new LogExecutedActionsExtension($logger);
 
-        $extension->onPreExecute($stdModelRequest);
-        $extension->onExecute($stdModelRequest, $action);
+        $context = new Context($this->createGatewayMock(), $stdModelRequest, array());
+        $context->setAction($action);
+
+        $extension->onExecute($context);
     }
 
     /**
      * @test
      */
-    public function shouldLogOnReply()
+    public function shouldLogReplyWhenSetOnPostExecute()
     {
-        $action = new FooAction;
+        $action = new FooAction();
         $replyMock = $this->createReplyMock();
 
         $ro = new \ReflectionObject($replyMock);
@@ -328,18 +263,21 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
             ->with('[Payum] 1# FooAction::execute(string) throws reply '.$ro->getShortName())
         ;
 
+        $context = new Context($this->createGatewayMock(), 'string', array());
+        $context->setAction($action);
+        $context->setReply($replyMock);
+
         $extension = new LogExecutedActionsExtension($logger);
 
-        $extension->onPreExecute('string');
-        $extension->onReply($replyMock, 'string', $action);
+        $extension->onPostExecute($context);
     }
 
     /**
      * @test
      */
-    public function shouldLogHttpRedirectReplyWithUrlIncludedOnReply()
+    public function shouldLogHttpRedirectReplyWithUrlIncludedOnPostExecute()
     {
-        $action = new FooAction;
+        $action = new FooAction();
         $reply = new HttpRedirect('http://example.com');
 
         $logger = $this->createLoggerMock();
@@ -351,16 +289,19 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension = new LogExecutedActionsExtension($logger);
 
-        $extension->onPreExecute('string');
-        $extension->onReply($reply, 'string', $action);
+        $context = new Context($this->createGatewayMock(), 'string', array());
+        $context->setAction($action);
+        $context->setReply($reply);
+
+        $extension->onPostExecute($context);
     }
 
     /**
      * @test
      */
-    public function shouldLogOnExceptionWhenActionPassed()
+    public function shouldLogExceptionWhenSetOnPostExecute()
     {
-        $action = new FooAction;
+        $action = new FooAction();
 
         $logger = $this->createLoggerMock();
         $logger
@@ -371,26 +312,31 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension = new LogExecutedActionsExtension($logger);
 
-        $extension->onPreExecute('string');
-        $extension->onException(new \LogicException, 'string', $action);
+        $context = new Context($this->createGatewayMock(), 'string', array());
+        $context->setAction($action);
+        $context->setException(new \LogicException());
+
+        $extension->onPostExecute($context);
     }
 
     /**
      * @test
      */
-    public function shouldLogOnExceptionWhenActionNotPassed()
+    public function shouldLogExceptionWhenSetButActionNotSetOnPostExecute()
     {
         $logger = $this->createLoggerMock();
         $logger
             ->expects($this->at(0))
             ->method('debug')
-            ->with('[Payum] 1# Payment::execute(string) throws exception LogicException')
+            ->with('[Payum] 1# Gateway::execute(string) throws exception LogicException')
         ;
 
         $extension = new LogExecutedActionsExtension($logger);
 
-        $extension->onPreExecute('string');
-        $extension->onException(new \LogicException, 'string');
+        $context = new Context($this->createGatewayMock(), 'string', array());
+        $context->setException(new \LogicException());
+
+        $extension->onPostExecute($context);
     }
 
     /**
@@ -415,6 +361,14 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
     protected function createActionMock()
     {
         return $this->getMock('Payum\Core\Action\ActionInterface');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     */
+    protected function createGatewayMock()
+    {
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }
 

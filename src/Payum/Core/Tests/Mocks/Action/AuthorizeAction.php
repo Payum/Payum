@@ -11,7 +11,7 @@ class AuthorizeAction implements ActionInterface
      * {@inheritDoc}
      */
     public function execute($request)
-    {   
+    {
         throw new HttpRedirect('http://login.thePayment.com');
     }
 

@@ -1,18 +1,105 @@
 # Upgrades
 
+## 1.0
+
+* Php required version is 5.5
+* [be2bill] `Api::getOnsiteUrl` method is renamed to `Api::getOffsiteUrl`
+* [be2bill] `Api` methods are returing array instead of Response
+* [http-client] kriswallsmith/buzz http client was replaced with PSR7 compatible guzzlehttp/guzzle.
+
+## 0.15 to never
+
+Libraries and extension dependencies are not required now. You must install them if you need.
+This make sense for:
+* "Authorizenet.NET"
+* "PayPal REST API"
+* "Klarna Checkout"
+* "Klarna Invoice"
+* "Stripe"
+* "Payex"
+
+## 0.14 to 0.15
+
+* [order] The method getCreditCard was added to `OrderInterface` interface.
+* [klarna-checkout] `CreateOrderAction` and `UpdateOrderAction` do not do fetch any more.
+* `Payment` class deprecated and will be removed in 0.15. Use `Gateway`.
+* `PaymentInterface` interface deprecated and will be removed in 0.15. Use `GatewayInterface`.
+* `PaymentFactoryInterface` interface deprecated and will be removed in 0.15. Use `GatewayFactoryInterface`.
+* `PaymentFactory` class deprecated and will be removed in 0.15. Use `GatewayFactory`.
+* `PaymentAwareInterface` interface deprecated and will be removed in 0.15. Use `GatewayAwareInterface`.
+* `PaymentFactoryRegistryInterface` interface deprecated and will be removed in 0.15. Use `GatewayFactoryRegistryInterface`.
+* Use `GatewayFactoryRegistryInterface::getGatewayFactory` method instead of `PaymentRegistryInterface::getPaymentFactory`.
+* Use `GatewayFactoryRegistryInterface::getGatewayFactories` method instead of `PaymentRegistryInterface::getPaymentFactories`.
+* `PaymentRegistryInterface` interface deprecated and will be removed in 0.15. Use `GatewayRegistryInterface`.
+* Use `GatewayRegistryInterface::getGateway` method instead of `PaymentRegistryInterface::getPayment`.
+* Use `GatewayRegistryInterface::getGateways` method instead of `PaymentRegistryInterface::getPayments`.
+* `PaymentConfigInterface` interface deprecated and will be removed in 0.15. Use `GatewayConfigInterface`.
+* `PaymentConfig` class deprecated and will be removed in 0.15. Use `GatewayConfig`.
+* `PaymentConfig::getPaymentName` and related property renamed to `GatewayConfig::getGatewayName`. 
+* `Order` class deprecated and will be removed in 0.15. Use `Payment`.
+* `OrderInterface` interface deprecated and will be removed in 0.15. Use `PaymentInterface`.
+* `Payum\AuthorizeNet\Aim\PaymentFactory` renamed to `AuthorizeNetAimGatewayFactory`.
+* `Payum\Core\Bridge\Symfony\Form\Type\PaymentConfigType` renamed to `GatewayConfigType`.
+* `Payum\Core\Bridge\Symfony\Form\Type\PaymentFactoriesChoiceType` renamed to `GatewayFactoriesChoiceType`.
+* [doctrine] PaymentConfig::paymentName property renamed to `gatewayName`. **You have to migrate your database**.
+* [doctrine] Token::paymentName property renamed to `gatewayName`. **You have to migrate your database**.
+* [doctrine] Order renamed to `Payment`. Database schema was changed. **You have to migrate your database**.
+* [doctrine] The `currencyDigitsAfterDecimalPoint` property removed from ORM\ODM schema.
+* [propel] PaymentConfig::paymentName property renamed to `gatewayName`. **You have to migrate your database**.
+* [propel] Token::paymentName property renamed to `gatewayName`. **You have to migrate your database**.
+* [propel] Order renamed to `Payment`. Database schema was changed. **You have to migrate your database**.
+* [propel] The `currencyDigitsAfterDecimalPoint` property removed from schema.
+* [be2bill] Method `Api::prepareOnsitePayment` was renamed to `Api::prepareOffsitePayment`.
+* [action] Action `CaptureOrderAction` was renamed to `CapturePaymentAction`.
+* [action] Actions `FillOrderDetailsAction` removed. Use `ConvertPaymentAction` ones instead.
+* [request] Request `FillOrderDetails` removed. Use `Convert` one instead.
+* [model] The method `PaymentInterface::getCurrencyDigitsAfterDecimalPoint` was removed. Use `GetCurrency::getIso4217` request method to get same info.
+* [storage] `StorageInterface::findBy` returned value is changed. It was a model or null now it is always an array.
+* [extension] The method `ExtensionInterface::onReply` was removed. Use `ExtensionInterface::onPostExecute` and check whether context contains reply or not.
+* [extension] The method `ExtensionInterface::onException` was removed. Use `ExtensionInterface::onPostExecute` and check whether context contains exception or not.
+* [extension] The method `ExtensionInterface::onPreExecute` signature was changed. Now it takes instance of `Context`.
+* [extension] The method `ExtensionInterface::onExecute` signature was changed. Now it takes instance of `Context`.
+* [extension] The method `ExtensionInterface::onPostExecute` signature was changed. Now it takes instance of `Context`.
+
+## 0.13 to 0.14
+
+* [registry] `PaymentRegistryInterface::getDefaultPaymentName` method was removed.
+* [registry] `PaymentRegistryInterface::getPayment` the argument `name` is always required.
+* [registry] `AbstractRegistry::__construct` third `$defaultPayment` argument was removed.
+* [storage] A new method `StorageInterface::findBy` was added.
+
 ## 0.12 to 0.13
 
+* [request] `markSuspended` method added to `GetStatusInterface` interface. 
 * [omnipay-bridge] Omnipay bridge is not shipped with `payum\payum` code any more. Install it separatly by requiring `payum/omnipay-bridge` package.
 * [paypal-pro] Remove `PaymentDetails` class.
 * [paypal-pro] Remove `Request` and `Response` classes. Use ones from Buzz.
 * [paypal-pro] Remove `trxtype` option from api.
 * [paypal-pro] Rename `Api::doPayment` to `Api::doSale`. Change the first argument now it is array and the method returns array too.
+* [be2bill] `Api` constructor arguments order was changed. Second argument `options` is now first, and the client now is second and optional.
+* [paypal-ipn] `Api` constructor arguments order was changed. Second argument `options` is now first, and the client now is second and optional.
+* [paypal-pro] `Api` constructor arguments order was changed. Second argument `options` is now first, and the client now is second and optional.
 * [payment] Method `PaymentInterface::addApi` was removed from interface, still available in `Payment` class.
 * [payment] Method `PaymentInterface::addAction` was removed from interface, still available in `Payment` class.
 * [payment] Method `PaymentInterface::addExtension` was removed from interface, still available in `Payment` class.
+* [storage] Method `StorageInterface::createModel` was renamed to `create`.
+* [storage] Method `StorageInterface::supportModel` was renamed to `support`.
+* [storage] Method `StorageInterface::updateModel` was renamed to `update`.
+* [storage] Method `StorageInterface::deleteModel` was renamed to `delete`.
+* [storage] Method `StorageInterface::findModelById` was renamed to `find`.
+* [storage] Method `StorageInterface::getIdentificator` was renamed to `identify`.
+* [storage] Method `StorageInterface::findByIdentificator` was removed. Use `find` method instead.
+* [storage] Class `Identificator` was deprecated. Use `Identity` instead.
+* [factory] Payment factories were changed significantly. Now they implements `PaymentFactoryInterface` and therefor have to accept only array of options as first argument.
+* [be2bill] Action `CaptureOnsiteAction` was renamed to `CaptureOffsiteAction`.
+* [be2bill] Factory `OnsitePaymentFactory` was renamed to `OffsitePaymentFactory`.
+* [be2bill] Factory `PaymentFactory` was renamed to `DirectPaymentFactory`.
+* [stripe] Factory `PaymentFactory` was splitted into two: `JsPaymentFactory` and `CheckoutPaymentFactory`.
+
 
 ## 0.11 to 0.12
 
+* [refund] `createRefundToken` was added to `AbstractGenericTokenFactory`.
 * [request] `BaseModelAware` request was renamed to `Generic`.
 * [request] `SecuredInterface` allows to return a null on `getToken` method call.
 * [request] `SecuredAuthorize` request was removed. The removed logic is now in `Authorize` request, so use it.

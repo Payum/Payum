@@ -2,7 +2,7 @@
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\Token;
-use Payum\Core\Model\Identificator;
+use Payum\Core\Model\Identity;
 
 class TokenTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +21,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new Token;
+        new Token();
     }
 
     /**
@@ -29,7 +29,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetHashGeneratedInConstructor()
     {
-        $token = new Token;
+        $token = new Token();
 
         $this->assertNotEmpty($token->getHash());
     }
@@ -39,8 +39,8 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldGenerateDifferentTokensInConstructor()
     {
-        $tokenOne = new Token;
-        $tokenTwo = new Token;
+        $tokenOne = new Token();
+        $tokenTwo = new Token();
 
         $this->assertNotEquals($tokenOne->getHash(), $tokenTwo->getHash());
     }
@@ -50,7 +50,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetHash()
     {
-        $token = new Token;
+        $token = new Token();
 
         $token->setHash('foo');
     }
@@ -60,7 +60,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetHash()
     {
-        $token = new Token;
+        $token = new Token();
 
         $token->setHash('theToken');
 
@@ -70,23 +70,23 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowSetPaymentName()
+    public function shouldAllowSetGatewayName()
     {
-        $token = new Token;
+        $token = new Token();
 
-        $token->setPaymentName('aName');
+        $token->setGatewayName('aName');
     }
 
     /**
      * @test
      */
-    public function shouldAllowGetPreviouslySetPaymentName()
+    public function shouldAllowGetPreviouslySetGatewayName()
     {
-        $token = new Token;
+        $token = new Token();
 
-        $token->setPaymentName('theName');
+        $token->setGatewayName('theName');
 
-        $this->assertSame('theName', $token->getPaymentName());
+        $this->assertSame('theName', $token->getGatewayName());
     }
 
     /**
@@ -94,7 +94,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetTargetUrl()
     {
-        $token = new Token;
+        $token = new Token();
 
         $token->setTargetUrl('anUrl');
     }
@@ -104,7 +104,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetTargetUrl()
     {
-        $token = new Token;
+        $token = new Token();
 
         $token->setTargetUrl('theUrl');
 
@@ -116,7 +116,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetAfterUrl()
     {
-        $token = new Token;
+        $token = new Token();
 
         $token->setAfterUrl('anUrl');
     }
@@ -126,7 +126,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetAfterUrl()
     {
-        $token = new Token;
+        $token = new Token();
 
         $token->setAfterUrl('theUrl');
 
@@ -136,11 +136,11 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowSetIdentificatorAsDetails()
+    public function shouldAllowSetIdentityAsDetails()
     {
-        $token = new Token;
+        $token = new Token();
 
-        $token->setDetails(new Identificator('anId', 'stdClass'));
+        $token->setDetails(new Identity('anId', 'stdClass'));
     }
 
     /**
@@ -148,26 +148,26 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetDetails()
     {
-        $expectedIdentificator = 'theDetails';
+        $expectedIdentity = 'theDetails';
 
-        $token = new Token;
+        $token = new Token();
 
-        $token->setDetails($expectedIdentificator);
+        $token->setDetails($expectedIdentity);
 
-        $this->assertSame($expectedIdentificator, $token->getDetails());
+        $this->assertSame($expectedIdentity, $token->getDetails());
     }
 
     /**
      * @test
      */
-    public function shouldAllowGetIdentificatorPreviouslySetAsDetails()
+    public function shouldAllowGetIdentityPreviouslySetAsDetails()
     {
-        $expectedIdentificator = new Identificator('anId', 'stdClass');
+        $expectedIdentity = new Identity('anId', 'stdClass');
 
-        $token = new Token;
+        $token = new Token();
 
-        $token->setDetails($expectedIdentificator);
+        $token->setDetails($expectedIdentity);
 
-        $this->assertSame($expectedIdentificator, $token->getDetails());
+        $this->assertSame($expectedIdentity, $token->getDetails());
     }
 }

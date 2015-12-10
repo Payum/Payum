@@ -1,16 +1,16 @@
 <?php
 namespace Payum\Paypal\Ipn;
 
-use Buzz\Client\ClientInterface;
-use Buzz\Message\Form\FormRequest;
-use Buzz\Message\Response;
+use GuzzleHttp\Psr7\Request;
+use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\HttpClientInterface;
 
 /**
  * @link https://www.x.com/developers/paypal/documentation-tools/ipn/integration-guide/IPNIntro
  */
-class Api 
+class Api
 {
     /**
      * It sends back if the message originated with PayPal.
@@ -21,11 +21,11 @@ class Api
      * if there is any discrepancy with what was originally sent
      */
     const NOTIFY_INVALID = 'INVALID';
-    
+
     const CMD_NOTIFY_VALIDATE = '_notify-validate';
 
     /**
-     * @var \Buzz\Client\ClientInterface
+     * @var HttpClientInterface
      */
     protected $client;
 
@@ -35,46 +35,44 @@ class Api
     protected $options;
 
     /**
-     * @param ClientInterface $client
-     * @param array $options
+     * @param array               $options
+     * @param HttpClientInterface $client
      */
-    public function __construct(ClientInterface $client, array $options)
+    public function __construct(array $options, HttpClientInterface $client = null)
     {
-        $this->client = $client;
-        
+        $this->client = $client ?: HttpClientFactory::create();
+
         $this->options = $options;
 
         if (false == (isset($this->options['sandbox']) && is_bool($this->options['sandbox']))) {
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
         }
     }
-    
+
     /**
-     * @param array $notification
-     * 
+     * @param array $fields
+     *
      * @return string
      */
-    public function notifyValidate(array $notification)
+    public function notifyValidate(array $fields)
     {
-        $request = new FormRequest();
-        $request->setField('cmd', self::CMD_NOTIFY_VALIDATE);
-        $request->addFields($notification);
-        $request->setMethod('POST');
-        $request->fromUrl($this->getIpnEndpoint());
-        
-        $response = new Response;
-        
-        $this->client->send($request, $response);
+        $fields['cmd'] = self::CMD_NOTIFY_VALIDATE;
 
-        if (false == $response->isSuccessful()) {
+        $headers = array(
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        );
+
+        $request = new Request('POST', $this->getIpnEndpoint(), $headers, http_build_query($fields));
+
+        $response = $this->client->send($request);
+
+        if (false == ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
             throw HttpException::factory($request, $response);
         }
-        
-        if (self::NOTIFY_VERIFIED === $response->getContent()) {
-            return self::NOTIFY_VERIFIED;
-        }
-        
-        return self::NOTIFY_INVALID;
+
+        $result = $response->getBody()->getContents();
+
+        return self::NOTIFY_VERIFIED === $result ? self::NOTIFY_VERIFIED : self::NOTIFY_INVALID;
     }
 
     /**

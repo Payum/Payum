@@ -2,20 +2,20 @@
 
 Since we are dealing with payments it is required to log sensitive details. if the problem appear it would be easy to find out the problem when you have a good log file. This lib provide support of [PSR-3 compatible loggers](http://www.php-fig.org/psr/psr-3/).
 
-To inject a logger you have to create a logger itself, and add an extension with that logger to a payment.
+To inject a logger you have to create a logger itself, and add an extension with that logger to a gateway.
 
 ```php
 <?php
 use Payum\Core\Bridge\Psr\Log\LoggerExtension;
 use Payum\Core\Tests\Mocks\Action\LoggerAwareAction;
-use Payum\Core\Payment;
+use Payum\Core\Gateway;
 
 
-$payment = new Payment;
-$payment->addExtension(new LoggerExtension($logger));
-$payment->addAction(new LoggerAwareAction);
+$gateway = new Gateway;
+$gateway->addExtension(new LoggerExtension($logger));
+$gateway->addAction(new LoggerAwareAction);
 
-$payment->execute('a request');
+$gateway->execute('a request');
 ```
 
 After you are done you can simply implement `LoggerAwareInterface` interface to an action where you want log something. It will be injected by the extension.

@@ -12,17 +12,17 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfPaymentAwareAction()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction');
-        
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
+
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()   
+    public function couldBeConstructedWithoutAnyArguments()
     {
         new PaymentDetailsSyncAction();
     }
@@ -35,9 +35,9 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new PaymentDetailsSyncAction();
 
         $paymentDetails = array(
-            'PAYMENTREQUEST_0_AMT' => 12
+            'PAYMENTREQUEST_0_AMT' => 12,
         );
-        
+
         $request = new Sync($paymentDetails);
 
         $this->assertTrue($action->supports($request));
@@ -51,7 +51,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
         $action = new PaymentDetailsSyncAction();
 
         $paymentDetails = array(
-            'PAYMENTREQUEST_0_AMT' => 0
+            'PAYMENTREQUEST_0_AMT' => 0,
         );
 
         $request = new Sync($paymentDetails);
@@ -71,7 +71,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
@@ -86,19 +86,19 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldDoNothingIfTokenNotSet()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->never())
             ->method('execute')
         ;
-        
+
         $action = new PaymentDetailsSyncAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $request = new Sync(array(
-            'PAYMENTREQUEST_0_AMT' => 12
+            'PAYMENTREQUEST_0_AMT' => 12,
         ));
-        
+
         $action->execute($request);
     }
 
@@ -107,12 +107,12 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldRequestGetExpressCheckoutDetailsAndUpdateModelIfTokenSetInModel()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetails'))
-            ->will($this->returnCallback(function(GetExpressCheckoutDetails $request) {
+            ->will($this->returnCallback(function (GetExpressCheckoutDetails $request) {
                 $model = $request->getModel();
                 $model['foo'] = 'fooVal';
                 $model['PAYMENTREQUEST_0_AMT'] = 33;
@@ -120,7 +120,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new PaymentDetailsSyncAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $details = new \ArrayObject(array(
             'PAYMENTREQUEST_0_AMT' => 11,
@@ -141,12 +141,12 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldRequestGetExpressCheckoutDetailsAndDoNotUpdateModelIfSessionExpired()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetails'))
-            ->will($this->returnCallback(function(GetExpressCheckoutDetails $request) {
+            ->will($this->returnCallback(function (GetExpressCheckoutDetails $request) {
                 $model = $request->getModel();
                 $model['foo'] = 'fooVal';
                 $model['PAYMENTREQUEST_0_AMT'] = 33;
@@ -155,7 +155,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new PaymentDetailsSyncAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $details = new \ArrayObject(array(
             'PAYMENTREQUEST_0_AMT' => 11,
@@ -175,34 +175,34 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldRequestGetTransactionDetailsTwice()
     {
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails'))
-            ->will($this->returnCallback(function(GetTransactionDetails $request) {
+            ->will($this->returnCallback(function (GetTransactionDetails $request) {
                 $model = $request->getModel();
                 $model['foo'] = 'fooVal';
             }))
         ;
-        $paymentMock
+        $gatewayMock
             ->expects($this->at(2))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails'))
-            ->will($this->returnCallback(function(GetTransactionDetails $request) {
+            ->will($this->returnCallback(function (GetTransactionDetails $request) {
                 $model = $request->getModel();
                 $model['bar'] = 'barVal';
             }))
         ;
 
         $action = new PaymentDetailsSyncAction();
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         $details = new \ArrayObject(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'TOKEN' => 'aToken',
             'PAYMENTREQUEST_0_TRANSACTIONID' => 'zeroTransId',
-            'PAYMENTREQUEST_9_TRANSACTIONID' => 'nineTransId'
+            'PAYMENTREQUEST_9_TRANSACTIONID' => 'nineTransId',
         ));
 
         $action->execute(new Sync($details));
@@ -215,10 +215,10 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

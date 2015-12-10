@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Payex\Api;
 
-class SoapClientFactory 
+class SoapClientFactory
 {
     /**
      * @var string
@@ -14,7 +14,7 @@ class SoapClientFactory
     protected $soapClientOptions;
 
     /**
-     * @param array $soapClientOptions
+     * @param array  $soapClientOptions
      * @param string $soapClientClass
      */
     public function __construct(array $soapClientOptions = array(), $soapClientClass = null)
@@ -22,18 +22,18 @@ class SoapClientFactory
         $soapClientOptions = array_replace(
             array(
                 'trace' => true,
-                'exceptions' => true
+                'exceptions' => true,
             ),
             $soapClientOptions
         );
-        
+
         $this->soapClientClass = $soapClientClass ?: 'SoapClient';
         $this->soapClientOptions = $soapClientOptions;
     }
 
     /**
      * @param string $wsdl
-     * 
+     *
      * @return \SoapClient
      */
     public function createWsdlClient($wsdl)

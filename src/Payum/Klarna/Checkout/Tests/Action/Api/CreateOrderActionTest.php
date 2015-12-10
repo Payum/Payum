@@ -45,14 +45,9 @@ class CreateOrderActionTest extends GenericActionTest
             ->method('apply')
             ->with('POST')
         ;
-        $connector
-            ->expects($this->at(1))
-            ->method('apply')
-            ->with('GET')
-        ;
 
         $action = new CreateOrderAction($connector);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
 
         $action->execute($request);
 
@@ -67,7 +62,7 @@ class CreateOrderActionTest extends GenericActionTest
         $model = array(
             'foo' => 'fooVal',
             'bar' => 'barVal',
-            'merchant' => array('id' => 'anId')
+            'merchant' => array('id' => 'anId'),
         );
 
         $request = new CreateOrder($model);
@@ -79,7 +74,7 @@ class CreateOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function($method, $order, $options) use ($testCase, $model) {
+            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, $model) {
                 $testCase->assertInternalType('array', $options);
                 $testCase->assertArrayHasKey('data', $options);
                 $testCase->assertEquals($model, $options['data']);
@@ -87,7 +82,7 @@ class CreateOrderActionTest extends GenericActionTest
         ;
 
         $action = new CreateOrderAction($connector);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
 
         $action->execute($request);
 
@@ -99,7 +94,7 @@ class CreateOrderActionTest extends GenericActionTest
      */
     public function shouldAddMerchantIdFromConfigIfNotSetInModelOnExecute()
     {
-        $config = new Config;
+        $config = new Config();
         $config->merchantId = 'theMerchantId';
 
         $model = array(
@@ -119,7 +114,7 @@ class CreateOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function($method, $order, $options) use ($testCase, $expectedModel) {
+            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, $expectedModel) {
                 $testCase->assertInternalType('array', $options);
                 $testCase->assertArrayHasKey('data', $options);
                 $testCase->assertEquals($expectedModel, $options['data']);
@@ -149,13 +144,89 @@ class CreateOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function($method, $order, $options) use ($testCase, &$expectedOrder) {
+            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, &$expectedOrder) {
                 $expectedOrder = $order;
             }))
         ;
 
         $action = new CreateOrderAction($connector);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
+
+        $action->execute($request);
+
+        $this->assertSame($expectedOrder, $request->getOrder());
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Klarna_Checkout_ConnectionErrorException
+     */
+    public function shouldFailedAfterThreeRetriesOnTimeout()
+    {
+        $model = array(
+            'location' => 'theLocation',
+            'cart' => array(
+                'items' => array(
+                    array('foo'),
+                    array('bar'),
+                ),
+            ),
+        );
+
+        $request = new CreateOrder($model);
+
+        $connector = $this->createConnectorMock();
+        $connector
+            ->expects($this->exactly(3))
+            ->method('apply')
+            ->with('POST')
+            ->will($this->throwException(new \Klarna_Checkout_ConnectionErrorException()))
+        ;
+
+        $action = new CreateOrderAction($connector);
+        $action->setApi(new Config());
+
+        $action->execute($request);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldRecoverAfterTimeout()
+    {
+        $model = array(
+            'location' => 'theLocation',
+            'cart' => array(
+                'items' => array(
+                    array('foo'),
+                    array('bar'),
+                ),
+            ),
+        );
+
+        $request = new CreateOrder($model);
+
+        $expectedOrder = null;
+
+        $connector = $this->createConnectorMock();
+        $connector
+            ->expects($this->at(0))
+            ->method('apply')
+            ->with('POST')
+            ->will($this->throwException(new \Klarna_Checkout_ConnectionErrorException()))
+        ;
+        $connector
+            ->expects($this->at(1))
+            ->method('apply')
+            ->with('POST')
+            ->will($this->returnCallback(function ($method, $order, $options) use (&$expectedOrder) {
+                $expectedOrder = $order;
+            }))
+        ;
+
+        $action = new CreateOrderAction($connector);
+        $action->setApi(new Config());
 
         $action->execute($request);
 

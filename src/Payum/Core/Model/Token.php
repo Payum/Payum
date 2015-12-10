@@ -3,11 +3,12 @@ namespace Payum\Core\Model;
 
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Security\Util\Random;
+use Payum\Core\Storage\IdentityInterface;
 
 class Token implements TokenInterface
 {
     /**
-     * @var \Payum\Core\Model\Identificator
+     * @var IdentityInterface
      */
     protected $details;
 
@@ -29,7 +30,7 @@ class Token implements TokenInterface
     /**
      * @var string
      */
-    protected $paymentName;
+    protected $gatewayName;
 
     public function __construct()
     {
@@ -38,8 +39,8 @@ class Token implements TokenInterface
 
     /**
      * {@inheritDoc}
-     * 
-     * @return Identificator
+     *
+     * @return Identity
      */
     public function getDetails()
     {
@@ -105,16 +106,16 @@ class Token implements TokenInterface
     /**
      * {@inheritDoc}
      */
-    public function getPaymentName()
+    public function getGatewayName()
     {
-        return $this->paymentName;
+        return $this->gatewayName;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setPaymentName($paymentName)
+    public function setGatewayName($gatewayName)
     {
-        $this->paymentName = $paymentName;
+        $this->gatewayName = $gatewayName;
     }
 }

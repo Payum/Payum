@@ -19,7 +19,7 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_Te
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()   
+    public function couldBeConstructedWithoutAnyArguments()
     {
         new GetRecurringPaymentsProfileDetailsAction();
     }
@@ -30,7 +30,7 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_Te
     public function shouldSupportGetRecurringPaymentsProfileDetailsRequestAndArrayAccessAsModel()
     {
         $action = new GetRecurringPaymentsProfileDetailsAction();
-        
+
         $this->assertTrue(
             $action->supports(new GetRecurringPaymentsProfileDetails($this->getMock('ArrayAccess')))
         );
@@ -48,7 +48,7 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_Te
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
@@ -62,12 +62,12 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_Te
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The PROFILEID fields is required.
+     * @expectedExceptionMessage The PROFILEID fields are required.
      */
     public function throwIfTokenNotSetInModel()
     {
         $action = new GetRecurringPaymentsProfileDetailsAction();
-        
+
         $request = new GetRecurringPaymentsProfileDetails(array());
 
         $action->execute($request);
@@ -84,19 +84,19 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_Te
         $apiMock
             ->expects($this->once())
             ->method('getRecurringPaymentsProfileDetails')
-            ->will($this->returnCallback(function(array $fields) use ($testCase) {
+            ->will($this->returnCallback(function (array $fields) use ($testCase) {
                 $testCase->assertArrayHasKey('PROFILEID', $fields);
                 $testCase->assertEquals('theProfileId', $fields['PROFILEID']);
 
                 return array();
             }))
         ;
-        
+
         $action = new GetRecurringPaymentsProfileDetailsAction();
         $action->setApi($apiMock);
 
         $request = new GetRecurringPaymentsProfileDetails(array(
-            'PROFILEID' => 'theProfileId', 
+            'PROFILEID' => 'theProfileId',
         ));
 
         $action->execute($request);
@@ -111,9 +111,9 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_Te
         $apiMock
             ->expects($this->once())
             ->method('getRecurringPaymentsProfileDetails')
-            ->will($this->returnCallback(function() {
+            ->will($this->returnCallback(function () {
                 return array(
-                    'STATUS'=> 'theStatus',
+                    'STATUS' => 'theStatus',
                 );
             }))
         ;

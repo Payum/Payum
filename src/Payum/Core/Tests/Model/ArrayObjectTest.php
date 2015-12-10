@@ -30,7 +30,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new ArrayObject;
+        new ArrayObject();
     }
 
     /**
@@ -38,7 +38,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddElementToArray()
     {
-        $model = new ArrayObject;
+        $model = new ArrayObject();
 
         $model['foo'] = 'theFoo';
 
@@ -50,7 +50,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnTrueIfElementSetOnIsset()
     {
-        $model = new ArrayObject;
+        $model = new ArrayObject();
 
         $model['foo'] = 'theFoo';
 
@@ -62,7 +62,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnFalseIfElementNotSetOnIsset()
     {
-        $model = new ArrayObject;
+        $model = new ArrayObject();
 
         $this->assertFalse(isset($model['foo']));
     }
@@ -72,7 +72,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowUnsetElement()
     {
-        $model = new ArrayObject;
+        $model = new ArrayObject();
 
         $model['foo'] = 'theFoo';
 
@@ -89,7 +89,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldReturnArrayIteratorOnGetIterator()
     {
-        $model = new ArrayObject;
+        $model = new ArrayObject();
 
         $model['foo'] = 'theFoo';
         $model['bar'] = 'theBar';
@@ -100,7 +100,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             array(
                 'foo' => 'theFoo',
-                'bar' => 'theBar'
+                'bar' => 'theBar',
             ),
             iterator_to_array($model)
         );

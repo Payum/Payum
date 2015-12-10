@@ -7,7 +7,7 @@ use Payum\Core\Reply\HttpRedirect;
 abstract class Humanify
 {
     /**
-     * @param mixed $request
+     * @param  mixed  $request
      * @return string
      */
     public static function request($request)
@@ -15,7 +15,6 @@ abstract class Humanify
         $return = self::value($request);
 
         $details = array();
-
 
         if ($request instanceof ModelAggregateInterface) {
             $details[] = sprintf('model: %s', self::value($request->getModel()));
@@ -33,7 +32,7 @@ abstract class Humanify
 
     /**
      * @param mixed $value
-     * @param bool $shortClass
+     * @param bool  $shortClass
      *
      * @return string
      */
@@ -52,5 +51,7 @@ abstract class Humanify
         return gettype($value);
     }
 
-    private final function __construct() {}
-} 
+    final private function __construct()
+    {
+    }
+}

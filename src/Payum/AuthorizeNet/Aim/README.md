@@ -3,22 +3,15 @@
 [![Total Downloads](https://poser.pugx.org/payum/authorize-net-aim/d/total.png)](https://packagist.org/packages/payum/authorize-net-aim)
 [![Latest Stable Version](https://poser.pugx.org/payum/authorize-net-aim/version.png)](https://packagist.org/packages/payum/authorize-net-aim)
 
-The lib implements [Authorize.Net AIM](http://www.authorize.net/) payment.
+The Payum extension. It provides [Authorize.Net AIM](http://www.authorize.net/) payment integration.
 
 ## Resources
 
+* [Examples](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/examples)
 * [Documentation](http://payum.org/doc#AuthorizeNetAim)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)
-
-## Contributing
-
-AuthorizeNetAIM is an open source, community-driven project. Pull requests are very welcome.
-
-## Like it? Spread the word!
-
-Star payum on [github](https://github.com/Payum/AuthorizeNetAIM) or [packagist](https://packagist.org/packages/payum/authorize-net-aim).
 
 ## License
 

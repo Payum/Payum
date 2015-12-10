@@ -10,7 +10,7 @@ class SoapClientFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new SoapClientFactory;
+        new SoapClientFactory();
     }
 
     /**
@@ -18,10 +18,10 @@ class SoapClientFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreateSoapClientWithDefaultClassAndOptions()
     {
-        $factory = new SoapClientFactory;
+        $factory = new SoapClientFactory();
 
         $client = $factory->createWsdlClient('https://test-external.payex.com/pxorder/pxorder.asmx?wsdl');
-        
+
         $this->assertInstanceOf('SoapClient', $client);
     }
 
@@ -29,12 +29,12 @@ class SoapClientFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      */
     public function shouldAllowCreateSoapClientWithCustomClassAndOptions()
-    {        
+    {
         $options = array(
             'trace' => true,
             'exceptions' => true,
         );
-        
+
         $factory = new SoapClientFactory($options, 'Payum\Payex\Tests\Api\CustomSoapClient');
 
         $client = $factory->createWsdlClient('https://test-external.payex.com/pxorder/pxorder.asmx?wsdl');

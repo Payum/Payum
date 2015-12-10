@@ -2,8 +2,8 @@
 
 Storage allow you save,fetch payment related information. 
 They could be used explicitly, it means you have to call save or fetch methods when it is required. 
-Or you can integrate a storage to a payment using `StorageExtension`. 
-In this case every time payment finish to execute a request it stores the information. 
+Or you can integrate a storage to a gateway using `StorageExtension`. 
+In this case every time gateway finish to execute a request it stores the information. 
 `StorageExtension` could also load a model by it is `Identificator` so you do not have to care about that.
 
 Explicitly used example:
@@ -12,15 +12,15 @@ Explicitly used example:
 <?php
 use Payum\Core\Storage\FilesystemStorage;
 
-$storage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Order', 'number');
+$storage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Payment', 'number');
 
-$order = $storage->createModel();
+$order = $storage->create();
 $order->setTotalAmount(123);
 $order->setCurrency('EUR');
 
-$storage->updateModel($order);
+$storage->update($order);
 
-$foundOrder = $storage->findModelById($order->getNumber());
+$foundOrder = $storage->find($order->getNumber());
 ```
 
 Implicitly used example: 
@@ -28,37 +28,37 @@ Implicitly used example:
 ```php
 <?php
 use Payum\Core\Extension\StorageExtension;
-use Payum\Core\Payment;
+use Payum\Core\Gateway;
 use Payum\Core\Storage\FilesystemStorage;
 
-$payment->addExtension(new StorageExtension(
-   new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Order', 'number')
+$gateway->addExtension(new StorageExtension(
+   new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Payment', 'number')
 ));
 ```
 
-Usage of a model identificator:
+Usage of a model identity with the extension:
 
 ```php
 <?php
 use Payum\Core\Extension\StorageExtension;
-use Payum\Core\Storage\Identificator;
+use Payum\Core\Model\Identity;
 use Payum\Core\Storage\FilesystemStorage;
-use Payum\Core\Payment;
+use Payum\Core\Gateway;
 use Payum\Core\Request\Capture;
 
-$storage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Order', 'number');
+$storage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Payment', 'number');
 
-$order = $storage->createModel();
-$storage->updateModel($order);
+$order = $storage->create();
+$storage->update($order);
 
-$payment->addExtension(new StorageExtension($storage));
+$gateway->addExtension(new StorageExtension($storage));
 
-$payment->execute($capture = new Capture(
-    $storage->getIdentificator($order)
+$gateway->execute($capture = new Capture(
+    $storage->identify($order)
 ));
 
 echo get_class($capture->getModel());
-// -> Payum\Core\Model\Order
+// -> Payum\Core\Model\Payment
 ```
 
 ## Doctrine ORM
@@ -90,13 +90,13 @@ class PaymentToken extends Token
 namespace Acme\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Payum\Core\Model\Order as BaseOrder;
+use Payum\Core\Model\Payment as BasePayment;
 
 /**
  * @ORM\Table
  * @ORM\Entity
  */
-class Order extends BaseOrder
+class Payment extends BasePayment
 {
     /**
      * @ORM\Column(name="id", type="integer")
@@ -146,7 +146,7 @@ $connection = array('driver' => 'pdo_sqlite', 'path' => ':memory:');
 
 $orderStorage = new DoctrineStorage(
    EntityManager::create($connection, $config),
-   'Payum\Entity\Order'
+   'Payum\Entity\Payment'
 );
 
 $tokenStorage = new DoctrineStorage(
@@ -181,12 +181,12 @@ class PaymentToken extends Token
 namespace Acme\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as Mongo;
-use Payum\Core\Model\Order as BaseOrder;
+use Payum\Core\Model\Payment as BasePayment;
 
 /**
  * @Mongo\Document
  */
-class Order extends BaseOrder
+class Payment extends BasePayment
 {
     /**
      * @Mongo\Id
@@ -250,7 +250,7 @@ $connection = new Connection(null, array(), $config);
 
 $orderStorage = new DoctrineStorage(
     DocumentManager::create($connection, $config),
-    'Acme\Document\Order'
+    'Acme\Document\Payment'
 );
 
 $tokenStorage = new DoctrineStorage(
@@ -267,9 +267,59 @@ use Payum\Core\Storage\FilesystemStorage;
 
 $storage = new FilesystemStorage(
     '/path/to/storage', 
-    'Payum\Core\Model\Order', 
+    'Payum\Core\Model\Payment', 
     'number'
 );
+```
+
+## Propel 2
+
+First, you have to generate the model base classes.
+
+To do that, you have to create a configuration file. 
+Please take a look at [propel's documentation](http://propelorm.org/documentation/02-buildtime.html#building-the-model) to write that file.
+
+Then run:
+```sh
+$ bin/propel --config-dir=path/where/you/created/propel.ext --schema-dir=src/Payum/Core/Bridge/Propel2/Resources/config --output-dir=src/ build
+```
+
+Then you can insert ```src/Payum/Core/Bridge/Propel2/Resources/install/order.sql``` and ```src/Payum/Core/Bridge/Propel2/Resources/install/token.sql```
+in your database(s).
+
+You can copy the ```schema.xml``` file into your project resources and customize it.
+If you customize your ```schema.xml``` you'll have to generate the table creation sql file.
+You only have to run:
+```sh
+$ bin/propel --config-dir=your/path/to/propel.xml/directory --schema-dir=your/path/to/schema.xml/directory --output-dir=your-application/resources/ sql:build
+```
+
+If you want to add your own logic to the model classes, you can extend the following classes:
+- ```Payum\Core\Bridge\Propel2\Model\Payment```
+- ```Payum\Core\Bridge\Propel2\Model\OrderQuery```
+- ```Payum\Core\Bridge\Propel2\Model\Token```
+- ```Payum\Core\Bridge\Propel2\Model\TokenQuery```
+
+If you don't want to, you only have to use them.
+
+Then, you have to configure a connection.
+
+Here's a snippet adapted from propel [documentation](http://propelorm.org/documentation/02-buildtime.html#runtime-connection-settings):
+
+```php
+<?php
+
+use Propel\Runtime\Propel;
+use Propel\Runtime\Connection\ConnectionManagerSingle;
+$serviceContainer = Propel::getServiceContainer();
+$serviceContainer->setAdapterClass('default', 'mysql');
+$manager = new ConnectionManagerSingle();
+$manager->setConfiguration(array (
+  'dsn'      => 'mysql:host=localhost;dbname=my_db_name',
+  'user'     => 'my_db_user',
+  'password' => 's3cr3t',
+));
+$serviceContainer->setConnectionManager('default', $manager);
 ```
 
 ## Custom.

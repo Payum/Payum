@@ -32,7 +32,7 @@ class CreateChargeActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new CreateChargeAction;
+        new CreateChargeAction();
     }
 
     /**
@@ -40,7 +40,7 @@ class CreateChargeActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetKeysAsApi()
     {
-        $action = new CreateChargeAction;
+        $action = new CreateChargeAction();
 
         $action->setApi(new Keys('publishableKey', 'secretKey'));
     }
@@ -52,7 +52,7 @@ class CreateChargeActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwNotSupportedApiIfNotKeysGivenAsApi()
     {
-        $action = new CreateChargeAction;
+        $action = new CreateChargeAction();
 
         $action->setApi('not keys instance');
     }
@@ -62,7 +62,7 @@ class CreateChargeActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportCreateChargeRequestWithArrayAccessModel()
     {
-        $action = new CreateChargeAction;
+        $action = new CreateChargeAction();
 
         $this->assertTrue($action->supports(new CreateCharge(array())));
     }
@@ -72,9 +72,9 @@ class CreateChargeActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportCreateChargeRequestWithNotArrayAccessModel()
     {
-        $action = new CreateChargeAction;
+        $action = new CreateChargeAction();
 
-        $this->assertFalse($action->supports(new CreateCharge(new \stdClass)));
+        $this->assertFalse($action->supports(new CreateCharge(new \stdClass())));
     }
 
     /**
@@ -82,9 +82,9 @@ class CreateChargeActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportNotCreateChargeRequest()
     {
-        $action = new CreateChargeAction;
+        $action = new CreateChargeAction();
 
-        $this->assertFalse($action->supports(new \stdClass));
+        $this->assertFalse($action->supports(new \stdClass()));
     }
 
     /**
@@ -95,8 +95,8 @@ class CreateChargeActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwRequestNotSupportedIfNotSupportedGiven()
     {
-        $action = new CreateChargeAction;
+        $action = new CreateChargeAction();
 
-        $action->execute(new \stdClass);
+        $action->execute(new \stdClass());
     }
-} 
+}

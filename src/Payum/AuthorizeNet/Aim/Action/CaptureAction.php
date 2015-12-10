@@ -1,7 +1,7 @@
 <?php
 namespace Payum\AuthorizeNet\Aim\Action;
 
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -12,13 +12,13 @@ use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Security\SensitiveValue;
 
-class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
+class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
 {
     /**
      * @var AuthorizeNetAIM
      */
     protected $api;
-    
+
     /**
      * {@inheritDoc}
      */
@@ -27,10 +27,10 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         if (false == $api instanceof AuthorizeNetAIM) {
             throw new UnsupportedApiException('Not supported.');
         }
-        
+
         $this->api = $api;
     }
-    
+
     /**
      * {@inheritDoc}
      *
@@ -45,11 +45,11 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         if (null != $model['response_code']) {
             return;
         }
-        
+
         if (false == $model->validateNotEmpty(array('card_num', 'exp_date'), false)) {
             try {
-                $this->payment->execute($obtainCreditCard = new ObtainCreditCard);
-
+                $obtainCreditCard = new ObtainCreditCard($request->getFirstModel(), $request->getModel());
+                $this->gateway->execute($obtainCreditCard);
                 $card = $obtainCreditCard->obtain();
 
                 $model['exp_date'] = new SensitiveValue($card->getExpireAt()->format('m/y'));
@@ -73,7 +73,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof Capture &&
             $request->getModel() instanceof \ArrayAccess
         ;

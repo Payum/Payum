@@ -2,7 +2,7 @@
 namespace Payum\Core\Bridge\Zend\Storage;
 
 use Payum\Core\Exception\LogicException;
-use Payum\Core\Model\Identificator;
+use Payum\Core\Model\Identity;
 use Payum\Core\Storage\AbstractStorage;
 use Zend\Db\TableGateway\TableGateway;
 
@@ -29,7 +29,7 @@ use Zend\Db\TableGateway\TableGateway;
  *                new HydratingResultSet(
  *                    $sm->get('<transactionHydrator>'),  // Hydrator to hydrate your data entity (defined below).
  *                    $sm->get('<transactionEntity>')     // The entity that represents your data (defined below).
-*                 )
+ *                 )
  *            );
  *        },
  *        'transactionHydrator' => function ($sm) {
@@ -55,8 +55,8 @@ class TableGatewayStorage extends AbstractStorage
 
     /**
      * @param TableGateway $tableGateway
-     * @param string $modelClass
-     * @param string $idField
+     * @param string       $modelClass
+     * @param string       $idField
      */
     public function __construct(TableGateway $tableGateway, $modelClass, $idField = 'id')
     {
@@ -69,7 +69,15 @@ class TableGatewayStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
-    public function findModelById($id)
+    public function findBy(array $criteria)
+    {
+        throw new LogicException('Method is not supported by the storage.');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function doFind($id)
     {
         return $this->tableGateway->select(array("{$this->idField} = ?" => $id))->current();
     }
@@ -100,7 +108,7 @@ class TableGatewayStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
-    protected function doGetIdentificator($model)
+    protected function doGetIdentity($model)
     {
         $id = $this->getModelId($model);
 
@@ -108,7 +116,7 @@ class TableGatewayStorage extends AbstractStorage
             throw new LogicException('The model must be persisted before usage of this method');
         }
 
-        return new Identificator($id, $model);
+        return new Identity($id, $model);
     }
 
     /**

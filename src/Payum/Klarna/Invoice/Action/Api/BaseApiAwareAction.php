@@ -23,7 +23,7 @@ abstract class BaseApiAwareAction implements  ApiAwareInterface, ActionInterface
      */
     public function __construct(\Klarna $klarna = null)
     {
-        $this->klarna = $klarna ?: new \Klarna;
+        $this->klarna = $klarna ?: new \Klarna();
     }
 
     /**
@@ -68,9 +68,9 @@ abstract class BaseApiAwareAction implements  ApiAwareInterface, ActionInterface
     }
 
     /**
-     * @param \ArrayAccess $details
+     * @param \ArrayAccess     $details
      * @param \KlarnaException $e
-     * @param object $request
+     * @param object           $request
      */
     protected function populateDetailsWithError(\ArrayAccess $details, \KlarnaException $e, $request)
     {

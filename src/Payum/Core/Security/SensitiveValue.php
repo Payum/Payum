@@ -3,14 +3,14 @@ namespace Payum\Core\Security;
 
 use Payum\Core\Exception\LogicException;
 
-final class SensitiveValue implements \Serializable
+final class SensitiveValue implements \Serializable, \JsonSerializable
 {
     private $value;
 
     /**
      * @param mixed $value
      */
-    public final function __construct($value)
+    final public function __construct($value)
     {
         $this->value = $value;
     }
@@ -52,6 +52,13 @@ final class SensitiveValue implements \Serializable
      * {@inheritDoc}
      */
     public function unserialize($serialized)
+    {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function jsonSerialize()
     {
     }
 

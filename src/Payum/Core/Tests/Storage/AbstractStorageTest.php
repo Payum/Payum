@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Storage;
 
-use Payum\Core\Model\Identificator;
+use Payum\Core\Model\Identity;
 
 class AbstractStorageTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,7 +11,7 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
     public function shouldImplementStorageInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Storage\AbstractStorage');
-        
+
         $this->assertTrue($rc->implementsInterface('Payum\Core\Storage\StorageInterface'));
     }
 
@@ -40,7 +40,7 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', array('stdClass'));
 
-        $model = $storage->createModel();
+        $model = $storage->create();
 
         $this->assertInstanceOf('stdClass', $model);
     }
@@ -57,7 +57,7 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
 
         $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', array($modelClass));
 
-        $storage->updateModel(new \stdClass);
+        $storage->update(new \stdClass());
     }
 
     /**
@@ -65,7 +65,7 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallDoUpdateModelOnModelUpdate()
     {
-        $model = new \stdClass;
+        $model = new \stdClass();
 
         $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', array('stdClass'));
         $storage
@@ -74,7 +74,7 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo($model))
         ;
 
-        $storage->updateModel($model);
+        $storage->update($model);
     }
 
     /**
@@ -89,7 +89,7 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
 
         $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', array($modelClass));
 
-        $storage->deleteModel(new \stdClass);
+        $storage->delete(new \stdClass());
     }
 
     /**
@@ -97,7 +97,7 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallDoDeleteModelOnModelDelete()
     {
-        $model = new \stdClass;
+        $model = new \stdClass();
 
         $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', array('stdClass'));
         $storage
@@ -106,7 +106,7 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo($model))
         ;
 
-        $storage->deleteModel($model);
+        $storage->delete($model);
     }
 
     /**
@@ -115,60 +115,60 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage Invalid model given. Should be instance of Mock_stdClass_
      */
-    public function throwIfInvalidModelGivenOnGetIdentificator()
+    public function throwIfInvalidModelGivenOnGetIdentity()
     {
         $modelClass = get_class($this->getMock('stdClass'));
 
         $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', array($modelClass));
 
-        $storage->getIdentificator(new \stdClass);
+        $storage->identify(new \stdClass());
     }
 
     /**
      * @test
      */
-    public function shouldCallDoGetIdentificatorOnGetIdentificator()
+    public function shouldCallDoGetIdentityOnGetIdentificator()
     {
-        $model = new \stdClass;
+        $model = new \stdClass();
 
         $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', array('stdClass'));
         $storage
             ->expects($this->once())
-            ->method('doGetIdentificator')
+            ->method('doGetIdentity')
             ->with($this->identicalTo($model))
         ;
 
-        $storage->getIdentificator($model);
+        $storage->identify($model);
     }
 
     /**
      * @test
      */
-    public function shouldReturnNullIfNotSupportedIdentificatorGivenOnFindModelByIdentificator()
+    public function shouldReturnNullIfNotSupportedIdentityGivenOnFindModelByIdentity()
     {
         $modelClass = get_class($this->getMock('stdClass'));
-        $identificator = new Identificator('anId', new \stdClass);
+        $identity = new Identity('anId', new \stdClass());
 
         $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', array($modelClass));
 
-        $this->assertNull($storage->findModelByIdentificator($identificator));
+        $this->assertNull($storage->find($identity));
     }
 
     /**
      * @test
      */
-    public function shouldCallFindModelByIdOnFindModelByIdentificatorWithIdFromIdentificator()
+    public function shouldCallFindModelByIdOnFindModelByIdentityWithIdFromIdentity()
     {
-        $identificator = new Identificator('theId', new \stdClass);
+        $identity = new Identity('theId', new \stdClass());
 
         $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', array('stdClass'));
         $storage
             ->expects($this->once())
-            ->method('findModelById')
+            ->method('doFind')
             ->with('theId')
         ;
 
-        $storage->findModelByIdentificator($identificator);
+        $storage->find($identity);
     }
 
     /**
@@ -176,34 +176,53 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallFindModelByIdOnFindModelByEvenIfModelClassPrependWithSlash()
     {
-        $identificator = new Identificator('theId', new \stdClass);
+        $identity = new Identity('theId', new \stdClass());
 
         $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', array('\stdClass'));
         $storage
             ->expects($this->once())
-            ->method('findModelById')
+            ->method('doFind')
             ->with('theId')
         ;
 
-        $storage->findModelByIdentificator($identificator);
+        $storage->find($identity);
     }
 
     /**
      * @test
      */
-    public function shouldProxyFindModelByIdResultOnFindModelByIdentificator()
+    public function shouldProxyFindModelByIdResultOnFindModelByIdentity()
     {
-        $expectedModel = new \stdClass;
-        $identificator = new Identificator('aId', $expectedModel);
+        $expectedModel = new \stdClass();
+        $identity = new Identity('aId', $expectedModel);
 
         $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', array('stdClass'));
         $storage
             ->expects($this->once())
-            ->method('findModelById')
+            ->method('doFind')
             ->will($this->returnValue($expectedModel))
         ;
 
-        $this->assertSame($expectedModel, $storage->findModelByIdentificator($identificator));
+        $this->assertSame($expectedModel, $storage->find($identity));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotCallDoFindIfIdentityClassNotMatchStorageOne()
+    {
+        $expectedModel = new \stdClass();
+        $identity = new Identity('aId', $expectedModel);
+
+        $modelClass = get_class($this->getMock('stdClass'));
+
+        $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', array($modelClass));
+        $storage
+            ->expects($this->never())
+            ->method('doFind')
+        ;
+
+        $this->assertNull($storage->find($identity));
     }
 
     /**
@@ -215,7 +234,7 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
 
         $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', array(get_class($model)));
 
-        $this->assertTrue($storage->supportModel($model));
+        $this->assertTrue($storage->support($model));
     }
 
     /**
@@ -227,7 +246,7 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
 
         $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', array($modelClass));
 
-        $this->assertFalse($storage->supportModel(new \stdClass));
+        $this->assertFalse($storage->support(new \stdClass()));
     }
 
     /**
@@ -237,6 +256,6 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', array('stdClass'));
 
-        $this->assertFalse($storage->supportModel('notObject'));
+        $this->assertFalse($storage->support('notObject'));
     }
 }

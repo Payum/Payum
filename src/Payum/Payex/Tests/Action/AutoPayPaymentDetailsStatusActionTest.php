@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Payex\Tests\Action;
 
-use Payum\Core\PaymentInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\GetBinaryStatus;
 use Payum\Payex\Action\AutoPayPaymentDetailsStatusAction;
 use Payum\Payex\Api\OrderApi;
@@ -23,7 +23,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new AutoPayPaymentDetailsStatusAction;
+        new AutoPayPaymentDetailsStatusAction();
     }
 
     /**
@@ -34,7 +34,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $action = new AutoPayPaymentDetailsStatusAction();
 
         $this->assertTrue($action->supports(new GetBinaryStatus(array(
-            'autoPay' => true
+            'autoPay' => true,
         ))));
     }
 
@@ -69,7 +69,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $action = new AutoPayPaymentDetailsStatusAction();
 
         $this->assertFalse($action->supports(new GetBinaryStatus(array(
-            'autoPay' => false
+            'autoPay' => false,
         ))));
     }
 
@@ -78,7 +78,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotBinaryMaskStatusRequest()
     {
-        $action = new AutoPayPaymentDetailsStatusAction;
+        $action = new AutoPayPaymentDetailsStatusAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -88,9 +88,9 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportBinaryMaskStatusRequestWithNotArrayAccessModel()
     {
-        $action = new AutoPayPaymentDetailsStatusAction;
+        $action = new AutoPayPaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new GetBinaryStatus(new \stdClass)));
+        $this->assertFalse($action->supports(new GetBinaryStatus(new \stdClass())));
     }
 
     /**
@@ -100,7 +100,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $action = new AutoPayPaymentDetailsStatusAction;
+        $action = new AutoPayPaymentDetailsStatusAction();
 
         $action->execute(new \stdClass());
     }
@@ -186,12 +186,12 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($status->isFailed());
     }
-    
+
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

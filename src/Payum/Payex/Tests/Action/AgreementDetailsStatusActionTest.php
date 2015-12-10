@@ -2,7 +2,7 @@
 namespace Payum\Payex\Tests\Action;
 
 use Payum\Payex\Api\AgreementApi;
-use Payum\Core\PaymentInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\GetBinaryStatus;
 use Payum\Payex\Action\AgreementDetailsStatusAction;
 
@@ -23,7 +23,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new AgreementDetailsStatusAction;
+        new AgreementDetailsStatusAction();
     }
 
     /**
@@ -46,10 +46,10 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
             ->with('orderId')
             ->will($this->returnValue(false))
         ;
-        
+
         $this->assertTrue($action->supports(new GetBinaryStatus($array)));
     }
-    
+
     /**
      * @test
      */
@@ -79,7 +79,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotStatusRequest()
     {
-        $action = new AgreementDetailsStatusAction;
+        $action = new AgreementDetailsStatusAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -89,9 +89,9 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportStatusRequestWithNotArrayAccessModel()
     {
-        $action = new AgreementDetailsStatusAction;
+        $action = new AgreementDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new GetBinaryStatus(new \stdClass)));
+        $this->assertFalse($action->supports(new GetBinaryStatus(new \stdClass())));
     }
 
     /**
@@ -101,7 +101,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $action = new AgreementDetailsStatusAction;
+        $action = new AgreementDetailsStatusAction();
 
         $action->execute(new \stdClass());
     }
@@ -206,10 +206,10 @@ class AgreementDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

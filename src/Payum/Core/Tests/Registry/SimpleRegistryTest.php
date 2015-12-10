@@ -2,7 +2,12 @@
 namespace Payum\Core\Tests\Registry;
 
 use Payum\Core\Extension\StorageExtension;
+use Payum\Core\Gateway;
+use Payum\Core\GatewayInterface;
+use Payum\Core\Registry\AbstractRegistry;
 use Payum\Core\Registry\SimpleRegistry;
+use Payum\Core\Storage\StorageInterface;
+use Payum\Core\Tests\Mocks\Model\TestModel;
 
 class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,76 +16,71 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfAbstractRegistry()
     {
-        $rc = new \ReflectionClass('Payum\Core\Registry\SimpleRegistry');
+        $rc = new \ReflectionClass(SimpleRegistry::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Registry\AbstractRegistry'));
+        $this->assertTrue($rc->isSubclassOf(AbstractRegistry::class));
     }
 
     /**
      * @test
      */
-    public function couldBeConstructedWithExpectedSetOfArguments()
+    public function couldBeConstructedWithoutAnyArguments()
     {
-        new SimpleRegistry(
-            $payments = array(),
-            $storages = array(),
-            $defaultPayment = 'foo'
-        );
+        $registry = new SimpleRegistry();
+
+        $this->assertAttributeEquals(array(), 'gateways', $registry);
+        $this->assertAttributeEquals(array(), 'storages', $registry);
+        $this->assertAttributeEquals(array(), 'gatewayFactories', $registry);
     }
 
     /**
      * @test
      */
-    public function shouldAllowGetPaymentSetInConstructor()
-    {
-        $paymentFooMock = $this->getMock('Payum\Core\Payment');
-        $paymentBarMock = $this->getMock('Payum\Core\Payment');
-
-        $registry = new SimpleRegistry(
-            $payments = array('foo' => $paymentFooMock, 'bar' => $paymentBarMock),
-            array(),
-            'foo'
-        );
-
-        $this->assertSame($paymentFooMock, $registry->getPayment('foo'));
-        $this->assertSame($paymentBarMock, $registry->getPayment('bar'));
-
-        //default
-        $this->assertSame($paymentFooMock, $registry->getPayment());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetPaymentsSetInConstructor()
-    {
-        $paymentFooMock = $this->getMock('Payum\Core\Payment');
-        $paymentBarMock = $this->getMock('Payum\Core\Payment');
-
-        $registry = new SimpleRegistry(
-            $payments = array('foo' => $paymentFooMock, 'bar' => $paymentBarMock),
-            array(),
-            'foo'
-        );
-
-        $payments = $registry->getPayments();
-
-        $this->assertContains($paymentFooMock, $payments);
-        $this->assertContains($paymentBarMock, $payments);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetDefaultPaymentNameSetInConstructor()
+    public function couldBeConstructedWithAllPossibleArguments()
     {
         $registry = new SimpleRegistry(
-            array(),
-            array(),
-            'foo'
+            $gateways = array('foo' => 'fooGateway'),
+            $storages = array('fooClass' => 'fooStorage'),
+            $gatewayFactories = array('bar' => 'barFactory')
         );
 
-        $this->assertEquals('foo', $registry->getDefaultPaymentName());
+        $this->assertAttributeEquals($gateways, 'gateways', $registry);
+        $this->assertAttributeEquals($storages, 'storages', $registry);
+        $this->assertAttributeEquals($gatewayFactories, 'gatewayFactories', $registry);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetGatewaySetInConstructor()
+    {
+        $gatewayFooMock = $this->getMock(GatewayInterface::class);
+        $gatewayBarMock = $this->getMock(GatewayInterface::class);
+
+        $registry = new SimpleRegistry(
+            array('foo' => $gatewayFooMock, 'bar' => $gatewayBarMock)
+        );
+
+        $this->assertSame($gatewayFooMock, $registry->getGateway('foo'));
+        $this->assertSame($gatewayBarMock, $registry->getGateway('bar'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetGatewaysSetInConstructor()
+    {
+        $gatewayFooMock = $this->getMock(GatewayInterface::class);
+        $gatewayBarMock = $this->getMock(GatewayInterface::class);
+
+        $registry = new SimpleRegistry(
+            array('foo' => $gatewayFooMock, 'bar' => $gatewayBarMock)
+        );
+
+        $gateways = $registry->getGateways();
+
+        $this->assertContains($gatewayFooMock, $gateways);
+        $this->assertContains($gatewayBarMock, $gateways);
     }
 
     /**
@@ -88,20 +88,19 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetStorageForGivenClass()
     {
-        $storageFooMock = $this->getMock('Payum\Core\Storage\StorageInterface');
-        $storageBarMock = $this->getMock('Payum\Core\Storage\StorageInterface');
+        $storageFooMock = $this->getMock(StorageInterface::class);
+        $storageBarMock = $this->getMock(StorageInterface::class);
 
         $registry = new SimpleRegistry(
             array(),
             array(
                 'stdClass' => $storageFooMock,
-                'Payum\Core\Tests\Mocks\Model\TestModel' => $storageBarMock
-            ),
-            'bar'
+                TestModel::class => $storageBarMock,
+            )
         );
 
         $this->assertSame($storageFooMock, $registry->getStorage('stdClass'));
-        $this->assertSame($storageBarMock, $registry->getStorage('Payum\Core\Tests\Mocks\Model\TestModel'));
+        $this->assertSame($storageBarMock, $registry->getStorage(TestModel::class));
     }
 
     /**
@@ -109,18 +108,17 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetStorages()
     {
-        $storageFooMock = $this->getMock('Payum\Core\Storage\StorageInterface');
-        $storageBarMock = $this->getMock('Payum\Core\Storage\StorageInterface');
+        $storageFooMock = $this->getMock(StorageInterface::class);
+        $storageBarMock = $this->getMock(StorageInterface::class);
 
         $storages = array(
             'stdClass' => $storageFooMock,
-            'Payum\Core\Tests\Mocks\Model\TestModel' => $storageBarMock
+            TestModel::class => $storageBarMock,
         );
 
         $registry = new SimpleRegistry(
             array(),
-            $storages,
-            'bar'
+            $storages
         );
 
         $this->assertEquals($storages, $registry->getStorages());
@@ -129,79 +127,46 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldInitializeStorageExtensionOnlyOnFirstCallGetPayment()
+    public function shouldInitializeStorageExtensionOnlyOnFirstCallGetGateway()
     {
-        $storageMock = $this->getMock('Payum\Core\Storage\StorageInterface');
+        $storageMock = $this->getMock(StorageInterface::class);
 
         $testCase = $this;
 
-        $paymentMock = $this->getMock('Payum\Core\Payment');
-        $paymentMock
+        $gatewayMock = $this->getMock(Gateway::class);
+        $gatewayMock
             ->expects($this->once())
             ->method('addExtension')
-            ->with($this->isInstanceOf('Payum\Core\Extension\StorageExtension'))
-            ->will($this->returnCallback(function(StorageExtension $extension) use ($storageMock, $testCase) {
+            ->with($this->isInstanceOf(StorageExtension::class))
+            ->will($this->returnCallback(function (StorageExtension $extension) use ($storageMock, $testCase) {
                 $testCase->assertAttributeSame($storageMock, 'storage', $extension);
             }))
         ;
 
         $registry = new SimpleRegistry(
-            array('foo' => $paymentMock),
-            array('stdClass' => $storageMock),
-            'foo'
+            array('foo' => $gatewayMock),
+            array('stdClass' => $storageMock)
         );
 
-        $this->assertSame($paymentMock, $registry->getPayment('foo'));
-        $this->assertSame($paymentMock, $registry->getPayment('foo'));
-        $this->assertSame($paymentMock, $registry->getPayment('foo'));
+        $this->assertSame($gatewayMock, $registry->getGateway('foo'));
+        $this->assertSame($gatewayMock, $registry->getGateway('foo'));
+        $this->assertSame($gatewayMock, $registry->getGateway('foo'));
     }
 
     /**
      * @test
      */
-    public function shouldInitializeStorageExtensionForDefaultPayment()
+    public function shouldNotInitializeStorageExtensionsIfAnyStoragesAssociatedWithGateway()
     {
-        $storageMock = $this->getMock('Payum\Core\Storage\StorageInterface');
-
-        $testCase = $this;
-
-        $paymentMock = $this->getMock('Payum\Core\Payment');
-        $paymentMock
-            ->expects($this->once())
-            ->method('addExtension')
-            ->with($this->isInstanceOf('Payum\Core\Extension\StorageExtension'))
-            ->will($this->returnCallback(function(StorageExtension $extension) use ($storageMock, $testCase) {
-                $testCase->assertAttributeSame($storageMock, 'storage', $extension);
-            }))
-        ;
-
-        $registry = new SimpleRegistry(
-            array('foo' => $paymentMock),
-            array('stdClass' => $storageMock),
-            'foo'
-        );
-
-        $this->assertSame($paymentMock, $registry->getPayment());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotInitializeStorageExtensionsIfAnyStoragesAssociatedWithPayment()
-    {
-        $paymentMock = $this->getMock('Payum\Core\Payment');
-        $paymentMock
+        $gatewayMock = $this->getMock(GatewayInterface::class);
+        $gatewayMock
             ->expects($this->never())
             ->method('addExtension')
         ;
 
-        $registry = new SimpleRegistry(
-            array('foo' => $paymentMock),
-            array(),
-            'foo'
-        );
+        $registry = new SimpleRegistry(array('foo' => $gatewayMock));
 
-        $registry->getPayment('foo');
+        $registry->getGateway('foo');
     }
 
     /**
@@ -209,86 +174,118 @@ class SimpleRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldInitializeStorageExtensionsForEachStorageInRegistry()
     {
-        $storageOneMock = $this->getMock('Payum\Core\Storage\StorageInterface');
-        $storageTwoMock = $this->getMock('Payum\Core\Storage\StorageInterface');
-        $storageThreeMock = $this->getMock('Payum\Core\Storage\StorageInterface');
+        $storageOneMock = $this->getMock(StorageInterface::class);
+        $storageTwoMock = $this->getMock(StorageInterface::class);
+        $storageThreeMock = $this->getMock(StorageInterface::class);
 
-        $paymentFooMock = $this->getMock('Payum\Core\Payment');
-        $paymentFooMock
+        $gatewayFooMock = $this->getMock(Gateway::class);
+        $gatewayFooMock
             ->expects($this->exactly(3))
             ->method('addExtension')
         ;
 
-        $paymentBarMock = $this->getMock('Payum\Core\Payment');
-        $paymentBarMock
+        $gatewayBarMock = $this->getMock(Gateway::class);
+        $gatewayBarMock
             ->expects($this->exactly(3))
             ->method('addExtension')
         ;
 
         $registry = new SimpleRegistry(
-            array('foo' => $paymentFooMock, 'bar' => $paymentBarMock),
+            array('foo' => $gatewayFooMock, 'bar' => $gatewayBarMock),
             array(
                 'fooClass' => $storageOneMock,
                 'barClass' => $storageTwoMock,
                 'ololClass' => $storageThreeMock,
-            ),
-            'foo'
+            )
         );
 
-        $registry->getPayment('foo');
-        $registry->getPayment('bar');
+        $registry->getGateway('foo');
+        $registry->getGateway('bar');
     }
 
     /**
      * @test
      */
-    public function shouldInitializeStorageExtensionsOnGetPayments()
+    public function shouldNotInitializeStorageExtensionsIfAddStorageExtensionsSetFalse()
     {
-        $storageOneMock = $this->getMock('Payum\Core\Storage\StorageInterface');
+        $storageOneMock = $this->getMock(StorageInterface::class);
+        $storageTwoMock = $this->getMock(StorageInterface::class);
+        $storageThreeMock = $this->getMock(StorageInterface::class);
 
-        $paymentFooMock = $this->getMock('Payum\Core\Payment');
-        $paymentFooMock
-            ->expects($this->once())
+        $gatewayFooMock = $this->getMock(Gateway::class);
+        $gatewayFooMock
+            ->expects($this->never())
             ->method('addExtension')
         ;
 
-        $paymentBarMock = $this->getMock('Payum\Core\Payment');
-        $paymentBarMock
-            ->expects($this->once())
+        $gatewayBarMock = $this->getMock(Gateway::class);
+        $gatewayBarMock
+            ->expects($this->never())
             ->method('addExtension')
         ;
 
         $registry = new SimpleRegistry(
-            array('foo' => $paymentFooMock, 'bar' => $paymentBarMock),
+            array('foo' => $gatewayFooMock, 'bar' => $gatewayBarMock),
             array(
-                'fooClass' => $storageOneMock
-            ),
-            'foo'
+                'fooClass' => $storageOneMock,
+                'barClass' => $storageTwoMock,
+                'ololClass' => $storageThreeMock,
+            )
         );
+        $registry->setAddStorageExtensions(false);
 
-        $registry->getPayments();
-        $registry->getPayments();
+        $registry->getGateway('foo');
+        $registry->getGateway('bar');
     }
 
     /**
      * @test
      */
-    public function shouldNotInitializeStorageExtensionsOnGetPaymentsIfNotGenericPayment()
+    public function shouldInitializeStorageExtensionsOnGetGateways()
     {
-        $storageOneMock = $this->getMock('Payum\Core\Storage\StorageInterface');
+        $storageOneMock = $this->getMock(StorageInterface::class);
 
-        $paymentFooMock = $this->getMock('Payum\Core\PaymentInterface');
+        $gatewayFooMock = $this->getMock(Gateway::class);
+        $gatewayFooMock
+            ->expects($this->once())
+            ->method('addExtension')
+        ;
 
-        $paymentBarMock = $this->getMock('Payum\Core\Payment');
+        $gatewayBarMock = $this->getMock(Gateway::class);
+        $gatewayBarMock
+            ->expects($this->once())
+            ->method('addExtension')
+        ;
 
         $registry = new SimpleRegistry(
-            array('foo' => $paymentFooMock, 'bar' => $paymentBarMock),
+            array('foo' => $gatewayFooMock, 'bar' => $gatewayBarMock),
             array(
-                'fooClass' => $storageOneMock
-            ),
-            'foo'
+                'fooClass' => $storageOneMock,
+            )
         );
 
-        $registry->getPayments();
+        $registry->getGateways();
+        $registry->getGateways();
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotInitializeStorageExtensionsOnGetGatewaysIfNotGenericGateway()
+    {
+        $storageOneMock = $this->getMock(StorageInterface::class);
+
+        $gatewayFooMock = $this->getMock(GatewayInterface::class);
+
+        $gatewayBarMock = $this->getMock(GatewayInterface::class);
+
+        $registry = new SimpleRegistry(
+            array('foo' => $gatewayFooMock, 'bar' => $gatewayBarMock),
+            array(
+                'fooClass' => $storageOneMock,
+            )
+        );
+
+        $registry->getGateways();
     }
 }

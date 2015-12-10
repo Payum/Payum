@@ -2,7 +2,7 @@
 namespace Payum\Core\Storage;
 
 use Payum\Core\Exception\LogicException;
-use Payum\Core\Model\Identificator as ModelIdentificator;
+use Payum\Core\Model\Identity;
 
 class FilesystemStorage extends AbstractStorage
 {
@@ -37,7 +37,15 @@ class FilesystemStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
-    public function findModelById($id)
+    public function findBy(array $criteria)
+    {
+        throw new LogicException('Method is not supported by the storage.');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function doFind($id)
     {
         if (isset($this->identityMap[$id])) {
             return $this->identityMap[$id];
@@ -90,7 +98,7 @@ class FilesystemStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
-    protected function doGetIdentificator($model)
+    protected function doGetIdentity($model)
     {
         $rp = new \ReflectionProperty($model, $this->idProperty);
         $rp->setAccessible(true);
@@ -99,6 +107,6 @@ class FilesystemStorage extends AbstractStorage
             throw new LogicException('The model must be persisted before usage of this method');
         }
 
-        return new ModelIdentificator($id, $model);
+        return new Identity($id, $model);
     }
 }

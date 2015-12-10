@@ -23,7 +23,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new CaptureAction;
+        new CaptureAction();
     }
 
     /**
@@ -79,7 +79,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSetStatusPendingIfPaidNotSet()
     {
-        $action = new CaptureAction;
+        $action = new CaptureAction();
 
         $details = new ArrayObject();
 
@@ -99,7 +99,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSetStatusPendingIfPaidSetToFalse()
     {
-        $action = new CaptureAction;
+        $action = new CaptureAction();
 
         $details = new ArrayObject();
         $details[Constants::FIELD_PAID] = false;
@@ -120,7 +120,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSetStatusCapturedIfPaidSetToTrue()
     {
-        $action = new CaptureAction;
+        $action = new CaptureAction();
 
         $details = new ArrayObject();
         $details[Constants::FIELD_PAID] = true;

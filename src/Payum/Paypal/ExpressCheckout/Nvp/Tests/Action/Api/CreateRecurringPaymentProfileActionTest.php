@@ -60,7 +60,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The TOKEN fields is required.
+     * @expectedExceptionMessage The TOKEN, PROFILESTARTDATE, DESC, BILLINGPERIOD, BILLINGFREQUENCY, AMT, CURRENCYCODE fields are required.
      */
     public function throwIfTokenNotSetInModel()
     {
@@ -73,7 +73,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The PROFILESTARTDATE fields is required.
+     * @expectedExceptionMessage The PROFILESTARTDATE, DESC, BILLINGPERIOD, BILLINGFREQUENCY, AMT, CURRENCYCODE fields are required.
      */
     public function throwIfRequiredFieldMissing()
     {
@@ -95,7 +95,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
         $apiMock
             ->expects($this->once())
             ->method('createRecurringPaymentsProfile')
-            ->will($this->returnCallback(function(array $fields) use ($testCase) {
+            ->will($this->returnCallback(function (array $fields) use ($testCase) {
 
                 $testCase->assertArrayHasKey('TOKEN', $fields);
                 $testCase->assertEquals('theToken', $fields['TOKEN']);
@@ -167,10 +167,10 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
         $apiMock
             ->expects($this->once())
             ->method('createRecurringPaymentsProfile')
-            ->will($this->returnCallback(function() {
+            ->will($this->returnCallback(function () {
                 return array(
-                    'PROFILEID'=> 'theId',
-                    'PROFILESTATUS' => 'theStatus'
+                    'PROFILEID' => 'theId',
+                    'PROFILESTATUS' => 'theStatus',
                 );
             }))
         ;
@@ -198,7 +198,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
         $model = $request->getModel();
         $this->assertArrayHasKey('PROFILEID', $model);
         $this->assertEquals('theId', $model['PROFILEID']);
-        
+
         $this->assertArrayHasKey('PROFILESTATUS', $model);
         $this->assertEquals('theStatus', $model['PROFILESTATUS']);
     }

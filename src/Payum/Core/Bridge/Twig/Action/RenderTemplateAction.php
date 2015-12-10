@@ -19,7 +19,7 @@ class RenderTemplateAction implements ActionInterface
 
     /**
      * @param \Twig_Environment $twig
-     * @param string $layout
+     * @param string            $layout
      */
     public function __construct(\Twig_Environment $twig, $layout)
     {
@@ -37,7 +37,7 @@ class RenderTemplateAction implements ActionInterface
 
         $request->setResult($this->twig->render($request->getTemplateName(), array_replace(
             array('layout' => $this->layout),
-            $request->getContext()
+            $request->getParameters()
         )));
     }
 

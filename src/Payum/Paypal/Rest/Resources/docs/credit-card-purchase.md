@@ -19,8 +19,8 @@ use PayPal\Api\Transaction;
 
 $storage = $payum->getStorage($paypalRestPaymentDetailsClass);
 
-$paymentDetails = $storage->createModel();
-$storage->updateModel($paymentDetails);
+$payment = $storage->create();
+$storage->update($payment);
 
 $address = new Address();
 $address->line1 = "3909 Witmer Road";
@@ -56,11 +56,11 @@ $transaction = new Transaction();
 $transaction->amount = $amount;
 $transaction->description = "This is the payment description.";
 
-$paymentDetails->intent = "sale";
-$paymentDetails->payer = $payer;
-$paymentDetails->transactions = array($transaction);
+$payment->intent = "sale";
+$payment->payer = $payer;
+$payment->transactions = array($transaction);
 
-$captureToken = $tokenFactory->createCaptureToken('paypalRest', $paymentDetails, 'create_recurring_payment.php');
+$captureToken = $payum->getTokenFactory->createCaptureToken('paypalRest', $payment, 'create_recurring_payment.php');
 
 header("Location: ".$captureToken->getTargetUrl());
 ```

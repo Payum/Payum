@@ -23,7 +23,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new PaymentDetailsStatusAction;
+        new PaymentDetailsStatusAction();
     }
 
     /**
@@ -44,7 +44,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $action = new PaymentDetailsStatusAction();
 
         $this->assertFalse($action->supports(new GetHumanStatus(array(
-            'autoPay' => true
+            'autoPay' => true,
         ))));
     }
 
@@ -56,7 +56,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $action = new PaymentDetailsStatusAction();
 
         $this->assertTrue($action->supports(new GetHumanStatus(array(
-            'autoPay' => false
+            'autoPay' => false,
         ))));
     }
 
@@ -69,7 +69,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($action->supports(new GetHumanStatus(array(
             'autoPay' => true,
-            'recurring' => true
+            'recurring' => true,
         ))));
     }
 
@@ -78,7 +78,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotStatusRequest()
     {
-        $action = new PaymentDetailsStatusAction;
+        $action = new PaymentDetailsStatusAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -88,9 +88,9 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportStatusRequestWithNotArrayAccessModel()
     {
-        $action = new PaymentDetailsStatusAction;
+        $action = new PaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new GetHumanStatus(new \stdClass)));
+        $this->assertFalse($action->supports(new GetHumanStatus(new \stdClass())));
     }
 
     /**
@@ -100,7 +100,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $action = new PaymentDetailsStatusAction;
+        $action = new PaymentDetailsStatusAction();
 
         $action->execute(new \stdClass());
     }
@@ -134,12 +134,12 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
             'orderId' => 'anId',
             'autoPay' => false,
         ));
-        
+
         //guard
         $status->markNew();
-        
+
         $action->execute($status);
-        
+
         $this->assertTrue($status->isUnknown());
     }
 
@@ -295,7 +295,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $status->markUnknown();
 
         $action->execute($status);
-        
+
         $this->assertTrue($status->isCanceled());
     }
 
@@ -309,7 +309,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $status = new GetHumanStatus(array(
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_CANCEL,
             'errorDetails' => array(
-                'transactionErrorCode' => OrderApi::TRANSACTIONERRORCODE_OPERATIONCANCELLEDBYCUSTOMER
+                'transactionErrorCode' => OrderApi::TRANSACTIONERRORCODE_OPERATIONCANCELLEDBYCUSTOMER,
             ),
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'orderId' => 'anId',

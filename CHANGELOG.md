@@ -1,5 +1,220 @@
 # Changelog
 
+## 1.0.0 (2015-11-09)
+
+* [payumBuilder] add `addCoreGatewayFactoryConfig` method
+* [payum] add `getTokenStorage` method to payum object
+* [paypal][ec] better handling of cancelled payments.
+* [paypal][ec] add support of order confirmation step.
+* [stripe] pass payum token to obtain stripe token action.
+* [security] set token hash to token model if not set
+* [symfony] add gateways choice form type.
+* [payumBuilder][omnipay] skip broken gateways.
+* [payumBuilder][builder] auto register omnipay's factories.
+* [be2bill] Improve capture and notify actions, do not rely on session. Fully working solution.
+* [exception] add suggestion on how to troubleshoot request not supported issues.
+* [gateway] Allow use of injected api and gateway in `supports` method.
+* [doc] add Payum vs Omnipay doc.
+* [authorize.net] Use official sdk authorizenet/authorizenet-php deprecation.
+
+## 1.0.0-BETA4 (2015-09-29)
+
+* [reply] remove "continue", clicking on it user can do double payment
+* [factory] Add `UpdateRecurringPaymentProfileAction` config on PaymentFactory.
+
+## 1.0.0-BETA3 (2015-09-28)
+
+* [facade] add ability to pass builders (closures) to Payum facade builder, various bug fixes.
+
+## 1.0.0-BETA2 (2015-09-25)
+
+* [registry] add ability to disable auto adding of storage extensions.
+* [registry] Add FallbackRegistry
+* [facade] add Payum facade and its builder
+* [doc] Update supported-gateways.md
+* [paypal-ec] Fix empty paypal description
+* Licence owner is changed
+
+## 1.0.0-BETA1 (2015-08-14)
+
+* Drop support of php5.3 and php5.4
+* [vendors] Make some libraries non required. They are still required but "softly".
+* [http-client] Reuse PSR-7 as http client.
+* [twig] Move javascript vendors to separate twig block
+* [factory] Introduce core gateway factory.
+* [request] Add setter\getter for parameters property in RenderTemplate request. Remove context.
+* [request] Add ability to pass first\current models with obtain credit card request.
+* [symfony] Fix compatibility with Symfony 2.7
+* [symfony] Add EventDispatcherExtension.
+* [payex] Change exception message
+* [paypal][rest] require stable version of sdk.
+* [paypal][api] Replace $request by $fields
+* [klarna] Klarna Invoice Update
+* [klarna] Use sandbox recurring base uri if sandbox mode.
+* [stripe] Add currency to checkout token template
+* [stripe] Set stripe form payment action if variable exists
+* [stripe] Use stripe javascript object only after the script is loaded
+* [tests] use ::class whenever its possible
+* [travis] Run tests on php7
+
+## 0.15.4 (2015-09-29)
+
+* [reply] remove "continue", clicking on it user can do double payment
+* [factory] Add `UpdateRecurringPaymentProfileAction` config on PaymentFactory.
+
+## 0.15.3 (2015-08-03)
+
+* [buzz] Do not force TLSv1 Cipher for NSS.
+
+## 0.15.2 (2015-06-10)
+
+* [paypal-ec] Add `UpdateRecurringPaymentsProfile` require and an action for it.
+
+## 0.15.1 (2015-04-28)
+
+* [composer] Require stable versions
+
+## 0.15.0 (2015-04-27)
+
+* [extension] Rework extension. Introduce context.
+* [storage] Change `StorageInterface::findBy` returned value. It must be an array of object. or empty.
+* [doctrine][mongo] add a mapping for GatewayConfig.
+* [doc] document iso4217 use cases.
+* [request] decouple GetCurrency request from Payum\ISO4217 lib.
+* [gateway] Allow pass custom instance of iso4217.
+* [travis] sudo: false
+* Add payum/iso4217 to composr deps.
+* Rename Order to Payment
+* Rename Payment and PaymentXXX classes to Gateway and GatewayXXX ones.
+* [action] Add ability to get ISO4217 info. Add a request and action for that. Simply payment interface.
+* [action] use Convert request in CapturePaymentAction.
+* [request] Add convert request. Remove FillOrderDetails one.
+* [symfony] Add `CreditCardDateValidator` validator.
+* [request] Make `GetHumanStatus` request compatible with interface.
+* [payment] add setter and getter for credit card on payment.
+* [stripe] add support of direct payments.
+* [stripe] improve payment status handling, add support of authorize\refund. better handling of pending.
+* [klarna] Klarna return amount
+* [klarna] Klarna credit invoice
+* [klarna] Klarna resend invoice
+* [klarna-checkout] allow use of v2.0 SDK.
+* [klarna-checkout] check if acceptHeader property exists.
+* [klarna-checkout] change constant names
+* [klarna-checkout] add support of klarna checkout recurring payments.
+
+## 0.14.7 (2015-09-29)
+
+* [reply] remove "continue", clicking on it user can do double payment
+* [factory] Add `UpdateRecurringPaymentProfileAction` config on PaymentFactory.
+
+## 0.14.6 (2015-06-10)
+
+* [paypal-ec] Add `UpdateRecurringPaymentsProfile` require and an action for it.
+
+## 0.14.5 (2015-04-15)
+
+* [bridge][symfony] allow unset checkbox field (sandbox for example) on payment config form.
+* [composer] add symfony\validator package to dev dependencies.
+
+## 0.14.4 (2015-04-08)
+
+* [symfony] Add `CreditCardDate` constraint. Checks that expiration date is greater than today.
+
+## 0.14.3 (2015-04-03)
+
+* Introduce Payment model. Deprecate Order model.
+* Introduce Gateway interfaces and classes. Deprecate Payment ones.
+* [doc] add basic examples.
+
+## 0.14.2 (2015-03-13)
+
+* [klarna-invoice] Fix payment factory. Always runs in live mode. 
+
+## 0.14.1 (2015-03-12)
+
+* [paypal-ec] Add CancelRecurringPaymentsProfileAction. 
+* [doc] update list of supported payments
+
+## 0.14.0 (2015-02-20)
+
+* [payment-factory] pass config to core payment factory too.
+* [payment-factory] allow set default config to payment factory.
+* [payment-factory] add factory name and title to the payment config.
+* [payment-factory] return default options when call createConfig.
+* [doc] add EloquentStorage to list of support storages.
+* [doc] add Propel2Storage to list of supported storages.
+* [doc] add Propel1Storage to supported storages.
+* [security] add token factory extension.
+* [security] use composition of token factories. move some code to plain php bridge.
+* [offline] if order details are set don't set it again.
+* [storage] Add storage method findBy code improve tests include base models and example schema.
+* [registry] Add DynamicRegistry registry.
+* [symfony][form] Add payment config form, and payment factories choice.
+* [registry] Introduce payment factories registry interface.
+* [payex] add missed action to factory.
+* [paypal-express-checkout] Paypal request parameters should be lowercased.
+* [paypal-pro] fix api in factory.
+* [payment-factory] options lower case
+* [payment-factory] allow set which actions\apis\extensions must be prepend.
+
+## 0.13.0 (2014-12-26)
+
+* [ssl] Added cURL Options for the PayPal Sandbox SSL 3.0 Vulnerability (POODLE)
+* [payment] remove all addXXX methods from PaymentInterface.
+* [payment] Introduce `PaymentFactoryInterface`. Simplify exist factories.
+* [request] Add missed markSuspended method to GetStatusInterface.
+* [request] Allow get raw content of the request.
+* [reply] Add ability to set Http StatusCode and headers.
+* [action] Remove generic order action. Improve execute same request with details action.
+* [action] Execute same request with details has to be the last action.
+* [storage] Rename methods. Improve usage of Identity.
+* [doctrine] fix mapping of `details` field in the order model. It has to be object.
+* [buzz] Create default curl client, if no client is passed
+* [security] Reuse league/url while manipulation with tokens urls.
+* [security] Making `afterPath` optional on `TokenFactoryInterface`.
+* [paypal-pro] Add support of refunds.
+* [paypal-pro] Refactor Paypal Pro, remove not used stuff, simplify logic.
+* [omnipay] Allow install Omnipay bridge ONLY as a standalone package. Not shipped with payum/payum any more.
+* [symfony] Allow configure min max expiration years.
+* [docs] Add chapter about refund.
+
+## 0.12.9 (2014-12-24)
+
+* [authorize.net] Amount must be decimal.
+* [request] add `getFirstModel` method to `Generic` request.
+
+## 0.12.8 (2014-12-13)
+
+* [action] Back port from master a `GenericOrderAction`. Fixes "Attempted to call method "getClientId" in done script but got array instead of order" 
+
+## 0.12.7 (2014-12-11)
+
+* [klarna-checkout] Mark failed if error_code set in details.
+
+## 0.12.6 (2014-11-20)
+
+* [action] Add `NotifyOrderAction` action.
+
+## 0.12.5 (2014-11-11)
+
+* [doc] add sagepay and redsys to list of supported payments.
+* [security] token factory should accept Identificator instance as model.
+* [paypal-ec] use capture\authorize details as details for notify token.
+
+## 0.12.4 (2014-11-10)
+
+* [request] add cancel request.
+* [stripe] description in template must have default val.
+
+## 0.12.3 (2014-11-08)
+
+* [paypal-ec] Allow purchase order with custom details
+
+## 0.12.2 (2014-11-07)
+
+* [security] Added cURL Options for the PayPal Sandbox SSL 3.0 Vulnerability (POODLE)
+* [omnipay-bridge] catch invalid credit card exception.
+
 ## 0.12.1 (2014-10-31)
 
 * [symfony-bridge][forms] Fix exception "there is only 'years' option available."

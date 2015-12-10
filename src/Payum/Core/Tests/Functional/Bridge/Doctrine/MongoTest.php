@@ -17,11 +17,11 @@ abstract class MongoTest extends BaseMongoTest
     protected function getMetadataDriverImpl()
     {
         $rootDir = realpath(__DIR__.'/../../../..');
-        if (false === $rootDir || false === is_file($rootDir.'/Payment.php')) {
+        if (false === $rootDir || false === is_file($rootDir.'/Gateway.php')) {
             throw new \RuntimeException('Cannot guess Payum root dir.');
         }
 
-        $driver = new MappingDriverChain;
+        $driver = new MappingDriverChain();
         $xmlDriver = new XmlDriver(
             new SymfonyFileLocator(
                 array($rootDir.'/Bridge/Doctrine/Resources/mapping' => 'Payum\Core\Model'),
@@ -35,7 +35,7 @@ abstract class MongoTest extends BaseMongoTest
 
         $rc = new \ReflectionClass('Payum\Core\Tests\Mocks\Document\TestModel');
         $annotationDriver = new AnnotationDriver(new AnnotationReader(), array(
-            dirname($rc->getFileName())
+            dirname($rc->getFileName()),
         ));
         $driver->addDriver($annotationDriver, 'Payum\Core\Tests\Mocks\Document');
 

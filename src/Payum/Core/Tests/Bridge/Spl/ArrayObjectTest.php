@@ -4,7 +4,7 @@ namespace Payum\Core\Tests\Bridge\Spl;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Security\SensitiveValue;
 
-class ArrayObjectTest extends \PHPUnit_Framework_TestCase 
+class ArrayObjectTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -12,7 +12,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
     public function shouldBeSubClassOfArrayObject()
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Spl\ArrayObject');
-        
+
         $this->assertTrue($rc->isSubclassOf('ArrayObject'));
     }
 
@@ -23,7 +23,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
     {
         $array = new ArrayObject();
         $array['foo'] = 'bar';
-        
+
         $this->assertTrue(isset($array['foo']));
         $this->assertEquals('bar', $array['foo']);
     }
@@ -33,9 +33,9 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetValueSetInInternalArrayObject()
     {
-        $internalArray = new \ArrayObject;
+        $internalArray = new \ArrayObject();
         $internalArray['foo'] = 'bar';
-        
+
         $array = new ArrayObject($internalArray);
 
         $this->assertTrue(isset($array['foo']));
@@ -59,18 +59,18 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
     public function shouldReplaceFromArray()
     {
         $expectedArray = array(
-            'foo' => 'valNew', 
+            'foo' => 'valNew',
             'ololo' => 'valCurr',
-            'baz' => 'bazNew'
+            'baz' => 'bazNew',
         );
-        
+
         $array = new ArrayObject(array('foo' => 'valCurr', 'ololo' => 'valCurr'));
 
         $array->replace(array(
             'foo' => 'valNew',
-            'baz' => 'bazNew'
+            'baz' => 'bazNew',
         ));
-        
+
         $this->assertEquals($expectedArray, (array) $array);
     }
 
@@ -81,16 +81,16 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
     {
         $traversable = new \ArrayIterator(array(
             'foo' => 'valNew',
-            'baz' => 'bazNew'
+            'baz' => 'bazNew',
         ));
 
         //guard
         $this->assertInstanceOf('Traversable', $traversable);
-        
+
         $expectedArray = array(
             'foo' => 'valNew',
             'ololo' => 'valCurr',
-            'baz' => 'bazNew'
+            'baz' => 'bazNew',
         );
 
         $array = new ArrayObject(array('foo' => 'valCurr', 'ololo' => 'valCurr'));
@@ -102,7 +102,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage Invalid input given. Should be an array or instance of \Traversable
      */
@@ -118,7 +118,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCastToArrayFromCustomArrayObject()
     {
-        $input = new CustomArrayObject;
+        $input = new CustomArrayObject();
         $input['foo'] = 'barbaz';
 
         $arrayObject = new ArrayObject($input);
@@ -134,7 +134,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetToCustomArrayObject()
     {
-        $input = new CustomArrayObject;
+        $input = new CustomArrayObject();
         $input['foo'] = 'barbaz';
 
         $arrayObject = new ArrayObject($input);
@@ -148,7 +148,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowUnsetToCustomArrayObject()
     {
-        $input = new CustomArrayObject;
+        $input = new CustomArrayObject();
         $input['foo'] = 'barbaz';
 
         $arrayObject = new ArrayObject($input);
@@ -162,7 +162,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetValueFromCustomArrayObject()
     {
-        $input = new CustomArrayObject;
+        $input = new CustomArrayObject();
         $input['foo'] = 'barbaz';
 
         $arrayObject = new ArrayObject($input);
@@ -175,7 +175,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowIssetValueFromCustomArrayObject()
     {
-        $input = new CustomArrayObject;
+        $input = new CustomArrayObject();
         $input['foo'] = 'barbaz';
 
         $arrayObject = new ArrayObject($input);
@@ -189,7 +189,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowIterateOverCustomArrayObject()
     {
-        $input = new CustomArrayObject;
+        $input = new CustomArrayObject();
         $input['foo'] = 'barbaz';
 
         $arrayObject = new ArrayObject($input);
@@ -202,9 +202,9 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The aRequiredField fields is required.
+     * @expectedExceptionMessage The aRequiredField fields are required.
      */
     public function throwIfRequiredFieldEmptyAndThrowOnInvalidTrue()
     {
@@ -217,7 +217,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The otherRequiredField fields is required.
+     * @expectedExceptionMessage The otherRequiredField fields are required.
      */
     public function throwIfSecondRequiredFieldEmptyAndThrowOnInvalidTrue()
     {
@@ -231,7 +231,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The aRequiredField fields is required.
+     * @expectedExceptionMessage The aRequiredField fields are required.
      */
     public function throwByDefaultIfRequiredFieldEmpty()
     {
@@ -367,12 +367,29 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNull($sensitiveValue->peek());
     }
+
+    /**
+     * @test
+     */
+    public function shouldAllowSetDefaultValues()
+    {
+        $arrayObject = new ArrayObject();
+        $arrayObject['foo'] = 'fooVal';
+
+        $arrayObject->defaults(array(
+            'foo' => 'fooDefVal',
+            'bar' => 'barDefVal',
+        ));
+
+        $this->assertEquals('fooVal', $arrayObject['foo']);
+        $this->assertEquals('barDefVal', $arrayObject['bar']);
+    }
 }
 
 class CustomArrayObject implements \ArrayAccess, \IteratorAggregate
 {
     private $foo;
-    
+
     public function offsetExists($offset)
     {
         return 'foo' === $offset;
@@ -392,12 +409,11 @@ class CustomArrayObject implements \ArrayAccess, \IteratorAggregate
     {
         $this->{$offset} = null;
     }
-    
+
     public function getIterator()
     {
         return new \ArrayIterator(array(
-            'foo' => $this->foo
+            'foo' => $this->foo,
         ));
     }
 }
-

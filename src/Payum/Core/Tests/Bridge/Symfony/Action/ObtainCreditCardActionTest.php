@@ -4,7 +4,7 @@ namespace Payum\Core\Tests\Bridge\Symfony\Action;
 use Payum\Core\Bridge\Symfony\Action\ObtainCreditCardAction;
 use Payum\Core\Bridge\Symfony\Reply\HttpResponse;
 use Payum\Core\Model\CreditCard;
-use Payum\Core\PaymentInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Request\RenderTemplate;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -17,11 +17,11 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfPaymentAwareAction()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Action\ObtainCreditCardAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\PaymentAwareAction'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
@@ -39,7 +39,7 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new ObtainCreditCardAction($this->createFormFactoryMock(), 'aTemplate');
 
-        $this->assertTrue($action->supports(new ObtainCreditCard));
+        $this->assertTrue($action->supports(new ObtainCreditCard()));
     }
 
     /**
@@ -49,7 +49,7 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new ObtainCreditCardAction($this->createFormFactoryMock(), 'aTemplate');
 
-        $this->assertFalse($action->supports(new \stdClass));
+        $this->assertFalse($action->supports(new \stdClass()));
     }
 
     /**
@@ -62,7 +62,7 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new ObtainCreditCardAction($this->createFormFactoryMock(), 'aTemplate');
 
-        $action->execute(new \stdClass);
+        $action->execute(new \stdClass());
     }
 
     /**
@@ -75,7 +75,7 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new ObtainCreditCardAction($this->createFormFactoryMock(), 'aTemplate');
 
-        $action->execute(new ObtainCreditCard);
+        $action->execute(new ObtainCreditCard());
     }
 
     /**
@@ -83,9 +83,9 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldRenderFormWhenNotSubmitted()
     {
-        $httpRequest = new Request;
+        $httpRequest = new Request();
 
-        $formView = new FormView;
+        $formView = new FormView();
 
         $formMock = $this->createFormMock();
         $formMock
@@ -118,14 +118,19 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
 
         $testCase = $this;
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
-            ->will($this->returnCallback(function(RenderTemplate $request) use ($testCase, $formView) {
+            ->will($this->returnCallback(function (RenderTemplate $request) use ($testCase, $formView) {
                 $testCase->assertEquals('theTemplateName', $request->getTemplateName());
-                $testCase->assertEquals(array('form' => $formView), $request->getContext());
+                $testCase->assertEquals(array(
+                    'form' => $formView,
+                    'model' => null,
+                    'firstModel' => null,
+                    'actionUrl' => null,
+                ), $request->getParameters());
 
                 $request->setResult('theObtainCreditCardPageWithForm');
             }))
@@ -133,10 +138,10 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new ObtainCreditCardAction($formFactoryMock, 'theTemplateName');
         $action->setRequest($httpRequest);
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         try {
-            $action->execute(new ObtainCreditCard);
+            $action->execute(new ObtainCreditCard());
         } catch (HttpResponse $e) {
             $this->assertEquals('theObtainCreditCardPageWithForm', $e->getResponse()->getContent());
             $this->assertEquals(200, $e->getResponse()->getStatusCode());
@@ -145,7 +150,6 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
                 $e->getResponse()->headers->get('Cache-Control')
             );
             $this->assertEquals('no-cache', $e->getResponse()->headers->get('Pragma'));
-
 
             return;
         }
@@ -158,11 +162,11 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldRenderFormWhenSubmittedButNotValid()
     {
-        $httpRequest = new Request;
+        $httpRequest = new Request();
 
-        $formView = new FormView;
+        $formView = new FormView();
 
-        $creditCard = new CreditCard;
+        $creditCard = new CreditCard();
 
         $formMock = $this->createFormMock();
         $formMock
@@ -201,14 +205,19 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
 
         $testCase = $this;
 
-        $paymentMock = $this->createPaymentMock();
-        $paymentMock
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
-            ->will($this->returnCallback(function(RenderTemplate $request) use ($testCase, $formView) {
+            ->will($this->returnCallback(function (RenderTemplate $request) use ($testCase, $formView) {
                 $testCase->assertEquals('theTemplateName', $request->getTemplateName());
-                $testCase->assertEquals(array('form' => $formView), $request->getContext());
+                $testCase->assertEquals(array(
+                    'form' => $formView,
+                    'model' => null,
+                    'firstModel' => null,
+                    'actionUrl' => null,
+                ), $request->getParameters());
 
                 $request->setResult('theObtainCreditCardPageWithForm');
             }))
@@ -216,10 +225,10 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
 
         $action = new ObtainCreditCardAction($formFactoryMock, 'theTemplateName');
         $action->setRequest($httpRequest);
-        $action->setPayment($paymentMock);
+        $action->setGateway($gatewayMock);
 
         try {
-            $action->execute(new ObtainCreditCard);
+            $action->execute(new ObtainCreditCard());
         } catch (HttpResponse $e) {
             $this->assertEquals('theObtainCreditCardPageWithForm', $e->getResponse()->getContent());
             $this->assertEquals(200, $e->getResponse()->getStatusCode());
@@ -228,7 +237,6 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
                 $e->getResponse()->headers->get('Cache-Control')
             );
             $this->assertEquals('no-cache', $e->getResponse()->headers->get('Pragma'));
-
 
             return;
         }
@@ -239,11 +247,11 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldRenderFormWhenSubmitedAndValid()
+    public function shouldRenderFormWhenSubmittedAndValid()
     {
-        $httpRequest = new Request;
+        $httpRequest = new Request();
 
-        $creditCard = new CreditCard;
+        $creditCard = new CreditCard();
 
         $formMock = $this->createFormMock();
         $formMock
@@ -278,11 +286,91 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
         $action = new ObtainCreditCardAction($formFactoryMock, 'aTemplate');
         $action->setRequest($httpRequest);
 
-        $obtainCreditCard = new ObtainCreditCard;
+        $obtainCreditCard = new ObtainCreditCard();
 
         $action->execute($obtainCreditCard);
 
         $this->assertSame($creditCard, $obtainCreditCard->obtain());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldPassFirstAndCurrentModelsToTemplate()
+    {
+        $firstModel = new \stdClass();
+        $currentModel = new \stdClass();
+
+        $httpRequest = new Request();
+
+        $formView = new FormView();
+
+        $creditCard = new CreditCard();
+
+        $formMock = $this->createFormMock();
+        $formMock
+            ->expects($this->once())
+            ->method('handleRequest')
+            ->with($this->identicalTo($httpRequest))
+        ;
+        $formMock
+            ->expects($this->once())
+            ->method('isSubmitted')
+            ->will($this->returnValue(true))
+        ;
+        $formMock
+            ->expects($this->once())
+            ->method('createView')
+            ->will($this->returnValue($formView))
+        ;
+        $formMock
+            ->expects($this->once())
+            ->method('isValid')
+            ->will($this->returnValue(false))
+        ;
+        $formMock
+            ->expects($this->once())
+            ->method('getData')
+            ->will($this->returnValue($creditCard))
+        ;
+
+        $formFactoryMock = $this->createFormFactoryMock();
+        $formFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with('payum_credit_card')
+            ->will($this->returnValue($formMock))
+        ;
+
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
+            ->will($this->returnCallback(function (RenderTemplate $request) use ($formView, $firstModel, $currentModel) {
+                $this->assertEquals('theTemplateName', $request->getTemplateName());
+                $this->assertEquals(array(
+                    'form' => $formView,
+                    'model' => $currentModel,
+                    'firstModel' => $firstModel,
+                    'actionUrl' => null,
+                ), $request->getParameters());
+
+                $request->setResult('theObtainCreditCardPageWithForm');
+            }))
+        ;
+
+        $action = new ObtainCreditCardAction($formFactoryMock, 'theTemplateName');
+        $action->setRequest($httpRequest);
+        $action->setGateway($gatewayMock);
+
+        try {
+            $action->execute(new ObtainCreditCard($firstModel, $currentModel));
+        } catch (HttpResponse $e) {
+            return;
+        }
+
+        $this->fail('Reply exception was expected to be thrown');
     }
 
     /**
@@ -302,10 +390,10 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PaymentInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
      */
-    protected function createPaymentMock()
+    protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\PaymentInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

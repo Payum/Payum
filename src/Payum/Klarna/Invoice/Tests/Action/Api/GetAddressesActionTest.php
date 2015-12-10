@@ -22,7 +22,7 @@ class GetAddressesActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new GetAddressesAction;
+        new GetAddressesAction();
     }
 
     /**
@@ -40,7 +40,7 @@ class GetAddressesActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new GetAddressesAction($this->createKlarnaMock());
 
-        $action->setApi($config = new Config);
+        $action->setApi($config = new Config());
 
         $this->assertAttributeSame($config, 'config', $action);
     }
@@ -55,7 +55,7 @@ class GetAddressesActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new GetAddressesAction($this->createKlarnaMock());
 
-        $action->setApi(new \stdClass);
+        $action->setApi(new \stdClass());
     }
 
     /**
@@ -63,7 +63,7 @@ class GetAddressesActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportGetAddressesRequest()
     {
-        $action = new GetAddressesAction;
+        $action = new GetAddressesAction();
 
         $this->assertTrue($action->supports(new GetAddresses('pno')));
     }
@@ -73,7 +73,7 @@ class GetAddressesActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotGetAddresses()
     {
-        $action = new GetAddressesAction;
+        $action = new GetAddressesAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -85,7 +85,7 @@ class GetAddressesActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $action = new GetAddressesAction;
+        $action = new GetAddressesAction();
 
         $action->execute(new \stdClass());
     }
@@ -95,10 +95,10 @@ class GetAddressesActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallKlarnaGetAddresses()
     {
-        $first = new \KlarnaAddr;
+        $first = new \KlarnaAddr();
         $first->setCountry('SE');
 
-        $second = new \KlarnaAddr;
+        $second = new \KlarnaAddr();
         $second->setCountry('SE');
 
         $klarnaMock = $this->createKlarnaMock();
@@ -110,7 +110,7 @@ class GetAddressesActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new GetAddressesAction($klarnaMock);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
 
         $action->execute($getAddresses = new GetAddresses('thePno'));
 
@@ -138,7 +138,7 @@ class GetAddressesActionTest extends \PHPUnit_Framework_TestCase
         ;
 
         $action = new GetAddressesAction($klarnaMock);
-        $action->setApi(new Config);
+        $action->setApi(new Config());
 
         $action->execute($getAddresses = new GetAddresses('thePno'));
     }

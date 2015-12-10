@@ -21,7 +21,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new StatusAction;
+        new StatusAction();
     }
 
     /**
@@ -39,7 +39,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotGetStatus()
     {
-        $action = new StatusAction;
+        $action = new StatusAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -49,9 +49,9 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportGetStatusWithNotArrayAccessModel()
     {
-        $action = new StatusAction;
+        $action = new StatusAction();
 
-        $this->assertFalse($action->supports(new GetHumanStatus(new \stdClass)));
+        $this->assertFalse($action->supports(new GetHumanStatus(new \stdClass())));
     }
 
     /**
@@ -61,7 +61,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $action = new StatusAction;
+        $action = new StatusAction();
 
         $action->execute(new \stdClass());
     }
@@ -71,7 +71,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkAsNewIfDetailsEmpty()
     {
-        $action = new StatusAction;
+        $action = new StatusAction();
 
         $action->execute($getStatus = new GetHumanStatus(array()));
 
@@ -83,7 +83,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkAsNew()
     {
-        $action = new StatusAction;
+        $action = new StatusAction();
 
         $action->execute($getStatus = new GetHumanStatus(array()));
 
@@ -95,7 +95,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkFailedIfErrorCodeSet()
     {
-        $action = new StatusAction;
+        $action = new StatusAction();
 
         $action->execute($getStatus = new GetHumanStatus(array(
             'error_code' => 'aCode',
@@ -109,7 +109,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkCanceledIfCanceledPropertySet()
     {
-        $action = new StatusAction;
+        $action = new StatusAction();
 
         $action->execute($getStatus = new GetHumanStatus(array(
             'canceled' => true,
@@ -123,7 +123,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkCapturedIfInvoiceNumberSet()
     {
-        $action = new StatusAction;
+        $action = new StatusAction();
 
         $action->execute($getStatus = new GetHumanStatus(array(
             'invoice_number' => 'aNumber',
@@ -137,7 +137,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkAuthorizedIfStatusAccepted()
     {
-        $action = new StatusAction;
+        $action = new StatusAction();
 
         $action->execute($getStatus = new GetHumanStatus(array(
             'status' => \KlarnaFlags::ACCEPTED,
@@ -151,7 +151,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkPendingIfStatusPending()
     {
-        $action = new StatusAction;
+        $action = new StatusAction();
 
         $action->execute($getStatus = new GetHumanStatus(array(
             'status' => \KlarnaFlags::PENDING,
@@ -165,7 +165,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkFailedIfStatusDenied()
     {
-        $action = new StatusAction;
+        $action = new StatusAction();
 
         $action->execute($getStatus = new GetHumanStatus(array(
             'status' => \KlarnaFlags::DENIED,
@@ -179,7 +179,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkUnknownIfStatusUnknown()
     {
-        $action = new StatusAction;
+        $action = new StatusAction();
 
         $action->execute($getStatus = new GetHumanStatus(array(
             'status' => 'unknown',
@@ -193,7 +193,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkRefundedIfRefundInvoiceNumberSet()
     {
-        $action = new StatusAction;
+        $action = new StatusAction();
 
         $action->execute($getStatus = new GetHumanStatus(array(
             'refund_invoice_number' => 'aNum',

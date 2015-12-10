@@ -8,13 +8,13 @@ class GetHumanStatus extends BaseGetStatus
     const STATUS_AUTHORIZED = 'authorized';
 
     const STATUS_REFUNDED = 'refunded';
-    
+
     const STATUS_UNKNOWN = 'unknown';
-    
+
     const STATUS_FAILED = 'failed';
 
     const STATUS_SUSPENDED = 'suspended';
-    
+
     const STATUS_EXPIRED = 'expired';
 
     const STATUS_PENDING = 'pending';
@@ -184,12 +184,12 @@ class GetHumanStatus extends BaseGetStatus
     }
 
     /**
-     * @param int $expectedStatus
-     * 
+     * @param string $expectedStatus
+     *
      * @return boolean
      */
     protected function isCurrentStatusEqualTo($expectedStatus)
     {
-        return ($expectedStatus | $this->getValue()) == $expectedStatus;
+        return $this->getValue() === $expectedStatus;
     }
 }

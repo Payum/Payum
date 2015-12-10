@@ -3,14 +3,15 @@
 {% block payum_body %}
     {{ parent() }}
 
-    <form action="" method="POST">
+    <form action="{{ actionUrl|default('') }}" method="POST">
         <script
             src="https://checkout.stripe.com/checkout.js" class="stripe-button"
             data-key="{{ publishable_key }}"
             data-image="{{ model.image|default("") }}"
             data-name="{{ model.name|default("") }}"
-            data-description="{{ model.description }}"
-            data-amount="{{ model.amount }}">
+            data-description="{{ model.description|default("") }}"
+            data-amount="{{ model.amount }}"
+            data-currency="{{ model.currency|default("USD") }}">
         </script>
     </form>
 {% endblock %}

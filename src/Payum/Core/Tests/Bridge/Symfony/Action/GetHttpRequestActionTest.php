@@ -22,7 +22,7 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new GetHttpRequestAction;
+        new GetHttpRequestAction();
     }
 
     /**
@@ -30,9 +30,9 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetHttpReqeust()
     {
-        $expectedRequest = new Request;
+        $expectedRequest = new Request();
 
-        $action = new GetHttpRequestAction;
+        $action = new GetHttpRequestAction();
         $action->setHttpRequest($expectedRequest);
 
         $this->assertAttributeSame($expectedRequest, 'httpRequest', $action);
@@ -43,9 +43,9 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportGetHttpRequest()
     {
-        $action = new GetHttpRequestAction;
+        $action = new GetHttpRequestAction();
 
-        $this->assertTrue($action->supports(new GetHttpRequest));
+        $this->assertTrue($action->supports(new GetHttpRequest()));
     }
 
     /**
@@ -53,7 +53,7 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotGetHttpRequest()
     {
-        $action = new GetHttpRequestAction;
+        $action = new GetHttpRequestAction();
 
         $this->assertFalse($action->supports('foo'));
     }
@@ -66,7 +66,7 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestPassedToExecute()
     {
-        $action = new GetHttpRequestAction;
+        $action = new GetHttpRequestAction();
 
         $action->execute('foo');
     }
@@ -76,9 +76,9 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldDoNothingIfHttpRequestNotSet()
     {
-        $action = new GetHttpRequestAction;
+        $action = new GetHttpRequestAction();
 
-        $request = new \Payum\Core\Request\GetHttpRequest;
+        $request = new \Payum\Core\Request\GetHttpRequest();
         $action->execute($request);
 
         $this->assertSame(array(), $request->query);
@@ -92,14 +92,14 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldPopulateFromGetHttpRequest()
     {
-        $action = new GetHttpRequestAction;
+        $action = new GetHttpRequestAction();
         $action->setHttpRequest(Request::create(
             'http://request.uri',
             'GET',
             array('foo' => 'fooVal')
         ));
 
-        $request = new GetHttpRequest;
+        $request = new GetHttpRequest();
         $action->execute($request);
 
         $this->assertSame(array('foo' => 'fooVal'), $request->query);
@@ -115,14 +115,14 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldPopulateFromPostHttpRequest()
     {
-        $action = new GetHttpRequestAction;
+        $action = new GetHttpRequestAction();
         $action->setHttpRequest(Request::create(
             'http://request.uri',
             'POST',
             array('foo' => 'fooVal')
         ));
 
-        $request = new \Payum\Core\Request\GetHttpRequest;
+        $request = new \Payum\Core\Request\GetHttpRequest();
         $action->execute($request);
 
         $this->assertSame(array(), $request->query);
@@ -132,4 +132,4 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('Symfony/2.X', $request->userAgent);
         $this->assertSame('127.0.0.1', $request->clientIp);
     }
-} 
+}
