@@ -35,12 +35,8 @@ class PaymentDetailsStatusAction implements ActionInterface
                 return;
             }
         }
-        
-        //treat this situation as canceled. In other case we can get into an endless cycle.
-        if (
-            false == $model['PAYERID'] &&
-            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $model['CHECKOUTSTATUS'] 
-        ) {
+
+        if (isset($model['CANCELLED'])) {
             $request->markCanceled();
 
             return;

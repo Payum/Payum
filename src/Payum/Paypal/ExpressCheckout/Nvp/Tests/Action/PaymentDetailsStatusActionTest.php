@@ -158,6 +158,22 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldMarkCanceledIfDetailsContainCanceledKey()
+    {
+        $action = new PaymentDetailsStatusAction();
+
+        $request = new GetHumanStatus(array(
+            'CANCELLED' => true
+        ));
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isCanceled());
+    }
+
+    /**
+     * @test
+     */
     public function shouldMarkCapturedIfCreateBillingAgreementRequestAndZeroAmount()
     {
         $action = new PaymentDetailsStatusAction();
@@ -391,4 +407,5 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($request->isUnknown());
     }
+
 }
