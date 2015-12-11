@@ -2,12 +2,15 @@
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
 use Payum\Core\GatewayInterface;
+use Payum\Core\Tests\SkipOnPhp7Trait;
 use Payum\Klarna\Invoice\Action\Api\UpdateAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\Update;
 
 class UpdateActionTest extends \PHPUnit_Framework_TestCase
 {
+    use SkipOnPhp7Trait;
+
     /**
      * @test
      */

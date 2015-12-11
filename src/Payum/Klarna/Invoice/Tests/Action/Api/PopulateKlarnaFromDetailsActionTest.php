@@ -1,11 +1,14 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
+use Payum\Core\Tests\SkipOnPhp7Trait;
 use Payum\Klarna\Invoice\Action\Api\PopulateKlarnaFromDetailsAction;
 use Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails;
 
 class PopulateKlarnaFromDetailsActionTest extends \PHPUnit_Framework_TestCase
 {
+    use SkipOnPhp7Trait;
+
     /**
      * @test
      */

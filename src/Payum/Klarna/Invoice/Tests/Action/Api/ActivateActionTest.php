@@ -8,6 +8,8 @@ use Payum\Klarna\Invoice\Request\Api\Activate;
 
 class ActivateActionTest extends \PHPUnit_Framework_TestCase
 {
+    use SkipOnPhp7Trait;
+
     /**
      * @test
      */

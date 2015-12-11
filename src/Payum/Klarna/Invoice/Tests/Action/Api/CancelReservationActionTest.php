@@ -8,6 +8,8 @@ use Payum\Klarna\Invoice\Request\Api\CancelReservation;
 
 class CancelReservationActionTest extends \PHPUnit_Framework_TestCase
 {
+    use SkipOnPhp7Trait;
+
     /**
      * @test
      */
