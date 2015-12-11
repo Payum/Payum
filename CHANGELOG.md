@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.1.0 (2015-12-11)
+
+* Supports PHP7
+* [builder] Add ability to customize concrete gateway factory config.
+* [action] Set action url to obtain credit card form
+* [security] Implement JsonSerializable interface of SensitiveValue.
+* [paypal-ec] Implemented DoCapture PayPal method
+* [paypal-ec] Add support of authorize request
+* [paypal-ec] Fixing an issue with marking paypal payment as canceled
+* [bridge][symfony] Fix response status code in obtain credit card action.
+* [offline] Add authorize action
+* [klarna] Add support of payment model. add converter for it.
+* [klarna] Add timeout tolerant fetch\create\update order.
+
 ## 1.0.0 (2015-11-09)
 
 * [payumBuilder] add `addCoreGatewayFactoryConfig` method
