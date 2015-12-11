@@ -1,12 +1,15 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
+use Payum\Core\Tests\SkipOnPhp7Trait;
 use Payum\Klarna\Invoice\Action\Api\SendInvoiceAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\SendInvoice;
 
 class SendInvoiceActionTest extends \PHPUnit_Framework_TestCase
 {
+    use SkipOnPhp7Trait;
+
     /**
      * @test
      */

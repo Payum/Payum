@@ -27,8 +27,6 @@ use Payum\Core\Storage\StorageInterface;
 use Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory;
 use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
 use Payum\Offline\OfflineGatewayFactory;
-use Payum\OmnipayBridge\OmnipayDirectGatewayFactory;
-use Payum\OmnipayBridge\OmnipayOffsiteGatewayFactory;
 use Payum\OmnipayBridge\OmnipayGatewayFactory;
 use Payum\Payex\PayexGatewayFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory;
