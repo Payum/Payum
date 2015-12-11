@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.3 (2015-12-11)
+
+* Support PHP7
+
+## 1.0.2 (2015-12-11)
+
+# Support Payum's versions 1.x
+
 ## 1.0.1 (2015-11-28)
 
 * [omnipay] Fix fatal error when omnipay offsite factory is used.
