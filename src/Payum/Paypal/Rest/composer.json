@@ -24,7 +24,7 @@
         }
     ],
     "require": {
-        "payum/core": "1.0.*",
+        "payum/core": "~1.0",
         "paypal/rest-api-sdk-php" : "~1.0"
     },
     "require-dev": {

@@ -20,7 +20,7 @@
         }
     ],
     "require": {
-        "payum/core": "1.0.*",
+        "payum/core": "~1.0",
         "authorizenet/authorizenet": "~1.8"
     },
     "require-dev": {

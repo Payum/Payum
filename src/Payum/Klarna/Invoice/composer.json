@@ -23,7 +23,7 @@
         }
     ],
     "require": {
-        "payum/core": "1.0.*",
+        "payum/core": "~1.0",
         "fp/klarna-invoice": "0.1.*"
     },
     "require-dev": {
