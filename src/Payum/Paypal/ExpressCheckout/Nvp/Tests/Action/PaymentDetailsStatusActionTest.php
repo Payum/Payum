@@ -128,7 +128,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $action = new PaymentDetailsStatusAction();
 
         $request = new GetHumanStatus(array(
-            'CANCELLED' => true
+            'CANCELLED' => true,
         ));
 
         $action->execute($request);
