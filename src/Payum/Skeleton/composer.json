@@ -1,6 +1,6 @@
 {
     "name": "payum/skeleton",
-    "type": "library",
+    "type": "project",
     "description": "The Payum extension. Rapid extensino development",
     "keywords": ["payment"],
     "homepage": "http://payum.org",
