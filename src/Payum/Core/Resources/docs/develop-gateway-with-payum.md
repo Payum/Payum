@@ -1,144 +1,51 @@
 # Develop a custom Payum gateway.
 
 This chapter could be useful for a developer who wants to create a gateway on top of payum.
-Here we would briefly describe general approaches, and things you should start from.
-Let's assume you want to implement the most common task: purchase a product and get payment status.
-For this you would send a request to a gateway using username and password provided.
+The Payum provides a skeleton project which helps us a lots.
 
-_**Note**: Before you start we would suggest to read [the architecture](the-architecture.md) chapter._
+1. Create new project
 
-## Capture action.
-
-Purchasing will be done by `CaptureAction`. This action will contain all payment related logic.
-We assume you use `ArrayObject` as model but you of course may change it to what ever you want.
-
-```php
-<?php
-namespace App\Payum\Action;
-
-use Payum\Core\Action\ActionInterface;
-use Payum\Core\Request\Capture;
-
-class CaptureAction implements ActionInterface
-{
-    protected $gatewayUsername;
-
-    protected $gatewayPassword;
-
-    public function __construct($gatewayUsername, $gatewayPassword)
-    {
-        $this->gatewayUsername = $gatewayUsername;
-        $this->gatewayPassword = $gatewayPassword;
-    }
-
-    public function execute($request)
-    {
-        $model = $request->getModel();
-
-        if (isset($model['amount']) && isset($model['currency'])) {
-
-            //do purchase call to the gateway using username and password.
-
-            $model['status'] = 'success';
-        } else {
-            $model['status'] = 'error';
-        }
-    }
-
-    public function supports($request)
-    {
-        return
-            $request instanceof Capture &&
-            $request->getModel() instanceof \ArrayAccess
-        ;
-    }
-}
+```bash
+$ composer create-project payum/skeleton
 ```
 
-## Status action.
-
-`StatusAction` would contain all the rules of payment status calculation.
-The action must make its decisions using the model you pass with the request.
-Let's assume your model have `status` field and it can be either success or error.
+2. Replace all occurrences of `payum` with your vendor name. It may be your github name, for now let's say you choose: `acme`.
+3. Replace all occurrences of `skeleton` with a payment gateway name. For example Stripe, Paypal etc. For now let's say you choose: `paypal`.
+4. Register a gateway factory to the payum's builder and create a gateway:
 
 ```php
 <?php
-namespace App\Payum\Action;
 
-use Payum\Core\Action\ActionInterface;
-use Payum\Core\Request\GetStatusInterface;
+use Payum\Core\PayumBuilder;
 
-class StatusAction implements ActionInterface
-{
-    public function execute($request)
-    {
-        $model = $request->getModel();
+$defaultConfig = [];
 
-        if (false == isset($model['status'])) {
-            $request->markNew();
+$payum = (new PayumBuilder)
+    ->addGatewayFactory('paypal', new \Acme\Paypal\PaypalGatewayFactory($defaultConfig))
 
-            return;
-        }
+    ->addGateway('paypal', [
+        'factory' => 'paypal',
+        'sandbox' => true,
+    ])
 
-        if ('success' == $model['status']) {
-            $request->markCaptured();
-
-            return;
-        }
-
-        if ('error' == $model['status']) {
-            $request->markFailed();
-
-            return;
-        }
-
-        $request->markUnknown();
-    }
-
-    public function supports($request)
-    {
-        return
-            $request instanceof GetStatusInterface &&
-            $request->getModel() instanceof \ArrayAccess
-        ;
-    }
-}
+    ->getPayum()
+;
 ```
 
-# Usage
-
-Now you want knit all things together and start use it. Okay,
-To make it work we have to create a gateway object and put all we did into it.
+5. While using the gateway implement all method where you get `Not implemented` exception:
 
 ```php
 <?php
-namespace App;
 
-App\Payum\Action\CaptureAction;
-App\Payum\Action\StatusAction;
-use Payum\Core\Gateway;
 use Payum\Core\Request\Capture;
-use Payum\Core\Request\GetHumanStatus;
 
-$gateway = new Gateway;
-$gateway->addAction(new CaptureAction('aUsername', 'aPassword'));
-$gateway->addAction(new StatusAction);
+$paypal = $payum->getGateway('paypal');
 
-$model = new ArrayObject(array(
-    'amount' => 10,
-    'currency' => 'USD',
-));
+$model = new \ArrayObject([
+  // ...
+]);
 
-$gateway->execute(new Capture($model));
-$gateway->execute($status = new GetHumanStatus($model));
-
-if ($status->isCaptured()) {
-    echo 'We purchase staff successfully';
-} else if ($status->isFailed()) {
-    echo 'An error occurred';
-} else {
-    echo 'Something went wrong but we don`t know the exact status';
-}
+$paypal->execute(new Capture($model));
 ```
 
 Enjoy!
