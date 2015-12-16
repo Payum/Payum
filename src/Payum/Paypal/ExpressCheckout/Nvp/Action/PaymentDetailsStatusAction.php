@@ -36,6 +36,15 @@ class PaymentDetailsStatusAction implements ActionInterface
             }
         }
 
+        if (
+            false == $model['PAYERID'] &&
+            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $model['CHECKOUTSTATUS']
+        ) {
+            $request->markPending();
+
+            return;
+        }
+
         if (isset($model['CANCELLED'])) {
             $request->markCanceled();
 

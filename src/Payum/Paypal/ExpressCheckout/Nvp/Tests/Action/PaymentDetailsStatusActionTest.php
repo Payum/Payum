@@ -224,6 +224,24 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldMarkPendingIfPayerIdNotSetAndCheckoutStatusNotInitiated()
+    {
+        $action = new PaymentDetailsStatusAction();
+
+        $request = new GetHumanStatus(array(
+            'PAYMENTREQUEST_0_AMT' => 12,
+            'PAYERID' => null,
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
+        ));
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isPending());
+    }
+
+    /**
+     * @test
+     */
     public function shouldMarkFailedIfCheckoutStatusFailed()
     {
         $action = new PaymentDetailsStatusAction();
