@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1 (2015-12-16)
+
+* [paypal-ec] Fix status action. The status must be pending when user comes back from Paypal side. 
+
 ## 1.1.0 (2015-12-11)
 
 * Supports PHP7
