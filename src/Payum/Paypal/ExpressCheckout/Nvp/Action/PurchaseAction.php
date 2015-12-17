@@ -78,7 +78,9 @@ abstract class PurchaseAction extends GatewayAwareAction implements GenericToken
 
             if ($details['CANCELURL']) {
                 $cancelUrl = Url::createFromUrl($details['CANCELURL']);
-                $cancelUrl->setQuery(['cancelled' => 1]);
+                $query = $cancelUrl->getQuery();
+                $query->modify(['cancelled' => 1]);
+                $cancelUrl->setQuery($query);
 
                 $details['CANCELURL'] = (string) $cancelUrl;
             }
