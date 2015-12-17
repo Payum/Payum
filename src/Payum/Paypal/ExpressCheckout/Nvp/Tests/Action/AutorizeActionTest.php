@@ -265,6 +265,42 @@ class AutorizeActionTest extends GenericActionTest
     /**
      * @test
      */
+    public function shouldNotLooseExistingGetParamWhenSettingTargetUrlAsCancelUrl()
+    {
+        $testCase = $this;
+
+        $cancelUrl = 'http://theCancelUrl/?existingGetParam=testValue';
+        $expectedCancelUrl = $cancelUrl.'&cancelled=1';
+
+        $token = new Token();
+        $token->setTargetUrl($cancelUrl);
+        $token->setDetails(array());
+
+        $gatewayMock = $this->createGatewayMock();
+
+        $gatewayMock
+            ->expects($this->at(1))
+            ->method('execute')
+            ->with($this->isInstanceOf(SetExpressCheckout::class))
+            ->will($this->returnCallback(function ($request) use ($testCase, $expectedCancelUrl) {
+                $model = $request->getModel();
+
+                $testCase->assertEquals($expectedCancelUrl, $model['CANCELURL']);
+            }))
+        ;
+
+        $action = new AuthorizeAction();
+        $action->setGateway($gatewayMock);
+
+        $request = new Authorize($token);
+        $request->setModel(array());
+
+        $action->execute($request);
+    }
+
+    /**
+     * @test
+     */
     public function shouldNotRequestSetExpressCheckoutActionAndAuthorizeActionIfTokenSetInModel()
     {
         $gatewayMock = $this->createGatewayMock();
