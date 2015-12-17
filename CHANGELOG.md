@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2 (2015-12-17)
+
+* [paypal-ec] Do not overwrite previous query parameters when adding cancelled=1 to cancel url.
+
 ## 1.1.1 (2015-12-16)
 
 * [paypal-ec] Fix status action. The status must be pending when user comes back from Paypal side. 
