@@ -1,14 +1,14 @@
 <?php
 
-namespace Invit\PayumSofortueberweisung\Tests\Action;
+namespace Payum\Sofort\Tests\Action;
 
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Notify;
 use Payum\Core\Request\Sync;
 use Payum\Core\Tests\GenericActionTest;
-use Invit\PayumSofortueberweisung\Action\NotifyAction;
 use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\GatewayInterface;
+use Payum\Sofort\Action\NotifyAction;
 
 class NotifyActionTest extends GenericActionTest
 {

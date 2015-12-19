@@ -1,11 +1,11 @@
 <?php
 
-namespace Invit\PayumSofortueberweisung\Tests\Action\Api;
+namespace Payum\Sofort\Tests\Action\Api;
 
-use Invit\PayumSofortueberweisung\Action\Api\RefundTransactionAction;
-use Invit\PayumSofortueberweisung\Request\Api\RefundTransaction;
-use Invit\PayumSofortueberweisung\Action\Api\BaseApiAwareAction;
-use Invit\PayumSofortueberweisung\Api;
+use Payum\Sofort\Action\Api\RefundTransactionAction;
+use Payum\Sofort\Request\Api\RefundTransaction;
+use Payum\Sofort\Action\Api\BaseApiAwareAction;
+use Payum\Sofort\Api;
 
 class RefundTransactionActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -141,7 +141,7 @@ class RefundTransactionActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Invit\PayumSofortueberweisung\Api
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Sofort\Api
      */
     protected function createApiMock()
     {

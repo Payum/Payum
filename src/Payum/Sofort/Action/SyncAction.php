@@ -1,8 +1,8 @@
 <?php
 
-namespace Invit\PayumSofortueberweisung\Action;
+namespace Payum\Sofort\Action;
 
-use Invit\PayumSofortueberweisung\Request\Api\GetTransactionData;
+use Payum\Sofort\Request\Api\GetTransactionData;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\Sync;
 use Payum\Core\Action\GatewayAwareAction;
@@ -12,10 +12,11 @@ class SyncAction extends GatewayAwareAction
 {
     /**
      * {@inheritdoc}
+     *
+     * @param $request Sync
      */
     public function execute($request)
     {
-        /* @var $request Sync */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -32,15 +33,9 @@ class SyncAction extends GatewayAwareAction
      */
     public function supports($request)
     {
-        if (false == $request instanceof Sync) {
-            return false;
-        }
-
-        $model = $request->getModel();
-        if (false == $model instanceof \ArrayAccess) {
-            return false;
-        }
-
-        return true;
+        return
+            $request instanceof Sync &&
+            $request->getModel() instanceof \ArrayAccess
+        ;
     }
 }

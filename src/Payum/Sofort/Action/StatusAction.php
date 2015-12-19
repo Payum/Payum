@@ -1,8 +1,8 @@
 <?php
 
-namespace Invit\PayumSofortueberweisung\Action;
+namespace Payum\Sofort\Action;
 
-use Invit\PayumSofortueberweisung\Api;
+use Payum\Sofort\Api;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -12,10 +12,11 @@ class StatusAction implements ActionInterface
 {
     /**
      * {@inheritdoc}
+     *
+     * @param $request GetStatusInterface
      */
     public function execute($request)
     {
-        /* @var $request GetStatusInterface */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());

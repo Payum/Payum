@@ -1,11 +1,11 @@
 <?php
 
-namespace Invit\PayumSofortueberweisung\Tests\Action\Api;
+namespace Payum\Sofort\Tests\Action\Api;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
-use Invit\PayumSofortueberweisung\Api;
-use Invit\PayumSofortueberweisung\Action\Api\BaseApiAwareAction;
+use Payum\Sofort\Api;
+use Payum\Sofort\Action\Api\BaseApiAwareAction;
 
 class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -66,7 +66,7 @@ class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Invit\PayumSofortueberweisung\Api
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Sofort\Api
      */
     protected function createApiMock()
     {

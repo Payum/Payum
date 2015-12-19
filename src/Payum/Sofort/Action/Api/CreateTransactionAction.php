@@ -1,8 +1,8 @@
 <?php
 
-namespace Invit\PayumSofortueberweisung\Action\Api;
+namespace Payum\Sofort\Action\Api;
 
-use Invit\PayumSofortueberweisung\Request\Api\CreateTransaction;
+use Payum\Sofort\Request\Api\CreateTransaction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -12,10 +12,11 @@ class CreateTransactionAction extends BaseApiAwareAction
 {
     /**
      * {@inheritdoc}
+     *
+     * @param $request CreateTransaction
      */
     public function execute($request)
     {
-        /* @var $request CreateTransaction */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
@@ -51,6 +52,6 @@ class CreateTransactionAction extends BaseApiAwareAction
         return
             $request instanceof CreateTransaction &&
             $request->getModel() instanceof \ArrayAccess
-            ;
+        ;
     }
 }

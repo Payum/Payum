@@ -1,8 +1,8 @@
 <?php
 
-namespace Invit\PayumSofortueberweisung\Action\Api;
+namespace Payum\Sofort\Action\Api;
 
-use Invit\PayumSofortueberweisung\Request\Api\RefundTransaction;
+use Payum\Sofort\Request\Api\RefundTransaction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\LogicException;
@@ -11,10 +11,11 @@ class RefundTransactionAction extends BaseApiAwareAction
 {
     /**
      * {@inheritdoc}
+     *
+     * @param $request RefundTransaction
      */
     public function execute($request)
     {
-        /* @var $request RefundTransaction */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
@@ -44,6 +45,6 @@ class RefundTransactionAction extends BaseApiAwareAction
         return
             $request instanceof RefundTransaction &&
             $request->getModel() instanceof \ArrayAccess
-            ;
+        ;
     }
 }

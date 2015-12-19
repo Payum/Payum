@@ -1,6 +1,6 @@
 <?php
 
-namespace Invit\PayumSofortueberweisung;
+namespace Payum\Sofort;
 
 use Sofort\SofortLib\Refund;
 use Sofort\SofortLib\Sofortueberweisung;

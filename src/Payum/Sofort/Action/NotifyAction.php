@@ -1,6 +1,6 @@
 <?php
 
-namespace Invit\PayumSofortueberweisung\Action;
+namespace Payum\Sofort\Action;
 
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Notify;
@@ -12,10 +12,11 @@ class NotifyAction extends GatewayAwareAction
 {
     /**
      * {@inheritdoc}
+     *
+     * @param $request Notify
      */
     public function execute($request)
     {
-        /* @var $request Notify */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $this->gateway->execute(new Sync($request->getModel()));
@@ -31,6 +32,6 @@ class NotifyAction extends GatewayAwareAction
         return
             $request instanceof Notify &&
             $request->getModel() instanceof \ArrayAccess
-            ;
+        ;
     }
 }

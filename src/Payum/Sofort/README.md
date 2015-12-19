@@ -1,34 +1,18 @@
-# payum-sofortueberweisung
-Payum extension to provide a Sofort (Sofortüberweisung) gateway
+# Sofort
+[![Build Status](https://travis-ci.org/Payum/Sofort.png?branch=master)](https://travis-ci.org/Payum/Sofort)
+[![Total Downloads](https://poser.pugx.org/payum/sofort/d/total.png)](https://packagist.org/packages/payum/sofort)
+[![Latest Stable Version](https://poser.pugx.org/payum/sofort/version.png)](https://packagist.org/packages/payum/sofort)
 
-## Symfony2 Bridge
-### Register factory inside your bundle
+The Payum extension. It provides [Sofort](https://www.sofort.com/eng-INT/buyer/sb/overview/) payment integration.
 
-```php
-<?php
-namespace Acme\Bundle\DemoBundle;
+## Resources
 
-use Invit\PayumSofortueberweisung\Bridge\SymfonySofortueberweisungGatewayFactory;
+* [Examples](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/examples)
+* [Documentation](http://payum.org/doc#Sofort)
+* [Questions](http://stackoverflow.com/questions/tagged/payum)
+* [Issue Tracker](https://github.com/Payum/Payum/issues)
+* [Twitter](https://twitter.com/payumphp)
 
-class AcmeDemoBundle extends Bundle
-{
-    public function build(ContainerBuilder $container)
-    {
-        parent::build($container);
-        
-        $extension = $container->getExtension('payum');
-        $extension->addGatewayFactory(new SymfonySofortueberweisungGatewayFactory());
-    }
-}
+## License
 
-```
-### Configure sofort gateway
-
-```yaml
-payum:
-    gateways:
-        sofort_xyz:
-            sofort:
-                config_key: 'xxx:yyy:zzzzzzzz'
-                abort_url:  'https://www.nicewebshop.ch/get_me_back_there'
-```
+Sofort is released under the [MIT License](LICENSE).

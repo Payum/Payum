@@ -1,8 +1,8 @@
 <?php
 
-namespace Invit\PayumSofortueberweisung\Action;
+namespace Payum\Sofort\Action;
 
-use Invit\PayumSofortueberweisung\Request\Api\RefundTransaction;
+use Payum\Sofort\Request\Api\RefundTransaction;
 use Payum\Core\Request\Notify;
 use Payum\Core\Request\Refund;
 use Payum\Core\Request\Sync;
@@ -13,10 +13,11 @@ class RefundAction extends GatewayAwareAction
 {
     /**
      * {@inheritdoc}
+     *
+     * @param $request Notify
      */
     public function execute($request)
     {
-        /* @var $request Notify */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $this->gateway->execute(new RefundTransaction($request->getModel()));
@@ -32,6 +33,6 @@ class RefundAction extends GatewayAwareAction
         return
             $request instanceof Refund &&
             $request->getModel() instanceof \ArrayAccess
-            ;
+        ;
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace Invit\PayumSofortueberweisung\Action;
+namespace Payum\Sofort\Action;
 
-use Invit\PayumSofortueberweisung\Request\Api\CreateTransaction;
+use Payum\Sofort\Request\Api\CreateTransaction;
 use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -28,6 +28,8 @@ class CaptureAction extends GatewayAwareAction implements GenericTokenFactoryAwa
 
     /**
      * {@inheritdoc}
+     *
+     * @param Capture $request
      */
     public function execute($request)
     {
