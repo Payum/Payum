@@ -9,6 +9,7 @@ use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Gateway;
+use Payum\Core\GatewayFactory;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\Model\ArrayObject;
 use Payum\Core\Model\Payment;
@@ -415,6 +416,46 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(Payum::class, $payum);
         $this->assertSame($expectedFactory, $payum->getGatewayFactory('a_factory'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowGetGatewayFactoryAddedAsCallbackFactory()
+    {
+        $expectedFactory = null;
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGatewayFactory('a_factory', function(array $config, GatewayFactoryInterface $coreGatewayFactory) use (&$expectedFactory) {
+                $expectedFactory = new GatewayFactory($config, $coreGatewayFactory);
+
+                return $expectedFactory;
+
+            })
+            ->getPayum()
+        ;
+
+        $this->assertInstanceOf(Payum::class, $payum);
+        $this->assertSame($expectedFactory, $payum->getGatewayFactory('a_factory'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldPassAddedConfigToGatewayCallbackFactory()
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGatewayFactoryConfig('a_factory', ['foo' => 'fooVal'])
+            ->addGatewayFactory('a_factory', function(array $config, GatewayFactoryInterface $coreGatewayFactory) use (&$expectedFactory) {
+                $this->assertEquals(['foo' => 'fooVal'], $config);
+
+                return new GatewayFactory($config, $coreGatewayFactory);
+
+            })
+            ->getPayum()
+        ;
     }
 
     /**
