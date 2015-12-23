@@ -16,11 +16,14 @@ $ composer create-project payum/skeleton
 <?php
 
 use Payum\Core\PayumBuilder;
+use Payum\Core\GatewayFactoryInterface;
 
 $defaultConfig = [];
 
 $payum = (new PayumBuilder)
-    ->addGatewayFactory('paypal', new \Acme\Paypal\PaypalGatewayFactory($defaultConfig))
+    ->addGatewayFactory('paypal', function(array $config, GatewayFactoryInterface $coreGatewayFactory) {
+        return new \Acme\Paypal\PaypalGatewayFactory($config, $coreGatewayFactory)
+    })
 
     ->addGateway('paypal', [
         'factory' => 'paypal',
