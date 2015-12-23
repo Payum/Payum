@@ -88,7 +88,7 @@ class PayumBuilder
     protected $gatewayConfigs = [];
 
     /**
-     * @var GatewayFactoryInterface[]
+     * @var GatewayFactoryInterface[]|callable[]
      */
     protected $gatewayFactories = [];
 
@@ -172,17 +172,22 @@ class PayumBuilder
 
     /**
      * @param string           $name
-     * @param GatewayFactoryInterface $gatewayFactory
+     * @param GatewayFactoryInterface|callable $gatewayFactory
      *
      * @return static
      */
-    public function addGatewayFactory($name, GatewayFactoryInterface $gatewayFactory)
+    public function addGatewayFactory($name, $gatewayFactory)
     {
-        // TODO add checks
+        if (
+            $gatewayFactory instanceof GatewayFactoryInterface ||
+            is_callable($gatewayFactory))
+        {
+            $this->gatewayFactories[$name] = $gatewayFactory;
 
-        $this->gatewayFactories[$name] = $gatewayFactory;
+            return $this;
+        }
 
-        return $this;
+        throw new InvalidArgumentException('Invalid argument');
     }
 
     /**
@@ -399,7 +404,7 @@ class PayumBuilder
         $gatewayFactories = array_replace(
             $this->buildGatewayFactories($coreGatewayFactory),
             $this->buildOmnipayGatewayFactories($coreGatewayFactory),
-            $this->gatewayFactories
+            $this->buildAddedGatewayFactories($coreGatewayFactory)
         );
 
         $registry = $this->buildRegistry($this->gateways, $storages, $gatewayFactories);
@@ -566,6 +571,27 @@ class PayumBuilder
                     $coreGatewayFactory
                 );
             }
+        }
+
+        return $gatewayFactories;
+    }
+
+    /**
+     * @param GatewayFactoryInterface $coreGatewayFactory
+     *
+     * @return GatewayFactoryInterface[]
+     */
+    protected function buildAddedGatewayFactories(GatewayFactoryInterface $coreGatewayFactory)
+    {
+        $gatewayFactories = [];
+        foreach ($this->gatewayFactories as $name => $factory) {
+            if (is_callable($factory)) {
+                $config = isset($this->gatewayFactoryConfigs[$name]) ? $this->gatewayFactoryConfigs[$name] : [];
+
+                $factory = call_user_func($factory, $config, $coreGatewayFactory);
+            }
+
+            $gatewayFactories[$name] = $factory;
         }
 
         return $gatewayFactories;
