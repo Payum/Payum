@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.3 (2015-12-26)
+
+* [builder] Add abiliry to pass gateway factory factory, as callable
+* [action][creditcard] pass token with the request so that actionUrl is set.
+
 ## 1.1.2 (2015-12-17)
 
 * [paypal-ec] Do not overwrite previous query parameters when adding cancelled=1 to cancel url.
