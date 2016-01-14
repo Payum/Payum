@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.4 (2016-01-14)
+
+* [offline] add canceled status
+* [skeleton] Require payum/core with needed fix
+
 ## 1.1.3 (2015-12-26)
 
 * [builder] Add abiliry to pass gateway factory factory, as callable
