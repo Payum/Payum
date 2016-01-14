@@ -2,6 +2,7 @@
 namespace Payum\Core\Tests\Bridge\Symfony\Form\Type;
 
 use Payum\Core\Bridge\Symfony\Form\Type\CreditCardExpirationDateType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreditCardExpirationDateTypeTest extends \PHPUnit_Framework_TestCase
@@ -31,17 +32,7 @@ class CreditCardExpirationDateTypeTest extends \PHPUnit_Framework_TestCase
     {
         $type = new CreditCardExpirationDateType();
 
-        $this->assertEquals('date', $type->getParent());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldReturnExpectedName()
-    {
-        $type = new CreditCardExpirationDateType();
-
-        $this->assertEquals('payum_credit_card_expiration_date', $type->getName());
+        $this->assertEquals(DateType::class, $type->getParent());
     }
 
     /**
@@ -53,7 +44,7 @@ class CreditCardExpirationDateTypeTest extends \PHPUnit_Framework_TestCase
 
         $resolver = new OptionsResolver();
 
-        $type->setDefaultOptions($resolver);
+        $type->configureOptions($resolver);
 
         $options = $resolver->resolve();
 
@@ -76,7 +67,7 @@ class CreditCardExpirationDateTypeTest extends \PHPUnit_Framework_TestCase
 
         $resolver = new OptionsResolver();
 
-        $type->setDefaultOptions($resolver);
+        $type->configureOptions($resolver);
 
         $options = $resolver->resolve(array(
             'min_expiration_year' => 2000,

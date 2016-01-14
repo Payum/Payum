@@ -1,10 +1,12 @@
 <?php
 namespace Payum\Core\Bridge\Symfony\Form\Type;
 
+use Payum\Core\Model\CreditCard;
+use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class CreditCardType extends AbstractType
 {
@@ -14,15 +16,15 @@ class CreditCardType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('holder', 'text', array('label' => 'form.credit_card.holder'))
-            ->add('number', 'text', array('label' => 'form.credit_card.number'))
-            ->add('securityCode', 'text', array('label' => 'form.credit_card.security_code'))
+            ->add('holder', TextType::class, array('label' => 'form.credit_card.holder'))
+            ->add('number', TextType::class, array('label' => 'form.credit_card.number'))
+            ->add('securityCode', TextType::class, array('label' => 'form.credit_card.security_code'))
             ->add(
                 'expireAt',
-                'payum_credit_card_expiration_date',
+                CreditCardExpirationDateType::class,
                 array(
                     'input' => 'datetime',
-                    'widget' => 'choice',
+                    'widget' => ChoiceType::class,
                     'label' => 'form.credit_card.expire_at',
                 )
             );
@@ -36,27 +38,11 @@ class CreditCardType extends AbstractType
         $resolver
             ->setDefaults(
                 array(
-                    'data_class' => 'Payum\Core\Model\CreditCard',
+                    'data_class' => CreditCard::class,
                     'validation_groups' => array('Payum'),
                     'label' => false,
                     'translation_domain' => 'PayumBundle',
                 )
             );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $this->configureOptions($resolver);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getName()
-    {
-        return 'payum_credit_card';
     }
 }
