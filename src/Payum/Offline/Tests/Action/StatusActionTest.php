@@ -137,7 +137,24 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($request->isCaptured());
     }
+    
+    /**
+     * @test
+     */
+    public function shouldMarkCanceledIfStatusSetToCanceled()
+    {
+        $request = new GetBinaryStatus(array(
+            Constants::FIELD_STATUS => Constants::STATUS_CANCELED,
+        ));
+        $request->markCanceled();
 
+        $action = new StatusAction();
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isCanceled());
+    }
+    
     /**
      * @test
      */
