@@ -229,7 +229,7 @@ class AutorizeActionTest extends GenericActionTest
     {
         $testCase = $this;
 
-        $cancelUrl = 'http://theCancelUrl/';
+        $cancelUrl = 'http://thecancelurl/';
         $expectedCancelUrl = $cancelUrl.'?cancelled=1';
 
         $token = new Token();
@@ -269,7 +269,7 @@ class AutorizeActionTest extends GenericActionTest
     {
         $testCase = $this;
 
-        $cancelUrl = 'http://theCancelUrl/?existingGetParam=testValue';
+        $cancelUrl = 'http://thecancelurl/?existingGetParam=testValue';
         $expectedCancelUrl = $cancelUrl.'&cancelled=1';
 
         $token = new Token();
