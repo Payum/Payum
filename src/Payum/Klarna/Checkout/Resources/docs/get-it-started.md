@@ -26,7 +26,7 @@ use Payum\Core\Payum;
 /** @var Payum $payum */
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
-    ->addGatewayConfig('klarna', [
+    ->addGateway('klarna', [
         'factory' => 'klarna_checkout'
         'merchant_id' => 'EDIT IT',
         'secret' => 'EDIT IT',

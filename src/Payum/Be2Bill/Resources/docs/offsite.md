@@ -29,7 +29,7 @@ use Payum\Core\Payum;
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
 
-    ->addGatewayConfig('be2bill_offsite', [
+    ->addGateway('be2bill_offsite', [
         'factory' => 'be2bill_offsite'
         'identifier' => 'REPLACE WITH YOURS',
         'password' => 'REPLACE WITH YOURS',

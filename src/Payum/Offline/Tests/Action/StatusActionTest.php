@@ -146,7 +146,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
         $request = new GetBinaryStatus(array(
             Constants::FIELD_STATUS => Constants::STATUS_CANCELED,
         ));
-        $request->markCanceled();
+        $request->markUnknown();
 
         $action = new StatusAction();
 

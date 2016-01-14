@@ -29,7 +29,7 @@ use Payum\Core\Payum;
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
 
-    ->addGatewayConfig('be2bill', [
+    ->addGateway('be2bill', [
         'factory' => 'be2bill_direct'
         'identifier' => 'REPLACE WITH YOURS',
         'password' => 'REPLACE WITH YOURS',

@@ -47,7 +47,7 @@ $paymentClass = Payment::class;
 /** @var Payum $payum */
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
-    ->addGatewayConfig('aGateway', [
+    ->addGateway('aGateway', [
         'factory' => 'offline'
     ])
 
