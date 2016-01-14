@@ -12,6 +12,8 @@ abstract class Constants
     const STATUS_AUTHORIZED = 'authorized';
 
     const STATUS_PENDING = 'pending';
+    
+    const STATUS_CANCELED = 'canceled';
 
     final private function __construct()
     {
