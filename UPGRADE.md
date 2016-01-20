@@ -1,5 +1,9 @@
 # Upgrades
 
+## 1.2.0
+
+* [stripe] Stripe api version updated to 2.0 - 3.x. You'll have to update any custom actions that use the Stripe api directly.
+
 ## 1.0
 
 * Php required version is 5.5
