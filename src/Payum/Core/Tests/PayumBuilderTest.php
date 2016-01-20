@@ -655,6 +655,10 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldRegisterOmnipayFactories()
     {
+        if (false == class_exists(OmnipayGateway::class)) {
+            $this->markTestSkipped('Either omnipay or\and omnipay bridge are not installed. Skip');
+        }
+
         $expectedCoreGatewayFactory = $this->getMock(GatewayFactoryInterface::class);
 
         $payum = (new PayumBuilder())
@@ -675,6 +679,10 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldInjectCoreGatewayFactoryToOmnipayFactory()
     {
+        if (false == class_exists(OmnipayGateway::class)) {
+            $this->markTestSkipped('Either omnipay or\and omnipay bridge are not installed. Skip');
+        }
+
         $expectedCoreGatewayFactory = $this->getMock(GatewayFactoryInterface::class);
 
         $payum = (new PayumBuilder())
@@ -695,6 +703,10 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldInjectExpectedOmnipayGatewayInstanceAsApi()
     {
+        if (false == class_exists(OmnipayGateway::class)) {
+            $this->markTestSkipped('Either omnipay or\and omnipay bridge are not installed. Skip');
+        }
+
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
             ->getPayum()

@@ -1,13 +1,16 @@
 <?php
 namespace Payum\Core\Bridge\Symfony\Form\Type;
 
+use Payum\Core\Model\GatewayConfig;
 use Payum\Core\Registry\GatewayFactoryRegistryInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class GatewayConfigType extends AbstractType
@@ -32,7 +35,7 @@ class GatewayConfigType extends AbstractType
     {
         $builder
             ->add('gatewayName')
-            ->add('factoryName', 'payum_gateway_factories_choice')
+            ->add('factoryName', GatewayFactoriesChoiceType::class)
         ;
 
         $builder->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'buildCredentials'));
@@ -58,7 +61,7 @@ class GatewayConfigType extends AbstractType
 
         $form = $event->getForm();
 
-        $form->add('config', 'form');
+        $form->add('config', FormType::class);
         $configForm = $form->get('config');
 
         $gatewayFactory = $this->registry->getGatewayFactory($factoryName);
@@ -71,7 +74,7 @@ class GatewayConfigType extends AbstractType
                 PropertyAccess::createPropertyAccessor()->setValue($data, $propertyPath, $value);
             }
 
-            $type = is_bool($value) ? 'checkbox' : 'text';
+            $type = is_bool($value) ? CheckboxType::class : TextType::class;
 
             $options = array();
             $options['required'] = in_array($name, $config['payum.required_options']);
@@ -88,23 +91,7 @@ class GatewayConfigType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Payum\Core\Model\GatewayConfig'
+            'data_class' => GatewayConfig::class
         ));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $this->configureOptions($resolver);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getName()
-    {
-        return 'payum_gateway_config';
     }
 }

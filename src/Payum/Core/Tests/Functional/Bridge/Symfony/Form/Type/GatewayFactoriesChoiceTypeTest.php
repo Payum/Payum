@@ -17,8 +17,8 @@ class GatewayFactoriesChoiceTypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->formFactory = Forms::createFormFactoryBuilder()
             ->addType(new GatewayFactoriesChoiceType(array(
-                'foo' => 'Foo Factory',
-                'bar' => 'Bar Factory'
+                'Foo Factory' => 'foo',
+                'Bar Factory' => 'bar'
             )))
             ->getFormFactory()
         ;
@@ -29,7 +29,7 @@ class GatewayFactoriesChoiceTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeConstructedByFormFactory()
     {
-        $form = $this->formFactory->create('payum_gateway_factories_choice');
+        $form = $this->formFactory->create(GatewayFactoriesChoiceType::class);
 
         $this->assertInstanceOf('Symfony\Component\Form\Form', $form);
         $this->assertInstanceOf('Symfony\Component\Form\FormView', $form->createView());
@@ -40,7 +40,7 @@ class GatewayFactoriesChoiceTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCorrectlyBindValidValue()
     {
-        $form = $this->formFactory->create('payum_gateway_factories_choice');
+        $form = $this->formFactory->create(GatewayFactoriesChoiceType::class);
 
         $form->submit('foo');
 
@@ -54,7 +54,7 @@ class GatewayFactoriesChoiceTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotBindInvalidValue()
     {
-        $form = $this->formFactory->create('payum_gateway_factories_choice');
+        $form = $this->formFactory->create(GatewayFactoriesChoiceType::class);
 
         $form->submit('invalid');
 

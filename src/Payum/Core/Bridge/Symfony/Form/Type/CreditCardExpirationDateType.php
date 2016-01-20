@@ -2,11 +2,12 @@
 namespace Payum\Core\Bridge\Symfony\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class CreditCardExpirationDateType extends AbstractType
 {
@@ -15,7 +16,7 @@ class CreditCardExpirationDateType extends AbstractType
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        if ('choice' == $options['widget']) {
+        if (ChoiceType::class == $options['widget']) {
             if (empty($view['day']->vars['value'])) {
                 $view['day']->vars['value'] = $view['day']->vars['choices'][0]->value;
             }
@@ -46,24 +47,8 @@ class CreditCardExpirationDateType extends AbstractType
     /**
      * {@inheritDoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $this->configureOptions($resolver);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getParent()
     {
-        return 'date';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getName()
-    {
-        return 'payum_credit_card_expiration_date';
+        return DateType::class;
     }
 }

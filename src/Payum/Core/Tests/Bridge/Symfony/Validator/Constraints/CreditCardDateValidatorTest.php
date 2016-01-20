@@ -22,8 +22,6 @@ class CreditCardDateValidatorTest extends AbstractConstraintValidatorTest
         $options = array('min' => 'today');
         $constraint = new CreditCardDate($options);
 
-        $validator = new CreditCardDateValidator();
-
         $value = new \Datetime();
 
         $this->validator->validate($value, $constraint);

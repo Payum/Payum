@@ -46,7 +46,7 @@ class GatewayConfigTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeConstructedByFormFactory()
     {
-        $form = $this->formFactory->create('payum_gateway_config');
+        $form = $this->formFactory->create(GatewayConfigType::class);
 
         $this->assertInstanceOf('Symfony\Component\Form\Form', $form);
         $this->assertInstanceOf('Symfony\Component\Form\FormView', $form->createView());
@@ -57,7 +57,7 @@ class GatewayConfigTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAddDefaultFieldsIfFactoryNameChosen()
     {
-        $form = $this->formFactory->create('payum_gateway_config');
+        $form = $this->formFactory->create(GatewayConfigType::class);
 
         $this->assertTrue($form->has('gatewayName'));
         $this->assertTrue($form->has('factoryName'));
@@ -83,7 +83,7 @@ class GatewayConfigTypeTest extends \PHPUnit_Framework_TestCase
             ))
         ;
 
-        $form = $this->formFactory->create('payum_gateway_config');
+        $form = $this->formFactory->create(GatewayConfigType::class);
 
         $form->submit(array(
             'gatewayName' => 'foo',
@@ -121,7 +121,7 @@ class GatewayConfigTypeTest extends \PHPUnit_Framework_TestCase
             ))
         ;
 
-        $form = $this->formFactory->create('payum_gateway_config');
+        $form = $this->formFactory->create(GatewayConfigType::class);
 
         $form->submit(array(
             'gatewayName' => 'foo',
@@ -165,7 +165,7 @@ class GatewayConfigTypeTest extends \PHPUnit_Framework_TestCase
             ))
         ;
 
-        $form = $this->formFactory->create('payum_gateway_config');
+        $form = $this->formFactory->create(GatewayConfigType::class);
 
         $form->submit(array(
             'gatewayName' => 'foo',
@@ -217,7 +217,7 @@ class GatewayConfigTypeTest extends \PHPUnit_Framework_TestCase
             'sandbox' => false,
         ));
 
-        $form = $this->formFactory->create('payum_gateway_config', $gatewayConfig);
+        $form = $this->formFactory->create(GatewayConfigType::class, $gatewayConfig);
 
 
         $this->assertTrue($form->has('config'));

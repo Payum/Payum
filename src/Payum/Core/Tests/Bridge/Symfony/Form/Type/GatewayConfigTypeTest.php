@@ -39,23 +39,13 @@ class GatewayConfigTypeTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldReturnExpectedName()
-    {
-        $type = new GatewayConfigType($this->getMock('Payum\Core\Registry\GatewayFactoryRegistryInterface'));
-
-        $this->assertEquals('payum_gateway_config', $type->getName());
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowResolveOptions()
     {
         $type = new GatewayConfigType($this->getMock('Payum\Core\Registry\GatewayFactoryRegistryInterface'));
 
         $resolver = new OptionsResolver();
 
-        $type->setDefaultOptions($resolver);
+        $type->configureOptions($resolver);
 
         $options = $resolver->resolve();
 

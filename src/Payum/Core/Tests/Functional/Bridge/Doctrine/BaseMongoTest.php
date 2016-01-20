@@ -22,6 +22,11 @@ abstract class BaseMongoTest extends \PHPUnit_Framework_TestCase
     {
         $this->skipTestsIfPhp7();
 
+
+        if (false == (class_exists(\MongoId::class) && class_exists(Connection::class))) {
+            $this->markTestSkipped('Either mongo extension or\and doctrine\mongo-odm are not installed.');
+        }
+
         Type::hasType('object') ?
             Type::overrideType('object', 'Payum\Core\Bridge\Doctrine\Types\ObjectType') :
             Type::addType('object', 'Payum\Core\Bridge\Doctrine\Types\ObjectType')

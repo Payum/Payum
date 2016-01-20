@@ -39,23 +39,13 @@ class CreditCardTypeTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldReturnExpectedName()
-    {
-        $type = new CreditCardType();
-
-        $this->assertEquals('payum_credit_card', $type->getName());
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowResolveOptions()
     {
         $type = new CreditCardType();
 
         $resolver = new OptionsResolver();
 
-        $type->setDefaultOptions($resolver);
+        $type->configureOptions($resolver);
 
         $options = $resolver->resolve();
 
