@@ -24,7 +24,7 @@ class CreditCardType extends AbstractType
                 CreditCardExpirationDateType::class,
                 array(
                     'input' => 'datetime',
-                    'widget' => ChoiceType::class,
+                    'widget' =>'choice',
                     'label' => 'form.credit_card.expire_at',
                 )
             );
