@@ -40,7 +40,7 @@
     "target-dir": "Payum/Offline",
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0-dev"
+            "dev-master": "1.2-dev"
         }
     }
 }
