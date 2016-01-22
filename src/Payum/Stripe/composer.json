@@ -21,7 +21,7 @@
     ],
     "require": {
         "payum/core": "~1.0",
-        "stripe/stripe-php": "~1.0"
+        "stripe/stripe-php": "~2.0|~3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",

@@ -63,7 +63,7 @@
         "paypal/rest-api-sdk-php" : "0.5.*",
         "klarna/checkout": "~1|~2.0",
         "fp/klarna-invoice": "0.1.*",
-        "stripe/stripe-php": "~1.0",
+        "stripe/stripe-php": "~2.0|~3.0",
         "ext-soap": "*"
     },
     "replace": {
@@ -95,7 +95,7 @@
         "paypal/rest-api-sdk-php" : "0.5.* If you want to use PayPal REST API install paypal/rest-api-sdk-php:0.5.* library",
         "klarna/checkout": "~1.0|~2.0 If you want to use Klarna Checkout install klarna/checkout:~1|~2.0 library",
         "fp/klarna-invoice": "0.1.* If you want to use Klarna Invoice install fp/klarna-invoice:0.1.* library",
-        "stripe/stripe-php": "~1.0 If you want to use Stripe install stripe/stripe-php:~1.0 library",
+        "stripe/stripe-php": "~2.0|~3.0 If you want to use Stripe install stripe/stripe-php:~2.0|~3.0 library",
         "ext-soap": "* If you want to use Payex extension you have to install soap extension"
     },
     "config": {

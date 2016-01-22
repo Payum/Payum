@@ -9,6 +9,10 @@ use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateCharge;
 use Payum\Stripe\Request\Api\ObtainToken;
+use Stripe\Customer;
+use Stripe\Error;
+use Stripe\Stripe;
+
 
 class CreateCustomerAction extends GatewayAwareAction implements ApiAwareInterface
 {
@@ -46,12 +50,12 @@ class CreateCustomerAction extends GatewayAwareAction implements ApiAwareInterfa
         }
 
         try {
-            \Stripe::setApiKey($this->keys->getSecretKey());
+            Stripe::setApiKey($this->keys->getSecretKey());
 
-            $charge = \Stripe_Customer::create($model->toUnsafeArray());
+            $charge = Customer::create($model->toUnsafeArray());
 
             $model->replace($charge->__toArray(true));
-        } catch (\Stripe_CardError $e) {
+        } catch (Error\Card $e) {
             $model->replace($e->getJsonBody());
         }
     }
