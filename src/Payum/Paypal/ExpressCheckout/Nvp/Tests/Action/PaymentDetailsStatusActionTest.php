@@ -407,4 +407,22 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($request->isUnknown());
     }
+
+
+    /**
+     * @test
+     */
+    public function shouldMarkCanceledIfPaymentIsCancelledByUser()
+    {
+        $action = new PaymentDetailsStatusAction();
+
+        $request = new GetHumanStatus(array(
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
+            'CANCELLED' => true,
+        ));
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isCanceled());
+    }
 }
