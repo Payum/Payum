@@ -2,6 +2,7 @@
 namespace Payum\Core\Bridge\Symfony\Action;
 
 use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Bridge\Symfony\Form\Type\CreditCardType;
 use Payum\Core\Bridge\Symfony\Reply\HttpResponse;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -104,6 +105,6 @@ class ObtainCreditCardAction extends GatewayAwareAction
      */
     protected function createCreditCardForm()
     {
-        return $this->formFactory->create('payum_credit_card');
+        return $this->formFactory->create(CreditCardType::class);
     }
 }

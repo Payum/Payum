@@ -2,6 +2,7 @@
 namespace Payum\Core\Tests\Bridge\Symfony\Action;
 
 use Payum\Core\Bridge\Symfony\Action\ObtainCreditCardAction;
+use Payum\Core\Bridge\Symfony\Form\Type\CreditCardType;
 use Payum\Core\Bridge\Symfony\Reply\HttpResponse;
 use Payum\Core\Model\CreditCard;
 use Payum\Core\GatewayInterface;
@@ -112,7 +113,7 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
         $formFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->with('payum_credit_card')
+            ->with(CreditCardType::class)
             ->will($this->returnValue($formMock))
         ;
 
@@ -199,7 +200,7 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
         $formFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->with('payum_credit_card')
+            ->with(CreditCardType::class)
             ->will($this->returnValue($formMock))
         ;
 
@@ -279,7 +280,7 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
         $formFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->with('payum_credit_card')
+            ->with(CreditCardType::class)
             ->will($this->returnValue($formMock))
         ;
 
@@ -338,7 +339,7 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
         $formFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->with('payum_credit_card')
+            ->with(CreditCardType::class)
             ->will($this->returnValue($formMock))
         ;
 
