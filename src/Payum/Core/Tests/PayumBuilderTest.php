@@ -5,6 +5,7 @@ use Omnipay\Dummy\Gateway as OmnipayGateway;
 use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
 use Payum\Be2Bill\Be2BillDirectGatewayFactory;
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\Extension\StorageExtension;
@@ -368,11 +369,8 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Gateway config must have factory key and it must not be empty.
      */
-    public function throwIfTryToAddGatewayConfigWithoutFactoryKeySet()
+    public function shouldUseCoreGatewayFactoryIfFactoryNotSetExplisitly()
     {
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
@@ -380,6 +378,26 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
             ])
             ->getPayum()
         ;
+
+        $this->assertInstanceOf(Gateway::class, $payum->getGateway('a_gateway'));
+        $this->assertAttributeCount(6, 'actions', $payum->getGateway('a_gateway'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAddCustomActionToGatewayCreatedByCoreFactory()
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGateway('a_gateway', [
+                'payum.action.foo' => $this->getMock(ActionInterface::class),
+            ])
+            ->getPayum()
+        ;
+
+        $this->assertInstanceOf(Gateway::class, $payum->getGateway('a_gateway'));
+        $this->assertAttributeCount(7, 'actions', $payum->getGateway('a_gateway'));
     }
 
     /**
