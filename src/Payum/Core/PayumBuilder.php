@@ -158,10 +158,6 @@ class PayumBuilder
         if ($gateway instanceof GatewayInterface) {
             $this->gateways[$name] = $gateway;
         } elseif (is_array($gateway)) {
-            if (empty($gateway['factory'])) {
-                throw new InvalidArgumentException('Gateway config must have factory key and it must not be empty.');
-            }
-
             $this->gatewayConfigs[$name] = $gateway;
         } else {
             throw new \LogicException('Gateway argument must be either instance of GatewayInterface or a config array');
@@ -412,15 +408,16 @@ class PayumBuilder
         if ($this->gatewayConfigs) {
             $gateways = $this->gateways;
             foreach ($this->gatewayConfigs as $name => $gatewayConfig) {
-                $gatewayFactory = $registry->getGatewayFactory($gatewayConfig['factory']);
+                $gatewayFactory = isset($gatewayConfig['factory']) ?
+                    $registry->getGatewayFactory($gatewayConfig['factory']) :
+                    $coreGatewayFactory
+                ;
                 unset($gatewayConfig['factory']);
 
                 $gateways[$name] = $gatewayFactory->create($gatewayConfig);
             }
 
             $registry = $this->buildRegistry($gateways, $storages, $gatewayFactories);
-
-
         }
 
         return new Payum($registry, $httpRequestVerifier, $genericTokenFactory, $tokenStorage);
