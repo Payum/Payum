@@ -9,7 +9,6 @@ use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
-use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 
 class CoreGatewayFactory implements GatewayFactoryInterface
