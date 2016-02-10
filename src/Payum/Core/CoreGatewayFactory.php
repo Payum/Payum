@@ -19,11 +19,17 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     protected $defaultConfig;
 
     /**
+     * @var \Twig_Loader_Filesystem
+     */
+    protected $twigLoader;
+
+    /**
      * @param array $defaultConfig
      */
     public function __construct(array $defaultConfig = array())
     {
         $this->defaultConfig = $defaultConfig;
+        $this->twigLoader = new \Twig_Loader_Filesystem();
     }
 
     /**
@@ -52,19 +58,31 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->defaultConfig);
+
+        /** @var \Twig_Environment|null $twig */
+        $twig = $config['twig.env'];
+        $config['twig.env'] = null;
+
         $config->defaults(array(
             'payum.template.layout' => '@PayumCore/layout.html.twig',
 
             'payum.http_client' => HttpClientFactory::create(),
             'guzzle.client' => HttpClientFactory::createGuzzle(),
-
-            'twig.env' => function(ArrayObject $config) {
-                $loader = new \Twig_Loader_Filesystem();
+            'twig.loader' => function(ArrayObject $config) {
                 foreach ($config['payum.paths'] as $namespace => $path) {
-                    $loader->addPath($path, $namespace);
+                    $this->twigLoader->addPath($path, $namespace);
                 }
 
-                return new \Twig_Environment($loader);
+                return $this->twigLoader;
+            },
+            'twig.env' => function(ArrayObject $config) use ($twig) {
+                if ($twig) {
+                    $twig->setLoader(new \Twig_Loader_Chain([$twig->getLoader(), $config['twig.loader']]));
+
+                    return $twig;
+                } else {
+                    return new \Twig_Environment($config['twig.loader']);
+                }
             },
             'payum.action.get_http_request' => new GetHttpRequestAction(),
             'payum.action.capture_payment' => new CapturePaymentAction(),
@@ -107,6 +125,14 @@ class CoreGatewayFactory implements GatewayFactoryInterface
      */
     protected function buildClosures(ArrayObject $config)
     {
+        // with higher priority
+        foreach (['guzzle.client', 'payum.http_client', 'twig.loader', 'payum.paths', 'twig.env'] as $name) {
+            $value = $config[$name];
+            if (is_callable($value)) {
+                $config[$name] = call_user_func($value, $config);
+            }
+        }
+
         foreach ($config as $name => $value) {
             if (is_callable($value)) {
                 $config[$name] = call_user_func($value, $config);
