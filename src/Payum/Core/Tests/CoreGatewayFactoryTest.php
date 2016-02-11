@@ -169,11 +169,7 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $config);
         $this->assertNotEmpty($config);
 
-        $this->assertInstanceOf(\Closure::class, $config['twig.loader']);
         $this->assertInstanceOf(\Closure::class, $config['twig.env']);
-
-        $config['twig.loader'] = $loader  = call_user_func($config['twig.loader'], ArrayObject::ensureArrayObject($config));
-        $this->assertInstanceOf(\Twig_Loader_Filesystem::class, $loader);
 
         $twig = call_user_func($config['twig.env'], ArrayObject::ensureArrayObject($config));
 
@@ -196,8 +192,6 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $config);
         $this->assertNotEmpty($config);
 
-        $this->assertInstanceOf(\Closure::class, $config['twig.loader']);
-        $config['twig.loader'] = call_user_func($config['twig.loader'], ArrayObject::ensureArrayObject($config));
         $config['twig.env'] = call_user_func($config['twig.env'], ArrayObject::ensureArrayObject($config));
 
         $this->assertInstanceOf(\Closure::class, $config['payum.action.render_template']);

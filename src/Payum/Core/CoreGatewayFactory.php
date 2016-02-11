@@ -9,6 +9,7 @@ use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
+use Payum\Core\Bridge\Twig\TwigUtil;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 
 class CoreGatewayFactory implements GatewayFactoryInterface
@@ -19,17 +20,11 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     protected $defaultConfig;
 
     /**
-     * @var \Twig_Loader_Filesystem
-     */
-    protected $twigLoader;
-
-    /**
      * @param array $defaultConfig
      */
     public function __construct(array $defaultConfig = array())
     {
         $this->defaultConfig = $defaultConfig;
-        $this->twigLoader = new \Twig_Loader_Filesystem();
     }
 
     /**
@@ -68,21 +63,11 @@ class CoreGatewayFactory implements GatewayFactoryInterface
 
             'payum.http_client' => HttpClientFactory::create(),
             'guzzle.client' => HttpClientFactory::createGuzzle(),
-            'twig.loader' => function(ArrayObject $config) {
-                foreach ($config['payum.paths'] as $namespace => $path) {
-                    $this->twigLoader->addPath($path, $namespace);
-                }
-
-                return $this->twigLoader;
-            },
             'twig.env' => function(ArrayObject $config) use ($twig) {
-                if ($twig) {
-                    $twig->setLoader(new \Twig_Loader_Chain([$twig->getLoader(), $config['twig.loader']]));
+                $twig = $twig ?: new \Twig_Environment(new \Twig_Loader_Chain());
+                TwigUtil::registerPaths($twig, $config['payum.paths']);
 
-                    return $twig;
-                } else {
-                    return new \Twig_Environment($config['twig.loader']);
-                }
+                return $twig;
             },
             'payum.action.get_http_request' => new GetHttpRequestAction(),
             'payum.action.capture_payment' => new CapturePaymentAction(),
@@ -126,7 +111,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     protected function buildClosures(ArrayObject $config)
     {
         // with higher priority
-        foreach (['guzzle.client', 'payum.http_client', 'twig.loader', 'payum.paths', 'twig.env'] as $name) {
+        foreach (['guzzle.client', 'payum.http_client', 'payum.paths', 'twig.env'] as $name) {
             $value = $config[$name];
             if (is_callable($value)) {
                 $config[$name] = call_user_func($value, $config);
