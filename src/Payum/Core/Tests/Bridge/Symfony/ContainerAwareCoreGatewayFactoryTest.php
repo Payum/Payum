@@ -119,5 +119,15 @@ class ContainerAwareCoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($called);
     }
+
+    public function testShouldSkipEmptyStringValue()
+    {
+        $factory = new ContainerAwareCoreGatewayFactory();
+        $factory->setContainer(new Container());
+
+        $factory->create([
+            'foo' => '',
+        ]);
+    }
     
 }
