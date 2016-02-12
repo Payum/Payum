@@ -158,7 +158,8 @@ class PayumBuilder
         if ($gateway instanceof GatewayInterface) {
             $this->gateways[$name] = $gateway;
         } elseif (is_array($gateway)) {
-            $this->gatewayConfigs[$name] = $gateway;
+            $currentConfig = isset($this->gatewayConfigs[$name]) ? $this->gatewayConfigs[$name] : [];
+            $this->gatewayConfigs[$name] = array_replace_recursive($currentConfig, $gateway);
         } else {
             throw new \LogicException('Gateway argument must be either instance of GatewayInterface or a config array');
         }
@@ -194,9 +195,8 @@ class PayumBuilder
      */
     public function addGatewayFactoryConfig($name, array $config)
     {
-        // TODO add checks
-
-        $this->gatewayFactoryConfigs[$name] = $config;
+        $currentConfig = isset($this->gatewayFactoryConfigs[$name]) ? $this->gatewayFactoryConfigs[$name] : [];
+        $this->gatewayFactoryConfigs[$name] = array_replace_recursive($currentConfig, $config);
 
         return $this;
     }
@@ -325,7 +325,7 @@ class PayumBuilder
     public function addCoreGatewayFactoryConfig(array $config)
     {
         $currentConfig = $this->coreGatewayFactoryConfig ?: [];
-        $this->coreGatewayFactoryConfig = array_replace($currentConfig, $config);
+        $this->coreGatewayFactoryConfig = array_replace_recursive($currentConfig, $config);
 
         return $this;
     }
@@ -391,7 +391,7 @@ class PayumBuilder
             $httpClient = HttpClientFactory::create();
         }
 
-        $coreGatewayFactory = $this->buildCoreGatewayFactory(array_replace([
+        $coreGatewayFactory = $this->buildCoreGatewayFactory(array_replace_recursive([
             'payum.extension.token_factory' => new GenericTokenFactoryExtension($genericTokenFactory),
             'payum.security.token_storage' => $tokenStorage,
             'payum.http_client' => $httpClient,

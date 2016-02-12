@@ -781,6 +781,36 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
+     */
+    public function shouldAllowAddGatewayConfigSeveralTimes()
+    {
+        $payumBuilder = new PayumBuilder();
+
+        $payumBuilder->addGateway('foo', ['foo' => 'fooVal', 'bar' => 'barVal']);
+        $this->assertAttributeSame(['foo' => ['foo' => 'fooVal', 'bar' => 'barVal']], 'gatewayConfigs', $payumBuilder);
+
+        $payumBuilder->addGateway('foo', ['baz' => 'bazVal', 'foo' => 'fooNewVal']);
+
+        $this->assertAttributeSame(['foo' => ['foo' => 'fooNewVal', 'bar' => 'barVal', 'baz' => 'bazVal']], 'gatewayConfigs', $payumBuilder);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowAddGatewayFactoryConfigSeveralTimes()
+    {
+        $payumBuilder = new PayumBuilder();
+
+        $payumBuilder->addGatewayFactoryConfig('foo', ['foo' => 'fooVal', 'bar' => 'barVal']);
+        $this->assertAttributeSame(['foo' => ['foo' => 'fooVal', 'bar' => 'barVal']], 'gatewayFactoryConfigs', $payumBuilder);
+
+        $payumBuilder->addGatewayFactoryConfig('foo', ['baz' => 'bazVal', 'foo' => 'fooNewVal']);
+
+        $this->assertAttributeSame(['foo' => ['foo' => 'fooNewVal', 'bar' => 'barVal', 'baz' => 'bazVal']], 'gatewayFactoryConfigs', $payumBuilder);
+    }
+
+    /**
      * @return \PHPUnit_Framework_MockObject_MockObject|RegistryInterface
      */
     protected function createRegistryMock()
