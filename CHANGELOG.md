@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.2.0 (2016-02-12)
+
+* Supports Symfony 3.x
+* [symfony] Add GatewayFactoryBuilder
+* [symfony] Add CoreGatewayFactoryBuilder
+* [symfony] Add TokenFactoryBuilder
+* [symfony] Add HttpRequestVerifierBuilder
+* [symfony] Add ContainerAwareRegistry
+* [symfony] Add ContainerAwareCoreGatewayFactory
+* [twig] Improve twig loader injection. Inject it to custom twig instance. Do not inject the loader several times.
+* [builder] Allow to add configs several times and merge them, including core gateway, gateway, factory configs.
+* [builder] Allow create a gateway without explicitly setting a factory. The core one is used.
+* [http] Remove encription curl options, use default ones.
+* [paypal-ec] Fixed paypal status does not detect cancelled payments
+* [stripe] Updates stripe api to 2.0 - 3.x version.
+
 ## 1.1.4 (2016-01-14)
 
 * [offline] add canceled status
