@@ -18,7 +18,7 @@ class ContainerAwareCoreGatewayFactory extends CoreGatewayFactory implements Con
     protected function buildClosures(ArrayObject $config)
     {
         foreach ($config as $name => $value) {
-            if (false == is_string($value)) {
+            if (false == $value || false == is_string($value)) {
                 continue;
             }
 
