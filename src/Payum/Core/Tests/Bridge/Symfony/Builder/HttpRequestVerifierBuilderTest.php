@@ -24,4 +24,16 @@ class HttpRequestVerifierBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(HttpRequestVerifier::class, $verifier);
         $this->assertAttributeSame($tokenStorage, 'tokenStorage', $verifier);
     }
+
+    public function testAllowUseBuilderAsAsFunction()
+    {
+        /** @var StorageInterface $tokenStorage */
+        $tokenStorage = $this->getMock(StorageInterface::class);
+
+        $builder = new HttpRequestVerifierBuilder();
+
+        $verifier = $builder($tokenStorage);
+
+        $this->assertInstanceOf(HttpRequestVerifier::class, $verifier);
+    }
 }

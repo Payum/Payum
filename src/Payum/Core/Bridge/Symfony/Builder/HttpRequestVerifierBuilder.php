@@ -16,4 +16,9 @@ class HttpRequestVerifierBuilder
     {
         return new HttpRequestVerifier($tokenStorage);
     }
+
+    public function __invoke()
+    {
+        return call_user_func_array([$this, 'build'], func_get_args());
+    }
 }

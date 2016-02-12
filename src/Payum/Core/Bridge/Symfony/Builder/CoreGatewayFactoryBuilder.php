@@ -22,4 +22,9 @@ class CoreGatewayFactoryBuilder implements ContainerAwareInterface
 
         return $coreGatewayFactory;
     }
+
+    public function __invoke()
+    {
+        return call_user_func_array([$this, 'build'], func_get_args());
+    }
 }

@@ -32,4 +32,9 @@ class TokenFactoryBuilder
     {
         return new TokenFactory($tokenStorage, $storageRegistry, $this->urlGenerator);
     }
+
+    public function __invoke()
+    {
+        return call_user_func_array([$this, 'build'], func_get_args());
+    }
 }

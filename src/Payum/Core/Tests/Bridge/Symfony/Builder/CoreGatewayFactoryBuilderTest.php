@@ -34,4 +34,17 @@ class CoreGatewayFactoryBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame($container, 'container', $gatewayFactory);
         $this->assertAttributeSame($defaultConfig, 'defaultConfig', $gatewayFactory);
     }
+
+    public function testAllowUseBuilderAsAsFunction()
+    {
+        $container = new Container();
+        $defaultConfig = ['foo' => 'fooVal'];
+
+        $builder = new CoreGatewayFactoryBuilder();
+        $builder->setContainer($container);
+
+        $gatewayFactory = $builder($defaultConfig);
+
+        $this->assertInstanceOf(ContainerAwareCoreGatewayFactory::class, $gatewayFactory);
+    }
 }

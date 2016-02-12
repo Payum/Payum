@@ -37,4 +37,22 @@ class TokenFactoryBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame($storageRegistry, 'storageRegistry', $tokenFactory);
         $this->assertAttributeSame($urlGenerator, 'urlGenerator', $tokenFactory);
     }
+
+    public function testAllowUseBuilderAsAsFunction()
+    {
+        /** @var StorageInterface $tokenStorage */
+        $tokenStorage = $this->getMock(StorageInterface::class);
+
+        /** @var StorageRegistryInterface $storageRegistry */
+        $storageRegistry = $this->getMock(StorageRegistryInterface::class);
+
+        /** @var UrlGeneratorInterface $urlGenerator */
+        $urlGenerator = $this->getMock(UrlGeneratorInterface::class);
+
+        $builder = new TokenFactoryBuilder($urlGenerator);
+
+        $tokenFactory = $builder($tokenStorage, $storageRegistry);
+
+        $this->assertInstanceOf(TokenFactory::class, $tokenFactory);
+    }
 }
