@@ -52,7 +52,7 @@ $paypal->execute(new Capture($model));
 
 ## Resources
 
-* [Documentation](http://payum.org/doc)
+* [Documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/index.md)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)

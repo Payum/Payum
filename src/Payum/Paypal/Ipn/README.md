@@ -5,8 +5,7 @@ It is the client side for [PayPal Instant Payment Notifications](https://www.x.c
 
 ## Resources
 
-* [Examples](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/examples)
-* [Documentation](http://payum.org/doc#PaypalIpn)
+* [Documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/index.md)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)

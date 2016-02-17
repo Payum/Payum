@@ -7,8 +7,7 @@ The Payum extension. It provides [Be2Bill](http://www.be2bill.com/) payment inte
 
 ## Resources
 
-* [Examples](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/examples)
-* [Documentation](http://payum.org/doc#Be2Bill)
+* [Documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/index.md)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)

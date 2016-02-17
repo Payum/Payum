@@ -7,8 +7,7 @@ The Payum extension. It provides [Klarna Checkout](https://klarna.com/sv/salj-me
 
 ## Resources
 
-* [Examples](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/examples)
-* [Documentation](http://payum.org/doc#KlarnaCheckout)
+* [Documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/index.md)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)
