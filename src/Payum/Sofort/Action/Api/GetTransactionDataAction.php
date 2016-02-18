@@ -20,13 +20,11 @@ class GetTransactionDataAction extends  BaseApiAwareAction
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (!isset($details['transaction_id'])) {
+        if (false == $details['transaction_id']) {
             throw new LogicException('The parameter "transaction_id" must be set. Have you run CreateTransactionAction?');
         }
 
-        $details->replace(
-            $this->api->getTransactionData($details['transaction_id'])
-        );
+        $details->replace($this->api->getTransactionData($details['transaction_id']));
     }
 
     /**

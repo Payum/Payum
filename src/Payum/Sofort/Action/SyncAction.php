@@ -19,13 +19,11 @@ class SyncAction extends GatewayAwareAction
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $model = ArrayObject::ensureArrayObject($request->getModel());
+        $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (!isset($model['transaction_id'])) {
-            return;
+        if ($details['transaction_id']) {
+            $this->gateway->execute(new GetTransactionData($details));
         }
-
-        $this->gateway->execute(new GetTransactionData($model));
     }
 
     /**

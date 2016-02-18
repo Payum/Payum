@@ -21,26 +21,16 @@ class CreateTransactionAction extends BaseApiAwareAction
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (null === $details['amount']) {
-            throw new LogicException('The parameter "Amount" must be set.');
+        if ($details['transaction_id']) {
+            throw new LogicException(sprintf('The transaction has already been created for this payment. transaction_id: %s', $details['transaction_id']));
         }
 
-        if (null === $details['currency_code']) {
-            throw new LogicException('The parameter "currency_code" must be set.');
-        }
+        $details->validateNotEmpty(['amount', 'currency_code', 'reason', 'success_url', 'notification_url']);
 
-        if (null === $details['reason']) {
-            throw new LogicException('The parameter "reason" must be set.');
-        }
+        $details->replace($this->api->createTransaction((array) $details));
 
-        $details->replace(
-            $this->api->createTransaction((array) $details)
-        );
-
-        if (isset($details['payment_url'])) {
-            throw new HttpRedirect(
-                $details['payment_url']
-            );
+        if ($details['payment_url']) {
+            throw new HttpRedirect($details['payment_url']);
         }
     }
 

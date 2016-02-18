@@ -38,12 +38,15 @@ class CaptureAction extends GatewayAwareAction implements GenericTokenFactoryAwa
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (empty($details['transaction_id'])) {
+        if (false == $details['transaction_id']) {
             if (false == $details['success_url'] && $request->getToken()) {
-                $details['success_url'] = $request->getToken()->getAfterUrl();
+                $details['success_url'] = $request->getToken()->getTargetUrl();
+            }
+            if (false == $details['abort_url'] && $request->getToken()) {
+                $details['abort_url'] = $request->getToken()->getTargetUrl();
             }
 
-            if (empty($details['notification_url']) && $request->getToken() && $this->tokenFactory) {
+            if (false == $details['notification_url'] && $request->getToken() && $this->tokenFactory) {
                 $notifyToken = $this->tokenFactory->createNotifyToken(
                     $request->getToken()->getGatewayName(),
                     $request->getToken()->getDetails()
@@ -52,9 +55,7 @@ class CaptureAction extends GatewayAwareAction implements GenericTokenFactoryAwa
                 $details['notification_url'] = $notifyToken->getTargetUrl();
             }
 
-            if ($details['amount'] > 0) {
-                $this->gateway->execute(new CreateTransaction($details));
-            }
+            $this->gateway->execute(new CreateTransaction($details));
         }
 
         $this->gateway->execute(new Sync($details));

@@ -22,10 +22,9 @@ class Api
     const STATUS_UNTRACEABLE = 'untraceable';
     const SUB_SOFORT_NEEDED = 'sofort_bank_account_needed';
 
-    protected $options = array(
+    protected $options = [
         'config_key' => null,
-        'abort_url' => null,
-    );
+    ];
 
     /**
      * @param array $options
@@ -42,41 +41,34 @@ class Api
      */
     public function createTransaction(array $fields)
     {
+
+        $fields = (array_replace([
+            'success_url' => null,
+            'success_link_redirect' => true,
+            'abort_url' => null,
+            'notification_url' => null,
+            'notify_on' => implode(',', [self::STATUS_PENDING, self::STATUS_LOSS, self::STATUS_RECEIVED, self::STATUS_REFUNDED, self::STATUS_UNTRACEABLE]),
+            'reason' => '',
+            'reason_2' => '',
+            'product_code' => null,
+        ], $fields));
+
         $sofort = new Sofortueberweisung($this->options['config_key']);
         $sofort->setAmount($fields['amount']);
         $sofort->setCurrencyCode($fields['currency_code']);
-        $sofort->setReason(
-            $fields['reason'],
-            isset($fields['reason_2']) ? $fields['reason_2'] : ''
-        );
+        $sofort->setReason($fields['reason'], $fields['reason_2'], $fields['product_code']);
 
-        $sofort->setSuccessUrl($fields['success_url'], true);
-        $sofort->setAbortUrl(isset($fields['abort_url']) ? $fields['abort_url'] : $this->options['abort_url']);
-
-        $sofort->setNotificationUrl(
-            $fields['notification_url'],
-            implode(
-                ',',
-                array(
-                    self::STATUS_PENDING,
-                    self::STATUS_LOSS,
-                    self::STATUS_RECEIVED,
-                    self::STATUS_REFUNDED,
-                    self::STATUS_UNTRACEABLE,
-                    )
-            )
-        );
+        $sofort->setSuccessUrl($fields['success_url'], $fields['success_link_redirect']);
+        $sofort->setAbortUrl($fields['abort_url']);
+        $sofort->setNotificationUrl($fields['notification_url'], $fields['notify_on']);
 
         $sofort->sendRequest();
 
-        if ($sofort->isError()) {
-            $fields['error'] = $sofort->getError();
-        } else {
-            $fields['transaction_id'] = $sofort->getTransactionId();
-            $fields['payment_url'] = $sofort->getPaymentUrl();
-        }
-
-        return $fields;
+        return array_filter([
+            'error' => $sofort->getError(),
+            'transaction_id' => $sofort->getTransactionId(),
+            'payment_url' => $sofort->getPaymentUrl(),
+        ]);
     }
 
     /**
