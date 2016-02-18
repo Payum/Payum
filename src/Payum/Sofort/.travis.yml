@@ -1,0 +1,37 @@
+language: php
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+matrix:
+  include:
+    - php: 5.5
+      env: SYMFONY_VERSION=2.7.*
+    - php: 5.6
+      env: SYMFONY_VERSION=2.7.*
+    - php: 5.6
+      env: SYMFONY_VERSION=2.8.*
+    - php: 7.0
+      env: SYMFONY_VERSION=2.8.*
+    - php: hhvm
+  allow_failures:
+    - php: hhvm
+
+services: mongodb
+
+before_install:
+    - composer self-update
+    - if [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]]; then INI_FILE=~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini; else INI_FILE=/etc/hhvm/php.ini; fi;
+    - if [[ "$TRAVIS_PHP_VERSION" = 5.* ]]; then echo "extension = mongo.so" >> $INI_FILE; fi;
+
+install:
+    - if [[ "$TRAVIS_PHP_VERSION" = 5.* ]]; then composer require "doctrine/mongodb:1.0.*@dev" "doctrine/mongodb-odm:1.0.*@dev" --no-interaction --no-update; fi;
+    - composer require symfony/symfony:${SYMFONY_VERSION} --no-update
+    - composer install --prefer-source
+
+notifications:
+  email:
+    - payumsupport@forma-pro.com
