@@ -32,6 +32,7 @@ use Payum\Payex\PayexGatewayFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory;
 use Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory;
 use Payum\Paypal\Rest\PaypalRestGatewayFactory;
+use Payum\Sofort\SofortGatewayFactory;
 use Payum\Stripe\StripeCheckoutGatewayFactory;
 use Payum\Stripe\StripeJsGatewayFactory;
 
@@ -557,6 +558,7 @@ class PayumBuilder
             'payex' => PayexGatewayFactory::class,
             'stripe_checkout' => StripeCheckoutGatewayFactory::class,
             'stripe_js' => StripeJsGatewayFactory::class,
+            'sofort' => SofortGatewayFactory::class,
         ];
 
         $gatewayFactories = [];
