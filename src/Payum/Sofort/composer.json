@@ -1,0 +1,46 @@
+{
+  "name": "payum/sofort",
+  "type": "library",
+  "description": "The Payum extension. It provides Sofort payment integration.",
+  "keywords": ["payment", "sofort", "sofortueberweisung"],
+  "homepage": "http://payum.org",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Toni Rudolf",
+      "email": "toni.rudolf@weekend4two.com"
+    },
+    {
+      "name": "Kotlyar Maksim",
+      "email": "kotlyar.maksim@gmail.com"
+    },
+    {
+      "name":     "Payum project",
+      "homepage": "http://payum.org/"
+    },
+    {
+      "name":     "Community contributions",
+      "homepage": "https://github.com/Payum/Offline/contributors"
+    }
+  ],
+  "require": {
+    "payum/core": "~1.0",
+    "sofort/sofortlib-php": "^3.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.0",
+    "symfony/phpunit-bridge": "~2.7"
+  },
+  "config": {
+    "bin-dir": "bin"
+  },
+  "autoload": {
+    "psr-0": { "Payum\\Sofort": "" }
+  },
+  "target-dir": "Payum/Sofort",
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0-dev"
+    }
+  }
+}
