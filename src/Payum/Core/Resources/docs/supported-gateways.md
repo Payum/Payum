@@ -14,6 +14,7 @@
 * [Offline](https://github.com/Payum/Offline/blob/master/Resources/docs/index.md)
 * [Klarna Checkout](https://github.com/Payum/KlarnaCheckout/blob/master/Resources/docs/get-it-started.md)
 * [Klarna Invoice](https://github.com/Payum/KlarnaInvoice/blob/master/Resources/docs/get-it-started.md)
+* [Sofort](https://github.com/Payum/Sofort/blob/master/Resources/docs/get-it-started.md)
 
 ## Community
 
@@ -24,7 +25,8 @@
 * [locastic/TcomPayWayPayum](https://github.com/locastic/TcomPayWayPayum)
 * [LedjIn/Sagepay](https://github.com/LedjIn/Sagepay)
 * [crevillo/payum-redsys](https://github.com/crevillo/payum-redsys)
-* [wiseape/payum-sofortuberweisung](https://github.com/wiseape/payum-sofortuberweisung)
+* [invit/payum-sofortueberweisung (abandoned)](https://github.com/invit/payum-sofortueberweisung)
+* [wiseape/payum-sofortuberweisung (abandoned)](https://github.com/wiseape/payum-sofortuberweisung)
 * [wiseape/payum-paymill](https://github.com/wiseape/payum-paymill)
 * [JakubKohout/BraintreePayum](https://github.com/JakubKohout/BraintreePayum)
 * [peterfox/Payum-Bitpay](https://github.com/peterfox/Payum-Bitpay)
@@ -33,6 +35,18 @@
 * [fullpipe/payum-uniteller](https://github.com/fullpipe/payum-uniteller)
 * [fullpipe/payum-flexidengi](https://github.com/fullpipe/payum-flexidengi)
 * [paradigm/payum-trustly](https://github.com/Paradigmfi/PayumTrustly)
+* [ekyna/PayumSips](https://github.com/ekyna/PayumSips)
+* [accesto/PayumPayU](https://github.com/accesto/PayumPayU)
+* [pixers/payum-dotpay](https://github.com/pixers/payum-dotpay)
+* [khal3d/payum-cashnpay](https://github.com/khal3d/payum-cashnpay)
+* [NetTeam/payum-adyen](https://github.com/NetTeam/payum-adyen)
+* [NetTeam/payum-paymill](https://github.com/NetTeam/payum-paymill)
+* [fullpipe/payum-uniteller](https://github.com/fullpipe/payum-uniteller)
+* [fullpipe/payum-flexidengi](https://github.com/fullpipe/payum-flexidengi)
+* [BoShurik/payum-yandex-money](https://github.com/BoShurik/payum-yandex-money)
+* [sergeym/payum-pay-receipt](https://github.com/sergeym/payum-pay-receipt)
+* [remyma/payum-paybox](https://github.com/remyma/payum-paybox)
+* 
 
 ## Omnipay gateways.
 
