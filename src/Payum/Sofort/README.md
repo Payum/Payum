@@ -13,6 +13,13 @@ The Payum extension. It provides [Sofort](https://www.sofort.com/eng-INT/buyer/s
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)
 
+## Credits
+
+These guys did the initial version of the extension, which were used as a base for official one.
+
+* [Toni Rudolf](https://github.com/toooni)
+* [Ruben](https://github.com/kryptychon)
+
 ## License
 
 Sofort is released under the [MIT License](LICENSE).
