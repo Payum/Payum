@@ -28,7 +28,7 @@
         "ext-pdo_sqlite": "*",
         "doctrine/orm": "2.3",
         "phpunit/phpunit": "~4.0",
-        "symfony/phpunit-bridge": "~2.7"
+        "symfony/phpunit-bridge": "~2.8|~3.0"
     },
     "config": {
         "bin-dir": "bin"

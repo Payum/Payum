@@ -2,12 +2,14 @@
 namespace Payum\Stripe;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\GatewayFactory;
 use Payum\Stripe\Action\Api\CreateChargeAction;
 use Payum\Stripe\Action\Api\ObtainTokenAction;
 use Payum\Stripe\Action\CaptureAction;
 use Payum\Stripe\Action\ConvertPaymentAction;
 use Payum\Stripe\Action\StatusAction;
+use Stripe\Stripe;
 
 class StripeCheckoutGatewayFactory extends GatewayFactory
 {
@@ -16,8 +18,8 @@ class StripeCheckoutGatewayFactory extends GatewayFactory
      */
     protected function populateConfig(ArrayObject $config)
     {
-        if (!class_exists('\Stripe\Stripe')) {
-            throw new \LogicException('You must install "stripe/stripe-php:~2.0|~3.0" library.');
+        if (false == class_exists(Stripe::class)) {
+            throw new LogicException('You must install "stripe/stripe-php:~2.0|~3.0" library.');
         }
 
         $config->defaults(array(
