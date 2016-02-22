@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.2.1 (2016-02-22)
+
+* [doc] Update list of supported gateways
+* Add subtree split bin
+* Update deps of symfony phpunit bridge.
+* [sofort] Add sofort gateway
+* Add Gitter badge
+* [doc] Remove links to payum.org.
+* [doc] Create a main documentation landing page. prepare for payum.org shut down.
+
+
 ## 1.2.0 (2016-02-12)
 
 * Supports Symfony 3.x
