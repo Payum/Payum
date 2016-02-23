@@ -62,13 +62,13 @@ $details['purchase_currency'] = 'SEK';
 $details['locale'] = 'sv-se';
 $storage->update($details);
 
-$captureToken = $payum->getTokenFactory()->createCaptureToken('klarna', $details, 'done.php');
+$authorizeToken = $payum->getTokenFactory()->createAuthorizeToken('klarna', $details, 'done.php');
 $notifyToken = $payum->tokenFactory()->createNotifyToken('klarna', $details);
 
 $details['merchant'] = array(
     'terms_uri' => 'http://example.com/terms',
-    'checkout_uri' => $captureToken->getTargetUrl(),
-    'confirmation_uri' => $captureToken->getTargetUrl(),
+    'checkout_uri' => $authorizeToken->getTargetUrl(),
+    'confirmation_uri' => $authorizeToken->getTargetUrl(),
     'push_uri' => $notifyToken->getTargetUrl()
 );
 $details['cart'] = array(
@@ -93,7 +93,7 @@ $details['cart'] = array(
 );
 $storage->update($details);
 
-header("Location: ".$captureToken->getTargetUrl());
+header("Location: ".$authorizeToken->getTargetUrl());
 ```
 
 That's it. As you see we configured Klarna Checkout `config.php` and set details `prepare.php`.
