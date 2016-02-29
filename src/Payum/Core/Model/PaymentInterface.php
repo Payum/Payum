@@ -2,7 +2,7 @@
 namespace Payum\Core\Model;
 
 /**
- * @method array getDetails
+ * @method array getDetails()
  */
 interface PaymentInterface extends DetailsAggregateInterface, DetailsAwareInterface
 {

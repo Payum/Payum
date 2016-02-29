@@ -6,7 +6,7 @@ use Payum\Core\Model\DetailsAwareInterface;
 use Payum\Core\Storage\IdentityInterface;
 
 /**
- * @method IdentityInterface getDetails
+ * @method IdentityInterface getDetails()
  */
 interface TokenInterface extends DetailsAggregateInterface, DetailsAwareInterface
 {
