@@ -16,7 +16,7 @@ try {
     $gateway->execute(new Notify($token));
 
     if (false == isset($_REQUEST['noinvalidate'])) {
-        $payum->getRequestVerifier()->invalidate($token);
+        $payum->getHttpRequestVerifier()->invalidate($token);
     }
 
     if ($token->getAfterUrl()) {

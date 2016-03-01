@@ -14,14 +14,14 @@ use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
 
 include 'config.php';
 
-$token = $payum->getRequestVerifier()->verify($_REQUEST);
+$token = $payum->getHttpRequestVerifier()->verify($_REQUEST);
 $gateway = $payum->getGateway($token->getGatewayName());
 
 try {
     $gateway->execute(new Authorize($token));
 
     if (false == isset($_REQUEST['noinvalidate'])) {
-        $payum->getRequestVerifier()->invalidate($token);
+        $payum->getHttpRequestVerifier()->invalidate($token);
     }
 
     header("Location: ".$token->getAfterUrl());

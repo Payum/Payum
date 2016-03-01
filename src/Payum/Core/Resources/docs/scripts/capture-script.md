@@ -23,7 +23,7 @@ try {
     $gateway->execute(new Capture($token));
 
     if (false == isset($_REQUEST['noinvalidate'])) {
-        $payum->getRequestVerifier()->invalidate($token);
+        $payum->getHttpRequestVerifier()->invalidate($token);
     }
 
     header("Location: ".$token->getAfterUrl());

@@ -119,7 +119,7 @@ if ($reply = $gateway->execute(new Capture($token), true)) {
     throw new \LogicException('Unsupported reply', null, $reply);
 }
 
-$payum->getRequestVerifier()->invalidate($token);
+$payum->getHttpRequestVerifier()->invalidate($token);
 
 header("Location: ".$token->getAfterUrl());
 ```
@@ -140,11 +140,11 @@ use Payum\Core\Request\GetHumanStatus;
 
 include 'config.php';
 
-$token = $payum->getRequestVerifier()->verify($_REQUEST);
+$token = $payum->getHttpRequestVerifier()->verify($_REQUEST);
 $gateway = $payum->getGateway($token->getGatewayName());
 
 // you can invalidate the token. The url could not be requested any more.
-// $payum->getRequestVerifier()->invalidate($token);
+// $payum->getHttpRequestVerifier()->invalidate($token);
 
 // Once you have token you can get the model from the storage directly. 
 //$identity = $token->getDetails();

@@ -105,8 +105,8 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfile;
 
 include 'config.php';
 
-$token = $payum->getRequestVerifier()->verify($_REQUEST);
-$payum->getRequestVerifier()->invalidate($token);
+$token = $payum->getHttpRequestVerifier()->verify($_REQUEST);
+$payum->getHttpRequestVerifier()->invalidate($token);
 
 $gateway = $payum->getGateway($token->getGatewayName());
 
