@@ -35,7 +35,7 @@ try {
 
 You have to use this script if a gateway does not allows setting notification url per payment, like Be2Bill.
 
-Back to [scripts](https://github.com/Payum/Core/tree/master/Resources/docs/scripts/index.md).
-Back to [index](https://github.com/Payum/Core/tree/master/Resources/docs/index.md).
+Back to [scripts](index.md).
+Back to [index](../index.md).
 
 

@@ -87,5 +87,5 @@ $payum->getHttpRequestVerifier()->invalidate($token);
 
 _**Note**: We advice you to invalidate(remove) the token as soon as you do not need it._
 
-Back to [scripts](https://github.com/Payum/Core/tree/master/Resources/docs/scripts/index.md).
-Back to [index](https://github.com/Payum/Core/tree/master/Resources/docs/index.md).
+Back to [scripts](index.md).
+Back to [index](../index.md).

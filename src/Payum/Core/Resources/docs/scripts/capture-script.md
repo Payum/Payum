@@ -3,7 +3,7 @@
 This is the script which does all the job related to capturing payments. 
 It may show a credit card form, an iframe or redirect a user to gateway side.
 Each capture url is completely unique for each purchase, and once we done the url is invalidated and no more accessible.
-When the capture is done a user is redirected to after url, in our case it is [done script](https://github.com/Payum/Core/tree/master/Resources/docs/scripts/done-script.md).
+When the capture is done a user is redirected to after url, in our case it is [done script](done-script.md).
 
 ## Secured script.
 
@@ -59,5 +59,5 @@ $token = $payum->getTokenFactory()->createCaptureToken($gatewayName, $details, '
 header("Location: ".$token->getTargetUrl());
 ```
 
-Back to [scripts](https://github.com/Payum/Core/tree/master/Resources/docs/scripts/index.md).
-Back to [index](https://github.com/Payum/Core/tree/master/Resources/docs/index.md).
+Back to [scripts](index.md).
+Back to [index](../index.md).

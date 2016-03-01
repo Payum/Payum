@@ -19,4 +19,4 @@ $status->getValue(); // 'new', 'authorized', 'captured' and so on.
 ```
 
 Back to [examples](index.md).
-Back to [index](https://github.com/Payum/Core/tree/master/Resources/docs/index.md).
+Back to [index](../index.md).

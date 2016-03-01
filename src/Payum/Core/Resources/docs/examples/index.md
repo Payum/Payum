@@ -9,4 +9,4 @@
 * [Stripe.Js. Render form](7-stripe-js-render-form.md)
 * [Stripe. Credit card](8-stripe-credit-card.md)
 
-Back to [index](https://github.com/Payum/Core/tree/master/Resources/docs/index.md).
+Back to [index](../index.md).
