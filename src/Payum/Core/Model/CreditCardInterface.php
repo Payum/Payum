@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Core\Model;
 
+use Payum\Core\Security\SensitiveValue;
+
 interface CreditCardInterface
 {
     /**
@@ -29,7 +31,7 @@ interface CreditCardInterface
     public function getHolder();
 
     /**
-     * @param string $holder
+     * @param string|SensitiveValue $holder
      */
     public function setHolder($holder);
 
@@ -49,7 +51,7 @@ interface CreditCardInterface
     public function getNumber();
 
     /**
-     * @param string $number
+     * @param string|SensitiveValue $number
      */
     public function setNumber($number);
 
@@ -69,7 +71,7 @@ interface CreditCardInterface
     public function getSecurityCode();
 
     /**
-     * @param string $securityCode
+     * @param string|SensitiveValue $securityCode
      */
     public function setSecurityCode($securityCode);
 
@@ -79,11 +81,13 @@ interface CreditCardInterface
     public function getExpireAt();
 
     /**
-     * @param \DateTime $date
+     * @param \DateTime|SensitiveValue $date
      */
-    public function setExpireAt(\DateTime $date = null);
+    public function setExpireAt($date = null);
 
     /**
+     * @deprecated the method will be removed in v2
+     *
      * Wraps all sensitive values by SensitiveValue objects. Prevent accidental storing of them while serialization and so on.
      */
     public function secure();

@@ -57,9 +57,9 @@ class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
                 $this->gateway->execute($obtainCreditCard);
                 $card = $obtainCreditCard->obtain();
 
-                $model['EXPDATE'] = new SensitiveValue($card->getExpireAt()->format('my'));
-                $model['ACCT'] = new SensitiveValue($card->getNumber());
-                $model['CVV2'] = new SensitiveValue($card->getSecurityCode());
+                $model['EXPDATE'] = SensitiveValue::ensureSensitive($card->getExpireAt()->format('my'));
+                $model['ACCT'] = SensitiveValue::ensureSensitive($card->getNumber());
+                $model['CVV2'] = SensitiveValue::ensureSensitive($card->getSecurityCode());
             } catch (RequestNotSupportedException $e) {
                 throw new LogicException('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.');
             }
