@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.2 (2016-03-01)
+
+* [security] add ensure var is sensitive value method.
+* [security] add __debugInfo to SensitiveValue object.
+* [doc] various doc fixes
+
 ## 1.2.1 (2016-02-22)
 
 * [doc] Update list of supported gateways
