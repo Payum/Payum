@@ -28,7 +28,7 @@ class ConvertPaymentAction implements ActionInterface
         $details["description"] = $payment->getDescription();
 
         if ($card = $payment->getCreditCard()) {
-            $details["card"] = new SensitiveValue(array(
+            $details["card"] = SensitiveValue::ensureSensitive(array(
                 'number' => $card->getNumber(),
                 'exp_month' => $card->getExpireAt()->format('m'),
                 'exp_year' => $card->getExpireAt()->format('Y'),

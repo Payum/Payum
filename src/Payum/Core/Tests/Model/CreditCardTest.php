@@ -3,6 +3,7 @@ namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\CreditCard;
 use Payum\Core\Model\CreditCardInterface;
+use Payum\Core\Security\SensitiveValue;
 
 class CreditCardTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,7 +12,7 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldExtendDetailsAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Model\CreditCard');
+        $rc = new \ReflectionClass(CreditCard::class);
 
         $this->assertTrue($rc->implementsInterface(CreditCardInterface::class));
     }
@@ -22,6 +23,23 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
     public function couldBeConstructedWithoutAnyArguments()
     {
         new CreditCard();
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnNullOnNewCreditCard()
+    {
+        $card = new CreditCard();
+        
+        $this->assertNull($card->getToken());
+        $this->assertNull($card->getBrand());
+        $this->assertNull($card->getHolder());
+        $this->assertNull($card->getMaskedHolder());
+        $this->assertNull($card->getNumber());
+        $this->assertNull($card->getMaskedNumber());
+        $this->assertNull($card->getSecurityCode());
+        $this->assertNull($card->getExpireAt());
     }
 
     /**
@@ -63,25 +81,15 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowSecureHolder()
+    public function shouldStoreHolderAsSensitiveValue()
     {
         $card = new CreditCard();
 
         $card->setHolder('Mahatma Gandhi');
 
-        $this->assertEquals('Mahatma Gandhi', $this->readAttribute($card, 'holder'));
-        $this->assertEquals('Mahatma Gandhi', $card->getHolder());
-        $this->assertNull($this->readAttribute($card, 'securedHolder'));
-
-        $card->secure();
-
-        $this->assertNull($this->readAttribute($card, 'holder'));
-
-        $value = $this->readAttribute($card, 'securedHolder');
-
-        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $value);
+        $value = $this->readAttribute($card, 'holder');
+        $this->assertInstanceOf(SensitiveValue::class, $value);
         $this->assertEquals('Mahatma Gandhi', $value->peek());
-        $this->assertEquals('Mahatma Gandhi', $card->getHolder());
     }
 
     /**
@@ -125,25 +133,15 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowSecureNumber()
+    public function shouldStoreNumberAsSensitiveValue()
     {
         $card = new CreditCard();
 
         $card->setNumber('1234 5678 1234 5678');
 
-        $this->assertEquals('1234 5678 1234 5678', $this->readAttribute($card, 'number'));
-        $this->assertEquals('1234 5678 1234 5678', $card->getNumber());
-        $this->assertNull($this->readAttribute($card, 'securedNumber'));
-
-        $card->secure();
-
-        $this->assertNull($this->readAttribute($card, 'number'));
-
-        $value = $this->readAttribute($card, 'securedNumber');
-
-        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $value);
+        $value = $this->readAttribute($card, 'number');
+        $this->assertInstanceOf(SensitiveValue::class, $value);
         $this->assertEquals('1234 5678 1234 5678', $value->peek());
-        $this->assertEquals('1234 5678 1234 5678', $card->getNumber());
     }
 
     /**
@@ -188,25 +186,15 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowSecureSecurityCode()
+    public function shouldStoreSecurityCodeAsSensitiveValue()
     {
         $card = new CreditCard();
 
         $card->setSecurityCode('123');
 
-        $this->assertEquals('123', $this->readAttribute($card, 'securityCode'));
-        $this->assertEquals('123', $card->getSecuritycode());
-        $this->assertNull($this->readAttribute($card, 'securedSecurityCode'));
-
-        $card->secure();
-
-        $this->assertNull($this->readAttribute($card, 'securityCode'));
-
-        $value = $this->readAttribute($card, 'securedSecurityCode');
-
-        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $value);
+        $value = $this->readAttribute($card, 'securityCode');
+        $this->assertInstanceOf(SensitiveValue::class, $value);
         $this->assertEquals('123', $value->peek());
-        $this->assertEquals('123', $card->getSecuritycode());
     }
 
     /**
@@ -226,7 +214,7 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowSecureExpireAt()
+    public function shouldStoreExpireAtAsSensitiveValue()
     {
         $card = new CreditCard();
 
@@ -234,43 +222,8 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
 
         $card->setExpireAt($expected);
 
-        $this->assertEquals($expected, $this->readAttribute($card, 'expireAt'));
-        $this->assertEquals($expected, $card->getExpireAt());
-        $this->assertNull($this->readAttribute($card, 'securedExpireAt'));
-
-        $card->secure();
-
-        $this->assertNull($this->readAttribute($card, 'expireAt'));
-
-        $value = $this->readAttribute($card, 'securedExpireAt');
-
-        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $value);
-        $this->assertEquals($expected, $value->peek());
-        $this->assertEquals($expected, $card->getExpireAt());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSecureOnlyChangedFields()
-    {
-        $card = new CreditCard();
-        $card->setNumber('1234');
-
-        $card->secure();
-
-        //guard
-        $this->assertNull($this->readAttribute($card, 'number'));
-        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $this->readAttribute($card, 'securedNumber'));
-
-        $card->setNumber('John Doe');
-
-        $card->secure();
-
-        $this->assertNull($this->readAttribute($card, 'holder'));
-        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $this->readAttribute($card, 'securedHolder'));
-
-        $this->assertNull($this->readAttribute($card, 'number'));
-        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $this->readAttribute($card, 'securedNumber'));
+        $value = $this->readAttribute($card, 'expireAt');
+        $this->assertInstanceOf(SensitiveValue::class, $value);
+        $this->assertSame($expected, $value->peek());
     }
 }

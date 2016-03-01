@@ -5,6 +5,7 @@ use Payum\Core\Model\CreditCard;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
+use Payum\Core\Security\SensitiveValue;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Stripe\Action\ConvertPaymentAction;
 
@@ -114,7 +115,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('card', $details);
-        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $details['card']);
+        $this->assertInstanceOf(SensitiveValue::class, $details['card']);
 
         $card = $details['card']->peek();
         $this->assertInternalType('array', $card);

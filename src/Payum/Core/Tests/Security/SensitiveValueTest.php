@@ -10,7 +10,7 @@ class SensitiveValueTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeFinal()
     {
-        $rc = new \ReflectionClass('Payum\Core\Security\SensitiveValue');
+        $rc = new \ReflectionClass(SensitiveValue::class);
 
         $this->assertTrue($rc->isFinal());
     }
@@ -20,7 +20,7 @@ class SensitiveValueTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementSerializableInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Security\SensitiveValue');
+        $rc = new \ReflectionClass(SensitiveValue::class);
 
         $this->assertTrue($rc->implementsInterface('Serializable'));
     }
@@ -121,5 +121,23 @@ class SensitiveValueTest extends \PHPUnit_Framework_TestCase
         $sensitiveValue = new SensitiveValue('cardNumber');
 
         clone $sensitiveValue;
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnNewInstanceOfSensitiveValueOnEnsureSensitive()
+    {
+        $this->assertInstanceOf(SensitiveValue::class, SensitiveValue::ensureSensitive('foo'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnSameInstanceOfSensitiveValueGivenAsArgumentOnEnsureSensitive()
+    {
+        $foo = new SensitiveValue('foo');
+
+        $this->assertSame($foo, SensitiveValue::ensureSensitive($foo));
     }
 }
