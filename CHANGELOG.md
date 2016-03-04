@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.3 (2016-03-04)
+
+* [spl] add get method to array object. with default option.
+
 ## 1.2.2 (2016-03-01)
 
 * [security] add ensure var is sensitive value method.
