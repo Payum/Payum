@@ -4,6 +4,7 @@ namespace Payum\Skeleton\Action;
 use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Request\Notify;
 
 class NotifyAction extends GatewayAwareAction
 {

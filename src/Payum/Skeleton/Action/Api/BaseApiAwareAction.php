@@ -9,7 +9,7 @@ use Payum\Skeleton\Api;
 abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
 {
     /**
-     * @var Config
+     * @var Api
      */
     protected $api;
 
