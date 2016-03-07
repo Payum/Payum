@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.4 (2016-03-07)
+
+* [credit-card] Fixes **regression** in the bundle. Symfony's validator marks all fields as invalid on credit card form submission.
+* [skeleton] fix some typos.
+
 ## 1.2.3 (2016-03-04)
 
 * [spl] add get method to array object. with default option.
