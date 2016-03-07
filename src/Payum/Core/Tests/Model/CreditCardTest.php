@@ -87,7 +87,7 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
 
         $card->setHolder('Mahatma Gandhi');
 
-        $value = $this->readAttribute($card, 'holder');
+        $value = $this->readAttribute($card, 'securedHolder');
         $this->assertInstanceOf(SensitiveValue::class, $value);
         $this->assertEquals('Mahatma Gandhi', $value->peek());
     }
@@ -139,7 +139,7 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
 
         $card->setNumber('1234 5678 1234 5678');
 
-        $value = $this->readAttribute($card, 'number');
+        $value = $this->readAttribute($card, 'securedNumber');
         $this->assertInstanceOf(SensitiveValue::class, $value);
         $this->assertEquals('1234 5678 1234 5678', $value->peek());
     }
@@ -192,7 +192,7 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
 
         $card->setSecurityCode('123');
 
-        $value = $this->readAttribute($card, 'securityCode');
+        $value = $this->readAttribute($card, 'securedSecurityCode');
         $this->assertInstanceOf(SensitiveValue::class, $value);
         $this->assertEquals('123', $value->peek());
     }
@@ -222,7 +222,7 @@ class CreditCardTest extends \PHPUnit_Framework_TestCase
 
         $card->setExpireAt($expected);
 
-        $value = $this->readAttribute($card, 'expireAt');
+        $value = $this->readAttribute($card, 'securedExpireAt');
         $this->assertInstanceOf(SensitiveValue::class, $value);
         $this->assertSame($expected, $value->peek());
     }
