@@ -4,15 +4,16 @@ namespace Payum\Stripe\Action\Api;
 use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateCharge;
+use Payum\Stripe\Request\Api\CreateCustomer;
 use Payum\Stripe\Request\Api\ObtainToken;
 use Stripe\Customer;
 use Stripe\Error;
 use Stripe\Stripe;
-
 
 class CreateCustomerAction extends GatewayAwareAction implements ApiAwareInterface
 {
@@ -43,11 +44,7 @@ class CreateCustomerAction extends GatewayAwareAction implements ApiAwareInterfa
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validateNotEmpty(array('plan'));
-
-        if (false == $model['card']) {
-            $this->gateway->execute(new ObtainToken($model));
-        }
+//        $model->validateNotEmpty(array('plan'));
 
         try {
             Stripe::setApiKey($this->keys->getSecretKey());
@@ -66,7 +63,7 @@ class CreateCustomerAction extends GatewayAwareAction implements ApiAwareInterfa
     public function supports($request)
     {
         return
-            $request instanceof CreateCharge &&
+            $request instanceof CreateCustomer &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

@@ -42,18 +42,24 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (is_array($model['card'])) {
-            throw new LogicException('The token has already been used.');
+        if (false == ($model['card'] || $model['customer'])) {
+            throw new LogicException('The either card token or customer id has to be set.');
         }
 
-        if (empty($model['card'])) {
-            throw new LogicException('The token has to be set.');
+        if (is_array($model['card'])) {
+            throw new LogicException('The token has already been used.');
         }
 
         try {
             Stripe::setApiKey($this->keys->getSecretKey());
 
-            $charge = Charge::create($model->toUnsafeArray());
+            $params = $model->toUnsafeArray();
+            if (isset($params['customer']['id'])) {
+                $params['customer'] = $params['customer']['id'];
+            }
+            unset($params['save_card']);
+
+            $charge = Charge::create($params);
 
             $model->replace($charge->__toArray(true));
         } catch (Error\Card $e) {

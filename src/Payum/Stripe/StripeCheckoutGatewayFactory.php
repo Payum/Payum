@@ -5,9 +5,11 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\GatewayFactory;
 use Payum\Stripe\Action\Api\CreateChargeAction;
+use Payum\Stripe\Action\Api\CreateCustomerAction;
 use Payum\Stripe\Action\Api\ObtainTokenAction;
 use Payum\Stripe\Action\CaptureAction;
 use Payum\Stripe\Action\ConvertPaymentAction;
+use Payum\Stripe\Action\CreateCustomerExtension;
 use Payum\Stripe\Action\StatusAction;
 use Stripe\Stripe;
 
@@ -35,6 +37,9 @@ class StripeCheckoutGatewayFactory extends GatewayFactory
                 return new ObtainTokenAction($config['payum.template.obtain_token']);
             },
             'payum.action.create_charge' => new CreateChargeAction(),
+            'payum.action.create_customer' => new CreateCustomerAction(),
+
+            'payum.extension.create_customer' => new CreateCustomerExtension(),
         ));
 
         if (false == $config['payum.api']) {
