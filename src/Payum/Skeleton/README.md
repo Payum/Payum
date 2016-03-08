@@ -22,7 +22,7 @@ $defaultConfig = [];
 
 $payum = (new PayumBuilder)
     ->addGatewayFactory('paypal', function(array $config, GatewayFactoryInterface $coreGatewayFactory) {
-        return new \Acme\Paypal\PaypalGatewayFactory($config, $coreGatewayFactory)
+        return new \Acme\Paypal\PaypalGatewayFactory($config, $coreGatewayFactory);
     })
 
     ->addGateway('paypal', [
