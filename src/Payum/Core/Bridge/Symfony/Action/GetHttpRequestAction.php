@@ -21,6 +21,7 @@ class GetHttpRequestAction implements ActionInterface
 
     /**
      * @param Request|null $httpRequest
+     * @deprecated
      */
     public function setHttpRequest(Request $httpRequest = null)
     {

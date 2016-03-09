@@ -49,6 +49,7 @@ class ObtainCreditCardAction extends GatewayAwareAction
 
     /**
      * @param Request $request
+     * @deprecated
      */
     public function setRequest(Request $request = null)
     {
