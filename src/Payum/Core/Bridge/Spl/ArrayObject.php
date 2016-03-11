@@ -39,6 +39,17 @@ class ArrayObject extends \ArrayObject
     }
 
     /**
+     * @param string $key
+     * @param mixed $default
+     *
+     * @return static
+     */
+    public function getArray($key, $default = [])
+    {
+        return static::ensureArrayObject($this->get($key, $default));
+    }
+
+    /**
      * @param array|\Traversable $input
      *
      * @throws \Payum\Core\Exception\InvalidArgumentException

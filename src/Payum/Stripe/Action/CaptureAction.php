@@ -36,7 +36,9 @@ class CaptureAction extends GatewayAwareAction
 
         }
 
-        $this->gateway->execute(new CreateCharge($model));
+        if (false == $model['status']) {
+            $this->gateway->execute(new CreateCharge($model));
+        }
     }
 
     /**

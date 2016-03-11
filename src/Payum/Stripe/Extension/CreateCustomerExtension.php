@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Stripe\Action;
+namespace Payum\Stripe\Extension;
 
 use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -7,6 +7,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Request\Capture;
+use Payum\Stripe\Constants;
 use Payum\Stripe\Request\Api\CreateCharge;
 use Payum\Stripe\Request\Api\CreateCustomer;
 use Payum\Stripe\Request\Api\ObtainToken;
@@ -30,19 +31,28 @@ class CreateCustomerExtension implements ExtensionInterface
         }
         $model = ArrayObject::ensureArrayObject($model);
 
-        if (false == $model['save_card']) {
-            return;
-        }
         if (false == ($model['card'] && is_string($model['card']))) {
             return;
         }
 
-        $customer = ArrayObject::ensureArrayObject($model->get('customer', []));
+        $local = $model->getArray('local');
+        if (false == $local['save_card']) {
+            return;
+        }
+
+        $customer = $local->getArray('customer');
         $customer['card'] = $model['card'];
         $context->getGateway()->execute(new CreateCustomer($customer));
 
-        $model['customer'] = $customer->toUnsafeArray();
+        $local['customer'] = $customer->toUnsafeArray();
+        $model['local'] = $local->toUnsafeArray();
         unset($model['card']);
+
+        if ($customer['id']) {
+            $model['customer'] = $customer['id'];
+        } else {
+            $model['status'] = Constants::STATUS_FAILED;
+        }
     }
 
     /**

@@ -9,7 +9,7 @@ use Payum\Stripe\Action\Api\CreateCustomerAction;
 use Payum\Stripe\Action\Api\ObtainTokenAction;
 use Payum\Stripe\Action\CaptureAction;
 use Payum\Stripe\Action\ConvertPaymentAction;
-use Payum\Stripe\Action\CreateCustomerExtension;
+use Payum\Stripe\Extension\CreateCustomerExtension;
 use Payum\Stripe\Action\StatusAction;
 use Stripe\Stripe;
 
