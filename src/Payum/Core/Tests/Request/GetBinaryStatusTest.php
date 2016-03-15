@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Request;
 
+use Payum\Core\Request\BaseGetStatus;
 use Payum\Core\Request\GetBinaryStatus;
 
 class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
@@ -42,9 +43,9 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfBaseGetStatus()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\GetBinaryStatus');
+        $rc = new \ReflectionClass(GetBinaryStatus::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseGetStatus'));
+        $this->assertTrue($rc->isSubclassOf(BaseGetStatus::class));
     }
 
     /**

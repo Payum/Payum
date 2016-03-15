@@ -47,10 +47,7 @@ class CreateCustomerAction extends GatewayAwareAction implements ApiAwareInterfa
         try {
             Stripe::setApiKey($this->keys->getSecretKey());
 
-            $params = $model->toUnsafeArray();
-            unset($params['local']);
-
-            $charge = Customer::create($params);
+            $charge = Customer::create($model->toUnsafeArrayWithoutLocal());
 
             $model->replace($charge->__toArray(true));
         } catch (Error\Card $e) {

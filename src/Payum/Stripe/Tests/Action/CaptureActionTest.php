@@ -7,6 +7,7 @@ use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Stripe\Action\CaptureAction;
+use Payum\Stripe\Constants;
 use Payum\Stripe\Request\Api\CreateCharge;
 use Payum\Stripe\Request\Api\ObtainToken;
 
@@ -104,6 +105,72 @@ class CaptureActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(CreateCharge::class))
+        ;
+
+        $action = new CaptureAction();
+        $action->setGateway($gatewayMock);
+
+        $action->execute(new Capture($model));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotSubExecuteCreateChargeIfAlreadyCharged()
+    {
+        $model = [
+            'card' => 'theToken',
+            'status' => Constants::STATUS_PAID,
+        ];
+
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
+            ->expects($this->never())
+            ->method('execute')
+        ;
+
+        $action = new CaptureAction();
+        $action->setGateway($gatewayMock);
+
+        $action->execute(new Capture($model));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSubExecuteCreateChargeIfCustomerSet()
+    {
+        $model = [
+            'customer' => 'theCustomerId',
+        ];
+
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->isInstanceOf(CreateCharge::class))
+        ;
+
+        $action = new CaptureAction();
+        $action->setGateway($gatewayMock);
+
+        $action->execute(new Capture($model));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotSubExecuteCreateChargeIfCustomerSetButAlreadyCharged()
+    {
+        $model = [
+            'customer' => 'theCustomerId',
+            'status' => Constants::STATUS_SUCCEEDED,
+        ];
+
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
+            ->expects($this->never())
+            ->method('execute')
         ;
 
         $action = new CaptureAction();

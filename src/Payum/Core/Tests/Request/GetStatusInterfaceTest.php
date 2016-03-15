@@ -1,6 +1,10 @@
 <?php
 namespace Payum\Core\Tests\Request;
 
+use Payum\Core\Model\ModelAggregateInterface;
+use Payum\Core\Model\ModelAwareInterface;
+use Payum\Core\Request\GetStatusInterface;
+
 class GetStatusInterfaceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -8,9 +12,9 @@ class GetStatusInterfaceTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementModelAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\GetStatusInterface');
+        $rc = new \ReflectionClass(GetStatusInterface::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Model\ModelAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(ModelAwareInterface::class));
     }
 
     /**
@@ -18,8 +22,8 @@ class GetStatusInterfaceTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementModelAggregateInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\GetStatusInterface');
+        $rc = new \ReflectionClass(GetStatusInterface::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Model\ModelAggregateInterface'));
+        $this->assertTrue($rc->implementsInterface(ModelAggregateInterface::class));
     }
 }

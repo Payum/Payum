@@ -29,6 +29,7 @@ class GetTokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetPreviouslySetToken()
     {
+        /** @var TokenInterface $token */
         $token = $this->getMock(TokenInterface::class);
 
         $request = new GetToken('aHash');

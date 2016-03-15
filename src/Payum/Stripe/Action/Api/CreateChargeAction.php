@@ -53,10 +53,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
         try {
             Stripe::setApiKey($this->keys->getSecretKey());
 
-            $params = $model->toUnsafeArray();
-            unset($params['local']);
-
-            $charge = Charge::create($params);
+            $charge = Charge::create($model->toUnsafeArrayWithoutLocal());
 
             $model->replace($charge->__toArray(true));
         } catch (Error\Card $e) {
