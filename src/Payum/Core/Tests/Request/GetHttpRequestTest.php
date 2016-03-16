@@ -20,8 +20,8 @@ class GetHttpRequestTest extends \PHPUnit_Framework_TestCase
     {
         $request = new GetHttpRequest();
 
-        $this->assertSame(array(), $request->query);
-        $this->assertSame(array(), $request->request);
+        $this->assertSame([], $request->query);
+        $this->assertSame([], $request->request);
         $this->assertSame('', $request->method);
         $this->assertSame('', $request->uri);
     }

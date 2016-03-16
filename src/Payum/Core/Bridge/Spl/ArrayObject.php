@@ -35,7 +35,18 @@ class ArrayObject extends \ArrayObject
      */
     public function get($key, $default = null)
     {
-        return array_key_exists($key, $this->input) ? $this->input[$key] : $default;
+        return isset($this[$key]) ? $this[$key] : $default;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $default
+     *
+     * @return static
+     */
+    public function getArray($key, $default = [])
+    {
+        return static::ensureArrayObject($this->get($key, $default));
     }
 
     /**
@@ -180,7 +191,7 @@ class ArrayObject extends \ArrayObject
      */
     public function toUnsafeArray()
     {
-        $array = array();
+        $array = [];
         foreach ($this as $name => $value) {
             if ($value instanceof SensitiveValue) {
                 $array[$name] = $value->get();
@@ -191,6 +202,19 @@ class ArrayObject extends \ArrayObject
             $array[$name] = $value;
         }
 
+        return $array;
+    }
+
+    /**
+     * @experimental
+     *
+     * @return array
+     */
+    public function toUnsafeArrayWithoutLocal()
+    {
+        $array = $this->toUnsafeArray();
+        unset($array['local']);
+        
         return $array;
     }
 

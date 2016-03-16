@@ -109,7 +109,7 @@ class RenderTemplateTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function shouldThrowExceptionIfParameterExistsOnAddParameter()
     {

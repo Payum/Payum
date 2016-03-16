@@ -2,6 +2,7 @@
 namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\Authorize;
+use Payum\Core\Request\Generic;
 
 class AuthorizeTest extends \PHPUnit_Framework_TestCase
 {
@@ -10,9 +11,9 @@ class AuthorizeTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\Authorize');
+        $rc = new \ReflectionClass(Authorize::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
+        $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
     /**

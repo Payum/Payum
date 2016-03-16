@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Request;
 
+use Payum\Core\Request\BaseGetStatus;
 use Payum\Core\Request\GetHumanStatus;
 
 class GetHumanStatusTest extends \PHPUnit_Framework_TestCase
@@ -42,9 +43,9 @@ class GetHumanStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfBaseStatusRequest()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\GetHumanStatus');
+        $rc = new \ReflectionClass(GetHumanStatus::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseGetStatus'));
+        $this->assertTrue($rc->isSubclassOf(BaseGetStatus::class));
     }
 
     /**

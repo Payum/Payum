@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Stripe\Tests\Action\Api;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
 use Payum\Stripe\Action\Api\CreateChargeAction;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateCharge;
@@ -12,9 +14,9 @@ class CreateChargeActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementsActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Stripe\Action\Api\CreateChargeAction');
+        $rc = new \ReflectionClass(CreateChargeAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
     /**
@@ -22,9 +24,9 @@ class CreateChargeActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementsApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Stripe\Action\Api\CreateChargeAction');
+        $rc = new \ReflectionClass(CreateChargeAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
     /**
@@ -98,5 +100,33 @@ class CreateChargeActionTest extends \PHPUnit_Framework_TestCase
         $action = new CreateChargeAction();
 
         $action->execute(new \stdClass());
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The either card token or customer id has to be set.
+     */
+    public function throwIfNotCardNorCustomerSet()
+    {
+        $action = new CreateChargeAction();
+
+        $action->execute(new CreateCharge([]));
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The token has already been used.
+     */
+    public function throwIfCardAlreadyUsed()
+    {
+        $action = new CreateChargeAction();
+
+        $action->execute(new CreateCharge([
+            'card' => ['foo'],
+        ]));
     }
 }

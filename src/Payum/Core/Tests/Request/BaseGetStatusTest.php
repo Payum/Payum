@@ -1,6 +1,10 @@
 <?php
 namespace Payum\Core\Tests\Request;
 
+use Payum\Core\Request\BaseGetStatus;
+use Payum\Core\Request\Generic;
+use Payum\Core\Request\GetStatusInterface;
+
 class BaseGetStatusTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -8,9 +12,9 @@ class BaseGetStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementGetStatusInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\BaseGetStatus');
+        $rc = new \ReflectionClass(BaseGetStatus::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Request\GetStatusInterface'));
+        $this->assertTrue($rc->implementsInterface(GetStatusInterface::class));
     }
 
     /**
@@ -18,9 +22,9 @@ class BaseGetStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\BaseGetStatus');
+        $rc = new \ReflectionClass(BaseGetStatus::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
+        $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
     /**
@@ -28,7 +32,7 @@ class BaseGetStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeAbstract()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\BaseGetStatus');
+        $rc = new \ReflectionClass(BaseGetStatus::class);
 
         $this->assertTrue($rc->isAbstract());
     }
