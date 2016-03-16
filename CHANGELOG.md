@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.5 (2016-03-16)
+
+* [stripe] add ability to store credit card and charge it later.
+* [bridge] Allow Symfony 3 request stack
+* [doc] small doc fixes
+
 ## 1.2.4 (2016-03-07)
 
 * [credit-card] Fixes **regression** in the bundle. Symfony's validator marks all fields as invalid on credit card form submission.
