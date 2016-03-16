@@ -40,4 +40,9 @@ interface PaymentInterface extends DetailsAggregateInterface, DetailsAwareInterf
      * @return CreditCardInterface|null
      */
     public function getCreditCard();
+
+    /**
+     * @return BankAccountInterface|null
+     */
+    public function getBankAccount();
 }
