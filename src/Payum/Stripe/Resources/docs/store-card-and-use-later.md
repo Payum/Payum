@@ -54,7 +54,7 @@ $payment->setCreditCard($card);
 
 ## Links
 
-* (https://support.stripe.com/questions/can-i-save-a-card-and-charge-it-later)[https://support.stripe.com/questions/can-i-save-a-card-and-charge-it-later]
-* (https://stripe.com/docs/charges)[https://stripe.com/docs/charges]
+* https://support.stripe.com/questions/can-i-save-a-card-and-charge-it-later
+* https://stripe.com/docs/charges
 
 Back to [index](index.md).
