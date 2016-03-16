@@ -35,6 +35,7 @@
 * [fullpipe/payum-uniteller](https://github.com/fullpipe/payum-uniteller)
 * [fullpipe/payum-flexidengi](https://github.com/fullpipe/payum-flexidengi)
 * [paradigm/payum-trustly](https://github.com/Paradigmfi/PayumTrustly)
+* [paradigm/payum-paytrail](https://github.com/Paradigmfi/PayumPaytrail)
 * [ekyna/PayumSips](https://github.com/ekyna/PayumSips)
 * [accesto/PayumPayU](https://github.com/accesto/PayumPayU)
 * [pixers/payum-dotpay](https://github.com/pixers/payum-dotpay)
@@ -46,7 +47,6 @@
 * [BoShurik/payum-yandex-money](https://github.com/BoShurik/payum-yandex-money)
 * [sergeym/payum-pay-receipt](https://github.com/sergeym/payum-pay-receipt)
 * [remyma/payum-paybox](https://github.com/remyma/payum-paybox)
-* 
 
 ## Omnipay gateways.
 
