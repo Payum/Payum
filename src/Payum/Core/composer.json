@@ -44,7 +44,7 @@
     "require-dev": {
         "ext-curl": "*",
         "ext-pdo_sqlite": "*",
-        "payum/omnipay-bridge": "~1.0@dev",
+        "payum/omnipay-bridge": "^1",
         "omnipay/dummy": "~2.0",
         "doctrine/orm": "2.*",
         "phpunit/phpunit": "~4.0",
