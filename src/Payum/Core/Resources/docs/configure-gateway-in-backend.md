@@ -57,9 +57,6 @@ $payum = (new PayumBuilder())
 
     ->getPayum()
 ;
-
-
-$payum = new DynamicRegistry($gatewayConfigStorage, $payum);
 ```
 
 ## Store gateway config
