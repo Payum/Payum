@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.6 (2016-03-18)
+
+* [bridge][symfony] add obtain credit card action builder.
+* [builder] Revert "[builder] Allow create a gateway without explicit factory set. The core one is used."
+
 ## 1.2.5 (2016-03-16)
 
 * [stripe] add ability to store credit card and charge it later.
