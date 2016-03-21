@@ -1,7 +1,8 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
-use GuzzleHttp\Psr7\Request;
+use Http\Discovery\MessageFactoryDiscovery;
+use Http\Message\MessageFactory;
 use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\Http\HttpException;
@@ -289,7 +290,15 @@ class Api
 
     const VERSION = '65.1';
 
+    /**
+     * @var HttpClientInterface
+     */
     protected $client;
+
+    /**
+     * @var MessageFactory
+     */
+    protected $messageFactory;
 
     protected $options = array(
         'username' => null,
@@ -303,10 +312,11 @@ class Api
     );
 
     /**
-     * @param array                $options
+     * @param array                    $options
      * @param HttpClientInterface|null $client
+     * @param MessageFactory|null      $messageFactory
      */
-    public function __construct(array $options, HttpClientInterface $client = null)
+    public function __construct(array $options, HttpClientInterface $client = null, MessageFactory $messageFactory = null)
     {
         $options = ArrayObject::ensureArrayObject($options);
         $options->defaults($this->options);
@@ -322,6 +332,7 @@ class Api
 
         $this->options = $options;
         $this->client = $client ?: HttpClientFactory::create();
+        $this->messageFactory = $messageFactory ?: MessageFactoryDiscovery::find();
     }
 
     /**
@@ -532,7 +543,7 @@ class Api
             'Content-Type' => 'application/x-www-form-urlencoded',
         );
 
-        $request = new Request('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
+        $request = $this->messageFactory->createRequest('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
 
         $response = $this->client->send($request);
 

@@ -1,5 +1,9 @@
 # Upgrades
 
+## 1.3.0
+
+* [http-client] guzzlehttp/guzzle was decoupled and replaced by [Httplug](http://docs.php-http.org/en/latest/httplug/introduction.html). This gives you option to use Guzzle6, Guzzle5, Buzz or any other library to send HTTP messages. Make sure to specify `httplug.client` and `httplug.message_factory` or use [Httplug discovery](http://docs.php-http.org/en/latest/discovery.html). 
+
 ## 1.2.0
 
 * [stripe] Stripe api version updated to 2.0 - 3.x. You'll have to update any custom actions that use the Stripe api directly.

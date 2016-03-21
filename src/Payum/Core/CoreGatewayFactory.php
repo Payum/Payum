@@ -1,11 +1,15 @@
 <?php
 namespace Payum\Core;
 
+use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\MessageFactoryDiscovery;
 use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetCurrencyAction;
 use Payum\Core\Action\GetTokenAction;
+use Payum\Core\Bridge\Guzzle\HttpClient;
 use Payum\Core\Bridge\Guzzle\HttpClientFactory;
+use Payum\Core\Bridge\Guzzle\HttplugClient;
 use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
@@ -59,10 +63,17 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         $config['twig.env'] = null;
 
         $config->defaults(array(
-            'payum.template.layout' => '@PayumCore/layout.html.twig',
-
-            'payum.http_client' => HttpClientFactory::create(),
+            'httplug.client'=>function(ArrayObject $config) {
+                return HttpClientDiscovery::find();
+            },
+            'httplug.message_factory'=>function(ArrayObject $config) {
+                return MessageFactoryDiscovery::find();
+            },
+            'payum.http_client'=>function(ArrayObject $config) {
+                  return new HttplugClient($config['httplug.client']);
+            },
             'guzzle.client' => HttpClientFactory::createGuzzle(),
+            'payum.template.layout' => '@PayumCore/layout.html.twig',
             'twig.env' => function(ArrayObject $config) use ($twig) {
                 $twig = $twig ?: new \Twig_Environment(new \Twig_Loader_Chain());
                 TwigUtil::registerPaths($twig, $config['payum.paths']);
@@ -111,7 +122,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     protected function buildClosures(ArrayObject $config)
     {
         // with higher priority
-        foreach (['guzzle.client', 'payum.http_client', 'payum.paths', 'twig.env'] as $name) {
+        foreach (['httplug.client', 'payum.http_client', 'payum.paths', 'twig.env'] as $name) {
             $value = $config[$name];
             if (is_callable($value)) {
                 $config[$name] = call_user_func($value, $config);

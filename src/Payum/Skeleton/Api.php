@@ -1,7 +1,8 @@
 <?php
 namespace Payum\Skeleton;
 
-use GuzzleHttp\Psr7\Request;
+use Http\Discovery\MessageFactoryDiscovery;
+use Http\Message\MessageFactory;
 use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\HttpClientInterface;
@@ -14,6 +15,11 @@ class Api
     protected $client;
 
     /**
+     * @var MessageFactory
+     */
+    protected $messageFactory;
+
+    /**
      * @var array
      */
     protected $options = [];
@@ -21,13 +27,15 @@ class Api
     /**
      * @param array               $options
      * @param HttpClientInterface $client
+     * @param MessageFactory      $messageFactory
      *
      * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
      */
-    public function __construct(array $options, HttpClientInterface $client = null)
+    public function __construct(array $options, HttpClientInterface $client = null, MessageFactory $messageFactory = null)
     {
         $this->options = $options;
         $this->client = $client ?: HttpClientFactory::create();
+        $this->messageFactory = $messageFactory ?: MessageFactoryDiscovery::find();
     }
 
     /**
@@ -39,7 +47,7 @@ class Api
     {
         $headers = [];
 
-        $request = new Request($method, $this->getApiEndpoint(), $headers, http_build_query($fields));
+        $request = $this->messageFactory->createRequest($method, $this->getApiEndpoint(), $headers, http_build_query($fields));
 
         $response = $this->client->send($request);
 

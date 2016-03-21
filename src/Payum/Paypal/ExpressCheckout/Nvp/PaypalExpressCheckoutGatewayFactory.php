@@ -86,7 +86,7 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
                     'sandbox' => $config['sandbox'],
                 );
 
-                return new Api($paypalConfig, $config['payum.http_client']);
+                return new Api($paypalConfig, $config['payum.http_client'], $config['httplug.message_factory']);
             };
         }
 

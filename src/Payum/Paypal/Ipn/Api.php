@@ -1,7 +1,8 @@
 <?php
 namespace Payum\Paypal\Ipn;
 
-use GuzzleHttp\Psr7\Request;
+use Http\Discovery\MessageFactoryDiscovery;
+use Http\Message\MessageFactory;
 use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
@@ -30,6 +31,11 @@ class Api
     protected $client;
 
     /**
+     * @var MessageFactory
+     */
+    protected $messageFactory;
+
+    /**
      * @var array
      */
     protected $options;
@@ -37,10 +43,12 @@ class Api
     /**
      * @param array               $options
      * @param HttpClientInterface $client
+     * @param MessageFactory      $messageFactory
      */
-    public function __construct(array $options, HttpClientInterface $client = null)
+    public function __construct(array $options, HttpClientInterface $client = null, MessageFactory $messageFactory = null)
     {
         $this->client = $client ?: HttpClientFactory::create();
+        $this->messageFactory = $messageFactory ?: MessageFactoryDiscovery::find();
 
         $this->options = $options;
 
@@ -62,7 +70,7 @@ class Api
             'Content-Type' => 'application/x-www-form-urlencoded',
         );
 
-        $request = new Request('POST', $this->getIpnEndpoint(), $headers, http_build_query($fields));
+        $request = $this->messageFactory->createRequest('POST', $this->getIpnEndpoint(), $headers, http_build_query($fields));
 
         $response = $this->client->send($request);
 

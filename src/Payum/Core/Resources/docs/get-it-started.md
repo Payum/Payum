@@ -13,12 +13,14 @@ The preferred way to install the library is using [composer](http://getcomposer.
 Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require payum/offline
+php composer.phar require payum/offline php-http/message php-http/guzzle6-adapter
 ```
 
 _**Note**: Where payum/offline is a php payum extension, you can for example change it to payum/paypal-express-checkout-nvp or payum/stripe. Look at [supported gateways](supported-gateways.md) to find out what you can use._
 
 _**Note**: Use payum/payum if you want to install all gateways at once._
+
+_**Note**: Use php-http/guzzle6-adapter is just an example. You can use any of [these adapters](https://packagist.org/providers/php-http/client-implementation)._
 
 Before we configure the payum let's look at the flow diagram.
 This flow is same for all gateways so once you familiar with it any other gateways could be added easily.
@@ -48,7 +50,9 @@ $paymentClass = Payment::class;
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
     ->addGateway('aGateway', [
-        'factory' => 'offline'
+        'factory' => 'offline',
+        'httplug.client' => new Http\Adapter\Guzzle6\Client(),
+        'httplug.message_factory' => new Http\Message\MessageFactory\GuzzleMessageFactory(),
     ])
 
     ->getPayum()
@@ -58,6 +62,8 @@ $payum = (new PayumBuilder())
 _**Note**: There are other [storages](storages.md) available. Such as Doctrine ORM\MongoODM._
 
 _**Note**: Consider using something other than `FilesystemStorage` in production._
+
+_**Note**: Instead of specifying `httplug.client` and `httplug.message_factory` you could use [Httplug discovery](http://docs.php-http.org/en/latest/discovery.html)._
 
 ## prepare.php
 
