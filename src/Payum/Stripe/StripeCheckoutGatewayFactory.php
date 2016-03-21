@@ -6,6 +6,7 @@ use Payum\Core\Exception\LogicException;
 use Payum\Core\GatewayFactory;
 use Payum\Stripe\Action\Api\CreateChargeAction;
 use Payum\Stripe\Action\Api\CreateCustomerAction;
+use Payum\Stripe\Action\Api\CreatePlanAction;
 use Payum\Stripe\Action\Api\ObtainTokenAction;
 use Payum\Stripe\Action\CaptureAction;
 use Payum\Stripe\Action\ConvertPaymentAction;
@@ -24,7 +25,7 @@ class StripeCheckoutGatewayFactory extends GatewayFactory
             throw new LogicException('You must install "stripe/stripe-php:~2.0|~3.0" library.');
         }
 
-        $config->defaults(array(
+        $config->defaults([
             'payum.factory_name' => 'stripe_checkout',
             'payum.factory_title' => 'Stripe Checkout',
 
@@ -38,17 +39,18 @@ class StripeCheckoutGatewayFactory extends GatewayFactory
             },
             'payum.action.create_charge' => new CreateChargeAction(),
             'payum.action.create_customer' => new CreateCustomerAction(),
+            'payum.action.create_plan' => new CreatePlanAction(),
 
             'payum.extension.create_customer' => new CreateCustomerExtension(),
-        ));
+        ]);
 
         if (false == $config['payum.api']) {
-            $config['payum.default_options'] = array(
+            $config['payum.default_options'] = [
                 'publishable_key' => '',
                 'secret_key' => ''
-            );
+            ];
             $config->defaults($config['payum.default_options']);
-            $config['payum.required_options'] = array('publishable_key', 'secret_key');
+            $config['payum.required_options'] = ['publishable_key', 'secret_key'];
 
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
