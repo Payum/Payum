@@ -6,7 +6,7 @@ In this chapter we show how to create subscription plan and use it in future to 
 
 ```php
 <?php
-// create_plan.php
+// prepare.php
 
 use Payum\Stripe\Request\Api\CreatePlan;
 
@@ -35,7 +35,7 @@ $payment->setDetails([
     // everything in this section is never sent to the payment gateway
     'local' => [
         'save_card' => true,
-        'customer' => ['plan' => 'gold'],
+        'customer' => ['plan' => $plan['id']],
     ],
 ]);
 ```
