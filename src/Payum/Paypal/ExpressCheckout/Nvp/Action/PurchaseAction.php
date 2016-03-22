@@ -1,7 +1,8 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
-use League\Url\Url;
+use League\Uri\Schemes\Http as HttpUri;
+use League\Uri\Modifiers\MergeQuery;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
@@ -77,12 +78,11 @@ abstract class PurchaseAction extends GatewayAwareAction implements GenericToken
             }
 
             if ($details['CANCELURL']) {
-                $cancelUrl = Url::createFromUrl($details['CANCELURL']);
-                $query = $cancelUrl->getQuery();
-                $query->modify(['cancelled' => 1]);
-                $cancelUrl->setQuery($query);
+                $cancelUri = HttpUri::createFromString($details['CANCELURL']);
+                $modifier = new MergeQuery('cancelled=1');
+                $cancelUri = $modifier->__invoke($cancelUri);
 
-                $details['CANCELURL'] = (string) $cancelUrl;
+                $details['CANCELURL'] = (string) $cancelUri;
             }
 
             $this->gateway->execute(new SetExpressCheckout($details));

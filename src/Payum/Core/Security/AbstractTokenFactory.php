@@ -1,7 +1,9 @@
 <?php
 namespace Payum\Core\Security;
 
-use League\Url\Url;
+use League\Uri\Schemes\Http as HttpUri;
+use League\Uri\Components\Query;
+use League\Uri\Modifiers\MergeQuery;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\Util\Random;
 use Payum\Core\Storage\IdentityInterface;
@@ -37,14 +39,13 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
         }
 
         if (0 === strpos($targetPath, 'http')) {
-            $targetUrl = Url::createFromUrl($targetPath);
-            $targetUrl->getQuery()->set(array_replace(
+            $targetUri = HttpUri::createFromString($targetPath);
+            $targetUri = $targetUri->withQuery( Query::createFromArray(array_replace(
                 array('payum_token' => $token->getHash()),
-                $targetUrl->getQuery()->toArray(),
+                $targetUri->query->toArray(),
                 $targetParameters
-            ));
-
-            $token->setTargetUrl((string) $targetUrl);
+            ))->__toString());
+            $token->setTargetUrl((string) $targetUri);
         } else {
             $token->setTargetUrl($this->generateUrl($targetPath, array_replace(
                 array('payum_token' => $token->getHash()),
@@ -53,10 +54,12 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
         }
 
         if ($afterPath && 0 === strpos($afterPath, 'http')) {
-            $afterUrl = Url::createFromUrl($afterPath);
-            $afterUrl->getQuery()->modify($afterParameters);
+            $afterUri = HttpUri::createFromString($afterPath);
 
-            $token->setAfterUrl((string) $afterUrl);
+            $modifier = new MergeQuery(Query::createFromArray($afterParameters)->__toString());
+            $afterUri = $modifier->__invoke($afterUri);
+
+            $token->setAfterUrl((string) $afterUri);
         } elseif ($afterPath) {
             $token->setAfterUrl($this->generateUrl($afterPath, $afterParameters));
         }
