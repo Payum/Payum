@@ -40,11 +40,11 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
 
         if (0 === strpos($targetPath, 'http')) {
             $targetUri = HttpUri::createFromString($targetPath);
-            $targetUri = $targetUri->withQuery( Query::createFromArray(array_replace(
+            $targetUri = $targetUri->withQuery( (string) Query::createFromArray(array_replace(
                 array('payum_token' => $token->getHash()),
                 $targetUri->query->toArray(),
                 $targetParameters
-            ))->__toString());
+            )));
             $token->setTargetUrl((string) $targetUri);
         } else {
             $token->setTargetUrl($this->generateUrl($targetPath, array_replace(
@@ -56,8 +56,8 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
         if ($afterPath && 0 === strpos($afterPath, 'http')) {
             $afterUri = HttpUri::createFromString($afterPath);
 
-            $modifier = new MergeQuery(Query::createFromArray($afterParameters)->__toString());
-            $afterUri = $modifier->__invoke($afterUri);
+            $modifier = new MergeQuery((string)Query::createFromArray($afterParameters));
+            $afterUri = $modifier($afterUri);
 
             $token->setAfterUrl((string) $afterUri);
         } elseif ($afterPath) {

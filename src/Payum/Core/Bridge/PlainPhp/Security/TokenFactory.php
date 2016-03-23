@@ -44,7 +44,7 @@ class TokenFactory extends AbstractTokenFactory
 
         $uri = HttpUri::createFromString($this->baseUrl);
         $uri = $uri->withPath($path);
-        $uri = $uri->withQuery(Query::createFromArray($parameters)->__toString());
+        $uri = $uri->withQuery((string)Query::createFromArray($parameters));
 
         return (string)$uri;
     }

@@ -80,7 +80,7 @@ abstract class PurchaseAction extends GatewayAwareAction implements GenericToken
             if ($details['CANCELURL']) {
                 $cancelUri = HttpUri::createFromString($details['CANCELURL']);
                 $modifier = new MergeQuery('cancelled=1');
-                $cancelUri = $modifier->__invoke($cancelUri);
+                $cancelUri = $modifier($cancelUri);
 
                 $details['CANCELURL'] = (string) $cancelUri;
             }

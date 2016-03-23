@@ -41,7 +41,7 @@ class CaptureOffsiteNullAction extends GatewayAwareAction
         $this->gateway->execute($getToken = new GetToken($extraData['capture_token']));
 
         $uri = HttpUri::createFromString($getToken->getToken()->getTargetUrl());
-        $uri = $uri->withQuery(Query::createFromArray($httpRequest->query)->__toString());
+        $uri = $uri->withQuery((string)Query::createFromArray($httpRequest->query));
 
 
         throw new HttpRedirect((string) $uri);
