@@ -32,6 +32,9 @@ This is a usual charge as we showed it in [get-it-started](get-it-started.md) wi
 /** @var \Payum\Core\Model\PaymentInterface $payment */
 
 $payment->setDetails([
+    'amount' => 2000,
+    'currency' => 'USD',
+
     // everything in this section is never sent to the payment gateway
     'local' => [
         'save_card' => true,
