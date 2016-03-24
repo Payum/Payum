@@ -1,15 +1,18 @@
 <?php
 namespace Payum\Core;
 
+use GuzzleHttp\Client as GuzzleClient;
+use Http\Adapter\Guzzle6\Client as HttpGuzzle6Client;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
+use Http\Message\MessageFactory\DiactorosMessageFactory;
+use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetCurrencyAction;
 use Payum\Core\Action\GetTokenAction;
-use Payum\Core\Bridge\Guzzle\HttpClient;
 use Payum\Core\Bridge\Guzzle\HttpClientFactory;
-use Payum\Core\Bridge\Guzzle\HttplugClient;
+use Payum\Core\Bridge\Httplug\HttplugClient;
 use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
@@ -64,10 +67,30 @@ class CoreGatewayFactory implements GatewayFactoryInterface
 
         $config->defaults(array(
             'httplug.client'=>function(ArrayObject $config) {
-                return HttpClientDiscovery::find();
+                if (class_exists(HttpGuzzle6Client::class)) {
+                    return new HttpGuzzle6Client(new GuzzleClient());
+                }
+                
+                // TODO add "if else" for other clients provided by httplug.
+
+                if (class_exists(HttpClientDiscovery::class)) {
+                    return HttpClientDiscovery::find();
+                }
+
+                throw new \LogicException('The httpplug.client could not be guessed. Install one of the following packages: php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
             },
             'httplug.message_factory'=>function(ArrayObject $config) {
-                return MessageFactoryDiscovery::find();
+                if (class_exists(GuzzleClient::class)) {
+                    return new GuzzleMessageFactory();
+                }
+
+                // TODO add "if else" for other message factories provided by httplug.
+                
+                if (class_exists(MessageFactoryDiscovery::class)) {
+                    return MessageFactoryDiscovery::find();
+                }
+
+                throw new \LogicException('The httpplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
             },
             'payum.http_client'=>function(ArrayObject $config) {
                   return new HttplugClient($config['httplug.client']);
