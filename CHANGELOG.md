@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.7 (2016-03-24)
+
+* [stripe] Subscription billing.
+
 ## 1.2.6 (2016-03-18)
 
 * [bridge][symfony] add obtain credit card action builder.
