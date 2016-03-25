@@ -284,7 +284,7 @@ class AbstractTokenFactoryTest extends \PHPUnit_Framework_TestCase
         $actualToken = $factory->createToken(
             $gatewayName,
             $model,
-            'http://google.com?foo=fooVal',
+            'http://google.com/?foo=fooVal',
             array('target' => 'val'),
             'theAfterPath',
             array('after' => 'val')
@@ -294,7 +294,7 @@ class AbstractTokenFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($gatewayName, $token->getGatewayName());
         $this->assertSame($identity, $token->getDetails());
         $this->assertEquals(
-            'http://google.com/?payum_token='.$token->getHash().'&foo=fooVal&target=val',
+            'http://google.com/?foo=fooVal&payum_token='.$token->getHash().'&target=val',
             $token->getTargetUrl()
         );
         $this->assertEquals('theAfterPath?after=val', $token->getAfterUrl());
