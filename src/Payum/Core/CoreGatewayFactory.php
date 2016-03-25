@@ -67,35 +67,38 @@ class CoreGatewayFactory implements GatewayFactoryInterface
 
         $config->defaults(array(
             'httplug.client'=>function(ArrayObject $config) {
+                if (class_exists(HttpClientDiscovery::class)) {
+                    return HttpClientDiscovery::find();
+                }
+
                 if (class_exists(HttpGuzzle6Client::class)) {
                     return new HttpGuzzle6Client(new GuzzleClient());
                 }
                 
                 // TODO add "if else" for other clients provided by httplug.
 
-                if (class_exists(HttpClientDiscovery::class)) {
-                    return HttpClientDiscovery::find();
-                }
+
 
                 throw new \LogicException('The httpplug.client could not be guessed. Install one of the following packages: php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
             },
             'httplug.message_factory'=>function(ArrayObject $config) {
+                if (class_exists(MessageFactoryDiscovery::class)) {
+                    return MessageFactoryDiscovery::find();
+                }
+
                 if (class_exists(GuzzleClient::class)) {
                     return new GuzzleMessageFactory();
                 }
 
                 // TODO add "if else" for other message factories provided by httplug.
                 
-                if (class_exists(MessageFactoryDiscovery::class)) {
-                    return MessageFactoryDiscovery::find();
-                }
+
 
                 throw new \LogicException('The httpplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
             },
             'payum.http_client'=>function(ArrayObject $config) {
                   return new HttplugClient($config['httplug.client']);
             },
-            'guzzle.client' => HttpClientFactory::createGuzzle(),
             'payum.template.layout' => '@PayumCore/layout.html.twig',
             'twig.env' => function(ArrayObject $config) use ($twig) {
                 $twig = $twig ?: new \Twig_Environment(new \Twig_Loader_Chain());

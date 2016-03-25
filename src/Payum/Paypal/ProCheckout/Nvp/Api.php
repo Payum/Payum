@@ -1,9 +1,7 @@
 <?php
 namespace Payum\Paypal\ProCheckout\Nvp;
 
-use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\MessageFactory;
-use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\LogicException;
@@ -188,7 +186,7 @@ class Api
      *
      * @throw InvalidArgumentException
      */
-    public function __construct(array $options, HttpClientInterface $client = null, MessageFactory $messageFactory = null)
+    public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
     {
         $options = ArrayObject::ensureArrayObject($options);
         $options->defaults($this->options);
@@ -205,8 +203,8 @@ class Api
         }
 
         $this->options = $options;
-        $this->client = $client ?: HttpClientFactory::create();
-        $this->messageFactory = $messageFactory ?: MessageFactoryDiscovery::find();
+        $this->client = $client;
+        $this->messageFactory = $messageFactory;
     }
 
     /**

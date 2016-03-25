@@ -14,7 +14,7 @@ class HttpClientFactory
 {
     /**
      * Create a Guzzle client.
-     *
+     * 
      * @return \GuzzleHttp\Client
      */
     public static function createGuzzle()

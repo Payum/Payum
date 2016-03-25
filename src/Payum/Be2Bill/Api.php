@@ -1,9 +1,7 @@
 <?php
 namespace Payum\Be2Bill;
 
-use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\MessageFactory;
-use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\Http\HttpException;
@@ -130,7 +128,7 @@ class Api
      *
      * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
      */
-    public function __construct(array $options, HttpClientInterface $client = null, MessageFactory $messageFactory = null)
+    public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory )
     {
         $options = ArrayObject::ensureArrayObject($options);
         $options->defaults($this->options);
@@ -144,8 +142,8 @@ class Api
         }
 
         $this->options = $options;
-        $this->client = $client ?: HttpClientFactory::create();
-        $this->messageFactory = $messageFactory ?: MessageFactoryDiscovery::find();
+        $this->client = $client;
+        $this->messageFactory = $messageFactory;
     }
 
     /**

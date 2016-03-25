@@ -1,9 +1,7 @@
 <?php
 namespace Payum\Skeleton;
 
-use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\MessageFactory;
-use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\HttpClientInterface;
 
@@ -31,11 +29,11 @@ class Api
      *
      * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
      */
-    public function __construct(array $options, HttpClientInterface $client = null, MessageFactory $messageFactory = null)
+    public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
     {
         $this->options = $options;
-        $this->client = $client ?: HttpClientFactory::create();
-        $this->messageFactory = $messageFactory ?: MessageFactoryDiscovery::find();
+        $this->client = $client;
+        $this->messageFactory = $messageFactory;
     }
 
     /**

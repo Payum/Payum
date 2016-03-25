@@ -1,9 +1,7 @@
 <?php
 namespace Payum\Paypal\Ipn;
 
-use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\MessageFactory;
-use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\HttpClientInterface;
@@ -45,10 +43,10 @@ class Api
      * @param HttpClientInterface $client
      * @param MessageFactory      $messageFactory
      */
-    public function __construct(array $options, HttpClientInterface $client = null, MessageFactory $messageFactory = null)
+    public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
     {
-        $this->client = $client ?: HttpClientFactory::create();
-        $this->messageFactory = $messageFactory ?: MessageFactoryDiscovery::find();
+        $this->client = $client;
+        $this->messageFactory = $messageFactory;
 
         $this->options = $options;
 
