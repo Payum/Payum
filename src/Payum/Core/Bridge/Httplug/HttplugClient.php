@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Core\Bridge\Guzzle;
+namespace Payum\Core\Bridge\Httplug;
 
 use Payum\Core\HttpClientInterface;
 use Psr\Http\Message\RequestInterface;

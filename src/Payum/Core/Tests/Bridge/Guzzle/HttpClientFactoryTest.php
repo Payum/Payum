@@ -4,7 +4,7 @@ namespace Payum\Core\Tests\Bridge\Guzzle;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use Payum\Core\Bridge\Guzzle\HttpClient;
 use Payum\Core\Bridge\Guzzle\HttpClientFactory;
-use Payum\Core\Bridge\Guzzle\HttplugClient;
+use Payum\Core\Bridge\Httplug\HttplugClient;
 use Payum\Core\HttpClientInterface;
 
 class HttpClientFactoryTest extends \PHPUnit_Framework_TestCase

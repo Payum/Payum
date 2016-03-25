@@ -4,6 +4,7 @@ namespace Payum\Core\Bridge\Guzzle;
 
 use GuzzleHttp\Client;
 use Http\Discovery\HttpClientDiscovery;
+use Payum\Core\Bridge\Httplug\HttplugClient;
 use Payum\Core\HttpClientInterface;
 
 /**
