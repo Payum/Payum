@@ -5,6 +5,7 @@
 * [http-client] When you update to Payum 1.3.0 the installation will fail because you need to install a client implementation. If you choose php-http/guzzle6-adapter everything will work exactly as before.
 * Api constructor's arguments are not optional any more.
 * [gateway-factory] Option 'guzzle.client' was removed.
+* [security] A new method `createPayoutToken` was added to `GenericTokenFactoryInterface` interface.
 
 ## 1.2.0
 

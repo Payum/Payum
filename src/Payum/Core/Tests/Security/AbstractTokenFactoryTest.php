@@ -5,6 +5,7 @@ use Payum\Core\Model\Identity;
 use Payum\Core\Model\Token;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\AbstractTokenFactory;
+use Payum\Core\Security\TokenFactoryInterface;
 use Payum\Core\Storage\StorageInterface;
 
 class AbstractTokenFactoryTest extends \PHPUnit_Framework_TestCase
@@ -14,9 +15,9 @@ class AbstractTokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementsGenericTokenFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Security\AbstractTokenFactory');
+        $rc = new \ReflectionClass(AbstractTokenFactory::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Security\TokenFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface(TokenFactoryInterface::class));
     }
 
     /**
@@ -24,7 +25,7 @@ class AbstractTokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeAbstract()
     {
-        $rc = new \ReflectionClass('Payum\Core\Security\AbstractTokenFactory');
+        $rc = new \ReflectionClass(AbstractTokenFactory::class);
 
         $this->assertFalse($rc->isInstantiable());
     }
@@ -345,7 +346,7 @@ class AbstractTokenFactoryTest extends \PHPUnit_Framework_TestCase
             $gatewayName,
             $model,
             'http://example.com/authorize.php',
-            array(),
+            [],
             'http://google.com/?payum_token=foo',
             array('afterKey' => 'afterVal')
         );
@@ -408,7 +409,7 @@ class AbstractTokenFactoryTest extends \PHPUnit_Framework_TestCase
             $gatewayName,
             $model,
             'http://example.com/authorize.php',
-            array(),
+            [],
             'http://google.com/?payum_token=foo',
             array('payum_token' => null, 'afterKey' => 'afterVal')
         );
@@ -471,7 +472,7 @@ class AbstractTokenFactoryTest extends \PHPUnit_Framework_TestCase
             $gatewayName,
             $model,
             'http://example.com/authorize.php',
-            array(),
+            [],
             'http://google.com/foo/bar?foo=fooVal#fragment',
             array('payum_token' => null)
         );
@@ -497,7 +498,7 @@ class AbstractTokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function createTokenFactoryMock(StorageInterface $tokenStorage, StorageRegistryInterface $registry)
     {
-        $factoryMock = $this->getMockForAbstractClass('Payum\Core\Security\AbstractTokenFactory', array($tokenStorage, $registry));
+        $factoryMock = $this->getMockForAbstractClass(AbstractTokenFactory::class, array($tokenStorage, $registry));
         $factoryMock
             ->expects($this->any())
             ->method('generateUrl')

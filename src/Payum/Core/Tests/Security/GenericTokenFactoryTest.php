@@ -3,6 +3,7 @@ namespace Payum\Core\Tests\Security;
 
 use Payum\Core\Model\Token;
 use Payum\Core\Security\GenericTokenFactory;
+use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\TokenFactoryInterface;
 
 class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
@@ -12,9 +13,9 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementGenericTokenFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Security\GenericTokenFactory');
+        $rc = new \ReflectionClass(GenericTokenFactory::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Security\GenericTokenFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface(GenericTokenFactoryInterface::class));
     }
 
     /**
@@ -22,7 +23,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithTokenFactoryAndPaths()
     {
-        new GenericTokenFactory($this->createTokenFactoryMock(), array());
+        new GenericTokenFactory($this->createTokenFactoryMock(), []);
     }
 
     /**
@@ -55,7 +56,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
         ;
 
 
-        $factory = new GenericTokenFactory($tokenFactoryMock, array());
+        $factory = new GenericTokenFactory($tokenFactoryMock, []);
 
         $actualToken = $factory->createToken(
             $gatewayName,
@@ -91,13 +92,13 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
                 $targetPath,
                 $targetParameters,
                 null,
-                array()
+                []
             )
             ->willReturn($token)
         ;
 
 
-        $factory = new GenericTokenFactory($tokenFactoryMock, array());
+        $factory = new GenericTokenFactory($tokenFactoryMock, []);
 
         $actualToken = $factory->createToken(
             $gatewayName,
@@ -166,7 +167,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
                 $afterPath,
                 $afterParameters,
                 null,
-                array()
+                []
             )
             ->willReturn($afterToken)
         ;
@@ -177,9 +178,9 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
                 $gatewayName,
                 $this->identicalTo($model),
                 $capturePath,
-                array(),
+                [],
                 $afterUrl,
-                array()
+                []
             )
             ->willReturn($captureToken)
         ;
@@ -256,7 +257,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
                 $afterPath,
                 $afterParameters,
                 null,
-                array()
+                []
             )
             ->willReturn($afterToken)
         ;
@@ -267,9 +268,9 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
                 $gatewayName,
                 $this->identicalTo($model),
                 $authorizePath,
-                array(),
+                [],
                 $afterUrl,
-                array()
+                []
             )
             ->willReturn($authorizeToken)
         ;
@@ -346,7 +347,7 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
                 $afterPath,
                 $afterParameters,
                 null,
-                array()
+                []
             )
             ->willReturn($afterToken)
         ;
@@ -357,9 +358,9 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
                 $gatewayName,
                 $this->identicalTo($model),
                 $refundPath,
-                array(),
+                [],
                 $afterUrl,
-                array()
+                []
             )
             ->willReturn($refundToken)
         ;
@@ -398,9 +399,9 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
                 $gatewayName,
                 $this->identicalTo($model),
                 $refundPath,
-                array(),
+                [],
                 null,
-                array()
+                []
             )
             ->willReturn($refundToken)
         ;
@@ -463,9 +464,9 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
                 $gatewayName,
                 $this->identicalTo($model),
                 $notifyPath,
-                array(),
+                [],
                 null,
-                array()
+                []
             )
             ->willReturn($notifyToken)
         ;
@@ -497,9 +498,9 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
                 $gatewayName,
                 null,
                 $notifyPath,
-                array(),
+                [],
                 null,
-                array()
+                []
             )
             ->willReturn($notifyToken)
         ;
@@ -514,10 +515,100 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The path "payout" is not found. Possible paths are foo, bar
+     */
+    public function throwIfPayoutPathNotConfigured()
+    {
+        $gatewayName = 'theGatewayName';
+        $model = new \stdClass();
+        $afterPath = 'theAfterPath';
+        $afterParameters = array('after' => 'val');
+
+        $tokenFactoryMock = $this->createTokenFactoryMock();
+        $tokenFactoryMock
+            ->expects($this->never())
+            ->method('createToken')
+        ;
+
+
+        $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
+
+        $factory->createPayoutToken(
+            $gatewayName,
+            $model,
+            $afterPath,
+            $afterParameters
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowCreatePayoutToken()
+    {
+        $gatewayName = 'theGatewayName';
+        $model = new \stdClass();
+        $payoutPath = 'thePayoutPath';
+        $afterPath = 'theAfterPath';
+        $afterUrl = 'theAfterUrl';
+        $afterParameters = array('after' => 'val');
+
+        $afterToken = new Token();
+        $afterToken->setTargetUrl($afterUrl);
+
+        $payoutToken = new Token();
+
+        $tokenFactoryMock = $this->createTokenFactoryMock();
+        $tokenFactoryMock
+            ->expects($this->at(0))
+            ->method('createToken')
+            ->with(
+                $gatewayName,
+                $this->identicalTo($model),
+                $afterPath,
+                $afterParameters,
+                null,
+                []
+            )
+            ->willReturn($afterToken)
+        ;
+        $tokenFactoryMock
+            ->expects($this->at(1))
+            ->method('createToken')
+            ->with(
+                $gatewayName,
+                $this->identicalTo($model),
+                $payoutPath,
+                [],
+                $afterUrl,
+                []
+            )
+            ->willReturn($payoutToken)
+        ;
+
+
+        $factory = new GenericTokenFactory($tokenFactoryMock, array(
+            'payout' => $payoutPath
+        ));
+
+        $actualToken = $factory->createPayoutToken(
+            $gatewayName,
+            $model,
+            $afterPath,
+            $afterParameters
+        );
+
+        $this->assertSame($payoutToken, $actualToken);
+    }
+
+    /**
      * @return \PHPUnit_Framework_MockObject_MockObject|TokenFactoryInterface
      */
     protected function createTokenFactoryMock()
     {
-        return $this->getMock('Payum\Core\Security\TokenFactoryInterface');
+        return $this->getMock(TokenFactoryInterface::class);
     }
 }
