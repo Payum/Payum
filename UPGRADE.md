@@ -3,6 +3,7 @@
 ## 1.3.0
 
 * [http-client] When you update to Payum 1.3.0 the installation will fail because you need to install a client implementation. If you choose php-http/guzzle6-adapter everything will work exactly as before.
+* Api constructor's arguments are not optional any more.
 
 ## 1.2.0
 
