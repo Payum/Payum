@@ -2,7 +2,7 @@
 
 ## 1.3.0
 
-* [http-client] guzzlehttp/guzzle was decoupled and replaced by [Httplug](http://docs.php-http.org/en/latest/httplug/introduction.html). This gives you option to use Guzzle6, Guzzle5, Buzz or any other library to send HTTP messages. Make sure to specify `httplug.client` and `httplug.message_factory` or use [Httplug discovery](http://docs.php-http.org/en/latest/discovery.html). 
+* [http-client] When you update to Payum 1.3.0 the installation will fail because you need to install a client implementation. If you choose php-http/guzzle6-adapter everything will work exactly as before.
 
 ## 1.2.0
 
