@@ -37,7 +37,8 @@
     "require": {
         "php": "^5.5.0|^7.0",
         "payum/iso4217": "~1.0",
-        "guzzlehttp/guzzle": "~6.0",
+        "php-http/message": "^1.0",
+        "php-http/client-implementation": "^1.0",
         "league/url": "~3.0",
         "twig/twig": "~1.0"
     },

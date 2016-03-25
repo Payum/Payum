@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Core\Tests;
 
-use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\GatewayInterface;

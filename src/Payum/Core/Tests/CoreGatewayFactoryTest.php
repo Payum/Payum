@@ -96,8 +96,7 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $config);
         $this->assertNotEmpty($config);
 
-        $this->assertInstanceOf(HttpClientInterface::class, $config['payum.http_client']);
-        $this->assertInstanceOf(GuzzleClientInterface::class, $config['guzzle.client']);
+        $this->assertInstanceOf(\Closure::class, $config['payum.http_client']);
         $this->assertInstanceOf(GetHttpRequestAction::class, $config['payum.action.get_http_request']);
         $this->assertInstanceOf(CapturePaymentAction::class, $config['payum.action.capture_payment']);
         $this->assertInstanceOf(ExecuteSameRequestWithModelDetailsAction::class, $config['payum.action.execute_same_request_with_model_details']);
