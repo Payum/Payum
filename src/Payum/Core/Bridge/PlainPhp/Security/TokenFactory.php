@@ -2,7 +2,6 @@
 namespace Payum\Core\Bridge\PlainPhp\Security;
 
 use League\Uri\Schemes\Http as HttpUri;
-use League\Uri\Components\Query;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\AbstractTokenFactory;
 use Payum\Core\Storage\StorageInterface;
@@ -10,7 +9,7 @@ use Payum\Core\Storage\StorageInterface;
 class TokenFactory extends AbstractTokenFactory
 {
     /**
-     * @var string
+     * @var HttpUri
      */
     protected $baseUrl;
 
@@ -23,29 +22,19 @@ class TokenFactory extends AbstractTokenFactory
     {
         parent::__construct($tokenStorage, $storageRegistry);
 
-        if ($baseUrl) {
-            $this->baseUrl = $baseUrl;
-        } else {
-            $uri = HttpUri::createFromServer($_SERVER);
-            $scheme = $uri->getScheme();
-            $auth = $uri->getAuthority();
-            if ('' != $auth && '' == $scheme) {
-                $scheme = '//';
-            }
-            $this->baseUrl = $scheme . $auth;
-        }
+        $this->baseUrl = $baseUrl ? HttpUri::createFromString($baseUrl) : HttpUri::createFromServer($_SERVER);
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function generateUrl($path, array $parameters = array())
+    protected function generateUrl($path, array $parameters = [])
     {
+        $newPath = $this->baseUrl->path->append($path);
 
-        $uri = HttpUri::createFromString($this->baseUrl);
-        $uri = $uri->withPath($path);
-        $uri = $uri->withQuery((string)Query::createFromArray($parameters));
+        $uri = $this->baseUrl->withPath((string) $newPath);
+        $uri = $this->addQueryToUri($uri, $parameters);
 
-        return (string)$uri;
+        return (string) $uri;
     }
 }

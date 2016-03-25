@@ -12,6 +12,16 @@ use Payum\Core\Storage\StorageInterface;
 abstract class AbstractTokenFactory implements TokenFactoryInterface
 {
     /**
+     * @var StorageInterface
+     */
+    protected $tokenStorage;
+
+    /**
+     * @var StorageRegistryInterface
+     */
+    protected $storageRegistry;
+
+    /**
      * @param StorageInterface         $tokenStorage
      * @param StorageRegistryInterface $storageRegistry
      */
@@ -24,11 +34,13 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createToken($gatewayName, $model, $targetPath, array $targetParameters = array(), $afterPath = null, array $afterParameters = array())
+    public function createToken($gatewayName, $model, $targetPath, array $targetParameters = [], $afterPath = null, array $afterParameters = [])
     {
         /** @var TokenInterface $token */
         $token = $this->tokenStorage->create();
         $token->setHash($token->getHash() ?: Random::generateToken());
+
+        $targetParameters = array_replace(['payum_token' => $token->getHash()], $targetParameters);
 
         $token->setGatewayName($gatewayName);
 
@@ -40,24 +52,16 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
 
         if (0 === strpos($targetPath, 'http')) {
             $targetUri = HttpUri::createFromString($targetPath);
-            $targetUri = $targetUri->withQuery( (string) Query::createFromArray(array_replace(
-                array('payum_token' => $token->getHash()),
-                $targetUri->query->toArray(),
-                $targetParameters
-            )));
+            $targetUri = $this->addQueryToUri($targetUri, $targetParameters);
+
             $token->setTargetUrl((string) $targetUri);
         } else {
-            $token->setTargetUrl($this->generateUrl($targetPath, array_replace(
-                array('payum_token' => $token->getHash()),
-                $targetParameters
-            )));
+            $token->setTargetUrl($this->generateUrl($targetPath, $targetParameters));
         }
 
         if ($afterPath && 0 === strpos($afterPath, 'http')) {
             $afterUri = HttpUri::createFromString($afterPath);
-
-            $modifier = new MergeQuery((string)Query::createFromArray($afterParameters));
-            $afterUri = $modifier($afterUri);
+            $afterUri = $this->addQueryToUri($afterUri, $afterParameters);
 
             $token->setAfterUrl((string) $afterUri);
         } elseif ($afterPath) {
@@ -67,6 +71,22 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
         $this->tokenStorage->update($token);
 
         return $token;
+    }
+
+    /**
+     * @param HttpUri $uri
+     * @param array $query
+     *
+     * @return HttpUri
+     */
+    protected function addQueryToUri(HttpUri $uri, array $query)
+    {
+        $query = array_replace($uri->query->toArray(), $query);
+        $query = array_filter($query, function($value) {
+            return null !== $value;
+        });
+
+        return $uri->withQuery((string) Query::createFromArray($query));
     }
 
     /**

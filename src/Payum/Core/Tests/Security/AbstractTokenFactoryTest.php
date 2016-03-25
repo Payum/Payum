@@ -294,7 +294,7 @@ class AbstractTokenFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($gatewayName, $token->getGatewayName());
         $this->assertSame($identity, $token->getDetails());
         $this->assertEquals(
-            'http://google.com/?payum_token='.$token->getHash().'&foo=fooVal&target=val',
+            'http://google.com/?foo=fooVal&payum_token='.$token->getHash().'&target=val',
             $token->getTargetUrl()
         );
         $this->assertEquals('theAfterPath?after=val', $token->getAfterUrl());
@@ -421,7 +421,7 @@ class AbstractTokenFactoryTest extends \PHPUnit_Framework_TestCase
             $authorizeToken->getTargetUrl()
         );
         $this->assertEquals(
-            'http://google.com/?payum_token&afterKey=afterVal',
+            'http://google.com/?afterKey=afterVal',
             $authorizeToken->getAfterUrl()
         );
     }
@@ -484,7 +484,7 @@ class AbstractTokenFactoryTest extends \PHPUnit_Framework_TestCase
             $authorizeToken->getTargetUrl()
         );
         $this->assertEquals(
-            'http://google.com/foo/bar?foo=fooVal&payum_token#fragment',
+            'http://google.com/foo/bar?foo=fooVal#fragment',
             $authorizeToken->getAfterUrl()
         );
     }
