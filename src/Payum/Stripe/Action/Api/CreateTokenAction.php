@@ -7,12 +7,12 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Stripe\Keys;
-use Payum\Stripe\Request\Api\CreatePlan;
+use Payum\Stripe\Request\Api\CreateToken;
 use Stripe\Error;
-use Stripe\Plan;
 use Stripe\Stripe;
+use Stripe\Token;
 
-class CreatePlanAction extends GatewayAwareAction implements ApiAwareInterface
+class CreateTokenAction extends GatewayAwareAction implements ApiAwareInterface
 {
     /**
      * @var Keys
@@ -36,7 +36,7 @@ class CreatePlanAction extends GatewayAwareAction implements ApiAwareInterface
      */
     public function execute($request)
     {
-        /** @var $request CreatePlan */
+        /** @var $request CreateToken */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -44,9 +44,9 @@ class CreatePlanAction extends GatewayAwareAction implements ApiAwareInterface
         try {
             Stripe::setApiKey($this->keys->getSecretKey());
 
-            $plan = Plan::create($model->toUnsafeArrayWithoutLocal());
+            $token = Token::create($model->toUnsafeArrayWithoutLocal());
 
-            $model->replace($plan->__toArray(true));
+            $model->replace($token->__toArray(true));
         } catch (Error\Base $e) {
             $model->replace($e->getJsonBody());
         }
@@ -58,7 +58,7 @@ class CreatePlanAction extends GatewayAwareAction implements ApiAwareInterface
     public function supports($request)
     {
         return
-            $request instanceof CreatePlan &&
+            $request instanceof CreateToken &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }
