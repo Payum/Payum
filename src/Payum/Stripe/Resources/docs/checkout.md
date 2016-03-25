@@ -10,7 +10,7 @@ The preferred way to install the library is using [composer](http://getcomposer.
 Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require payum/stripe
+php composer.phar require payum/stripe php-http/guzzle6-adapter
 ```
 
 ## config.php
