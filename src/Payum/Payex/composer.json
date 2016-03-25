@@ -27,6 +27,7 @@
         "ext-curl": "*",
         "ext-pdo_sqlite": "*",
         "doctrine/orm": "2.3",
+        "payum/core": "~1.0@dev",
         "phpunit/phpunit": "~4.0",
         "symfony/phpunit-bridge": "~2.8|~3.0"
     },
