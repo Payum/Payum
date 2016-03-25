@@ -30,6 +30,7 @@ use Payum\Offline\OfflineGatewayFactory;
 use Payum\OmnipayBridge\OmnipayGatewayFactory;
 use Payum\Payex\PayexGatewayFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory;
+use Payum\Paypal\Masspay\Nvp\PaypalMasspayGatewayFactory;
 use Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory;
 use Payum\Paypal\Rest\PaypalRestGatewayFactory;
 use Payum\Sofort\SofortGatewayFactory;
@@ -548,6 +549,7 @@ class PayumBuilder
         $map = [
             'paypal_express_checkout' => PaypalExpressCheckoutGatewayFactory::class,
             'paypal_pro_checkout' => PaypalProCheckoutGatewayFactory::class,
+            'paypal_masspay' => PaypalMasspayGatewayFactory::class,
             'paypal_rest' => PaypalRestGatewayFactory::class,
             'authorize_net_aim' => AuthorizeNetAimGatewayFactory::class,
             'be2bill_direct' => Be2BillDirectGatewayFactory::class,
