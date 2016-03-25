@@ -21,6 +21,10 @@ class CaptureAction extends GatewayAwareAction
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
+        if ($model['status']) {
+            return;
+        }
+
         if ($model['customer']) {
         } else {
             if (false == $model['card']) {
@@ -32,9 +36,7 @@ class CaptureAction extends GatewayAwareAction
 
         }
 
-        if (false == $model['status']) {
-            $this->gateway->execute(new CreateCharge($model));
-        }
+        $this->gateway->execute(new CreateCharge($model));
     }
 
     /**
