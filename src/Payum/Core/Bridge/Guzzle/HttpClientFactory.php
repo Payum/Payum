@@ -4,7 +4,6 @@ namespace Payum\Core\Bridge\Guzzle;
 
 use GuzzleHttp\Client;
 use Http\Discovery\HttpClientDiscovery;
-use Payum\Core\Bridge\Httplug\HttplugClient;
 use Payum\Core\HttpClientInterface;
 
 /**
@@ -46,6 +45,6 @@ class HttpClientFactory
      */
     public static function create()
     {
-        return new HttplugClient(HttpClientDiscovery::find());
+        return new HttpClient(static::createGuzzle());
     }
 }
