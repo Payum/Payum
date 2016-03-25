@@ -30,11 +30,11 @@ class CaptureActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldDoNothingIfModelHasAlreadyUsedToken()
+    public function shouldDoNothingIfPaymentHasStatus()
     {
-        $model = array(
-            'card' => array('foo', 'bar'),
-        );
+        $model = [
+            'status' => Constants::STATUS_SUCCEEDED,
+        ];
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -142,6 +142,33 @@ class CaptureActionTest extends GenericActionTest
     {
         $model = [
             'customer' => 'theCustomerId',
+        ];
+
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->isInstanceOf(CreateCharge::class))
+        ;
+
+        $action = new CaptureAction();
+        $action->setGateway($gatewayMock);
+
+        $action->execute(new Capture($model));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSubExecuteCreateChargeIfCreditCardSetExplisitly()
+    {
+        $model = [
+            'card' => [
+                'number' => '4111111111111111',
+                'exp_month' => '10',
+                'exp_year' => '20',
+                'cvc' => '123',
+            ],
         ];
 
         $gatewayMock = $this->createGatewayMock();

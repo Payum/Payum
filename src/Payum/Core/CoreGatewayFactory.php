@@ -1,11 +1,21 @@
 <?php
 namespace Payum\Core;
 
+use Http\Adapter\Guzzle6\Client as HttpGuzzle6Client;
+use Http\Adapter\Guzzle5\Client as HttpGuzzle5Client;
+use Http\Adapter\Buzz\Client as HttpBuzzClient;
+use Http\Client\Curl\Client as HttpCurlClient;
+use Http\Client\Socket\Client as HttpSocketClient;
+use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\MessageFactoryDiscovery;
+use Http\Message\MessageFactory\DiactorosMessageFactory;
+use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetCurrencyAction;
 use Payum\Core\Action\GetTokenAction;
 use Payum\Core\Bridge\Guzzle\HttpClientFactory;
+use Payum\Core\Bridge\Httplug\HttplugClient;
 use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
@@ -59,10 +69,52 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         $config['twig.env'] = null;
 
         $config->defaults(array(
-            'payum.template.layout' => '@PayumCore/layout.html.twig',
+            'httplug.client'=>function(ArrayObject $config) {
+                if (class_exists(HttpClientDiscovery::class)) {
+                    return HttpClientDiscovery::find();
+                }
 
-            'payum.http_client' => HttpClientFactory::create(),
-            'guzzle.client' => HttpClientFactory::createGuzzle(),
+                if (class_exists(HttpGuzzle6Client::class)) {
+                    return new HttpGuzzle6Client();
+                }
+
+                if (class_exists(HttpGuzzle5Client::class)) {
+                    return new HttpGuzzle5Client();
+                }
+
+                if (class_exists(HttpSocketClient::class)) {
+                    return new HttpSocketClient();
+                }
+
+                if (class_exists(HttpCurlClient::class)) {
+                    return new HttpCurlClient();
+                }
+
+                if (class_exists(HttpBuzzClient::class)) {
+                    return new HttpBuzzClient();
+                }
+
+                throw new \LogicException('The httplug.client could not be guessed. Install one of the following packages: php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
+            },
+            'httplug.message_factory'=>function(ArrayObject $config) {
+                if (class_exists(MessageFactoryDiscovery::class)) {
+                    return MessageFactoryDiscovery::find();
+                }
+
+                if (class_exists(\GuzzleHttp\Psr7\Request::class)) {
+                    return new GuzzleMessageFactory();
+                }
+
+                if (class_exists(\Zend\Diactoros\Request::class)) {
+                    return new DiactorosMessageFactory();
+                }
+
+                throw new \LogicException('The httplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
+            },
+            'payum.http_client'=>function(ArrayObject $config) {
+                  return new HttplugClient($config['httplug.client']);
+            },
+            'payum.template.layout' => '@PayumCore/layout.html.twig',
             'twig.env' => function(ArrayObject $config) use ($twig) {
                 $twig = $twig ?: new \Twig_Environment(new \Twig_Loader_Chain());
                 TwigUtil::registerPaths($twig, $config['payum.paths']);
@@ -111,7 +163,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     protected function buildClosures(ArrayObject $config)
     {
         // with higher priority
-        foreach (['guzzle.client', 'payum.http_client', 'payum.paths', 'twig.env'] as $name) {
+        foreach (['httplug.client', 'payum.http_client', 'payum.paths', 'twig.env'] as $name) {
             $value = $config[$name];
             if (is_callable($value)) {
                 $config[$name] = call_user_func($value, $config);

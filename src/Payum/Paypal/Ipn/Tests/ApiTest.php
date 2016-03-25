@@ -2,6 +2,7 @@
 namespace Payum\Paypal\Ipn\Tests;
 
 use GuzzleHttp\Psr7\Response;
+use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Payum\Core\HttpClientInterface;
 use Payum\Paypal\Ipn\Api;
 use Psr\Http\Message\RequestInterface;
@@ -15,7 +16,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     {
         new Api(array(
             'sandbox' => true,
-        ), $this->createHttpClientMock());
+        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
     /**
@@ -26,7 +27,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfSandboxOptionNotSetInConstructor()
     {
-        new Api(array(), $this->createHttpClientMock());
+        new Api(array(), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
     /**
@@ -36,7 +37,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     {
         $api = new Api(array(
             'sandbox' => true,
-        ), $this->createHttpClientMock());
+        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
         $this->assertEquals('https://www.sandbox.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
     }
@@ -48,7 +49,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     {
         $api = new Api(array(
             'sandbox' => false,
-        ), $this->createHttpClientMock());
+        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
         $this->assertEquals('https://www.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
     }
@@ -72,7 +73,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
 
         $api = new Api(array(
             'sandbox' => false,
-        ), $clientMock);
+        ), $clientMock, $this->createHttpMessageFactory());
 
         $api->notifyValidate(array());
     }
@@ -98,7 +99,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
 
         $api = new Api(array(
             'sandbox' => false,
-        ), $clientMock);
+        ), $clientMock, $this->createHttpMessageFactory());
 
         $expectedNotification = array(
             'foo' => 'foo',
@@ -132,7 +133,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
 
         $api = new Api(array(
             'sandbox' => false,
-        ), $clientMock);
+        ), $clientMock, $this->createHttpMessageFactory());
 
         $this->assertEquals(Api::NOTIFY_VERIFIED, $api->notifyValidate(array()));
     }
@@ -153,7 +154,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
 
         $api = new Api(array(
             'sandbox' => false,
-        ), $clientMock);
+        ), $clientMock, $this->createHttpMessageFactory());
 
         $this->assertEquals(Api::NOTIFY_INVALID, $api->notifyValidate(array()));
     }
@@ -174,7 +175,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
 
         $api = new Api(array(
             'sandbox' => false,
-        ), $clientMock);
+        ), $clientMock, $this->createHttpMessageFactory());
 
         $this->assertEquals(Api::NOTIFY_INVALID, $api->notifyValidate(array()));
     }
@@ -185,6 +186,14 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     protected function createHttpClientMock()
     {
         return $this->getMock('Payum\Core\HttpClientInterface', array('send'));
+    }
+
+    /**
+     * @return \Http\Message\MessageFactory
+     */
+    protected function createHttpMessageFactory()
+    {
+        return new GuzzleMessageFactory();
     }
 
     /**

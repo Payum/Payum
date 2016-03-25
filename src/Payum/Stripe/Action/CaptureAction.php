@@ -21,12 +21,12 @@ class CaptureAction extends GatewayAwareAction
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
+        if ($model['status']) {
+            return;
+        }
+
         if ($model['customer']) {
         } else {
-            if (is_array($model['card'])) {
-                return;
-            }
-
             if (false == $model['card']) {
                 $obtainToken = new ObtainToken($request->getToken());
                 $obtainToken->setModel($model);
@@ -36,9 +36,7 @@ class CaptureAction extends GatewayAwareAction
 
         }
 
-        if (false == $model['status']) {
-            $this->gateway->execute(new CreateCharge($model));
-        }
+        $this->gateway->execute(new CreateCharge($model));
     }
 
     /**

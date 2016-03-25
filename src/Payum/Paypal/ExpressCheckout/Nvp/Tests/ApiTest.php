@@ -2,6 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests;
 
 use GuzzleHttp\Psr7\Response;
+use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Payum\Core\HttpClientInterface;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Psr\Http\Message\RequestInterface;
@@ -11,33 +12,20 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithOptionsOnly()
-    {
-        $api = new Api(array(
-            'username' => 'a_username',
-            'password' => 'a_password',
-            'signature' => 'a_signature',
-            'sandbox' => true,
-        ));
-
-        $this->assertAttributeInstanceOf('Payum\Core\HttpClientInterface', 'client', $api);
-    }
-
-    /**
-     * @test
-     */
     public function couldBeConstructedWithOptionsAndHttpClient()
     {
         $client = $this->createHttpClientMock();
+        $factory = $this->createHttpMessageFactory();
 
         $api = new Api(array(
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ), $client);
+        ), $client, $factory);
 
         $this->assertAttributeSame($client, 'client', $api);
+        $this->assertAttributeSame($factory, 'messageFactory', $api);
     }
 
     /**
@@ -48,7 +36,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfRequiredOptionsNotSetInConstructor()
     {
-        new Api(array());
+        new Api(array(), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
     /**
@@ -63,7 +51,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
-        ));
+        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
     /**
@@ -79,7 +67,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ));
+        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
         $api->setExpressCheckout(array());
     }
@@ -96,7 +84,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessHttpClientStub());
+        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->setExpressCheckout(array('RETURNURL' => 'formRequestReturnUrl'));
 
@@ -115,7 +103,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessHttpClientStub());
+        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->setExpressCheckout(array());
 
@@ -135,7 +123,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ), $this->createHttpClientMock());
+        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
         $api->setExpressCheckout(array());
     }
@@ -152,7 +140,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessHttpClientStub());
+        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->setExpressCheckout(array('CANCELURL' => 'formRequestCancelUrl'));
 
@@ -171,7 +159,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessHttpClientStub());
+        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->setExpressCheckout(array());
 
@@ -190,7 +178,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessHttpClientStub());
+        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->setExpressCheckout(array());
 
@@ -210,7 +198,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessHttpClientStub());
+        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->setExpressCheckout(array());
 
@@ -236,7 +224,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessHttpClientStub());
+        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->setExpressCheckout(array());
 
@@ -254,7 +242,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ), $this->createHttpClientMock());
+        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
         $this->assertEquals(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
@@ -273,7 +261,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
             'useraction' => 'aCustomUserAction',
-        ), $this->createHttpClientMock());
+        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
         $this->assertEquals(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?useraction=aCustomUserAction&cmd=_express-checkout&token=theToken',
@@ -292,7 +280,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
             'useraction' => 'notUsedUseraction',
-        ), $this->createHttpClientMock());
+        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
         $this->assertEquals(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?useraction=theUseraction&cmd=_express-checkout&token=theToken',
@@ -311,7 +299,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
             'cmd' => 'theCmd',
-        ), $this->createHttpClientMock());
+        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
         $this->assertEquals(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=theCmd&token=theToken',
@@ -330,7 +318,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
             'cmd' => 'thisCmdNotUsed',
-        ), $this->createHttpClientMock());
+        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
         $this->assertEquals(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=theCmd&token=theToken',
@@ -348,7 +336,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ), $this->createHttpClientMock());
+        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
         $this->assertEquals(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken&foo=fooVal',
@@ -366,7 +354,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ), $this->createHttpClientMock());
+        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
         $this->assertEquals(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
@@ -384,7 +372,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => false,
-        ), $this->createHttpClientMock());
+        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
         $this->assertEquals(
             'https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
@@ -417,7 +405,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'sandbox' => false,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $clientMock);
+        ), $clientMock, $this->createHttpMessageFactory());
 
         $api->setExpressCheckout(array());
     }
@@ -447,7 +435,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $clientMock);
+        ), $clientMock, $this->createHttpMessageFactory());
 
         $api->setExpressCheckout(array());
     }
@@ -458,6 +446,14 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     protected function createHttpClientMock()
     {
         return $this->getMock('Payum\Core\HttpClientInterface');
+    }
+
+    /**
+     * @return \Http\Message\MessageFactory
+     */
+    protected function createHttpMessageFactory()
+    {
+        return new GuzzleMessageFactory();
     }
 
     /**

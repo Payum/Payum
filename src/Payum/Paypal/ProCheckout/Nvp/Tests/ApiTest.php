@@ -2,6 +2,7 @@
 namespace Payum\Paypal\ProCheckout\Nvp\Tests;
 
 use GuzzleHttp\Psr7\Response;
+use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Payum\Core\HttpClientInterface;
 use Payum\Paypal\ProCheckout\Nvp\Api;
 use Psr\Http\Message\RequestInterface;
@@ -11,25 +12,10 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithOptionsOnly()
-    {
-        $api = new Api(array(
-            'username' => 'aUsername',
-            'password' => 'aPassword',
-            'partner' => 'aPartner',
-            'vendor' => 'aVendor',
-            'tender' => 'aTender'
-        ));
-
-        $this->assertAttributeInstanceOf('Payum\Core\HttpClientInterface', 'client', $api);
-    }
-
-    /**
-     * @test
-     */
     public function couldBeConstructedWithOptionsAndHttpClient()
     {
         $client = $this->createHttpClientMock();
+        $factory = $this->createHttpMessageFactory();
 
         $api = new Api(array(
             'username' => 'aUsername',
@@ -37,9 +23,10 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'partner' => 'aPartner',
             'vendor' => 'aVendor',
             'tender' => 'aTender'
-        ), $client);
+        ), $client, $factory);
 
         $this->assertAttributeSame($client, 'client', $api);
+        $this->assertAttributeSame($factory, 'messageFactory', $api);
     }
 
     /**
@@ -50,7 +37,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfRequiredOptionsNotSetInConstructor()
     {
-        new Api(array());
+        new Api(array(), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
     /**
@@ -68,7 +55,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'vendor' => 'aVendor',
             'tender' => 'aTender',
             'sandbox' => 'notABool'
-        ));
+        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
     /**
@@ -82,7 +69,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'partner' => 'aPartner',
             'vendor' => 'aVendor',
             'tender' => 'aTender'
-        ), $this->createSuccessHttpClientStub());
+        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->doSale(array());
 
@@ -101,7 +88,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'partner' => 'aPartner',
             'vendor' => 'aVendor',
             'tender' => 'aTender'
-        ), $this->createSuccessHttpClientStub());
+        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->doCredit(array());
 
@@ -120,7 +107,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'partner' => 'thePartner',
             'vendor' => 'theVendor',
             'tender' => 'theTender'
-        ), $this->createSuccessHttpClientStub());
+        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->doSale(array());
 
@@ -151,7 +138,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'partner' => 'thePartner',
             'vendor' => 'theVendor',
             'tender' => 'theTender'
-        ), $this->createSuccessHttpClientStub());
+        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->doCredit(array());
 
@@ -196,7 +183,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'vendor' => 'theVendor',
             'tender' => 'theTender',
             'sandbox' => false,
-        ), $clientMock);
+        ), $clientMock, $this->createHttpMessageFactory());
 
         $api->doCredit(array());
     }
@@ -226,7 +213,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'vendor' => 'theVendor',
             'tender' => 'theTender',
             'sandbox' => true,
-        ), $clientMock);
+        ), $clientMock, $this->createHttpMessageFactory());
 
         $api->doCredit(array());
     }
@@ -237,6 +224,14 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     protected function createHttpClientMock()
     {
         return $this->getMock('Payum\Core\HttpClientInterface');
+    }
+
+    /**
+     * @return \Http\Message\MessageFactory
+     */
+    protected function createHttpMessageFactory()
+    {
+        return new GuzzleMessageFactory();
     }
 
     /**

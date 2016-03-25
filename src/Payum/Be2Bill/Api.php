@@ -1,8 +1,7 @@
 <?php
 namespace Payum\Be2Bill;
 
-use GuzzleHttp\Psr7\Request;
-use Payum\Core\Bridge\Guzzle\HttpClientFactory;
+use Http\Message\MessageFactory;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\Http\HttpException;
@@ -109,6 +108,11 @@ class Api
     protected $client;
 
     /**
+     * @var MessageFactory
+     */
+    protected $messageFactory;
+
+    /**
      * @var array
      */
     protected $options = array(
@@ -120,10 +124,11 @@ class Api
     /**
      * @param array               $options
      * @param HttpClientInterface $client
+     * @param MessageFactory      $messageFactory
      *
      * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
      */
-    public function __construct(array $options, HttpClientInterface $client = null)
+    public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory )
     {
         $options = ArrayObject::ensureArrayObject($options);
         $options->defaults($this->options);
@@ -137,7 +142,8 @@ class Api
         }
 
         $this->options = $options;
-        $this->client = $client ?: HttpClientFactory::create();
+        $this->client = $client;
+        $this->messageFactory = $messageFactory;
     }
 
     /**
@@ -187,7 +193,7 @@ class Api
             'Content-Type' => 'application/x-www-form-urlencoded',
         );
 
-        $request = new Request('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
+        $request = $this->messageFactory->createRequest('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
 
         $response = $this->client->send($request);
 

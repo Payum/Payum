@@ -39,7 +39,8 @@
     "require": {
         "php": "^5.5.0|^7.0",
         "payum/iso4217": "~1.0",
-        "guzzlehttp/guzzle": "~6.0",
+        "php-http/message": "^1.0",
+        "php-http/client-implementation": "^1.0",
         "league/uri": "~4.0",
         "twig/twig": "~1.0"
     },
@@ -57,6 +58,7 @@
         "symfony/http-kernel": "~2.8|~3.0",
         "symfony/http-foundation": "~2.8|~3.0",
         "symfony/form": "~2.8|~3.0",
+        "symfony/templating": "~2.8|~3.0",
         "symfony/validator": "~2.8|~3.0",
         "symfony/phpunit-bridge": "~2.8|~3.0",
         "symfony/dependency-injection": "~2.8|~3.0",
@@ -66,6 +68,7 @@
         "klarna/checkout": "~1|~2.0",
         "fp/klarna-invoice": "0.1.*",
         "stripe/stripe-php": "~2.0|~3.0",
+        "php-http/guzzle6-adapter": "^1.0",
         "ext-soap": "*"
     },
     "replace": {
