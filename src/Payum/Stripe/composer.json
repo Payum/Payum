@@ -2,7 +2,7 @@
     "name": "payum/stripe",
     "type": "library",
     "description": "The Payum extension. It provides Stripe payment integration.",
-    "keywords": ["payment", "stripe", "stripe.js", "checkout"],
+    "keywords": ["payment", "stripe", "stripe.js", "checkout", "direct", "subscription", "store card"],
     "homepage": "http://payum.org",
     "license": "MIT",
     "authors": [

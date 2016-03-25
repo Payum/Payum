@@ -30,7 +30,10 @@ $payum = (new PayumBuilder())
 
 Do next:
 
-```
+```php
+<?php
+// prepare.php
+
 use Payum\Core\Model\CreditCard;
 
 // ...
@@ -40,7 +43,7 @@ $card->setNumber('4111111111111111');
 $card->setExpireAt(new \DateTime('2018-10-10'));
 $card->setSecurityCode(123);
 
-$order->setCreditCard($card);
+$payment->setCreditCard($card);
 ```
 
 Here you have to modify a `gatewayName` value. Set it to `stripe`. And create and populate a credit card object. 
