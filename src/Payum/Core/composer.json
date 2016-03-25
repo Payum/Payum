@@ -51,6 +51,7 @@
         "phpunit/phpunit": "~4.0",
         "propel/propel1": "~1.7",
         "psr/log": "~1.0",
+        "php-http/guzzle6-adapter": "^1.0",
         "zendframework/zend-db": "~2",
         "symfony/routing": "~2.8|~3.0",
         "symfony/http-kernel": "~2.8|~3.0",
