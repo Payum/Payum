@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Model;
 
-class Payment implements PaymentInterface
+class Payment implements PaymentInterface, CreditCardPaymentInterface, DirectDebitPaymentInterface
 {
     /**
      * @var string
@@ -50,7 +50,7 @@ class Payment implements PaymentInterface
 
     public function __construct()
     {
-        $this->details = array();
+        $this->details = [];
     }
 
     /**
