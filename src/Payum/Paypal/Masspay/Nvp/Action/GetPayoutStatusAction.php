@@ -4,19 +4,15 @@ namespace Payum\Paypal\Masspay\Nvp\Action;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\GatewayAwareInterface;
-use Payum\Core\GatewayAwareTrait;
-use Payum\Core\Request\Payout;
-use Payum\Paypal\Masspay\Nvp\Request\Api\Masspay;
+use Payum\Core\Request\GetStatusInterface;
+use Payum\Paypal\Masspay\Nvp\Api;
 
-class PayoutAction implements ActionInterface, GatewayAwareInterface
+class GetPayoutStatusAction implements ActionInterface
 {
-    use GatewayAwareTrait;
-
     /**
      * {@inheritdoc}
      * 
-     * @param Payout $request
+     * @param GetStatusInterface $request
      */
     public function execute($request)
     {
@@ -25,8 +21,24 @@ class PayoutAction implements ActionInterface, GatewayAwareInterface
         $model = ArrayObject::ensureArrayObject($request->getModel());
         
         if (false == $model['ACK']) {
-            $this->gateway->execute(new Masspay($model));   
+            $request->markNew();
+
+            return;
         }
+
+        if (in_array($model['ACK'], [Api::ACK_SUCCESS, Api::ACK_SUCCESS_WITH_WARNING])) {
+            $request->markPayedout();
+
+            return;
+        }
+
+        if (in_array($model['ACK'], [Api::ACK_FAILURE, Api::ACK_FAILURE_WITH_WARNING])) {
+            $request->markFailed();
+
+            return;
+        }
+
+        $request->markUnknown();
     }
 
     /**
@@ -35,7 +47,7 @@ class PayoutAction implements ActionInterface, GatewayAwareInterface
     public function supports($request)
     {
         return 
-            $request instanceof Payout &&
+            $request instanceof GetStatusInterface &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

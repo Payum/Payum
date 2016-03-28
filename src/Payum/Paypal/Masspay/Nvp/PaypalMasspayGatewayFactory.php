@@ -3,7 +3,9 @@ namespace Payum\Paypal\Masspay\Nvp;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
-use Payum\Paypal\Masspay\Nvp\Action\Api\DoMasspayAction;
+use Payum\Paypal\Masspay\Nvp\Action\Api\MasspayAction;
+use Payum\Paypal\Masspay\Nvp\Action\ConvertPayoutAction;
+use Payum\Paypal\Masspay\Nvp\Action\GetPayoutStatusAction;
 use Payum\Paypal\Masspay\Nvp\Action\PayoutAction;
 
 class PaypalMasspayGatewayFactory extends GatewayFactory
@@ -18,7 +20,9 @@ class PaypalMasspayGatewayFactory extends GatewayFactory
             'payum.factory_title' => 'PayPal Masspay',
             
             'payum.action.payout' => new PayoutAction(),
-            'payum.action.api.do_masspay' => new DoMasspayAction(),
+            'payum.action.api.masspay' => new MasspayAction(),
+            'payum.action.convert_payout' => new ConvertPayoutAction(),
+            'payum.action.get_payout_status' => new GetPayoutStatusAction(),
         ));
 
         if (false == $config['payum.api']) {

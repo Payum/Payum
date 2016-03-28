@@ -101,7 +101,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAddVersionOnSetExpressCheckoutCall()
+    public function shouldAddVersionOnMasspayCall()
     {
         $api = new Api(array(
             'username' => 'a_username',

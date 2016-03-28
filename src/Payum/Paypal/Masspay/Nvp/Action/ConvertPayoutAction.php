@@ -40,7 +40,7 @@ class ConvertPayoutAction implements ActionInterface, GatewayAwareInterface
             $details['L_EMAIL0'] = $payout->getRecipientEmail();
         } else if ($payout->getRecipientId()) {
             $details['RECEIVERTYPE'] = 'UserID';
-            $details['L_RECEIVERID0'] = $payout->getRecipientEmail();
+            $details['L_RECEIVERID0'] = $payout->getRecipientId();
         } else {
             throw new LogicException('Either recipient id or email must be set.');
         }
@@ -55,7 +55,7 @@ class ConvertPayoutAction implements ActionInterface, GatewayAwareInterface
     {
         return 
             $request instanceof Convert &&
-            $request->getModel() instanceof PayoutInterface &&
+            $request->getSource() instanceof PayoutInterface &&
             'array' == $request->getTo()
         ;
     }

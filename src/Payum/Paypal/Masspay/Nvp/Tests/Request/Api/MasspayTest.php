@@ -1,17 +1,17 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request\Api;
+namespace Payum\Paypal\Masspay\Nvp\Tests\Request\Api;
 
 use Payum\Core\Request\Generic;
-use Payum\Paypal\Masspay\Nvp\Request\Api\DoMasspay;
+use Payum\Paypal\Masspay\Nvp\Request\Api\Masspay;
 
-class DoMasspayTest extends \PHPUnit_Framework_TestCase
+class MasspayTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass(DoMasspay::class);
+        $rc = new \ReflectionClass(Masspay::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
@@ -21,6 +21,6 @@ class DoMasspayTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithModelAsArgument()
     {
-        new DoMasspay(new \stdClass());
+        new Masspay(new \stdClass());
     }
 }
