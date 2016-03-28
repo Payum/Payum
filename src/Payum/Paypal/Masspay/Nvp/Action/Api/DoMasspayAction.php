@@ -1,13 +1,25 @@
 <?php
-namespace Payum\Paypal\Masspay\Action\Api;
+namespace Payum\Paypal\Masspay\Nvp\Action\Api;
 
-use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareTrait;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Paypal\Masspay\Request\Api\DoMasspay;
+use Payum\Paypal\Masspay\Nvp\Api;
+use Payum\Paypal\Masspay\Nvp\Request\Api\DoMasspay;
 
-class DoMasspayAction extends GatewayAwareAction
+/**
+ * @property Api $api
+ */
+class DoMasspayAction implements ActionInterface
 {
+    use ApiAwareTrait;
 
+    public function __construct()
+    {
+        $this->apiClass = Api::class;
+    }
+    
     /**
      * {@inheritdoc}
      * 
@@ -16,8 +28,12 @@ class DoMasspayAction extends GatewayAwareAction
     public function execute($request)
     {
         RequestNotSupportedException::assertSupports($this, $request);
-        
-        
+
+        $model = ArrayObject::ensureArrayObject($request->getModel());
+
+        $model->replace(
+            $this->api->massPay((array) $model)
+        );
     }
 
     /**

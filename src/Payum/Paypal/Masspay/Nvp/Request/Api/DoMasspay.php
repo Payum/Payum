@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Paypal\Masspay\Request\Api;
+namespace Payum\Paypal\Masspay\Nvp\Request\Api;
 
 use Payum\Core\Request\Generic;
 

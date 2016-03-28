@@ -1,12 +1,16 @@
 <?php
-namespace Payum\Paypal\Masspay\Action;
+namespace Payum\Paypal\Masspay\Nvp\Action;
 
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Payout;
 
-class PayoutAction extends GatewayAwareAction
+class PayoutAction implements ActionInterface, GatewayAwareInterface
 {
+    use GatewayAwareTrait;
 
     /**
      * {@inheritdoc}

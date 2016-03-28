@@ -1,17 +1,19 @@
 <?php
-namespace Payum\Paypal\Masspay\Action;
+namespace Payum\Paypal\Masspay\Nvp\Action;
 
-use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Model\PayoutInterface;
 use Payum\Core\Request\Convert;
 use Payum\Core\Request\GetCurrency;
-use Payum\Core\Request\Payout;
 
-class ConvertPayoutAction extends GatewayAwareAction
+class ConvertPayoutAction implements ActionInterface, GatewayAwareInterface
 {
+    use GatewayAwareTrait;
 
     /**
      * {@inheritdoc}

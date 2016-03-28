@@ -3,8 +3,8 @@ namespace Payum\Paypal\Masspay\Nvp;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
-use Payum\Paypal\Masspay\Action\Api\DoMasspayAction;
-use Payum\Paypal\Masspay\Action\PayoutAction;
+use Payum\Paypal\Masspay\Nvp\Action\Api\DoMasspayAction;
+use Payum\Paypal\Masspay\Nvp\Action\PayoutAction;
 
 class PaypalMasspayGatewayFactory extends GatewayFactory
 {
