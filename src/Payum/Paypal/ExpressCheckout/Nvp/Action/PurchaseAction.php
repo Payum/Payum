@@ -3,13 +3,17 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use League\Uri\Schemes\Http as HttpUri;
 use League\Uri\Modifiers\MergeQuery;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Sync;
 use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
+use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ConfirmOrder;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout;
@@ -17,23 +21,11 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
-abstract class PurchaseAction extends GatewayAwareAction implements GenericTokenFactoryAwareInterface
+abstract class PurchaseAction implements ActionInterface, GatewayAwareInterface, GenericTokenFactoryAwareInterface
 {
-    /**
-     * @var GenericTokenFactoryInterface
-     */
-    protected $tokenFactory;
-
-    /**
-     * @param GenericTokenFactoryInterface $genericTokenFactory
-     *
-     * @return void
-     */
-    public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null)
-    {
-        $this->tokenFactory = $genericTokenFactory;
-    }
-
+    use GatewayAwareTrait;
+    use GenericTokenFactoryAwareTrait;
+    
     /**
      * {@inheritDoc}
      */
@@ -41,8 +33,6 @@ abstract class PurchaseAction extends GatewayAwareAction implements GenericToken
     {
         /** @var $request Capture */
         RequestNotSupportedException::assertSupports($this, $request);
-
-
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
