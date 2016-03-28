@@ -2,6 +2,9 @@
 
 namespace Payum\Core\Model;
 
+/**
+ * @experimental
+ */
 interface BankAccountInterface
 {
     /**

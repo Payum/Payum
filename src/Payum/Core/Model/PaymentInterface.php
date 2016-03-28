@@ -2,9 +2,11 @@
 namespace Payum\Core\Model;
 
 /**
+ * TODO it extends CreditCardPaymentInterface for BC
+ * 
  * @method array getDetails()
  */
-interface PaymentInterface extends DetailsAggregateInterface, DetailsAwareInterface
+interface PaymentInterface extends CreditCardPaymentInterface, DetailsAggregateInterface, DetailsAwareInterface
 {
     /**
      * @return string
@@ -35,11 +37,6 @@ interface PaymentInterface extends DetailsAggregateInterface, DetailsAwareInterf
      * @return string
      */
     public function getCurrencyCode();
-
-    /**
-     * @return CreditCardInterface|null
-     */
-    public function getCreditCard();
 
     /**
      * @return BankAccountInterface|null
