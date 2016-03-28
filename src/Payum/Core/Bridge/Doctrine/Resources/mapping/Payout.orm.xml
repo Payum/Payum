@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <mapped-superclass name="Payum\Core\Model\Payout">
+
+        <field name="description" type="string" nullable="true" />
+
+        <field name="recipientEmail" type="string" nullable="true" />
+
+        <field name="recipientId" type="string" nullable="true" />
+
+        <field name="totalAmount" type="integer" nullable="true" />
+
+        <field name="currencyCode" type="string" nullable="true" />
+
+        <field name="details" type="json_array" />
+
+    </mapped-superclass>
+</doctrine-mapping>
