@@ -29,6 +29,7 @@ use Payum\Offline\OfflineGatewayFactory;
 use Payum\OmnipayBridge\OmnipayGatewayFactory;
 use Payum\Payex\PayexGatewayFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory;
+use Payum\Paypal\Masspay\Nvp\PaypalMasspayGatewayFactory;
 use Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory;
 use Payum\Paypal\Rest\PaypalRestGatewayFactory;
 use Payum\Stripe\StripeCheckoutGatewayFactory;
@@ -94,6 +95,9 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('paypal_express_checkout', $factories);
         $this->assertInstanceOf(PaypalExpressCheckoutGatewayFactory::class, $factories['paypal_express_checkout']);
+
+        $this->assertArrayHasKey('paypal_masspay', $factories);
+        $this->assertInstanceOf(PaypalMasspayGatewayFactory::class, $factories['paypal_masspay']);
 
         $this->assertArrayHasKey('paypal_pro_checkout', $factories);
         $this->assertInstanceOf(PaypalProCheckoutGatewayFactory::class, $factories['paypal_pro_checkout']);
