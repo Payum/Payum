@@ -3,6 +3,8 @@ namespace Payum\Core\Request;
 
 class GetBinaryStatus extends BaseGetStatus
 {
+    const STATUS_PAYEDOUT = 4194304; //2^22
+
     const STATUS_UNKNOWN = 2097152; //2^21
 
     const STATUS_FAILED = 1048576; //2^20
@@ -53,6 +55,22 @@ class GetBinaryStatus extends BaseGetStatus
     public function isAuthorized()
     {
         return $this->isCurrentStatusEqualTo(static::STATUS_AUTHORIZED);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function markPayedout()
+    {
+        $this->status = static::STATUS_PAYEDOUT;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isPayedout()
+    {
+        return $this->isCurrentStatusEqualTo(static::STATUS_PAYEDOUT);
     }
 
     /**

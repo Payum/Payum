@@ -6,6 +6,7 @@
 * Api constructor's arguments are not optional any more.
 * [gateway-factory] Option 'guzzle.client' was removed.
 * [security] A new method `createPayoutToken` was added to `GenericTokenFactoryInterface` interface.
+* [request] New methods `isPayedout` and `markPayedout` were added to `GetStatusInterface` request.
 
 ## 1.2.0
 

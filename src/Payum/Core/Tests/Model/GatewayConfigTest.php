@@ -2,6 +2,7 @@
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\GatewayConfig;
+use Payum\Core\Model\GatewayConfigInterface;
 
 class GatewayConfigTest extends \PHPUnit_Framework_TestCase
 {
@@ -10,9 +11,9 @@ class GatewayConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldExtendDetailsAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Model\GatewayConfig');
+        $rc = new \ReflectionClass(GatewayConfig::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Model\GatewayConfigInterface'));
+        $this->assertTrue($rc->implementsInterface(GatewayConfigInterface::class));
     }
 
     /**

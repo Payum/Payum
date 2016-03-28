@@ -2,6 +2,7 @@
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\Identity;
+use Payum\Core\Storage\IdentityInterface;
 
 class IdentityTest extends \PHPUnit_Framework_TestCase
 {
@@ -10,9 +11,9 @@ class IdentityTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementIdentityInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Model\Identity');
+        $rc = new \ReflectionClass(Identity::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Storage\IdentityInterface'));
+        $this->assertTrue($rc->implementsInterface(IdentityInterface::class));
     }
 
     /**

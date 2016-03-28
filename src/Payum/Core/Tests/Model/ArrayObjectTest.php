@@ -10,9 +10,9 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementArrayAccessInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Model\ArrayObject');
+        $rc = new \ReflectionClass(ArrayObject::class);
 
-        $this->assertTrue($rc->implementsInterface('ArrayAccess'));
+        $this->assertTrue($rc->implementsInterface(\ArrayAccess::class));
     }
 
     /**
@@ -20,9 +20,9 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementIteratorAggregateInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Model\ArrayObject');
+        $rc = new \ReflectionClass(ArrayObject::class);
 
-        $this->assertTrue($rc->implementsInterface('IteratorAggregate'));
+        $this->assertTrue($rc->implementsInterface(\IteratorAggregate::class));
     }
 
     /**
