@@ -14,6 +14,7 @@ use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetCurrencyAction;
 use Payum\Core\Action\GetTokenAction;
+use Payum\Core\Action\PayoutPayoutAction;
 use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Bridge\Httplug\HttplugClient;
 use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
@@ -123,6 +124,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
             },
             'payum.action.get_http_request' => new GetHttpRequestAction(),
             'payum.action.capture_payment' => new CapturePaymentAction(),
+            'payum.action.payout_payout' => new PayoutPayoutAction(),
             'payum.action.execute_same_request_with_model_details' => new ExecuteSameRequestWithModelDetailsAction(),
             'payum.action.render_template' => function (ArrayObject $config) {
                 return new RenderTemplateAction($config['twig.env'], $config['payum.template.layout']);

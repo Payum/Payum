@@ -4,6 +4,7 @@ namespace Payum\Core\Tests;
 use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetTokenAction;
+use Payum\Core\Action\PayoutPayoutAction;
 use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
@@ -43,7 +44,7 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new CoreGatewayFactory();
 
-        $gateway = $factory->create(array());
+        $gateway = $factory->create([]);
 
         $this->assertInstanceOf(Gateway::class, $gateway);
 
@@ -61,7 +62,7 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new CoreGatewayFactory();
 
-        $config = $factory->createConfig(array());
+        $config = $factory->createConfig([]);
         $this->assertArrayHasKey('payum.api.http_client', $config);
         $this->assertInstanceOf(\Closure::class, $config['payum.api.http_client']);
 
@@ -99,16 +100,17 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\Closure::class, $config['payum.http_client']);
         $this->assertInstanceOf(GetHttpRequestAction::class, $config['payum.action.get_http_request']);
         $this->assertInstanceOf(CapturePaymentAction::class, $config['payum.action.capture_payment']);
+        $this->assertInstanceOf(PayoutPayoutAction::class, $config['payum.action.payout_payout']);
         $this->assertInstanceOf(ExecuteSameRequestWithModelDetailsAction::class, $config['payum.action.execute_same_request_with_model_details']);
         $this->assertInstanceOf(\Closure::class, $config['payum.action.render_template']);
         $this->assertInstanceOf(EndlessCycleDetectorExtension::class, $config['payum.extension.endless_cycle_detector']);
 
         $this->assertEquals('@PayumCore/layout.html.twig', $config['payum.template.layout']);
-        $this->assertEquals(array(), $config['payum.prepend_actions']);
-        $this->assertEquals(array(), $config['payum.prepend_extensions']);
-        $this->assertEquals(array(), $config['payum.prepend_apis']);
-        $this->assertEquals(array(), $config['payum.default_options']);
-        $this->assertEquals(array(), $config['payum.required_options']);
+        $this->assertEquals([], $config['payum.prepend_actions']);
+        $this->assertEquals([], $config['payum.prepend_extensions']);
+        $this->assertEquals([], $config['payum.prepend_apis']);
+        $this->assertEquals([], $config['payum.default_options']);
+        $this->assertEquals([], $config['payum.required_options']);
     }
 
     /**
