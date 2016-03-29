@@ -2,7 +2,7 @@
 namespace Payum\Core\Model;
 
 /**
- * @experimental
+ * Experimental. Anything could be changed in this model at any moment
  */
 class Payout implements PayoutInterface
 {
