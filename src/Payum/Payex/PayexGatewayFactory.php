@@ -3,6 +3,11 @@ namespace Payum\Payex;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
+use Payum\Core\Model\DetailsAggregateInterface;
+use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetStatusInterface;
+use Payum\Core\Request\Sync;
 use Payum\Payex\Action\AgreementDetailsStatusAction;
 use Payum\Payex\Action\AgreementDetailsSyncAction;
 use Payum\Payex\Action\Api\AutoPayAgreementAction;
@@ -33,7 +38,7 @@ class PayexGatewayFactory extends GatewayFactory
      */
     protected function populateConfig(ArrayObject $config)
     {
-        if (!class_exists('SoapClient')) {
+        if (!class_exists(\SoapClient::class)) {
             throw new \LogicException('You must install "ext-soap" extension.');
         }
 
@@ -48,6 +53,11 @@ class PayexGatewayFactory extends GatewayFactory
         $config->defaults(array(
             'payum.factory_name' => 'payex',
             'payum.factory_title' => 'Payex',
+            'payum.supported_actions' => [
+                Sync::class => [\ArrayAccess::class, DetailsAggregateInterface::class],
+                GetStatusInterface::class => [\ArrayAccess::class, DetailsAggregateInterface::class],
+                Capture::class => [\ArrayAccess::class, PaymentInterface::class],
+            ],
 
             'soap.client_factory' => new SoapClientFactory(),
 

@@ -11,10 +11,10 @@ use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\MessageFactory\DiactorosMessageFactory;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Payum\Core\Action\CapturePaymentAction;
+use Payum\Core\Action\ConfigurableSupportAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetCurrencyAction;
 use Payum\Core\Action\GetTokenAction;
-use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Bridge\Httplug\HttplugClient;
 use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -32,7 +32,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     /**
      * @param array $defaultConfig
      */
-    public function __construct(array $defaultConfig = array())
+    public function __construct(array $defaultConfig = [])
     {
         $this->defaultConfig = $defaultConfig;
     }
@@ -40,7 +40,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function create(array $config = array())
+    public function create(array $config = [])
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->createConfig());
@@ -59,7 +59,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createConfig(array $config = array())
+    public function createConfig(array $config = [])
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->defaultConfig);
@@ -131,11 +131,14 @@ class CoreGatewayFactory implements GatewayFactoryInterface
             'payum.action.get_currency' => function (ArrayObject $config) {
                 return new GetCurrencyAction($config['payum.iso4217']);
             },
-            'payum.prepend_actions' => array(),
-            'payum.prepend_extensions' => array(),
-            'payum.prepend_apis' => array(),
-            'payum.default_options' => array(),
-            'payum.required_options' => array(),
+            'payum.action.support' => function(ArrayObject $config) {
+                return new ConfigurableSupportAction($config['payum.supported_actions'] ?: []);
+            },
+            'payum.prepend_actions' => [],
+            'payum.prepend_extensions' => [],
+            'payum.prepend_apis' => [],
+            'payum.default_options' => [],
+            'payum.required_options' => [],
 
             'payum.api.http_client' => function (ArrayObject $config) {
                 return $config['payum.http_client'];

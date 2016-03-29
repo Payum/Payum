@@ -4,6 +4,10 @@ namespace Payum\Stripe;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\GatewayFactory;
+use Payum\Core\Model\DetailsAggregateInterface;
+use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetStatusInterface;
 use Payum\Stripe\Action\Api\CreateChargeAction;
 use Payum\Stripe\Action\Api\CreateCustomerAction;
 use Payum\Stripe\Action\Api\CreatePlanAction;
@@ -29,6 +33,10 @@ class StripeCheckoutGatewayFactory extends GatewayFactory
         $config->defaults([
             'payum.factory_name' => 'stripe_checkout',
             'payum.factory_title' => 'Stripe Checkout',
+            'payum.supported_actions' => [
+                GetStatusInterface::class => [\ArrayAccess::class, DetailsAggregateInterface::class],
+                Capture::class => [\ArrayAccess::class, PaymentInterface::class],
+            ],
 
             'payum.template.obtain_token' => '@PayumStripe/Action/obtain_checkout_token.html.twig',
 

@@ -4,6 +4,12 @@ namespace Payum\Klarna\Invoice;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\GatewayFactory;
+use Payum\Core\Model\DetailsAggregateInterface;
+use Payum\Core\Request\Authorize;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetStatusInterface;
+use Payum\Core\Request\Refund;
+use Payum\Core\Request\Sync;
 use Payum\Klarna\Invoice\Action\Api\ActivateAction;
 use Payum\Klarna\Invoice\Action\Api\ActivateReservationAction;
 use Payum\Klarna\Invoice\Action\Api\CancelReservationAction;
@@ -37,6 +43,14 @@ class KlarnaInvoiceGatewayFactory extends GatewayFactory
         $config->defaults(array(
             'payum.factory_name' => 'klarna_invoice',
             'payum.factory_title' => 'Klarna Invoice',
+            'payum.supported_actions' => [
+                Sync::class => [\ArrayAccess::class, DetailsAggregateInterface::class],
+                GetStatusInterface::class => [\ArrayAccess::class, DetailsAggregateInterface::class],
+                Refund::class => [\ArrayAccess::class, DetailsAggregateInterface::class],
+                Capture::class => [\ArrayAccess::class],
+                Authorize::class => [\ArrayAccess::class],
+            ],
+            
             'sandbox' => true,
             'pClassStorage' => 'json',
             'pClassStoragePath' => './pclasses.json',

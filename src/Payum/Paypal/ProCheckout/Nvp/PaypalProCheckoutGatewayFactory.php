@@ -3,6 +3,11 @@ namespace Payum\Paypal\ProCheckout\Nvp;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
+use Payum\Core\Model\DetailsAggregateInterface;
+use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetStatusInterface;
+use Payum\Core\Request\Refund;
 use Payum\Paypal\ProCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ProCheckout\Nvp\Action\RefundAction;
 use Payum\Paypal\ProCheckout\Nvp\Action\ConvertPaymentAction;
@@ -18,6 +23,11 @@ class PaypalProCheckoutGatewayFactory extends GatewayFactory
         $config->defaults(array(
             'payum.factory_name' => 'paypal_pro_checkout_nvp',
             'payum.factory_title' => 'PayPal ProCheckout',
+            'payum.supported_actions' => [
+                GetStatusInterface::class => [\ArrayAccess::class, DetailsAggregateInterface::class],
+                Capture::class => [\ArrayAccess::class, PaymentInterface::class],
+                Refund::class => [\ArrayAccess::class, PaymentInterface::class],
+            ],
 
             'payum.action.capture' => new CaptureAction(),
             'payum.action.refund' => new RefundAction(),

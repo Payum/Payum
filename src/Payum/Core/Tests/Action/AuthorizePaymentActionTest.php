@@ -1,30 +1,30 @@
 <?php
 namespace Payum\Core\Tests\Action;
 
-use Payum\Core\Action\PayoutPayoutAction;
+use Payum\Core\Action\AuthorizePaymentAction;
 use Payum\Core\GatewayAwareInterface;
-use Payum\Core\Model\Payout as PayoutModel;
-use Payum\Core\Model\PayoutInterface;
-use Payum\Core\Request\Payout;
+use Payum\Core\Model\Payment;
+use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Request\Authorize;
 use Payum\Core\Request\Convert;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
 
-class PayoutPayoutActionTest extends GenericActionTest
+class AuthorizePaymentActionTest extends GenericActionTest
 {
-    protected $requestClass = Payout::class;
+    protected $requestClass = Authorize::class;
 
-    protected $actionClass = PayoutPayoutAction::class;
+    protected $actionClass = AuthorizePaymentAction::class;
 
     public function provideSupportedRequests()
     {
-        $payout = new $this->requestClass($this->getMock(TokenInterface::class));
-        $payout->setModel($this->getMock(PayoutInterface::class));
+        $authorize = new $this->requestClass($this->getMock(TokenInterface::class));
+        $authorize->setModel($this->getMock(PaymentInterface::class));
 
         return array(
-            array(new $this->requestClass(new PayoutModel())),
-            array($payout),
+            array(new $this->requestClass(new Payment())),
+            array($authorize),
         );
     }
 
@@ -43,7 +43,7 @@ class PayoutPayoutActionTest extends GenericActionTest
      */
     public function shouldExecuteConvertRequestIfStatusNew()
     {
-        $payoutModel = new PayoutModel();
+        $payment = new Payment();
 
         $testCase = $this;
 
@@ -60,8 +60,8 @@ class PayoutPayoutActionTest extends GenericActionTest
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf(Convert::class))
-            ->will($this->returnCallback(function (Convert $request) use ($testCase, $payoutModel) {
-                $testCase->assertSame($payoutModel, $request->getSource());
+            ->will($this->returnCallback(function (Convert $request) use ($testCase, $payment) {
+                $testCase->assertSame($payment, $request->getSource());
                 $testCase->assertSame('array', $request->getTo());
                 $testCase->assertNull($request->getToken());
 
@@ -69,22 +69,22 @@ class PayoutPayoutActionTest extends GenericActionTest
             }))
         ;
 
-        $action = new PayoutPayoutAction();
+        $action = new AuthorizePaymentAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute($payout = new Payout($payoutModel));
+        $action->execute($authorize = new Authorize($payment));
 
-        $this->assertSame($payoutModel, $payout->getFirstModel());
-        $this->assertInstanceOf(\ArrayAccess::class, $payout->getModel());
-        $this->assertNull($payout->getToken());
+        $this->assertSame($payment, $authorize->getFirstModel());
+        $this->assertInstanceOf(\ArrayAccess::class, $authorize->getModel());
+        $this->assertNull($authorize->getToken());
     }
 
     /**
      * @test
      */
-    public function shouldSetConvertedResultToPayoutAsDetails()
+    public function shouldSetConvertedResultToPaymentAsDetails()
     {
-        $payoutModel = new PayoutModel();
+        $payment = new Payment();
 
         $testCase = $this;
 
@@ -101,7 +101,7 @@ class PayoutPayoutActionTest extends GenericActionTest
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf(Convert::class))
-            ->will($this->returnCallback(function (Convert $request) use ($testCase, $payoutModel) {
+            ->will($this->returnCallback(function (Convert $request) use ($testCase, $payment) {
                 $details['foo'] = 'fooVal';
 
                 $request->setResult(array(
@@ -110,15 +110,15 @@ class PayoutPayoutActionTest extends GenericActionTest
             }))
         ;
 
-        $action = new PayoutPayoutAction();
+        $action = new AuthorizePaymentAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute($payout = new Payout($payoutModel));
+        $action->execute($authorize = new Authorize($payment));
 
-        $this->assertSame($payoutModel, $payout->getFirstModel());
-        $this->assertInstanceOf(\ArrayAccess::class, $payout->getModel());
+        $this->assertSame($payment, $authorize->getFirstModel());
+        $this->assertInstanceOf(\ArrayAccess::class, $authorize->getModel());
 
-        $details = $payoutModel->getDetails();
+        $details = $payment->getDetails();
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('foo', $details);
@@ -130,7 +130,7 @@ class PayoutPayoutActionTest extends GenericActionTest
      */
     public function shouldExecuteConvertRequestWithTokenIfOnePresent()
     {
-        $payoutModel = new PayoutModel();
+        $payment = new Payment();
         $token = $this->createTokenMock();
 
         $testCase = $this;
@@ -148,36 +148,36 @@ class PayoutPayoutActionTest extends GenericActionTest
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf(Convert::class))
-            ->will($this->returnCallback(function (Convert $request) use ($testCase, $payoutModel, $token) {
-                $testCase->assertSame($payoutModel, $request->getSource());
+            ->will($this->returnCallback(function (Convert $request) use ($testCase, $payment, $token) {
+                $testCase->assertSame($payment, $request->getSource());
                 $testCase->assertSame($token, $request->getToken());
 
                 $request->setResult(array());
             }))
         ;
 
-        $action = new PayoutPayoutAction();
+        $action = new AuthorizePaymentAction();
         $action->setGateway($gatewayMock);
 
-        $payout = new Payout($token);
-        $payout->setModel($payoutModel);
+        $authorize = new Authorize($token);
+        $authorize->setModel($payment);
 
-        $action->execute($payout);
+        $action->execute($authorize);
 
-        $this->assertSame($payoutModel, $payout->getFirstModel());
-        $this->assertInstanceOf(\ArrayAccess::class, $payout->getModel());
-        $this->assertSame($token, $payout->getToken());
+        $this->assertSame($payment, $authorize->getFirstModel());
+        $this->assertInstanceOf(\ArrayAccess::class, $authorize->getModel());
+        $this->assertSame($token, $authorize->getToken());
     }
 
     /**
      * @test
      */
-    public function shouldSetDetailsBackToPayoutAfterPayoutDetailsExecution()
+    public function shouldSetDetailsBackToPaymentAfterAuthorizeDetailsExecution()
     {
         $expectedDetails = array('foo' => 'fooVal');
 
-        $payoutModel = new PayoutModel();
-        $payoutModel->setDetails($expectedDetails);
+        $payment = new Payment();
+        $payment->setDetails($expectedDetails);
 
         $testCase = $this;
 
@@ -193,8 +193,8 @@ class PayoutPayoutActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf(Payout::class))
-            ->will($this->returnCallback(function (Payout $request) use ($testCase, $expectedDetails) {
+            ->with($this->isInstanceOf(Authorize::class))
+            ->will($this->returnCallback(function (Authorize $request) use ($testCase, $expectedDetails) {
                 $details = $request->getModel();
 
                 $testCase->assertInstanceOf(\ArrayAccess::class, $details);
@@ -204,25 +204,25 @@ class PayoutPayoutActionTest extends GenericActionTest
             }))
         ;
 
-        $action = new PayoutPayoutAction();
+        $action = new AuthorizePaymentAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute($payout = new Payout($payoutModel));
+        $action->execute($authorize = new Authorize($payment));
 
-        $this->assertSame($payoutModel, $payout->getFirstModel());
-        $this->assertInstanceOf(\ArrayAccess::class, $payout->getModel());
-        $this->assertEquals(array('foo' => 'fooVal', 'bar' => 'barVal'), $payoutModel->getDetails());
+        $this->assertSame($payment, $authorize->getFirstModel());
+        $this->assertInstanceOf(\ArrayAccess::class, $authorize->getModel());
+        $this->assertEquals(array('foo' => 'fooVal', 'bar' => 'barVal'), $payment->getDetails());
     }
 
     /**
      * @test
      */
-    public function shouldSetDetailsBackToPayoutEvenIfExceptionThrown()
+    public function shouldSetDetailsBackToPaymentEvenIfExceptionThrown()
     {
         $expectedDetails = array('foo' => 'fooVal');
 
-        $payoutModel = new PayoutModel();
-        $payoutModel->setDetails($expectedDetails);
+        $payment = new Payment();
+        $payment->setDetails($expectedDetails);
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -236,8 +236,8 @@ class PayoutPayoutActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf(Payout::class))
-            ->will($this->returnCallback(function (Payout $request) {
+            ->with($this->isInstanceOf(Authorize::class))
+            ->will($this->returnCallback(function (Authorize $request) {
                 $details = $request->getModel();
                 $details['bar'] = 'barVal';
 
@@ -245,14 +245,14 @@ class PayoutPayoutActionTest extends GenericActionTest
             }))
         ;
 
-        $action = new PayoutPayoutAction();
+        $action = new AuthorizePaymentAction();
         $action->setGateway($gatewayMock);
 
         $this->setExpectedException('Exception');
-        $action->execute($payout = new Payout($payoutModel));
+        $action->execute($authorize = new Authorize($payment));
 
-        $this->assertSame($payoutModel, $payout->getFirstModel());
-        $this->assertInstanceOf(\ArrayAccess::class, $payout->getModel());
-        $this->assertEquals(array('foo' => 'fooVal', 'bar' => 'barVal'), $payoutModel->getDetails());
+        $this->assertSame($payment, $authorize->getFirstModel());
+        $this->assertInstanceOf(\ArrayAccess::class, $authorize->getModel());
+        $this->assertEquals(array('foo' => 'fooVal', 'bar' => 'barVal'), $payment->getDetails());
     }
 }

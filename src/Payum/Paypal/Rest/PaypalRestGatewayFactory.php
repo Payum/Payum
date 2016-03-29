@@ -1,12 +1,14 @@
 <?php
 namespace Payum\Paypal\Rest;
 
+use PayPal\Api\Payment;
 use PayPal\Rest\ApiContext;
 use PayPal\Auth\OAuthTokenCredential;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\GatewayFactory as CoreGatewayFactory;
 use Payum\Core\GatewayFactory;
-use Payum\Core\GatewayFactoryInterface;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetStatusInterface;
+use Payum\Core\Request\Sync;
 use Payum\Paypal\Rest\Action\CaptureAction;
 use Payum\Paypal\Rest\Action\StatusAction;
 use Payum\Paypal\Rest\Action\SyncAction;
@@ -26,6 +28,11 @@ class PaypalRestGatewayFactory extends GatewayFactory
         $config->defaults(array(
             'payum.factory_name' => 'paypal_rest',
             'payum.factory_title' => 'PayPal Rest',
+            'payum.supported_actions' => [
+                Sync::class => [Payment::class],
+                GetStatusInterface::class => [Payment::class],
+                Capture::class => [Payment::class],
+            ],
 
             'payum.action.capture' => new CaptureAction(),
             'payum.action.sync' => new SyncAction(),

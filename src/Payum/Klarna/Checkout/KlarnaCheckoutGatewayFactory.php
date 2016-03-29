@@ -3,6 +3,13 @@ namespace Payum\Klarna\Checkout;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
+use Payum\Core\Model\DetailsAggregateInterface;
+use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Request\Authorize;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetStatusInterface;
+use Payum\Core\Request\Notify;
+use Payum\Core\Request\Sync;
 use Payum\Klarna\Checkout\Action\Api\CreateOrderAction;
 use Payum\Klarna\Checkout\Action\Api\FetchOrderAction;
 use Payum\Klarna\Checkout\Action\Api\UpdateOrderAction;
@@ -27,6 +34,14 @@ class KlarnaCheckoutGatewayFactory extends GatewayFactory
         $config->defaults(array(
             'payum.factory_name' => 'klarna_checkout',
             'payum.factory_title' => 'Klarna Checkout',
+            'payum.supported_actions' => [
+                Sync::class => [\ArrayAccess::class, DetailsAggregateInterface::class],
+                Notify::class => [\ArrayAccess::class, DetailsAggregateInterface::class],
+                GetStatusInterface::class => [\ArrayAccess::class, DetailsAggregateInterface::class],
+                Capture::class => [\ArrayAccess::class, PaymentInterface::class],
+                Authorize::class => [\ArrayAccess::class, PaymentInterface::class],
+            ],
+            
             'payum.template.authorize' => '@PayumKlarnaCheckout/Action/capture.html.twig',
             'contentType' => Constants::CONTENT_TYPE_AGGREGATED_ORDER_V2,
             'sandbox' => true,

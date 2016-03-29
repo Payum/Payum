@@ -4,6 +4,13 @@ namespace Payum\Sofort;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\GatewayFactory;
+use Payum\Core\Model\DetailsAggregateInterface;
+use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetStatusInterface;
+use Payum\Core\Request\Notify;
+use Payum\Core\Request\Refund;
+use Payum\Core\Request\Sync;
 use Payum\Sofort\Action\Api\CreateTransactionAction;
 use Payum\Sofort\Action\Api\GetTransactionDataAction;
 use Payum\Sofort\Action\Api\RefundTransactionAction;
@@ -29,6 +36,14 @@ class SofortGatewayFactory extends GatewayFactory
         $config->defaults(array(
             'payum.factory_name' => 'sofort',
             'payum.factory_title' => 'Sofort',
+            'payum.supported_actions' => [
+                Sync::class => [\ArrayAccess::class, DetailsAggregateInterface::class],
+                Notify::class => [\ArrayAccess::class, DetailsAggregateInterface::class],
+                GetStatusInterface::class => [\ArrayAccess::class, DetailsAggregateInterface::class],
+                Capture::class => [\ArrayAccess::class, PaymentInterface::class],
+                Refund::class => [\ArrayAccess::class, PaymentInterface::class],
+            ],
+
             'payum.action.capture' => new CaptureAction(),
             'payum.action.status' => new StatusAction(),
             'payum.action.notify' => new NotifyAction(),
