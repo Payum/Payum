@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Model;
 
-interface DirectDebitPaymentInterface extends PaymentInterface
+interface DirectDebitPaymentInterface
 {
     /**
      * @return BankAccountInterface|null

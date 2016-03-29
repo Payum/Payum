@@ -4,7 +4,7 @@ namespace Payum\Core\Model;
 /**
  * @experimental
  */
-interface CreditCardPaymentInterface extends PaymentInterface
+interface CreditCardPaymentInterface
 {
     /**
      * @return CreditCardInterface|null
