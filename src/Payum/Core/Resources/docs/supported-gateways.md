@@ -47,6 +47,7 @@
 * [BoShurik/payum-yandex-money](https://github.com/BoShurik/payum-yandex-money)
 * [sergeym/payum-pay-receipt](https://github.com/sergeym/payum-pay-receipt)
 * [remyma/payum-paybox](https://github.com/remyma/payum-paybox)
+* [artkonekt/payum-otp-hungary](https://github.com/artkonekt/payum-otp-hungary)
 
 ## Omnipay gateways.
 
