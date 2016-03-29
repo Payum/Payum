@@ -10,9 +10,9 @@ class IdentificatorTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementSerializableInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Model\Identificator');
+        $rc = new \ReflectionClass(Identificator::class);
 
-        $this->assertTrue($rc->implementsInterface('Serializable'));
+        $this->assertTrue($rc->implementsInterface(\Serializable::class));
     }
 
     /**

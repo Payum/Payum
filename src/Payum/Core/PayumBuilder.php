@@ -109,14 +109,11 @@ class PayumBuilder
     protected $mainRegistry;
 
     /**
+     * @deprecated will be removed in 2.0
+     *
      * @var HttpClientInterface
      */
     protected $httpClient;
-
-    /**
-     * @var string
-     */
-    protected $modelIdProperty;
 
     /**
      * @return static
@@ -160,7 +157,12 @@ class PayumBuilder
             $this->gateways[$name] = $gateway;
         } elseif (is_array($gateway)) {
             $currentConfig = isset($this->gatewayConfigs[$name]) ? $this->gatewayConfigs[$name] : [];
-            $this->gatewayConfigs[$name] = array_replace_recursive($currentConfig, $gateway);
+            $currentConfig = array_replace_recursive($currentConfig, $gateway);
+            if (empty($currentConfig['factory'])) {
+                throw new InvalidArgumentException('Gateway config must have factory set in it and it must not be empty.');
+            }
+
+            $this->gatewayConfigs[$name] = $currentConfig;
         } else {
             throw new \LogicException('Gateway argument must be either instance of GatewayInterface or a config array');
         }
@@ -358,6 +360,8 @@ class PayumBuilder
     /**
      * @param HttpClientInterface $httpClient
      *
+     * @deprecated this method will be removed in 2.0 Use self::addCoreGatewayFactoryConfig to overwrite http client.
+     *
      * @return static
      */
     public function setHttpClient(HttpClientInterface $httpClient = null)
@@ -388,14 +392,9 @@ class PayumBuilder
 
         $httpRequestVerifier = $this->buildHttpRequestVerifier($this->tokenStorage);
 
-        if (false == $httpClient = $this->httpClient) {
-            $httpClient = HttpClientFactory::create();
-        }
-
         $coreGatewayFactory = $this->buildCoreGatewayFactory(array_replace_recursive([
             'payum.extension.token_factory' => new GenericTokenFactoryExtension($genericTokenFactory),
             'payum.security.token_storage' => $tokenStorage,
-            'payum.http_client' => $httpClient,
         ], $this->coreGatewayFactoryConfig));
 
         $gatewayFactories = array_replace(
@@ -403,22 +402,23 @@ class PayumBuilder
             $this->buildOmnipayGatewayFactories($coreGatewayFactory),
             $this->buildAddedGatewayFactories($coreGatewayFactory)
         );
+        
+        $gatewayFactories['core'] = $coreGatewayFactory;
 
         $registry = $this->buildRegistry($this->gateways, $storages, $gatewayFactories);
 
         if ($this->gatewayConfigs) {
             $gateways = $this->gateways;
             foreach ($this->gatewayConfigs as $name => $gatewayConfig) {
-                $gatewayFactory = isset($gatewayConfig['factory']) ?
-                    $registry->getGatewayFactory($gatewayConfig['factory']) :
-                    $coreGatewayFactory
-                ;
+                $gatewayFactory = $registry->getGatewayFactory($gatewayConfig['factory']);
                 unset($gatewayConfig['factory']);
 
                 $gateways[$name] = $gatewayFactory->create($gatewayConfig);
             }
 
             $registry = $this->buildRegistry($gateways, $storages, $gatewayFactories);
+
+
         }
 
         return new Payum($registry, $httpRequestVerifier, $genericTokenFactory, $tokenStorage);

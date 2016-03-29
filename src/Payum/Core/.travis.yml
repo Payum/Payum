@@ -2,6 +2,9 @@ language: php
 
 sudo: false
 
+git:
+    depth: 1
+
 cache:
   directories:
     - $HOME/.composer/cache
@@ -37,6 +40,9 @@ install:
     - if [[ "$TRAVIS_PHP_VERSION" = 5.* ]]; then composer require "doctrine/mongodb:1.0.*@dev" "doctrine/mongodb-odm:1.0.*@dev" --no-interaction --no-update; fi;
     - composer require symfony/symfony:${SYMFONY_VERSION} --no-update
     - composer install --prefer-source
+
+script:
+    - bin/phpunit
 
 notifications:
   email:

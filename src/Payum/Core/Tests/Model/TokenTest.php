@@ -3,6 +3,7 @@ namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\Token;
 use Payum\Core\Model\Identity;
+use Payum\Core\Security\TokenInterface;
 
 class TokenTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,9 +12,9 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldExtendDetailsAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Model\Token');
+        $rc = new \ReflectionClass(Token::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Security\TokenInterface'));
+        $this->assertTrue($rc->implementsInterface(TokenInterface::class));
     }
 
     /**

@@ -2,6 +2,9 @@ language: php
 
 sudo: false
 
+git:
+    depth: 1
+
 cache:
   directories:
     - $HOME/.composer/cache
@@ -32,6 +35,9 @@ before_install:
 install:
     - composer require symfony/symfony:${SYMFONY_VERSION} --no-update
     - composer install --prefer-source
+
+script:
+    - bin/phpunit
 
 notifications:
   email:

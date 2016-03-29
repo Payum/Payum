@@ -27,6 +27,7 @@
         "fp/klarna-invoice": "0.1.*"
     },
     "require-dev": {
+        "payum/core": "~1.0@dev",
         "phpunit/phpunit": "~4.0",
         "symfony/phpunit-bridge": "~2.8|~3.0"
     },
@@ -39,7 +40,7 @@
     "target-dir": "Payum/Klarna/Invoice",
     "extra": {
         "branch-alias": {
-            "dev-master": "1.2-dev"
+            "dev-master": "1.3-dev"
         }
     }
 }

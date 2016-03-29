@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Stripe\Tests\Request\Api;
 
+use Payum\Core\Request\Generic;
 use Payum\Stripe\Request\Api\CreateCharge;
 
 class CreateChargeTest extends \PHPUnit_Framework_TestCase
@@ -10,9 +11,9 @@ class CreateChargeTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass('Payum\Stripe\Request\Api\CreateCharge');
+        $rc = new \ReflectionClass(CreateCharge::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
+        $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
     /**
@@ -20,6 +21,6 @@ class CreateChargeTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithModelAsFirstArgument()
     {
-        new CreateCharge($model = array());
+        new CreateCharge($model = []);
     }
 }

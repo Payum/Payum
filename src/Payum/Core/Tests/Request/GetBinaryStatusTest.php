@@ -1,40 +1,43 @@
 <?php
 namespace Payum\Core\Tests\Request;
 
+use Payum\Core\Request\BaseGetStatus;
 use Payum\Core\Request\GetBinaryStatus;
 
 class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
 {
     public static function provideIsXXXMethods()
     {
-        return array(
-            array('isCaptured'),
-            array('isAuthorized'),
-            array('isRefunded'),
-            array('isCanceled'),
-            array('isPending'),
-            array('isFailed'),
-            array('isNew'),
-            array('isUnknown'),
-            array('isSuspended'),
-            array('isExpired'),
-        );
+        return [
+            ['isCaptured'],
+            ['isAuthorized'],
+            ['isPayedout'],
+            ['isRefunded'],
+            ['isCanceled'],
+            ['isPending'],
+            ['isFailed'],
+            ['isNew'],
+            ['isUnknown'],
+            ['isSuspended'],
+            ['isExpired'],
+        ];
     }
 
     public static function provideMarkXXXMethods()
     {
-        return array(
-            array('markCaptured'),
-            array('markAuthorized'),
-            array('markRefunded'),
-            array('markCanceled'),
-            array('markPending'),
-            array('markFailed'),
-            array('markNew'),
-            array('markUnknown'),
-            array('markSuspended'),
-            array('markExpired'),
-        );
+        return [
+            ['markCaptured'],
+            ['markAuthorized'],
+            ['markPayedout'],
+            ['markRefunded'],
+            ['markCanceled'],
+            ['markPending'],
+            ['markFailed'],
+            ['markNew'],
+            ['markUnknown'],
+            ['markSuspended'],
+            ['markExpired'],
+        ];
     }
 
     /**
@@ -42,9 +45,9 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfBaseGetStatus()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\GetBinaryStatus');
+        $rc = new \ReflectionClass(GetBinaryStatus::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\BaseGetStatus'));
+        $this->assertTrue($rc->isSubclassOf(BaseGetStatus::class));
     }
 
     /**
@@ -52,9 +55,9 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkUnknownInConstructor()
     {
-        $statusRequest = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new \stdClass());
 
-        $this->assertTrue($statusRequest->isUnknown());
+        $this->assertTrue($getStatus->isUnknown());
     }
 
     /**
@@ -64,11 +67,11 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetMarkedStatus($markXXXMethod)
     {
-        $statusRequest = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new \stdClass());
 
-        $statusRequest->$markXXXMethod();
+        $getStatus->$markXXXMethod();
 
-        $this->assertNotEmpty($statusRequest->getValue());
+        $this->assertNotEmpty($getStatus->getValue());
     }
 
     /**
@@ -78,9 +81,9 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallIsXXXStatus($isXXXMethod)
     {
-        $statusRequest = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new \stdClass());
 
-        $this->assertInternalType('boolean', $statusRequest->$isXXXMethod());
+        $this->assertInternalType('boolean', $getStatus->$isXXXMethod());
     }
 
     /**
@@ -88,21 +91,22 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenCapturedStatus()
     {
-        $statusRequest = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new \stdClass());
 
-        $statusRequest->markCaptured();
+        $getStatus->markCaptured();
 
-        $this->assertTrue($statusRequest->isCaptured());
+        $this->assertTrue($getStatus->isCaptured());
 
-        $this->assertFalse($statusRequest->isCanceled());
-        $this->assertFalse($statusRequest->isAuthorized());
-        $this->assertFalse($statusRequest->isRefunded());
-        $this->assertFalse($statusRequest->isSuspended());
-        $this->assertFalse($statusRequest->isExpired());
-        $this->assertFalse($statusRequest->isPending());
-        $this->assertFalse($statusRequest->isFailed());
-        $this->assertFalse($statusRequest->isNew());
-        $this->assertFalse($statusRequest->isUnknown());
+        $this->assertFalse($getStatus->isCanceled());
+        $this->assertFalse($getStatus->isAuthorized());
+        $this->assertFalse($getStatus->isPayedout());
+        $this->assertFalse($getStatus->isRefunded());
+        $this->assertFalse($getStatus->isSuspended());
+        $this->assertFalse($getStatus->isExpired());
+        $this->assertFalse($getStatus->isPending());
+        $this->assertFalse($getStatus->isFailed());
+        $this->assertFalse($getStatus->isNew());
+        $this->assertFalse($getStatus->isUnknown());
     }
 
     /**
@@ -110,19 +114,21 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenFailedStatus()
     {
-        $statusRequest = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new \stdClass());
 
-        $statusRequest->markFailed();
+        $getStatus->markFailed();
 
-        $this->assertTrue($statusRequest->isFailed());
+        $this->assertTrue($getStatus->isFailed());
 
-        $this->assertFalse($statusRequest->isCaptured());
-        $this->assertFalse($statusRequest->isSuspended());
-        $this->assertFalse($statusRequest->isExpired());
-        $this->assertFalse($statusRequest->isCanceled());
-        $this->assertFalse($statusRequest->isPending());
-        $this->assertFalse($statusRequest->isNew());
-        $this->assertFalse($statusRequest->isUnknown());
+        $this->assertFalse($getStatus->isCaptured());
+        $this->assertFalse($getStatus->isPayedout());
+        $this->assertFalse($getStatus->isAuthorized());
+        $this->assertFalse($getStatus->isSuspended());
+        $this->assertFalse($getStatus->isExpired());
+        $this->assertFalse($getStatus->isCanceled());
+        $this->assertFalse($getStatus->isPending());
+        $this->assertFalse($getStatus->isNew());
+        $this->assertFalse($getStatus->isUnknown());
     }
 
     /**
@@ -130,19 +136,21 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenPendingStatus()
     {
-        $statusRequest = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new \stdClass());
 
-        $statusRequest->markPending();
+        $getStatus->markPending();
 
-        $this->assertTrue($statusRequest->isPending());
+        $this->assertTrue($getStatus->isPending());
 
-        $this->assertFalse($statusRequest->isFailed());
-        $this->assertFalse($statusRequest->isSuspended());
-        $this->assertFalse($statusRequest->isExpired());
-        $this->assertFalse($statusRequest->isCaptured());
-        $this->assertFalse($statusRequest->isCanceled());
-        $this->assertFalse($statusRequest->isNew());
-        $this->assertFalse($statusRequest->isUnknown());
+        $this->assertFalse($getStatus->isFailed());
+        $this->assertFalse($getStatus->isSuspended());
+        $this->assertFalse($getStatus->isExpired());
+        $this->assertFalse($getStatus->isCaptured());
+        $this->assertFalse($getStatus->isPayedout());
+        $this->assertFalse($getStatus->isAuthorized());
+        $this->assertFalse($getStatus->isCanceled());
+        $this->assertFalse($getStatus->isNew());
+        $this->assertFalse($getStatus->isUnknown());
     }
 
     /**
@@ -150,19 +158,21 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenCanceledStatus()
     {
-        $statusRequest = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new \stdClass());
 
-        $statusRequest->markCanceled();
+        $getStatus->markCanceled();
 
-        $this->assertTrue($statusRequest->isCanceled());
+        $this->assertTrue($getStatus->isCanceled());
 
-        $this->assertFalse($statusRequest->isPending());
-        $this->assertFalse($statusRequest->isSuspended());
-        $this->assertFalse($statusRequest->isExpired());
-        $this->assertFalse($statusRequest->isFailed());
-        $this->assertFalse($statusRequest->isCaptured());
-        $this->assertFalse($statusRequest->isNew());
-        $this->assertFalse($statusRequest->isUnknown());
+        $this->assertFalse($getStatus->isPending());
+        $this->assertFalse($getStatus->isSuspended());
+        $this->assertFalse($getStatus->isExpired());
+        $this->assertFalse($getStatus->isFailed());
+        $this->assertFalse($getStatus->isCaptured());
+        $this->assertFalse($getStatus->isPayedout());
+        $this->assertFalse($getStatus->isAuthorized());
+        $this->assertFalse($getStatus->isNew());
+        $this->assertFalse($getStatus->isUnknown());
     }
 
     /**
@@ -170,19 +180,21 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenNewStatus()
     {
-        $statusRequest = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new \stdClass());
 
-        $statusRequest->markNew();
+        $getStatus->markNew();
 
-        $this->assertTrue($statusRequest->isNew());
+        $this->assertTrue($getStatus->isNew());
 
-        $this->assertFalse($statusRequest->isCaptured());
-        $this->assertFalse($statusRequest->isSuspended());
-        $this->assertFalse($statusRequest->isExpired());
-        $this->assertFalse($statusRequest->isCanceled());
-        $this->assertFalse($statusRequest->isPending());
-        $this->assertFalse($statusRequest->isFailed());
-        $this->assertFalse($statusRequest->isUnknown());
+        $this->assertFalse($getStatus->isCaptured());
+        $this->assertFalse($getStatus->isPayedout());
+        $this->assertFalse($getStatus->isAuthorized());
+        $this->assertFalse($getStatus->isSuspended());
+        $this->assertFalse($getStatus->isExpired());
+        $this->assertFalse($getStatus->isCanceled());
+        $this->assertFalse($getStatus->isPending());
+        $this->assertFalse($getStatus->isFailed());
+        $this->assertFalse($getStatus->isUnknown());
     }
 
     /**
@@ -190,19 +202,21 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenUnknownStatus()
     {
-        $statusRequest = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new \stdClass());
 
-        $statusRequest->markUnknown();
+        $getStatus->markUnknown();
 
-        $this->assertTrue($statusRequest->isUnknown());
+        $this->assertTrue($getStatus->isUnknown());
 
-        $this->assertFalse($statusRequest->isCaptured());
-        $this->assertFalse($statusRequest->isSuspended());
-        $this->assertFalse($statusRequest->isExpired());
-        $this->assertFalse($statusRequest->isCanceled());
-        $this->assertFalse($statusRequest->isPending());
-        $this->assertFalse($statusRequest->isFailed());
-        $this->assertFalse($statusRequest->isNew());
+        $this->assertFalse($getStatus->isCaptured());
+        $this->assertFalse($getStatus->isPayedout());
+        $this->assertFalse($getStatus->isAuthorized());
+        $this->assertFalse($getStatus->isSuspended());
+        $this->assertFalse($getStatus->isExpired());
+        $this->assertFalse($getStatus->isCanceled());
+        $this->assertFalse($getStatus->isPending());
+        $this->assertFalse($getStatus->isFailed());
+        $this->assertFalse($getStatus->isNew());
     }
 
     /**
@@ -210,19 +224,21 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenExpiredStatus()
     {
-        $statusRequest = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new \stdClass());
 
-        $statusRequest->markExpired();
+        $getStatus->markExpired();
 
-        $this->assertTrue($statusRequest->isExpired());
+        $this->assertTrue($getStatus->isExpired());
 
-        $this->assertFalse($statusRequest->isCaptured());
-        $this->assertFalse($statusRequest->isSuspended());
-        $this->assertFalse($statusRequest->isCanceled());
-        $this->assertFalse($statusRequest->isPending());
-        $this->assertFalse($statusRequest->isFailed());
-        $this->assertFalse($statusRequest->isNew());
-        $this->assertFalse($statusRequest->isUnknown());
+        $this->assertFalse($getStatus->isCaptured());
+        $this->assertFalse($getStatus->isPayedout());
+        $this->assertFalse($getStatus->isAuthorized());
+        $this->assertFalse($getStatus->isSuspended());
+        $this->assertFalse($getStatus->isCanceled());
+        $this->assertFalse($getStatus->isPending());
+        $this->assertFalse($getStatus->isFailed());
+        $this->assertFalse($getStatus->isNew());
+        $this->assertFalse($getStatus->isUnknown());
     }
 
     /**
@@ -230,18 +246,42 @@ class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotMatchOthersThenSuspendedStatus()
     {
-        $statusRequest = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new \stdClass());
 
-        $statusRequest->markSuspended();
+        $getStatus->markSuspended();
 
-        $this->assertTrue($statusRequest->isSuspended());
+        $this->assertTrue($getStatus->isSuspended());
 
-        $this->assertFalse($statusRequest->isCaptured());
-        $this->assertFalse($statusRequest->isExpired());
-        $this->assertFalse($statusRequest->isCanceled());
-        $this->assertFalse($statusRequest->isPending());
-        $this->assertFalse($statusRequest->isFailed());
-        $this->assertFalse($statusRequest->isNew());
-        $this->assertFalse($statusRequest->isUnknown());
+        $this->assertFalse($getStatus->isCaptured());
+        $this->assertFalse($getStatus->isPayedout());
+        $this->assertFalse($getStatus->isAuthorized());
+        $this->assertFalse($getStatus->isExpired());
+        $this->assertFalse($getStatus->isCanceled());
+        $this->assertFalse($getStatus->isPending());
+        $this->assertFalse($getStatus->isFailed());
+        $this->assertFalse($getStatus->isNew());
+        $this->assertFalse($getStatus->isUnknown());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotMatchOthersThenPayedoutStatus()
+    {
+        $getStatus = new GetBinaryStatus(new \stdClass());
+
+        $getStatus->markPayedout();
+
+        $this->assertTrue($getStatus->isPayedout());
+
+        $this->assertFalse($getStatus->isCaptured());
+        $this->assertFalse($getStatus->isAuthorized());
+        $this->assertFalse($getStatus->isSuspended());
+        $this->assertFalse($getStatus->isExpired());
+        $this->assertFalse($getStatus->isCanceled());
+        $this->assertFalse($getStatus->isPending());
+        $this->assertFalse($getStatus->isFailed());
+        $this->assertFalse($getStatus->isNew());
+        $this->assertFalse($getStatus->isUnknown());
     }
 }

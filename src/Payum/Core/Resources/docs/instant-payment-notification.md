@@ -15,7 +15,7 @@ What you have to do is add an extension to detect payment status changes, and ac
 
 Here's an example of the extension:
 
-```
+```php
 <?php
 
 use Payum\Core\Extension\Context;

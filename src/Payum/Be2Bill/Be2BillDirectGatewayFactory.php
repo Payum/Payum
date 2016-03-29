@@ -41,7 +41,8 @@ class Be2BillDirectGatewayFactory extends GatewayFactory
                         'password' => $config['password'],
                         'sandbox' => $config['sandbox'],
                     ),
-                    $config['payum.http_client']
+                    $config['payum.http_client'],
+                    $config['httplug.message_factory']
                 );
             };
         }

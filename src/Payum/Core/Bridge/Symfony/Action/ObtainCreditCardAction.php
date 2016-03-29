@@ -12,6 +12,7 @@ use Payum\Core\Request\RenderTemplate;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 
 class ObtainCreditCardAction extends GatewayAwareAction
@@ -25,6 +26,11 @@ class ObtainCreditCardAction extends GatewayAwareAction
      * @var Request
      */
     protected $httpRequest;
+
+    /**
+     * @var RequestStack
+     */
+    protected $httpRequestStack;
 
     /**
      * @var string
@@ -43,10 +49,19 @@ class ObtainCreditCardAction extends GatewayAwareAction
 
     /**
      * @param Request $request
+     * @deprecated
      */
     public function setRequest(Request $request = null)
     {
         $this->httpRequest = $request;
+    }
+
+    /**
+     * @param RequestStack|null $requestStack
+     */
+    public function setRequestStack(RequestStack $requestStack = null)
+    {
+        $this->httpRequestStack = $requestStack;
     }
 
     /**
@@ -58,13 +73,20 @@ class ObtainCreditCardAction extends GatewayAwareAction
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        if (false == $this->httpRequest) {
+        $httpRequest = null;
+        if ($this->httpRequest instanceof Request) {
+            $httpRequest = $this->httpRequest;
+        } else if ($this->httpRequestStack instanceof RequestStack) {
+            $httpRequest = $this->httpRequestStack->getMasterRequest();
+        }
+
+        if (false == $httpRequest) {
             throw new LogicException('The action can be run only when http request is set.');
         }
 
         $form = $this->createCreditCardForm();
 
-        $form->handleRequest($this->httpRequest);
+        $form->handleRequest($httpRequest);
         if ($form->isSubmitted()) {
             /** @var CreditCardInterface $card */
             $card = $form->getData();

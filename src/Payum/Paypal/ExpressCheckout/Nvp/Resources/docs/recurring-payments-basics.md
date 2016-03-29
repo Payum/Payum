@@ -76,7 +76,7 @@ $agreement['L_BILLINGAGREEMENTDESCRIPTION0'] = "Insert some description here";
 $agreement['NOSHIPPING'] = 1;
 $storage->update($agreement);
 
-$captureToken = $payum->getTokenFactory->createCaptureToken('paypal', $agreement, 'create_recurring_payment.php');
+$captureToken = $payum->getTokenFactory()->createCaptureToken('paypal', $agreement, 'create_recurring_payment.php');
 
 $storage->update($agreement);
 

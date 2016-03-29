@@ -5,6 +5,11 @@ use GuzzleHttp\ClientInterface;
 use Payum\Core\HttpClientInterface;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * This is a HttpClient that is using Guzzle.
+ *
+ * @deprecated This will be removed in 2.0. Consider using Http\Client\HttpClient.
+ */
 class HttpClient implements HttpClientInterface
 {
     /**

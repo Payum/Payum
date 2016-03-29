@@ -11,7 +11,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfArrayObject()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Spl\ArrayObject');
+        $rc = new \ReflectionClass(ArrayObject::class);
 
         $this->assertTrue($rc->isSubclassOf('ArrayObject'));
     }
@@ -383,6 +383,38 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('fooVal', $arrayObject['foo']);
         $this->assertEquals('barDefVal', $arrayObject['bar']);
+    }
+
+    public function shouldAllowGetArrayAsArrayObjectIfSet()
+    {
+        $array = new ArrayObject();
+        $array['foo'] = ['foo' => 'fooVal'];
+
+        $subArray = $array->getArray('foo');
+
+        $this->assertInstanceOf(ArrayObject::class, $subArray);
+        $this->assertEquals(['foo' => 'fooVal'], (array) $subArray);
+    }
+
+    public function shouldAllowGetArrayAsArrayObjectIfNotSet()
+    {
+        $array = new ArrayObject();
+
+        $subArray = $array->getArray('foo');
+
+        $this->assertInstanceOf(ArrayObject::class, $subArray);
+        $this->assertEquals([], (array) $subArray);
+    }
+
+    public function shouldAllowToArrayWithoutSensitiveValuesAdnLocal()
+    {
+        $array = new ArrayObject([
+            'local' => 'theLocal',
+            'sensitive' => new SensitiveValue('theSens'),
+            'foo' => 'fooVal',
+        ]);
+
+        $this->assertEquals(['foo' => 'fooVal'], $array->toUnsafeArrayWithoutLocal());
     }
 }
 

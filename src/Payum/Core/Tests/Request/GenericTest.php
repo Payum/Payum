@@ -22,7 +22,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeAbstractClass()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\Generic');
+        $rc = new \ReflectionClass(Generic::class);
 
         $this->assertTrue($rc->isAbstract());
     }
@@ -32,7 +32,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementModelAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\Generic');
+        $rc = new \ReflectionClass(Generic::class);
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Model\ModelAwareInterface'));
     }
@@ -42,7 +42,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementModelAggregateInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\Generic');
+        $rc = new \ReflectionClass(Generic::class);
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Model\ModelAggregateInterface'));
     }
@@ -52,7 +52,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementTokenAggregateInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\Generic');
+        $rc = new \ReflectionClass(Generic::class);
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Security\TokenAggregateInterface'));
     }
@@ -64,7 +64,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithModelOfAnyType($phpType)
     {
-        $this->getMockForAbstractClass('Payum\Core\Request\Generic', array($phpType));
+        $this->getMockForAbstractClass(Generic::class, array($phpType));
     }
 
     /**
@@ -75,7 +75,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
     public function shouldAllowSetModelAndGetIt($phpType)
     {
         /** @var Generic $request */
-        $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array(123321));
+        $request = $this->getMockForAbstractClass(Generic::class, array(123321));
 
         $request->setModel($phpType);
 
@@ -90,7 +90,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
     public function shouldAllowGetModelSetInConstructor($phpType)
     {
         /** @var Generic $request */
-        $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array($phpType));
+        $request = $this->getMockForAbstractClass(Generic::class, array($phpType));
 
         $this->assertEquals($phpType, $request->getModel());
     }
@@ -103,7 +103,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
         $tokenMock = $this->getMock('Payum\Core\Security\TokenInterface');
 
         /** @var Generic $request */
-        $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array($tokenMock));
+        $request = $this->getMockForAbstractClass(Generic::class, array($tokenMock));
 
         $this->assertSame($tokenMock, $request->getModel());
         $this->assertSame($tokenMock, $request->getToken());
@@ -117,7 +117,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
         $model = array('foo' => 'bar');
 
         /** @var Generic $request */
-        $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array($model));
+        $request = $this->getMockForAbstractClass(Generic::class, array($model));
 
         $this->assertInstanceOf('ArrayObject', $request->getModel());
         $this->assertEquals($model, (array) $request->getModel());
@@ -129,7 +129,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
     public function shouldConvertArrayToArrayObjectSetWithSetter()
     {
         /** @var Generic $request */
-        $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array(123321));
+        $request = $this->getMockForAbstractClass(Generic::class, array(123321));
 
         $model = array('foo' => 'bar');
 
@@ -147,7 +147,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
         /** @var Generic $request */
         $token = $this->getMock('Payum\Core\Security\TokenInterface');
 
-        $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array($token));
+        $request = $this->getMockForAbstractClass(Generic::class, array($token));
 
         $this->assertNull($request->getFirstModel());
     }
@@ -160,7 +160,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
         /** @var Generic $request */
         $identity = $this->getMock('Payum\Core\Storage\IdentityInterface', array(), array(), '', false);
 
-        $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array($identity));
+        $request = $this->getMockForAbstractClass(Generic::class, array($identity));
 
         $this->assertNull($request->getFirstModel());
     }
@@ -173,7 +173,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
         $model = new \stdClass();
 
         /** @var Generic $request */
-        $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array($model));
+        $request = $this->getMockForAbstractClass(Generic::class, array($model));
 
         $this->assertSame($model, $request->getFirstModel());
     }
@@ -186,7 +186,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
         $token = $this->getMock('Payum\Core\Security\TokenInterface');
 
         /** @var Generic $request */
-        $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array(null));
+        $request = $this->getMockForAbstractClass(Generic::class, array(null));
         $request->setModel($token);
 
         $this->assertNull($request->getFirstModel());
@@ -200,7 +200,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
         $identity = $this->getMock('Payum\Core\Storage\IdentityInterface', array(), array(), '', false);
 
         /** @var Generic $request */
-        $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array(null));
+        $request = $this->getMockForAbstractClass(Generic::class, array(null));
         $request->setModel($identity);
 
         $this->assertNull($request->getFirstModel());
@@ -214,7 +214,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
         $model = new \stdClass();
 
         /** @var Generic $request */
-        $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array(null));
+        $request = $this->getMockForAbstractClass(Generic::class, array(null));
         $request->setModel($model);
 
         $this->assertSame($model, $request->getFirstModel());
@@ -229,7 +229,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
         $secondModel = new \stdClass();
 
         /** @var Generic $request */
-        $request = $this->getMockForAbstractClass('Payum\Core\Request\Generic', array($firstModel));
+        $request = $this->getMockForAbstractClass(Generic::class, array($firstModel));
         $request->setModel($secondModel);
 
         $this->assertSame($firstModel, $request->getFirstModel());

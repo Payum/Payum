@@ -2,6 +2,7 @@
 namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\Capture;
+use Payum\Core\Request\Generic;
 
 class CaptureTest extends \PHPUnit_Framework_TestCase
 {
@@ -10,9 +11,9 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass('Payum\Core\Request\Capture');
+        $rc = new \ReflectionClass(Capture::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
+        $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
     /**
