@@ -7,6 +7,10 @@ use Payum\AuthorizeNet\Aim\Action\StatusAction;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
+use Payum\Core\Model\DetailsAggregateInterface;
+use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetStatusInterface;
 
 class AuthorizeNetAimGatewayFactory extends GatewayFactory
 {
@@ -22,6 +26,11 @@ class AuthorizeNetAimGatewayFactory extends GatewayFactory
         $config->defaults(array(
             'payum.factory_name' => 'authorize_net_aim',
             'payum.factory_title' => 'Authorize.NET AIM',
+            'payum.supported_actions' => [
+                GetStatusInterface::class => [\ArrayAccess::class, DetailsAggregateInterface::class],
+                Capture::class => [\ArrayAccess::class, PaymentInterface::class],
+            ],
+            
             'payum.action.capture' => new CaptureAction(),
             'payum.action.status' => new StatusAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),

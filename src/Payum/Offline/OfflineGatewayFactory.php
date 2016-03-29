@@ -3,6 +3,11 @@ namespace Payum\Offline;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
+use Payum\Core\Model\DetailsAggregateInterface;
+use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Request\Authorize;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetStatusInterface;
 use Payum\Offline\Action\AuthorizeAction;
 use Payum\Offline\Action\CaptureAction;
 use Payum\Offline\Action\ConvertPaymentAction;
@@ -18,6 +23,12 @@ class OfflineGatewayFactory extends GatewayFactory
         $config->defaults([
             'payum.factory_name' => 'offline',
             'payum.factory_title' => 'Offline',
+            'payum.supported_actions' => [
+                GetStatusInterface::class => [\ArrayAccess::class, DetailsAggregateInterface::class],
+                Capture::class => [\ArrayAccess::class, PaymentInterface::class],
+                Authorize::class => [\ArrayAccess::class, PaymentInterface::class],
+            ],
+            
             'payum.action.capture' => new CaptureAction(),
             'payum.action.authorize' => new AuthorizeAction(),
             'payum.action.status' => new StatusAction(),

@@ -3,6 +3,13 @@ namespace Payum\Paypal\ExpressCheckout\Nvp;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
+use Payum\Core\Model\DetailsAggregateInterface;
+use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Request\Authorize;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetStatusInterface;
+use Payum\Core\Request\Notify;
+use Payum\Core\Request\Sync;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\ConfirmOrderAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoCaptureAction;
@@ -36,6 +43,13 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
         $config->defaults(array(
             'payum.factory_name' => 'paypal_express_checkout_nvp',
             'payum.factory_title' => 'PayPal ExpressCheckout',
+            'payum.supported_actions' => [
+                Sync::class => [\ArrayAccess::class, DetailsAggregateInterface::class],
+                Notify::class => [\ArrayAccess::class, DetailsAggregateInterface::class],
+                GetStatusInterface::class => [\ArrayAccess::class, DetailsAggregateInterface::class],
+                Capture::class => [\ArrayAccess::class, PaymentInterface::class],
+                Authorize::class => [\ArrayAccess::class, PaymentInterface::class],
+            ],
 
             'payum.template.confirm_order' => '@PayumPaypalExpressCheckout/confirmOrder.html.twig',
 

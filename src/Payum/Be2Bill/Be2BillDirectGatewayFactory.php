@@ -6,6 +6,10 @@ use Payum\Be2Bill\Action\CaptureAction;
 use Payum\Be2Bill\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
+use Payum\Core\Model\DetailsAggregateInterface;
+use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetStatusInterface;
 
 class Be2BillDirectGatewayFactory extends GatewayFactory
 {
@@ -17,6 +21,10 @@ class Be2BillDirectGatewayFactory extends GatewayFactory
         $config->defaults(array(
             'payum.factory_name' => 'be2bill_direct',
             'payum.factory_title' => 'Be2Bill Direct',
+            'payum.supported_actions' => [
+                GetStatusInterface::class => [\ArrayAccess::class, DetailsAggregateInterface::class],
+                Capture::class => [\ArrayAccess::class, PaymentInterface::class],
+            ],
 
             'payum.action.capture' => new CaptureAction(),
             'payum.action.status' => new StatusAction(),
