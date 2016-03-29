@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Model;
 
-class Payment implements PaymentInterface
+class Payment implements PaymentInterface, DirectDebitPaymentInterface
 {
     /**
      * @var string
@@ -43,9 +43,14 @@ class Payment implements PaymentInterface
      */
     protected $creditCard;
 
+    /**
+     * @var BankAccountInterface|null
+     */
+    protected $bankAccount;
+
     public function __construct()
     {
-        $this->details = array();
+        $this->details = [];
     }
 
     /**
@@ -180,5 +185,21 @@ class Payment implements PaymentInterface
     public function setCreditCard(CreditCardInterface $creditCard = null)
     {
         $this->creditCard = $creditCard;
+    }
+
+    /**
+     * @return BankAccountInterface|null
+     */
+    public function getBankAccount()
+    {
+        return $this->bankAccount;
+    }
+
+    /**
+     * @param BankAccountInterface|null $bankAccount
+     */
+    public function setBankAccount(BankAccountInterface $bankAccount = null)
+    {
+        $this->bankAccount = $bankAccount;
     }
 }
