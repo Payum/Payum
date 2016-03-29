@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.0 (2016-03-29)
+
+* Foundation for payouts. Payout model, generic actions.
+* Foundation for direct bank debit. BankAccount model.
+* Decouple from Guzzle6. Use Httplug instead.
+* Replace league/url (abandoned) with league/uri.
+
 ## 1.2.8 (2016-03-25)
 
 * [stripe] Allow use of explicitly passed credit card.
