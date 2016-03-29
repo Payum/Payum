@@ -2,30 +2,22 @@
 
 namespace Payum\Sofort\Action;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
+use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 use Payum\Sofort\Request\Api\CreateTransaction;
-use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\Sync;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
-use Payum\Core\Security\GenericTokenFactoryInterface;
 
-class CaptureAction extends GatewayAwareAction implements GenericTokenFactoryAwareInterface
+class CaptureAction implements ActionInterface, GatewayAwareInterface, GenericTokenFactoryAwareInterface
 {
-    /**
-     * @var GenericTokenFactoryInterface
-     */
-    protected $tokenFactory;
-
-    /**
-     * @param GenericTokenFactoryInterface $genericTokenFactory
-     */
-    public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null)
-    {
-        $this->tokenFactory = $genericTokenFactory;
-    }
-
+    use GatewayAwareTrait;
+    use GenericTokenFactoryAwareTrait;
+    
     /**
      * {@inheritdoc}
      *

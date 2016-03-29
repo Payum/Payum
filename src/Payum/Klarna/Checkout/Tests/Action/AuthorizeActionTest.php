@@ -1,8 +1,10 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests\Action;
 
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Model\Identity;
 use Payum\Core\Model\Token;
@@ -22,11 +24,21 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfGatewayAwareAction()
+    public function shouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(AuthorizeAction::class);
 
-        $this->assertTrue($rc->isSubclassOf(GatewayAwareAction::class));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldImplementGatewayAwareInterface()
+    {
+        $rc = new \ReflectionClass(AuthorizeAction::class);
+
+        $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     /**

@@ -30,16 +30,10 @@ class ExecuteSameRequestWithModelDetailsAction extends GatewayAwareAction
         $request->setModel($details);
         try {
             $this->gateway->execute($request);
-
+        } finally {
             if ($model instanceof DetailsAwareInterface) {
                 $model->setDetails($details);
             }
-        } catch (\Exception $e) {
-            if ($model instanceof DetailsAwareInterface) {
-                $model->setDetails($details);
-            }
-
-            throw $e;
         }
     }
 

@@ -1,37 +1,36 @@
 <?php
 namespace Payum\Klarna\Checkout\Action;
 
-use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Authorize;
 use Payum\Core\Request\RenderTemplate;
 use Payum\Core\Request\Sync;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
-use Payum\Core\Security\GenericTokenFactoryInterface;
+use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 use Payum\Klarna\Checkout\Config;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\CreateOrder;
 
-class AuthorizeAction extends GatewayAwareAction implements GenericTokenFactoryAwareInterface, ApiAwareInterface
+/**
+ * @property Config $api
+ */
+class AuthorizeAction implements ActionInterface, GatewayAwareInterface, GenericTokenFactoryAwareInterface, ApiAwareInterface
 {
+    use ApiAwareTrait;
+    use GatewayAwareTrait;
+    use GenericTokenFactoryAwareTrait;
+    
     /**
      * @var string
      */
     protected $templateName;
-
-    /**
-     * @var GenericTokenFactoryInterface
-     */
-    protected $tokenFactory;
-
-    /**
-     * @var Config
-     */
-    protected $config;
 
     /**
      * @param string|null $templateName
@@ -39,28 +38,7 @@ class AuthorizeAction extends GatewayAwareAction implements GenericTokenFactoryA
     public function __construct($templateName)
     {
         $this->templateName = $templateName;
-    }
-
-    /**
-     * @param GenericTokenFactoryInterface $genericTokenFactory
-     *
-     * @return void
-     */
-    public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null)
-    {
-        $this->tokenFactory = $genericTokenFactory;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
-    {
-        if (false == $api instanceof Config) {
-            throw new UnsupportedApiException('Not supported. Expected Payum\Klarna\Checkout\Config instance to be set as api.');
-        }
-
-        $this->config = $api;
+        $this->apiClass = Config::class;
     }
 
     /**
@@ -76,12 +54,12 @@ class AuthorizeAction extends GatewayAwareAction implements GenericTokenFactoryA
 
         $merchant = ArrayObject::ensureArrayObject($model['merchant'] ?: []);
 
-        if (false == $merchant['checkout_uri'] && $this->config->checkoutUri) {
-            $merchant['checkout_uri'] = $this->config->checkoutUri;
+        if (false == $merchant['checkout_uri'] && $this->api->checkoutUri) {
+            $merchant['checkout_uri'] = $this->api->checkoutUri;
         }
 
-        if (false == $merchant['terms_uri'] && $this->config->termsUri) {
-            $merchant['terms_uri'] = $this->config->termsUri;
+        if (false == $merchant['terms_uri'] && $this->api->termsUri) {
+            $merchant['terms_uri'] = $this->api->termsUri;
         }
 
         if (false == $merchant['confirmation_uri'] && $request->getToken()) {

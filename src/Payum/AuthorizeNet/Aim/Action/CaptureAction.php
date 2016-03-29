@@ -1,36 +1,32 @@
 <?php
 namespace Payum\AuthorizeNet\Aim\Action;
 
-use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
-use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Security\SensitiveValue;
 
-class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
+/**
+ * @property AuthorizeNetAIM $api
+ */
+class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
 {
-    /**
-     * @var AuthorizeNetAIM
-     */
-    protected $api;
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
+    use ApiAwareTrait;
+    use GatewayAwareTrait;
+    
+    public function __construct()
     {
-        if (false == $api instanceof AuthorizeNetAIM) {
-            throw new UnsupportedApiException('Not supported.');
-        }
-
-        $this->api = $api;
+        $this->apiClass = AuthorizeNetAIM::class;
     }
-
+    
     /**
      * {@inheritDoc}
      *

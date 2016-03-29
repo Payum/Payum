@@ -1,0 +1,44 @@
+language: php
+
+sudo: false
+
+git:
+    depth: 1
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+matrix:
+  include:
+    - php: 5.5
+      env: SYMFONY_VERSION=2.8.*
+    - php: 5.6
+      env: SYMFONY_VERSION=2.8.*
+    - php: 7.0
+      env: SYMFONY_VERSION=2.8.*
+    - php: 5.5
+      env: SYMFONY_VERSION=3.0.*
+    - php: 5.6
+      env: SYMFONY_VERSION=3.0.*
+    - php: 7.0
+      env: SYMFONY_VERSION=3.0.*
+    - php: hhvm
+      env: SYMFONY_VERSION=2.8.*
+  allow_failures:
+    - php: hhvm
+
+before_install:
+    - composer self-update
+    - if [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]]; then INI_FILE=~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini; else INI_FILE=/etc/hhvm/php.ini; fi;
+
+install:
+    - composer require symfony/symfony:${SYMFONY_VERSION} --no-update
+    - composer install --prefer-source
+
+script:
+    - bin/phpunit
+
+notifications:
+  email:
+    - payumsupport@forma-pro.com

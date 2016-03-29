@@ -28,6 +28,7 @@ remote paypal-pro-checkout git@github.com:Payum/PaypalProCheckoutNvp.git
 remote authorize-net-aim git@github.com:Payum/AuthorizeNetAim.git
 remote be2bill git@github.com:Payum/Be2Bill.git
 remote paypal-express-checkout git@github.com:Payum/PaypalExpressCheckoutNvp.git
+remote paypal-masspay git@github.com:Payum/PaypalMasspayNvp.git
 remote paypal-ipn git@github.com:Payum/PaypalIpn.git
 remote paypal-rest git@github.com:Payum/PaypalRest.git
 remote offline git@github.com:Payum/Offline.git
@@ -42,6 +43,7 @@ split 'src/Payum/Core/' core
 split 'src/Payum/AuthorizeNet/Aim/' authorize-net-aim
 split 'src/Payum/Be2Bill' be2bill
 split 'src/Payum/Paypal/ExpressCheckout/Nvp' paypal-express-checkout
+split 'src/Payum/Paypal/Masspay/Nvp' paypal-masspay
 split 'src/Payum/Paypal/ProCheckout/Nvp' paypal-pro-checkout
 split 'src/Payum/Paypal/Ipn' paypal-ipn
 split 'src/Payum/Paypal/Rest' paypal-rest

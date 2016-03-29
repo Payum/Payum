@@ -2,51 +2,33 @@
 namespace Payum\Be2Bill\Action;
 
 use Payum\Be2Bill\Api;
-use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
-use Payum\Core\Security\GenericTokenFactoryInterface;
+use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 
-class CaptureOffsiteAction extends GatewayAwareAction implements ApiAwareInterface, GenericTokenFactoryAwareInterface
+/**
+ * @property Api $api
+ */
+class CaptureOffsiteAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface, GenericTokenFactoryAwareInterface
 {
-    /**
-     * @var Api
-     */
-    protected $api;
-
-    /**
-     * @var GenericTokenFactoryInterface
-     */
-    protected $tokenFactory;
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
+    use ApiAwareTrait;
+    use GatewayAwareTrait;
+    use GenericTokenFactoryAwareTrait;
+    
+    public function __construct()
     {
-        if (false === $api instanceof Api) {
-            throw new UnsupportedApiException('Not supported.');
-        }
-
-        $this->api = $api;
+        $this->apiClass = Api::class;
     }
-
-    /**
-     * @param GenericTokenFactoryInterface $genericTokenFactory
-     *
-     * @return void
-     */
-    public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null)
-    {
-        $this->tokenFactory = $genericTokenFactory;
-    }
-
+    
     /**
      * {@inheritDoc}
      *
