@@ -2,13 +2,17 @@
 
 namespace Payum\Paypal\Rest\Action;
 
-use PayPal\Api\Payment;
-use Payum\Core\Action\GatewayAwareAction;
+use PayPal\Api\Payment as PaypalPayment;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Sync;
 
-class SyncAction extends GatewayAwareAction
+class SyncAction implements ActionInterface, GatewayAwareInterface
 {
+    use GatewayAwareTrait;
+
     /**
      * {@inheritDoc}
      */
@@ -17,10 +21,10 @@ class SyncAction extends GatewayAwareAction
         /** @var $request Sync */
         RequestNotSupportedException::assertSupports($this, $request);
 
-        /** @var Payment $model */
+        /** @var PaypalPayment $model */
         $model = $request->getModel();
 
-        $payment = Payment::get($model->id);
+        $payment = PaypalPayment::get($model->id);
 
         $model->fromArray($payment->toArray());
     }
@@ -32,7 +36,7 @@ class SyncAction extends GatewayAwareAction
     {
         return
             $request instanceof Sync &&
-            $request->getModel() instanceof Payment
+            $request->getModel() instanceof PaypalPayment
         ;
     }
 }

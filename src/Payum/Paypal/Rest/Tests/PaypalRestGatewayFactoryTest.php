@@ -2,6 +2,10 @@
 
 namespace Payum\Paypal\Rest\Tests;
 
+use Payum\Core\CoreGatewayFactory;
+use Payum\Core\Gateway;
+use Payum\Core\GatewayFactory;
+use Payum\Core\GatewayFactoryInterface;
 use Payum\Paypal\Rest\PaypalRestGatewayFactory;
 
 class PaypalRestGatewayFactoryTest extends \PHPUnit_Framework_TestCase
@@ -11,9 +15,9 @@ class PaypalRestGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSubClassGatewayFactory()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\Rest\PaypalRestGatewayFactory');
+        $rc = new \ReflectionClass(PaypalRestGatewayFactory::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\GatewayFactory'));
+        $this->assertTrue($rc->isSubclassOf(GatewayFactory::class));
     }
 
     /**
@@ -31,7 +35,7 @@ class PaypalRestGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new PaypalRestGatewayFactory();
 
-        $this->assertAttributeInstanceOf('Payum\Core\CoreGatewayFactory', 'coreGatewayFactory', $factory);
+        $this->assertAttributeInstanceOf(CoreGatewayFactory::class, 'coreGatewayFactory', $factory);
     }
 
     /**
@@ -39,9 +43,9 @@ class PaypalRestGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
     {
-        $coreGatewayFactory = $this->getMock('Payum\Core\GatewayFactoryInterface');
+        $coreGatewayFactory = $this->getMock(GatewayFactoryInterface::class);
 
-        $factory = new PaypalRestGatewayFactory(array(), $coreGatewayFactory);
+        $factory = new PaypalRestGatewayFactory([], $coreGatewayFactory);
 
         $this->assertAttributeSame($coreGatewayFactory, 'coreGatewayFactory', $factory);
     }
@@ -53,13 +57,13 @@ class PaypalRestGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new PaypalRestGatewayFactory();
 
-        $gateway = $factory->create(array(
+        $gateway = $factory->create([
             'client_id' => 'cId',
             'client_secret' => 'cSecret',
             'config_path' => __DIR__,
-        ));
+        ]);
 
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
+        $this->assertInstanceOf(Gateway::class, $gateway);
 
         $this->assertAttributeNotEmpty('apis', $gateway);
         $this->assertAttributeNotEmpty('actions', $gateway);
@@ -75,9 +79,9 @@ class PaypalRestGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new PaypalRestGatewayFactory();
 
-        $gateway = $factory->create(array('payum.api' => new \stdClass()));
+        $gateway = $factory->create(['payum.api' => new \stdClass()]);
 
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
+        $this->assertInstanceOf(Gateway::class, $gateway);
 
         $this->assertAttributeNotEmpty('apis', $gateway);
         $this->assertAttributeNotEmpty('actions', $gateway);
@@ -104,10 +108,10 @@ class PaypalRestGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
-        $factory = new PaypalRestGatewayFactory(array(
+        $factory = new PaypalRestGatewayFactory([
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        ));
+        ]);
 
         $config = $factory->createConfig();
 
@@ -132,7 +136,7 @@ class PaypalRestGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
-        $this->assertEquals(array('client_id' => '', 'client_secret' => '', 'config_path' => ''), $config['payum.default_options']);
+        $this->assertEquals(['client_id' => '', 'client_secret' => '', 'config_path' => ''], $config['payum.default_options']);
     }
 
     /**
@@ -175,10 +179,10 @@ class PaypalRestGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     public function shouldThrowIfConfigPathOptionsNotEqualPaypalPath()
     {
         $factory = new PaypalRestGatewayFactory();
-        $factory->create(array(
+        $factory->create([
             'client_id' => 'cId',
             'client_secret' => 'cSecret',
             'config_path' => dirname(__DIR__),
-        ));
+        ]);
     }
 }

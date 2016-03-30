@@ -152,20 +152,19 @@ class Gateway implements GatewayInterface
 
             if ($action instanceof ApiAwareInterface) {
                 $apiSet = false;
+                $unsupportedException = null;
                 foreach ($this->apis as $api) {
                     try {
                         $action->setApi($api);
                         $apiSet = true;
                         break;
                     } catch (UnsupportedApiException $e) {
+                        $unsupportedException = $e;
                     }
                 }
 
                 if (false == $apiSet) {
-                    throw new LogicException(sprintf(
-                        'Cannot find right api supported by %s',
-                        get_class($action)
-                    ));
+                    throw new LogicException(sprintf('Cannot find right api for the action %s', get_class($action)), null, $unsupportedException);
                 }
             }
 
