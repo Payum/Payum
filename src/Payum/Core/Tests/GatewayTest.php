@@ -196,7 +196,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage Cannot find right api supported by
+     * @expectedExceptionMessage Cannot find right api for the action Mock_ApiAwareAction
      */
     public function throwIfGatewayNotHaveApiSupportedByActionOnExecute()
     {

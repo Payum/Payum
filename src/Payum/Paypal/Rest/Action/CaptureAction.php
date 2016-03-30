@@ -2,33 +2,26 @@
 
 namespace Payum\Paypal\Rest\Action;
 
-use PayPal\Api\Payment;
+use PayPal\Api\Payment as PaypalPayment;
 use PayPal\Api\PaymentExecution;
 use PayPal\Rest\ApiContext;
-use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Capture;
 use Payum\Core\Reply\HttpRedirect;
 
-class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
+class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
 {
-    /**
-     * @param ApiContext
-     */
-    protected $api;
+    use ApiAwareTrait;
+    use GatewayAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
+    public function __construct()
     {
-        if (false == $api instanceof ApiContext) {
-            throw new UnsupportedApiException('Given api is not supported. Supported api is instance of ApiContext');
-        }
-
-        $this->api = $api;
+        $this->apiClass = ApiContext::class;
     }
 
     /**
@@ -39,7 +32,7 @@ class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
         /** @var $request Capture */
         RequestNotSupportedException::assertSupports($this, $request);
 
-        /** @var Payment $model */
+        /** @var PaypalPayment $model */
         $model = $request->getModel();
 
         if (
@@ -84,7 +77,7 @@ class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
     {
         return
             $request instanceof Capture &&
-            $request->getModel() instanceof Payment
+            $request->getModel() instanceof PaypalPayment
         ;
     }
 }
