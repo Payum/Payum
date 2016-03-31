@@ -542,6 +542,7 @@ class Api
         );
 
         $request = $this->messageFactory->createRequest('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
+        $request = $this->authorizeRequest($request);
 
         $response = $this->client->send($request);
 
@@ -608,5 +609,17 @@ class Api
     protected function addVersionField(array &$fields)
     {
         $fields['VERSION'] = self::VERSION;
+    }
+
+    /**
+     * Adds authorize headers to request.
+     * Note: only headers.
+     *
+     * @param Request $request
+     * @return Request
+     */
+    protected function authorizeRequest(Request $request)
+    {
+        return $request;
     }
 }

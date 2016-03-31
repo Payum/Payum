@@ -31,39 +31,6 @@ class ApiPermission extends BaseApi
 
     /**
      * @param array $fields
-     *
-     * @throws HttpException
-     *
-     * @return array
-     */
-    protected function doRequest(array $fields)
-    {
-        $headers = array(
-            'Content-Type' => 'application/x-www-form-urlencoded',
-        );
-
-        $method = 'POST';
-
-        $request = new Request($method, $this->getApiEndpoint(), $headers, http_build_query($fields));
-        $request = $this->authorizeRequest($request);
-
-        $response = $this->client->send($request);
-
-        if (false == ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
-            throw HttpException::factory($request, $response);
-        }
-
-        $result = array();
-        parse_str($response->getBody()->getContents(), $result);
-        foreach ($result as &$value) {
-            $value = urldecode($value);
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param array $fields
      */
     protected function addAuthorizeFields(array &$fields)
     {
