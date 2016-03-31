@@ -43,9 +43,9 @@ class ApiPermission extends BaseApi
         );
 
         $method = 'POST';
-        $this->addAuthorizeHeader($headers, $method);
 
         $request = new Request($method, $this->getApiEndpoint(), $headers, http_build_query($fields));
+        $request = $this->authorizeRequest($request);
 
         $response = $this->client->send($request);
 
@@ -74,18 +74,33 @@ class ApiPermission extends BaseApi
         $fields['SUBJECT'] = $this->options['third_party_subject'];
     }
 
+    /**
+     * @deprecated
+     * @param array $headers
+     * @param string $method='POST'
+     */
     protected function addAuthorizeHeader(array &$headers, $method = 'POST')
+    {
+    }
+
+    /**
+     * Adds authorize headers to request.
+     * Note: only headers.
+     *
+     * @param Request $request
+     * @return Request
+     */
+    protected function authorizeRequest(Request $request)
     {
         $authSignature = AuthSignature::generateFullAuthString(
             $this->options['username'],
             $this->options['password'],
             $this->options['token'],
             $this->options['tokenSecret'],
-            $method,
+            $request->getMethod(),
             $this->getApiEndpoint()
         );
-
-        $headers['X-PAYPAL-AUTHORIZATION'] = $authSignature;
+        return $request->withAddedHeader('X-PAYPAL-AUTHORIZATION', $authSignature);
     }
 
 }
