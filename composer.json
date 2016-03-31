@@ -44,7 +44,8 @@
         "php-http/message": "^1.0",
         "php-http/client-implementation": "^1.0",
         "league/uri": "~4.0",
-        "twig/twig": "~1.0"
+        "twig/twig": "~1.0",
+        "paypal/sdk-core-php": "~3.0"
     },
     "require-dev": {
         "ext-curl": "*",
