@@ -13,7 +13,7 @@ use PayPal\Auth\Oauth\AuthSignature;
  * @link https://developer.paypal.com/docs/classic/permissions-service/integration-guide/PermissionsUsing/
  *
  */
-class Api extends BaseApi
+class ApiPermission extends BaseApi
 {
 
     protected $options = array(
@@ -26,7 +26,7 @@ class Api extends BaseApi
         'useraction' => null,
         'token' => null,
         'tokenSecret' => null,
-        'cmd' => Api::CMD_EXPRESS_CHECKOUT,
+        'cmd' => self::CMD_EXPRESS_CHECKOUT,
     );
 
     /**

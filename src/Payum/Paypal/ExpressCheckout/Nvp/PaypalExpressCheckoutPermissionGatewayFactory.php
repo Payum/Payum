@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\NvpViaToken;
+namespace Payum\Paypal\ExpressCheckout\Nvp;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
@@ -25,8 +25,9 @@ use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsSyncAction;
+use Payum\Paypal\ExpressCheckout\NvpViaToken\ApiPermission;
 
-class PaypalExpressCheckoutViaTokenGatewayFactory extends GatewayFactory
+class PaypalExpressCheckoutPermissionGatewayFactory extends GatewayFactory
 {
     /**
      * {@inheritDoc}
@@ -92,7 +93,7 @@ class PaypalExpressCheckoutViaTokenGatewayFactory extends GatewayFactory
                     'sandbox' => $config['sandbox'],
                 );
 
-                return new Api($paypalConfig, $config['payum.http_client'], $config['httplug.message_factory']);
+                return new ApiPermission($paypalConfig, $config['payum.http_client'], $config['httplug.message_factory']);
             };
         }
 
