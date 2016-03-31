@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\NvpViaToken;
+namespace Payum\Paypal\ExpressCheckout\Nvp;
 
 use Payum\Paypal\ExpressCheckout\Nvp\Api as BaseApi;
 use Payum\Core\Exception\Http\HttpException;

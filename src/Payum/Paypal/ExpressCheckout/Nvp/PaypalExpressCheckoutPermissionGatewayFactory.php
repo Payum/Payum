@@ -25,7 +25,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsSyncAction;
-use Payum\Paypal\ExpressCheckout\NvpViaToken\ApiPermission;
+use Payum\Paypal\ExpressCheckout\Nvp\ApiPermission;
 
 class PaypalExpressCheckoutPermissionGatewayFactory extends GatewayFactory
 {
@@ -35,7 +35,7 @@ class PaypalExpressCheckoutPermissionGatewayFactory extends GatewayFactory
     protected function populateConfig(ArrayObject $config)
     {
         $config->defaults(array(
-            'payum.factory_name' => 'paypal_express_checkout_nvp_via_token',
+            'payum.factory_name' => 'paypal_express_checkout_nvp',
             'payum.factory_title' => 'PayPal ExpressCheckout via merchant token',
 
             'payum.template.confirm_order' => '@PayumPaypalExpressCheckout/confirmOrder.html.twig',
