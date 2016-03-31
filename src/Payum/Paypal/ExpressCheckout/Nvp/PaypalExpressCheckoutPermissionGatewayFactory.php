@@ -2,6 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\GatewayFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\ConfirmOrderAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileAction;
@@ -92,6 +93,10 @@ class PaypalExpressCheckoutPermissionGatewayFactory extends GatewayFactory
                     'third_party_subject' => $config['third_party_subject'],
                     'sandbox' => $config['sandbox'],
                 );
+
+                if (empty($config['token']) || empty($config['tokenSecret']) || empty($config['third_party_subject'])) {
+                    throw new InvalidArgumentException('"token", "tokenSecret" and "third_party_subject" options must be defined to use third-party token authorization');
+                }
 
                 return new ApiPermission($paypalConfig, $config['payum.http_client'], $config['httplug.message_factory']);
             };
