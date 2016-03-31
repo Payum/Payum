@@ -22,10 +22,11 @@ class ApiPermission extends BaseApi
         'signature' => null,
         'return_url' => null,
         'cancel_url' => null,
-        'sandbox' => null,
-        'useraction' => null,
         'token' => null,
         'tokenSecret' => null,
+        'third_party_subject' => null,
+        'sandbox' => null,
+        'useraction' => null,
         'cmd' => self::CMD_EXPRESS_CHECKOUT,
     );
 
