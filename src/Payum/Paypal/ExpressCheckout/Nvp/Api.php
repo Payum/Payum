@@ -8,6 +8,7 @@ use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\RuntimeException;
 use Payum\Core\HttpClientInterface;
 use Psr\Http\Message\RequestInterface;
+use GuzzleHttp\Psr7;
 
 /**
  * @link https://www.x.com/developers/paypal/documentation-tools/api/getexpresscheckoutdetails-api-operation-nvp

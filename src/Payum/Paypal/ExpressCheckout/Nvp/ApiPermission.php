@@ -6,6 +6,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Api as BaseApi;
 use Payum\Core\Exception\Http\HttpException;
 use Psr\Http\Message\RequestInterface;
 use PayPal\Auth\Oauth\AuthSignature;
+use GuzzleHttp\Psr7;
 
 /**
  * {@inheritDoc}
