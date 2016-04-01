@@ -159,7 +159,7 @@ class PaypalExpressCheckoutPermissionGatewayFactoryTest extends \PHPUnit_Framewo
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The username, password, signature fields are required.
+     * @expectedExceptionMessage The username, password, signature, token, tokenSecret, third_party_subject fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {
