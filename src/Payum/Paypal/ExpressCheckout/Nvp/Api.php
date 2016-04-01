@@ -7,7 +7,6 @@ use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\RuntimeException;
 use Payum\Core\HttpClientInterface;
-use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -300,6 +299,9 @@ class Api
      */
     protected $messageFactory;
 
+    /**
+     * @var array|ArrayObject
+     */
     protected $options = array(
         'username' => null,
         'password' => null,

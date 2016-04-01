@@ -4,7 +4,6 @@ namespace Payum\Paypal\ExpressCheckout\Nvp;
 use Payum\Core\Exception\LogicException;
 use Payum\Paypal\ExpressCheckout\Nvp\Api as BaseApi;
 use Payum\Core\Exception\Http\HttpException;
-use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
 use PayPal\Auth\Oauth\AuthSignature;
 
@@ -18,6 +17,9 @@ use PayPal\Auth\Oauth\AuthSignature;
 class ApiPermission extends BaseApi
 {
 
+    /**
+     * @var array
+     */
     protected $options = array(
         'username' => null,
         'password' => null,
@@ -63,7 +65,8 @@ class ApiPermission extends BaseApi
      * $throws LogicException
      * @return string
      */
-    protected function generateOauthSignature(RequestInterface $request) {
+    protected function generateOauthSignature(RequestInterface $request)
+    {
         if (false == class_exists(AuthSignature::class)) {
             throw new LogicException('You must install "paypal/sdk-core-php:~3.0" library.');
         }
