@@ -2,6 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
+use PayPal\Auth\Oauth\AuthSignature;
 
 class PaypalExpressCheckoutPermissionGatewayFactory extends PaypalExpressCheckoutGatewayFactory
 {
@@ -11,14 +12,17 @@ class PaypalExpressCheckoutPermissionGatewayFactory extends PaypalExpressCheckou
      */
     protected function populateConfig(ArrayObject $config)
     {
+        if (false == class_exists(AuthSignature::class)) {
+            throw new LogicException('You must install "paypal/sdk-core-php:~3.0" library.');
+        }
         parent::populateConfig($config);
-        $config['payum.factory_title'] = 'PayPal ExpressCheckout via merchant token';
+        $config['payum.factory_title'] = 'PayPal ExpressCheckout';
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function setDefaultApi(ArrayObject $config)
+    protected function populateDefaultApi(ArrayObject $config)
     {
         $config['payum.default_options'] = array(
             'username' => '',

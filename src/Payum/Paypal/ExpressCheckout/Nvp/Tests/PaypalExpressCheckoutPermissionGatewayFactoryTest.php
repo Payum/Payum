@@ -155,7 +155,7 @@ class PaypalExpressCheckoutPermissionGatewayFactoryTest extends \PHPUnit_Framewo
         $this->assertEquals('paypal_express_checkout_nvp', $config['payum.factory_name']);
 
         $this->assertArrayHasKey('payum.factory_title', $config);
-        $this->assertEquals('PayPal ExpressCheckout via merchant token', $config['payum.factory_title']);
+        $this->assertEquals('PayPal ExpressCheckout', $config['payum.factory_title']);
     }
 
     /**

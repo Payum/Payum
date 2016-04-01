@@ -60,9 +60,6 @@ class ApiPermission extends BaseApi
      */
     protected function generateOauthSignature(RequestInterface $request)
     {
-        if (false == class_exists(AuthSignature::class)) {
-            throw new LogicException('You must install "paypal/sdk-core-php:~3.0" library.');
-        }
         return AuthSignature::generateFullAuthString(
             $this->options['username'],
             $this->options['password'],

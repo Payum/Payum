@@ -66,7 +66,7 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
             },
         ));
         if (false == $config['payum.api']) {
-            $this->setDefaultApi($config);
+            $this->populateDefaultApi($config);
         }
 
         $config['payum.paths'] = array_replace([
@@ -77,7 +77,7 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
     /**
      * @param ArrayObject $config
      */
-    protected function setDefaultApi(ArrayObject $config)
+    protected function populateDefaultApi(ArrayObject $config)
     {
         $config['payum.default_options'] = array(
             'username' => '',
