@@ -67,12 +67,12 @@
         "authorizenet/authorizenet": "~1.8",
         "sofort/sofortlib-php": "^3.0",
         "paypal/rest-api-sdk-php" : "~1.0",
+        "paypal/sdk-core-php": "~3.0",
         "klarna/checkout": "~1|~2.0",
         "fp/klarna-invoice": "0.1.*",
         "stripe/stripe-php": "~2.0|~3.0",
         "php-http/guzzle6-adapter": "^1.0",
-        "ext-soap": "*",
-        "paypal/sdk-core-php": "~3.0"
+        "ext-soap": "*"
     },
     "replace": {
         "payum/core": "self.version",

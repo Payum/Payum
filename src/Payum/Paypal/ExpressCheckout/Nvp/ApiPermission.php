@@ -43,15 +43,6 @@ class ApiPermission extends BaseApi
     }
 
     /**
-     * @deprecated
-     * @param array $headers
-     * @param string $method='POST'
-     */
-    protected function addAuthorizeHeader(array &$headers, $method = 'POST')
-    {
-    }
-
-    /**
      * Adds authorize headers to request.
      * Note: only headers.
      *
