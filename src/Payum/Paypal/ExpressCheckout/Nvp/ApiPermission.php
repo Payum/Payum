@@ -45,7 +45,7 @@ class ApiPermission extends BaseApi
         $fields = array();
         parse_str($request->getBody(), $fields);
         $fields['SUBJECT'] = $this->options['third_party_subject'];
-        $request = $request->withBody(stream_for(http_build_query($fields)));
+        $request = $request->withBody(Psr7\stream_for(http_build_query($fields)));
         $authSignature = $this->generateOauthSignature($request);
 
         return $request->withAddedHeader('X-PAYPAL-AUTHORIZATION', $authSignature);
