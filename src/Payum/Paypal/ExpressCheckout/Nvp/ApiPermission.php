@@ -54,6 +54,7 @@ class ApiPermission extends BaseApi
     protected function authorizeRequest(RequestInterface $request)
     {
         $authSignature = $this->generateOauthSignature($request);
+
         return $request->withAddedHeader('X-PAYPAL-AUTHORIZATION', $authSignature);
     }
 
