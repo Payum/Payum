@@ -37,9 +37,7 @@ class ApiPermission extends BaseApi
      */
     protected function addAuthorizeFields(array &$fields)
     {
-        $fields['PWD'] = $this->options['password'];
-        $fields['USER'] = $this->options['username'];
-        $fields['SIGNATURE'] = $this->options['signature'];
+        parent::addAuthorizeFields($fields);
 
         $fields['SUBJECT'] = $this->options['third_party_subject'];
     }
