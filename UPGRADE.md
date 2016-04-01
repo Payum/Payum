@@ -2,7 +2,6 @@
 
 ## 1.3.1
 * [Paypal ExpressCheckout][Api] `Api` `addAuthorizeFields` method has been removed. Instead `authorizeRequest` method is used now for this action, and it adds both headers and fields for request authorization.
-* [composer] Added "paypal/sdk-core-php": "~3.0" to require-dev section.
 
 ## 1.3.0
 
