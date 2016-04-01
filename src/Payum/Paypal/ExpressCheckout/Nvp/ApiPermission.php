@@ -27,7 +27,7 @@ class ApiPermission extends BaseApi
         'return_url' => null,
         'cancel_url' => null,
         'token' => null,
-        'tokenSecret' => null,
+        'token_secret' => null,
         'third_party_subject' => null,
         'sandbox' => null,
         'useraction' => null,
@@ -64,7 +64,7 @@ class ApiPermission extends BaseApi
             $this->options['username'],
             $this->options['password'],
             $this->options['token'],
-            $this->options['tokenSecret'],
+            $this->options['token_secret'],
             $request->getMethod(),
             $this->getApiEndpoint()
         );

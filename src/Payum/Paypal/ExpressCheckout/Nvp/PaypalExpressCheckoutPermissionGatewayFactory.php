@@ -29,12 +29,12 @@ class PaypalExpressCheckoutPermissionGatewayFactory extends PaypalExpressCheckou
             'password' => '',
             'signature' => '',
             'token' => '',
-            'tokenSecret' => '',
+            'token_secret' => '',
             'third_party_subject' => '',
             'sandbox' => true,
         );
         $config->defaults($config['payum.default_options']);
-        $config['payum.required_options'] = array('username', 'password', 'signature', 'token', 'tokenSecret', 'third_party_subject');
+        $config['payum.required_options'] = array('username', 'password', 'signature', 'token', 'token_secret', 'third_party_subject');
 
         $config['payum.api'] = function (ArrayObject $config) {
             $config->validateNotEmpty($config['payum.required_options']);
@@ -44,7 +44,7 @@ class PaypalExpressCheckoutPermissionGatewayFactory extends PaypalExpressCheckou
                 'password' => $config['password'],
                 'signature' => $config['signature'],
                 'token' => $config['token'],
-                'tokenSecret' => $config['tokenSecret'],
+                'token_secret' => $config['token_secret'],
                 'third_party_subject' => $config['third_party_subject'],
                 'sandbox' => $config['sandbox'],
             );

@@ -57,7 +57,7 @@ class PaypalExpressCheckoutPermissionGatewayFactoryTest extends \PHPUnit_Framewo
             'password' => 'aPass',
             'signature' => 'aSign',
             'token' => 'aToken',
-            'tokenSecret' => 'aTokenSecret',
+            'token_secret' => 'atoken_secret',
             'third_party_subject' => 'a_third_party_subject',
         ));
 
@@ -135,7 +135,7 @@ class PaypalExpressCheckoutPermissionGatewayFactoryTest extends \PHPUnit_Framewo
 
         $this->assertArrayHasKey('payum.default_options', $config);
         $this->assertEquals(
-            array('username' => '', 'password' => '', 'signature' => '', 'token' => '', 'tokenSecret' => '', 'third_party_subject' => '', 'sandbox' => true),
+            array('username' => '', 'password' => '', 'signature' => '', 'token' => '', 'token_secret' => '', 'third_party_subject' => '', 'sandbox' => true),
             $config['payum.default_options']
         );
     }
@@ -162,7 +162,7 @@ class PaypalExpressCheckoutPermissionGatewayFactoryTest extends \PHPUnit_Framewo
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The username, password, signature, token, tokenSecret, third_party_subject fields are required.
+     * @expectedExceptionMessage The username, password, signature, token, token_secret, third_party_subject fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {
