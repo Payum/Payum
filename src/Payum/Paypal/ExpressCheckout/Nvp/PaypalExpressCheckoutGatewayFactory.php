@@ -33,19 +33,6 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
      */
     protected function populateConfig(ArrayObject $config)
     {
-        $this->populateApiConfig($config);
-        $this->setDefaultApi($config);
-
-        $config['payum.paths'] = array_replace([
-            'PayumPaypalExpressCheckout' => __DIR__.'/Resources/views',
-        ], $config['payum.paths'] ?: []);
-    }
-
-    /**
-     * @param ArrayObject $config
-     */
-    protected function populateApiConfig(ArrayObject $config)
-    {
         $config->defaults(array(
             'payum.factory_name' => 'paypal_express_checkout_nvp',
             'payum.factory_title' => 'PayPal ExpressCheckout',
@@ -78,6 +65,13 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
                 return new ConfirmOrderAction($config['payum.template.confirm_order']);
             },
         ));
+        if (false == $config['payum.api']) {
+            $this->setDefaultApi($config);
+        }
+
+        $config['payum.paths'] = array_replace([
+            'PayumPaypalExpressCheckout' => __DIR__.'/Resources/views',
+        ], $config['payum.paths'] ?: []);
     }
 
     /**
@@ -85,28 +79,26 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
      */
     protected function setDefaultApi(ArrayObject $config)
     {
-        if (false == $config['payum.api']) {
-            $config['payum.default_options'] = array(
-                'username' => '',
-                'password' => '',
-                'signature' => '',
-                'sandbox' => true,
+        $config['payum.default_options'] = array(
+            'username' => '',
+            'password' => '',
+            'signature' => '',
+            'sandbox' => true,
+        );
+        $config->defaults($config['payum.default_options']);
+        $config['payum.required_options'] = array('username', 'password', 'signature');
+
+        $config['payum.api'] = function (ArrayObject $config) {
+            $config->validateNotEmpty($config['payum.required_options']);
+
+            $paypalConfig = array(
+                'username' => $config['username'],
+                'password' => $config['password'],
+                'signature' => $config['signature'],
+                'sandbox' => $config['sandbox'],
             );
-            $config->defaults($config['payum.default_options']);
-            $config['payum.required_options'] = array('username', 'password', 'signature');
 
-            $config['payum.api'] = function (ArrayObject $config) {
-                $config->validateNotEmpty($config['payum.required_options']);
-
-                $paypalConfig = array(
-                    'username' => $config['username'],
-                    'password' => $config['password'],
-                    'signature' => $config['signature'],
-                    'sandbox' => $config['sandbox'],
-                );
-
-                return new Api($paypalConfig, $config['payum.http_client'], $config['httplug.message_factory']);
-            };
-        }
+            return new Api($paypalConfig, $config['payum.http_client'], $config['httplug.message_factory']);
+        };
     }
 }
