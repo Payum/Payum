@@ -33,7 +33,20 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
      */
     protected function populateConfig(ArrayObject $config)
     {
-        $config->defaults(array(
+        $config->defaults($this->getConfigDefaults());
+        $this->setDefaultApi($config);
+
+        $config['payum.paths'] = array_replace([
+            'PayumPaypalExpressCheckout' => __DIR__.'/Resources/views',
+        ], $config['payum.paths'] ?: []);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getConfigDefaults()
+    {
+        return array(
             'payum.factory_name' => 'paypal_express_checkout_nvp',
             'payum.factory_title' => 'PayPal ExpressCheckout',
 
@@ -64,8 +77,14 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
             'payum.action.api.confirm_order' => function (ArrayObject $config) {
                 return new ConfirmOrderAction($config['payum.template.confirm_order']);
             },
-        ));
+        );
+    }
 
+    /**
+     * @param ArrayObject $config
+     */
+    protected function setDefaultApi(ArrayObject $config)
+    {
         if (false == $config['payum.api']) {
             $config['payum.default_options'] = array(
                 'username' => '',
@@ -89,9 +108,5 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
                 return new Api($paypalConfig, $config['payum.http_client'], $config['httplug.message_factory']);
             };
         }
-
-        $config['payum.paths'] = array_replace([
-            'PayumPaypalExpressCheckout' => __DIR__.'/Resources/views',
-        ], $config['payum.paths'] ?: []);
     }
 }

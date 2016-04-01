@@ -29,16 +29,22 @@ use Payum\Paypal\ExpressCheckout\Nvp\ApiPermission;
 
 class PaypalExpressCheckoutPermissionGatewayFactory extends PaypalExpressCheckoutGatewayFactory
 {
+
     /**
      * {@inheritDoc}
      */
-    protected function populateConfig(ArrayObject $config)
+    protected function getConfigDefaults()
     {
-        parent::populateConfig($config);
-        $config->defaults(array(
-            'payum.factory_title' => 'PayPal ExpressCheckout via merchant token',
-        ));
+        $defaults = parent::getConfigDefaults();
+        $defaults['payum.factory_title'] = 'PayPal ExpressCheckout via merchant token';
+        return $defaults;
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    protected function setDefaultApi(ArrayObject $config)
+    {
         if (false == $config['payum.api']) {
             $config['payum.default_options'] = array(
                 'username' => '',
