@@ -132,7 +132,7 @@ class PaypalExpressCheckoutPermissionGatewayFactoryTest extends \PHPUnit_Framewo
 
         $this->assertArrayHasKey('payum.default_options', $config);
         $this->assertEquals(
-            array('username' => '', 'password' => '', 'signature' => '', 'sandbox' => true),
+            array('username' => '', 'password' => '', 'signature' => '', 'token' => '', 'tokenSecret' => '', 'third_party_subject' => '', 'sandbox' => true),
             $config['payum.default_options']
         );
     }
