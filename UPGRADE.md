@@ -1,5 +1,10 @@
 # Upgrades
 
+## 1.3.1
+* [gateway-factory] Added `PaypalExpressCheckoutPermissionGatewayFactory`, that allows using ExpressCheckout in behalf of other merchant via third-party token. See https://developer.paypal.com/docs/classic/permissions-service/integration-guide/PermissionsAbout/
+* [Paypal ExpressCheckout][Api] `Api` `addAuthorizeFields` method has been removed. Instead `authorizeRequest` method is used now for this action, and it adds both headers and fields for request authorization.
+* [composer] Added "paypal/sdk-core-php": "~3.0" to require-dev section.
+
 ## 1.3.0
 
 * [http-client] When you update to Payum 1.3.0 the installation will fail because you need to install a client implementation. If you choose php-http/guzzle6-adapter everything will work exactly as before.
