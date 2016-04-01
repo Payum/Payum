@@ -607,7 +607,7 @@ class Api
         $fields['PWD'] = $this->options['password'];
         $fields['USER'] = $this->options['username'];
         $fields['SIGNATURE'] = $this->options['signature'];
-        $request = $request->withBody(http_build_query($fields));
+        $request->setBody(http_build_query($fields));
 
         return $request;
     }
