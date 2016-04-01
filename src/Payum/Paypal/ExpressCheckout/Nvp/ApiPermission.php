@@ -1,9 +1,11 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
+use Payum\Core\Exception\LogicException;
 use Payum\Paypal\ExpressCheckout\Nvp\Api as BaseApi;
 use Payum\Core\Exception\Http\HttpException;
 use GuzzleHttp\Psr7\Request;
+use Psr\Http\Message\RequestInterface;
 use PayPal\Auth\Oauth\AuthSignature;
 
 /**
@@ -55,12 +57,28 @@ class ApiPermission extends BaseApi
      * Adds authorize headers to request.
      * Note: only headers.
      *
-     * @param Request $request
-     * @return Request
+     * @param RequestInterface $request
+     * @return RequestInterface
      */
-    protected function authorizeRequest(Request $request)
+    protected function authorizeRequest(RequestInterface $request)
     {
-        $authSignature = AuthSignature::generateFullAuthString(
+        $authSignature = $this->generateOauthSignature($request);
+        return $request->withAddedHeader('X-PAYPAL-AUTHORIZATION', $authSignature);
+    }
+
+    /**
+     * Generates OAuth signature for X-PAYPAL-AUTHORIZATION header.
+     * @see https://developer.paypal.com/docs/classic/permissions-service/integration-guide/PermissionsUsing/
+     *
+     * @param RequestInterface $request
+     * $throws LogicException
+     * @return string
+     */
+    protected function generateOauthSignature(RequestInterface $request) {
+        if (false == class_exists(AuthSignature::class)) {
+            throw new LogicException('You must install "paypal/sdk-core-php:~3.0" library.');
+        }
+        return AuthSignature::generateFullAuthString(
             $this->options['username'],
             $this->options['password'],
             $this->options['token'],
@@ -68,7 +86,6 @@ class ApiPermission extends BaseApi
             $request->getMethod(),
             $this->getApiEndpoint()
         );
-        return $request->withAddedHeader('X-PAYPAL-AUTHORIZATION', $authSignature);
     }
 
 }

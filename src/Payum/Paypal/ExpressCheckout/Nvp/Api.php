@@ -8,6 +8,7 @@ use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\RuntimeException;
 use Payum\Core\HttpClientInterface;
 use GuzzleHttp\Psr7\Request;
+use Psr\Http\Message\RequestInterface;
 
 /**
  * @link https://www.x.com/developers/paypal/documentation-tools/api/getexpresscheckoutdetails-api-operation-nvp
@@ -616,10 +617,10 @@ class Api
      * Adds authorize headers to request.
      * Note: only headers.
      *
-     * @param Request $request
-     * @return Request
+     * @param RequestInterface $request
+     * @return RequestInterface
      */
-    protected function authorizeRequest(Request $request)
+    protected function authorizeRequest(RequestInterface $request)
     {
         return $request;
     }
