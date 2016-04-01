@@ -33,7 +33,7 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
      */
     protected function populateConfig(ArrayObject $config)
     {
-        $config->defaults($this->getConfigDefaults());
+        $this->populateApiConfig($config);
         $this->setDefaultApi($config);
 
         $config['payum.paths'] = array_replace([
@@ -42,11 +42,11 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
     }
 
     /**
-     * @return array
+     * @param ArrayObject $config
      */
-    protected function getConfigDefaults()
+    protected function populateApiConfig(ArrayObject $config)
     {
-        return array(
+        $config->defaults(array(
             'payum.factory_name' => 'paypal_express_checkout_nvp',
             'payum.factory_title' => 'PayPal ExpressCheckout',
 
@@ -77,7 +77,7 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
             'payum.action.api.confirm_order' => function (ArrayObject $config) {
                 return new ConfirmOrderAction($config['payum.template.confirm_order']);
             },
-        );
+        ));
     }
 
     /**
