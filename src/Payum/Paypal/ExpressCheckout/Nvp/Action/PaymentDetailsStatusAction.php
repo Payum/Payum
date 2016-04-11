@@ -113,7 +113,7 @@ class PaymentDetailsStatusAction implements ActionInterface
                     Api::PAYMENTSTATUS_PENDING,
                 );
                 if (in_array($paymentStatus, $pendingStatuses)) {
-                    if (Api::PENDINGREASON_AUTHORIZATION == $model['PAYMENTREQUEST_'.$index.'_PENDINGREASON']) {
+                    if (Api::PENDINGREASON_AUTHORIZATION == $model['PAYMENTINFO_'.$index.'_PENDINGREASON']) {
                         $authorizedCounter++;
                     } else {
                         $request->markPending();
