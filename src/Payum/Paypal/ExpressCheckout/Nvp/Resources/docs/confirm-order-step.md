@@ -20,10 +20,6 @@ You can tell the gateway to use your own template by providing it in the gateway
 <?php
 // config.php
 
-```php
-<?php
-//config.php
-
 use Payum\Core\PayumBuilder;
 use Payum\Core\Payum;
 
