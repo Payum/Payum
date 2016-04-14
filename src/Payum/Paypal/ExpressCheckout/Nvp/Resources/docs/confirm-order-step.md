@@ -4,7 +4,7 @@ Paypal official documentation [suggest you to show a confirm order page](https:/
 By default Payum skip this step, at Paypal site you will see "Pay Now" button. If you want to use confirm step you have to reset
 `AUTHORIZE_TOKEN_USERACTION`. Set it to empty string
 
-```
+```php
 <?php
 // prepare.php
 
@@ -16,7 +16,7 @@ $payment->setDetails(array(
 That's it. Payum will render a page with a confirm button. The page is pretty simple and you most likely want to customize it.
 You can tell the gateway to use your own template by providing it in the gateway config.
 
-```
+```php
 <?php
 // config.php
 
