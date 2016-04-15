@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.3.1 (2016-04-15)
+
+* [paypal] Add support of Paypal Masspay.
+* [paypal][ec] Fix usage of PENDINGREASON (paymentinfo instead of paymentrequest).
+* [paypal][rest] Fixes and cleanups
+* [core] Introduce ApiAwareTrait, GatewayAwareTrait, GenericTokenFactoryAwareTrait.
+* [core] Add AuthorizePaymentAction.
+* [doc] Add docs for EventDispatcherExtension.
+
 ## 1.3.0 (2016-03-29)
 
 * Foundation for payouts. Payout model, generic actions.
