@@ -12,7 +12,7 @@ Here I show you how to move your fixes to payum/payum repository and push them.
 ```bash
 $ git clone git@github.com:Foo/Payum.git Payum
 $ cd Payum
-$ git checkout patch1
+$ git checkout -b patch1
 ```
 
 3. Add your fork of `payum/stripe` repository as remote and fetch changes
