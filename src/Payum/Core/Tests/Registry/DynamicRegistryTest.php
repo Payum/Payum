@@ -37,7 +37,7 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
         $staticRegistryMock
             ->expects($this->once())
             ->method('getGateways')
-            ->willReturn('theGateways')
+            ->willReturn(['theGateways'])
         ;
 
         $registry = new DynamicRegistry(
@@ -45,7 +45,7 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
             $staticRegistryMock
         );
         
-        $this->assertEquals('theGateways', $registry->getGateways());
+        $this->assertEquals(['theGateways'], $registry->getGateways());
     }
 
     /**

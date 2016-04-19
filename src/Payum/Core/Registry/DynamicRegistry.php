@@ -1,11 +1,17 @@
 <?php
 namespace Payum\Core\Registry;
 
+use Payum\Core\GatewayInterface;
 use Payum\Core\Model\GatewayConfigInterface;
 use Payum\Core\Storage\StorageInterface;
 
 class DynamicRegistry implements RegistryInterface
 {
+    /**
+     * @var GatewayInterface[]
+     */
+    private $gateways = [];
+
     /**
      * @var StorageInterface
      */
@@ -47,13 +53,20 @@ class DynamicRegistry implements RegistryInterface
      */
     public function getGateway($name)
     {
+        if (array_key_exists($name, $this->gateways)) {
+            return $this->gateways[$name];
+        }
+
         /** @var GatewayConfigInterface[] $configs */
         if ($configs = $this->gatewayConfigStore->findBy(array('gatewayName' => $name))) {
             $config = array_shift($configs);
 
             $factory = $this->getGatewayFactory($config->getFactoryName());
 
-            return $factory->create($config->getConfig());
+            $gateway = $factory->create($config->getConfig());
+            $this->gateways[$name] = $gateway;
+
+            return $gateway;
         }
 
         return $this->staticRegistry->getGateway($name);
