@@ -2,6 +2,7 @@
 namespace Payum\Core\Tests\Registry;
 
 use Payum\Core\Extension\StorageExtension;
+use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\Model\GatewayConfig;
 use Payum\Core\Gateway;
 use Payum\Core\Registry\DynamicRegistry;
@@ -86,6 +87,48 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
 
         $registry = new DynamicRegistry($storageMock, $staticRegistryMock);
 
+        $this->assertSame($gateway, $registry->getGateway($gatewayName));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCreateGatewayOnlyOnceWhenCalledMultipleTimes()
+    {
+        $gatewayConfig = new GatewayConfig();
+        $gatewayConfig->setConfig($config = array('foo' => 'fooVal', 'bar' => 'barVal'));
+        $gatewayConfig->setFactoryName($factoryName = 'theFactoryName');
+        $gatewayConfig->setGatewayName($gatewayName = 'theGatewayName');
+
+        $gateway = new Gateway();
+
+        $gatewayFactoryMock = $this->getMock('Payum\Core\GatewayFactoryInterface');
+        $gatewayFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($config)
+            ->willReturn($gateway)
+        ;
+
+        $staticRegistryMock = $this->createRegistryMock();
+        $staticRegistryMock
+            ->expects($this->atLeastOnce())
+            ->method('getGatewayFactory')
+            ->with($factoryName)
+            ->willReturn($gatewayFactoryMock)
+        ;
+
+        $storageMock = $this->createStorageMock();
+        $storageMock
+            ->expects($this->atLeastOnce())
+            ->method('findBy')
+            ->with(array('gatewayName' => $gatewayName))
+            ->willReturn(array($gatewayConfig))
+        ;
+
+        $registry = new DynamicRegistry($storageMock, $staticRegistryMock);
+
+        $this->assertSame($gateway, $registry->getGateway($gatewayName));
         $this->assertSame($gateway, $registry->getGateway($gatewayName));
     }
 
