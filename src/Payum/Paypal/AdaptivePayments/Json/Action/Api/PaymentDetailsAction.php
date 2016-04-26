@@ -24,7 +24,8 @@ class PaymentDetailsAction extends BaseAction
         if (false == $model['payKey'] && false == $model['transactionId'] && false == $model['trackingId']) {
             throw new LogicException('One of payKey, transactionId, or trackingId field is required to identify the payment.');
         }
-        
+
+        $this->setDefaultErrorLanguage($model);
         $this->setDefaultDetailLevel($model);
 
         $model->replace($this->api->getPaymentDetails($model));

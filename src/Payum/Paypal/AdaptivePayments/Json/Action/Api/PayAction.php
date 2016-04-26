@@ -23,10 +23,11 @@ class PayAction extends BaseAction implements GatewayAwareInterface
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        
-        $model->validateNotEmpty(['actionType', 'cancelUrl', 'currencyCode', 'receiverList', 'requestEnvelope', 'returnUrl']);
 
+        $this->setDefaultErrorLanguage($model);
         $this->setDefaultDetailLevel($model);
+
+        $model->validateNotEmpty(['actionType', 'cancelUrl', 'currencyCode', 'receiverList', 'requestEnvelope', 'returnUrl']);
 
         $model->replace($this->api->pay($model));
     }
