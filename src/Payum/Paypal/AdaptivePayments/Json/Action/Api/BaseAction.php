@@ -29,4 +29,18 @@ abstract class BaseAction implements ActionInterface, ApiAwareInterface
             $model['requestEnvelope'] = (array) $requestEnvelope;
         }
     }
+
+    /**
+     * @param ArrayObject $model
+     */
+    protected function setDefaultErrorLanguage(ArrayObject $model)
+    {
+        $requestEnvelope = $model->getArray('requestEnvelope');
+
+        if (false == $requestEnvelope['errorLanguage']) {
+            $requestEnvelope['errorLanguage'] = Api::ERROR_LANGUAGE_EN_US;
+
+            $model['requestEnvelope'] = (array) $requestEnvelope;
+        }
+    }
 }

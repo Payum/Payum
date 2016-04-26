@@ -24,6 +24,8 @@ class Api
 
     const DETAIL_LEVEL_RETURN_ALL = 'ReturnAll';
 
+    const ERROR_LANGUAGE_EN_US = 'en_US';
+
     const PAYMENT_STATUS_CREATED = 'CREATED';
     const PAYMENT_STATUS_COMPLETED = 'COMPLETED';
     const PAYMENT_STATUS_INCOMPLETE = 'INCOMPLETE';
