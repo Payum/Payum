@@ -19,6 +19,12 @@ class StatusAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
+        if ($model['Cancelled']) {
+            $request->markCanceled();
+
+            return;
+        }
+
         switch ($model['status']) {
             case Api::PAYMENT_STATUS_CREATED:
                 $request->markNew();
