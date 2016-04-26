@@ -4,31 +4,35 @@ namespace Payum\Paypal\AdaptivePayments\Json\Action\Api;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Reply\HttpRedirect;
 use Payum\Paypal\AdaptivePayments\Json\Api;
-use Payum\Paypal\AdaptivePayments\Json\Request\Api\PaymentDetails;
+use Payum\Paypal\AdaptivePayments\Json\Request\Api\AuthorizeKey;
 
 /**
  * @property Api $api
  */
-class PaymentDetailsAction extends BaseAction
+class AuthorizeKeyAction extends BaseAction
 {
     /**
      * {@inheritdoc}
      */
     public function execute($request)
     {
+        /** @var $request AuthorizeKey */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-
-        if (false == $model['payKey'] && false == $model['transactionId'] && false == $model['trackingId']) {
-            throw new LogicException('One of payKey, transactionId, or trackingId field is required to identify the payment.');
+        if ($model['payKey']) {
+            $url = $this->api->generatePayKeyAuthorizationUrl($model['payKey']);
+        } elseif ($model['preapprovalKey']) {
+            $url = $this->api->generatePreApprovalAuthorizationUrl($model['preapprovalKey']);
+        } else {
+            throw new LogicException('The "payKey" is required for explicit approval, or the "preapprovalKey" for a pre-approval payment.');
         }
-        
-        $this->setDefaultDetailLevel($model);
 
-        $model->replace($this->api->getPaymentDetails($model));
+        throw new HttpRedirect($url);
     }
+
 
     /**
      * {@inheritdoc}
@@ -36,7 +40,7 @@ class PaymentDetailsAction extends BaseAction
     public function supports($request)
     {
         return
-            $request instanceof PaymentDetails &&
+            $request instanceof AuthorizeKey &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

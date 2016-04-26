@@ -1,17 +1,15 @@
 <?php
-namespace Payum\Paypal\AdaptivePayments\Json\Action\Api;
+namespace Payum\Paypal\AdaptivePayments\Json\Action;
 
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
-use Payum\Paypal\AdaptivePayments\Json\Api;
-use Payum\Paypal\AdaptivePayments\Json\Request\Api\Pay;
+use Payum\Core\Request\Sync;
+use Payum\Paypal\AdaptivePayments\Json\Request\Api\PaymentDetails;
 
-/**
- * @property Api $api
- */
-class PayAction extends BaseAction implements GatewayAwareInterface
+class SyncAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
@@ -23,12 +21,8 @@ class PayAction extends BaseAction implements GatewayAwareInterface
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        
-        $model->validateNotEmpty(['actionType', 'cancelUrl', 'currencyCode', 'receiverList', 'requestEnvelope', 'returnUrl']);
 
-        $this->setDefaultDetailLevel($model);
-
-        $model->replace($this->api->pay($model));
+        $this->gateway->execute(new PaymentDetails($model));
     }
 
     /**
@@ -37,7 +31,7 @@ class PayAction extends BaseAction implements GatewayAwareInterface
     public function supports($request)
     {
         return
-            $request instanceof Pay &&
+            $request instanceof Sync &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

@@ -11,24 +11,26 @@ use Payum\Core\HttpClientInterface;
 class Api
 {
     const OPERATION_PAY = 'Pay';
-
     const OPERATION_PAYMENT_DETAILS = 'PaymentDetails';
 
     const PAY_ACTION_TYPE_PAY = 'PAY';
-
     const PAY_ACTION_TYPE_CREATE = 'CREATE';
-
     const PAY_ACTION_TYPE_PAY_PRIMARY = 'PAY_PRIMARY';
 
     const ACK_SUCCESS = 'Success';
-
     const ACK_FAILURE = 'Failure';
-
     const ACK_SUCCESS_WITH_WARNING = 'SuccessWithWarning';
-
     const ACK_FAILURE_WITH_WARNING = 'FailureWithWarning';
 
     const DETAIL_LEVEL_RETURN_ALL = 'ReturnAll';
+
+    const PAYMENT_STATUS_CREATED = 'CREATED';
+    const PAYMENT_STATUS_COMPLETED = 'COMPLETED';
+    const PAYMENT_STATUS_INCOMPLETE = 'INCOMPLETE';
+    const PAYMENT_STATUS_ERROR = 'ERROR';
+    const PAYMENT_STATUS_REVERSALERROR = 'REVERSALERROR';
+    const PAYMENT_STATUS_PROCESSING = 'PROCESSING';
+    const PAYMENT_STATUS_PENDING = 'PENDING';
 
     /**
      * @var HttpClientInterface
@@ -96,6 +98,46 @@ class Api
     }
 
     /**
+     * @param $payKey
+     *
+     * @return string
+     */
+    public function generatePayKeyAuthorizationUrl($payKey)
+    {
+        return $this->generateAuthorizationUrl(array(
+            'cmd' => '_ap-payment',
+            'paykey' => $payKey,
+        ));
+    }
+
+    /**
+     * @param $preapprovalKey
+     *
+     * @return string
+     */
+    public function generatePreApprovalAuthorizationUrl($preapprovalKey)
+    {
+        return $this->generateAuthorizationUrl(array(
+            'cmd' => '_ap-preapproval',
+            'preapprovalkey' => $preapprovalKey,
+        ));
+    }
+
+    /**
+     * @param array $query
+     *
+     * @return string
+     */
+    protected function generateAuthorizationUrl(array $query)
+    {
+        return sprintf(
+            'https://%s/cgi-bin/webscr?%s',
+            $this->options['sandbox'] ? 'www.sandbox.paypal.com' : 'www.paypal.com',
+            http_build_query($query)
+        );
+    }
+
+    /**
      * @param ArrayObject $fields
      *
      * @throws HttpException
@@ -124,7 +166,7 @@ class Api
             throw HttpException::factory($request, $response);
         }
 
-        return json_encode($response->getBody()->getContents());
+        return json_decode($response->getBody()->getContents(), true);
     }
 
     /**
