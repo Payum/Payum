@@ -1,12 +1,15 @@
 <?php
 namespace Payum\Paypal\AdaptivePayments\Json\Action;
 
+use League\Uri\Schemes\Http as HttpUri;
+use League\Uri\Modifiers\MergeQuery;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Sync;
 use Payum\Paypal\AdaptivePayments\Json\Api;
 use Payum\Paypal\AdaptivePayments\Json\Request\Api\AuthorizeKey;
@@ -26,6 +29,13 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
+        $this->gateway->execute($httpRequest = new GetHttpRequest());
+        if (isset($httpRequest->query['cancelled'])) {
+            $details['Cancelled'] = true;
+
+            return;
+        }
+
         if (false == $details['payKey']) {
             if (false == $details['returnUrl'] && $request->getToken()) {
                 $details['returnUrl'] = $request->getToken()->getTargetUrl();
@@ -33,6 +43,14 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
 
             if (false == $details['cancelUrl'] && $request->getToken()) {
                 $details['cancelUrl'] = $request->getToken()->getTargetUrl();
+            }
+
+            if ($details['cancelUrl']) {
+                $cancelUri = HttpUri::createFromString($details['cancelUrl']);
+                $modifier = new MergeQuery('cancelled=1');
+                $cancelUri = $modifier($cancelUri);
+
+                $details['cancelUrl'] = (string) $cancelUri;
             }
 
             $this->gateway->execute(new Pay($details));
