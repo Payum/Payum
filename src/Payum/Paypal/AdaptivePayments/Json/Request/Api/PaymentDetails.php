@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Paypal\AdaptivePayments\Json\Request\Api;
 
-class PaymentDetails extends BaseRequest
+use Payum\Core\Request\Generic;
+
+class PaymentDetails extends Generic
 {
 }

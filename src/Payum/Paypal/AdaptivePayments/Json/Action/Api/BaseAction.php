@@ -21,8 +21,12 @@ abstract class BaseAction implements ActionInterface, ApiAwareInterface
      */
     protected function setDefaultDetailLevel(ArrayObject $model)
     {
-        if (false == isset($model['requestEnvelope']['detailLevel'])) {
-            $model['requestEnvelope']['detailLevel'] = Api::DETAIL_LEVEL_RETURN_ALL;
+        $requestEnvelope = $model->getArray('requestEnvelope');
+
+        if (false == $requestEnvelope['detailLevel']) {
+            $requestEnvelope['detailLevel'] = Api::DETAIL_LEVEL_RETURN_ALL;
+
+            $model['requestEnvelope'] = (array) $requestEnvelope;
         }
     }
 }
