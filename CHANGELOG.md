@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.9 (2016-04-29)
+
+* [symfony] Do not fail on empty request stack
+
 ## 1.2.8 (2016-03-25)
 
 * [stripe] Allow use of explicitly passed credit card.
