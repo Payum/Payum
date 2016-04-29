@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.2 (2016-04-29)
+
+* [doc] Add how to contribute from sub repository doc
+* [paypal][rest] Return the api context in the config closure
+* [symfony] Do not fail on empty request stack
+* [registry] Keep already created gateway instances
+
 ## 1.2.9 (2016-04-29)
 
 * [symfony] Do not fail on empty request stack
