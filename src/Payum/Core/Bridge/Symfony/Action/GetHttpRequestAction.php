@@ -46,7 +46,7 @@ class GetHttpRequestAction implements ActionInterface
 
         if ($this->httpRequest instanceof Request) {
             $this->updateRequest($request, $this->httpRequest);
-        } else if ($this->httpRequestStack instanceof RequestStack) {
+        } else if ($this->httpRequestStack instanceof RequestStack && null !== $this->httpRequestStack->getMasterRequest()) {
             $this->updateRequest($request, $this->httpRequestStack->getMasterRequest());
         }
     }

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.9 (2016-04-29)
+
+* [symfony] Do not fail on empty request stack
+
 ## 1.3.1 (2016-04-15)
 
 * [paypal] Add support of Paypal Masspay.

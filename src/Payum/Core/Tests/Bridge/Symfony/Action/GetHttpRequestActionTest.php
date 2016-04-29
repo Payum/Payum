@@ -4,6 +4,7 @@ namespace Payum\Core\Tests\Bridge\Symfony\Action\Http;
 use Payum\Core\Bridge\Symfony\Action\GetHttpRequestAction;
 use Payum\Core\Request\GetHttpRequest;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -77,6 +78,23 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
     public function shouldDoNothingIfHttpRequestNotSet()
     {
         $action = new GetHttpRequestAction();
+
+        $request = new \Payum\Core\Request\GetHttpRequest();
+        $action->execute($request);
+
+        $this->assertSame(array(), $request->query);
+        $this->assertSame(array(), $request->request);
+        $this->assertSame('', $request->method);
+        $this->assertSame('', $request->uri);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldDoNothingIfHttpRequestStackIsEmpty()
+    {
+        $action = new GetHttpRequestAction();
+        $action->setHttpRequestStack(new RequestStack());
 
         $request = new \Payum\Core\Request\GetHttpRequest();
         $action->execute($request);
