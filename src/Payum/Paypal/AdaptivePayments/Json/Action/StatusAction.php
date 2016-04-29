@@ -59,6 +59,6 @@ class StatusAction implements ActionInterface
             return false;
         }
 
-        return $model['status'];
+        return true;
     }
 }

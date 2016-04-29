@@ -156,7 +156,6 @@ class Api
         $this->addVersionHeader($headers);
         $this->addApplicationHeaders($headers);
         $this->addAuthenticationHeaders($headers);
-        $this->addDeviceHeaders($fields, $headers);
 
         $fields = $fields->toUnsafeArrayWithoutLocal();
 
@@ -206,25 +205,6 @@ class Api
     protected function addApplicationHeaders(array &$headers)
     {
         $headers['X-PAYPAL-APPLICATION-ID'] = $this->options['application_id'];
-    }
-
-    /**
-     * @param ArrayObject $fields
-     * @param array $headers
-     */
-    protected function addDeviceHeaders(ArrayObject $fields, array &$headers)
-    {
-        $local = $fields->getArray('local');
-
-        if ($local['device_id']) {
-            $headers['X-PAYPAL-DEVICE-ID'] = $local['device_id'];
-        }
-
-        if (false == $local['device_ipaddress']) {
-            throw new LogicException('Device ipaddress field is required');
-        }
-
-        $headers['X-PAYPAL-DEVICE-IPADDRESS'] = $local['device_ipaddress'];
     }
 
     /**
