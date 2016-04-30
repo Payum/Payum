@@ -13,11 +13,15 @@ class SimpleRegistry extends AbstractRegistry
     protected $initializedStorageExtensions;
 
     /**
+     * @deprecated since 1.3.3 and ill be removed in 2.x. It is here for BC
+     *
      * @var bool
      */
     protected $addStorageExtensions = true;
 
     /**
+     * @deprecated since 1.3.3 and will be removed in 2.x. It is here for BC
+     *
      * @param boolean $bool
      */
     public function setAddStorageExtensions($bool)
@@ -48,6 +52,8 @@ class SimpleRegistry extends AbstractRegistry
     }
 
     /**
+     * @deprecated since 1.3.3 and will be removed in 2.x.
+     *
      * @param string           $name
      * @param GatewayInterface $gateway
      */

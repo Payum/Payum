@@ -4,7 +4,6 @@ namespace Payum\Core;
 use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
 use Payum\Be2Bill\Be2BillDirectGatewayFactory;
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
-use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
 use Payum\Core\Exception\InvalidArgumentException;
@@ -523,17 +522,18 @@ class PayumBuilder
      */
     protected function buildRegistry(array $gateways = [], array $storages = [], array $gatewayFactories = [])
     {
-        $fallbackRegistry = new SimpleRegistry($gateways, $storages, $gatewayFactories);
-        $fallbackRegistry->setAddStorageExtensions(false);
+        $registry = new SimpleRegistry($gateways, $storages, $gatewayFactories);
+        $registry->setAddStorageExtensions(false);
 
         if ($this->gatewayConfigStorage) {
-            $fallbackRegistry = new DynamicRegistry($this->gatewayConfigStorage, $fallbackRegistry);
+            $dynamicRegistry = new DynamicRegistry($this->gatewayConfigStorage, $registry);
+            $dynamicRegistry->setBackwardCompatibility(false);
+
+            $registry = new FallbackRegistry($dynamicRegistry, $registry);
         }
 
         if ($this->mainRegistry) {
-            $registry = new FallbackRegistry($this->mainRegistry, $fallbackRegistry);
-        } else {
-            $registry = $fallbackRegistry;
+            $registry = new FallbackRegistry($this->mainRegistry, $registry);
         }
 
         return $registry;
