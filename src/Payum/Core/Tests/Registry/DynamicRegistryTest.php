@@ -75,14 +75,64 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @deprecated
+     *
      * @test
      */
-    public function shouldCreateGatewayUsingConfigOnGetGateway()
+    public function shouldCreateGatewayUsingConfigAndGetFactoryNameOnGetGateway()
     {
         $gatewayConfig = new GatewayConfig();
         $gatewayConfig->setConfig($config = array('foo' => 'fooVal', 'bar' => 'barVal'));
         $gatewayConfig->setFactoryName($factoryName = 'theFactoryName');
         $gatewayConfig->setGatewayName($gatewayName = 'theGatewayName');
+
+        $gateway = new Gateway();
+
+        $gatewayFactoryMock = $this->getMock(GatewayFactoryInterface::class);
+        $gatewayFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($config)
+            ->willReturn($gateway)
+        ;
+
+        $gatewayFactoryRegistry = $this->createGatewayFactoryRegistryMock();
+        $gatewayFactoryRegistry
+            ->expects($this->once())
+            ->method('getGatewayFactory')
+            ->with($factoryName)
+            ->willReturn($gatewayFactoryMock)
+        ;
+
+        $storageMock = $this->createStorageMock();
+        $storageMock
+            ->expects($this->once())
+            ->method('findBy')
+            ->with(array('gatewayName' => $gatewayName))
+            ->willReturn(array($gatewayConfig))
+        ;
+
+        $registry = new DynamicRegistry($storageMock, $gatewayFactoryRegistry);
+
+        $this->assertSame($gateway, $registry->getGateway($gatewayName));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCreateGatewayUsingConfigOnGetGateway()
+    {
+        $factoryName = 'theFactoryName';
+
+        $gatewayConfig = new GatewayConfig();
+        $gatewayConfig->setConfig(array(
+            'factory' => $factoryName,
+            'foo' => 'fooVal',
+            'bar' => 'barVal')
+        );
+        $gatewayConfig->setGatewayName($gatewayName = 'theGatewayName');
+
+        $config = array('foo' => 'fooVal', 'bar' => 'barVal');
 
         $gateway = new Gateway();
 
