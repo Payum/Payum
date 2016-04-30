@@ -59,8 +59,10 @@ class StorageExtension implements ExtensionInterface
         $this->scheduleForUpdateIfSupported($context);
 
         if (false == $context->getPrevious()) {
-            foreach ($context->getValue('payum.storage_extension.model_scheduled_for_update', []) as $modelHash => $model) {
-                $this->storage->update($model);
+            foreach ($context->getValue('payum.storage_extension.model_scheduled_for_update', []) as $model) {
+                if ($this->storage->support($model)) {
+                    $this->storage->update($model);
+                }
             }
         }
     }
