@@ -76,20 +76,7 @@ class DynamicRegistry implements RegistryInterface
         }
 
         if ($gatewayConfigs = $this->gatewayConfigStore->findBy(array('gatewayName' => $name))) {
-            /** @var GatewayConfigInterface $gatewayConfig */
-            $gatewayConfig = array_shift($gatewayConfigs);
-            $config = $gatewayConfig->getConfig();
-            
-            if (isset($config['factory'])) {
-                $factory = $this->gatewayFactoryRegistry->getGatewayFactory($config['factory']);
-                unset($config['factory']);
-            } else {
-                // BC
-
-                $factory = $this->gatewayFactoryRegistry->getGatewayFactory($gatewayConfig->getFactoryName());
-            }
-
-            $gateway = $factory->create($config);
+            $gateway = $this->createGateway(array_shift($gatewayConfigs));
             $this->gateways[$name] = $gateway;
 
             return $gateway;
@@ -113,7 +100,14 @@ class DynamicRegistry implements RegistryInterface
             return $this->gatewayFactoryRegistry->getGateways();
         }
 
-        return [];
+        $gateways = [];
+        foreach ($this->gatewayConfigStore->findBy([]) as $gatewayConfig) {
+            /** @var GatewayConfigInterface $gatewayConfig */
+
+            $gateways[$gatewayConfig->getGatewayName()] = $this->getGateway($gatewayConfig->getGatewayName());
+        }
+
+        return $gateways;
     }
 
     /**
@@ -150,5 +144,26 @@ class DynamicRegistry implements RegistryInterface
     public function setBackwardCompatibility($backwardCompatibility)
     {
         $this->backwardCompatibility = $backwardCompatibility;
+    }
+
+    /**
+     * @param GatewayConfigInterface $gatewayConfig
+     * 
+     * @return GatewayInterface
+     */
+    protected function createGateway(GatewayConfigInterface $gatewayConfig)
+    {
+        $config = $gatewayConfig->getConfig();
+
+        if (isset($config['factory'])) {
+            $factory = $this->gatewayFactoryRegistry->getGatewayFactory($config['factory']);
+            unset($config['factory']);
+        } else {
+            // BC
+
+            $factory = $this->gatewayFactoryRegistry->getGatewayFactory($gatewayConfig->getFactoryName());
+        }
+
+        return $factory->create($config);
     }
 }
