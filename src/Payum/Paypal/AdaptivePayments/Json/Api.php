@@ -48,7 +48,7 @@ class Api
      * @var array
      */
     protected $options = [
-        'user_id' => null,
+        'username' => null,
         'password' => null,
         'signature' => null,
         'application_id' => null,
@@ -64,7 +64,7 @@ class Api
         $options = ArrayObject::ensureArrayObject($options);
         $options->defaults($this->options);
         $options->validateNotEmpty(array(
-            'user_id',
+            'username',
             'password',
             'signature',
             'application_id',
@@ -190,7 +190,7 @@ class Api
      */
     protected function addAuthenticationHeaders(array &$headers)
     {
-        $headers['X-PAYPAL-SECURITY-USERID'] = $this->options['user_id'];
+        $headers['X-PAYPAL-SECURITY-USERID'] = $this->options['username'];
         $headers['X-PAYPAL-SECURITY-PASSWORD'] = $this->options['password'];
         $headers['X-PAYPAL-SECURITY-SIGNATURE'] = $this->options['signature'];
 

@@ -33,20 +33,20 @@ class PaypalAdaptivePaymentsGatewayFactory extends GatewayFactory
 
         if (false == $config['payum.api']) {
             $config['payum.default_options'] = array(
-                'user_id' => '',
+                'username' => '',
                 'password' => '',
                 'signature' => '',
                 'application_id' => '',
                 'sandbox' => true,
             );
             $config->defaults($config['payum.default_options']);
-            $config['payum.required_options'] = array('user_id', 'password', 'signature', 'application_id');
+            $config['payum.required_options'] = array('username', 'password', 'signature', 'application_id');
 
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
 
                 $paypalConfig = [
-                    'user_id' => $config['user_id'],
+                    'username' => $config['username'],
                     'password' => $config['password'],
                     'application_id' => $config['application_id'],
                     'sandbox' => $config['sandbox'],
