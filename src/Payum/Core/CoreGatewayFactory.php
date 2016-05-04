@@ -122,12 +122,6 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                 }
 
                 if (class_exists(HttpCurlClient::class)) {
-                    if ($config['httplug.message_factory'] instanceof \Closure) {
-                        $config['httplug.message_factory'] = $config['httplug.message_factory']->__invoke($config);
-                    }
-                    if ($config['httplug.stream_factory'] instanceof \Closure) {
-                        $config['httplug.stream_factory'] = $config['httplug.stream_factory']->__invoke($config);
-                    }
                     return new HttpCurlClient($config['httplug.message_factory'], $config['httplug.stream_factory']);
                 }
 
@@ -191,7 +185,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     protected function buildClosures(ArrayObject $config)
     {
         // with higher priority
-        foreach (['httplug.client', 'payum.http_client', 'payum.paths', 'twig.env'] as $name) {
+        foreach (['httplug.message_factory', 'httplug.stream_factory', 'httplug.client', 'payum.http_client', 'payum.paths', 'twig.env'] as $name) {
             $value = $config[$name];
             if (is_callable($value)) {
                 $config[$name] = call_user_func($value, $config);
