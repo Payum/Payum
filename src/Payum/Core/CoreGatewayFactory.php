@@ -87,7 +87,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                     return new DiactorosMessageFactory();
                 }
 
-                throw new \LogicException('The httplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
+                throw new \LogicException('The httplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter, php-http/curl-client. You can also overwrite the config option with your implementation.');
             },
             'httplug.stream_factory'=>function(ArrayObject $config) {
                 if (class_exists(StreamFactoryDiscovery::class)) {
@@ -102,7 +102,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                     return new DiactorosStreamFactory();
                 }
 
-                throw new \LogicException('The httplug.stream_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
+                throw new \LogicException('The httplug.stream_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter, php-http/curl-client. You can also overwrite the config option with your implementation.');
             },
             'httplug.client'=>function(ArrayObject $config) {
                 if (class_exists(HttpClientDiscovery::class)) {
