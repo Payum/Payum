@@ -19,7 +19,7 @@ class PaypalAdaptivePaymentsGatewayFactory extends GatewayFactory
     protected function populateConfig(ArrayObject $config)
     {
         $config->defaults(array(
-            'payum.factory_name' => 'paypal_adaptive_payments_json',
+            'payum.factory_name' => 'paypal_adaptive_payments',
             'payum.factory_title' => 'PayPal Adaptive Payments',
             
             'payum.action.api.pay' => new PayAction(),
