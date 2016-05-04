@@ -8,8 +8,11 @@ use Http\Client\Curl\Client as HttpCurlClient;
 use Http\Client\Socket\Client as HttpSocketClient;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
+use Http\Discovery\StreamFactoryDiscovery;
 use Http\Message\MessageFactory\DiactorosMessageFactory;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
+use Http\Message\StreamFactory\DiactorosStreamFactory;
+use Http\Message\StreamFactory\GuzzleStreamFactory;
 use Payum\Core\Action\AuthorizePaymentAction;
 use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
@@ -71,6 +74,36 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         $config['twig.env'] = null;
 
         $config->defaults(array(
+            'httplug.message_factory'=>function(ArrayObject $config) {
+                if (class_exists(MessageFactoryDiscovery::class)) {
+                    return MessageFactoryDiscovery::find();
+                }
+
+                if (class_exists(\GuzzleHttp\Psr7\Request::class)) {
+                    return new GuzzleMessageFactory();
+                }
+
+                if (class_exists(\Zend\Diactoros\Request::class)) {
+                    return new DiactorosMessageFactory();
+                }
+
+                throw new \LogicException('The httplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
+            },
+            'httplug.stream_factory'=>function(ArrayObject $config) {
+                if (class_exists(StreamFactoryDiscovery::class)) {
+                    return StreamFactoryDiscovery::find();
+                }
+
+                if (class_exists(\GuzzleHttp\Psr7\Request::class)) {
+                    return new GuzzleStreamFactory();
+                }
+
+                if (class_exists(\Zend\Diactoros\Request::class)) {
+                    return new DiactorosStreamFactory();
+                }
+
+                throw new \LogicException('The httplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
+            },
             'httplug.client'=>function(ArrayObject $config) {
                 if (class_exists(HttpClientDiscovery::class)) {
                     return HttpClientDiscovery::find();
@@ -89,7 +122,13 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                 }
 
                 if (class_exists(HttpCurlClient::class)) {
-                    return new HttpCurlClient();
+                    if ($config['httplug.message_factory'] instanceof \Closure) {
+                        $config['httplug.message_factory'] = $config['httplug.message_factory']->__invoke($config);
+                    }
+                    if ($config['httplug.stream_factory'] instanceof \Closure) {
+                        $config['httplug.stream_factory'] = $config['httplug.stream_factory']->__invoke($config);
+                    }
+                    return new HttpCurlClient($config['httplug.message_factory'], $config['httplug.stream_factory']);
                 }
 
                 if (class_exists(HttpBuzzClient::class)) {
@@ -97,21 +136,6 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                 }
 
                 throw new \LogicException('The httplug.client could not be guessed. Install one of the following packages: php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
-            },
-            'httplug.message_factory'=>function(ArrayObject $config) {
-                if (class_exists(MessageFactoryDiscovery::class)) {
-                    return MessageFactoryDiscovery::find();
-                }
-
-                if (class_exists(\GuzzleHttp\Psr7\Request::class)) {
-                    return new GuzzleMessageFactory();
-                }
-
-                if (class_exists(\Zend\Diactoros\Request::class)) {
-                    return new DiactorosMessageFactory();
-                }
-
-                throw new \LogicException('The httplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
             },
             'payum.http_client'=>function(ArrayObject $config) {
                   return new HttplugClient($config['httplug.client']);
