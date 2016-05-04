@@ -4,6 +4,7 @@ namespace Payum\Paypal\AdaptivePayments\Json;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
 use Payum\Paypal\AdaptivePayments\Json\Action\Api\AuthorizeKeyAction;
+use Payum\Paypal\AdaptivePayments\Json\Action\ConvertPaymentAction;
 use Payum\Paypal\AdaptivePayments\Json\Action\Api\PayAction;
 use Payum\Paypal\AdaptivePayments\Json\Action\Api\PaymentDetailsAction;
 use Payum\Paypal\AdaptivePayments\Json\Action\CaptureAction;
@@ -23,6 +24,7 @@ class PaypalAdaptivePaymentsGatewayFactory extends GatewayFactory
             
             'payum.action.api.pay' => new PayAction(),
             'payum.action.api.payment_details' => new PaymentDetailsAction(),
+            'payum.action.api.convert_payment' => new ConvertPaymentAction(),
             'payum.action.api.authorize_key' => new AuthorizeKeyAction(),
             'payum.action.api.capture' => new CaptureAction(),
             'payum.action.api.sync' => new SyncAction(),

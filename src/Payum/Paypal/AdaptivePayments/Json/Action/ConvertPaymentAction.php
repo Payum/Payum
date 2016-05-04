@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Paypal\AdaptivePayments\Json\Action\Api;
+namespace Payum\Paypal\AdaptivePayments\Json\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\GatewayAwareInterface;
@@ -27,14 +27,14 @@ class ConvertPaymentAction implements ActionInterface, GatewayAwareInterface
         $payment = $request->getSource();
 
         $this->gateway->execute($currency = new GetCurrency($payment->getCurrencyCode()));
-        $divisor = pow(10, $currency->exp);
+        $divisor = pow(1, $currency->exp);
 
         $details = ArrayObject::ensureArrayObject($payment->getDetails());
         $details['invNum'] = $payment->getNumber();
         $details['currencyCode'] = $payment->getCurrencyCode();
         $details['totalAmount'] = $payment->getTotalAmount() / $divisor;
         $details['description'] = $payment->getDescription();
-        
+
         $request->setResult((array) $details);
     }
 
