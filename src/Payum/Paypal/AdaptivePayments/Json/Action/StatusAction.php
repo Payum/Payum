@@ -25,6 +25,18 @@ class StatusAction implements ActionInterface
             return;
         }
 
+        if (false == $model['status']) {
+            if ($model['error']) {
+                $request->markFailed();
+
+                return;
+            }
+
+            $request->markUnknown();
+
+            return;
+        }
+
         switch ($model['status']) {
             case Api::PAYMENT_STATUS_CREATED:
                 $request->markNew();
@@ -40,8 +52,11 @@ class StatusAction implements ActionInterface
                 $request->markPending();
 
                 return;
-            default:
-                $request->markAuthorized();
+            case Api::PAYMENT_STATUS_COMPLETED:
+            case Api::PAYMENT_STATUS_INCOMPLETE;
+                $request->markCaptured();
+
+                return;
         }
     }
 
@@ -50,15 +65,9 @@ class StatusAction implements ActionInterface
      */
     public function supports($request)
     {
-        if (false == $request instanceof GetStatusInterface) {
-            return false;
-        }
-
-        $model = $request->getModel();
-        if (false == $model instanceof \ArrayAccess) {
-            return false;
-        }
-
-        return $model['status'];
+        return
+            $request instanceof GetStatusInterface &&
+            $request->getModel() instanceof \ArrayAccess
+        ;
     }
 }
