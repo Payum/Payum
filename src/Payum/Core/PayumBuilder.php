@@ -549,7 +549,7 @@ class PayumBuilder
     {
         $map = [
             'paypal_express_checkout' => PaypalExpressCheckoutGatewayFactory::class,
-            'paypal_adaptive_payments_json' => PaypalAdaptivePaymentsGatewayFactory::class,
+            'paypal_adaptive_payments' => PaypalAdaptivePaymentsGatewayFactory::class,
             'paypal_pro_checkout' => PaypalProCheckoutGatewayFactory::class,
             'paypal_masspay' => PaypalMasspayGatewayFactory::class,
             'paypal_rest' => PaypalRestGatewayFactory::class,
