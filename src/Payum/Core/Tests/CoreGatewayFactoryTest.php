@@ -82,15 +82,7 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $config = $factory->createConfig([]);
         $this->assertArrayHasKey('httplug.message_factory', $config);
         $this->assertInstanceOf(\Closure::class, $config['httplug.message_factory']);
-
-        $rc = new \ReflectionClass(CoreGatewayFactory::class);
-        $config = ArrayObject::ensureArrayObject($config);
-
-        $method = $rc->getMethod('buildClosures');
-
-        $rc->newInstance();
-        $method->setAccessible(true);
-        $method->invoke($factory, $config);
+        $config['httplug.message_factory'] = call_user_func($config['httplug.message_factory'], ArrayObject::ensureArrayObject($config));
         $this->assertInstanceOf(MessageFactory::class, $config['httplug.message_factory']);
     }
 
@@ -104,15 +96,7 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $config = $factory->createConfig([]);
         $this->assertArrayHasKey('httplug.stream_factory', $config);
         $this->assertInstanceOf(\Closure::class, $config['httplug.stream_factory']);
-
-        $rc = new \ReflectionClass(CoreGatewayFactory::class);
-        $config = ArrayObject::ensureArrayObject($config);
-
-        $method = $rc->getMethod('buildClosures');
-
-        $rc->newInstance();
-        $method->setAccessible(true);
-        $method->invoke($factory, $config);
+        $config['httplug.stream_factory'] = call_user_func($config['httplug.stream_factory'], ArrayObject::ensureArrayObject($config));
         $this->assertInstanceOf(StreamFactory::class, $config['httplug.stream_factory']);
     }
 
@@ -127,14 +111,10 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('httplug.client', $config);
         $this->assertInstanceOf(\Closure::class, $config['httplug.client']);
 
-        $rc = new \ReflectionClass(CoreGatewayFactory::class);
-        $config = ArrayObject::ensureArrayObject($config);
+        $config['httplug.message_factory'] = call_user_func($config['httplug.message_factory'], ArrayObject::ensureArrayObject($config));
+        $config['httplug.stream_factory'] = call_user_func($config['httplug.stream_factory'], ArrayObject::ensureArrayObject($config));
+        $config['httplug.client'] = call_user_func($config['httplug.client'], ArrayObject::ensureArrayObject($config));
 
-        $method = $rc->getMethod('buildClosures');
-
-        $rc->newInstance();
-        $method->setAccessible(true);
-        $method->invoke($factory, $config);
         $this->assertInstanceOf(HttpClient::class, $config['httplug.client']);
     }
 
