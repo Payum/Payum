@@ -110,7 +110,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                 }
 
                 if (class_exists(HttpGuzzle6Client::class)) {
-                    return HttpGuzzle6Client::createWithConfig(array());
+                    return new HttpGuzzle6Client();
                 }
 
                 if (class_exists(HttpGuzzle5Client::class)) {
