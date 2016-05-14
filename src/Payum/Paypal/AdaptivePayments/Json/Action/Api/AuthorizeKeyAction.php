@@ -23,7 +23,12 @@ class AuthorizeKeyAction extends BaseAction
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
         if ($model['payKey']) {
-            $url = $this->api->generatePayKeyAuthorizationUrl($model['payKey']);
+            $local = $model->getArray('local');
+            if ($local['embedded']) {
+                $url = $this->api->generateEmbeddedPayKeyAuthorizationUrl($model['payKey']);
+            } else {
+                $url = $this->api->generatePayKeyAuthorizationUrl($model['payKey']);
+            }
         } elseif ($model['preapprovalKey']) {
             $url = $this->api->generatePreApprovalAuthorizationUrl($model['preapprovalKey']);
         } else {

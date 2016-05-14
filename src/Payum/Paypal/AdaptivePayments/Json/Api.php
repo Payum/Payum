@@ -109,6 +109,24 @@ class Api
      *
      * @return string
      */
+    public function generateEmbeddedPayKeyAuthorizationUrl($payKey)
+    {
+        $query = [
+            'paykey' => $payKey,
+        ];
+
+        return sprintf(
+            'https://%s/webapps/adaptivepayment/flow/pay?%s',
+            $this->options['sandbox'] ? 'www.sandbox.paypal.com' : 'www.paypal.com',
+            http_build_query($query)
+        );
+    }
+
+    /**
+     * @param $payKey
+     *
+     * @return string
+     */
     public function generatePayKeyAuthorizationUrl($payKey)
     {
         return $this->generateAuthorizationUrl(array(
