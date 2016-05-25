@@ -1,11 +1,11 @@
 <?php
-namespace Payum\Paypal\ProHosted\Action\Api;
+namespace Payum\Paypal\ProHosted\Nvp\Action\Api;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\UnsupportedApiException;
-use Payum\Paypal\ProHosted\Api;
+use Payum\Paypal\ProHosted\Nvp\Api;
 
 abstract class BaseApiAwareAction extends GatewayAwareAction implements ActionInterface, ApiAwareInterface
 {

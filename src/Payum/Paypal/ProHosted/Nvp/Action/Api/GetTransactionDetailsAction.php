@@ -1,9 +1,10 @@
 <?php
-namespace Payum\Paypal\ProHosted\Action\Api;
+namespace Payum\Paypal\ProHosted\Nvp\Action\Api;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
-use Payum\Paypal\ProHosted\Request\Api\GetTransactionDetails;
+use Payum\Paypal\ProHosted\Nvp\Api;
+use Payum\Paypal\ProHosted\Nvp\Request\Api\GetTransactionDetails;
 use Payum\Core\Exception\RequestNotSupportedException;
 
 class GetTransactionDetailsAction extends BaseApiAwareAction
@@ -17,14 +18,14 @@ class GetTransactionDetailsAction extends BaseApiAwareAction
         RequestNotSupportedException::assertSupports($this, $request);
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (null == $model['txn_id']) {
-            throw new LogicException('Transaction id Txn_id must be set.');
-        }
-
         $fields                  = new ArrayObject([]);
         $fields['TRANSACTIONID'] = $model['txn_id'];
 
-        $result = $this->api->getTransactionDetails((array) $fields);
+        if (null == $fields['TRANSACTIONID']) {
+            throw new LogicException('TRANSACTIONID must be set.');
+        }
+
+        $result = $this->api->getTransactionDetails((array)$fields);
 
         $model->replace($result);
     }

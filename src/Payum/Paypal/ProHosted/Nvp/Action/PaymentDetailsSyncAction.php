@@ -1,32 +1,27 @@
 <?php
-namespace Payum\Paypal\ProHosted\Action;
+namespace Payum\Paypal\ProHosted\Nvp\Action;
 
-use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Sync;
-use Payum\Paypal\ProHosted\Request\Api\GetTransactionDetails;
-use Payum\Paypal\ProHosted\Api;
+use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Paypal\ProHosted\Nvp\Api;
+use Payum\Paypal\ProHosted\Nvp\Request\Api\GetTransactionDetails;
 
 class PaymentDetailsSyncAction extends GatewayAwareAction
 {
     /**
      * {@inheritDoc}
-     *
-     * @param Sync $request
      */
     public function execute($request)
     {
+        /** @var $request Sync */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validateNotEmpty(['txn_id']);
-
-        $this->gateway->execute(new GetTransactionDetails($model));
-
-        if ($model['ACK'] == Api::ACK_SUCCESS) {
-            $model->replace($model);
+        if ($model['txn_id']) {
+            $this->gateway->execute(new GetTransactionDetails($model));
         }
     }
 
@@ -43,5 +38,7 @@ class PaymentDetailsSyncAction extends GatewayAwareAction
         if (false == $model instanceof \ArrayAccess) {
             return false;
         }
+
+        return true;
     }
 }

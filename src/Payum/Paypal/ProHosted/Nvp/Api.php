@@ -1,13 +1,19 @@
 <?php
-namespace Payum\Paypal\ProHosted;
+namespace Payum\Paypal\ProHosted\Nvp;
 
 use Http\Message\MessageFactory;
-use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
-use Payum\Core\HttpClientInterface;
+use Payum\Core\Exception\Http\HttpException;
+use Payum\Core\Exception\RuntimeException;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Reply\HttpPostRedirect;
+use Payum\Core\HttpClientInterface;
+use Symfony\Component\VarDumper\VarDumper;
 
+/**
+ * @link https://developer.paypal.com/docs/classic/api/button-manager/BMCreateButton_API_Operation_NVP/
+ * L_ERRORCODE @link https://developer.paypal.com/webapps/developer/docs/classic/api/errorcodes/#id09C3GA00GR1
+ */
 class Api
 {
     const VERSION = '65.2';
@@ -16,11 +22,6 @@ class Api
     const ACK_FAILURE = 'Failure';
     const ACK_FAILUREWITHWARNING = 'FailureWithWarning';
     const ACK_WARNING = 'Warning';
-    const CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED = 'PaymentActionNotInitiated';
-    const CHECKOUTSTATUS_PAYMENT_ACTION_FAILED = 'PaymentActionFailed';
-    const CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS = 'PaymentActionInProgress';
-    const CHECKOUTSTATUS_PAYMENT_COMPLETED = 'PaymentCompleted';
-    const CHECKOUTSTATUS_PAYMENT_ACTION_COMPLETED = 'PaymentActionCompleted';
 
     /**
      * No status
@@ -81,20 +82,11 @@ class Api
      *  A payment has been accepted.
      */
     const PAYMENTSTATUS_PROCESSED = 'Processed';
+
     const PAYERSTATUS_VERIFIED = 'verified';
     const PAYERSTATUS_UNVERIFIED = 'unverified';
 
     const PENDINGREASON_AUTHORIZATION = 'authorization';
-
-    /**
-     * Payment has not been authorized by the user.
-     */
-    const L_ERRORCODE_PAYMENT_NOT_AUTHORIZED = 10485;
-
-    /**
-     * This Express Checkout session has expired.
-     */
-    const L_ERRORCODE_SESSION_HAS_EXPIRED = 10411;
 
     const PAYMENTACTION_SALE = 'sale';
     const FORM_CMD = '_hosted-payment';
@@ -113,15 +105,14 @@ class Api
      * @var array
      */
     protected $options = array(
-        'username'   => null,
-        'password'   => null,
-        'signature'  => null,
-        'business'   => null,
-        'bn'         => null,
-        'return_url' => null,
-        'cancel_url' => null,
-        'sandbox'    => null,
-        'cmd'        => Api::FORM_CMD,
+        'username'  => null,
+        'password'  => null,
+        'signature' => null,
+        'business'  => null,
+        'return'    => null,
+        'subtotal'  => null,
+        'sandbox'   => null,
+        'cmd'       => Api::FORM_CMD,
     );
 
     /**
@@ -154,74 +145,60 @@ class Api
     }
 
     /**
-     * Solution HTML
-     *
-     * @param array $fields
-     *
-     * @return array
-     */
-    public function doSale(array $fields)
-    {
-        $fields['paymentaction'] = self::PAYMENTACTION_SALE;
-        $fields['cmd']           = self::FORM_CMD;
-
-        $this->addVersionField($fields);
-        $this->addAuthorizeFields($fields);
-
-        throw new HttpPostRedirect(
-            $this->getApiEndpoint(),
-            $fields
-        );
-    }
-
-    /**
      * Solution BMCreateButton
      *
      * @param array $fields
+     *
+     * @throws RuntimeException
      *
      * @return array
      */
     public function doCreateButton(array $fields)
     {
-        $this->addAuthorizeFields($fields);
+        if (false == isset($fields['return'])) {
+            if (false == $this->options['return']) {
+                throw new RuntimeException('The return must be set either to FormRequest or to options.');
+            }
 
-        $fields['paymentaction'] = self::PAYMENTACTION_SALE;
-        $fields['cmd']           = self::FORM_CMD;
+            $fields['return'] = $this->options['return'];
+        }
+
+        $fields['paymentaction']       = self::PAYMENTACTION_SALE;
+        $fields['cmd']                 = self::FORM_CMD;
 
         $newFields = [];
-        $i = 0;
+        $i         = 0;
         foreach ($fields as $key => $val) {
-            $newFields['L_BUTTONVAR'.$i.'='.$key] = $val;
+            $newFields['L_BUTTONVAR'.$i] = $key.'='.$val;
             $i++;
         }
-        $newFields['L_BUTTONVAR'.$i] = 'subtotal='.$fields['subtotal'];
-        $newFields['METHOD']         = 'BMCreateButton';
-        $newFields['BUTTONTYPE']     = 'PAYMENT';
-        $newFields['BUTTONCODE']     = 'TOKEN';
+
+        $newFields['METHOD']     = 'BMCreateButton';
+        $newFields['BUTTONTYPE'] = 'PAYMENT';
+        $newFields['BUTTONCODE'] = 'TOKEN';
 
         $this->addVersionField($newFields);
-        $this->addAuthorizeNvpFields($newFields);
+        $this->addAuthorizeFields($newFields);
 
-        $response = $this->doRequest($newFields, $this->getNvpEndpoint());
+        $response = $this->doRequest($newFields);
 
         return $response;
     }
 
     /**
-     * @param array  $fields
-     * @param string $endPoint
+     * @param array $fields
      *
      * @throws HttpException
      *
      * @return array
      */
-    protected function doRequest(array $fields, $endPoint)
+    protected function doRequest(array $fields)
     {
         $headers = array(
             'Content-Type' => 'application/x-www-form-urlencoded',
         );
 
-        $request = $this->messageFactory->createRequest('POST', $endPoint, $headers, http_build_query($fields));
+        $request = $this->messageFactory->createRequest('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
 
         $response = $this->client->send($request);
 
@@ -229,7 +206,6 @@ class Api
             throw HttpException::factory($request, $response);
         }
 
-        $result = array();
         parse_str($response->getBody()->getContents(), $result);
 
         foreach ($result as &$value) {
@@ -242,17 +218,7 @@ class Api
     /**
      * @return string
      */
-    public function getApiEndpoint()
-    {
-        return $this->options['sandbox'] ?
-            'https://www.sandbox.paypal.com/acquiringwebr' :
-            'https://securepayments.paypal.com/acquiringweb';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getNvpEndpoint()
+    protected function getApiEndpoint()
     {
         return $this->options['sandbox'] ?
             'https://api-3t.sandbox.paypal.com/nvp' :
@@ -264,7 +230,11 @@ class Api
      */
     protected function addAuthorizeFields(array &$fields)
     {
-        $fields['business'] = $this->options['business'];
+        $fields['USER']      = $this->options['username'];
+        $fields['PWD']       = $this->options['password'];
+        $fields['SIGNATURE'] = $this->options['signature'];
+        $fields['BUSINESS']  = $this->options['business'];
+        $fields['SUBJECT']   = $this->options['business'];
     }
 
     /**
@@ -276,7 +246,7 @@ class Api
     }
 
     /**
-     * Require: txn_id
+     * Require: TRANSACTIONID
      *
      * @param array $fields
      *
@@ -286,23 +256,10 @@ class Api
     {
         $fields['METHOD'] = 'GetTransactionDetails';
 
-        $this->addAuthorizeNvpFields($fields);
         $this->addAuthorizeFields($fields);
         $this->addVersionField($fields);
 
-        var_dump($fields);
-
-        return $this->doRequest($fields, $this->getNvpEndpoint());
-    }
-
-    /**
-     * @param array $fields
-     */
-    protected function addAuthorizeNvpFields(array &$fields)
-    {
-        $fields['USER']      = $this->options['username'];
-        $fields['PWD']       = $this->options['password'];
-        $fields['SIGNATURE'] = $this->options['signature'];
+        return $this->doRequest($fields);
     }
 
     /**
@@ -313,4 +270,3 @@ class Api
         return $this->options['sandbox'];
     }
 }
-

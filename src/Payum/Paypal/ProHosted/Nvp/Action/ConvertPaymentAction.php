@@ -1,10 +1,12 @@
 <?php
-namespace Payum\Paypal\ProHosted\Action;
+namespace Payum\Paypal\ProHosted\Nvp\Action;
 
 use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
+use Payum\Core\Request\GetCurrency;
 
 class ConvertPaymentAction extends GatewayAwareAction
 {
@@ -20,7 +22,14 @@ class ConvertPaymentAction extends GatewayAwareAction
         /** @var PaymentInterface $payment */
         $payment = $request->getSource();
 
-        throw new \LogicException('Not implemented');
+        $this->gateway->execute($currency = new GetCurrency($payment->getCurrencyCode()));
+
+        $details                 = ArrayObject::ensureArrayObject($payment->getDetails());
+        $details['INVNUM']       = $payment->getNumber();
+        $details['AMT']          = (float)$payment->getTotalAmount();
+        $details['CURRENCYCODE'] = $payment->getCurrencyCode();
+
+        $request->setResult((array)$details);
     }
 
     /**
@@ -31,7 +40,6 @@ class ConvertPaymentAction extends GatewayAwareAction
         return
             $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&
-            $request->getTo() == 'array'
-        ;
+            $request->getTo() == 'array';
     }
 }

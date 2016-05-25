@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Paypal\ProHosted\Action;
+namespace Payum\Paypal\ProHosted\Nvp\Action;
 
 use Http\Message\MessageFactory;
 use Payum\Core\Action\GatewayAwareAction;
@@ -19,8 +19,6 @@ class NotifyAction extends GatewayAwareAction
         RequestNotSupportedException::assertSupports($this, $request);
 
         $this->gateway->execute(new Sync($request->getModel()));
-
-        throw new HttpResponse('OK', 200);
     }
 
     /**

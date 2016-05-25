@@ -1,16 +1,16 @@
 <?php
 
-namespace Payum\Paypal\ProHosted;
+namespace Payum\Paypal\ProHosted\Nvp;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
-use Payum\Paypal\ProHosted\Action\Api\GetTransactionDetailsAction;
-use Payum\Paypal\ProHosted\Action\Api\CreateButtonPaymentAction;
-use Payum\Paypal\ProHosted\Action\ConvertPaymentAction;
-use Payum\Paypal\ProHosted\Action\CaptureAction;
-use Payum\Paypal\ProHosted\Action\NotifyAction;
-use Payum\Paypal\ProHosted\Action\PaymentDetailsStatusAction;
-use Payum\Paypal\ProHosted\Action\PaymentDetailsSyncAction;
+use Payum\Paypal\ProHosted\Nvp\Action\Api\GetTransactionDetailsAction;
+use Payum\Paypal\ProHosted\Nvp\Action\Api\CreateButtonPaymentAction;
+use Payum\Paypal\ProHosted\Nvp\Action\ConvertPaymentAction;
+use Payum\Paypal\ProHosted\Nvp\Action\CaptureAction;
+use Payum\Paypal\ProHosted\Nvp\Action\NotifyAction;
+use Payum\Paypal\ProHosted\Nvp\Action\PaymentDetailsStatusAction;
+use Payum\Paypal\ProHosted\Nvp\Action\PaymentDetailsSyncAction;
 
 class PaypalProHostedGatewayFactory extends GatewayFactory
 {
@@ -33,11 +33,10 @@ class PaypalProHostedGatewayFactory extends GatewayFactory
 
         if (false == $config['payum.api']) {
             $config['payum.default_options'] = [
-                'username'  => $config['username'],
-                'password'  => $config['password'],
-                'signature' => $config['signature'],
+                'username'  => '',
+                'password'  => '',
+                'signature' => '',
                 'business'  => '',
-                'bn'        => '',
                 'sandbox'   => true,
             ];
 
@@ -57,13 +56,11 @@ class PaypalProHostedGatewayFactory extends GatewayFactory
                     'password'  => $config['password'],
                     'signature' => $config['signature'],
                     'business'  => $config['business'],
-                    'bn'        => $config['bn'],
                     'sandbox'   => $config['sandbox'],
                 );
 
                 return new Api((array)$paypalConfig, $config['payum.http_client'], $config['httplug.message_factory']);
             };
         }
-
     }
 }
