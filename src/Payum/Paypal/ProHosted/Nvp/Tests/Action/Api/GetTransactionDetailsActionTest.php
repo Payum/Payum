@@ -92,8 +92,8 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
         $action->setApi($apiMock);
 
         $request = new GetTransactionDetails(array(
-                                                 'txn_id' => 'aTransactionId',
-                                             ));
+            'txn_id' => 'aTransactionId',
+        ));
 
         $action->execute($request);
 

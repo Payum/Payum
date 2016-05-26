@@ -26,10 +26,10 @@ class ConvertPaymentAction extends GatewayAwareAction
 
         $details                 = ArrayObject::ensureArrayObject($payment->getDetails());
         $details['INVNUM']       = $payment->getNumber();
-        $details['AMT']          = (float)$payment->getTotalAmount();
+        $details['AMT']          = (float) $payment->getTotalAmount();
         $details['CURRENCYCODE'] = $payment->getCurrencyCode();
 
-        $request->setResult((array)$details);
+        $request->setResult((array) $details);
     }
 
     /**

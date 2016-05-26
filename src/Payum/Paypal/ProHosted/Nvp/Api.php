@@ -69,7 +69,9 @@ class Api
     const PAYMENTSTATUS_PENDING = 'Pending';
 
     /**
-     * A payment was reversed due to a chargeback or other type of reversal. The funds have been removed from your account balance and returned to the buyer. The reason for the reversal is specified in the ReasonCode element.
+     * A payment was reversed due to a chargeback or other type of reversal.
+     * The funds have been removed from your account balance and returned to the buyer.
+     * The reason for the reversal is specified in the ReasonCode element.
      */
     const PAYMENTSTATUS_REVERSED = 'Reversed';
 
@@ -127,13 +129,11 @@ class Api
         $options = ArrayObject::ensureArrayObject($options);
         $options->defaults($this->options);
         $options->validateNotEmpty([
-                                       'username',
-                                       'password',
-                                       'signature',
-                                       'business',
-                                   ]
-
-        );
+            'username',
+            'password',
+            'signature',
+            'business',
+        ]);
 
         if (false == is_bool($options['sandbox'])) {
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
@@ -163,8 +163,8 @@ class Api
             $fields['return'] = $this->options['return'];
         }
 
-        $fields['paymentaction']       = self::PAYMENTACTION_SALE;
-        $fields['cmd']                 = self::FORM_CMD;
+        $fields['paymentaction'] = self::PAYMENTACTION_SALE;
+        $fields['cmd']           = self::FORM_CMD;
 
         $newFields = [];
         $i         = 0;
@@ -185,6 +185,31 @@ class Api
         return $response;
     }
 
+    /**
+     * Require: TRANSACTIONID
+     *
+     * @param array $fields
+     *
+     * @return array
+     */
+    public function getTransactionDetails($fields)
+    {
+        $fields['METHOD'] = 'GetTransactionDetails';
+
+        $this->addAuthorizeFields($fields);
+        $this->addVersionField($fields);
+
+        return $this->doRequest($fields);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnvironnementTest()
+    {
+        return $this->options['sandbox'];
+    }
+    
     /**
      * @param array $fields
      *
@@ -220,9 +245,7 @@ class Api
      */
     protected function getApiEndpoint()
     {
-        return $this->options['sandbox'] ?
-            'https://api-3t.sandbox.paypal.com/nvp' :
-            'https://api-3t.paypal.com/nvp';
+        return $this->options['sandbox'] ? 'https://api-3t.sandbox.paypal.com/nvp' : 'https://api-3t.paypal.com/nvp';
     }
 
     /**
@@ -243,30 +266,5 @@ class Api
     protected function addVersionField(array &$fields)
     {
         $fields['VERSION'] = self::VERSION;
-    }
-
-    /**
-     * Require: TRANSACTIONID
-     *
-     * @param array $fields
-     *
-     * @return array
-     */
-    public function getTransactionDetails($fields)
-    {
-        $fields['METHOD'] = 'GetTransactionDetails';
-
-        $this->addAuthorizeFields($fields);
-        $this->addVersionField($fields);
-
-        return $this->doRequest($fields);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isEnvironnementTest()
-    {
-        return $this->options['sandbox'];
     }
 }

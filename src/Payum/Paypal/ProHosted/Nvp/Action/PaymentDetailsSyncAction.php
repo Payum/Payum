@@ -35,6 +35,7 @@ class PaymentDetailsSyncAction extends GatewayAwareAction
         }
 
         $model = $request->getModel();
+
         if (false == $model instanceof \ArrayAccess) {
             return false;
         }

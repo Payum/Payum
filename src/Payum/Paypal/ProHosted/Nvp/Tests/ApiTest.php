@@ -18,14 +18,15 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $factory = $this->createHttpMessageFactory();
 
         $api = new Api(array(
-                           'username'  => 'a_username',
-                           'password'  => 'a_password',
-                           'signature' => 'a_signature',
-                           'business'  => 'a_business',
-                           'sandbox'   => true,
-                       ), $client, $factory);
+            'username'  => 'a_username',
+            'password'  => 'a_password',
+            'signature' => 'a_signature',
+            'business'  => 'a_business',
+            'sandbox'   => true,
+        ), $client, $factory);
 
         $this->assertAttributeSame($client, 'client', $api);
+
         $this->assertAttributeSame($factory, 'messageFactory', $api);
     }
 
@@ -38,11 +39,11 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     public function throwIfSandboxOptionNotSetInConstructor()
     {
         new Api(array(
-                    'username'  => 'a_username',
-                    'password'  => 'a_password',
-                    'signature' => 'a_signature',
-                    'business'  => 'a_business',
-                ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
+            'username'  => 'a_username',
+            'password'  => 'a_password',
+            'signature' => 'a_signature',
+            'business'  => 'a_business',
+        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
     /**
@@ -51,13 +52,13 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     public function shouldUseReturnUrlSetInFormRequest()
     {
         $api = new Api(array(
-                           'username'  => 'a_username',
-                           'password'  => 'a_password',
-                           'signature' => 'a_signature',
-                           'business'  => 'a_business',
-                           'sandbox'   => true,
-                           'return'    => 'optionReturnUrl',
-                       ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+            'username'  => 'a_username',
+            'password'  => 'a_password',
+            'signature' => 'a_signature',
+            'business'  => 'a_business',
+            'sandbox'   => true,
+            'return'    => 'optionReturnUrl',
+        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->doCreateButton(array('return' => 'formRequestReturnUrl'));
 
@@ -70,14 +71,14 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     public function shouldAddAuthorizeFieldsOnDoCreateButtonCall()
     {
         $api = new Api(array(
-                           'username'  => 'the_username',
-                           'password'  => 'the_password',
-                           'signature' => 'the_signature',
-                           'business'  => 'the_business',
-                           'subject'   => 'the_business',
-                           'sandbox'   => true,
-                           'return'    => 'optionReturnUrl',
-                       ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+            'username'  => 'the_username',
+            'password'  => 'the_password',
+            'signature' => 'the_signature',
+            'business'  => 'the_business',
+            'subject'   => 'the_business',
+            'sandbox'   => true,
+            'return'    => 'optionReturnUrl',
+        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->doCreateButton([]);
 
@@ -103,13 +104,13 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     public function shouldAddVersionOnDoCreateButtonCall()
     {
         $api = new Api(array(
-                           'username'  => 'a_username',
-                           'password'  => 'a_password',
-                           'signature' => 'a_signature',
-                           'business'  => 'a_business',
-                           'sandbox'   => true,
-                           'return'    => 'optionReturnUrl',
-                       ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+            'username'  => 'a_username',
+            'password'  => 'a_password',
+            'signature' => 'a_signature',
+            'business'  => 'a_business',
+            'sandbox'   => true,
+            'return'    => 'optionReturnUrl',
+        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->doCreateButton([]);
 
@@ -125,23 +126,23 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $testCase = $this;
 
         $clientMock = $this->createHttpClientMock();
-        $clientMock
-            ->expects($this->once())
-            ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) use ($testCase) {
-                $testCase->assertEquals('https://api-3t.paypal.com/nvp', $request->getUri());
+        $clientMock->expects($this->once())->method('send')->will($this->returnCallback(function (RequestInterface $request) use
+        (
+            $testCase
+        ) {
+            $testCase->assertEquals('https://api-3t.paypal.com/nvp', $request->getUri());
 
-                return new Response(200, [], $request->getBody());
-            }));
+            return new Response(200, [], $request->getBody());
+        }));
 
         $api = new Api(array(
-                           'username'  => 'a_username',
-                           'password'  => 'a_password',
-                           'signature' => 'a_signature',
-                           'business'  => 'a_business',
-                           'sandbox'   => false,
-                           'return'    => 'optionReturnUrl',
-                       ), $clientMock, $this->createHttpMessageFactory());
+            'username'  => 'a_username',
+            'password'  => 'a_password',
+            'signature' => 'a_signature',
+            'business'  => 'a_business',
+            'sandbox'   => false,
+            'return'    => 'optionReturnUrl',
+        ), $clientMock, $this->createHttpMessageFactory());
 
         $api->doCreateButton([]);
     }
@@ -154,23 +155,23 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $testCase = $this;
 
         $clientMock = $this->createHttpClientMock();
-        $clientMock
-            ->expects($this->once())
-            ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) use ($testCase) {
-                $testCase->assertEquals('https://api-3t.sandbox.paypal.com/nvp', $request->getUri());
+        $clientMock->expects($this->once())->method('send')->will($this->returnCallback(function (RequestInterface $request) use
+        (
+            $testCase
+        ) {
+            $testCase->assertEquals('https://api-3t.sandbox.paypal.com/nvp', $request->getUri());
 
-                return new Response(200, [], $request->getBody());
-            }));
+            return new Response(200, [], $request->getBody());
+        }));
 
         $api = new Api(array(
-                           'username'  => 'a_username',
-                           'password'  => 'a_password',
-                           'signature' => 'a_signature',
-                           'business'  => 'a_business',
-                           'sandbox'   => true,
-                           'return'    => 'optionReturnUrl',
-                       ), $clientMock, $this->createHttpMessageFactory());
+            'username'  => 'a_username',
+            'password'  => 'a_password',
+            'signature' => 'a_signature',
+            'business'  => 'a_business',
+            'sandbox'   => true,
+            'return'    => 'optionReturnUrl',
+        ), $clientMock, $this->createHttpMessageFactory());
 
         $api->doCreateButton([]);
     }
@@ -181,18 +182,48 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     public function shouldAddMethodOnDoCreateButtonCall()
     {
         $api = new Api(array(
-                           'username'  => 'a_username',
-                           'password'  => 'a_password',
-                           'signature' => 'a_signature',
-                           'business'  => 'a_business',
-                           'sandbox'   => true,
-                           'return'    => 'optionReturnUrl',
-                       ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+            'username'  => 'a_username',
+            'password'  => 'a_password',
+            'signature' => 'a_signature',
+            'business'  => 'a_business',
+            'sandbox'   => true,
+            'return'    => 'optionReturnUrl',
+        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->doCreateButton([]);
 
         $this->assertArrayHasKey('METHOD', $result);
         $this->assertEquals('BMCreateButton', $result['METHOD']);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\RuntimeException
+     * @expectedExceptionMessage The return must be set either to FormRequest or to options.
+     */
+    public function throwIfReturnUrlNeitherSetToFormRequestNorToOptions()
+    {
+        $api = new Api(array(
+            'username'  => 'a_username',
+            'password'  => 'a_password',
+            'signature' => 'a_signature',
+            'business'  => 'a_business',
+            'sandbox'   => true,
+        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
+
+        $api->doCreateButton([]);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The username, password, signature, business fields are required.
+     */
+    public function throwIfRequiredOptionsNotSetInConstructor()
+    {
+        new Api(array(), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
     /**
@@ -217,43 +248,10 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     protected function createSuccessHttpClientStub()
     {
         $clientMock = $this->createHttpClientMock();
-        $clientMock
-            ->expects($this->any())
-            ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) {
-                return new Response(200, [], $request->getBody());
-            }));
+        $clientMock->expects($this->any())->method('send')->will($this->returnCallback(function (RequestInterface $request) {
+            return new Response(200, [], $request->getBody());
+        }));
 
         return $clientMock;
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Core\Exception\RuntimeException
-     * @expectedExceptionMessage The return must be set either to FormRequest or to options.
-     */
-    public function throwIfReturnUrlNeitherSetToFormRequestNorToOptions()
-    {
-        $api = new Api(array(
-                           'username'  => 'a_username',
-                           'password'  => 'a_password',
-                           'signature' => 'a_signature',
-                           'business'  => 'a_business',
-                           'sandbox'   => true,
-                       ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
-
-        $api->doCreateButton([]);
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The username, password, signature, business fields are required.
-     */
-    public function throwIfRequiredOptionsNotSetInConstructor()
-    {
-        new Api(array(), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 }

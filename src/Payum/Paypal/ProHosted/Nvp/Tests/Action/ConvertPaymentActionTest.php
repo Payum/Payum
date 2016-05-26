@@ -43,18 +43,13 @@ class ConvertPaymentActionTest extends GenericActionTest
     public function shouldCorrectlyConvertOrderToDetailsAndSetItBack()
     {
         $gatewayMock = $this->getMock('Payum\Core\GatewayInterface');
-        $gatewayMock
-            ->expects($this->once())
-            ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\GetCurrency'))
-            ->willReturnCallback(function(GetCurrency $request) {
-                $request->name = 'US Dollar';
-                $request->alpha3 = 'USD';
-                $request->numeric = 123;
-                $request->exp = 2;
-                $request->country = 'US';
-            })
-        ;
+        $gatewayMock->expects($this->once())->method('execute')->with($this->isInstanceOf('Payum\Core\Request\GetCurrency'))->willReturnCallback(function (GetCurrency $request) {
+            $request->name    = 'US Dollar';
+            $request->alpha3  = 'USD';
+            $request->numeric = 123;
+            $request->exp     = 2;
+            $request->country = 'US';
+        });
 
         $payment = new Payment();
         $payment->setNumber('theNumber');
@@ -89,18 +84,13 @@ class ConvertPaymentActionTest extends GenericActionTest
     public function shouldNotOverwriteAlreadySetExtraDetails()
     {
         $gatewayMock = $this->getMock('Payum\Core\GatewayInterface');
-        $gatewayMock
-            ->expects($this->once())
-            ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\GetCurrency'))
-            ->willReturnCallback(function(GetCurrency $request) {
-                $request->name = 'US Dollar';
-                $request->alpha3 = 'USD';
-                $request->numeric = 123;
-                $request->exp = 2;
-                $request->country = 'US';
-            })
-        ;
+        $gatewayMock->expects($this->once())->method('execute')->with($this->isInstanceOf('Payum\Core\Request\GetCurrency'))->willReturnCallback(function (GetCurrency $request) {
+            $request->name    = 'US Dollar';
+            $request->alpha3  = 'USD';
+            $request->numeric = 123;
+            $request->exp     = 2;
+            $request->country = 'US';
+        });
 
         $payment = new Payment();
         $payment->setCurrencyCode('USD');

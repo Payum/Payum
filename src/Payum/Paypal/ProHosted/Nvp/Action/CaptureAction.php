@@ -15,9 +15,7 @@ use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Sync;
-use Payum\Paypal\ProHosted\Nvp\Api;
 use Payum\Paypal\ProHosted\Nvp\Request\Api\CreateButtonPayment;
-use Payum\Paypal\ProHosted\Nvp\Request\Api\GetTransactionDetails;
 
 class CaptureAction extends GatewayAwareAction
 {
@@ -44,12 +42,12 @@ class CaptureAction extends GatewayAwareAction
 
         if ($response['txn_id'] != null) {
             $response->validateNotEmpty([
-                                           'payment_status',
-                                           'business',
-                                           'invoice',
-                                           'txn_id',
-                                           'mc_gross',
-                                       ]);
+                'payment_status',
+                'business',
+                'invoice',
+                'txn_id',
+                'mc_gross',
+            ]);
 
             $this->gateway->execute(new Sync($response));
 
@@ -57,7 +55,7 @@ class CaptureAction extends GatewayAwareAction
         } else {
             if ($model['cancel_return']) {
                 $cancelUri = HttpUri::createFromString($model['cancel_return']);
-                $modifier = new MergeQuery('cancelled=1');
+                $modifier  = new MergeQuery('cancelled=1');
                 $cancelUri = $modifier($cancelUri);
 
                 $model['cancel_return'] = (string) $cancelUri;
@@ -72,8 +70,6 @@ class CaptureAction extends GatewayAwareAction
      */
     public function supports($request)
     {
-        return
-            $request instanceof Capture &&
-            $request->getModel() instanceof \ArrayAccess;
+        return $request instanceof Capture && $request->getModel() instanceof \ArrayAccess;
     }
 }

@@ -61,6 +61,7 @@ class PaymentDetailsStatusAction implements ActionInterface
             Api::PAYMENTSTATUS_IN_PROGRESS,
             Api::PAYMENTSTATUS_PENDING,
         ];
+
         if (in_array($paymentStatus, $pendingStatuses)) {
             if (Api::PENDINGREASON_AUTHORIZATION == $model['PENDINGREASON']) {
                 $request->markAuthorized();
@@ -98,6 +99,7 @@ class PaymentDetailsStatusAction implements ActionInterface
         }
 
         $model = $request->getModel();
+
         if (false == $model instanceof \ArrayAccess) {
             return false;
         }

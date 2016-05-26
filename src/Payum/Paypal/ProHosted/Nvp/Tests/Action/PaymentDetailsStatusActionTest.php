@@ -127,8 +127,8 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
         $action = new PaymentDetailsStatusAction();
 
         $request = new GetHumanStatus(array(
-            'AMT' => 21,
-            'L_ERRORCODE0' => 'foo'
+            'AMT'          => 21,
+            'L_ERRORCODE0' => 'foo',
         ));
 
         $action->execute($request);

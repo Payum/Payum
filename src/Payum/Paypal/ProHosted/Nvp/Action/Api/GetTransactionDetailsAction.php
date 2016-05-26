@@ -25,7 +25,7 @@ class GetTransactionDetailsAction extends BaseApiAwareAction
             throw new LogicException('TRANSACTIONID must be set.');
         }
 
-        $result = $this->api->getTransactionDetails((array)$fields);
+        $result = $this->api->getTransactionDetails((array) $fields);
 
         $model->replace($result);
     }
