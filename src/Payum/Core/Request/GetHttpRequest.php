@@ -14,6 +14,11 @@ class GetHttpRequest
     public $request;
 
     /**
+     * @var array
+     */
+    public $headers;
+
+    /**
      * @var string
      */
     public $method;
@@ -42,6 +47,7 @@ class GetHttpRequest
     {
         $this->query = array();
         $this->request = array();
+        $this->headers = array();
         $this->method = '';
         $this->uri = '';
         $this->clientIp = '';
