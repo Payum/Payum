@@ -475,7 +475,7 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage Storage for given class "theClass" does not exist.
      */
-    public function alwaysThrowOnGetStorage()
+    public function alwaysThrowOnGetStorageForClass()
     {
         $registry = new DynamicRegistry(
             $this->createStorageMock(),
@@ -484,6 +484,23 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
         $registry->setBackwardCompatibility(false);
 
         $registry->getStorage('theClass');
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Storage for given class "stdClass" does not exist.
+     */
+    public function alwaysThrowOnGetStorageForObject()
+    {
+        $registry = new DynamicRegistry(
+            $this->createStorageMock(),
+            $this->createGatewayFactoryRegistryMock()
+        );
+        $registry->setBackwardCompatibility(false);
+
+        $registry->getStorage(new \stdClass);
     }
 
     /**

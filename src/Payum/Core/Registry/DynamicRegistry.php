@@ -120,7 +120,10 @@ class DynamicRegistry implements RegistryInterface
             return $this->gatewayFactoryRegistry->getStorage($class);
         }
 
-        throw new InvalidArgumentException(sprintf('Storage for given class "%s" does not exist.', $class));
+        throw new InvalidArgumentException(sprintf(
+            'Storage for given class "%s" does not exist.',
+            is_object($class) ? get_class($class) : $class
+        ));
     }
 
     /**
