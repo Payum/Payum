@@ -34,7 +34,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     /**
      * @param array $defaultConfig
      */
-    public function __construct(array $defaultConfig = array())
+    public function __construct(array $defaultConfig = [])
     {
         $this->defaultConfig = $defaultConfig;
     }
@@ -42,7 +42,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function create(array $config = array())
+    public function create(array $config = [])
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->createConfig());
@@ -61,16 +61,12 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createConfig(array $config = array())
+    public function createConfig(array $config = [])
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->defaultConfig);
 
-        /** @var \Twig_Environment|null $twig */
-        $twig = $config['twig.env'];
-        $config['twig.env'] = null;
-
-        $config->defaults(array(
+        $config->defaults([
             'httplug.client'=>function(ArrayObject $config) {
                 if (class_exists(HttpClientDiscovery::class)) {
                     return HttpClientDiscovery::find();
@@ -117,11 +113,24 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                   return new HttplugClient($config['httplug.client']);
             },
             'payum.template.layout' => '@PayumCore/layout.html.twig',
-            'twig.env' => function(ArrayObject $config) use ($twig) {
-                $twig = $twig ?: new \Twig_Environment(new \Twig_Loader_Chain());
+
+            // deprecated
+            'guzzle.client' => HttpClientFactory::createGuzzle(),
+            'twig.env' => function() {
+                return new \Twig_Environment(new \Twig_Loader_Chain());
+            },
+            'twig.register_paths' => function(ArrayObject $config) {
+                $twig = $config['twig.env'];
+                if (false == $twig instanceof \Twig_Environment) {
+                    throw new \LogicException(sprintf(
+                        'The `twig.env config option must contains instance of Twig_Environment but got %s`',
+                        is_object($twig) ? get_class($twig) : gettype($twig)
+                    ));
+                }
+
                 TwigUtil::registerPaths($twig, $config['payum.paths']);
 
-                return $twig;
+                return null;
             },
             'payum.action.get_http_request' => new GetHttpRequestAction(),
             'payum.action.capture_payment' => new CapturePaymentAction(),
@@ -135,18 +144,18 @@ class CoreGatewayFactory implements GatewayFactoryInterface
             'payum.action.get_currency' => function (ArrayObject $config) {
                 return new GetCurrencyAction($config['payum.iso4217']);
             },
-            'payum.prepend_actions' => array(),
-            'payum.prepend_extensions' => array(),
-            'payum.prepend_apis' => array(),
-            'payum.default_options' => array(),
-            'payum.required_options' => array(),
+            'payum.prepend_actions' => [],
+            'payum.prepend_extensions' => [],
+            'payum.prepend_apis' => [],
+            'payum.default_options' => [],
+            'payum.required_options' => [],
 
             'payum.api.http_client' => function (ArrayObject $config) {
                 return $config['payum.http_client'];
             },
 
             'payum.security.token_storage' => null,
-        ));
+        ]);
 
         if ($config['payum.security.token_storage']) {
             $config['payum.action.get_token'] = function(ArrayObject $config) {
@@ -167,7 +176,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     protected function buildClosures(ArrayObject $config)
     {
         // with higher priority
-        foreach (['httplug.client', 'payum.http_client', 'payum.paths', 'twig.env'] as $name) {
+        foreach (['httplug.client', 'payum.http_client', 'payum.paths', 'twig.env', 'twig.register_paths'] as $name) {
             $value = $config[$name];
             if (is_callable($value)) {
                 $config[$name] = call_user_func($value, $config);
