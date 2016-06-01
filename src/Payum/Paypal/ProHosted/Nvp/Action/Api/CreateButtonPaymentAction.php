@@ -1,14 +1,27 @@
 <?php
 namespace Payum\Paypal\ProHosted\Nvp\Action\Api;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Exception\LogicException;
-use Payum\Core\Reply\HttpRedirect;
-use Payum\Paypal\ProHosted\Nvp\Request\Api\CreateButtonPayment;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Reply\HttpRedirect;
+use Payum\Paypal\ProHosted\Nvp\Api;
+use Payum\Paypal\ProHosted\Nvp\Request\Api\CreateButtonPayment;
 
-class CreateButtonPaymentAction extends BaseApiAwareAction
+/**
+ * @property Api $api
+ */
+class CreateButtonPaymentAction implements ActionInterface, ApiAwareInterface
 {
+    use ApiAwareTrait;
+
+    public function __construct()
+    {
+        $this->apiClass = Api::class;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -28,8 +41,6 @@ class CreateButtonPaymentAction extends BaseApiAwareAction
 
         if ($model['EMAILLINK'] != null) {
             throw new HttpRedirect($model['EMAILLINK']);
-        } else {
-            throw new LogicException('Paypal :'.$model['L_SEVERITYCODE0'].' Code '.$model['L_ERRORCODE0'].': '.$model['L_SHORTMESSAGE0'].'. '.$model['L_LONGMESSAGE0']);
         }
     }
 
@@ -38,6 +49,8 @@ class CreateButtonPaymentAction extends BaseApiAwareAction
      */
     public function supports($request)
     {
-        return $request instanceof CreateButtonPayment && $request->getModel() instanceof \ArrayAccess;
+        return
+            $request instanceof CreateButtonPayment &&
+            $request->getModel() instanceof \ArrayAccess;
     }
 }

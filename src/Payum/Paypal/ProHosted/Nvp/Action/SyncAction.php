@@ -8,7 +8,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ProHosted\Nvp\Api;
 use Payum\Paypal\ProHosted\Nvp\Request\Api\GetTransactionDetails;
 
-class PaymentDetailsSyncAction extends GatewayAwareAction
+class SyncAction extends GatewayAwareAction
 {
     /**
      * {@inheritDoc}
@@ -30,16 +30,9 @@ class PaymentDetailsSyncAction extends GatewayAwareAction
      */
     public function supports($request)
     {
-        if (false == $request instanceof Sync) {
-            return false;
-        }
-
-        $model = $request->getModel();
-
-        if (false == $model instanceof \ArrayAccess) {
-            return false;
-        }
-
-        return true;
+        return
+            $request instanceof Sync &&
+            $request->getModel() instanceof \ArrayAccess
+        ;
     }
 }

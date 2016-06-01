@@ -9,8 +9,8 @@ use Payum\Paypal\ProHosted\Nvp\Action\Api\CreateButtonPaymentAction;
 use Payum\Paypal\ProHosted\Nvp\Action\ConvertPaymentAction;
 use Payum\Paypal\ProHosted\Nvp\Action\CaptureAction;
 use Payum\Paypal\ProHosted\Nvp\Action\NotifyAction;
-use Payum\Paypal\ProHosted\Nvp\Action\PaymentDetailsStatusAction;
-use Payum\Paypal\ProHosted\Nvp\Action\PaymentDetailsSyncAction;
+use Payum\Paypal\ProHosted\Nvp\Action\StatusAction;
+use Payum\Paypal\ProHosted\Nvp\Action\SyncAction;
 
 class PaypalProHostedGatewayFactory extends GatewayFactory
 {
@@ -24,8 +24,8 @@ class PaypalProHostedGatewayFactory extends GatewayFactory
             'payum.factory_title'                      => 'Paypal Pro Hosted',
             'payum.action.capture'                     => new CaptureAction(),
             'payum.action.notify'                      => new NotifyAction(),
-            'payum.action.status'                      => new PaymentDetailsStatusAction(),
-            'payum.action.sync'                        => new PaymentDetailsSyncAction(),
+            'payum.action.status'                      => new StatusAction(),
+            'payum.action.sync'                        => new SyncAction(),
             'payum.action.convert_payment'             => new ConvertPaymentAction(),
             'payum.action.api.get_transaction_details' => new GetTransactionDetailsAction(),
             'payum.action.api.create_button_payment'   => new CreateButtonPaymentAction(),

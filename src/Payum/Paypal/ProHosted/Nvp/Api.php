@@ -8,7 +8,6 @@ use Payum\Core\Exception\RuntimeException;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\HttpClientInterface;
-use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * @link https://developer.paypal.com/docs/classic/api/button-manager/BMCreateButton_API_Operation_NVP/

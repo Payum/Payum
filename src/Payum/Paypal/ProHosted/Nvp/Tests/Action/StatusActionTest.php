@@ -2,17 +2,17 @@
 namespace Payum\Paypal\ProHosted\Nvp\Tests\Action;
 
 use Payum\Core\Request\GetHumanStatus;
-use Payum\Paypal\ProHosted\Nvp\Action\PaymentDetailsStatusAction;
+use Payum\Paypal\ProHosted\Nvp\Action\StatusAction;
 use Payum\Paypal\ProHosted\Nvp\Api;
 
-class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
+class StatusActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldImplementsActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ProHosted\Nvp\Action\PaymentDetailsStatusAction');
+        $rc = new \ReflectionClass('Payum\Paypal\ProHosted\Nvp\Action\StatusAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
@@ -22,7 +22,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new PaymentDetailsStatusAction();
+        new StatusAction();
     }
 
     /**
@@ -30,7 +30,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportStatusRequestWithArrayAsModelWhichHasPaymentRequestAmountSet()
     {
-        $action = new PaymentDetailsStatusAction();
+        $action = new StatusAction();
 
         $payment = array(
            'AMT' => 1,
@@ -46,7 +46,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportEmptyModel()
     {
-        $action = new PaymentDetailsStatusAction();
+        $action = new StatusAction();
 
         $request = new GetHumanStatus(array());
 
@@ -58,7 +58,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportStatusRequestWithArrayAsModelWhichHasPaymentRequestAmountSetToZero()
     {
-        $action = new PaymentDetailsStatusAction();
+        $action = new StatusAction();
 
         $payment = array(
             'AMT' => 0,
@@ -74,7 +74,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportStatusRequestWithNoArrayAccessAsModel()
     {
-        $action = new PaymentDetailsStatusAction();
+        $action = new StatusAction();
 
         $request = new GetHumanStatus(new \stdClass());
 
@@ -86,7 +86,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotStatusRequest()
     {
-        $action = new PaymentDetailsStatusAction();
+        $action = new StatusAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -98,7 +98,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $action = new PaymentDetailsStatusAction();
+        $action = new StatusAction();
 
         $action->execute(new \stdClass());
     }
@@ -108,7 +108,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkCanceledIfDetailsContainCanceledKey()
     {
-        $action = new PaymentDetailsStatusAction();
+        $action = new StatusAction();
 
         $request = new GetHumanStatus(array(
             'CANCELLED' => true,
@@ -124,7 +124,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkFailedIfErrorCodeSetToModel()
     {
-        $action = new PaymentDetailsStatusAction();
+        $action = new StatusAction();
 
         $request = new GetHumanStatus(array(
             'AMT'          => 21,
@@ -141,7 +141,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkNewIfDetailsEmpty()
     {
-        $action = new PaymentDetailsStatusAction();
+        $action = new StatusAction();
 
         $request = new GetHumanStatus(array());
 
@@ -155,7 +155,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkUnknownIfPaymentStatusNotSet()
     {
-        $action = new PaymentDetailsStatusAction();
+        $action = new StatusAction();
 
         $request = new GetHumanStatus(array(
             'AMT' => 0,
@@ -173,7 +173,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkPendingIfPaymentStatusPending()
     {
-        $action = new PaymentDetailsStatusAction();
+        $action = new StatusAction();
 
         $request = new GetHumanStatus(array(
             'AMT' => 12,
@@ -190,7 +190,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkFailedIfPaymentStatusFailed()
     {
-        $action = new PaymentDetailsStatusAction();
+        $action = new StatusAction();
 
         $request = new GetHumanStatus(array(
             'AMT' => 12,
@@ -207,7 +207,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkRefundedIfPaymentStatusRefund()
     {
-        $action = new PaymentDetailsStatusAction();
+        $action = new StatusAction();
 
         $request = new GetHumanStatus(array(
             'AMT' => 12,
@@ -224,7 +224,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkRefundedIfPaymentStatusPartiallyRefund()
     {
-        $action = new PaymentDetailsStatusAction();
+        $action = new StatusAction();
 
         $request = new GetHumanStatus(array(
             'AMT' => 12,
@@ -241,7 +241,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkCapturedIfPaymentStatusCompleted()
     {
-        $action = new PaymentDetailsStatusAction();
+        $action = new StatusAction();
 
         $request = new GetHumanStatus(array(
             'AMT' => 12,
@@ -258,7 +258,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldMarkAuthorizedIfPaymentStatusPendingAndReasonAuthorization()
     {
-        $action = new PaymentDetailsStatusAction();
+        $action = new StatusAction();
 
         $request = new GetHumanStatus(array(
             'AMT' => 12,

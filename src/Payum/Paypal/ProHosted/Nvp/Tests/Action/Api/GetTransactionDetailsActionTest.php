@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Paypal\ProHosted\Nvp\Tests\Action\Api;
 
+use Payum\Core\ApiAwareInterface;
 use Payum\Paypal\ProHosted\Nvp\Action\Api\GetTransactionDetailsAction;
 use Payum\Paypal\ProHosted\Nvp\Request\Api\GetTransactionDetails;
 
@@ -9,11 +10,11 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function shouldImplementsApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ProHosted\Nvp\Action\Api\GetTransactionDetailsAction');
+        $rc = new \ReflectionClass(GetTransactionDetailsAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ProHosted\Nvp\Action\Api\BaseApiAwareAction'));
+        $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
     /**

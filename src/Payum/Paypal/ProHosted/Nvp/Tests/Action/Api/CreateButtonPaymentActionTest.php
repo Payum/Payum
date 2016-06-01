@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Paypal\ProHosted\Nvp\Tests\Action\Api;
 
+use Payum\Core\ApiAwareInterface;
 use Payum\Paypal\ProHosted\Nvp\Action\Api\CreateButtonPaymentAction;
 use Payum\Paypal\ProHosted\Nvp\Request\Api\CreateButtonPayment;
 
@@ -9,11 +10,11 @@ class CreateButtonPaymentActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function shouldImplementsApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ProHosted\Nvp\Action\Api\CreateButtonPaymentAction');
+        $rc = new \ReflectionClass(CreateButtonPaymentAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ProHosted\Nvp\Action\Api\BaseApiAwareAction'));
+        $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
     /**

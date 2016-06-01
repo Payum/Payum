@@ -1,7 +1,7 @@
 {
-    "name": "payum/paypal-prohosted",
+    "name": "payum/paypal-pro-hosted-nvp",
     "type": "project",
-    "description": "The Payum extension. Rapid extensino development",
+    "description": "The Payum extension. Rapid extension development",
     "keywords": ["payment", "paypal", "prohosted"],
     "homepage": "http://payum.org",
     "license": "MIT",

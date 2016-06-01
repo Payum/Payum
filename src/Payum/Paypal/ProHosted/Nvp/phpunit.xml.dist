@@ -11,12 +11,6 @@
          syntaxCheck="false"
          bootstrap="Tests/bootstrap.php"
 >
-    <php>
-        <var name="__PAYUM_PAYPAL_PRO_HOSTED_NVP_API_USERNAME" value="businessapi_api1.store-factory.com"/>
-        <var name="__PAYUM_PAYPAL_PRO_HOSTED_NVP_API_PASSWORD" value="J9EWCH2BQFLG5DFP"/>
-        <var name="__PAYUM_PAYPAL_PRO_HOSTED_NVP_API_SIGNATURE" value="AFcWxV21C7fd0v3bYYYRCpSSRl31AZlMFnV33WNCzHSwr7G96aH7Y6uX"/>
-        <var name="__PAYUM_PAYPAL_PRO_HOSTED_NVP_API_BUSINESS" value="seller_1278074842_biz@store-factory.com"/>
-    </php>
 
     <testsuites>
         <testsuite name="Payum PaypalProHostedNvp Component Test Suite">

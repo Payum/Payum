@@ -49,8 +49,14 @@ class CaptureActionTest extends GenericActionTest
     public function shouldRequestApiCreateButtonPaymentMethodWithExpectedRequiredArguments()
     {
         $gatewayMock = $this->createGatewayMock();
-        $gatewayMock->expects($this->at(0))->method('execute')->with($this->isInstanceOf(GetHttpRequest::class));
-        $gatewayMock->expects($this->at(1))->method('execute')->with($this->isInstanceOf(CreateButtonPayment::class));
+
+        $gatewayMock->expects($this->at(0))
+            ->method('execute')
+            ->with($this->isInstanceOf(GetHttpRequest::class));
+
+        $gatewayMock->expects($this->at(1))
+            ->method('execute')
+            ->with($this->isInstanceOf(CreateButtonPayment::class));
 
         $action = new CaptureAction();
         $action->setGateway($gatewayMock);

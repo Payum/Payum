@@ -7,7 +7,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetStatusInterface;
 use Payum\Paypal\ProHosted\Nvp\Api;
 
-class PaymentDetailsStatusAction implements ActionInterface
+class StatusAction implements ActionInterface
 {
     /**
      * {@inheritDoc}
@@ -82,6 +82,7 @@ class PaymentDetailsStatusAction implements ActionInterface
             Api::PAYMENTSTATUS_DENIED,
             Api::PAYMENTSTATUS_CANCELED_REVERSAL,
         );
+
         if (in_array($paymentStatus, $failedStatuses)) {
             $request->markFailed();
 
@@ -94,16 +95,9 @@ class PaymentDetailsStatusAction implements ActionInterface
      */
     public function supports($request)
     {
-        if (false == $request instanceof GetStatusInterface) {
-            return false;
-        }
-
-        $model = $request->getModel();
-
-        if (false == $model instanceof \ArrayAccess) {
-            return false;
-        }
-
-        return true;
+        return
+            $request instanceof GetStatusInterface &&
+            $request->getModel() instanceof \ArrayAccess
+        ;
     }
 }

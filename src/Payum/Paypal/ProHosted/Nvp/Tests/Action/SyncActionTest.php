@@ -2,18 +2,17 @@
 namespace Payum\Paypal\ProHosted\Nvp\Tests\Action;
 
 use Payum\Core\Request\Sync;
-use Payum\Paypal\ProHosted\Nvp\Action\PaymentDetailsSyncAction;
-use Payum\Paypal\ProHosted\Nvp\Api;
+use Payum\Paypal\ProHosted\Nvp\Action\SyncAction;
 use Payum\Paypal\ProHosted\Nvp\Request\Api\GetTransactionDetails;
 
-class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
+class SyncActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function shouldBeSubClassOfGatewayAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ProHosted\Nvp\Action\PaymentDetailsSyncAction');
+        $rc = new \ReflectionClass('Payum\Paypal\ProHosted\Nvp\Action\SyncAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
@@ -23,7 +22,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new PaymentDetailsSyncAction();
+        new SyncAction();
     }
 
     /**
@@ -31,7 +30,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSet()
     {
-        $action = new PaymentDetailsSyncAction();
+        $action = new SyncAction();
 
         $paymentDetails = array(
             'AMT' => 12,
@@ -47,7 +46,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSetToZero()
     {
-        $action = new PaymentDetailsSyncAction();
+        $action = new SyncAction();
 
         $paymentDetails = array(
             'AMT' => 0,
@@ -63,7 +62,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotSupportAnythingNotSync()
     {
-        $action = new PaymentDetailsSyncAction();
+        $action = new SyncAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
@@ -75,7 +74,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $action = new PaymentDetailsSyncAction();
+        $action = new SyncAction();
 
         $action->execute(new \stdClass());
     }
@@ -97,7 +96,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $action = new PaymentDetailsSyncAction();
+        $action = new SyncAction();
         $action->setGateway($gatewayMock);
 
         $details = new \ArrayObject(array(
