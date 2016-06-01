@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.3 (2016-05-31)
+
+* [twig] Postpone twig configuration and paths injection.
+* [registry] fix exception message in getStorage method when object is given.
+* add better messages on errors in api aware trait
+* Fix stripe auto open
+* [registry] Return dynamically stored gateways.
+* [registry] First check factory option from config. Deprecate getFactoryName method
+* [registry] Do not fallback to static registry in dynamic one. Use fallback for that.
+
 ## 1.3.2 (2016-04-29)
 
 * [doc] Add how to contribute from sub repository doc

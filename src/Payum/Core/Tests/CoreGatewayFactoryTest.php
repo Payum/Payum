@@ -242,7 +242,7 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $config);
         $this->assertNotEmpty($config);
 
-        $config['twig.env'] = call_user_func($config['twig.env'], ArrayObject::ensureArrayObject($config));
+        $this->assertSame($twig, $config['twig.env']);
 
         $this->assertInstanceOf(\Closure::class, $config['payum.action.render_template']);
 
