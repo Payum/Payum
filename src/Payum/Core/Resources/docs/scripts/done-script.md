@@ -1,6 +1,6 @@
 ## Done script
 
-This is the most importnat script for you, because here you have to decided what to do next.
+This is the most important script for you, because here you have to decide what to do next.
 Was the payment successful, or not?
 What to do in each case?
 You have to put here your own logic, for example on success you may want to send a welcome mail, and increment points on a user account.
@@ -74,7 +74,7 @@ if ($status->isFailed() || $status->isCanceled()) {
 
 ## Invalidation
 
-A good practise is to do some actions and redirect a user to another url.
+A good practice is to do some actions and redirect a user to another url.
 This url should not be accessible more than once.
 This way the user is not able to accidentally purchase the same order two times for example.
 
