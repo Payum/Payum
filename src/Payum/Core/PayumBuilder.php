@@ -11,6 +11,7 @@ use Payum\Core\Extension\GenericTokenFactoryExtension;
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Model\ArrayObject;
 use Payum\Core\Model\Payment;
+use Payum\Core\Model\Payout;
 use Payum\Core\Model\Token;
 use Payum\Core\Registry\DynamicRegistry;
 use Payum\Core\Registry\FallbackRegistry;
@@ -122,8 +123,10 @@ class PayumBuilder
     {
         $this
             ->setTokenStorage(new FilesystemStorage(sys_get_temp_dir(), Token::class, 'hash'))
+
             ->addStorage(Payment::class, new FilesystemStorage(sys_get_temp_dir(), Payment::class, 'number'))
             ->addStorage(ArrayObject::class, new FilesystemStorage(sys_get_temp_dir(), ArrayObject::class))
+            ->addStorage(Payout::class, new FilesystemStorage(sys_get_temp_dir(), Payout::class))
         ;
 
         return $this;
@@ -388,6 +391,7 @@ class PayumBuilder
             'notify' => 'notify.php',
             'authorize' => 'authorize.php',
             'refund' => 'refund.php',
+            'payout' => 'payout.php',
         ], $this->genericTokenFactoryPaths));
 
         $httpRequestVerifier = $this->buildHttpRequestVerifier($this->tokenStorage);

@@ -29,7 +29,7 @@ $payum = (new PayumBuilder())
     ->addDefaultStorages()
 
     ->addGateway('aGateway', [
-        'factory' => 'paypal_masspay'
+        'factory' => 'paypal_masspay',
         'username'  => 'change it',
         'password'  => 'change it',
         'signature' => 'change it',
@@ -57,7 +57,7 @@ $gatewayName = 'aGateway';
 $storage = $payum->getStorage(Payout::class);
 
 $payout = $storage->create();
-$payout->setCurrenyCode('USD');
+$payout->setCurrencyCode('USD');
 $payout->setRecipientEmail('recipient@example.com');
 $payout->setTotalAmount(100); // 1$
 $storage->update($payout);
