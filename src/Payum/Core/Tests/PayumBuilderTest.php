@@ -13,6 +13,7 @@ use Payum\Core\GatewayFactory;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\Model\ArrayObject;
 use Payum\Core\Model\Payment;
+use Payum\Core\Model\Payout;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
 use Payum\Core\Registry\RegistryInterface;
@@ -84,9 +85,10 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $payum->getGateways());
 
         $this->assertInternalType('array', $payum->getStorages());
-        $this->assertCount(2, $payum->getStorages());
+        $this->assertCount(3, $payum->getStorages());
         $this->assertArrayHasKey(Payment::class, $payum->getStorages());
         $this->assertArrayHasKey(ArrayObject::class, $payum->getStorages());
+        $this->assertArrayHasKey(Payout::class, $payum->getStorages());
 
 
         $factories = $payum->getGatewayFactories();
@@ -228,6 +230,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
                     'notify' => 'notify.php',
                     'authorize' => 'authorize.php',
                     'refund' => 'refund.php',
+                    'payout' => 'payout.php',
                 ], $paths);
 
                 return $expectedTokenFactory;
@@ -249,6 +252,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
             'notify' => 'notify_custom.php',
             'authorize' => 'authorize_custom.php',
             'refund' => 'refund_custom.php',
+            'payout' => 'payout_custom.php',
         ];
 
         $payum = (new PayumBuilder())
@@ -609,9 +613,6 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddGatewayFactorySpecificConfig()
     {
-        /** @var StorageInterface $expectedStorage */
-        $expectedStorage = $this->getMock(StorageInterface::class);
-
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
             ->addGatewayFactoryConfig('offline', ['foo' => 'fooVal'])
