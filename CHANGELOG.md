@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.3.4 (2016-06-09)
+
+* [paypal][masspay] Fix bugs.
+* Updated guzzle6-adapter dependency & rolled back a workaround
+* Added tests for Httplug client & message/stream factories
+* Fix for Guzzle6 default client creation
+* Exception messages fix (added php-http/curl-client to hints)
+* Default config values priority fix
+* Fixed default client creation for CurlAdapter; added httplug.stream_factory to default options
+* fix doc typos
+
 ## 1.3.3 (2016-05-31)
 
 * [twig] Postpone twig configuration and paths injection.
