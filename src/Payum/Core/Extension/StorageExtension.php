@@ -1,6 +1,9 @@
 <?php
 namespace Payum\Core\Extension;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\ModelAggregateInterface;
 use Payum\Core\Storage\IdentityInterface;
 use Payum\Core\Storage\StorageInterface;
@@ -68,6 +71,19 @@ class StorageExtension implements ExtensionInterface
         }
 
         if (false == $context->getPrevious()) {
+            // a fix for entity manager connection is closed issue.
+            if (
+                $this->storage instanceof DoctrineStorage &&
+                $this->storage->getObjectManager() instanceof EntityManagerInterface
+            ) {
+                /** @var EntityManagerInterface $entityManager */
+                $entityManager = $this->storage->getObjectManager();
+
+                if (false == $entityManager->getConnection()->isConnected()) {
+                    throw new LogicException('The entity manager connection is closed.', null, $context->getException());
+                }
+            }
+
             foreach ($this->scheduledForUpdateModels as $modelHash => $model) {
                 $this->storage->update($model);
                 unset($this->scheduledForUpdateModels[$modelHash]);

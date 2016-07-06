@@ -32,6 +32,14 @@ class DoctrineStorage extends AbstractStorage
     }
 
     /**
+     * @return ObjectManager
+     */
+    public function getObjectManager()
+    {
+        return $this->objectManager;
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function doFind($id)
