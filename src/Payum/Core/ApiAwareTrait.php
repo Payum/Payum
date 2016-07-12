@@ -24,7 +24,7 @@ trait ApiAwareTrait
         if (empty($this->apiClass)) {
             throw new LogicException(sprintf('You must configure apiClass in __constructor method of the class the trait is applied to.'));
         }
-        if (false == class_exists($this->apiClass)) {
+        if (false == (class_exists($this->apiClass) || interface_exists($this->apiClass))) {
             throw new LogicException(sprintf('Api class not found or invalid class. "%s", $this->apiClass', $this->apiClass));
         }
         
