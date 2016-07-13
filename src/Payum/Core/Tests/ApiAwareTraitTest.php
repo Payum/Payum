@@ -45,6 +45,18 @@ class ApiAwareTraitTest extends \PHPUnit_Framework_TestCase
 
         $this->assertAttributeSame($expectedApi, 'api', $object);
     }
+
+    public function testShouldSetApiIfSupportedWithInterface()
+    {
+        $expectedApi = new FooApi;
+
+        $object = new ApiAwareClass;
+        $object->setApiClass(FooInterface::class);
+
+        $object->setApi($expectedApi);
+
+        $this->assertAttributeSame($expectedApi, 'api', $object);
+    }
 }
 
 class ApiAwareClass
@@ -56,4 +68,12 @@ class ApiAwareClass
 
 
     use ApiAwareTrait;
+}
+
+interface FooInterface
+{
+}
+
+class FooApi implements FooInterface
+{
 }
