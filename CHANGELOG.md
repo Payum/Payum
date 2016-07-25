@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.6 (2016-07-25)
+
+* [gateway] Better handing for exception thrown on onPostExecute while processing an exception (EntityManager is closed issue).
+
 ## 1.3.5 (2016-07-13)
 
 * Made ApiAwareTrait interface tolerant
