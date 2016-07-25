@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.5 (2016-07-13)
+
+* Made ApiAwareTrait interface tolerant
+
 ## 1.3.4 (2016-06-09)
 
 * [paypal][masspay] Fix bugs.
