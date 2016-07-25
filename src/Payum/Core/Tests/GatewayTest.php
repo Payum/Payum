@@ -5,10 +5,13 @@ use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionCollection;
+use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Gateway;
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\GatewayInterface;
+use Payum\Core\Reply\Base;
 use Payum\Core\Reply\ReplyInterface;
 
 class GatewayTest extends \PHPUnit_Framework_TestCase
@@ -330,7 +333,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
     {
         $gateway = new Gateway();
 
-        $actionMock = $this->getMock('Payum\Core\Action\GatewayAwareAction');
+        $actionMock = $this->getMock(GatewayAwareAction::class);
         $actionMock
             ->expects($this->at(0))
             ->method('setGateway')
@@ -371,8 +374,6 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true))
         ;
 
-        $testCase = $this;
-
         $extensionMock = $this->createExtensionMock();
 
         $gateway = new Gateway();
@@ -382,13 +383,13 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
         $extensionMock
             ->expects($this->once())
             ->method('onPostExecute')
-            ->with($this->isInstanceOf('Payum\Core\Extension\Context'))
-            ->willReturnCallback(function(Context $context) use ($testCase, $actionMock, $request, $exception, $gateway) {
-                $testCase->assertSame($actionMock, $context->getAction());
-                $testCase->assertSame($request, $context->getRequest());
-                $testCase->assertSame($exception, $context->getException());
-                $testCase->assertSame($gateway, $context->getGateway());
-                $testCase->assertNull($context->getReply());
+            ->with($this->isInstanceOf(Context::class))
+            ->willReturnCallback(function(Context $context) use ($actionMock, $request, $exception, $gateway) {
+                $this->assertSame($actionMock, $context->getAction());
+                $this->assertSame($request, $context->getRequest());
+                $this->assertSame($exception, $context->getException());
+                $this->assertSame($gateway, $context->getGateway());
+                $this->assertNull($context->getReply());
             })
         ;
 
@@ -420,8 +421,6 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true))
         ;
 
-        $testCase = $this;
-
         $extensionMock = $this->createExtensionMock();
 
         $gateway = new Gateway();
@@ -431,9 +430,9 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
         $extensionMock
             ->expects($this->once())
             ->method('onPostExecute')
-            ->with($this->isInstanceOf('Payum\Core\Extension\Context'))
-            ->willReturnCallback(function(Context $context) use ($testCase, $exception, $newException) {
-                $testCase->assertSame($exception, $context->getException());
+            ->with($this->isInstanceOf(Context::class))
+            ->willReturnCallback(function(Context $context) use ($exception, $newException) {
+                $this->assertSame($exception, $context->getException());
 
                 $context->setException($newException);
             })
@@ -463,7 +462,46 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true))
         ;
 
-        $testCase = $this;
+        $extensionMock = $this->createExtensionMock();
+
+        $gateway = new Gateway();
+        $gateway->addAction($actionMock);
+        $gateway->addExtension($extensionMock);
+
+        $extensionMock
+            ->expects($this->once())
+            ->method('onPostExecute')
+            ->with($this->isInstanceOf(Context::class))
+            ->willReturnCallback(function(Context $context) use ($exception) {
+                $this->assertSame($exception, $context->getException());
+
+                $context->setException(null);
+            })
+        ;
+
+        $gateway->execute($request);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReThrowNewExceptionProvidedThrownByExtensionOnPostExecuteIfPreviousOurException()
+    {
+        $exception = new \LogicException('An error occurred');
+
+        $request = new \stdClass();
+
+        $actionMock = $this->createActionMock();
+        $actionMock
+            ->expects($this->once())
+            ->method('execute')
+            ->will($this->throwException($exception))
+        ;
+        $actionMock
+            ->expects($this->any())
+            ->method('supports')
+            ->will($this->returnValue(true))
+        ;
 
         $extensionMock = $this->createExtensionMock();
 
@@ -474,15 +512,73 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
         $extensionMock
             ->expects($this->once())
             ->method('onPostExecute')
-            ->with($this->isInstanceOf('Payum\Core\Extension\Context'))
-            ->willReturnCallback(function(Context $context) use ($testCase, $exception) {
-                $testCase->assertSame($exception, $context->getException());
-
-                $context->setException(null);
+            ->with($this->isInstanceOf(Context::class))
+            ->willReturnCallback(function(Context $context) use ($exception) {
+                throw new \InvalidArgumentException('Another error.', null, $exception);
             })
         ;
 
-        $gateway->execute($request);
+        try {
+            $gateway->execute($request);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+            $this->assertEquals('Another error.', $e->getMessage());
+            $this->assertSame($exception, $e->getPrevious());
+
+            return;
+        }
+
+        $this->fail('The exception is expected.');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldThrowOurExceptionAndIgnoreExceptionThrownFromExtension()
+    {
+        $exception = new \LogicException('An error occurred');
+        $newException = new \InvalidArgumentException('Another error.');
+
+        $request = new \stdClass();
+
+        $actionMock = $this->createActionMock();
+        $actionMock
+            ->expects($this->once())
+            ->method('execute')
+            ->will($this->throwException($exception))
+        ;
+        $actionMock
+            ->expects($this->any())
+            ->method('supports')
+            ->will($this->returnValue(true))
+        ;
+
+        $extensionMock = $this->createExtensionMock();
+
+        $gateway = new Gateway();
+        $gateway->addAction($actionMock);
+        $gateway->addExtension($extensionMock);
+
+        $extensionMock
+            ->expects($this->once())
+            ->method('onPostExecute')
+            ->with($this->isInstanceOf(Context::class))
+            ->willReturnCallback(function(Context $context) use ($exception, $newException) {
+                throw new \InvalidArgumentException('Another error.');
+            })
+        ;
+
+        try {
+            $gateway->execute($request);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+            $this->assertEquals('Another error.', $e->getMessage());
+            $this->assertSame($exception, $e->getPrevious());
+
+            return;
+        }
+
+        $this->fail('The exception is expected.');
     }
 
     /**
@@ -509,17 +605,15 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
         ;
 
-        $testCase = $this;
-
         $gateway = new Gateway();
 
         $extensionMock = $this->createExtensionMock();
         $extensionMock
             ->expects($this->once())
             ->method('onExecute')
-            ->with($this->isInstanceOf('Payum\Core\Extension\Context'))
-            ->willReturnCallback(function(Context $context) use ($testCase, $actionMock, $anotherActionMock) {
-                $testCase->assertSame($actionMock, $context->getAction());
+            ->with($this->isInstanceOf(Context::class))
+            ->willReturnCallback(function(Context $context) use ($actionMock, $anotherActionMock) {
+                $this->assertSame($actionMock, $context->getAction());
 
                 $context->setAction($anotherActionMock);
             })
@@ -549,17 +643,15 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true))
         ;
 
-        $testCase = $this;
-
         $gateway = new Gateway();
 
         $extensionMock = $this->createExtensionMock();
         $extensionMock
             ->expects($this->once())
             ->method('onPreExecute')
-            ->with($this->isInstanceOf('Payum\Core\Extension\Context'))
-            ->willReturnCallback(function(Context $context) use ($testCase, $actionMock) {
-                $testCase->assertNull($context->getAction());
+            ->with($this->isInstanceOf(Context::class))
+            ->willReturnCallback(function(Context $context) use ($actionMock) {
+                $this->assertNull($context->getAction());
 
                 $context->setAction($actionMock);
             })
@@ -590,21 +682,19 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true))
         ;
 
-        $testCase = $this;
-
         $gateway = new Gateway();
 
         $extensionMock = $this->createExtensionMock();
         $extensionMock
             ->expects($this->once())
             ->method('onPostExecute')
-            ->with($this->isInstanceOf('Payum\Core\Extension\Context'))
-            ->willReturnCallback(function(Context $context) use ($testCase, $actionMock, $request, $reply, $gateway) {
-                $testCase->assertSame($actionMock, $context->getAction());
-                $testCase->assertSame($request, $context->getRequest());
-                $testCase->assertSame($gateway, $context->getGateway());
-                $testCase->assertSame($reply, $context->getReply());
-                $testCase->assertNull($context->getException());
+            ->with($this->isInstanceOf(Context::class))
+            ->willReturnCallback(function(Context $context) use ($actionMock, $request, $reply, $gateway) {
+                $this->assertSame($actionMock, $context->getAction());
+                $this->assertSame($request, $context->getRequest());
+                $this->assertSame($gateway, $context->getGateway());
+                $this->assertSame($reply, $context->getReply());
+                $this->assertNull($context->getException());
             })
         ;
 
@@ -637,17 +727,15 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true))
         ;
 
-        $testCase = $this;
-
         $gateway = new Gateway();
 
         $extensionMock = $this->createExtensionMock();
         $extensionMock
             ->expects($this->once())
             ->method('onPostExecute')
-            ->with($this->isInstanceOf('Payum\Core\Extension\Context'))
-            ->willReturnCallback(function(Context $context) use ($testCase, $thrownReplyMock, $expectedReplyMock) {
-                $testCase->assertSame($thrownReplyMock, $context->getReply());
+            ->with($this->isInstanceOf(Context::class))
+            ->willReturnCallback(function(Context $context) use ($thrownReplyMock, $expectedReplyMock) {
+                $this->assertSame($thrownReplyMock, $context->getReply());
 
                 $context->setReply($expectedReplyMock);
             })
@@ -681,17 +769,15 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true))
         ;
 
-        $testCase = $this;
-
         $gateway = new Gateway();
 
         $extensionMock = $this->createExtensionMock();
         $extensionMock
             ->expects($this->once())
             ->method('onPostExecute')
-            ->with($this->isInstanceOf('Payum\Core\Extension\Context'))
-            ->willReturnCallback(function(Context $context) use ($testCase, $thrownReplyMock) {
-                $testCase->assertSame($thrownReplyMock, $context->getReply());
+            ->with($this->isInstanceOf(Context::class))
+            ->willReturnCallback(function(Context $context) use ($thrownReplyMock) {
+                $this->assertSame($thrownReplyMock, $context->getReply());
 
                 $context->setReply(null);
             })
@@ -719,22 +805,20 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true))
         ;
 
-        $testCase = $this;
-
         $gateway = new Gateway();
 
         $extensionMock = $this->createExtensionMock();
         $extensionMock
             ->expects($this->once())
             ->method('onPreExecute')
-            ->with($this->isInstanceOf('Payum\Core\Extension\Context'))
-            ->willReturnCallback(function(Context $context) use ($testCase, $expectedRequest, $actionMock, $gateway) {
-                $testCase->assertSame($expectedRequest, $context->getRequest());
-                $testCase->assertSame($gateway, $context->getGateway());
+            ->with($this->isInstanceOf(Context::class))
+            ->willReturnCallback(function(Context $context) use ($expectedRequest, $actionMock, $gateway) {
+                $this->assertSame($expectedRequest, $context->getRequest());
+                $this->assertSame($gateway, $context->getGateway());
 
-                $testCase->assertNull($context->getAction());
-                $testCase->assertNull($context->getReply());
-                $testCase->assertNull($context->getException());
+                $this->assertNull($context->getAction());
+                $this->assertNull($context->getReply());
+                $this->assertNull($context->getException());
             })
         ;
 
@@ -758,22 +842,20 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true))
         ;
 
-        $testCase = $this;
-
         $gateway = new Gateway();
 
         $extensionMock = $this->createExtensionMock();
         $extensionMock
             ->expects($this->once())
             ->method('onExecute')
-            ->with($this->isInstanceOf('Payum\Core\Extension\Context'))
-            ->willReturnCallback(function(Context $context) use ($testCase, $expectedRequest, $actionMock, $gateway) {
-                $testCase->assertSame($expectedRequest, $context->getRequest());
-                $testCase->assertSame($actionMock, $context->getAction());
-                $testCase->assertSame($gateway, $context->getGateway());
+            ->with($this->isInstanceOf(Context::class))
+            ->willReturnCallback(function(Context $context) use ($expectedRequest, $actionMock, $gateway) {
+                $this->assertSame($expectedRequest, $context->getRequest());
+                $this->assertSame($actionMock, $context->getAction());
+                $this->assertSame($gateway, $context->getGateway());
 
-                $testCase->assertNull($context->getReply());
-                $testCase->assertNull($context->getException());
+                $this->assertNull($context->getReply());
+                $this->assertNull($context->getException());
             })
         ;
 
@@ -809,26 +891,24 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
         ;
         $gateway->addAction($actionMock);
 
-        $testCase = $this;
-
         $extensionMock = $this->createExtensionMock();
         $extensionMock
             ->expects($this->at(0))
             ->method('onPreExecute')
-            ->willReturnCallback(function(Context $context) use ($testCase, $firstRequest) {
-                $testCase->assertSame($firstRequest, $context->getRequest());
+            ->willReturnCallback(function(Context $context) use ($firstRequest) {
+                $this->assertSame($firstRequest, $context->getRequest());
 
-                $testCase->assertEmpty($context->getPrevious());
+                $this->assertEmpty($context->getPrevious());
             })
         ;
         $extensionMock
             ->expects($this->at(1))
             ->method('onPreExecute')
-            ->willReturnCallback(function(Context $context) use ($testCase, $secondRequest) {
-                $testCase->assertSame($secondRequest, $context->getRequest());
+            ->willReturnCallback(function(Context $context) use ($secondRequest) {
+                $this->assertSame($secondRequest, $context->getRequest());
 
-                $testCase->assertCount(1, $context->getPrevious());
-                $this->assertContainsOnly('Payum\Core\Extension\Context', $context->getPrevious());
+                $this->assertCount(1, $context->getPrevious());
+                $this->assertContainsOnly(Context::class, $context->getPrevious());
             })
         ;
 
@@ -838,32 +918,43 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\Reply\ReplyInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|ReplyInterface
      */
     protected function createReplyMock()
     {
-        return $this->getMock('Payum\Core\Reply\Base');
+        return $this->getMock(Base::class);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\Extension\ExtensionInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|ExtensionInterface
      */
     protected function createExtensionMock()
     {
-        return $this->getMock('Payum\Core\Extension\ExtensionInterface');
+        return $this->getMock(ExtensionInterface::class);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\Action\ActionInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|ActionInterface
      */
     protected function createActionMock()
     {
-        return $this->getMock('Payum\Core\Action\ActionInterface');
+        return $this->getMock(ActionInterface::class);
     }
 }
 
-class RequireOtherRequestAction extends GatewayAwareAction
+abstract class GatewayAwareAction implements ActionInterface, GatewayAwareInterface
 {
+    use GatewayAwareTrait;
+}
+
+abstract class ApiAwareAction implements ActionInterface, ApiAwareInterface
+{
+}
+
+class RequireOtherRequestAction implements ActionInterface, GatewayAwareInterface 
+{
+    use GatewayAwareTrait;
+    
     protected $supportedRequest;
 
     protected $requiredRequest;
@@ -926,8 +1017,4 @@ class ThrowReplyAction implements ActionInterface
     {
         return $this->supportedRequest === $request;
     }
-}
-
-abstract class ApiAwareAction implements ActionInterface, ApiAwareInterface
-{
 }

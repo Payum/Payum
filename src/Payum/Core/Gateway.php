@@ -36,9 +36,9 @@ class Gateway implements GatewayInterface
      */
     public function __construct()
     {
-        $this->stack = array();
-        $this->actions = array();
-        $this->apis = array();
+        $this->stack = [];
+        $this->actions = [];
+        $this->apis = [];
 
         $this->extensions = new ExtensionCollection();
     }
@@ -126,16 +126,39 @@ class Gateway implements GatewayInterface
         } catch (\Exception $e) {
             $context->setException($e);
 
-            $this->extensions->onPostExecute($context);
-
-            array_pop($this->stack);
-
-            if ($context->getException()) {
-                throw $context->getException();
-            }
+            $this->onPostExecuteWithException($context);
         }
 
         return;
+    }
+
+    protected function onPostExecuteWithException(Context $context)
+    {
+        array_pop($this->stack);
+
+        $exception = $context->getException();
+
+        try {
+            $this->extensions->onPostExecute($context);
+        } catch (\Exception $e) {
+            // logic is similar to one in Symfony's ExceptionListener::onKernelException
+            $wrapper = $e;
+            while ($prev = $wrapper->getPrevious()) {
+                if ($exception === $wrapper = $prev) {
+                    throw $e;
+                }
+            }
+
+            $prev = new \ReflectionProperty('Exception', 'previous');
+            $prev->setAccessible(true);
+            $prev->setValue($wrapper, $exception);
+
+            throw $e;
+        }
+
+        if ($context->getException()) {
+            throw $context->getException();
+        }
     }
 
     /**
