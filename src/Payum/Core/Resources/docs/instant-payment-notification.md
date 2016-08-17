@@ -36,7 +36,7 @@ class PaymentStatusExtension implements ExtensionInterface
         if (false == $request instanceof Generic) {
             return;
         }
-        if (false == $request instanceof GetStatusInterface) {
+        if ($request instanceof GetStatusInterface) {
             return;
         }
 
