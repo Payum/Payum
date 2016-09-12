@@ -130,7 +130,7 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
         self::assertSame([], $request->request);
         self::assertSame('GET', $request->method);
         self::assertSame('http://request.uri/?foo=fooVal', $request->uri);
-        self::assertSame('Symfony/2.X', $request->userAgent);
+        self::assertStringStartsWith('Symfony', $request->userAgent);
         self::assertSame('127.0.0.1', $request->clientIp);
     }
 
@@ -206,7 +206,7 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
         self::assertSame([], $request->request);
         self::assertSame('GET', $request->method);
         self::assertSame('http://request.uri/?foo=fooVal', $request->uri);
-        self::assertSame('Symfony/2.X', $request->userAgent);
+        self::assertStringStartsWith('Symfony', $request->userAgent);
         self::assertSame('127.0.0.1', $request->clientIp);
     }
 
@@ -231,7 +231,7 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
         self::assertSame(['foo' => 'fooVal'], $request->request);
         self::assertSame('POST', $request->method);
         self::assertSame('http://request.uri/', $request->uri);
-        self::assertSame('Symfony/2.X', $request->userAgent);
+        self::assertStringStartsWith('Symfony', $request->userAgent);
         self::assertSame('127.0.0.1', $request->clientIp);
     }
 }
