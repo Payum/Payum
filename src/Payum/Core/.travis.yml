@@ -39,6 +39,7 @@ install:
     - if [[ "$SYMFONY_VERSION" = "3.0.*" ]]; then composer remove payum/omnipay-bridge omnipay/common omnipay/dummy omnipay/stripe omnipay/paypal --no-interaction; fi;
     - if [[ "$TRAVIS_PHP_VERSION" = 5.* ]]; then composer require "doctrine/mongodb:1.0.*@dev" "doctrine/mongodb-odm:1.0.*@dev" --no-interaction --no-update; fi;
     - composer require symfony/symfony:${SYMFONY_VERSION} --no-update
+    - composer require "php-http/guzzle6-adapter:^1.0" --no-update
     - composer install --prefer-source
 
 script:
