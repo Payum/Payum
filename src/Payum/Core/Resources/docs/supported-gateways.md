@@ -89,6 +89,7 @@
 * [thephpleague/omnipay-targetpay](https://github.com/thephpleague/omnipay-targetpay)
 * [thephpleague/omnipay-worldpay](https://github.com/thephpleague/omnipay-worldpay)
 * [aTastyCookie/yandexmoney_omnipay](https://github.com/aTastyCookie/yandexmoney_omnipay)
+* [antqa/payum-perfectmoney](https://github.com/antqa/payum-perfectmoney)
 
 ## JMS payment plugins
 
