@@ -136,6 +136,11 @@ class Api
     const PAYMENTACTION_ORDER = 'Order';
 
     /**
+     * Void – This is the voiding of an authorized order that has not been captured.
+     */
+    const PAYMENTACTION_VOID = 'Void';
+
+    /**
      * Payment has not been authorized by the user.
      */
     const L_ERRORCODE_PAYMENT_NOT_AUTHORIZED = 10485;
@@ -521,6 +526,23 @@ class Api
     public function doCapture(array $fields)
     {
         $fields['METHOD']  = 'DoCapture';
+
+        $this->addVersionField($fields);
+        $this->addAuthorizeFields($fields);
+
+        return $this->doRequest($fields);
+    }
+
+    /**
+     * Require: AUTHORIZATIONID
+     *
+     * @param array $fields
+     *
+     * @return array
+     */
+    public function doVoid(array $fields)
+    {
+        $fields['METHOD']  = 'DoVoid';
 
         $this->addVersionField($fields);
         $this->addAuthorizeFields($fields);
