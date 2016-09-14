@@ -1,6 +1,9 @@
 <?php
 namespace Payum\Core\Security;
 
+/**
+ * @deprecated since 1.3.7 and will be removed in 2.0
+ */
 interface GenericTokenFactoryInterface extends TokenFactoryInterface
 {
     /**

@@ -419,6 +419,131 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The path "cancel" is not found. Possible paths are foo, bar
+     */
+    public function throwIfCancelPathNotConfigured()
+    {
+        $gatewayName = 'theGatewayName';
+        $model = new \stdClass();
+        $afterPath = 'theAfterPath';
+        $afterParameters = array('after' => 'val');
+
+        $tokenFactoryMock = $this->createTokenFactoryMock();
+        $tokenFactoryMock
+            ->expects($this->never())
+            ->method('createToken')
+        ;
+
+
+        $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
+
+        $factory->createCancelToken(
+            $gatewayName,
+            $model,
+            $afterPath,
+            $afterParameters
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowCreateCancelToken()
+    {
+        $gatewayName = 'theGatewayName';
+        $model = new \stdClass();
+        $cancelPath = 'theCancelPath';
+        $afterPath = 'theAfterPath';
+        $afterUrl = 'theAfterUrl';
+        $afterParameters = array('after' => 'val');
+
+        $afterToken = new Token();
+        $afterToken->setTargetUrl($afterUrl);
+
+        $cancelToken = new Token();
+
+        $tokenFactoryMock = $this->createTokenFactoryMock();
+        $tokenFactoryMock
+            ->expects($this->at(0))
+            ->method('createToken')
+            ->with(
+                $gatewayName,
+                $this->identicalTo($model),
+                $afterPath,
+                $afterParameters,
+                null,
+                []
+            )
+            ->willReturn($afterToken)
+        ;
+        $tokenFactoryMock
+            ->expects($this->at(1))
+            ->method('createToken')
+            ->with(
+                $gatewayName,
+                $this->identicalTo($model),
+                $cancelPath,
+                [],
+                $afterUrl,
+                []
+            )
+            ->willReturn($cancelToken)
+        ;
+
+
+        $factory = new GenericTokenFactory($tokenFactoryMock, array(
+            'cancel' => $cancelPath
+        ));
+
+        $actualToken = $factory->createCancelToken(
+            $gatewayName,
+            $model,
+            $afterPath,
+            $afterParameters
+        );
+
+        $this->assertSame($cancelToken, $actualToken);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAllowCreateCancelTokenWithoutAfterPath()
+    {
+        $gatewayName = 'theGatewayName';
+        $model = new \stdClass();
+        $cancelPath = 'theCancelPath';
+
+        $cancelToken = new Token();
+
+        $tokenFactoryMock = $this->createTokenFactoryMock();
+        $tokenFactoryMock
+            ->expects($this->once())
+            ->method('createToken')
+            ->with(
+                $gatewayName,
+                $this->identicalTo($model),
+                $cancelPath,
+                [],
+                null,
+                []
+            )
+            ->willReturn($cancelToken)
+        ;
+
+        $factory = new GenericTokenFactory($tokenFactoryMock, array(
+            'cancel' => $cancelPath
+        ));
+
+        $actualToken = $factory->createCancelToken($gatewayName, $model);
+
+        $this->assertSame($cancelToken, $actualToken);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage The path "notify" is not found. Possible paths are foo, bar
      */
     public function throwIfNotifyPathNotConfigured()
