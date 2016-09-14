@@ -534,7 +534,7 @@ class Api
     }
 
     /**
-     * Require: AUTHORIZATIONID
+     * Require: TRANSACTIONID
      *
      * @param array $fields
      *
@@ -543,6 +543,9 @@ class Api
     public function doVoid(array $fields)
     {
         $fields['METHOD']  = 'DoVoid';
+        if (empty($fields['AUTHORIZATIONID'])) {
+            $fields['AUTHORIZATIONID'] = $fields['TRANSACTIONID'];
+        }
 
         $this->addVersionField($fields);
         $this->addAuthorizeFields($fields);

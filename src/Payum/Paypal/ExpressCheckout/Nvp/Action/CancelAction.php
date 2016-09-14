@@ -3,11 +3,13 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\Cancel;
+use Payum\Core\Request\Sync;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoVoid;
 
-class CancelAction extends PurchaseAction
+class CancelAction extends GatewayAwareAction
 {
     /**
      * {@inheritDoc}
@@ -27,7 +29,7 @@ class CancelAction extends PurchaseAction
             }
         }
 
-        parent::execute($request);
+        $this->gateway->execute(new Sync($request->getModel()));
     }
 
     /**

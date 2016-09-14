@@ -15,24 +15,4 @@ class DoVoidTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithModelAndPaymentRequestNAsArguments()
-    {
-        new DoVoid(new \stdClass(), $paymentRequestN = 5);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetPaymentRequestNSetInConstructor()
-    {
-        $expectedPaymentRequestN = 7;
-
-        $request = new DoVoid(new \stdClass(), $expectedPaymentRequestN);
-
-        $this->assertSame($expectedPaymentRequestN, $request->getPaymentRequestN());
-    }
 }
