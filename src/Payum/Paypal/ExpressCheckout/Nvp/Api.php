@@ -136,11 +136,6 @@ class Api
     const PAYMENTACTION_ORDER = 'Order';
 
     /**
-     * Void – This is the voiding of an authorized order that has not been captured.
-     */
-    const PAYMENTACTION_VOID = 'Void';
-
-    /**
      * Payment has not been authorized by the user.
      */
     const L_ERRORCODE_PAYMENT_NOT_AUTHORIZED = 10485;

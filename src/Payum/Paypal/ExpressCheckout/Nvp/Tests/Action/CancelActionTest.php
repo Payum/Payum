@@ -1,6 +1,9 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Cancel;
 use Payum\Core\Request\Sync;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CancelAction;
@@ -12,11 +15,21 @@ class CancelActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfGatewayAwareAction()
+    public function shouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\CancelAction');
+        $rc = new \ReflectionClass(CancelAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
+        $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldImplementGatewayAwareInterface()
+    {
+        $rc = new \ReflectionClass(CancelAction::class);
+
+        $this->assertTrue($rc->isSubclassOf(GatewayAwareInterface::class));
     }
 
     /**
@@ -30,43 +43,11 @@ class CancelActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSetZeroGatewayActionAsVoid()
-    {
-        $action = new CancelAction();
-        $action->setGateway($this->createGatewayMock());
-
-        $action->execute($request = new Cancel([]));
-
-        $model = $request->getModel();
-        $this->assertArrayHasKey('PAYMENTREQUEST_0_PAYMENTACTION', $model);
-        $this->assertEquals(Api::PAYMENTACTION_VOID, $model['PAYMENTREQUEST_0_PAYMENTACTION']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldForcePaymentActionVoid()
-    {
-        $action = new CancelAction();
-        $action->setGateway($this->createGatewayMock());
-
-        $action->execute($request = new Cancel([
-            'PAYMENTREQUEST_0_PAYMENTACTION' => 'FooBarBaz',
-        ]));
-
-        $model = $request->getModel();
-        $this->assertArrayHasKey('PAYMENTREQUEST_0_PAYMENTACTION', $model);
-        $this->assertEquals(Api::PAYMENTACTION_VOID, $model['PAYMENTREQUEST_0_PAYMENTACTION']);
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportEmptyModel()
     {
         $action = new CancelAction();
 
-        $request = new Cancel(array());
+        $request = new Cancel([]);
 
         $this->assertTrue($action->supports($request));
     }
@@ -140,19 +121,18 @@ class CancelActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotExecuteDoVoidIfPaymentInfoPendingReasonNotSet()
+    public function shouldNotExecuteDoVoidIfTransactionIdNotSet()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->once())
+            ->expects($this->never())
             ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
         ;
 
         $action = new CancelAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Cancel(array());
+        $request = new Cancel([]);
 
         $action->execute($request);
     }
@@ -160,7 +140,7 @@ class CancelActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldExecuteDoVoidIfPaymentInfoPendingReasonSet()
+    public function shouldExecuteDoVoidIfTransactionIdSet()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -176,138 +156,10 @@ class CancelActionTest extends \PHPUnit_Framework_TestCase
         $action->setGateway($gatewayMock);
 
         $request = new Cancel(array(
-            'PAYMENTINFO_0_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
+            'TRANSACTIONID' => 'theId',
         ));
 
         $action->execute($request);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldExecuteDoVoidForEachPaymentInfoPendingReasonSetIndexedToNine()
-    {
-        $gatewayMock = $this->createGatewayMock();
-        $gatewayMock
-            ->expects($this->exactly(4))
-            ->method('execute')
-            ->withConsecutive(
-                array($this->isInstanceOf(DoVoid::class)),
-                array($this->isInstanceOf(DoVoid::class)),
-                array($this->isInstanceOf(DoVoid::class)),
-                array($this->isInstanceOf(Sync::class))
-            )
-        ;
-
-        $action = new CancelAction();
-        $action->setGateway($gatewayMock);
-
-        $request = new Cancel(array(
-            'PAYMENTINFO_0_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
-            'PAYMENTINFO_1_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
-            'PAYMENTINFO_9_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
-        ));
-
-        $action->execute($request);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotExecuteDoVoidForPaymentInfoPendingReasonIndexedOverNine()
-    {
-        $gatewayMock = $this->createGatewayMock();
-        $gatewayMock
-            ->expects($this->once())
-            ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
-        ;
-
-        $action = new CancelAction();
-        $action->setGateway($gatewayMock);
-
-        $request = new Cancel(array(
-            'PAYMENTINFO_10_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
-        ));
-
-        $action->execute($request);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotSetAuthorizationIdFromTransactionIdIfBothNotSet()
-    {
-        $gatewayMock = $this->createGatewayMock();
-        $gatewayMock
-            ->expects($this->at(0))
-            ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
-        ;
-
-        $action = new CancelAction();
-        $action->setGateway($gatewayMock);
-
-        $request = new Cancel(array());
-
-        $action->execute($request);
-
-        $details = $request->getModel();
-
-        $this->assertFalse(isset($details['AUTHORIZATIONID']));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSetAuthorizationIdFromTransactionIdIfNotSet()
-    {
-        $gatewayMock = $this->createGatewayMock();
-        $gatewayMock
-            ->expects($this->at(0))
-            ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
-        ;
-
-        $action = new CancelAction();
-        $action->setGateway($gatewayMock);
-
-        $request = new Cancel(array(
-            'TRANSACTIONID' => 'theOriginalTransactionId',
-        ));
-
-        $action->execute($request);
-
-        $details = $request->getModel();
-
-        $this->assertEquals($details['AUTHORIZATIONID'], 'theOriginalTransactionId');
-    }
-
-    /**
-     * @test
-     */
-    public function shouldNotOverrideAuthorizationIdWithTransactionIdIfSet()
-    {
-        $gatewayMock = $this->createGatewayMock();
-        $gatewayMock
-            ->expects($this->at(0))
-            ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
-        ;
-
-        $action = new CancelAction();
-        $action->setGateway($gatewayMock);
-
-        $request = new Cancel(array(
-            'TRANSACTIONID' => 'theReauthorizedTransactionId',
-            'AUTHORIZATIONID' => 'theOriginalTransactionId',
-        ));
-
-        $action->execute($request);
-
-        $details = $request->getModel();
-
-        $this->assertEquals($details['AUTHORIZATIONID'], 'theOriginalTransactionId');
     }
 
     /**
@@ -315,6 +167,6 @@ class CancelActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\GatewayInterface');
+        return $this->getMock(GatewayInterface::class);
     }
 }

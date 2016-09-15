@@ -24,10 +24,11 @@ class DoVoidAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
 
     /**
      * {@inheritdoc}
+     *
+     * @param $request DoVoid
      */
     public function execute($request)
     {
-        /** @var $request DoCapture */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
