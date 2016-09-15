@@ -9,11 +9,51 @@ class DoVoidActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function shouldImplementActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldImplementApiAwareInterface()
+    {
+        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction');
+
+        $this->assertTrue($rc->implementsInterface('Payum\Core\ApiAwareInterface'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldImplementGatewayAwareInterface()
+    {
+        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction');
+
+        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayAwareInterface'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldUseApiAwareTrait()
+    {
+        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction');
+
+        $this->assertContains('Payum\Core\ApiAwareTrait', $rc->getTraitNames());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldUseGatewayAwareTrait()
+    {
+        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction');
+
+        $this->assertContains('Payum\Core\GatewayAwareTrait', $rc->getTraitNames());
     }
 
     /**
@@ -62,9 +102,9 @@ class DoVoidActionTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage TRANSACTIONID must be set. Has user not authorized this transaction?
+     * @expectedExceptionMessage AUTHORIZATIONID must be set. Has user not authorized this transaction?
      */
-    public function throwIfTransactionIdNotSetInModel()
+    public function throwIfAuthorizationIdNotSetInModel()
     {
         $action = new DoVoidAction();
 
@@ -85,8 +125,8 @@ class DoVoidActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('DoVoid')
             ->will($this->returnCallback(function (array $fields) use ($testCase) {
-                $testCase->assertArrayHasKey('TRANSACTIONID', $fields);
-                $testCase->assertEquals('theTransactionId', $fields['TRANSACTIONID']);
+                $testCase->assertArrayHasKey('AUTHORIZATIONID', $fields);
+                $testCase->assertEquals('theOriginalTransactionId', $fields['AUTHORIZATIONID']);
 
                 return array();
             }))
@@ -96,7 +136,7 @@ class DoVoidActionTest extends \PHPUnit_Framework_TestCase
         $action->setApi($apiMock);
 
         $request = new DoVoid(array(
-            'TRANSACTIONID' => 'theTransactionId',
+            'AUTHORIZATIONID' => 'theOriginalTransactionId',
         ));
 
         $action->execute($request);
@@ -123,7 +163,7 @@ class DoVoidActionTest extends \PHPUnit_Framework_TestCase
         $action->setApi($apiMock);
 
         $request = new DoVoid(array(
-            'TRANSACTIONID' => 'theTransactionId',
+            'AUTHORIZATIONID' => 'theTransactionId',
         ));
 
         $action->execute($request);
