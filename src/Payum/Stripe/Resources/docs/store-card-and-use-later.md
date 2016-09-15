@@ -30,11 +30,11 @@ once the first payment is done you can get the customer id and store it somewher
 use Payum\Core\Request\GetCreditCardToken;
 
 /** @var \Payum\Core\Model\PaymentInterface $payment */
-
+/** @var \Payum\Core\GatewayInterface $gateway */
 
 $gateway->execute($getToken = new GetCreditCardToken($payment));
 
-$token = $getToken->getToken(); // if not null you are done. store it somewhere
+$token = $getToken->token; // if not null you are done. store it somewhere
 ```
 
 ## Use stored card
