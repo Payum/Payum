@@ -41,7 +41,7 @@ class PaymentDetailsStatusAction implements ActionInterface
 
             return;
         }
-		
+
         if (
             false == $model['PAYERID'] &&
             Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $model['CHECKOUTSTATUS']
@@ -90,6 +90,7 @@ class PaymentDetailsStatusAction implements ActionInterface
         ) {
             $completedCounter = 0;
             $authorizedCounter = 0;
+            $voidedCounter = 0;
             $allCounter = 0;
             foreach (range(0, 9) as $index) {
                 if (null === $paymentStatus = $model['PAYMENTREQUEST_'.$index.'_PAYMENTSTATUS']) {
@@ -122,6 +123,15 @@ class PaymentDetailsStatusAction implements ActionInterface
                     }
                 }
 
+                $canceledStatuses = array(
+                    Api::PAYMENTSTATUS_VOIDED,
+                );
+                if (in_array($paymentStatus, $canceledStatuses)) {
+                    if (Api::PENDINGREASON_AUTHORIZATION == $model['PAYMENTINFO_'.$index.'_PENDINGREASON']) {
+                        $voidedCounter++;
+                    }
+                }
+
                 $failedStatuses = array(
                     Api::PAYMENTSTATUS_FAILED,
                     Api::PAYMENTSTATUS_EXPIRED,
@@ -151,6 +161,12 @@ class PaymentDetailsStatusAction implements ActionInterface
 
             if ($authorizedCounter === $allCounter) {
                 $request->markAuthorized();
+
+                return;
+            }
+
+            if ($voidedCounter === $allCounter) {
+                $request->markCanceled();
 
                 return;
             }

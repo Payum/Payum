@@ -529,6 +529,23 @@ class Api
     }
 
     /**
+     * Require: AUTHORIZATIONID
+     *
+     * @param array $fields
+     *
+     * @return array
+     */
+    public function doVoid(array $fields)
+    {
+        $fields['METHOD']  = 'DoVoid';
+
+        $this->addVersionField($fields);
+        $this->addAuthorizeFields($fields);
+
+        return $this->doRequest($fields);
+    }
+
+    /**
      * @param array $fields
      *
      * @throws HttpException
