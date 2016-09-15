@@ -8,9 +8,9 @@ use Payum\Stripe\Constants;
 
 class StatusActionTest extends GenericActionTest
 {
-    protected $requestClass = 'Payum\Core\Request\GetHumanStatus';
+    protected $requestClass = GetHumanStatus::class;
 
-    protected $actionClass = 'Payum\Stripe\Action\StatusAction';
+    protected $actionClass = StatusAction::class;
 
     /**
      * @test
@@ -19,11 +19,31 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $model = array();
+        $model = [];
 
         $action->execute($status = new GetHumanStatus($model));
 
         $this->assertTrue($status->isNew());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkFailedIfDetailsHasErrorSet()
+    {
+        $action = new StatusAction();
+
+        $model = [
+            'error' => [
+                'type' => 'invalid_request_error',
+                'message' => 'Amount must be at least 50 cents',
+                'param' => 'amount',
+            ],
+        ];
+
+        $action->execute($status = new GetHumanStatus($model));
+
+        $this->assertTrue($status->isFailed());
     }
 
     /**
