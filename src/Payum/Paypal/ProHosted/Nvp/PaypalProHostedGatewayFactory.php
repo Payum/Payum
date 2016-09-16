@@ -45,7 +45,6 @@ class PaypalProHostedGatewayFactory extends GatewayFactory
                 'username',
                 'password',
                 'signature',
-                'business',
             ];
 
             $config['payum.api'] = function (ArrayObject $config) {
@@ -59,7 +58,7 @@ class PaypalProHostedGatewayFactory extends GatewayFactory
                     'sandbox'   => $config['sandbox'],
                 );
 
-                return new Api((array) $paypalConfig, $config['payum.http_client'], $config['httplug.message_factory']);
+                return new Api($paypalConfig, $config['payum.http_client'], $config['httplug.message_factory']);
             };
         }
     }

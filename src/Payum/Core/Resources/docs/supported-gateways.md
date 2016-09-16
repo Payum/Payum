@@ -4,6 +4,7 @@
 
 * [Paypal Express Checkout](https://github.com/Payum/PaypalExpressCheckoutNvp/blob/master/Resources/docs/index.md)
 * [Paypal Pro Checkout](https://github.com/Payum/PaypalProCheckoutNvp/blob/master/Resources/docs/index.md)
+* [Paypal Pro Hosted](https://github.com/Payum/PaypalProHostedNvp/blob/master/Resources/docs/index.md)
 * [Paypal Masspay](https://github.com/Payum/PaypalMasspayNvp/blob/master/Resources/docs/index.md)
 * [Paypal Rest](https://github.com/Payum/PaypalRest/blob/master/Resources/docs/index.md)
 * [Stripe.js](https://github.com/Payum/Stripe/blob/master/Resources/docs/get-it-started.md)

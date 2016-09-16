@@ -3,22 +3,20 @@ namespace Payum\Paypal\ProHosted\Nvp\Action;
 
 use League\Uri\Schemes\Http as HttpUri;
 use League\Uri\Modifiers\MergeQuery;
-use Payum\Core\Action\GatewayAwareAction;
-use Payum\Core\ApiAwareInterface;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
-use Payum\Core\Reply\HttpRedirect;
-use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Sync;
 use Payum\Paypal\ProHosted\Nvp\Request\Api\CreateButtonPayment;
 
-class CaptureAction extends GatewayAwareAction
+class CaptureAction implements ActionInterface, GatewayAwareInterface
 {
+    use GatewayAwareTrait;
+
     /**
      * {@inheritDoc}
      *

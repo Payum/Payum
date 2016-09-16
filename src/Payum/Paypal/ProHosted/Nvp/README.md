@@ -1,13 +1,17 @@
 # Payum Paypal Payments Pro Hosted Solution
-https://developer.paypal.com/webapps/developer/docs/classic/products/website-payments-pro-hosted-solution
+[![Build Status](https://travis-ci.org/Payum/PaypalProHostedNvp.png?branch=master)](https://travis-ci.org/Payum/PaypalProHostedNvp)
+[![Total Downloads](https://poser.pugx.org/payum/paypal-pro-hosted-nvp/d/total.png)](https://packagist.org/packages/payum/paypal-pro-hosted-nvp)
+[![Latest Stable Version](https://poser.pugx.org/payum/paypal-pro-hosted-nvp/version.png)](https://packagist.org/packages/payum/paypal-pro-hosted-nvp)
 
-Development and Integration
-https://www.paypalobjects.com/webstatic/en_GB/developer/docs/pdf/hostedsolution_uk.pdf
-https://www.paypalobjects.com/webstatic/en_FR/developer/docs/pdf/integralevolution.pdf
-https://developer.paypal.com/docs/classic/button-manager/integration-guide/#idb36a529e-76cb-4f00-a00a-f696c96fb404
+The Payum extension. It provides [Paypal ProHosted](https://developer.paypal.com/webapps/developer/docs/classic/products/website-payments-pro-hosted-solution) payment integration.
 
-The Payum extension. It provides [Paypal ProHosted] payment integration.
+## Resources
+
+* [Documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/index.md)
+* [Questions](http://stackoverflow.com/questions/tagged/payum)
+* [Issue Tracker](https://github.com/Payum/Payum/issues)
+* [Twitter](https://twitter.com/payumphp)
 
 ## License
 
-Payum Paypal Payments Pro Hosted Solution is released under the [MIT License](LICENSE).
+PaypalProHostedNvp is released under the [MIT License](LICENSE).

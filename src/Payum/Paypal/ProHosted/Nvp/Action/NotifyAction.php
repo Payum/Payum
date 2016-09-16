@@ -1,15 +1,17 @@
 <?php
 namespace Payum\Paypal\ProHosted\Nvp\Action;
 
-use Http\Message\MessageFactory;
-use Payum\Core\Action\GatewayAwareAction;
-use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Notify;
 use Payum\Core\Request\Sync;
 use Payum\Core\Exception\RequestNotSupportedException;
 
-class NotifyAction extends GatewayAwareAction
+class NotifyAction implements ActionInterface, GatewayAwareInterface
 {
+    use GatewayAwareTrait;
+
     /**
      * {@inheritDoc}
      */

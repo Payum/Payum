@@ -6,10 +6,11 @@ use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\RuntimeException;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\HttpClientInterface;
 
 /**
+ * @link https://developer.paypal.com/webapps/developer/docs/classic/products/website-payments-pro-hosted-solution
+ * @link https://www.paypalobjects.com/webstatic/en_GB/developer/docs/pdf/hostedsolution_uk.pdf
  * @link https://developer.paypal.com/docs/classic/api/button-manager/BMCreateButton_API_Operation_NVP/
  * L_ERRORCODE @link https://developer.paypal.com/webapps/developer/docs/classic/api/errorcodes/#id09C3GA00GR1
  */
@@ -111,7 +112,6 @@ class Api
         'signature' => null,
         'business'  => null,
         'return'    => null,
-        'subtotal'  => null,
         'sandbox'   => null,
         'cmd'       => Api::FORM_CMD,
     );
@@ -131,7 +131,6 @@ class Api
             'username',
             'password',
             'signature',
-            'business',
         ]);
 
         if (false == is_bool($options['sandbox'])) {
@@ -255,8 +254,11 @@ class Api
         $fields['USER']      = $this->options['username'];
         $fields['PWD']       = $this->options['password'];
         $fields['SIGNATURE'] = $this->options['signature'];
-        $fields['BUSINESS']  = $this->options['business'];
-        $fields['SUBJECT']   = $this->options['business'];
+
+        if ($this->options['business']) {
+            $fields['BUSINESS'] = $this->options['business'];
+            $fields['SUBJECT'] = $this->options['business'];
+        }
     }
 
     /**
