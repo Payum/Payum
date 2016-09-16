@@ -21,12 +21,15 @@ trait ApiAwareTrait
      */
     public function setApi($api)
     {
-        if (false == class_exists($this->apiClass)) {
-            throw new LogicException(sprintf('Invalid api class given: "%s". You must configure it in __constructor method of the class the trait applied to.', $this->apiClass));
+        if (empty($this->apiClass)) {
+            throw new LogicException(sprintf('You must configure apiClass in __constructor method of the class the trait is applied to.'));
+        }
+        if (false == (class_exists($this->apiClass) || interface_exists($this->apiClass))) {
+            throw new LogicException(sprintf('Api class not found or invalid class. "%s", $this->apiClass', $this->apiClass));
         }
         
         if (false == $api instanceof $this->apiClass) {
-            throw new UnsupportedApiException(sprintf('Not supported api given. It must be instance of %s', $this->apiClass));
+            throw new UnsupportedApiException(sprintf('Not supported api given. It must be an instance of %s', $this->apiClass));
         }
 
         $this->api = $api;

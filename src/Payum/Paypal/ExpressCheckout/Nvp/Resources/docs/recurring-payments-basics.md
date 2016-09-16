@@ -70,7 +70,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Api;
 $storage = $payum->getStorage($agreementClass);
 
 $agreement = $storage->create();
-$agreement['PAYMENTREQUEST_0_AMT'] = 0;
+$agreement['PAYMENTREQUEST_0_AMT'] = 0; // For an initial amount to be charged please add it here, eg $10 setup fee
 $agreement['L_BILLINGTYPE0'] = Api::BILLINGTYPE_RECURRING_PAYMENTS;
 $agreement['L_BILLINGAGREEMENTDESCRIPTION0'] = "Insert some description here";
 $agreement['NOSHIPPING'] = 1;
@@ -91,8 +91,8 @@ This is because we have one more step to do before we can go to `done.php`.
 
 ## Create recurring payment
 
-After capture did its job and the agreement has been created we are redirected back to the `create_recurring_payment.php` script.
-Here we will check the status of the agreement and if it is good: create a recurring payment.
+After capture has done it's job and the agreement has been created we are redirected back to the `create_recurring_payment.php` script.
+Here we will check the status of the agreement and if it has been accepted: create a recurring payment.
 After everything is complete we should redirect the user to a safe page - the page that shows payment details could be a good starting place.
 
 ```php
@@ -124,7 +124,7 @@ $storage = $payum->getStorage($recurringPaymentClass);
 
 $recurringPayment = $storage->create();
 $recurringPayment['TOKEN'] = $agreement['TOKEN'];
-$recurringPayment['DESC'] = 'Subscribe to weather forecast for a week. It is 0.05$ per day.';
+$recurringPayment['DESC'] = 'Subscribe to weather forecast for a week. It is 0.05$ per day.'; // Desc must match agreement 'L_BILLINGAGREEMENTDESCRIPTION' in prepare.php
 $recurringPayment['EMAIL'] = $agreement['EMAIL'];
 $recurringPayment['AMT'] = 0.05;
 $recurringPayment['CURRENCYCODE'] = 'USD';
@@ -135,9 +135,9 @@ $recurringPayment['BILLINGPERIOD'] = Api::BILLINGPERIOD_DAY;
 $gateway->execute(new CreateRecurringPaymentProfile($recurringPayment));
 $gateway->execute(new Sync($recurringPayment));
 
-$doneToken = $payum->geTokenFactory()->createToken('paypal', $recurringPayment, 'done.php');
+$doneToken = $payum->getTokenFactory()->createToken('paypal', $recurringPayment, 'done.php');
 
-header("Location: ".$doneToken->getTargetUrl());
+header("Location: " . $doneToken->getTargetUrl());
 ```
 
 Back to [index](index.md).

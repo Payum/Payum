@@ -1,20 +1,17 @@
 <?php
-namespace Payum\Skeleton\Action;
+namespace Payum\Stripe\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\GatewayAwareTrait;
-use Payum\Core\Request\Authorize;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Request\GetCreditCardToken;
 
-class AuthorizeAction implements ActionInterface
+class GetCreditCardTokenAction implements ActionInterface
 {
-    use GatewayAwareTrait;
-
     /**
      * {@inheritDoc}
      *
-     * @param Authorize $request
+     * @param GetCreditCardToken $request
      */
     public function execute($request)
     {
@@ -22,16 +19,15 @@ class AuthorizeAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        throw new \LogicException('Not implemented');
+        $request->token = $model['customer'];
     }
-
     /**
      * {@inheritDoc}
      */
     public function supports($request)
     {
         return
-            $request instanceof Authorize &&
+            $request instanceof GetCreditCardToken &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

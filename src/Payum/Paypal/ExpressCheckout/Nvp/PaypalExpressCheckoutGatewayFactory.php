@@ -17,8 +17,10 @@ use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\ManageRecurringPaymentsProfileSt
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateBillingAgreementAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoReferenceTransactionAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\UpdateRecurringPaymentProfileAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\AuthorizeAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\CancelAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\ConvertPaymentAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\NotifyAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction;
@@ -40,6 +42,7 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
             'payum.template.confirm_order' => '@PayumPaypalExpressCheckout/confirmOrder.html.twig',
 
             'payum.action.capture' => new CaptureAction(),
+            'payum.action.cancel' => new CancelAction(),
             'payum.action.authorize' => new AuthorizeAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),
             'payum.action.notify' => new NotifyAction(),
@@ -61,6 +64,7 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
             'payum.action.api.do_reference_transaction' => new DoReferenceTransactionAction(),
             'payum.action.api.do_capture' => new DoCaptureAction(),
             'payum.action.api.authorize_token' => new AuthorizeTokenAction(),
+            'payum.action.api.do_void' => new DoVoidAction(),
             'payum.action.api.confirm_order' => function (ArrayObject $config) {
                 return new ConfirmOrderAction($config['payum.template.confirm_order']);
             },

@@ -88,6 +88,21 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
     /**
      * {@inheritDoc}
      */
+    public function createCancelToken($gatewayName, $model, $afterPath = null, array $afterParameters = [])
+    {
+        $cancelPath = $this->getPath('cancel');
+
+        $afterUrl = null;
+        if ($afterPath) {
+            $afterUrl = $this->createToken($gatewayName, $model, $afterPath, $afterParameters)->getTargetUrl();
+        }
+
+        return $this->createToken($gatewayName, $model, $cancelPath, [], $afterUrl);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function createPayoutToken($gatewayName, $model, $afterPath, array $afterParameters = [])
     {
         $capturePath = $this->getPath('payout');

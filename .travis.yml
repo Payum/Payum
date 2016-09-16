@@ -22,11 +22,11 @@ matrix:
     - php: 7.0
       env: SYMFONY_VERSION=2.8.*
     - php: 5.5
-      env: SYMFONY_VERSION=3.0.*
+      env: SYMFONY_VERSION=3.0.* SYMFONY_DEPRECATIONS_HELPER=weak
     - php: 5.6
-      env: SYMFONY_VERSION=3.0.*
+      env: SYMFONY_VERSION=3.0.* SYMFONY_DEPRECATIONS_HELPER=weak
     - php: 7.0
-      env: SYMFONY_VERSION=3.0.*
+      env: SYMFONY_VERSION=3.0.* SYMFONY_DEPRECATIONS_HELPER=weak
     - php: hhvm
       env: SYMFONY_VERSION=2.8.*
   allow_failures:

@@ -28,7 +28,7 @@ use Payum\Core\Payum;
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
     ->addGateway('gatewayName', [
-        'factory' => 'stripe_checkout'
+        'factory' => 'stripe_checkout',
         'publishable_key' => 'EDIT IT',
         'secret_key' => 'EDIT IT'
     ])

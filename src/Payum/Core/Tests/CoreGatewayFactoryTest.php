@@ -1,6 +1,9 @@
 <?php
 namespace Payum\Core\Tests;
 
+use Http\Client\HttpClient;
+use Http\Message\MessageFactory;
+use Http\Message\StreamFactory;
 use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetTokenAction;
@@ -67,6 +70,52 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\Closure::class, $config['payum.api.http_client']);
 
         $this->assertSame($config['payum.http_client'], $config['payum.api.http_client'](new ArrayObject($config)));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCreateDefaultHttplugMessageFactory()
+    {
+        $factory = new CoreGatewayFactory();
+
+        $config = $factory->createConfig([]);
+        $this->assertArrayHasKey('httplug.message_factory', $config);
+        $this->assertInstanceOf(\Closure::class, $config['httplug.message_factory']);
+        $config['httplug.message_factory'] = call_user_func($config['httplug.message_factory'], ArrayObject::ensureArrayObject($config));
+        $this->assertInstanceOf(MessageFactory::class, $config['httplug.message_factory']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCreateDefaultHttplugStreamFactory()
+    {
+        $factory = new CoreGatewayFactory();
+
+        $config = $factory->createConfig([]);
+        $this->assertArrayHasKey('httplug.stream_factory', $config);
+        $this->assertInstanceOf(\Closure::class, $config['httplug.stream_factory']);
+        $config['httplug.stream_factory'] = call_user_func($config['httplug.stream_factory'], ArrayObject::ensureArrayObject($config));
+        $this->assertInstanceOf(StreamFactory::class, $config['httplug.stream_factory']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCreateDefaultHttplugClient()
+    {
+        $factory = new CoreGatewayFactory();
+
+        $config = $factory->createConfig([]);
+        $this->assertArrayHasKey('httplug.client', $config);
+        $this->assertInstanceOf(\Closure::class, $config['httplug.client']);
+
+        $config['httplug.message_factory'] = call_user_func($config['httplug.message_factory'], ArrayObject::ensureArrayObject($config));
+        $config['httplug.stream_factory'] = call_user_func($config['httplug.stream_factory'], ArrayObject::ensureArrayObject($config));
+        $config['httplug.client'] = call_user_func($config['httplug.client'], ArrayObject::ensureArrayObject($config));
+
+        $this->assertInstanceOf(HttpClient::class, $config['httplug.client']);
     }
 
     /**
@@ -193,7 +242,7 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $config);
         $this->assertNotEmpty($config);
 
-        $config['twig.env'] = call_user_func($config['twig.env'], ArrayObject::ensureArrayObject($config));
+        $this->assertSame($twig, $config['twig.env']);
 
         $this->assertInstanceOf(\Closure::class, $config['payum.action.render_template']);
 

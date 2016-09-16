@@ -1,26 +1,21 @@
 #!/usr/bin/env bash
 
-#set -e
+set -e
 set -x
 
 CURRENT_BRANCH=`git name-rev --name-only HEAD`
-sleep 3
 
 function split()
 {
-    git subtree push --prefix=$1 $2 $CURRENT_BRANCH
-    sleep 2
-}
+    CURRENT_BRANCH=`git name-rev --name-only HEAD`
 
-function forceSplit()
-{
-    git push $2 `git subtree split --prefix $1 $CURRENT_BRANCH`:$CURRENT_BRANCH --force
-    sleep 2
+	SHA1=`~/.golibs/splitsh-lite --prefix=$1`
+    git push $2 "$SHA1:$CURRENT_BRANCH"
 }
 
 function remote()
 {
-    git remote add $1 $2
+    git remote add $1 $2 || true
 }
 
 remote core git@github.com:Payum/Core.git

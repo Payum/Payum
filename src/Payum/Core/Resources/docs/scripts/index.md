@@ -9,5 +9,6 @@ It is expected that you copy\past the script to your code and reuse it for all g
 * [Purchase is done](done-script.md)
 * [Refund](refund-script.md)
 * [Notify](notify-script.md)
+* [Payout](payout-script.md)
 
 Back to [index](../index.md).

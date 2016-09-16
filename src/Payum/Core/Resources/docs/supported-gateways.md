@@ -43,8 +43,6 @@
 * [khal3d/payum-cashnpay](https://github.com/khal3d/payum-cashnpay)
 * [NetTeam/payum-adyen](https://github.com/NetTeam/payum-adyen)
 * [NetTeam/payum-paymill](https://github.com/NetTeam/payum-paymill)
-* [fullpipe/payum-uniteller](https://github.com/fullpipe/payum-uniteller)
-* [fullpipe/payum-flexidengi](https://github.com/fullpipe/payum-flexidengi)
 * [BoShurik/payum-yandex-money](https://github.com/BoShurik/payum-yandex-money)
 * [sergeym/payum-pay-receipt](https://github.com/sergeym/payum-pay-receipt)
 * [remyma/payum-paybox](https://github.com/remyma/payum-paybox)
@@ -91,6 +89,7 @@
 * [thephpleague/omnipay-targetpay](https://github.com/thephpleague/omnipay-targetpay)
 * [thephpleague/omnipay-worldpay](https://github.com/thephpleague/omnipay-worldpay)
 * [aTastyCookie/yandexmoney_omnipay](https://github.com/aTastyCookie/yandexmoney_omnipay)
+* [antqa/payum-perfectmoney](https://github.com/antqa/payum-perfectmoney)
 
 ## JMS payment plugins
 

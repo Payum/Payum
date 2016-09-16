@@ -4,7 +4,6 @@ namespace Payum\Core;
 use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
 use Payum\Be2Bill\Be2BillDirectGatewayFactory;
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
-use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
 use Payum\Core\Exception\InvalidArgumentException;
@@ -12,6 +11,7 @@ use Payum\Core\Extension\GenericTokenFactoryExtension;
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Model\ArrayObject;
 use Payum\Core\Model\Payment;
+use Payum\Core\Model\Payout;
 use Payum\Core\Model\Token;
 use Payum\Core\Registry\DynamicRegistry;
 use Payum\Core\Registry\FallbackRegistry;
@@ -123,8 +123,10 @@ class PayumBuilder
     {
         $this
             ->setTokenStorage(new FilesystemStorage(sys_get_temp_dir(), Token::class, 'hash'))
+
             ->addStorage(Payment::class, new FilesystemStorage(sys_get_temp_dir(), Payment::class, 'number'))
             ->addStorage(ArrayObject::class, new FilesystemStorage(sys_get_temp_dir(), ArrayObject::class))
+            ->addStorage(Payout::class, new FilesystemStorage(sys_get_temp_dir(), Payout::class))
         ;
 
         return $this;
@@ -389,6 +391,7 @@ class PayumBuilder
             'notify' => 'notify.php',
             'authorize' => 'authorize.php',
             'refund' => 'refund.php',
+            'payout' => 'payout.php',
         ], $this->genericTokenFactoryPaths));
 
         $httpRequestVerifier = $this->buildHttpRequestVerifier($this->tokenStorage);
@@ -523,17 +526,18 @@ class PayumBuilder
      */
     protected function buildRegistry(array $gateways = [], array $storages = [], array $gatewayFactories = [])
     {
-        $fallbackRegistry = new SimpleRegistry($gateways, $storages, $gatewayFactories);
-        $fallbackRegistry->setAddStorageExtensions(false);
+        $registry = new SimpleRegistry($gateways, $storages, $gatewayFactories);
+        $registry->setAddStorageExtensions(false);
 
         if ($this->gatewayConfigStorage) {
-            $fallbackRegistry = new DynamicRegistry($this->gatewayConfigStorage, $fallbackRegistry);
+            $dynamicRegistry = new DynamicRegistry($this->gatewayConfigStorage, $registry);
+            $dynamicRegistry->setBackwardCompatibility(false);
+
+            $registry = new FallbackRegistry($dynamicRegistry, $registry);
         }
 
         if ($this->mainRegistry) {
-            $registry = new FallbackRegistry($this->mainRegistry, $fallbackRegistry);
-        } else {
-            $registry = $fallbackRegistry;
+            $registry = new FallbackRegistry($this->mainRegistry, $registry);
         }
 
         return $registry;

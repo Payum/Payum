@@ -1,5 +1,45 @@
 # Changelog
 
+## 1.3.6 (2016-07-25)
+
+* [gateway] Better handing for exception thrown on onPostExecute while processing an exception (EntityManager is closed issue).
+
+## 1.3.5 (2016-07-13)
+
+* Made ApiAwareTrait interface tolerant
+
+## 1.3.4 (2016-06-09)
+
+* [paypal][masspay] Fix bugs.
+* Updated guzzle6-adapter dependency & rolled back a workaround
+* Added tests for Httplug client & message/stream factories
+* Fix for Guzzle6 default client creation
+* Exception messages fix (added php-http/curl-client to hints)
+* Default config values priority fix
+* Fixed default client creation for CurlAdapter; added httplug.stream_factory to default options
+* fix doc typos
+
+## 1.3.3 (2016-05-31)
+
+* [twig] Postpone twig configuration and paths injection.
+* [registry] fix exception message in getStorage method when object is given.
+* add better messages on errors in api aware trait
+* Fix stripe auto open
+* [registry] Return dynamically stored gateways.
+* [registry] First check factory option from config. Deprecate getFactoryName method
+* [registry] Do not fallback to static registry in dynamic one. Use fallback for that.
+
+## 1.3.2 (2016-04-29)
+
+* [doc] Add how to contribute from sub repository doc
+* [paypal][rest] Return the api context in the config closure
+* [symfony] Do not fail on empty request stack
+* [registry] Keep already created gateway instances
+
+## 1.2.9 (2016-04-29)
+
+* [symfony] Do not fail on empty request stack
+
 ## 1.3.1 (2016-04-15)
 
 * [paypal] Add support of Paypal Masspay.

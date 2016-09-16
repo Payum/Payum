@@ -9,7 +9,7 @@ The preferred way to install the library is using [composer](http://getcomposer.
 Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require "payum/paypal-rest"
+php composer.phar require payum/paypal-rest php-http/guzzle6-adapter
 ```
 
 ## Configuration
