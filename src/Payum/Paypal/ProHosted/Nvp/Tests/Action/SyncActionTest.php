@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Paypal\ProHosted\Nvp\Tests\Action;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Request\Sync;
 use Payum\Paypal\ProHosted\Nvp\Action\SyncAction;
 use Payum\Paypal\ProHosted\Nvp\Request\Api\GetTransactionDetails;
@@ -10,11 +12,21 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfGatewayAwareAction()
+    public function shouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ProHosted\Nvp\Action\SyncAction');
+        $rc = new \ReflectionClass(SyncAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldImplementGatewayAwareInterface()
+    {
+        $rc = new \ReflectionClass(SyncAction::class);
+
+        $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     /**

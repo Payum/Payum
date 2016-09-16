@@ -219,7 +219,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The username, password, signature, business fields are required.
+     * @expectedExceptionMessage The username, password, signature fields are required.
      */
     public function throwIfRequiredOptionsNotSetInConstructor()
     {

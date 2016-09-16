@@ -1,25 +1,36 @@
 <?php
 namespace Payum\Paypal\ProHosted\Nvp\Tests\Action;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Request\Notify;
-use Payum\Core\Request\Sync;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\ProHosted\Nvp\Action\NotifyAction;
 
 class NotifyActionTest extends GenericActionTest
 {
-    protected $requestClass = 'Payum\Core\Request\Notify';
+    protected $requestClass = Notify::class;
 
-    protected $actionClass = 'Payum\Paypal\ProHosted\Nvp\Action\NotifyAction';
+    protected $actionClass = NotifyAction::class;
 
     /**
      * @test
      */
-    public function shouldBeSubClassOfGatewayAwareAction()
+    public function shouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ProHosted\Nvp\Action\NotifyAction');
+        $rc = new \ReflectionClass(NotifyAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldImplementGatewayAwareInterface()
+    {
+        $rc = new \ReflectionClass(NotifyAction::class);
+
+        $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     /**
@@ -28,8 +39,6 @@ class NotifyActionTest extends GenericActionTest
     public function shouldSubExecuteSyncWithSameModel()
     {
         $expectedModel = array('foo' => 'fooVal');
-
-        $testCase = $this;
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

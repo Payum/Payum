@@ -50,6 +50,9 @@
         <testsuite name="Payum PaypalProCheckoutNvp Component Test Suite">
             <directory>./src/Payum/Paypal/ProCheckout/Nvp/Tests</directory>
         </testsuite>
+        <testsuite name="Payum PaypalProHostedNvp Component Test Suite">
+            <directory>./src/Payum/Paypal/ProHosted/Nvp/Tests</directory>
+        </testsuite>
         <testsuite name="Payum PaypalRest Component Test Suite">
             <directory>./src/Payum/Paypal/Rest/Tests</directory>
         </testsuite>
@@ -67,6 +70,9 @@
         </testsuite>
         <testsuite name="Payum Stripe Component Test Suite">
             <directory>./src/Payum/Stripe/Tests</directory>
+        </testsuite>
+        <testsuite name="Payum Sofort Component Test Suite">
+            <directory>./src/Payum/Sofort/Tests</directory>
         </testsuite>
     </testsuites>
 
