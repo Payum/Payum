@@ -19,10 +19,11 @@ function remote()
 }
 
 remote core git@github.com:Payum/Core.git
+remote paypal-express-checkout git@github.com:Payum/PaypalExpressCheckoutNvp.git
 remote paypal-pro-checkout git@github.com:Payum/PaypalProCheckoutNvp.git
+remote paypal-pro-hosted git@github.com:Payum/PaypalProHostedNvp.git
 remote authorize-net-aim git@github.com:Payum/AuthorizeNetAim.git
 remote be2bill git@github.com:Payum/Be2Bill.git
-remote paypal-express-checkout git@github.com:Payum/PaypalExpressCheckoutNvp.git
 remote paypal-masspay git@github.com:Payum/PaypalMasspayNvp.git
 remote paypal-ipn git@github.com:Payum/PaypalIpn.git
 remote paypal-rest git@github.com:Payum/PaypalRest.git
@@ -40,6 +41,7 @@ split 'src/Payum/Be2Bill' be2bill
 split 'src/Payum/Paypal/ExpressCheckout/Nvp' paypal-express-checkout
 split 'src/Payum/Paypal/Masspay/Nvp' paypal-masspay
 split 'src/Payum/Paypal/ProCheckout/Nvp' paypal-pro-checkout
+split 'src/Payum/Paypal/ProHosted/Nvp' paypal-pro-hosted
 split 'src/Payum/Paypal/Ipn' paypal-ipn
 split 'src/Payum/Paypal/Rest' paypal-rest
 split 'src/Payum/Offline' offline
