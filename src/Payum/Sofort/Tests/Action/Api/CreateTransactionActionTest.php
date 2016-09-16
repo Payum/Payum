@@ -63,7 +63,7 @@ class CreateTransactionActionTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The parameter "Amount" must be set.
+     * @expectedExceptionMessage The amount, currency_code, reason, success_url, notification_url fields are required.
      */
     public function throwIfAmountParameterIsNotSet()
     {
@@ -77,7 +77,7 @@ class CreateTransactionActionTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The parameter "currency_code" must be set.
+     * @expectedExceptionMessage The currency_code, reason, success_url, notification_url fields are required.
      */
     public function throwIfCurrencyCodeParameterIsNotSet()
     {
@@ -91,7 +91,7 @@ class CreateTransactionActionTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The parameter "reason" must be set.
+     * @expectedExceptionMessage The reason, success_url, notification_url fields are required.
      */
     public function throwIfReasonParameterIsNotSet()
     {
