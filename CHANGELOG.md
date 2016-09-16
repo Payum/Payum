@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3.7 (2016-09-16)
+
+* [paypal] Add support of Paypal Pro Hosted payments.
+* [stripe] error not detected in some cases.
+* [stripe] add an action to get a credit card token from payment details.
+* [paypal-ec] add support of cancel request.
+* [security] Add createCancelToken method
+* [skeleton] Remove deprecated features from skeleton.
+* [be2bill] fix composer.json
+* Require payum/core 1.3 as minimum version.
+* Reuse splitsh-lite tool to split main repo.
+* [doc] fix various typos.
+
 ## 1.3.6 (2016-07-25)
 
 * [gateway] Better handing for exception thrown on onPostExecute while processing an exception (EntityManager is closed issue).
