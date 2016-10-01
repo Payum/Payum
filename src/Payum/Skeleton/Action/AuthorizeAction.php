@@ -3,11 +3,12 @@ namespace Payum\Skeleton\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Authorize;
 use Payum\Core\Exception\RequestNotSupportedException;
 
-class AuthorizeAction implements ActionInterface
+class AuthorizeAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
