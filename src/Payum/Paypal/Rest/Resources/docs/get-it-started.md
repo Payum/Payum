@@ -48,6 +48,8 @@ use PayPal\Api\Payer;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
 
+$paypalRestPaymentDetailsClass = 'Payum\Paypal\Rest\Model\PaymentDetails';
+
 $storage = $payum->getStorage($paypalRestPaymentDetailsClass);
 
 $payment = $storage->create();
