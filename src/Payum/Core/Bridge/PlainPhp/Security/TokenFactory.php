@@ -30,9 +30,9 @@ class TokenFactory extends AbstractTokenFactory
      */
     protected function generateUrl($path, array $parameters = [])
     {
-        $newPath = $this->baseUrl->path->append($path);
+        $newPath = $this->baseUrl->path->withTrailingSlash().$path;
 
-        $uri = $this->baseUrl->withPath((string) $newPath);
+        $uri = $this->baseUrl->withPath($newPath);
         $uri = $this->addQueryToUri($uri, $parameters);
 
         return (string) $uri;
