@@ -132,8 +132,6 @@ class CoreGatewayFactory implements GatewayFactoryInterface
             },
             'payum.template.layout' => '@PayumCore/layout.html.twig',
 
-            // deprecated
-            'guzzle.client' => HttpClientFactory::createGuzzle(),
             'twig.env' => function() {
                 return new \Twig_Environment(new \Twig_Loader_Chain());
             },
