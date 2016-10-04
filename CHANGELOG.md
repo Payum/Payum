@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.8 (2016-10-04)
+
+* [gateway] Remove `guzzle.client` from the gateway factory config
+* [doc][paypal-rest] Init payment class variable with correct model class name.
+* [skeleton] Update AuthorizeAction.php
+* fix tests, failed after some changes in league/uri lib.
+* [doc] Fix typo
+
 ## 1.3.7 (2016-09-16)
 
 * [paypal] Add support of Paypal Pro Hosted payments.
