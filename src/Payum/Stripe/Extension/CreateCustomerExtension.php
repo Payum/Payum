@@ -88,6 +88,7 @@ class CreateCustomerExtension implements ExtensionInterface
             $model['customer'] = $customer['id'];
         } else {
             $model['status'] = Constants::STATUS_FAILED;
+            $model['error'] = $customer['error'];
         }
     }
 }

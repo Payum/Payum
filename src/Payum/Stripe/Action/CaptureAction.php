@@ -7,6 +7,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Capture;
 use Payum\Stripe\Request\Api\CreateCharge;
 use Payum\Stripe\Request\Api\ObtainToken;
+use Payum\Stripe\Constants;
 
 class CaptureAction extends GatewayAwareAction
 {
@@ -32,6 +33,9 @@ class CaptureAction extends GatewayAwareAction
                 $obtainToken->setModel($model);
 
                 $this->gateway->execute($obtainToken);
+                if ($model['status'] == Constants::STATUS_FAILED) {
+                    return;
+                }
             }
 
         }
