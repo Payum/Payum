@@ -5,6 +5,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\GatewayFactory;
 use Payum\Stripe\Action\Api\CreateChargeAction;
+use Payum\Stripe\Action\Api\CreateRefundAction;
 use Payum\Stripe\Action\Api\CreateCustomerAction;
 use Payum\Stripe\Action\Api\CreatePlanAction;
 use Payum\Stripe\Action\Api\CreateTokenAction;
@@ -41,6 +42,7 @@ class StripeCheckoutGatewayFactory extends GatewayFactory
                 return new ObtainTokenAction($config['payum.template.obtain_token']);
             },
             'payum.action.create_charge' => new CreateChargeAction(),
+            'payum.action.create_refund' => new CreateRefundAction(),
             'payum.action.create_customer' => new CreateCustomerAction(),
             'payum.action.create_plan' => new CreatePlanAction(),
             'payum.action.create_token' => new CreateTokenAction(),
