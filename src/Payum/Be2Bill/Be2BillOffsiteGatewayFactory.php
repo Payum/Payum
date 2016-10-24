@@ -14,14 +14,14 @@ class Be2BillOffsiteGatewayFactory extends Be2BillDirectGatewayFactory
      */
     protected function populateConfig(ArrayObject $config)
     {
-        $config->defaults([
+        $config->defaults(array(
             'payum.factory_name' => 'be2bill_offsite',
             'payum.factory_title' => 'Be2Bill Offsite',
             'payum.action.capture' => new CaptureOffsiteAction(),
             'payum.action.capture_null' => new CaptureOffsiteNullAction(),
             'payum.action.notify_null' => new NotifyNullAction(),
             'payum.action.notify' => new NotifyAction(),
-        ]);
+        ));
 
         parent::populateConfig($config);
     }

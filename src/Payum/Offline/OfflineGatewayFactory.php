@@ -15,13 +15,13 @@ class OfflineGatewayFactory extends GatewayFactory
      */
     protected function populateConfig(ArrayObject $config)
     {
-        $config->defaults([
+        $config->defaults(array(
             'payum.factory_name' => 'offline',
             'payum.factory_title' => 'Offline',
             'payum.action.capture' => new CaptureAction(),
             'payum.action.authorize' => new AuthorizeAction(),
             'payum.action.status' => new StatusAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),
-        ]);
+        ));
     }
 }

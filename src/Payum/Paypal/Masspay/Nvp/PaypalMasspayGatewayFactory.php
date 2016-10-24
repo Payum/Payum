@@ -38,12 +38,12 @@ class PaypalMasspayGatewayFactory extends GatewayFactory
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
 
-                $paypalConfig = [
+                $paypalConfig = array(
                     'username' => $config['username'],
                     'password' => $config['password'],
                     'signature' => $config['signature'],
                     'sandbox' => $config['sandbox'],
-                ];
+                );
 
                 return new Api($paypalConfig, $config['payum.http_client'], $config['httplug.message_factory']);
             };

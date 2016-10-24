@@ -1,9 +1,7 @@
 <?php
 namespace Payum\Core\Security;
 
-use League\Uri\Schemes\Http as HttpUri;
-use League\Uri\Components\Query;
-use League\Uri\Modifiers\MergeQuery;
+use League\Url\Url;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\Util\Random;
 use Payum\Core\Storage\IdentityInterface;
@@ -11,16 +9,6 @@ use Payum\Core\Storage\StorageInterface;
 
 abstract class AbstractTokenFactory implements TokenFactoryInterface
 {
-    /**
-     * @var StorageInterface
-     */
-    protected $tokenStorage;
-
-    /**
-     * @var StorageRegistryInterface
-     */
-    protected $storageRegistry;
-
     /**
      * @param StorageInterface         $tokenStorage
      * @param StorageRegistryInterface $storageRegistry
@@ -34,13 +22,11 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createToken($gatewayName, $model, $targetPath, array $targetParameters = [], $afterPath = null, array $afterParameters = [])
+    public function createToken($gatewayName, $model, $targetPath, array $targetParameters = array(), $afterPath = null, array $afterParameters = array())
     {
         /** @var TokenInterface $token */
         $token = $this->tokenStorage->create();
         $token->setHash($token->getHash() ?: Random::generateToken());
-
-        $targetParameters = array_replace(['payum_token' => $token->getHash()], $targetParameters);
 
         $token->setGatewayName($gatewayName);
 
@@ -51,42 +37,33 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
         }
 
         if (0 === strpos($targetPath, 'http')) {
-            $targetUri = HttpUri::createFromString($targetPath);
-            $targetUri = $this->addQueryToUri($targetUri, $targetParameters);
+            $targetUrl = Url::createFromUrl($targetPath);
+            $targetUrl->getQuery()->set(array_replace(
+                array('payum_token' => $token->getHash()),
+                $targetUrl->getQuery()->toArray(),
+                $targetParameters
+            ));
 
-            $token->setTargetUrl((string) $targetUri);
+            $token->setTargetUrl((string) $targetUrl);
         } else {
-            $token->setTargetUrl($this->generateUrl($targetPath, $targetParameters));
+            $token->setTargetUrl($this->generateUrl($targetPath, array_replace(
+                array('payum_token' => $token->getHash()),
+                $targetParameters
+            )));
         }
 
         if ($afterPath && 0 === strpos($afterPath, 'http')) {
-            $afterUri = HttpUri::createFromString($afterPath);
-            $afterUri = $this->addQueryToUri($afterUri, $afterParameters);
+            $afterUrl = Url::createFromUrl($afterPath);
+            $afterUrl->getQuery()->modify($afterParameters);
 
-            $token->setAfterUrl((string) $afterUri);
+            $token->setAfterUrl((string) $afterUrl);
         } elseif ($afterPath) {
             $token->setAfterUrl($this->generateUrl($afterPath, $afterParameters));
         }
 
-        $this->tokenStorage->update($token);
+        $this->tokenStorage->updateModel($token);
 
         return $token;
-    }
-
-    /**
-     * @param HttpUri $uri
-     * @param array $query
-     *
-     * @return HttpUri
-     */
-    protected function addQueryToUri(HttpUri $uri, array $query)
-    {
-        $query = array_replace($uri->query->toArray(), $query);
-        $query = array_filter($query, function($value) {
-            return null !== $value;
-        });
-
-        return $uri->withQuery((string) Query::createFromArray($query));
     }
 
     /**

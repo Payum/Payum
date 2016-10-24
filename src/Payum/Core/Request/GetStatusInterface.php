@@ -42,16 +42,6 @@ interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterfac
     public function markAuthorized();
 
     /**
-     * @return void
-     */
-    public function markPayedout();
-
-    /**
-     * @return boolean
-     */
-    public function isPayedout();
-
-    /**
      * @return boolean
      */
     public function isRefunded();

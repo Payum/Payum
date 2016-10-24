@@ -2,18 +2,15 @@
 namespace Payum\AuthorizeNet\Aim\Action;
 
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\GatewayAwareInterface;
-use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
 use Payum\Core\Request\GetCurrency;
 
-class ConvertPaymentAction implements ActionInterface, GatewayAwareInterface
+class ConvertPaymentAction extends GatewayAwareAction
 {
-    use GatewayAwareTrait;
-    
     /**
      * {@inheritDoc}
      *
@@ -30,11 +27,16 @@ class ConvertPaymentAction implements ActionInterface, GatewayAwareInterface
         $divisor = pow(10, $currency->exp);
 
         $details = ArrayObject::ensureArrayObject($payment->getDetails());
-        $details['amount'] = $payment->getTotalAmount() / $divisor;
+        $details['amount'] = abs($payment->getTotalAmount());
         $details['invoice_num'] = $payment->getNumber();
         $details['description'] = $payment->getDescription();
         $details['email'] = $payment->getClientEmail();
         $details['cust_id'] = $payment->getClientId();
+        $details['card_number'] = $payment->getCreditCardNumber();
+        $details['expire_at'] = $payment->getExpireMonth() . $payment->getExpireYear();
+        if($payment->getRefund() == 'true'){
+            $details['trans_id'] = $payment->getTransactionID();
+        }
 
         $request->setResult((array) $details);
     }
@@ -48,6 +50,6 @@ class ConvertPaymentAction implements ActionInterface, GatewayAwareInterface
             $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&
             $request->getTo() == 'array'
-        ;
+            ;
     }
 }

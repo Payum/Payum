@@ -34,8 +34,12 @@ class CapturePaymentAction extends GatewayAwareAction
         $request->setModel($details);
         try {
             $this->gateway->execute($request);
-        } finally {
+
             $payment->setDetails($details);
+        } catch (\Exception $e) {
+            $payment->setDetails($details);
+
+            throw $e;
         }
     }
 

@@ -7,8 +7,6 @@ class GetHumanStatus extends BaseGetStatus
 
     const STATUS_AUTHORIZED = 'authorized';
 
-    const STATUS_PAYEDOUT = 'payedout';
-
     const STATUS_REFUNDED = 'refunded';
 
     const STATUS_UNKNOWN = 'unknown';
@@ -57,22 +55,6 @@ class GetHumanStatus extends BaseGetStatus
         return $this->isCurrentStatusEqualTo(static::STATUS_AUTHORIZED);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function markPayedout()
-    {
-        $this->status = static::STATUS_PAYEDOUT;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function isPayedout()
-    {
-        return $this->isCurrentStatusEqualTo(static::STATUS_PAYEDOUT);
-    }
-    
     /**
      * {@inheritDoc}
      */

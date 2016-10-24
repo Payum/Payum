@@ -52,9 +52,9 @@ abstract class AbstractRegistry implements RegistryInterface
         $class = is_object($class) ? get_class($class) : $class;
 
         // TODO: this is a quick fix. I have to find a better\clean solution.
-        if (class_exists($class) && interface_exists(Proxy::class)) {
+        if (class_exists($class) && interface_exists('Doctrine\Common\Persistence\Proxy')) {
             $rc = new \ReflectionClass($class);
-            if ($rc->implementsInterface(Proxy::class)) {
+            if ($rc->implementsInterface('Doctrine\Common\Persistence\Proxy')) {
                 $class = $rc->getParentClass()->getName();
             }
         }

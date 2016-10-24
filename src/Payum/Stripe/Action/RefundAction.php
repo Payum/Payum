@@ -7,8 +7,9 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Capture;
 use Payum\Stripe\Request\Api\CreateCharge;
 use Payum\Stripe\Request\Api\ObtainToken;
+use Payum\Stripe\Request\Api\CreateRefund;
 
-class CaptureAction extends GatewayAwareAction
+class RefundAction extends GatewayAwareAction
 {
     /**
      * {@inheritDoc}
@@ -32,7 +33,7 @@ class CaptureAction extends GatewayAwareAction
             $this->gateway->execute($obtainToken);
         }
 
-        $this->gateway->execute(new CreateCharge($model));
+        $this->gateway->execute(new CreateRefund($model));
     }
 
     /**
@@ -41,7 +42,7 @@ class CaptureAction extends GatewayAwareAction
     public function supports($request)
     {
         return
-            $request instanceof Capture &&
+            $request instanceof Refund &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

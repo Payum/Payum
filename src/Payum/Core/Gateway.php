@@ -36,9 +36,9 @@ class Gateway implements GatewayInterface
      */
     public function __construct()
     {
-        $this->stack = [];
-        $this->actions = [];
-        $this->apis = [];
+        $this->stack = array();
+        $this->actions = array();
+        $this->apis = array();
 
         $this->extensions = new ExtensionCollection();
     }

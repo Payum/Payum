@@ -9,9 +9,6 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateCharge;
-use Stripe\Charge;
-use Stripe\Error;
-use Stripe\Stripe;
 
 class CreateChargeAction implements ActionInterface, ApiAwareInterface
 {
@@ -42,21 +39,29 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == ($model['card'] || $model['customer'])) {
-            throw new LogicException('The either card token or customer id has to be set.');
-        }
-
         if (is_array($model['card'])) {
             throw new LogicException('The token has already been used.');
         }
 
+        if (empty($model['card'])) {
+            throw new LogicException('The token has to be set.');
+        }
+
         try {
-            Stripe::setApiKey($this->keys->getSecretKey());
+            $refund = $model['refund'];
+            \Stripe::setApiKey($this->keys->getSecretKey());
+            if($refund == 'false')
+            {
+                unset($model['refund']);
+                unset($model['id']);
+                $charge = \Stripe_Charge::create($model->toUnsafeArray());
+                $model->replace($charge->__toArray(true));
+            } else {
+                $charge = \Stripe_Charge::retrieve($model['id']);
+                $charge->refund(array('amount' => $model['amount']));
+            }
 
-            $charge = Charge::create($model->toUnsafeArrayWithoutLocal());
-
-            $model->replace($charge->__toArray(true));
-        } catch (Error\Base $e) {
+        } catch (\Stripe_CardError $e) {
             $model->replace($e->getJsonBody());
         }
     }

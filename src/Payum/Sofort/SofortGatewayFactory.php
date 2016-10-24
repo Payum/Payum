@@ -22,7 +22,7 @@ class SofortGatewayFactory extends GatewayFactory
      */
     protected function populateConfig(ArrayObject $config)
     {
-        if (false == class_exists(Sofortueberweisung::class)) {
+        if (false == class_exists('Sofortueberweisung')) {
             throw new LogicException('You must install "sofort/sofortlib-php:^3.0" library.');
         }
 
@@ -42,20 +42,20 @@ class SofortGatewayFactory extends GatewayFactory
         ));
 
         if (false == $config['payum.api']) {
-            $config['payum.default_options'] = [
+            $config['payum.default_options'] = array(
                 'config_key' => '',
                 'abort_url' => '',
-            ];
+            );
             $config->defaults($config['payum.default_options']);
-            $config['payum.required_options'] = ['config_key'];
+            $config['payum.required_options'] = array('config_key');
 
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
 
-                return new Api([
+                return new Api(array(
                     'config_key' => $config['config_key'],
                     'abort_url' => $config['abort_url'],
-                ]);
+                ));
             };
         }
     }

@@ -1,8 +1,8 @@
 <?php
 namespace Payum\Paypal\ProHosted\Nvp\Action;
 
-use League\Uri\Schemes\Http as HttpUri;
-use League\Uri\Modifiers\MergeQuery;
+/*use League\Url\Schemes\Http as HttpUrl;
+use League\Url\Modifiers\MergeQuery;*/
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -52,11 +52,11 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
             $model->replace($response);
         } else {
             if ($model['cancel_return']) {
-                $cancelUri = HttpUri::createFromString($model['cancel_return']);
+               /* $cancelUrl = HttpUri::createFromString($model['cancel_return']);
                 $modifier  = new MergeQuery('cancelled=1');
-                $cancelUri = $modifier($cancelUri);
+                $cancelUrl = $modifier($cancelUri);*/
 
-                $model['cancel_return'] = (string) $cancelUri;
+               // $model['cancel_return'] = (string) $cancelUri;
             }
 
             $this->gateway->execute(new CreateButtonPayment($model));

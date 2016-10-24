@@ -92,7 +92,7 @@ class RequestNotSupportedException extends InvalidArgumentException
      */
     protected static function suggestions($request)
     {
-        $suggestions = [];
+        $suggestions = array();
 
         if ($request instanceof Generic && $request->getModel() instanceof IdentityInterface) {
             $suggestions[] = sprintf(

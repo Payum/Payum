@@ -94,8 +94,8 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
             };
         }
 
-        $config['payum.paths'] = array_replace([
+        $config['payum.paths'] = array_replace(array(
             'PayumPaypalExpressCheckout' => __DIR__.'/Resources/views',
-        ], $config['payum.paths'] ?: []);
+        ), $config['payum.paths'] ?: array());
     }
 }

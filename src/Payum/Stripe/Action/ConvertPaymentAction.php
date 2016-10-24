@@ -23,21 +23,19 @@ class ConvertPaymentAction implements ActionInterface
         $payment = $request->getSource();
 
         $details = ArrayObject::ensureArrayObject($payment->getDetails());
-        $details["amount"] = $payment->getTotalAmount();
+        $details["amount"] = abs($payment->getTotalAmount() * 100);
         $details["currency"] = $payment->getCurrencyCode();
         $details["description"] = $payment->getDescription();
+        $details["id"] = $payment->getTransactionID();
+        $details["refund"] = $payment->getRefund();
 
         if ($card = $payment->getCreditCard()) {
-            if ($card->getToken()) {
-                $details["customer"] = $card->getToken();
-            } else {
-                $details["card"] = SensitiveValue::ensureSensitive([
-                    'number' => $card->getNumber(),
-                    'exp_month' => $card->getExpireAt()->format('m'),
-                    'exp_year' => $card->getExpireAt()->format('Y'),
-                    'cvc' => $card->getSecurityCode(),
-                ]);
-            }
+            $details["card"] = new SensitiveValue(array(
+                'number' => $card->getNumber(),
+                'exp_month' => $card->getExpireAt()->format('m'),
+                'exp_year' => $card->getExpireAt()->format('Y'),
+                'cvc' => $card->getSecurityCode(),
+            ));
         }
 
         $request->setResult((array) $details);

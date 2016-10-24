@@ -19,7 +19,7 @@ class PaypalProHostedGatewayFactory extends GatewayFactory
      */
     protected function populateConfig(ArrayObject $config)
     {
-        $config->defaults([
+        $config->defaults(array(
             'payum.factory_name'                       => 'paypal_pro_hosted',
             'payum.factory_title'                      => 'Paypal Pro Hosted',
             'payum.action.capture'                     => new CaptureAction(),
@@ -29,23 +29,23 @@ class PaypalProHostedGatewayFactory extends GatewayFactory
             'payum.action.convert_payment'             => new ConvertPaymentAction(),
             'payum.action.api.get_transaction_details' => new GetTransactionDetailsAction(),
             'payum.action.api.create_button_payment'   => new CreateButtonPaymentAction(),
-        ]);
+        ));
 
         if (false == $config['payum.api']) {
-            $config['payum.default_options'] = [
+            $config['payum.default_options'] = array(
                 'username'  => '',
                 'password'  => '',
                 'signature' => '',
                 'business'  => '',
                 'sandbox'   => true,
-            ];
+            );
 
             $config->defaults($config['payum.default_options']);
-            $config['payum.required_options'] = [
+            $config['payum.required_options'] = array(
                 'username',
                 'password',
                 'signature',
-            ];
+            );
 
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);

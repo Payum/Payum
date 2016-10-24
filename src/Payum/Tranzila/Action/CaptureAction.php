@@ -1,21 +1,27 @@
 <?php
-namespace Payum\AuthorizeNet\Aim\Action;
+/**
+ * Created by PhpStorm.
+ * User: meghana.gv
+ * Date: 18-04-2016
+ * Time: 17:47
+ */
+
+namespace Payum\Tranzila\Action;
 
 use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\ApiAwareInterface;
-use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
-use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Request\Capture;
-use Payum\Core\Request\ObtainCreditCard;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Tranzila\Api;
 use Payum\Core\Security\SensitiveValue;
 
-class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
+class CaptureAction  extends GatewayAwareAction implements ApiAwareInterface
 {
     /**
-     * @var AuthorizeNetAIM
+     * @var Api
      */
     protected $api;
 
@@ -24,7 +30,7 @@ class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
      */
     public function setApi($api)
     {
-        if (false == $api instanceof AuthorizeNetAIM) {
+        if (false == $api instanceof Api) {
             throw new UnsupportedApiException('Not supported.');
         }
 
@@ -41,22 +47,12 @@ class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
 
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $model = ArrayObject::ensureArrayObject($request->getModel());
+        $model = new ArrayObject($request->getModel());
 
-        if (null != $model['response_code']) {
-            return;
-        }
 
-        if (false == $model->validateNotEmpty(array('card_num', 'exp_date'), false)) {
+        $cardFields = array('CARDCODE', 'CARDCVV', 'CARDVALIDITYDATE', 'CARDFULLNAME');
+        if (false == $model->validateNotEmpty(array('card_num', 'exp_date'), false) && false == $model['ALIAS']) {
             try {
-                /*$obtainCreditCard = new ObtainCreditCard($request->getToken());
-                $obtainCreditCard->setModel($request->getFirstModel());
-                $obtainCreditCard->setModel($request->getModel());
-                $this->gateway->execute($obtainCreditCard);
-                $card = $obtainCreditCard->obtain();*/
-
-                /*$model['exp_date'] = new SensitiveValue($card->getExpireAt()->format('m/y'));
-                $model['card_num'] = new SensitiveValue($card->getNumber());*/
                 $model['exp_date'] = new SensitiveValue($model['expire_at']);
                 $model['card_num'] = new SensitiveValue($model['card_number']);
             } catch (RequestNotSupportedException $e) {
@@ -64,12 +60,14 @@ class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
             }
         }
 
-        $api = clone $this->api;
-        $api->ignore_not_x_fields = true;
-        $api->setFields(array_filter($model->toUnsafeArray()));
+        //instruction must have an alias set (e.g oneclick payment) or credit card info.
+        if (false == ($model['exp_date'] || $model->validateNotEmpty($cardFields, false))) {
+            throw new LogicException('Either credit card fields or its alias has to be set.');
+        }
 
-        $response = $api->authorizeAndCapture();
-        $model->replace(get_object_vars($response));
+        $result = $this->api->doPayment($model->toUnsafeArray());
+
+        $model->replace((array) $result);
     }
 
     /**

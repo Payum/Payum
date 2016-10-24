@@ -2,12 +2,20 @@
 namespace Payum\Core\Action;
 
 use Payum\Core\GatewayAwareInterface;
-use Payum\Core\GatewayAwareTrait;
+use Payum\Core\GatewayInterface;
 
-/**
- * @deprecated  since 1.3 will be removed in 2.0.  Use trait+interface in your classes.
- */
 abstract class GatewayAwareAction implements ActionInterface, GatewayAwareInterface
 {
-    use GatewayAwareTrait;
+    /**
+     * @var GatewayInterface
+     */
+    protected $gateway;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setGateway(GatewayInterface $gateway)
+    {
+        $this->gateway = $gateway;
+    }
 }

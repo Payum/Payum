@@ -80,6 +80,15 @@ class FilesystemStorage extends AbstractStorage
         $this->identityMap[$id] = $model;
         file_put_contents($this->storageDir.'/payum-model-'.$id, serialize($model));
     }
+    /**
+     * {@inheritDoc}
+     */
+    public function updateModel($model)
+    {
+        $this->assertModelSupported($model);
+
+        $this->doUpdateModel($model);
+    }
 
     /**
      * {@inheritDoc}

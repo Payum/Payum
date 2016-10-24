@@ -44,7 +44,7 @@ class ArrayObject extends \ArrayObject
      *
      * @return static
      */
-    public function getArray($key, $default = [])
+    public function getArray($key, $default = array())
     {
         return static::ensureArrayObject($this->get($key, $default));
     }
@@ -191,7 +191,7 @@ class ArrayObject extends \ArrayObject
      */
     public function toUnsafeArray()
     {
-        $array = [];
+        $array = array();
         foreach ($this as $name => $value) {
             if ($value instanceof SensitiveValue) {
                 $array[$name] = $value->get();

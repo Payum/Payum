@@ -28,7 +28,7 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createToken($gatewayName, $model, $targetPath, array $targetParameters = [], $afterPath = null, array $afterParameters = [])
+    public function createToken($gatewayName, $model, $targetPath, array $targetParameters = array(), $afterPath = null, array $afterParameters = array())
     {
         return $this->tokenFactory->createToken(
             $gatewayName,
@@ -43,7 +43,7 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createCaptureToken($gatewayName, $model, $afterPath, array $afterParameters = [])
+    public function createCaptureToken($gatewayName, $model, $afterPath, array $afterParameters = array())
     {
         $capturePath = $this->getPath('capture');
 
@@ -53,7 +53,7 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
             $gatewayName,
             $model,
             $capturePath,
-            [],
+            array(),
             $afterToken->getTargetUrl()
         );
     }
@@ -61,19 +61,19 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createAuthorizeToken($gatewayName, $model, $afterPath, array $afterParameters = [])
+    public function createAuthorizeToken($gatewayName, $model, $afterPath, array $afterParameters = array())
     {
         $authorizePath = $this->getPath('authorize');
 
         $afterToken = $this->createToken($gatewayName, $model, $afterPath, $afterParameters);
 
-        return $this->createToken($gatewayName, $model, $authorizePath, [], $afterToken->getTargetUrl());
+        return $this->createToken($gatewayName, $model, $authorizePath, array(), $afterToken->getTargetUrl());
     }
 
     /**
      * {@inheritDoc}
      */
-    public function createRefundToken($gatewayName, $model, $afterPath = null, array $afterParameters = [])
+    public function createRefundToken($gatewayName, $model, $afterPath = null, array $afterParameters = array())
     {
         $refundPath = $this->getPath('refund');
 
@@ -82,13 +82,13 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
             $afterUrl = $this->createToken($gatewayName, $model, $afterPath, $afterParameters)->getTargetUrl();
         }
 
-        return $this->createToken($gatewayName, $model, $refundPath, [], $afterUrl);
+        return $this->createToken($gatewayName, $model, $refundPath, array(), $afterUrl);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function createCancelToken($gatewayName, $model, $afterPath = null, array $afterParameters = [])
+    public function createCancelToken($gatewayName, $model, $afterPath = null, array $afterParameters = array())
     {
         $cancelPath = $this->getPath('cancel');
 
@@ -97,13 +97,13 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
             $afterUrl = $this->createToken($gatewayName, $model, $afterPath, $afterParameters)->getTargetUrl();
         }
 
-        return $this->createToken($gatewayName, $model, $cancelPath, [], $afterUrl);
+        return $this->createToken($gatewayName, $model, $cancelPath, array(), $afterUrl);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function createPayoutToken($gatewayName, $model, $afterPath, array $afterParameters = [])
+    public function createPayoutToken($gatewayName, $model, $afterPath, array $afterParameters = array())
     {
         $capturePath = $this->getPath('payout');
 
@@ -113,7 +113,7 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
             $gatewayName,
             $model,
             $capturePath,
-            [],
+            array(),
             $afterToken->getTargetUrl()
         );
     }

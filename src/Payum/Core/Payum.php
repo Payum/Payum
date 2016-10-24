@@ -107,6 +107,7 @@ class Payum implements RegistryInterface
      */
     public function getTokenFactory()
     {
+
         return $this->tokenFactory;
     }
 

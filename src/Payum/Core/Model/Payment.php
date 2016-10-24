@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Model;
 
-class Payment implements PaymentInterface, DirectDebitPaymentInterface
+class Payment implements PaymentInterface
 {
     /**
      * @var string
@@ -17,6 +17,11 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
      * @var string
      */
     protected $clientEmail;
+
+    /**
+     * @var string
+     */
+    protected $workPhone;
 
     /**
      * @var string
@@ -43,14 +48,93 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
      */
     protected $creditCard;
 
+    protected $creditCardNumber;
+
+    protected $creditCardExpireAt;
+
+    protected $userName;
+
+    protected $expireMonth;
+
+    protected $expireYear;
+
+    protected $cardName;
+
+    protected $firstName;
+
+    protected $lastName;
+
+    protected $cardType;
+
+    protected $addressZip;
+
+    protected $addressState;
+
+    protected $addressCountry;
+
+    protected $addressLine1;
+
+    protected $addressLine2;
+
+    protected $eventStatus;
+
+    protected $company;
+
+    protected $attendeeID;
+
+    protected $eventID;
+
+    protected $eventName;
+
+    protected $env;
+
+    protected $orderNumber;
+
+    protected $TransactionID;
+
+    protected $refund;
+
     /**
-     * @var BankAccountInterface|null
+     * @return mixed
      */
-    protected $bankAccount;
+    public function getIsraelisocialid()
+    {
+        return $this->israelisocialid;
+    }
+
+    /**
+     * @param mixed $israelisocialid
+     */
+    public function setIsraelisocialid($israelisocialid)
+    {
+        $this->israelisocialid = $israelisocialid;
+    }
+
+    protected $israelisocialid;
 
     public function __construct()
     {
-        $this->details = [];
+        $this->details = array();
+    }
+
+    public function getCreditCardNumber()
+    {
+        return $this->creditCardNumber;
+    }
+
+    public function setCreditCardNumber($creditCardNumber)
+    {
+        $this->creditCardNumber = $creditCardNumber;
+    }
+
+    public function getCreditCardExpireAt()
+    {
+        return $this->creditCardExpireAt;
+    }
+
+    public function setCreditCardExpireAt($creditCardExpireAt)
+    {
+        $this->creditCardExpireAt = $creditCardExpireAt;
     }
 
     /**
@@ -104,6 +188,22 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     /**
      * {@inheritDoc}
      */
+    public function getWorkPhone()
+    {
+        return $this->workPhone;
+    }
+
+    /**
+     * @param string $clientEmail
+     */
+    public function setWorkPhone($workPhone)
+    {
+        $this->workPhone = $workPhone;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getClientId()
     {
         return $this->clientId;
@@ -131,6 +231,19 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     public function setTotalAmount($totalAmount)
     {
         $this->totalAmount = $totalAmount;
+    }
+
+    public function getUserName()
+    {
+        return $this->userName;
+    }
+
+    /**
+     * @param int $totalAmount
+     */
+    public function setUserName($userName)
+    {
+        $this->userName = $UserName;
     }
 
     /**
@@ -187,19 +300,204 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
         $this->creditCard = $creditCard;
     }
 
-    /**
-     * @return BankAccountInterface|null
-     */
-    public function getBankAccount()
+    public function setExpireMonth($month)
     {
-        return $this->bankAccount;
+        $this->expireMonth = $month;
     }
 
-    /**
-     * @param BankAccountInterface|null $bankAccount
-     */
-    public function setBankAccount(BankAccountInterface $bankAccount = null)
+    public function getExpireMonth()
     {
-        $this->bankAccount = $bankAccount;
+        return $this->expireMonth;
     }
+
+    public function setExpireYear($year)
+    {
+        $this->expireYear = $year;
+    }
+
+    public function getExpireYear()
+    {
+        return $this->expireYear;
+    }
+
+    public function setCardName($name)
+    {
+        $this->cardName = $name;
+    }
+
+    public function getCardName()
+    {
+        return $this->cardName;
+    }
+
+    public function setFirstName($fname)
+    {
+        $this->firstName = $fname;
+    }
+
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    public function setLastName($lname)
+    {
+        $this->lastName = $lname;
+    }
+
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    public function setCardType($cardtype)
+    {
+        $this->cardType = $cardtype;
+    }
+
+    public function getCardType()
+    {
+        return $this->cardType;
+    }
+
+    public function setAddressZip($zip)
+    {
+        $this->addressZip = $zip;
+    }
+
+    public function getAddressZip()
+    {
+        return $this->addressZip;
+    }
+
+    public function setAddressState($state)
+    {
+        $this->addressState = $state;
+    }
+
+    public function getAddressState()
+    {
+        return $this->addressState;
+    }
+
+    public function setAddressCountry($country)
+    {
+        $this->addressCountry = $country;
+    }
+
+    public function getAddressCountry()
+    {
+        return $this->addressCountry;
+    }
+
+    public function setAddressLine1($address)
+    {
+        $this->addressLine1 = $address;
+    }
+
+    public function getAddressLine1()
+    {
+        return $this->addressLine1;
+    }
+
+    public function setAddressLine2($address)
+    {
+        $this->addressLine2 = $address;
+    }
+
+    public function getAddressLine2()
+    {
+        return $this->addressLine2;
+    }
+
+    public function setEventStatus($status)
+    {
+        $this->eventStatus = $status;
+    }
+
+    public function getEventStatus()
+    {
+        return $this->eventStatus;
+    }
+
+    public function setCompany($company)
+    {
+        $this->company = $company;
+    }
+
+    public function getCompany()
+    {
+        return $this->company;
+    }
+
+    public function setAttendeeID($attendee)
+    {
+        $this->attendeeID = $attendee;
+    }
+
+    public function getAttendeeID()
+    {
+        return $this->attendeeID;
+    }
+
+    public function setEventID($event)
+    {
+        $this->eventID = $event;
+    }
+
+    public function getEventID()
+    {
+        return $this->eventID;
+    }
+
+    public function setEventName($event)
+    {
+        $this->eventName = $event;
+    }
+
+    public function getEventName()
+    {
+        return $this->eventName;
+    }
+
+    public function setEnvironment($env)
+    {
+        $this->env = $env;
+    }
+
+    public function getEnvironment()
+    {
+        return $this->env;
+    }
+
+    public function setOrderNumber($order)
+    {
+        $this->orderNumber = $order;
+    }
+
+    public function getOrderNumber()
+    {
+        return $this->orderNumber;
+    }
+
+    public function setTransactionID($ID)
+    {
+        $this->TransactionID = $ID;
+    }
+
+    public function getTransactionID()
+    {
+        return $this->TransactionID;
+    }
+
+    public function setRefund($refund)
+    {
+        $this->refund = $refund;
+    }
+
+    public function getRefund()
+    {
+        return $this->refund;
+    }
+
 }
