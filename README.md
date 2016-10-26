@@ -23,3 +23,5 @@ There are lots of features were done and even more stuff in todo list. If the li
 ## License
 
 Payum is released under the [MIT License](LICENSE).
+
+Payment gateway Tranzila and MerchantESoultion
