@@ -125,7 +125,7 @@ $driver = new MappingDriverChain;
 
 // payum's basic models
 $driver->addDriver(
-    new SimplifiedXmlDriver(array('path/to/Payum/Core/Model' => 'Payum\Core\Model')), 
+    new SimplifiedXmlDriver(array('path/to/Payum/Core/Bridge/Doctrine/Resources/mapping' => 'Payum\Core\Model')), 
     'Payum\Core\Model'
 );
 
