@@ -16,7 +16,7 @@ Payum offers everything you need to work with payments. From simplest use cases 
 
 ## Support me
 
-There are lots of features were done and even more stuff in todo list. If the library made your life easier cosider support me. You can either hire me to do some payment related stuff or donate. You can also send a mail with a feedback. [Tell me](https://github.com/makasim) about your experience with Payum. 
+There are lots of features were done and even more stuff in todo list. If the library made your life easier consider support me. You can either hire me to do some payment related stuff or donate. You can also send a mail with a feedback. [Tell me](https://github.com/makasim) about your experience with Payum. 
 
 <a href='https://pledgie.com/campaigns/30526'><img alt='Click here to lend your support to: Your private payment processing server. Setup it once and rule them all and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/30526.png?skin_name=chrome' border='0' ></a>
 
