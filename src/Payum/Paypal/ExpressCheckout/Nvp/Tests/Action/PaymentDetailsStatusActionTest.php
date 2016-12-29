@@ -297,6 +297,25 @@ class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldMarkFailedIfAtLeastOnePaymentStatusReversed()
+    {
+        $action = new PaymentDetailsStatusAction();
+
+        $request = new GetHumanStatus(array(
+            'PAYMENTREQUEST_0_AMT' => 12,
+            'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
+            'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
+            'PAYMENTREQUEST_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_REVERSED,
+        ));
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isFailed());
+    }
+
+    /**
+     * @test
+     */
     public function shouldMarkRefundedIfAtLeastOnePaymentStatusRefund()
     {
         $action = new PaymentDetailsStatusAction();
