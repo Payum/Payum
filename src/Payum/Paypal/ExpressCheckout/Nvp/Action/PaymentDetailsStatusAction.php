@@ -136,6 +136,7 @@ class PaymentDetailsStatusAction implements ActionInterface
                     Api::PAYMENTSTATUS_FAILED,
                     Api::PAYMENTSTATUS_EXPIRED,
                     Api::PAYMENTSTATUS_DENIED,
+                    Api::PAYMENTSTATUS_REVERSED,
                     Api::PAYMENTSTATUS_CANCELED_REVERSAL,
                 );
                 if (in_array($paymentStatus, $failedStatuses)) {
