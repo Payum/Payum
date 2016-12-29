@@ -94,6 +94,16 @@ interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterfac
     /**
      * @return boolean
      */
+    public function isReversed();
+
+    /**
+     * @return void
+     */
+    public function markReversed();
+
+    /**
+     * @return boolean
+     */
     public function isPending();
 
     /**
