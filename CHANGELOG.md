@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.9 (2017-01-31)
+
+* [paypal][rest] Fix testsFix comments starting with # are deprecated
+* [core] Twig 2.x - compatibility
+* [paypal][ec] Mark reversed payments failed
+* [doc] various typo fixes and improvements 
+
 ## 1.3.8 (2016-10-04)
 
 * [gateway] Remove `guzzle.client` from the gateway factory config
