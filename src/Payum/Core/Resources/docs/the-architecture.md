@@ -12,7 +12,7 @@ _**Note**: If you'd like to see real world examples we have provided you with a 
 ```php
 <?php
 $gateway = new Gateway;
-$gateway->addAction(new CaptureAction));
+$gateway->addAction(new CaptureAction);
 
 //CaptureAction does its job.
 $gateway->execute($capture = new Capture(array(
