@@ -5,7 +5,7 @@ language: php
 #      - SYMFONY_DEPRECATIONS_HELPER=weak
 
 git:
-    depth: 1
+    depth: 10
 
 sudo: false
 
