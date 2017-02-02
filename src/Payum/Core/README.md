@@ -7,7 +7,7 @@ Payum offers everything you need to work with payments. From simplest use cases 
 
 ## Resources
 
-* [Documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/index.md)
+* [Documentation](https://github.com/Payum/Payum/blob/master/docs/index.md#general)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)

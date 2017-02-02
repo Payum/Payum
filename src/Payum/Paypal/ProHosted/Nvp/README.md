@@ -7,7 +7,7 @@ The Payum extension. It provides [Paypal ProHosted](https://developer.paypal.com
 
 ## Resources
 
-* [Documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/index.md)
+* [Documentation](https://github.com/Payum/Payum/blob/master/docs/index.md#paypal-pro-hosted)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)
