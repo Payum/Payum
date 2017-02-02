@@ -74,7 +74,7 @@
         "ext-soap": "*"
     },
     "replace": {
-        "payum/core": "self.version",
+        "payum/core": "self.version|^1",
         "payum/paypal-express-checkout-nvp": "self.version",
         "payum/paypal-pro-checkout-nvp": "self.version",
         "payum/paypal-rest": "self.version",
