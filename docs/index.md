@@ -92,3 +92,11 @@
     
 * ### Symfony. JMS Payment Bridge
     * [Get it started. Capture](jms-payment-bridge/get-it-started.md)
+
+* ### Laravel. Payum Laravel Package
+    * [Get it started](laravel/get-it-started.md)
+    * [Examples](laravel/examples.md)
+    * [Eloquent storage](laravel/eloquent-storage.md)
+    * [Payment done controller](laravel/payment-done-controller.md)
+    * [Store gateway config in database](laravel/store-gateway-config-in-database.md)
+    * [Blade templates](laravel/blade-templating.md)
