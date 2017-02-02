@@ -101,7 +101,7 @@
     * [Store gateway config in database](laravel/store-gateway-config-in-database.md)
     * [Blade templates](laravel/blade-templating.md)
     
-# Silex. Payum Silex Provider
+* ### Silex. Payum Silex Provider
     * [Get it started](silex/get-it-started.md)
     * [Payment done controller](silex/payment-done-controller.md)
 
