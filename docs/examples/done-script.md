@@ -18,8 +18,11 @@ First one, Let Payum fetch the model for you while executing a request with a to
 // done.php
 
 use Payum\Core\Request\GetHumanStatus;
+use Payum\Core\Payum;
 
-include 'config.php';
+include __DIR__.'/config.php';
+
+/** @var Payum $payum */
 
 $token = $payum->getHttpRequestVerifier()->verify($_REQUEST);
 
@@ -36,8 +39,11 @@ Second one, Get the model from the storage directly.
 // done.php
 
 use Payum\Core\Request\GetHumanStatus;
+use Payum\Core\Payum;
 
-include 'config.php';
+include __DIR__.'/config.php';
+
+/** @var Payum $payum */
 
 $token = $payum->getHttpRequestVerifier()->verify($_REQUEST);
 
@@ -55,6 +61,8 @@ Now, you have a model and status. And you can find out what is the status of a p
 
 ```php
 <?php
+
+/** @var \Payum\Core\Request\GetHumanStatus $status */
 
 // using shortcut
 if ($status->isCaptured() || $status->isAuthorized()) {
@@ -80,6 +88,9 @@ This way the user is not able to accidentally purchase the same order two times 
 
 ```php
 <?php
+
+/** @var Payum\Core\Payum $payum */
+/** @var Payum\Core\Security\TokenInterface $token */
 
 // you can invalidate the token. The url could not be requested any more.
 $payum->getHttpRequestVerifier()->invalidate($token);

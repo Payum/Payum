@@ -26,7 +26,7 @@ use Payum\Core\Payum;
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
     ->addGateway('gatewayName', [
-        'factory' => 'paypal_pro_checkout'
+        'factory' => 'paypal_pro_checkout',
         'username' => 'REPLACE IT',
         'password' => 'REPLACE IT',
         'partner' => 'REPLACE IT',

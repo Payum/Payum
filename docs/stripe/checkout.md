@@ -30,7 +30,7 @@ $payum = (new PayumBuilder())
     ->addGateway('gatewayName', [
         'factory' => 'stripe_checkout',
         'publishable_key' => 'EDIT IT',
-        'secret_key' => 'EDIT IT'
+        'secret_key' => 'EDIT IT',
     ])
 
     ->getPayum()

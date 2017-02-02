@@ -11,6 +11,9 @@ _**Note**: If you'd like to see real world examples we have provided you with a 
 
 ```php
 <?php
+use Payum\Core\Gateway;
+use Payum\Core\Request\Capture;
+
 $gateway = new Gateway;
 $gateway->addAction(new CaptureAction);
 
@@ -25,6 +28,9 @@ var_export($capture->getModel());
 
 ```php
 <?php
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Request\Capture;
+
 class CaptureAction implements ActionInterface
 {
     public function execute($request)
@@ -55,8 +61,14 @@ Only then, it can create a sub request and pass it to the gateway.
 
 ```php
 <?php
-class FooAction extends GatewayAwareAction
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
+
+class FooAction implements ActionInterface, GatewayAwareInterface
 {
+    use GatewayAwareTrait;
+    
     public function execute($request)
     {
         //do its jobs
@@ -79,6 +91,9 @@ You can throw a http redirect reply for example at any time and catch it at a to
 
 ```php
 <?php
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Reply\HttpRedirect;
+
 class FooAction implements ActionInterface
 {
     public function execute($request)
@@ -94,7 +109,11 @@ Next code example demonstrate how you catch and process it.
 
 ```php
 <?php
+
+use Payum\Core\Reply\HttpRedirect;
+
 try {
+    /** @var \Payum\Core\Gateway $gateway */
     $gateway->addAction(new FooAction);
 
     $gateway->execute(new FooRequest);
@@ -114,6 +133,9 @@ The [Status request][status-request] is provided by default by our library, howe
 
 ```php
 <?php
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Request\GetStatusInterface;
+
 class FooAction implements ActionInterface
 {
     public function execute($request)
@@ -137,6 +159,9 @@ class FooAction implements ActionInterface
 ```php
 <?php
 
+use Payum\Core\Request\GetHumanStatus;
+
+/** @var \Payum\Core\Gateway $gateway */
 $gateway->addAction(new FooAction);
 
 $gateway->execute($status = new GetHumanStatus);
@@ -160,10 +185,15 @@ Imagine you want to check permissions before a user can capture the payment:
 
 ```php
 <?php
+use Payum\Core\Extension\ExtensionInterface;
+use Payum\Core\Extension\Context;
+
 class PermissionExtension implements ExtensionInterface
 {
-    public function onPreExecute($request)
+    public function onPreExecute(Context $context)
     {
+        $request = $context->getRequest();
+        
         if (false == in_array('ROLE_CUSTOMER', $request->getModel()->getRoles())) {
             throw new Exception('The user does not have the required roles.');
         }
@@ -174,7 +204,9 @@ class PermissionExtension implements ExtensionInterface
 ```
 
 ```php
-    <?php
+<?php
+
+/** @var \Payum\Core\Gateway $gateway */
 $gateway->addExtension(new PermissionExtension);
 
 // here is the place where the exception may be thrown.
@@ -195,6 +227,10 @@ Currently [Doctrine][doctrine-storage] [Zend Table Gateway][zend-table-gateway] 
 
 ```php
 <?php
+use Payum\Core\Gateway;
+use Payum\Core\Extension\StorageExtension;
+
+/** @var \Payum\Core\Storage\StorageInterface $storage */
 $storage = new FooStorage;
 
 $gateway = new Gateway;
@@ -213,33 +249,48 @@ When such api aware action is added to a gateway it tries to set an API, one by 
 
 ```php
 <?php
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\UnsupportedApiException;
+
 class FooAction implements ActionInterface, ApiAwareInterface
 {
-    public function setApi($api)
+    use ApiAwareTrait;
+    
+    public function __construct() 
     {
-        if (false == $api instanceof FirstApi) {
-            throw new UnsupportedApiException('Not supported.');
-        }
-
-        $this->api = $api;
+        $this->apiClass = Api::class;    
+    }    
+    
+    
+    public function execute($request) 
+    {
+        $this->api; // Api::class 
     }
 }
 
 class BarAction implements ActionInterface, ApiAwareInterface
 {
-    public function setApi($api)
+    use ApiAwareTrait;
+    
+    public function __construct() 
     {
-        if (false == $api instanceof SecondApi) {
-            throw new UnsupportedApiException('Not supported.');
-        }
-
-        $this->api = $api;
+        $this->apiClass = AnotherApi::class;    
+    }    
+    
+    
+    public function execute($request) 
+    {
+        $this->api; // AnotherApi::class 
     }
 }
 ```
 
 ```php
 <?php
+use Payum\Core\Gateway;
+
 $gateway = new Gateway;
 $gateway->addApi(new FirstApi);
 $gateway->addApi(new SecondApi);

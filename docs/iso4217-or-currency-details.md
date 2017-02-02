@@ -7,10 +7,12 @@ To get this information you have to execute a GetCurrency request with a currenc
 ```php
 <?php
 
+use Payum\Core\Request\GetCurrency;
+
 $factory = new \Payum\Offline\OfflineGatewayFactory();
 $gateway = $factory->create();
 
-$gateway->execute($currency = new \Payum\Core\GetCurrency('USD'));
+$gateway->execute($currency = new GetCurrency('USD'));
 
 echo $currency->alpha3;  // USD
 echo $currency->name;    // US Dollar
@@ -25,11 +27,18 @@ Or inside another action:
 ```php
 <?php
 
-class FooAction extends GatewayAwareAction
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
+use Payum\Core\Request\GetCurrency;
+
+class FooAction implements ActionInterface, GatewayAwareInterface
 {
+    use GatewayAwareTrait;
+    
     public function execute($request)
     {
-        $this->gateway->execute($currency = new \Payum\Core\GetCurrency('USD'));
+        $this->gateway->execute($currency = new GetCurrency('USD'));
         
         echo $currency->alpha3;  // USD
         echo $currency->name;    // US Dollar
@@ -44,9 +53,10 @@ Or directly ISO4217 service:
 ```php
 <?php
 
-$iso4217 = new \Payum\ISO4216\ISO4217();
+use Payum\ISO4217\ISO4217;
 
-/** @var \Payum\ISO4216\Currency $currency **/
+$iso4217 = new ISO4217();
+
 $currency = $iso4217->findByAlpha3('USD');
 
 echo $currency->getAlpha3();  // USD

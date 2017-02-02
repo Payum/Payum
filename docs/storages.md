@@ -41,9 +41,7 @@ Usage of a model identity with the extension:
 ```php
 <?php
 use Payum\Core\Extension\StorageExtension;
-use Payum\Core\Model\Identity;
 use Payum\Core\Storage\FilesystemStorage;
-use Payum\Core\Gateway;
 use Payum\Core\Request\Capture;
 
 $storage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Payment', 'number');
@@ -51,6 +49,7 @@ $storage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Payment',
 $order = $storage->create();
 $storage->update($order);
 
+/** @var \Payum\Core\Gateway $gateway */
 $gateway->addExtension(new StorageExtension($storage));
 
 $gateway->execute($capture = new Capture(
@@ -204,7 +203,6 @@ next, you have to create an entity manager and Payum's storage:
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator;
 use Doctrine\ODM\MongoDB\Types\Type;
 use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
@@ -212,6 +210,7 @@ use Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Configuration;
 use Doctrine\MongoDB\Connection;
+use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
 
 Type::addType('object', 'Payum\Core\Bridge\Doctrine\Types\ObjectType');
 
@@ -338,13 +337,7 @@ class CustomStorage implements StorageInterface
 
 ## TODO
 
-* [Propel](http://propelorm.org/) Storage - https://github.com/Payum/Payum/pull/144
 * [Pdo](http://php.net/manual/en/book.pdo.php) Storage - https://github.com/Payum/Payum/issues/205
-* [Eloquent](http://laravel.com/docs/4.2/eloquent) Storage
 * [Yii ActiveRecord](http://www.yiiframework.com/doc/guide/1.1/en/database.ar) Storage - https://github.com/Payum/PayumYiiExtension/pull/4
 
-
-## Next Step
-
-* [Get it started](get-it-started.md).
 * [Back to index](index.md).

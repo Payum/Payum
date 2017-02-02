@@ -5,7 +5,12 @@ The EventDispatcherExtensions provides a Bridge to the [Symfony EventDispatcher 
 ## Enable the EventDispatcherExtension
 
 ```php
+<?php
+
 use Payum\Core\Bridge\Symfony\Extension\EventDispatcherExtension;
+
+/** @var \Payum\Core\Gateway $gateway */
+/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher */
 
 $gateway->addExtension(
     new EventDispatcherExtension($eventDispatcher)
@@ -15,8 +20,12 @@ $gateway->addExtension(
 ## Listen to an Event
 
 ```php
+<?php
+
 use Payum\Core\Bridge\Symfony\Event\ExecuteEvent;
 use Payum\Core\Bridge\Symfony\PayumEvents;
+
+/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher */
 
 $eventDispatcher->addListener(
     PayumEvents::GATEWAY_EXECUTE,
@@ -54,3 +63,5 @@ services:
         tags:
             - { name: kernel.event_listener, event: payum.gateway.execute }
 ```
+
+Back to [index](index.md).

@@ -3,11 +3,19 @@
 ```php
 <?php
 
+use Payum\Core\GatewayInterface;
+use Payum\Core\Request\Capture;
+use Payum\Core\Reply\HttpRedirect;
+use Payum\Core\Model\Payment;
+use Payum\Core\Reply\ReplyInterface;
 
 try {
-    $gateway->execute(new \Payum\Core\Request\Capture($model);
-} catch (Payum\Core\Reply\ReplyInterface $reply) {
-    if ($reply instanceof Payum\Core\Reply\HttpRedirect) {
+    /** @var array|\ArrayObject|Payment $model */
+    
+    /** @var GatewayInterface $gateway */
+    $gateway->execute(new Capture($model));
+} catch (ReplyInterface $reply) {
+    if ($reply instanceof HttpRedirect) {
         header("Location: ".$reply->getUrl());
         
         exit;

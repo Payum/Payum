@@ -28,7 +28,7 @@ use Payum\Core\Payum;
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
     ->addGateway('gatewayName', [
-        'factory' => 'offline'
+        'factory' => 'offline',
     ])
 
     ->getPayum()

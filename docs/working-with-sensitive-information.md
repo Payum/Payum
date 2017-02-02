@@ -11,6 +11,8 @@ All info like credit cards have to be wrapped by `SensitiveValue` class.
 ```php
 <?php
 
+use Payum\Core\Security\SensitiveValue;
+
 $cardNumber = new SensitiveValue('theCreditCardNumber');
 
 serialize($cardNumber);
@@ -28,11 +30,14 @@ $cardNumber->get();
 $cardNumber->peek();
 // get sensitive value but do not erase it. use this method carefully
 
-(string) $model['cardNumber'];
+(string) $cardNumber;
 // empty string
 
-json_encode($model['cardNumber']);
+json_encode($cardNumber);
 // {}
+
+var_dump($cardNumber);
+// does not print sensitive data
 ```
 
 All supported gateways are aware of this class and will handle it safely.

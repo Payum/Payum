@@ -7,9 +7,13 @@ You can use this script if a gateway allows setting notification url per payment
 //notify.php
 
 use Payum\Core\Request\Notify;
-use Payum\Core\Reply\HttpRedirect;
+use Payum\Core\Payum;
+use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Reply\ReplyInterface;
 
-include 'config.php';
+include __DIR__.'/config.php';
+
+/** @var Payum $payum */
 
 $token = $payum->getHttpRequestVerifier()->verify($_REQUEST);
 $gateway = $payum->getGateway($token->getGatewayName());

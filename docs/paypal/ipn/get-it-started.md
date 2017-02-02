@@ -4,9 +4,10 @@
 <?php
 use Payum\Paypal\Ipn\Api;
 
-$api = new Api(array(
-    'sandbox' => true
-));
+/** @var \Payum\Core\HttpClientInterface $client */ 
+/** @var \Http\Message\MessageFactory $messageFactory */
+
+$api = new Api(['sandbox' => true], $client, $messageFactory);
 
 if (Api::NOTIFY_VERIFIED === $api->notifyValidate($_POST)) {
     echo 'It is valid paypal notification. Let\'s do some additional checks';

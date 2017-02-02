@@ -27,7 +27,7 @@ $payum = (new PayumBuilder())
     ->addDefaultStorages()
 
     ->addGateway('gatewayName', [
-        'factory' => 'paypal_express_checkout'
+        'factory' => 'paypal_express_checkout',
         'username'  => 'change it',
         'password'  => 'change it',
         'signature' => 'change it',

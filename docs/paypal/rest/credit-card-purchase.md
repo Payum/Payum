@@ -8,7 +8,7 @@ Here we show how to purchase something using credit card provided by a user.
 ```php
 <?php
 
-include 'config.php';
+include __DIR__.'/config.php';
 
 use PayPal\Api\Address;
 use PayPal\Api\Amount;
@@ -17,6 +17,7 @@ use PayPal\Api\Payer;
 use PayPal\Api\FundingInstrument;
 use PayPal\Api\Transaction;
 
+/** @var \Payum\Core\Payum $payum */
 $storage = $payum->getStorage($paypalRestPaymentDetailsClass);
 
 $payment = $storage->create();
@@ -60,7 +61,7 @@ $payment->intent = "sale";
 $payment->payer = $payer;
 $payment->transactions = array($transaction);
 
-$captureToken = $payum->getTokenFactory->createCaptureToken('paypalRest', $payment, 'create_recurring_payment.php');
+$captureToken = $payum->getTokenFactory()->createCaptureToken('paypalRest', $payment, 'create_recurring_payment.php');
 
 header("Location: ".$captureToken->getTargetUrl());
 ```

@@ -28,7 +28,7 @@ use Payum\Core\Payum;
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
     ->addGateway('klarna', [
-        'factory' => 'klarna_checkout'
+        'factory' => 'klarna_checkout',
         'merchant_id' => 'EDIT IT',
         'secret' => 'EDIT IT',
     ])
@@ -53,8 +53,9 @@ We need to add gateway factory and payment details storage.
 
 use Payum\Core\Model\ArrayObject;
 
-include 'config.php';
+include __DIR__.'/config.php';
 
+/** @var \Payum\Core\Storage\StorageInterface $storage */
 $storage = $this->getPayum()->getStorage(ArrayObject::class);
 
 $details = $storage->create();
@@ -63,7 +64,10 @@ $details['purchase_currency'] = 'SEK';
 $details['locale'] = 'sv-se';
 $storage->update($details);
 
+/** @var \Payum\Core\Security\TokenInterface $authorizeToken */
 $authorizeToken = $payum->getTokenFactory()->createAuthorizeToken('klarna', $details, 'done.php');
+
+/** @var \Payum\Core\Security\TokenInterface $notifyToken */
 $notifyToken = $payum->tokenFactory()->createNotifyToken('klarna', $details);
 
 $details['merchant'] = array(

@@ -30,7 +30,7 @@ $payum = (new PayumBuilder())
     ->addDefaultStorages()
 
     ->addGateway('be2bill_offsite', [
-        'factory' => 'be2bill_offsite'
+        'factory' => 'be2bill_offsite',
         'identifier' => 'REPLACE WITH YOURS',
         'password' => 'REPLACE WITH YOURS',
         'sandbox' => true,
@@ -47,10 +47,23 @@ The urls you can generate with these code:
 <?php
 //generate_urls.php
 
-include 'config.php';
+include __DIR__.'/config.php';
 
-echo 'Capture url: ', $payum->createCaptureToken('be2bill_offsite', null, ['noinvalidate' => 1], 'done_url')->getTargetUrl(), PHP_EOL;
-echo 'Notify url: ', $payum->createNotifyToken('be2bill_offsite', null)->getTargetUrl(), PHP_EOL;
+use Payum\Core\Payum;
+
+/** @var Payum $payum */
+
+$captureToken = $payum->getTokenFactory()->createCaptureToken(
+    'be2bill_offsite', 
+    null, 
+    ['noinvalidate' => 1], 
+    'done_url'
+);
+
+echo 'Capture url: ', $captureToken->getTargetUrl(), PHP_EOL;
+
+$notifyToken = $payum->getTokenFactory()->createNotifyToken('be2bill_offsite', null);
+echo 'Notify url: ', $notifyToken->getTargetUrl(), PHP_EOL;
 ```
 
 _**Note**: This step could be skipped if you are not using be2bill offsite._

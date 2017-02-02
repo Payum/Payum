@@ -4,7 +4,7 @@ Authorization & Capture, or Auth/Capture, allows you to authorize the availabili
 This is often useful for merchants who have a delayed order fulfillment process.
 Authorize & Capture also enables merchants to modify the original authorization amount due to order changes occurring after the initial order is placed, such as taxes, shipping or gratuity.
 
-```
+```php
 <?php
 // demo.php
 
@@ -28,8 +28,17 @@ $payum->getGateway('paypal')->execute(new Authorize([
     'PAYMENTREQUEST_0_AMT' => 1.1,
     'PAYMENTREQUEST_0_CURRENCY' => 'USD',
 ]));
+```
 
 Or you can create a token and reuse authorize script:
+
+```php
+<?php
+
+use Payum\Core\Model\Payment;
+
+/** @var \Payum\Core\Payum $payum */
+/** @var array|\ArrayObject|Payment $payment */
 
 $authorizeToken = $payum->getTokenFactory()->createAuthorizeToken('paypal', $payment, 'http://afterUrl');
 

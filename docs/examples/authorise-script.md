@@ -9,10 +9,14 @@ When the authorization is done a user is redirected to after url, in our case it
 <?php
 //authorise.php
 
+use Payum\Core\Payum;
 use Payum\Core\Request\Authorize;
-use Payum\Core\Request\Http\RedirectUrlInteractiveRequest;
+use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Reply\ReplyInterface;
 
-include 'config.php';
+include __DIR__.'/config.php';
+
+/** @var Payum $payum */
 
 $token = $payum->getHttpRequestVerifier()->verify($_REQUEST);
 $gateway = $payum->getGateway($token->getGatewayName());

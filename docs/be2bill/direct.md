@@ -33,7 +33,7 @@ $payum = (new PayumBuilder())
         'factory' => 'be2bill_direct',
         'identifier' => 'REPLACE WITH YOURS',
         'password' => 'REPLACE WITH YOURS',
-        'sandbox' => true
+        'sandbox' => true,
     ])
 
     ->getPayum()

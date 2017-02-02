@@ -13,12 +13,12 @@ This is a usual charge as we showed it in [get-it-started](get-it-started.md) wi
 
 /** @var \Payum\Core\Model\PaymentInterface $payment */
 
-$payment->setDetails([
+$payment->setDetails(new \ArrayObject([
     // everything in this section is never sent to the payment gateway
     'local' => [
         'save_card' => true,
     ],
-]);
+]));
 ```
 
 once the first payment is done you can get the customer id and store it somewhere
@@ -47,7 +47,7 @@ This is a usual charge as we showed it in [get-it-started](get-it-started.md) wi
 
 use Payum\Core\Model\CreditCard;
 
-/** @var \Payum\Core\Model\PaymentInterface $payment */
+/** @var \Payum\Core\Model\Payment $payment */
 
 $card = new CreditCard();
 $card->setToken($token);

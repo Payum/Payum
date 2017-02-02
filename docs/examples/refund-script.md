@@ -5,9 +5,13 @@
 //refund.php
 
 use Payum\Core\Request\Refund;
-use Payum\Core\Reply\HttpRedirect;
+use Payum\Core\Payum;
+use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Reply\ReplyInterface;
 
-include 'config.php';
+include __DIR__.'/config.php';
+
+/** @var Payum $payum */
 
 $token = $payum->getHttpRequestVerifier()->verify($_REQUEST);
 $gateway = $payum->getGateway($token->getGatewayName());

@@ -25,7 +25,7 @@ $payum = (new PayumBuilder())
     ->addDefaultStorages()
 
     ->addGateway('aGateway', [
-        'factory' => 'paypal_pro_hosted'
+        'factory' => 'paypal_pro_hosted',
         'username'  => 'change it',
         'password'  => 'change it',
         'signature' => 'change it',

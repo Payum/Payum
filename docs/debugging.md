@@ -11,6 +11,8 @@ use Payum\Core\Tests\Mocks\Action\CaptureAction;
 use Payum\Core\Gateway;
 use Payum\Core\Request\Capture;
 
+/** @var \Psr\Log\LoggerInterface $logger */
+
 $gateway = new Gateway;
 $gateway->addExtension(new LogExecutedActionsExtension($logger));
 $gateway->addAction(new CaptureAction);

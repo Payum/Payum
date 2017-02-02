@@ -39,6 +39,7 @@ $payum = (new PayumBuilder)
 
 use Payum\Core\Request\Capture;
 
+/** @var \Payum\Core\Payum $payum */
 $paypal = $payum->getGateway('paypal');
 
 $model = new \ArrayObject([
@@ -47,7 +48,5 @@ $model = new \ArrayObject([
 
 $paypal->execute(new Capture($model));
 ```
-
-Enjoy!
 
 Back to [index](index.md).

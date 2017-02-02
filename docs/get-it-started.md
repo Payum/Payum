@@ -71,10 +71,11 @@ Here's an offline gateway example:
 <?php
 // prepare.php
 
-include 'config.php';
+include __DIR__.'/config.php';
 
 $gatewayName = 'aGateway';
 
+/** @var \Payum\Core\Payum $payum */
 $storage = $payum->getStorage($paymentClass);
 
 $payment = $storage->create();
@@ -110,8 +111,12 @@ It has to work for all gateways without any modification from your side.
 <?php
 //capture.php
 
-include 'config.php';
+use Payum\Core\Request\Capture;
+use Payum\Core\Reply\HttpRedirect;
 
+include __DIR__.'/config.php';
+
+/** @var \Payum\Core\GatewayInterface $gateway */
 if ($reply = $gateway->execute(new Capture($token), true)) {
     if ($reply instanceof HttpRedirect) {
         header("Location: ".$reply->getUrl());
@@ -121,6 +126,7 @@ if ($reply = $gateway->execute(new Capture($token), true)) {
     throw new \LogicException('Unsupported reply', null, $reply);
 }
 
+/** @var \Payum\Core\Payum $payum */
 $payum->getHttpRequestVerifier()->invalidate($token);
 
 header("Location: ".$token->getAfterUrl());
@@ -140,8 +146,9 @@ In `done.php` we may check the payment status, update the model, dispatch events
 
 use Payum\Core\Request\GetHumanStatus;
 
-include 'config.php';
+include __DIR__.'/config.php';
 
+/** @var \Payum\Core\Payum $payum */
 $token = $payum->getHttpRequestVerifier()->verify($_REQUEST);
 $gateway = $payum->getGateway($token->getGatewayName());
 
@@ -154,25 +161,19 @@ $gateway = $payum->getGateway($token->getGatewayName());
 
 // or Payum can fetch the model for you while executing a request (Preferred).
 $gateway->execute($status = new GetHumanStatus($token));
-$payment = $status->getFirstModel());
+$payment = $status->getFirstModel();
 
 header('Content-Type: application/json');
-echo json_encode(array(
+echo json_encode([
     'status' => $status->getValue(),
-    'order' => array(
+    'order' => [
         'total_amount' => $payment->getTotalAmount(),
         'currency_code' => $payment->getCurrencyCode(),
         'details' => $payment->getDetails(),
-    ),
-)));
+    ],
+]);
 ```
 
 _**Note**: Find out more about done script in the [dedicated chapter](scripts/done-script.md)._
-
-## Next 
-
-* [The architecture](the-architecture.md).
-* [Supported gateways](supported-gateways.md).
-* [Storages](storages.md).
 
 Back to [index](index.md).

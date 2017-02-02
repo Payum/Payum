@@ -18,6 +18,7 @@ $plan = new \ArrayObject([
     "id" => "gold"
 ]);
 
+/** @var \Payum\Core\Payum $payum */
 $payum->getGateway('gatewayName')->execute(new CreatePlan($plan));
 ```
 
@@ -31,7 +32,7 @@ This is a usual charge as we showed it in [get-it-started](get-it-started.md) wi
 
 /** @var \Payum\Core\Model\PaymentInterface $payment */
 
-$payment->setDetails([
+$payment->setDetails(new \ArrayObject([
     'amount' => 2000,
     'currency' => 'USD',
 
@@ -40,7 +41,7 @@ $payment->setDetails([
         'save_card' => true,
         'customer' => ['plan' => $plan['id']],
     ],
-]);
+]));
 ```
 
 ## Links
