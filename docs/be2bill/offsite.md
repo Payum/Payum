@@ -1,7 +1,7 @@
 # Get it started.
 
 In this chapter we are going to talk about the most common task: purchase of a product using [be2bill](http://www.be2bill.com/).
-We assume you already read [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) from core.
+We assume you already read basic [get it started](../get-it-started.md).
 Here we just show you modifications you have to put to the files shown there.
 
 ## Installation
@@ -57,14 +57,7 @@ _**Note**: This step could be skipped if you are not using be2bill offsite._
 
 ## prepare.php
 
-Here you have to modify a `gatewayName` value. Set it to `be2bill` or `be2bill_offsite`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
+Here you have to modify a `gatewayName` value. Set it to `be2bill` or `be2bill_offsite`. The rest remain the same as described in basic [get it started](../get-it-started.md) documentation.
 
-
-## Next 
-
-* [Core's Get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
-* [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
-* [Supported gateways](https://github.com/Payum/Core/blob/master/Resources/docs/supported-gateways.md).
-* [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
 
 Back to [index](../index.md).

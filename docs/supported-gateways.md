@@ -2,21 +2,21 @@
 
 ## Official
 
-* [Paypal Express Checkout](https://github.com/Payum/PaypalExpressCheckoutNvp/blob/master/Resources/docs/index.md)
-* [Paypal Pro Checkout](https://github.com/Payum/PaypalProCheckoutNvp/blob/master/Resources/docs/index.md)
-* [Paypal Pro Hosted](https://github.com/Payum/PaypalProHostedNvp/blob/master/Resources/docs/index.md)
-* [Paypal Masspay](https://github.com/Payum/PaypalMasspayNvp/blob/master/Resources/docs/index.md)
-* [Paypal Rest](https://github.com/Payum/PaypalRest/blob/master/Resources/docs/index.md)
-* [Stripe.js](https://github.com/Payum/Stripe/blob/master/Resources/docs/get-it-started.md)
-* [Stripe Checkout](https://github.com/Payum/Stripe/blob/master/Resources/docs/checkout.md)
-* [Authorize.Net AIM](https://github.com/Payum/AuthorizeNetAim/blob/master/Resources/docs/index.md)
-* [Be2Bill CreditCard](https://github.com/Payum/Be2Bill/blob/master/Resources/docs/index.md)
-* [Be2Bill Offsite](https://github.com/Payum/Be2Bill/blob/master/Resources/docs/index.md)
-* [Payex](https://github.com/Payum/Payex/blob/master/Resources/docs/index.md)
-* [Offline](https://github.com/Payum/Offline/blob/master/Resources/docs/index.md)
-* [Klarna Checkout](https://github.com/Payum/KlarnaCheckout/blob/master/Resources/docs/get-it-started.md)
-* [Klarna Invoice](https://github.com/Payum/KlarnaInvoice/blob/master/Resources/docs/get-it-started.md)
-* [Sofort](https://github.com/Payum/Sofort/blob/master/Resources/docs/get-it-started.md)
+* [Paypal Express Checkout](index.md#paypal-express-checkout)
+* [Paypal Pro Checkout](index.md#paypal-pro-checkout)
+* [Paypal Pro Hosted](index.md#paypal-pro-hosted)
+* [Paypal Masspay](index.md#paypal-masspay)
+* [Paypal Rest](index.md#paypal-rest)
+* [Stripe.js](index.md#stripe)
+* [Stripe Checkout](index.md#stripe)
+* [Authorize.Net AIM](index.md#authorizenet-aim)
+* [Be2Bill CreditCard](index.md#be2bill)
+* [Be2Bill Offsite](index.md#be2bill)
+* [Payex](index.md#payex)
+* [Offline](index.md#offline)
+* [Klarna Checkout](index.md#klarna-checkout)
+* [Klarna Invoice](index.md#klarna-invoice)
+* [Sofort](index.md#sofort)
 
 ## Community
 

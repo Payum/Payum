@@ -47,4 +47,4 @@ $payment->setDetails([
 
 * https://stripe.com/docs/subscriptions/tutorial
 
-Back to [index](index.md).
+Back to [index](../index.md).

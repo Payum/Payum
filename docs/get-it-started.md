@@ -3,9 +3,9 @@
 Here we describe basic steps required by all supported gateways. We are going to setup models, storages, a security layer and so on.
 All that stuff will be used later.
 
-_**Note**: If you are working with Symfony2 framework look read the bundle's [documentation](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md) instead._
+_**Note**: If you are working with Symfony2 framework look read the bundle's [documentation](index.md#symfony-payum-bundle) instead._
 
-_**Note**: If you are working with Laravel4 framework look read the bundle's [documentation](https://github.com/Payum/PayumLaravelPackage/blob/master/docs/index.md) instead._
+_**Note**: If you are working with Laravel5 framework look read the bundle's [documentation](index.md#laravel-payum-package) instead._
 
 ## Install
 
@@ -29,7 +29,7 @@ This flow is same for all gateways so once you familiar with it any other gatewa
 
 As you can see we have to create some php files: `config.php`, `prepare.php`, `capture.php` and `done.php`.
 At the end you will have the complete solution and 
-it would be [much easier to add](https://github.com/Payum/PaypalExpressCheckoutNvp/blob/master/Resources/docs/get-it-started.md) other gateways.
+it would be [much easier to add](paypal/express-checkout/get-it-started.md) other gateways.
 Let's start from the `config.php` and continue with rest after:
 
 ## config.php

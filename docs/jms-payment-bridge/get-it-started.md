@@ -6,7 +6,7 @@ Steps:
 * [Configure context](#configure-context)
 * [Prepare gateway](#prepare-gateway)
 
-_**Note** : We assume you followed all steps in [get it started](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/get-it-started.md) and your basic configuration same as described there._
+_**Note** : We assume you followed all steps in basic [get it started](../get-it-started.md) and your basic configuration same as described there._
 
 ## Download libraries
 

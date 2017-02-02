@@ -1,7 +1,8 @@
 # Get it started.
 
 In this chapter we are going to talk about the most common task: purchasing a product.
-We assume you already read [payum's get it started documentation](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
+We assume you already read basic [get it started](../../get-it-started.md).
+
 
 ## Installation
 
@@ -83,14 +84,7 @@ header("Location: ".$captureToken->getTargetUrl());
 ```
 
 That's it. As you see we configured Paypal Rest `config.php` and set details `prepare.php`.
-[capture.php](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/scripts/capture-script.md) and [done.php](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/scripts/done-script.md) scripts remain same.
-Here you have to modify a `gatewayName` value. Set it to `paypal_pro_checkout`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
-
-## Next
-
-* [Core's Get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
-* [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
-* [Supported gateways](https://github.com/Payum/Core/blob/master/Resources/docs/supported-gateways.md).
-* [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
+[capture.php](../../examples/capture-script.md) and [done.php](../../examples/done-script.md) scripts remain same.
+Here you have to modify a `gatewayName` value. Set it to `paypal_pro_checkout`. The rest remain the same as described in basic [get it started](../../get-it-started.md) documentation.
 
 Back to [index](../../index.md).

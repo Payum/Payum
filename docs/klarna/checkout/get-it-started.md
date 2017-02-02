@@ -2,6 +2,7 @@
 
 In this chapter we are going to talk about the most common task: purchase of a product using [Klarna Checkout](https://developers.klarna.com/en/klarna-checkout).
 Unfortunately, You cannot use Payum's order to purchase stuff. Only klarna specific format is supported.
+We assume you already read basic [get it started](../../get-it-started.md).
 
 ## Installation
 
@@ -97,13 +98,6 @@ header("Location: ".$authorizeToken->getTargetUrl());
 ```
 
 That's it. As you see we configured Klarna Checkout `config.php` and set details `prepare.php`.
-[capture.php](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/scripts/capture-script.md) and [done.php](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/scripts/done-script.md) scripts remain same.
-
-## Next 
-
-* [Core's Get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
-* [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
-* [Supported gateways](https://github.com/Payum/Core/blob/master/Resources/docs/supported-gateways.md).
-* [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
+[capture.php](../../examples/capture-script.md) and [done.php](../../examples/done-script.md) scripts remain same.
 
 Back to [index](../index.md).

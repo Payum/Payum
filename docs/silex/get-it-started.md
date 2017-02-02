@@ -9,7 +9,7 @@ Look at sandbox to find more examples.
 php composer.phar require payum/payum-silex-provider payum/xxx
 ```
 
-_**Note**: Where payum/xxx is a payum package, for example it could be payum/paypal-express-checkout-nvp. Look at [supported gateways](https://github.com/Payum/Core/blob/master/Resources/docs/supported-gateways.md) to find out what you can use._
+_**Note**: Where payum/xxx is a payum package, for example it could be payum/paypal-express-checkout-nvp. Look at [supported gateways](../supported-gateways.md) to find out what you can use._
 
 _**Note**: Use payum/payum if you want to install all gateways at once._
 

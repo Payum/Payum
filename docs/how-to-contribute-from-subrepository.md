@@ -6,7 +6,7 @@ Later on you found a bug fixed it and want to contribute it back to payum main r
 The patch could not be accepted on payum/stripe repository. It is readonly subtree split repository.
 Here I show you how to move your fixes to payum/payum repository and push them.
 
-1. Fork [payum/payum](https://github.com/Payum/Payum#fork-destination-box) repository on GitHub.
+1. Fork [payum/payum](https://github.com/Payum/Payum) repository on GitHub.
 2. Clone forked repository locally.
 
 ```bash

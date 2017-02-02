@@ -285,5 +285,5 @@ Back to [index](index.md).
 [authorize-status-action]: https://github.com/Payum/Payum/blob/master/src/Payum/AuthorizeNet/Aim/Action/StatusAction.php
 [omnipay]: https://github.com/adrianmacneil/omnipay
 [omnipay-example]: https://github.com/Payum/PayumBundleSandbox/blob/master/src/Acme/PaymentBundle/Controller/SimplePurchasePaypalExpressViaOmnipayController.php
-[bundle-doc]: https://github.com/Payum/PayumBundle/blob/master/Resources/doc/index.md
+[bundle-doc]: index.md#symfony-payum-bundle
 [payum-bundle]: https://github.com/Payum/PayumBundle/blob/master/PayumBundle.php
