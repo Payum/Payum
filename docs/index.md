@@ -1,6 +1,6 @@
 # Payum docs
 
-* ##### General
+* #### General
     * [Get it started](get-it-started.md)
     * [Architecture](the-architecture.md)
     * [Storages](storages.md)
@@ -19,26 +19,26 @@
     * [Symfony. The event dispatcher extension](event-dispatcher.md)
     * [How to contribute from sub repository](how-to-contribute-from-subrepository.md)
 
-* ##### Authorize.Net AIM
+* #### Authorize.Net AIM
     * [Get it started](authorize-net/aim/get-it-started.md)
     
-* ##### Be2Bill
+* #### Be2Bill
     * [Get it started](be2bill/get-it-started.md)
     * [Offsite](be2bill/offsite.md)
 
-* ##### Klarna Checkout
+* #### Klarna Checkout
     * [Get it started](klarna/checkout/get-it-started.md)
     
-* ##### Klarna Invoice
+* #### Klarna Invoice
     * [Get it started](klarna/invoice/get-it-started.md)
     
-* ##### Offline 
+* #### Offline 
     * [Get it started](offline/get-it-started.md)
 
-* ##### Payex
+* #### Payex
     * [Get it started](payex/get-it-started.md)
     
-* ##### Paypal Express Checkout
+* #### Paypal Express Checkout
     * [Get it started](paypal/express-checkout/get-it-started.md)
     * [Authorize order](paypal/express-checkout/authorize-order.md)
     * [Confirm order step](paypal/express-checkout/confirm-order-step.md)
@@ -46,26 +46,26 @@
     * [Cancel recurring payment](paypal/express-checkout/cancel-recurring-payment.md)
     * [Authorize token custom query parameters](paypal/express-checkout/authorize-token-custom-query-parameters.md)
 
-* ##### Paypal Pro Checkout
+* #### Paypal Pro Checkout
     * [Get it started](paypal/pro-checkout/get-it-started.md)
 
-* ##### Paypal Pro Hosted 
+* #### Paypal Pro Hosted 
     * [Get it started](paypal/pro-hosted/get-it-started.md)
 
-* ##### Paypal Masspay
+* #### Paypal Masspay
     * [Get it started](paypal/masspay/get-it-started.md)
     
-* ##### Paypal Rest
+* #### Paypal Rest
     * [Get it started](paypal/rest/get-it-started.md)
     * [Credit card purchase](paypal/rest/credit-card-purchase.md)
 
-* ##### Paypal IPN
+* #### Paypal IPN
     * [Get it started](paypal/ipn/get-it-started.md)
 
-* ##### Sofort  
+* #### Sofort  
     * [Get it started](sofort/get-it-started.md)
     
-* ##### Stripe
+* #### Stripe
     * [Get it started. Stripe.js](stripe/get-it-started.md)
     * [Checkout](stripe/checkout.md)
     * [Direct](stripe/direct.md)
@@ -73,7 +73,7 @@
     * [Store Card and use later](stripe/store-card-and-use-later.md)
     * [Subscription billing](stripe/subscription-billing.md)
     
-* ##### Symfony. Payum Bundle
+* #### Symfony. Payum Bundle
     * [Get it started. Capture](symfony/get-it-started.md)
     * [Authorize](symfony/authorize.md)
     * [Refund](symfony/refund.md)
@@ -90,5 +90,5 @@
     * [Container tags](symfony/container-tags.md)
     * [ISO4217. Currency details](symfony/iso4217-or-currency-details.md)
     
-* ##### Symfony. JMS Payment Bridge
+* #### Symfony. JMS Payment Bridge
     * [Get it started. Capture](jms-payment-bridge/get-it-started.md)
