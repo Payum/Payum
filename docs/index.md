@@ -89,11 +89,8 @@
     * [Configuration reference](symfony/configuration-reference.md)
     * [Container tags](symfony/container-tags.md)
     * [ISO4217. Currency details](symfony/iso4217-or-currency-details.md)
-    
-* ### Symfony. JMS Payment Bridge
-    * [Get it started. Capture](jms-payment-bridge/get-it-started.md)
 
-* ### Laravel. Payum Laravel Package
+* ### Laravel. Payum Package
     * [Get it started](laravel/get-it-started.md)
     * [Examples](laravel/examples.md)
     * [Eloquent storage](laravel/eloquent-storage.md)
@@ -101,13 +98,16 @@
     * [Store gateway config in database](laravel/store-gateway-config-in-database.md)
     * [Blade templates](laravel/blade-templating.md)
     
-* ### Silex. Payum Silex Provider
+* ### Silex. Payum Provider
     * [Get it started](silex/get-it-started.md)
     * [Payment done controller](silex/payment-done-controller.md)
+    
+* ### Symfony. JMS Payment Bridge
+    * [Get it started. Capture](jms-payment-bridge/get-it-started.md)
 
 * ### [Zend. Payum Module (External)](https://github.com/Payum/PayumModule)
 
-* ### [Yii. Payum Yii Extension (External)](https://github.com/Payum/PayumYiiExtension)
+* ### [Yii. Payum Extension (External)](https://github.com/Payum/PayumYiiExtension)
 
 * ### [Omnipay Bridge (External)](https://github.com/Payum/OmnipayBridge)
 
