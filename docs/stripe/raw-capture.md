@@ -1,4 +1,4 @@
-# Raw capture 
+# Stripe. Raw capture 
 
 In the basic [get it started](../get-it-started.md) we showed how to use the library with unified interface or in other words Payment model.
 Sometimes you need completely custom solution.

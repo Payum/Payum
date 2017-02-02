@@ -1,4 +1,4 @@
-# Storages
+# Payum Bundle. Storages
 
 ## Doctrine ORM
 

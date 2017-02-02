@@ -1,4 +1,4 @@
-# Refund payment
+# Payum Bundle. Refund payment
 
 Let's say you already purchased an order and now you want to refund it. 
 

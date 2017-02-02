@@ -1,4 +1,4 @@
-# Get it started.
+# Klarna Invoice. Get it started.
 
 In this chapter we are going to talk about the most common task: purchase of a product [Klarna Invoice](https://developers.klarna.com/en/invoice-and-part-payment/prepare-your-checkout-for-klarna).
 Unfortunately, You cannot use Payum's order to purchase stuff. Only klarna specific format is supported.

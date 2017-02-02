@@ -1,4 +1,4 @@
-# Get it started.
+# Be2Bill. Offsite
 
 In this chapter we are going to talk about the most common task: purchase of a product using [be2bill](http://www.be2bill.com/).
 We assume you already read basic [get it started](../get-it-started.md).

@@ -1,4 +1,4 @@
-# Get it started.
+# Klarna Checkout. Get it started.
 
 In this chapter we are going to talk about the most common task: purchase of a product using [Klarna Checkout](https://developers.klarna.com/en/klarna-checkout).
 Unfortunately, You cannot use Payum's order to purchase stuff. Only klarna specific format is supported.
@@ -100,4 +100,4 @@ header("Location: ".$authorizeToken->getTargetUrl());
 That's it. As you see we configured Klarna Checkout `config.php` and set details `prepare.php`.
 [capture.php](../../examples/capture-script.md) and [done.php](../../examples/done-script.md) scripts remain same.
 
-Back to [index](../index.md).
+Back to [index](../../index.md).

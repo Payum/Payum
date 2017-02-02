@@ -1,4 +1,4 @@
-# Get it started. Paypal ExpressCheckout.
+# Paypal Express Checkout. Get it started. Paypal ExpressCheckout.
 
 In this chapter we are going to talk about the most common task: purchase of a product using [Paypal ExpressCheckout](https://www.paypal.com/webapps/mpp/express-checkout).
 We assume you already read basic [get it started](../../get-it-started.md).

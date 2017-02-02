@@ -1,4 +1,4 @@
-# Configuration Reference
+# Payum Bundle. Configuration Reference
 
 ## Payum extension:
 

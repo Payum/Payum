@@ -1,4 +1,4 @@
-# Get it started.
+# Sofort. Get it started.
 
 In this chapter we are going to talk about the most common task: purchase of a product using [sofort](https://www.sofort.com/).
 We assume you already read basic [get it started](../get-it-started.md).

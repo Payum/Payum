@@ -1,4 +1,4 @@
-# Store gateway config in database
+# Payum Laravel Package. Store gateway config in database
 
 Payum allows you store gateway configuration and credentials in your database.
 Later you may provide a backoffice so the admin can modify gateway through it.

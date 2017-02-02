@@ -1,4 +1,4 @@
-# Debugging
+# Payum Bundle. Debugging
 
 ## Debug payment
 

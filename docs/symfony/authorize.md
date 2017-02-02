@@ -1,4 +1,4 @@
-# Authorize payment
+# Payum Bundle. Authorize payment
 
 In [get it started](get-it-started.md) we showed you an example of how to capture the payment. 
 It is not always the case, sometimes you want to just authorize it and capture a bit later.

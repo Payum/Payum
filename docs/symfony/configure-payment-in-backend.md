@@ -1,4 +1,4 @@
-# Configure gateway in backend
+# Payum Bundle. Configure gateway in backend
 
 In [get it started](get-it-started.md) we showed you how to configure gateways in the Symfony config.yml file. 
 Though it covers most of the cases sometimes you may want to configure gateways in the backend. 

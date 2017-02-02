@@ -1,4 +1,4 @@
-# Confirm order step.
+# Paypal Express Checkout. Confirm order step.
 
 Paypal official documentation [suggest you to show a confirm order page](https://developer.paypal.com/docs/classic/express-checkout/integration-guide/ECGettingStarted/#id084RN0F0OPN), once user is back from Paypal.
 By default Payum skip this step, at Paypal site you will see "Pay Now" button. If you want to use confirm step you have to reset

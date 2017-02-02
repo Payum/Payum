@@ -1,4 +1,4 @@
-# Authorize token custom query parameters.
+# Paypal Express Checkout. Authorize token custom query parameters.
 
 It often required to customize authorize token ulr parameters.
 For example you may want a mobile version of paypal pages.

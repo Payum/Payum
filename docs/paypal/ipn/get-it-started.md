@@ -1,4 +1,4 @@
-# Get it started. Paypal IPN
+# Paypal IPN. Get it started.
 
 ```php
 <?php

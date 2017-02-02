@@ -1,4 +1,4 @@
-# Container tags
+# Payum Bundle. Container tags
 
 The bundle supports\reuse several Symfony container tags. You may find them useful too.
  

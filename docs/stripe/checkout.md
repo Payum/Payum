@@ -1,4 +1,4 @@
-# Checkout.
+# Stripe Checkout.
 
 In this chapter we are going to talk about the most common task: purchase of a product using [Stripe Checkout](https://stripe.com/docs/checkout).
 We assume you already read basic [get it started](../get-it-started.md).

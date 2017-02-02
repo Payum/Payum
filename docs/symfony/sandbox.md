@@ -1,4 +1,4 @@
-# Sandbox
+# Payum Bundle. Sandbox
 
 There is a sandbox app ([source](https://github.com/Payum/PayumBundleSandbox) or [web](http://sandbox.payum.forma-dev.com/)) with bunch of examples.
 It contains basic example as well as some advanced (paypal recurring payments, or paypal IPN).

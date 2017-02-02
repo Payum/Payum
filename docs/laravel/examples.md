@@ -1,4 +1,4 @@
-# Examples
+# Payum Laravel Package. Examples
 
 ## Paypal Express checkout
 

@@ -23,7 +23,7 @@
     * [Get it started](authorize-net/aim/get-it-started.md)
     
 * ### Be2Bill
-    * [Get it started](be2bill/get-it-started.md)
+    * [Direct](be2bill/direct.md)
     * [Offsite](be2bill/offsite.md)
 
 * ### Klarna Checkout
@@ -66,7 +66,7 @@
     * [Get it started](sofort/get-it-started.md)
     
 * ### Stripe
-    * [Get it started. Stripe.js](stripe/get-it-started.md)
+    * [Stripe.js](stripe/js.md)
     * [Checkout](stripe/checkout.md)
     * [Direct](stripe/direct.md)
     * [Raw capture](stripe/raw-capture.md)

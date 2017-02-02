@@ -1,4 +1,4 @@
-# Get it started
+# Payum Bundle. Get it started
 
 ## Install
 

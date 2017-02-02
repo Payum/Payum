@@ -1,4 +1,4 @@
-# Eloquent Storage
+# Payum Laravel Package. Eloquent Storage
 
 Here we show how to store data in database using [Eloquent ORM](http://laravel.com/docs/4.2/eloquent).
 

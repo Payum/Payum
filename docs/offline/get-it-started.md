@@ -1,4 +1,4 @@
-# Get it started.
+# Offline. Get it started.
 
 In this chapter we are going to talk about offline payments. The offline may be used in case of cash, cheque or wire transfer.
 We assume you already read basic [get it started](../get-it-started.md).

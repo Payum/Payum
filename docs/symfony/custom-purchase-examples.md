@@ -1,4 +1,4 @@
-# Custom purchase examples
+# Payum Bundle. Custom purchase examples
 
 ## Configure
 

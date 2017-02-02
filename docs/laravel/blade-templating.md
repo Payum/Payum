@@ -1,4 +1,4 @@
-# Templating
+# Payum Laravel Package. Templating
 
 Some gateways require authorizations in one way or another. Some of these are to be included as a javascript
 or iframe or anything else on your page. By default, payum solves this with twix templates. With Laravel

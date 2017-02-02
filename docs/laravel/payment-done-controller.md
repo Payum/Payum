@@ -1,4 +1,4 @@
-# Payment done controller
+# Payum Laravel Package. Payment done controller
 
 First we have to validate the request. 
 If it is valid the verifier returns a token. 

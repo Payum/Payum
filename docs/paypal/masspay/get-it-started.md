@@ -1,4 +1,4 @@
-# Get it started. Paypal Masspay.
+# Paypal Masspay. Get it started.
 
 Mass Payments lets you send multiple payments in one batch.
 It's a fast and convenient way to send commissions, rebates, rewards, and general payments.

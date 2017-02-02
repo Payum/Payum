@@ -1,4 +1,4 @@
-# Direct.
+# Stripe Direct.
 
 Use this method if you already get a credit card details somehow, and you just have to send them to Stripe.
 

@@ -1,4 +1,4 @@
-# Get it started.
+# Payex. Get it started.
 
 In this chapter we are going to talk about the most common task: purchase of a product using [Payex](http://www.payexpim.com/).
 We assume you already read basic [get it started](../get-it-started.md).

@@ -1,4 +1,4 @@
-# Get it started. Paypal Website Payments Pro Hosted Solution.
+# Paypal Pro Hosted. Get it started.
 
 Introduction: https://developer.paypal.com/docs/classic/products/website-payments-pro-hosted-solution
 

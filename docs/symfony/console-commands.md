@@ -1,4 +1,4 @@
-# Console commands
+# Payum Bundle. Console commands
 
 Payum Bundle provides a set of CLI commands.
 

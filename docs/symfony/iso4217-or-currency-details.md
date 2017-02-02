@@ -1,4 +1,4 @@
-# ISO4217 or Currency Details. 
+# Payum Bundle. ISO4217 or Currency Details. 
 
 Payum provides ability to get currency details listed in [ISO4217](http://en.wikipedia.org/wiki/ISO_4217) specification.
 To get this information you have to execute a GetCurrency request with a currency code.

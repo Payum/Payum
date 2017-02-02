@@ -1,4 +1,4 @@
-# Get it started.
+# Be2Bill Direct.
 
 In this chapter we are going to talk about the most common task: purchase of a product using [be2bill](http://www.be2bill.com/).
 We assume you already read basic [get it started](../get-it-started.md).
@@ -29,7 +29,7 @@ use Payum\Core\Payum;
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
 
-    ->addGateway('be2bill', [
+    ->addGateway('be2bill_direct', [
         'factory' => 'be2bill_direct',
         'identifier' => 'REPLACE WITH YOURS',
         'password' => 'REPLACE WITH YOURS',

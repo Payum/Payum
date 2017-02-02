@@ -1,4 +1,4 @@
-# Get it started.
+# Paypal Rest. Get it started.
 
 In this chapter we are going to talk about the most common task: purchasing a product.
 We assume you already read basic [get it started](../../get-it-started.md).

@@ -1,4 +1,4 @@
-# Subscription billing.
+# Stripe. Subscription billing.
 
 In this chapter we show how to create subscription plan and use it in future to charge a customer.
 

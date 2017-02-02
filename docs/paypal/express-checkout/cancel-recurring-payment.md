@@ -1,4 +1,4 @@
-# Cancel recurring payment.
+# Paypal Express Checkout. Cancel recurring payment.
 
 In the chapter [recurring payments basics](recurring-payments-basics.md) we showed how to configure create a recurring.
 Here we show you how to cancel a recurring payment. 

@@ -1,4 +1,4 @@
-# Store credit card and use later.
+# Stripe. Store credit card and use later.
 
 In this chapter we show how to store a credit card safely and use in future.
 A customer enter the card once and billed later without the need to reenter it again.

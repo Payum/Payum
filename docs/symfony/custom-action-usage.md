@@ -1,4 +1,4 @@
-# Custom action usage
+# Payum Bundle. Custom action usage
 
 Gateway comes with built in actions but sometime you have to add your own. First you have to define a service:
 

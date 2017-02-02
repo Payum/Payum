@@ -1,4 +1,4 @@
-# Custom api usage
+# Payum Bundle. Custom api usage
 
 Sometime you asked to store payment gateway credentials to database. 
 If this is your case read [Configure payment in backend](configure-payment-in-backend.md) chapter.

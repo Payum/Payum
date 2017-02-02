@@ -1,4 +1,4 @@
-# Get it started.
+# Paypal Pro Checkout. Get it started.
 
 In this chapter we are going to talk about the most common task: purchase of a product using [Paypal Pro Checkout](https://www.paypal.com/webapps/mpp/paypal-payments-pro).
 We assume you already read basic [get it started](../../get-it-started.md).

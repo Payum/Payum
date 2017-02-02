@@ -1,4 +1,4 @@
-# Get it started.
+# Payum Silex Provider. Get it started.
 
 In this chapter we are going to setup payum package and do simple purchase using paypal express checkout. 
 Look at sandbox to find more examples.

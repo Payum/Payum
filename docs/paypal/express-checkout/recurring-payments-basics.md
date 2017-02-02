@@ -1,4 +1,4 @@
- # Recurring payments basics.
+# Paypal Express Checkout. Recurring payments basics.
 
 In this chapter we describe the basic steps you have to follow to set up recurring payments.
 We will use weather subscription as example.
