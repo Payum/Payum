@@ -1,6 +1,6 @@
 # Configure gateway in backend
 
-In [get it started](get_it_started.md) we showed you how to configure gateways in the code. 
+In [get it started](get-it-started.md) we showed you how to configure gateways in the code. 
 Sometimes you may asked to store gateways (mostly gateway credentials) to a database for example. 
 So the admin can edit them in the backend. Here's the basic example how to do it in plain php. 
    
