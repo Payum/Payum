@@ -96,4 +96,4 @@ include 'capture.php';
 That's it. As you see we configured Klarna Invoice `config.php` and set details `prepare.php`.
 [capture.php](../../examples/capture-script.md) and [done.php](../../examples/done-script.md) scripts remain same.
 
-Back to [index](../index.md).
+Back to [index](../../index.md).
