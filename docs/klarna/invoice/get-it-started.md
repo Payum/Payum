@@ -28,7 +28,7 @@ use Payum\Core\Payum;
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
     ->addGateway('klarna', [
-        'factory' => 'klarna_invoice'
+        'factory' => 'klarna_invoice',
         'eid' => 'EDIT IT',
         'secret' => 'EDIT IT',
         'country' => 'SE',
