@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.10 (2017-02-03)
+
+* [bridge][symfony] Allow choices to be defined as callbacks.
+* [docs] Fix code examples. Add namespace imports to code examples
+* [docs] Put all docs in one place.
+* [travis] Fix library version conflict
+* [travis] Prevent build fails when commit often.
+
 ## 1.3.9 (2017-01-31)
 
 * [paypal][rest] Fix testsFix comments starting with # are deprecated
