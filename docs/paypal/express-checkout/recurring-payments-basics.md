@@ -14,8 +14,6 @@ Let's define them:
 <?php
 namespace App\Model;
 
-use Payum\Core\Model\ArrayObject;
-
 class AgreementDetails extends \ArrayObject
 {
 }
@@ -28,8 +26,6 @@ And recurring payment details model:
 <?php
 namespace App\Model;
 
-use Payum\Core\Model\ArrayObject;
-
 class RecurringPaymentDetails extends \ArrayObject
 {
 }
@@ -40,6 +36,8 @@ Now we have to adjust `config.php` to support paypal recurring payments:
 ```php
 <?php
 //config.php
+
+use Payum\Core\Storage\FilesystemStorage;
 
 $agreementClass = 'App\Model\AgreementDetails';
 $recurringPaymentClass = 'App\Model\RecurringPaymentDetails';
@@ -63,10 +61,13 @@ For this we have to create an agreement with him.
 <?php
 //prepare.php
 
-include 'config.php';
+include __DIR__.'/config.php';
 
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
+/** @var \ArrayObject $agreementClass */
+
+/** @var \Payum\Core\Payum $payum */
 $storage = $payum->getStorage($agreementClass);
 
 $agreement = $storage->create();
@@ -102,9 +103,13 @@ After everything is complete we should redirect the user to a safe page - the pa
 use Payum\Core\Request\Sync;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfile;
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
-include 'config.php';
+include __DIR__.'/config.php';
 
+/** @var \ArrayObject $recurringPaymentClass */
+
+/** @var \Payum\Core\Payum $payum */
 $token = $payum->getHttpRequestVerifier()->verify($_REQUEST);
 $payum->getHttpRequestVerifier()->invalidate($token);
 

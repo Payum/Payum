@@ -7,10 +7,10 @@ use Payum\Stripe\StripeJsGatewayFactory;
 
 $factory = new StripeJsGatewayFactory();
 
-$gateway = $factory->create(array(
+$gateway = $factory->create([
     'publishable_key' => 'aKey', 
     'secret_key' => 'aKey',
-));
+]);
 ```
 
 Back to [examples](index.md).

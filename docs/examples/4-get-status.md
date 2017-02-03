@@ -3,7 +3,14 @@
 ```php
 <?php
 
-$gateway->execute($status = new \Payum\Core\Request\GetHumanStatus($model));
+use Payum\Core\GatewayInterface;
+use Payum\Core\Model\Payment;
+use Payum\Core\Request\GetHumanStatus;
+
+/** @var array|\ArrayObject|Payment $model */
+
+/** @var GatewayInterface $gateway */
+$gateway->execute($status = new GetHumanStatus($model));
 
 $status->isNew();
 $status->isPending();

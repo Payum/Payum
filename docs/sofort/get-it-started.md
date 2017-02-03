@@ -27,7 +27,7 @@ $payum = (new PayumBuilder())
     ->addDefaultStorages()
 
     ->addGateway('sofort', [
-        'factory' => 'sofort'
+        'factory' => 'sofort',
         'config_key' => 'EDIT ME',
     ])
 

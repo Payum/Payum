@@ -9,9 +9,13 @@ This is the script which does all the job related to payout payments.
 //payout.php
 
 use Payum\Core\Request\Payout;
-use Payum\Core\Reply\HttpRedirect;
+use Payum\Core\Payum;
+use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Reply\ReplyInterface;
 
-include 'config.php';
+include __DIR__.'/config.php';
+
+/** @var Payum $payum */
 
 $token = $payum->getHttpRequestVerifier()->verify($_REQUEST);
 $gateway = $payum->getGateway($token->getGatewayName());
@@ -45,7 +49,11 @@ This is how you can create a payout url.
 ```php
 <?php
 
-include config.php;
+use Payum\Core\Payum;
+
+include __DIR__.'/config.php';
+
+/** @var Payum $payum */
 
 $token = $payum->getTokenFactory()->createPayoutToken($gatewayName, $details, 'afterPayoutUrl');
 

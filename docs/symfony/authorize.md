@@ -13,12 +13,17 @@ We have to caThe only difference from capture one example
 
 namespace Acme\PaymentBundle\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Payum\Core\Storage\StorageInterface;
+use Payum\Core\Security\TokenInterface;
+
 class PaymentController extends Controller 
 {
     public function prepareAction() 
     {
         $gatewayName = 'offline';
         
+        /** @var StorageInterface $storage */
         $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\Payment');
         
         $payment = $storage->create();
@@ -31,13 +36,14 @@ class PaymentController extends Controller
         
         $storage->update($payment);
         
+        /** @var TokenInterface $captureToken */
         $captureToken = $this->get('payum')->getTokenFactory()->createCaptureToken(
             $gatewayName, 
             $payment, 
             'done' // the route to redirect after capture;
         );
         
-        return $this->redirect($captureToken->getTargetUrl())    
+        return $this->redirect($captureToken->getTargetUrl());    
     }
 }
 ```

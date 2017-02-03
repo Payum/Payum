@@ -56,8 +56,11 @@ We need to add gateway factory and payment details storage.
 // prepare.php
 
 use Payum\Core\Model\ArrayObject;
+use Payum\Klarna\Invoice\Request\Api\GetAddresses;
 
-include 'config.php';
+include __DIR__.'/config.php';
+
+/** @var \Payum\Core\Payum $payum */
 
 $gateway = $payum->getGateway('klarna_invoice');
 $gateway->execute($getAddresses = new GetAddresses($pno));
@@ -90,7 +93,7 @@ $captureToken = $payum->getTokenFactory()->createCaptureToken('klarna_invoice', 
 
 $_REQUEST['payum_token'] = $captureToken;
 
-include 'capture.php';
+include __DIR__.'/capture.php';
 ```
 
 That's it. As you see we configured Klarna Invoice `config.php` and set details `prepare.php`.

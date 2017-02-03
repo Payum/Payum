@@ -26,7 +26,7 @@ use Payum\Core\Payum;
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
     ->addGateway('gatewayName', [
-        'factory' => 'paypal_rest'
+        'factory' => 'paypal_rest',
         'client_id' => 'REPLACE IT',
         'client_secret' => 'REPLACE IT',
         'config_path' => 'REPLACE IT',
@@ -42,7 +42,7 @@ $payum = (new PayumBuilder())
 <?php
 // prepare.php
 
-include 'config.php';
+include __DIR__.'/config.php';
 
 use PayPal\Api\Amount;
 use PayPal\Api\Payer;
@@ -51,6 +51,7 @@ use PayPal\Api\Transaction;
 
 $paypalRestPaymentDetailsClass = 'Payum\Paypal\Rest\Model\PaymentDetails';
 
+/** @var \Payum\Core\Payum $payum */
 $storage = $payum->getStorage($paypalRestPaymentDetailsClass);
 
 $payment = $storage->create();

@@ -12,9 +12,13 @@ When the capture is done a user is redirected to after url, in our case it is [d
 //capture.php
 
 use Payum\Core\Request\Capture;
-use Payum\Core\Reply\HttpRedirect;
+use Payum\Core\Payum;
+use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Reply\ReplyInterface;
 
-include 'config.php';
+include __DIR__.'/config.php';
+
+/** @var Payum $payum */
 
 $token = $payum->getHttpRequestVerifier()->verify($_REQUEST);
 $gateway = $payum->getGateway($token->getGatewayName());

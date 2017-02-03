@@ -65,7 +65,9 @@ $payum = (new PayumBuilder())
 <?php
 //create_config.php
 
-include 'config.php';
+include __DIR__.'/config.php';
+
+/** @var \Payum\Core\Storage\StorageInterface $gatewayConfigStorage */
 
 $gatewayConfig = $gatewayConfigStorage->create();
 $gatewayConfig->setGatewayName('paypal');
@@ -86,8 +88,9 @@ $gatewayConfigStorage->update($gatewayConfig);
 <?php
 // prepare.php
 
-include 'config.php';
+include __DIR__.'/config.php';
 
+/** @var \Payum\Core\Payum $payum */
 $gateway = $payum->getGateway('paypal');
 ```
 

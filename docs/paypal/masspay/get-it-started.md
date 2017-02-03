@@ -50,10 +50,11 @@ Here we send 1$ to recipient@example.com user:
 
 use Payum\Core\Model\Payout;
 
-include 'config.php';
+include __DIR__.'/config.php';
 
 $gatewayName = 'aGateway';
 
+/** @var \Payum\Core\Payum $payum */
 $storage = $payum->getStorage(Payout::class);
 
 $payout = $storage->create();

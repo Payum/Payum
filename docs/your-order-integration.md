@@ -29,9 +29,14 @@ namespace App\Payum\Action;
 use App\Model\Payment;
 use Payum\Core\Request\Capture;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\GatewayAwareTrait;
+use Payum\Core\GatewayAwareInterface;
 
-class CaptureOrderUsingFooAction extends GatewayAwareAction
+class CaptureOrderUsingFooAction implements ActionInterface, GatewayAwareInterface
 {
+    use GatewayAwareTrait
+    
     public function execute($request)
     {
         RequestNotSupportedException::assertSupports($this, $request);
@@ -83,8 +88,9 @@ $storages['App\Model\Payment'] = new FilesystemStorage('/path/to/storage', 'App\
 
 use App\Model\Payment;
 
-include 'config.php';
+include __DIR__.'/config.php';
 
+/** @var \Payum\Core\Payum $payum */
 $storage = $payum->getStorage('App\Model\Payment');
 
 $order = $storage->create();
@@ -93,7 +99,7 @@ $order->price = 1;
 $order->currency = 'USD';
 $storage->update($order);
 
-$captureToken = $payum->getTokenFactory->createCaptureToken('foo', $order, 'done.php');
+$captureToken = $payum->getTokenFactory()->createCaptureToken('foo', $order, 'done.php');
 
 header("Location: ".$captureToken->getTargetUrl());
 ```

@@ -49,7 +49,7 @@ class AcmePaymentBundle extends Bundle
 
 Once you added the factory you can configure payum context.
 
-```yml
+```yaml
 jms_payment_core:
     secret:                                               %kernel.secret%
 
@@ -82,6 +82,7 @@ Please note that you have to set details in the jms plugin specific format.
 
 ```php
 <?php
+
 public function prepareAction(Request $request)
 {
     $gatewayName = 'your_payment_name';

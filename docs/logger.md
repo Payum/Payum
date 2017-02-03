@@ -10,6 +10,7 @@ use Payum\Core\Bridge\Psr\Log\LoggerExtension;
 use Payum\Core\Tests\Mocks\Action\LoggerAwareAction;
 use Payum\Core\Gateway;
 
+/** @var \Psr\Log\LoggerInterface $logger */
 
 $gateway = new Gateway;
 $gateway->addExtension(new LoggerExtension($logger));
@@ -30,6 +31,7 @@ use Psr\Log\LoggerInterface;
 
 class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
 {
+    /** @var \Psr\Log\LoggerInterface $logger */
     protected $logger;
 
     /**

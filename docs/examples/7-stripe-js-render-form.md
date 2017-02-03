@@ -3,16 +3,25 @@
 ```php
 <?php
 
+use Payum\Core\GatewayInterface;
+use Payum\Core\Request\Capture;
+use Payum\Core\Reply\ReplyInterface;
+use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Model\Payment;
+
+/** @var array|\ArrayObject|Payment $model */
+
 try {
-    $gateway->execute(new \Payum\Core\Request\Capture($model));
-} catch (Reply) {
-    if ($reply instanceof Payum\Core\Reply\HttpResponse) {
+    /** @var GatewayInterface $gateway */
+    $gateway->execute(new Capture($model));
+} catch (ReplyInterface $reply) {
+    if ($reply instanceof HttpResponse) {
         echo $reply->getContent();
         
         exit;
     }
     
-    throws \LogicException('Unsupported reply', null, $reply);
+    throw new \LogicException('Unsupported reply', null, $reply);
 }
 ```
 
