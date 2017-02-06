@@ -63,7 +63,7 @@ class ObtainTokenForCreditCardAction extends GatewayAwareAction implements ApiAw
         $model['local'] = (array) $local;
 
         if ($token['id']) {
-            $model['card'] = $token['id']; 
+            $model['card'] = $token['id'];
         } else {
             $model['status'] = Constants::STATUS_FAILED;
         }

@@ -95,7 +95,7 @@ class Gateway implements GatewayInterface
             $this->extensions->onPreExecute($context);
 
             if (false == $context->getAction()) {
-                if (false == $action = $this->findActionSupported($context->getRequest())){
+                if (false == $action = $this->findActionSupported($context->getRequest())) {
                     throw RequestNotSupportedException::create($context->getRequest());
                 }
 

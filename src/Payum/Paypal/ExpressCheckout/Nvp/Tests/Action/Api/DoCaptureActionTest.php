@@ -178,7 +178,7 @@ class DoCaptureActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetTransactionDetails::class))
-            ->will($this->returnCallback(function(GetTransactionDetails $request) {
+            ->will($this->returnCallback(function (GetTransactionDetails $request) {
                 $this->assertSame(0, $request->getPaymentRequestN());
                 $this->assertSame(array(
                     'PAYMENTREQUEST_0_TRANSACTIONID' => 'theTransactionId',

@@ -163,7 +163,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->setHttpRequestVerifier(function($tokenStorage) use ($expectedVerifier) {
+            ->setHttpRequestVerifier(function ($tokenStorage) use ($expectedVerifier) {
                 $this->assertInstanceOf(StorageInterface::class, $tokenStorage);
 
                 return $expectedVerifier;
@@ -185,8 +185,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->setHttpRequestVerifier(function() {
-
+            ->setHttpRequestVerifier(function () {
                 return new \stdClass();
             })
             ->getPayum()
@@ -221,7 +220,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->setGenericTokenFactory(function($tokenFactory, $paths) use ($expectedTokenFactory) {
+            ->setGenericTokenFactory(function ($tokenFactory, $paths) use ($expectedTokenFactory) {
                 $this->assertInstanceOf(TokenFactoryInterface::class, $tokenFactory);
 
                 $this->assertInternalType('array', $paths);
@@ -275,7 +274,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->setGenericTokenFactory(function() {
+            ->setGenericTokenFactory(function () {
                 return new \stdClass();
             })
             ->getPayum()
@@ -310,7 +309,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->setTokenFactory(function($tokenStorage, $storageRegistry) use ($expectedTokenFactory) {
+            ->setTokenFactory(function ($tokenStorage, $storageRegistry) use ($expectedTokenFactory) {
                 $this->assertInstanceOf(StorageInterface::class, $tokenStorage);
                 $this->assertInstanceOf(StorageRegistryInterface::class, $storageRegistry);
 
@@ -333,7 +332,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->setTokenFactory(function() {
+            ->setTokenFactory(function () {
                 return new \stdClass();
             })
             ->getPayum()
@@ -435,11 +434,10 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->addGatewayFactory('a_factory', function(array $config, GatewayFactoryInterface $coreGatewayFactory) use (&$expectedFactory) {
+            ->addGatewayFactory('a_factory', function (array $config, GatewayFactoryInterface $coreGatewayFactory) use (&$expectedFactory) {
                 $expectedFactory = new GatewayFactory($config, $coreGatewayFactory);
 
                 return $expectedFactory;
-
             })
             ->getPayum()
         ;
@@ -456,11 +454,10 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
             ->addGatewayFactoryConfig('a_factory', ['foo' => 'fooVal'])
-            ->addGatewayFactory('a_factory', function(array $config, GatewayFactoryInterface $coreGatewayFactory) use (&$expectedFactory) {
+            ->addGatewayFactory('a_factory', function (array $config, GatewayFactoryInterface $coreGatewayFactory) use (&$expectedFactory) {
                 $this->assertEquals(['foo' => 'fooVal'], $config);
 
                 return new GatewayFactory($config, $coreGatewayFactory);
-
             })
             ->getPayum()
         ;
@@ -557,8 +554,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->setCoreGatewayFactory(function($config) use ($expectedCoreGatewayFactory) {
-
+            ->setCoreGatewayFactory(function ($config) use ($expectedCoreGatewayFactory) {
                 $this->assertInternalType('array', $config);
                 $this->assertNotEmpty($config);
 
@@ -585,8 +581,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
             ->addStorage(TestModel::class, $expectedStorage)
-            ->setCoreGatewayFactory(function($config) use ($expectedStorage) {
-
+            ->setCoreGatewayFactory(function ($config) use ($expectedStorage) {
                 $this->assertInternalType('array', $config);
                 $this->assertArrayHasKey('payum.extension.storage_payum_core_tests_testmodel', $config, var_export($config, true));
                 $this->assertInstanceOf(StorageExtension::class, $config['payum.extension.storage_payum_core_tests_testmodel']);
@@ -642,7 +637,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->setCoreGatewayFactory(function() {
+            ->setCoreGatewayFactory(function () {
                 return new \stdClass();
             })
             ->getPayum()
@@ -740,8 +735,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
             ->setTokenStorage($tokenStorageMock)
-            ->setCoreGatewayFactory(function($config) use ($tokenStorageMock) {
-
+            ->setCoreGatewayFactory(function ($config) use ($tokenStorageMock) {
                 $this->assertInternalType('array', $config);
                 $this->assertArrayHasKey('payum.security.token_storage', $config);
                 $this->assertSame($tokenStorageMock, $config['payum.security.token_storage']);
@@ -841,4 +835,6 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-class TestModel {}
+class TestModel
+{
+}

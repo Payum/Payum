@@ -72,7 +72,7 @@ class NotifyActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->will($this->returnCallback(function(GetHttpRequest $request) {
+            ->will($this->returnCallback(function (GetHttpRequest $request) {
                 $request->query = ['expected be2bill query'];
             }))
         ;
@@ -110,7 +110,7 @@ class NotifyActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->will($this->returnCallback(function(GetHttpRequest $request) {
+            ->will($this->returnCallback(function (GetHttpRequest $request) {
                 $request->query = ['AMOUNT' => 2.0];
             }))
         ;
@@ -150,7 +150,7 @@ class NotifyActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->will($this->returnCallback(function(GetHttpRequest $request) {
+            ->will($this->returnCallback(function (GetHttpRequest $request) {
                 $request->query = ['AMOUNT' => 1.0, 'FOO' => 'FOO', 'BAR' => 'BAR'];
             }))
         ;

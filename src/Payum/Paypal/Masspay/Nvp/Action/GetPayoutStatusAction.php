@@ -11,7 +11,7 @@ class GetPayoutStatusAction implements ActionInterface
 {
     /**
      * {@inheritdoc}
-     * 
+     *
      * @param GetStatusInterface $request
      */
     public function execute($request)
@@ -46,7 +46,7 @@ class GetPayoutStatusAction implements ActionInterface
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof GetStatusInterface &&
             $request->getModel() instanceof \ArrayAccess
         ;

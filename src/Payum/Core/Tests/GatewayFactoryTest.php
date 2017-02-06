@@ -76,6 +76,4 @@ class GatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $config);
         $this->assertNotEmpty($config);
     }
-
-
 }

@@ -151,7 +151,7 @@ class DynamicRegistry implements RegistryInterface
 
     /**
      * @param GatewayConfigInterface $gatewayConfig
-     * 
+     *
      * @return GatewayInterface
      */
     protected function createGateway(GatewayConfigInterface $gatewayConfig)

@@ -76,7 +76,7 @@ class ObtainCreditCardAction extends GatewayAwareAction
         $httpRequest = null;
         if ($this->httpRequest instanceof Request) {
             $httpRequest = $this->httpRequest;
-        } else if ($this->httpRequestStack instanceof RequestStack) {
+        } elseif ($this->httpRequestStack instanceof RequestStack) {
             $httpRequest = $this->httpRequestStack->getMasterRequest();
         }
 

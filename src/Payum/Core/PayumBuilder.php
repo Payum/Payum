@@ -184,8 +184,7 @@ class PayumBuilder
     {
         if (
             $gatewayFactory instanceof GatewayFactoryInterface ||
-            is_callable($gatewayFactory))
-        {
+            is_callable($gatewayFactory)) {
             $this->gatewayFactories[$name] = $gatewayFactory;
 
             return $this;
@@ -218,8 +217,7 @@ class PayumBuilder
         if (
             null === $httpRequestVerifier ||
             $httpRequestVerifier instanceof HttpRequestVerifierInterface ||
-            is_callable($httpRequestVerifier))
-        {
+            is_callable($httpRequestVerifier)) {
             $this->httpRequestVerifier = $httpRequestVerifier;
 
             return $this;
@@ -238,8 +236,7 @@ class PayumBuilder
         if (
             null === $tokenFactory ||
             $tokenFactory instanceof TokenFactoryInterface ||
-            is_callable($tokenFactory))
-        {
+            is_callable($tokenFactory)) {
             $this->tokenFactory = $tokenFactory;
 
             return $this;
@@ -258,8 +255,7 @@ class PayumBuilder
         if (
             null === $tokenFactory ||
             $tokenFactory instanceof GenericTokenFactoryInterface ||
-            is_callable($tokenFactory))
-        {
+            is_callable($tokenFactory)) {
             $this->genericTokenFactory = $tokenFactory;
 
             return $this;
@@ -302,8 +298,7 @@ class PayumBuilder
         if (
             null === $coreGatewayFactory ||
             $coreGatewayFactory instanceof GatewayFactoryInterface ||
-            is_callable($coreGatewayFactory))
-        {
+            is_callable($coreGatewayFactory)) {
             $this->coreGatewayFactory = $coreGatewayFactory;
 
             return $this;
@@ -422,8 +417,6 @@ class PayumBuilder
             }
 
             $registry = $this->buildRegistry($gateways, $storages, $gatewayFactories);
-
-
         }
 
         return new Payum($registry, $httpRequestVerifier, $genericTokenFactory, $tokenStorage);

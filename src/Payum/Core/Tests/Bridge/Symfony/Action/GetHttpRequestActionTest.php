@@ -28,8 +28,8 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @deprecated 
-     * 
+     * @deprecated
+     *
      * @test
      */
     public function shouldAllowSetHttpRequest()
@@ -187,7 +187,7 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @deprecated
-     * 
+     *
      * @test
      */
     public function shouldPopulateFromGetHttpRequest()
@@ -211,8 +211,8 @@ class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @deprecated 
-     * 
+     * @deprecated
+     *
      * @test
      */
     public function shouldPopulateFromPostHttpRequest()

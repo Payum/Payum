@@ -14,7 +14,7 @@ trait ApiAwareTrait
     /**
      * @var string
      */
-    protected $apiClass; 
+    protected $apiClass;
 
     /**
      * {@inheritDoc}
