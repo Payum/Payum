@@ -82,7 +82,7 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
     protected function addQueryToUri(HttpUri $uri, array $query)
     {
         $query = array_replace($uri->query->toArray(), $query);
-        $query = array_filter($query, function($value) {
+        $query = array_filter($query, function ($value) {
             return null !== $value;
         });
 

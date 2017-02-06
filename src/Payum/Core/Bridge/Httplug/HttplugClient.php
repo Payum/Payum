@@ -7,7 +7,7 @@ use Http\Client\HttpClient;
 
 /**
  * This is a HttpClient that support Httplug. This is an adapter class that make sure we can use Httplug without breaking
- * backward compatibility. At 2.0 we will be using Http\Client\HttpClient. 
+ * backward compatibility. At 2.0 we will be using Http\Client\HttpClient.
  *
  * @deprecated This will be removed in 2.0. Consider using Http\Client\HttpClient.
  */

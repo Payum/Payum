@@ -520,7 +520,7 @@ class TokenFactoryTest extends \PHPUnit_Framework_TestCase
         $urlGenerator
             ->expects($this->any())
             ->method('generate')
-            ->willReturnCallback(function($route, $parameters) {
+            ->willReturnCallback(function ($route, $parameters) {
                 return $route.'?'.http_build_query($parameters);
             })
         ;

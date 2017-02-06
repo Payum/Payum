@@ -21,7 +21,6 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
 
     public function provideSupportedRequests()
     {
-
         return array(
             array(new $this->requestClass(array('BILLINGPERIOD' => 'foo'))),
             array(new $this->requestClass(new \ArrayObject(array('BILLINGPERIOD' => 'foo'))))

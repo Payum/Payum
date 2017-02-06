@@ -126,8 +126,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $testCase = $this;
 
         $clientMock = $this->createHttpClientMock();
-        $clientMock->expects($this->once())->method('send')->will($this->returnCallback(function (RequestInterface $request) use
-        (
+        $clientMock->expects($this->once())->method('send')->will($this->returnCallback(function (RequestInterface $request) use (
             $testCase
         ) {
             $testCase->assertEquals('https://api-3t.paypal.com/nvp', $request->getUri());
@@ -155,8 +154,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $testCase = $this;
 
         $clientMock = $this->createHttpClientMock();
-        $clientMock->expects($this->once())->method('send')->will($this->returnCallback(function (RequestInterface $request) use
-        (
+        $clientMock->expects($this->once())->method('send')->will($this->returnCallback(function (RequestInterface $request) use (
             $testCase
         ) {
             $testCase->assertEquals('https://api-3t.sandbox.paypal.com/nvp', $request->getUri());

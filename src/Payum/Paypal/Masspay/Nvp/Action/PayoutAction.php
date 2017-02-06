@@ -15,7 +15,7 @@ class PayoutAction implements ActionInterface, GatewayAwareInterface
 
     /**
      * {@inheritdoc}
-     * 
+     *
      * @param Payout $request
      */
     public function execute($request)
@@ -25,7 +25,7 @@ class PayoutAction implements ActionInterface, GatewayAwareInterface
         $model = ArrayObject::ensureArrayObject($request->getModel());
         
         if (false == $model['ACK']) {
-            $this->gateway->execute(new Masspay($model));   
+            $this->gateway->execute(new Masspay($model));
         }
     }
 
@@ -34,7 +34,7 @@ class PayoutAction implements ActionInterface, GatewayAwareInterface
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof Payout &&
             $request->getModel() instanceof \ArrayAccess
         ;

@@ -502,7 +502,7 @@ class AbstractTokenFactoryTest extends \PHPUnit_Framework_TestCase
         $factoryMock
             ->expects($this->any())
             ->method('generateUrl')
-            ->willReturnCallback(function($path, array $args) {
+            ->willReturnCallback(function ($path, array $args) {
                 return $path.'?'.http_build_query($args);
             })
         ;

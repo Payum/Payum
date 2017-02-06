@@ -110,7 +110,7 @@ class AgreementApiTest extends \PHPUnit_Framework_TestCase
 
         $result = $agreementApi->create(array());
 
-        $this->assertEquals(array('fooValue'),  $result);
+        $this->assertEquals(array('fooValue'), $result);
     }
 
     /**
@@ -147,7 +147,7 @@ class AgreementApiTest extends \PHPUnit_Framework_TestCase
 
         $result = $agreementApi->check(array());
 
-        $this->assertEquals(array('fooValue'),  $result);
+        $this->assertEquals(array('fooValue'), $result);
     }
 
     /**
@@ -184,7 +184,7 @@ class AgreementApiTest extends \PHPUnit_Framework_TestCase
 
         $result = $agreementApi->delete(array());
 
-        $this->assertEquals(array('fooValue'),  $result);
+        $this->assertEquals(array('fooValue'), $result);
     }
 
     /**
@@ -221,6 +221,6 @@ class AgreementApiTest extends \PHPUnit_Framework_TestCase
 
         $result = $agreementApi->autoPay(array());
 
-        $this->assertEquals(array('fooValue'),  $result);
+        $this->assertEquals(array('fooValue'), $result);
     }
 }

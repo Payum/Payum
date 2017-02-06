@@ -12,7 +12,7 @@ class TwigUtil
      * @param \Twig_Environment $twig
      * @param string[] $paths
      */
-    public static function registerPaths(\Twig_Environment $twig, array $paths) 
+    public static function registerPaths(\Twig_Environment $twig, array $paths)
     {
         if (false == static::$storage) {
             static::$storage = new \SplObjectStorage();

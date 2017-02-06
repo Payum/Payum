@@ -384,7 +384,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('onPostExecute')
             ->with($this->isInstanceOf(Context::class))
-            ->willReturnCallback(function(Context $context) use ($actionMock, $request, $exception, $gateway) {
+            ->willReturnCallback(function (Context $context) use ($actionMock, $request, $exception, $gateway) {
                 $this->assertSame($actionMock, $context->getAction());
                 $this->assertSame($request, $context->getRequest());
                 $this->assertSame($exception, $context->getException());
@@ -431,7 +431,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('onPostExecute')
             ->with($this->isInstanceOf(Context::class))
-            ->willReturnCallback(function(Context $context) use ($exception, $newException) {
+            ->willReturnCallback(function (Context $context) use ($exception, $newException) {
                 $this->assertSame($exception, $context->getException());
 
                 $context->setException($newException);
@@ -472,7 +472,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('onPostExecute')
             ->with($this->isInstanceOf(Context::class))
-            ->willReturnCallback(function(Context $context) use ($exception) {
+            ->willReturnCallback(function (Context $context) use ($exception) {
                 $this->assertSame($exception, $context->getException());
 
                 $context->setException(null);
@@ -513,7 +513,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('onPostExecute')
             ->with($this->isInstanceOf(Context::class))
-            ->willReturnCallback(function(Context $context) use ($exception) {
+            ->willReturnCallback(function (Context $context) use ($exception) {
                 throw new \InvalidArgumentException('Another error.', null, $exception);
             })
         ;
@@ -563,7 +563,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('onPostExecute')
             ->with($this->isInstanceOf(Context::class))
-            ->willReturnCallback(function(Context $context) use ($exception, $newException) {
+            ->willReturnCallback(function (Context $context) use ($exception, $newException) {
                 throw new \InvalidArgumentException('Another error.');
             })
         ;
@@ -612,7 +612,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('onExecute')
             ->with($this->isInstanceOf(Context::class))
-            ->willReturnCallback(function(Context $context) use ($actionMock, $anotherActionMock) {
+            ->willReturnCallback(function (Context $context) use ($actionMock, $anotherActionMock) {
                 $this->assertSame($actionMock, $context->getAction());
 
                 $context->setAction($anotherActionMock);
@@ -650,7 +650,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('onPreExecute')
             ->with($this->isInstanceOf(Context::class))
-            ->willReturnCallback(function(Context $context) use ($actionMock) {
+            ->willReturnCallback(function (Context $context) use ($actionMock) {
                 $this->assertNull($context->getAction());
 
                 $context->setAction($actionMock);
@@ -689,7 +689,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('onPostExecute')
             ->with($this->isInstanceOf(Context::class))
-            ->willReturnCallback(function(Context $context) use ($actionMock, $request, $reply, $gateway) {
+            ->willReturnCallback(function (Context $context) use ($actionMock, $request, $reply, $gateway) {
                 $this->assertSame($actionMock, $context->getAction());
                 $this->assertSame($request, $context->getRequest());
                 $this->assertSame($gateway, $context->getGateway());
@@ -734,7 +734,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('onPostExecute')
             ->with($this->isInstanceOf(Context::class))
-            ->willReturnCallback(function(Context $context) use ($thrownReplyMock, $expectedReplyMock) {
+            ->willReturnCallback(function (Context $context) use ($thrownReplyMock, $expectedReplyMock) {
                 $this->assertSame($thrownReplyMock, $context->getReply());
 
                 $context->setReply($expectedReplyMock);
@@ -776,7 +776,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('onPostExecute')
             ->with($this->isInstanceOf(Context::class))
-            ->willReturnCallback(function(Context $context) use ($thrownReplyMock) {
+            ->willReturnCallback(function (Context $context) use ($thrownReplyMock) {
                 $this->assertSame($thrownReplyMock, $context->getReply());
 
                 $context->setReply(null);
@@ -812,7 +812,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('onPreExecute')
             ->with($this->isInstanceOf(Context::class))
-            ->willReturnCallback(function(Context $context) use ($expectedRequest, $actionMock, $gateway) {
+            ->willReturnCallback(function (Context $context) use ($expectedRequest, $actionMock, $gateway) {
                 $this->assertSame($expectedRequest, $context->getRequest());
                 $this->assertSame($gateway, $context->getGateway());
 
@@ -849,7 +849,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('onExecute')
             ->with($this->isInstanceOf(Context::class))
-            ->willReturnCallback(function(Context $context) use ($expectedRequest, $actionMock, $gateway) {
+            ->willReturnCallback(function (Context $context) use ($expectedRequest, $actionMock, $gateway) {
                 $this->assertSame($expectedRequest, $context->getRequest());
                 $this->assertSame($actionMock, $context->getAction());
                 $this->assertSame($gateway, $context->getGateway());
@@ -885,7 +885,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
         $actionMock
             ->expects($this->any())
             ->method('supports')
-            ->willReturnCallback(function($request) use ($secondRequest) {
+            ->willReturnCallback(function ($request) use ($secondRequest) {
                 return $secondRequest === $request;
             })
         ;
@@ -895,7 +895,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
         $extensionMock
             ->expects($this->at(0))
             ->method('onPreExecute')
-            ->willReturnCallback(function(Context $context) use ($firstRequest) {
+            ->willReturnCallback(function (Context $context) use ($firstRequest) {
                 $this->assertSame($firstRequest, $context->getRequest());
 
                 $this->assertEmpty($context->getPrevious());
@@ -904,7 +904,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
         $extensionMock
             ->expects($this->at(1))
             ->method('onPreExecute')
-            ->willReturnCallback(function(Context $context) use ($secondRequest) {
+            ->willReturnCallback(function (Context $context) use ($secondRequest) {
                 $this->assertSame($secondRequest, $context->getRequest());
 
                 $this->assertCount(1, $context->getPrevious());
@@ -951,7 +951,7 @@ abstract class ApiAwareAction implements ActionInterface, ApiAwareInterface
 {
 }
 
-class RequireOtherRequestAction implements ActionInterface, GatewayAwareInterface 
+class RequireOtherRequestAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
     

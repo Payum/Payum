@@ -96,7 +96,6 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
             ->expects($this->once())
             ->method('createRecurringPaymentsProfile')
             ->will($this->returnCallback(function (array $fields) use ($testCase) {
-
                 $testCase->assertArrayHasKey('TOKEN', $fields);
                 $testCase->assertEquals('theToken', $fields['TOKEN']);
 

@@ -45,7 +45,6 @@ class CreditCardDateValidator extends ConstraintValidator
 
         if (null !== $constraint->min && $value < $constraint->min) {
             if (method_exists($this->context, 'buildViolation')) {
-
                 $this->context->buildViolation($constraint->minMessage)
                     ->atPath('expireAt')
                     ->addViolation();
@@ -54,7 +53,6 @@ class CreditCardDateValidator extends ConstraintValidator
             }
 
             $this->context->addViolationAt('expireAt', $constraint->minMessage);
-
         }
     }
 }

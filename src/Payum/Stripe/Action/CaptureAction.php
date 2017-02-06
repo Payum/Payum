@@ -33,7 +33,6 @@ class CaptureAction extends GatewayAwareAction
 
                 $this->gateway->execute($obtainToken);
             }
-
         }
 
         $this->gateway->execute(new CreateCharge($model));

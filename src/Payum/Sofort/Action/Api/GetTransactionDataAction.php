@@ -7,7 +7,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\LogicException;
 
-class GetTransactionDataAction extends  BaseApiAwareAction
+class GetTransactionDataAction extends BaseApiAwareAction
 {
     /**
      * {@inheritdoc}

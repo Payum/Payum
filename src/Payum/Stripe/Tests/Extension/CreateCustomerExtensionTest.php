@@ -39,7 +39,7 @@ class CreateCustomerExtensionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(CreateCustomer::class))
-            ->willReturnCallback(function(CreateCustomer $request) {
+            ->willReturnCallback(function (CreateCustomer $request) {
                 $model = $request->getModel();
 
                 $this->assertInstanceOf(\ArrayObject::class, $model);
@@ -83,7 +83,7 @@ class CreateCustomerExtensionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(CreateCustomer::class))
-            ->willReturnCallback(function(CreateCustomer $request) {
+            ->willReturnCallback(function (CreateCustomer $request) {
                 $model = $request->getModel();
 
                 $this->assertInstanceOf(\ArrayObject::class, $model);
@@ -132,7 +132,7 @@ class CreateCustomerExtensionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(CreateCustomer::class))
-            ->willReturnCallback(function(CreateCustomer $request) {
+            ->willReturnCallback(function (CreateCustomer $request) {
                 $model = $request->getModel();
 
                 $this->assertInstanceOf(\ArrayObject::class, $model);
@@ -315,7 +315,7 @@ class CreateCustomerExtensionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(CreateCustomer::class))
-            ->willReturnCallback(function(CreateCustomer $request) {
+            ->willReturnCallback(function (CreateCustomer $request) {
                 $model = $request->getModel();
 
                 $this->assertInstanceOf(\ArrayObject::class, $model);
@@ -359,7 +359,7 @@ class CreateCustomerExtensionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(CreateCustomer::class))
-            ->willReturnCallback(function(CreateCustomer $request) {
+            ->willReturnCallback(function (CreateCustomer $request) {
                 $model = $request->getModel();
 
                 $this->assertInstanceOf(\ArrayObject::class, $model);
@@ -408,7 +408,7 @@ class CreateCustomerExtensionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(CreateCustomer::class))
-            ->willReturnCallback(function(CreateCustomer $request) {
+            ->willReturnCallback(function (CreateCustomer $request) {
                 $model = $request->getModel();
 
                 $this->assertInstanceOf(\ArrayObject::class, $model);

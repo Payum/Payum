@@ -24,7 +24,7 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @deprecated
-     * 
+     *
      * @test
      */
     public function couldBeConstructedWithGatewayConfigAndRegistryAsArguments()
@@ -274,8 +274,8 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @deprecated 
-     * 
+     * @deprecated
+     *
      * @test
      */
     public function shouldCallStaticRegistryIfGatewayConfigNotFoundOnGetGateway()
@@ -370,8 +370,8 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @deprecated 
-     * 
+     * @deprecated
+     *
      * @test
      */
     public function shouldCallStaticRegistryOnGetGatewayFactory()
@@ -394,7 +394,7 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * 
+     *
      * @expectedException \Payum\Core\Exception\InvalidArgumentException
      * @expectedExceptionMessage Gateway factory "theName" does not exist.
      */
@@ -407,7 +407,6 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
         $registry->setBackwardCompatibility(false);
 
         $registry->getGatewayFactory('theName');
-
     }
 
     /**

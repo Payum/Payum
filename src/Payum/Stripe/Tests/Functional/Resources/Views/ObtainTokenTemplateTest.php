@@ -46,7 +46,6 @@ class ObtainTokenTemplateTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertContains('data-currency="GBP"', $result);
-
     }
 
     /**
@@ -61,6 +60,5 @@ class ObtainTokenTemplateTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertContains('data-currency="USD"', $result);
-
     }
 }

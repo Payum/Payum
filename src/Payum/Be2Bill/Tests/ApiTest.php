@@ -213,6 +213,5 @@ class ApiTest extends \Phpunit_Framework_TestCase
     protected function createHttpMessageFactory()
     {
         return new GuzzleMessageFactory();
-
     }
 }
