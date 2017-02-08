@@ -3,6 +3,7 @@ namespace Payum\Be2Bill\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Be2Bill\Api;
@@ -24,6 +25,10 @@ class StatusAction implements ActionInterface
             $request->markNew();
 
             return;
+        }
+
+        if (Api::EXECCODE_3DSECURE_IDENTIFICATION_REQUIRED === $model['EXECCODE']) {
+            throw new HttpResponse(base64_decode($model['3DSECUREHTML']), 302);
         }
 
         if (Api::EXECCODE_SUCCESSFUL === $model['EXECCODE']) {
@@ -49,6 +54,6 @@ class StatusAction implements ActionInterface
         return
             $request instanceof GetStatusInterface &&
             $request->getModel() instanceof \ArrayAccess
-        ;
+            ;
     }
 }
