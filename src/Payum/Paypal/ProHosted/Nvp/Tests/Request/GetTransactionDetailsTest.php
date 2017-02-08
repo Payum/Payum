@@ -23,5 +23,4 @@ class GetTransactionDetailsTest extends \PHPUnit_Framework_TestCase
     {
         new GetTransactionDetails(new \stdClass());
     }
-
 }

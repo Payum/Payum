@@ -8,14 +8,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class GatewayChoiceType extends AbstractType
 {
     /**
-     * @var string[]
+     * @var string[]|callable
      */
     protected $defaultChoices;
 
     /**
-     * @param string[] $defaultChoices
+     * @param string[]|callable $defaultChoices
      */
-    public function __construct(array $defaultChoices)
+    public function __construct($defaultChoices)
     {
         $this->defaultChoices = $defaultChoices;
     }

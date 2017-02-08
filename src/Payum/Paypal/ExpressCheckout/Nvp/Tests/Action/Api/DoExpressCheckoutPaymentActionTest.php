@@ -135,7 +135,6 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('doExpressCheckoutPayment')
             ->will($this->returnCallback(function (array $fields) use ($testCase) {
-
                 $testCase->assertArrayHasKey('TOKEN', $fields);
                 $testCase->assertEquals('theToken', $fields['TOKEN']);
 

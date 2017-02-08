@@ -3,7 +3,7 @@
 namespace Payum\Core\Model;
 
 /**
- * Experimental. Anything could be changed in this model at any moment 
+ * Experimental. Anything could be changed in this model at any moment
  */
 class BankAccount implements BankAccountInterface
 {

@@ -84,7 +84,6 @@ class AuthorizeRecurringActionTest extends GenericActionTest
     {
         $action = new AuthorizeRecurringAction();
         $action->setApi(new Config());
-
     }
 
     /**
@@ -95,7 +94,6 @@ class AuthorizeRecurringActionTest extends GenericActionTest
     {
         $action = new AuthorizeRecurringAction();
         $action->setApi(new \stdClass());
-
     }
 
     public function testShouldDoNothingIfReservationAlreadySet()

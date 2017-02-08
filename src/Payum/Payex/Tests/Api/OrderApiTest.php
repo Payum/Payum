@@ -110,7 +110,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
 
         $result = $orderApi->initialize(array());
 
-        $this->assertEquals(array('fooValue'),  $result);
+        $this->assertEquals(array('fooValue'), $result);
     }
 
     /**
@@ -147,7 +147,7 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
 
         $result = $orderApi->complete(array());
 
-        $this->assertEquals(array('fooValue'),  $result);
+        $this->assertEquals(array('fooValue'), $result);
     }
 
     /**
@@ -184,6 +184,6 @@ class OrderApiTest extends \PHPUnit_Framework_TestCase
 
         $result = $orderApi->check(array());
 
-        $this->assertEquals(array('fooValue'),  $result);
+        $this->assertEquals(array('fooValue'), $result);
     }
 }

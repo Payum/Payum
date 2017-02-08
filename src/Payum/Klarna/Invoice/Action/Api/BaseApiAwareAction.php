@@ -6,7 +6,7 @@ use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Klarna\Invoice\Config;
 
-abstract class BaseApiAwareAction implements  ApiAwareInterface, ActionInterface
+abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
 {
     /**
      * @var Config

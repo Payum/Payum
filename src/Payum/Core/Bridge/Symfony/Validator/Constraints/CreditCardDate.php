@@ -28,6 +28,5 @@ class CreditCardDate extends Constraint
             $this->min = new \DateTime($this->min);
             $this->min->modify('last day of this month');
         }
-
     }
 }

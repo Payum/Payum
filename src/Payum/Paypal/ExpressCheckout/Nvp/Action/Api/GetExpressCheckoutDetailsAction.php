@@ -6,7 +6,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\LogicException;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetails;
 
-class GetExpressCheckoutDetailsAction extends  BaseApiAwareAction
+class GetExpressCheckoutDetailsAction extends BaseApiAwareAction
 {
     /**
      * {@inheritDoc}

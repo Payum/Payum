@@ -49,7 +49,7 @@ class ConvertPayoutActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetCurrency::class))
-            ->willReturnCallback(function(GetCurrency $request) {
+            ->willReturnCallback(function (GetCurrency $request) {
                 $request->name = 'US Dollar';
                 $request->alpha3 = 'USD';
                 $request->numeric = 123;
@@ -92,7 +92,7 @@ class ConvertPayoutActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetCurrency::class))
-            ->willReturnCallback(function(GetCurrency $request) {
+            ->willReturnCallback(function (GetCurrency $request) {
                 $request->name = 'US Dollar';
                 $request->alpha3 = 'USD';
                 $request->numeric = 123;

@@ -1,4 +1,1 @@
-# Documents
-
-* [Get it started](get-it-started.md)
-* [Credit card purchase](credit-card-purchase.md)
+Documentation was moved to [another place](https://github.com/Payum/Payum/blob/master/docs/index.md)

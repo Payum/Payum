@@ -13,7 +13,6 @@ class AuthorizeNetAimGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSubClassGatewayFactory()
     {
-
         $rc = new \ReflectionClass('Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\GatewayFactory'));

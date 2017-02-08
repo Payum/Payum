@@ -17,7 +17,7 @@ class ConvertPayoutAction implements ActionInterface, GatewayAwareInterface
 
     /**
      * {@inheritdoc}
-     * 
+     *
      * @param Convert $request
      */
     public function execute($request)
@@ -38,7 +38,7 @@ class ConvertPayoutAction implements ActionInterface, GatewayAwareInterface
         if ($payout->getRecipientEmail()) {
             $details['RECEIVERTYPE'] = 'EmailAddress';
             $details['L_EMAIL0'] = $payout->getRecipientEmail();
-        } else if ($payout->getRecipientId()) {
+        } elseif ($payout->getRecipientId()) {
             $details['RECEIVERTYPE'] = 'UserID';
             $details['L_RECEIVERID0'] = $payout->getRecipientId();
         } else {
@@ -53,7 +53,7 @@ class ConvertPayoutAction implements ActionInterface, GatewayAwareInterface
      */
     public function supports($request)
     {
-        return 
+        return
             $request instanceof Convert &&
             $request->getSource() instanceof PayoutInterface &&
             'array' == $request->getTo()

@@ -41,7 +41,6 @@ class Api
      */
     public function createTransaction(array $fields)
     {
-
         $fields = (array_replace([
             'success_url' => null,
             'success_link_redirect' => true,

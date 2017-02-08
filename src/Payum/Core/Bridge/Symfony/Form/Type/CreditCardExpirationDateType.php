@@ -38,7 +38,7 @@ class CreditCardExpirationDateType extends AbstractType
         $resolver->setDefaults(array(
             'max_expiration_year' => date('Y') + 10,
             'min_expiration_year' => date('Y'),
-            'years' => function(Options $options) {
+            'years' => function (Options $options) {
                 return range($options['min_expiration_year'], $options['max_expiration_year']);
             },
         ));

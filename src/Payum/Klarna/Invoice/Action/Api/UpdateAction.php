@@ -40,7 +40,6 @@ class UpdateAction extends BaseApiAwareAction implements GatewayAwareInterface
             $this->gateway->execute(new PopulateKlarnaFromDetails($details, $klarna));
 
             $details['updated'] = $klarna->update($details['rno']);
-
         } catch (\KlarnaException $e) {
             $this->populateDetailsWithError($details, $e, $request);
         }

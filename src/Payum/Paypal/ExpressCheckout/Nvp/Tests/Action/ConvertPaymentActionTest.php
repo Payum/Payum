@@ -47,7 +47,7 @@ class ConvertPaymentActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetCurrency'))
-            ->willReturnCallback(function(GetCurrency $request) {
+            ->willReturnCallback(function (GetCurrency $request) {
                 $request->name = 'US Dollar';
                 $request->alpha3 = 'USD';
                 $request->numeric = 123;
@@ -93,7 +93,7 @@ class ConvertPaymentActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetCurrency'))
-            ->willReturnCallback(function(GetCurrency $request) {
+            ->willReturnCallback(function (GetCurrency $request) {
                 $request->name = 'US Dollar';
                 $request->alpha3 = 'USD';
                 $request->numeric = 123;

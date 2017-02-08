@@ -195,7 +195,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
     }
 }
 
-class ModelAggregateAwareRequest implements ModelAwareInterface,ModelAggregateInterface
+class ModelAggregateAwareRequest implements ModelAwareInterface, ModelAggregateInterface
 {
     public $model;
 
@@ -225,7 +225,7 @@ class DetailsAggregateModel implements DetailsAggregateInterface
     }
 }
 
-class DetailsAggregateAndAwareModel implements DetailsAggregateInterface,DetailsAwareInterface
+class DetailsAggregateAndAwareModel implements DetailsAggregateInterface, DetailsAwareInterface
 {
     public $details = array();
 

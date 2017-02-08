@@ -110,7 +110,7 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
 
         $result = $recurringApi->start(array());
 
-        $this->assertEquals(array('fooValue'),  $result);
+        $this->assertEquals(array('fooValue'), $result);
     }
 
     /**
@@ -147,7 +147,7 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
 
         $result = $recurringApi->stop(array());
 
-        $this->assertEquals(array('fooValue'),  $result);
+        $this->assertEquals(array('fooValue'), $result);
     }
 
     /**
@@ -184,6 +184,6 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
 
         $result = $recurringApi->check(array());
 
-        $this->assertEquals(array('fooValue'),  $result);
+        $this->assertEquals(array('fooValue'), $result);
     }
 }

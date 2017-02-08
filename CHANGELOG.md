@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.3.10 (2017-02-03)
+
+* [bridge][symfony] Allow choices to be defined as callbacks.
+* [docs] Fix code examples. Add namespace imports to code examples
+* [docs] Put all docs in one place.
+* [travis] Fix library version conflict
+* [travis] Prevent build fails when commit often.
+
+## 1.3.9 (2017-01-31)
+
+* [paypal][rest] Fix testsFix comments starting with # are deprecated
+* [core] Twig 2.x - compatibility
+* [paypal][ec] Mark reversed payments failed
+* [doc] various typo fixes and improvements 
+
 ## 1.3.8 (2016-10-04)
 
 * [gateway] Remove `guzzle.client` from the gateway factory config

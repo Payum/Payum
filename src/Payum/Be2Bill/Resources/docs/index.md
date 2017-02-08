@@ -1,4 +1,1 @@
-# Be2Bill
-
-* [Get it started](get-it-started.md)
-* [Offsite](offsite.md)
+Documentation was moved to [another place](https://github.com/Payum/Payum/blob/master/docs/index.md)

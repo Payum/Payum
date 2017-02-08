@@ -79,7 +79,7 @@ class CaptureActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
-            ->will($this->returnCallback(function(ObtainToken $request) use ($model) {
+            ->will($this->returnCallback(function (ObtainToken $request) use ($model) {
                 $this->assertInstanceOf(ArrayObject::class, $request->getModel());
                 $this->assertSame(['foo' => 'fooVal'], (array) $request->getModel());
             }))

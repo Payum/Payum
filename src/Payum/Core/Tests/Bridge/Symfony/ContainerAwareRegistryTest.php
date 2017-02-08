@@ -8,7 +8,7 @@ use Payum\Core\Storage\StorageInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-class ContainerAwareRegistryTest extends \PHPUnit_Framework_TestCase 
+class ContainerAwareRegistryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
