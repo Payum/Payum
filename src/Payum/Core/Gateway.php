@@ -117,11 +117,11 @@ class Gateway implements GatewayInterface
             array_pop($this->stack);
 
             if ($catchReply && $context->getReply()) {
-                return $context->getReply();
+                throw $context->getReply();
             }
 
             if ($context->getReply()) {
-                throw $context->getReply();
+                return $context->getReply();
             }
         } catch (\Exception $e) {
             $context->setException($e);
