@@ -55,7 +55,8 @@
         "symfony/form": "~2.8|~3.0",
         "symfony/validator": "~2.8|~3.0",
         "symfony/dependency-injection": "~2.8|~3.0",
-        "symfony/phpunit-bridge": "~2.8|~3.0"
+        "symfony/phpunit-bridge": "~2.8|~3.0",
+        "defuse/php-encryption": "^2"
     },
     "suggest": {
         "payum/paypal-express-checkout-nvp": "self.version If you want to use paypal express checkout, digital goods or recurring payments",
@@ -77,6 +78,7 @@
         "symfony/form": "~2.8|~3.0 If you want to use forms",
         "symfony/dependency-injection": "~2.8|~3.0 If you want to use container aware stuff",
         "monolog/monolog": "~1.0 If you want to use PSR-3 logger"
+        "defuse/php-encryption": "^2 If you want to encrypt gateways credentials in database"
     },
     "config": {
         "bin-dir": "bin"

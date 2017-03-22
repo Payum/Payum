@@ -1,7 +1,10 @@
 <?php
 namespace Payum\Core\Model;
 
-class GatewayConfig implements GatewayConfigInterface
+use Payum\Core\Security\CryptedInterface;
+use Payum\Core\Security\CypherInterface;
+
+class GatewayConfig implements GatewayConfigInterface, CryptedInterface
 {
     /**
      * @var string
@@ -18,9 +21,17 @@ class GatewayConfig implements GatewayConfigInterface
      */
     protected $config;
 
+    /**
+     * Note: This should not be persisted to database
+     *
+     * @var array
+     */
+    protected $decryptedConfig;
+
     public function __construct()
     {
-        $this->config = array();
+        $this->config = [];
+        $this->decryptedConfig = [];
     }
 
     /**
@@ -60,6 +71,10 @@ class GatewayConfig implements GatewayConfigInterface
      */
     public function getConfig()
     {
+        if (isset($this->config['encrypted'])) {
+            return $this->decryptedConfig;
+        }
+
         return $this->config;
     }
 
@@ -69,5 +84,32 @@ class GatewayConfig implements GatewayConfigInterface
     public function setConfig(array $config)
     {
         $this->config = $config;
+        $this->decryptedConfig = $config;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function decrypt(CypherInterface $cypher)
+    {
+        if (false == isset($this->config['encrypted'])) {
+            return;
+        }
+
+        foreach ($this->config as $name => $value) {
+            $this->decryptedConfig[$name] = $cypher->decrypt($value);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function encrypt(CypherInterface $cypher)
+    {
+        $this->config['encrypted'] = true;
+
+        foreach ($this->decryptedConfig as $name => $value) {
+            $this->config[$name] = $cypher->encrypt($value);
+        }
     }
 }
