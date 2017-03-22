@@ -64,7 +64,7 @@ _**Note**: Consider using something other than `FilesystemStorage` in production
 ## prepare.php
 
 At this stage we have to create an order. Add some information into it. 
-Create a capture token and delegate the job to [capture.php](scripts/capture-script.md) script.
+Create a capture token and delegate the job to [capture.php](examples/capture-script.md) script.
 Here's an offline gateway example:
 
 ```php
@@ -132,12 +132,12 @@ $payum->getHttpRequestVerifier()->invalidate($token);
 header("Location: ".$token->getAfterUrl());
 ```
 
-_**Note**: Find out more about capture script in the [dedicated chapter](scripts/capture-script.md)._
+_**Note**: Find out more about capture script in the [dedicated chapter](examples/capture-script.md)._
 
 ## done.php
 
-After the capture did its job you will be redirected to [done.php](scripts/done-script.md).
-The [capture.php](scripts/capture-script.md) script always redirects you to `done.php` no matter the payment was a success or not.
+After the capture did its job you will be redirected to [done.php](examples/done-script.md).
+The [capture.php](examples/capture-script.md) script always redirects you to `done.php` no matter the payment was a success or not.
 In `done.php` we may check the payment status, update the model, dispatch events and so on.
 
 ```php
@@ -174,6 +174,6 @@ echo json_encode([
 ]);
 ```
 
-_**Note**: Find out more about done script in the [dedicated chapter](scripts/done-script.md)._
+_**Note**: Find out more about done script in the [dedicated chapter](examples/done-script.md)._
 
 Back to [index](index.md).
