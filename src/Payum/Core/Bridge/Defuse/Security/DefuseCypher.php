@@ -23,16 +23,16 @@ class DefuseCypher implements CypherInterface
     /**
      * {@inheritdoc}
      */
-    public function decrypt($encryptedValue)
+    public function decrypt($value)
     {
-        return Crypto::decrypt($encryptedValue, $this->key);
+        return Crypto::decrypt($value, $this->key);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function encrypt($rawValue)
+    public function encrypt($value)
     {
-        return Crypto::encrypt($rawValue, $this->key);
+        return Crypto::encrypt($value, $this->key);
     }
 }
