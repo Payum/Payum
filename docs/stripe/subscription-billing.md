@@ -24,7 +24,7 @@ $payum->getGateway('gatewayName')->execute(new CreatePlan($plan));
 
 ## Subscribing a customer to a plan
 
-This is a usual charge as we showed it in [get-it-started](get-it-started.md) with only these additions:
+This is a usual charge as we showed it in [get-it-started](../get-it-started.md) with only these additions:
 
 ```php
 <?php
