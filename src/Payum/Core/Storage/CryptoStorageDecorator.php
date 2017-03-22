@@ -10,7 +10,7 @@ final class CryptoStorageDecorator implements StorageInterface
     /**
      * @var StorageInterface
      */
-    private $realStorage;
+    private $decoratedStorage;
 
     /**
      * @var CypherInterface
@@ -18,12 +18,12 @@ final class CryptoStorageDecorator implements StorageInterface
     private $crypto;
 
     /**
-     * @param StorageInterface $realStorage
+     * @param StorageInterface $decoratedStorage
      * @param CypherInterface $crypto
      */
-    public function __construct(StorageInterface $realStorage, CypherInterface $crypto)
+    public function __construct(StorageInterface $decoratedStorage, CypherInterface $crypto)
     {
-        $this->realStorage = $realStorage;
+        $this->decoratedStorage = $decoratedStorage;
         $this->crypto = $crypto;
     }
 
@@ -32,7 +32,7 @@ final class CryptoStorageDecorator implements StorageInterface
      */
     public function create()
     {
-        return $this->realStorage->create();
+        return $this->decoratedStorage->create();
     }
 
     /**
@@ -40,7 +40,7 @@ final class CryptoStorageDecorator implements StorageInterface
      */
     public function support($model)
     {
-        return $this->realStorage->support($model);
+        return $this->decoratedStorage->support($model);
     }
 
     /**
@@ -52,7 +52,7 @@ final class CryptoStorageDecorator implements StorageInterface
             $model->encrypt($this->crypto);
         }
 
-        $this->realStorage->update($model);
+        $this->decoratedStorage->update($model);
     }
 
     /**
@@ -60,7 +60,7 @@ final class CryptoStorageDecorator implements StorageInterface
      */
     public function delete($model)
     {
-        $this->realStorage->delete($model);
+        $this->decoratedStorage->delete($model);
     }
 
     /**
@@ -68,7 +68,7 @@ final class CryptoStorageDecorator implements StorageInterface
      */
     public function find($id)
     {
-        $model = $this->realStorage->find($id);
+        $model = $this->decoratedStorage->find($id);
 
         if ($model instanceof CryptedInterface) {
             $model->decrypt($this->crypto);
@@ -82,7 +82,7 @@ final class CryptoStorageDecorator implements StorageInterface
      */
     public function findBy(array $criteria)
     {
-        $models = $this->realStorage->findBy($criteria);
+        $models = $this->decoratedStorage->findBy($criteria);
 
         foreach ($models as $model) {
             if ($model instanceof CryptedInterface) {
@@ -98,6 +98,6 @@ final class CryptoStorageDecorator implements StorageInterface
      */
     public function identify($model)
     {
-        return $this->realStorage->identify($model);
+        return $this->decoratedStorage->identify($model);
     }
 }
