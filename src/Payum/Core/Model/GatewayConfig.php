@@ -92,11 +92,17 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
      */
     public function decrypt(CypherInterface $cypher)
     {
-        if (false == isset($this->config['encrypted'])) {
+        if (empty($this->config['encrypted'])) {
             return;
         }
 
         foreach ($this->config as $name => $value) {
+            if ('encrypted' == $name || is_bool($value)) {
+                $this->decryptedConfig[$name] = $value;
+
+                continue;
+            }
+
             $this->decryptedConfig[$name] = $cypher->decrypt($value);
         }
     }
@@ -106,9 +112,15 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
      */
     public function encrypt(CypherInterface $cypher)
     {
-        $this->config['encrypted'] = true;
+        $this->decryptedConfig['encrypted'] = true;
 
         foreach ($this->decryptedConfig as $name => $value) {
+            if ('encrypted' == $name || is_bool($value)) {
+                $this->config[$name] = $value;
+
+                continue;
+            }
+
             $this->config[$name] = $cypher->encrypt($value);
         }
     }
