@@ -66,8 +66,8 @@ class KlarnaCheckoutGatewayFactory extends GatewayFactory
                 $klarnaConfig->merchantId = $config['merchant_id'];
                 $klarnaConfig->secret = $config['secret'];
                 $klarnaConfig->contentType = $config['contentType'];
-                $klarnaConfig->termsUri = $config['termsUri'];
-                $klarnaConfig->checkoutUri = $config['checkoutUri'];
+                $klarnaConfig->termsUri = $config['termsUri'] ?: $config['terms_uri'];
+                $klarnaConfig->checkoutUri = $config['checkoutUri'] ?: $config['checkout_uri'];
                 $klarnaConfig->baseUri = $config['sandbox'] ?
                     Constants::BASE_URI_SANDBOX :
                     Constants::BASE_URI_LIVE
