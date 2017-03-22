@@ -56,7 +56,7 @@ This is how you can create a capture url.
 ```php
 <?php
 
-include config.php;
+include __DIR__.'/config.php';
 
 $token = $payum->getTokenFactory()->createCaptureToken($gatewayName, $details, 'afterCaptureUrl');
 
