@@ -32,7 +32,11 @@ final class CryptoStorageDecorator implements StorageInterface
      */
     public function create()
     {
-        return $this->decoratedStorage->create();
+        $model = $this->decoratedStorage->create();
+
+        $this->assertCrypted($model);
+
+        return $model;
     }
 
     /**
@@ -48,9 +52,9 @@ final class CryptoStorageDecorator implements StorageInterface
      */
     public function update($model)
     {
-        if ($model instanceof CryptedInterface) {
-            $model->encrypt($this->crypto);
-        }
+        $this->assertCrypted($model);
+
+        $model->encrypt($this->crypto);
 
         $this->decoratedStorage->update($model);
     }
@@ -70,9 +74,9 @@ final class CryptoStorageDecorator implements StorageInterface
     {
         $model = $this->decoratedStorage->find($id);
 
-        if ($model instanceof CryptedInterface) {
-            $model->decrypt($this->crypto);
-        }
+        $this->assertCrypted($model);
+
+        $model->decrypt($this->crypto);
 
         return $model;
     }
@@ -85,9 +89,9 @@ final class CryptoStorageDecorator implements StorageInterface
         $models = $this->decoratedStorage->findBy($criteria);
 
         foreach ($models as $model) {
-            if ($model instanceof CryptedInterface) {
-                $model->decrypt($this->crypto);
-            }
+            $this->assertCrypted($model);
+
+            $model->decrypt($this->crypto);
         }
 
         return $models;
@@ -99,5 +103,19 @@ final class CryptoStorageDecorator implements StorageInterface
     public function identify($model)
     {
         return $this->decoratedStorage->identify($model);
+    }
+
+    /**
+     * @param object $model
+     */
+    private function assertCrypted($model)
+    {
+        if (false == $model instanceof  CryptedInterface) {
+            throw new \LogicException(sprintf(
+                'The model %s must implement %s interface. It is required for this decorator.',
+                get_class($model),
+                CryptedInterface::class
+            ));
+        }
     }
 }

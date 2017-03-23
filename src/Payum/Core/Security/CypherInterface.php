@@ -18,6 +18,8 @@ interface CypherInterface
      * Binary data may be base64-encoded.
      *
      * @param string $value
+     *
+     * @return string
      */
     public function encrypt($value);
 }
