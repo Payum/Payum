@@ -3,16 +3,20 @@ namespace Payum\Be2Bill\Action;
 
 use League\Uri\Schemes\Http as HttpUri;
 use League\Uri\Components\Query;
-use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\GetToken;
 
-class CaptureOffsiteNullAction extends GatewayAwareAction
+class CaptureOffsiteNullAction implements ActionInterface, GatewayAwareInterface
 {
+    use GatewayAwareTrait;
+
     /**
      * {@inheritDoc}
      *
