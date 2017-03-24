@@ -59,7 +59,7 @@
                 // This identifies your website in the createToken call below
                 Stripe.setPublishableKey({{ publishable_key|json_encode|raw }});
 
-                Stripe.card.createToken($form, stripeResponseHandler);
+                Stripe.card.createToken($form, {{ model.amount }}, stripeResponseHandler);
 
                 // Prevent the form from submitting with the default action
                 return false;
