@@ -30,7 +30,7 @@ App::resolving('payum.builder', function(\Payum\Core\PayumBuilder $payumBuilder)
 
 use Payum\LaravelPackage\Controller\PayumController;
 
-cclass PaymentController extends PayumController
+class PaymentController extends PayumController
 {
  	public function preparePayment()
  	{
@@ -87,7 +87,7 @@ App::resolving('payum.builder', function(\Payum\Core\PayumBuilder $payumBuilder)
 
 use Payum\LaravelPackage\Controller\PayumController;
 
-cclass StripeController extends PayumController
+class StripeController extends PayumController
 {
  	public function prepareJs()
  	{
@@ -136,7 +136,7 @@ App::resolving('payum.builder', function(\Payum\Core\PayumBuilder $payumBuilder)
 
 use Payum\LaravelPackage\Controller\PayumController;
 
-cclass StripeController extends PayumController
+class StripeController extends PayumController
 {
  	public function prepareCheckout()
  	{
@@ -188,7 +188,7 @@ App::resolving('payum.builder', function(\Payum\Core\PayumBuilder $payumBuilder)
 
 use Payum\LaravelPackage\Controller\PayumController;
 
-cclass OmnipayController extends PayumController
+class OmnipayController extends PayumController
 {
  	public function prepareDirect()
  	{
