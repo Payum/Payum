@@ -3,6 +3,7 @@ namespace Payum\Payex\Action\Api;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Payex\Api\AgreementApi;
 use Payum\Core\Exception\LogicException;
@@ -12,21 +13,11 @@ use Payum\Payex\Request\Api\CreateAgreement;
 
 class CreateAgreementAction implements ActionInterface, ApiAwareInterface
 {
-    /**
-     * @var AgreementApi
-     */
-    protected $api;
+    use ApiAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
+    public function __construct()
     {
-        if (false == $api instanceof AgreementApi) {
-            throw new UnsupportedApiException('Expected api must be instance of AgreementApi.');
-        }
-
-        $this->api = $api;
+        $this->apiClass = AgreementApi::class;
     }
 
     /**

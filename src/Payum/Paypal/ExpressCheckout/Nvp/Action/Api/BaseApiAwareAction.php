@@ -6,6 +6,9 @@ use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
+/**
+ * @deprecated since 1.4.1 will be removed in 2.x
+ */
 abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
 {
     /**

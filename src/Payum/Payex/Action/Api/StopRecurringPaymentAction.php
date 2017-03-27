@@ -3,6 +3,7 @@ namespace Payum\Payex\Action\Api;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
@@ -11,21 +12,11 @@ use Payum\Payex\Request\Api\StopRecurringPayment;
 
 class StopRecurringPaymentAction implements ActionInterface, ApiAwareInterface
 {
-    /**
-     * @var RecurringApi
-     */
-    protected $api;
+    use ApiAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
+    public function __construct()
     {
-        if (false == $api instanceof RecurringApi) {
-            throw new UnsupportedApiException('Expected api must be instance of RecurringApi.');
-        }
-
-        $this->api = $api;
+        $this->apiClass = RecurringApi::class;
     }
 
     /**

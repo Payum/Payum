@@ -90,7 +90,7 @@ class CreateAgreementActionTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\UnsupportedApiException
-     * @expectedExceptionMessage Expected api must be instance of AgreementApi.
+     * @expectedExceptionMessage Not supported api given. It must be an instance of Payum\Payex\Api\AgreementApi
      */
     public function throwOnTryingSetNotAgreementApiAsApi()
     {

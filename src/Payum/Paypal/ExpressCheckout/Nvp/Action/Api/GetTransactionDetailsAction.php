@@ -1,13 +1,24 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
 use Payum\Core\Exception\RequestNotSupportedException;
 
-class GetTransactionDetailsAction extends BaseApiAwareAction
+class GetTransactionDetailsAction implements ActionInterface, ApiAwareInterface
 {
+    use ApiAwareTrait;
+
+    public function __construct()
+    {
+        $this->apiClass = Api::class;
+    }
+
     /**
      * {@inheritDoc}
      */

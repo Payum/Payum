@@ -76,7 +76,7 @@ class StartRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\UnsupportedApiException
-     * @expectedExceptionMessage Expected api must be instance of RecurringApi.
+     * @expectedExceptionMessage Not supported api given. It must be an instance of Payum\Payex\Api\RecurringApi
      */
     public function throwOnTryingSetNotRecurringApiAsApi()
     {

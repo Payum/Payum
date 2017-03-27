@@ -2,9 +2,10 @@
 
 namespace Payum\Sofort\Tests\Action\Api;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
 use Payum\Sofort\Request\Api\CreateTransaction;
 use Payum\Sofort\Action\Api\CreateTransactionAction;
-use Payum\Sofort\Action\Api\BaseApiAwareAction;
 use Payum\Sofort\Api;
 
 class CreateTransactionActionTest extends \PHPUnit_Framework_TestCase
@@ -12,11 +13,21 @@ class CreateTransactionActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function shouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(CreateTransactionAction::class);
 
-        $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
+        $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldImplementApiAwareInterface()
+    {
+        $rc = new \ReflectionClass(CreateTransactionAction::class);
+
+        $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
     /**

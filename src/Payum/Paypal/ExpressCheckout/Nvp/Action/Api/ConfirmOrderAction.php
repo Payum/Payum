@@ -1,43 +1,36 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Exception\LogicException;
 use Payum\Core\GatewayAwareInterface;
-use Payum\Core\GatewayInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\RenderTemplate;
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ConfirmOrder;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout;
 
-class ConfirmOrderAction extends BaseApiAwareAction implements GatewayAwareInterface
+class ConfirmOrderAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
 {
-    /**
-     * @var GatewayInterface
-     */
-    protected $gateway;
+    use ApiAwareTrait;
+    use GatewayAwareTrait;
 
     /**
      * @var string
      */
     private $templateName;
 
-    /**
-     * @param string $templateName
-     */
+
     public function __construct($templateName)
     {
         $this->templateName = $templateName;
-    }
 
-    /**
-     * @param GatewayInterface $gateway
-     */
-    public function setGateway(GatewayInterface $gateway)
-    {
-        $this->gateway = $gateway;
+        $this->apiClass = Api::class;
     }
 
     /**

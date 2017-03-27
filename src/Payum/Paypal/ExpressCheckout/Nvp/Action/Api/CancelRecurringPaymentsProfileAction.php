@@ -1,13 +1,23 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Request\Cancel;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 
-class CancelRecurringPaymentsProfileAction extends BaseApiAwareAction
+class CancelRecurringPaymentsProfileAction implements ActionInterface, ApiAwareInterface
 {
+    use ApiAwareTrait;
+
+    public function __construct()
+    {
+        $this->apiClass = Api::class;
+    }
+
     /**
      * {@inheritDoc}
      */
