@@ -65,6 +65,7 @@
 
 * ### Sofort  
     * [Get it started](sofort/get-it-started.md)
+    * [Disable notifications](sofort/disable-notifications.md)
     
 * ### Stripe
     * [Stripe.js](stripe/js.md)

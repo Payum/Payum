@@ -31,7 +31,11 @@ class Api
      */
     public function __construct(array $options)
     {
-        $this->options = $options;
+        $this->options = array_replace([
+            'config_key' => null,
+            'abort_url' => null,
+            'disable_notification' => false,
+        ], $options);
     }
 
     /**
@@ -59,7 +63,10 @@ class Api
 
         $sofort->setSuccessUrl($fields['success_url'], $fields['success_link_redirect']);
         $sofort->setAbortUrl($fields['abort_url']);
-        $sofort->setNotificationUrl($fields['notification_url'], $fields['notify_on']);
+
+        if (false == $this->options['disable_notification']) {
+            $sofort->setNotificationUrl($fields['notification_url'], $fields['notify_on']);
+        }
 
         $sofort->sendRequest();
 

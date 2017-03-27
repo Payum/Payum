@@ -45,6 +45,14 @@ class SofortGatewayFactory extends GatewayFactory
             $config['payum.default_options'] = [
                 'config_key' => '',
                 'abort_url' => '',
+
+                /**
+                 * This adds possibility to disable use of notification url.
+                 * Could be useful in dev environments which is not accessable from the Internet.
+                 * @link https://github.com/Payum/Payum/issues/628
+                 */
+                'disable_notification' => false,
+
             ];
             $config->defaults($config['payum.default_options']);
             $config['payum.required_options'] = ['config_key'];
@@ -55,6 +63,7 @@ class SofortGatewayFactory extends GatewayFactory
                 return new Api([
                     'config_key' => $config['config_key'],
                     'abort_url' => $config['abort_url'],
+                    'disable_notification' => $config['disable_notification'],
                 ]);
             };
         }
