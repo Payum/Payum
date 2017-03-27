@@ -1,35 +1,28 @@
 <?php
 namespace Payum\Be2Bill\Action;
 
-use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\ObtainCreditCard;
-use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Be2Bill\Api;
 use Payum\Core\Security\SensitiveValue;
 
-class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
+class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface
 {
-    /**
-     * @var Api
-     */
-    protected $api;
+    use GatewayAwareTrait;
+    use ApiAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
+    public function __construct()
     {
-        if (false == $api instanceof Api) {
-            throw new UnsupportedApiException('Not supported.');
-        }
-
-        $this->api = $api;
+        $this->apiClass = Api::class;
     }
 
     /**

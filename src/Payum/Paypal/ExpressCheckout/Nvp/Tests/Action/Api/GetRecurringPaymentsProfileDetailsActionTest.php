@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetRecurringPaymentsProfileDetailsAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetRecurringPaymentsProfileDetails;
 
@@ -9,11 +11,21 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit_Framework_Te
     /**
      * @test
      */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function shouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetRecurringPaymentsProfileDetailsAction');
+        $rc = new \ReflectionClass(GetRecurringPaymentsProfileDetailsAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction'));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldImplementApoAwareInterface()
+    {
+        $rc = new \ReflectionClass(GetRecurringPaymentsProfileDetailsAction::class);
+
+        $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
     /**

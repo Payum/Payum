@@ -75,7 +75,7 @@ class CreditPartActionTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\UnsupportedApiException
-     * @expectedExceptionMessage Instance of Config is expected to be passed as api.
+     * @expectedExceptionMessage Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config
      */
     public function throwApiNotSupportedIfNotConfigGivenAsApi()
     {

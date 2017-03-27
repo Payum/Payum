@@ -1,9 +1,10 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoCaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoCapture;
@@ -14,11 +15,21 @@ class DoCaptureActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function shouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(DoCaptureAction::class);
 
-        $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldImplementApoAwareInterface()
+    {
+        $rc = new \ReflectionClass(DoCaptureAction::class);
+
+        $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
     /**

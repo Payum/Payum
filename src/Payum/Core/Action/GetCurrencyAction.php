@@ -5,7 +5,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetCurrency;
 use Payum\ISO4217\ISO4217;
 
-class GetCurrencyAction extends GatewayAwareAction
+class GetCurrencyAction implements ActionInterface
 {
     /**
      * @var ISO4217

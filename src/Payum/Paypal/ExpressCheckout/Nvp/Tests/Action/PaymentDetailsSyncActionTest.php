@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Request\Sync;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
@@ -12,11 +13,11 @@ class PaymentDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfGatewayAwareAction()
+    public function shouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction');
+        $rc = new \ReflectionClass(PaymentDetailsSyncAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
+        $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     /**

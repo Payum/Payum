@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoExpressCheckoutPaymentAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment;
 
@@ -9,11 +11,21 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function shouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoExpressCheckoutPaymentAction');
+        $rc = new \ReflectionClass(DoExpressCheckoutPaymentAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction'));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldImplementApoAwareInterface()
+    {
+        $rc = new \ReflectionClass(DoExpressCheckoutPaymentAction::class);
+
+        $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
     /**

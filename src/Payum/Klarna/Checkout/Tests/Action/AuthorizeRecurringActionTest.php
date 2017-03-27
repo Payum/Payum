@@ -1,6 +1,8 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests\Action;
 
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Request\Authorize;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Klarna\Checkout\Action\AuthorizeRecurringAction;
@@ -63,11 +65,11 @@ class AuthorizeRecurringActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldBeSubClassOfGatewayAwareAction()
+    public function shouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\AuthorizeRecurringAction');
+        $rc = new \ReflectionClass(AuthorizeRecurringAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
+        $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     /**
@@ -75,9 +77,9 @@ class AuthorizeRecurringActionTest extends GenericActionTest
      */
     public function shouldImplementsApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\AuthorizeRecurringAction');
+        $rc = new \ReflectionClass(AuthorizeRecurringAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
     public function testShouldAllowSetKlarnaConfigAsApi()
@@ -88,7 +90,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
 
     /**
      * @expectedException \Payum\Core\Exception\UnsupportedApiException
-     * @expectedExceptionMessage Not supported. Expected Payum\Klarna\Checkout\Config instance to be set as api.
+     * @expectedExceptionMessage Not supported api given. It must be an instance of Payum\Klarna\Checkout\Config
      */
     public function testThrowIfNotKlarnaConfigGivenAsApi()
     {

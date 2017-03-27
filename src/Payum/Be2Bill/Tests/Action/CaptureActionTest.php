@@ -3,7 +3,6 @@ namespace Payum\Be2Bill\Tests\Action;
 
 use Payum\Be2Bill\Api;
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;

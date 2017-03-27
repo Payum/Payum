@@ -1,12 +1,14 @@
 <?php
 namespace Payum\Paypal\ProCheckout\Nvp\Action;
 
-use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Exception\LogicException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Security\SensitiveValue;
 use Payum\Paypal\ProCheckout\Nvp\Api;
@@ -14,24 +16,17 @@ use Payum\Core\Request\Capture;
 
 /**
  * @author Ton Sharp <Forma-PRO@66ton99.org.ua>
+ *
+ * @param Api $api
  */
-class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
+class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface
 {
-    /**
-     * @var Api
-     */
-    protected $api;
+    use ApiAwareTrait;
+    use GatewayAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
+    public function __construct()
     {
-        if (false == $api instanceof Api) {
-            throw new UnsupportedApiException('Not supported.');
-        }
-
-        $this->api = $api;
+        $this->apiClass = Api::class;
     }
 
     /**

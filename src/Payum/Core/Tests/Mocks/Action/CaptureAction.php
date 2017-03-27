@@ -1,13 +1,17 @@
 <?php
 namespace Payum\Core\Tests\Mocks\Action;
 
-use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Tests\Mocks\Model\AuthorizeRequiredModel;
 use Payum\Core\Request\Capture;
 use Payum\Core\Tests\Mocks\Request\AuthorizeRequest;
 
-class CaptureAction extends GatewayAwareAction
+class CaptureAction implements ActionInterface, GatewayAwareInterface
 {
+    use GatewayAwareTrait;
+
     /**
      * {@inheritDoc}
      */

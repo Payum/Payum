@@ -1,14 +1,18 @@
 <?php
 namespace Payum\Klarna\Invoice\Action;
 
-use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Authorize;
 use Payum\Klarna\Invoice\Request\Api\ReserveAmount;
 
-class AuthorizeAction extends GatewayAwareAction
+class AuthorizeAction implements ActionInterface, GatewayAwareInterface
 {
+    use GatewayAwareTrait;
+
     /**
      * {@inheritDoc}
      *

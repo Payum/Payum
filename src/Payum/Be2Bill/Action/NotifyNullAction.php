@@ -1,15 +1,19 @@
 <?php
 namespace Payum\Be2Bill\Action;
 
-use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\GetToken;
 use Payum\Core\Request\Notify;
 
-class NotifyNullAction extends GatewayAwareAction
+class NotifyNullAction implements ActionInterface, GatewayAwareInterface
 {
+    use GatewayAwareTrait;
+
     /**
      * {@inheritDoc}
      *

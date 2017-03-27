@@ -2,6 +2,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
 use Payum\Core\Request\Cancel;
 use Payum\Core\Request\Generic;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CancelRecurringPaymentsProfileAction;
@@ -41,11 +42,21 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function shouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass($this->actionClass);
+        $rc = new \ReflectionClass(CancelRecurringPaymentsProfileAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction'));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldImplementApoAwareInterface()
+    {
+        $rc = new \ReflectionClass(CancelRecurringPaymentsProfileAction::class);
+
+        $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
     /**

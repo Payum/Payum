@@ -1,26 +1,25 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
-use Payum\Core\GatewayInterface;
+use Payum\Core\GatewayAwareTrait;
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoCapture;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
 
-class DoCaptureAction extends BaseApiAwareAction implements GatewayAwareInterface
+class DoCaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface
 {
-    /**
-     * @var GatewayInterface
-     */
-    protected $gateway;
+    use ApiAwareTrait;
+    use GatewayAwareTrait;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setGateway(GatewayInterface $gateway)
+    public function __construct()
     {
-        $this->gateway = $gateway;
+        $this->apiClass = Api::class;
     }
 
     /**

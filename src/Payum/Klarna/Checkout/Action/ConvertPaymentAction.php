@@ -1,13 +1,13 @@
 <?php
 namespace Payum\Klarna\Checkout\Action;
 
-use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
 
-class ConvertPaymentAction extends GatewayAwareAction
+class ConvertPaymentAction implements ActionInterface
 {
     /**
      * {@inheritDoc}

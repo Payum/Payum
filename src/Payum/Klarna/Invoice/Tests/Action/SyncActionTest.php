@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action;
 
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Sync;
 use Payum\Klarna\Invoice\Action\SyncAction;
@@ -10,11 +11,11 @@ class SyncActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfGatewayAwareAction()
+    public function shouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\SyncAction');
+        $rc = new \ReflectionClass(SyncAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
+        $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Payum\Core\Tests\Bridge\Symfony\Action;
 use Payum\Core\Bridge\Symfony\Action\ObtainCreditCardAction;
 use Payum\Core\Bridge\Symfony\Form\Type\CreditCardType;
 use Payum\Core\Bridge\Symfony\Reply\HttpResponse;
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Model\CreditCard;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\ObtainCreditCard;
@@ -18,11 +19,11 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfGatewayAwareAction()
+    public function shouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Action\ObtainCreditCardAction');
+        $rc = new \ReflectionClass(ObtainCreditCardAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
+        $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     /**

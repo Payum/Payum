@@ -3,12 +3,18 @@ namespace Payum\Klarna\Checkout\Action\Api;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
-use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\ApiAwareTrait;
 use Payum\Klarna\Checkout\Config;
 
 abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
 {
+    use ApiAwareTrait {
+        setApi as _setApi;
+    }
+
     /**
+     * BC. will be removed in 2.x. @use $this->api
+     *
      * @var Config
      */
     protected $config;
@@ -21,6 +27,9 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
     public function __construct(\Klarna_Checkout_ConnectorInterface $connector = null)
     {
         $this->connector = $connector;
+
+        // BC. will be removed in 2.x. @use $this->api
+        $this->apiClass = Config::class;
     }
 
     /**
@@ -28,11 +37,9 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
      */
     public function setApi($api)
     {
-        if (false == $api instanceof Config) {
-            throw new UnsupportedApiException('Not supported. Expected Payum\Klarna\Checkout\Config instance to be set as api.');
-        }
+        $this->_setApi($api);
 
-        $this->config = $api;
+        $this->config = $this->api;
     }
 
     /**

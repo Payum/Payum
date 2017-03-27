@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests\Action;
 
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Notify;
 use Payum\Core\Tests\GenericActionTest;
@@ -10,18 +11,18 @@ use Payum\Klarna\Checkout\Request\Api\UpdateOrder;
 
 class NotifyActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\Klarna\Checkout\Action\NotifyAction';
+    protected $actionClass = NotifyAction::class;
 
-    protected $requestClass = 'Payum\Core\Request\Notify';
+    protected $requestClass = Notify::class;
 
     /**
      * @test
      */
-    public function shouldBeSubClassOfGatewayAwareAction()
+    public function shouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\NotifyAction');
+        $rc = new \ReflectionClass(NotifyAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
+        $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     /**

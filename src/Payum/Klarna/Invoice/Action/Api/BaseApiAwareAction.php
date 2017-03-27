@@ -3,12 +3,19 @@ namespace Payum\Klarna\Invoice\Action\Api;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Klarna\Invoice\Config;
 
 abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
 {
+    use ApiAwareTrait {
+        setApi as _setApi;
+    }
+
     /**
+     * BC. will be removed in 2.x. @use $this->api
+     *
      * @var Config
      */
     protected $config;
@@ -24,6 +31,8 @@ abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
     public function __construct(\Klarna $klarna = null)
     {
         $this->klarna = $klarna ?: new \Klarna();
+
+        $this->apiClass = Config::class;
     }
 
     /**
@@ -33,11 +42,10 @@ abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
      */
     public function setApi($api)
     {
-        if (false == $api instanceof Config) {
-            throw new UnsupportedApiException('Instance of Config is expected to be passed as api.');
-        }
+        $this->_setApi($api);
 
-        $this->config = $api;
+        // BC. will be removed in 2.x. @use $this->api
+        $this->config = $this->api;
     }
 
     /**
