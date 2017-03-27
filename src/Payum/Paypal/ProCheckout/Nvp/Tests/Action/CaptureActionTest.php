@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Paypal\ProCheckout\Nvp\Tests\Action;
 
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\ProCheckout\Nvp\Api;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -12,18 +13,18 @@ use Payum\Core\Request\ObtainCreditCard;
 
 class CaptureActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\Paypal\ProCheckout\Nvp\Action\CaptureAction';
+    protected $actionClass = CaptureAction::class;
 
-    protected $requestClass = 'Payum\Core\Request\Capture';
+    protected $requestClass = Capture::class;
 
     /**
      * @test
      */
-    public function shouldBeSubClassOfGatewayAwareAction()
+    public function shouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ProCheckout\Nvp\Action\CaptureAction');
+        $rc = new \ReflectionClass(CaptureAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
+        $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     /**

@@ -2,6 +2,7 @@
 namespace Payum\Core\Tests\Action;
 
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Model\DetailsAggregateInterface;
 use Payum\Core\Model\DetailsAwareInterface;
 use Payum\Core\Model\ModelAggregateInterface;
@@ -25,11 +26,11 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldBeSubClassOfGatewayAwareAction()
+    public function shouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass($this->actionClass);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
+        $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     /**

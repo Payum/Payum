@@ -1,6 +1,11 @@
 <?php
 namespace Payum\Core\Tests\Action;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayInterface;
+use Payum\Core\Tests\GatewayAwareAction;
+
 class GatewayAwareActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -8,9 +13,9 @@ class GatewayAwareActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Action\GatewayAwareAction');
+        $rc = new \ReflectionClass(GatewayAwareAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     /**
@@ -18,9 +23,9 @@ class GatewayAwareActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Action\GatewayAwareAction');
+        $rc = new \ReflectionClass(GatewayAwareAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     /**
@@ -28,9 +33,9 @@ class GatewayAwareActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSetGatewayToProperty()
     {
-        $gateway = $this->getMock('Payum\Core\GatewayInterface');
+        $gateway = $this->getMock(GatewayInterface::class);
 
-        $action = $this->getMockForAbstractClass('Payum\Core\Action\GatewayAwareAction');
+        $action = $this->getMockForAbstractClass(GatewayAwareAction::class);
 
         $action->setGateway($gateway);
 

@@ -2,14 +2,18 @@
 
 namespace Payum\Sofort\Action;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Sofort\Request\Api\GetTransactionData;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\Sync;
-use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
 
-class SyncAction extends GatewayAwareAction
+class SyncAction implements ActionInterface, GatewayAwareInterface
 {
+    use GatewayAwareTrait;
+
     /**
      * {@inheritdoc}
      *

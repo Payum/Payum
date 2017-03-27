@@ -1,14 +1,18 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetRecurringPaymentsProfileDetails;
 use Payum\Core\Request\Sync;
-use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
 
-class RecurringPaymentDetailsSyncAction extends GatewayAwareAction
+class RecurringPaymentDetailsSyncAction implements ActionInterface, GatewayAwareInterface
 {
+    use GatewayAwareTrait;
+
     /**
      * {@inheritDoc}
      */

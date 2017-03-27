@@ -2,11 +2,11 @@
 
 namespace Payum\Sofort\Tests\Action;
 
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Notify;
 use Payum\Core\Request\Sync;
 use Payum\Core\Tests\GenericActionTest;
-use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\GatewayInterface;
 use Payum\Sofort\Action\NotifyAction;
 
@@ -19,11 +19,11 @@ class NotifyActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldBeSubClassOfGatewayAwareAction()
+    public function shouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(NotifyAction::class);
 
-        $this->assertTrue($rc->isSubclassOf(GatewayAwareAction::class));
+        $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     /**

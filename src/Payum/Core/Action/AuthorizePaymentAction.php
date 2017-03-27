@@ -3,13 +3,17 @@ namespace Payum\Core\Action;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Authorize;
 use Payum\Core\Request\Convert;
 use Payum\Core\Request\GetHumanStatus;
 
-class AuthorizePaymentAction extends GatewayAwareAction
+class AuthorizePaymentAction implements ActionInterface, GatewayAwareInterface
 {
+    use GatewayAwareTrait;
+
     /**
      * {@inheritDoc}
      *

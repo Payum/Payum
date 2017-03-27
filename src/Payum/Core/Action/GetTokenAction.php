@@ -6,7 +6,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetToken;
 use Payum\Core\Storage\StorageInterface;
 
-class GetTokenAction extends GatewayAwareAction
+class GetTokenAction implements ActionInterface
 {
     /**
      * @var StorageInterface

@@ -2,7 +2,6 @@
 namespace Payum\Klarna\Checkout\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;

@@ -1,8 +1,8 @@
 <?php
 namespace Payum\Stripe\Tests\Action\Api;
 
-use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\GetHttpRequest;
@@ -16,11 +16,11 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfGatewayAwareAction()
+    public function shouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(ObtainTokenAction::class);
 
-        $this->assertTrue($rc->isSubclassOf(GatewayAwareAction::class));
+        $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     /**

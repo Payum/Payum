@@ -1,25 +1,25 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Request\Notify;
-use Payum\Core\Request\Sync;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\NotifyAction;
 
 class NotifyActionTest extends GenericActionTest
 {
-    protected $requestClass = 'Payum\Core\Request\Notify';
+    protected $requestClass = Notify::class;
 
-    protected $actionClass = 'Payum\Paypal\ExpressCheckout\Nvp\Action\NotifyAction';
+    protected $actionClass = NotifyAction::class;
 
     /**
      * @test
      */
-    public function shouldBeSubClassOfGatewayAwareAction()
+    public function shouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\NotifyAction');
+        $rc = new \ReflectionClass(NotifyAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
+        $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     /**
