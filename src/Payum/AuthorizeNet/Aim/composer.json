@@ -21,7 +21,7 @@
     ],
     "require": {
         "payum/core": "^1.3",
-        "authorizenet/authorizenet": "~1.8"
+        "authorizenet/authorizenet": "^1.8"
     },
     "require-dev": {
         "payum/core": "^1.3@dev",
