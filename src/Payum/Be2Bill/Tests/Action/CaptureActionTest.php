@@ -8,6 +8,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Model\CreditCard;
 use Payum\Core\GatewayInterface;
+use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Capture;
 use Payum\Be2Bill\Action\CaptureAction;
 use Payum\Core\Request\ObtainCreditCard;
@@ -341,6 +342,18 @@ class CaptureActionTest extends GenericActionTest
         $capture->setModel($currentModel);
 
         $action->execute($capture);
+    }
+
+    /**
+     * @expectedException HttpResponse
+     */
+    public function testShouldThrowHttpResponseIfExecCode3DSecureRequired()
+    {
+        $action = new CaptureAction();
+
+        $action->execute($status = new Capture([
+            'EXECCODE' => Api::EXECCODE_3DSECURE_IDENTIFICATION_REQUIRED,
+        ]));
     }
 
     /**

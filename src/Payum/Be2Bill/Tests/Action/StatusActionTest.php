@@ -77,17 +77,4 @@ class StatusActionTest extends GenericActionTest
 
         $this->assertTrue($status->isUnknown());
     }
-
-    /**
-     * @test
-     * @expectedException Payum\Core\Reply\HttpResponse
-     */
-    public function shouldThrowHttpResponseIfExecCode3DSecureRequired()
-    {
-        $action = new StatusAction();
-
-        $action->execute($status = new GetHumanStatus(array(
-            'EXECCODE' => Api::EXECCODE_3DSECURE_IDENTIFICATION_REQUIRED,
-        )));
-    }
 }

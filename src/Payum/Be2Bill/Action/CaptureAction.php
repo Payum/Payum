@@ -8,6 +8,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
+use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\ObtainCreditCard;
@@ -35,6 +36,10 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = new ArrayObject($request->getModel());
+
+        if (Api::EXECCODE_3DSECURE_IDENTIFICATION_REQUIRED === $model['EXECCODE']) {
+            throw new HttpResponse(base64_decode($model['3DSECUREHTML']), 302);
+        }
 
         if (null !== $model['EXECCODE']) {
             return;
