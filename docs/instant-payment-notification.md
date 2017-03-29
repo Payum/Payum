@@ -8,7 +8,7 @@ The diagram shows two examples where notification could be very handy:
 
 If you follow [get it started](get-it-started.md) and used a payum builder to create paypal gateway,
 you do not have to care about notify url. Payum does it for you.
-You just have to make sure [notify script](scripts/notify-script.md) is accessible from web.
+You just have to make sure [notify script](examples/notify-script.md) is accessible from web.
 
 The model will be updated automatically once the notification is sent.
 What you have to do is add an extension to detect payment status changes, and act accordingly.
