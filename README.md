@@ -23,3 +23,7 @@ There are lots of features were done and even more stuff in todo list. If the li
 ## License
 
 Payum is released under the [MIT License](LICENSE).
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Payum/payum/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
