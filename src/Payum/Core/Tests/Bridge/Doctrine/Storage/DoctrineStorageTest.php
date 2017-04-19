@@ -133,6 +133,18 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
+     */
+    public function shouldAllowGetObjectManagerSetInConstructor()
+    {
+        $objectManager = $this->createObjectManagerMock();
+
+        $storage = new DoctrineStorage($objectManager, TestModel::class);
+
+        $this->assertSame($objectManager, $storage->getObjectManager());
+    }
+
+    /**
      * @return \PHPUnit_Framework_MockObject_MockObject|\Doctrine\Common\Persistence\ObjectManager
      */
     protected function createObjectManagerMock()

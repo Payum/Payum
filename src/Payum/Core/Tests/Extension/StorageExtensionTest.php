@@ -1,11 +1,17 @@
 <?php
 namespace Payum\Core\Tests\Extension;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
 use Payum\Core\Extension\Context;
+use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Model\Identity;
+use Payum\Core\Model\ModelAggregateInterface;
+use Payum\Core\Request\Generic;
 use Payum\Core\Storage\StorageInterface;
 
 class StorageExtensionTest extends \PHPUnit_Framework_TestCase
@@ -15,9 +21,9 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementExtensionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Extension\StorageExtension');
+        $rc = new \ReflectionClass(StorageExtension::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
+        $this->assertTrue($rc->implementsInterface(ExtensionInterface::class));
     }
 
     /**
@@ -68,7 +74,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(null))
         ;
 
-        $requestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface');
+        $requestMock = $this->getMock(ModelAggregateInterface::class);
         $requestMock
             ->expects($this->any())
             ->method('getModel')
@@ -102,7 +108,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('find')
         ;
 
-        $requestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface');
+        $requestMock = $this->getMock(ModelAggregateInterface::class);
         $requestMock
             ->expects($this->any())
             ->method('getModel')
@@ -135,7 +141,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('find')
         ;
 
-        $requestMock = $this->getMock('Payum\Core\Request\RequestInterface');
+        $requestMock = new \stdClass;
 
         $context = new Context($this->createGatewayMock(), $requestMock, array());
 
@@ -161,7 +167,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($expectedModel))
         ;
 
-        $requestMock = $this->getMock('Payum\Core\Request\Generic', array(), array(), '', false);
+        $requestMock = $this->getMock(Generic::class, array(), array(), '', false);
         $requestMock
             ->expects($this->any())
             ->method('getModel')
@@ -199,7 +205,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true))
         ;
 
-        $requestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface', array('getModel', 'setModel'));
+        $requestMock = $this->getMock(ModelAggregateInterface::class, array('getModel', 'setModel'));
         $requestMock
             ->expects($this->any())
             ->method('getModel')
@@ -237,7 +243,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true))
         ;
 
-        $requestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface', array('getModel', 'setModel'));
+        $requestMock = $this->getMock(ModelAggregateInterface::class, array('getModel', 'setModel'));
         $requestMock
             ->expects($this->any())
             ->method('getModel')
@@ -280,7 +286,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo($expectedModel))
         ;
 
-        $requestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface');
+        $requestMock = $this->getMock(ModelAggregateInterface::class);
         $requestMock
             ->expects($this->any())
             ->method('getModel')
@@ -322,7 +328,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo($expectedModel))
         ;
 
-        $requestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface');
+        $requestMock = $this->getMock(ModelAggregateInterface::class);
         $requestMock
             ->expects($this->any())
             ->method('getModel')
@@ -344,9 +350,193 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
     }
 
+    /**
+     * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The entity manager connection is closed.
+     */
+    public function throwIfEntityManagerConnectionIsClosed()
+    {
+        $expectedModel = new \stdClass();
+
+        $connectionMock = $this->getMock(Connection::class, [], [], '', false);
+        $connectionMock
+            ->expects($this->once())
+            ->method('isConnected')
+            ->will($this->returnValue(false))
+        ;
+
+        $entityManagerMock = $this->getMock(EntityManagerInterface::class);
+        $entityManagerMock
+            ->expects($this->once())
+            ->method('getConnection')
+            ->will($this->returnValue($connectionMock))
+        ;
+
+        $storageMock = $this->getMock(DoctrineStorage::class, [], [], '', false);
+        $storageMock
+            ->expects($this->any())
+            ->method('support')
+            ->will($this->returnValue(true))
+        ;
+        $storageMock
+            ->expects($this->any())
+            ->method('getObjectManager')
+            ->will($this->returnValue($entityManagerMock))
+        ;
+        $storageMock
+            ->expects($this->never())
+            ->method('update')
+        ;
+
+        $requestMock = $this->getMock(ModelAggregateInterface::class);
+        $requestMock
+            ->expects($this->any())
+            ->method('getModel')
+            ->will($this->returnValue($expectedModel))
+        ;
+
+        $extension = new StorageExtension($storageMock);
+
+        $context = new Context($this->createGatewayMock(), $requestMock, array());
+
+        $extension->onPreExecute($context);
+
+        //guard
+        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
+
+        $extension->onPostExecute($context);
+    }
+
+    /**
+     * @test
+     */
+    public function throwWithPreviousExceptionIfEntityManagerConnectionIsClosed()
+    {
+        $expectedModel = new \stdClass();
+        $exception = new \LogicException;
+
+        $connectionMock = $this->getMock(Connection::class, [], [], '', false);
+        $connectionMock
+            ->expects($this->once())
+            ->method('isConnected')
+            ->will($this->returnValue(false))
+        ;
+
+        $entityManagerMock = $this->getMock(EntityManagerInterface::class);
+        $entityManagerMock
+            ->expects($this->once())
+            ->method('getConnection')
+            ->will($this->returnValue($connectionMock))
+        ;
+
+        $storageMock = $this->getMock(DoctrineStorage::class, [], [], '', false);
+        $storageMock
+            ->expects($this->any())
+            ->method('support')
+            ->will($this->returnValue(true))
+        ;
+        $storageMock
+            ->expects($this->any())
+            ->method('getObjectManager')
+            ->will($this->returnValue($entityManagerMock))
+        ;
+        $storageMock
+            ->expects($this->never())
+            ->method('update')
+        ;
+
+        $requestMock = $this->getMock(ModelAggregateInterface::class);
+        $requestMock
+            ->expects($this->any())
+            ->method('getModel')
+            ->will($this->returnValue($expectedModel))
+        ;
+
+        $extension = new StorageExtension($storageMock);
+
+        $context = new Context($this->createGatewayMock(), $requestMock, array());
+        $context->setException($exception);
+
+        $extension->onPreExecute($context);
+
+        //guard
+        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
+
+        try {
+            $extension->onPostExecute($context);
+        } catch (\Exception $e) {
+            $this->assertSame($exception, $e->getPrevious());
+
+            return;
+        }
+
+        $this->fail('Exception was expected to be thrown.');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldUpdateModelIfEntityManagerConnectionIsNotClosed()
+    {
+        $expectedModel = new \stdClass();
+        $exception = new \LogicException;
+
+        $connectionMock = $this->getMock(Connection::class, [], [], '', false);
+        $connectionMock
+            ->expects($this->once())
+            ->method('isConnected')
+            ->will($this->returnValue(true))
+        ;
+
+        $entityManagerMock = $this->getMock(EntityManagerInterface::class);
+        $entityManagerMock
+            ->expects($this->once())
+            ->method('getConnection')
+            ->will($this->returnValue($connectionMock))
+        ;
+
+        $storageMock = $this->getMock(DoctrineStorage::class, [], [], '', false);
+        $storageMock
+            ->expects($this->any())
+            ->method('support')
+            ->will($this->returnValue(true))
+        ;
+        $storageMock
+            ->expects($this->any())
+            ->method('getObjectManager')
+            ->will($this->returnValue($entityManagerMock))
+        ;
+        $storageMock
+            ->expects($this->once())
+            ->method('update')
+        ;
+
+        $requestMock = $this->getMock(ModelAggregateInterface::class);
+        $requestMock
+            ->expects($this->any())
+            ->method('getModel')
+            ->will($this->returnValue($expectedModel))
+        ;
+
+        $extension = new StorageExtension($storageMock);
+
+        $context = new Context($this->createGatewayMock(), $requestMock, array());
+        $context->setException($exception);
+
+        $extension->onPreExecute($context);
+
+        //guard
+        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
+
+        $extension->onPostExecute($context);
+        $this->assertAttributeEmpty('scheduledForUpdateModels', $extension);
+    }
+
     protected function createModelRequestWithModel($model)
     {
-        $modelRequestMock = $this->getMock('Payum\Core\Model\ModelAggregateInterface', array('setModel', 'getModel'));
+        $modelRequestMock = $this->getMock(ModelAggregateInterface::class, array('setModel', 'getModel'));
         $modelRequestMock
             ->expects($this->any())
             ->method('getModel')
@@ -361,7 +551,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createStorageMock()
     {
-        return $this->getMock('Payum\Core\Storage\StorageInterface');
+        return $this->getMock(StorageInterface::class);
     }
 
     /**
@@ -369,7 +559,7 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createActionMock()
     {
-        return $this->getMock('Payum\Core\Action\ActionInterface');
+        return $this->getMock(ActionInterface::class);
     }
 
     /**
@@ -377,6 +567,6 @@ class StorageExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\GatewayInterface');
+        return $this->getMock(GatewayInterface::class);
     }
 }
