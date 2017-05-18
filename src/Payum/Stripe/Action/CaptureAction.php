@@ -9,6 +9,7 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Capture;
 use Payum\Stripe\Request\Api\CreateCharge;
 use Payum\Stripe\Request\Api\ObtainToken;
+use Payum\Stripe\Constants;
 
 class CaptureAction implements ActionInterface, GatewayAwareInterface
 {
@@ -36,6 +37,9 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
                 $obtainToken->setModel($model);
 
                 $this->gateway->execute($obtainToken);
+                if ($model['status'] == Constants::STATUS_FAILED) {
+                    return;
+                }
             }
         }
 
