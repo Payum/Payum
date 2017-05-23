@@ -314,6 +314,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
         $firstAction = new RequireOtherRequestAction();
         $firstAction->setSupportedRequest($firstRequest);
         $firstAction->setRequiredRequest($secondRequest);
+        $firstAction->setCatchReply(true);
 
         $secondAction = new ThrowReplyAction();
         $secondAction->setSupportedRequest($secondRequest);
@@ -323,7 +324,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
         $gateway->addAction($firstAction);
         $gateway->addAction($secondAction);
 
-        $gateway->execute($firstRequest);
+        $gateway->execute($firstRequest, $catchReply = true);
     }
 
     /**
@@ -959,6 +960,13 @@ class RequireOtherRequestAction implements ActionInterface, GatewayAwareInterfac
 
     protected $requiredRequest;
 
+    protected $catchReply = false;
+
+    public function setCatchReply($catchReply)
+    {
+        $this->catchReply = $catchReply;
+    }
+
     /**
      * @param $request
      */
@@ -977,7 +985,7 @@ class RequireOtherRequestAction implements ActionInterface, GatewayAwareInterfac
 
     public function execute($request)
     {
-        $this->gateway->execute($this->requiredRequest);
+        $this->gateway->execute($this->requiredRequest, $this->catchReply);
     }
 
     public function supports($request)
