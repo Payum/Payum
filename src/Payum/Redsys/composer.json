@@ -1,0 +1,40 @@
+{
+    "name": "payum/redsys",
+    "type": "library",
+    "description": "Redsys pament",
+    "keywords": [
+        "payment",
+        "redsys"
+    ],
+    "homepage": "http://payum.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Carlos Revillo",
+            "email": "crevillo@gmail.com"
+        },
+        {
+            "name":     "Payum project",
+            "homepage": "http://payum.org/"
+        },
+        {
+            "name":     "Community contributions",
+            "homepage": "https://github.com/crevillo/payum-redsys/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "payum/core": "0.13.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": { "Payum\\Redsys": "" }
+    },
+    "target-dir": "Payum/Redsys"
+}
+
