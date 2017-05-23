@@ -109,6 +109,15 @@ class PaymentDetailsStatusAction implements ActionInterface
                     return;
                 }
 
+                $reversedStatuses = array(
+                    Api::PAYMENTSTATUS_REVERSED,
+                );
+                if (in_array($paymentStatus, $reversedStatuses)) {
+                    $request->markReversed();
+
+                    return;
+                }
+
                 $pendingStatuses = array(
                     Api::PAYMENTSTATUS_IN_PROGRESS,
                     Api::PAYMENTSTATUS_PENDING,

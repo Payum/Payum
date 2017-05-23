@@ -15,6 +15,8 @@ class GetBinaryStatus extends BaseGetStatus
 
     const STATUS_PENDING = 1024; // 2^10
 
+    const STATUS_REVERSED = 64; //2^6
+
     const STATUS_CANCELED = 32; //2^5
 
     const STATUS_REFUNDED = 16; // 2^4
@@ -135,6 +137,22 @@ class GetBinaryStatus extends BaseGetStatus
     public function isCanceled()
     {
         return $this->isCurrentStatusEqualTo(static::STATUS_CANCELED);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function markReversed()
+    {
+        $this->status = static::STATUS_REVERSED;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isReversed()
+    {
+        return $this->isCurrentStatusEqualTo(static::STATUS_REVERSED);
     }
 
     /**
