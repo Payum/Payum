@@ -7,6 +7,7 @@ The Payum extension. It provides [Sofort](https://www.sofort.com/eng-INT/buyer/s
 
 ## Resources
 
+* [Site](https://payum.forma-pro.com/)
 * [Documentation](https://github.com/Payum/Payum/blob/master/docs/index.md#sofort)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)

@@ -7,6 +7,7 @@ The Payum extension. It provides [Paypal ExpressCheckout](https://www.paypal.com
 
 ## Resources
 
+* [Site](https://payum.forma-pro.com/)
 * [Documentation](https://github.com/Payum/Payum/blob/master/docs/index.md#paypal-express-checkout)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)

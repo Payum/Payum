@@ -7,6 +7,7 @@ The Payum extension. It provides [Payex](http://www.payexpim.com/) payment integ
 
 ## Resources
 
+* [Site](https://payum.forma-pro.com/)
 * [Documentation](https://github.com/Payum/Payum/blob/master/docs/index.md#payex)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
