@@ -43,11 +43,15 @@ class CancelActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportEmptyModel()
+    public function shouldSupportModelWithTransactionId()
     {
         $action = new CancelAction();
 
-        $request = new Cancel([]);
+        $payment = array(
+            'TRANSACTIONID' => 123,
+        );
+
+        $request = new Cancel($payment);
 
         $this->assertTrue($action->supports($request));
     }
@@ -60,7 +64,8 @@ class CancelActionTest extends \PHPUnit_Framework_TestCase
         $action = new CancelAction();
 
         $payment = array(
-           'PAYMENTINFO_0_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
+            'TRANSACTIONID' => 123,
+            'PAYMENTINFO_0_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
         );
 
         $request = new Cancel($payment);
@@ -76,12 +81,25 @@ class CancelActionTest extends \PHPUnit_Framework_TestCase
         $action = new CancelAction();
 
         $payment = array(
-           'PAYMENTINFO_0_PENDINGREASON' => 'Foo',
+            'TRANSACTIONID' => 123,
+            'PAYMENTINFO_0_PENDINGREASON' => 'Foo',
         );
 
         $request = new Cancel($payment);
 
         $this->assertTrue($action->supports($request));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotSupportModelWithoutTransactionId()
+    {
+        $action = new CancelAction();
+
+        $request = new Cancel([]);
+
+        $this->assertFalse($action->supports($request));
     }
 
     /**
@@ -120,17 +138,12 @@ class CancelActionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     *
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
-    public function shouldNotExecuteDoVoidIfTransactionIdNotSet()
+    public function throwIfNotSupportedModelGivenAsArgumentForExecute()
     {
-        $gatewayMock = $this->createGatewayMock();
-        $gatewayMock
-            ->expects($this->never())
-            ->method('execute')
-        ;
-
         $action = new CancelAction();
-        $action->setGateway($gatewayMock);
 
         $request = new Cancel([]);
 
