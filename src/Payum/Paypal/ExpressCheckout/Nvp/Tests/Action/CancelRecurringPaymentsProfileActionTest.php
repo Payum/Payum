@@ -2,11 +2,14 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\ApiAwareInterface;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Cancel;
 use Payum\Core\Request\Generic;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CancelRecurringPaymentsProfileAction;
+use Payum\Core\Request\Sync;
 use Payum\Core\Tests\GenericActionTest;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\CancelRecurringPaymentsProfileAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ManageRecurringPaymentsProfileStatus;
 
 class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
 {
@@ -52,11 +55,11 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldImplementApoAwareInterface()
+    public function shouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(CancelRecurringPaymentsProfileAction::class);
 
-        $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
+        $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     /**
@@ -123,78 +126,34 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldCallApiManageRecurringPaymentsProfileStatusMethodWithExpectedRequiredArguments()
+    public function shouldExecuteManageAndSyncActions()
     {
-        $testCase = $this;
-
-        $apiMock = $this->createApiMock();
-        $apiMock
-            ->expects($this->once())
-            ->method('manageRecurringPaymentsProfileStatus')
-            ->will($this->returnCallback(function (array $fields) use ($testCase) {
-                $testCase->assertArrayHasKey('PROFILEID', $fields);
-                $testCase->assertEquals('theProfileId', $fields['PROFILEID']);
-
-                $testCase->assertArrayHasKey('ACTION', $fields);
-                $testCase->assertEquals('Cancel', $fields['ACTION']);
-
-                $testCase->assertArrayHasKey('BILLINGPERIOD', $fields);
-                $testCase->assertEquals('theBillingPeriod', $fields['BILLINGPERIOD']);
-
-                return array();
-            }))
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
+            ->expects($this->exactly(2))
+            ->method('execute')
+            ->withConsecutive(
+                array($this->isInstanceOf(ManageRecurringPaymentsProfileStatus::class)),
+                array($this->isInstanceOf(Sync::class))
+            )
         ;
 
         $action = new CancelRecurringPaymentsProfileAction();
-        $action->setApi($apiMock);
+        $action->setGateway($gatewayMock);
 
         $request = new Cancel(array(
-            'PROFILEID' => 'theProfileId',
-            'ACTION' => 'theAction',
-            'BILLINGPERIOD' => 'theBillingPeriod'
+            'BILLINGPERIOD' => 'Month',
+            'PROFILEID' => 'profile-ID',
         ));
 
         $action->execute($request);
     }
 
     /**
-     * @test
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\GatewayInterface
      */
-    public function shouldCallApiManageRecurringPaymentsProfileStatusMethodAndUpdateModelFromResponseOnSuccess()
+    protected function createGatewayMock()
     {
-        $apiMock = $this->createApiMock();
-        $apiMock
-            ->expects($this->once())
-            ->method('manageRecurringPaymentsProfileStatus')
-            ->will($this->returnCallback(function () {
-                return array(
-                    'PROFILEID' => 'theResponseProfileId',
-                );
-            }))
-        ;
-
-        $action = new CancelRecurringPaymentsProfileAction();
-        $action->setApi($apiMock);
-
-        $request = new Cancel(array(
-            'PROFILEID' => 'aProfileId',
-            'ACTION' => 'anAction',
-            'BILLINGPERIOD' => 'theBillingPeriod'
-        ));
-
-        $action->execute($request);
-
-        $model = $request->getModel();
-
-        $this->assertArrayHasKey('PROFILEID', $model);
-        $this->assertEquals('theResponseProfileId', $model['PROFILEID']);
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Paypal\ExpressCheckout\Nvp\Api
-     */
-    protected function createApiMock()
-    {
-        return $this->getMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->getMock(GatewayInterface::class);
     }
 }

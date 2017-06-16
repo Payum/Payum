@@ -2,21 +2,18 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\ApiAwareInterface;
-use Payum\Core\ApiAwareTrait;
-use Payum\Core\Request\Cancel;
-use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
+use Payum\Core\Request\Cancel;
+use Payum\Core\Request\Sync;
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ManageRecurringPaymentsProfileStatus;
 
-class CancelRecurringPaymentsProfileAction implements ActionInterface, ApiAwareInterface
+class CancelRecurringPaymentsProfileAction implements ActionInterface, GatewayAwareInterface
 {
-    use ApiAwareTrait;
-
-    public function __construct()
-    {
-        $this->apiClass = Api::class;
-    }
+    use GatewayAwareTrait;
 
     /**
      * {@inheritDoc}
@@ -29,11 +26,13 @@ class CancelRecurringPaymentsProfileAction implements ActionInterface, ApiAwareI
         $model = ArrayObject::ensureArrayObject($request->getModel());
         $model->validateNotEmpty(array('PROFILEID', 'BILLINGPERIOD'));
 
-        $model['ACTION'] = Api::RECURRINGPAYMENTACTION_CANCEL;
+        $cancelDetails = new ArrayObject([
+            'PROFILEID' => $model['PROFILEID'],
+            'ACTION' => Api::RECURRINGPAYMENTACTION_CANCEL,
+        ]);
 
-        $model->replace(
-            $this->api->manageRecurringPaymentsProfileStatus((array) $model)
-        );
+        $this->gateway->execute(new ManageRecurringPaymentsProfileStatus($cancelDetails));
+        $this->gateway->execute(new Sync($request->getModel()));
     }
 
     /**
