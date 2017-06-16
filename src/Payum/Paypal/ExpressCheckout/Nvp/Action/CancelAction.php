@@ -24,6 +24,10 @@ class CancelAction implements ActionInterface, GatewayAwareInterface
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
+        if (!$details['TRANSACTIONID']) {
+            return;
+        }
+
         $voidDetails = new ArrayObject([
             'AUTHORIZATIONID' => $details['TRANSACTIONID'],
         ]);
@@ -43,6 +47,6 @@ class CancelAction implements ActionInterface, GatewayAwareInterface
 
         // it must take into account only common payments, recurring payments must be cancelled by another action.
         $model = $request->getModel();
-        return isset($model['TRANSACTIONID']);
+        return empty($model['BILLINGPERIOD']);
     }
 }

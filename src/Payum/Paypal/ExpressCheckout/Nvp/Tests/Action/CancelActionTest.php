@@ -43,15 +43,11 @@ class CancelActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldSupportModelWithTransactionId()
+    public function shouldSupportEmptyModel()
     {
         $action = new CancelAction();
 
-        $payment = array(
-            'TRANSACTIONID' => 123,
-        );
-
-        $request = new Cancel($payment);
+        $request = new Cancel([]);
 
         $this->assertTrue($action->supports($request));
     }
@@ -64,8 +60,7 @@ class CancelActionTest extends \PHPUnit_Framework_TestCase
         $action = new CancelAction();
 
         $payment = array(
-            'TRANSACTIONID' => 123,
-            'PAYMENTINFO_0_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
+           'PAYMENTINFO_0_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
         );
 
         $request = new Cancel($payment);
@@ -81,8 +76,7 @@ class CancelActionTest extends \PHPUnit_Framework_TestCase
         $action = new CancelAction();
 
         $payment = array(
-            'TRANSACTIONID' => 123,
-            'PAYMENTINFO_0_PENDINGREASON' => 'Foo',
+           'PAYMENTINFO_0_PENDINGREASON' => 'Foo',
         );
 
         $request = new Cancel($payment);
@@ -93,11 +87,15 @@ class CancelActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotSupportModelWithoutTransactionId()
+    public function shouldNotSupportModelWithBillingPeriod()
     {
         $action = new CancelAction();
 
-        $request = new Cancel([]);
+        $payment = array(
+           'BILLINGPERIOD' => 'Month',
+        );
+
+        $request = new Cancel($payment);
 
         $this->assertFalse($action->supports($request));
     }
@@ -138,12 +136,17 @@ class CancelActionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
-    public function throwIfNotSupportedModelGivenAsArgumentForExecute()
+    public function shouldNotExecuteDoVoidIfTransactionIdNotSet()
     {
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
+            ->expects($this->never())
+            ->method('execute')
+        ;
+
         $action = new CancelAction();
+        $action->setGateway($gatewayMock);
 
         $request = new Cancel([]);
 
