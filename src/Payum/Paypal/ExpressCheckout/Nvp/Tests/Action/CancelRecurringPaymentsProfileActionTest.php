@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
+namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
@@ -18,7 +18,7 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
     /**
      * @var ActionInterface
      */
-    protected $actionClass = 'Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CancelRecurringPaymentsProfileAction';
+    protected $actionClass = 'Payum\Paypal\ExpressCheckout\Nvp\Action\CancelRecurringPaymentsProfileAction';
 
     public function provideSupportedRequests()
     {
