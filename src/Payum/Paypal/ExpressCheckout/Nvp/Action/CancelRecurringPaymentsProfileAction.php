@@ -8,9 +8,10 @@ use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Cancel;
 use Payum\Core\Request\Sync;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoVoid;
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ManageRecurringPaymentsProfileStatus;
 
-class CancelAction implements ActionInterface, GatewayAwareInterface
+class CancelRecurringPaymentsProfileAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
@@ -22,17 +23,15 @@ class CancelAction implements ActionInterface, GatewayAwareInterface
         /** @var $request Cancel */
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $details = ArrayObject::ensureArrayObject($request->getModel());
+        $model = ArrayObject::ensureArrayObject($request->getModel());
+        $model->validateNotEmpty(array('PROFILEID', 'BILLINGPERIOD'));
 
-        if (!$details['TRANSACTIONID']) {
-            return;
-        }
-
-        $voidDetails = new ArrayObject([
-            'AUTHORIZATIONID' => $details['TRANSACTIONID'],
+        $cancelDetails = new ArrayObject([
+            'PROFILEID' => $model['PROFILEID'],
+            'ACTION' => Api::RECURRINGPAYMENTACTION_CANCEL,
         ]);
 
-        $this->gateway->execute(new DoVoid($voidDetails));
+        $this->gateway->execute(new ManageRecurringPaymentsProfileStatus($cancelDetails));
         $this->gateway->execute(new Sync($request->getModel()));
     }
 
@@ -45,8 +44,8 @@ class CancelAction implements ActionInterface, GatewayAwareInterface
             return false;
         }
 
-        // it must take into account only common payments, recurring payments must be cancelled by another action.
+        // it must take into account only recurring payments, common payments must be cancelled by another action.
         $model = $request->getModel();
-        return empty($model['BILLINGPERIOD']);
+        return isset($model['BILLINGPERIOD']);
     }
 }

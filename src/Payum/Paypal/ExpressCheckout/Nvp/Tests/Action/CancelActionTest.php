@@ -87,6 +87,22 @@ class CancelActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldNotSupportModelWithBillingPeriod()
+    {
+        $action = new CancelAction();
+
+        $payment = array(
+           'BILLINGPERIOD' => 'Month',
+        );
+
+        $request = new Cancel($payment);
+
+        $this->assertFalse($action->supports($request));
+    }
+
+    /**
+     * @test
+     */
     public function shouldNotSupportCancelRequestWithNoArrayAccessAsModel()
     {
         $action = new CancelAction();
