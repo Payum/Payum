@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.4.1 (2017-06-21)
+
+* [core] Do not use base api classes where it is appropriate
+* [core] Do not use GatewayAwareAction class. Use interface + trait
+* [sofort] add an exception if invalid config key given
+* [sofort] Add ability to disable notifications.
+* [doc] Minor gramatical changes
+* [doc] Add new Uniteller gateway for ^1.4 version
+* [doc] Update instant-payment-notification.md
+* [doc] Upgrade 3rd party libs requirments
+* [doc] Update examples.md
+* [doc] Add docs on how to encrypt and store gateway configs in database
+
 ## 1.4.0 (2017-03-24)
 
 * [security] Add ability to crypt data stored to database
