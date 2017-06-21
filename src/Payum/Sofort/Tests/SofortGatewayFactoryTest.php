@@ -1,11 +1,10 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\Nvp\Tests;
+namespace Payum\Sofort\Tests;
 
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\Gateway;
 use Payum\Core\GatewayFactory;
 use Payum\Core\GatewayFactoryInterface;
-use Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory;
 use Payum\Sofort\SofortGatewayFactory;
 
 class SofortGatewayFactoryTest extends \PHPUnit_Framework_TestCase
@@ -45,7 +44,7 @@ class SofortGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $coreGatewayFactory = $this->getMock(GatewayFactoryInterface::class);
 
-        $factory = new PaypalExpressCheckoutGatewayFactory([], $coreGatewayFactory);
+        $factory = new SofortGatewayFactory([], $coreGatewayFactory);
 
         $this->assertAttributeSame($coreGatewayFactory, 'coreGatewayFactory', $factory);
     }
@@ -58,7 +57,7 @@ class SofortGatewayFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new SofortGatewayFactory();
 
         $gateway = $factory->create([
-            'config_key' => 'aKey',
+            'config_key' => 'foo:bar:baz',
         ]);
 
         $this->assertInstanceOf(Gateway::class, $gateway);
