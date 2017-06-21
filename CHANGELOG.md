@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.2 (2017-06-21)
+
+* [paypal-ec] Re-factor CancelRecurringPaymentsProfileAction as actions proxy
+* [paypal-ec] Change CancelRecurringPaymentsProfileAction namespace
+* [paypal-ec] Fix PayPal express checkout NVP Cancel action support scope
+
 ## 1.4.1 (2017-06-21)
 
 * [core] Do not use base api classes where it is appropriate
