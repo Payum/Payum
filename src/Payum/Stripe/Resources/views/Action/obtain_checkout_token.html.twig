@@ -11,7 +11,8 @@
             data-name="{{ model.name|default("") }}"
             data-description="{{ model.description|default("") }}"
             data-amount="{{ model.amount }}"
-            data-currency="{{ model.currency|default("USD") }}">
+            data-currency="{{ model.currency|default("USD") }}"
+            data-locale="auto">
         </script>
     </form>
 {% endblock %}
