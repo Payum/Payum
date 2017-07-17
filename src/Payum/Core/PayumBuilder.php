@@ -605,7 +605,7 @@ class PayumBuilder
     protected function buildOmnipayGatewayFactories(GatewayFactoryInterface $coreGatewayFactory)
     {
         $gatewayFactories = [];
-        if (false == class_exists(\Omnipay\Omnipay::class)) {
+        if (false == class_exists(\Omnipay\Omnipay::class) || false == class_exists(OmnipayGatewayFactory::class)) {
             return $gatewayFactories;
         }
 
