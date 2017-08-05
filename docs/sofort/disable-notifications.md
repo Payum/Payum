@@ -13,8 +13,8 @@ When you are working locally with Sofort you may get
 </errors>
 ```
 
-That's because the notification url you sent to Sofort is not reachable and Sofort returns error in this case.
-To work around the problem you can disable notifications by setting next option:
+That's because the notification URL you sent to Sofort is not reachable and Sofort returns error in this case.
+To work around the problem you can disable notifications by setting the additional option:
 
 ```php
 <?php
@@ -38,9 +38,9 @@ payum:
     sofort:
       config_key: 'aKey',
       disable_notification: true            
-      facory: 'sofort'
+      factory: 'sofort'
 ```
 
-Pay attention that you must do it only for local\dev environments and never in production.
+Pay attention that you must do it only for local/dev environments and never in production.
 
 Back to [index](../index.md).
