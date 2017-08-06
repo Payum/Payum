@@ -23,28 +23,32 @@ class StatusAction implements ActionInterface
 
         if (!isset($details['status'])
            && isset($details['transaction_id'])
+           && isset($details['expires'])
            && $details['expires'] < time()) {
             $request->markExpired();
 
             return;
         }
+
         if (!isset($details['transaction_id']) || !strlen($details['transaction_id'])) {
             $request->markNew();
 
             return;
         }
+
         if (!isset($details['status'])) {
             $request->markNew();
 
             return;
         }
+
         $subcode = isset($details['statusReason']) ? $details['statusReason'] : null;
         switch ($details['status']) {
             case Api::STATUS_LOSS:
                 $request->markFailed();
                 break;
             case Api::STATUS_PENDING:
-                $request->markCaptured();
+                $request->markPending();
                 break;
             case Api::STATUS_RECEIVED:
                 switch ($subcode) {
