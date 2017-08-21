@@ -611,19 +611,9 @@ class PayumBuilder
 
         $factory = \Omnipay\Omnipay::getFactory();
 
-        $gatewayFactories['omnipay'] = new OmnipayGatewayFactory('', $factory, [], $coreGatewayFactory);
-        $gatewayFactories['omnipay_direct'] = new OmnipayGatewayFactory('', $factory, [], $coreGatewayFactory);
-        $gatewayFactories['omnipay_offsite'] = new OmnipayGatewayFactory('', $factory, [], $coreGatewayFactory);
-
-        foreach ($factory->getSupportedGateways() as $type) {
-            // omnipay throws exception on these gateways https://github.com/thephpleague/omnipay/issues/312
-            // skip them for now
-            if (in_array($type, ['Buckaroo', 'Alipay Bank', 'AliPay Dual Func', 'Alipay Express', 'Alipay Mobile Express', 'Alipay Secured', 'Alipay Wap Express', 'Cybersource', 'DataCash', 'Ecopayz', 'Neteller', 'Pacnet', 'PaymentSense', 'Realex Remote', 'SecPay (PayPoint.net)', 'Sisow', 'Skrill', 'YandexMoney', 'YandexMoneyIndividual'])) {
-                continue;
-            }
-
-            $gatewayFactories[strtolower('omnipay_'.$type)] = new OmnipayGatewayFactory($type, $factory, [], $coreGatewayFactory);
-        }
+        $gatewayFactories['omnipay'] = new OmnipayGatewayFactory($factory, [], $coreGatewayFactory);
+        $gatewayFactories['omnipay_direct'] = new OmnipayGatewayFactory($factory, [], $coreGatewayFactory);
+        $gatewayFactories['omnipay_offsite'] = new OmnipayGatewayFactory($factory, [], $coreGatewayFactory);
 
         return $gatewayFactories;
     }
