@@ -645,9 +645,6 @@ class PayumBuilder
         $factory = \Omnipay\Omnipay::getFactory();
 
         $gatewayFactories['omnipay'] = new OmnipayV3GatewayFactory($factory, [], $coreGatewayFactory);
-        $gatewayFactories['omnipay_direct'] = new OmnipayV3GatewayFactory($factory, [], $coreGatewayFactory);
-        $gatewayFactories['omnipay_offsite'] = new OmnipayV3GatewayFactory($factory, [], $coreGatewayFactory);
-
 
         return $gatewayFactories;
     }
