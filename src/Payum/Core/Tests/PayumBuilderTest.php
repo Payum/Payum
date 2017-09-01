@@ -659,19 +659,19 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Either omnipay or\and omnipay bridge are not installed. Skip');
         }
 
-        $expectedCoreGatewayFactory = $this->getMock(GatewayFactoryInterface::class);
-
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->setCoreGatewayFactory($expectedCoreGatewayFactory)
+            ->setCoreGatewayFactory(new CoreGatewayFactory())
             ->getPayum()
         ;
 
         $gatewayFactories = $payum->getGatewayFactories();
 
-        $this->assertArrayHasKey('omnipay_dummy', $gatewayFactories);
-        $this->assertArrayHasKey('omnipay_stripe', $gatewayFactories);
-        $this->assertArrayHasKey('omnipay_paypal_express', $gatewayFactories);
+        $this->assertArrayHasKey('omnipay', $gatewayFactories);
+
+        $dummyType = $gatewayFactories['omnipay']->create(['type' => 'dummy']);
+
+        $this->assertNotNull($dummyType);
     }
 
     /**
@@ -691,7 +691,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
             ->getPayum()
         ;
 
-        $gatewayFactory = $payum->getGatewayFactory('omnipay_dummy');
+        $gatewayFactory = $payum->getGatewayFactory('omnipay');
 
         $this->assertInstanceOf(OmnipayGatewayFactory::class, $gatewayFactory);
 
@@ -712,11 +712,11 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
             ->getPayum()
         ;
 
-        $gatewayFactory = $payum->getGatewayFactory('omnipay_dummy');
+        $gatewayFactory = $payum->getGatewayFactory('omnipay');
 
         $this->assertInstanceOf(OmnipayGatewayFactory::class, $gatewayFactory);
 
-        $gateway = $gatewayFactory->create();
+        $gateway = $gatewayFactory->create(['type' => 'Dummy']);
 
         $apis = $this->readAttribute($gateway, 'apis');
 

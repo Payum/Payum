@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.0 (2017-08-21)
+* [bridge][omnipay] make it compatible with ominpay/common:^3.0, since Omnipay removed getSupportedGateways() function, you now need add 'type' property to your gateway-config or pass it to the gateway factory.
+
 ## 1.4.2 (2017-06-21)
 
 * [paypal-ec] Re-factor CancelRecurringPaymentsProfileAction as actions proxy
