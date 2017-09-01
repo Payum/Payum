@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.3 (2017-09-01)
+* [bridge][omnipay-v3] make compatible with OmnipayV3Bridge
+
 ## 1.4.2 (2017-06-21)
 
 * [paypal-ec] Re-factor CancelRecurringPaymentsProfileAction as actions proxy

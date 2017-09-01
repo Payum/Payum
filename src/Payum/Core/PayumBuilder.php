@@ -28,6 +28,7 @@ use Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory;
 use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
 use Payum\Offline\OfflineGatewayFactory;
 use Payum\OmnipayBridge\OmnipayGatewayFactory;
+use Payum\OmnipayV3Bridge\OmnipayGatewayFactory as OmnipayV3GatewayFactory;
 use Payum\Payex\PayexGatewayFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory;
 use Payum\Paypal\Masspay\Nvp\PaypalMasspayGatewayFactory;
@@ -400,6 +401,7 @@ class PayumBuilder
         $gatewayFactories = array_replace(
             $this->buildGatewayFactories($coreGatewayFactory),
             $this->buildOmnipayGatewayFactories($coreGatewayFactory),
+            $this->buildOmnipayV3GatewayFactories($coreGatewayFactory),
             $this->buildAddedGatewayFactories($coreGatewayFactory)
         );
         
@@ -624,6 +626,28 @@ class PayumBuilder
 
             $gatewayFactories[strtolower('omnipay_'.$type)] = new OmnipayGatewayFactory($type, $factory, [], $coreGatewayFactory);
         }
+
+        return $gatewayFactories;
+    }
+
+    /**
+     * @param GatewayFactoryInterface $coreGatewayFactory
+     *
+     * @return GatewayFactoryInterface[]
+     */
+    protected function buildOmnipayV3GatewayFactories(GatewayFactoryInterface $coreGatewayFactory)
+    {
+        $gatewayFactories = [];
+        if (false == class_exists(\Omnipay\Omnipay::class) || false == class_exists(OmnipayV3GatewayFactory::class)) {
+            return $gatewayFactories;
+        }
+
+        $factory = \Omnipay\Omnipay::getFactory();
+
+        $gatewayFactories['omnipay'] = new OmnipayV3GatewayFactory($factory, [], $coreGatewayFactory);
+        $gatewayFactories['omnipay_direct'] = new OmnipayV3GatewayFactory($factory, [], $coreGatewayFactory);
+        $gatewayFactories['omnipay_offsite'] = new OmnipayV3GatewayFactory($factory, [], $coreGatewayFactory);
+
 
         return $gatewayFactories;
     }
