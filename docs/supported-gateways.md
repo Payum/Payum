@@ -49,6 +49,8 @@
 * [sergeym/payum-pay-receipt](https://github.com/sergeym/payum-pay-receipt)
 * [remyma/payum-paybox](https://github.com/remyma/payum-paybox)
 * [artkonekt/payum-otp-hungary](https://github.com/artkonekt/payum-otp-hungary)
+* [sourcefabric/payum-mollie](https://github.com/sourcefabric/payum-mollie)
+* [sourcefabric/payum-mbe4](https://github.com/sourcefabric/payum-mbe4)
 
 ## Omnipay gateways.
 
