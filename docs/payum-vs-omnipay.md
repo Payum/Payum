@@ -26,7 +26,7 @@ Payum has official extensions for most modern frameworks such as [Symfony](https
 
 At the end lets compare the corner stone interfaces from Payum and Omnipay.
 
-* Payum [GatewatInterface](https://github.com/Payum/Payum/blob/master/src/Payum/Core/GatewayInterface.php) vs Omnipay [GatewayInterface](https://github.com/thephpleague/omnipay-common/blob/master/src/Omnipay/Common/GatewayInterface.php)
-* Payum [GatewayFactoryInterface](https://github.com/Payum/Payum/blob/master/src/Payum/Core/GatewayFactoryInterface.php) vs Omnipay [GatewayFactory](https://github.com/thephpleague/omnipay-common/blob/master/src/Omnipay/Common/GatewayFactory.php) ups there is not an interface.
+* Payum [GatewayInterface](https://github.com/Payum/Payum/blob/master/src/Payum/Core/GatewayInterface.php) vs Omnipay [GatewayInterface](https://github.com/thephpleague/omnipay-common/blob/master/src/Common/GatewayInterface.php)
+* Payum [GatewayFactoryInterface](https://github.com/Payum/Payum/blob/master/src/Payum/Core/GatewayFactoryInterface.php) vs Omnipay [GatewayFactory](https://github.com/thephpleague/omnipay-common/blob/master/src/Common/GatewayFactory.php) ups there is not an interface.
 
 Back to [index](index.md).
