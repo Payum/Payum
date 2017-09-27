@@ -42,7 +42,19 @@ class StatusAction implements ActionInterface
 
             return;
         }
-        
+
+        if (Constants::STATUS_PAYEDOUT == $model[Constants::FIELD_STATUS]) {
+            $request->markPayedout();
+
+            return;
+        }
+
+        if (Constants::STATUS_REFUNDED == $model[Constants::FIELD_STATUS]) {
+            $request->markRefunded();
+
+            return;
+        }
+
         if (Constants::STATUS_CANCELED == $model[Constants::FIELD_STATUS]) {
             $request->markCanceled();
 

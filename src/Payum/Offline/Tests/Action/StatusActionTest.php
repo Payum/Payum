@@ -137,7 +137,41 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($request->isCaptured());
     }
-    
+
+    /**
+     * @test
+     */
+    public function shouldMarkPayedoutIfStatusSetToPayedout()
+    {
+        $request = new GetBinaryStatus(array(
+            Constants::FIELD_STATUS => Constants::STATUS_PAYEDOUT,
+        ));
+        $request->markUnknown();
+
+        $action = new StatusAction();
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isPayedout());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkRefundedIfStatusSetToRefunded()
+    {
+        $request = new GetBinaryStatus(array(
+            Constants::FIELD_STATUS => Constants::STATUS_REFUNDED,
+        ));
+        $request->markUnknown();
+
+        $action = new StatusAction();
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isRefunded());
+    }
+
     /**
      * @test
      */
