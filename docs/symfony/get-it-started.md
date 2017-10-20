@@ -3,7 +3,7 @@
 ## Install
 
 The preferred way to install the library is using [composer](http://getcomposer.org/).
-Run composer require to add dependencies to _composer.json_:
+Run `composer require` to add dependencies to _composer.json_:
 
 ```bash
 php composer.phar require "payum/payum-bundle" "payum/offline" "php-http/guzzle6-adapter"
@@ -39,8 +39,8 @@ payum_all:
 
 ## Configure
 
-First we need two entities: a token and an order. 
-The token entity is used to protect your payments where the second one stores all your payment information.
+First we need two entities: `Token` and `Payment`.  
+The token entity is used to protect your payments, while the payment entity stores all your payment information.
 
 _**Note**: In this chapter we show how to use Doctrine ORM entities. There are other supported [storages](storages.md)._
 
@@ -84,7 +84,7 @@ class Payment extends BasePayment
 }
 ```
 
-next, you have to add mapping of the basic entities you are extended, and configure payum's storages:
+next, you have to add mapping information, and configure payum's storages:
 
 ```yml
 #app/config/config.yml
@@ -106,8 +106,7 @@ _**Note**: You can add other gateways to the gateways section too._
 
 ## Prepare order
 
-At this stage we have to create an order. Add some information into it. 
-Create a capture token and delegate the job to capture action.
+Now we can create an order. In the last line the user is redirected to an URL which is handled by [`CaptureController ::doAction()`](https://github.com/Payum/PayumBundle/blob/fd930cb9516c8a5f19b4eeae35c8e37eea77ce11/Controller/CaptureController.php#L30)
 
 ```php
 <?php
@@ -146,11 +145,10 @@ class PaymentController extends Controller
 
 ## Payment is done
 
-After the capture did its job you will be redirected to done action. 
-One we set while token creation in prepare action.
-You can read more about it in the dedicated [chapter](purchase-done-action.md)
-The capture action script always redirects you to done one, no matter the payment was successful or not.
-In done action we may check the payment status, update the model, dispatch events and so on.
+After setting up the payment, the user will be redirected to `doneAction()`. 
+You can read more about it in its dedicated [chapter](purchase-done-action.md).
+`doneAction()` is always called, no matter if the payment was successful or not.
+Here we may check the payment status, update the model, dispatch events and so on.
 
 ```php
 <?php
@@ -169,19 +167,18 @@ class PaymentController extends Controller
         
         $gateway = $this->get('payum')->getGateway($token->getGatewayName());
         
-        // you can invalidate the token. The url could not be requested any more.
+        // You can invalidate the token, so that the URL cannot be requested any more:
         // $this->get('payum')->getHttpRequestVerifier()->invalidate($token);
         
-        // Once you have token you can get the model from the storage directly. 
-        //$identity = $token->getDetails();
-        //$payment = $this->get('payum')->getStorage($identity->getClass())->find($identity);
+        // Once you have the token, you can get the payment entity from the storage directly. 
+        // $identity = $token->getDetails();
+        // $payment = $this->get('payum')->getStorage($identity->getClass())->find($identity);
         
-        // or Payum can fetch the model for you while executing a request (Preferred).
+        // Or Payum can fetch the entity for you while executing a request (preferred).
         $gateway->execute($status = new GetHumanStatus($token));
         $payment = $status->getFirstModel();
         
-        // you have order and payment status 
-        // so you can do whatever you want for example you can just print status and payment details.
+        // Now you have order and payment status
         
         return new JsonResponse(array(
             'status' => $status->getValue(),
