@@ -106,7 +106,7 @@ _**Note**: You can add other gateways to the gateways section too._
 
 ## Prepare order
 
-Now we can create an order. Create a capture token and delegate the job to capture action.
+Now we can create an order. In the last line the user is redirected to an URL which is handled by [`CaptureController ::doAction()`](https://github.com/Payum/PayumBundle/blob/fd930cb9516c8a5f19b4eeae35c8e37eea77ce11/Controller/CaptureController.php#L30)
 
 ```php
 <?php
