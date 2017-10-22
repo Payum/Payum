@@ -89,15 +89,6 @@
         "payum/stripe": "self.version",
         "payum/sofort": "self.version"
     },
-    "suggest": {
-        "authorizenet/authorizenet": "^1 If you want to use Authorizenet.NET install authorizenet/authorizenet:~1.8 library",
-        "sofort/sofortlib-php": "^3 If you want to use Sofort install sofort/sofortlib-php:^3.0 library",
-        "paypal/rest-api-sdk-php" : "^0.5 If you want to use PayPal REST API install paypal/rest-api-sdk-php:0.5.* library",
-        "klarna/checkout": "^1|^2 If you want to use Klarna Checkout install klarna/checkout:~1|~2.0 library",
-        "fp/klarna-invoice": "^0.1 If you want to use Klarna Invoice install fp/klarna-invoice:0.1.* library",
-        "stripe/stripe-php": "^3|^4 If you want to use Stripe install stripe/stripe-php:~2.0|~3.0 library",
-        "defuse/php-encryption": "^2 If you want to encrypt gateways credentials in database"
-    },
     "config": {
         "bin-dir": "bin"
     },
