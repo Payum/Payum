@@ -2,7 +2,6 @@
 namespace Payum\Core\Bridge\Symfony\Form\Type;
 
 use Payum\Core\Model\CreditCard;
-use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
