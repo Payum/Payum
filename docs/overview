@@ -1,0 +1,27 @@
+
+After the user has pressed the "Pay" button on your checkout-page, here's what's happening:
+
+1. Payum generates two entities and persists them to the database:
+
+    * Payment: Basic info like amount, or . Fields: [Entity Payment](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Model/Payment.php)
+    
+    * Token: A unique string for this payment.
+    This is used to generate an unique URL (mostly referred to as "success url").
+    Fields: [Entity Token](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Model/Token.php)
+    
+2. Payum contacts the payment provider (using [php-http/guzzle6-adapter](https://github.com/php-http/guzzle6-adapter)),
+passing the payment details and the success url.
+    
+3. The payment provider usually answers with a payment url, unique for this payment.
+  
+4. Payum sends a HTTP-302-Redirect to the user, referring them to the payment provider.
+    
+5. After the user has finished the transaction, the payment provider sends them back to your success url.
+    
+6. Upon this request you have to check the status of the payment and mark it as completed.
+    
+So to get you up and running, all you need is:
+
+* Credentials of your payment provider.
+
+* ...
