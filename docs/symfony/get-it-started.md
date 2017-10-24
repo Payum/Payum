@@ -107,7 +107,11 @@ Acme\PaymentBundle\Entity\PaymentToken:
     table: payment_token
 ```
 
-Now run `schema:update` to create the `payment` table in your database:
+The entities extend Payum's [Payment](https://github.com/ThomasLandauer/Payum/blob/patch-1/src/Payum/Core/Model/Payment.php) and
+[Token](https://github.com/ThomasLandauer/Payum/blob/patch-1/src/Payum/Core/Model/Token.php) entity.
+The fields required by Payum are defined there. So you may add some more fields to these two entities here.
+
+Now run `schema:update` to create the `payment` and `payment_token` table in your database:
 
 ```
  php bin/console doctrine:schema:update --force
