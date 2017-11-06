@@ -1,6 +1,9 @@
 # Paypal Pro Checkout. Get it started.
 
 In this chapter we are going to talk about the most common task: purchase of a product using [Paypal Pro Checkout](https://www.paypal.com/webapps/mpp/paypal-payments-pro).
+
+Please note: To make a testing account please look [here](https://developer.paypal.com/docs/classic/payflow/test_hosted_pages/?mark=payflow%20sandbox#create-a-test-only-payflow-gateway-account) and follow the steps to create a test account - you can then use these same credentials in your config.
+
 We assume you already read basic [get it started](../../get-it-started.md).
 Here we just show you modifications you have to put to the files shown there.
 
@@ -31,6 +34,7 @@ $payum = (new PayumBuilder())
         'password' => 'REPLACE IT',
         'partner' => 'REPLACE IT',
         'vendor' => 'REPLACE IT',
+        'tender' => 'REPLACE IT'
         'sandbox' => true
     ])
 
