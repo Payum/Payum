@@ -3,7 +3,7 @@
     "type": "library",
     "description": "The Payum extension. It provides Authorize.Net AIM payment integration.",
     "keywords": ["payment", "authorize.net", "authorizenet"],
-    "homepage": "http://payum.org",
+    "homepage": "https://payum.forma-pro.com",
     "license": "MIT",
     "authors": [
         {
@@ -12,7 +12,7 @@
         },
         {
             "name":     "Payum project",
-            "homepage": "http://payum.org/"
+            "homepage": "https://payum.forma-pro.com/"
         },
         {
             "name":     "Community contributions",

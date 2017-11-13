@@ -3,7 +3,7 @@
     "type": "library",
     "description": "Paypal instant payment notification",
     "keywords": ["payment", "paypal", "ipn", "instant payment notification"],
-    "homepage": "http://payum.org/",
+    "homepage": "https://payum.forma-pro.com/",
     "license": "MIT",
     "authors": [
         {
@@ -12,7 +12,7 @@
         },
         {
             "name":     "Payum project",
-            "homepage": "http://payum.org/"
+            "homepage": "https://payum.forma-pro.com/"
         },
         {
             "name":     "Community contributions",
