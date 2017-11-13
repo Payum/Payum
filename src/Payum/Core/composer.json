@@ -1,7 +1,7 @@
 {
     "name": "payum/core",
     "type": "library",
-    "description": "Payum offers everything you need to work with payments. From simplest use cases to very advanced ones.",
+    "description": "One million downloads of Payum already! Payum offers everything you need to work with payments. Friendly for all PHP frameworks (Symfony, Laravel, Zend, Yii, Silex).",
     "keywords": [
         "payment",
         "recurring payment",
@@ -14,7 +14,7 @@
         "refund",
         "notify"
     ],
-    "homepage": "http://payum.org",
+    "homepage": "https://payum.forma-pro.com/",
     "license": "MIT",
     "authors": [
         {
