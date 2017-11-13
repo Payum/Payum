@@ -1,7 +1,7 @@
 {
     "name": "payum/payum",
     "type": "library",
-    "description": "One million downloads of Payum already! Payum offers everything you need to work with payments. Friendly for all PHP frameworks (Symfony, Laravel, Zend, Yii, Silex).",
+    "description": "One million downloads of Payum already! Payum offers everything you need to work with payments. Friendly for all PHP frameworks (Symfony, Laravel, Zend, Yii, Silex). Check more visiting site.",
     "keywords": [
         "payment",
         "recurring payment",
