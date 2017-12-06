@@ -30,7 +30,7 @@
 * [invit/payum-sofortueberweisung (abandoned)](https://github.com/invit/payum-sofortueberweisung)
 * [wiseape/payum-sofortuberweisung (abandoned)](https://github.com/wiseape/payum-sofortuberweisung)
 * [wiseape/payum-paymill](https://github.com/wiseape/payum-paymill)
-* [JakubKohout/BraintreePayum](https://github.com/JakubKohout/BraintreePayum)
+* [gdaws/payum_braintree](https://github.com/gdaws/payum_braintree)
 * [peterfox/Payum-Bitpay](https://github.com/peterfox/Payum-Bitpay)
 * [winzou/payum-limonetik](https://github.com/winzou/payum-limonetik)
 * [ekipower/payum-nganluong](https://github.com/ekipower/payum-nganluong)
