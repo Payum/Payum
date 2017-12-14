@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
-use League\Uri\Schemes\Http as HttpUri;
+use League\Uri\Http as HttpUri;
 use League\Uri\Modifiers\MergeQuery;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -68,7 +68,7 @@ abstract class PurchaseAction implements ActionInterface, GatewayAwareInterface,
             if ($details['CANCELURL']) {
                 $cancelUri = HttpUri::createFromString($details['CANCELURL']);
                 $modifier = new MergeQuery('cancelled=1');
-                $cancelUri = $modifier($cancelUri);
+                $cancelUri = $modifier->process($cancelUri);
 
                 $details['CANCELURL'] = (string) $cancelUri;
             }
