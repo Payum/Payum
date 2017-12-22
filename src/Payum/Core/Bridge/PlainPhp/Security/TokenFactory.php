@@ -1,7 +1,8 @@
 <?php
 namespace Payum\Core\Bridge\PlainPhp\Security;
 
-use League\Uri\Schemes\Http as HttpUri;
+use League\Uri\Components\Path;
+use League\Uri\Http as HttpUri;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\AbstractTokenFactory;
 use Payum\Core\Storage\StorageInterface;
@@ -30,7 +31,7 @@ class TokenFactory extends AbstractTokenFactory
      */
     protected function generateUrl($path, array $parameters = [])
     {
-        $newPath = $this->baseUrl->path->withTrailingSlash().$path;
+        $newPath = (new Path($this->baseUrl->getPath()))->withTrailingSlash().$path;
 
         $uri = $this->baseUrl->withPath($newPath);
         $uri = $this->addQueryToUri($uri, $parameters);

@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Be2Bill\Action;
 
-use League\Uri\Schemes\Http as HttpUri;
+use League\Uri\Http as HttpUri;
 use League\Uri\Components\Query;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -45,8 +45,7 @@ class CaptureOffsiteNullAction implements ActionInterface, GatewayAwareInterface
         $this->gateway->execute($getToken = new GetToken($extraData['capture_token']));
 
         $uri = HttpUri::createFromString($getToken->getToken()->getTargetUrl());
-        $uri = $uri->withQuery((string)Query::createFromArray($httpRequest->query));
-
+        $uri = $uri->withQuery((string)Query::createFromPairs($httpRequest->query));
 
         throw new HttpRedirect((string) $uri);
     }
