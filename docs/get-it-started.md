@@ -3,9 +3,7 @@
 Here we describe basic steps required by all supported gateways. We are going to setup models, storages, a security layer and so on.
 All that stuff will be used later.
 
-_**Note**: If you are working with Symfony2 framework look read the bundle's [documentation](index.md#symfony-payum-bundle) instead._
-
-_**Note**: If you are working with Laravel5 framework look read the bundle's [documentation](index.md#laravel-payum-package) instead._
+_**Note**: If you are using Symfony2 or Laravel5, read this page first, before switching to [Symfony Bundle](index.md#symfony-payum-bundle) or [Laravel Bundle](index.md#laravel-payum-package)._
 
 ## Install
 

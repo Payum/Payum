@@ -84,7 +84,40 @@ class Payment extends BasePayment
 }
 ```
 
-next, you have to add mapping information, and configure payum's storages:
+If you use YAML mapping in your bundle:
+
+```yml
+# src/Acme/PaymentBundle/Resources/config/doctrine/Payment.orm.yml
+
+Acme\PaymentBundle\Entity\Payment:
+    type: entity
+    table: payment
+
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+```
+```yml
+# src/Acme/PaymentBundle/Resources/config/doctrine/PaymentToken.orm.yml
+
+Acme\PaymentBundle\Entity\PaymentToken:
+    type: entity
+    table: payment_token
+```
+
+The entities extend Payum's [Payment](https://github.com/ThomasLandauer/Payum/blob/patch-1/src/Payum/Core/Model/Payment.php) and
+[Token](https://github.com/ThomasLandauer/Payum/blob/patch-1/src/Payum/Core/Model/Token.php) entity.
+The fields required by Payum are defined there. So you may add some more fields to these two entities here.
+
+Now run `schema:update` to create the `payment` and `payment_token` table in your database:
+
+```
+ php bin/console doctrine:schema:update --force
+```
+
+Next, you have to add mapping information, and configure payum's storages:
 
 ```yml
 #app/config/config.yml
@@ -114,6 +147,8 @@ Now we can create an order. In the last line the user is redirected to an URL wh
 
 namespace Acme\PaymentBundle\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
 class PaymentController extends Controller 
 {
     public function prepareAction() 
@@ -135,7 +170,7 @@ class PaymentController extends Controller
         $captureToken = $this->get('payum')->getTokenFactory()->createCaptureToken(
             $gatewayName, 
             $payment, 
-            'done' // the route to redirect after capture
+            'payum_capture_do' // the route to redirect after capture
         );
         
         return $this->redirect($captureToken->getTargetUrl());    
