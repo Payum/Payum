@@ -5,7 +5,7 @@ use Payum\Payex\Action\Api\DeleteAgreementAction;
 use Payum\Payex\Api\AgreementApi;
 use Payum\Payex\Request\Api\DeleteAgreement;
 
-class DeleteAgreementActionTest extends \PHPUnit_Framework_TestCase
+class DeleteAgreementActionTest extends \PHPUnit\Framework\TestCase
 {
     protected $requiredNotEmptyFields = array(
         'agreementRef' => 'anAgreementRef',
@@ -55,7 +55,7 @@ class DeleteAgreementActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetAgreementApiAsApi()
     {
-        $agreementApi = $this->getMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
+        $agreementApi = $this->createMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
 
         $action = new DeleteAgreementAction();
 
@@ -84,7 +84,7 @@ class DeleteAgreementActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new DeleteAgreementAction();
 
-        $this->assertTrue($action->supports(new DeleteAgreement($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new DeleteAgreement($this->createMock('ArrayAccess'))));
     }
 
     /**
@@ -167,6 +167,6 @@ class DeleteAgreementActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createApiMock()
     {
-        return $this->getMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
+        return $this->createMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
     }
 }

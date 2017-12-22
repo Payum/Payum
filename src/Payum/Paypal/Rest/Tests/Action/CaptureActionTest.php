@@ -10,7 +10,7 @@ use Payum\Paypal\Rest\Action\CaptureAction;
 use Payum\Paypal\Rest\Model\PaymentDetails;
 use Payum\Core\Request\Capture;
 
-class CaptureActionTest extends \PHPUnit_Framework_TestCase
+class CaptureActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -75,7 +75,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CaptureAction();
 
-        $request = new Capture($this->getMock(PaypalPayment::class));
+        $request = new Capture($this->createMock(PaypalPayment::class));
 
         $this->assertTrue($action->supports($request));
     }
@@ -88,7 +88,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
         $action = new CaptureAction();
 
         /** @var OAuthTokenCredential $tokenMock */
-        $tokenMock = $this->getMock(OAuthTokenCredential::class, [], [], '', false);
+        $tokenMock = $this->createMock(OAuthTokenCredential::class, [], [], '', false);
 
         $apiContext = new ApiContext($tokenMock);
 

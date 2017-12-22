@@ -7,8 +7,9 @@ use Payum\Core\Gateway;
 use Payum\Core\Registry\FallbackRegistry;
 use Payum\Core\Registry\RegistryInterface;
 use Payum\Core\Storage\StorageInterface;
+use PHPUnit\Framework\TestCase;
 
-class FallbackRegistryTest extends \PHPUnit_Framework_TestCase
+class FallbackRegistryTest extends TestCase
 {
     /**
      * @test
@@ -480,6 +481,6 @@ class FallbackRegistryTest extends \PHPUnit_Framework_TestCase
      */
     protected function createRegistryMock()
     {
-        return $this->getMock('Payum\Core\Registry\RegistryInterface');
+        return $this->createMock('Payum\Core\Registry\RegistryInterface');
     }
 }

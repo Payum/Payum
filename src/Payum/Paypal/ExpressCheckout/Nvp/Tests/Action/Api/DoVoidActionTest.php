@@ -4,7 +4,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoVoid;
 
-class DoVoidActionTest extends \PHPUnit_Framework_TestCase
+class DoVoidActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -72,7 +72,7 @@ class DoVoidActionTest extends \PHPUnit_Framework_TestCase
         $action = new DoVoidAction();
 
         $this->assertTrue(
-            $action->supports(new DoVoid($this->getMock('ArrayAccess')))
+            $action->supports(new DoVoid($this->createMock('ArrayAccess')))
         );
     }
 
@@ -182,6 +182,6 @@ class DoVoidActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createApiMock()
     {
-        return $this->getMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
     }
 }

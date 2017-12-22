@@ -4,8 +4,9 @@ namespace Payum\Core\Tests\Bridge\Propel\Storage;
 
 use Payum\Core\Bridge\Propel\Storage\Propel1Storage as PropelStorage;
 use Payum\Core\Tests\Mocks\Model\PropelModel;
+use PHPUnit\Framework\TestCase;
 
-class Propel1StorageTest extends \PHPUnit_Framework_TestCase
+class Propel1StorageTest extends TestCase
 {
     /**
      * @test

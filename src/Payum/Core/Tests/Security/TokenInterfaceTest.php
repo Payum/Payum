@@ -1,7 +1,9 @@
 <?php
 namespace Payum\Core\Tests\Security;
 
-class TokenInterfaceTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class TokenInterfaceTest extends TestCase
 {
     /**
      * @test

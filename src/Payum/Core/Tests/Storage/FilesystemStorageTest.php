@@ -2,8 +2,9 @@
 namespace Payum\Core\Tests\Storage;
 
 use Payum\Core\Storage\FilesystemStorage;
+use PHPUnit\Framework\TestCase;
 
-class FilesystemStorageTest extends \PHPUnit_Framework_TestCase
+class FilesystemStorageTest extends TestCase
 {
     /**
      * @test

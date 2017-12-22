@@ -4,7 +4,7 @@ namespace Payum\Paypal\ProHosted\Nvp\Tests\Request\Api;
 use Payum\Core\Request\Generic;
 use Payum\Paypal\ProHosted\Nvp\Request\Api\CreateButtonPayment;
 
-class CreateButtonPaymentTest extends \PHPUnit_Framework_TestCase
+class CreateButtonPaymentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

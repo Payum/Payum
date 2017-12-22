@@ -2,8 +2,9 @@
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\ArrayObject;
+use PHPUnit\Framework\TestCase;
 
-class ArrayObjectTest extends \PHPUnit_Framework_TestCase
+class ArrayObjectTest extends TestCase
 {
     /**
      * @test

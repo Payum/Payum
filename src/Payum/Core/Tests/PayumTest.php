@@ -11,8 +11,9 @@ use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Storage\StorageInterface;
+use PHPUnit\Framework\TestCase;
 
-class PayumTest extends \PHPUnit_Framework_TestCase
+class PayumTest extends TestCase
 {
     /**
      * @test
@@ -95,8 +96,8 @@ class PayumTest extends \PHPUnit_Framework_TestCase
     {
         $registry = new SimpleRegistry(
             [
-                'foo' => $fooGateway = $this->getMock(GatewayInterface::class),
-                'bar' => $barGateway = $this->getMock(GatewayInterface::class),
+                'foo' => $fooGateway = $this->createMock(GatewayInterface::class),
+                'bar' => $barGateway = $this->createMock(GatewayInterface::class),
             ],
             [
                 'foo' => 'fooStorage',
@@ -198,7 +199,7 @@ class PayumTest extends \PHPUnit_Framework_TestCase
      */
     protected function createRegistryMock()
     {
-        return $this->getMock(RegistryInterface::class);
+        return $this->createMock(RegistryInterface::class);
     }
 
     /**
@@ -206,7 +207,7 @@ class PayumTest extends \PHPUnit_Framework_TestCase
      */
     protected function createHttpRequestVerifierMock()
     {
-        return $this->getMock(HttpRequestVerifierInterface::class);
+        return $this->createMock(HttpRequestVerifierInterface::class);
     }
 
     /**
@@ -214,7 +215,7 @@ class PayumTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGenericTokenFactoryMock()
     {
-        return $this->getMock(GenericTokenFactoryInterface::class);
+        return $this->createMock(GenericTokenFactoryInterface::class);
     }
 
     /**
@@ -222,6 +223,6 @@ class PayumTest extends \PHPUnit_Framework_TestCase
      */
     protected function createTokenStorage()
     {
-        return $this->getMock(StorageInterface::class);
+        return $this->createMock(StorageInterface::class);
     }
 }

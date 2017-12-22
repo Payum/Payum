@@ -5,8 +5,9 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
+use PHPUnit\Framework\TestCase;
 
-class GatewayAwareActionTest extends \PHPUnit_Framework_TestCase
+class GatewayAwareActionTest extends TestCase
 {
     /**
      * @test
@@ -33,7 +34,7 @@ class GatewayAwareActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldSetGatewayToProperty()
     {
-        $gateway = $this->getMock(GatewayInterface::class);
+        $gateway = $this->createMock(GatewayInterface::class);
 
         $action = $this->getMockForAbstractClass(GatewayAwareAction::class);
 

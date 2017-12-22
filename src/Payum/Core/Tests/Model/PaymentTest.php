@@ -7,8 +7,9 @@ use Payum\Core\Model\CreditCardPaymentInterface;
 use Payum\Core\Model\DirectDebitPaymentInterface;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
+use PHPUnit\Framework\TestCase;
 
-class PaymentTest extends \PHPUnit_Framework_TestCase
+class PaymentTest extends TestCase
 {
     /**
      * @test
@@ -55,7 +56,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     {
         $order = new Payment();
 
-        $creditCardMock = $this->getMock(CreditCardInterface::class);
+        $creditCardMock = $this->createMock(CreditCardInterface::class);
 
         $order->setCreditCard($creditCardMock);
 
@@ -69,7 +70,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     {
         $order = new Payment();
 
-        $bankAccountMock = $this->getMock(BankAccountInterface::class);
+        $bankAccountMock = $this->createMock(BankAccountInterface::class);
 
         $order->setBankAccount($bankAccountMock);
 

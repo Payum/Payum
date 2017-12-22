@@ -8,7 +8,7 @@ use Payum\Sofort\Request\Api\CreateTransaction;
 use Payum\Sofort\Action\Api\CreateTransactionAction;
 use Payum\Sofort\Api;
 
-class CreateTransactionActionTest extends \PHPUnit_Framework_TestCase
+class CreateTransactionActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -45,7 +45,7 @@ class CreateTransactionActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CreateTransactionAction();
 
-        $this->assertTrue($action->supports(new CreateTransaction($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new CreateTransaction($this->createMock('ArrayAccess'))));
     }
 
     /**
@@ -117,6 +117,6 @@ class CreateTransactionActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createApiMock()
     {
-        return $this->getMock(Api::class, array(), array(), '', false);
+        return $this->createMock(Api::class, array(), array(), '', false);
     }
 }

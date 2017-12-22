@@ -3,7 +3,7 @@ namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
 use Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails;
 
-class PopulateKlarnaFromDetailsTest extends \PHPUnit_Framework_TestCase
+class PopulateKlarnaFromDetailsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

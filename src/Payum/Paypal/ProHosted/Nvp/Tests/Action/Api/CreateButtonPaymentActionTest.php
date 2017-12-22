@@ -5,7 +5,7 @@ use Payum\Core\ApiAwareInterface;
 use Payum\Paypal\ProHosted\Nvp\Action\Api\CreateButtonPaymentAction;
 use Payum\Paypal\ProHosted\Nvp\Request\Api\CreateButtonPayment;
 
-class CreateButtonPaymentActionTest extends \PHPUnit_Framework_TestCase
+class CreateButtonPaymentActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -32,7 +32,7 @@ class CreateButtonPaymentActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CreateButtonPaymentAction();
 
-        $request = new CreateButtonPayment($this->getMock('ArrayAccess'));
+        $request = new CreateButtonPayment($this->createMock('ArrayAccess'));
 
         $this->assertTrue($action->supports($request));
     }
@@ -78,6 +78,6 @@ class CreateButtonPaymentActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createApiMock()
     {
-        return $this->getMock('Payum\Paypal\ProHosted\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ProHosted\Nvp\Api', array(), array(), '', false);
     }
 }

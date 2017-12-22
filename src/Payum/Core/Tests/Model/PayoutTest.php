@@ -3,8 +3,9 @@ namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\Payout;
 use Payum\Core\Model\PayoutInterface;
+use PHPUnit\Framework\TestCase;
 
-class PayoutTest extends \PHPUnit_Framework_TestCase
+class PayoutTest extends TestCase
 {
     /**
      * @test

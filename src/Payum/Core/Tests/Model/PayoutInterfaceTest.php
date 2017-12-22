@@ -4,8 +4,9 @@ namespace Payum\Core\Tests\Model;
 use Payum\Core\Model\DetailsAggregateInterface;
 use Payum\Core\Model\DetailsAwareInterface;
 use Payum\Core\Model\PayoutInterface;
+use PHPUnit\Framework\TestCase;
 
-class PayoutInterfaceTest extends \PHPUnit_Framework_TestCase
+class PayoutInterfaceTest extends TestCase
 {
     /**
      * @test

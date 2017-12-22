@@ -2,9 +2,10 @@
 namespace Payum\Core\Tests\Bridge\Symfony\Reply;
 
 use Payum\Core\Bridge\Symfony\Reply\HttpResponse;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class HttpResponseTest extends \PHPUnit_Framework_TestCase
+class HttpResponseTest extends TestCase
 {
     /**
      * @test

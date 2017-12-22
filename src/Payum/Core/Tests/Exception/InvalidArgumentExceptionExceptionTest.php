@@ -2,8 +2,9 @@
 namespace Payum\Core\Tests\Exception;
 
 use Payum\Core\Exception\InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 
-class InvalidArgumentExceptionExceptionTest extends \PHPUnit_Framework_TestCase
+class InvalidArgumentExceptionExceptionTest extends TestCase
 {
     /**
      * @test

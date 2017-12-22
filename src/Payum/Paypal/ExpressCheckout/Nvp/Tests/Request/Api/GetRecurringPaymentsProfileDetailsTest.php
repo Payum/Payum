@@ -3,7 +3,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request\Api;
 
 use Payum\Core\Request\Generic;
 
-class GetRecurringPaymentsProfileDetailsTest extends \PHPUnit_Framework_TestCase
+class GetRecurringPaymentsProfileDetailsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

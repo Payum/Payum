@@ -1,7 +1,9 @@
 <?php
 namespace Payum\Core\Tests\Exception\Http;
 
-class HttpExceptionInterfaceTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class HttpExceptionInterfaceTest extends TestCase
 {
     /**
      * @test

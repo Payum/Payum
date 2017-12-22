@@ -134,7 +134,7 @@ class StatusActionTest extends GenericActionTest
      */
     protected function createGetStatusStub($model)
     {
-        $status = $this->getMock('Payum\Core\Request\GetStatusInterface');
+        $status = $this->createMock('Payum\Core\Request\GetStatusInterface');
 
         $status
             ->expects($this->any())

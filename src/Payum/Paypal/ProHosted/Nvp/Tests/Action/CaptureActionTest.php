@@ -81,7 +81,7 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createApiMock()
     {
-        return $this->getMock(Api::class, array(), array(), '', false);
+        return $this->createMock(Api::class, array(), array(), '', false);
     }
 
     /**
@@ -89,6 +89,6 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createGatewayMock()
     {
-        return $this->getMock(GatewayInterface::class);
+        return $this->createMock(GatewayInterface::class);
     }
 }

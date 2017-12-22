@@ -6,7 +6,7 @@ use Payum\Core\Request\GetBinaryStatus;
 use Payum\Core\Request\GetStatusInterface;
 use Payum\Offline\Action\StatusAction;
 
-class StatusActionTest extends \PHPUnit_Framework_TestCase
+class StatusActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -33,7 +33,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StatusAction();
 
-        $request = $this->createGetStatusStub($this->getMock('ArrayAccess'));
+        $request = $this->createGetStatusStub($this->createMock('ArrayAccess'));
 
         $this->assertTrue($action->supports($request));
     }
@@ -211,7 +211,7 @@ class StatusActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGetStatusStub($model)
     {
-        $status = $this->getMock('Payum\Core\Request\GetStatusInterface');
+        $status = $this->createMock('Payum\Core\Request\GetStatusInterface');
 
         $status
             ->expects($this->any())

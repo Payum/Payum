@@ -2,8 +2,9 @@
 namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
 use Payum\Klarna\Invoice\Request\Api\Activate;
+use PHPUnit\Framework\TestCase;
 
-class ActivateTest extends \PHPUnit_Framework_TestCase
+class ActivateTest extends TestCase
 {
     /**
      * @test

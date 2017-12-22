@@ -7,7 +7,7 @@ use Payum\Core\HttpClientInterface;
 use Payum\Paypal\ProCheckout\Nvp\Api;
 use Psr\Http\Message\RequestInterface;
 
-class ApiTest extends \PHPUnit_Framework_TestCase
+class ApiTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -223,7 +223,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
      */
     protected function createHttpClientMock()
     {
-        return $this->getMock('Payum\Core\HttpClientInterface');
+        return $this->createMock('Payum\Core\HttpClientInterface');
     }
 
     /**

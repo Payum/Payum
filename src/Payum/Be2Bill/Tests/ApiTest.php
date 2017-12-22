@@ -4,8 +4,9 @@ namespace Payum\Be2Bill\Tests;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Payum\Be2Bill\Api;
 use Payum\Core\HttpClientInterface;
+use PHPUnit\Framework\TestCase;
 
-class ApiTest extends \Phpunit_Framework_TestCase
+class ApiTest extends TestCase
 {
     /**
      * @test
@@ -204,7 +205,7 @@ class ApiTest extends \Phpunit_Framework_TestCase
      */
     protected function createHttpClientMock()
     {
-        return $this->getMock('Payum\Core\HttpClientInterface');
+        return $this->createMock('Payum\Core\HttpClientInterface');
     }
 
     /**

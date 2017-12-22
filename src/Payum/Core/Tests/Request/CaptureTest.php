@@ -3,8 +3,9 @@ namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\Generic;
+use PHPUnit\Framework\TestCase;
 
-class CaptureTest extends \PHPUnit_Framework_TestCase
+class CaptureTest extends TestCase
 {
     /**
      * @test

@@ -4,8 +4,9 @@ namespace Payum\Core\Tests\Debug;
 use Payum\Core\Debug\Humanify;
 use Payum\Core\Request\Capture;
 use Payum\Core\Reply\HttpRedirect;
+use PHPUnit\Framework\TestCase;
 
-class HumanifyTest extends \PHPUnit_Framework_TestCase
+class HumanifyTest extends TestCase
 {
     /**
      * @test

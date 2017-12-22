@@ -3,15 +3,10 @@ namespace Payum\Core\Tests\Bridge\Symfony\Validator\Constraints;
 
 use Payum\Core\Bridge\Symfony\Validator\Constraints\CreditCardDate;
 use Payum\Core\Bridge\Symfony\Validator\Constraints\CreditCardDateValidator;
-use Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest;
-use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class CreditCardDateValidatorTest extends AbstractConstraintValidatorTest
+class CreditCardDateValidatorTest extends ConstraintValidatorTestCase
 {
-    protected function getApiVersion()
-    {
-        return Validation::API_VERSION_2_5;
-    }
     protected function createValidator()
     {
         return new CreditCardDateValidator();

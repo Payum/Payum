@@ -194,7 +194,7 @@ class NotifyActionTest extends GenericActionTest
      */
     protected function createApiMock()
     {
-        return $this->getMock(Api::class, ['verifyHash'], [], '', false);
+        return $this->createMock(Api::class, ['verifyHash'], [], '', false);
     }
 
     /**
@@ -202,6 +202,6 @@ class NotifyActionTest extends GenericActionTest
      */
     protected function createGatewayMock()
     {
-        return $this->getMock(GatewayInterface::class);
+        return $this->createMock(GatewayInterface::class);
     }
 }

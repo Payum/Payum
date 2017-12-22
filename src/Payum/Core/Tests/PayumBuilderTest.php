@@ -35,8 +35,9 @@ use Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory;
 use Payum\Paypal\Rest\PaypalRestGatewayFactory;
 use Payum\Stripe\StripeCheckoutGatewayFactory;
 use Payum\Stripe\StripeJsGatewayFactory;
+use PHPUnit\Framework\TestCase;
 
-class PayumBuilderTest extends \PHPUnit_Framework_TestCase
+class PayumBuilderTest extends TestCase
 {
     public function setUp()
     {
@@ -141,7 +142,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
     public function shouldUseCustomHttpRequestVerifier()
     {
         /** @var HttpRequestVerifierInterface $expectedVerifier */
-        $expectedVerifier = $this->getMock(HttpRequestVerifierInterface::class);
+        $expectedVerifier = $this->createMock(HttpRequestVerifierInterface::class);
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
@@ -159,7 +160,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
     public function shouldUseHttpRequestVerifierBuilder()
     {
         /** @var HttpRequestVerifierInterface $expectedVerifier */
-        $expectedVerifier = $this->getMock(HttpRequestVerifierInterface::class);
+        $expectedVerifier = $this->createMock(HttpRequestVerifierInterface::class);
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
@@ -198,7 +199,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
     public function shouldUseCustomGenericTokenFactory()
     {
         /** @var GenericTokenFactoryInterface $expectedTokenFactory */
-        $expectedTokenFactory = $this->getMock(GenericTokenFactoryInterface::class);
+        $expectedTokenFactory = $this->createMock(GenericTokenFactoryInterface::class);
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
@@ -216,7 +217,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
     public function shouldUseGenericTokenFactoryBuilder()
     {
         /** @var GenericTokenFactoryInterface $expectedTokenFactory */
-        $expectedTokenFactory = $this->getMock(GenericTokenFactoryInterface::class);
+        $expectedTokenFactory = $this->createMock(GenericTokenFactoryInterface::class);
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
@@ -287,7 +288,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
     public function shouldUseCustomTokenFactory()
     {
         /** @var TokenFactoryInterface $expectedTokenFactory */
-        $expectedTokenFactory = $this->getMock(TokenFactoryInterface::class);
+        $expectedTokenFactory = $this->createMock(TokenFactoryInterface::class);
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
@@ -305,7 +306,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
     public function shouldUseTokenFactoryBuilder()
     {
         /** @var TokenFactoryInterface $expectedTokenFactory */
-        $expectedTokenFactory = $this->getMock(TokenFactoryInterface::class);
+        $expectedTokenFactory = $this->createMock(TokenFactoryInterface::class);
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
@@ -395,7 +396,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
     public function shouldAllowGetStorageAddedAsInstance()
     {
         /** @var StorageInterface $expectedStorage */
-        $expectedStorage = $this->getMock(StorageInterface::class);
+        $expectedStorage = $this->createMock(StorageInterface::class);
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
@@ -413,7 +414,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
     public function shouldAllowGetGatewayFactoryAddedAsInstance()
     {
         /** @var GatewayFactoryInterface $expectedFactory */
-        $expectedFactory = $this->getMock(GatewayFactoryInterface::class);
+        $expectedFactory = $this->createMock(GatewayFactoryInterface::class);
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
@@ -530,7 +531,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseCustomCoreGatewayFactory()
     {
-        $expectedCoreGatewayFactory = $this->getMock(GatewayFactoryInterface::class);
+        $expectedCoreGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
@@ -550,7 +551,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseCoreGatewayFactoryBuilder()
     {
-        $expectedCoreGatewayFactory = $this->getMock(GatewayFactoryInterface::class);
+        $expectedCoreGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
@@ -576,7 +577,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
     public function shouldAddStorageExtensionForTheAddedStorage()
     {
         /** @var StorageInterface $expectedStorage */
-        $expectedStorage = $this->getMock(StorageInterface::class);
+        $expectedStorage = $this->createMock(StorageInterface::class);
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
@@ -633,7 +634,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function throwsIfCoreGatewayFactoryBuilderReturnInvalidInstance()
     {
-        $expectedCoreGateway = $this->getMock(GatewayFactoryInterface::class);
+        $expectedCoreGateway = $this->createMock(GatewayFactoryInterface::class);
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
@@ -659,7 +660,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Either omnipay or\and omnipay bridge are not installed. Skip');
         }
 
-        $expectedCoreGatewayFactory = $this->getMock(GatewayFactoryInterface::class);
+        $expectedCoreGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
@@ -683,7 +684,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Either omnipay or\and omnipay bridge are not installed. Skip');
         }
 
-        $expectedCoreGatewayFactory = $this->getMock(GatewayFactoryInterface::class);
+        $expectedCoreGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
@@ -730,7 +731,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAddTokenStorageToCoreGatewayConfig()
     {
-        $tokenStorageMock = $this->getMock(StorageInterface::class);
+        $tokenStorageMock = $this->createMock(StorageInterface::class);
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
@@ -815,7 +816,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected function createRegistryMock()
     {
-        return $this->getMock(RegistryInterface::class);
+        return $this->createMock(RegistryInterface::class);
     }
 
     /**
@@ -823,7 +824,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected function createHttpRequestVerifierMock()
     {
-        return $this->getMock(HttpRequestVerifierInterface::class);
+        return $this->createMock(HttpRequestVerifierInterface::class);
     }
 
     /**
@@ -831,7 +832,7 @@ class PayumBuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGenericTokenFactoryMock()
     {
-        return $this->getMock(GenericTokenFactoryInterface::class);
+        return $this->createMock(GenericTokenFactoryInterface::class);
     }
 }
 

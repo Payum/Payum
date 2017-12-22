@@ -5,8 +5,9 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Generic;
 use Payum\Core\Security\TokenInterface;
+use PHPUnit\Framework\TestCase;
 
-abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
+abstract class GenericActionTest extends TestCase
 {
     /**
      * @var Generic
@@ -103,7 +104,7 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->getMock(GatewayInterface::class);
+        return $this->createMock(GatewayInterface::class);
     }
 
     /**
@@ -111,6 +112,6 @@ abstract class GenericActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createTokenMock()
     {
-        return $this->getMock(TokenInterface::class);
+        return $this->createMock(TokenInterface::class);
     }
 }

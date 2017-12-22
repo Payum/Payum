@@ -3,8 +3,9 @@ namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\Generic;
 use Payum\Core\Request\Sync;
+use PHPUnit\Framework\TestCase;
 
-class SyncTest extends \PHPUnit_Framework_TestCase
+class SyncTest extends TestCase
 {
     /**
      * @test

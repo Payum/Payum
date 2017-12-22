@@ -7,7 +7,7 @@ use Payum\Stripe\Action\Api\CreateChargeAction;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateCharge;
 
-class CreateChargeActionTest extends \PHPUnit_Framework_TestCase
+class CreateChargeActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

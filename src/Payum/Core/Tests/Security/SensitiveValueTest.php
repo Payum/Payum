@@ -2,8 +2,9 @@
 namespace Payum\Core\Tests\Security;
 
 use Payum\Core\Security\SensitiveValue;
+use PHPUnit\Framework\TestCase;
 
-class SensitiveValueTest extends \PHPUnit_Framework_TestCase
+class SensitiveValueTest extends TestCase
 {
     /**
      * @test

@@ -5,8 +5,9 @@ use Payum\Core\Tests\SkipOnPhp7Trait;
 use Payum\Klarna\Invoice\Action\Api\GetAddressesAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\GetAddresses;
+use PHPUnit\Framework\TestCase;
 
-class GetAddressesActionTest extends \PHPUnit_Framework_TestCase
+class GetAddressesActionTest extends TestCase
 {
     use SkipOnPhp7Trait;
 
@@ -151,11 +152,11 @@ class GetAddressesActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock =  $this->getMock('Klarna', array('config', 'getAddresses'));
+        $klarnaMock =  $this->createMock('Klarna', array('config', 'getAddresses'));
 
         $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);
-        $rp->setValue($klarnaMock, $this->getMock('xmlrpc_client', array(), array(), '', false));
+        $rp->setValue($klarnaMock, $this->createMock('xmlrpc_client', array(), array(), '', false));
         $rp->setAccessible(false);
 
         return $klarnaMock;

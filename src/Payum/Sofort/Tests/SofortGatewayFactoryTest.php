@@ -7,7 +7,7 @@ use Payum\Core\GatewayFactory;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Sofort\SofortGatewayFactory;
 
-class SofortGatewayFactoryTest extends \PHPUnit_Framework_TestCase
+class SofortGatewayFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -42,7 +42,7 @@ class SofortGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
     {
-        $coreGatewayFactory = $this->getMock(GatewayFactoryInterface::class);
+        $coreGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
 
         $factory = new SofortGatewayFactory([], $coreGatewayFactory);
 

@@ -1,7 +1,9 @@
 <?php
 namespace Payum\Core\Tests\Reply;
 
-class BaseModeAwareTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class BaseModeAwareTest extends TestCase
 {
     /**
      * @test

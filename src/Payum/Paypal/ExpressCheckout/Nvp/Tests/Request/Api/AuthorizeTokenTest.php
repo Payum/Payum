@@ -4,7 +4,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request\Api;
 use Payum\Core\Request\Generic;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken;
 
-class AuthorizeTokenTest extends \PHPUnit_Framework_TestCase
+class AuthorizeTokenTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

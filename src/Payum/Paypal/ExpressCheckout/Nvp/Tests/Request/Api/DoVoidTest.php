@@ -4,7 +4,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request\Api;
 use Payum\Core\Request\Generic;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoVoid;
 
-class DoVoidTest extends \PHPUnit_Framework_TestCase
+class DoVoidTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

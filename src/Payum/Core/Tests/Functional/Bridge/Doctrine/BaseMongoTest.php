@@ -8,8 +8,9 @@ use Doctrine\ODM\MongoDB\Configuration;
 use Doctrine\MongoDB\Connection;
 use Doctrine\ODM\MongoDB\Types\Type;
 use Payum\Core\Tests\SkipOnPhp7Trait;
+use PHPUnit\Framework\TestCase;
 
-abstract class BaseMongoTest extends \PHPUnit_Framework_TestCase
+abstract class BaseMongoTest extends TestCase
 {
     use SkipOnPhp7Trait;
 

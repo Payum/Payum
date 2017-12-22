@@ -5,8 +5,9 @@ use Payum\Core\Model\Token;
 use Payum\Core\Security\GenericTokenFactory;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\TokenFactoryInterface;
+use PHPUnit\Framework\TestCase;
 
-class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
+class GenericTokenFactoryTest extends TestCase
 {
     /**
      * @test
@@ -734,6 +735,6 @@ class GenericTokenFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function createTokenFactoryMock()
     {
-        return $this->getMock(TokenFactoryInterface::class);
+        return $this->createMock(TokenFactoryInterface::class);
     }
 }

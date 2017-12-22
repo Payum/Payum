@@ -6,7 +6,7 @@ use Payum\Payex\Api\OrderApi;
 use Payum\Payex\Request\Api\InitializeOrder;
 use Payum\Core\Reply\HttpRedirect;
 
-class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
+class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
 {
     protected $requiredFields = array(
         'price' => 1000,
@@ -71,7 +71,7 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetOrderApiAsApi()
     {
-        $orderApi = $this->getMock('Payum\Payex\Api\OrderApi', array(), array(), '', false);
+        $orderApi = $this->createMock('Payum\Payex\Api\OrderApi', array(), array(), '', false);
 
         $action = new InitializeOrderAction();
 
@@ -100,7 +100,7 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new InitializeOrderAction();
 
-        $this->assertTrue($action->supports(new InitializeOrder($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new InitializeOrder($this->createMock('ArrayAccess'))));
     }
 
     /**
@@ -233,6 +233,6 @@ class InitializeOrderActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createApiMock()
     {
-        return $this->getMock('Payum\Payex\Api\OrderApi', array(), array(), '', false);
+        return $this->createMock('Payum\Payex\Api\OrderApi', array(), array(), '', false);
     }
 }

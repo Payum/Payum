@@ -2,9 +2,10 @@
 namespace Payum\Core\Tests\Bridge\Zend\Storage;
 
 use Payum\Core\Bridge\Zend\Storage\TableGatewayStorage;
+use PHPUnit\Framework\TestCase;
 use Zend\Db\TableGateway\TableGateway;
 
-class TableGatewayStorageTest extends \PHPUnit_Framework_TestCase
+class TableGatewayStorageTest extends TestCase
 {
     /**
      * @test
@@ -42,6 +43,6 @@ class TableGatewayStorageTest extends \PHPUnit_Framework_TestCase
      */
     protected function createTableGatewayMock()
     {
-        return $this->getMock('Zend\Db\TableGateway\TableGateway', array(), array(), '', false);
+        return $this->createMock('Zend\Db\TableGateway\TableGateway', array(), array(), '', false);
     }
 }

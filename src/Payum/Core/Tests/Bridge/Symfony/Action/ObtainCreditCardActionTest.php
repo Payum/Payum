@@ -9,12 +9,13 @@ use Payum\Core\Model\CreditCard;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Request\RenderTemplate;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
 
-class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
+class ObtainCreditCardActionTest extends TestCase
 {
     /**
      * @test
@@ -380,7 +381,7 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createFormFactoryMock()
     {
-        return $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+        return $this->createMock('Symfony\Component\Form\FormFactoryInterface');
     }
 
     /**
@@ -388,7 +389,7 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createFormMock()
     {
-        return $this->getMock('Symfony\Component\Form\Form', array(), array(), '', false);
+        return $this->createMock('Symfony\Component\Form\Form', array(), array(), '', false);
     }
 
     /**
@@ -396,6 +397,6 @@ class ObtainCreditCardActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\GatewayInterface');
+        return $this->createMock('Payum\Core\GatewayInterface');
     }
 }

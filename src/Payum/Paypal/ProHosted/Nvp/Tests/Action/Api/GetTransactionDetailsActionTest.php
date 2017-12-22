@@ -5,7 +5,7 @@ use Payum\Core\ApiAwareInterface;
 use Payum\Paypal\ProHosted\Nvp\Action\Api\GetTransactionDetailsAction;
 use Payum\Paypal\ProHosted\Nvp\Request\Api\GetTransactionDetails;
 
-class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
+class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -32,7 +32,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new GetTransactionDetailsAction();
 
-        $request = new GetTransactionDetails($this->getMock('ArrayAccess'));
+        $request = new GetTransactionDetails($this->createMock('ArrayAccess'));
 
         $this->assertTrue($action->supports($request));
     }
@@ -109,6 +109,6 @@ class GetTransactionDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createApiMock()
     {
-        return $this->getMock('Payum\Paypal\ProHosted\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ProHosted\Nvp\Api', array(), array(), '', false);
     }
 }

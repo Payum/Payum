@@ -3,7 +3,7 @@ namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
 use Payum\Klarna\Invoice\Request\Api\CheckOrderStatus;
 
-class CheckOrderStatusTest extends \PHPUnit_Framework_TestCase
+class CheckOrderStatusTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

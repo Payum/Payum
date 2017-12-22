@@ -19,8 +19,8 @@ class AuthorizePaymentActionTest extends GenericActionTest
 
     public function provideSupportedRequests()
     {
-        $authorize = new $this->requestClass($this->getMock(TokenInterface::class));
-        $authorize->setModel($this->getMock(PaymentInterface::class));
+        $authorize = new $this->requestClass($this->createMock(TokenInterface::class));
+        $authorize->setModel($this->createMock(PaymentInterface::class));
 
         return array(
             array(new $this->requestClass(new Payment())),

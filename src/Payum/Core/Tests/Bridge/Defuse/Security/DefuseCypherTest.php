@@ -4,8 +4,9 @@ namespace Payum\Core\Tests\Bridge\Defuse\Security;
 use Defuse\Crypto\Key;
 use Payum\Core\Bridge\Defuse\Security\DefuseCypher;
 use Payum\Core\Security\CypherInterface;
+use PHPUnit\Framework\TestCase;
 
-class DefuseCypherTest extends \PHPUnit_Framework_TestCase
+class DefuseCypherTest extends TestCase
 {
     public function testShouldImplementCypherInterface()
     {

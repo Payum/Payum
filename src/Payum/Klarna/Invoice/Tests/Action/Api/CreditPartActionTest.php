@@ -6,8 +6,9 @@ use Payum\Core\Tests\SkipOnPhp7Trait;
 use Payum\Klarna\Invoice\Action\Api\CreditPartAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\CreditPart;
+use PHPUnit\Framework\TestCase;
 
-class CreditPartActionTest extends \PHPUnit_Framework_TestCase
+class CreditPartActionTest extends TestCase
 {
     use SkipOnPhp7Trait;
 
@@ -54,7 +55,7 @@ class CreditPartActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CreditPartAction($this->createKlarnaMock());
 
-        $action->setGateway($gateway = $this->getMock('Payum\Core\GatewayInterface'));
+        $action->setGateway($gateway = $this->createMock('Payum\Core\GatewayInterface'));
 
         $this->assertAttributeSame($gateway, 'gateway', $action);
     }
@@ -212,11 +213,11 @@ class CreditPartActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock =  $this->getMock('Klarna', array('config', 'activate', 'cancelReservation', 'checkOrderStatus', 'reserveAmount', 'creditPart'));
+        $klarnaMock =  $this->createMock('Klarna', array('config', 'activate', 'cancelReservation', 'checkOrderStatus', 'reserveAmount', 'creditPart'));
 
         $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);
-        $rp->setValue($klarnaMock, $this->getMock('xmlrpc_client', array(), array(), '', false));
+        $rp->setValue($klarnaMock, $this->createMock('xmlrpc_client', array(), array(), '', false));
         $rp->setAccessible(false);
 
         return $klarnaMock;
@@ -227,6 +228,6 @@ class CreditPartActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\GatewayInterface');
+        return $this->createMock('Payum\Core\GatewayInterface');
     }
 }

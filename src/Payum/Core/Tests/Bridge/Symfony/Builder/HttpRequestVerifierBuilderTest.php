@@ -4,8 +4,9 @@ namespace Payum\Core\Tests\Bridge\Symfony\Builder;
 use Payum\Core\Bridge\Symfony\Builder\HttpRequestVerifierBuilder;
 use Payum\Core\Bridge\Symfony\Security\HttpRequestVerifier;
 use Payum\Core\Storage\StorageInterface;
+use PHPUnit\Framework\TestCase;
 
-class HttpRequestVerifierBuilderTest extends \PHPUnit_Framework_TestCase
+class HttpRequestVerifierBuilderTest extends TestCase
 {
     public function testCouldBeConstructedWithoutAnyArguments()
     {
@@ -15,7 +16,7 @@ class HttpRequestVerifierBuilderTest extends \PHPUnit_Framework_TestCase
     public function testShouldBuildSymfonyHttpRequestVerifier()
     {
         /** @var StorageInterface $tokenStorage */
-        $tokenStorage = $this->getMock(StorageInterface::class);
+        $tokenStorage = $this->createMock(StorageInterface::class);
 
         $builder = new HttpRequestVerifierBuilder();
 
@@ -28,7 +29,7 @@ class HttpRequestVerifierBuilderTest extends \PHPUnit_Framework_TestCase
     public function testAllowUseBuilderAsAsFunction()
     {
         /** @var StorageInterface $tokenStorage */
-        $tokenStorage = $this->getMock(StorageInterface::class);
+        $tokenStorage = $this->createMock(StorageInterface::class);
 
         $builder = new HttpRequestVerifierBuilder();
 

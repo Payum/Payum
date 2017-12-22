@@ -3,7 +3,7 @@ namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
 use Payum\Klarna\Invoice\Request\Api\GetAddresses;
 
-class GetAddressesTest extends \PHPUnit_Framework_TestCase
+class GetAddressesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

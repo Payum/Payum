@@ -4,8 +4,9 @@ namespace Payum\Core\Tests\Extension;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionCollection;
 use Payum\Core\Extension\ExtensionInterface;
+use PHPUnit\Framework\TestCase;
 
-class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
+class ExtensionCollectionTest extends TestCase
 {
     /**
      * @test
@@ -164,7 +165,7 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createContextMock()
     {
-        return $this->getMock('Payum\Core\Extension\Context', array(), array(), '', false);
+        return $this->createMock('Payum\Core\Extension\Context', array(), array(), '', false);
     }
 
     /**
@@ -172,6 +173,6 @@ class ExtensionCollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createExtensionMock()
     {
-        return $this->getMock('Payum\Core\Extension\ExtensionInterface');
+        return $this->createMock('Payum\Core\Extension\ExtensionInterface');
     }
 }

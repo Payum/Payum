@@ -2,10 +2,11 @@
 namespace Payum\Core\Tests\Bridge\Symfony\Form\Type;
 
 use Payum\Core\Bridge\Symfony\Form\Type\CreditCardExpirationDateType;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CreditCardExpirationDateTypeTest extends \PHPUnit_Framework_TestCase
+class CreditCardExpirationDateTypeTest extends TestCase
 {
     /**
      * @test

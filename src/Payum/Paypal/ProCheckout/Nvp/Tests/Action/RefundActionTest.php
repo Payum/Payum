@@ -159,6 +159,6 @@ class RefundActionTest extends GenericActionTest
      */
     protected function createApiMock()
     {
-        return $this->getMock('Payum\Paypal\ProCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ProCheckout\Nvp\Api', array(), array(), '', false);
     }
 }

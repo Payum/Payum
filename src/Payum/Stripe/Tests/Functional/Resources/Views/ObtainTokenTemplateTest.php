@@ -3,7 +3,7 @@ namespace Payum\Klarna\Checkout\Tests\Functional\Resources\Views;
 
 use Payum\Core\Bridge\Twig\TwigFactory;
 
-class ObtainTokenTemplateTest extends \PHPUnit_Framework_TestCase
+class ObtainTokenTemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

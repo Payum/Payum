@@ -7,6 +7,7 @@ use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\Convert;
 use Payum\Core\Request\GetHumanStatus;
+use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
 
 class CapturePaymentActionTest extends GenericActionTest
@@ -17,8 +18,8 @@ class CapturePaymentActionTest extends GenericActionTest
 
     public function provideSupportedRequests()
     {
-        $capture = new $this->requestClass($this->getMock('Payum\Security\TokenInterface'));
-        $capture->setModel($this->getMock(PaymentInterface::class));
+        $capture = new $this->requestClass($this->createMock(TokenInterface::class));
+        $capture->setModel($this->createMock(PaymentInterface::class));
 
         return array(
             array(new $this->requestClass(new Payment())),

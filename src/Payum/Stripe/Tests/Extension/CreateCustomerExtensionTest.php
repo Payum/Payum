@@ -12,7 +12,7 @@ use Payum\Stripe\Extension\CreateCustomerExtension;
 use Payum\Stripe\Request\Api\CreateCustomer;
 use Payum\Stripe\Request\Api\ObtainToken;
 
-class CreateCustomerExtensionTest extends \PHPUnit_Framework_TestCase
+class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldImplementExtensionInterface()
     {
@@ -583,6 +583,6 @@ class CreateCustomerExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->getMock(GatewayInterface::class);
+        return $this->createMock(GatewayInterface::class);
     }
 }

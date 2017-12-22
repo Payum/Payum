@@ -10,7 +10,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Action\CancelAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoVoid;
 
-class CancelActionTest extends \PHPUnit_Framework_TestCase
+class CancelActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -183,6 +183,6 @@ class CancelActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->getMock(GatewayInterface::class);
+        return $this->createMock(GatewayInterface::class);
     }
 }

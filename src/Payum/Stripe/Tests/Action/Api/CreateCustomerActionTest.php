@@ -7,7 +7,7 @@ use Payum\Stripe\Action\Api\CreateCustomerAction;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateCustomer;
 
-class CreateCustomerActionTest extends \PHPUnit_Framework_TestCase
+class CreateCustomerActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

@@ -1,7 +1,9 @@
 <?php
 namespace Payum\Core\Tests\Reply;
 
-class ReplyInterfaceTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class ReplyInterfaceTest extends TestCase
 {
     /**
      * @test

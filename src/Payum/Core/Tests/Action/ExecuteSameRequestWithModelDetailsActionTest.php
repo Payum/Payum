@@ -47,7 +47,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $gatewayMock = $this->getMock('Payum\Core\GatewayInterface');
+        $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
@@ -79,7 +79,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $gatewayMock = $this->getMock('Payum\Core\GatewayInterface');
+        $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
@@ -117,7 +117,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $gatewayMock = $this->getMock('Payum\Core\GatewayInterface');
+        $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
@@ -159,7 +159,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $gatewayMock = $this->getMock('Payum\Core\GatewayInterface');
+        $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
         $gatewayMock
             ->expects($this->once())
             ->method('execute')

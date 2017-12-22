@@ -6,7 +6,7 @@ use Payum\Core\Request\Payout;
 use Payum\Offline\Action\PayoutAction;
 use Payum\Offline\Constants;
 
-class PayoutActionTest extends \PHPUnit_Framework_TestCase
+class PayoutActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -33,7 +33,7 @@ class PayoutActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new PayoutAction();
 
-        $request = new Payout($this->getMock('ArrayAccess'));
+        $request = new Payout($this->createMock('ArrayAccess'));
 
         $this->assertTrue($action->supports($request));
     }

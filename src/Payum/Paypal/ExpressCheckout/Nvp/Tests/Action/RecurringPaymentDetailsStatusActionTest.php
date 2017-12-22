@@ -5,7 +5,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction;
 use Payum\Core\Request\GetBinaryStatus;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
-class RecurringPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
+class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

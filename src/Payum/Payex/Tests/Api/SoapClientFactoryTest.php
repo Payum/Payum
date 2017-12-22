@@ -3,7 +3,7 @@ namespace Payum\Payex\Tests\Api;
 
 use Payum\Payex\Api\SoapClientFactory;
 
-class SoapClientFactoryTest extends \PHPUnit_Framework_TestCase
+class SoapClientFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

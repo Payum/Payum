@@ -3,8 +3,9 @@ namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\Generic;
 use Payum\Core\Request\Notify;
+use PHPUnit\Framework\TestCase;
 
-class NotifyTest extends \PHPUnit_Framework_TestCase
+class NotifyTest extends TestCase
 {
     /**
      * @test

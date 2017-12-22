@@ -2,8 +2,9 @@
 namespace Payum\Core\Tests\Registry;
 
 use Doctrine\Common\Persistence\Proxy;
+use PHPUnit\Framework\TestCase;
 
-class AbstractRegistryTest extends \PHPUnit_Framework_TestCase
+class AbstractRegistryTest extends TestCase
 {
     /**
      * @test

@@ -2,8 +2,9 @@
 namespace Payum\Klarna\Checkout\Tests\Request\Api;
 
 use Payum\Klarna\Checkout\Request\Api\CreateOrder;
+use PHPUnit\Framework\TestCase;
 
-class CreateOrderTest extends \PHPUnit_Framework_TestCase
+class CreateOrderTest extends TestCase
 {
     /**
      * @test

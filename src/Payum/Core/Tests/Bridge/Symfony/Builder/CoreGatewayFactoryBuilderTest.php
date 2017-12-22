@@ -3,10 +3,11 @@ namespace Payum\Core\Tests\Bridge\Symfony\Builder;
 
 use Payum\Core\Bridge\Symfony\Builder\CoreGatewayFactoryBuilder;
 use Payum\Core\Bridge\Symfony\ContainerAwareCoreGatewayFactory;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-class CoreGatewayFactoryBuilderTest extends \PHPUnit_Framework_TestCase
+class CoreGatewayFactoryBuilderTest extends TestCase
 {
     public function testShouldImplementContainerAwareInterface()
     {

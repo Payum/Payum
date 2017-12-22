@@ -11,7 +11,7 @@ use Payum\Stripe\Action\Api\ObtainTokenAction;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\ObtainToken;
 
-class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
+class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -242,6 +242,6 @@ class ObtainTokenActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->getMock(GatewayInterface::class);
+        return $this->createMock(GatewayInterface::class);
     }
 }

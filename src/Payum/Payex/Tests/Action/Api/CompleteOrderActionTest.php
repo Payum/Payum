@@ -4,7 +4,7 @@ namespace Payum\Payex\Tests\Action\Api;
 use Payum\Payex\Action\Api\CompleteOrderAction;
 use Payum\Payex\Request\Api\CompleteOrder;
 
-class CompleteOrderActionTest extends \PHPUnit_Framework_TestCase
+class CompleteOrderActionTest extends \PHPUnit\Framework\TestCase
 {
     protected $requiredFields = array(
         'orderRef' => 'aRef',
@@ -54,7 +54,7 @@ class CompleteOrderActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetOrderApiAsApi()
     {
-        $orderApi = $this->getMock('Payum\Payex\Api\OrderApi', array(), array(), '', false);
+        $orderApi = $this->createMock('Payum\Payex\Api\OrderApi', array(), array(), '', false);
 
         $action = new CompleteOrderAction();
 
@@ -83,7 +83,7 @@ class CompleteOrderActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CompleteOrderAction();
 
-        $this->assertTrue($action->supports(new CompleteOrder($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new CompleteOrder($this->createMock('ArrayAccess'))));
     }
 
     /**
@@ -164,6 +164,6 @@ class CompleteOrderActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createApiMock()
     {
-        return $this->getMock('Payum\Payex\Api\OrderApi', array(), array(), '', false);
+        return $this->createMock('Payum\Payex\Api\OrderApi', array(), array(), '', false);
     }
 }

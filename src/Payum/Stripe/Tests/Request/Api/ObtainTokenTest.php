@@ -4,7 +4,7 @@ namespace Payum\Stripe\Tests\Request\Api;
 use Payum\Core\Request\Generic;
 use Payum\Stripe\Request\Api\ObtainToken;
 
-class ObtainTokenTest extends \PHPUnit_Framework_TestCase
+class ObtainTokenTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

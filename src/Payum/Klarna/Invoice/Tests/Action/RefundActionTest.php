@@ -5,8 +5,9 @@ use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Refund;
 use Payum\Klarna\Invoice\Action\RefundAction;
+use PHPUnit\Framework\TestCase;
 
-class RefundActionTest extends \PHPUnit_Framework_TestCase
+class RefundActionTest extends TestCase
 {
     /**
      * @test
@@ -139,6 +140,6 @@ class RefundActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\GatewayInterface');
+        return $this->createMock('Payum\Core\GatewayInterface');
     }
 }

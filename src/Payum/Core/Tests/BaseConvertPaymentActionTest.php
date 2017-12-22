@@ -5,8 +5,9 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Generic;
+use PHPUnit\Framework\TestCase;
 
-abstract class BaseConvertPaymentActionTest extends \PHPUnit_Framework_TestCase
+abstract class BaseConvertPaymentActionTest extends TestCase
 {
     /**
      * @var Generic
@@ -22,8 +23,8 @@ abstract class BaseConvertPaymentActionTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(new $this->requestClass(new Payment())),
-            array(new $this->requestClass($this->getMock(PaymentInterface::class))),
-            array(new $this->requestClass(new Payment(), $this->getMock('Payum\Core\Security\TokenInterface'))),
+            array(new $this->requestClass($this->createMock(PaymentInterface::class))),
+            array(new $this->requestClass(new Payment(), $this->createMock('Payum\Core\Security\TokenInterface'))),
         );
     }
 

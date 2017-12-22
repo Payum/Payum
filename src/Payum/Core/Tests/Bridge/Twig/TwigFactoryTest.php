@@ -1,7 +1,9 @@
 <?php
 namespace Payum\Core\Bridge\Twig;
 
-class TwigFactoryTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class TwigFactoryTest extends TestCase
 {
     /**
      * @test

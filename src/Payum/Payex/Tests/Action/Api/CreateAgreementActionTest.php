@@ -5,7 +5,7 @@ use Payum\Payex\Action\Api\CreateAgreementAction;
 use Payum\Payex\Api\AgreementApi;
 use Payum\Payex\Request\Api\CreateAgreement;
 
-class CreateAgreementActionTest extends \PHPUnit_Framework_TestCase
+class CreateAgreementActionTest extends \PHPUnit\Framework\TestCase
 {
     protected $requiredFields = array(
         'merchantRef' => 'aMerchRef',
@@ -77,7 +77,7 @@ class CreateAgreementActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetAgreementApiAsApi()
     {
-        $agreementApi = $this->getMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
+        $agreementApi = $this->createMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
 
         $action = new CreateAgreementAction();
 
@@ -106,7 +106,7 @@ class CreateAgreementActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CreateAgreementAction();
 
-        $this->assertTrue($action->supports(new CreateAgreement($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new CreateAgreement($this->createMock('ArrayAccess'))));
     }
 
     /**
@@ -222,6 +222,6 @@ class CreateAgreementActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createApiMock()
     {
-        return $this->getMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
+        return $this->createMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
     }
 }

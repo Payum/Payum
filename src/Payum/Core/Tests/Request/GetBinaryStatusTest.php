@@ -3,8 +3,9 @@ namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\BaseGetStatus;
 use Payum\Core\Request\GetBinaryStatus;
+use PHPUnit\Framework\TestCase;
 
-class GetBinaryStatusTest extends \PHPUnit_Framework_TestCase
+class GetBinaryStatusTest extends TestCase
 {
     public static function provideIsXXXMethods()
     {

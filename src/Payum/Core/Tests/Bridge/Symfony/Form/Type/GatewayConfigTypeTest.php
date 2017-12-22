@@ -2,9 +2,10 @@
 namespace Payum\Core\Tests\Bridge\Symfony\Form\Type;
 
 use Payum\Core\Bridge\Symfony\Form\Type\GatewayConfigType;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class GatewayConfigTypeTest extends \PHPUnit_Framework_TestCase
+class GatewayConfigTypeTest extends TestCase
 {
     /**
      * @test
@@ -21,7 +22,7 @@ class GatewayConfigTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithGatewayFactoryRegistryAsFirstArgument()
     {
-        new GatewayConfigType($this->getMock('Payum\Core\Registry\GatewayFactoryRegistryInterface'));
+        new GatewayConfigType($this->createMock('Payum\Core\Registry\GatewayFactoryRegistryInterface'));
     }
 
     /**
@@ -31,7 +32,7 @@ class GatewayConfigTypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestSkipped('Undo mark skipp when minimum supported version of Symfony will be 2.8');
 
-        $type = new GatewayConfigType($this->getMock('Payum\Core\Registry\GatewayFactoryRegistryInterface'));
+        $type = new GatewayConfigType($this->createMock('Payum\Core\Registry\GatewayFactoryRegistryInterface'));
 
         $this->assertEquals('form', $type->getParent());
     }
@@ -41,7 +42,7 @@ class GatewayConfigTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowResolveOptions()
     {
-        $type = new GatewayConfigType($this->getMock('Payum\Core\Registry\GatewayFactoryRegistryInterface'));
+        $type = new GatewayConfigType($this->createMock('Payum\Core\Registry\GatewayFactoryRegistryInterface'));
 
         $resolver = new OptionsResolver();
 

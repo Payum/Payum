@@ -95,7 +95,7 @@ class CaptureActionTest extends GenericActionTest
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->never())
-            ->method('gateway')
+            ->method('doSale')
         ;
 
         $action = new CaptureAction();
@@ -254,7 +254,7 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createApiMock()
     {
-        return $this->getMock('Payum\Paypal\ProCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ProCheckout\Nvp\Api', array(), array(), '', false);
     }
 
     /**
@@ -262,6 +262,6 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\GatewayInterface');
+        return $this->createMock('Payum\Core\GatewayInterface');
     }
 }

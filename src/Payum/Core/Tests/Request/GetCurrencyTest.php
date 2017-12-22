@@ -2,8 +2,9 @@
 namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\GetCurrency;
+use PHPUnit\Framework\TestCase;
 
-class GetCurrencyTest extends \PHPUnit_Framework_TestCase
+class GetCurrencyTest extends TestCase
 {
     /**
      * @test

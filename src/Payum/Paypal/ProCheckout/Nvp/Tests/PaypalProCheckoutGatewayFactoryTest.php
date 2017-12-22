@@ -3,7 +3,7 @@ namespace Payum\Paypal\ProCheckout\Nvp\Tests;
 
 use Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory;
 
-class PaypalProCheckoutGatewayFactoryTest extends \PHPUnit_Framework_TestCase
+class PaypalProCheckoutGatewayFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -38,7 +38,7 @@ class PaypalProCheckoutGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
     {
-        $coreGatewayFactory = $this->getMock('Payum\Core\GatewayFactoryInterface');
+        $coreGatewayFactory = $this->createMock('Payum\Core\GatewayFactoryInterface');
 
         $factory = new PaypalProCheckoutGatewayFactory(array(), $coreGatewayFactory);
 
