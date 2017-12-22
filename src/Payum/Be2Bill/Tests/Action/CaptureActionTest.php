@@ -344,14 +344,13 @@ class CaptureActionTest extends GenericActionTest
         $action->execute($capture);
     }
 
-    /**
-     * @expectedException HttpResponse
-     */
     public function testShouldThrowHttpResponseIfExecCode3DSecureRequired()
     {
         $action = new CaptureAction();
 
+        $this->expectException(HttpResponse::class);
         $action->execute($status = new Capture([
+            '3DSECUREHTML' => base64_encode('<html>foo</html>'),
             'EXECCODE' => Api::EXECCODE_3DSECURE_IDENTIFICATION_REQUIRED,
         ]));
     }
