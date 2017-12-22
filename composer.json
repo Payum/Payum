@@ -51,7 +51,7 @@
         "ext-pdo_sqlite": "*",
         "payum/omnipay-v3-bridge": "^1@alpha",
         "omnipay/dummy": "^3@alpha",
-        "omnipay/common": "^3@alpha",
+        "omnipay/common": "^3@dev",
         "doctrine/orm": "2.5.*",
         "phpunit/phpunit": "^5.7",
         "propel/propel1": "~1.7",
