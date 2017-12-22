@@ -2,9 +2,9 @@
 namespace Payum\Core\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
-use Payum\Core\Tests\GatewayAwareAction;
 
 class GatewayAwareActionTest extends \PHPUnit_Framework_TestCase
 {
