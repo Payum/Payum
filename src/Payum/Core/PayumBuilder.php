@@ -30,6 +30,7 @@ use Payum\Offline\OfflineGatewayFactory;
 use Payum\OmnipayBridge\OmnipayGatewayFactory;
 use Payum\OmnipayV3Bridge\OmnipayGatewayFactory as OmnipayV3GatewayFactory;
 use Payum\Payex\PayexGatewayFactory;
+use Payum\Paypal\AdaptivePayments\Json\PaypalAdaptivePaymentsGatewayFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory;
 use Payum\Paypal\Masspay\Nvp\PaypalMasspayGatewayFactory;
 use Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory;
@@ -548,6 +549,7 @@ class PayumBuilder
     {
         $map = [
             'paypal_express_checkout' => PaypalExpressCheckoutGatewayFactory::class,
+            'paypal_adaptive_payments' => PaypalAdaptivePaymentsGatewayFactory::class,
             'paypal_pro_checkout' => PaypalProCheckoutGatewayFactory::class,
             'paypal_pro_hosted' => PaypalProHostedGatewayFactory::class,
             'paypal_masspay' => PaypalMasspayGatewayFactory::class,
