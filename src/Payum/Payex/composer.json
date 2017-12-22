@@ -26,7 +26,6 @@
     "require-dev": {
         "ext-curl": "*",
         "ext-pdo_sqlite": "*",
-        "doctrine/orm": "2.3",
         "payum/core": "^1.5@dev",
         "phpunit/phpunit": "^5.7",
         "symfony/phpunit-bridge": "^3.1|^4"
