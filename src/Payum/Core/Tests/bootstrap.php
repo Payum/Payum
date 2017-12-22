@@ -1,4 +1,7 @@
 <?php
+
+use Doctrine\Common\Annotations\AnnotationRegistry;
+
 if (!$loader = @include __DIR__.'/../vendor/autoload.php') {
     echo <<<EOM
 You must set up the project dependencies by running the following commands:
@@ -10,6 +13,8 @@ EOM;
 
     exit(1);
 }
+
+AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 
 $rc = new \ReflectionClass('Payum\Core\GatewayInterface');
 $coreDir = dirname($rc->getFileName()).'/Tests';

@@ -2,6 +2,7 @@
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator;
 use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
@@ -30,8 +31,6 @@ abstract class MongoTest extends BaseMongoTest
             '.mongodb.xml'
         );
         $driver->addDriver($xmlDriver, 'Payum\Core\Model');
-
-        AnnotationDriver::registerAnnotationClasses();
 
         $rc = new \ReflectionClass('Payum\Core\Tests\Mocks\Document\TestModel');
         $annotationDriver = new AnnotationDriver(new AnnotationReader(), array(
