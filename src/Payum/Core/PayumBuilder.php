@@ -600,6 +600,8 @@ class PayumBuilder
     }
 
     /**
+     * @deprecated since 1.5 will be removed in 2.0
+     *
      * @param GatewayFactoryInterface $coreGatewayFactory
      *
      * @return GatewayFactoryInterface[]

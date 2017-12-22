@@ -49,9 +49,9 @@
     "require-dev": {
         "ext-curl": "*",
         "ext-pdo_sqlite": "*",
-        "payum/omnipay-bridge": "^1",
-        "omnipay/dummy": "~2.0",
-        "guzzle/guzzle": "dev-upd-symfony-event-dispatcher as 3.10",
+        "payum/omnipay-v3-bridge": "^1@alpha",
+        "omnipay/dummy": "^3@alpha",
+        "omnipay/common": "^3@alpha",
         "doctrine/orm": "2.5.*",
         "phpunit/phpunit": "^5.7",
         "propel/propel1": "~1.7",
@@ -100,11 +100,5 @@
         "branch-alias": {
             "dev-master": "1.5-dev"
         }
-    },
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/formapro-forks/guzzle3.git"
-        }
-    ]
+    }
 }

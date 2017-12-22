@@ -27,7 +27,7 @@ use Payum\Core\Storage\StorageInterface;
 use Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory;
 use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
 use Payum\Offline\OfflineGatewayFactory;
-use Payum\OmnipayBridge\OmnipayGatewayFactory;
+use Payum\OmnipayV3Bridge\OmnipayGatewayFactory;
 use Payum\Payex\PayexGatewayFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory;
 use Payum\Paypal\Masspay\Nvp\PaypalMasspayGatewayFactory;
@@ -654,7 +654,7 @@ class PayumBuilderTest extends TestCase
     /**
      * @test
      */
-    public function shouldRegisterOmnipayFactories()
+    public function shouldRegisterOmnipayV3Factories()
     {
         if (false == class_exists(OmnipayGateway::class)) {
             $this->markTestSkipped('Either omnipay or\and omnipay bridge are not installed. Skip');
@@ -670,15 +670,13 @@ class PayumBuilderTest extends TestCase
 
         $gatewayFactories = $payum->getGatewayFactories();
 
-        $this->assertArrayHasKey('omnipay_dummy', $gatewayFactories);
-        $this->assertArrayHasKey('omnipay_stripe', $gatewayFactories);
-        $this->assertArrayHasKey('omnipay_paypal_express', $gatewayFactories);
+        $this->assertArrayHasKey('omnipay', $gatewayFactories);
     }
 
     /**
      * @test
      */
-    public function shouldInjectCoreGatewayFactoryToOmnipayFactory()
+    public function shouldInjectCoreGatewayFactoryToOmnipayV3Factory()
     {
         if (false == class_exists(OmnipayGateway::class)) {
             $this->markTestSkipped('Either omnipay or\and omnipay bridge are not installed. Skip');
@@ -692,7 +690,7 @@ class PayumBuilderTest extends TestCase
             ->getPayum()
         ;
 
-        $gatewayFactory = $payum->getGatewayFactory('omnipay_dummy');
+        $gatewayFactory = $payum->getGatewayFactory('omnipay');
 
         $this->assertInstanceOf(OmnipayGatewayFactory::class, $gatewayFactory);
 
@@ -702,7 +700,7 @@ class PayumBuilderTest extends TestCase
     /**
      * @test
      */
-    public function shouldInjectExpectedOmnipayGatewayInstanceAsApi()
+    public function shouldInjectExpectedOmnipayV3GatewayInstanceAsApi()
     {
         if (false == class_exists(OmnipayGateway::class)) {
             $this->markTestSkipped('Either omnipay or\and omnipay bridge are not installed. Skip');
@@ -713,11 +711,13 @@ class PayumBuilderTest extends TestCase
             ->getPayum()
         ;
 
-        $gatewayFactory = $payum->getGatewayFactory('omnipay_dummy');
+        $gatewayFactory = $payum->getGatewayFactory('omnipay');
 
         $this->assertInstanceOf(OmnipayGatewayFactory::class, $gatewayFactory);
 
-        $gateway = $gatewayFactory->create();
+        $gateway = $gatewayFactory->create([
+            'type' => 'dummy',
+        ]);
 
         $apis = $this->readAttribute($gateway, 'apis');
 
