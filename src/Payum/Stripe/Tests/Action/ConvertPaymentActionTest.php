@@ -57,7 +57,7 @@ class ConvertPaymentActionTest extends GenericActionTest
 
         $this->assertNotEmpty($details);
 
-        $this->assertArrayNotHasKey('card', $details);
+        $this->assertArrayNotHasKey('source', $details);
 
         $this->assertArrayHasKey('amount', $details);
         $this->assertEquals(123, $details['amount']);
@@ -116,10 +116,10 @@ class ConvertPaymentActionTest extends GenericActionTest
 
         $this->assertNotEmpty($details);
 
-        $this->assertArrayHasKey('card', $details);
-        $this->assertInstanceOf(SensitiveValue::class, $details['card']);
+        $this->assertArrayHasKey('source', $details);
+        $this->assertInstanceOf(SensitiveValue::class, $details['source']);
 
-        $card = $details['card']->peek();
+        $card = $details['source']->peek();
         $this->assertInternalType('array', $card);
 
         $this->assertArrayHasKey('number', $card);
@@ -141,7 +141,7 @@ class ConvertPaymentActionTest extends GenericActionTest
     public function shouldCorrectlyConvertCreditCardToken()
     {
         $creditCard = new CreditCard();
-        $creditCard->setToken('theCustomerId');
+        $creditCard->setToken('theSourceId');
 
         $order = new Payment();
         $order->setCreditCard($creditCard);
@@ -154,7 +154,7 @@ class ConvertPaymentActionTest extends GenericActionTest
 
         $this->assertNotEmpty($details);
 
-        $this->assertArrayHasKey('customer', $details);
-        $this->assertEquals('theCustomerId', $details['customer']);
+        $this->assertArrayHasKey('source', $details);
+        $this->assertEquals('theSourceId', $details['source']);
     }
 }

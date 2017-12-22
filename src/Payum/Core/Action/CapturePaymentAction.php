@@ -25,8 +25,8 @@ class CapturePaymentAction implements ActionInterface, GatewayAwareInterface
 
         /** @var $payment PaymentInterface */
         $payment = $request->getModel();
-
         $this->gateway->execute($status = new GetHumanStatus($payment));
+
         if ($status->isNew()) {
             $this->gateway->execute($convert = new Convert($payment, 'array', $request->getToken()));
 

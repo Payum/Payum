@@ -29,9 +29,9 @@ class ConvertPaymentAction implements ActionInterface
 
         if ($card = $payment->getCreditCard()) {
             if ($card->getToken()) {
-                $details["customer"] = $card->getToken();
+                $details["source"] = $card->getToken();
             } else {
-                $details["card"] = SensitiveValue::ensureSensitive([
+                $details["source"] = SensitiveValue::ensureSensitive([
                     'number' => $card->getNumber(),
                     'exp_month' => $card->getExpireAt()->format('m'),
                     'exp_year' => $card->getExpireAt()->format('Y'),

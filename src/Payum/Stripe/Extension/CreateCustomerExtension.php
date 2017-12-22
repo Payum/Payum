@@ -9,6 +9,7 @@ use Payum\Core\Request\Capture;
 use Payum\Stripe\Constants;
 use Payum\Stripe\Request\Api\CreateCustomer;
 use Payum\Stripe\Request\Api\ObtainToken;
+use Payum\Core\Security\SensitiveValue;
 
 class CreateCustomerExtension implements ExtensionInterface
 {
@@ -66,7 +67,11 @@ class CreateCustomerExtension implements ExtensionInterface
         if ($model['customer']) {
             return;
         }
-        if (false == ($model['card'] && is_string($model['card']))) {
+
+        if (!@$model['card']
+            || (!is_string($model['card'])
+            && !$model['card'] instanceof SensitiveValue)
+        ) {
             return;
         }
 
