@@ -20,14 +20,14 @@
         }
     ],
     "require": {
-        "payum/core": "^1.3",
+        "payum/core": "^1.5",
         "ext-soap": "*"
     },
     "require-dev": {
         "ext-curl": "*",
         "ext-pdo_sqlite": "*",
         "doctrine/orm": "2.3",
-        "payum/core": "^1.3@dev",
+        "payum/core": "^1.5@dev",
         "phpunit/phpunit": "~4.0",
         "symfony/phpunit-bridge": "~2.8|~3.0"
     },
@@ -40,7 +40,7 @@
     "target-dir": "Payum/Payex",
     "extra": {
         "branch-alias": {
-            "dev-master": "1.4-dev"
+            "dev-master": "1.5-dev"
         }
     }
 }
