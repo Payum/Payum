@@ -51,6 +51,7 @@
         "ext-pdo_sqlite": "*",
         "payum/omnipay-bridge": "^1",
         "omnipay/dummy": "~2.0",
+        "guzzle/guzzle": "dev-newer-event-dispatcher as 3.8.2",
         "doctrine/orm": "2.5.*",
         "phpunit/phpunit": "^5.7",
         "propel/propel1": "~1.7",
@@ -99,5 +100,11 @@
         "branch-alias": {
             "dev-master": "1.5-dev"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/formapro-forks/guzzle.git"
+        }
+    ]
 }
