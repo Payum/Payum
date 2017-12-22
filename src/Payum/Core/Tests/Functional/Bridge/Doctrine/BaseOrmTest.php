@@ -6,8 +6,9 @@ use Doctrine\ORM\Configuration;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
+use PHPUnit\Framework\TestCase;
 
-abstract class BaseOrmTest extends \PHPUnit_Framework_TestCase
+abstract class BaseOrmTest extends TestCase
 {
     /**
      * @var EntityManager

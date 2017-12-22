@@ -3,7 +3,7 @@ namespace Payum\Offline\Tests;
 
 use Payum\Offline\OfflineGatewayFactory;
 
-class OfflineGatewayFactoryTest extends \PHPUnit_Framework_TestCase
+class OfflineGatewayFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -38,7 +38,7 @@ class OfflineGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
     {
-        $coreGatewayFactory = $this->getMock('Payum\Core\GatewayFactoryInterface');
+        $coreGatewayFactory = $this->createMock('Payum\Core\GatewayFactoryInterface');
 
         $factory = new OfflineGatewayFactory(array(), $coreGatewayFactory);
 

@@ -2,9 +2,10 @@
 namespace Payum\Core\Tests\Bridge\Symfony\Form\Type;
 
 use Payum\Core\Bridge\Symfony\Form\Type\CreditCardType;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CreditCardTypeTest extends \PHPUnit_Framework_TestCase
+class CreditCardTypeTest extends TestCase
 {
     /**
      * @test

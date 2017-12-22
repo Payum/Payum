@@ -3,8 +3,9 @@ namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\GetToken;
 use Payum\Core\Security\TokenInterface;
+use PHPUnit\Framework\TestCase;
 
-class GetTokenTest extends \PHPUnit_Framework_TestCase
+class GetTokenTest extends TestCase
 {
     /**
      * @test
@@ -30,7 +31,7 @@ class GetTokenTest extends \PHPUnit_Framework_TestCase
     public function shouldAllowGetPreviouslySetToken()
     {
         /** @var TokenInterface $token */
-        $token = $this->getMock(TokenInterface::class);
+        $token = $this->createMock(TokenInterface::class);
 
         $request = new GetToken('aHash');
         $request->setToken($token);

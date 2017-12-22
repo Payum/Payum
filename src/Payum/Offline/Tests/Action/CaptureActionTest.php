@@ -6,7 +6,7 @@ use Payum\Offline\Action\CaptureAction;
 use Payum\Offline\Constants;
 use Payum\Core\Request\Capture;
 
-class CaptureActionTest extends \PHPUnit_Framework_TestCase
+class CaptureActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -33,7 +33,7 @@ class CaptureActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new CaptureAction();
 
-        $request = new Capture($this->getMock('ArrayAccess'));
+        $request = new Capture($this->createMock('ArrayAccess'));
 
         $this->assertTrue($action->supports($request));
     }

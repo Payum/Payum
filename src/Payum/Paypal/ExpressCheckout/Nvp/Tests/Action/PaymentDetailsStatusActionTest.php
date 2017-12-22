@@ -5,7 +5,7 @@ use Payum\Core\Request\GetHumanStatus;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
-class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
+class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

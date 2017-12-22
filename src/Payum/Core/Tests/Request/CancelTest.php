@@ -3,8 +3,9 @@ namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\Cancel;
 use Payum\Core\Request\Generic;
+use PHPUnit\Framework\TestCase;
 
-class CancelTest extends \PHPUnit_Framework_TestCase
+class CancelTest extends TestCase
 {
     /**
      * @test

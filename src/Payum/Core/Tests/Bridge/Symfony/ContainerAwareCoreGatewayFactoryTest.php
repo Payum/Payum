@@ -4,10 +4,11 @@ namespace Payum\Core\Tests\Bridge\Symfony;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Symfony\ContainerAwareCoreGatewayFactory;
 use Payum\Core\CoreGatewayFactory;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-class ContainerAwareCoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
+class ContainerAwareCoreGatewayFactoryTest extends TestCase
 {
     public function testShouldExtendCoreGatewayFactory()
     {

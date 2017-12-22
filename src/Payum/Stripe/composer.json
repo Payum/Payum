@@ -25,8 +25,8 @@
     },
     "require-dev": {
         "payum/core": "^1.5@dev",
-        "phpunit/phpunit": "~4.0",
-        "symfony/phpunit-bridge": "~2.8|~3.0"
+        "phpunit/phpunit": "^5.7",
+        "symfony/phpunit-bridge": "^3.1|^4"
     },
     "config": {
         "bin-dir": "bin"

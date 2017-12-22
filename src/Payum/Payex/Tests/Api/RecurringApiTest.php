@@ -4,7 +4,7 @@ namespace Payum\Payex\Tests\Api;
 use Payum\Payex\Api\RecurringApi;
 use Payum\Payex\Api\SoapClientFactory;
 
-class RecurringApiTest extends \PHPUnit_Framework_TestCase
+class RecurringApiTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -84,7 +84,7 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
         $response = new \stdClass();
         $response->StartResult = '<foo>fooValue</foo>';
 
-        $soapClientMock = $this->getMock('SoapClient', array('Start'), array(), '', false);
+        $soapClientMock = $this->createSoapClientMock();
         $soapClientMock
             ->expects($this->once())
             ->method('Start')
@@ -92,7 +92,7 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($response))
         ;
 
-        $clientFactoryMock = $this->getMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
+        $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
@@ -121,7 +121,7 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
         $response = new \stdClass();
         $response->StopResult = '<foo>fooValue</foo>';
 
-        $soapClientMock = $this->getMock('SoapClient', array('Stop'), array(), '', false);
+        $soapClientMock = $this->createSoapClientMock();
         $soapClientMock
             ->expects($this->once())
             ->method('Stop')
@@ -129,7 +129,7 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($response))
         ;
 
-        $clientFactoryMock = $this->getMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
+        $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
@@ -158,7 +158,7 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
         $response = new \stdClass();
         $response->CheckResult = '<foo>fooValue</foo>';
 
-        $soapClientMock = $this->getMock('SoapClient', array('Check'), array(), '', false);
+        $soapClientMock = $this->createSoapClientMock();
         $soapClientMock
             ->expects($this->once())
             ->method('Check')
@@ -166,7 +166,7 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($response))
         ;
 
-        $clientFactoryMock = $this->getMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
+        $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
@@ -186,4 +186,20 @@ class RecurringApiTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(array('fooValue'), $result);
     }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\SoapClient
+     */
+    private function createSoapClientMock()
+    {
+        return $this->createMock(RecurringSoapClient::class);
+    }
 }
+
+class RecurringSoapClient extends \SoapClient {
+    public function __construct() {}
+
+    public function Start() {}
+    public function Stop() {}
+    public function Check() {}
+};

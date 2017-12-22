@@ -5,10 +5,11 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Psr\Log\LoggerExtension;
 use Payum\Core\Extension\Context;
 use Payum\Core\GatewayInterface;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
-class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
+class LoggerExtensionTest extends TestCase
 {
     public static function setUpBeforeClass()
     {
@@ -168,7 +169,7 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createLoggerMock()
     {
-        return $this->getMock('Psr\Log\LoggerInterface');
+        return $this->createMock('Psr\Log\LoggerInterface');
     }
 
     /**
@@ -176,7 +177,7 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createActionMock()
     {
-        return $this->getMock('Payum\Core\Action\ActionInterface');
+        return $this->createMock('Payum\Core\Action\ActionInterface');
     }
 
     /**
@@ -184,7 +185,7 @@ class LoggerExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\GatewayInterface');
+        return $this->createMock('Payum\Core\GatewayInterface');
     }
 }
 

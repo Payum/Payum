@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Payex\Tests\Request\Api;
 
-class CheckAgreementTest extends \PHPUnit_Framework_TestCase
+class CheckAgreementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

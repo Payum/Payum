@@ -4,8 +4,9 @@ namespace Payum\Core\Tests\Exception\Http;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Payum\Core\Exception\Http\HttpException;
+use PHPUnit\Framework\TestCase;
 
-class HttpExceptionTest extends \PHPUnit_Framework_TestCase
+class HttpExceptionTest extends TestCase
 {
     /**
      * @test
@@ -42,7 +43,7 @@ class HttpExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $exception = new HttpException();
 
-        $exception->setRequest($this->getMock('Psr\Http\Message\RequestInterface'));
+        $exception->setRequest($this->createMock('Psr\Http\Message\RequestInterface'));
     }
 
     /**
@@ -52,7 +53,7 @@ class HttpExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $exception = new HttpException();
 
-        $exception->setRequest($expectedRequest = $this->getMock('Psr\Http\Message\RequestInterface'));
+        $exception->setRequest($expectedRequest = $this->createMock('Psr\Http\Message\RequestInterface'));
 
         $this->assertSame($expectedRequest, $exception->getRequest());
     }
@@ -64,7 +65,7 @@ class HttpExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $exception = new HttpException();
 
-        $exception->setResponse($this->getMock('Psr\Http\Message\ResponseInterface'));
+        $exception->setResponse($this->createMock('Psr\Http\Message\ResponseInterface'));
     }
 
     /**
@@ -74,7 +75,7 @@ class HttpExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $exception = new HttpException();
 
-        $exception->setResponse($expectedResponse = $this->getMock('Psr\Http\Message\ResponseInterface'));
+        $exception->setResponse($expectedResponse = $this->createMock('Psr\Http\Message\ResponseInterface'));
 
         $this->assertSame($expectedResponse, $exception->getResponse());
     }

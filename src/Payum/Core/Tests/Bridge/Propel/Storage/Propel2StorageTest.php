@@ -3,8 +3,9 @@ namespace Payum\Core\Tests\Bridge\Propel\Storage;
 
 use Payum\Core\Bridge\Propel2\Storage\Propel2Storage as PropelStorage;
 use Payum\Core\Tests\Mocks\Model\Propel2ModelQuery;
+use PHPUnit\Framework\TestCase;
 
-class Propel2StorageTest extends \PHPUnit_Framework_TestCase
+class Propel2StorageTest extends TestCase
 {
     /**
      * @test

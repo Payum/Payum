@@ -6,8 +6,9 @@ use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\Identity;
 use Payum\Core\Request\Capture;
+use PHPUnit\Framework\TestCase;
 
-class RequestNotSupportedExceptionTest extends \PHPUnit_Framework_TestCase
+class RequestNotSupportedExceptionTest extends TestCase
 {
     /**
      * @test
@@ -62,13 +63,15 @@ class RequestNotSupportedExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCreateWithActionAndStringRequest()
     {
-        $action = $this->getMock(ActionInterface::class, array(), array(), 'Mock_Action12');
+        $action = $this->createMock(ActionInterface::class);
+        $actionClass = get_class($action);
+
 
         $exception = RequestNotSupportedException::createActionNotSupported($action, 'anRequest');
 
         $this->assertInstanceOf(RequestNotSupportedException::class, $exception);
         $this->assertStringStartsWith(
-            'Action Mock_Action12 is not supported the request string.',
+            'Action '.$actionClass.' is not supported the request string.',
             $exception->getMessage()
         );
 
@@ -83,13 +86,14 @@ class RequestNotSupportedExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $request = new \stdClass();
 
-        $action = $this->getMock(ActionInterface::class, array(), array(), 'Mock_Action24');
+        $action = $this->createMock(ActionInterface::class);
+        $actionClass = get_class($action);
 
         $exception = RequestNotSupportedException::createActionNotSupported($action, $request);
 
         $this->assertInstanceOf(RequestNotSupportedException::class, $exception);
         $this->assertStringStartsWith(
-            'Action Mock_Action24 is not supported the request stdClass.',
+            'Action '.$actionClass.' is not supported the request stdClass.',
             $exception->getMessage()
         );
 
@@ -134,6 +138,6 @@ class RequestNotSupportedExceptionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createActionMock()
     {
-        return $this->getMock(ActionInterface::class);
+        return $this->createMock(ActionInterface::class);
     }
 }

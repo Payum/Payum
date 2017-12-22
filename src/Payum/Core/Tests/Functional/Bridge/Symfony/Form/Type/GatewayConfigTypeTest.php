@@ -5,10 +5,11 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\GatewayFactoryI
 use Payum\Core\Bridge\Symfony\Form\Type\GatewayConfigType;
 use Payum\Core\Bridge\Symfony\Form\Type\GatewayFactoriesChoiceType;
 use Payum\Core\Model\GatewayConfig;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\Forms;
 
-class GatewayConfigTypeTest extends \PHPUnit_Framework_TestCase
+class GatewayConfigTypeTest extends TestCase
 {
     /**
      * @var  FormFactory
@@ -22,9 +23,9 @@ class GatewayConfigTypeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fooGatewayFactoryMock = $this->getMock('Payum\Core\GatewayFactoryInterface');
+        $this->fooGatewayFactoryMock = $this->createMock('Payum\Core\GatewayFactoryInterface');
 
-        $registry = $this->getMock('Payum\Core\Registry\GatewayFactoryRegistryInterface');
+        $registry = $this->createMock('Payum\Core\Registry\GatewayFactoryRegistryInterface');
         $registry
             ->expects($this->any())
             ->method('getGatewayFactory')

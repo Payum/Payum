@@ -4,7 +4,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request\Api;
 use Payum\Core\Request\Generic;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoCapture;
 
-class DoCaptureTest extends \PHPUnit_Framework_TestCase
+class DoCaptureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

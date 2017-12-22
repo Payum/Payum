@@ -1,7 +1,9 @@
 <?php
 namespace Payum\Core\Tests\Registry;
 
-class RegistryInterfaceTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class RegistryInterfaceTest extends TestCase
 {
     /**
      * @test

@@ -3,8 +3,9 @@ namespace Payum\AuthorizeNet\Aim\Tests;
 
 use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
 use Payum\Core\Tests\SkipOnPhp7Trait;
+use PHPUnit\Framework\TestCase;
 
-class AuthorizeNetAimGatewayFactoryTest extends \PHPUnit_Framework_TestCase
+class AuthorizeNetAimGatewayFactoryTest extends TestCase
 {
     use SkipOnPhp7Trait;
 
@@ -41,7 +42,7 @@ class AuthorizeNetAimGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
     {
-        $coreGatewayFactory = $this->getMock('Payum\Core\GatewayFactory');
+        $coreGatewayFactory = $this->createMock('Payum\Core\GatewayFactory');
 
         $factory = new AuthorizeNetAimGatewayFactory(array(), $coreGatewayFactory);
 

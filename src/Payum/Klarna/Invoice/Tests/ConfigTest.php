@@ -2,8 +2,9 @@
 namespace Payum\Klarna\Invoice\Tests;
 
 use Payum\Klarna\Invoice\Config;
+use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends TestCase
 {
     /**
      * @test

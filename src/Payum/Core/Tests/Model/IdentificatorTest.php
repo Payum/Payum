@@ -2,8 +2,9 @@
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\Identificator;
+use PHPUnit\Framework\TestCase;
 
-class IdentificatorTest extends \PHPUnit_Framework_TestCase
+class IdentificatorTest extends TestCase
 {
     /**
      * @test

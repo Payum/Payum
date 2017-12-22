@@ -3,7 +3,7 @@ namespace Payum\Stripe\Tests;
 
 use Payum\Stripe\Keys;
 
-class KeysTest extends \PHPUnit_Framework_TestCase
+class KeysTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

@@ -3,7 +3,7 @@ namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
 use Payum\Klarna\Invoice\Request\Api\ReserveAmount;
 
-class ReserveAmountTest extends \PHPUnit_Framework_TestCase
+class ReserveAmountTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

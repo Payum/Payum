@@ -3,7 +3,7 @@ namespace Payum\Stripe\Tests;
 
 use Payum\Stripe\StripeJsGatewayFactory;
 
-class StripeJsGatewayFactoryTest extends \PHPUnit_Framework_TestCase
+class StripeJsGatewayFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -38,7 +38,7 @@ class StripeJsGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
     {
-        $coreGatewayFactory = $this->getMock('Payum\Core\GatewayFactoryInterface');
+        $coreGatewayFactory = $this->createMock('Payum\Core\GatewayFactoryInterface');
 
         $factory = new StripeJsGatewayFactory(array(), $coreGatewayFactory);
 

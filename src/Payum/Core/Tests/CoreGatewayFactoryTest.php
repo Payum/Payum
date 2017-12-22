@@ -19,8 +19,9 @@ use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\HttpClientInterface;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use Payum\Core\Storage\StorageInterface;
+use PHPUnit\Framework\TestCase;
 
-class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
+class CoreGatewayFactoryTest extends TestCase
 {
     /**
      * @test
@@ -260,7 +261,7 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new CoreGatewayFactory();
 
-        $tokenStorageMock = $this->getMock(StorageInterface::class);
+        $tokenStorageMock = $this->createMock(StorageInterface::class);
 
         $config = $factory->createConfig([
             'payum.security.token_storage' => $tokenStorageMock,
@@ -304,8 +305,8 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowPrependAction()
     {
-        $firstAction = $this->getMock('Payum\Core\Action\ActionInterface');
-        $secondAction = $this->getMock('Payum\Core\Action\ActionInterface');
+        $firstAction = $this->createMock('Payum\Core\Action\ActionInterface');
+        $secondAction = $this->createMock('Payum\Core\Action\ActionInterface');
 
         $factory = new CoreGatewayFactory();
 
@@ -368,8 +369,8 @@ class CoreGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowPrependExtensions()
     {
-        $firstExtension = $this->getMock(ExtensionInterface::class);
-        $secondExtension = $this->getMock(ExtensionInterface::class);
+        $firstExtension = $this->createMock(ExtensionInterface::class);
+        $secondExtension = $this->createMock(ExtensionInterface::class);
 
         $factory = new CoreGatewayFactory();
 

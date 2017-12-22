@@ -3,7 +3,7 @@ namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
 use Payum\Klarna\Invoice\Request\Api\EmailInvoice;
 
-class EmailInvoiceTest extends \PHPUnit_Framework_TestCase
+class EmailInvoiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

@@ -3,8 +3,9 @@ namespace Payum\Klarna\Invoice\Tests\Action;
 
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Klarna\Invoice\Action\StatusAction;
+use PHPUnit\Framework\TestCase;
 
-class StatusActionTest extends \PHPUnit_Framework_TestCase
+class StatusActionTest extends TestCase
 {
     /**
      * @test

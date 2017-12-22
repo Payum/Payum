@@ -6,7 +6,7 @@ use Payum\Core\Request\Refund;
 use Payum\Offline\Action\RefundAction;
 use Payum\Offline\Constants;
 
-class RefundActionTest extends \PHPUnit_Framework_TestCase
+class RefundActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -33,7 +33,7 @@ class RefundActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new RefundAction();
 
-        $request = new Refund($this->getMock('ArrayAccess'));
+        $request = new Refund($this->createMock('ArrayAccess'));
 
         $this->assertTrue($action->supports($request));
     }

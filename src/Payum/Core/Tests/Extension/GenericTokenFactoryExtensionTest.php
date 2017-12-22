@@ -7,8 +7,9 @@ use Payum\Core\Extension\GenericTokenFactoryExtension;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryInterface;
+use PHPUnit\Framework\TestCase;
 
-class GenericTokenFactoryExtensionTest extends \PHPUnit_Framework_TestCase
+class GenericTokenFactoryExtensionTest extends TestCase
 {
     /**
      * @test
@@ -120,7 +121,7 @@ class GenericTokenFactoryExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createActionMock()
     {
-        return $this->getMock('Payum\Core\Action\ActionInterface');
+        return $this->createMock('Payum\Core\Action\ActionInterface');
     }
 
     /**
@@ -128,7 +129,7 @@ class GenericTokenFactoryExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGenericTokenFactoryMock()
     {
-        return $this->getMock('Payum\Core\Security\GenericTokenFactoryInterface');
+        return $this->createMock('Payum\Core\Security\GenericTokenFactoryInterface');
     }
 
     /**
@@ -136,7 +137,7 @@ class GenericTokenFactoryExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\GatewayInterface');
+        return $this->createMock('Payum\Core\GatewayInterface');
     }
 }
 

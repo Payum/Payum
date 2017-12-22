@@ -6,7 +6,7 @@ use Payum\Core\Request\GetBinaryStatus;
 use Payum\Payex\Action\AutoPayPaymentDetailsStatusAction;
 use Payum\Payex\Api\OrderApi;
 
-class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
+class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -192,6 +192,6 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\GatewayInterface');
+        return $this->createMock('Payum\Core\GatewayInterface');
     }
 }

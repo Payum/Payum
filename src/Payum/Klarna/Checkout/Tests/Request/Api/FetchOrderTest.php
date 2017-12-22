@@ -2,8 +2,9 @@
 namespace Payum\Klarna\Checkout\Tests\Request\Api;
 
 use Payum\Klarna\Checkout\Request\Api\FetchOrder;
+use PHPUnit\Framework\TestCase;
 
-class FetchOrderTest extends \PHPUnit_Framework_TestCase
+class FetchOrderTest extends TestCase
 {
     /**
      * @test

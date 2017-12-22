@@ -8,7 +8,7 @@ use Payum\Sofort\Action\Api\RefundTransactionAction;
 use Payum\Sofort\Request\Api\RefundTransaction;
 use Payum\Sofort\Api;
 
-class RefundTransactionActionTest extends \PHPUnit_Framework_TestCase
+class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -45,7 +45,7 @@ class RefundTransactionActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new RefundTransactionAction();
 
-        $this->assertTrue($action->supports(new RefundTransaction($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new RefundTransaction($this->createMock('ArrayAccess'))));
     }
 
     /**
@@ -156,6 +156,6 @@ class RefundTransactionActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createApiMock()
     {
-        return $this->getMock(Api::class, array(), array(), '', false);
+        return $this->createMock(Api::class, array(), array(), '', false);
     }
 }

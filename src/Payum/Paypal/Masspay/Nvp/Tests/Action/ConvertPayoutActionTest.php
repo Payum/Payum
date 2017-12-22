@@ -21,8 +21,8 @@ class ConvertPayoutActionTest extends GenericActionTest
     {
         return array(
             array(new $this->requestClass(new Payout(), 'array')),
-            array(new $this->requestClass($this->getMock(PayoutInterface::class), 'array')),
-            array(new $this->requestClass(new Payout(), 'array', $this->getMock(TokenInterface::class))),
+            array(new $this->requestClass($this->createMock(PayoutInterface::class), 'array')),
+            array(new $this->requestClass(new Payout(), 'array', $this->createMock(TokenInterface::class))),
         );
     }
 
@@ -35,7 +35,7 @@ class ConvertPayoutActionTest extends GenericActionTest
             array($this->getMockForAbstractClass(Generic::class, [[]])),
             array(new $this->requestClass(new \stdClass(), 'array')),
             array(new $this->requestClass(new Payout(), 'foobar')),
-            array(new $this->requestClass($this->getMock(PayoutInterface::class), 'foobar')),
+            array(new $this->requestClass($this->createMock(PayoutInterface::class), 'foobar')),
         );
     }
 
@@ -44,7 +44,7 @@ class ConvertPayoutActionTest extends GenericActionTest
      */
     public function shouldCorrectlyConvertPayoutToDetails()
     {
-        $gatewayMock = $this->getMock(GatewayInterface::class);
+        $gatewayMock = $this->createMock(GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
@@ -87,7 +87,7 @@ class ConvertPayoutActionTest extends GenericActionTest
      */
     public function shouldNotOverwriteAlreadySetExtraDetails()
     {
-        $gatewayMock = $this->getMock(GatewayInterface::class);
+        $gatewayMock = $this->createMock(GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')

@@ -17,8 +17,9 @@ use Payum\Klarna\Checkout\Action\AuthorizeAction;
 use Payum\Klarna\Checkout\Config;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\CreateOrder;
+use PHPUnit\Framework\TestCase;
 
-class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
+class AuthorizeActionTest extends TestCase
 {
     /**
      * @test
@@ -460,7 +461,7 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
         $notifyToken = new Token();
         $notifyToken->setTargetUrl('theNotifyUrl');
 
-        $tokenFactory = $this->getMock(GenericTokenFactoryInterface::class);
+        $tokenFactory = $this->createMock(GenericTokenFactoryInterface::class);
         $tokenFactory
             ->expects($this->once())
             ->method('createNotifyToken')
@@ -493,7 +494,7 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\GatewayInterface');
+        return $this->createMock('Payum\Core\GatewayInterface');
     }
 
     /**
@@ -501,6 +502,6 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createOrderMock()
     {
-        return $this->getMock('Klarna_Checkout_Order', array(), array(), '', false);
+        return $this->createMock('Klarna_Checkout_Order', array(), array(), '', false);
     }
 }

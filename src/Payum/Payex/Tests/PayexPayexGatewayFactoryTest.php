@@ -3,7 +3,7 @@ namespace Payum\Payex\Tests;
 
 use Payum\Payex\PayexGatewayFactory;
 
-class PayexGatewayFactoryTest extends \PHPUnit_Framework_TestCase
+class PayexGatewayFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -38,7 +38,7 @@ class PayexGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
     {
-        $coreGatewayFactory = $this->getMock('Payum\Core\GatewayFactoryInterface');
+        $coreGatewayFactory = $this->createMock('Payum\Core\GatewayFactoryInterface');
 
         $factory = new PayexGatewayFactory(array(), $coreGatewayFactory);
 

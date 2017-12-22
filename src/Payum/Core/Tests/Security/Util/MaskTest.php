@@ -2,8 +2,9 @@
 namespace Payum\Core\Tests\Security\Util;
 
 use Payum\Core\Security\Util\Mask;
+use PHPUnit\Framework\TestCase;
 
-class MaskTest extends \PHPUnit_Framework_TestCase
+class MaskTest extends TestCase
 {
     /**
      * @test

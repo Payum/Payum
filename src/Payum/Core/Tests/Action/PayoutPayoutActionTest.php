@@ -19,8 +19,8 @@ class PayoutPayoutActionTest extends GenericActionTest
 
     public function provideSupportedRequests()
     {
-        $payout = new $this->requestClass($this->getMock(TokenInterface::class));
-        $payout->setModel($this->getMock(PayoutInterface::class));
+        $payout = new $this->requestClass($this->createMock(TokenInterface::class));
+        $payout->setModel($this->createMock(PayoutInterface::class));
 
         return array(
             array(new $this->requestClass(new PayoutModel())),

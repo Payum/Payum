@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Payex\Tests\Request\Api;
 
-class StopRecurringPaymentTest extends \PHPUnit_Framework_TestCase
+class StopRecurringPaymentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

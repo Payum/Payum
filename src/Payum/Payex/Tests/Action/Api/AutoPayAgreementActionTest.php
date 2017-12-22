@@ -5,7 +5,7 @@ use Payum\Payex\Action\Api\AutoPayAgreementAction;
 use Payum\Payex\Api\AgreementApi;
 use Payum\Payex\Request\Api\AutoPayAgreement;
 
-class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
+class AutoPayAgreementActionTest extends \PHPUnit\Framework\TestCase
 {
     protected $requiredFields = array(
         'agreementRef' => 'aRef',
@@ -61,7 +61,7 @@ class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetAgreementApiAsApi()
     {
-        $agreementApi = $this->getMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
+        $agreementApi = $this->createMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
 
         $action = new AutoPayAgreementAction();
 
@@ -90,7 +90,7 @@ class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AutoPayAgreementAction();
 
-        $this->assertTrue($action->supports(new AutoPayAgreement($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new AutoPayAgreement($this->createMock('ArrayAccess'))));
     }
 
     /**
@@ -171,6 +171,6 @@ class AutoPayAgreementActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createApiMock()
     {
-        return $this->getMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
+        return $this->createMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
     }
 }

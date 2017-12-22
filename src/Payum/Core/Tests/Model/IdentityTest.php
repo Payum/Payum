@@ -3,8 +3,9 @@ namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\Identity;
 use Payum\Core\Storage\IdentityInterface;
+use PHPUnit\Framework\TestCase;
 
-class IdentityTest extends \PHPUnit_Framework_TestCase
+class IdentityTest extends TestCase
 {
     /**
      * @test

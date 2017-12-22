@@ -5,8 +5,9 @@ use Payum\Core\Tests\SkipOnPhp7Trait;
 use Payum\Klarna\Invoice\Action\Api\ReturnAmountAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\ReturnAmount;
+use PHPUnit\Framework\TestCase;
 
-class ReturnAmountActionTest extends \PHPUnit_Framework_TestCase
+class ReturnAmountActionTest extends TestCase
 {
     use SkipOnPhp7Trait;
 
@@ -177,11 +178,11 @@ class ReturnAmountActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock =  $this->getMock('Klarna', array('config', 'returnAmount'));
+        $klarnaMock =  $this->createMock('Klarna', array('config', 'returnAmount'));
 
         $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);
-        $rp->setValue($klarnaMock, $this->getMock('xmlrpc_client', array(), array(), '', false));
+        $rp->setValue($klarnaMock, $this->createMock('xmlrpc_client', array(), array(), '', false));
         $rp->setAccessible(false);
 
         return $klarnaMock;

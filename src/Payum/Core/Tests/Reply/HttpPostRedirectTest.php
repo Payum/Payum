@@ -2,8 +2,9 @@
 namespace Payum\Core\Tests\Reply;
 
 use Payum\Core\Reply\HttpPostRedirect;
+use PHPUnit\Framework\TestCase;
 
-class HttpPostRedirectTest extends \PHPUnit_Framework_TestCase
+class HttpPostRedirectTest extends TestCase
 {
     /**
      * @test

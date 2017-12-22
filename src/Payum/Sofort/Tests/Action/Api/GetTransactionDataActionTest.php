@@ -8,7 +8,7 @@ use Payum\Sofort\Action\Api\GetTransactionDataAction;
 use Payum\Sofort\Request\Api\GetTransactionData;
 use Payum\Sofort\Api;
 
-class GetTransactionDataActionTest extends \PHPUnit_Framework_TestCase
+class GetTransactionDataActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -45,7 +45,7 @@ class GetTransactionDataActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new GetTransactionDataAction();
 
-        $this->assertTrue($action->supports(new GetTransactionData($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new GetTransactionData($this->createMock('ArrayAccess'))));
     }
 
     /**
@@ -89,6 +89,6 @@ class GetTransactionDataActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createApiMock()
     {
-        return $this->getMock(Api::class, array(), array(), '', false);
+        return $this->createMock(Api::class, array(), array(), '', false);
     }
 }

@@ -5,8 +5,9 @@ use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Authorize;
 use Payum\Klarna\Invoice\Action\AuthorizeAction;
+use PHPUnit\Framework\TestCase;
 
-class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
+class AuthorizeActionTest extends TestCase
 {
     /**
      * @test
@@ -114,6 +115,6 @@ class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\GatewayInterface');
+        return $this->createMock('Payum\Core\GatewayInterface');
     }
 }

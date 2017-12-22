@@ -19,8 +19,8 @@ class ConvertPaymentActionTest extends GenericActionTest
     {
         return array(
             array(new $this->requestClass(new Payment(), 'array')),
-            array(new $this->requestClass($this->getMock(PaymentInterface::class), 'array')),
-            array(new $this->requestClass(new Payment(), 'array', $this->getMock(TokenInterface::class))),
+            array(new $this->requestClass($this->createMock(PaymentInterface::class), 'array')),
+            array(new $this->requestClass(new Payment(), 'array', $this->createMock(TokenInterface::class))),
         );
     }
 
@@ -33,7 +33,7 @@ class ConvertPaymentActionTest extends GenericActionTest
             array($this->getMockForAbstractClass(Generic::class, array(array()))),
             array(new $this->requestClass(new \stdClass(), 'array')),
             array(new $this->requestClass(new Payment(), 'foobar')),
-            array(new $this->requestClass($this->getMock(PaymentInterface::class), 'foobar')),
+            array(new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar')),
         );
     }
 

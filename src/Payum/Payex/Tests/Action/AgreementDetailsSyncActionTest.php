@@ -6,7 +6,7 @@ use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Sync;
 use Payum\Payex\Action\AgreementDetailsSyncAction;
 
-class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
+class AgreementDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -33,7 +33,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AgreementDetailsSyncAction();
 
-        $array = $this->getMock('ArrayAccess');
+        $array = $this->createMock('ArrayAccess');
         $array
             ->expects($this->at(0))
             ->method('offsetExists')
@@ -57,7 +57,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AgreementDetailsSyncAction();
 
-        $array = $this->getMock('ArrayAccess');
+        $array = $this->createMock('ArrayAccess');
         $array
             ->expects($this->at(0))
             ->method('offsetExists')
@@ -131,6 +131,6 @@ class AgreementDetailsSyncActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\GatewayInterface');
+        return $this->createMock('Payum\Core\GatewayInterface');
     }
 }

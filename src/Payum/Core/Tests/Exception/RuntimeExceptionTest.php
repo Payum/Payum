@@ -2,8 +2,9 @@
 namespace Payum\Core\Tests\Exception;
 
 use Payum\Core\Exception\RuntimeException;
+use PHPUnit\Framework\TestCase;
 
-class RuntimeExceptionTest extends \PHPUnit_Framework_TestCase
+class RuntimeExceptionTest extends TestCase
 {
     /**
      * @test

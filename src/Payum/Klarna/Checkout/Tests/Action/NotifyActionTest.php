@@ -115,7 +115,7 @@ class NotifyActionTest extends GenericActionTest
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\GatewayInterface');
+        return $this->createMock('Payum\Core\GatewayInterface');
     }
 
     /**
@@ -123,6 +123,6 @@ class NotifyActionTest extends GenericActionTest
      */
     protected function createOrderMock()
     {
-        return $this->getMock('Klarna_Checkout_Order', array(), array(), '', false);
+        return $this->createMock('Klarna_Checkout_Order', array(), array(), '', false);
     }
 }

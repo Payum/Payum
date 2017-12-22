@@ -6,7 +6,7 @@ use Payum\Core\Request\GetHumanStatus;
 use Payum\Payex\Action\PaymentDetailsStatusAction;
 use Payum\Payex\Api\OrderApi;
 
-class PaymentDetailsStatusActionTest extends \PHPUnit_Framework_TestCase
+class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

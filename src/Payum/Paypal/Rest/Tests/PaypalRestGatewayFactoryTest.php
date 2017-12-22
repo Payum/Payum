@@ -8,7 +8,7 @@ use Payum\Core\GatewayFactory;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Paypal\Rest\PaypalRestGatewayFactory;
 
-class PaypalRestGatewayFactoryTest extends \PHPUnit_Framework_TestCase
+class PaypalRestGatewayFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -43,7 +43,7 @@ class PaypalRestGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
     {
-        $coreGatewayFactory = $this->getMock(GatewayFactoryInterface::class);
+        $coreGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
 
         $factory = new PaypalRestGatewayFactory([], $coreGatewayFactory);
 

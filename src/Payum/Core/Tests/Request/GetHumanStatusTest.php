@@ -3,8 +3,9 @@ namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\BaseGetStatus;
 use Payum\Core\Request\GetHumanStatus;
+use PHPUnit\Framework\TestCase;
 
-class GetHumanStatusTest extends \PHPUnit_Framework_TestCase
+class GetHumanStatusTest extends TestCase
 {
     public static function provideIsXXXMethods()
     {

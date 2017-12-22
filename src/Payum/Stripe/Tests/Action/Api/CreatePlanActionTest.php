@@ -7,7 +7,7 @@ use Payum\Stripe\Action\Api\CreatePlanAction;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreatePlan;
 
-class CreatePlanActionTest extends \PHPUnit_Framework_TestCase
+class CreatePlanActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

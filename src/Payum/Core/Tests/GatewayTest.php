@@ -13,8 +13,9 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\Base;
 use Payum\Core\Reply\ReplyInterface;
+use PHPUnit\Framework\TestCase;
 
-class GatewayTest extends \PHPUnit_Framework_TestCase
+class GatewayTest extends TestCase
 {
     /**
      * @test
@@ -333,7 +334,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
     {
         $gateway = new Gateway();
 
-        $actionMock = $this->getMock(GatewayAwareAction::class);
+        $actionMock = $this->createMock(GatewayAwareAction::class);
         $actionMock
             ->expects($this->at(0))
             ->method('setGateway')
@@ -922,7 +923,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
      */
     protected function createReplyMock()
     {
-        return $this->getMock(Base::class);
+        return $this->createMock(Base::class);
     }
 
     /**
@@ -930,7 +931,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
      */
     protected function createExtensionMock()
     {
-        return $this->getMock(ExtensionInterface::class);
+        return $this->createMock(ExtensionInterface::class);
     }
 
     /**
@@ -938,7 +939,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
      */
     protected function createActionMock()
     {
-        return $this->getMock(ActionInterface::class);
+        return $this->createMock(ActionInterface::class);
     }
 }
 

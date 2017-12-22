@@ -3,8 +3,9 @@ namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\BankAccount;
 use Payum\Core\Model\BankAccountInterface;
+use PHPUnit\Framework\TestCase;
 
-class BankAccountTest extends \PHPUnit_Framework_TestCase
+class BankAccountTest extends TestCase
 {
     /**
      * @test

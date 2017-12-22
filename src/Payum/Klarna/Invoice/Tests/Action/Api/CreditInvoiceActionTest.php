@@ -5,8 +5,9 @@ use Payum\Core\Tests\SkipOnPhp7Trait;
 use Payum\Klarna\Invoice\Action\Api\CreditInvoiceAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\CreditInvoice;
+use PHPUnit\Framework\TestCase;
 
-class CreditInvoiceActionTest extends \PHPUnit_Framework_TestCase
+class CreditInvoiceActionTest extends TestCase
 {
     use SkipOnPhp7Trait;
 
@@ -161,11 +162,11 @@ class CreditInvoiceActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock =  $this->getMock('Klarna', array('config', 'creditInvoice'));
+        $klarnaMock =  $this->createMock('Klarna', array('config', 'creditInvoice'));
 
         $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);
-        $rp->setValue($klarnaMock, $this->getMock('xmlrpc_client', array(), array(), '', false));
+        $rp->setValue($klarnaMock, $this->createMock('xmlrpc_client', array(), array(), '', false));
         $rp->setAccessible(false);
 
         return $klarnaMock;

@@ -6,9 +6,10 @@ use Payum\Core\Bridge\Symfony\ReplyToSymfonyResponseConverter;
 use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Reply\HttpResponse;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class ReplyToSymfonyResponseConverterTest extends \PHPUnit_Framework_TestCase
+class ReplyToSymfonyResponseConverterTest extends TestCase
 {
     /**
      * @test
@@ -118,7 +119,7 @@ class ReplyToSymfonyResponseConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldChangeReplyToLogicExceptionIfNotSupported()
     {
-        $notSupportedReply = $this->getMock('Payum\Core\Reply\Base');
+        $notSupportedReply = $this->createMock('Payum\Core\Reply\Base');
 
         $listener = new ReplyToSymfonyResponseConverter();
 

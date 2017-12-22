@@ -2,8 +2,9 @@
 namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
 use Payum\Klarna\Invoice\Request\Api\CancelReservation;
+use PHPUnit\Framework\TestCase;
 
-class CancelReservationTest extends \PHPUnit_Framework_TestCase
+class CancelReservationTest extends TestCase
 {
     /**
      * @test

@@ -5,7 +5,7 @@ use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Request\Capture;
 use Payum\Payex\Action\AutoPayPaymentDetailsCaptureAction;
 
-class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
+class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -131,6 +131,6 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\GatewayInterface');
+        return $this->createMock('Payum\Core\GatewayInterface');
     }
 }

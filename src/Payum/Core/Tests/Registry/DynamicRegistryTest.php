@@ -9,8 +9,9 @@ use Payum\Core\Registry\DynamicRegistry;
 use Payum\Core\Registry\GatewayFactoryRegistryInterface;
 use Payum\Core\Registry\RegistryInterface;
 use Payum\Core\Storage\StorageInterface;
+use PHPUnit\Framework\TestCase;
 
-class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
+class DynamicRegistryTest extends TestCase
 {
     /**
      * @test
@@ -105,7 +106,7 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
 
         $gateway = new Gateway();
 
-        $gatewayFactoryMock = $this->getMock(GatewayFactoryInterface::class);
+        $gatewayFactoryMock = $this->createMock(GatewayFactoryInterface::class);
         $gatewayFactoryMock
             ->expects($this->once())
             ->method('create')
@@ -154,7 +155,7 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
 
         $gateway = new Gateway();
 
-        $gatewayFactoryMock = $this->getMock(GatewayFactoryInterface::class);
+        $gatewayFactoryMock = $this->createMock(GatewayFactoryInterface::class);
         $gatewayFactoryMock
             ->expects($this->once())
             ->method('create')
@@ -202,7 +203,7 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
 
         $gateway = new Gateway();
 
-        $gatewayFactoryMock = $this->getMock(GatewayFactoryInterface::class);
+        $gatewayFactoryMock = $this->createMock(GatewayFactoryInterface::class);
         $gatewayFactoryMock
             ->expects($this->once())
             ->method('create')
@@ -243,7 +244,7 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
 
         $gateway = new Gateway();
 
-        $gatewayFactoryMock = $this->getMock(GatewayFactoryInterface::class);
+        $gatewayFactoryMock = $this->createMock(GatewayFactoryInterface::class);
         $gatewayFactoryMock
             ->expects($this->once())
             ->method('create')
@@ -507,7 +508,7 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
      */
     protected function createStorageMock()
     {
-        return $this->getMock(StorageInterface::class);
+        return $this->createMock(StorageInterface::class);
     }
 
     /**
@@ -515,7 +516,7 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
      */
     protected function createRegistryMock()
     {
-        return $this->getMock(RegistryInterface::class);
+        return $this->createMock(RegistryInterface::class);
     }
 
     /**
@@ -523,6 +524,6 @@ class DynamicRegistryTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayFactoryRegistryMock()
     {
-        return $this->getMock(GatewayFactoryRegistryInterface::class);
+        return $this->createMock(GatewayFactoryRegistryInterface::class);
     }
 }

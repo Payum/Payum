@@ -4,7 +4,7 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request\Api;
 use Payum\Core\Request\Generic;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
 
-class GetTransactionDetailsTest extends \PHPUnit_Framework_TestCase
+class GetTransactionDetailsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

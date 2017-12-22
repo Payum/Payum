@@ -18,8 +18,8 @@ class ConvertPayoutActionTest extends GenericActionTest
     {
         return array(
             array(new $this->requestClass(new Payout(), 'array')),
-            array(new $this->requestClass($this->getMock(PayoutInterface::class), 'array')),
-            array(new $this->requestClass(new Payout(), 'array', $this->getMock('Payum\Core\Security\TokenInterface'))),
+            array(new $this->requestClass($this->createMock(PayoutInterface::class), 'array')),
+            array(new $this->requestClass(new Payout(), 'array', $this->createMock('Payum\Core\Security\TokenInterface'))),
         );
     }
 
@@ -32,7 +32,7 @@ class ConvertPayoutActionTest extends GenericActionTest
             array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
             array(new $this->requestClass(new \stdClass(), 'array')),
             array(new $this->requestClass(new Payout(), 'foobar')),
-            array(new $this->requestClass($this->getMock(PayoutInterface::class), 'foobar')),
+            array(new $this->requestClass($this->createMock(PayoutInterface::class), 'foobar')),
         );
     }
 

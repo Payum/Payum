@@ -4,8 +4,9 @@ namespace Payum\Core\Tests\Request;
 use Payum\Core\Request\BaseGetStatus;
 use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetStatusInterface;
+use PHPUnit\Framework\TestCase;
 
-class BaseGetStatusTest extends \PHPUnit_Framework_TestCase
+class BaseGetStatusTest extends TestCase
 {
     /**
      * @test

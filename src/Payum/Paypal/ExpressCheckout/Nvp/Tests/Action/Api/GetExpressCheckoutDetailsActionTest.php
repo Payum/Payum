@@ -6,7 +6,7 @@ use Payum\Core\ApiAwareInterface;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetails;
 
-class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
+class GetExpressCheckoutDetailsActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -44,7 +44,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
         $action = new GetExpressCheckoutDetailsAction();
 
         $this->assertTrue(
-            $action->supports(new GetExpressCheckoutDetails($this->getMock('ArrayAccess')))
+            $action->supports(new GetExpressCheckoutDetails($this->createMock('ArrayAccess')))
         );
     }
 
@@ -154,6 +154,6 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createApiMock()
     {
-        return $this->getMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
     }
 }

@@ -22,7 +22,7 @@ class GetTokenActionTest extends GenericActionTest
 
     protected function setUp()
     {
-        $this->action = new $this->actionClass($this->getMock(StorageInterface::class));
+        $this->action = new $this->actionClass($this->createMock(StorageInterface::class));
     }
 
     /**
@@ -56,9 +56,9 @@ class GetTokenActionTest extends GenericActionTest
     public function shouldSetFoundToken()
     {
         $hash = 'theHash';
-        $token = $this->getMock(TokenInterface::class);
+        $token = $this->createMock(TokenInterface::class);
 
-        $tokenStorage = $this->getMock(StorageInterface::class);
+        $tokenStorage = $this->createMock(StorageInterface::class);
         $tokenStorage
             ->expects($this->once())
             ->method('find')
@@ -85,7 +85,7 @@ class GetTokenActionTest extends GenericActionTest
     {
         $hash = 'theHash';
 
-        $tokenStorage = $this->getMock(StorageInterface::class);
+        $tokenStorage = $this->createMock(StorageInterface::class);
         $tokenStorage
             ->expects($this->once())
             ->method('find')

@@ -7,7 +7,7 @@ use Payum\Core\Reply\HttpRedirect;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\AuthorizeTokenAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken;
 
-class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
+class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -44,7 +44,7 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new AuthorizeTokenAction();
 
-        $this->assertTrue($action->supports(new AuthorizeToken($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new AuthorizeToken($this->createMock('ArrayAccess'))));
     }
 
     /**
@@ -215,6 +215,6 @@ class AuthorizeTokenActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createApiMock()
     {
-        return $this->getMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
     }
 }

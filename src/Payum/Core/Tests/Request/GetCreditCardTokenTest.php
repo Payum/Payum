@@ -3,8 +3,9 @@ namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetCreditCardToken;
+use PHPUnit\Framework\TestCase;
 
-class GetCreditCardTokenTest extends \PHPUnit_Framework_TestCase
+class GetCreditCardTokenTest extends TestCase
 {
     /**
      * @test

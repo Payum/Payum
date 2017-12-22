@@ -10,7 +10,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoCapture;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
 
-class DoCaptureActionTest extends \PHPUnit_Framework_TestCase
+class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -230,7 +230,7 @@ class DoCaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createApiMock()
     {
-        return $this->getMock(Api::class, [], [], '', false);
+        return $this->createMock(Api::class, [], [], '', false);
     }
 
     /**
@@ -238,6 +238,6 @@ class DoCaptureActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->getMock(GatewayInterface::class);
+        return $this->createMock(GatewayInterface::class);
     }
 }

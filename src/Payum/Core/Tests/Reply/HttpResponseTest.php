@@ -2,8 +2,9 @@
 namespace Payum\Core\Tests\Request\Http;
 
 use Payum\Core\Reply\HttpResponse;
+use PHPUnit\Framework\TestCase;
 
-class HttpResponseTest extends \PHPUnit_Framework_TestCase
+class HttpResponseTest extends TestCase
 {
     /**
      * @test

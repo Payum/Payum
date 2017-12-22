@@ -3,8 +3,9 @@ namespace Payum\Core\Tests\Bridge\Spl;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Security\SensitiveValue;
+use PHPUnit\Framework\TestCase;
 
-class ArrayObjectTest extends \PHPUnit_Framework_TestCase
+class ArrayObjectTest extends TestCase
 {
     /**
      * @test

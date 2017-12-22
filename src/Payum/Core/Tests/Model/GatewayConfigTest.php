@@ -5,8 +5,9 @@ use Payum\Core\Model\GatewayConfig;
 use Payum\Core\Model\GatewayConfigInterface;
 use Payum\Core\Security\CryptedInterface;
 use Payum\Core\Security\CypherInterface;
+use PHPUnit\Framework\TestCase;
 
-class GatewayConfigTest extends \PHPUnit_Framework_TestCase
+class GatewayConfigTest extends TestCase
 {
     /**
      * @test
@@ -170,7 +171,7 @@ class GatewayConfigTest extends \PHPUnit_Framework_TestCase
      */
     private function createDummyCypher()
     {
-        $mock = $this->getMock(CypherInterface::class);
+        $mock = $this->createMock(CypherInterface::class);
 
         $mock
             ->expects($this->any())

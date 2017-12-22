@@ -534,7 +534,7 @@ class CaptureActionTest extends GenericActionTest
         $notifyToken = new Token();
         $notifyToken->setTargetUrl('theNotifyUrl');
 
-        $tokenFactoryMock = $this->getMock(GenericTokenFactoryInterface::class);
+        $tokenFactoryMock = $this->createMock(GenericTokenFactoryInterface::class);
         $tokenFactoryMock
             ->expects($this->once())
             ->method('createNotifyToken')
@@ -571,7 +571,7 @@ class CaptureActionTest extends GenericActionTest
         $captureToken->setGatewayName('theGatewayName');
         $captureToken->setDetails($details);
 
-        $tokenFactoryMock = $this->getMock(GenericTokenFactoryInterface::class);
+        $tokenFactoryMock = $this->createMock(GenericTokenFactoryInterface::class);
         $tokenFactoryMock
             ->expects($this->never())
             ->method('createNotifyToken')
@@ -603,7 +603,7 @@ class CaptureActionTest extends GenericActionTest
         $captureToken->setGatewayName('theGatewayName');
         $captureToken->setDetails($details);
 
-        $tokenFactoryMock = $this->getMock(GenericTokenFactoryInterface::class);
+        $tokenFactoryMock = $this->createMock(GenericTokenFactoryInterface::class);
         $tokenFactoryMock
             ->expects($this->never())
             ->method('createNotifyToken')
@@ -651,7 +651,7 @@ class CaptureActionTest extends GenericActionTest
     {
         $details = new \ArrayObject();
 
-        $tokenFactoryMock = $this->getMock(GenericTokenFactoryInterface::class);
+        $tokenFactoryMock = $this->createMock(GenericTokenFactoryInterface::class);
         $tokenFactoryMock
             ->expects($this->never())
             ->method('createNotifyToken')
@@ -673,6 +673,6 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createGatewayMock()
     {
-        return $this->getMock(GatewayInterface::class);
+        return $this->createMock(GatewayInterface::class);
     }
 }

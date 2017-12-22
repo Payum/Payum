@@ -5,7 +5,7 @@ use Payum\Payex\Action\Api\StartRecurringPaymentAction;
 use Payum\Payex\Api\RecurringApi;
 use Payum\Payex\Request\Api\StartRecurringPayment;
 
-class StartRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
+class StartRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
 {
     protected $requiredFields = array(
         'agreementRef' => 'aRef',
@@ -63,7 +63,7 @@ class StartRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowSetRecurringApiAsApi()
     {
-        $recurringApi = $this->getMock('Payum\Payex\Api\RecurringApi', array(), array(), '', false);
+        $recurringApi = $this->createMock('Payum\Payex\Api\RecurringApi', array(), array(), '', false);
 
         $action = new StartRecurringPaymentAction();
 
@@ -92,7 +92,7 @@ class StartRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
     {
         $action = new StartRecurringPaymentAction();
 
-        $this->assertTrue($action->supports(new StartRecurringPayment($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new StartRecurringPayment($this->createMock('ArrayAccess'))));
     }
 
     /**
@@ -173,6 +173,6 @@ class StartRecurringPaymentActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createApiMock()
     {
-        return $this->getMock('Payum\Payex\Api\RecurringApi', array(), array(), '', false);
+        return $this->createMock('Payum\Payex\Api\RecurringApi', array(), array(), '', false);
     }
 }

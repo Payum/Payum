@@ -2,8 +2,9 @@
 namespace Payum\Klarna\Invoice\Tests;
 
 use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
+use PHPUnit\Framework\TestCase;
 
-class KlarnaInvoiceGatewayFactoryTest extends \PHPUnit_Framework_TestCase
+class KlarnaInvoiceGatewayFactoryTest extends TestCase
 {
     /**
      * @test
@@ -38,7 +39,7 @@ class KlarnaInvoiceGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
     {
-        $coreGatewayFactory = $this->getMock('Payum\Core\GatewayFactoryInterface');
+        $coreGatewayFactory = $this->createMock('Payum\Core\GatewayFactoryInterface');
 
         $factory = new KlarnaInvoiceGatewayFactory(array(), $coreGatewayFactory);
 

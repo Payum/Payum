@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
-class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
+class BaseApiAwareActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -64,6 +64,6 @@ class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createApiMock()
     {
-        return $this->getMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
     }
 }

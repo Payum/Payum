@@ -2,8 +2,9 @@
 namespace Payum\Core\Tests;
 
 use Payum\Core\GatewayFactory;
+use PHPUnit\Framework\TestCase;
 
-class GatewayFactoryTest extends \PHPUnit_Framework_TestCase
+class GatewayFactoryTest extends TestCase
 {
     /**
      * @test
@@ -38,7 +39,7 @@ class GatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
     {
-        $coreGatewayFactory = $this->getMock('Payum\Core\CoreGatewayFactory');
+        $coreGatewayFactory = $this->createMock('Payum\Core\CoreGatewayFactory');
 
         $factory = new GatewayFactory(array(), $coreGatewayFactory);
 

@@ -3,7 +3,7 @@ namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
 use Payum\Klarna\Invoice\Request\Api\ReturnAmount;
 
-class ReturnAmountTest extends \PHPUnit_Framework_TestCase
+class ReturnAmountTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

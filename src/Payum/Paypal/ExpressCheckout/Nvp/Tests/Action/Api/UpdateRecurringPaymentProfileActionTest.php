@@ -6,7 +6,7 @@ use Payum\Core\ApiAwareInterface;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\UpdateRecurringPaymentProfileAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\UpdateRecurringPaymentProfile;
 
-class UpdateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCase
+class UpdateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -43,7 +43,7 @@ class UpdateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
     {
         $action = new UpdateRecurringPaymentProfileAction();
 
-        $this->assertTrue($action->supports(new UpdateRecurringPaymentProfile($this->getMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new UpdateRecurringPaymentProfile($this->createMock('ArrayAccess'))));
     }
 
     /**
@@ -149,6 +149,6 @@ class UpdateRecurringPaymentProfileActionTest extends \PHPUnit_Framework_TestCas
      */
     protected function createApiMock()
     {
-        return $this->getMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
     }
 }

@@ -4,10 +4,11 @@ namespace Payum\Core\Tests\Bridge\Symfony\Action\Http;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Symfony\Action\GetHttpRequestAction;
 use Payum\Core\Request\GetHttpRequest;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class GetHttpRequestActionTest extends \PHPUnit_Framework_TestCase
+class GetHttpRequestActionTest extends TestCase
 {
     /**
      * @test

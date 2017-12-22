@@ -3,8 +3,9 @@ namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\Convert;
 use Payum\Core\Security\TokenInterface;
+use PHPUnit\Framework\TestCase;
 
-class ConvertTest extends \PHPUnit_Framework_TestCase
+class ConvertTest extends TestCase
 {
     /**
      * @test
@@ -24,7 +25,7 @@ class ConvertTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithSourceModelAndToAndOptionnalToken()
     {
-        $request = new Convert($source = new \stdClass(), $to = 'array', $token = $this->getMock(TokenInterface::class));
+        $request = new Convert($source = new \stdClass(), $to = 'array', $token = $this->createMock(TokenInterface::class));
 
         $this->assertSame($source, $request->getSource());
         $this->assertSame($to, $request->getTo());

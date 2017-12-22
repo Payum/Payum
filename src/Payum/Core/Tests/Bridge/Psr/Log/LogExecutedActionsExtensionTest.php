@@ -8,9 +8,10 @@ use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Reply\HttpRedirect;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
+class LogExecutedActionsExtensionTest extends TestCase
 {
     /**
      * @test
@@ -344,7 +345,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createLoggerMock()
     {
-        return $this->getMock('Psr\Log\LoggerInterface');
+        return $this->createMock('Psr\Log\LoggerInterface');
     }
 
     /**
@@ -352,7 +353,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createReplyMock()
     {
-        return $this->getMock('Payum\Core\Reply\ReplyInterface');
+        return $this->createMock('Payum\Core\Reply\ReplyInterface');
     }
 
     /**
@@ -360,7 +361,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createActionMock()
     {
-        return $this->getMock('Payum\Core\Action\ActionInterface');
+        return $this->createMock('Payum\Core\Action\ActionInterface');
     }
 
     /**
@@ -368,7 +369,7 @@ class LogExecutedActionsExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\GatewayInterface');
+        return $this->createMock('Payum\Core\GatewayInterface');
     }
 }
 

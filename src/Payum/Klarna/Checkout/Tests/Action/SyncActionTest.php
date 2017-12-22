@@ -80,7 +80,7 @@ class SyncActionTest extends GenericActionTest
      */
     public function shouldSubExecuteFetchOrderRequestIfModelHasLocationSet()
     {
-        $orderMock = $this->getMock('Klarna_Checkout_Order', array('marshal'), array(), '', false);
+        $orderMock = $this->createMock('Klarna_Checkout_Order', array('marshal'), array(), '', false);
         $orderMock
             ->expects($this->once())
             ->method('marshal')
@@ -138,7 +138,7 @@ class SyncActionTest extends GenericActionTest
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\Core\GatewayInterface');
+        return $this->createMock('Payum\Core\GatewayInterface');
     }
 
     /**
@@ -146,6 +146,6 @@ class SyncActionTest extends GenericActionTest
      */
     protected function createOrderMock()
     {
-        return $this->getMock('Klarna_Checkout_Order', array(), array(), '', false);
+        return $this->createMock('Klarna_Checkout_Order', array(), array(), '', false);
     }
 }

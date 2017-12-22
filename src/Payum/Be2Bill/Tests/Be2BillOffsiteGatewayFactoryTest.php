@@ -8,8 +8,9 @@ use Payum\Core\CoreGatewayFactory;
 use Payum\Core\GatewayFactory;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\Storage\StorageInterface;
+use PHPUnit\Framework\TestCase;
 
-class Be2billOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
+class Be2billOffsiteGatewayFactoryTest extends TestCase
 {
     /**
      * @test
@@ -44,7 +45,7 @@ class Be2billOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
     {
-        $coreGatewayFactory = $this->getMock(GatewayFactoryInterface::class);
+        $coreGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
 
         $factory = new Be2BillOffsiteGatewayFactory(array(), $coreGatewayFactory);
 
