@@ -103,8 +103,8 @@
     },
     "repositories": [
         {
-            "type": "vcs",
-            "url": "https://github.com/guzzle/guzzle3.git"
+            "type": "git",
+            "url": "https://github.com/formapro-forks/guzzle3.git"
         }
     ]
 }
