@@ -13,6 +13,7 @@ The service must implement `Payum\Core\GatewayInterface`.
 services:
     acme.foo_gateway:
         class: Payum\Core\Gateway
+        public: true
         tags:
             - { name: payum.gateway, gateway: foo }
 ```
@@ -34,6 +35,7 @@ The service must implement `Payum\Core\Action\ActionInterface`.
 services:
     acme.foo_action:
         class: Payum\Core\Action\ActionInterface
+        public: true
         tags:
             - { name: payum.action, factory: foo, gateway: bar, all: true, alias: foo, prepend: false }
 ```
@@ -59,8 +61,9 @@ The service could be any object.
 # app/config/config.yml
 
 services:
-    acme.foo_extension:
-        class: Payum\Core\Extension\ExtensionInterface
+    acme.foo_api:
+        class: Acme\Payum\FooApi
+        public: true
         tags:
             - { name: payum.api, factory: foo, gateway: bar, all: true, alias: foo, prepend: false }
 ```
@@ -88,6 +91,7 @@ The service must implement `Payum\Core\Extension\ExtensionInterface`.
 services:
     acme.foo_extension:
         class: Payum\Core\Extension\ExtensionInterface
+        public: true
         tags:
             - { name: payum.extension, factory: foo, gateway: bar, all: true, alias: foo, prepend: false }
 ```
@@ -115,6 +119,7 @@ The service must implement `Payum\Core\GatewayFactoryInterface`.
 services:
     acme.foo_gateway_factory:
         class: Payum\Core\GatewayFactory
+        public: true
         tags:
             - { name: payum.gateway_factory, factory: foo }
 ```
