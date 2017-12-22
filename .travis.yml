@@ -17,7 +17,6 @@ matrix:
       env: SYMFONY_VERSION=v3
     - php: 7.2
       env: SYMFONY_VERSION=v3
-
     - php: 7.1
       env: SYMFONY_VERSION=v4
     - php: 7.2
@@ -28,10 +27,6 @@ before_install:
 
 install:
     - composer require dunglas/symfony-lock::${SYMFONY_VERSION} --no-update
-
-install:
-    - if [[ "$SYMFONY_VERSION" = "3.0.*" ]]; then composer remove payum/omnipay-bridge omnipay/common omnipay/dummy omnipay/stripe omnipay/paypal --no-interaction; fi;
-    - composer require symfony/symfony:${SYMFONY_VERSION} --no-update
     - composer install --prefer-source
 
 script:

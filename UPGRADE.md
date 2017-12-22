@@ -4,7 +4,9 @@
 
 * Dropped PHP 5.x support
 * Dropped Symfony 2.x support
-
+* Dropped Omnipay v2 support, Added v3 though
+* Updated league/uri from 4 to v5
+* Updated phpunit
 
 ## 1.3.0
 

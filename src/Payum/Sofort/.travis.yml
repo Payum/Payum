@@ -11,29 +11,22 @@ cache:
 
 matrix:
   include:
-    - php: 5.5
-      env: SYMFONY_VERSION=2.8.*
-    - php: 5.6
-      env: SYMFONY_VERSION=2.8.*
     - php: 7.0
-      env: SYMFONY_VERSION=2.8.*
-    - php: 5.5
-      env: SYMFONY_VERSION=3.0.*
-    - php: 5.6
-      env: SYMFONY_VERSION=3.0.*
-    - php: 7.0
-      env: SYMFONY_VERSION=3.0.*
-    - php: hhvm
-      env: SYMFONY_VERSION=2.8.*
-  allow_failures:
-    - php: hhvm
+      env: SYMFONY_VERSION=v3
+    - php: 7.1
+      env: SYMFONY_VERSION=v3
+    - php: 7.2
+      env: SYMFONY_VERSION=v3
+    - php: 7.1
+      env: SYMFONY_VERSION=v4
+    - php: 7.2
+      env: SYMFONY_VERSION=v4
 
 before_install:
     - composer self-update
-    - if [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]]; then INI_FILE=~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini; else INI_FILE=/etc/hhvm/php.ini; fi;
 
 install:
-    - composer require symfony/symfony:${SYMFONY_VERSION} --no-update
+    - composer require dunglas/symfony-lock::${SYMFONY_VERSION} --no-update
     - composer require "php-http/guzzle6-adapter:^1.0" --no-update
     - composer install --prefer-source
 
