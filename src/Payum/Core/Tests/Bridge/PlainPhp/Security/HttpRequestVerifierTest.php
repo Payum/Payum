@@ -130,6 +130,32 @@ class HttpRequestVerifierTest extends TestCase
     /**
      * @test
      */
+    public function shouldReturnExpectedTokenIfAllEncodedCheckPassedOnVerify()
+    {
+        $_SERVER['REQUEST_URI'] = 'http://target.com/%5FSsYp0j9YWCZfC0qpxCK58s0kaSBXVTYVDecuCqo6%5Fw';
+
+        $expectedToken = new Token();
+        $expectedToken->setHash('theHash');
+        $expectedToken->setTargetUrl('http://target.com/_SsYp0j9YWCZfC0qpxCK58s0kaSBXVTYVDecuCqo6_w');
+
+        $storageMock = $this->createStorageMock();
+        $storageMock
+            ->expects($this->once())
+            ->method('find')
+            ->with('theHash')
+            ->will($this->returnValue($expectedToken))
+        ;
+
+        $verifier = new HttpRequestVerifier($storageMock);
+
+        $actualToken = $verifier->verify(array('payum_token' => 'theHash'));
+
+        $this->assertSame($expectedToken, $actualToken);
+    }
+
+    /**
+     * @test
+     */
     public function shouldReturnTokenObjectSetToRequestGlobalArrayWithoutChecks()
     {
         $expectedToken = new Token();
