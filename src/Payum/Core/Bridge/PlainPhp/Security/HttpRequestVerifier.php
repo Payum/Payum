@@ -51,7 +51,7 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
         }
 
         /** @var $token TokenInterface */
-        if (RequestTokenVerifier::isValid($_SERVER['REQUEST_URI'], $token->getTargetUrl())) {
+        if (!RequestTokenVerifier::isValid($_SERVER['REQUEST_URI'], $token->getTargetUrl())) {
             throw new InvalidArgumentException(sprintf('The current url %s not match target url %s set in the token.', $_SERVER['REQUEST_URI'], $token->getTargetUrl()));
         }
 
