@@ -189,6 +189,31 @@ class HttpRequestVerifierTest extends TestCase
     /**
      * @test
      */
+    public function shouldReturnExpectedTokenIfTokenSetToEncodedRequestAttribute()
+    {
+        $expectedToken = new Token();
+        $expectedToken->setHash('theHash');
+        $expectedToken->setTargetUrl('http://target.com/_SsYp0j9YWCZfC0qpxCK58s0kaSBXVTYVDecuCqo6_w');
+
+        $storageMock = $this->createStorageMock();
+        $storageMock
+            ->expects($this->never())
+            ->method('find')
+        ;
+
+        $request = Request::create('http://target.com/%5FSsYp0j9YWCZfC0qpxCK58s0kaSBXVTYVDecuCqo6%5Fw');
+        $request->query->set('payum_token', $expectedToken);
+
+        $verifier = new HttpRequestVerifier($storageMock);
+
+        $actualToken = $verifier->verify($request);
+
+        $this->assertSame($expectedToken, $actualToken);
+    }
+
+    /**
+     * @test
+     */
     public function shouldNotMatchUriIfTokenSetToRequestAttribute()
     {
         $expectedToken = new Token();

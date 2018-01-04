@@ -4,6 +4,7 @@ namespace Payum\Core\Bridge\PlainPhp\Security;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Security\TokenInterface;
+use Payum\Core\Security\Util\RequestTokenVerifier;
 use Payum\Core\Storage\StorageInterface;
 
 class HttpRequestVerifier implements HttpRequestVerifierInterface
@@ -50,8 +51,7 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
         }
 
         /** @var $token TokenInterface */
-
-        if (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) != parse_url($token->getTargetUrl(), PHP_URL_PATH)) {
+        if (!RequestTokenVerifier::isValid($_SERVER['REQUEST_URI'], $token->getTargetUrl())) {
             throw new InvalidArgumentException(sprintf('The current url %s not match target url %s set in the token.', $_SERVER['REQUEST_URI'], $token->getTargetUrl()));
         }
 
