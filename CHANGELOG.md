@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.5.0 (2018-01-09)
+
+* add tests for encoded requests
+* add RequestTokenVerifier, use league uri to check urls
+* require league/uri 5 in core too
+* add support of omnipay v3
+* Upgrade phpunit
+* removed PHP 5.5/5.6 support
+* Change community gateway for Braintree
+* Some docs improvements
+* Removed unused use referencing Sonata Admin Bundle
+* [stripe] add create subscription action.
+* [be2bill] add support of 3dSecure.
+* [payex] remove doctrine from deps
+* [payex] upd test wsdl link
+* [offline] added refund and payout actions to offline gateway
+
 ## 1.4.3 (2017-09-01)
 * [bridge][omnipay-v3] make compatible with OmnipayV3Bridge
 
