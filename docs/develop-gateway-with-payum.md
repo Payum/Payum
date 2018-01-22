@@ -31,6 +31,14 @@ $payum = (new PayumBuilder)
     ->getPayum()
 ;
 ```
+Or, if your are working on the bases of Symfony, you can define it in a service that way :
+```yml
+    acme.paypal_gateway_factory:
+        class: Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder
+        arguments: [Acme\Paypal\PaypalGatewayFactory]
+        tags:
+            - { name: payum.gateway_factory_builder, factory: paypal }
+```
 
 5. While using the gateway implement all method where you get `Not implemented` exception:
 
