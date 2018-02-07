@@ -401,6 +401,23 @@ class Api
     }
 
     /**
+     * Require: STARTDATE
+     *
+     * @param array $fields
+     *
+     * @return array
+     */
+    public function transactionSearch(array $fields)
+    {
+        $fields['METHOD'] = 'TransactionSearch';
+
+        $this->addVersionField($fields);
+        $this->addAuthorizeFields($fields);
+
+        return $this->doRequest($fields);
+    }
+
+    /**
      * Require: PAYMENTREQUEST_0_AMT, PAYMENTREQUEST_0_PAYMENTACTION, PAYERID, TOKEN
      *
      * @param array $fields
