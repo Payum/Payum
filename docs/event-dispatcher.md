@@ -49,6 +49,7 @@ If you use Symfony Full-Stack Framework and the PayumBundle you can add the Even
 services:
     app.payum.extension.event_dispatcher:
         class: Payum\Core\Bridge\Symfony\Extension\EventDispatcherExtension
+        public: true
         arguments: ["@event_dispatcher"]
         tags:
             - { name: payum.extension, all: true, prepend: false }
