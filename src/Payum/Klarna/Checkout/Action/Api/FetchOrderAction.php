@@ -24,7 +24,8 @@ class FetchOrderAction extends BaseApiAwareAction
         }
 
         $this->callWithRetry(function () use ($model, $request) {
-            $order = new \Klarna_Checkout_Order($this->getConnector(), $model['location']);
+            $order = $this->getOrder($this->getConnector());
+            $order->setLocation($model['location']);
             $order->fetch();
 
             $request->setOrder($order);

@@ -21,7 +21,7 @@ class CreateOrderAction extends BaseApiAwareAction
         $this->addMerchantId($model);
 
         $this->callWithRetry(function () use ($model, $request) {
-            $order = new \Klarna_Checkout_Order($this->getConnector());
+            $order = $this->getOrder($this->getConnector());
             $order->create($model->toUnsafeArray());
 
             $request->setOrder($order);

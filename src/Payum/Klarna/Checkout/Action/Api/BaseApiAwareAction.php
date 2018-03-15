@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Action\Api;
 
 use Payum\Core\Action\ActionInterface;
@@ -51,13 +52,24 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
             return $this->connector;
         }
 
-        \Klarna_Checkout_Order::$contentType = $this->config->contentType;
-        \Klarna_Checkout_Order::$baseUri = $this->config->baseUri;
+        return \Klarna_Checkout_Connector::create($this->config->secret);
+    }
+
+    /**
+     * @param \Klarna_Checkout_ConnectorInterface $connector
+     *
+     * @return \Klarna_Checkout_Order
+     */
+    protected function getOrder(\Klarna_Checkout_ConnectorInterface $connector): \Klarna_Checkout_Order
+    {
+        $klarnaCheckoutOrder = new \Klarna_Checkout_Order($connector);
+        $klarnaCheckoutOrder->setContentType($this->config->contentType);
+        $klarnaCheckoutOrder->setLocation($this->config->baseUri);
         if (property_exists('Klarna_Checkout_Order', 'accept')) {
-            \Klarna_Checkout_Order::$accept = $this->config->acceptHeader;
+            $klarnaCheckoutOrder->setAccept($this->config->acceptHeader);
         }
 
-        return \Klarna_Checkout_Connector::create($this->config->secret);
+        return $klarnaCheckoutOrder;
     }
 
     /**
@@ -79,7 +91,7 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
 
     /**
      * @param \Closure $function
-     * @param int $maxRetry
+     * @param int      $maxRetry
      *
      * @throws \Klarna_Checkout_ConnectionErrorException
      *
