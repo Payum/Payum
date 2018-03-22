@@ -1,13 +1,14 @@
 <?php
 namespace Payum\Klarna\Checkout\Request\Api;
 
+use Klarna\Rest\Checkout\Order;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Request\Generic;
 
 abstract class BaseOrder extends Generic
 {
     /**
-     * @var \Klarna_Checkout_Order
+     * @var Order
      */
     protected $order;
 
@@ -21,7 +22,7 @@ abstract class BaseOrder extends Generic
     }
 
     /**
-     * @return \Klarna_Checkout_Order
+     * @return Order
      */
     public function getOrder()
     {
@@ -29,9 +30,9 @@ abstract class BaseOrder extends Generic
     }
 
     /**
-     * @param \Klarna_Checkout_Order $order
+     * @param Order $order
      */
-    public function setOrder(\Klarna_Checkout_Order $order)
+    public function setOrder(Order $order)
     {
         $this->order = $order;
     }

@@ -18,8 +18,6 @@ class CreateOrderAction extends BaseApiAwareAction
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $this->addMerchantId($model);
-
         $this->callWithRetry(function () use ($model, $request) {
             $order = $this->getOrder($this->getConnector());
             $order->create($model->toUnsafeArray());

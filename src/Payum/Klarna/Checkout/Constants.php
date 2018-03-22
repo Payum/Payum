@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Klarna\Checkout;
 
 final class Constants
@@ -13,9 +14,9 @@ final class Constants
 
     const GUI_LAYOUT_MOBILE = 'mobile';
 
-    const BASE_URI_LIVE = 'https://api.klarna.com/checkout/v3/orders';
+    const BASE_URI_LIVE = 'https://api.klarna.com';
 
-    const BASE_URI_SANDBOX = 'https://api.playground.klarna.com/checkout/v3/orders';
+    const BASE_URI_SANDBOX = 'https://api.playground.klarna.com';
 
     const BASE_URI_RECURRING_SANDBOX = 'https://checkout.testdrive.klarna.com/checkout/recurring/{recurring_token}/orders';
 

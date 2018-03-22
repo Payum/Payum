@@ -26,7 +26,7 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface, Generic
     use ApiAwareTrait;
     use GatewayAwareTrait;
     use GenericTokenFactoryAwareTrait;
-    
+
     /**
      * @var string
      */
@@ -52,37 +52,37 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface, Generic
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $merchant = ArrayObject::ensureArrayObject($model['merchant'] ?: []);
+        $merchantUrls = ArrayObject::ensureArrayObject($model['merchant_urls'] ?: []);
 
-        if (false == $merchant['checkout_uri'] && $this->api->checkoutUri) {
-            $merchant['checkout_uri'] = $this->api->checkoutUri;
+        if (false == $merchantUrls['checkout'] && $this->api->checkoutUri) {
+            $merchantUrls['checkout'] = $this->api->checkoutUri;
         }
 
-        if (false == $merchant['terms_uri'] && $this->api->termsUri) {
-            $merchant['terms_uri'] = $this->api->termsUri;
+        if (false == $merchantUrls['terms'] && $this->api->termsUri) {
+            $merchantUrls['terms'] = $this->api->termsUri;
         }
 
-        if (false == $merchant['confirmation_uri'] && $request->getToken()) {
-            $merchant['confirmation_uri'] = $request->getToken()->getTargetUrl();
+        if (false == $merchantUrls['confirmation'] && $request->getToken()) {
+            $merchantUrls['confirmation'] = $request->getToken()->getTargetUrl();
         }
 
-        if (empty($merchant['push_uri']) && $request->getToken() && $this->tokenFactory) {
+        if (empty($merchantUrls['push']) && $request->getToken() && $this->tokenFactory) {
             $notifyToken = $this->tokenFactory->createNotifyToken(
                 $request->getToken()->getGatewayName(),
                 $request->getToken()->getDetails()
             );
 
-            $merchant['push_uri'] = $notifyToken->getTargetUrl();
+            $merchantUrls['push'] = $notifyToken->getTargetUrl();
         }
 
-        $merchant->validateNotEmpty(['checkout_uri', 'terms_uri', 'confirmation_uri', 'push_uri']);
-        $model['merchant'] = (array) $merchant;
+        $merchantUrls->validateNotEmpty(['checkout', 'terms', 'confirmation', 'push']);
+        $model['merchant_urls'] = (array) $merchantUrls;
 
         if (false == $model['location']) {
             $createOrderRequest = new CreateOrder($model);
             $this->gateway->execute($createOrderRequest);
 
-            $model->replace($createOrderRequest->getOrder()->marshal());
+            $model->replace($createOrderRequest->getOrder());
             $model['location'] = $createOrderRequest->getOrder()->getLocation();
         }
 
@@ -90,7 +90,7 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface, Generic
 
         if (Constants::STATUS_CHECKOUT_INCOMPLETE == $model['status']) {
             $renderTemplate = new RenderTemplate($this->templateName, array(
-                'snippet' => isset($model['gui']['snippet']) ? $model['gui']['snippet'] : null,
+                'snippet' => $model['html_snippet'],
             ));
             $this->gateway->execute($renderTemplate);
 

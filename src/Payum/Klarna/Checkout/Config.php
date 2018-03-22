@@ -21,16 +21,6 @@ class Config
     /**
      * @var string
      */
-    public $contentType = Constants::CONTENT_TYPE_AGGREGATED_ORDER_V2;
-
-    /**
-     * @var string
-     */
-    public $acceptHeader;
-
-    /**
-     * @var string
-     */
     public $termsUri;
 
     /**

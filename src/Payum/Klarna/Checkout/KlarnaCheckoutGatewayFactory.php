@@ -20,15 +20,14 @@ class KlarnaCheckoutGatewayFactory extends GatewayFactory
      */
     protected function populateConfig(ArrayObject $config)
     {
-        if (!class_exists('Klarna_Checkout_Order')) {
-            throw new \LogicException('You must install "klarna/checkout" library.');
+        if (!class_exists('Klarna\Rest\Checkout\Order')) {
+            throw new \LogicException('You must install "klarna/kco_rest" library.');
         }
 
         $config->defaults(array(
             'payum.factory_name' => 'klarna_checkout',
             'payum.factory_title' => 'Klarna Checkout',
             'payum.template.authorize' => '@PayumKlarnaCheckout/Action/capture.html.twig',
-            'contentType' => Constants::CONTENT_TYPE_AGGREGATED_ORDER_V2,
             'sandbox' => true,
         ));
 
@@ -65,9 +64,8 @@ class KlarnaCheckoutGatewayFactory extends GatewayFactory
                 $klarnaConfig = new Config();
                 $klarnaConfig->merchantId = $config['merchant_id'];
                 $klarnaConfig->secret = $config['secret'];
-                $klarnaConfig->contentType = $config['contentType'];
-                $klarnaConfig->termsUri = $config['termsUri'] ?: $config['terms_uri'];
-                $klarnaConfig->checkoutUri = $config['checkoutUri'] ?: $config['checkout_uri'];
+                $klarnaConfig->termsUri = $config['terms'];
+                $klarnaConfig->checkoutUri = $config['checkout'];
                 $klarnaConfig->baseUri = $config['sandbox'] ?
                     Constants::BASE_URI_SANDBOX :
                     Constants::BASE_URI_LIVE

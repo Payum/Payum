@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -27,7 +28,7 @@ class SyncAction implements ActionInterface, GatewayAwareInterface
         if ($model['location']) {
             $this->gateway->execute($fetchOrder = new FetchOrder($model));
 
-            $model->replace($fetchOrder->getOrder()->marshal());
+            $model->replace($fetchOrder->getOrder());
         }
     }
 
@@ -38,7 +39,6 @@ class SyncAction implements ActionInterface, GatewayAwareInterface
     {
         return
             $request instanceof Sync &&
-            $request->getModel() instanceof \ArrayAccess
-        ;
+            $request->getModel() instanceof \ArrayAccess;
     }
 }
