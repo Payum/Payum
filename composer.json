@@ -90,6 +90,9 @@
         "payum/stripe": "self.version",
         "payum/sofort": "self.version"
     },
+    "conflict": {
+        "league/uri-components": "<1.7.1"
+    },
     "config": {
         "bin-dir": "bin"
     },
