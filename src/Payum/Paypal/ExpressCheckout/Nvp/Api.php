@@ -302,6 +302,7 @@ class Api
         'username' => null,
         'password' => null,
         'signature' => null,
+        'subject' => null,
         'return_url' => null,
         'cancel_url' => null,
         'sandbox' => null,
@@ -634,6 +635,10 @@ class Api
         $fields['PWD'] = $this->options['password'];
         $fields['USER'] = $this->options['username'];
         $fields['SIGNATURE'] = $this->options['signature'];
+
+        if ($this->options['subject']) {
+            $fields['SUBJECT'] = $this->options['subject'];
+        }
     }
 
     /**
