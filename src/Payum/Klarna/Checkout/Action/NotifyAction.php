@@ -29,13 +29,12 @@ class NotifyAction implements ActionInterface, GatewayAwareInterface
         $this->gateway->execute(new Sync($details));
 
         if (Constants::STATUS_CHECKOUT_COMPLETE == $details['status']) {
-            $this->gateway->execute(new UpdateOrder(array(
-                'location' => $details['location'],
-                'status' => Constants::STATUS_CREATED,
-                'merchant_reference' => array(
-                    'orderid1' => $details['merchant_reference']['orderid1'],
-                ),
-            )));
+            $this->gateway->execute((new UpdateOrder(
+                [
+                    'order_id' => $details['order_id'],
+                ]))
+                ->setMerchantReferences($details['merchant_reference']['orderid1'], null)
+                ->acknowledgeOrder());
 
             $this->gateway->execute(new Sync($details));
         }

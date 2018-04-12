@@ -1,9 +1,10 @@
 <?php
 namespace Payum\Klarna\Checkout\Action\Api;
 
+use Klarna\Rest\OrderManagement\Order;
+use Klarna\Rest\Transport\Connector;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Klarna\Checkout\Request\Api\CreateOrder;
 use Payum\Klarna\Checkout\Request\Api\UpdateOrder;
 
 class UpdateOrderAction extends BaseApiAwareAction
@@ -11,7 +12,7 @@ class UpdateOrderAction extends BaseApiAwareAction
     /**
      * {@inheritDoc}
      *
-     * @param CreateOrder $request
+     * @param UpdateOrder $request
      */
     public function execute($request)
     {
@@ -20,15 +21,10 @@ class UpdateOrderAction extends BaseApiAwareAction
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         $this->callWithRetry(function () use ($model, $request) {
-            $order = $this->getOrder($this->getConnector());
-            $order->setLocation($model['location']);
-
-            $data = $model->toUnsafeArray();
-            unset($data['location']);
-
-            $order->update($data);
+            $order = $this->getOrderManagementOrder($this->getConnector(), $model['order_id']);
 
             $request->setOrder($order);
+            $request->execute();
         });
     }
 
@@ -38,5 +34,16 @@ class UpdateOrderAction extends BaseApiAwareAction
     public function supports($request)
     {
         return $request instanceof UpdateOrder;
+    }
+
+    /**
+     * @param Connector $connector
+     * @param string    $orderId
+     *
+     * @return Order
+     */
+    private function getOrderManagementOrder(Connector $connector, string $orderId)
+    {
+        return new Order($connector, $orderId);
     }
 }
