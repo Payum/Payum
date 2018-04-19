@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Klarna\Checkout\Tests\Action;
+namespace Payum\Klarna\CheckoutRest\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
@@ -13,8 +13,8 @@ use Payum\Core\Request\RenderTemplate;
 use Payum\Core\Request\Sync;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryInterface;
-use Payum\Klarna\Checkout\Action\AuthorizeAction;
-use Payum\Klarna\Checkout\Request\Api\CreateOrder;
+use Payum\Klarna\CheckoutRest\Action\AuthorizeAction;
+use Payum\Klarna\CheckoutRest\Request\Api\CreateOrder;
 use Payum\Klarna\Common\Config;
 use Payum\Klarna\Common\Constants;
 use PHPUnit\Framework\TestCase;

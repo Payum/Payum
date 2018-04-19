@@ -1,11 +1,11 @@
 <?php
-namespace Payum\Klarna\Checkout\Tests;
+namespace Payum\Klarna\CheckoutRest\Tests;
 
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\Gateway;
 use Payum\Core\GatewayFactory;
 use Payum\Core\GatewayFactoryInterface;
-use Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory;
+use Payum\Klarna\CheckoutRest\KlarnaCheckoutGatewayFactory;
 use PHPUnit\Framework\TestCase;
 
 class KlarnaCheckoutGatewayFactoryTest extends TestCase

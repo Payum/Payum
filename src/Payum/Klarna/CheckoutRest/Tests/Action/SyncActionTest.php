@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Klarna\Checkout\Tests\Action;
+namespace Payum\Klarna\CheckoutRest\Tests\Action;
 
 use Klarna\Rest\Checkout\Order;
 use Payum\Core\GatewayAwareInterface;

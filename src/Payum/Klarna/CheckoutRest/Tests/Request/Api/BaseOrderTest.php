@@ -1,7 +1,7 @@
 <?php
-namespace Payum\Klarna\Checkout\Tests\Request\Api;
+namespace Payum\Klarna\CheckoutRest\Tests\Request\Api;
 
-use Payum\Klarna\Checkout\Request\Api\BaseOrder;
+use Payum\Klarna\CheckoutRest\Request\Api\BaseOrder;
 use PHPUnit\Framework\TestCase;
 
 class BaseOrderTest extends TestCase
@@ -11,7 +11,7 @@ class BaseOrderTest extends TestCase
      */
     public function shouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Request\Api\BaseOrder');
+        $rc = new \ReflectionClass('Payum\Klarna\CheckoutRest\Request\Api\BaseOrder');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
     }
@@ -21,7 +21,7 @@ class BaseOrderTest extends TestCase
      */
     public function shouldBeAbstractClass()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Request\Api\BaseOrder');
+        $rc = new \ReflectionClass('Payum\Klarna\CheckoutRest\Request\Api\BaseOrder');
 
         $this->assertTrue($rc->isAbstract());
     }
@@ -89,6 +89,6 @@ class BaseOrderTest extends TestCase
      */
     protected function createBaseOrderMock($model)
     {
-        return $this->getMockForAbstractClass('Payum\Klarna\Checkout\Request\Api\BaseOrder', array($model));
+        return $this->getMockForAbstractClass('Payum\Klarna\CheckoutRest\Request\Api\BaseOrder', array($model));
     }
 }

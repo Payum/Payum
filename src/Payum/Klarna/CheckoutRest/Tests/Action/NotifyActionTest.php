@@ -1,12 +1,12 @@
 <?php
-namespace Payum\Klarna\Checkout\Tests\Action;
+namespace Payum\Klarna\CheckoutRest\Tests\Action;
 
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Notify;
 use Payum\Core\Tests\GenericActionTest;
-use Payum\Klarna\Checkout\Action\NotifyAction;
-use Payum\Klarna\Checkout\Request\Api\UpdateOrder;
+use Payum\Klarna\CheckoutRest\Action\NotifyAction;
+use Payum\Klarna\CheckoutRest\Request\Api\UpdateOrder;
 use Payum\Klarna\Common\Constants;
 
 class NotifyActionTest extends GenericActionTest
@@ -41,7 +41,7 @@ class NotifyActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\UpdateOrder'))
+            ->with($this->isInstanceOf('Payum\Klarna\CheckoutRest\Request\Api\UpdateOrder'))
             ->will($this->returnCallback(function (UpdateOrder $request) use ($testCase) {
                 $model = $request->getModel();
 

@@ -1,10 +1,10 @@
 <?php
-namespace Payum\Klarna\Checkout\Tests\Action\Api;
+namespace Payum\Klarna\CheckoutRest\Tests\Action\Api;
 
 use Payum\Core\Request\Generic;
 use Payum\Core\Tests\GenericActionTest;
-use Payum\Klarna\Checkout\Action\Api\CreateOrderAction;
-use Payum\Klarna\Checkout\Request\Api\CreateOrder;
+use Payum\Klarna\CheckoutRest\Action\Api\CreateOrderAction;
+use Payum\Klarna\CheckoutRest\Request\Api\CreateOrder;
 use Payum\Klarna\Common\Action\Api\BaseApiAwareAction;
 use Payum\Klarna\Common\Config;
 

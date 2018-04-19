@@ -1,12 +1,12 @@
 <?php
-namespace Payum\Klarna\Checkout\Tests\Action;
+namespace Payum\Klarna\CheckoutRest\Tests\Action;
 
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Request\Authorize;
 use Payum\Core\Tests\GenericActionTest;
-use Payum\Klarna\Checkout\Action\AuthorizeRecurringAction;
-use Payum\Klarna\Checkout\Request\Api\CreateOrder;
+use Payum\Klarna\CheckoutRest\Action\AuthorizeRecurringAction;
+use Payum\Klarna\CheckoutRest\Request\Api\CreateOrder;
 use Payum\Klarna\Common\Config;
 use Payum\Klarna\Common\Constants;
 
@@ -20,7 +20,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
     /**
      * @var AuthorizeRecurringAction
      */
-    protected $actionClass = 'Payum\Klarna\Checkout\Action\AuthorizeRecurringAction';
+    protected $actionClass = 'Payum\Klarna\CheckoutRest\Action\AuthorizeRecurringAction';
 
     public function provideSupportedRequests(): \Iterator
     {
@@ -87,7 +87,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
     public function testThrowIfNotKlarnaConfigGivenAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
-        $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Checkout\Config');
+        $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\CheckoutRest\Config');
         $action = new AuthorizeRecurringAction();
         $action->setApi(new \stdClass());
     }
@@ -124,7 +124,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\CreateOrder'))
+            ->with($this->isInstanceOf('Payum\Klarna\CheckoutRest\Request\Api\CreateOrder'))
             ->will($this->returnCallback(function (CreateOrder $request) use ($orderMock) {
                 $request->setOrder($orderMock);
             }))
@@ -169,7 +169,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\CreateOrder'))
+            ->with($this->isInstanceOf('Payum\Klarna\CheckoutRest\Request\Api\CreateOrder'))
             ->will($this->returnCallback(function (CreateOrder $request) use ($orderMock, $config, $testCase) {
                 $request->setOrder($orderMock);
 
@@ -222,7 +222,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\CreateOrder'))
+            ->with($this->isInstanceOf('Payum\Klarna\CheckoutRest\Request\Api\CreateOrder'))
             ->will($this->returnCallback(function (CreateOrder $request) use ($orderMock, $config, $testCase) {
                 $request->setOrder($orderMock);
 

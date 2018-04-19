@@ -1,16 +1,16 @@
 <?php
-namespace Payum\Klarna\Checkout\Tests\Action\Api;
+namespace Payum\Klarna\CheckoutRest\Tests\Action\Api;
 
 use Payum\Core\Tests\GenericActionTest;
-use Payum\Klarna\Checkout\Action\Api\UpdateOrderAction;
-use Payum\Klarna\Checkout\Request\Api\UpdateOrder;
+use Payum\Klarna\CheckoutRest\Action\Api\UpdateOrderAction;
+use Payum\Klarna\CheckoutRest\Request\Api\UpdateOrder;
 use Payum\Klarna\Common\Config;
 
 class UpdateOrderActionTest extends GenericActionTest
 {
-    protected $requestClass = 'Payum\Klarna\Checkout\Request\Api\UpdateOrder';
+    protected $requestClass = 'Payum\Klarna\CheckoutRest\Request\Api\UpdateOrder';
 
-    protected $actionClass = 'Payum\Klarna\Checkout\Action\Api\UpdateOrderAction';
+    protected $actionClass = 'Payum\Klarna\CheckoutRest\Action\Api\UpdateOrderAction';
 
     public function provideNotSupportedRequests(): \Iterator
     {
@@ -25,7 +25,7 @@ class UpdateOrderActionTest extends GenericActionTest
      */
     public function shouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\UpdateOrderAction');
+        $rc = new \ReflectionClass('Payum\Klarna\CheckoutRest\Action\Api\UpdateOrderAction');
 
         $rc->isSubclassOf('Payum\Klarna\Common\Action\Api\BaseApiAwareAction');
     }

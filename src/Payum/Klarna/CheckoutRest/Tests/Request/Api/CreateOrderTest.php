@@ -1,7 +1,7 @@
 <?php
-namespace Payum\Klarna\Checkout\Tests\Request\Api;
+namespace Payum\Klarna\CheckoutRest\Tests\Request\Api;
 
-use Payum\Klarna\Checkout\Request\Api\CreateOrder;
+use Payum\Klarna\CheckoutRest\Request\Api\CreateOrder;
 use PHPUnit\Framework\TestCase;
 
 class CreateOrderTest extends TestCase
@@ -11,9 +11,9 @@ class CreateOrderTest extends TestCase
      */
     public function shouldBeSubClassOfBaseOrder()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Request\Api\CreateOrder');
+        $rc = new \ReflectionClass('Payum\Klarna\CheckoutRest\Request\Api\CreateOrder');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Checkout\Request\Api\BaseOrder'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Klarna\CheckoutRest\Request\Api\BaseOrder'));
     }
 
     /**

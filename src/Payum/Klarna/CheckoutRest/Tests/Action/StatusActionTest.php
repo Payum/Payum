@@ -1,14 +1,14 @@
 <?php
-namespace Payum\Klarna\Checkout\Tests\Action;
+namespace Payum\Klarna\CheckoutRest\Tests\Action;
 
 use Payum\Core\Request\GetBinaryStatus;
 use Payum\Core\Tests\GenericActionTest;
-use Payum\Klarna\Checkout\Action\StatusAction;
+use Payum\Klarna\CheckoutRest\Action\StatusAction;
 use Payum\Klarna\Common\Constants;
 
 class StatusActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\Klarna\Checkout\Action\StatusAction';
+    protected $actionClass = 'Payum\Klarna\CheckoutRest\Action\StatusAction';
 
     protected $requestClass = 'Payum\Core\Request\GetHumanStatus';
 

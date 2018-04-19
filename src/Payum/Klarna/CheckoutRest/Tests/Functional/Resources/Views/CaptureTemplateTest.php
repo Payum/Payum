@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Klarna\Checkout\Tests\Functional\Resources\Views;
+namespace Payum\Klarna\CheckoutRest\Tests\Functional\Resources\Views;
 
 use Payum\Core\Bridge\Twig\TwigFactory;
 use PHPUnit\Framework\TestCase;

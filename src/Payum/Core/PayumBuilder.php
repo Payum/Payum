@@ -25,7 +25,9 @@ use Payum\Core\Security\TokenFactoryInterface;
 use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory;
+use Payum\Klarna\CheckoutRest\KlarnaCheckoutRestGatewayFactory;
 use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
+use Payum\Klarna\Payments\KlarnaPaymentsGatewayFactory;
 use Payum\Offline\OfflineGatewayFactory;
 use Payum\OmnipayBridge\OmnipayGatewayFactory;
 use Payum\OmnipayV3Bridge\OmnipayGatewayFactory as OmnipayV3GatewayFactory;
@@ -556,7 +558,9 @@ class PayumBuilder
             'be2bill_direct' => Be2BillDirectGatewayFactory::class,
             'be2bill_offsite' => Be2BillOffsiteGatewayFactory::class,
             'klarna_checkout' => KlarnaCheckoutGatewayFactory::class,
+            'klarna_checkout_rest' => KlarnaCheckoutRestGatewayFactory::class,
             'klarna_invoice' => KlarnaInvoiceGatewayFactory::class,
+            'klarna_payments' => KlarnaPaymentsGatewayFactory::class,
             'offline' => OfflineGatewayFactory::class,
             'payex' => PayexGatewayFactory::class,
             'stripe_checkout' => StripeCheckoutGatewayFactory::class,

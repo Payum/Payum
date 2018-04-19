@@ -66,8 +66,17 @@
         <testsuite name="Payum KlarnaCheckout Component Test Suite">
             <directory>./src/Payum/Klarna/Checkout/Tests</directory>
         </testsuite>
+        <testsuite name="Payum KlarnaCommon Component Test Suite">
+            <directory>./src/Payum/Klarna/Common/Tests</directory>
+        </testsuite>
+        <testsuite name="Payum KlarnaCheckoutRest Component Test Suite">
+            <directory>./src/Payum/Klarna/CheckoutRest/Tests</directory>
+        </testsuite>
         <testsuite name="Payum KlarnaInvoice Component Test Suite">
             <directory>./src/Payum/Klarna/Invoice/Tests</directory>
+        </testsuite>
+        <testsuite name="Payum KlarnaPayments Component Test Suite">
+            <directory>./src/Payum/Klarna/Payments/Tests</directory>
         </testsuite>
         <testsuite name="Payum Stripe Component Test Suite">
             <directory>./src/Payum/Stripe/Tests</directory>

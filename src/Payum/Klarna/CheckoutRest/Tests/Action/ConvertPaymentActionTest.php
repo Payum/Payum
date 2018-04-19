@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Klarna\Checkout\Tests\Action;
+namespace Payum\Klarna\CheckoutRest\Tests\Action\Api;
 
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
@@ -7,7 +7,7 @@ use Payum\Core\Request\Convert;
 use Payum\Core\Request\Generic;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
-use Payum\Klarna\Checkout\Action\ConvertPaymentAction;
+use Payum\Klarna\CheckoutRest\Action\ConvertPaymentAction;
 
 class ConvertPaymentActionTest extends GenericActionTest
 {

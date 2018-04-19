@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Klarna\Checkout\Tests\Action\Api;
+namespace Payum\Klarna\CheckoutRest\Tests\Action\Api;
 
 use Payum\Klarna\Common\Config;
 use PHPUnit\Framework\TestCase;
