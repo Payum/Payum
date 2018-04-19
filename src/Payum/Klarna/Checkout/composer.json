@@ -1,0 +1,46 @@
+{
+    "name": "payum/klarna-checkout",
+    "type": "library",
+    "description": "The Payum extension. It provides Klarna Checkout payment integration.",
+    "keywords": [
+        "payment",
+        "klarna"
+    ],
+    "homepage": "http://payum.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kotlyar Maksim",
+            "email": "kotlyar.maksim@gmail.com"
+        },
+        {
+            "name":     "Payum project",
+            "homepage": "http://payum.org/"
+        },
+        {
+            "name":     "Community contributions",
+            "homepage": "https://github.com/Payum/KlarnaCheckout/contributors"
+        }
+    ],
+    "require": {
+        "payum/core": "~1.0",
+        "klarna/checkout": "~1|~2.0"
+    },
+    "require-dev": {
+        "payum/core": "~1.0@dev",
+        "phpunit/phpunit": "~4.0",
+        "symfony/phpunit-bridge": "~2.8|~3.0"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": { "Payum\\Klarna\\Checkout": "" }
+    },
+    "target-dir": "Payum/Klarna/Checkout",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.3-dev"
+        }
+    }
+}
