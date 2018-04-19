@@ -25,7 +25,9 @@ use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Security\TokenFactoryInterface;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory;
+use Payum\Klarna\CheckoutRest\KlarnaCheckoutRestGatewayFactory;
 use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
+use Payum\Klarna\Payments\KlarnaPaymentsGatewayFactory;
 use Payum\Offline\OfflineGatewayFactory;
 use Payum\OmnipayV3Bridge\OmnipayGatewayFactory;
 use Payum\Payex\PayexGatewayFactory;
@@ -119,8 +121,14 @@ class PayumBuilderTest extends TestCase
         $this->assertArrayHasKey('klarna_checkout', $factories);
         $this->assertInstanceOf(KlarnaCheckoutGatewayFactory::class, $factories['klarna_checkout']);
 
+        $this->assertArrayHasKey('klarna_checkout_rest', $factories);
+        $this->assertInstanceOf(KlarnaCheckoutRestGatewayFactory::class, $factories['klarna_checkout_rest']);
+
         $this->assertArrayHasKey('klarna_invoice', $factories);
         $this->assertInstanceOf(KlarnaInvoiceGatewayFactory::class, $factories['klarna_invoice']);
+
+        $this->assertArrayHasKey('klarna_payments', $factories);
+        $this->assertInstanceOf(KlarnaPaymentsGatewayFactory::class, $factories['klarna_payments']);
 
         $this->assertArrayHasKey('offline', $factories);
         $this->assertInstanceOf(OfflineGatewayFactory::class, $factories['offline']);

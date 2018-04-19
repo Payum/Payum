@@ -1,21 +1,21 @@
 <?php
-namespace Payum\Klarna\Checkout;
+namespace Payum\Klarna\CheckoutRest;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
-use Payum\Klarna\Checkout\Action\Api\CreateOrderAction;
-use Payum\Klarna\Checkout\Action\Api\FetchOrderAction;
-use Payum\Klarna\Checkout\Action\Api\UpdateOrderAction;
-use Payum\Klarna\Checkout\Action\AuthorizeAction;
-use Payum\Klarna\Checkout\Action\AuthorizeRecurringAction;
-use Payum\Klarna\Checkout\Action\ConvertPaymentAction;
-use Payum\Klarna\Checkout\Action\NotifyAction;
-use Payum\Klarna\Checkout\Action\StatusAction;
-use Payum\Klarna\Checkout\Action\SyncAction;
+use Payum\Klarna\CheckoutRest\Action\Api\CreateOrderAction;
+use Payum\Klarna\CheckoutRest\Action\Api\FetchOrderAction;
+use Payum\Klarna\CheckoutRest\Action\Api\UpdateOrderAction;
+use Payum\Klarna\CheckoutRest\Action\AuthorizeAction;
+use Payum\Klarna\CheckoutRest\Action\AuthorizeRecurringAction;
+use Payum\Klarna\CheckoutRest\Action\ConvertPaymentAction;
+use Payum\Klarna\CheckoutRest\Action\NotifyAction;
+use Payum\Klarna\CheckoutRest\Action\StatusAction;
+use Payum\Klarna\CheckoutRest\Action\SyncAction;
 use Payum\Klarna\Common\Config;
 use Payum\Klarna\Common\Constants;
 
-class KlarnaCheckoutGatewayFactory extends GatewayFactory
+class KlarnaCheckoutRestGatewayFactory extends GatewayFactory
 {
     /**
      * {@inheritDoc}

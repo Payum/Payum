@@ -51,6 +51,9 @@ class TwigFactoryTest extends TestCase
         $this->assertArrayHasKey('PayumKlarnaCheckout', $paths);
         $this->assertStringEndsWith('Payum/Klarna/Checkout/Resources/views', $paths['PayumKlarnaCheckout']);
 
+        $this->assertArrayHasKey('PayumKlarnaCheckoutRest', $paths);
+        $this->assertStringEndsWith('Payum/Klarna/CheckoutRest/Resources/views', $paths['PayumKlarnaCheckoutRest']);
+
         $this->assertArrayHasKey('PayumStripe', $paths);
         $this->assertStringEndsWith('Payum/Stripe/Resources/views', $paths['PayumStripe']);
 
