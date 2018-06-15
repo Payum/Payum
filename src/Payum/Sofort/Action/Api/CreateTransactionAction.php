@@ -36,7 +36,11 @@ class CreateTransactionAction implements ActionInterface, ApiAwareInterface
             throw new LogicException(sprintf('The transaction has already been created for this payment. transaction_id: %s', $details['transaction_id']));
         }
 
-        $details->validateNotEmpty(['amount', 'currency_code', 'reason', 'success_url', 'notification_url']);
+        $fieldsRequired = ['amount', 'currency_code', 'reason', 'success_url'];
+	    if ($this->api->getOption('disable_notification') == false) {
+		    $fieldsRequired[] = 'notification_url';
+	    }
+	    $details->validateNotEmpty($fieldsRequired);
 
         $details->replace($this->api->createTransaction((array) $details));
 
