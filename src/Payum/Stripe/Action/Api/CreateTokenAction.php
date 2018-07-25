@@ -22,7 +22,7 @@ class CreateTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
     use GatewayAwareTrait;
 
     /**
-     * BC will be removed in 2.x. @Use $this->api
+     * @deprecated BC will be removed in 2.x. Use $this->api
      *
      * @var Keys
      */
