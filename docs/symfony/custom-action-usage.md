@@ -7,6 +7,7 @@ Gateway comes with built in actions but sometime you have to add your own. First
 
 services:
     acme.payum.action.foo:
+        public: true
         class: Acme\PaymentBundle\Payum\Action\FooAction
 ```
 
@@ -46,6 +47,7 @@ There are several ways to add it to a gateway:
     services:
         acme.payum.action.foo:
             class: Acme\PaymentBundle\Payum\Action\FooAction
+            public: true
             tags:
                 - { name: payum.action, factory: a_factory }
 
@@ -60,6 +62,7 @@ There are several ways to add it to a gateway:
     services:
         acme.payum.action.foo:
             class: Acme\PaymentBundle\Payum\Action\FooAction
+            public: true
             tags:
                 - {name: payum.action, prepend: true, all: true }
     ```
