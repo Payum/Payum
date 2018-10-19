@@ -24,7 +24,7 @@
         "stripe/stripe-php": "^3|^4"
     },
     "require-dev": {
-        "payum/core": "^1.5@dev",
+        "payum/core": "^1.5",
         "phpunit/phpunit": "^5.7",
         "symfony/phpunit-bridge": "^3.1|^4"
     },
