@@ -18,7 +18,7 @@
 
         <field name="imageUrl" column="image_url" type="string" nullable="true" />
 
-        <field name="title" column="title" type="string" nullable="true" />P
+        <field name="title" column="title" type="string" nullable="true" />
 
     </mapped-superclass>
 </doctrine-mapping>

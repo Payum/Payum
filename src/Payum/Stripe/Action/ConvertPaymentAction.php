@@ -26,6 +26,8 @@ class ConvertPaymentAction implements ActionInterface
         $details["amount"] = $payment->getTotalAmount();
         $details["currency"] = $payment->getCurrencyCode();
         $details["description"] = $payment->getDescription();
+        $details["image"] = $payment->getImageUrl();
+        $details["name"] = $payment->getTitle();
 
         if ($card = $payment->getCreditCard()) {
             if ($card->getToken()) {
