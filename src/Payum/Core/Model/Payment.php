@@ -48,6 +48,16 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
      */
     protected $bankAccount;
 
+    /**
+     * @var string
+     */
+    protected $imageUrl;
+
+    /**
+     * @var string
+     */
+    protected $title;
+
     public function __construct()
     {
         $this->details = [];
@@ -201,5 +211,37 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     public function setBankAccount(BankAccountInterface $bankAccount = null)
     {
         $this->bankAccount = $bankAccount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImageUrl()
+    {
+        return $this->imageUrl;
+    }
+
+    /**
+     * @param string $imageUrl
+     */
+    public function setImageUrl($imageUrl)
+    {
+        $this->imageUrl = $imageUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle(string $title)
+    {
+        $this->title = $title;
     }
 }

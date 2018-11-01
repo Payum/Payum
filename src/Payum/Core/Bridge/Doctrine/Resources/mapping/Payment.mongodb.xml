@@ -16,5 +16,9 @@
 
         <field name="details" type="object" />
 
+        <field name="imageUrl" type="string" />
+
+        <field name="title" type="string" />
+
     </mapped-superclass>
 </doctrine-mongo-mapping>

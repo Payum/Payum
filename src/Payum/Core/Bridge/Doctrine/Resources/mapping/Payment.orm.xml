@@ -16,5 +16,9 @@
 
         <field name="details" column="details" type="json_array" />
 
+        <field name="imageUrl" column="image_url" type="string" nullable="true" />
+
+        <field name="title" column="title" type="string" nullable="true" />P
+
     </mapped-superclass>
 </doctrine-mapping>

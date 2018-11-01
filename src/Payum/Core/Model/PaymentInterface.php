@@ -35,4 +35,14 @@ interface PaymentInterface extends CreditCardPaymentInterface, DetailsAggregateI
      * @return string
      */
     public function getCurrencyCode();
+
+    /**
+     * @return string
+     */
+    public function getImageUrl();
+
+    /**
+     * @return string
+     */
+    public function getTitle();
 }
