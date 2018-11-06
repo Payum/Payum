@@ -74,6 +74,7 @@ services:
 
     acme.payment.payum.paypal_express_checkout_api:
         class: Payum\Paypal\ExpressCheckout\Nvp\Api
+        public: true
         factory_service: acme.payment.payum.api.factory
         factory_method: createPaypalExpressCheckoutApi
 ```

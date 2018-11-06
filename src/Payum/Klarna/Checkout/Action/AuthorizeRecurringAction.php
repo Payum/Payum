@@ -25,7 +25,7 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
     use GatewayAwareTrait;
 
     /**
-     * BC. will be removed in 2.x. @use $this->api
+     * @deprecated BC. will be removed in 2.x. Use $this->api
      *
      * @var Config
      */
@@ -43,7 +43,7 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
     {
         $this->_setApi($api);
 
-        // BC. will be removed in 2.x. @use $this->api
+        // BC. will be removed in 2.x. Use $this->api
         $this->config = $this->api;
     }
 

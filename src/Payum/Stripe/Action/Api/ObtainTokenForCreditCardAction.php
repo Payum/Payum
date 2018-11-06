@@ -27,7 +27,7 @@ class ObtainTokenForCreditCardAction implements ActionInterface, GatewayAwareInt
     use GatewayAwareTrait;
 
     /**
-     * BC will be removed in 2.x. @Use $this->api
+     * @deprecated BC will be removed in 2.x. Use $this->api
      *
      * @var Keys
      */

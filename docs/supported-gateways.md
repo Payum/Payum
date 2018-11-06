@@ -60,6 +60,7 @@ Payum is an MIT-licensed open source project with its ongoing development made p
 * [artkonekt/payum-otp-hungary](https://github.com/artkonekt/payum-otp-hungary)
 * [sourcefabric/payum-mollie](https://github.com/sourcefabric/payum-mollie)
 * [sourcefabric/payum-mbe4](https://github.com/sourcefabric/payum-mbe4)
+* [valiton/payum-payone](https://github.com/valiton/payum-payone)
 
 ## Omnipay gateways.
 

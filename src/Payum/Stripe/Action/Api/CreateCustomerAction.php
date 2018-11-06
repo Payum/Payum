@@ -26,7 +26,7 @@ class CreateCustomerAction implements ActionInterface, ApiAwareInterface, Gatewa
     use GatewayAwareTrait;
 
     /**
-     * BC will be removed in 2.x. @Use $this->api
+     * @deprecated BC will be removed in 2.x. Use $this->api
      *
      * @var Keys
      */
