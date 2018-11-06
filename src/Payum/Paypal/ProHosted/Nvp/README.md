@@ -1,3 +1,12 @@
+<h2 align="center">Supporting Payum</h2>
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+- [Become a sponsor](https://www.patreon.com/makasim)
+- [Become our client](http://forma-pro.com/)
+
+---
+
 # Payum Paypal Payments Pro Hosted Solution
 [![Build Status](https://travis-ci.org/Payum/PaypalProHostedNvp.png?branch=master)](https://travis-ci.org/Payum/PaypalProHostedNvp)
 [![Total Downloads](https://poser.pugx.org/payum/paypal-pro-hosted-nvp/d/total.png)](https://packagist.org/packages/payum/paypal-pro-hosted-nvp)

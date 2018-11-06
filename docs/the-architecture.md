@@ -1,3 +1,12 @@
+<h2 align="center">Supporting Payum</h2>
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+- [Become a sponsor](https://www.patreon.com/makasim)
+- [Become our client](http://forma-pro.com/)
+
+---
+
 # The architecture
 
 The code snippets presented below are only for demonstration purposes (pseudo code). Their goal is to illustrate the general approach to various tasks. To see real life examples please follow the links provided when appropriate.

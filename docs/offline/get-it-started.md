@@ -1,3 +1,12 @@
+<h2 align="center">Supporting Payum</h2>
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+- [Become a sponsor](https://www.patreon.com/makasim)
+- [Become our client](http://forma-pro.com/)
+
+---
+
 # Offline. Get it started.
 
 In this chapter we are going to talk about offline payments. The offline may be used in case of cash, cheque or wire transfer.

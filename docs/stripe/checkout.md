@@ -1,3 +1,12 @@
+<h2 align="center">Supporting Payum</h2>
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+- [Become a sponsor](https://www.patreon.com/makasim)
+- [Become our client](http://forma-pro.com/)
+
+---
+
 # Stripe Checkout.
 
 In this chapter we are going to talk about the most common task: purchase of a product using [Stripe Checkout](https://stripe.com/docs/checkout).
