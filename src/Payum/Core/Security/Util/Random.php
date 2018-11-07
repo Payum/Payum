@@ -25,25 +25,6 @@ class Random
 
     private static function getRandomNumber()
     {
-        // determine whether to use OpenSSL
-        if (defined('PHP_WINDOWS_VERSION_BUILD') && version_compare(PHP_VERSION, '5.3.4', '<')) {
-            $useOpenSsl = false;
-        } elseif (!function_exists('openssl_random_pseudo_bytes')) {
-            $useOpenSsl = false;
-        } else {
-            $useOpenSsl = true;
-        }
-
-        $nbBytes = 32;
-
-        if ($useOpenSsl) {
-            $bytes = openssl_random_pseudo_bytes($nbBytes, $strong);
-
-            if (false !== $bytes && true === $strong) {
-                return $bytes;
-            }
-        }
-
-        return hash('sha256', uniqid(mt_rand(), true), true);
+        return random_bytes(32);
     }
 }
