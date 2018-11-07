@@ -1,6 +1,6 @@
 <?php
 namespace Payum\Core\Exception;
 
-interface ExceptionInterface
+interface ExceptionInterface extends \Throwable
 {
 }
