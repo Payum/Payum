@@ -93,7 +93,7 @@ class PaymentDetailsStatusAction implements ActionInterface
             $voidedCounter = 0;
             $allCounter = 0;
             foreach (range(0, 9) as $index) {
-                if (null === $paymentStatus = $model['PAYMENTREQUEST_'.$index.'_PAYMENTSTATUS']) {
+                if (null === $paymentStatus = $model['PAYMENTINFO_'.$index.'_PAYMENTSTATUS']) {
                     continue;
                 }
 
