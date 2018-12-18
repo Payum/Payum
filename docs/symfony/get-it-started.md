@@ -22,7 +22,7 @@ _**Note**: Where payum/offline is a php payum extension, you can for example cha
 
 _**Note**: Use payum/payum if you want to install all gateways at once._
 
-Enable the bundle in the kernel:
+Enable the bundle in the kernel (only necessary for Symfony <=3):
 
 ``` php
 <?php
@@ -37,10 +37,10 @@ public function registerBundles()
 }
 ```
 
-So now after you registered the bundle let's import routing.
+Now let's import Payum's routes:
 
 ```yaml
-# app/config/routing.yml
+# config/routes/payum.yaml (Symfony >=4) or app/config/routing.yml (Symfony <=3)
 
 payum_all:
     resource: "@PayumBundle/Resources/config/routing/all.xml"
@@ -48,21 +48,23 @@ payum_all:
 
 ## Configure
 
-First we need two entities: `Token` and `Payment`.  
+First we need two entities: `PaymentToken` and `Payment`.  
 The token entity is used to protect your payments, while the payment entity stores all your payment information.
 
-_**Note**: In this chapter we show how to use Doctrine ORM entities. There are other supported [storages](storages.md)._
+_**Note**: In this chapter we show how to use [Doctrine ORM](https://www.doctrine-project.org/projects/orm.html) entities. There are other supported [storages](storages.md)._
 
 ```php
 <?php
-namespace Acme\PaymentBundle\Entity;
+// src/EntityPaymentToken.php
+
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Payum\Core\Model\Token;
 
 /**
- * @ORM\Table
  * @ORM\Entity
+ * @ORM\Table
  */
 class PaymentToken extends Token
 {
@@ -71,47 +73,54 @@ class PaymentToken extends Token
 
 ```php
 <?php
-namespace Acme\PaymentBundle\Entity;
+// src/EntityPayment.php
+
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Payum\Core\Model\Payment as BasePayment;
 
 /**
- * @ORM\Table
  * @ORM\Entity
+ * @ORM\Table
  */
 class Payment extends BasePayment
 {
     /**
-     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     *
-     * @var integer $id
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
      */
     protected $id;
 }
 ```
 
-next, you have to add mapping information, and configure payum's storages:
+Next, you have to add mapping information, and configure payum's storages:
 
 ```yml
-#app/config/config.yml
+# config/packages/payum.yaml (Smyonfy >=4) or app/config/config.yml (Symfony <=3)
 
 payum:
     security:
         token_storage:
-            Acme\PaymentBundle\Entity\PaymentToken: { doctrine: orm }
+            App\Entity\PaymentToken: { doctrine: orm }
 
     storages:
-        Acme\PaymentBundle\Entity\Payment: { doctrine: orm }
+        App\Entity\Payment: { doctrine: orm }
             
     gateways:
         offline:
             factory: offline
 ```
 
-_**Note**: You can add other gateways to the gateways section too._
+For Symfony >=4, you need to add this to your `config/services.yaml`:
+```yml
+services:
+    Payum\Core\Payum:
+        alias: payum
+```
+
+_**Note**: You can add other gateways to the `gateways` key too._
 
 ## Prepare order
 
@@ -119,17 +128,23 @@ Now we can create an order. In the last line the user is redirected to an URL wh
 
 ```php
 <?php
-// src/Acme/PaymentBundle/Controller/PaymentController.php
+// src/Controller/PaymentController.php
 
 namespace Acme\PaymentBundle\Controller;
 
-class PaymentController extends Controller 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
+
+class PaymentController extends AbstractController
 {
+    /**
+     * @Route("/prepare-payment", name="payum_prepare_payment")
+     */
     public function prepareAction() 
     {
         $gatewayName = 'offline';
         
-        $storage = $this->get('payum')->getStorage('Acme\PaymentBundle\Entity\Payment');
+        $storage = $this->get('payum')->getStorage('App\Entity\Payment');
         
         $payment = $storage->create();
         $payment->setNumber(uniqid());
