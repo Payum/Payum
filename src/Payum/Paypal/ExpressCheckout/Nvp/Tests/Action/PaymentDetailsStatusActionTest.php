@@ -266,8 +266,8 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $request = new GetHumanStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
-            'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
-            'PAYMENTREQUEST_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_IN_PROGRESS,
+            'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
+            'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_IN_PROGRESS,
         ));
 
         $action->execute($request);
@@ -285,8 +285,8 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $request = new GetHumanStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
-            'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
-            'PAYMENTREQUEST_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_FAILED,
+            'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
+            'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_FAILED,
         ));
 
         $action->execute($request);
@@ -304,8 +304,8 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $request = new GetHumanStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
-            'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
-            'PAYMENTREQUEST_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_REVERSED,
+            'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
+            'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_REVERSED,
         ));
 
         $action->execute($request);
@@ -323,8 +323,8 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $request = new GetHumanStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
-            'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
-            'PAYMENTREQUEST_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_REFUNDED,
+            'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
+            'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_REFUNDED,
         ));
 
         $action->execute($request);
@@ -342,8 +342,8 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $request = new GetHumanStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
-            'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
-            'PAYMENTREQUEST_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PARTIALLY_REFUNDED,
+            'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
+            'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PARTIALLY_REFUNDED,
         ));
 
         $action->execute($request);
@@ -361,8 +361,8 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $request = new GetHumanStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
-            'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
-            'PAYMENTREQUEST_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PROCESSED,
+            'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
+            'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PROCESSED,
         ));
 
         $action->execute($request);
@@ -380,9 +380,9 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $request = new GetHumanStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
-            'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_VOIDED,
+            'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_VOIDED,
             'PAYMENTINFO_0_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
-            'PAYMENTREQUEST_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_VOIDED,
+            'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_VOIDED,
             'PAYMENTINFO_9_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
         ));
 
@@ -401,9 +401,9 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $request = new GetHumanStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
-            'PAYMENTREQUEST_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PENDING,
+            'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PENDING,
             'PAYMENTINFO_0_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
-            'PAYMENTREQUEST_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PENDING,
+            'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PENDING,
             'PAYMENTINFO_9_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
 
         ));
@@ -440,7 +440,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $request = new GetHumanStatus(array(
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
-            'PAYMENTREQUEST_9_PAYMENTSTATUS' => 'unknownPaymentStatus',
+            'PAYMENTINFO_9_PAYMENTSTATUS' => 'unknownPaymentStatus',
         ));
 
         $action->execute($request);
