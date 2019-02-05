@@ -91,6 +91,7 @@ Payum is an MIT-licensed open source project with its ongoing development made p
     * [Storages](symfony/storages.md)
     * [Done action](symfony/purchase-done-action.md)
     * [Configure payment in backend](symfony/configure-payment-in-backend.md)
+    * [Encrypt gateway configs stored in database](symfony/encrypt-gateway-configs-stored-in-database.md)
     * [Custom action usage](symfony/custom-action-usage.md)
     * [Custom api usage](symfony/custom-api-usage.md)
     * [Custom purchase examples](symfony/custom-purchase-examples.md)
