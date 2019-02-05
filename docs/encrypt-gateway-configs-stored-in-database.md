@@ -9,7 +9,7 @@ Payum is an MIT-licensed open source project with its ongoing development made p
 
 # Encrypt gateway configs stored in database
 
-To encrypt (and later decrypt) sensitive configuration details (like payment provider credentials) we have to do two things:
+To encrypt (and later decrypt) sensitive configuration details (like payment provider credentials) we have to do three things:
  
 * Make sure model implements `CryptedInterface`. The `GatewayConfig` class already does it.
 * Create a cypher instance. 
