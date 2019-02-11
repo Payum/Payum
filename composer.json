@@ -40,10 +40,11 @@
     ],
     "require": {
         "php": "^7.0",
-        "payum/iso4217": "~1.0",
-        "php-http/message": "^1.0",
-        "php-http/client-implementation": "^1.0",
         "league/uri": "^5.0",
+        "payum/iso4217": "~1.0",
+        "php-http/client-implementation": "^1.0",
+        "php-http/message": "^1.0",
+        "phpstan/phpstan": "^0.11.2",
         "twig/twig": "~1.0|~2.0"
     },
     "require-dev": {
@@ -73,7 +74,8 @@
         "stripe/stripe-php": "~2.0|~3.0",
         "php-http/guzzle6-adapter": "^1.1.1",
         "defuse/php-encryption": "^2",
-        "ext-soap": "*"
+        "ext-soap": "*",
+        "sensiolabs/security-checker": "^5.0"
     },
     "replace": {
         "payum/core": "^1",
@@ -94,7 +96,8 @@
         "league/uri-components": "<1.7.1"
     },
     "config": {
-        "bin-dir": "bin"
+        "bin-dir": "bin",
+        "sort-packages": true
     },
     "autoload": {
         "psr-4": { "Payum\\": "src/Payum/" }
@@ -103,5 +106,10 @@
         "branch-alias": {
             "dev-master": "1.5-dev"
         }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "security-checker security:check"
+        ]
     }
 }

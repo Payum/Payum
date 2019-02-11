@@ -61,6 +61,7 @@ Payum is an MIT-licensed open source project with its ongoing development made p
 * [sourcefabric/payum-mollie](https://github.com/sourcefabric/payum-mollie)
 * [sourcefabric/payum-mbe4](https://github.com/sourcefabric/payum-mbe4)
 * [valiton/payum-payone](https://github.com/valiton/payum-payone)
+* [Setono/payum-quickpay](https://github.com/Setono/payum-quickpay)
 
 ## Omnipay gateways.
 
