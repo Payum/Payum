@@ -33,7 +33,6 @@ install:
 
 script:
     - bin/phpunit
-    - bin/phpstan anayse src
 
 notifications:
   email:
