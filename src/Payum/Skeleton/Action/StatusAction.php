@@ -19,6 +19,38 @@ class StatusAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
+        // This action is called when calling: $gateway->execute($status = new GetHumanStatus($model))
+        // See: https://github.com/Payum/Payum/blob/master/docs/get-it-started.md#donephp
+        //
+        // This is where you can mark the request status given your model data.
+
+        /*
+        // When a payment has been initiated, mark the request as new
+        if ($model['status'] === null) {
+            $request->markNew();
+
+            return;
+        }
+
+        // When the bank will send you back payment data (e.g.: after a successful or failed payment),
+        // then you will able to mark the request with different status.
+
+        if ($model['status'] === 'success') {
+            $request->markCaptured();
+
+            return;
+        }
+
+        if ($model['status'] === 'error') {
+            $request->markFailed();
+
+            return;
+        }
+
+        // If the payment's status is unknown, then mark the request as unknown:
+        $request->markUnknown();
+        */
+
         throw new \LogicException('Not implemented');
     }
 
