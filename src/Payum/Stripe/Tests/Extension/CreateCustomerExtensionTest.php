@@ -422,12 +422,9 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
         $extension->onPostExecute($context);
 
         $this->assertEquals([
+            'card' => 'theCardToken',
             'local' => [
                 'save_card' => true,
-                'customer' => [
-                    'id' => null,
-                    'card' => 'theCardToken',
-                ]
             ],
         ], (array) $request->getModel());
     }
