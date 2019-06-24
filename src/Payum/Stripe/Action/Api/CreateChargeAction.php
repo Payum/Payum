@@ -8,6 +8,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareTrait;
+use Payum\Stripe\Constants;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateCharge;
 use Stripe\Charge;
@@ -64,6 +65,14 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
 
         try {
             Stripe::setApiKey($this->keys->getSecretKey());
+
+            if (method_exists(Stripe::class, "setAppInfo")) {
+                Stripe::setAppInfo(
+                    Constants::PAYUM_STRIPE_APP_NAME,
+                    Constants::PAYUM_STRIPE_VERSION,
+                    Constants::PAYUM_URL
+                );
+            }
 
             $charge = Charge::create($model->toUnsafeArrayWithoutLocal());
 
