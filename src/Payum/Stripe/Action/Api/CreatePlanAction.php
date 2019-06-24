@@ -8,6 +8,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
+use Payum\Stripe\Constants;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreatePlan;
 use Stripe\Exception;
@@ -60,6 +61,14 @@ class CreatePlanAction implements ActionInterface, GatewayAwareInterface, ApiAwa
 
         try {
             Stripe::setApiKey($this->keys->getSecretKey());
+
+            if (method_exists(Stripe::class, "setAppInfo")) {
+                Stripe::setAppInfo(
+                    Constants::PAYUM_STRIPE_APP_NAME,
+                    Constants::PAYUM_STRIPE_VERSION,
+                    Constants::PAYUM_URL
+                );
+            }
 
             $plan = Plan::create($model->toUnsafeArrayWithoutLocal());
 
