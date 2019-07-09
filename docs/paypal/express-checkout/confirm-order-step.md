@@ -35,7 +35,7 @@ use Payum\Core\Payum;
 /** @var Payum $payum */
 $payum = (new PayumBuilder())
     ->addGateway('gatewayName', [
-        'factory' => 'paypal_express_checkout'
+        'factory' => 'paypal_express_checkout',
         'payum.template.confirm_order' => '@Acme/confirm_paypal_order.html.twig',
     ])
 
