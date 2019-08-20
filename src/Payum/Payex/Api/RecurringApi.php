@@ -107,7 +107,7 @@ class RecurringApi extends BaseApi
     protected function getPxRecurringWsdl()
     {
         return $this->options['sandbox'] ?
-            'https://test-external.payex.com/pxagreement/pxrecurring.asmx?wsdl' :
+            'https://external.externaltest.payex.com/pxagreement/pxrecurring.asmx?wsdl' :
             'https://external.payex.com/pxagreement/pxrecurring.asmx?wsdl'
         ;
     }
