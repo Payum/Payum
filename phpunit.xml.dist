@@ -28,7 +28,7 @@
 
         <ini name="soap.wsdl_cache_enabled" value="0" />
 
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="regex=/Twig_/"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak_vendors"/>
     </php>
 
     <testsuites>
