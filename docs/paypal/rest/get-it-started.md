@@ -36,9 +36,9 @@ $payum = (new PayumBuilder())
     ->addDefaultStorages()
     ->addGateway('gatewayName', [
         'factory' => 'paypal_rest',
-        'client_id' => 'REPLACE IT',
-        'client_secret' => 'REPLACE IT',
-        'config_path' => 'REPLACE IT',
+        'client_id' => 'REPLACE IT', // Your PayPal REST API cliend ID.
+        'client_secret' => 'REPLACE IT', // Your PayPal REST API client secret.
+        'config_path' => 'REPLACE IT', // Point to the directory where your skd_config.ini is located.
     ])
 
     ->getPayum()
