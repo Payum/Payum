@@ -35,21 +35,27 @@ class PaypalRestGatewayFactory extends GatewayFactory
                 'client_id' => '',
                 'client_secret' => '',
                 'config_path' => '',
+                'config' => [],
             ];
             $config->defaults($config['payum.default_options']);
 
-            $config['payum.required_options'] = ['client_id', 'client_secret', 'config_path'];
+            $config['payum.required_options'] = ['client_id', 'client_secret'];
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
 
-                if (false == defined('PP_CONFIG_PATH')) {
-                    define('PP_CONFIG_PATH', $config['config_path']);
-                } elseif (PP_CONFIG_PATH !== $config['config_path']) {
-                    throw new InvalidArgumentException(sprintf('Given "config_path" is invalid. Should be equal to the defined "PP_CONFIG_PATH": %s.', PP_CONFIG_PATH));
+                if (isset($config['config_path']) && $config['config_path'] !== '') {
+                    if (false == defined('PP_CONFIG_PATH')) {
+                        define('PP_CONFIG_PATH', $config['config_path']);
+                    } elseif (PP_CONFIG_PATH !== $config['config_path']) {
+                        throw new InvalidArgumentException(sprintf('Given "config_path" is invalid. Should be equal to the defined "PP_CONFIG_PATH": %s.', PP_CONFIG_PATH));
+                    }
                 }
 
                 $credential = new OAuthTokenCredential($config['client_id'], $config['client_secret']);
-                return new ApiContext($credential);
+                $apiContext = new ApiContext($credential);
+                $apiContext->setConfig($config['config']);
+
+                return $apiContext;
             };
         }
     }
