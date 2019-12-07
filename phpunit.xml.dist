@@ -26,6 +26,8 @@
         <var name="__PAYUM_PAYPAL_PRO_CHECKOUT_NVP_API_VENDOR" value="palexanderpayflowtest"/>
 
         <ini name="soap.wsdl_cache_enabled" value="0" />
+             
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak_vendors"/>
     </php>
 
     <testsuites>
