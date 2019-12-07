@@ -133,13 +133,13 @@ class CoreGatewayFactory implements GatewayFactoryInterface
             'payum.template.layout' => '@PayumCore/layout.html.twig',
 
             'twig.env' => function () {
-                return new \Twig_Environment(new \Twig_Loader_Chain());
+                return new \Twig\Environment(new \Twig\Loader\ChainLoader());
             },
             'twig.register_paths' => function (ArrayObject $config) {
                 $twig = $config['twig.env'];
-                if (false == $twig instanceof \Twig_Environment) {
+                if (false == $twig instanceof \Twig\Environment) {
                     throw new \LogicException(sprintf(
-                        'The `twig.env config option must contains instance of Twig_Environment but got %s`',
+                        'The `twig.env config option must contains instance of Twig\Environment but got %s`',
                         is_object($twig) ? get_class($twig) : gettype($twig)
                     ));
                 }
