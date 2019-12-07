@@ -53,7 +53,7 @@
         "omnipay/dummy": "^3@alpha",
         "omnipay/common": "^3@dev",
         "doctrine/orm": "2.5.*",
-        "phpunit/phpunit": "^6.0",
+        "phpunit/phpunit": "^5.7",
         "propel/propel1": "~1.7",
         "psr/log": "~1.0",
         "zendframework/zend-db": "~2",
