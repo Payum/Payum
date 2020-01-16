@@ -17,7 +17,7 @@ class ObtainTokenTemplateTest extends TestCase
             'publishable_key' => 'theKey',
         ));
 
-        $this->assertContains('Stripe.setPublishableKey("theKey");', $result);
+        $this->assertStringContainsString('Stripe.setPublishableKey("theKey");', $result);
     }
 
     /**
@@ -31,8 +31,8 @@ class ObtainTokenTemplateTest extends TestCase
             'publishable_key' => 'theKey',
         ));
 
-        $this->assertContains('data-key="theKey"', $result);
-        $this->assertContains('https://checkout.stripe.com/checkout.js', $result);
+        $this->assertStringContainsString('data-key="theKey"', $result);
+        $this->assertStringContainsString('https://checkout.stripe.com/checkout.js', $result);
     }
 
     /**
@@ -46,7 +46,7 @@ class ObtainTokenTemplateTest extends TestCase
             'model' => array('currency' => 'GBP'),
         ));
 
-        $this->assertContains('data-currency="GBP"', $result);
+        $this->assertStringContainsString('data-currency="GBP"', $result);
     }
 
     /**
@@ -60,6 +60,6 @@ class ObtainTokenTemplateTest extends TestCase
             'model' => array('currency' => ''),
         ));
 
-        $this->assertContains('data-currency="USD"', $result);
+        $this->assertStringContainsString('data-currency="USD"', $result);
     }
 }

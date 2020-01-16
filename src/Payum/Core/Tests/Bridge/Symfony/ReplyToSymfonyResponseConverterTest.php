@@ -33,7 +33,7 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
         $response = $converter->convert($reply);
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
-        $this->assertContains('Redirecting to /foo/bar', $response->getContent());
+        $this->assertStringContainsString('Redirecting to /foo/bar', $response->getContent());
         $this->assertEquals(302, $response->getStatusCode());
 
         $headers = $response->headers->all();
