@@ -74,7 +74,7 @@ class GatewayTest extends TestCase
 
         $actualActions = $this->readAttribute($gateway, 'actions');
 
-        $this->assertInternalType('array', $actualActions);
+        $this->assertIsArray($actualActions);
         $this->assertCount(2, $actualActions);
         $this->assertSame($expectedFirstAction, $actualActions[0]);
         $this->assertSame($expectedSecondAction, $actualActions[1]);
@@ -95,7 +95,7 @@ class GatewayTest extends TestCase
 
         $actualActions = $this->readAttribute($gateway, 'actions');
 
-        $this->assertInternalType('array', $actualActions);
+        $this->assertIsArray($actualActions);
         $this->assertCount(2, $actualActions);
         $this->assertSame($expectedFirstAction, $actualActions[0]);
         $this->assertSame($expectedSecondAction, $actualActions[1]);
@@ -129,7 +129,7 @@ class GatewayTest extends TestCase
 
         $actualApis = $this->readAttribute($gateway, 'apis');
 
-        $this->assertInternalType('array', $actualApis);
+        $this->assertIsArray($actualApis);
         $this->assertCount(2, $actualApis);
         $this->assertSame($expectedFirstApi, $actualApis[0]);
         $this->assertSame($expectedSecondApi, $actualApis[1]);

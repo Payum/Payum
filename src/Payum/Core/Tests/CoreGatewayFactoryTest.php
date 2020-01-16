@@ -146,7 +146,7 @@ class CoreGatewayFactoryTest extends TestCase
 
         $config = $factory->createConfig();
 
-        $this->assertInternalType('array', $config);
+        $this->assertIsArray($config);
         $this->assertNotEmpty($config);
 
         $this->assertInstanceOf(\Closure::class, $config['payum.http_client']);
@@ -174,10 +174,10 @@ class CoreGatewayFactoryTest extends TestCase
 
         $config = $factory->createConfig();
 
-        $this->assertInternalType('array', $config);
+        $this->assertIsArray($config);
         $this->assertNotEmpty($config);
 
-        $this->assertInternalType('array', $config['payum.paths']);
+        $this->assertIsArray($config['payum.paths']);
         $this->assertNotEmpty($config['payum.paths']);
 
         $this->assertArrayHasKey('PayumCore', $config['payum.paths']);
@@ -196,10 +196,10 @@ class CoreGatewayFactoryTest extends TestCase
             'payum.paths' => ['FooNamespace' => 'FooPath']
         ]);
 
-        $this->assertInternalType('array', $config);
+        $this->assertIsArray($config);
         $this->assertNotEmpty($config);
 
-        $this->assertInternalType('array', $config['payum.paths']);
+        $this->assertIsArray($config['payum.paths']);
         $this->assertNotEmpty($config['payum.paths']);
 
         $this->assertArrayHasKey('PayumCore', $config['payum.paths']);
@@ -219,7 +219,7 @@ class CoreGatewayFactoryTest extends TestCase
 
         $config = $factory->createConfig();
 
-        $this->assertInternalType('array', $config);
+        $this->assertIsArray($config);
         $this->assertNotEmpty($config);
 
         $this->assertInstanceOf(\Closure::class, $config['twig.env']);
@@ -242,7 +242,7 @@ class CoreGatewayFactoryTest extends TestCase
             'twig.env' => $twig,
         ]);
 
-        $this->assertInternalType('array', $config);
+        $this->assertIsArray($config);
         $this->assertNotEmpty($config);
 
         $this->assertSame($twig, $config['twig.env']);
@@ -269,7 +269,7 @@ class CoreGatewayFactoryTest extends TestCase
             'payum.security.token_storage' => $tokenStorageMock,
         ]);
 
-        $this->assertInternalType('array', $config);
+        $this->assertIsArray($config);
         $this->assertNotEmpty($config);
 
         $this->assertInstanceOf(\Closure::class, $config['payum.action.get_token']);
@@ -293,7 +293,7 @@ class CoreGatewayFactoryTest extends TestCase
 
         $config = $factory->createConfig();
 
-        $this->assertInternalType('array', $config);
+        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('foo', $config);
         $this->assertEquals('fooVal', $config['foo']);

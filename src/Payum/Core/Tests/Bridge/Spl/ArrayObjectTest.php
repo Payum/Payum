@@ -125,7 +125,7 @@ class ArrayObjectTest extends TestCase
 
         $array = (array) $arrayObject;
 
-        $this->assertInternalType('array', $array);
+        $this->assertIsArray($array);
         $this->assertEquals(array('foo' => 'barbaz'), $array);
     }
 
@@ -196,7 +196,7 @@ class ArrayObjectTest extends TestCase
 
         $array = iterator_to_array($arrayObject);
 
-        $this->assertInternalType('array', $array);
+        $this->assertIsArray($array);
         $this->assertEquals(array('foo' => 'barbaz'), $array);
     }
 
@@ -351,7 +351,7 @@ class ArrayObjectTest extends TestCase
 
         $primitiveArray = $arrayObject->toUnsafeArray();
 
-        $this->assertInternalType('array', $primitiveArray);
+        $this->assertIsArray($primitiveArray);
 
         $this->assertArrayHasKey('creditCard', $primitiveArray);
         $this->assertEquals('theCreditCard', $primitiveArray['creditCard']);

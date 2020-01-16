@@ -80,7 +80,7 @@ class GetBinaryStatusTest extends TestCase
     {
         $getStatus = new GetBinaryStatus(new \stdClass());
 
-        $this->assertInternalType('boolean', $getStatus->$isXXXMethod());
+        $this->assertIsBool($getStatus->$isXXXMethod());
     }
 
     /**

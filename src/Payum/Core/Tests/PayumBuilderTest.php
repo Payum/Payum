@@ -81,10 +81,10 @@ class PayumBuilderTest extends TestCase
         $this->assertInstanceOf(HttpRequestVerifier::class, $payum->getHttpRequestVerifier());
         $this->assertInstanceOf(GenericTokenFactory::class, $payum->getTokenFactory());
 
-        $this->assertInternalType('array', $payum->getGateways());
+        $this->assertIsArray($payum->getGateways());
         $this->assertCount(0, $payum->getGateways());
 
-        $this->assertInternalType('array', $payum->getStorages());
+        $this->assertIsArray($payum->getStorages());
         $this->assertCount(3, $payum->getStorages());
         $this->assertArrayHasKey(Payment::class, $payum->getStorages());
         $this->assertArrayHasKey(ArrayObject::class, $payum->getStorages());
@@ -92,7 +92,7 @@ class PayumBuilderTest extends TestCase
 
 
         $factories = $payum->getGatewayFactories();
-        $this->assertInternalType('array', $factories);
+        $this->assertIsArray($factories);
         $this->assertGreaterThan(40, $factories);
 
         $this->assertArrayHasKey('paypal_express_checkout', $factories);
@@ -222,7 +222,7 @@ class PayumBuilderTest extends TestCase
             ->setGenericTokenFactory(function ($tokenFactory, $paths) use ($expectedTokenFactory) {
                 $this->assertInstanceOf(TokenFactoryInterface::class, $tokenFactory);
 
-                $this->assertInternalType('array', $paths);
+                $this->assertIsArray($paths);
                 $this->assertEquals([
                     'capture' => 'capture.php',
                     'notify' => 'notify.php',
@@ -551,7 +551,7 @@ class PayumBuilderTest extends TestCase
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
             ->setCoreGatewayFactory(function ($config) use ($expectedCoreGatewayFactory) {
-                $this->assertInternalType('array', $config);
+                $this->assertIsArray($config);
                 $this->assertNotEmpty($config);
 
                 return $expectedCoreGatewayFactory;
@@ -578,7 +578,7 @@ class PayumBuilderTest extends TestCase
             ->addDefaultStorages()
             ->addStorage(TestModel::class, $expectedStorage)
             ->setCoreGatewayFactory(function ($config) use ($expectedStorage) {
-                $this->assertInternalType('array', $config);
+                $this->assertIsArray($config);
                 $this->assertArrayHasKey('payum.extension.storage_payum_core_tests_testmodel', $config, var_export($config, true));
                 $this->assertInstanceOf(StorageExtension::class, $config['payum.extension.storage_payum_core_tests_testmodel']);
                 $this->assertAttributeSame($expectedStorage, 'storage', $config['payum.extension.storage_payum_core_tests_testmodel']);
@@ -731,7 +731,7 @@ class PayumBuilderTest extends TestCase
             ->addDefaultStorages()
             ->setTokenStorage($tokenStorageMock)
             ->setCoreGatewayFactory(function ($config) use ($tokenStorageMock) {
-                $this->assertInternalType('array', $config);
+                $this->assertIsArray($config);
                 $this->assertArrayHasKey('payum.security.token_storage', $config);
                 $this->assertSame($tokenStorageMock, $config['payum.security.token_storage']);
 

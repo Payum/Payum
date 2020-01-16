@@ -13,7 +13,7 @@ class RandomTest extends TestCase
     {
         $token = Random::generateToken();
 
-        $this->assertInternalType('string', $token);
+        $this->assertIsString($token);
         $this->assertEquals(43, strlen($token));
     }
 }

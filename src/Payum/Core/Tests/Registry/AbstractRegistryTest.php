@@ -127,7 +127,7 @@ class AbstractRegistryTest extends TestCase
 
         $gateways = $registry->getGateways();
 
-        $this->assertInternalType('array', $gateways);
+        $this->assertIsArray($gateways);
         $this->assertCount(2, $gateways);
 
         $this->assertArrayHasKey('fooName', $gateways);
@@ -184,7 +184,7 @@ class AbstractRegistryTest extends TestCase
 
         $gateways = $registry->getGatewayFactories();
 
-        $this->assertInternalType('array', $gateways);
+        $this->assertIsArray($gateways);
         $this->assertCount(2, $gateways);
 
         $this->assertArrayHasKey('foo', $gateways);

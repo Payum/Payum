@@ -66,7 +66,7 @@ class ConvertPaymentActionTest extends GenericActionTest
 
         $result = $convert->getResult();
 
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertNotEmpty($result);
 
         $this->assertArrayHasKey('amount', $result);
