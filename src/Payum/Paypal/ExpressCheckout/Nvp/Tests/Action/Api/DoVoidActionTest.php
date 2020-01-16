@@ -43,7 +43,7 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction');
 
-        $this->assertContains('Payum\Core\ApiAwareTrait', $rc->getTraitNames());
+        $this->assertStringContainsString('Payum\Core\ApiAwareTrait', $rc->getTraitNames());
     }
 
     /**
@@ -53,7 +53,7 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction');
 
-        $this->assertContains('Payum\Core\GatewayAwareTrait', $rc->getTraitNames());
+        $this->assertStringContainsString('Payum\Core\GatewayAwareTrait', $rc->getTraitNames());
     }
 
     /**

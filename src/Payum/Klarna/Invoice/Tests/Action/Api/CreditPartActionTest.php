@@ -166,7 +166,7 @@ class CreditPartActionTest extends TestCase
         $action->execute($creditPart = new CreditPart($details));
 
         $actualDetails = $creditPart->getModel();
-        $this->assertContains('theRefundInvoiceNumber', $actualDetails['refund_invoice_number']);
+        $this->assertStringContainsString('theRefundInvoiceNumber', $actualDetails['refund_invoice_number']);
     }
 
     /**

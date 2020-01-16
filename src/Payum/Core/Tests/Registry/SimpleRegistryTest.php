@@ -80,8 +80,8 @@ class SimpleRegistryTest extends TestCase
 
         $gateways = $registry->getGateways();
 
-        $this->assertContains($gatewayFooMock, $gateways);
-        $this->assertContains($gatewayBarMock, $gateways);
+        $this->assertStringContainsString($gatewayFooMock, $gateways);
+        $this->assertStringContainsString($gatewayBarMock, $gateways);
     }
 
     /**

@@ -46,8 +46,8 @@ class GetAddressesTest extends \PHPUnit\Framework\TestCase
         $addresses = $request->getAddresses();
 
         $this->assertCount(2, $addresses);
-        $this->assertContains($first, $addresses);
-        $this->assertContains($second, $addresses);
+        $this->assertStringContainsString($first, $addresses);
+        $this->assertStringContainsString($second, $addresses);
     }
 
     /**
