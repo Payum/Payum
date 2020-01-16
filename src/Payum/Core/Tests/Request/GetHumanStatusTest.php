@@ -80,7 +80,7 @@ class GetHumanStatusTest extends TestCase
     {
         $getStatus = new GetHumanStatus(new \stdClass());
 
-        $this->assertInternalType('boolean', $getStatus->$isXXXMethod());
+        $this->assertIsBool($getStatus->$isXXXMethod());
     }
 
     /**

@@ -65,7 +65,7 @@ class ApiTest extends TestCase
             'AMOUNT' => 100,
         ));
 
-        $this->assertInternalType('array', $post);
+        $this->assertIsArray($post);
         $this->assertArrayHasKey('OPERATIONTYPE', $post);
         $this->assertEquals(Api::OPERATION_PAYMENT, $post['OPERATIONTYPE']);
     }
@@ -85,7 +85,7 @@ class ApiTest extends TestCase
             'AMOUNT' => 100,
         ));
 
-        $this->assertInternalType('array', $post);
+        $this->assertIsArray($post);
         $this->assertArrayHasKey('VERSION', $post);
         $this->assertArrayHasKey('IDENTIFIER', $post);
         $this->assertArrayHasKey('HASH', $post);
@@ -108,7 +108,7 @@ class ApiTest extends TestCase
             'BAR' => 'barVal',
         ));
 
-        $this->assertInternalType('array', $post);
+        $this->assertIsArray($post);
         $this->assertArrayNotHasKey('FOO', $post);
         $this->assertArrayNotHasKey('BAR', $post);
     }
@@ -129,7 +129,7 @@ class ApiTest extends TestCase
             'DESCRIPTION' => 'a desc',
         ));
 
-        $this->assertInternalType('array', $post);
+        $this->assertIsArray($post);
 
         $this->assertArrayHasKey('AMOUNT', $post);
         $this->assertEquals(100, $post['AMOUNT']);

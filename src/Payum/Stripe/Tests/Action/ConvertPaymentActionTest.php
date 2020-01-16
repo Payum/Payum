@@ -116,7 +116,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertInstanceOf(SensitiveValue::class, $details['card']);
 
         $card = $details['card']->peek();
-        $this->assertInternalType('array', $card);
+        $this->assertIsArray($card);
 
         $this->assertArrayHasKey('number', $card);
         $this->assertEquals('4111111111111111', $card['number']);

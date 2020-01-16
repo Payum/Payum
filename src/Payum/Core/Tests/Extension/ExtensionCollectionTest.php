@@ -41,7 +41,7 @@ class ExtensionCollectionTest extends TestCase
 
         $addedExtensions = $this->readAttribute($collection, 'extensions');
 
-        $this->assertInternalType('array', $addedExtensions);
+        $this->assertIsArray($addedExtensions);
         $this->assertCount(2, $addedExtensions);
 
         $this->assertSame($extensionFirst, $addedExtensions[0]);
@@ -63,7 +63,7 @@ class ExtensionCollectionTest extends TestCase
 
         $addedExtensions = $this->readAttribute($collection, 'extensions');
 
-        $this->assertInternalType('array', $addedExtensions);
+        $this->assertIsArray($addedExtensions);
         $this->assertCount(2, $addedExtensions);
 
         $this->assertSame($extensionSecond, $addedExtensions[0]);

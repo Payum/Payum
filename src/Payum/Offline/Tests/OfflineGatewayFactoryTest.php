@@ -72,7 +72,7 @@ class OfflineGatewayFactoryTest extends \PHPUnit\Framework\TestCase
 
         $config = $factory->createConfig();
 
-        $this->assertInternalType('array', $config);
+        $this->assertIsArray($config);
         $this->assertNotEmpty($config);
     }
 
@@ -88,7 +88,7 @@ class OfflineGatewayFactoryTest extends \PHPUnit\Framework\TestCase
 
         $config = $factory->createConfig();
 
-        $this->assertInternalType('array', $config);
+        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('foo', $config);
         $this->assertEquals('fooVal', $config['foo']);
@@ -106,7 +106,7 @@ class OfflineGatewayFactoryTest extends \PHPUnit\Framework\TestCase
 
         $config = $factory->createConfig();
 
-        $this->assertInternalType('array', $config);
+        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
         $this->assertEquals(array(), $config['payum.default_options']);
@@ -121,7 +121,7 @@ class OfflineGatewayFactoryTest extends \PHPUnit\Framework\TestCase
 
         $config = $factory->createConfig();
 
-        $this->assertInternalType('array', $config);
+        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.factory_name', $config);
         $this->assertEquals('offline', $config['payum.factory_name']);

@@ -55,7 +55,7 @@ class UpdateOrderActionTest extends GenericActionTest
             ->method('apply')
             ->with('POST')
             ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, $model) {
-                $testCase->assertInternalType('array', $options);
+                $testCase->assertIsArray($options);
                 $testCase->assertArrayHasKey('data', $options);
                 $testCase->assertEquals(array('cart' => $model['cart']), $options['data']);
             }))
@@ -126,7 +126,7 @@ class UpdateOrderActionTest extends GenericActionTest
             ->method('apply')
             ->with('POST')
             ->will($this->returnCallback(function ($method, $order, $options) use ($model) {
-                $this->assertInternalType('array', $options);
+                $this->assertIsArray($options);
                 $this->assertArrayHasKey('data', $options);
                 $this->assertEquals(array('cart' => $model['cart']), $options['data']);
             }))

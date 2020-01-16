@@ -62,7 +62,7 @@ class FetchOrderActionTest extends GenericActionTest
             ->method('apply')
             ->with('GET')
             ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, $model) {
-                $testCase->assertInternalType('array', $options);
+                $testCase->assertIsArray($options);
                 $testCase->assertArrayHasKey('url', $options);
                 $testCase->assertEquals($model['location'], $options['url']);
             }))
