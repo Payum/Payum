@@ -21,6 +21,8 @@ matrix:
       env: SYMFONY_VERSION=v4
     - php: 7.2
       env: SYMFONY_VERSION=v4
+    - php: 7.3
+      env: SYMFONY_VERSION=v5
 
 before_install:
     - composer self-update
