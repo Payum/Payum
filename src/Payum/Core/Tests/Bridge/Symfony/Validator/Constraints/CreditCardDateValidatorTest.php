@@ -38,9 +38,4 @@ class CreditCardDateValidatorTest extends ConstraintValidatorTestCase
             ->atPath('property.path.expireAt')
             ->assertRaised();
     }
-
-    public function tearDown()
-    {
-        $this->constraint = null;
-    }
 }

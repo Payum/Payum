@@ -2,7 +2,7 @@
 namespace Payum\Core\Bridge\Symfony\Event;
 
 use Payum\Core\Extension\Context;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class ExecuteEvent extends Event
 {
