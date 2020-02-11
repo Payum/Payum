@@ -13,7 +13,8 @@ class ApiAwareTraitTest extends TestCase
         $object = new ApiAwareClass;
         $object->setApiClass(null);
 
-        $this->setExpectedException(LogicException::class, 'You must configure apiClass in __constructor method of the class the trait is applied to.');
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('You must configure apiClass in __constructor method of the class the trait is applied to.');
         $object->setApi(new \stdClass());
     }
 
@@ -22,7 +23,8 @@ class ApiAwareTraitTest extends TestCase
         $object = new ApiAwareClass;
         $object->setApiClass('invalidClass');
 
-        $this->setExpectedException(LogicException::class, 'Api class not found or invalid class. "invalidClass"');
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Api class not found or invalid class. "invalidClass"');
         $object->setApi(new \stdClass());
     }
 
@@ -31,7 +33,8 @@ class ApiAwareTraitTest extends TestCase
         $object = new ApiAwareClass;
         $object->setApiClass($this->getMockClass(\stdClass::class));
 
-        $this->setExpectedException(UnsupportedApiException::class, 'It must be an instance of Mock_stdClass');
+        $this->expectException(UnsupportedApiException::class);
+        $this->expectExceptionMessage('It must be an instance of Mock_stdClass');
         $object->setApi(new \stdClass);
     }
 

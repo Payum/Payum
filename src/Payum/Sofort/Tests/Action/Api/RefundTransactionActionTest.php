@@ -108,7 +108,7 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('refundTransaction')
             ->will($this->returnCallback(function ($details) {
-                \PHPUnit_Framework_Assert::assertEquals(100, $details['refund_amount']);
+                $this->assertEquals(100, $details['refund_amount']);
 
                 return array();
             }));
@@ -134,7 +134,7 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('refundTransaction')
             ->will($this->returnCallback(function ($details) {
-                \PHPUnit_Framework_Assert::assertEquals(50, $details['refund_amount']);
+                $this->assertEquals(50, $details['refund_amount']);
 
                 return array();
             }));
@@ -156,6 +156,6 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, array(), array(), '', false);
+        return $this->createMock(Api::class);
     }
 }

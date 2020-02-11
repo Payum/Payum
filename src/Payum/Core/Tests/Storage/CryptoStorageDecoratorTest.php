@@ -60,7 +60,8 @@ class CryptoStorageDecoratorTest extends TestCase
 
         $storage = new CryptoStorageDecorator($decoratedStorage, $this->createCypherMock());
 
-        $this->setExpectedException(\LogicException::class, 'The model stdClass must implement Payum\Core\Security\CryptedInterface interface.');
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The model stdClass must implement Payum\Core\Security\CryptedInterface interface.');
         $storage->create();
     }
 
@@ -173,7 +174,8 @@ class CryptoStorageDecoratorTest extends TestCase
     {
         $storage = new CryptoStorageDecorator($this->createStorageMock(), $this->createCypherMock());
 
-        $this->setExpectedException(\LogicException::class, 'The model stdClass must implement Payum\Core\Security\CryptedInterface interface.');
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The model stdClass must implement Payum\Core\Security\CryptedInterface interface.');
         $storage->update(new \stdClass());
     }
 
@@ -217,7 +219,8 @@ class CryptoStorageDecoratorTest extends TestCase
 
         $storage = new CryptoStorageDecorator($decoratedStorage, $this->createCypherMock());
 
-        $this->setExpectedException(\LogicException::class, 'The model stdClass must implement Payum\Core\Security\CryptedInterface interface.');
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The model stdClass must implement Payum\Core\Security\CryptedInterface interface.');
         $storage->find('anId');
     }
 
@@ -261,7 +264,8 @@ class CryptoStorageDecoratorTest extends TestCase
 
         $storage = new CryptoStorageDecorator($decoratedStorage, $this->createCypherMock());
 
-        $this->setExpectedException(\LogicException::class, 'The model stdClass must implement Payum\Core\Security\CryptedInterface interface.');
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The model stdClass must implement Payum\Core\Security\CryptedInterface interface.');
         $storage->findBy([]);
     }
 
