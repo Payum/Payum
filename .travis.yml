@@ -1,5 +1,9 @@
 language: php
 
+env:
+  global:
+    - SYMFONY_DEPRECATIONS_HELPER=weak
+
 git:
     depth: 10
 
