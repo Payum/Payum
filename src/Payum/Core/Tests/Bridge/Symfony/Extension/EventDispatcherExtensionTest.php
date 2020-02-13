@@ -3,9 +3,6 @@ namespace Payum\Core\Tests\Extension;
 
 use Payum\Core\Bridge\Symfony\Extension\EventDispatcherExtension;
 use Payum\Core\Bridge\Symfony\PayumEvents;
-use Payum\Core\Bridge\Symfony\Event\RequestEvent;
-use Payum\Core\Bridge\Symfony\Event\ReplyEvent;
-use Payum\Core\Bridge\Symfony\Event\ExceptionEvent;
 use PHPUnit\Framework\TestCase;
 
 class EventDispatcherExtensionTest extends TestCase
@@ -37,7 +34,7 @@ class EventDispatcherExtensionTest extends TestCase
         $dispatcherMock
             ->expects($this->once())
             ->method('dispatch')
-            ->with(PayumEvents::GATEWAY_PRE_EXECUTE, $this->isInstanceOf('Payum\Core\Bridge\Symfony\Event\ExecuteEvent'))
+            ->with($this->isInstanceOf('Payum\Core\Bridge\Symfony\Event\ExecuteEvent'), PayumEvents::GATEWAY_PRE_EXECUTE)
         ;
 
         $extension = new EventDispatcherExtension($dispatcherMock);
@@ -54,7 +51,7 @@ class EventDispatcherExtensionTest extends TestCase
         $dispatcherMock
             ->expects($this->once())
             ->method('dispatch')
-            ->with(PayumEvents::GATEWAY_EXECUTE, $this->isInstanceOf('Payum\Core\Bridge\Symfony\Event\ExecuteEvent'))
+            ->with($this->isInstanceOf('Payum\Core\Bridge\Symfony\Event\ExecuteEvent'), PayumEvents::GATEWAY_EXECUTE)
         ;
 
         $extension = new EventDispatcherExtension($dispatcherMock);
@@ -71,7 +68,7 @@ class EventDispatcherExtensionTest extends TestCase
         $dispatcherMock
             ->expects($this->once())
             ->method('dispatch')
-            ->with(PayumEvents::GATEWAY_POST_EXECUTE, $this->isInstanceOf('Payum\Core\Bridge\Symfony\Event\ExecuteEvent'))
+            ->with($this->isInstanceOf('Payum\Core\Bridge\Symfony\Event\ExecuteEvent'), PayumEvents::GATEWAY_POST_EXECUTE)
         ;
 
         $extension = new EventDispatcherExtension($dispatcherMock);
@@ -86,6 +83,6 @@ class EventDispatcherExtensionTest extends TestCase
 
     protected function createContextMock()
     {
-        return $this->createMock('Payum\Core\Extension\Context', array(), array(), '', false);
+        return $this->createMock('Payum\Core\Extension\Context');
     }
 }

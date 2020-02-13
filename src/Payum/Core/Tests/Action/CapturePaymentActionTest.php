@@ -247,7 +247,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $action = new CapturePaymentAction();
         $action->setGateway($gatewayMock);
 
-        $this->setExpectedException('Exception');
+        $this->expectException('Exception');
         $action->execute($capture = new Capture($payment));
 
         $this->assertSame($payment, $capture->getFirstModel());

@@ -248,7 +248,7 @@ class PayoutPayoutActionTest extends GenericActionTest
         $action = new PayoutPayoutAction();
         $action->setGateway($gatewayMock);
 
-        $this->setExpectedException('Exception');
+        $this->expectException('Exception');
         $action->execute($payout = new Payout($payoutModel));
 
         $this->assertSame($payoutModel, $payout->getFirstModel());

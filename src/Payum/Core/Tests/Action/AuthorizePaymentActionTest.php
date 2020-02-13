@@ -248,7 +248,7 @@ class AuthorizePaymentActionTest extends GenericActionTest
         $action = new AuthorizePaymentAction();
         $action->setGateway($gatewayMock);
 
-        $this->setExpectedException('Exception');
+        $this->expectException('Exception');
         $action->execute($authorize = new Authorize($payment));
 
         $this->assertSame($payment, $authorize->getFirstModel());

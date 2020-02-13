@@ -789,7 +789,7 @@ class GatewayTest extends TestCase
 
         $actualReply = $gateway->execute($expectedRequest, true);
 
-        $this->assertNull(null, $actualReply);
+        $this->assertNull(null, (string) $actualReply);
     }
 
     /**
