@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Stripe\Action\Api;
 
-use Exception as GlobalException;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
