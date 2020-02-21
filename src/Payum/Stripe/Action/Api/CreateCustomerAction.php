@@ -11,7 +11,7 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateCustomer;
 use Stripe\Customer;
-use Stripe\Error;
+use Stripe\Exception;
 use Stripe\Stripe;
 
 /**
@@ -63,8 +63,8 @@ class CreateCustomerAction implements ActionInterface, ApiAwareInterface, Gatewa
 
             $customer = Customer::create($model->toUnsafeArrayWithoutLocal());
 
-            $model->replace($customer->__toArray(true));
-        } catch (Error\Base $e) {
+            $model->replace($customer->toArray(true));
+        } catch (Exception\ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }
