@@ -126,7 +126,7 @@ class Api
             $varName = $method;
             $varName = strtolower(preg_replace('/([^A-Z])([A-Z])/', '$1_$2', substr($varName, 3)));
 
-            if (count($params) == 2) {
+            if (is_array($params) && count($params) == 2) {
                 $fields[$varName] = $transactionData->$method($params[0], $params[1]);
             } elseif ($params !== '') {
                 $fields[$varName] = $transactionData->$method($params);
