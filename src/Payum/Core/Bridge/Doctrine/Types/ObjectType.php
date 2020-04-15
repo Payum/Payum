@@ -41,12 +41,12 @@ class ObjectType extends Type
         return $val;
     }
 
-    public function closureToMongo()
+    public function closureToMongo(): string
     {
         return '$return = serialize($value);';
     }
 
-    public function closureToPHP()
+    public function closureToPHP(): string
     {
         return '$return = unserialize($value);';
     }
