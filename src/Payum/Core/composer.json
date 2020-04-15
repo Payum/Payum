@@ -71,7 +71,7 @@
         "payum/payex": "self.version If you want to use payex payment gateway",
         "payum/omnipay-v3-bridge": "^1 If you want to use omnipay's gateways",
         "doctrine/orm": "~2.3 If you want to store models to database using doctrin2 ORM",
-        "doctrine/mongodb-odm": "~1.1 If you want to store models to mongo doctrin2 ODM",
+        "doctrine/mongodb-odm": "~1.3|~2.0 If you want to store models to mongo doctrin2 ODM",
         "zendframework/zend-db": "~2.0 If you want to store models to Zend Db ORM",
         "propel/propel1": "~1.7 If you want to store models to Propel1 ORM",
         "propel/propel": "If you want to store models to Propel2 ORM",

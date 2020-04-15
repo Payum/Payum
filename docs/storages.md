@@ -166,7 +166,7 @@ $tokenStorage = new DoctrineStorage(
 ### Doctrine MongoODM.
 
 ```
-php composer.phar install "doctrine/mongodb": "1.0.*@dev" "doctrine/mongodb-odm": "1.0.*@dev"
+php composer.phar install "doctrine/mongodb-odm": "^2.0"
 ```
 
 ```php
@@ -218,7 +218,6 @@ use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
 use Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Configuration;
-use Doctrine\MongoDB\Connection;
 use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
 
 Type::addType('object', 'Payum\Core\Bridge\Doctrine\Types\ObjectType');
@@ -254,17 +253,9 @@ $config->setMetadataDriverImpl($driver);
 $config->setMetadataCacheImpl(new ArrayCache());
 $config->setDefaultDB('payum_tests');
 
-$connection = new Connection(null, array(), $config);
-
-$orderStorage = new DoctrineStorage(
-    DocumentManager::create($connection, $config),
-    'Acme\Document\Payment'
-);
-
-$tokenStorage = new DoctrineStorage(
-    DocumentManager::create($connection, $config),
-    'Acme\Document\SecurityToken'
-);
+$documentManager = DocumentManager::create(null, $config);
+$orderStorage = new DoctrineStorage($documentManager, 'Acme\Document\Payment');
+$tokenStorage = new DoctrineStorage($documentManager, 'Acme\Document\SecurityToken');
 ```        
 
 ## Filesystem.
