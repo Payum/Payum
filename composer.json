@@ -43,7 +43,7 @@
         "payum/iso4217": "~1.0",
         "php-http/message": "^1.0",
         "php-http/client-implementation": "^1.0",
-        "league/uri": "^5.0",
+        "league/uri": "^6.0",
         "twig/twig": "~1.0|~2.0"
     },
     "require-dev": {
