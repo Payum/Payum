@@ -4,6 +4,7 @@ namespace Payum\Core\Tests\Bridge\Twig\Action;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
 use Payum\Core\Request\RenderTemplate;
 use PHPUnit\Framework\TestCase;
+use Twig\Environment;
 
 class RenderTemplateActionTest extends TestCase
 {
@@ -115,10 +116,10 @@ class RenderTemplateActionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Twig_Environment
+     * @return \PHPUnit_Framework_MockObject_MockObject|Environment
      */
     protected function createTwigMock()
     {
-        return $this->createMock('Twig_Environment', array('render'), array(), '', false);
+        return $this->createMock(Environment::class, array('render'), array(), '', false);
     }
 }

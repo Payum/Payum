@@ -134,18 +134,18 @@ class DoctrineStorageTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Doctrine\Common\Persistence\ObjectManager
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Doctrine\Persistence\ObjectManager
      */
     protected function createObjectManagerMock()
     {
-        return $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        return $this->createMock('Doctrine\Persistence\ObjectManager');
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Doctrine\Common\Persistence\ObjectRepository
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Doctrine\Persistence\ObjectRepository
      */
     protected function createObjectRepositoryMock()
     {
-        return $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
+        return $this->createMock('Doctrine\Persistence\ObjectRepository');
     }
 }

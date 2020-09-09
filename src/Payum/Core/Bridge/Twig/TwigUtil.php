@@ -1,6 +1,10 @@
 <?php
 namespace Payum\Core\Bridge\Twig;
 
+use Twig\Environment;
+use Twig\Loader\ChainLoader;
+use Twig\Loader\FilesystemLoader;
+
 class TwigUtil
 {
     /**
@@ -9,10 +13,10 @@ class TwigUtil
     protected static $storage;
     
     /**
-     * @param \Twig_Environment $twig
+     * @param Environment $twig
      * @param string[] $paths
      */
-    public static function registerPaths(\Twig_Environment $twig, array $paths)
+    public static function registerPaths(Environment $twig, array $paths)
     {
         if (false == static::$storage) {
             static::$storage = new \SplObjectStorage();
@@ -20,18 +24,18 @@ class TwigUtil
         
         $storage = static::$storage;
 
-        /** @var \Twig_Loader_Filesystem $payumLoader */
-        $payumLoader = $twig && isset($storage[$twig]) ? $storage[$twig] : new \Twig_Loader_Filesystem();
+        /** @var FilesystemLoader $payumLoader */
+        $payumLoader = $twig && isset($storage[$twig]) ? $storage[$twig] : new FilesystemLoader();
         foreach ($paths as $namespace => $path) {
             $payumLoader->addPath($path, $namespace);
         }
 
         if (false == isset($storage[$twig])) {
             $currentLoader = $twig->getLoader();
-            if ($currentLoader instanceof \Twig_Loader_Chain) {
+            if ($currentLoader instanceof ChainLoader) {
                 $currentLoader->addLoader($payumLoader);
             } else {
-                $twig->setLoader(new \Twig_Loader_Chain([$currentLoader, $payumLoader]));
+                $twig->setLoader(new ChainLoader([$currentLoader, $payumLoader]));
             }
 
             $storage->attach($twig, $payumLoader);

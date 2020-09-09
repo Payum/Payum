@@ -1,20 +1,20 @@
 <?php
 namespace Payum\Core\Bridge\Doctrine\Storage;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Payum\Core\Model\Identity;
 use Payum\Core\Storage\AbstractStorage;
 
 class DoctrineStorage extends AbstractStorage
 {
     /**
-     * @var \Doctrine\Common\Persistence\ObjectManager
+     * @var \Doctrine\Persistence\ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
-     * @param string                                     $modelClass
+     * @param \Doctrine\Persistence\ObjectManager $objectManager
+     * @param string                              $modelClass
      */
     public function __construct(ObjectManager $objectManager, $modelClass)
     {
