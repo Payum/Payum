@@ -43,7 +43,7 @@
         "payum/iso4217": "~1.0",
         "php-http/message": "^1.0",
         "php-http/client-implementation": "^1.0",
-        "league/uri": "^5.0",
+        "league/uri": "^5.2",
         "twig/twig": "~1.0|~2.0"
     },
     "require-dev": {
@@ -53,6 +53,7 @@
         "omnipay/dummy": "^3@alpha",
         "omnipay/common": "^3@dev",
         "doctrine/orm": "^2.5",
+        "doctrine/common": "^2.0",
         "phpunit/phpunit": "^7.5",
         "propel/propel1": "~1.7",
         "psr/log": "~1.0",
@@ -68,7 +69,7 @@
         "authorizenet/authorizenet": "~1.8",
         "sofort/sofortlib-php": "^3.0",
         "paypal/rest-api-sdk-php" : "0.5.*",
-        "klarna/checkout": "~1|~2.0",
+        "klarna/checkout": "~1.1|~2.0",
         "fp/klarna-invoice": "0.1.*",
         "stripe/stripe-php": "~2.0|~3.0",
         "php-http/guzzle6-adapter": "^1.1.1",

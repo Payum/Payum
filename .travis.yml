@@ -16,7 +16,9 @@ cache:
 matrix:
   include:
     - php: 7.1
-      env: SYMFONY_REQUIRE=^4
+      env:
+        - SYMFONY_REQUIRE=^4
+        - DEPS=low
     - php: 7.2
       env: SYMFONY_REQUIRE=^4
     - php: 7.3
@@ -24,7 +26,9 @@ matrix:
     - php: 7.4
       env: SYMFONY_REQUIRE=^4
     - php: 7.2
-      env: SYMFONY_REQUIRE=^5
+      env:
+        - SYMFONY_REQUIRE=^5
+        - DEPS=low
     - php: 7.3
       env: SYMFONY_REQUIRE=^5
     - php: 7.4
@@ -35,7 +39,8 @@ before_install:
 
 install:
     - composer require symfony/flex --no-update
-    - composer install --prefer-source
+    - composer install
+    - if [ $DEPS = "low" ]; then composer update --prefer-lowest --prefer-stable -n; fi;
 
 script:
     - bin/phpunit
