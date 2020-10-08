@@ -16,7 +16,9 @@ cache:
 matrix:
   include:
     - php: 7.1
-      env: SYMFONY_REQUIRE=^4
+      env:
+        - SYMFONY_REQUIRE=^4
+        - COMPOSER_FLAGS="--prefer-lowest --prefer-stable"
     - php: 7.2
       env: SYMFONY_REQUIRE=^4
     - php: 7.3
@@ -24,18 +26,19 @@ matrix:
     - php: 7.4
       env: SYMFONY_REQUIRE=^4
     - php: 7.2
-      env: SYMFONY_REQUIRE=^5
+      env:
+        - SYMFONY_REQUIRE=^5
+        - COMPOSER_FLAGS="--prefer-lowest --prefer-stable"
     - php: 7.3
       env: SYMFONY_REQUIRE=^5
     - php: 7.4
       env: SYMFONY_REQUIRE=^5
 
 before_install:
-    - composer self-update
+    - composer global require --no-progress --no-scripts --no-plugins symfony/flex
 
 install:
-    - composer require symfony/flex --no-update
-    - composer install --prefer-source
+    - composer update $COMPOSER_FLAGS
 
 script:
     - bin/phpunit
