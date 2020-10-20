@@ -20,6 +20,8 @@ use Payum\Core\HttpClientInterface;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 class CoreGatewayFactoryTest extends TestCase
 {
@@ -224,7 +226,7 @@ class CoreGatewayFactoryTest extends TestCase
 
         $twig = call_user_func($config['twig.env'], ArrayObject::ensureArrayObject($config));
 
-        $this->assertInstanceOf(\Twig_Environment::class, $twig);
+        $this->assertInstanceOf(Environment::class, $twig);
     }
 
     /**
@@ -234,7 +236,7 @@ class CoreGatewayFactoryTest extends TestCase
     {
         $factory = new CoreGatewayFactory();
 
-        $twig = new \Twig_Environment(new \Twig_Loader_Filesystem());
+        $twig = new Environment(new FilesystemLoader());
 
         $config = $factory->createConfig([
             'twig.env' => $twig,

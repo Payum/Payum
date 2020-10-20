@@ -2,6 +2,7 @@
 namespace Payum\Core\Bridge\Twig;
 
 use PHPUnit\Framework\TestCase;
+use Twig\Environment;
 
 class TwigFactoryTest extends TestCase
 {
@@ -12,7 +13,7 @@ class TwigFactoryTest extends TestCase
     {
         $twig = TwigFactory::createGeneric();
 
-        $this->assertInstanceOf('Twig_Environment', $twig);
+        $this->assertInstanceOf(Environment::class, $twig);
     }
 
     /**

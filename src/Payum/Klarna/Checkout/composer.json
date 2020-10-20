@@ -24,7 +24,7 @@
     ],
     "require": {
         "payum/core": "^1.5",
-        "klarna/checkout": "^1|^2"
+        "klarna/checkout": "^1.1|^2.0"
     },
     "require-dev": {
         "payum/core": "^1.5",

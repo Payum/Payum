@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Registry;
 
-use Doctrine\Common\Persistence\Proxy;
+use Doctrine\Persistence\Proxy;
 use PHPUnit\Framework\TestCase;
 
 class AbstractRegistryTest extends TestCase
@@ -348,3 +348,4 @@ class DoctrineProxy extends DoctrineModel implements Proxy
     {
     }
 }
+

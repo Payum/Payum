@@ -1,7 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine;
 
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
+use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\ORM\Configuration;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\ORM\EntityManager;

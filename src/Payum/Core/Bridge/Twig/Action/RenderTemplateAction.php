@@ -4,11 +4,12 @@ namespace Payum\Core\Bridge\Twig\Action;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\RenderTemplate;
+use Twig\Environment;
 
 class RenderTemplateAction implements ActionInterface
 {
     /**
-     * @var \Twig_Environment
+     * @var Environment
      */
     protected $twig;
 
@@ -18,10 +19,10 @@ class RenderTemplateAction implements ActionInterface
     protected $layout;
 
     /**
-     * @param \Twig_Environment $twig
-     * @param string            $layout
+     * @param Environment $twig
+     * @param string      $layout
      */
-    public function __construct(\Twig_Environment $twig, $layout)
+    public function __construct(Environment $twig, $layout)
     {
         $this->twig = $twig;
         $this->layout = $layout;
