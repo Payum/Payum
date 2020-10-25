@@ -23,11 +23,11 @@
         }
     ],
     "require": {
-        "payum/core": "^1.5",
+        "payum/core": "^1.6",
         "fp/klarna-invoice": "0.1.*"
     },
     "require-dev": {
-        "payum/core": "^1.5",
+        "payum/core": "^1.6",
         "phpunit/phpunit": "^5.7",
         "symfony/phpunit-bridge": "^3.1|^4"
     },
