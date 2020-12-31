@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Be2bill\Tests\Action\Api;
+namespace Payum\Be2Bill\Tests\Action;
 
 use Payum\Be2Bill\Action\ConvertPaymentAction;
 use Payum\Core\Model\Identity;

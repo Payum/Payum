@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Klarna\Checkout\Tests\Action\Api;
+namespace Payum\Klarna\Checkout\Tests\Action;
 
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;

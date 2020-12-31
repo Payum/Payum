@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Stripe\Tests\Action\Api;
+namespace Payum\Stripe\Tests\Action;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayAwareInterface;

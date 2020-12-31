@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Paypal\Masspay\Nvp\Tests\Action\Api;
+namespace Payum\Paypal\Masspay\Nvp\Tests\Action;
 
 use Payum\Core\GatewayInterface;
 use Payum\Core\Model\PayoutInterface;

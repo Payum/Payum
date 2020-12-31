@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Offline\Tests\Action\Api;
+namespace Payum\Offline\Tests\Action;
 
 use Payum\Core\Model\PaymentInterface;
 use Payum\Offline\Action\ConvertPaymentAction;

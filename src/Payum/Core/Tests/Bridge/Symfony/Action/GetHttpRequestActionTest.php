@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Core\Tests\Bridge\Symfony\Action\Http;
+namespace Payum\Core\Tests\Bridge\Symfony\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Symfony\Action\GetHttpRequestAction;

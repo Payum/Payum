@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Paypal\ProHosted\Nvp\Tests\Action\Api;
+namespace Payum\Paypal\ProHosted\Nvp\Tests\Action;
 
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Generic;
