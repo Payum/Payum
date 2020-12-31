@@ -25,7 +25,7 @@ class ArrayObjectTest extends TestCase
         $array = new ArrayObject();
         $array['foo'] = 'bar';
 
-        $this->assertTrue(isset($array['foo']));
+        $this->assertArrayHasKey('foo', $array);
         $this->assertEquals('bar', $array['foo']);
     }
 
@@ -39,7 +39,7 @@ class ArrayObjectTest extends TestCase
 
         $array = new ArrayObject($internalArray);
 
-        $this->assertTrue(isset($array['foo']));
+        $this->assertArrayHasKey('foo', $array);
         $this->assertEquals('bar', $array['foo']);
     }
 
@@ -50,7 +50,7 @@ class ArrayObjectTest extends TestCase
     {
         $array = new ArrayObject();
 
-        $this->assertFalse(isset($array['foo']));
+        $this->assertArrayNotHasKey('foo', $array);
         $this->assertNull($array['foo']);
     }
 
@@ -180,8 +180,8 @@ class ArrayObjectTest extends TestCase
 
         $arrayObject = new ArrayObject($input);
 
-        $this->assertTrue(isset($arrayObject['foo']));
-        $this->assertFalse(isset($arrayObject['bar']));
+        $this->assertArrayHasKey('foo', $arrayObject);
+        $this->assertArrayNotHasKey('bar', $arrayObject);
     }
 
     /**

@@ -141,13 +141,13 @@ class RefundActionTest extends GenericActionTest
 
         $action->execute(new Refund($details));
 
-        $this->assertTrue(isset($details['FOO']));
+        $this->assertArrayHasKey('FOO', $details);
         $this->assertEquals('aVal', $details['FOO']);
 
-        $this->assertTrue(isset($details['RESULT']));
+        $this->assertArrayHasKey('RESULT', $details);
         $this->assertEquals('aResult', $details['RESULT']);
 
-        $this->assertTrue(isset($details['ORIGID']));
+        $this->assertArrayHasKey('ORIGID', $details);
         $this->assertEquals('aRef', $details['ORIGID']);
     }
 

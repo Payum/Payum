@@ -152,12 +152,12 @@ class CaptureOffsiteActionTest extends GenericActionTest
 
         $actualModel = $request->getModel();
 
-        $this->assertTrue(isset($actualModel['EXECCODE']));
+        $this->assertArrayHasKey('EXECCODE', $actualModel);
 
-        $this->assertTrue(isset($actualModel['FOO']));
+        $this->assertArrayHasKey('FOO', $actualModel);
         $this->assertEquals('fooVal', $actualModel['FOO']);
 
-        $this->assertTrue(isset($actualModel['CLIENTIDENT']));
+        $this->assertArrayHasKey('CLIENTIDENT', $actualModel);
         $this->assertEquals($model['CLIENTIDENT'], $actualModel['CLIENTIDENT']);
     }
 

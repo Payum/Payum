@@ -182,7 +182,7 @@ class CoreGatewayFactoryTest extends TestCase
 
         $this->assertArrayHasKey('PayumCore', $config['payum.paths']);
         $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumCore']);
-        $this->assertTrue(file_exists($config['payum.paths']['PayumCore']));
+        $this->assertFileExists($config['payum.paths']['PayumCore']);
     }
 
     /**
@@ -204,7 +204,7 @@ class CoreGatewayFactoryTest extends TestCase
 
         $this->assertArrayHasKey('PayumCore', $config['payum.paths']);
         $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumCore']);
-        $this->assertTrue(file_exists($config['payum.paths']['PayumCore']));
+        $this->assertFileExists($config['payum.paths']['PayumCore']);
 
         $this->assertArrayHasKey('FooNamespace', $config['payum.paths']);
         $this->assertEquals('FooPath', $config['payum.paths']['FooNamespace']);

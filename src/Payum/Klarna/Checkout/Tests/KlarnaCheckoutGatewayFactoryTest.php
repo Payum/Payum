@@ -191,10 +191,10 @@ class KlarnaCheckoutGatewayFactoryTest extends TestCase
 
         $this->assertArrayHasKey('PayumCore', $config['payum.paths']);
         $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumCore']);
-        $this->assertTrue(file_exists($config['payum.paths']['PayumCore']));
+        $this->assertFileExists($config['payum.paths']['PayumCore']);
 
         $this->assertArrayHasKey('PayumKlarnaCheckout', $config['payum.paths']);
         $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumKlarnaCheckout']);
-        $this->assertTrue(file_exists($config['payum.paths']['PayumKlarnaCheckout']));
+        $this->assertFileExists($config['payum.paths']['PayumKlarnaCheckout']);
     }
 }
