@@ -15,12 +15,10 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
     protected $requestClass = 'Payum\Core\Tests\Action\ModelAggregateAwareRequest';
 
-    public function provideSupportedRequests()
+    public function provideSupportedRequests(): \Iterator
     {
-        return array(
-            array(new $this->requestClass(new DetailsAggregateAndAwareModel())),
-            array(new $this->requestClass(new DetailsAggregateModel())),
-        );
+        yield array(new $this->requestClass(new DetailsAggregateAndAwareModel()));
+        yield array(new $this->requestClass(new DetailsAggregateModel()));
     }
 
     /**

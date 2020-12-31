@@ -17,26 +17,22 @@ class ConvertPayoutActionTest extends GenericActionTest
 
     protected $requestClass = Convert::class;
 
-    public function provideSupportedRequests()
+    public function provideSupportedRequests(): \Iterator
     {
-        return array(
-            array(new $this->requestClass(new Payout(), 'array')),
-            array(new $this->requestClass($this->createMock(PayoutInterface::class), 'array')),
-            array(new $this->requestClass(new Payout(), 'array', $this->createMock(TokenInterface::class))),
-        );
+        yield array(new $this->requestClass(new Payout(), 'array'));
+        yield array(new $this->requestClass($this->createMock(PayoutInterface::class), 'array'));
+        yield array(new $this->requestClass(new Payout(), 'array', $this->createMock(TokenInterface::class)));
     }
 
-    public function provideNotSupportedRequests()
+    public function provideNotSupportedRequests(): \Iterator
     {
-        return array(
-            array('foo'),
-            array(array('foo')),
-            array(new \stdClass()),
-            array($this->getMockForAbstractClass(Generic::class, [[]])),
-            array(new $this->requestClass(new \stdClass(), 'array')),
-            array(new $this->requestClass(new Payout(), 'foobar')),
-            array(new $this->requestClass($this->createMock(PayoutInterface::class), 'foobar')),
-        );
+        yield array('foo');
+        yield array(array('foo'));
+        yield array(new \stdClass());
+        yield array($this->getMockForAbstractClass(Generic::class, [[]]));
+        yield array(new $this->requestClass(new \stdClass(), 'array'));
+        yield array(new $this->requestClass(new Payout(), 'foobar'));
+        yield array(new $this->requestClass($this->createMock(PayoutInterface::class), 'foobar'));
     }
 
     /**

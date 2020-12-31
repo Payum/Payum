@@ -29,24 +29,20 @@ abstract class GenericActionTest extends TestCase
         $this->action = new $this->actionClass();
     }
 
-    public function provideSupportedRequests()
+    public function provideSupportedRequests(): \Iterator
     {
-        return array(
-            array(new $this->requestClass(array())),
-            array(new $this->requestClass(new \ArrayObject())),
-        );
+        yield array(new $this->requestClass(array()));
+        yield array(new $this->requestClass(new \ArrayObject()));
     }
 
-    public function provideNotSupportedRequests()
+    public function provideNotSupportedRequests(): \Iterator
     {
-        return array(
-            array('foo'),
-            array(array('foo')),
-            array(new \stdClass()),
-            array(new $this->requestClass('foo')),
-            array(new $this->requestClass(new \stdClass())),
-            array($this->getMockForAbstractClass(Generic::class, array(array()))),
-        );
+        yield array('foo');
+        yield array(array('foo'));
+        yield array(new \stdClass());
+        yield array(new $this->requestClass('foo'));
+        yield array(new $this->requestClass(new \stdClass()));
+        yield array($this->getMockForAbstractClass(Generic::class, array(array())));
     }
 
     /**

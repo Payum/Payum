@@ -33,21 +33,17 @@ class GetTokenActionTest extends GenericActionTest
         //overwrite
     }
 
-    public function provideSupportedRequests()
+    public function provideSupportedRequests(): \Iterator
     {
-        return array(
-            array(new $this->requestClass('aHash')),
-        );
+        yield array(new $this->requestClass('aHash'));
     }
 
-    public function provideNotSupportedRequests()
+    public function provideNotSupportedRequests(): \Iterator
     {
-        return array(
-            array('foo'),
-            array(array('foo')),
-            array(new \stdClass()),
-            array($this->getMockForAbstractClass(Generic::class, array(array()))),
-        );
+        yield array('foo');
+        yield array(array('foo'));
+        yield array(new \stdClass());
+        yield array($this->getMockForAbstractClass(Generic::class, array(array())));
     }
 
     /**

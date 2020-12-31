@@ -11,21 +11,17 @@ class GetHttpRequestActionTest extends GenericActionTest
 
     protected $actionClass = 'Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction';
 
-    public function provideSupportedRequests()
+    public function provideSupportedRequests(): \Iterator
     {
-        return array(
-            array(new $this->requestClass()),
-        );
+        yield array(new $this->requestClass());
     }
 
-    public function provideNotSupportedRequests()
+    public function provideNotSupportedRequests(): \Iterator
     {
-        return array(
-            array('foo'),
-            array(array('foo')),
-            array(new \stdClass()),
-            array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
-        );
+        yield array('foo');
+        yield array(array('foo'));
+        yield array(new \stdClass());
+        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
     }
 
     /**

@@ -12,14 +12,12 @@ class UpdateOrderActionTest extends GenericActionTest
 
     protected $actionClass = 'Payum\Klarna\Checkout\Action\Api\UpdateOrderAction';
 
-    public function provideNotSupportedRequests()
+    public function provideNotSupportedRequests(): \Iterator
     {
-        return array(
-            array('foo'),
-            array(array('foo')),
-            array(new \stdClass()),
-            array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
-        );
+        yield array('foo');
+        yield array(array('foo'));
+        yield array(new \stdClass());
+        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
     }
 
     /**
