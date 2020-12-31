@@ -20,7 +20,7 @@ class GetTokenActionTest extends GenericActionTest
      */
     protected $action;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->action = new $this->actionClass($this->createMock(StorageInterface::class));
     }

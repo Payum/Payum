@@ -25,7 +25,7 @@ class RenderTemplateActionTest extends GenericActionTest
      */
     private $templating;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->templating = $this->createMock(EngineInterface::class);
         $this->action = new $this->actionClass($this->templating, 'layout.html.engine');

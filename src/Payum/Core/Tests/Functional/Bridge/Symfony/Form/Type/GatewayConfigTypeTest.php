@@ -21,7 +21,7 @@ class GatewayConfigTypeTest extends TestCase
      */
     protected $fooGatewayFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fooGatewayFactoryMock = $this->createMock('Payum\Core\GatewayFactoryInterface');
 

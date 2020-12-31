@@ -19,7 +19,7 @@ abstract class BaseMongoTest extends TestCase
      */
     protected $dm;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->skipTestsIfPhp7();
 

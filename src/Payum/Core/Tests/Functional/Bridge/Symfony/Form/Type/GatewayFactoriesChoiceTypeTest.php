@@ -14,7 +14,7 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
      */
     protected $formFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->formFactory = Forms::createFormFactoryBuilder()
             ->addType(new GatewayFactoriesChoiceType(array(

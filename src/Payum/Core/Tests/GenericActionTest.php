@@ -24,7 +24,7 @@ abstract class GenericActionTest extends TestCase
      */
     protected $action;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->action = new $this->actionClass();
     }

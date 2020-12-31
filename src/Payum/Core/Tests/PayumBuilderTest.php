@@ -39,7 +39,7 @@ use PHPUnit\Framework\TestCase;
 
 class PayumBuilderTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $_SERVER = [
             'HTTP_HOST' => 'payum.dev',
