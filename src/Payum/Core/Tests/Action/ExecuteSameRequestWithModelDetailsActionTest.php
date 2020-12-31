@@ -52,9 +52,9 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->identicalTo($request))
-            ->will($this->returnCallback(function ($request) use ($expectedDetails, $testCase) {
+            ->willReturnCallback(function ($request) use ($expectedDetails, $testCase) {
                 $testCase->assertSame($expectedDetails, $request->getModel());
-            }))
+            })
         ;
 
         $action = new ExecuteSameRequestWithModelDetailsAction();
@@ -84,14 +84,14 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->identicalTo($request))
-            ->will($this->returnCallback(function ($request) use ($expectedDetails, $testCase) {
+            ->willReturnCallback(function ($request) use ($expectedDetails, $testCase) {
                 $details = $request->getModel();
 
                 $testCase->assertInstanceOf('ArrayAccess', $details);
                 $testCase->assertSame($expectedDetails, iterator_to_array($details));
 
                 $details['baz'] = 'bazVal';
-            }))
+            })
         ;
 
         $action = new ExecuteSameRequestWithModelDetailsAction();
@@ -122,14 +122,14 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->identicalTo($request))
-            ->will($this->returnCallback(function ($request) use ($expectedDetails, $testCase) {
+            ->willReturnCallback(function ($request) use ($expectedDetails, $testCase) {
                 $details = $request->getModel();
 
                 $testCase->assertInstanceOf('ArrayAccess', $details);
                 $testCase->assertSame($expectedDetails, iterator_to_array($details));
 
                 $details['baz'] = 'bazVal';
-            }))
+            })
         ;
 
         $action = new ExecuteSameRequestWithModelDetailsAction();
@@ -164,7 +164,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->identicalTo($request))
-            ->will($this->returnCallback(function ($request) use ($expectedDetails, $testCase) {
+            ->willReturnCallback(function ($request) use ($expectedDetails, $testCase) {
                 $details = $request->getModel();
 
                 $testCase->assertInstanceOf('ArrayAccess', $details);
@@ -173,7 +173,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
                 $details['baz'] = 'bazVal';
 
                 throw new \LogicException('The exception');
-            }))
+            })
         ;
 
         $action = new ExecuteSameRequestWithModelDetailsAction();

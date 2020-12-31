@@ -96,7 +96,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
-            ->will($this->returnValue($soapClientMock))
+            ->willReturn($soapClientMock)
         ;
 
         $orderApi = new OrderApi(
@@ -133,7 +133,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
-            ->will($this->returnValue($soapClientMock))
+            ->willReturn($soapClientMock)
         ;
 
         $orderApi = new OrderApi(
@@ -170,7 +170,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
-            ->will($this->returnValue($soapClientMock))
+            ->willReturn($soapClientMock)
         ;
 
         $orderApi = new OrderApi(

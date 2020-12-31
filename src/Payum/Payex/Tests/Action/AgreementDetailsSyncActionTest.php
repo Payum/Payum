@@ -38,13 +38,13 @@ class AgreementDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->at(0))
             ->method('offsetExists')
             ->with('agreementRef')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
         $array
             ->expects($this->at(1))
             ->method('offsetExists')
             ->with('orderId')
-            ->will($this->returnValue(false))
+            ->willReturn(false)
         ;
 
         $this->assertTrue($action->supports(new Sync($array)));
@@ -62,13 +62,13 @@ class AgreementDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->at(0))
             ->method('offsetExists')
             ->with('agreementRef')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
         $array
             ->expects($this->at(1))
             ->method('offsetExists')
             ->with('orderId')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $this->assertFalse($action->supports(new Sync($array)));

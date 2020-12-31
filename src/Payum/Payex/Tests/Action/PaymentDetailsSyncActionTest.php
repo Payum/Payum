@@ -38,7 +38,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->at(0))
             ->method('offsetExists')
             ->with('transactionNumber')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $this->assertTrue($action->supports(new Sync($array)));

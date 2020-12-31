@@ -466,7 +466,7 @@ class AuthorizeActionTest extends TestCase
             ->expects($this->once())
             ->method('createNotifyToken')
             ->with('theGatewayName', $this->identicalTo($identity))
-            ->will($this->returnValue($notifyToken))
+            ->willReturn($notifyToken)
         ;
 
         $action = new AuthorizeAction('aTemplate');

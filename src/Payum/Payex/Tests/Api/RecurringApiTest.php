@@ -96,7 +96,7 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
-            ->will($this->returnValue($soapClientMock))
+            ->willReturn($soapClientMock)
         ;
 
         $recurringApi = new RecurringApi(
@@ -133,7 +133,7 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
-            ->will($this->returnValue($soapClientMock))
+            ->willReturn($soapClientMock)
         ;
 
         $recurringApi = new RecurringApi(
@@ -170,7 +170,7 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
-            ->will($this->returnValue($soapClientMock))
+            ->willReturn($soapClientMock)
         ;
 
         $recurringApi = new RecurringApi(

@@ -139,7 +139,7 @@ class StatusActionTest extends GenericActionTest
         $status
             ->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue($model))
+            ->willReturn($model)
         ;
 
         return $status;

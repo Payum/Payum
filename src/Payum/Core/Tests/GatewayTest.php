@@ -154,7 +154,7 @@ class GatewayTest extends TestCase
         $action
             ->expects($this->at(1))
             ->method('supports')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $gateway->addAction($action);
@@ -177,7 +177,7 @@ class GatewayTest extends TestCase
             ->expects($this->at(0))
             ->method('setApi')
             ->with($this->identicalTo($firstApi))
-            ->will($this->throwException(new UnsupportedApiException('first api not supported')))
+            ->willThrowException(new UnsupportedApiException('first api not supported'))
         ;
         $action
             ->expects($this->at(1))
@@ -187,7 +187,7 @@ class GatewayTest extends TestCase
         $action
             ->expects($this->at(2))
             ->method('supports')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
 
@@ -214,13 +214,13 @@ class GatewayTest extends TestCase
             ->expects($this->at(0))
             ->method('setApi')
             ->with($this->identicalTo($firstApi))
-            ->will($this->throwException(new UnsupportedApiException('first api not supported')))
+            ->willThrowException(new UnsupportedApiException('first api not supported'))
         ;
         $action
             ->expects($this->at(1))
             ->method('setApi')
             ->with($this->identicalTo($secondApi))
-            ->will($this->throwException(new UnsupportedApiException('second api not supported')))
+            ->willThrowException(new UnsupportedApiException('second api not supported'))
         ;
         $action
             ->expects($this->never())
@@ -343,7 +343,7 @@ class GatewayTest extends TestCase
         $actionMock
             ->expects($this->at(1))
             ->method('supports')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
 

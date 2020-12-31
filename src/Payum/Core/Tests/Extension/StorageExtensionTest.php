@@ -75,7 +75,7 @@ class StorageExtensionTest extends TestCase
         $requestMock
             ->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue($identity))
+            ->willReturn($identity)
         ;
         $requestMock
             ->expects($this->never())
@@ -109,7 +109,7 @@ class StorageExtensionTest extends TestCase
         $requestMock
             ->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue(new \stdClass()))
+            ->willReturn(new \stdClass())
         ;
         $requestMock
             ->expects($this->never())
@@ -168,7 +168,7 @@ class StorageExtensionTest extends TestCase
         $requestMock
             ->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue($identity))
+            ->willReturn($identity)
         ;
         $requestMock
             ->expects($this->any())
@@ -206,7 +206,7 @@ class StorageExtensionTest extends TestCase
         $requestMock
             ->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue($model))
+            ->willReturn($model)
         ;
 
         $extension = new StorageExtension($storageMock);
@@ -244,7 +244,7 @@ class StorageExtensionTest extends TestCase
         $requestMock
             ->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue($model))
+            ->willReturn($model)
         ;
 
         $context = new Context($this->createGatewayMock(), $requestMock, array(
@@ -287,7 +287,7 @@ class StorageExtensionTest extends TestCase
         $requestMock
             ->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue($expectedModel))
+            ->willReturn($expectedModel)
         ;
 
         $extension = new StorageExtension($storageMock);
@@ -329,7 +329,7 @@ class StorageExtensionTest extends TestCase
         $requestMock
             ->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue($expectedModel))
+            ->willReturn($expectedModel)
         ;
 
         $extension = new StorageExtension($storageMock);
@@ -353,7 +353,7 @@ class StorageExtensionTest extends TestCase
         $modelRequestMock
             ->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue($model))
+            ->willReturn($model)
         ;
 
         return $modelRequestMock;

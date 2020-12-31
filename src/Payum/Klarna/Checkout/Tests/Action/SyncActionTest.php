@@ -84,7 +84,7 @@ class SyncActionTest extends GenericActionTest
         $orderMock
             ->expects($this->once())
             ->method('marshal')
-            ->will($this->returnValue(array('foo' => 'fooVal', 'bar' => 'barVal')))
+            ->willReturn(array('foo' => 'fooVal', 'bar' => 'barVal'))
         ;
 
         $gatewayMock = $this->createGatewayMock();

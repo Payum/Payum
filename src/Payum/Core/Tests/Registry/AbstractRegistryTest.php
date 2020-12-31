@@ -327,7 +327,7 @@ class AbstractRegistryTest extends TestCase
         $registryMock
             ->expects($this->any())
             ->method('getService')
-            ->will($this->returnArgument(0))
+            ->willReturnArgument(0)
         ;
 
         return $registryMock;

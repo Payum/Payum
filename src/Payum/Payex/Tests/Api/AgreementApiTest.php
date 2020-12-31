@@ -96,7 +96,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
-            ->will($this->returnValue($soapClientMock))
+            ->willReturn($soapClientMock)
         ;
 
         $agreementApi = new AgreementApi(
@@ -133,7 +133,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
-            ->will($this->returnValue($soapClientMock))
+            ->willReturn($soapClientMock)
         ;
 
         $agreementApi = new AgreementApi(
@@ -170,7 +170,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
-            ->will($this->returnValue($soapClientMock))
+            ->willReturn($soapClientMock)
         ;
 
         $agreementApi = new AgreementApi(
@@ -207,7 +207,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
-            ->will($this->returnValue($soapClientMock))
+            ->willReturn($soapClientMock)
         ;
 
         $agreementApi = new AgreementApi(

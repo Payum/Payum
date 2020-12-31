@@ -201,7 +201,7 @@ class AbstractStorageTest extends TestCase
         $storage
             ->expects($this->once())
             ->method('doFind')
-            ->will($this->returnValue($expectedModel))
+            ->willReturn($expectedModel)
         ;
 
         $this->assertSame($expectedModel, $storage->find($identity));
