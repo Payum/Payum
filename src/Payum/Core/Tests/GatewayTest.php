@@ -366,7 +366,6 @@ class GatewayTest extends TestCase
             ->will($this->throwException($exception))
         ;
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -412,7 +411,6 @@ class GatewayTest extends TestCase
             ->will($this->throwException($exception))
         ;
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -453,7 +451,6 @@ class GatewayTest extends TestCase
             ->will($this->throwException($exception))
         ;
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -494,7 +491,6 @@ class GatewayTest extends TestCase
             ->will($this->throwException($exception))
         ;
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -544,7 +540,6 @@ class GatewayTest extends TestCase
             ->will($this->throwException($exception))
         ;
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -590,7 +585,6 @@ class GatewayTest extends TestCase
             ->method('execute')
         ;
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -673,7 +667,6 @@ class GatewayTest extends TestCase
             ->will($this->throwException($reply))
         ;
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -718,7 +711,6 @@ class GatewayTest extends TestCase
             ->will($this->throwException($thrownReplyMock))
         ;
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -760,7 +752,6 @@ class GatewayTest extends TestCase
             ->will($this->throwException($thrownReplyMock))
         ;
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -796,7 +787,6 @@ class GatewayTest extends TestCase
 
         $actionMock = $this->createActionMock();
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -833,7 +823,6 @@ class GatewayTest extends TestCase
 
         $actionMock = $this->createActionMock();
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -879,7 +868,6 @@ class GatewayTest extends TestCase
 
         $actionMock = $this->createActionMock();
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->willReturnCallback(function ($request) use ($secondRequest) {
                 return $secondRequest === $request;

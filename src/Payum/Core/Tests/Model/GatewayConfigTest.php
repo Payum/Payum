@@ -174,7 +174,6 @@ class GatewayConfigTest extends TestCase
         $mock = $this->createMock(CypherInterface::class);
 
         $mock
-            ->expects($this->any())
             ->method('encrypt')
             ->with($this->anything())
             ->willReturnCallback(function($value) {
@@ -183,7 +182,6 @@ class GatewayConfigTest extends TestCase
         ;
 
         $mock
-            ->expects($this->any())
             ->method('decrypt')
             ->with($this->anything())
             ->willReturnCallback(function($value) {

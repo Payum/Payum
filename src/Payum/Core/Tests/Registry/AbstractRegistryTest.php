@@ -322,7 +322,6 @@ class AbstractRegistryTest extends TestCase
         $registryMock = $this->getMockForAbstractClass('Payum\Core\Registry\AbstractRegistry', $constructorArguments);
 
         $registryMock
-            ->expects($this->any())
             ->method('getService')
             ->willReturnArgument(0)
         ;

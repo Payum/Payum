@@ -243,7 +243,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
     protected function createSuccessHttpClientStub()
     {
         $clientMock = $this->createHttpClientMock();
-        $clientMock->expects($this->any())->method('send')->will($this->returnCallback(function (RequestInterface $request) {
+        $clientMock->method('send')->will($this->returnCallback(function (RequestInterface $request) {
             return new Response(200, [], $request->getBody());
         }));
 

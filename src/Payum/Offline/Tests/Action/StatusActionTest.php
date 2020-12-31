@@ -213,7 +213,6 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $status = $this->createMock('Payum\Core\Request\GetStatusInterface');
 
         $status
-            ->expects($this->any())
             ->method('getModel')
             ->willReturn($model)
         ;

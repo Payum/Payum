@@ -73,7 +73,6 @@ class StorageExtensionTest extends TestCase
 
         $requestMock = $this->createMock(ModelAggregateAndAwareInterface::class);
         $requestMock
-            ->expects($this->any())
             ->method('getModel')
             ->willReturn($identity)
         ;
@@ -107,7 +106,6 @@ class StorageExtensionTest extends TestCase
 
         $requestMock = $this->createMock(ModelAggregateAndAwareInterface::class);
         $requestMock
-            ->expects($this->any())
             ->method('getModel')
             ->willReturn(new \stdClass())
         ;
@@ -166,12 +164,10 @@ class StorageExtensionTest extends TestCase
 
         $requestMock = $this->createMock(ModelAggregateAndAwareInterface::class);
         $requestMock
-            ->expects($this->any())
             ->method('getModel')
             ->willReturn($identity)
         ;
         $requestMock
-            ->expects($this->any())
             ->method('setModel')
             ->with($this->identicalTo($expectedModel))
         ;
@@ -204,7 +200,6 @@ class StorageExtensionTest extends TestCase
 
         $requestMock = $this->createMock(ModelAggregateInterface::class);
         $requestMock
-            ->expects($this->any())
             ->method('getModel')
             ->willReturn($model)
         ;
@@ -242,7 +237,6 @@ class StorageExtensionTest extends TestCase
 
         $requestMock = $this->createMock(ModelAggregateInterface::class);
         $requestMock
-            ->expects($this->any())
             ->method('getModel')
             ->willReturn($model)
         ;
@@ -285,7 +279,6 @@ class StorageExtensionTest extends TestCase
 
         $requestMock = $this->createMock(ModelAggregateInterface::class);
         $requestMock
-            ->expects($this->any())
             ->method('getModel')
             ->willReturn($expectedModel)
         ;
@@ -327,7 +320,6 @@ class StorageExtensionTest extends TestCase
 
         $requestMock = $this->createMock(ModelAggregateInterface::class);
         $requestMock
-            ->expects($this->any())
             ->method('getModel')
             ->willReturn($expectedModel)
         ;
@@ -351,7 +343,6 @@ class StorageExtensionTest extends TestCase
     {
         $modelRequestMock = $this->createMock(ModelAggregateAndAwareInterface::class);
         $modelRequestMock
-            ->expects($this->any())
             ->method('getModel')
             ->willReturn($model)
         ;

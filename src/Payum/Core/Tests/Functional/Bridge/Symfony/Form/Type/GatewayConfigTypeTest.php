@@ -27,7 +27,6 @@ class GatewayConfigTypeTest extends TestCase
 
         $registry = $this->createMock('Payum\Core\Registry\GatewayFactoryRegistryInterface');
         $registry
-            ->expects($this->any())
             ->method('getGatewayFactory')
             ->with('foo')
             ->willReturn($this->fooGatewayFactoryMock)
