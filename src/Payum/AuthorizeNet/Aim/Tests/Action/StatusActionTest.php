@@ -137,9 +137,8 @@ class StatusActionTest extends GenericActionTest
         $status = $this->createMock('Payum\Core\Request\GetStatusInterface');
 
         $status
-            ->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue($model))
+            ->willReturn($model)
         ;
 
         return $status;

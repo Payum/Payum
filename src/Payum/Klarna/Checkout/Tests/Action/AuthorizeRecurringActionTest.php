@@ -22,44 +22,40 @@ class AuthorizeRecurringActionTest extends GenericActionTest
      */
     protected $actionClass = 'Payum\Klarna\Checkout\Action\AuthorizeRecurringAction';
 
-    public function provideSupportedRequests()
+    public function provideSupportedRequests(): \Iterator
     {
-        return array(
-            array(new $this->requestClass(array(
-                'recurring_token' => 'aToken',
-            ))),
-            array(new $this->requestClass(array(
-                'recurring' => false,
-                'recurring_token' => 'aToken',
-            ))),
-            array(new $this->requestClass(new \ArrayObject(array(
-                'recurring_token' => 'aToken',
-            )))),
-            array(new $this->requestClass(new \ArrayObject(array(
-                'recurring' => false,
-                'recurring_token' => 'aToken',
-            )))),
-        );
+        yield array(new $this->requestClass(array(
+            'recurring_token' => 'aToken',
+        )));
+        yield array(new $this->requestClass(array(
+            'recurring' => false,
+            'recurring_token' => 'aToken',
+        )));
+        yield array(new $this->requestClass(new \ArrayObject(array(
+            'recurring_token' => 'aToken',
+        ))));
+        yield array(new $this->requestClass(new \ArrayObject(array(
+            'recurring' => false,
+            'recurring_token' => 'aToken',
+        ))));
     }
 
-    public function provideNotSupportedRequests()
+    public function provideNotSupportedRequests(): \Iterator
     {
-        return array(
-            array('foo'),
-            array(array('foo')),
-            array(new \stdClass()),
-            array(new $this->requestClass('foo')),
-            array(new $this->requestClass(new \stdClass())),
-            array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
-            array(new $this->requestClass(array(
-                'recurring' => true,
-                'recurring_token' => 'aToken',
-            ))),
-            array(new $this->requestClass(array())),
-            array(new $this->requestClass(array(
-                'recurring' => false,
-            ))),
-        );
+        yield array('foo');
+        yield array(array('foo'));
+        yield array(new \stdClass());
+        yield array(new $this->requestClass('foo'));
+        yield array(new $this->requestClass(new \stdClass()));
+        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
+        yield array(new $this->requestClass(array(
+            'recurring' => true,
+            'recurring_token' => 'aToken',
+        )));
+        yield array(new $this->requestClass(array()));
+        yield array(new $this->requestClass(array(
+            'recurring' => false,
+        )));
     }
 
     /**
@@ -88,12 +84,10 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $action->setApi(new Config());
     }
 
-    /**
-     * @expectedException \Payum\Core\Exception\UnsupportedApiException
-     * @expectedExceptionMessage Not supported api given. It must be an instance of Payum\Klarna\Checkout\Config
-     */
     public function testThrowIfNotKlarnaConfigGivenAsApi()
     {
+        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Checkout\Config');
         $action = new AuthorizeRecurringAction();
         $action->setApi(new \stdClass());
     }

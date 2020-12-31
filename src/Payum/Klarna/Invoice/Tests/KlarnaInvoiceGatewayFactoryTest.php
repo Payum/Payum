@@ -160,12 +160,11 @@ class KlarnaInvoiceGatewayFactoryTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The eid, secret, country, language, currency fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The eid, secret, country, language, currency fields are required.');
         $factory = new KlarnaInvoiceGatewayFactory();
 
         $factory->create();

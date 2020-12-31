@@ -38,7 +38,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->at(0))
             ->method('offsetExists')
             ->with('transactionNumber')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $this->assertTrue($action->supports(new Sync($array)));
@@ -66,11 +66,10 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new PaymentDetailsSyncAction();
 
         $action->execute(new \stdClass());

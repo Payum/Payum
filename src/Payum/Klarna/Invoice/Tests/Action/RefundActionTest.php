@@ -59,11 +59,10 @@ class RefundActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new RefundAction();
 
         $action->execute(new \stdClass());
@@ -115,12 +114,11 @@ class RefundActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The invoice_number fields are required.
      */
     public function shouldThrowsIfDetailsNotHaveInvoiceNumber()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The invoice_number fields are required.');
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->never())

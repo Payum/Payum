@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Offline\Tests\Action\Api;
+namespace Payum\Offline\Tests\Action;
 
 use Payum\Core\Model\PaymentInterface;
 use Payum\Offline\Action\ConvertPaymentAction;
@@ -14,26 +14,22 @@ class ConvertPaymentActionTest extends GenericActionTest
 
     protected $requestClass = 'Payum\Core\Request\Convert';
 
-    public function provideSupportedRequests()
+    public function provideSupportedRequests(): \Iterator
     {
-        return array(
-            array(new $this->requestClass(new Payment(), 'array')),
-            array(new $this->requestClass($this->createMock(PaymentInterface::class), 'array')),
-            array(new $this->requestClass(new Payment(), 'array', $this->createMock('Payum\Core\Security\TokenInterface'))),
-        );
+        yield array(new $this->requestClass(new Payment(), 'array'));
+        yield array(new $this->requestClass($this->createMock(PaymentInterface::class), 'array'));
+        yield array(new $this->requestClass(new Payment(), 'array', $this->createMock('Payum\Core\Security\TokenInterface')));
     }
 
-    public function provideNotSupportedRequests()
+    public function provideNotSupportedRequests(): \Iterator
     {
-        return array(
-            array('foo'),
-            array(array('foo')),
-            array(new \stdClass()),
-            array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
-            array(new $this->requestClass(new \stdClass(), 'array')),
-            array(new $this->requestClass(new Payment(), 'foobar')),
-            array(new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar')),
-        );
+        yield array('foo');
+        yield array(array('foo'));
+        yield array(new \stdClass());
+        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
+        yield array(new $this->requestClass(new \stdClass(), 'array'));
+        yield array(new $this->requestClass(new Payment(), 'foobar'));
+        yield array(new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar'));
     }
 
     /**

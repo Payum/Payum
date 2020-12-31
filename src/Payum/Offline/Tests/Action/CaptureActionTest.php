@@ -64,11 +64,10 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CaptureAction();
 
         $action->execute(new \stdClass());
@@ -90,7 +89,7 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
 
         $action->execute($request);
 
-        $this->assertTrue(isset($details[Constants::FIELD_STATUS]));
+        $this->assertArrayHasKey(Constants::FIELD_STATUS, $details);
         $this->assertEquals(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
     }
 
@@ -111,7 +110,7 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
 
         $action->execute($request);
 
-        $this->assertTrue(isset($details[Constants::FIELD_STATUS]));
+        $this->assertArrayHasKey(Constants::FIELD_STATUS, $details);
         $this->assertEquals(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
     }
 
@@ -132,7 +131,7 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
 
         $action->execute($request);
 
-        $this->assertTrue(isset($details[Constants::FIELD_STATUS]));
+        $this->assertArrayHasKey(Constants::FIELD_STATUS, $details);
         $this->assertEquals(Constants::STATUS_CAPTURED, $details[Constants::FIELD_STATUS]);
     }
 }

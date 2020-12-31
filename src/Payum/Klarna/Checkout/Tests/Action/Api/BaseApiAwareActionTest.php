@@ -52,11 +52,10 @@ class BaseApiAwareActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\UnsupportedApiException
      */
     public function throwIfUnsupportedApiGiven()
     {
+        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $action = $this->getMockForAbstractClass('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
 
         $action->setApi(new \stdClass());

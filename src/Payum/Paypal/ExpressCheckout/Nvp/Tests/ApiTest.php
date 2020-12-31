@@ -30,23 +30,21 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The username, password, signature fields are required.
      */
     public function throwIfRequiredOptionsNotSetInConstructor()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The username, password, signature fields are required.');
         new Api(array(), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The boolean sandbox option must be set.
      */
     public function throwIfSandboxOptionNotSetInConstructor()
     {
+        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The boolean sandbox option must be set.');
         new Api(array(
             'username' => 'a_username',
             'password' => 'a_password',
@@ -56,12 +54,11 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RuntimeException
-     * @expectedExceptionMessage The return_url must be set either to FormRequest or to options.
      */
     public function throwIfReturnUrlNeitherSetToFormRequestNorToOptions()
     {
+        $this->expectException(\Payum\Core\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('The return_url must be set either to FormRequest or to options.');
         $api = new Api(array(
             'username' => 'a_username',
             'password' => 'a_password',
@@ -112,12 +109,11 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RuntimeException
-     * @expectedExceptionMessage The return_url must be set either to FormRequest or to options.
      */
     public function throwIfCancelUrlNeitherSetToFormRequestNorToOptions()
     {
+        $this->expectException(\Payum\Core\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('The return_url must be set either to FormRequest or to options.');
         $api = new Api(array(
             'username' => 'a_username',
             'password' => 'a_password',
@@ -463,7 +459,6 @@ class ApiTest extends \PHPUnit\Framework\TestCase
     {
         $clientMock = $this->createHttpClientMock();
         $clientMock
-            ->expects($this->any())
             ->method('send')
             ->will($this->returnCallback(function (RequestInterface $request) {
                 return new Response(200, [], $request->getBody());

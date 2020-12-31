@@ -55,16 +55,14 @@ class BaseModeAwareTest extends TestCase
         $this->assertTrue($rc->isAbstract());
     }
 
-    public static function provideDifferentPhpTypes()
+    public static function provideDifferentPhpTypes(): \Iterator
     {
-        return array(
-            'object' => array(new \stdClass()),
-            'int' => array(5),
-            'float' => array(5.5),
-            'string' => array('foo'),
-            'boolean' => array(false),
-            'resource' => array(tmpfile()),
-        );
+        yield 'object' => array(new \stdClass());
+        yield 'int' => array(5);
+        yield 'float' => array(5.5);
+        yield 'string' => array('foo');
+        yield 'boolean' => array(false);
+        yield 'resource' => array(tmpfile());
     }
 
     /**

@@ -519,7 +519,6 @@ class TokenFactoryTest extends TestCase
         $urlGenerator = $this->createMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
 
         $urlGenerator
-            ->expects($this->any())
             ->method('generate')
             ->willReturnCallback(function ($route, $parameters) {
                 return $route.'?'.http_build_query($parameters);

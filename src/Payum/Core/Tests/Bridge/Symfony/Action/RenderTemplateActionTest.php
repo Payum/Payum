@@ -1,6 +1,6 @@
 <?php
 
-namespace Payum\Core\Tests\Bridge\Symfony\Action\Http;
+namespace Payum\Core\Tests\Bridge\Symfony\Action;
 
 use Payum\Core\Bridge\Symfony\Action\RenderTemplateAction;
 use Payum\Core\Request\Generic;
@@ -25,7 +25,7 @@ class RenderTemplateActionTest extends GenericActionTest
      */
     private $templating;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->templating = $this->createMock(EngineInterface::class);
         $this->action = new $this->actionClass($this->templating, 'layout.html.engine');
@@ -36,14 +36,12 @@ class RenderTemplateActionTest extends GenericActionTest
         //overwrite
     }
 
-    public function provideNotSupportedRequests()
+    public function provideNotSupportedRequests(): \Iterator
     {
-        return array(
-            array('foo'),
-            array(array('foo')),
-            array(new \stdClass()),
-            array($this->getMockForAbstractClass(Generic::class, array(array()))),
-        );
+        yield array('foo');
+        yield array(array('foo'));
+        yield array(new \stdClass());
+        yield array($this->getMockForAbstractClass(Generic::class, array(array())));
     }
 
     /**

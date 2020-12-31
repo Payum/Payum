@@ -19,23 +19,19 @@ abstract class BaseConvertPaymentActionTest extends TestCase
      */
     protected $actionClass;
 
-    public function provideSupportedRequests()
+    public function provideSupportedRequests(): \Iterator
     {
-        return array(
-            array(new $this->requestClass(new Payment())),
-            array(new $this->requestClass($this->createMock(PaymentInterface::class))),
-            array(new $this->requestClass(new Payment(), $this->createMock('Payum\Core\Security\TokenInterface'))),
-        );
+        yield array(new $this->requestClass(new Payment()));
+        yield array(new $this->requestClass($this->createMock(PaymentInterface::class)));
+        yield array(new $this->requestClass(new Payment(), $this->createMock('Payum\Core\Security\TokenInterface')));
     }
 
-    public function provideNotSupportedRequests()
+    public function provideNotSupportedRequests(): \Iterator
     {
-        return array(
-            array('foo'),
-            array(array('foo')),
-            array(new \stdClass()),
-            array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
-        );
+        yield array('foo');
+        yield array(array('foo'));
+        yield array(new \stdClass());
+        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
     }
 
     /**
@@ -84,11 +80,10 @@ abstract class BaseConvertPaymentActionTest extends TestCase
      * @test
      *
      * @dataProvider provideNotSupportedRequests
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute($request)
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new $this->actionClass();
 
         $action->execute($request);

@@ -73,9 +73,8 @@ class StorageExtensionTest extends TestCase
 
         $requestMock = $this->createMock(ModelAggregateAndAwareInterface::class);
         $requestMock
-            ->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue($identity))
+            ->willReturn($identity)
         ;
         $requestMock
             ->expects($this->never())
@@ -107,9 +106,8 @@ class StorageExtensionTest extends TestCase
 
         $requestMock = $this->createMock(ModelAggregateAndAwareInterface::class);
         $requestMock
-            ->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue(new \stdClass()))
+            ->willReturn(new \stdClass())
         ;
         $requestMock
             ->expects($this->never())
@@ -166,12 +164,10 @@ class StorageExtensionTest extends TestCase
 
         $requestMock = $this->createMock(ModelAggregateAndAwareInterface::class);
         $requestMock
-            ->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue($identity))
+            ->willReturn($identity)
         ;
         $requestMock
-            ->expects($this->any())
             ->method('setModel')
             ->with($this->identicalTo($expectedModel))
         ;
@@ -204,9 +200,8 @@ class StorageExtensionTest extends TestCase
 
         $requestMock = $this->createMock(ModelAggregateInterface::class);
         $requestMock
-            ->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue($model))
+            ->willReturn($model)
         ;
 
         $extension = new StorageExtension($storageMock);
@@ -242,9 +237,8 @@ class StorageExtensionTest extends TestCase
 
         $requestMock = $this->createMock(ModelAggregateInterface::class);
         $requestMock
-            ->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue($model))
+            ->willReturn($model)
         ;
 
         $context = new Context($this->createGatewayMock(), $requestMock, array(
@@ -285,9 +279,8 @@ class StorageExtensionTest extends TestCase
 
         $requestMock = $this->createMock(ModelAggregateInterface::class);
         $requestMock
-            ->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue($expectedModel))
+            ->willReturn($expectedModel)
         ;
 
         $extension = new StorageExtension($storageMock);
@@ -327,9 +320,8 @@ class StorageExtensionTest extends TestCase
 
         $requestMock = $this->createMock(ModelAggregateInterface::class);
         $requestMock
-            ->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue($expectedModel))
+            ->willReturn($expectedModel)
         ;
 
         $extension = new StorageExtension($storageMock);
@@ -351,9 +343,8 @@ class StorageExtensionTest extends TestCase
     {
         $modelRequestMock = $this->createMock(ModelAggregateAndAwareInterface::class);
         $modelRequestMock
-            ->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue($model))
+            ->willReturn($model)
         ;
 
         return $modelRequestMock;

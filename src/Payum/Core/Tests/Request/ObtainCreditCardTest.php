@@ -77,12 +77,11 @@ class ObtainCreditCardTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage Credit card could not be obtained. It has to be set before obtain.
      */
     public function throwIfObtainCalledBeforeCreditCardSet()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('Credit card could not be obtained. It has to be set before obtain.');
         $request = new ObtainCreditCard();
 
         $request->obtain();

@@ -164,12 +164,11 @@ class KlarnaCheckoutGatewayFactoryTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The merchant_id, secret fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The merchant_id, secret fields are required.');
         $factory = new KlarnaCheckoutGatewayFactory();
 
         $factory->create();
@@ -192,10 +191,10 @@ class KlarnaCheckoutGatewayFactoryTest extends TestCase
 
         $this->assertArrayHasKey('PayumCore', $config['payum.paths']);
         $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumCore']);
-        $this->assertTrue(file_exists($config['payum.paths']['PayumCore']));
+        $this->assertFileExists($config['payum.paths']['PayumCore']);
 
         $this->assertArrayHasKey('PayumKlarnaCheckout', $config['payum.paths']);
         $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumKlarnaCheckout']);
-        $this->assertTrue(file_exists($config['payum.paths']['PayumKlarnaCheckout']));
+        $this->assertFileExists($config['payum.paths']['PayumKlarnaCheckout']);
     }
 }

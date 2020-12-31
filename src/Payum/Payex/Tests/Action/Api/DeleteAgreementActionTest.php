@@ -66,12 +66,11 @@ class DeleteAgreementActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\UnsupportedApiException
-     * @expectedExceptionMessage Not supported api given. It must be an instance of Payum\Payex\Api\AgreementApi
      */
     public function throwOnTryingSetNotAgreementApiAsApi()
     {
+        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Payex\Api\AgreementApi');
         $action = new DeleteAgreementAction();
 
         $action->setApi(new \stdClass());
@@ -109,11 +108,10 @@ class DeleteAgreementActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new DeleteAgreementAction($this->createApiMock());
 
         $action->execute(new \stdClass());
@@ -123,11 +121,10 @@ class DeleteAgreementActionTest extends \PHPUnit\Framework\TestCase
      * @test
      *
      * @dataProvider provideRequiredNotEmptyFields
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
      */
     public function throwIfTryInitializeWithRequiredFieldEmpty($requiredField)
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
         $fields = $this->requiredNotEmptyFields;
 
         $fields[$requiredField] = '';

@@ -15,7 +15,7 @@ abstract class BaseOrmTest extends TestCase
      */
     protected $em;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         if (false == class_exists('Doctrine\ORM\Version', $autoload = true)) {
             throw new \PHPUnit_Framework_SkippedTestError('Doctrine ORM lib not installed. Have you run composer with --dev option?');
@@ -25,7 +25,7 @@ abstract class BaseOrmTest extends TestCase
         }
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->setUpEntityManager();
         $this->setUpDatabase();

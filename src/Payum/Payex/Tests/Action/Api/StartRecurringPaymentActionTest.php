@@ -74,12 +74,11 @@ class StartRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\UnsupportedApiException
-     * @expectedExceptionMessage Not supported api given. It must be an instance of Payum\Payex\Api\RecurringApi
      */
     public function throwOnTryingSetNotRecurringApiAsApi()
     {
+        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Payex\Api\RecurringApi');
         $action = new StartRecurringPaymentAction();
 
         $action->setApi(new \stdClass());
@@ -117,11 +116,10 @@ class StartRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new StartRecurringPaymentAction($this->createApiMock());
 
         $action->execute(new \stdClass());
@@ -131,11 +129,10 @@ class StartRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
      * @test
      *
      * @dataProvider provideRequiredFields
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
      */
     public function throwIfTryInitializeWithRequiredFieldNotPresent($requiredField)
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
         unset($this->requiredFields[$requiredField]);
 
         $action = new StartRecurringPaymentAction();

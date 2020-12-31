@@ -154,12 +154,11 @@ class Be2BillDirectGatewayFactoryTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The identifier, password fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The identifier, password fields are required.');
         $factory = new Be2BillDirectGatewayFactory();
 
         $factory->create();

@@ -55,7 +55,7 @@ class ArrayObjectTest extends TestCase
 
         $model['foo'] = 'theFoo';
 
-        $this->assertTrue(isset($model['foo']));
+        $this->assertArrayHasKey('foo', $model);
     }
 
     /**
@@ -65,7 +65,7 @@ class ArrayObjectTest extends TestCase
     {
         $model = new ArrayObject();
 
-        $this->assertFalse(isset($model['foo']));
+        $this->assertArrayNotHasKey('foo', $model);
     }
 
     /**
@@ -78,11 +78,11 @@ class ArrayObjectTest extends TestCase
         $model['foo'] = 'theFoo';
 
         //guard
-        $this->assertTrue(isset($model['foo']));
+        $this->assertArrayHasKey('foo', $model);
 
         unset($model['foo']);
 
-        $this->assertFalse(isset($model['foo']));
+        $this->assertArrayNotHasKey('foo', $model);
     }
 
     /**

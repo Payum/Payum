@@ -139,9 +139,9 @@ class SimpleRegistryTest extends TestCase
             ->expects($this->once())
             ->method('addExtension')
             ->with($this->isInstanceOf(StorageExtension::class))
-            ->will($this->returnCallback(function (StorageExtension $extension) use ($storageMock, $testCase) {
+            ->willReturnCallback(function (StorageExtension $extension) use ($storageMock, $testCase) {
                 $testCase->assertAttributeSame($storageMock, 'storage', $extension);
-            }))
+            })
         ;
 
         $registry = new SimpleRegistry(

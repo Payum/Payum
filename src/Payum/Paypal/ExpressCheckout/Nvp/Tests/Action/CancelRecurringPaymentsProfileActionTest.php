@@ -23,23 +23,19 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
      */
     protected $actionClass = 'Payum\Paypal\ExpressCheckout\Nvp\Action\CancelRecurringPaymentsProfileAction';
 
-    public function provideSupportedRequests()
+    public function provideSupportedRequests(): \Iterator
     {
-        return array(
-            array(new $this->requestClass(array('BILLINGPERIOD' => 'foo'))),
-            array(new $this->requestClass(new \ArrayObject(array('BILLINGPERIOD' => 'foo'))))
-        );
+        yield array(new $this->requestClass(array('BILLINGPERIOD' => 'foo')));
+        yield array(new $this->requestClass(new \ArrayObject(array('BILLINGPERIOD' => 'foo'))));
     }
-    public function provideNotSupportedRequests()
+    public function provideNotSupportedRequests(): \Iterator
     {
-        return array(
-            array('foo'),
-            array(array('foo')),
-            array(new \stdClass()),
-            array(new $this->requestClass('foo')),
-            array(new $this->requestClass(new \stdClass())),
-            array($this->getMockForAbstractClass(Generic::class, array(array()))),
-        );
+        yield array('foo');
+        yield array(array('foo'));
+        yield array(new \stdClass());
+        yield array(new $this->requestClass('foo'));
+        yield array(new $this->requestClass(new \stdClass()));
+        yield array($this->getMockForAbstractClass(Generic::class, array(array())));
     }
 
     /**
@@ -98,11 +94,10 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute($request = null)
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CancelRecurringPaymentsProfileAction();
 
         $action->execute(new \stdClass());
@@ -110,12 +105,11 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The PROFILEID fields are required.
      */
     public function throwIfProfileIdNotSetInModel()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The PROFILEID fields are required.');
         $action = new CancelRecurringPaymentsProfileAction();
 
         $request = new Cancel(array('BILLINGPERIOD' => 'foo'));

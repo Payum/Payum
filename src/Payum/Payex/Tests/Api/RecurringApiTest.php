@@ -18,23 +18,21 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The account_number option must be set.
      */
     public function throwIfAccountNumberOptionNotSet()
     {
+        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The account_number option must be set.');
         new RecurringApi(new SoapClientFactory(), array());
     }
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The encryption_key option must be set.
      */
     public function throwIfEncryptionKeyOptionNotSet()
     {
+        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The encryption_key option must be set.');
         new RecurringApi(
             new SoapClientFactory(),
             array(
@@ -45,12 +43,11 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The boolean sandbox option must be set.
      */
     public function throwIfNotBoolSandboxOptionGiven()
     {
+        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The boolean sandbox option must be set.');
         new RecurringApi(
             new SoapClientFactory(),
             array(
@@ -96,7 +93,7 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
-            ->will($this->returnValue($soapClientMock))
+            ->willReturn($soapClientMock)
         ;
 
         $recurringApi = new RecurringApi(
@@ -133,7 +130,7 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
-            ->will($this->returnValue($soapClientMock))
+            ->willReturn($soapClientMock)
         ;
 
         $recurringApi = new RecurringApi(
@@ -170,7 +167,7 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
-            ->will($this->returnValue($soapClientMock))
+            ->willReturn($soapClientMock)
         ;
 
         $recurringApi = new RecurringApi(

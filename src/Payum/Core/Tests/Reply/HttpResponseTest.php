@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Core\Tests\Request\Http;
+namespace Payum\Core\Tests\Reply;
 
 use Payum\Core\Reply\HttpResponse;
 use PHPUnit\Framework\TestCase;

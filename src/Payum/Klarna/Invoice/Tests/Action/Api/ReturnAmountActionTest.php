@@ -51,12 +51,11 @@ class ReturnAmountActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\UnsupportedApiException
-     * @expectedExceptionMessage Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config
      */
     public function throwApiNotSupportedIfNotConfigGivenAsApi()
     {
+        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
         $action = new ReturnAmountAction($this->createKlarnaMock());
 
         $action->setApi(new \stdClass());
@@ -94,11 +93,10 @@ class ReturnAmountActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new ReturnAmountAction();
 
         $action->execute(new \stdClass());

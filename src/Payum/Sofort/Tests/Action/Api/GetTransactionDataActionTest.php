@@ -60,11 +60,10 @@ class GetTransactionDataActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new GetTransactionDataAction($this->createApiMock());
 
         $action->execute(new \stdClass());
@@ -72,12 +71,11 @@ class GetTransactionDataActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The parameter "transaction_id" must be set. Have you run CreateTransactionAction?
      */
     public function throwIfTransactionIdParameterIsNotSet()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The parameter "transaction_id" must be set. Have you run CreateTransactionAction?');
         $action = new GetTransactionDataAction();
 
         $request = new GetTransactionData(array());

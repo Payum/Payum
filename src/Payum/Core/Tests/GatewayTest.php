@@ -154,7 +154,7 @@ class GatewayTest extends TestCase
         $action
             ->expects($this->at(1))
             ->method('supports')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $gateway->addAction($action);
@@ -177,7 +177,7 @@ class GatewayTest extends TestCase
             ->expects($this->at(0))
             ->method('setApi')
             ->with($this->identicalTo($firstApi))
-            ->will($this->throwException(new UnsupportedApiException('first api not supported')))
+            ->willThrowException(new UnsupportedApiException('first api not supported'))
         ;
         $action
             ->expects($this->at(1))
@@ -187,7 +187,7 @@ class GatewayTest extends TestCase
         $action
             ->expects($this->at(2))
             ->method('supports')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
 
@@ -198,12 +198,11 @@ class GatewayTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage Cannot find right api for the action Mock_ApiAwareAction
      */
     public function throwIfGatewayNotHaveApiSupportedByActionOnExecute()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('Cannot find right api for the action Mock_ApiAwareAction');
         $gateway = new Gateway();
 
         $gateway->addApi($firstApi = new \stdClass());
@@ -214,13 +213,13 @@ class GatewayTest extends TestCase
             ->expects($this->at(0))
             ->method('setApi')
             ->with($this->identicalTo($firstApi))
-            ->will($this->throwException(new UnsupportedApiException('first api not supported')))
+            ->willThrowException(new UnsupportedApiException('first api not supported'))
         ;
         $action
             ->expects($this->at(1))
             ->method('setApi')
             ->with($this->identicalTo($secondApi))
-            ->will($this->throwException(new UnsupportedApiException('second api not supported')))
+            ->willThrowException(new UnsupportedApiException('second api not supported'))
         ;
         $action
             ->expects($this->never())
@@ -235,11 +234,10 @@ class GatewayTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwRequestNotSupportedIfNoneActionSet()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $request = new \stdClass();
 
         $gateway = new Gateway();
@@ -303,11 +301,10 @@ class GatewayTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Reply\Base
      */
     public function shouldNotCatchReplyByDefault()
     {
+        $this->expectException(\Payum\Core\Reply\Base::class);
         $firstRequest = new \stdClass();
         $secondRequest = new \stdClass();
         $replyMock = $this->createReplyMock();
@@ -343,7 +340,7 @@ class GatewayTest extends TestCase
         $actionMock
             ->expects($this->at(1))
             ->method('supports')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
 
@@ -354,12 +351,11 @@ class GatewayTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage An error occurred
      */
     public function shouldCallOnPostExecuteWithExceptionWhenExceptionThrown()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('An error occurred');
         $exception = new \LogicException('An error occurred');
         $request = new \stdClass();
 
@@ -370,7 +366,6 @@ class GatewayTest extends TestCase
             ->will($this->throwException($exception))
         ;
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -399,12 +394,11 @@ class GatewayTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Another error.
      */
     public function shouldThrowNewExceptionProvidedByExtensionOnPostExecute()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Another error.');
         $exception = new \LogicException('An error occurred');
         $newException = new \InvalidArgumentException('Another error.');
 
@@ -417,7 +411,6 @@ class GatewayTest extends TestCase
             ->will($this->throwException($exception))
         ;
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -458,7 +451,6 @@ class GatewayTest extends TestCase
             ->will($this->throwException($exception))
         ;
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -499,7 +491,6 @@ class GatewayTest extends TestCase
             ->will($this->throwException($exception))
         ;
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -549,7 +540,6 @@ class GatewayTest extends TestCase
             ->will($this->throwException($exception))
         ;
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -595,7 +585,6 @@ class GatewayTest extends TestCase
             ->method('execute')
         ;
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -678,7 +667,6 @@ class GatewayTest extends TestCase
             ->will($this->throwException($reply))
         ;
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -723,7 +711,6 @@ class GatewayTest extends TestCase
             ->will($this->throwException($thrownReplyMock))
         ;
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -765,7 +752,6 @@ class GatewayTest extends TestCase
             ->will($this->throwException($thrownReplyMock))
         ;
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -801,7 +787,6 @@ class GatewayTest extends TestCase
 
         $actionMock = $this->createActionMock();
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -838,7 +823,6 @@ class GatewayTest extends TestCase
 
         $actionMock = $this->createActionMock();
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
@@ -884,7 +868,6 @@ class GatewayTest extends TestCase
 
         $actionMock = $this->createActionMock();
         $actionMock
-            ->expects($this->any())
             ->method('supports')
             ->willReturnCallback(function ($request) use ($secondRequest) {
                 return $secondRequest === $request;

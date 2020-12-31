@@ -49,11 +49,10 @@ class CreateButtonPaymentActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CreateButtonPaymentAction();
 
         $action->execute(new \stdClass());
@@ -61,11 +60,10 @@ class CreateButtonPaymentActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
      */
     public function throwIfModelNotHavePaymentAmountOrCurrencySet()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
         $action = new CreateButtonPaymentAction();
 
         $request = new CreateButtonPayment(new \ArrayObject());

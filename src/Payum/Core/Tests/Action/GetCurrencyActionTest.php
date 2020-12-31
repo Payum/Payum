@@ -11,22 +11,18 @@ class GetCurrencyActionTest extends GenericActionTest
 
     protected $actionClass = 'Payum\Core\Action\GetCurrencyAction';
 
-    public function provideSupportedRequests()
+    public function provideSupportedRequests(): \Iterator
     {
-        return array(
-            array(new $this->requestClass('USD')),
-            array(new $this->requestClass('EUR')),
-        );
+        yield array(new $this->requestClass('USD'));
+        yield array(new $this->requestClass('EUR'));
     }
 
-    public function provideNotSupportedRequests()
+    public function provideNotSupportedRequests(): \Iterator
     {
-        return array(
-            array('foo'),
-            array(array('foo')),
-            array(new \stdClass()),
-            array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
-        );
+        yield array('foo');
+        yield array(array('foo'));
+        yield array(new \stdClass());
+        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
     }
 
     /**
@@ -55,12 +51,11 @@ class GetCurrencyActionTest extends GenericActionTest
 
     /**
      * @test
-     *
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage ISO 4217 does not contain: 000
      */
     public function throwsIfCurrencyNotSupported()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('ISO 4217 does not contain: 000');
         $action = new GetCurrencyAction();
 
         $action->execute($getCurrency = new GetCurrency('000'));

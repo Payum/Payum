@@ -17,15 +17,12 @@ class PayoutPayoutActionTest extends GenericActionTest
 
     protected $actionClass = PayoutPayoutAction::class;
 
-    public function provideSupportedRequests()
+    public function provideSupportedRequests(): \Iterator
     {
         $payout = new $this->requestClass($this->createMock(TokenInterface::class));
         $payout->setModel($this->createMock(PayoutInterface::class));
-
-        return array(
-            array(new $this->requestClass(new PayoutModel())),
-            array($payout),
-        );
+        yield array(new $this->requestClass(new PayoutModel()));
+        yield array($payout);
     }
 
     /**

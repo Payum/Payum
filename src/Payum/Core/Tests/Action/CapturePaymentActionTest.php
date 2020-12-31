@@ -16,15 +16,12 @@ class CapturePaymentActionTest extends GenericActionTest
 
     protected $actionClass = 'Payum\Core\Action\CapturePaymentAction';
 
-    public function provideSupportedRequests()
+    public function provideSupportedRequests(): \Iterator
     {
         $capture = new $this->requestClass($this->createMock(TokenInterface::class));
         $capture->setModel($this->createMock(PaymentInterface::class));
-
-        return array(
-            array(new $this->requestClass(new Payment())),
-            array($capture),
-        );
+        yield array(new $this->requestClass(new Payment()));
+        yield array($capture);
     }
 
     /**

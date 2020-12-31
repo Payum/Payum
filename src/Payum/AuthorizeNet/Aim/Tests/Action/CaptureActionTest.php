@@ -66,11 +66,10 @@ class CaptureActionTest extends GenericActionTest
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\UnsupportedApiException
      */
     public function throwIfUnsupportedApiGiven()
     {
+        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $action = new CaptureAction();
 
         $action->setApi(new \stdClass());
@@ -133,12 +132,11 @@ class CaptureActionTest extends GenericActionTest
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.
      */
     public function throwIfCreditCardNotSetExplicitlyAndObtainRequestNotSupportedOnCapture()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.');
         $api = $this->createAuthorizeNetAIMMock();
         $api
             ->expects($this->never())

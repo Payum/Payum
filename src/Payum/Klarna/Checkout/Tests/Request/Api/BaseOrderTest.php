@@ -38,12 +38,11 @@ class BaseOrderTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Given model is invalid. Should be an array or ArrayAccess instance.
      */
     public function throwIfTryConstructWithNotArrayModel()
     {
+        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Given model is invalid. Should be an array or ArrayAccess instance.');
         $this->createBaseOrderMock('not array');
     }
 

@@ -48,12 +48,11 @@ class EndlessCycleDetectorExtensionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage Possible endless cycle detected. ::onPreExecute was called 2 times before reach the limit.
      */
     public function throwIfCycleCounterMoreOrEqualsToNumberOfPreviousRequest()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('Possible endless cycle detected. ::onPreExecute was called 2 times before reach the limit.');
         $gatewayMock = $this->createGatewayMock();
 
         $context = new Context($gatewayMock, new \stdClass(), array(

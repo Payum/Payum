@@ -1,9 +1,10 @@
 <?php
-namespace Payum\Klarna\Checkout\Tests\Functional\Resources\Views;
+namespace Payum\Stripe\Tests\Functional\Resources\Views;
 
 use Payum\Core\Bridge\Twig\TwigFactory;
+use PHPUnit\Framework\TestCase;
 
-class ObtainTokenTemplateTest extends \PHPUnit\Framework\TestCase
+class ObtainTokenTemplateTest extends TestCase
 {
     /**
      * @test

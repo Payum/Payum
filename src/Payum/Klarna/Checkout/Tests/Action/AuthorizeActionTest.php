@@ -102,11 +102,10 @@ class AuthorizeActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new AuthorizeAction('aTemplate');
 
         $action->execute(new \stdClass());
@@ -114,11 +113,10 @@ class AuthorizeActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Reply\HttpResponse
      */
     public function shouldSubExecuteSyncIfModelHasLocationSet()
     {
+        $this->expectException(\Payum\Core\Reply\HttpResponse::class);
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->at(0))
@@ -294,12 +292,11 @@ class AuthorizeActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The push_uri fields are required.
      */
     public function shouldThrowIfPushUriNotSet()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The push_uri fields are required.');
         $action = new AuthorizeAction('aTemplate');
         $action->setGateway($this->createGatewayMock());
 
@@ -314,12 +311,11 @@ class AuthorizeActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The confirmation_uri fields are required.
      */
     public function shouldThrowIfConfirmUriNotSet()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The confirmation_uri fields are required.');
         $action = new AuthorizeAction('aTemplate');
         $action->setGateway($this->createGatewayMock());
 
@@ -334,12 +330,11 @@ class AuthorizeActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The checkout_uri fields are required.
      */
     public function shouldThrowIfCheckoutUriNotSetNeitherInConfigNorPayment()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The checkout_uri fields are required.');
         $action = new AuthorizeAction('aTemplate');
         $action->setGateway($this->createGatewayMock());
         $action->setApi(new Config());
@@ -377,12 +372,11 @@ class AuthorizeActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The terms_uri fields are required.
      */
     public function shouldThrowIfTermsUriNotSetNeitherInConfigNorPayment()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The terms_uri fields are required.');
         $action = new AuthorizeAction('aTemplate');
         $action->setGateway($this->createGatewayMock());
         $action->setApi(new Config());
@@ -466,7 +460,7 @@ class AuthorizeActionTest extends TestCase
             ->expects($this->once())
             ->method('createNotifyToken')
             ->with('theGatewayName', $this->identicalTo($identity))
-            ->will($this->returnValue($notifyToken))
+            ->willReturn($notifyToken)
         ;
 
         $action = new AuthorizeAction('aTemplate');

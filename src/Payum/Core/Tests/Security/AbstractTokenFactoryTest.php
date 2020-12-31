@@ -501,7 +501,6 @@ class AbstractTokenFactoryTest extends TestCase
     {
         $factoryMock = $this->getMockForAbstractClass(AbstractTokenFactory::class, array($tokenStorage, $registry));
         $factoryMock
-            ->expects($this->any())
             ->method('generateUrl')
             ->willReturnCallback(function ($path, array $args) {
                 return $path.'?'.http_build_query($args);

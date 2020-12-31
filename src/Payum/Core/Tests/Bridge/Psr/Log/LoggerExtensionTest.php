@@ -11,7 +11,7 @@ use Psr\Log\LoggerInterface;
 
 class LoggerExtensionTest extends TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         if (false == interface_exists('Psr\Log\LoggerInterface')) {
             throw new \PHPUnit_Framework_SkippedTestError('To run these tests install psr log lib.');

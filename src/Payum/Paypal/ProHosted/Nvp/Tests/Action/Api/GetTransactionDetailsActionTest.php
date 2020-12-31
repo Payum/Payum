@@ -49,11 +49,10 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new GetTransactionDetailsAction();
 
         $action->execute(new \stdClass());
@@ -61,12 +60,11 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage TRANSACTIONID must be set.
      */
     public function throwIfZeroPaymentRequestTransactionIdNotSetInModel()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('TRANSACTIONID must be set.');
         $action = new GetTransactionDetailsAction();
 
         $request = new GetTransactionDetails(array());

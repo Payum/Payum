@@ -539,7 +539,7 @@ class CaptureActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('createNotifyToken')
             ->with('theGatewayName', $this->identicalTo($details))
-            ->will($this->returnValue($notifyToken))
+            ->willReturn($notifyToken)
         ;
 
         $action = new CaptureAction();

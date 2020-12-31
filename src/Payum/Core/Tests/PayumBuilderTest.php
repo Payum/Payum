@@ -39,7 +39,7 @@ use PHPUnit\Framework\TestCase;
 
 class PayumBuilderTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $_SERVER = [
             'HTTP_HOST' => 'payum.dev',
@@ -57,12 +57,11 @@ class PayumBuilderTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Token storage must be configured.
      */
     public function throwsIfTokenStorageIsNotSet()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Token storage must be configured.');
         $payum = (new PayumBuilder())->getPayum();
 
         $this->assertInstanceOf(Payum::class, $payum);
@@ -178,12 +177,11 @@ class PayumBuilderTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Builder returned invalid instance
      */
     public function throwsIfHttpRequestVerifierBuilderReturnsInvalidInstance()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Builder returned invalid instance');
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
             ->setHttpRequestVerifier(function () {
@@ -267,12 +265,11 @@ class PayumBuilderTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Builder returned invalid instance
      */
     public function throwsIfGenericTokenFactoryBuilderReturnInvalidInstance()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Builder returned invalid instance');
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
             ->setGenericTokenFactory(function () {
@@ -325,12 +322,11 @@ class PayumBuilderTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Builder returned invalid instance
      */
     public function throwsIfTokenFactoryBuilderReturnInvalidInstance()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Builder returned invalid instance');
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
             ->setTokenFactory(function () {
@@ -376,12 +372,11 @@ class PayumBuilderTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Gateway config must have factory set in it and it must not be empty.
      */
     public function throwIfTryToAddGatewayConfigWithoutFactoryKeySet()
     {
+        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Gateway config must have factory set in it and it must not be empty.');
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
             ->addGateway('a_gateway', [
@@ -628,12 +623,11 @@ class PayumBuilderTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Builder returned invalid instance
      */
     public function throwsIfCoreGatewayFactoryBuilderReturnInvalidInstance()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Builder returned invalid instance');
         $expectedCoreGateway = $this->createMock(GatewayFactoryInterface::class);
 
         $payum = (new PayumBuilder())

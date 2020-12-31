@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Core\Tests\Bridge\Symfony\Action\Http;
+namespace Payum\Core\Tests\Bridge\Symfony\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Symfony\Action\GetHttpRequestAction;
@@ -65,12 +65,11 @@ class GetHttpRequestActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
-     * @expectedExceptionMessage Action GetHttpRequestAction is not supported the request string.
      */
     public function throwIfNotSupportedRequestPassedToExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectExceptionMessage('Action GetHttpRequestAction is not supported the request string.');
         $action = new GetHttpRequestAction();
 
         $action->execute('foo');

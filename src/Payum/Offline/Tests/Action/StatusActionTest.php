@@ -64,11 +64,10 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new StatusAction();
 
         $action->execute(new \stdClass());
@@ -214,9 +213,8 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $status = $this->createMock('Payum\Core\Request\GetStatusInterface');
 
         $status
-            ->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue($model))
+            ->willReturn($model)
         ;
 
         return $status;

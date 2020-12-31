@@ -12,14 +12,12 @@ class FetchOrderActionTest extends GenericActionTest
 
     protected $actionClass = 'Payum\Klarna\Checkout\Action\Api\FetchOrderAction';
 
-    public function provideNotSupportedRequests()
+    public function provideNotSupportedRequests(): \Iterator
     {
-        return array(
-            array('foo'),
-            array(array('foo')),
-            array(new \stdClass()),
-            array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
-        );
+        yield array('foo');
+        yield array(array('foo'));
+        yield array(new \stdClass());
+        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
     }
 
     /**
@@ -34,12 +32,11 @@ class FetchOrderActionTest extends GenericActionTest
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage Location has to be provided to fetch an order
      */
     public function throwIfLocationNotSetOnExecute()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('Location has to be provided to fetch an order');
         $action = new FetchOrderAction();
 
         $action->execute(new FetchOrder(array()));
@@ -119,11 +116,10 @@ class FetchOrderActionTest extends GenericActionTest
 
     /**
      * @test
-     *
-     * @expectedException \Klarna_Checkout_ConnectionErrorException
      */
     public function shouldFailedAfterThreeRetriesOnTimeout()
     {
+        $this->expectException(\Klarna_Checkout_ConnectionErrorException::class);
         $model = array(
             'location' => 'theLocation',
             'cart' => array(

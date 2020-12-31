@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
+namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayAwareInterface;
@@ -16,7 +16,7 @@ class ConfirmOrderActionTest extends GenericActionTest
 
     protected $actionClass = ConfirmOrderAction::class;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->action = new ConfirmOrderAction('theConfirmOrderTemplate');
     }

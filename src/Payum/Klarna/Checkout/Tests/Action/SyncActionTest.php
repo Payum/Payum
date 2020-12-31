@@ -65,11 +65,10 @@ class SyncActionTest extends GenericActionTest
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new SyncAction();
 
         $action->execute(new \stdClass());
@@ -84,7 +83,7 @@ class SyncActionTest extends GenericActionTest
         $orderMock
             ->expects($this->once())
             ->method('marshal')
-            ->will($this->returnValue(array('foo' => 'fooVal', 'bar' => 'barVal')))
+            ->willReturn(array('foo' => 'fooVal', 'bar' => 'barVal'))
         ;
 
         $gatewayMock = $this->createGatewayMock();

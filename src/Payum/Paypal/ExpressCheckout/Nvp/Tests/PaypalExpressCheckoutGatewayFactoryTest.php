@@ -157,12 +157,11 @@ class PaypalExpressCheckoutGatewayFactoryTest extends \PHPUnit\Framework\TestCas
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The username, password, signature fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The username, password, signature fields are required.');
         $factory = new PaypalExpressCheckoutGatewayFactory();
 
         $factory->create();
@@ -185,10 +184,10 @@ class PaypalExpressCheckoutGatewayFactoryTest extends \PHPUnit\Framework\TestCas
 
         $this->assertArrayHasKey('PayumCore', $config['payum.paths']);
         $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumCore']);
-        $this->assertTrue(file_exists($config['payum.paths']['PayumCore']));
+        $this->assertFileExists($config['payum.paths']['PayumCore']);
 
         $this->assertArrayHasKey('PayumPaypalExpressCheckout', $config['payum.paths']);
         $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumPaypalExpressCheckout']);
-        $this->assertTrue(file_exists($config['payum.paths']['PayumPaypalExpressCheckout']));
+        $this->assertFileExists($config['payum.paths']['PayumPaypalExpressCheckout']);
     }
 }

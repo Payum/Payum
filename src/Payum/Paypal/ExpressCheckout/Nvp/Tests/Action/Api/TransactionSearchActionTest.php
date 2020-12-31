@@ -59,12 +59,11 @@ class TransactionSearchActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The STARTDATE fields are required.
      */
     public function throwIfRequiredFieldMissing()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The STARTDATE fields are required.');
         $action = new TransactionSearchAction();
 
         $action->execute(new TransactionSearch(array()));

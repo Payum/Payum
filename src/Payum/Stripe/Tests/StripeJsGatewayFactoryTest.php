@@ -150,12 +150,11 @@ class StripeJsGatewayFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The publishable_key, secret_key fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The publishable_key, secret_key fields are required.');
         $factory = new StripeJsGatewayFactory();
 
         $factory->create();
@@ -178,10 +177,10 @@ class StripeJsGatewayFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->assertArrayHasKey('PayumCore', $config['payum.paths']);
         $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumCore']);
-        $this->assertTrue(file_exists($config['payum.paths']['PayumCore']));
+        $this->assertFileExists($config['payum.paths']['PayumCore']);
 
         $this->assertArrayHasKey('PayumStripe', $config['payum.paths']);
         $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumStripe']);
-        $this->assertTrue(file_exists($config['payum.paths']['PayumStripe']));
+        $this->assertFileExists($config['payum.paths']['PayumStripe']);
     }
 }

@@ -113,12 +113,11 @@ class SensitiveValueTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage It is not permitted to close this object.
      */
     public function throwIfTryToCloneValue()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('It is not permitted to close this object.');
         $sensitiveValue = new SensitiveValue('cardNumber');
 
         clone $sensitiveValue;

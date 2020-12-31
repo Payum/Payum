@@ -58,11 +58,10 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CreateRecurringPaymentProfileAction();
 
         $action->execute(new \stdClass());
@@ -70,12 +69,11 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The TOKEN, PROFILESTARTDATE, DESC, BILLINGPERIOD, BILLINGFREQUENCY, AMT, CURRENCYCODE fields are required.
      */
     public function throwIfTokenNotSetInModel()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The TOKEN, PROFILESTARTDATE, DESC, BILLINGPERIOD, BILLINGFREQUENCY, AMT, CURRENCYCODE fields are required.');
         $action = new CreateRecurringPaymentProfileAction();
 
         $action->execute(new CreateRecurringPaymentProfile(array()));
@@ -83,12 +81,11 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The PROFILESTARTDATE, DESC, BILLINGPERIOD, BILLINGFREQUENCY, AMT, CURRENCYCODE fields are required.
      */
     public function throwIfRequiredFieldMissing()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The PROFILESTARTDATE, DESC, BILLINGPERIOD, BILLINGFREQUENCY, AMT, CURRENCYCODE fields are required.');
         $action = new CreateRecurringPaymentProfileAction();
 
         $action->execute(new CreateRecurringPaymentProfile(array(
