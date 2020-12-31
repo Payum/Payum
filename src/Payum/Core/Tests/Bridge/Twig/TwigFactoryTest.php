@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Bridge\Twig;
 
+use Payum\Core\Bridge\Twig\TwigFactory;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 
