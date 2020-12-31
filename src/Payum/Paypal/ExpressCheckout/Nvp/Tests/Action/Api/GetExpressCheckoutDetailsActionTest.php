@@ -60,11 +60,10 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new GetExpressCheckoutDetailsAction();
 
         $action->execute(new \stdClass());
@@ -72,12 +71,11 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage TOKEN must be set. Have you run SetExpressCheckoutAction?
      */
     public function throwIfTokenNotSetInModel()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('TOKEN must be set. Have you run SetExpressCheckoutAction?');
         $action = new GetExpressCheckoutDetailsAction();
 
         $request = new GetExpressCheckoutDetails(array());

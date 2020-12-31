@@ -37,11 +37,10 @@ class RefundActionTest extends GenericActionTest
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\UnsupportedApiException
      */
     public function throwIfUnsupportedApiGiven()
     {
+        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $action = new RefundAction();
 
         $action->setApi(new \stdClass());
@@ -66,12 +65,11 @@ class RefundActionTest extends GenericActionTest
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage You cannot refund transaction with type notSupported. Only these types could be refunded: S, D, F
      */
     public function throwIfTransactionTypeIsNotRefundable()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('You cannot refund transaction with type notSupported. Only these types could be refunded: S, D, F');
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->never())
@@ -89,12 +87,11 @@ class RefundActionTest extends GenericActionTest
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The PNREF fields are required.
      */
     public function throwIfTransactionIdNotSet()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The PNREF fields are required.');
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->never())

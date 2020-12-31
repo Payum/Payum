@@ -308,12 +308,11 @@ class DynamicRegistryTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Gateway "theGatewayName" does not exist.
      */
     public function throwIfGatewayConfigNotFoundOnGetGateway()
     {
+        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Gateway "theGatewayName" does not exist.');
         $gatewayFactoryRegistry = $this->createGatewayFactoryRegistryMock();
         $gatewayFactoryRegistry
             ->expects($this->never())
@@ -395,12 +394,11 @@ class DynamicRegistryTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Gateway factory "theName" does not exist.
      */
     public function alwaysThrowOnGetGatewayFactory()
     {
+        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Gateway factory "theName" does not exist.');
         $registry = new DynamicRegistry(
             $this->createStorageMock(),
             $this->createGatewayFactoryRegistryMock()
@@ -471,12 +469,11 @@ class DynamicRegistryTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Storage for given class "theClass" does not exist.
      */
     public function alwaysThrowOnGetStorageForClass()
     {
+        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Storage for given class "theClass" does not exist.');
         $registry = new DynamicRegistry(
             $this->createStorageMock(),
             $this->createGatewayFactoryRegistryMock()
@@ -488,12 +485,11 @@ class DynamicRegistryTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Storage for given class "stdClass" does not exist.
      */
     public function alwaysThrowOnGetStorageForObject()
     {
+        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Storage for given class "stdClass" does not exist.');
         $registry = new DynamicRegistry(
             $this->createStorageMock(),
             $this->createGatewayFactoryRegistryMock()

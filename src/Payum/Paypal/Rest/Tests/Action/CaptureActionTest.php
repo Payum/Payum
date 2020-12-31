@@ -48,11 +48,10 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CaptureAction();
 
         $action->execute(new \stdClass());
@@ -97,11 +96,10 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\UnsupportedApiException
      */
     public function throwIfNotSupportedApiContext()
     {
+        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $action = new CaptureAction();
 
         $action->setApi(new \stdClass());

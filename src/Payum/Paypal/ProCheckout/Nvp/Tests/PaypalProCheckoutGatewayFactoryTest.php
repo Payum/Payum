@@ -156,12 +156,11 @@ class PaypalProCheckoutGatewayFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The username, password, partner, vendor, tender fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The username, password, partner, vendor, tender fields are required.');
         $factory = new PaypalProCheckoutGatewayFactory();
 
         $factory->create();

@@ -60,11 +60,10 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new RefundTransactionAction($this->createApiMock());
 
         $action->execute(new \stdClass());
@@ -72,12 +71,11 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The parameter "transaction_id" must be set. Have you run CreateTransactionAction?
      */
     public function throwIfTransactionIdParameterIsNotSet()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The parameter "transaction_id" must be set. Have you run CreateTransactionAction?');
         $action = new RefundTransactionAction();
 
         $request = new RefundTransaction(array());
@@ -86,12 +84,11 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage One of the parameters "refund_amount" or "amount" must be set.
      */
     public function throwIfAmountParameterIsNotSet()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('One of the parameters "refund_amount" or "amount" must be set.');
         $action = new RefundTransactionAction();
 
         $request = new RefundTransaction(array('transaction_id' => 'daTransactionId'));

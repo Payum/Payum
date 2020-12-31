@@ -27,12 +27,11 @@ class HttpRequestVerifierTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid request given. In most cases you have to pass $_REQUEST array.
      */
     public function throwIfRequestIsNotArrayOnVerify()
     {
+        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid request given. In most cases you have to pass $_REQUEST array.');
         $verifier = new HttpRequestVerifier($this->createStorageMock());
 
         $verifier->verify('not array');
@@ -40,12 +39,11 @@ class HttpRequestVerifierTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Token parameter `payum_token` was not found in in the http request.
      */
     public function throwIfRequestNotContainTokenParameterOnVerify()
     {
+        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Token parameter `payum_token` was not found in in the http request.');
         $verifier = new HttpRequestVerifier($this->createStorageMock());
 
         $verifier->verify(array());
@@ -53,12 +51,11 @@ class HttpRequestVerifierTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage A token with hash `invalidHash` could not be found.
      */
     public function throwIfStorageCouldNotFindTokenByGivenHashOnVerify()
     {
+        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('A token with hash `invalidHash` could not be found.');
         $invalidHash = 'invalidHash';
 
         $storageMock = $this->createStorageMock();
@@ -76,12 +73,11 @@ class HttpRequestVerifierTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The current url http://target.com/bar not match target url http://target.com/foo set in the token.
      */
     public function throwIfTargetUrlPathNotMatchServerRequestUriPathOnVerify()
     {
+        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The current url http://target.com/bar not match target url http://target.com/foo set in the token.');
         $_SERVER['REQUEST_URI'] = 'http://target.com/bar';
 
         $token = new Token();

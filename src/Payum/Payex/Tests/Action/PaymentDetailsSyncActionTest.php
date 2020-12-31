@@ -66,11 +66,10 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new PaymentDetailsSyncAction();
 
         $action->execute(new \stdClass());

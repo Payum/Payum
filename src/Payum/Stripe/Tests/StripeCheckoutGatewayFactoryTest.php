@@ -150,12 +150,11 @@ class StripeCheckoutGatewayFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The publishable_key, secret_key fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The publishable_key, secret_key fields are required.');
         $factory = new StripeCheckoutGatewayFactory();
 
         $factory->create();

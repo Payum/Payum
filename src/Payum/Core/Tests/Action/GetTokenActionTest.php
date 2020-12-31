@@ -73,12 +73,11 @@ class GetTokenActionTest extends GenericActionTest
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The token theHash could not be found
      */
     public function throwIfTokenNotFound()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The token theHash could not be found');
         $hash = 'theHash';
 
         $tokenStorage = $this->createMock(StorageInterface::class);

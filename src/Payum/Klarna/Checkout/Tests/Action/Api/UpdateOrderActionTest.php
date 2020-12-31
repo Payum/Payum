@@ -71,11 +71,10 @@ class UpdateOrderActionTest extends GenericActionTest
 
     /**
      * @test
-     *
-     * @expectedException \Klarna_Checkout_ConnectionErrorException
      */
     public function shouldFailedAfterThreeRetriesOnTimeout()
     {
+        $this->expectException(\Klarna_Checkout_ConnectionErrorException::class);
         $model = array(
             'location' => 'theLocation',
             'cart' => array(

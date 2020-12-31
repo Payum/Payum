@@ -45,12 +45,10 @@ class Propel1StorageTest extends TestCase
         $this->assertNull($model->getId());
     }
 
-    /**
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage Save method was triggered.
-     */
     public function throwForModelClassSaveOnUpdateModel()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('Save method was triggered.');
         $storage = new PropelStorage('Payum\Core\Tests\Mocks\Model\PropelModel');
 
         $model = $storage->create();

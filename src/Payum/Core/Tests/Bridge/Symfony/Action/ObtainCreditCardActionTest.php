@@ -57,12 +57,11 @@ class ObtainCreditCardActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
-     * @expectedExceptionMessage Action ObtainCreditCardAction is not supported the request stdClass.
      */
     public function throwIfNotObtainCreditCardRequestGivenOnExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectExceptionMessage('Action ObtainCreditCardAction is not supported the request stdClass.');
         $action = new ObtainCreditCardAction($this->createFormFactoryMock(), 'aTemplate');
 
         $action->execute(new \stdClass());
@@ -70,12 +69,11 @@ class ObtainCreditCardActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The action can be run only when http request is set.
      */
     public function throwIfNotSetBeforeExecute()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The action can be run only when http request is set.');
         $action = new ObtainCreditCardAction($this->createFormFactoryMock(), 'aTemplate');
 
         $action->execute(new ObtainCreditCard());

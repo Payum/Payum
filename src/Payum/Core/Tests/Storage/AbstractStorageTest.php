@@ -48,12 +48,11 @@ class AbstractStorageTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid model given. Should be instance of Mock_stdClass_
      */
     public function throwIfInvalidModelGivenOnUpdate()
     {
+        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid model given. Should be instance of Mock_stdClass_');
         $modelClass = get_class($this->createMock('stdClass'));
 
         $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', array($modelClass));
@@ -80,12 +79,11 @@ class AbstractStorageTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid model given. Should be instance of Mock_stdClass_
      */
     public function throwIfInvalidModelGivenOnDelete()
     {
+        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid model given. Should be instance of Mock_stdClass_');
         $modelClass = get_class($this->createMock('stdClass'));
 
         $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', array($modelClass));
@@ -112,12 +110,11 @@ class AbstractStorageTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid model given. Should be instance of Mock_stdClass_
      */
     public function throwIfInvalidModelGivenOnGetIdentity()
     {
+        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid model given. Should be instance of Mock_stdClass_');
         $modelClass = get_class($this->createMock('stdClass'));
 
         $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', array($modelClass));

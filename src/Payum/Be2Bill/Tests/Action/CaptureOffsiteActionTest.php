@@ -62,11 +62,10 @@ class CaptureOffsiteActionTest extends GenericActionTest
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\UnsupportedApiException
      */
     public function throwIfUnsupportedApiGiven()
     {
+        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $action = new CaptureOffsiteAction();
 
         $action->setApi(new \stdClass());
@@ -74,11 +73,10 @@ class CaptureOffsiteActionTest extends GenericActionTest
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Reply\HttpPostRedirect
      */
     public function shouldRedirectToBe2billSiteIfExecCodeNotPresentInQuery()
     {
+        $this->expectException(\Payum\Core\Reply\HttpPostRedirect::class);
         $model = array(
             'AMOUNT' => 1000,
             'CLIENTIDENT' => 'payerId',

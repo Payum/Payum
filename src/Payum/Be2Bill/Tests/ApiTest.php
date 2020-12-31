@@ -28,23 +28,21 @@ class ApiTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The identifier, password fields are required.
      */
     public function throwIfRequiredOptionsNotSetInConstructor()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The identifier, password fields are required.');
         new Api(array(), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The boolean sandbox option must be set.
      */
     public function throwIfSandboxOptionsNotBooleanInConstructor()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The boolean sandbox option must be set.');
         new Api(array(
             'identifier' => 'anId',
             'password' => 'aPass',

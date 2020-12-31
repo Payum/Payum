@@ -82,12 +82,11 @@ class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\UnsupportedApiException
-     * @expectedExceptionMessage Not supported api given. It must be an instance of Payum\Payex\Api\OrderApi
      */
     public function throwOnTryingSetNotOrderApiAsApi()
     {
+        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Payex\Api\OrderApi');
         $action = new InitializeOrderAction();
 
         $action->setApi(new \stdClass());
@@ -125,11 +124,10 @@ class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new InitializeOrderAction($this->createApiMock());
 
         $action->execute(new \stdClass());
@@ -137,12 +135,11 @@ class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The order has already been initialized.
      */
     public function throwIfTryInitializeAlreadyInitializedOrder()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The order has already been initialized.');
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->never())
@@ -161,11 +158,10 @@ class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
      * @test
      *
      * @dataProvider provideRequiredFields
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
      */
     public function throwIfTryInitializeWithRequiredFieldNotPresent($requiredField)
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
         unset($this->requiredFields[$requiredField]);
 
         $action = new InitializeOrderAction();

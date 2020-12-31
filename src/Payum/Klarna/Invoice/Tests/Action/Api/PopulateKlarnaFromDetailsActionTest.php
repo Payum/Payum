@@ -50,11 +50,10 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new PopulateKlarnaFromDetailsAction();
 
         $action->execute(new \stdClass());

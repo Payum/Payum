@@ -154,12 +154,11 @@ class PayexGatewayFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The account_number, encryption_key fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The account_number, encryption_key fields are required.');
         $factory = new PayexGatewayFactory();
 
         $factory->create();

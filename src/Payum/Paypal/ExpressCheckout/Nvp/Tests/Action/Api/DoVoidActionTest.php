@@ -88,11 +88,10 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new DoVoidAction();
 
         $action->execute(new \stdClass());
@@ -100,12 +99,11 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage AUTHORIZATIONID must be set. Has user not authorized this transaction?
      */
     public function throwIfAuthorizationIdNotSetInModel()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('AUTHORIZATIONID must be set. Has user not authorized this transaction?');
         $action = new DoVoidAction();
 
         $request = new DoVoid(array());

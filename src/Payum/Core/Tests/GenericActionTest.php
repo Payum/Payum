@@ -87,11 +87,10 @@ abstract class GenericActionTest extends TestCase
      * @test
      *
      * @dataProvider provideNotSupportedRequests
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute($request)
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $this->action->execute($request);
     }
 

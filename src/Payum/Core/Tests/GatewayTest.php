@@ -198,12 +198,11 @@ class GatewayTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage Cannot find right api for the action Mock_ApiAwareAction
      */
     public function throwIfGatewayNotHaveApiSupportedByActionOnExecute()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('Cannot find right api for the action Mock_ApiAwareAction');
         $gateway = new Gateway();
 
         $gateway->addApi($firstApi = new \stdClass());
@@ -235,11 +234,10 @@ class GatewayTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwRequestNotSupportedIfNoneActionSet()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $request = new \stdClass();
 
         $gateway = new Gateway();
@@ -303,11 +301,10 @@ class GatewayTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Reply\Base
      */
     public function shouldNotCatchReplyByDefault()
     {
+        $this->expectException(\Payum\Core\Reply\Base::class);
         $firstRequest = new \stdClass();
         $secondRequest = new \stdClass();
         $replyMock = $this->createReplyMock();
@@ -354,12 +351,11 @@ class GatewayTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage An error occurred
      */
     public function shouldCallOnPostExecuteWithExceptionWhenExceptionThrown()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('An error occurred');
         $exception = new \LogicException('An error occurred');
         $request = new \stdClass();
 
@@ -399,12 +395,11 @@ class GatewayTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Another error.
      */
     public function shouldThrowNewExceptionProvidedByExtensionOnPostExecute()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Another error.');
         $exception = new \LogicException('An error occurred');
         $newException = new \InvalidArgumentException('Another error.');
 

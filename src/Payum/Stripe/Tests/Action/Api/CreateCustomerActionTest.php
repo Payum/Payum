@@ -49,11 +49,10 @@ class CreateCustomerActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\UnsupportedApiException
      */
     public function throwNotSupportedApiIfNotKeysGivenAsApi()
     {
+        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $action = new CreateCustomerAction();
 
         $action->setApi('not keys instance');
@@ -91,12 +90,11 @@ class CreateCustomerActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
-     * @expectedExceptionMessage Action CreateCustomerAction is not supported the request stdClass.
      */
     public function throwRequestNotSupportedIfNotSupportedGiven()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectExceptionMessage('Action CreateCustomerAction is not supported the request stdClass.');
         $action = new CreateCustomerAction();
 
         $action->execute(new \stdClass());

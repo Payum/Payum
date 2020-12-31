@@ -30,23 +30,21 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The username, password, signature fields are required.
      */
     public function throwIfRequiredOptionsNotSetInConstructor()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The username, password, signature fields are required.');
         new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The boolean sandbox option must be set.
      */
     public function throwIfSandboxOptionNotSetInConstructor()
     {
+        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The boolean sandbox option must be set.');
         new Api(array(
             'username' => 'a_username',
             'password' => 'a_password',

@@ -51,12 +51,11 @@ class ActivateActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\UnsupportedApiException
-     * @expectedExceptionMessage Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config
      */
     public function throwApiNotSupportedIfNotConfigGivenAsApi()
     {
+        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
         $action = new ActivateAction($this->createKlarnaMock());
 
         $action->setApi(new \stdClass());
@@ -94,11 +93,10 @@ class ActivateActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new ActivateAction();
 
         $action->execute(new \stdClass());
@@ -106,12 +104,11 @@ class ActivateActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The rno fields are required.
      */
     public function throwIfRnoNotSet()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The rno fields are required.');
         $action = new ActivateAction();
 
         $action->execute(new Activate(array()));

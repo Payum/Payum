@@ -159,12 +159,11 @@ class PaypalRestGatewayFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The client_id, client_secret, config_path fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The client_id, client_secret, config_path fields are required.');
         $factory = new PaypalRestGatewayFactory();
 
         $factory->create();
@@ -172,12 +171,11 @@ class PaypalRestGatewayFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessageRegExp /Given \"config_path\" is invalid. \w+/
      */
     public function shouldThrowIfConfigPathOptionsNotEqualPaypalPath()
     {
+        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('/Given \"config_path\" is invalid. \w+/');
         $factory = new PaypalRestGatewayFactory();
         $factory->create([
             'client_id' => 'cId',

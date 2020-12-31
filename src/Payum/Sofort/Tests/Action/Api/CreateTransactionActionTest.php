@@ -60,11 +60,10 @@ class CreateTransactionActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CreateTransactionAction($this->createApiMock());
 
         $action->execute(new \stdClass());
@@ -72,12 +71,11 @@ class CreateTransactionActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The amount, currency_code, reason, success_url, notification_url fields are required.
      */
     public function throwIfAmountParameterIsNotSet()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The amount, currency_code, reason, success_url, notification_url fields are required.');
         $action = new CreateTransactionAction();
 
         $request = new CreateTransaction(array());
@@ -86,12 +84,11 @@ class CreateTransactionActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The currency_code, reason, success_url, notification_url fields are required.
      */
     public function throwIfCurrencyCodeParameterIsNotSet()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The currency_code, reason, success_url, notification_url fields are required.');
         $action = new CreateTransactionAction();
 
         $request = new CreateTransaction(array('amount' => 55));
@@ -100,12 +97,11 @@ class CreateTransactionActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The reason, success_url, notification_url fields are required.
      */
     public function throwIfReasonParameterIsNotSet()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The reason, success_url, notification_url fields are required.');
         $action = new CreateTransactionAction();
 
         $request = new CreateTransaction(array('amount' => 55, 'currency_code' => 'CHF'));

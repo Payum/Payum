@@ -60,11 +60,10 @@ class SetExpressCheckoutActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new SetExpressCheckoutAction();
 
         $action->execute(new \stdClass());
@@ -72,12 +71,11 @@ class SetExpressCheckoutActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The PAYMENTREQUEST_0_AMT must be set.
      */
     public function throwIfModelNotHavePaymentAmountSet()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The PAYMENTREQUEST_0_AMT must be set.');
         $action = new SetExpressCheckoutAction();
 
         $request = new SetExpressCheckout(new \ArrayObject());

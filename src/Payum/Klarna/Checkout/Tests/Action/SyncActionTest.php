@@ -65,11 +65,10 @@ class SyncActionTest extends GenericActionTest
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new SyncAction();
 
         $action->execute(new \stdClass());

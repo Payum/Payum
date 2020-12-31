@@ -103,12 +103,11 @@ class ArrayObjectTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid input given. Should be an array or instance of \Traversable
      */
     public function throwIfInvalidArgumentGivenForReplace()
     {
+        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid input given. Should be an array or instance of \Traversable');
         $array = new ArrayObject();
 
         $array->replace('foo');
@@ -203,12 +202,11 @@ class ArrayObjectTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The aRequiredField fields are required.
      */
     public function throwIfRequiredFieldEmptyAndThrowOnInvalidTrue()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The aRequiredField fields are required.');
         $arrayObject = new ArrayObject();
 
         $arrayObject->validateNotEmpty(array('aRequiredField'), $throwOnInvalid = true);
@@ -216,12 +214,11 @@ class ArrayObjectTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The otherRequiredField fields are required.
      */
     public function throwIfSecondRequiredFieldEmptyAndThrowOnInvalidTrue()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The otherRequiredField fields are required.');
         $arrayObject = new ArrayObject();
         $arrayObject['aRequiredField'] = 'foo';
 
@@ -230,12 +227,11 @@ class ArrayObjectTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The aRequiredField fields are required.
      */
     public function throwByDefaultIfRequiredFieldEmpty()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The aRequiredField fields are required.');
         $arrayObject = new ArrayObject();
 
         $arrayObject->validateNotEmpty(array('aRequiredField'));
@@ -275,12 +271,11 @@ class ArrayObjectTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The aRequiredField fields is not set.
      */
     public function throwIfRequiredFieldNotSetAndThrowOnInvalidTrue()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The aRequiredField fields is not set.');
         $arrayObject = new ArrayObject();
 
         $arrayObject->validatedKeysSet(array('aRequiredField'), $throwOnInvalid = true);
@@ -288,12 +283,11 @@ class ArrayObjectTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The otherRequiredField fields is not set.
      */
     public function throwIfSecondRequiredFieldNotSetAndThrowOnInvalidTrue()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The otherRequiredField fields is not set.');
         $arrayObject = new ArrayObject();
         $arrayObject['aRequiredField'] = 'foo';
 
@@ -302,12 +296,11 @@ class ArrayObjectTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The aRequiredField fields is not set.
      */
     public function throwByDefaultIfRequiredFieldNotSet()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The aRequiredField fields is not set.');
         $arrayObject = new ArrayObject();
 
         $arrayObject->validatedKeysSet(array('aRequiredField'));

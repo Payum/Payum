@@ -74,12 +74,11 @@ class CreditPartActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\UnsupportedApiException
-     * @expectedExceptionMessage Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config
      */
     public function throwApiNotSupportedIfNotConfigGivenAsApi()
     {
+        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
         $action = new CreditPartAction($this->createKlarnaMock());
 
         $action->setApi(new \stdClass());
@@ -117,11 +116,10 @@ class CreditPartActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CreditPartAction();
 
         $action->execute(new \stdClass());
@@ -129,12 +127,11 @@ class CreditPartActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The invoice_number fields are required.
      */
     public function throwIfDetailsDoNotHaveInvoiceNumber()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The invoice_number fields are required.');
         $action = new CreditPartAction();
 
         $action->execute(new CreditPart(array()));

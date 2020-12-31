@@ -65,11 +65,10 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new RecurringPaymentDetailsStatusAction();
 
         $action->execute(new \stdClass());

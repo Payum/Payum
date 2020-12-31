@@ -48,12 +48,11 @@ class RenderTemplateActionTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
-     * @expectedExceptionMessage Action RenderTemplateAction is not supported the request string.
      */
     public function throwIfNotSupportedRequestPassedToExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectExceptionMessage('Action RenderTemplateAction is not supported the request string.');
         $action = new RenderTemplateAction($this->createTwigMock(), 'aLayout');
 
         $action->execute('foo');

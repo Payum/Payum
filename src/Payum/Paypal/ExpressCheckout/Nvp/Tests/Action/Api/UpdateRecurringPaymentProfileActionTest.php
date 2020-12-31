@@ -58,11 +58,10 @@ class UpdateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new UpdateRecurringPaymentProfileAction();
 
         $action->execute(new \stdClass());
@@ -70,12 +69,11 @@ class UpdateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The PROFILEID fields are required.
      */
     public function throwIfProfileIdNotSetInModel()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The PROFILEID fields are required.');
         $action = new UpdateRecurringPaymentProfileAction();
 
         $action->execute(new UpdateRecurringPaymentProfile(array()));

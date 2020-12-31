@@ -84,12 +84,10 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $action->setApi(new Config());
     }
 
-    /**
-     * @expectedException \Payum\Core\Exception\UnsupportedApiException
-     * @expectedExceptionMessage Not supported api given. It must be an instance of Payum\Klarna\Checkout\Config
-     */
     public function testThrowIfNotKlarnaConfigGivenAsApi()
     {
+        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Checkout\Config');
         $action = new AuthorizeRecurringAction();
         $action->setApi(new \stdClass());
     }

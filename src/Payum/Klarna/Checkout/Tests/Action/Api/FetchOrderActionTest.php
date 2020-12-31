@@ -32,12 +32,11 @@ class FetchOrderActionTest extends GenericActionTest
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage Location has to be provided to fetch an order
      */
     public function throwIfLocationNotSetOnExecute()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('Location has to be provided to fetch an order');
         $action = new FetchOrderAction();
 
         $action->execute(new FetchOrder(array()));
@@ -117,11 +116,10 @@ class FetchOrderActionTest extends GenericActionTest
 
     /**
      * @test
-     *
-     * @expectedException \Klarna_Checkout_ConnectionErrorException
      */
     public function shouldFailedAfterThreeRetriesOnTimeout()
     {
+        $this->expectException(\Klarna_Checkout_ConnectionErrorException::class);
         $model = array(
             'location' => 'theLocation',
             'cart' => array(

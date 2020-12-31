@@ -164,12 +164,11 @@ class KlarnaCheckoutGatewayFactoryTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The merchant_id, secret fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The merchant_id, secret fields are required.');
         $factory = new KlarnaCheckoutGatewayFactory();
 
         $factory->create();

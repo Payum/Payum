@@ -51,12 +51,11 @@ class GetCurrencyActionTest extends GenericActionTest
 
     /**
      * @test
-     *
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage ISO 4217 does not contain: 000
      */
     public function throwsIfCurrencyNotSupported()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('ISO 4217 does not contain: 000');
         $action = new GetCurrencyAction();
 
         $action->execute($getCurrency = new GetCurrency('000'));

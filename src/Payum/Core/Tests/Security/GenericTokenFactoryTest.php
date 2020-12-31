@@ -113,12 +113,11 @@ class GenericTokenFactoryTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The path "capture" is not found. Possible paths are foo, bar
      */
     public function throwIfCapturePathNotConfigured()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The path "capture" is not found. Possible paths are foo, bar');
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $afterPath = 'theAfterPath';
@@ -203,12 +202,11 @@ class GenericTokenFactoryTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The path "authorize" is not found. Possible paths are foo, bar
      */
     public function throwIfAuthorizePathNotConfigured()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The path "authorize" is not found. Possible paths are foo, bar');
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $afterPath = 'theAfterPath';
@@ -293,12 +291,11 @@ class GenericTokenFactoryTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The path "refund" is not found. Possible paths are foo, bar
      */
     public function throwIfRefundPathNotConfigured()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The path "refund" is not found. Possible paths are foo, bar');
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $afterPath = 'theAfterPath';
@@ -418,12 +415,11 @@ class GenericTokenFactoryTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The path "cancel" is not found. Possible paths are foo, bar
      */
     public function throwIfCancelPathNotConfigured()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The path "cancel" is not found. Possible paths are foo, bar');
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $afterPath = 'theAfterPath';
@@ -543,12 +539,11 @@ class GenericTokenFactoryTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The path "notify" is not found. Possible paths are foo, bar
      */
     public function throwIfNotifyPathNotConfigured()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The path "notify" is not found. Possible paths are foo, bar');
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $afterPath = 'theAfterPath';
@@ -642,12 +637,11 @@ class GenericTokenFactoryTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The path "payout" is not found. Possible paths are foo, bar
      */
     public function throwIfPayoutPathNotConfigured()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The path "payout" is not found. Possible paths are foo, bar');
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $afterPath = 'theAfterPath';

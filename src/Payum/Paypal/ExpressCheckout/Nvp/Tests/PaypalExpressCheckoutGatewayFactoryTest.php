@@ -157,12 +157,11 @@ class PaypalExpressCheckoutGatewayFactoryTest extends \PHPUnit\Framework\TestCas
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The username, password, signature fields are required.
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The username, password, signature fields are required.');
         $factory = new PaypalExpressCheckoutGatewayFactory();
 
         $factory->create();

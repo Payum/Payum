@@ -60,11 +60,10 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit\Framework\
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new ManageRecurringPaymentsProfileStatusAction();
 
         $action->execute(new \stdClass());
@@ -72,12 +71,11 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit\Framework\
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The PROFILEID, ACTION fields are required.
      */
     public function throwIfProfileIdNotSetInModel()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The PROFILEID, ACTION fields are required.');
         $action = new ManageRecurringPaymentsProfileStatusAction();
 
         $request = new ManageRecurringPaymentsProfileStatus(array());
@@ -87,12 +85,11 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit\Framework\
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The ACTION fields are required.
      */
     public function throwIfTokenNotSetInModel()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The ACTION fields are required.');
         $action = new ManageRecurringPaymentsProfileStatusAction();
 
         $request = new ManageRecurringPaymentsProfileStatus(array(

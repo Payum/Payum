@@ -108,10 +108,10 @@ class RenderTemplateTest extends TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      */
     public function shouldThrowExceptionIfParameterExistsOnAddParameter()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $request = new RenderTemplate('aTemplate', array());
 
         $request->addParameter('foo', 'fooVal');

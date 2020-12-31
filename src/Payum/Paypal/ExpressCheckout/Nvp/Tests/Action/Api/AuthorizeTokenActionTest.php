@@ -59,11 +59,10 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new AuthorizeTokenAction($this->createApiMock());
 
         $action->execute(new \stdClass());
@@ -71,12 +70,11 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The TOKEN must be set by SetExpressCheckout request but it was not executed or failed. Review payment details model for more information
      */
     public function throwIfModelNotHaveTokenSet()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The TOKEN must be set by SetExpressCheckout request but it was not executed or failed. Review payment details model for more information');
         $action = new AuthorizeTokenAction($this->createApiMock());
 
         $action->execute(new AuthorizeToken(new \ArrayObject()));

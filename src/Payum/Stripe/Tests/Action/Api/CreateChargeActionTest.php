@@ -49,11 +49,10 @@ class CreateChargeActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\UnsupportedApiException
      */
     public function throwNotSupportedApiIfNotKeysGivenAsApi()
     {
+        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $action = new CreateChargeAction();
 
         $action->setApi('not keys instance');
@@ -91,12 +90,11 @@ class CreateChargeActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
-     * @expectedExceptionMessage Action CreateChargeAction is not supported the request stdClass.
      */
     public function throwRequestNotSupportedIfNotSupportedGiven()
     {
+        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectExceptionMessage('Action CreateChargeAction is not supported the request stdClass.');
         $action = new CreateChargeAction();
 
         $action->execute(new \stdClass());
@@ -104,12 +102,11 @@ class CreateChargeActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The either card token or customer id has to be set.
      */
     public function throwIfNotCardNorCustomerSet()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The either card token or customer id has to be set.');
         $action = new CreateChargeAction();
 
         $action->execute(new CreateCharge([]));
@@ -117,12 +114,11 @@ class CreateChargeActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The token has already been used.
      */
     public function throwIfCardAlreadyUsed()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectExceptionMessage('The token has already been used.');
         $action = new CreateChargeAction();
 
         $action->execute(new CreateCharge([

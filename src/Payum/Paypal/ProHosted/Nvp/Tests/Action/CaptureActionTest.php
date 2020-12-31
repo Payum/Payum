@@ -64,11 +64,10 @@ class CaptureActionTest extends GenericActionTest
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
      */
     public function throwIfModelNotHavePaymentAmountOrCurrencySet()
     {
+        $this->expectException(\Payum\Core\Exception\LogicException::class);
         $action = new CreateButtonPaymentAction();
 
         $request = new CreateButtonPayment(new \ArrayObject());
