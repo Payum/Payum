@@ -39,11 +39,12 @@
         }
     ],
     "require": {
-        "php": "^7.1.3",
+        "php": "^7.2",
         "payum/iso4217": "~1.0",
         "php-http/message": "^1.0",
         "php-http/client-implementation": "^1.0",
-        "league/uri": "^5.1",
+        "league/uri": "^6.4",
+        "league/uri-components": "^2.2",
         "twig/twig": "^1.34|^2.4|^3.0"
     },
     "require-dev": {
