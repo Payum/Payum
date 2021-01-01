@@ -2,8 +2,8 @@
 
 namespace Payum\Core\Security\Util;
 
+use League\Uri\Components\Path;
 use League\Uri\Http;
-use League\Uri\Modifiers\Normalize;
 
 class RequestTokenVerifier
 {
@@ -16,11 +16,10 @@ class RequestTokenVerifier
     {
         $uri = Http::createFromString($requestUri);
         $altUri = Http::createFromString($tokenUri);
-        $modifier = new Normalize();
 
-        $newUri = $modifier->process($uri);
-        $newAltUri = $modifier->process($altUri);
+        $uriPath = Path::createFromUri($uri);
+        $altUriPath = Path::createFromUri($altUri);
 
-        return $newUri->getPath() === $newAltUri->getPath();
+        return rawurldecode((string) $uriPath) === rawurldecode((string) $altUriPath);
     }
 }

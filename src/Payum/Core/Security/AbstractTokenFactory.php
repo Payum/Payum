@@ -3,7 +3,7 @@ namespace Payum\Core\Security;
 
 use League\Uri\Http as HttpUri;
 use League\Uri\Components\Query;
-use League\Uri\QueryParser;
+use League\Uri\QueryString;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\Util\Random;
 use Payum\Core\Storage\IdentityInterface;
@@ -81,12 +81,11 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
      */
     protected function addQueryToUri(HttpUri $uri, array $query)
     {
-        $query = array_replace((new QueryParser())->parse($uri->getQuery()), $query);
-        $query = array_filter($query, function ($value) {
-            return null !== $value;
-        });
+        $uriQuery = Query::createFromUri($uri)->withoutEmptyPairs();
 
-        return $uri->withQuery((string) Query::createFromPairs($query));
+        $query = array_replace($uriQuery->params(), $query);
+
+        return $uri->withQuery((string) Query::createFromParams($query));
     }
 
     /**
