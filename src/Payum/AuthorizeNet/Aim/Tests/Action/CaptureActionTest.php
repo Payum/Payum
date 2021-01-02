@@ -11,12 +11,9 @@ use Payum\Core\Request\Capture;
 use Payum\AuthorizeNet\Aim\Action\CaptureAction;
 use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Tests\GenericActionTest;
-use Payum\Core\Tests\SkipOnPhp7Trait;
 
 class CaptureActionTest extends GenericActionTest
 {
-    use SkipOnPhp7Trait;
-
     protected $actionClass = 'Payum\AuthorizeNet\Aim\Action\CaptureAction';
 
     protected $requestClass = 'Payum\Core\Request\Capture';

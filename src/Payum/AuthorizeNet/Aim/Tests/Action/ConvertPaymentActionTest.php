@@ -7,12 +7,9 @@ use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
 use Payum\Core\Request\GetCurrency;
 use Payum\Core\Tests\GenericActionTest;
-use Payum\Core\Tests\SkipOnPhp7Trait;
 
 class ConvertPaymentActionTest extends GenericActionTest
 {
-    use SkipOnPhp7Trait;
-
     protected $actionClass = 'Payum\AuthorizeNet\Aim\Action\ConvertPaymentAction';
 
     protected $requestClass = 'Payum\Core\Request\Convert';

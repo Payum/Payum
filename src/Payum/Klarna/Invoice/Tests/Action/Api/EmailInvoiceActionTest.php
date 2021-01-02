@@ -1,16 +1,14 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
-use Payum\Core\Tests\SkipOnPhp7Trait;
 use Payum\Klarna\Invoice\Action\Api\EmailInvoiceAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\EmailInvoice;
 use PHPUnit\Framework\TestCase;
+use PhpXmlRpc\Client;
 
 class EmailInvoiceActionTest extends TestCase
 {
-    use SkipOnPhp7Trait;
-
     /**
      * @test
      */
@@ -164,7 +162,7 @@ class EmailInvoiceActionTest extends TestCase
 
         $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);
-        $rp->setValue($klarnaMock, $this->createMock('xmlrpc_client', array(), array(), '', false));
+        $rp->setValue($klarnaMock, $this->createMock(Client::class));
         $rp->setAccessible(false);
 
         return $klarnaMock;
