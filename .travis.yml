@@ -21,6 +21,12 @@ matrix:
     - php: 7.2
       env:
         - COMPOSER_FLAGS="--prefer-lowest --prefer-stable"
+    - php: 7.2
+      before_install:
+        - pecl install mongodb
+        - composer require doctrine/mongodb-odm
+      services:
+        - mongodb
 
 before_install:
     - composer global require --no-progress --no-scripts --no-plugins symfony/flex
