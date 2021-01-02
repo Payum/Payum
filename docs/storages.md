@@ -166,7 +166,7 @@ $tokenStorage = new DoctrineStorage(
 ### Doctrine MongoODM.
 
 ```
-php composer.phar install "doctrine/mongodb-odm": "^2.0"
+php composer.phar require "doctrine/mongodb-odm:^2.1"
 ```
 
 ```php
@@ -211,8 +211,8 @@ next, you have to create an entity manager and Payum's storage:
 <?php
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
-use Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator;
+use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
+use Doctrine\Persistence\Mapping\Driver\SymfonyFileLocator;
 use Doctrine\ODM\MongoDB\Types\Type;
 use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
 use Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver;
@@ -236,7 +236,6 @@ $driver->addDriver(
 );
 
 // your models
-AnnotationDriver::registerAnnotationClasses();
 $driver->addDriver(
     new AnnotationDriver(new AnnotationReader(), array(
         'path/to/Acme/Document',
@@ -254,6 +253,7 @@ $config->setMetadataCacheImpl(new ArrayCache());
 $config->setDefaultDB('payum_tests');
 
 $documentManager = DocumentManager::create(null, $config);
+
 $orderStorage = new DoctrineStorage($documentManager, 'Acme\Document\Payment');
 $tokenStorage = new DoctrineStorage($documentManager, 'Acme\Document\SecurityToken');
 ```        
