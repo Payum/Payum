@@ -67,7 +67,7 @@
         "symfony/validator": "^4.4|^5.0",
         "symfony/phpunit-bridge": "^4.4|^5.0",
         "symfony/dependency-injection": "^4.4|^5.0",
-        "authorizenet/authorizenet": "~1.8",
+        "authorizenet/authorizenet": "^1.8.1",
         "sofort/sofortlib-php": "^3.0",
         "paypal/rest-api-sdk-php" : "0.5.*",
         "klarna/checkout": "^1.1|^2.0",
