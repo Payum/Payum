@@ -397,4 +397,19 @@ class CoreGatewayFactoryTest extends TestCase
         $this->assertSame($secondExtension, $extensions[0]);
         $this->assertSame($firstExtension, $extensions[1]);
     }
+
+    /**
+     * @test
+     */
+    public function shouldNotAllowGlobalFunctionsAsGatewayConfig()
+    {
+        $factory = new CoreGatewayFactory();
+
+        $factory->create(array(
+            'hash' => 'sha1',
+            'verify' => function ($config) {
+                $this->assertSame('sha1', $config['hash']);
+            },
+        ));
+    }
 }
