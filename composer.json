@@ -39,7 +39,7 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.2 || ^8.0",
         "payum/iso4217": "~1.0",
         "php-http/message": "^1.0",
         "php-http/client-implementation": "^1.0",
