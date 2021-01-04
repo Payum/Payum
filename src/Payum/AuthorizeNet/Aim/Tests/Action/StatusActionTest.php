@@ -6,12 +6,9 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\GetBinaryStatus;
 use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Tests\GenericActionTest;
-use Payum\Core\Tests\SkipOnPhp7Trait;
 
 class StatusActionTest extends GenericActionTest
 {
-    use SkipOnPhp7Trait;
-
     protected $actionClass = 'Payum\AuthorizeNet\Aim\Action\StatusAction';
 
     protected $requestClass = 'Payum\Core\Request\GetHumanStatus';

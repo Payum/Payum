@@ -5,15 +5,11 @@ use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Configuration;
-use Doctrine\MongoDB\Connection;
 use Doctrine\ODM\MongoDB\Types\Type;
-use Payum\Core\Tests\SkipOnPhp7Trait;
 use PHPUnit\Framework\TestCase;
 
 abstract class BaseMongoTest extends TestCase
 {
-    use SkipOnPhp7Trait;
-
     /**
      * @var DocumentManager
      */
@@ -21,10 +17,7 @@ abstract class BaseMongoTest extends TestCase
 
     public function setUp(): void
     {
-        $this->skipTestsIfPhp7();
-
-
-        if (false == (class_exists(\MongoId::class) && class_exists(Connection::class))) {
+        if (false === (class_exists(\MongoDB\Client::class))) {
             $this->markTestSkipped('Either mongo extension or\and doctrine\mongo-odm are not installed.');
         }
 
@@ -42,12 +35,12 @@ abstract class BaseMongoTest extends TestCase
         $config->setMetadataCacheImpl(new ArrayCache());
         $config->setDefaultDB('payum_tests');
 
-        $connection = new Connection(null, array(), $config);
+        $this->dm = DocumentManager::create(null, $config);
 
-        $this->dm = DocumentManager::create($connection, $config);
+        $mongoDatabase = $this->dm->getClient()->selectDatabase('payum_tests');
 
-        foreach ($this->dm->getConnection()->selectDatabase('payum_tests')->listCollections() as $collection) {
-            $collection->drop();
+        foreach ($mongoDatabase->listCollections() as $collection) {
+            $mongoDatabase->selectCollection($collection->getName())->drop();
         }
     }
 

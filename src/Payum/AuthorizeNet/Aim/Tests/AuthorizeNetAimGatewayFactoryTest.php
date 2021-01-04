@@ -2,13 +2,10 @@
 namespace Payum\AuthorizeNet\Aim\Tests;
 
 use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
-use Payum\Core\Tests\SkipOnPhp7Trait;
 use PHPUnit\Framework\TestCase;
 
 class AuthorizeNetAimGatewayFactoryTest extends TestCase
 {
-    use SkipOnPhp7Trait;
-
     /**
      * @test
      */
