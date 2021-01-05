@@ -44,6 +44,30 @@ $payum = (new PayumBuilder())
     ->getPayum()
 ;
 ```
+alternatively, set configuration via the `config` option. See PayPal's `sdk_config.ini` for available options.
+```php
+<?php
+//config.php
+
+use Payum\Core\PayumBuilder;
+use Payum\Core\Payum;
+
+/** @var Payum $payum */
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+    ->addGateway('gatewayName', [
+        'factory' => 'paypal_rest',
+        'client_id' => 'REPLACE IT',
+        'client_secret' => 'REPLACE IT',
+        'config' => [
+            'option1' => 'value1',
+            'option2' => 'value2',
+        ],
+    ])
+
+    ->getPayum()
+;
+```
 
 ## Prepare payment
 
