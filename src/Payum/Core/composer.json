@@ -31,7 +31,7 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.2 || ^8.0",
         "alcohol/iso4217": "^3.1",
         "payum/iso4217": "^1.0",
         "php-http/message": "^1.0",
