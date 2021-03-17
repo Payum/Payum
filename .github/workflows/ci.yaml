@@ -109,6 +109,7 @@ jobs:
       - name: Start Mongodb
         run: |
           sudo systemctl start mongod.service
+
       - name: Get composer cache directory
         id: composercache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
