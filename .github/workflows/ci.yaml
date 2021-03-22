@@ -1,0 +1,130 @@
+name: Unit Tests
+
+on: [push, pull_request]
+
+env:
+  SYMFONY_DEPRECATIONS_HELPER: weak
+
+jobs:
+  unit-test:
+    name: Unit ( PHP ${{ matrix.php }} )
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php: 7.2
+          - php: 7.3
+          - php: 7.4
+          - php: 8.0
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: intl, opcache, mysql, pdo_mysql, :xdebug
+
+      - name: Get composer cache directory
+        id: composercache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composercache.outputs.dir }}
+          key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json composer.lock') }}
+          restore-keys: ${{ runner.os }}-php-${{ matrix.php }}-composer-
+
+      - name: Install PHP 8 dependencies
+        if: startsWith(matrix.php, '8')
+        run: composer req --dev league/uri-components:2.x-dev omnipay/common:3.0.x-dev alcohol/iso4217:^4.0
+
+      - name: Install dependencies
+        run: composer update $COMPOSER_FLAGS
+
+      - name: Run unit tests
+        run: bin/phpunit
+
+  lowest:
+    name: Unit ( PHP ${{ matrix.php }} + Lowest )
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php: 7.2
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: intl, opcache, mysql, pdo_mysql, :xdebug
+
+      - name: Get composer cache directory
+        id: composercache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composercache.outputs.dir }}
+          key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json composer.lock') }}
+          restore-keys: ${{ runner.os }}-php-${{ matrix.php }}-composer-
+
+      - name: Install dependencies
+        run: composer update --prefer-lowest --prefer-stable
+
+      - name: Run unit tests
+        run: bin/phpunit
+
+  mongodb:
+    name: Unit ( PHP ${{ matrix.php }} + MongoDB )
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [7.4]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: intl, opcache, mysql, pdo_mysql, mongodb, :xdebug
+
+      - name: Start Mongodb
+        run: |
+          sudo systemctl start mongod.service
+      - name: Get composer cache directory
+        id: composercache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composercache.outputs.dir }}
+          key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json composer.lock') }}
+          restore-keys: ${{ runner.os }}-php-${{ matrix.php }}-composer-
+
+      - name: Install dependencies
+        run: composer update
+
+      - name: Install Doctrine Mongodb ODM
+        run: composer require doctrine/mongodb-odm
+
+      - name: Run unit tests
+        run: bin/phpunit
