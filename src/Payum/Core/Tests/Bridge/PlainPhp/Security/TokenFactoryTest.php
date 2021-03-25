@@ -37,11 +37,11 @@ class TokenFactoryTest extends TestCase
      */
     public function couldBeConstructedWithExpectedArguments()
     {
-        new TokenFactory(
+        self::assertInstanceOf(TokenFactory::class, new TokenFactory(
             $this->createStorageMock(),
             $this->createStorageRegistryMock(),
             'http://example.com'
-        );
+        ));
     }
 
     /**
@@ -246,6 +246,51 @@ class TokenFactoryTest extends TestCase
 
         $this->assertEquals(
             'http://example.com/aBase/path/theTargetPath?payum_token=aHash&target=val',
+            $actualToken->getTargetUrl()
+        );
+    }
+
+    /**
+     * @test
+     * @dataProvider pathDataProvider
+     */
+    public function shouldCreateTokenForBaseUrlWithPathAndScriptFile($hostname, $target, $result)
+    {
+        $token = new Token();
+        $token->setHash('aHash');
+
+        $tokenStorageMock = $this->createStorageMock();
+        $tokenStorageMock
+            ->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($token))
+        ;
+        $tokenStorageMock
+            ->expects($this->once())
+            ->method('update')
+            ->with($this->identicalTo($token))
+        ;
+
+        $gatewayName = 'theGatewayName';
+        $identity = new Identity('anId', 'stdClass');
+
+        $storageRegistryMock = $this->createStorageRegistryMock();
+        $storageRegistryMock
+            ->expects($this->never())
+            ->method('getStorage')
+        ;
+
+        $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, $hostname);
+
+        $actualToken = $factory->createToken(
+            $gatewayName,
+            $identity,
+            $target,
+            ['target' => 'val']
+        );
+
+        $this->assertEquals(
+            $result.'?payum_token=aHash&target=val',
             $actualToken->getTargetUrl()
         );
     }
@@ -582,6 +627,27 @@ class TokenFactoryTest extends TestCase
             'http://google.com/foo/bar?foo=fooVal#fragment',
             $authorizeToken->getAfterUrl()
         );
+    }
+
+    public function pathDataProvider(): array
+    {
+        return [
+            ['http://example.com', 'capture.php', 'http://example.com/capture.php'],
+            ['http://example.com/path', 'capture.php', 'http://example.com/path/capture.php'],
+            ['http://example.com/path/anotherPath', 'capture.php', 'http://example.com/path/anotherPath/capture.php'],
+
+            ['http://example.com', 'capture', 'http://example.com/capture'],
+            ['http://example.com/path', 'capture', 'http://example.com/path/capture'],
+            ['http://example.com/path/anotherPath', 'capture', 'http://example.com/path/anotherPath/capture'],
+
+            ['http://example.com/index.php', 'capture.php', 'http://example.com/capture.php'],
+            ['http://example.com/path/index.php', 'capture.php', 'http://example.com/path/capture.php'],
+            ['http://example.com/path/anotherPath/index.php', 'capture.php', 'http://example.com/path/anotherPath/capture.php'],
+
+            ['http://example.com/index.php', 'capture', 'http://example.com/capture'],
+            ['http://example.com/path/index.php', 'capture', 'http://example.com/path/capture'],
+            ['http://example.com/path/anotherPath/index.php', 'capture', 'http://example.com/path/anotherPath/capture'],
+        ];
     }
 
     /**
