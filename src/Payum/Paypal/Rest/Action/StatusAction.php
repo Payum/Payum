@@ -3,12 +3,22 @@
 namespace Payum\Paypal\Rest\Action;
 
 use PayPal\Api\Payment;
+use PayPal\Rest\ApiContext;
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetStatusInterface;
 
-class StatusAction implements ActionInterface
+class StatusAction implements ActionInterface, ApiAwareInterface
 {
+    use ApiAwareTrait;
+
+    public function __construct()
+    {
+        $this->apiClass = ApiContext::class;
+    }
+
     /**
      * {@inheritDoc}
      *
@@ -18,22 +28,24 @@ class StatusAction implements ActionInterface
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        /** @var Payment $model */
+        /** @var \ArrayAccess|Payment $model */
         $model = $request->getModel();
 
-        if (isset($model->state) && 'approved' == $model->state) {
+        $state = $model instanceof \ArrayAccess ? ($model['state'] ?? null) : $model->state;
+
+        if ('approved' == $state) {
             $request->markCaptured();
 
             return;
         }
 
-        if (isset($model->state) && 'created' == $model->state) {
-            $request->markNew();
+        if ('created' == $state) {
+            $request->markPending();
 
             return;
         }
 
-        if (false == isset($model->state)) {
+        if (null == $state) {
             $request->markNew();
 
             return;
@@ -47,16 +59,9 @@ class StatusAction implements ActionInterface
      */
     public function supports($request)
     {
-        if (false == $request instanceof GetStatusInterface) {
-            return false;
-        }
-
-        /** @var Payment $model */
-        $model = $request->getModel();
-        if (false == $model instanceof Payment) {
-            return false;
-        }
-
-        return true;
+        return
+            $request instanceof GetStatusInterface &&
+            ($request->getModel() instanceof Payment || $request->getModel() instanceof \ArrayAccess)
+        ;
     }
 }

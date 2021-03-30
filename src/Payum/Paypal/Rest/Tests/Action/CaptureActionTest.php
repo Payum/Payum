@@ -5,7 +5,6 @@ namespace Payum\Paypal\Rest\Tests\Action;
 use PayPal\Api\Payment as PaypalPayment;
 use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Rest\ApiContext;
-use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Paypal\Rest\Action\CaptureAction;
 use Payum\Paypal\Rest\Model\PaymentDetails;
 use Payum\Core\Request\Capture;
@@ -28,6 +27,20 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
         $action = new CaptureAction();
 
         $model = new PaymentDetails();
+
+        $request = new Capture($model);
+
+        $this->assertTrue($action->supports($request));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSupportCaptureWithArrayObjectModel()
+    {
+        $action = new CaptureAction();
+
+        $model = new \ArrayObject();
 
         $request = new Capture($model);
 
@@ -77,6 +90,7 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
         $request = new Capture($this->createMock(PaypalPayment::class));
 
         $this->assertTrue($action->supports($request));
+        $this->assertTrue($action->supports(new Capture(new \ArrayObject)));
     }
 
     /**
