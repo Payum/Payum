@@ -8,6 +8,7 @@ use Payum\Core\GatewayFactory;
 use Payum\Paypal\Rest\Action\CaptureAction;
 use Payum\Paypal\Rest\Action\StatusAction;
 use Payum\Paypal\Rest\Action\SyncAction;
+use Payum\Paypal\Rest\Action\ConvertAction;
 use Payum\Core\Exception\InvalidArgumentException;
 
 class PaypalRestGatewayFactory extends GatewayFactory
@@ -28,6 +29,7 @@ class PaypalRestGatewayFactory extends GatewayFactory
             'payum.action.capture' => new CaptureAction(),
             'payum.action.sync' => new SyncAction(),
             'payum.action.status' => new StatusAction(),
+            'payum.action.convert_payment' => new ConvertAction(),
         ]);
 
         if (false == $config['payum.api']) {

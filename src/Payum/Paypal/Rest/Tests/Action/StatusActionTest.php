@@ -41,6 +41,18 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
+    public function shouldSupportStatusRequestWithArrayObjectAsModel()
+    {
+        $action = new StatusAction();
+
+        $request = new GetBinaryStatus(new \ArrayObject());
+
+        $this->assertTrue($action->supports($request));
+    }
+
+    /**
+     * @test
+     */
     public function shouldNotSupportAnythingNotStatusRequest()
     {
         $action = new StatusAction();
@@ -62,7 +74,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function shouldMarkNewIfStateCreated()
+    public function shouldMarkPendingIfStateCreated()
     {
         $action = new StatusAction();
 
@@ -73,7 +85,14 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
         $action->execute($request);
 
-        $this->assertTrue($request->isNew());
+        $this->assertTrue($request->isPending());
+
+        $model = new \ArrayObject(['state' => 'created']);
+        $request = new GetBinaryStatus($model);
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isPending());
     }
 
     /**
@@ -85,6 +104,13 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
         $model = new PaymentDetails();
 
+        $request = new GetBinaryStatus($model);
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isNew());
+
+        $model = new \ArrayObject();
         $request = new GetBinaryStatus($model);
 
         $action->execute($request);
@@ -107,6 +133,13 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $this->assertTrue($request->isCaptured());
+
+        $model = new \ArrayObject(['state' => 'approved']);
+        $request = new GetBinaryStatus($model);
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isCaptured());
     }
 
     /**
@@ -119,6 +152,13 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $model = new PaymentDetails();
         $model->setState('random');
 
+        $request = new GetBinaryStatus($model);
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isUnknown());
+
+        $model = new \ArrayObject(['state' => 'random']);
         $request = new GetBinaryStatus($model);
 
         $action->execute($request);
