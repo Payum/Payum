@@ -1,0 +1,26 @@
+name: Subtree Split
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  subtree-split:
+    name: Split sub packages
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: Download splitsh-lite
+        run: |
+          wget https://github.com/splitsh/lite/releases/download/v1.0.1/lite_linux_amd64.tar.gz
+          tar -xvf lite_linux_amd64.tar.gz
+          mv  ./splitsh-lite bin/splitsh-lite
+
+      - name: Run subtree-split
+        run: bin/subtree-split
