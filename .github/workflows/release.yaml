@@ -15,4 +15,4 @@ jobs:
 
       - name: Run release
         id: composercache
-        run: bin/release ${{ milestone.title }}
+        run: bin/release ${{ github.event.milestone.title }}
