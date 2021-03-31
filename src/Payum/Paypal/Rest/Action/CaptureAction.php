@@ -2,6 +2,8 @@
 
 namespace Payum\Paypal\Rest\Action;
 
+use League\Uri\Http as HttpUri;
+use League\Uri\UriModifier;
 use PayPal\Api\Amount;
 use PayPal\Api\Payer;
 use PayPal\Api\Payment as PaypalPayment;
@@ -44,10 +46,21 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
         /** @var \ArrayAccess|PaypalPayment $model */
         $model = $request->getModel();
 
+        $this->gateway->execute($httpRequest = new GetHttpRequest());
+
+        if (isset($httpRequest->query['cancelled'])) {
+            if ($model instanceof PaypalPayment) {
+                $model->setState('cancelled');
+            } else {
+                $model['state'] = 'cancelled';
+            }
+
+            return;
+        }
+
         if ($model instanceof PaypalPayment) {
             $payment = $model;
         } else {
-            $model = ArrayObject::ensureArrayObject($model);
             $payment = $this->captureArrayAccess($model, $request);
         }
 
@@ -127,12 +140,15 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
         $transaction->setAmount($amount);
 
         $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturnUrl($this->tokenFactory->createCaptureToken(
+        $returnUrl = $this->tokenFactory->createCaptureToken(
             $request->getToken()->getGatewayName(),
             $request->getToken()->getDetails(),
             $request->getToken()->getAfterUrl()
-        )->getTargetUrl())
-        ->setCancelUrl($model['return_url']);
+        )->getTargetUrl();
+
+        $cancelUri = HttpUri::createFromString($returnUrl);
+        $redirectUrls->setReturnUrl($returnUrl)
+        ->setCancelUrl((string) UriModifier::mergeQuery($cancelUri, 'cancelled=1'));
 
         $payment = new PaypalPayment();
         $payment->setIntent('sale')
