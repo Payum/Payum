@@ -145,6 +145,30 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
+    public function shouldMarkCanceledIfStateCanceled()
+    {
+        $action = new StatusAction();
+
+        $model = new PaymentDetails();
+        $model->setState('cancelled');
+
+        $request = new GetBinaryStatus($model);
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isCanceled());
+
+        $model = new \ArrayObject(['state' => 'cancelled']);
+        $request = new GetBinaryStatus($model);
+
+        $action->execute($request);
+
+        $this->assertTrue($request->isCanceled());
+    }
+
+    /**
+     * @test
+     */
     public function shouldMarkUnknownIfStateIsSetAndSetUnknown()
     {
         $action = new StatusAction();

@@ -45,6 +45,12 @@ class StatusAction implements ActionInterface, ApiAwareInterface
             return;
         }
 
+        if ('cancelled' == $state) {
+            $request->markCanceled();
+
+            return;
+        }
+
         if (null == $state) {
             $request->markNew();
 
