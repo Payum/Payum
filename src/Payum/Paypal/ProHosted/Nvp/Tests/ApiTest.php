@@ -61,7 +61,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
         $result = $api->doCreateButton(array('return' => 'formRequestReturnUrl'));
 
-        $this->assertStringContainsString('return=formRequestReturnUrl', $result);
+        $this->assertContains('return=formRequestReturnUrl', $result);
     }
 
     /**
