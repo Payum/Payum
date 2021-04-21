@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Core;
 
+use Http\Adapter\Guzzle7\Client as HttpGuzzle7Client;
 use Http\Adapter\Guzzle6\Client as HttpGuzzle6Client;
 use Http\Adapter\Guzzle5\Client as HttpGuzzle5Client;
 use Http\Adapter\Buzz\Client as HttpBuzzClient;
@@ -107,6 +108,10 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                     return HttpClientDiscovery::find();
                 }
 
+                if (class_exists(HttpGuzzle7Client::class)) {
+                    return new HttpGuzzle7Client();
+                }
+
                 if (class_exists(HttpGuzzle6Client::class)) {
                     return new HttpGuzzle6Client();
                 }
@@ -127,7 +132,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                     return new HttpBuzzClient();
                 }
 
-                throw new \LogicException('The httplug.client could not be guessed. Install one of the following packages: php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
+                throw new \LogicException('The httplug.client could not be guessed. Install one of the following packages: php-http/guzzle7-adapter, php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
             },
             'payum.http_client'=>function (ArrayObject $config) {
                 return new HttplugClient($config['httplug.client']);
