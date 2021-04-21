@@ -3,6 +3,7 @@
 namespace Payum\Paypal\Rest\Action;
 
 use PayPal\Api\Payment as PaypalPayment;
+use PayPal\Rest\ApiContext;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -19,7 +20,7 @@ class SyncAction implements ActionInterface, GatewayAwareInterface, ApiAwareInte
     public function __construct()
     {
         $this->apiClass = ApiContext::class;
-    }    
+    }
 
     /**
      * {@inheritDoc}
