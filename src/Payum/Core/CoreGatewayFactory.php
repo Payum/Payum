@@ -14,6 +14,7 @@ use Http\Message\MessageFactory\DiactorosMessageFactory;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Http\Message\StreamFactory\DiactorosStreamFactory;
 use Http\Message\StreamFactory\GuzzleStreamFactory;
+use Nyholm\Psr7\Factory\HttplugFactory;
 use Payum\Core\Action\AuthorizePaymentAction;
 use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
@@ -27,6 +28,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
 use Payum\Core\Bridge\Twig\TwigUtil;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
+use Symfony\Component\HttpClient\HttplugClient as SymfonyHttplugClient;
 use Twig\Environment;
 use Twig\Loader\ChainLoader;
 
@@ -86,6 +88,10 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                     return new DiactorosMessageFactory();
                 }
 
+                if (class_exists(\Nyholm\Psr7\Request::class)) {
+                    return new HttplugFactory();
+                }
+
                 throw new \LogicException('The httplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
             },
             'httplug.stream_factory'=>function (ArrayObject $config) {
@@ -99,6 +105,10 @@ class CoreGatewayFactory implements GatewayFactoryInterface
 
                 if (class_exists(\Zend\Diactoros\Request::class)) {
                     return new DiactorosStreamFactory();
+                }
+
+                if (class_exists(\Nyholm\Psr7\Request::class)) {
+                    return new HttplugFactory();
                 }
 
                 throw new \LogicException('The httplug.stream_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
@@ -118,6 +128,10 @@ class CoreGatewayFactory implements GatewayFactoryInterface
 
                 if (class_exists(HttpGuzzle5Client::class)) {
                     return new HttpGuzzle5Client();
+                }
+
+                if (class_exists(SymfonyHttplugClient::class)) {
+                    return new SymfonyHttplugClient();
                 }
 
                 if (class_exists(HttpSocketClient::class)) {
