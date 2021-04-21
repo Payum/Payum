@@ -164,13 +164,14 @@ class Api
 
         return $fields;
     }
-    
+
     /**
-	 * @param string $optionName
-	 *
-	 * @return mixed
-	 */
-    public function getOption(string $optionName){
-    	return $this->options[$optionName];
+     * @param string $optionName
+     *
+     * @return mixed
+     */
+    public function getOption(string $optionName)
+    {
+        return $this->options[$optionName] ?? null;
     }
 }

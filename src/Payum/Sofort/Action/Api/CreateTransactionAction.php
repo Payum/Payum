@@ -37,10 +37,12 @@ class CreateTransactionAction implements ActionInterface, ApiAwareInterface
         }
 
         $fieldsRequired = ['amount', 'currency_code', 'reason', 'success_url'];
-	    if ($this->api->getOption('disable_notification') == false) {
-		    $fieldsRequired[] = 'notification_url';
-	    }
-	    $details->validateNotEmpty($fieldsRequired);
+
+        if ($this->api->getOption('disable_notification') == false) {
+            $fieldsRequired[] = 'notification_url';
+        }
+
+        $details->validateNotEmpty($fieldsRequired);
 
         $details->replace($this->api->createTransaction((array) $details));
 
