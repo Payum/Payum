@@ -21,7 +21,6 @@ use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetCurrencyAction;
 use Payum\Core\Action\GetTokenAction;
 use Payum\Core\Action\PayoutPayoutAction;
-use Payum\Core\Bridge\Guzzle\HttpClientFactory;
 use Payum\Core\Bridge\Httplug\HttplugClient;
 use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -84,7 +83,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                     return new GuzzleMessageFactory();
                 }
 
-                if (class_exists(\Zend\Diactoros\Request::class)) {
+                if (class_exists(\Laminas\Diactoros\Request::class) || class_exists(\Zend\Diactoros\Request::class)) {
                     return new DiactorosMessageFactory();
                 }
 

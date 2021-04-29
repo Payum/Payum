@@ -1,7 +1,7 @@
 {
     "name": "payum/core",
     "type": "library",
-    "description": "One million downloads of Payum already! Payum offers everything you need to work with payments. Friendly for all PHP frameworks (Symfony, Laravel, Zend, Yii, Silex). Check more visiting site.",
+    "description": "One million downloads of Payum already! Payum offers everything you need to work with payments. Friendly for all PHP frameworks (Symfony, Laravel, Laminas, Yii, Silex). Check more visiting site.",
     "keywords": [
         "payment",
         "recurring payment",
@@ -52,7 +52,7 @@
         "propel/propel1": "~1.7",
         "psr/log": "~1.0",
         "php-http/guzzle6-adapter": "^1.0",
-        "zendframework/zend-db": "~2",
+        "laminas/laminas-db": "^2.0",
         "symfony/routing": "^4.4|^5.0",
         "symfony/http-kernel": "^4.4|^5.0",
         "symfony/http-foundation": "^4.4|^5.0",
@@ -73,7 +73,7 @@
         "payum/omnipay-v3-bridge": "^1 If you want to use omnipay's gateways",
         "doctrine/orm": "~2.3 If you want to store models to database using doctrin2 ORM",
         "doctrine/mongodb-odm": "~2.0 If you want to store models to mongo doctrin2 ODM",
-        "zendframework/zend-db": "~2.0 If you want to store models to Zend Db ORM",
+        "laminas/laminas-db": "~2.0 If you want to store models to Laminas Db ORM",
         "propel/propel1": "~1.7 If you want to store models to Propel1 ORM",
         "propel/propel": "If you want to store models to Propel2 ORM",
         "symfony/routing": "~2.8|~3.0 If you want to use TokenFactory from symfony's bridge",
