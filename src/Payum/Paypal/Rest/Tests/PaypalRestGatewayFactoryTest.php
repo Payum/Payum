@@ -213,7 +213,7 @@ class PaypalRestGatewayFactoryTest extends \PHPUnit\Framework\TestCase
     public function shouldThrowIfConfigPathOptionsNotEqualPaypalPath()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
-        $this->expectExceptionMessageRegExp('/Given \"config_path\" is invalid. \w+/');
+        $this->expectExceptionMessageMatches('/Given \"config_path\" is invalid. \w+/');
         $factory = new PaypalRestGatewayFactory();
         $factory->create([
             'client_id' => 'cId',
