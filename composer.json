@@ -76,7 +76,8 @@
         "stripe/stripe-php": "~2.0 || ~3.0",
         "php-http/guzzle6-adapter": "^1.1.1",
         "defuse/php-encryption": "^2",
-        "ext-soap": "*"
+        "ext-soap": "*",
+        "roave/security-advisories": "dev-latest"
     },
     "replace": {
         "payum/core": "^1",
