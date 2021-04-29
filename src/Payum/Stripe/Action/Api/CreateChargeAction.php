@@ -11,7 +11,7 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateCharge;
 use Stripe\Charge;
-use Stripe\Error;
+use Stripe\Exception;
 use Stripe\Stripe;
 
 class CreateChargeAction implements ActionInterface, ApiAwareInterface
@@ -67,10 +67,8 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
 
             $charge = Charge::create($model->toUnsafeArrayWithoutLocal());
 
-            $arrayMethod = method_exists($charge, 'toArray') ? 'toArray' : '__toArray';
-
-            $model->replace($charge->$arrayMethod(true));
-        } catch (Error\Base $e) {
+            $model->replace($charge->toArray(true));
+        } catch (Exception\ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }

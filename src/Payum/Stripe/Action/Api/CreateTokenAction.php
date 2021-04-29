@@ -10,7 +10,7 @@ use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateToken;
-use Stripe\Error;
+use Stripe\Exception;
 use Stripe\Stripe;
 use Stripe\Token;
 
@@ -59,8 +59,8 @@ class CreateTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
 
             $token = Token::create($model->toUnsafeArrayWithoutLocal());
 
-            $model->replace($token->__toArray(true));
-        } catch (Error\Base $e) {
+            $model->replace($token->toArray(true));
+        } catch (Exception\ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }

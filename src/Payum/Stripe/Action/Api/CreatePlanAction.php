@@ -10,7 +10,7 @@ use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreatePlan;
-use Stripe\Error;
+use Stripe\Exception;
 use Stripe\Plan;
 use Stripe\Stripe;
 
@@ -63,8 +63,8 @@ class CreatePlanAction implements ActionInterface, GatewayAwareInterface, ApiAwa
 
             $plan = Plan::create($model->toUnsafeArrayWithoutLocal());
 
-            $model->replace($plan->__toArray(true));
-        } catch (Error\Base $e) {
+            $model->replace($plan->toArray(true));
+        } catch (Exception\ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }

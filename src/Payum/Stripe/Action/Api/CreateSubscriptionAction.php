@@ -8,7 +8,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateSubscription;
-use Stripe\Error;
+use Stripe\Exception;
 use Stripe\Stripe;
 use Stripe\Subscription;
 
@@ -60,8 +60,8 @@ class CreateSubscriptionAction implements ActionInterface, ApiAwareInterface
 
             $subscription = Subscription::create($model->toUnsafeArrayWithoutLocal());
 
-            $model->replace($subscription->__toArray(true));
-        } catch (Error\Base $e) {
+            $model->replace($subscription->toArray(true));
+        } catch (Exception\ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }
