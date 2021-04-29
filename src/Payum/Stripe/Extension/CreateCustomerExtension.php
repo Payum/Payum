@@ -80,14 +80,11 @@ class CreateCustomerExtension implements ExtensionInterface
 
         $gateway->execute(new CreateCustomer($customer));
 
-        $local['customer'] = $customer->toUnsafeArray();
-        $model['local'] = $local->toUnsafeArray();
-        unset($model['card']);
-
         if ($customer['id']) {
+            $local['customer'] = $customer->toUnsafeArray();
+            $model['local'] = $local->toUnsafeArray();
             $model['customer'] = $customer['id'];
-        } else {
-            $model['status'] = Constants::STATUS_FAILED;
+            unset($model['card']);
         }
     }
 }
