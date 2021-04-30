@@ -31,11 +31,6 @@ class RenderTemplateActionTest extends GenericActionTest
         $this->action = new $this->actionClass($this->templating, 'layout.html.engine');
     }
 
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        //overwrite
-    }
-
     public function provideNotSupportedRequests(): \Iterator
     {
         yield array('foo');

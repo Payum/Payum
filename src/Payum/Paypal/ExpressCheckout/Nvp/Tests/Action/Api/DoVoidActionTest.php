@@ -59,14 +59,6 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new DoVoidAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportDoVoidRequestAndArrayAccessAsModel()
     {
         $action = new DoVoidAction();

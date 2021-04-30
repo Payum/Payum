@@ -22,22 +22,6 @@ class SendInvoiceActionTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new SendInvoiceAction();
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithKlarnaAsArgument()
-    {
-        new SendInvoiceAction($this->createKlarnaMock());
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowSetConfigAsApi()
     {
         $action = new SendInvoiceAction($this->createKlarnaMock());

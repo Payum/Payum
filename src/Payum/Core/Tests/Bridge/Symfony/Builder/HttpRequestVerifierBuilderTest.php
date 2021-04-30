@@ -8,11 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 class HttpRequestVerifierBuilderTest extends TestCase
 {
-    public function testCouldBeConstructedWithoutAnyArguments()
-    {
-        new HttpRequestVerifierBuilder();
-    }
-
     public function testShouldBuildSymfonyHttpRequestVerifier()
     {
         /** @var StorageInterface $tokenStorage */

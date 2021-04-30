@@ -12,8 +12,11 @@ class PaymentTest extends OrmTest
      */
     public function shouldAllowPersistEmpty()
     {
-        $this->em->persist(new Payment());
+        $entity = new Payment();
+        $this->em->persist($entity);
         $this->em->flush();
+
+        $this->assertSame([$entity], $this->em->getRepository(Payment::class)->findAll());
     }
 
     /**
@@ -32,6 +35,8 @@ class PaymentTest extends OrmTest
 
         $this->em->persist($order);
         $this->em->flush();
+
+        $this->assertSame([$order], $this->em->getRepository(Payment::class)->findAll());
     }
 
     /**

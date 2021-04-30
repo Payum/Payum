@@ -33,22 +33,6 @@ class UpdateActionTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new UpdateAction();
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithKlarnaAsArgument()
-    {
-        new UpdateAction($this->createKlarnaMock());
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowSetGateway()
     {
         $action = new UpdateAction($this->createKlarnaMock());

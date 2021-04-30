@@ -20,22 +20,6 @@ class IdentityTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithIdAndModelClassAsArguments()
-    {
-        new Identity('anId', 'aClass');
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithIdAndModelAsArguments()
-    {
-        new Identity('anId', new \stdClass());
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetIdSetInConstructor()
     {
         $id = new Identity('theId', new \stdClass());

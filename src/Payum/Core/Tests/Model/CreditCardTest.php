@@ -21,18 +21,10 @@ class CreditCardTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CreditCard();
-    }
-
-    /**
-     * @test
-     */
     public function shouldReturnNullOnNewCreditCard()
     {
         $card = new CreditCard();
-        
+
         $this->assertNull($card->getToken());
         $this->assertNull($card->getBrand());
         $this->assertNull($card->getHolder());

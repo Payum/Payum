@@ -22,14 +22,6 @@ class GenericTokenFactoryTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithTokenFactoryAndPaths()
-    {
-        new GenericTokenFactory($this->createTokenFactoryMock(), []);
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowCreateCustomTokenWithAfterPath()
     {
         $gatewayName = 'theGatewayName';

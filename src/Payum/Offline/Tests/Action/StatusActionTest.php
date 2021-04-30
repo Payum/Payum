@@ -21,14 +21,6 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new StatusAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportStatusRequestWithArrayAccessAsModel()
     {
         $action = new StatusAction();
@@ -187,7 +179,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($request->isCanceled());
     }
-    
+
     /**
      * @test
      */

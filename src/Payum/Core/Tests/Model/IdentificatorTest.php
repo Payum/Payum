@@ -19,22 +19,6 @@ class IdentificatorTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithIdAndModelClassAsArguments()
-    {
-        new Identificator('anId', 'aClass');
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithIdAndModelAsArguments()
-    {
-        new Identificator('anId', new \stdClass());
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetIdSetInConstructor()
     {
         $id = new Identificator('theId', new \stdClass());

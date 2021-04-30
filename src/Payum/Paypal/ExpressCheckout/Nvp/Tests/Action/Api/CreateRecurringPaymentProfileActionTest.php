@@ -31,14 +31,6 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CreateRecurringPaymentProfileAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldCreateRecurringPaymentProfileRequestAndArrayAccessAsModel()
     {
         $action = new CreateRecurringPaymentProfileAction();

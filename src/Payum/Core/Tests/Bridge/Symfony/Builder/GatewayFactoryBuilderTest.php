@@ -8,11 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 class GatewayFactoryBuilderTest extends TestCase
 {
-    public function testCouldBeConstructedWithGatewayFactoryClassAsFirstArgument()
-    {
-        new GatewayFactoryBuilder(GatewayFactory::class);
-    }
-
     public function testShouldBuildContainerAwareCoreGatewayFactory()
     {
         /** @var GatewayFactoryInterface $coreGatewayFactory */

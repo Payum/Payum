@@ -34,17 +34,6 @@ class ContainerAwareRegistryTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithGatewaysStoragesAndTheirDefaultNames()
-    {
-        $gateways = array('fooName' => 'fooGateway', 'barName' => 'barGateway');
-        $storages = array('barName' => array('stdClass' => 'barStorage'));
-
-        new ContainerAwareRegistry($gateways, $storages);
-    }
-
-    /**
-     * @test
-     */
     public function shouldReturnGatewaySetToContainer()
     {
         $gateways = array('fooGateway' => 'fooGatewayServiceId');
@@ -55,7 +44,7 @@ class ContainerAwareRegistryTest extends TestCase
 
         $registry = new ContainerAwareRegistry($gateways, $storages);
         $registry->setContainer($container);
-        
+
         $this->assertSame(
             $container->get('fooGatewayServiceId'),
             $registry->getGateway('fooGateway')

@@ -14,12 +14,4 @@ class SendInvoiceTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
     }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithArrayModelAsArgument()
-    {
-        new SendInvoice(array());
-    }
 }

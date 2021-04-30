@@ -9,14 +9,6 @@ class ConfigTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructed()
-    {
-        new Config();
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetDefaultPublicProperties()
     {
         $config = new Config();
@@ -45,5 +37,14 @@ class ConfigTest extends TestCase
         $config->mode = 'mode';
         $config->pClassStorage = 'storage';
         $config->pClassStoragePath = 'storagePath';
+
+        $this->assertEquals('country', $config->country);
+        $this->assertEquals('eid', $config->eid);
+        $this->assertEquals('secret', $config->secret);
+        $this->assertEquals('lang', $config->language);
+        $this->assertEquals('currency', $config->currency);
+        $this->assertEquals('mode', $config->mode);
+        $this->assertEquals('storage', $config->pClassStorage);
+        $this->assertEquals('storagePath', $config->pClassStoragePath);
     }
 }

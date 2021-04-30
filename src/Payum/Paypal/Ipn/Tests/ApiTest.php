@@ -12,16 +12,6 @@ class ApiTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithHttpClientAndOptions()
-    {
-        new Api(array(
-            'sandbox' => true,
-        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
-    }
-
-    /**
-     * @test
-     */
     public function throwIfSandboxOptionNotSetInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);

@@ -18,14 +18,6 @@ class PaypalProCheckoutGatewayFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new PaypalProCheckoutGatewayFactory();
-    }
-
-    /**
-     * @test
-     */
     public function shouldCreateCoreGatewayFactoryIfNotPassed()
     {
         $factory = new PaypalProCheckoutGatewayFactory();

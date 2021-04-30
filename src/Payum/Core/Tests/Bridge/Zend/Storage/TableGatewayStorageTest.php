@@ -21,14 +21,6 @@ class TableGatewayStorageTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithTableGatewayAndModelClassAsArguments()
-    {
-        new TableGatewayStorage($this->createTableGatewayMock(), 'stdClass');
-    }
-
-    /**
-     * @test
-     */
     public function throwIfTryToUseNotSupportedFindByMethod()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);

@@ -19,14 +19,6 @@ class KlarnaInvoiceGatewayFactoryTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new KlarnaInvoiceGatewayFactory();
-    }
-
-    /**
-     * @test
-     */
     public function shouldCreateCoreGatewayFactoryIfNotPassed()
     {
         $factory = new KlarnaInvoiceGatewayFactory();

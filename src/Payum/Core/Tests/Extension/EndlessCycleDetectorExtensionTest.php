@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Extension;
 
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\GatewayInterface;
@@ -16,14 +17,6 @@ class EndlessCycleDetectorExtensionTest extends TestCase
         $rc = new \ReflectionClass('Payum\Core\Extension\EndlessCycleDetectorExtension');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new EndlessCycleDetectorExtension();
     }
 
     /**
@@ -71,6 +64,8 @@ class EndlessCycleDetectorExtensionTest extends TestCase
      */
     public function shouldNotThrowIfNumberOfPreviousRequestNotReachLimit()
     {
+        $this->expectNotToPerformAssertions();
+
         $gatewayMock = $this->createGatewayMock();
 
         $context = new Context($gatewayMock, new \stdClass(), array(
@@ -81,7 +76,11 @@ class EndlessCycleDetectorExtensionTest extends TestCase
 
         $extension = new EndlessCycleDetectorExtension($expectedLimit = 5);
 
-        $extension->onPreExecute($context);
+        try {
+            $extension->onPreExecute($context);
+        } catch (LogicException $e) {
+            $this->fail('Exception should not be thrown');
+        }
     }
 
     /**

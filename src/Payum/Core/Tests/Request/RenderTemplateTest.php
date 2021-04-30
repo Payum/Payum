@@ -9,14 +9,6 @@ class RenderTemplateTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithTemplateNameAndParametersAsArguments()
-    {
-        new RenderTemplate('aTemplate', array());
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetTemplateNameSetInConstructor()
     {
         $request = new RenderTemplate('theTemplate', array());

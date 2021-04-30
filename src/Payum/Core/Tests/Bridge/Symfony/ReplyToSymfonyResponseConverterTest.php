@@ -14,14 +14,6 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new ReplyToSymfonyResponseConverter();
-    }
-
-    /**
-     * @test
-     */
     public function shouldReturnRedirectResponseIfPayumHttpRedirectReply()
     {
         $expectedUrl = '/foo/bar';

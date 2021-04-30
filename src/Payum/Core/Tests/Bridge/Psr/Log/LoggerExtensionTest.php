@@ -5,9 +5,11 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Psr\Log\LoggerExtension;
 use Payum\Core\Extension\Context;
 use Payum\Core\GatewayInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 class LoggerExtensionTest extends TestCase
 {
@@ -38,20 +40,14 @@ class LoggerExtensionTest extends TestCase
         $this->assertTrue($rc->implementsInterface('Psr\Log\LoggerAwareInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
+    public function testItCouldBeConstructedWithoutAnyArguments()
     {
         $extension = new LoggerExtension();
 
         $this->assertAttributeInstanceOf('Psr\Log\NullLogger', 'logger', $extension);
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithCustomLoggerGivenAsFirstArgument()
+    public function testCouldBeConstructedWithCustomLoggerGivenAsFirstArgument()
     {
         $expectedLogger = $this->createLoggerMock();
 
@@ -106,7 +102,12 @@ class LoggerExtensionTest extends TestCase
         $extension = new LoggerExtension($logger);
 
         $context = new Context($this->createGatewayMock(), new \stdClass(), array());
-        $context->setAction($this->createActionMock());
+        $action = $this->createMock(LoggerAwareAction::class);
+        $action->expects($this->once())
+            ->method('setLogger')
+            ->with($logger);
+
+        $context->setAction($action);
 
         $extension->onExecute($context);
     }
@@ -140,7 +141,13 @@ class LoggerExtensionTest extends TestCase
         $extension = new LoggerExtension($logger);
 
         $context = new Context($this->createGatewayMock(), new \stdClass(), array());
-        $context->setAction($this->createActionMock());
+
+        $action = $this->createMock(LoggerAwareAction::class);
+        $action->expects($this->once())
+            ->method('setLogger')
+            ->with(new NullLogger());
+
+        $context->setAction($action);
 
         $extension->onPostExecute($context);
     }
@@ -165,7 +172,7 @@ class LoggerExtensionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|LoggerInterface
+     * @return MockObject|LoggerInterface
      */
     protected function createLoggerMock()
     {
@@ -173,7 +180,7 @@ class LoggerExtensionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ActionInterface
+     * @return MockObject|ActionInterface
      */
     protected function createActionMock()
     {
@@ -181,7 +188,7 @@ class LoggerExtensionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

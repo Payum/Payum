@@ -19,14 +19,6 @@ class AuthorizeNetAimGatewayFactoryTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new AuthorizeNetAimGatewayFactory();
-    }
-
-    /**
-     * @test
-     */
     public function shouldCreateCoreGatewayFactoryIfNotPassed()
     {
         $factory = new AuthorizeNetAimGatewayFactory();

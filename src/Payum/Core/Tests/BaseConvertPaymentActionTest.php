@@ -46,14 +46,6 @@ abstract class BaseConvertPaymentActionTest extends TestCase
 
     /**
      * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new $this->actionClass();
-    }
-
-    /**
-     * @test
      *
      * @dataProvider provideSupportedRequests
      */

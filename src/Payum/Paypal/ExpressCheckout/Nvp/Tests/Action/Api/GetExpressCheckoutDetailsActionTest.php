@@ -31,14 +31,6 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new GetExpressCheckoutDetailsAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportGetExpressCheckoutDetailsRequestAndArrayAccessAsModel()
     {
         $action = new GetExpressCheckoutDetailsAction();

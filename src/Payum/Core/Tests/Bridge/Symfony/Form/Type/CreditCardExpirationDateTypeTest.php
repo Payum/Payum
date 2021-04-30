@@ -21,14 +21,6 @@ class CreditCardExpirationDateTypeTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CreditCardExpirationDateType();
-    }
-
-    /**
-     * @test
-     */
     public function shouldExtendDateType()
     {
         $type = new CreditCardExpirationDateType();

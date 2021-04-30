@@ -31,14 +31,6 @@ class CreateBillingAgreementActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CreateBillingAgreementAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportCreateBillingAgreementRequestAndArrayAccessAsModel()
     {
         $action = new CreateBillingAgreementAction();

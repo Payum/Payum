@@ -21,14 +21,6 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CaptureAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportCaptureWithArrayAccessAsModel()
     {
         $action = new CaptureAction();

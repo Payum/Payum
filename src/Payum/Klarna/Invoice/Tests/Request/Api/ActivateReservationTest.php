@@ -15,12 +15,4 @@ class ActivateReservationTest extends TestCase
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
     }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithArrayModelAsArgument()
-    {
-        new ActivateReservation(array());
-    }
 }

@@ -22,14 +22,6 @@ class Be2BillDirectGatewayFactoryTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new Be2BillDirectGatewayFactory();
-    }
-
-    /**
-     * @test
-     */
     public function shouldCreateCoreGatewayFactoryIfNotPassed()
     {
         $factory = new Be2BillDirectGatewayFactory();

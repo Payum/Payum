@@ -16,12 +16,4 @@ class GetTransactionDetailsTest extends TestCase
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithModelAndPaymentRequestNAsArguments()
-    {
-        new GetTransactionDetails(new \stdClass());
-    }
 }

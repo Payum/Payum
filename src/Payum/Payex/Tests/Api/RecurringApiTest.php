@@ -61,21 +61,6 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithValidOptions()
-    {
-        new RecurringApi(
-            new SoapClientFactory(),
-            array(
-                'encryption_key' => 'aKey',
-                'account_number' => 'aNumber',
-                'sandbox' => true,
-            )
-        );
-    }
-
-    /**
-     * @test
-     */
     public function shouldUseSoapClientOnStartRecurringPaymentAndConvertItsResponse()
     {
         $response = new \stdClass();

@@ -32,14 +32,6 @@ class TransactionSearchActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArgument()
-    {
-        new TransactionSearchAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportAuthorizeTokenRequestWithArrayAccessAsModel()
     {
         $action = new TransactionSearchAction();

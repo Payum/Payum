@@ -67,14 +67,6 @@ class CreateAgreementActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CreateAgreementAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowSetAgreementApiAsApi()
     {
         $agreementApi = $this->createMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);

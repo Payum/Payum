@@ -21,14 +21,6 @@ class RenderTemplateActionTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithTwigAndLayoutAsArguments()
-    {
-        new RenderTemplateAction($this->createTwigMock(), 'aLayout');
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportRenderTemplate()
     {
         $action = new RenderTemplateAction($this->createTwigMock(), 'aLayout');

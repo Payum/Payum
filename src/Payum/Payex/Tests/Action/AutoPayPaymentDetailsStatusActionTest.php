@@ -21,14 +21,6 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new AutoPayPaymentDetailsStatusAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToTrue()
     {
         $action = new AutoPayPaymentDetailsStatusAction();

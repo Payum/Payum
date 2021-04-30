@@ -45,14 +45,6 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new DoCaptureAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportDoCaptureRequestAndArrayAccessAsModel()
     {
         $action = new DoCaptureAction();

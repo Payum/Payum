@@ -8,14 +8,6 @@ class KeysTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithPublishableKeyAndSecretOne()
-    {
-        new Keys('aPublishableKey', 'aSecretKey');
-    }
-
-    /**
-     * @test
-     */
     public function souldAllowGetPublishableKeySetInConstructor()
     {
         $keys = new Keys('thePublishableKey', 'aSecretKey');

@@ -57,14 +57,15 @@ class GenericTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideDifferentPhpTypes
      */
-    public function couldBeConstructedWithModelOfAnyType($phpType)
+    public function testCouldBeConstructedWithModelOfAnyType($phpType)
     {
-        $this->getMockForAbstractClass(Generic::class, array($phpType));
+        $request = new class($phpType) extends Generic {};
+
+        $this->assertEquals($phpType, $request->getModel());
     }
+
 
     /**
      * @test
@@ -73,8 +74,7 @@ class GenericTest extends TestCase
      */
     public function shouldAllowSetModelAndGetIt($phpType)
     {
-        /** @var Generic $request */
-        $request = $this->getMockForAbstractClass(Generic::class, array(123321));
+        $request = new class(123321) extends Generic {};
 
         $request->setModel($phpType);
 

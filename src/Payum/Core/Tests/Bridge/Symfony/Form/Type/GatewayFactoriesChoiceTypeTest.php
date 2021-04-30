@@ -21,14 +21,6 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithDefaultFactoriesAsFirstArgument()
-    {
-        new GatewayFactoriesChoiceType(array('foo' => 'Foo Factory'));
-    }
-
-    /**
-     * @test
-     */
     public function shouldExtendChoice()
     {
         $type = new GatewayFactoriesChoiceType(array());

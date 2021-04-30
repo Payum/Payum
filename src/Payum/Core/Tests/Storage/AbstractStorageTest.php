@@ -2,6 +2,8 @@
 namespace Payum\Core\Tests\Storage;
 
 use Payum\Core\Model\Identity;
+use Payum\Core\Storage\AbstractStorage;
+use Payum\Core\Storage\IdentityInterface;
 use PHPUnit\Framework\TestCase;
 
 class AbstractStorageTest extends TestCase
@@ -29,17 +31,15 @@ class AbstractStorageTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithModelClassAsFirstArgument()
-    {
-        $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', array('stdClass'));
-    }
-
-    /**
-     * @test
-     */
     public function shouldCreateInstanceOfModelClassSetInConstructor()
     {
-        $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', array('stdClass'));
+        $storage = new class('stdClass') extends AbstractStorage {
+            protected function doUpdateModel($model) {}
+            protected function doDeleteModel($model) {}
+            protected function doGetIdentity($model) {}
+            protected function doFind($id) {}
+            public function findBy(array $criteria) {}
+        };
 
         $model = $storage->create();
 

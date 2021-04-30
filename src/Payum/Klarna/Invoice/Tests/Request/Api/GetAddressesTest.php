@@ -8,14 +8,6 @@ class GetAddressesTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithPnoAsArgument()
-    {
-        new GetAddresses('pno');
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetPnoSetInConstructor()
     {
         $request = new GetAddresses($pno = 'thePno');
@@ -30,7 +22,9 @@ class GetAddressesTest extends \PHPUnit\Framework\TestCase
     {
         $request = new GetAddresses('aPno');
 
-        $request->addAddress(new \KlarnaAddr());
+        $address = new \KlarnaAddr();
+        $request->addAddress($address);
+        $this->assertSame([$address], $request->getAddresses());
     }
 
     /**

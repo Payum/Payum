@@ -61,14 +61,6 @@ class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new InitializeOrderAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowSetOrderApiAsApi()
     {
         $orderApi = $this->createMock('Payum\Payex\Api\OrderApi', array(), array(), '', false);

@@ -44,14 +44,6 @@ class PaymentTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new Payment();
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetCreditCardPreviouslySet()
     {
         $order = new Payment();

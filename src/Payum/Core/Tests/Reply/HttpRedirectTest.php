@@ -29,14 +29,6 @@ class HttpRedirectTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithUrlAsArgument()
-    {
-        new HttpRedirect('an_url');
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetUrlSetInConstructor()
     {
         $expectedUrl = 'theUrl';

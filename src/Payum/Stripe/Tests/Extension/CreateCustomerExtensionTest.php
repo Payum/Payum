@@ -21,11 +21,6 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($rc->implementsInterface(ExtensionInterface::class));
     }
 
-    public function testCouldBeConstructedWithoutAnyArguments()
-    {
-        new CreateCustomerExtension();
-    }
-
     public function testShouldCreateCustomerAndReplaceCardTokenOnPreCapture()
     {
         $model = new \ArrayObject([
@@ -33,7 +28,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
             'local' => ['save_card' => true],
         ]);
         $request = new Capture($model);
-        
+
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())

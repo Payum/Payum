@@ -21,14 +21,6 @@ class AgreementDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new AgreementDetailsSyncAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportSyncWithArrayAccessAsModelIfOrderIdNotSetAndAgreementRefSet()
     {
         $action = new AgreementDetailsSyncAction();

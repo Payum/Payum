@@ -20,14 +20,6 @@ class StatusActionTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new StatusAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportGetStatusWithArrayAsModel()
     {
         $action = new StatusAction();

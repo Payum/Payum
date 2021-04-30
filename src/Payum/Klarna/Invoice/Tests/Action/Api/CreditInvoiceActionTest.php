@@ -22,22 +22,6 @@ class CreditInvoiceActionTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CreditInvoiceAction();
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithKlarnaAsArgument()
-    {
-        new CreditInvoiceAction($this->createKlarnaMock());
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowSetConfigAsApi()
     {
         $action = new CreditInvoiceAction($this->createKlarnaMock());

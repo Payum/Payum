@@ -33,14 +33,6 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArgument()
-    {
-        new RefundTransactionAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportRefundTransactionRequestWithArrayAccessAsModel()
     {
         $action = new RefundTransactionAction();

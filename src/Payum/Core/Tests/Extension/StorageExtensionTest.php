@@ -26,14 +26,6 @@ class StorageExtensionTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithStorageAsArgument()
-    {
-        new StorageExtension($this->createStorageMock());
-    }
-
-    /**
-     * @test
-     */
     public function shouldDoNothingOnPreExecuteIfNoModelRequest()
     {
         $neverUsedStorageMock = $this->createStorageMock();

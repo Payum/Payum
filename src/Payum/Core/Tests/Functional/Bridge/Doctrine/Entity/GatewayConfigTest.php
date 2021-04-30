@@ -21,6 +21,8 @@ class GatewayConfigTest extends OrmTest
 
         $this->em->persist($gatewayConfig);
         $this->em->flush();
+
+        $this->assertSame([$gatewayConfig], $this->em->getRepository(GatewayConfig::class)->findAll());
     }
 
     /**

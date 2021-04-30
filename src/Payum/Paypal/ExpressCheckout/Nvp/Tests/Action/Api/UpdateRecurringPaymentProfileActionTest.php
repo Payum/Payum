@@ -31,14 +31,6 @@ class UpdateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new UpdateRecurringPaymentProfileAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldUpdateRecurringPaymentProfileRequestAndArrayAccessAsModel()
     {
         $action = new UpdateRecurringPaymentProfileAction();

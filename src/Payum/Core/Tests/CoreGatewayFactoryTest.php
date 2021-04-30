@@ -38,14 +38,6 @@ class CoreGatewayFactoryTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CoreGatewayFactory();
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowCreateGatewayWithoutAnyOptions()
     {
         $factory = new CoreGatewayFactory();

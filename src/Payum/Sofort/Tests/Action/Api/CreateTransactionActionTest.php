@@ -33,14 +33,6 @@ class CreateTransactionActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArgument()
-    {
-        new CreateTransactionAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportCreateTransactionRequestWithArrayAccessAsModel()
     {
         $action = new CreateTransactionAction();

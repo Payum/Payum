@@ -21,14 +21,6 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new StatusAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldNotSupportStatusRequestWithNoPaymentAsModel()
     {
         $action = new StatusAction();

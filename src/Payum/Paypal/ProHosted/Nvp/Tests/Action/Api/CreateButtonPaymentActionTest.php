@@ -20,14 +20,6 @@ class CreateButtonPaymentActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CreateButtonPaymentAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportCreateButtonPaymentRequestAndArrayAccessAsModel()
     {
         $action = new CreateButtonPaymentAction();

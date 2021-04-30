@@ -61,21 +61,6 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithValidOptions()
-    {
-        new AgreementApi(
-            new SoapClientFactory(),
-            array(
-                'encryption_key' => 'aKey',
-                'account_number' => 'aNumber',
-                'sandbox' => true,
-            )
-        );
-    }
-
-    /**
-     * @test
-     */
     public function shouldUseSoapClientOnCreateAgreementAndConvertItsResponse()
     {
         $response = new \stdClass();

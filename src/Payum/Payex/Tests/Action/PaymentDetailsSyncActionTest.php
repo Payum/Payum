@@ -21,14 +21,6 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new PaymentDetailsSyncAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportSyncWithArrayAccessAsModelIfTransactionNumberSet()
     {
         $action = new PaymentDetailsSyncAction();

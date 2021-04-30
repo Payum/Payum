@@ -29,14 +29,6 @@ class SensitiveValueTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithValue()
-    {
-        new SensitiveValue('cardNumber');
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetValueSetInConstructorAndErase()
     {
         $expectedValue = 'cardNumber';

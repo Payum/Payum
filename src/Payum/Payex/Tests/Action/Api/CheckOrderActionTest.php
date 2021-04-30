@@ -44,14 +44,6 @@ class CheckOrderActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CheckOrderAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowSetOrderApiAsApi()
     {
         $orderApi = $this->createMock('Payum\Payex\Api\OrderApi', array(), array(), '', false);

@@ -28,19 +28,6 @@ class PayumTest extends TestCase
     /**
      * @test
      */
-    public function shouldBeConstructedWithExpectedArguments()
-    {
-        new Payum(
-            $this->createRegistryMock(),
-            $this->createHttpRequestVerifierMock(),
-            $this->createGenericTokenFactoryMock(),
-            $this->createTokenStorage()
-        );
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetHttpRequestVerifierSetInConstructor()
     {
         $httpRequestVerifier = $this->createHttpRequestVerifierMock();

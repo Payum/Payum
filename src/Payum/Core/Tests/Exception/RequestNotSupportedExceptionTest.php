@@ -23,14 +23,6 @@ class RequestNotSupportedExceptionTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new RequestNotSupportedException();
-    }
-
-    /**
-     * @test
-     */
     public function shouldCreateWithNoneObjectRequest()
     {
         $exception = RequestNotSupportedException::create('anRequest');

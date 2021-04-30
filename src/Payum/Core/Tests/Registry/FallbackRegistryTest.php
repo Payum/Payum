@@ -24,14 +24,6 @@ class FallbackRegistryTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithMainRegistryAndFallbackOne()
-    {
-        new FallbackRegistry($this->createRegistryMock(), $this->createRegistryMock());
-    }
-
-    /**
-     * @test
-     */
     public function shouldReturnGatewayFromMainRegistry()
     {
         $expectedGateway = new \stdClass();
@@ -51,7 +43,7 @@ class FallbackRegistryTest extends TestCase
         ;
 
         $registry = new FallbackRegistry($mailRegistryMock, $fallbackRegistryMock);
-        
+
         $this->assertSame($expectedGateway, $registry->getGateway('theGatewayName'));
     }
 

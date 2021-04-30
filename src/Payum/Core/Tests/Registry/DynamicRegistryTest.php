@@ -28,24 +28,6 @@ class DynamicRegistryTest extends TestCase
      *
      * @test
      */
-    public function couldBeConstructedWithGatewayConfigAndRegistryAsArguments()
-    {
-        new DynamicRegistry($this->createStorageMock(), $this->createRegistryMock());
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithGatewayConfigAndGatewayFactoryRegistryAsArguments()
-    {
-        new DynamicRegistry($this->createStorageMock(), $this->createGatewayFactoryRegistryMock());
-    }
-
-    /**
-     * @deprecated
-     *
-     * @test
-     */
     public function shouldCallStaticRegistryOnGetGateways()
     {
         $staticRegistryMock = $this->createRegistryMock();
@@ -59,7 +41,7 @@ class DynamicRegistryTest extends TestCase
             $this->createStorageMock(),
             $staticRegistryMock
         );
-        
+
         $this->assertEquals(['theGateways'], $registry->getGateways());
     }
 

@@ -29,6 +29,9 @@ class TokenTest extends OrmTest
 
         $this->em->persist($token);
         $this->em->flush();
+
+        $repository = $this->em->getRepository(Token::class);
+        $this->assertSame([$token], $repository->findAll());
     }
 
     /**

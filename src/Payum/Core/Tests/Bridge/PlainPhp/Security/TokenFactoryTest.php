@@ -35,18 +35,6 @@ class TokenFactoryTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithExpectedArguments()
-    {
-        self::assertInstanceOf(TokenFactory::class, new TokenFactory(
-            $this->createStorageMock(),
-            $this->createStorageRegistryMock(),
-            'http://example.com'
-        ));
-    }
-
-    /**
-     * @test
-     */
     public function shouldCreateTokenWithoutAfterPath()
     {
         $token = new Token();

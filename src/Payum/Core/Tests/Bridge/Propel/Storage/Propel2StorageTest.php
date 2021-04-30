@@ -20,17 +20,6 @@ class Propel2StorageTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithModelClassesAsArguments()
-    {
-        new PropelStorage(
-            'Payum\Core\Tests\Mocks\Model\Propel2Model',
-            'Payum\Core\Tests\Mocks\Model\Propel2Query'
-        );
-    }
-
-    /**
-     * @test
-     */
     public function shouldCreateInstanceOfModelClassGivenInConstructor()
     {
         $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\Propel2Model';

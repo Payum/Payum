@@ -21,14 +21,6 @@ class ExtensionCollectionTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new ExtensionCollection();
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowAddExtensionAppendByDefault()
     {
         $extensionFirst = $this->createExtensionMock();

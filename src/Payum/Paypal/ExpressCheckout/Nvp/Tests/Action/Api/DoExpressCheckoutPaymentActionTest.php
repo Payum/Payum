@@ -31,14 +31,6 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new DoExpressCheckoutPaymentAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportDoExpressCheckoutPaymentRequestAndArrayAccessAsModel()
     {
         $action = new DoExpressCheckoutPaymentAction();

@@ -10,14 +10,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TokenFactoryBuilderTest extends TestCase
 {
-    public function testCouldBeConstructedWithUrlGeneratorAsFirstArgument()
-    {
-        /** @var UrlGeneratorInterface $urlGenerator */
-        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-
-        new TokenFactoryBuilder($urlGenerator);
-    }
-
     public function testShouldBuildSymfonyHttpRequestVerifier()
     {
         /** @var StorageInterface $tokenStorage */

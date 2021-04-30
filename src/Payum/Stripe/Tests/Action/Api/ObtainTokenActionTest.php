@@ -36,24 +36,6 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithTemplateAsFirstArgument()
-    {
-        new ObtainTokenAction('aTemplateName');
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetKeysAsApi()
-    {
-        $action = new ObtainTokenAction('aTemplateName');
-
-        $action->setApi(new Keys('publishableKey', 'secretKey'));
-    }
-
-    /**
-     * @test
-     */
     public function throwNotSupportedApiIfNotKeysGivenAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);

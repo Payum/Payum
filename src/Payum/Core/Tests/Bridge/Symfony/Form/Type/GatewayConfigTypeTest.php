@@ -21,14 +21,6 @@ class GatewayConfigTypeTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithGatewayFactoryRegistryAsFirstArgument()
-    {
-        new GatewayConfigType($this->createMock('Payum\Core\Registry\GatewayFactoryRegistryInterface'));
-    }
-
-    /**
-     * @test
-     */
     public function shouldExtendFormType()
     {
         $type = new GatewayConfigType($this->createMock('Payum\Core\Registry\GatewayFactoryRegistryInterface'));

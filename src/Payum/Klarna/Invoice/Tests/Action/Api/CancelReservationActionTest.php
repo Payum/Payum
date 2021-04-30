@@ -22,22 +22,6 @@ class CancelReservationActionTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CancelReservationAction();
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithKlarnaAsArgument()
-    {
-        new CancelReservationAction($this->createKlarnaMock());
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowSetConfigAsApi()
     {
         $action = new CancelReservationAction($this->createKlarnaMock());

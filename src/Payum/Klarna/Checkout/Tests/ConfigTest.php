@@ -9,14 +9,6 @@ class ConfigTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new Config();
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowSetOptions()
     {
         $config = new Config();
@@ -24,5 +16,10 @@ class ConfigTest extends TestCase
         $config->secret = 'aSecret';
         $config->contentType = 'aType';
         $config->baseUri = 'aMode';
+
+        $this->assertSame('aMerhId', $config->merchantId);
+        $this->assertSame('aSecret', $config->secret);
+        $this->assertSame('aType', $config->contentType);
+        $this->assertSame('aMode', $config->baseUri);
     }
 }

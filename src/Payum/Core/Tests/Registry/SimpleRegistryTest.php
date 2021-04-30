@@ -22,10 +22,7 @@ class SimpleRegistryTest extends TestCase
         $this->assertTrue($rc->isSubclassOf(AbstractRegistry::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
+    public function testItCouldBeConstructedWithoutAnyArguments()
     {
         $registry = new SimpleRegistry();
 
@@ -34,10 +31,7 @@ class SimpleRegistryTest extends TestCase
         $this->assertAttributeEquals(array(), 'gatewayFactories', $registry);
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithAllPossibleArguments()
+    public function testCouldBeConstructedWithAllPossibleArguments()
     {
         $registry = new SimpleRegistry(
             $gateways = array('foo' => 'fooGateway'),
@@ -163,7 +157,7 @@ class SimpleRegistryTest extends TestCase
 
         $registry = new SimpleRegistry(array('foo' => $gatewayMock));
 
-        $registry->getGateway('foo');
+        $this->assertSame($gatewayMock, $registry->getGateway('foo'));
     }
 
     /**
@@ -196,8 +190,8 @@ class SimpleRegistryTest extends TestCase
             )
         );
 
-        $registry->getGateway('foo');
-        $registry->getGateway('bar');
+        $this->assertSame($gatewayFooMock, $registry->getGateway('foo'));
+        $this->assertSame($gatewayBarMock, $registry->getGateway('bar'));
     }
 
     /**
@@ -283,6 +277,8 @@ class SimpleRegistryTest extends TestCase
             )
         );
 
-        $registry->getGateways();
+        $this->assertSame(['foo' => $gatewayFooMock, 'bar' => $gatewayBarMock], $registry->getGateways());
+
+        $this->assertSame(['fooClass' => $storageOneMock], $registry->getStorages());
     }
 }

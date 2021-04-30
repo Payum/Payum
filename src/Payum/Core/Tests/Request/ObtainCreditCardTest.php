@@ -18,10 +18,7 @@ class ObtainCreditCardTest extends TestCase
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
+    public function testItCouldBeConstructedWithoutAnyArguments()
     {
         $request = new ObtainCreditCard();
 
@@ -29,10 +26,7 @@ class ObtainCreditCardTest extends TestCase
         $this->assertNull($request->getModel());
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithFirstModelAsFirstArgument()
+    public function testCouldBeConstructedWithFirstModelAsFirstArgument()
     {
         $request = new ObtainCreditCard($firstModel = new \stdClass());
 
@@ -40,10 +34,7 @@ class ObtainCreditCardTest extends TestCase
         $this->assertNull($request->getModel());
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithFirstModelAndCurrentModelAsArguments()
+    public function testCouldBeConstructedWithFirstModelAndCurrentModelAsArguments()
     {
         $request = new ObtainCreditCard($firstModel = new \stdClass(), $currentModel = new \stdClass());
 
@@ -58,7 +49,9 @@ class ObtainCreditCardTest extends TestCase
     {
         $request = new ObtainCreditCard();
 
-        $request->set($this->createMock(CreditCardInterface::class));
+        $creditCard = $this->createMock(CreditCardInterface::class);
+        $request->set($creditCard);
+        $this->assertSame($creditCard, $request->obtain());
     }
 
     /**

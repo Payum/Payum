@@ -15,12 +15,4 @@ class CreateOrderTest extends TestCase
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Checkout\Request\Api\BaseOrder'));
     }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithArrayModelAsArgument()
-    {
-        new CreateOrder(array());
-    }
 }

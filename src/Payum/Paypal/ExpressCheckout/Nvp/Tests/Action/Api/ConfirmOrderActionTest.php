@@ -21,11 +21,6 @@ class ConfirmOrderActionTest extends GenericActionTest
         $this->action = new ConfirmOrderAction('theConfirmOrderTemplate');
     }
 
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        //overwrite
-    }
-
     /**
      * @test
      */

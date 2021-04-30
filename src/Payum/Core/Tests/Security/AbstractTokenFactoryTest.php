@@ -34,14 +34,6 @@ class AbstractTokenFactoryTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithExpectedArguments()
-    {
-        $this->createTokenFactoryMock($this->createStorageMock(), $this->createStorageRegistryMock());
-    }
-
-    /**
-     * @test
-     */
     public function shouldCreateTokenWithoutAfterPath()
     {
         $token = new Token();

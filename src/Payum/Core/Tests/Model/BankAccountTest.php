@@ -20,14 +20,6 @@ class BankAccountTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new BankAccount();
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetHolderPreviouslySet()
     {
         $bankAccount = new BankAccount();

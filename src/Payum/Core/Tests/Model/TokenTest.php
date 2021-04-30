@@ -21,14 +21,6 @@ class TokenTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new Token();
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetHashGeneratedInConstructor()
     {
         $token = new Token();
@@ -50,16 +42,6 @@ class TokenTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowSetHash()
-    {
-        $token = new Token();
-
-        $token->setHash('foo');
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetPreviouslySetHash()
     {
         $token = new Token();
@@ -67,16 +49,6 @@ class TokenTest extends TestCase
         $token->setHash('theToken');
 
         $this->assertSame('theToken', $token->getHash());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetGatewayName()
-    {
-        $token = new Token();
-
-        $token->setGatewayName('aName');
     }
 
     /**
@@ -94,16 +66,6 @@ class TokenTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowSetTargetUrl()
-    {
-        $token = new Token();
-
-        $token->setTargetUrl('anUrl');
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetPreviouslySetTargetUrl()
     {
         $token = new Token();
@@ -111,16 +73,6 @@ class TokenTest extends TestCase
         $token->setTargetUrl('theUrl');
 
         $this->assertSame('theUrl', $token->getTargetUrl());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetAfterUrl()
-    {
-        $token = new Token();
-
-        $token->setAfterUrl('anUrl');
     }
 
     /**
@@ -138,19 +90,9 @@ class TokenTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowSetIdentityAsDetails()
-    {
-        $token = new Token();
-
-        $token->setDetails(new Identity('anId', 'stdClass'));
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetPreviouslySetDetails()
     {
-        $expectedIdentity = 'theDetails';
+        $expectedIdentity = new Identity('anId', 'stdClass');
 
         $token = new Token();
 

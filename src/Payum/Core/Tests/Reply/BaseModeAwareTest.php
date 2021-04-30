@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Reply;
 
+use Payum\Core\Reply\BaseModelAware;
 use PHPUnit\Framework\TestCase;
 
 class BaseModeAwareTest extends TestCase
@@ -70,19 +71,9 @@ class BaseModeAwareTest extends TestCase
      *
      * @dataProvider provideDifferentPhpTypes
      */
-    public function couldBeConstructedWithModelOfAnyType($phpType)
-    {
-        $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array($phpType));
-    }
-
-    /**
-     * @test
-     *
-     * @dataProvider provideDifferentPhpTypes
-     */
     public function shouldAllowSetModelAndGetIt($phpType)
     {
-        $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array(123321));
+        $request = new class(123321) extends BaseModelAware {};
 
         $request->setModel($phpType);
 
@@ -96,7 +87,7 @@ class BaseModeAwareTest extends TestCase
      */
     public function shouldAllowGetModelSetInConstructor($phpType)
     {
-        $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array($phpType));
+        $request = new class($phpType) extends BaseModelAware {};
 
         $this->assertEquals($phpType, $request->getModel());
     }

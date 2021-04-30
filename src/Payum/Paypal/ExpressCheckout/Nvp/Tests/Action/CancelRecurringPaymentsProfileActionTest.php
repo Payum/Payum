@@ -61,14 +61,6 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CancelRecurringPaymentsProfileAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportManageRecurringPaymentsProfileStatusRequestAndArrayAccessAsModel()
     {
         $action = new CancelRecurringPaymentsProfileAction();

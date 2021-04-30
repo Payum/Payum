@@ -8,10 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class ApiTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithOptionsAndHttpClient()
+    public function testCouldBeConstructedWithOptionsAndHttpClient()
     {
         $client = $this->createHttpClientMock();
         $factory = $this->createHttpMessageFactory();

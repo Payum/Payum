@@ -16,11 +16,6 @@ class CryptoStorageDecoratorTest extends TestCase
         $this->assertTrue($rc->implementsInterface(StorageInterface::class));
     }
 
-    public function testCouldBeConstructedWithDecoratedStorageAndCypherAsArguments()
-    {
-        new CryptoStorageDecorator($this->createStorageMock(), $this->createCypherMock());
-    }
-
     public function testShouldProxyCallToDecoratedStorageAndDoNothingWithCypherOnCreate()
     {
         $model = new CryptedModel();
