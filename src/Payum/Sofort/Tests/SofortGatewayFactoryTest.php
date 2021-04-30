@@ -1,95 +1,21 @@
 <?php
 namespace Payum\Sofort\Tests;
 
-use Payum\Core\CoreGatewayFactory;
-use Payum\Core\Gateway;
-use Payum\Core\GatewayFactory;
-use Payum\Core\GatewayFactoryInterface;
+use Payum\Core\Tests\AbstractGatewayFactoryTest;
 use Payum\Sofort\SofortGatewayFactory;
 
-class SofortGatewayFactoryTest extends \PHPUnit\Framework\TestCase
+class SofortGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    /**
-     * @test
-     */
-    public function shouldSubClassGatewayFactory()
+    protected function getGatewayFactoryClass(): string
     {
-        $rc = new \ReflectionClass(SofortGatewayFactory::class);
-
-        $this->assertTrue($rc->isSubclassOf(GatewayFactory::class));
+        return SofortGatewayFactory::class;
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateCoreGatewayFactoryIfNotPassed()
+    protected function getRequiredOptions(): array
     {
-        $factory = new SofortGatewayFactory();
-
-        $this->assertAttributeInstanceOf(CoreGatewayFactory::class, 'coreGatewayFactory', $factory);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
-    {
-        $coreGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
-
-        $factory = new SofortGatewayFactory([], $coreGatewayFactory);
-
-        $this->assertAttributeSame($coreGatewayFactory, 'coreGatewayFactory', $factory);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGateway()
-    {
-        $factory = new SofortGatewayFactory();
-
-        $gateway = $factory->create([
+        return [
             'config_key' => 'foo:bar:baz',
-        ]);
-
-        $this->assertInstanceOf(Gateway::class, $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
-        $this->assertAttributeNotEmpty('actions', $gateway);
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-        $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGatewayWithCustomApi()
-    {
-        $factory = new SofortGatewayFactory();
-
-        $gateway = $factory->create(array('payum.api' => new \stdClass()));
-
-        $this->assertInstanceOf(Gateway::class, $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
-        $this->assertAttributeNotEmpty('actions', $gateway);
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-        $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGatewayConfig()
-    {
-        $factory = new SofortGatewayFactory();
-
-        $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
-        $this->assertNotEmpty($config);
+        ];
     }
 
     /**

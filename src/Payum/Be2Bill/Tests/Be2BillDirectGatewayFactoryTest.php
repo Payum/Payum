@@ -2,92 +2,22 @@
 namespace Payum\Be2Bill\Tests;
 
 use Payum\Be2Bill\Be2BillDirectGatewayFactory;
-use Payum\Core\CoreGatewayFactory;
-use Payum\Core\GatewayFactory;
-use Payum\Core\GatewayFactoryInterface;
-use PHPUnit\Framework\TestCase;
 
-class Be2BillDirectGatewayFactoryTest extends TestCase
+use Payum\Core\Tests\AbstractGatewayFactoryTest;
+
+class Be2BillDirectGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    /**
-     * @test
-     */
-    public function shouldSubClassGatewayFactory()
+    protected function getGatewayFactoryClass(): string
     {
-        $rc = new \ReflectionClass(Be2BillDirectGatewayFactory::class);
-
-        $this->assertTrue($rc->isSubclassOf(GatewayFactory::class));
+        return Be2BillDirectGatewayFactory::class;
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateCoreGatewayFactoryIfNotPassed()
+    protected function getRequiredOptions(): array
     {
-        $factory = new Be2BillDirectGatewayFactory();
-
-        $this->assertAttributeInstanceOf(CoreGatewayFactory::class, 'coreGatewayFactory', $factory);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
-    {
-        $coreGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
-
-        $factory = new Be2BillDirectGatewayFactory(array(), $coreGatewayFactory);
-
-        $this->assertAttributeSame($coreGatewayFactory, 'coreGatewayFactory', $factory);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGateway()
-    {
-        $factory = new Be2BillDirectGatewayFactory();
-
-        $gateway = $factory->create(array('identifier' => 'anId', 'password' => 'aPass'));
-
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
-        $this->assertAttributeNotEmpty('actions', $gateway);
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-        $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGatewayWithCustomApi()
-    {
-        $factory = new Be2BillDirectGatewayFactory();
-
-        $gateway = $factory->create(array('payum.api' => new \stdClass()));
-
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
-        $this->assertAttributeNotEmpty('actions', $gateway);
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-        $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGatewayConfig()
-    {
-        $factory = new Be2BillDirectGatewayFactory();
-
-        $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
-        $this->assertNotEmpty($config);
+        return [
+            'identifier' => 'anId',
+            'password' => 'aPass',
+        ];
     }
 
     /**

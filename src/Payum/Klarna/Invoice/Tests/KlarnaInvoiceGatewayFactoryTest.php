@@ -1,96 +1,25 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests;
 
+use Payum\Core\Tests\AbstractGatewayFactoryTest;
 use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
-use PHPUnit\Framework\TestCase;
 
-class KlarnaInvoiceGatewayFactoryTest extends TestCase
+class KlarnaInvoiceGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    /**
-     * @test
-     */
-    public function shouldSubClassGatewayFactory()
+    protected function getGatewayFactoryClass(): string
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory');
-
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\GatewayFactory'));
+        return KlarnaInvoiceGatewayFactory::class;
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateCoreGatewayFactoryIfNotPassed()
+    protected function getRequiredOptions(): array
     {
-        $factory = new KlarnaInvoiceGatewayFactory();
-
-        $this->assertAttributeInstanceOf('Payum\Core\CoreGatewayFactory', 'coreGatewayFactory', $factory);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
-    {
-        $coreGatewayFactory = $this->createMock('Payum\Core\GatewayFactoryInterface');
-
-        $factory = new KlarnaInvoiceGatewayFactory(array(), $coreGatewayFactory);
-
-        $this->assertAttributeSame($coreGatewayFactory, 'coreGatewayFactory', $factory);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGateway()
-    {
-        $factory = new KlarnaInvoiceGatewayFactory();
-
-        $gateway = $factory->create(array(
+        return [
             'eid' => 'aEID',
             'secret' => 'aSecret',
             'country' => 'SV',
             'language' => 'SE',
             'currency' => 'SEK',
-        ));
-
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
-        $this->assertAttributeNotEmpty('actions', $gateway);
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-        $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGatewayWithCustomApi()
-    {
-        $factory = new KlarnaInvoiceGatewayFactory();
-
-        $gateway = $factory->create(array('payum.api' => new \stdClass()));
-
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
-        $this->assertAttributeNotEmpty('actions', $gateway);
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-        $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGatewayConfig()
-    {
-        $factory = new KlarnaInvoiceGatewayFactory();
-
-        $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
-        $this->assertNotEmpty($config);
+        ];
     }
 
     /**
