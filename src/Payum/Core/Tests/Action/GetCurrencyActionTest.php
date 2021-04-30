@@ -79,7 +79,7 @@ class GetCurrencyActionTest extends GenericActionTest
     }
 
     /**
-     * @legacy
+     * @group legacy
      */
     public function testItUsesPayumIso4217WhenItIsPassedThrough()
     {

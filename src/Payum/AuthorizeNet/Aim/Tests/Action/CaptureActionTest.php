@@ -60,6 +60,7 @@ class CaptureActionTest extends GenericActionTest
 
     /**
      * @test
+     * @group legacy
      */
     public function throwIfUnsupportedApiGiven()
     {

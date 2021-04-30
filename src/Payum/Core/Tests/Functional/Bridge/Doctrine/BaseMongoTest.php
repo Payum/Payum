@@ -31,7 +31,7 @@ abstract class BaseMongoTest extends TestCase
         $config->setProxyNamespace('PayumTestsProxies');
         $config->setHydratorDir(\sys_get_temp_dir());
         $config->setHydratorNamespace('PayumTestsHydrators');
-        $config->setMetadataDriverImpl($this->getMetadataDriverImpl($config));
+        $config->setMetadataDriverImpl($this->getMetadataDriverImpl());
         $config->setMetadataCacheImpl(new ArrayCache());
         $config->setDefaultDB('payum_tests');
 
@@ -45,8 +45,6 @@ abstract class BaseMongoTest extends TestCase
     }
 
     /**
-     * @param Configuration $config
-     *
      * @return MappingDriver
      */
     abstract protected function getMetadataDriverImpl();
