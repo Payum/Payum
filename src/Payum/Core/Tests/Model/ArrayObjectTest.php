@@ -29,14 +29,6 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new ArrayObject();
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowAddElementToArray()
     {
         $model = new ArrayObject();

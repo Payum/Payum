@@ -31,14 +31,6 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit\Framework\
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new ManageRecurringPaymentsProfileStatusAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportManageRecurringPaymentsProfileStatusRequestAndArrayAccessAsModel()
     {
         $action = new ManageRecurringPaymentsProfileStatusAction();

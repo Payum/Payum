@@ -16,12 +16,4 @@ class RefundTest extends TestCase
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithModel()
-    {
-        new Refund(new \stdClass());
-    }
 }

@@ -31,19 +31,13 @@ class HttpExceptionTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedSameAsStandardException()
-    {
-        new HttpException('aMessage', 404);
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowSetRequest()
     {
         $exception = new HttpException();
 
-        $exception->setRequest($this->createMock('Psr\Http\Message\RequestInterface'));
+        $request = $this->createMock('Psr\Http\Message\RequestInterface');
+        $exception->setRequest($request);
+        $this->assertSame($request, $exception->getRequest());
     }
 
     /**
@@ -65,7 +59,9 @@ class HttpExceptionTest extends TestCase
     {
         $exception = new HttpException();
 
-        $exception->setResponse($this->createMock('Psr\Http\Message\ResponseInterface'));
+        $response = $this->createMock('Psr\Http\Message\ResponseInterface');
+        $exception->setResponse($response);
+        $this->assertSame($response, $exception->getResponse());
     }
 
     /**

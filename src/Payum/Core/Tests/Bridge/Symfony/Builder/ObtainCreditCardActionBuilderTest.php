@@ -10,14 +10,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ObtainCreditCardActionBuilderTest extends TestCase
 {
-    public function testCouldBeConstructedWithFormFactoryAndRequestStackServices()
-    {
-        new ObtainCreditCardActionBuilder(
-            $this->createMock(FormFactoryInterface::class),
-            $this->createMock(RequestStack::class)
-        );
-    }
-
     public function testShouldBuildObtainCreditCardWithGivenTemplate()
     {
         $formFactory = $this->createMock(FormFactoryInterface::class);

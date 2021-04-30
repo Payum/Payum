@@ -25,12 +25,4 @@ class LogicExceptionTest extends TestCase
 
         $this->assertTrue($rc->isSubclassOf('LogicException'));
     }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new LogicException();
-    }
 }

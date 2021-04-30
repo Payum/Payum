@@ -33,22 +33,6 @@ class ReserveAmountActionTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new ReserveAmountAction();
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithKlarnaAsArgument()
-    {
-        new ReserveAmountAction($this->createKlarnaMock());
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowSetGateway()
     {
         $action = new ReserveAmountAction($this->createKlarnaMock());

@@ -22,14 +22,6 @@ class RefundActionTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new RefundAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportRefundWithArrayAsModel()
     {
         $action = new RefundAction();

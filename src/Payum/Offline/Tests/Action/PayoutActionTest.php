@@ -21,14 +21,6 @@ class PayoutActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new PayoutAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportPayoutWithArrayAccessAsModel()
     {
         $action = new PayoutAction();

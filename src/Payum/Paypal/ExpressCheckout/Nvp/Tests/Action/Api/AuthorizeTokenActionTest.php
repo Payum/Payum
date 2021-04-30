@@ -32,14 +32,6 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArgument()
-    {
-        new AuthorizeTokenAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportAuthorizeTokenRequestWithArrayAccessAsModel()
     {
         $action = new AuthorizeTokenAction();

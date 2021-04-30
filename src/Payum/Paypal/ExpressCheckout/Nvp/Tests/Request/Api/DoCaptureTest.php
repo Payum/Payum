@@ -19,14 +19,6 @@ class DoCaptureTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithModelAndPaymentRequestNAsArguments()
-    {
-        new DoCapture(new \stdClass(), $paymentRequestN = 5);
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetPaymentRequestNSetInConstructor()
     {
         $expectedPaymentRequestN = 7;

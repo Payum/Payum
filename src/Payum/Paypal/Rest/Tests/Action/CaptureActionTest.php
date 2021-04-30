@@ -14,14 +14,6 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CaptureAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportCaptureWithPaymentSdkModel()
     {
         $action = new CaptureAction();
@@ -91,21 +83,6 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($action->supports($request));
         $this->assertTrue($action->supports(new Capture(new \ArrayObject)));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportApiContext()
-    {
-        $action = new CaptureAction();
-
-        /** @var OAuthTokenCredential $tokenMock */
-        $tokenMock = $this->createMock(OAuthTokenCredential::class, [], [], '', false);
-
-        $apiContext = new ApiContext($tokenMock);
-
-        $action->setApi($apiContext);
     }
 
     /**

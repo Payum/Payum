@@ -30,14 +30,6 @@ class GatewayTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new Gateway();
-    }
-
-    /**
-     * @test
-     */
     public function shouldCreateExtensionCollectionInstanceInConstructor()
     {
         $gateway = new Gateway();
@@ -938,7 +930,7 @@ abstract class ApiAwareAction implements ActionInterface, ApiAwareInterface
 class RequireOtherRequestAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
-    
+
     protected $supportedRequest;
 
     protected $requiredRequest;

@@ -8,14 +8,6 @@ class SoapClientFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new SoapClientFactory();
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowCreateSoapClientWithDefaultClassAndOptions()
     {
         $factory = new SoapClientFactory();

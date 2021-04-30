@@ -16,12 +16,4 @@ class AuthorizeTest extends TestCase
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithModel()
-    {
-        new Authorize(new \stdClass());
-    }
 }

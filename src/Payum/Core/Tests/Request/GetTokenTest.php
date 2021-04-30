@@ -10,14 +10,6 @@ class GetTokenTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithHashAsArgument()
-    {
-        new GetToken('aHash');
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetHashSetInConstructor()
     {
         $request = new GetToken('theHash');

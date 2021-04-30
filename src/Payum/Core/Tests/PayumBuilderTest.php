@@ -46,15 +46,6 @@ class PayumBuilderTest extends TestCase
         ];
     }
 
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new PayumBuilder();
-    }
-
     /**
      * @test
      */

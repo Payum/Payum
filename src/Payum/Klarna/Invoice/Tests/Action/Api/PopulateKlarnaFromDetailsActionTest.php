@@ -20,14 +20,6 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new PopulateKlarnaFromDetailsAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportPopulateKlarnaFromDetails()
     {
         $action = new PopulateKlarnaFromDetailsAction();
@@ -114,7 +106,26 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
             'comment' => 'aComment',
         ));
 
-        $klarna = new \Klarna();
+        $klarna = $this->createMock(\Klarna::class);
+
+        $klarna->expects($this->once())
+            ->method('setComment')
+            ->with('aComment');
+
+        $klarna->expects($this->once())
+            ->method('addArticle')
+            ->with(4, 'HANDLING', 'Handling fee', '50.99', '25', '0', 48);
+
+        $klarna->expects($this->atMost(2))
+            ->method('setAddress')
+            ->withConsecutive(
+                [\KlarnaFlags::IS_SHIPPING, new \KlarnaAddr('info@payum.com', '0700 00 00 00', '', 'Testperson-se', 'Approved', '', utf8_decode('Stårgatan 1'), '12345', 'Ankeborg', 209, '', '')],
+                [\KlarnaFlags::IS_BILLING, new \KlarnaAddr('info@payum.com', '0700 00 00 00', '', 'Testperson-se', 'Approved', '', utf8_decode('Stårgatan 1'), '12345', 'Ankeborg', 209, '', '')]
+            );
+
+        $klarna->expects($this->once())
+            ->method('setEstoreInfo')
+            ->with('anId', 'anId', 'aName');
 
         $request = new PopulateKlarnaFromDetails($details, $klarna);
 
@@ -130,7 +141,11 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
      */
     public function shouldNotFaileIfEmptyDetailsGiven()
     {
-        $klarna = new \Klarna();
+        $klarna = $this->createMock(\Klarna::class);
+
+        $klarna->expects($this->once())
+            ->method('setComment')
+            ->with(null);
 
         $request = new PopulateKlarnaFromDetails(new \ArrayObject(), $klarna);
 
@@ -160,7 +175,11 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
             ),
         ));
 
-        $klarna = new \Klarna();
+        $klarna = $this->createMock(\Klarna::class);
+
+        $klarna->expects($this->once())
+            ->method('addArtNo')
+            ->with(4, 'HANDLING');
 
         $request = new PopulateKlarnaFromDetails($details, $klarna);
 

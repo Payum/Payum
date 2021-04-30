@@ -31,14 +31,6 @@ class SetExpressCheckoutActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new SetExpressCheckoutAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportSetExpressCheckoutRequestAndArrayAccessAsModel()
     {
         $action = new SetExpressCheckoutAction();

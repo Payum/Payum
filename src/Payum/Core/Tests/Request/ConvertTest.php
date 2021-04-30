@@ -7,10 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class ConvertTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithSourceModelAndTo()
+    public function testCouldBeConstructedWithSourceModelAndTo()
     {
         $request = new Convert($source = new \stdClass(), $to = 'array');
 
@@ -20,10 +17,7 @@ class ConvertTest extends TestCase
         $this->assertNull($request->getResult());
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithSourceModelAndToAndOptionnalToken()
+    public function testCouldBeConstructedWithSourceModelAndToAndOptionnalToken()
     {
         $request = new Convert($source = new \stdClass(), $to = 'array', $token = $this->createMock(TokenInterface::class));
 

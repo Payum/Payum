@@ -28,14 +28,6 @@ class SyncActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new SyncAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportSyncWithArrayAsModel()
     {
         $action = new SyncAction();

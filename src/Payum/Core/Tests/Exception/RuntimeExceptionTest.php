@@ -25,12 +25,4 @@ class RuntimeExceptionTest extends TestCase
 
         $this->assertTrue($rc->isSubclassOf('RuntimeException'));
     }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new RuntimeException();
-    }
 }

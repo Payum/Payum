@@ -32,14 +32,6 @@ class SyncActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new SyncAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSet()
     {
         $action = new SyncAction();

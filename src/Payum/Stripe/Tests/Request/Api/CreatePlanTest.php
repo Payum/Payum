@@ -15,12 +15,4 @@ class CreatePlanTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithModelAsFirstArgument()
-    {
-        new CreatePlan($model = []);
-    }
 }

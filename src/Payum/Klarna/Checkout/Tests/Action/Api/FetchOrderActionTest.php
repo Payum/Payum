@@ -27,7 +27,7 @@ class FetchOrderActionTest extends GenericActionTest
     {
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\FetchOrderAction');
 
-        $rc->isSubclassOf('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
+        $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction'));
     }
 
     /**

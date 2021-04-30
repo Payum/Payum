@@ -29,16 +29,6 @@ class BaseOrderTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithArrayModelAsArgument()
-    {
-        $this->createBaseOrderMock(array());
-        $this->createBaseOrderMock(new \ArrayObject());
-        $this->createBaseOrderMock($this->createMock('ArrayAccess'));
-    }
-
-    /**
-     * @test
-     */
     public function throwIfTryConstructWithNotArrayModel()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);

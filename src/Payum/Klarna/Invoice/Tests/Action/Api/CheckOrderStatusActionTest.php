@@ -22,22 +22,6 @@ class CheckOrderStatusActionTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CheckOrderStatusAction();
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithKlarnaAsArgument()
-    {
-        new CheckOrderStatusAction($this->createKlarnaMock());
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowSetConfigAsApi()
     {
         $action = new CheckOrderStatusAction($this->createKlarnaMock());

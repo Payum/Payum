@@ -31,14 +31,6 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new DoReferenceTransactionAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportDoReferenceTransactionRequestAndArrayAccessAsModel()
     {
         $action = new DoReferenceTransactionAction();

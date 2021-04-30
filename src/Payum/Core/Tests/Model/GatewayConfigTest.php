@@ -32,14 +32,6 @@ class GatewayConfigTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new GatewayConfig();
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetPreviouslySetFactoryName()
     {
         $config = new GatewayConfig();

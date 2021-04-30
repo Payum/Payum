@@ -10,14 +10,6 @@ class GetCreditCardTokenTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithCurrencyCode()
-    {
-        new GetCreditCardToken([]);
-    }
-
-    /**
-     * @test
-     */
     public function shouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass(GetCreditCardToken::class);

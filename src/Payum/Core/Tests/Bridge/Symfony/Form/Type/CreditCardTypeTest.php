@@ -21,14 +21,6 @@ class CreditCardTypeTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CreditCardType();
-    }
-
-    /**
-     * @test
-     */
     public function shouldExtendFormType()
     {
         $type = new CreditCardType();

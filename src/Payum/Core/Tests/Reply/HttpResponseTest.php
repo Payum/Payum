@@ -19,14 +19,6 @@ class HttpResponseTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithContentAsArgument()
-    {
-        new HttpResponse('html page');
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetContentSetInConstructor()
     {
         $expectedContent = 'html page';

@@ -22,14 +22,6 @@ class AuthorizeActionTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new AuthorizeAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportAuthorizeWithArrayAsModel()
     {
         $action = new AuthorizeAction();

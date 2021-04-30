@@ -59,19 +59,4 @@ class BaseApiTest extends \PHPUnit\Framework\TestCase
             ),
         ));
     }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithValidOptions()
-    {
-        $this->getMockForAbstractClass('Payum\Payex\Api\BaseApi', array(
-            new SoapClientFactory(),
-            array(
-                'account_number' => 'aNumber',
-                'encryption_key' => 'aKey',
-                'sandbox' => true,
-            ),
-        ));
-    }
 }

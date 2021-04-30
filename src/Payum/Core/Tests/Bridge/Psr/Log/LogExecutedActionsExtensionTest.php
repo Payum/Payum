@@ -33,20 +33,14 @@ class LogExecutedActionsExtensionTest extends TestCase
         $this->assertTrue($rc->implementsInterface('Psr\Log\LoggerAwareInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
+    public function testItCouldBeConstructedWithoutAnyArguments()
     {
         $extension = new LogExecutedActionsExtension();
 
         $this->assertAttributeInstanceOf('Psr\Log\NullLogger', 'logger', $extension);
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithCustomLoggerGivenAsFirstArgument()
+    public function testCouldBeConstructedWithCustomLoggerGivenAsFirstArgument()
     {
         $expectedLogger = $this->createLoggerMock();
 
@@ -100,7 +94,7 @@ class LogExecutedActionsExtensionTest extends TestCase
             ->expects($this->never())
             ->method('debug')
         ;
-        
+
         $context = new Context($this->createGatewayMock(), new \stdClass(), array());
         $context->setAction($this->createActionMock());
 
@@ -151,17 +145,17 @@ class LogExecutedActionsExtensionTest extends TestCase
             ->method('debug')
             ->with('[Payum] 1# '.get_class($action).'::execute(array)')
         ;
-        
+
         $extension = new LogExecutedActionsExtension($logger);
 
         $context = new Context($this->createGatewayMock(), $stringRequest, array());
         $context->setAction($action);
-        
+
         $extension->onExecute($context);
 
         $context = new Context($this->createGatewayMock(), $arrayRequest, array());
         $context->setAction($action);
-        
+
         $extension->onExecute($context);
     }
 
@@ -190,12 +184,12 @@ class LogExecutedActionsExtensionTest extends TestCase
 
         $context = new Context($this->createGatewayMock(), $stdRequest, array());
         $context->setAction($action);
-        
+
         $extension->onExecute($context);
 
         $context = new Context($this->createGatewayMock(), $namespacedRequest, array());
         $context->setAction($action);
-        
+
         $extension->onExecute($context);
     }
 
@@ -219,7 +213,7 @@ class LogExecutedActionsExtensionTest extends TestCase
 
         $context = new Context($this->createGatewayMock(), $modelRequest, array());
         $context->setAction($action);
-        
+
         $extension->onExecute($context);
     }
 

@@ -16,12 +16,4 @@ class CaptureTest extends TestCase
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithModel()
-    {
-        new Capture(new \stdClass());
-    }
 }

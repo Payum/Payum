@@ -18,14 +18,6 @@ class PopulateKlarnaFromDetailsTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithArrayModelAndKlarnaAsArguments()
-    {
-        new PopulateKlarnaFromDetails(new \ArrayObject(), new \Klarna());
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetModelSetInConstructor()
     {
         $details = new \ArrayObject();

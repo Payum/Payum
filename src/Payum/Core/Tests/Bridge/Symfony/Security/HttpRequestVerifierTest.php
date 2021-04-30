@@ -22,14 +22,6 @@ class HttpRequestVerifierTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithTokenStorageAsFirstArgument()
-    {
-        new HttpRequestVerifier($this->createStorageMock());
-    }
-
-    /**
-     * @test
-     */
     public function throwIfNotSymfonyRequestGivenOnVerify()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);

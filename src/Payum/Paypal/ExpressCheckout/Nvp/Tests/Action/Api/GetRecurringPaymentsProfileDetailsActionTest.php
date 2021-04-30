@@ -31,14 +31,6 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit\Framework\Te
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new GetRecurringPaymentsProfileDetailsAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportGetRecurringPaymentsProfileDetailsRequestAndArrayAccessAsModel()
     {
         $action = new GetRecurringPaymentsProfileDetailsAction();

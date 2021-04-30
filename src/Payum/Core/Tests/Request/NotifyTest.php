@@ -16,12 +16,4 @@ class NotifyTest extends TestCase
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithModel()
-    {
-        new Notify(new \stdClass());
-    }
 }

@@ -21,14 +21,6 @@ class GetHttpRequestActionTest extends TestCase
     }
 
     /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new GetHttpRequestAction();
-    }
-
-    /**
      * @deprecated
      *
      * @test
@@ -119,7 +111,7 @@ class GetHttpRequestActionTest extends TestCase
             'GET',
             ['foo' => 'fooVal']
         ));
-        
+
         $action = new GetHttpRequestAction();
         $action->setHttpRequestStack($stack);
 
@@ -145,7 +137,7 @@ class GetHttpRequestActionTest extends TestCase
             'POST',
             ['foo' => 'fooVal']
         ));
-        
+
         $action = new GetHttpRequestAction();
         $action->setHttpRequestStack($stack);
 
@@ -181,7 +173,7 @@ class GetHttpRequestActionTest extends TestCase
 
         $request = new GetHttpRequest();
         $action->execute($request);
-        
+
         self::assertSame('GET', $request->method);
     }
 

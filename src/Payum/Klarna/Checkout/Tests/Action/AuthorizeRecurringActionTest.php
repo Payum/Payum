@@ -78,12 +78,6 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testShouldAllowSetKlarnaConfigAsApi()
-    {
-        $action = new AuthorizeRecurringAction();
-        $action->setApi(new Config());
-    }
-
     public function testThrowIfNotKlarnaConfigGivenAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);

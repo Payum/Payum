@@ -12,8 +12,11 @@ class ArrayObjectTest extends OrmTest
      */
     public function shouldAllowPersistEmpty()
     {
-        $this->em->persist(new ArrayObject());
+        $entity = new ArrayObject();
+        $this->em->persist($entity);
         $this->em->flush();
+
+        $this->assertSame([$entity], $this->em->getRepository(ArrayObject::class)->findAll());
     }
 
     /**
@@ -27,6 +30,8 @@ class ArrayObjectTest extends OrmTest
 
         $this->em->persist($model);
         $this->em->flush();
+
+        $this->assertSame([$model], $this->em->getRepository(ArrayObject::class)->findAll());
     }
 
     /**

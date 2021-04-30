@@ -22,17 +22,6 @@ class DoctrineStorageTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithObjectManagerAndModelClassAsArguments()
-    {
-        new DoctrineStorage(
-            $this->createObjectManagerMock(),
-            'Payum\Core\Tests\Mocks\Model\TestModel'
-        );
-    }
-
-    /**
-     * @test
-     */
     public function shouldCreateInstanceOfModelClassGivenInConstructor()
     {
         $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';

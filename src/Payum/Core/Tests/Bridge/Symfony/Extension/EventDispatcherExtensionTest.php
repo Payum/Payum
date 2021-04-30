@@ -20,14 +20,6 @@ class EventDispatcherExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldBeConstructedWithEventDispatcherAsArgument()
-    {
-        new EventDispatcherExtension($this->createEventDispatcherMock());
-    }
-
-    /**
-     * @test
-     */
     public function shouldTriggerEventWhenCallOnPreExecute()
     {
         $dispatcherMock = $this->createEventDispatcherMock();

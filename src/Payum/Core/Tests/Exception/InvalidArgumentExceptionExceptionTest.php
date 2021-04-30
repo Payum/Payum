@@ -25,12 +25,4 @@ class InvalidArgumentExceptionExceptionTest extends TestCase
 
         $this->assertTrue($rc->isSubclassOf('InvalidArgumentException'));
     }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new InvalidArgumentException();
-    }
 }

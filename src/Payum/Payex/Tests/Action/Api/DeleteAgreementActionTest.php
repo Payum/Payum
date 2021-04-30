@@ -45,14 +45,6 @@ class DeleteAgreementActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new DeleteAgreementAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowSetAgreementApiAsApi()
     {
         $agreementApi = $this->createMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);

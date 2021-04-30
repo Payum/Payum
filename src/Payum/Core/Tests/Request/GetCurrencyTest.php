@@ -9,14 +9,6 @@ class GetCurrencyTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithCurrencyCode()
-    {
-        new GetCurrency('aCode');
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetCodeSetInConstructor()
     {
         $request = new GetCurrency('theCode');

@@ -53,14 +53,6 @@ class StartRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new StartRecurringPaymentAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowSetRecurringApiAsApi()
     {
         $recurringApi = $this->createMock('Payum\Payex\Api\RecurringApi', array(), array(), '', false);

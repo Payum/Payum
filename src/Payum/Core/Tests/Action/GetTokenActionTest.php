@@ -25,14 +25,6 @@ class GetTokenActionTest extends GenericActionTest
         $this->action = new $this->actionClass($this->createMock(StorageInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        //overwrite
-    }
-
     public function provideSupportedRequests(): \Iterator
     {
         yield array(new $this->requestClass('aHash'));

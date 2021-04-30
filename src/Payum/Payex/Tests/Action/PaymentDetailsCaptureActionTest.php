@@ -22,14 +22,6 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new PaymentDetailsCaptureAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportCaptureWithArrayAsModelIfAutoPayNotSet()
     {
         $action = new PaymentDetailsCaptureAction();

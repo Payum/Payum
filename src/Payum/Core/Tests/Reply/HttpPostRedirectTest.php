@@ -29,22 +29,6 @@ class HttpPostRedirectTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithUrlAsArgument()
-    {
-        new HttpPostRedirect('an_url');
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithUrlAsArgumentAndPostValuesArray()
-    {
-        new HttpPostRedirect('an_url', array('foo' => 'bar'));
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetContentWhenPostNotSet()
     {
         $expectedContent = <<<'HTML'

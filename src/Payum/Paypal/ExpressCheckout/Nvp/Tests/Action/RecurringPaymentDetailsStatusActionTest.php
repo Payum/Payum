@@ -20,14 +20,6 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new RecurringPaymentDetailsStatusAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportStatusRequestWithArrayAsModelWhichHasBillingPeriodSet()
     {
         $action = new RecurringPaymentDetailsStatusAction();

@@ -61,21 +61,6 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithValidOptions()
-    {
-        new OrderApi(
-            new SoapClientFactory(),
-            array(
-                'encryption_key' => 'aKey',
-                'account_number' => 'aNumber',
-                'sandbox' => true,
-            )
-        );
-    }
-
-    /**
-     * @test
-     */
     public function shouldUseSoapClientOnInitialize8AndConvertItsResponse()
     {
         $response = new \stdClass();

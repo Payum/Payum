@@ -22,14 +22,6 @@ class SyncActionTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new SyncAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportSyncWithArrayAsModel()
     {
         $action = new SyncAction();

@@ -30,14 +30,6 @@ class ObtainCreditCardActionTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithFormFactoryAndTemplatingAsArguments()
-    {
-        new ObtainCreditCardAction($this->createFormFactoryMock(), 'aTemplate');
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportObtainCreditCardRequest()
     {
         $action = new ObtainCreditCardAction($this->createFormFactoryMock(), 'aTemplate');

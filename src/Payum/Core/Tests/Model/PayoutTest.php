@@ -20,14 +20,6 @@ class PayoutTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new Payout();
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetRecipientIdPreviouslySet()
     {
         $payout = new Payout();

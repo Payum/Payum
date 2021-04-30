@@ -35,14 +35,6 @@ class CancelActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CancelAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportEmptyModel()
     {
         $action = new CancelAction();

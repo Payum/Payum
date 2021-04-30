@@ -22,14 +22,6 @@ class CaptureActionTest extends TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CaptureAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportCaptureWithArrayAsModel()
     {
         $action = new CaptureAction();

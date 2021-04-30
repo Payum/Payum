@@ -19,14 +19,6 @@ class GetTransactionDetailsTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithModelAndPaymentRequestNAsArguments()
-    {
-        new GetTransactionDetails(new \stdClass(), $paymentRequestN = 5);
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetPaymentRequestNSetInConstructor()
     {
         $expectedPaymentRequestN = 7;

@@ -15,12 +15,4 @@ class MasspayTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithModelAsArgument()
-    {
-        new Masspay(new \stdClass());
-    }
 }

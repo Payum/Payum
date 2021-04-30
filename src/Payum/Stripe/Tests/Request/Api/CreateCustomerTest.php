@@ -15,12 +15,4 @@ class CreateCustomerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithModelAsFirstArgument()
-    {
-        new CreateCustomer($model = []);
-    }
 }

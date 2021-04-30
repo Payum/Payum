@@ -21,14 +21,6 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new PaymentDetailsStatusAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportGetStatusRequestWithEmptyArrayAsModel()
     {
         $action = new PaymentDetailsStatusAction();

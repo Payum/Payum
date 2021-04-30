@@ -21,14 +21,6 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new AgreementDetailsStatusAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportStatusRequestWithArrayAccessAsModelIfOrderIdNotSetAndAgreementRefSet()
     {
         $action = new AgreementDetailsStatusAction();

@@ -20,14 +20,6 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new GetTransactionDetailsAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportGetTransactionDetailsRequestAndArrayAccessAsModel()
     {
         $action = new GetTransactionDetailsAction();
