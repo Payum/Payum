@@ -1,94 +1,24 @@
 <?php
 namespace Payum\Paypal\ProHosted\Nvp\Tests;
 
+use Payum\Core\Tests\AbstractGatewayFactoryTest;
 use Payum\Paypal\ProHosted\Nvp\PaypalProHostedGatewayFactory;
 
-class PaypalProHostedGatewayFactoryTest extends \PHPUnit\Framework\TestCase
+class PaypalProHostedGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    /**
-     * @test
-     */
-    public function shouldSubClassGatewayFactory()
+    protected function getGatewayFactoryClass(): string
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ProHosted\Nvp\PaypalProHostedGatewayFactory');
-
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\GatewayFactory'));
+        return PaypalProHostedGatewayFactory::class;
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateCoreGatewayFactoryIfNotPassed()
+    protected function getRequiredOptions(): array
     {
-        $factory = new PaypalProHostedGatewayFactory();
-
-        $this->assertAttributeInstanceOf('Payum\Core\CoreGatewayFactory', 'coreGatewayFactory', $factory);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
-    {
-        $coreGatewayFactory = $this->createMock('Payum\Core\GatewayFactoryInterface');
-
-        $factory = new PaypalProHostedGatewayFactory(array(), $coreGatewayFactory);
-
-        $this->assertAttributeSame($coreGatewayFactory, 'coreGatewayFactory', $factory);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGateway()
-    {
-        $factory = new PaypalProHostedGatewayFactory();
-
-        $gateway = $factory->create(array(
+        return [
             'business' => 'aBusiness',
             'username' => 'aName',
             'password' => 'aPass',
             'signature' => 'aSign',
-        ));
-
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
-        $this->assertAttributeNotEmpty('actions', $gateway);
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-        $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGatewayWithCustomApi()
-    {
-        $factory = new PaypalProHostedGatewayFactory();
-
-        $gateway = $factory->create(array('payum.api' => new \stdClass()));
-
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
-        $this->assertAttributeNotEmpty('actions', $gateway);
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-        $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGatewayConfig()
-    {
-        $factory = new PaypalProHostedGatewayFactory();
-
-        $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
-        $this->assertNotEmpty($config);
+        ];
     }
 
     /**

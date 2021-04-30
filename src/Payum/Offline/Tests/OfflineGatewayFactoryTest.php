@@ -1,71 +1,14 @@
 <?php
 namespace Payum\Offline\Tests;
 
+use Payum\Core\Tests\AbstractGatewayFactoryTest;
 use Payum\Offline\OfflineGatewayFactory;
 
-class OfflineGatewayFactoryTest extends \PHPUnit\Framework\TestCase
+class OfflineGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    /**
-     * @test
-     */
-    public function shouldSubClassGatewayFactory()
+    protected function getGatewayFactoryClass(): string
     {
-        $rc = new \ReflectionClass('Payum\Offline\OfflineGatewayFactory');
-
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\GatewayFactory'));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldCreateCoreGatewayFactoryIfNotPassed()
-    {
-        $factory = new OfflineGatewayFactory();
-
-        $this->assertAttributeInstanceOf('Payum\Core\CoreGatewayFactory', 'coreGatewayFactory', $factory);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
-    {
-        $coreGatewayFactory = $this->createMock('Payum\Core\GatewayFactoryInterface');
-
-        $factory = new OfflineGatewayFactory(array(), $coreGatewayFactory);
-
-        $this->assertAttributeSame($coreGatewayFactory, 'coreGatewayFactory', $factory);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGateway()
-    {
-        $factory = new OfflineGatewayFactory();
-
-        $gateway = $factory->create();
-
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
-        $this->assertAttributeNotEmpty('actions', $gateway);
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-        $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGatewayConfig()
-    {
-        $factory = new OfflineGatewayFactory();
-
-        $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
-        $this->assertNotEmpty($config);
+        return OfflineGatewayFactory::class;
     }
 
     /**

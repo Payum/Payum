@@ -1,96 +1,22 @@
 <?php
 namespace Payum\Be2Bill\Tests;
 
-use Payum\Core\Action\CaptureNullAction;
-use Payum\Core\Action\NotifyNullAction;
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
-use Payum\Core\CoreGatewayFactory;
-use Payum\Core\GatewayFactory;
-use Payum\Core\GatewayFactoryInterface;
-use Payum\Core\Storage\StorageInterface;
-use PHPUnit\Framework\TestCase;
+use Payum\Core\Tests\AbstractGatewayFactoryTest;
 
-class Be2billOffsiteGatewayFactoryTest extends TestCase
+class Be2billOffsiteGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    /**
-     * @test
-     */
-    public function shouldSubClassGatewayFactory()
+    protected function getGatewayFactoryClass(): string
     {
-        $rc = new \ReflectionClass(Be2BillOffsiteGatewayFactory::class);
-
-        $this->assertTrue($rc->isSubclassOf(GatewayFactory::class));
+        return Be2BillOffsiteGatewayFactory::class;
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateCoreGatewayFactoryIfNotPassed()
+    protected function getRequiredOptions(): array
     {
-        $factory = new Be2BillOffsiteGatewayFactory();
-
-        $this->assertAttributeInstanceOf(CoreGatewayFactory::class, 'coreGatewayFactory', $factory);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
-    {
-        $coreGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
-
-        $factory = new Be2BillOffsiteGatewayFactory(array(), $coreGatewayFactory);
-
-        $this->assertAttributeSame($coreGatewayFactory, 'coreGatewayFactory', $factory);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGateway()
-    {
-        $factory = new Be2BillOffsiteGatewayFactory();
-
-        $gateway = $factory->create(array('identifier' => 'anId', 'password' => 'aPass'));
-
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
-        $this->assertAttributeNotEmpty('actions', $gateway);
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-        $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGatewayWithCustomApi()
-    {
-        $factory = new Be2BillOffsiteGatewayFactory();
-
-        $gateway = $factory->create(array('payum.api' => new \stdClass()));
-
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
-        $this->assertAttributeNotEmpty('actions', $gateway);
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-        $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGatewayConfig()
-    {
-        $factory = new Be2BillOffsiteGatewayFactory();
-
-        $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
-        $this->assertNotEmpty($config);
+        return [
+            'identifier' => 'anId',
+            'password' => 'aPass',
+        ];
     }
 
     /**
