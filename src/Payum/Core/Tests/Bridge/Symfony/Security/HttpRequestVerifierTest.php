@@ -151,6 +151,7 @@ class HttpRequestVerifierTest extends TestCase
 
     /**
      * @test
+     * @group legacy
      */
     public function shouldReturnExpectedTokenIfTokenSetToRequestAttribute()
     {
@@ -176,6 +177,7 @@ class HttpRequestVerifierTest extends TestCase
 
     /**
      * @test
+     * @group legacy
      */
     public function shouldReturnExpectedTokenIfTokenSetToEncodedRequestAttribute()
     {
@@ -201,6 +203,7 @@ class HttpRequestVerifierTest extends TestCase
 
     /**
      * @test
+     * @group legacy
      */
     public function shouldNotMatchUriIfTokenSetToRequestAttribute()
     {
