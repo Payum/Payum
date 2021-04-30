@@ -6,3 +6,4 @@ vendor
 bin
 src/Payum/Core/Bridge/Propel2/Model/Base
 src/Payum/Core/Bridge/Propel2/Model/Map
+.phpunit.result.cache
