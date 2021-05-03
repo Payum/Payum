@@ -15,5 +15,4 @@ abstract class TestCase extends PHPUnitTestCase
 
         return $attribute->getValue($object);
     }
-
 }
