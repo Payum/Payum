@@ -12,12 +12,14 @@ class FetchOrderActionTest extends GenericActionTest
 
     protected $actionClass = 'Payum\Klarna\Checkout\Action\Api\FetchOrderAction';
 
-    public function provideNotSupportedRequests(): \Iterator
+    public function provideNotSupportedRequests()
     {
-        yield array('foo');
-        yield array(array('foo'));
-        yield array(new \stdClass());
-        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
+        return array(
+            array('foo'),
+            array(array('foo')),
+            array(new \stdClass()),
+            array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
+        );
     }
 
     /**
@@ -32,11 +34,12 @@ class FetchOrderActionTest extends GenericActionTest
 
     /**
      * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage Location has to be provided to fetch an order
      */
     public function throwIfLocationNotSetOnExecute()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
-        $this->expectExceptionMessage('Location has to be provided to fetch an order');
         $action = new FetchOrderAction();
 
         $action->execute(new FetchOrder(array()));
@@ -62,7 +65,7 @@ class FetchOrderActionTest extends GenericActionTest
             ->method('apply')
             ->with('GET')
             ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, $model) {
-                $testCase->assertIsArray($options);
+                $testCase->assertInternalType('array', $options);
                 $testCase->assertArrayHasKey('url', $options);
                 $testCase->assertEquals($model['location'], $options['url']);
             }))
@@ -116,10 +119,11 @@ class FetchOrderActionTest extends GenericActionTest
 
     /**
      * @test
+     *
+     * @expectedException \Klarna_Checkout_ConnectionErrorException
      */
     public function shouldFailedAfterThreeRetriesOnTimeout()
     {
-        $this->expectException(\Klarna_Checkout_ConnectionErrorException::class);
         $model = array(
             'location' => 'theLocation',
             'cart' => array(
@@ -190,6 +194,6 @@ class FetchOrderActionTest extends GenericActionTest
      */
     protected function createConnectorMock()
     {
-        return $this->createMock('Klarna_Checkout_ConnectorInterface', array(), array(), '', false);
+        return $this->getMock('Klarna_Checkout_ConnectorInterface', array(), array(), '', false);
     }
 }

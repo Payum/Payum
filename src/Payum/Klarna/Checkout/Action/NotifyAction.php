@@ -1,20 +1,16 @@
 <?php
 namespace Payum\Klarna\Checkout\Action;
 
-use Payum\Core\Action\ActionInterface;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\GatewayAwareInterface;
-use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Notify;
 use Payum\Core\Request\Sync;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\UpdateOrder;
 
-class NotifyAction implements ActionInterface, GatewayAwareInterface
+class NotifyAction extends GatewayAwareAction
 {
-    use GatewayAwareTrait;
-
     /**
      * {@inheritDoc}
      *

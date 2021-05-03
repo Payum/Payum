@@ -2,9 +2,8 @@
 namespace Payum\Klarna\Checkout\Tests\Request\Api;
 
 use Payum\Klarna\Checkout\Request\Api\BaseOrder;
-use PHPUnit\Framework\TestCase;
 
-class BaseOrderTest extends TestCase
+class BaseOrderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -33,16 +32,17 @@ class BaseOrderTest extends TestCase
     {
         $this->createBaseOrderMock(array());
         $this->createBaseOrderMock(new \ArrayObject());
-        $this->createBaseOrderMock($this->createMock('ArrayAccess'));
+        $this->createBaseOrderMock($this->getMock('ArrayAccess'));
     }
 
     /**
      * @test
+     *
+     * @expectedException \Payum\Core\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Given model is invalid. Should be an array or ArrayAccess instance.
      */
     public function throwIfTryConstructWithNotArrayModel()
     {
-        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Given model is invalid. Should be an array or ArrayAccess instance.');
         $this->createBaseOrderMock('not array');
     }
 
@@ -79,7 +79,7 @@ class BaseOrderTest extends TestCase
      */
     protected function createOrderMock()
     {
-        return $this->createMock('Klarna_Checkout_Order', array(), array(), '', false);
+        return $this->getMock('Klarna_Checkout_Order', array(), array(), '', false);
     }
 
     /**

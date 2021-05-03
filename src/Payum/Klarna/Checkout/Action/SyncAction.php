@@ -1,18 +1,14 @@
 <?php
 namespace Payum\Klarna\Checkout\Action;
 
-use Payum\Core\Action\ActionInterface;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\GatewayAwareInterface;
-use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Sync;
 use Payum\Klarna\Checkout\Request\Api\FetchOrder;
 
-class SyncAction implements ActionInterface, GatewayAwareInterface
+class SyncAction extends GatewayAwareAction
 {
-    use GatewayAwareTrait;
-
     /**
      * {@inheritDoc}
      *

@@ -1,50 +1,33 @@
 <?php
 namespace Payum\Klarna\Checkout\Action;
 
-use Payum\Core\Action\ActionInterface;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\ApiAwareInterface;
-use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\GatewayAwareInterface;
-use Payum\Core\GatewayAwareTrait;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Request\Authorize;
 use Payum\Klarna\Checkout\Config;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\CreateOrder;
 
-/**
- * @param Config $api
- * @param Config $config
- */
-class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface
+class AuthorizeRecurringAction extends GatewayAwareAction implements ApiAwareInterface
 {
-    use ApiAwareTrait {
-        setApi as _setApi;
-    }
-    use GatewayAwareTrait;
-
     /**
-     * @deprecated BC. will be removed in 2.x. Use $this->api
-     *
      * @var Config
      */
     protected $config;
-
-    public function __construct()
-    {
-        $this->apiClass = Config::class;
-    }
 
     /**
      * {@inheritDoc}
      */
     public function setApi($api)
     {
-        $this->_setApi($api);
+        if (false == $api instanceof Config) {
+            throw new UnsupportedApiException('Not supported. Expected Payum\Klarna\Checkout\Config instance to be set as api.');
+        }
 
-        // BC. will be removed in 2.x. Use $this->api
-        $this->config = $this->api;
+        $this->config = $api;
     }
 
     /**
@@ -64,7 +47,7 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
 
         $model['activate'] = false;
 
-        $backupConfig = clone $this->api;
+        $backupConfig = clone $this->config;
 
         $token = $model['recurring_token'];
 
@@ -76,17 +59,17 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
                 Constants::BASE_URI_RECURRING_SANDBOX
             ;
 
-            $this->api->contentType = Constants::CONTENT_TYPE_RECURRING_ORDER_V1;
-            $this->api->acceptHeader = Constants::ACCEPT_HEADER_RECURRING_ORDER_ACCEPTED_V1;
-            $this->api->baseUri = str_replace('{recurring_token}', $token, $baseUri);
+            $this->config->contentType = Constants::CONTENT_TYPE_RECURRING_ORDER_V1;
+            $this->config->acceptHeader = Constants::ACCEPT_HEADER_RECURRING_ORDER_ACCEPTED_V1;
+            $this->config->baseUri = str_replace('{recurring_token}', $token, $baseUri);
 
             $this->gateway->execute($createOrderRequest = new CreateOrder($model));
 
             $model->replace($createOrderRequest->getOrder()->marshal());
         } catch (\Exception $e) {
-            $this->api->contentType = $backupConfig->contentType;
-            $this->api->acceptHeader = $backupConfig->acceptHeader;
-            $this->api->baseUri = $backupConfig->baseUri;
+            $this->config->contentType = $backupConfig->contentType;
+            $this->config->acceptHeader = $backupConfig->acceptHeader;
+            $this->config->baseUri = $backupConfig->baseUri;
 
             $model['recurring_token'] = $token;
 
@@ -95,9 +78,9 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
 
         $model['recurring_token'] = $token;
 
-        $this->api->contentType = $backupConfig->contentType;
-        $this->api->acceptHeader = $backupConfig->acceptHeader;
-        $this->api->baseUri = $backupConfig->baseUri;
+        $this->config->contentType = $backupConfig->contentType;
+        $this->config->acceptHeader = $backupConfig->acceptHeader;
+        $this->config->baseUri = $backupConfig->baseUri;
     }
 
     /**

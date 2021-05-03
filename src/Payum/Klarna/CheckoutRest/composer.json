@@ -1,0 +1,50 @@
+{
+    "name": "payum/klarna-checkout-rest",
+    "type": "library",
+    "description": "The Payum extension. It provides Klarna Checkout payment integration using Klarna's REST API.",
+    "keywords": [
+        "payment",
+        "checkout",
+        "rest",
+        "klarna"
+    ],
+    "homepage": "https://payum.forma-pro.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kotlyar Maksim",
+            "email": "kotlyar.maksim@gmail.com"
+        },
+        {
+            "name":     "Payum project",
+            "homepage": "https://payum.forma-pro.com/"
+        },
+        {
+            "name":     "Community contributions",
+            "homepage": "https://github.com/Payum/KlarnaCheckout/contributors"
+        }
+    ],
+    "require": {
+        "payum/core": "^1.5",
+        "payum/klarna-common": "^1.5",
+        "klarna/kco_rest": "^3.0"
+    },
+    "require-dev": {
+        "payum/core": "^1.5",
+        "payum/klarna-common": "^1.5@dev",
+        "phpunit/phpunit": "^5.7",
+        "symfony/phpunit-bridge": "^3.1|^4"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": { "Payum\\Klarna\\CheckoutRest": "" }
+    },
+    "target-dir": "Payum/Klarna/CheckoutRest",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.6-dev"
+        }
+    }
+}

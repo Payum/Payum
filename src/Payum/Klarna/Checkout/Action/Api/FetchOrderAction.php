@@ -23,7 +23,7 @@ class FetchOrderAction extends BaseApiAwareAction
             throw new LogicException('Location has to be provided to fetch an order');
         }
 
-        $this->callWithRetry(function () use ($model, $request) {
+        $this->callWithRetry(function() use ($model, $request) {
             $order = new \Klarna_Checkout_Order($this->getConnector(), $model['location']);
             $order->fetch();
 

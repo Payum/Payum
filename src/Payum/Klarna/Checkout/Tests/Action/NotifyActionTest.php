@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests\Action;
 
-use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Notify;
 use Payum\Core\Tests\GenericActionTest;
@@ -11,18 +10,18 @@ use Payum\Klarna\Checkout\Request\Api\UpdateOrder;
 
 class NotifyActionTest extends GenericActionTest
 {
-    protected $actionClass = NotifyAction::class;
+    protected $actionClass = 'Payum\Klarna\Checkout\Action\NotifyAction';
 
-    protected $requestClass = Notify::class;
+    protected $requestClass = 'Payum\Core\Request\Notify';
 
     /**
      * @test
      */
-    public function shouldImplementGatewayAwareInterface()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
-        $rc = new \ReflectionClass(NotifyAction::class);
+        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\NotifyAction');
 
-        $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
@@ -115,7 +114,7 @@ class NotifyActionTest extends GenericActionTest
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 
     /**
@@ -123,6 +122,6 @@ class NotifyActionTest extends GenericActionTest
      */
     protected function createOrderMock()
     {
-        return $this->createMock('Klarna_Checkout_Order', array(), array(), '', false);
+        return $this->getMock('Klarna_Checkout_Order', array(), array(), '', false);
     }
 }

@@ -2,9 +2,8 @@
 namespace Payum\Klarna\Checkout\Tests\Functional\Resources\Views;
 
 use Payum\Core\Bridge\Twig\TwigFactory;
-use PHPUnit\Framework\TestCase;
 
-class CaptureTemplateTest extends TestCase
+class CaptureTemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test

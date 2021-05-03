@@ -2,6 +2,7 @@
 namespace Payum\Klarna\Checkout\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
@@ -17,9 +18,8 @@ use Payum\Klarna\Checkout\Action\AuthorizeAction;
 use Payum\Klarna\Checkout\Config;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\CreateOrder;
-use PHPUnit\Framework\TestCase;
 
-class AuthorizeActionTest extends TestCase
+class AuthorizeActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -102,10 +102,11 @@ class AuthorizeActionTest extends TestCase
 
     /**
      * @test
+     *
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new AuthorizeAction('aTemplate');
 
         $action->execute(new \stdClass());
@@ -113,10 +114,11 @@ class AuthorizeActionTest extends TestCase
 
     /**
      * @test
+     *
+     * @expectedException \Payum\Core\Reply\HttpResponse
      */
     public function shouldSubExecuteSyncIfModelHasLocationSet()
     {
-        $this->expectException(\Payum\Core\Reply\HttpResponse::class);
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->at(0))
@@ -292,11 +294,12 @@ class AuthorizeActionTest extends TestCase
 
     /**
      * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The push_uri fields are required.
      */
     public function shouldThrowIfPushUriNotSet()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
-        $this->expectExceptionMessage('The push_uri fields are required.');
         $action = new AuthorizeAction('aTemplate');
         $action->setGateway($this->createGatewayMock());
 
@@ -311,11 +314,12 @@ class AuthorizeActionTest extends TestCase
 
     /**
      * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The confirmation_uri fields are required.
      */
     public function shouldThrowIfConfirmUriNotSet()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
-        $this->expectExceptionMessage('The confirmation_uri fields are required.');
         $action = new AuthorizeAction('aTemplate');
         $action->setGateway($this->createGatewayMock());
 
@@ -330,11 +334,12 @@ class AuthorizeActionTest extends TestCase
 
     /**
      * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The checkout_uri fields are required.
      */
     public function shouldThrowIfCheckoutUriNotSetNeitherInConfigNorPayment()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
-        $this->expectExceptionMessage('The checkout_uri fields are required.');
         $action = new AuthorizeAction('aTemplate');
         $action->setGateway($this->createGatewayMock());
         $action->setApi(new Config());
@@ -372,11 +377,12 @@ class AuthorizeActionTest extends TestCase
 
     /**
      * @test
+     *
+     * @expectedException \Payum\Core\Exception\LogicException
+     * @expectedExceptionMessage The terms_uri fields are required.
      */
     public function shouldThrowIfTermsUriNotSetNeitherInConfigNorPayment()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
-        $this->expectExceptionMessage('The terms_uri fields are required.');
         $action = new AuthorizeAction('aTemplate');
         $action->setGateway($this->createGatewayMock());
         $action->setApi(new Config());
@@ -455,12 +461,12 @@ class AuthorizeActionTest extends TestCase
         $notifyToken = new Token();
         $notifyToken->setTargetUrl('theNotifyUrl');
 
-        $tokenFactory = $this->createMock(GenericTokenFactoryInterface::class);
+        $tokenFactory = $this->getMock(GenericTokenFactoryInterface::class);
         $tokenFactory
             ->expects($this->once())
             ->method('createNotifyToken')
             ->with('theGatewayName', $this->identicalTo($identity))
-            ->willReturn($notifyToken)
+            ->will($this->returnValue($notifyToken))
         ;
 
         $action = new AuthorizeAction('aTemplate');
@@ -488,7 +494,7 @@ class AuthorizeActionTest extends TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 
     /**
@@ -496,6 +502,6 @@ class AuthorizeActionTest extends TestCase
      */
     protected function createOrderMock()
     {
-        return $this->createMock('Klarna_Checkout_Order', array(), array(), '', false);
+        return $this->getMock('Klarna_Checkout_Order', array(), array(), '', false);
     }
 }

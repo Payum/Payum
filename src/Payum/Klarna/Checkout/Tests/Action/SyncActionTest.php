@@ -1,7 +1,6 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests\Action;
 
-use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Sync;
 use Payum\Core\Tests\GenericActionTest;
@@ -11,18 +10,17 @@ use Payum\Klarna\Checkout\Request\Api\FetchOrder;
 
 class SyncActionTest extends GenericActionTest
 {
-    protected $actionClass = SyncAction::class;
+    protected $actionClass = 'Payum\Klarna\Checkout\Action\SyncAction';
 
-    protected $requestClass = Sync::class;
-
+    protected $requestClass = 'Payum\Core\Request\Sync';
     /**
      * @test
      */
-    public function shouldImplementGatewayAwareInterface()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
-        $rc = new \ReflectionClass(SyncAction::class);
+        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\SyncAction');
 
-        $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\GatewayAwareAction'));
     }
 
     /**
@@ -65,10 +63,11 @@ class SyncActionTest extends GenericActionTest
 
     /**
      * @test
+     *
+     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new SyncAction();
 
         $action->execute(new \stdClass());
@@ -79,11 +78,11 @@ class SyncActionTest extends GenericActionTest
      */
     public function shouldSubExecuteFetchOrderRequestIfModelHasLocationSet()
     {
-        $orderMock = $this->createMock('Klarna_Checkout_Order', array('marshal'), array(), '', false);
+        $orderMock = $this->getMock('Klarna_Checkout_Order', array('marshal'), array(), '', false);
         $orderMock
             ->expects($this->once())
             ->method('marshal')
-            ->willReturn(array('foo' => 'fooVal', 'bar' => 'barVal'))
+            ->will($this->returnValue(array('foo' => 'fooVal', 'bar' => 'barVal')))
         ;
 
         $gatewayMock = $this->createGatewayMock();
@@ -137,7 +136,7 @@ class SyncActionTest extends GenericActionTest
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 
     /**
@@ -145,6 +144,6 @@ class SyncActionTest extends GenericActionTest
      */
     protected function createOrderMock()
     {
-        return $this->createMock('Klarna_Checkout_Order', array(), array(), '', false);
+        return $this->getMock('Klarna_Checkout_Order', array(), array(), '', false);
     }
 }

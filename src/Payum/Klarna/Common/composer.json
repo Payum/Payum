@@ -1,0 +1,48 @@
+{
+    "name": "payum/klarna-common",
+    "type": "library",
+    "description": "The Payum extension. Provides common logic for Klarna's REST powered solutions.",
+    "keywords": [
+        "payment",
+        "klarna"
+    ],
+    "homepage": "https://payum.forma-pro.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kotlyar Maksim",
+            "email": "kotlyar.maksim@gmail.com"
+        },
+        {
+            "name": "Oscar Reimer",
+            "email": "oscar.reimer@reimerbrothers.com"
+        },
+        {
+            "name":     "Payum project",
+            "homepage": "https://payum.forma-pro.com/"
+        },
+        {
+            "name":     "Community contributions",
+            "homepage": "https://github.com/Payum/KlarnaCommon/contributors"
+        }
+    ],
+    "require": {
+        "payum/core": "^1.5",
+        "klarna/kco_rest": "^3.0"
+    },
+    "require-dev": {
+        "payum/core": "^1.5@dev"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": { "Payum\\Klarna\\Common": "" }
+    },
+    "target-dir": "Payum/Klarna/Common",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.5-dev"
+        }
+    }
+}
