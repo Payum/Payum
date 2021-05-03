@@ -12,8 +12,11 @@ class ArrayObjectTest extends MongoTest
      */
     public function shouldAllowPersistEmpty()
     {
-        $this->dm->persist(new ArrayObject());
+        $document = new ArrayObject();
+        $this->dm->persist($document);
         $this->dm->flush();
+
+        $this->assertSame([$document], $this->dm->getRepository(ArrayObject::class)->findAll());
     }
 
     /**
@@ -27,6 +30,8 @@ class ArrayObjectTest extends MongoTest
 
         $this->dm->persist($model);
         $this->dm->flush();
+
+        $this->assertSame([$model], $this->dm->getRepository(ArrayObject::class)->findAll());
     }
 
     /**

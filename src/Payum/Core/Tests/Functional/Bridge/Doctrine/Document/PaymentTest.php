@@ -12,8 +12,11 @@ class PaymentTest extends MongoTest
      */
     public function shouldAllowPersistEmpty()
     {
-        $this->dm->persist(new Payment());
+        $document = new Payment();
+        $this->dm->persist($document);
         $this->dm->flush();
+
+        $this->assertSame([$document], $this->dm->getRepository(Payment::class)->findAll());
     }
 
     /**
@@ -32,6 +35,8 @@ class PaymentTest extends MongoTest
 
         $this->dm->persist($order);
         $this->dm->flush();
+
+        $this->assertSame([$order], $this->dm->getRepository(Payment::class)->findAll());
     }
 
     /**
