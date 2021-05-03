@@ -18,6 +18,8 @@ class TokenTest extends MongoTest
 
         $this->dm->persist($token);
         $this->dm->flush();
+
+        $this->assertSame([$token], $this->dm->getRepository(Token::class)->findAll());
     }
 
     /**

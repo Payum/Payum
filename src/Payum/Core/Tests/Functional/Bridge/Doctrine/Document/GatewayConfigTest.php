@@ -21,6 +21,8 @@ class GatewayConfigTest extends MongoTest
 
         $this->dm->persist($gatewayConfig);
         $this->dm->flush();
+
+        $this->assertSame([$gatewayConfig], $this->dm->getRepository(GatewayConfig::class)->findAll());
     }
 
     /**

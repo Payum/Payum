@@ -18,7 +18,7 @@ abstract class BaseMongoTest extends TestCase
     public function setUp(): void
     {
         if (false === (class_exists(\MongoDB\Client::class))) {
-            $this->markTestSkipped('Either mongo extension or\and doctrine\mongo-odm are not installed.');
+            $this->markTestSkipped('Either mongo extension or\and doctrine/mongodb-odm are not installed.');
         }
 
         Type::hasType('object') ?
