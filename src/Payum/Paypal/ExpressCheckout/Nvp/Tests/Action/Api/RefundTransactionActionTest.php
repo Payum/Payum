@@ -1,8 +1,11 @@
 <?php
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\RefundTransactionAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\RefundTransaction;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
 {
@@ -39,14 +42,6 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new RefundTransactionAction();
-    }
-
-    /**
-     * @test
-     */
     public function shouldSupportRefundTransactionRequestAndArrayAccessAsModel()
     {
         $action = new RefundTransactionAction();
@@ -68,11 +63,10 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
      */
     public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
     {
+        $this->expectException(RequestNotSupportedException::class);
         $action = new RefundTransactionAction();
 
         $action->execute(new \stdClass());
@@ -80,12 +74,12 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The TRANSACTIONID fields are required.
      */
     public function throwIfAuthorizationIdNotSetInModel()
     {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('The TRANSACTIONID fields are required.');
+
         $action = new RefundTransactionAction();
 
         $request = new RefundTransaction(array());
@@ -158,7 +152,7 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Paypal\ExpressCheckout\Nvp\Api
+     * @return MockObject|\Payum\Paypal\ExpressCheckout\Nvp\Api
      */
     protected function createApiMock()
     {
