@@ -12,6 +12,8 @@
          stopOnFailure="false"
          failOnRisky="true"
          stopOnRisky="true"
+         failOnWarning="true"
+         stopOnWarning="true"
          bootstrap="autoload.php.dist"
 >
     <php>
