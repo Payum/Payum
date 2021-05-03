@@ -232,7 +232,7 @@ This is handled by _[storage][storage-interface]_ and its _[storage extension][s
 The extension can solve two tasks.
 First it can save a model after the request is processed.
 Second, it can find a model by its id before the request is processed.
-Currently [Doctrine][doctrine-storage] [Zend Table Gateway][zend-table-gateway] and [filesystem][filesystem-storage] (use it for tests only!) storages are supported.
+Currently [Doctrine][doctrine-storage] [Laminas Table Gateway][laminas-table-gateway] and [filesystem][filesystem-storage] (use it for tests only!) storages are supported.
 
 ```php
 <?php
@@ -334,7 +334,7 @@ Back to [index](index.md).
 [storage-extension-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Extension/StorageExtension.php
 [storage-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Storage/StorageInterface.php
 [doctrine-storage]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Bridge/Doctrine/Storage/DoctrineStorage.php
-[zend-table-gateway]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Bridge/Zend/Storage/TableGatewayStorage.php
+[laminas-table-gateway]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
 [filesystem-storage]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/Storage/FilesystemStorage.php
 [gateway-interface]: https://github.com/Payum/Payum/blob/master/src/Payum/Core/GatewayInterface.php
 [capture-controller]: https://github.com/Payum/PayumBundle/blob/master/Controller/CaptureController.php

@@ -31,7 +31,7 @@ Payum tries to [standardise the payment flow](get-it-started.md). There are thre
 
 With a gateway factories you can easily overwrite\replace any parts of the gateway functionally, or add a custom actions, extensions or apis.
 
-Payum has official extensions for most modern frameworks such as [Symfony](https://github.com/Payum/PayumBundle). [Laravel](https://github.com/Payum/PayumLaravelPackage), [Silex](https://github.com/Payum/PayumSilexProvider), [Yii](https://github.com/Payum/PayumYiiExtension),  [Zend](https://github.com/Payum/PayumModule).
+Payum has official extensions for most modern frameworks such as [Symfony](https://github.com/Payum/PayumBundle). [Laravel](https://github.com/Payum/PayumLaravelPackage), [Silex](https://github.com/Payum/PayumSilexProvider), [Yii](https://github.com/Payum/PayumYiiExtension),  [Laminas](https://github.com/Payum/PayumModule).
 
 At the end lets compare the corner stone interfaces from Payum and Omnipay.
 
