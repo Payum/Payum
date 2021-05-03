@@ -39,18 +39,6 @@ class BaseApiAwareActionTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowSetConfigAsApi()
-    {
-        $action = $this->getMockForAbstractClass('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction');
-
-        $action->setApi($config = new Config());
-
-        $this->assertAttributeSame($config, 'config', $action);
-    }
-
-    /**
-     * @test
-     */
     public function throwApiNotSupportedIfNotConfigGivenAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);

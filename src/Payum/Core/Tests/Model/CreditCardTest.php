@@ -4,7 +4,7 @@ namespace Payum\Core\Tests\Model;
 use Payum\Core\Model\CreditCard;
 use Payum\Core\Model\CreditCardInterface;
 use Payum\Core\Security\SensitiveValue;
-use PHPUnit\Framework\TestCase;
+use Payum\Core\Tests\TestCase;
 
 class CreditCardTest extends TestCase
 {

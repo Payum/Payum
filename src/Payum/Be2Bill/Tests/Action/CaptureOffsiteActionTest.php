@@ -50,19 +50,6 @@ class CaptureOffsiteActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldAllowSetApi()
-    {
-        $expectedApi = $this->createApiMock();
-
-        $action = new CaptureOffsiteAction();
-        $action->setApi($expectedApi);
-
-        $this->assertAttributeSame($expectedApi, 'api', $action);
-    }
-
-    /**
-     * @test
-     */
     public function throwIfUnsupportedApiGiven()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);

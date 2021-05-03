@@ -9,7 +9,8 @@ use Payum\Core\Model\Identity;
 use Payum\Core\Model\ModelAggregateInterface;
 use Payum\Core\Model\ModelAwareInterface;
 use Payum\Core\Storage\StorageInterface;
-use PHPUnit\Framework\TestCase;
+use Payum\Core\Tests\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class StorageExtensionTest extends TestCase
 {
@@ -198,14 +199,9 @@ class StorageExtensionTest extends TestCase
 
         $extension = new StorageExtension($storageMock);
 
-        $this->assertAttributeCount(0, 'scheduledForUpdateModels', $extension);
-
         $context = new Context($this->createGatewayMock(), $requestMock, array());
 
         $extension->onPreExecute($context);
-
-        $this->assertAttributeCount(1, 'scheduledForUpdateModels', $extension);
-        $this->assertAttributeContains($model, 'scheduledForUpdateModels', $extension);
     }
 
     /**
@@ -239,12 +235,12 @@ class StorageExtensionTest extends TestCase
 
         $extension = new StorageExtension($storageMock);
 
-        $this->assertAttributeCount(0, 'scheduledForUpdateModels', $extension);
+        $storageMock
+            ->expects($this->never())
+            ->method('update')
+        ;
 
         $extension->onPostExecute($context);
-
-        $this->assertAttributeCount(1, 'scheduledForUpdateModels', $extension);
-        $this->assertAttributeContains($model, 'scheduledForUpdateModels', $extension);
     }
 
     /**
@@ -281,11 +277,7 @@ class StorageExtensionTest extends TestCase
 
         $extension->onPreExecute($context);
 
-        //guard
-        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
-
         $extension->onPostExecute($context);
-        $this->assertAttributeEmpty('scheduledForUpdateModels', $extension);
     }
 
     /**
@@ -324,11 +316,7 @@ class StorageExtensionTest extends TestCase
 
         $extension->onPreExecute($context);
 
-        //guard
-        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
-
         $extension->onPostExecute($context);
-        $this->assertAttributeNotEmpty('scheduledForUpdateModels', $extension);
     }
 
     protected function createModelRequestWithModel($model)
@@ -343,7 +331,7 @@ class StorageExtensionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|StorageInterface
+     * @return MockObject|StorageInterface
      */
     protected function createStorageMock()
     {
@@ -351,7 +339,7 @@ class StorageExtensionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ActionInterface
+     * @return MockObject|ActionInterface
      */
     protected function createActionMock()
     {
@@ -359,7 +347,7 @@ class StorageExtensionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

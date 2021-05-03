@@ -1,11 +1,20 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests\Action\Api;
 
-use Payum\Klarna\Checkout\Config;
 use PHPUnit\Framework\TestCase;
 
 class BaseApiAwareActionTest extends TestCase
 {
+    protected function getActionClass(): string
+    {
+        // TODO: Implement getActionClass() method.
+    }
+
+    protected function getApiClass()
+    {
+        // TODO: Implement getApiClass() method.
+    }
+
     /**
      * @test
      */
@@ -34,20 +43,6 @@ class BaseApiAwareActionTest extends TestCase
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
 
         $this->assertTrue($rc->isAbstract());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetConfigAsApi()
-    {
-        $action = $this->getMockForAbstractClass('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
-
-        $config = new Config();
-
-        $action->setApi($config);
-
-        $this->assertAttributeSame($config, 'config', $action);
     }
 
     /**

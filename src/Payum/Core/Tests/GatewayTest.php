@@ -13,7 +13,6 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\Base;
 use Payum\Core\Reply\ReplyInterface;
-use PHPUnit\Framework\TestCase;
 
 class GatewayTest extends TestCase
 {
@@ -25,30 +24,6 @@ class GatewayTest extends TestCase
         $rc = new \ReflectionClass(Gateway::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayInterface::class));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldCreateExtensionCollectionInstanceInConstructor()
-    {
-        $gateway = new Gateway();
-
-        $this->assertAttributeInstanceOf(ExtensionCollection::class, 'extensions', $gateway);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowAddExtension()
-    {
-        $gateway = new Gateway();
-
-        $gateway->addExtension($this->createExtensionMock());
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-
-        $this->assertAttributeCount(1, 'extensions', $extensions);
     }
 
     /**
@@ -103,7 +78,7 @@ class GatewayTest extends TestCase
         $gateway->addApi(new \stdClass());
         $gateway->addApi(new \stdClass());
 
-        $this->assertAttributeCount(2, 'apis', $gateway);
+        $this->assertCount(2, $this->readAttribute($gateway, 'apis'));
     }
 
     /**

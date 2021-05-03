@@ -9,6 +9,7 @@ use Payum\Core\Request\Capture;
 use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Reply\HttpRedirect;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
 class LogExecutedActionsExtensionTest extends TestCase
@@ -33,37 +34,14 @@ class LogExecutedActionsExtensionTest extends TestCase
         $this->assertTrue($rc->implementsInterface('Psr\Log\LoggerAwareInterface'));
     }
 
-    public function testItCouldBeConstructedWithoutAnyArguments()
-    {
-        $extension = new LogExecutedActionsExtension();
-
-        $this->assertAttributeInstanceOf('Psr\Log\NullLogger', 'logger', $extension);
-    }
-
-    public function testCouldBeConstructedWithCustomLoggerGivenAsFirstArgument()
-    {
-        $expectedLogger = $this->createLoggerMock();
-
-        $extension = new LogExecutedActionsExtension($expectedLogger);
-
-        $this->assertAttributeSame($expectedLogger, 'logger', $extension);
-    }
-
     /**
      * @test
      */
     public function shouldAllowSetLogger()
     {
-        $expectedLogger = $this->createLoggerMock();
-
         $extension = new LogExecutedActionsExtension();
 
-        //guard
-        $this->assertAttributeInstanceOf('Psr\Log\NullLogger', 'logger', $extension);
-
-        $extension->setLogger($expectedLogger);
-
-        $this->assertAttributeSame($expectedLogger, 'logger', $extension);
+        $this->assertInstanceOf(LoggerAwareInterface::class, $extension);
     }
 
     /**

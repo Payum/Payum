@@ -1,14 +1,25 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
+use Payum\Core\Tests\GenericApiAwareActionTest;
 use Payum\Klarna\Invoice\Action\Api\CancelReservationAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\CancelReservation;
 use PHPUnit\Framework\TestCase;
 use PhpXmlRpc\Client;
 
-class CancelReservationActionTest extends TestCase
+class CancelReservationActionTest extends GenericApiAwareActionTest
 {
+    protected function getActionClass(): string
+    {
+        return CancelReservationAction::class;
+    }
+
+    protected function getApiClass()
+    {
+        return new Config();
+    }
+
     /**
      * @test
      */
@@ -17,18 +28,6 @@ class CancelReservationActionTest extends TestCase
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\CancelReservationAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetConfigAsApi()
-    {
-        $action = new CancelReservationAction($this->createKlarnaMock());
-
-        $action->setApi($config = new Config());
-
-        $this->assertAttributeSame($config, 'config', $action);
     }
 
     /**

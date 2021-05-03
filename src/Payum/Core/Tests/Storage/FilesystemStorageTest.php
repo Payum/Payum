@@ -16,13 +16,6 @@ class FilesystemStorageTest extends TestCase
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Storage\AbstractStorage'));
     }
 
-    public function testCouldBeConstructedWithStorageDirModelClassAndDefaultIdPropertyArguments()
-    {
-        $storage = new FilesystemStorage(sys_get_temp_dir(), 'Payum\Core\Tests\Mocks\Model\TestModel');
-
-        $this->assertAttributeEquals('payum_id', 'idProperty', $storage);
-    }
-
     /**
      * @test
      */

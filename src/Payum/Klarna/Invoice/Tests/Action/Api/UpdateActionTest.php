@@ -1,15 +1,27 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
+use Payum\Core\Tests\GenericApiAwareActionTest;
 use Payum\Klarna\Invoice\Action\Api\UpdateAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\Update;
 use PHPUnit\Framework\TestCase;
 use PhpXmlRpc\Client;
 
-class UpdateActionTest extends TestCase
+class UpdateActionTest extends GenericApiAwareActionTest
 {
+    protected function getActionClass(): string
+    {
+        return UpdateAction::class;
+    }
+
+    protected function getApiClass()
+    {
+        return new Config();
+    }
+
     /**
      * @test
      */
@@ -35,23 +47,7 @@ class UpdateActionTest extends TestCase
      */
     public function shouldAllowSetGateway()
     {
-        $action = new UpdateAction($this->createKlarnaMock());
-
-        $action->setGateway($gateway = $this->createMock('Payum\Core\GatewayInterface'));
-
-        $this->assertAttributeSame($gateway, 'gateway', $action);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetConfigAsApi()
-    {
-        $action = new UpdateAction($this->createKlarnaMock());
-
-        $action->setApi($config = new Config());
-
-        $this->assertAttributeSame($config, 'config', $action);
+        $this->assertInstanceOf(GatewayAwareInterface::class, new UpdateAction($this->createKlarnaMock()));
     }
 
     /**

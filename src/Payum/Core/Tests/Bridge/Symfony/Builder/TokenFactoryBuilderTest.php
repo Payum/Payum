@@ -26,9 +26,6 @@ class TokenFactoryBuilderTest extends TestCase
         $tokenFactory = $builder->build($tokenStorage, $storageRegistry);
 
         $this->assertInstanceOf(TokenFactory::class, $tokenFactory);
-        $this->assertAttributeSame($tokenStorage, 'tokenStorage', $tokenFactory);
-        $this->assertAttributeSame($storageRegistry, 'storageRegistry', $tokenFactory);
-        $this->assertAttributeSame($urlGenerator, 'urlGenerator', $tokenFactory);
     }
 
     public function testAllowUseBuilderAsAsFunction()

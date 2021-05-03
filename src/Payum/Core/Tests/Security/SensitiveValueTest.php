@@ -61,13 +61,11 @@ class SensitiveValueTest extends TestCase
 
         $sensitiveValue = new SensitiveValue($expectedValue);
 
-        //guard
         $this->assertEquals($expectedValue, $sensitiveValue->get());
 
         $sensitiveValue->erase();
 
         $this->assertNull($sensitiveValue->get());
-        $this->assertAttributeEquals(null, 'value', $sensitiveValue);
     }
 
     /**

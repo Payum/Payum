@@ -22,28 +22,6 @@ class SimpleRegistryTest extends TestCase
         $this->assertTrue($rc->isSubclassOf(AbstractRegistry::class));
     }
 
-    public function testItCouldBeConstructedWithoutAnyArguments()
-    {
-        $registry = new SimpleRegistry();
-
-        $this->assertAttributeEquals(array(), 'gateways', $registry);
-        $this->assertAttributeEquals(array(), 'storages', $registry);
-        $this->assertAttributeEquals(array(), 'gatewayFactories', $registry);
-    }
-
-    public function testCouldBeConstructedWithAllPossibleArguments()
-    {
-        $registry = new SimpleRegistry(
-            $gateways = array('foo' => 'fooGateway'),
-            $storages = array('fooClass' => 'fooStorage'),
-            $gatewayFactories = array('bar' => 'barFactory')
-        );
-
-        $this->assertAttributeEquals($gateways, 'gateways', $registry);
-        $this->assertAttributeEquals($storages, 'storages', $registry);
-        $this->assertAttributeEquals($gatewayFactories, 'gatewayFactories', $registry);
-    }
-
     /**
      * @test
      */
@@ -126,16 +104,11 @@ class SimpleRegistryTest extends TestCase
     {
         $storageMock = $this->createMock(StorageInterface::class);
 
-        $testCase = $this;
-
         $gatewayMock = $this->createMock(Gateway::class);
         $gatewayMock
             ->expects($this->once())
             ->method('addExtension')
             ->with($this->isInstanceOf(StorageExtension::class))
-            ->willReturnCallback(function (StorageExtension $extension) use ($storageMock, $testCase) {
-                $testCase->assertAttributeSame($storageMock, 'storage', $extension);
-            })
         ;
 
         $registry = new SimpleRegistry(

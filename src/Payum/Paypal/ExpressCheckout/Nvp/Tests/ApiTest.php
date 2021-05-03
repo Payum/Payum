@@ -9,22 +9,6 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends \PHPUnit\Framework\TestCase
 {
-    public function testCouldBeConstructedWithOptionsAndHttpClient()
-    {
-        $client = $this->createHttpClientMock();
-        $factory = $this->createHttpMessageFactory();
-
-        $api = new Api(array(
-            'username' => 'a_username',
-            'password' => 'a_password',
-            'signature' => 'a_signature',
-            'sandbox' => true,
-        ), $client, $factory);
-
-        $this->assertAttributeSame($client, 'client', $api);
-        $this->assertAttributeSame($factory, 'messageFactory', $api);
-    }
-
     /**
      * @test
      */

@@ -1,14 +1,25 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
+use Payum\Core\Tests\GenericApiAwareActionTest;
 use Payum\Klarna\Invoice\Action\Api\GetAddressesAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\GetAddresses;
 use PHPUnit\Framework\TestCase;
 use PhpXmlRpc\Client;
 
-class GetAddressesActionTest extends TestCase
+class GetAddressesActionTest extends GenericApiAwareActionTest
 {
+    protected function getActionClass(): string
+    {
+        return GetAddressesAction::class;
+    }
+
+    protected function getApiClass()
+    {
+        return new Config();
+    }
+
     /**
      * @test
      */
@@ -17,18 +28,6 @@ class GetAddressesActionTest extends TestCase
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\GetAddressesAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetConfigAsApi()
-    {
-        $action = new GetAddressesAction($this->createKlarnaMock());
-
-        $action->setApi($config = new Config());
-
-        $this->assertAttributeSame($config, 'config', $action);
     }
 
     /**

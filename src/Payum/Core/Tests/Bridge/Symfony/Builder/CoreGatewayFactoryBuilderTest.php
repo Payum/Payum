@@ -27,8 +27,6 @@ class CoreGatewayFactoryBuilderTest extends TestCase
         $gatewayFactory = $builder->build($defaultConfig);
 
         $this->assertInstanceOf(ContainerAwareCoreGatewayFactory::class, $gatewayFactory);
-        $this->assertAttributeSame($container, 'container', $gatewayFactory);
-        $this->assertAttributeSame($defaultConfig, 'defaultConfig', $gatewayFactory);
     }
 
     public function testAllowUseBuilderAsAsFunction()

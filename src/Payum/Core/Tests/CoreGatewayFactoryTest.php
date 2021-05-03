@@ -16,10 +16,7 @@ use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Gateway;
 use Payum\Core\GatewayFactoryInterface;
-use Payum\Core\HttpClientInterface;
-use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use Payum\Core\Storage\StorageInterface;
-use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -45,12 +42,6 @@ class CoreGatewayFactoryTest extends TestCase
         $gateway = $factory->create([]);
 
         $this->assertInstanceOf(Gateway::class, $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
-        $this->assertAttributeNotEmpty('actions', $gateway);
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-        $this->assertAttributeNotEmpty('extensions', $extensions);
     }
 
     /**
@@ -125,8 +116,6 @@ class CoreGatewayFactoryTest extends TestCase
         ));
 
         $this->assertInstanceOf(Gateway::class, $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
     }
 
     /**
@@ -243,7 +232,6 @@ class CoreGatewayFactoryTest extends TestCase
 
         $action = call_user_func($config['payum.action.render_template'], ArrayObject::ensureArrayObject($config));
         $this->assertInstanceOf(RenderTemplateAction::class, $action);
-        $this->assertAttributeSame($twig, 'twig', $action);
 
         $this->assertSame($twig, $config['twig.env']);
     }
@@ -268,7 +256,6 @@ class CoreGatewayFactoryTest extends TestCase
 
         $action = call_user_func($config['payum.action.get_token'], ArrayObject::ensureArrayObject($config));
         $this->assertInstanceOf(GetTokenAction::class, $action);
-        $this->assertAttributeSame($tokenStorageMock, 'tokenStorage', $action);
 
         $this->assertSame($tokenStorageMock, $config['payum.security.token_storage']);
     }

@@ -8,21 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 class ApiTest extends TestCase
 {
-    public function testCouldBeConstructedWithOptionsAndHttpClient()
-    {
-        $client = $this->createHttpClientMock();
-        $factory = $this->createHttpMessageFactory();
-
-        $api = new Api(array(
-            'identifier' => 'anId',
-            'password' => 'aPass',
-            'sandbox' => true,
-        ), $client, $factory);
-
-        $this->assertAttributeSame($client, 'client', $api);
-        $this->assertAttributeSame($factory, 'messageFactory', $api);
-    }
-
     /**
      * @test
      */

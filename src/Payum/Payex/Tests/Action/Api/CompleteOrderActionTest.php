@@ -44,20 +44,6 @@ class CompleteOrderActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function shouldAllowSetOrderApiAsApi()
-    {
-        $orderApi = $this->createMock('Payum\Payex\Api\OrderApi', array(), array(), '', false);
-
-        $action = new CompleteOrderAction();
-
-        $action->setApi($orderApi);
-
-        $this->assertAttributeSame($orderApi, 'api', $action);
-    }
-
-    /**
-     * @test
-     */
     public function throwOnTryingSetNotOrderApiAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);

@@ -1,14 +1,25 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
+use Payum\Core\Tests\GenericApiAwareActionTest;
 use Payum\Klarna\Invoice\Action\Api\ReturnAmountAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\ReturnAmount;
 use PHPUnit\Framework\TestCase;
 use PhpXmlRpc\Client;
 
-class ReturnAmountActionTest extends TestCase
+class ReturnAmountActionTest extends GenericApiAwareActionTest
 {
+    protected function getActionClass(): string
+    {
+        return ReturnAmountAction::class;
+    }
+
+    protected function getApiClass()
+    {
+        return new Config();
+    }
+
     /**
      * @test
      */
@@ -17,18 +28,6 @@ class ReturnAmountActionTest extends TestCase
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\ReturnAmountAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetConfigAsApi()
-    {
-        $action = new ReturnAmountAction($this->createKlarnaMock());
-
-        $action->setApi($config = new Config());
-
-        $this->assertAttributeSame($config, 'config', $action);
     }
 
     /**
