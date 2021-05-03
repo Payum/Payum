@@ -28,18 +28,4 @@ class GatewayAwareActionTest extends TestCase
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
-
-    /**
-     * @test
-     */
-    public function shouldSetGatewayToProperty()
-    {
-        $gateway = $this->createMock(GatewayInterface::class);
-
-        $action = $this->getMockForAbstractClass(GatewayAwareAction::class);
-
-        $action->setGateway($gateway);
-
-        $this->assertAttributeSame($gateway, 'gateway', $action);
-    }
 }

@@ -61,20 +61,6 @@ class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function shouldAllowSetOrderApiAsApi()
-    {
-        $orderApi = $this->createMock('Payum\Payex\Api\OrderApi', array(), array(), '', false);
-
-        $action = new InitializeOrderAction();
-
-        $action->setApi($orderApi);
-
-        $this->assertAttributeSame($orderApi, 'api', $action);
-    }
-
-    /**
-     * @test
-     */
     public function throwOnTryingSetNotOrderApiAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);

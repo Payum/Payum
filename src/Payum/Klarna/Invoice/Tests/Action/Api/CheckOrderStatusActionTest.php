@@ -1,14 +1,24 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
+use Payum\Core\Tests\GenericApiAwareActionTest;
 use Payum\Klarna\Invoice\Action\Api\CheckOrderStatusAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\CheckOrderStatus;
-use PHPUnit\Framework\TestCase;
 use PhpXmlRpc\Client;
 
-class CheckOrderStatusActionTest extends TestCase
+class CheckOrderStatusActionTest extends GenericApiAwareActionTest
 {
+    protected function getActionClass(): string
+    {
+        return CheckOrderStatusAction::class;
+    }
+
+    protected function getApiClass(): Config
+    {
+        return new Config();
+    }
+
     /**
      * @test
      */
@@ -17,18 +27,6 @@ class CheckOrderStatusActionTest extends TestCase
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\CheckOrderStatusAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetConfigAsApi()
-    {
-        $action = new CheckOrderStatusAction($this->createKlarnaMock());
-
-        $action->setApi($config = new Config());
-
-        $this->assertAttributeSame($config, 'config', $action);
     }
 
     /**

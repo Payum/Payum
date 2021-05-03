@@ -49,60 +49,6 @@ class AbstractRegistryTest extends TestCase
     /**
      * @test
      */
-    public function couldConstructedWithoutAnyArguments()
-    {
-        $registry = $this->createAbstractRegistryMock(array());
-
-        $this->assertAttributeEquals(array(), 'gateways', $registry);
-        $this->assertAttributeEquals(array(), 'storages', $registry);
-        $this->assertAttributeEquals(array(), 'gatewayFactories', $registry);
-    }
-
-    /**
-     * @test
-     */
-    public function couldConstructedWithGatewaysOnly()
-    {
-        $gateways = array('fooName' => 'fooGateway');
-
-        $registry = $this->createAbstractRegistryMock(array($gateways));
-
-        $this->assertAttributeEquals($gateways, 'gateways', $registry);
-        $this->assertAttributeEquals(array(), 'storages', $registry);
-        $this->assertAttributeEquals(array(), 'gatewayFactories', $registry);
-    }
-
-    /**
-     * @test
-     */
-    public function couldConstructedWithStoragesOnly()
-    {
-        $storages = array('stdClass' => 'barStorage');
-
-        $registry = $this->createAbstractRegistryMock(array(array(), $storages));
-
-        $this->assertAttributeEquals(array(), 'gateways', $registry);
-        $this->assertAttributeEquals($storages, 'storages', $registry);
-        $this->assertAttributeEquals(array(), 'gatewayFactories', $registry);
-    }
-
-    /**
-     * @test
-     */
-    public function couldConstructedWithGatewayFactoriesOnly()
-    {
-        $factories = array('bar' => 'barFactory');
-
-        $registry = $this->createAbstractRegistryMock(array(array(), array(), $factories));
-
-        $this->assertAttributeEquals(array(), 'gateways', $registry);
-        $this->assertAttributeEquals(array(), 'storages', $registry);
-        $this->assertAttributeEquals($factories, 'gatewayFactories', $registry);
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetGatewayWithNamePassedExplicitly()
     {
         $gateways = array('fooName' => 'fooGateway', 'barName' => 'barGateway');

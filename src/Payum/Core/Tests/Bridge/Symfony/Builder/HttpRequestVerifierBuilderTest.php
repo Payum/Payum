@@ -18,7 +18,6 @@ class HttpRequestVerifierBuilderTest extends TestCase
         $verifier = $builder->build($tokenStorage);
 
         $this->assertInstanceOf(HttpRequestVerifier::class, $verifier);
-        $this->assertAttributeSame($tokenStorage, 'tokenStorage', $verifier);
     }
 
     public function testAllowUseBuilderAsAsFunction()

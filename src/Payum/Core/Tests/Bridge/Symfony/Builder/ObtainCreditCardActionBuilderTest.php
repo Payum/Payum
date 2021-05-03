@@ -22,10 +22,6 @@ class ObtainCreditCardActionBuilderTest extends TestCase
         ]));
 
         $this->assertInstanceOf(ObtainCreditCardAction::class, $action);
-
-        $this->assertAttributeSame($formFactory, 'formFactory', $action);
-        $this->assertAttributeSame($requestStack, 'httpRequestStack', $action);
-        $this->assertAttributeSame('obtain_credit_card_template', 'templateName', $action);
     }
 
     public function testAllowUseBuilderAsAsFunction()

@@ -36,20 +36,6 @@ class BaseApiAwareActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function shouldAllowSetApi()
-    {
-        $expectedApi = $this->createApiMock();
-
-        $action = $this->getMockForAbstractClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction');
-
-        $action->setApi($expectedApi);
-
-        $this->assertAttributeSame($expectedApi, 'api', $action);
-    }
-
-    /**
-     * @test
-     */
     public function throwIfUnsupportedApiGiven()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);

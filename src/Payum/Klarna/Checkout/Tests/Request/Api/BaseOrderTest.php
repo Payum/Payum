@@ -39,20 +39,6 @@ class BaseOrderTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowSetOrder()
-    {
-        $request = $this->createBaseOrderMock(array());
-
-        $expectedOrder = $this->createOrderMock();
-
-        $request->setOrder($expectedOrder);
-
-        $this->assertAttributeSame($expectedOrder, 'order', $request);
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowGetPreviouslySetOrder()
     {
         $request = $this->createBaseOrderMock(array());

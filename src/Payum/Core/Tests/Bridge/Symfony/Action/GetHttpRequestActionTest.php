@@ -21,21 +21,6 @@ class GetHttpRequestActionTest extends TestCase
     }
 
     /**
-     * @deprecated
-     *
-     * @test
-     */
-    public function shouldAllowSetHttpRequest()
-    {
-        $expectedRequest = new Request();
-
-        $action = new GetHttpRequestAction();
-        $action->setHttpRequest($expectedRequest);
-
-        self::assertAttributeSame($expectedRequest, 'httpRequest', $action);
-    }
-
-    /**
      * @test
      */
     public function shouldSupportGetHttpRequest()

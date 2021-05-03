@@ -40,37 +40,13 @@ class LoggerExtensionTest extends TestCase
         $this->assertTrue($rc->implementsInterface('Psr\Log\LoggerAwareInterface'));
     }
 
-    public function testItCouldBeConstructedWithoutAnyArguments()
-    {
-        $extension = new LoggerExtension();
-
-        $this->assertAttributeInstanceOf('Psr\Log\NullLogger', 'logger', $extension);
-    }
-
-    public function testCouldBeConstructedWithCustomLoggerGivenAsFirstArgument()
-    {
-        $expectedLogger = $this->createLoggerMock();
-
-        $extension = new LoggerExtension($expectedLogger);
-
-        $this->assertAttributeSame($expectedLogger, 'logger', $extension);
-    }
-
     /**
      * @test
      */
     public function shouldAllowSetLogger()
     {
-        $expectedLogger = $this->createLoggerMock();
-
         $extension = new LoggerExtension();
-
-        //guard
-        $this->assertAttributeInstanceOf('Psr\Log\NullLogger', 'logger', $extension);
-
-        $extension->setLogger($expectedLogger);
-
-        $this->assertAttributeSame($expectedLogger, 'logger', $extension);
+        $this->assertInstanceOf(LoggerAwareInterface::class, $extension);
     }
 
     /**

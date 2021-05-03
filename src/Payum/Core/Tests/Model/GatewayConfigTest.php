@@ -91,15 +91,11 @@ class GatewayConfigTest extends TestCase
         $config = new GatewayConfig();
         $config->setConfig($encryptedConfig);
 
-        $this->assertAttributeSame($encryptedConfig, 'config', $config);
-        $this->assertAttributeSame($encryptedConfig, 'decryptedConfig', $config);
+        $this->assertSame($encryptedConfig,  $config->getConfig());
 
         $config->decrypt($this->createDummyCypher());
 
-        $this->assertAttributeSame($encryptedConfig, 'config', $config);
-        $this->assertAttributeSame($expectedDecryptedConfig, 'decryptedConfig', $config);
-
-        $this->assertSame($expectedDecryptedConfig, $config->getConfig());
+        $this->assertSame($expectedDecryptedConfig,  $config->getConfig());
     }
 
     public function testShouldDoNothingOnDecryptIfConfigIsNotEncrypted()
@@ -113,13 +109,9 @@ class GatewayConfigTest extends TestCase
         $config = new GatewayConfig();
         $config->setConfig($plainConfig);
 
-        $this->assertAttributeSame($plainConfig, 'config', $config);
-        $this->assertAttributeSame($plainConfig, 'decryptedConfig', $config);
+        $this->assertSame($plainConfig,  $config->getConfig());
 
         $config->decrypt($this->createDummyCypher());
-
-        $this->assertAttributeSame($plainConfig, 'config', $config);
-        $this->assertAttributeSame($plainConfig, 'decryptedConfig', $config);
 
         $this->assertSame($plainConfig, $config->getConfig());
     }
@@ -137,23 +129,12 @@ class GatewayConfigTest extends TestCase
             'encrypted' => true,
         ];
 
-        $expectedEncryptedConfig = [
-            'foo' => 'encrypted-plainFooVal',
-            'bar' => 'encrypted-plainBarVal',
-            'encrypted' => true,
-        ];
-
-
         $config = new GatewayConfig();
         $config->setConfig($plainConfig);
 
-        $this->assertAttributeSame($plainConfig, 'config', $config);
-        $this->assertAttributeSame($plainConfig, 'decryptedConfig', $config);
+        $this->assertSame($plainConfig, $config->getConfig());
 
         $config->encrypt($this->createDummyCypher());
-
-        $this->assertAttributeSame($expectedEncryptedConfig, 'config', $config);
-        $this->assertAttributeSame($expectedDecryptedConfig, 'decryptedConfig', $config);
 
         $this->assertSame($expectedDecryptedConfig, $config->getConfig());
     }

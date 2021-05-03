@@ -4,7 +4,7 @@ namespace Payum\Core\Tests\Extension;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionCollection;
 use Payum\Core\Extension\ExtensionInterface;
-use PHPUnit\Framework\TestCase;
+use Payum\Core\Tests\TestCase;
 
 class ExtensionCollectionTest extends TestCase
 {

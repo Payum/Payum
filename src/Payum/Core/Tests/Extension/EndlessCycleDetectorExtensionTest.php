@@ -5,7 +5,7 @@ use Payum\Core\Exception\LogicException;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\GatewayInterface;
-use PHPUnit\Framework\TestCase;
+use Payum\Core\Tests\TestCase;
 
 class EndlessCycleDetectorExtensionTest extends TestCase
 {
@@ -17,26 +17,6 @@ class EndlessCycleDetectorExtensionTest extends TestCase
         $rc = new \ReflectionClass('Payum\Core\Extension\EndlessCycleDetectorExtension');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSetDefaultLimitInConstructor()
-    {
-        $extension = new EndlessCycleDetectorExtension();
-
-        $this->assertAttributeEquals(100, 'limit', $extension);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetLimitInInConstructor()
-    {
-        $extension = new EndlessCycleDetectorExtension($expectedLimit = 55);
-
-        $this->assertAttributeEquals($expectedLimit, 'limit', $extension);
     }
 
     /**

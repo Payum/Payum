@@ -19,8 +19,6 @@ class GatewayFactoryBuilderTest extends TestCase
         $gatewayFactory = $builder->build($defaultConfig, $coreGatewayFactory);
 
         $this->assertInstanceOf(GatewayFactory::class, $gatewayFactory);
-        $this->assertAttributeSame($coreGatewayFactory, 'coreGatewayFactory', $gatewayFactory);
-        $this->assertAttributeSame($defaultConfig, 'defaultConfig', $gatewayFactory);
     }
 
     public function testAllowUseBuilderAsAsFunction()
@@ -34,7 +32,5 @@ class GatewayFactoryBuilderTest extends TestCase
         $gatewayFactory = $builder($defaultConfig, $coreGatewayFactory);
 
         $this->assertInstanceOf(GatewayFactory::class, $gatewayFactory);
-        $this->assertAttributeSame($coreGatewayFactory, 'coreGatewayFactory', $gatewayFactory);
-        $this->assertAttributeSame($defaultConfig, 'defaultConfig', $gatewayFactory);
     }
 }
