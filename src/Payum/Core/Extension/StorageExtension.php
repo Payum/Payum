@@ -13,11 +13,6 @@ class StorageExtension implements ExtensionInterface
     protected $storage;
 
     /**
-     * @var object[]
-     */
-    protected $scheduledForUpdateModels = array();
-
-    /**
      * @param \Payum\Core\Storage\StorageInterface $storage
      */
     public function __construct(StorageInterface $storage)
@@ -46,7 +41,7 @@ class StorageExtension implements ExtensionInterface
             $request->setModel($model);
         }
 
-        $this->scheduleForUpdateIfSupported($request->getModel());
+        $this->scheduleForUpdateIfSupported($context);
     }
 
     /**
@@ -61,32 +56,41 @@ class StorageExtension implements ExtensionInterface
      */
     public function onPostExecute(Context $context)
     {
-        $request = $context->getRequest();
-
-        if ($request instanceof ModelAggregateInterface) {
-            $this->scheduleForUpdateIfSupported($request->getModel());
-        }
+        $this->scheduleForUpdateIfSupported($context);
 
         if (false == $context->getPrevious()) {
-            foreach ($this->scheduledForUpdateModels as $modelHash => $model) {
-                $this->storage->update($model);
-                unset($this->scheduledForUpdateModels[$modelHash]);
+            foreach ($context->getValue('payum.storage_extension.model_scheduled_for_update', []) as $model) {
+                if ($this->storage->support($model)) {
+                    $this->storage->update($model);
+                }
             }
         }
     }
 
     /**
-     * @param mixed $model
+     * @param Context $context
      */
-    protected function scheduleForUpdateIfSupported($model)
+    protected function scheduleForUpdateIfSupported(Context $context)
     {
+        $request = $context->getRequest();
+
+        if (false == $request instanceof ModelAggregateInterface) {
+            return;
+        }
+
+        $model = $request->getModel();
         if ($this->storage->support($model)) {
             $modelHash = spl_object_hash($model);
-            if (array_key_exists($modelHash, $this->scheduledForUpdateModels)) {
+            $firstContext = $context->getPrevious() ? current($context->getPrevious()) : $context;
+            $scheduledForUpdateModels = $firstContext->getValue('payum.storage_extension.model_scheduled_for_update', []);
+
+            if (array_key_exists($modelHash, $scheduledForUpdateModels)) {
                 return;
             }
 
-            $this->scheduledForUpdateModels[$modelHash] = $model;
+            $scheduledForUpdateModels[$modelHash] = $model;
+
+            $firstContext->setValue('payum.storage_extension.model_scheduled_for_update', $scheduledForUpdateModels);
         }
     }
 }

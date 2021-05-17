@@ -36,6 +36,8 @@ class Context
      * @var Context[]
      */
     protected $previous;
+    
+    protected $values = [];
 
     /**
      * @param GatewayInterface $gateway
@@ -119,5 +121,25 @@ class Context
     public function getRequest()
     {
         return $this->request;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $default
+     * 
+     * @return mixed
+     */
+    public function getValue($name, $default = null)
+    {
+        return array_key_exists($name, $this->values) ? $this->values[$name] : $default;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     */
+    public function setValue($name, $value) 
+    {
+        $this->values[$name] = $value;
     }
 }
