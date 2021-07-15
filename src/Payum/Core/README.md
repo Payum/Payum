@@ -33,6 +33,3 @@ If you have any questions and inquires about our open source development, this p
 ## License
 
 Payum is released under the [MIT License](LICENSE).
-
-
-[TEMP TEST]
