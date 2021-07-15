@@ -2,7 +2,6 @@ name: Subtree Split
 
 on:
   push:
-    branches: [master]
 
 jobs:
   subtree-split:
@@ -12,9 +11,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          ref: master
-          fetch-depth: 0
+        #with:
+        #  ref: master
+        #  fetch-depth: 0
 
       - name: Download splitsh-lite
         run: |
