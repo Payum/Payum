@@ -62,7 +62,7 @@ jobs:
           split-repository-name: '${{ matrix.package.name }}'
           user-name: "GitHub Action"
           user-email: "action@github.com"
-          branch: '${{ env.CI_REF_NAME_SLUG }}'
+          branch: 'master'
 
       #- name: Download splitsh-lite
       #  run: |
