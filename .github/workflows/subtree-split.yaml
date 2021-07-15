@@ -8,6 +8,43 @@ jobs:
     name: Split sub packages
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+            - name: core
+              path: src/Payum/Core
+            - name: authorize-net-aim
+              path: src/Payum/AuthorizeNet/Aim
+            - name: be2bill
+              path: src/Payum/Be2Bill
+            - name: paypal-express-checkout
+              path: src/Payum/Paypal/ExpressCheckout/Nvp
+            - name: paypal-masspay
+              path: src/Payum/Paypal/Masspay/Nvp
+            - name: paypal-pro-checkout
+              path: src/Payum/Paypal/ProCheckout/Nvp
+            - name: paypal-pro-hosted
+              path: src/Payum/Paypal/ProHosted/Nvp
+            - name: paypal-ipn
+              path: src/Payum/Paypal/Ipn
+            - name: paypal-rest
+              path: src/Payum/Paypal/Rest
+            - name: offline
+              path: src/Payum/Offline
+            - name: payex
+              path: src/Payum/Payex
+            - name: klarna-checkout
+              path: src/Payum/Klarna/Checkout
+            - name: klarna-invoice
+              path: src/Payum/Klarna/Invoice
+            - name: sofort
+              path: src/Payum/Sofort
+            - name: stripe
+              path: src/Payum/Stripe
+            - name: skeleton
+              path: src/Payum/Skeleton
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -15,11 +52,21 @@ jobs:
         #  ref: master
           fetch-depth: 0
 
-      - name: Download splitsh-lite
-        run: |
-          wget https://github.com/splitsh/lite/releases/download/v1.0.1/lite_linux_amd64.tar.gz
-          tar -xvf lite_linux_amd64.tar.gz
-          mv  ./splitsh-lite bin/splitsh-lite
+      - uses: symplify/github-action-monorepo-split@2.0
+        env:
+          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+        with:
+          package-directory: '${{ matrix.package.path }}'
+          split-repository-organization: 'Payum'
+          split-repository-name: '${{ matrix.package.name }}'
+          user-name: "GitHub Action"
+          user-email: "action@github.com"
 
-      - name: Run subtree-split
-        run: bin/subtree-split
+      #- name: Download splitsh-lite
+      #  run: |
+      #    wget https://github.com/splitsh/lite/releases/download/v1.0.1/lite_linux_amd64.tar.gz
+      #    tar -xvf lite_linux_amd64.tar.gz
+      #    mv  ./splitsh-lite bin/splitsh-lite
+
+      #- name: Run subtree-split
+      #  run: bin/subtree-split
