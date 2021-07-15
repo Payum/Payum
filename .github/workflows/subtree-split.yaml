@@ -52,6 +52,7 @@ jobs:
         #  ref: master
           fetch-depth: 0
 
+      - uses: FranzDiebold/github-env-vars-action@v2
       - uses: symplify/github-action-monorepo-split@2.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -61,6 +62,7 @@ jobs:
           split-repository-name: '${{ matrix.package.name }}'
           user-name: "GitHub Action"
           user-email: "action@github.com"
+          branch: '${{ env.CI_REF_NAME_SLUG }}'
 
       #- name: Download splitsh-lite
       #  run: |
