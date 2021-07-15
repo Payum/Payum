@@ -54,7 +54,7 @@ jobs:
 
       - uses: symplify/github-action-monorepo-split@2.0
         env:
-          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           package-directory: '${{ matrix.package.path }}'
           split-repository-organization: 'Payum'
