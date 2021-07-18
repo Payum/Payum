@@ -40,7 +40,7 @@ public function registerBundles()
 So now after you registered the bundle let's import routing.
 
 ```yaml
-# app/config/routing.yml
+# app/config/routing.yml (In Symfony 4 & 5 config/routes.yaml )
 
 payum_all:
     resource: "@PayumBundle/Resources/config/routing/all.xml"
