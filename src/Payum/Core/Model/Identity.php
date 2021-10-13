@@ -57,6 +57,16 @@ class Identity implements IdentityInterface
         list($this->id, $this->class) = unserialize($serialized);
     }
 
+    public function __serialize(): array
+    {
+        return array($this->id, $this->class);
+    }
+
+    public function __unserialize(array $data)
+    {
+        list($this->id, $this->class) = $data;
+    }
+
     /**
      * @return string
      */
