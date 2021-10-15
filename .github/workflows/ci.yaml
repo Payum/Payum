@@ -45,10 +45,6 @@ jobs:
           key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json composer.lock') }}
           restore-keys: ${{ runner.os }}-php-${{ matrix.php }}-composer-
 
-      - name: Install PHP 8 dependencies
-        if: startsWith(matrix.php, '8')
-        run: composer req --dev league/uri-components:2.x-dev omnipay/common:3.0.x-dev alcohol/iso4217:^4.0
-
       - name: Install dependencies
         run: composer update $COMPOSER_FLAGS
 
