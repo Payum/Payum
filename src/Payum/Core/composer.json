@@ -53,6 +53,7 @@
         "psr/log": "~1.0",
         "php-http/guzzle6-adapter": "^1.0",
         "laminas/laminas-db": "^2.0",
+        "symfony/cache": "^4.4|^5.0",
         "symfony/routing": "^4.4|^5.0",
         "symfony/http-kernel": "^4.4|^5.0",
         "symfony/http-foundation": "^4.4|^5.0",
