@@ -60,6 +60,7 @@
         "propel/propel1": "~1.7",
         "psr/log": "~1.0",
         "laminas/laminas-db": "^2.0",
+        "symfony/cache": "^4.4 || ^5.0",
         "symfony/routing": "^4.4 || ^5.0",
         "symfony/http-kernel": "^4.4 || ^5.0",
         "symfony/http-foundation": "^4.4 || ^5.0",
