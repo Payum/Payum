@@ -130,7 +130,7 @@ jobs:
         run: composer update
 
       - name: Install Doctrine Mongodb ODM
-        run: composer require doctrine/mongodb-odm
+        run: composer require doctrine/mongodb-odm --with-all-dependencies
 
       - name: Run unit tests
         run: bin/phpunit
