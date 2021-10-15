@@ -6,7 +6,7 @@
 
         <field name="factoryName" column="factory_name" type="string" />
 
-        <field name="config" column="config" type="json" />
+        <field name="config" column="config" type="json_array" />
 
     </mapped-superclass>
 </doctrine-mapping>

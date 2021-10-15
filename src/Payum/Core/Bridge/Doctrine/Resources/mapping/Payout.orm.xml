@@ -12,7 +12,7 @@
 
         <field name="currencyCode" type="string" nullable="true" />
 
-        <field name="details" type="json" />
+        <field name="details" type="json_array" />
 
     </mapped-superclass>
 </doctrine-mapping>
