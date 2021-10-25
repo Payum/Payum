@@ -7,6 +7,7 @@ use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 abstract class BaseOrmTest extends TestCase
 {
@@ -38,8 +39,14 @@ abstract class BaseOrmTest extends TestCase
         $config->setProxyDir(\sys_get_temp_dir());
         $config->setProxyNamespace('Proxies');
         $config->setMetadataDriverImpl($this->getMetadataDriverImpl($config));
-        $config->setQueryCacheImpl(new ArrayCache());
-        $config->setMetadataCacheImpl(new ArrayCache());
+
+        if (method_exists($config, 'setQueryCache')) {
+            $config->setQueryCache(new ArrayAdapter());
+            $config->setMetadataCache(new ArrayAdapter());
+        } else {
+            $config->setQueryCacheImpl(new ArrayCache());
+            $config->setMetadataCacheImpl(new ArrayCache());
+        }
 
         $connection = array('driver' => 'pdo_sqlite', 'path' => ':memory:');
 
