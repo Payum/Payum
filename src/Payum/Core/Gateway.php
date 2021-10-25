@@ -187,7 +187,7 @@ class Gateway implements GatewayInterface
                 }
 
                 if (false == $apiSet) {
-                    throw new LogicException(sprintf('Cannot find right api for the action %s', get_class($action)), null, $unsupportedException);
+                    throw new LogicException(sprintf('Cannot find right api for the action %s', get_class($action)), 0, $unsupportedException);
                 }
             }
 
