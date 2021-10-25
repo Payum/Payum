@@ -416,26 +416,31 @@ class CustomArrayObject implements \ArrayAccess, \IteratorAggregate
 {
     private $foo;
 
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return 'foo' === $offset;
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->{$offset};
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->{$offset} = $value;
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         $this->{$offset} = null;
     }
 
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator(array(

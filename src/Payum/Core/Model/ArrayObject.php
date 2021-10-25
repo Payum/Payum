@@ -11,6 +11,7 @@ class ArrayObject implements \ArrayAccess, \IteratorAggregate
     /**
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return array_key_exists($offset, $this->details);
@@ -19,6 +20,7 @@ class ArrayObject implements \ArrayAccess, \IteratorAggregate
     /**
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->details[$offset];
@@ -27,6 +29,7 @@ class ArrayObject implements \ArrayAccess, \IteratorAggregate
     /**
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->details[$offset] = $value;
@@ -35,6 +38,7 @@ class ArrayObject implements \ArrayAccess, \IteratorAggregate
     /**
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->details[$offset]);
@@ -43,6 +47,7 @@ class ArrayObject implements \ArrayAccess, \IteratorAggregate
     /**
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->details);
