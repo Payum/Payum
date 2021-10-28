@@ -473,7 +473,7 @@ class GatewayTest extends TestCase
             ->method('onPostExecute')
             ->with($this->isInstanceOf(Context::class))
             ->willReturnCallback(function (Context $context) use ($exception) {
-                throw new \InvalidArgumentException('Another error.', null, $exception);
+                throw new \InvalidArgumentException('Another error.', 0, $exception);
             })
         ;
 

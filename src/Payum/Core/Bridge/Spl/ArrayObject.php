@@ -148,6 +148,7 @@ class ArrayObject extends \ArrayObject
     /**
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($index, $value)
     {
         if ($this->input) {
@@ -160,6 +161,7 @@ class ArrayObject extends \ArrayObject
     /**
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($index)
     {
         if ($this->input) {
@@ -175,6 +177,7 @@ class ArrayObject extends \ArrayObject
      *
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($index)
     {
         if ($this->offsetExists($index)) {
@@ -214,7 +217,7 @@ class ArrayObject extends \ArrayObject
     {
         $array = $this->toUnsafeArray();
         unset($array['local']);
-        
+
         return $array;
     }
 

@@ -77,8 +77,14 @@ class SensitiveValueTest extends TestCase
 
         $serializedValue = serialize($sensitiveValue);
 
-        $this->assertEquals('N;', $serializedValue);
-        $this->assertNull(unserialize($serializedValue));
+        if (PHP_VERSION_ID >= 70400) {
+            // the object will be unserialized anyway, make sure it's empty
+            $this->assertEquals('O:34:"Payum\Core\Security\SensitiveValue":0:{}', $serializedValue);
+            $this->assertNull(unserialize($serializedValue)->peek());
+        } else {
+            $this->assertEquals('N;', $serializedValue);
+            $this->assertNull(unserialize($serializedValue));
+        }
     }
 
     /**

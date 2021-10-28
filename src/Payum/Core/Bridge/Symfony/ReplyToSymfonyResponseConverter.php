@@ -29,7 +29,7 @@ class ReplyToSymfonyResponseConverter
 
         throw new LogicException(
             sprintf('Cannot convert reply %s to http response.', $ro->getShortName()),
-            null,
+            0,
             $reply
         );
     }

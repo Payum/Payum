@@ -56,9 +56,19 @@ final class SensitiveValue implements \Serializable, \JsonSerializable
     {
     }
 
+    public function __serialize(): array
+    {
+        return [];
+    }
+
+    public function __unserialize(array $data)
+    {
+    }
+
     /**
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
     }
