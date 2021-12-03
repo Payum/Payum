@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Stripe\Action\Api;
 
+use Composer\InstalledVersions;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -62,10 +63,10 @@ class CreateCustomerAction implements ActionInterface, ApiAwareInterface, Gatewa
         try {
             Stripe::setApiKey($this->api->getSecretKey());
 
-            if (method_exists(Stripe::class, "setAppInfo")) {
+            if (class_exists(InstalledVersions::class)) {
                 Stripe::setAppInfo(
                     Constants::PAYUM_STRIPE_APP_NAME,
-                    Constants::PAYUM_STRIPE_VERSION,
+                    InstalledVersions::getVersion('stripe/stripe-php'),
                     Constants::PAYUM_URL
                 );
             }
