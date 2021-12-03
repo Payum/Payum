@@ -7,6 +7,7 @@ use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Configuration;
 use Doctrine\ODM\MongoDB\Types\Type;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 abstract class BaseMongoTest extends TestCase
 {
@@ -32,7 +33,13 @@ abstract class BaseMongoTest extends TestCase
         $config->setHydratorDir(\sys_get_temp_dir());
         $config->setHydratorNamespace('PayumTestsHydrators');
         $config->setMetadataDriverImpl($this->getMetadataDriverImpl());
-        $config->setMetadataCacheImpl(new ArrayCache());
+
+        if (method_exists($config, 'setMetadataCache')) {
+            $config->setMetadataCache(new ArrayAdapter());
+        } else {
+            $config->setMetadataCacheImpl(new ArrayCache());
+        }
+
         $config->setDefaultDB('payum_tests');
 
         $this->dm = DocumentManager::create(null, $config);
