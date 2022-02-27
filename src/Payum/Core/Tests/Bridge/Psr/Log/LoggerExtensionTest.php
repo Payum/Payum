@@ -176,7 +176,7 @@ class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
 {
     public $logger;
 
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }
