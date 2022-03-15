@@ -46,6 +46,7 @@ class CreditCardExpirationDateType extends AbstractType
 
     /**
      * {@inheritDoc}
+     * @return ?string
      */
     public function getParent()
     {
