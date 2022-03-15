@@ -32,6 +32,7 @@ class GatewayChoiceType extends AbstractType
 
     /**
      * {@inheritDoc}
+     * @return ?string
      */
     public function getParent()
     {
