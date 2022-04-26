@@ -717,7 +717,7 @@ class GenericTokenFactoryTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|TokenFactoryInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|TokenFactoryInterface
      */
     protected function createTokenFactoryMock()
     {

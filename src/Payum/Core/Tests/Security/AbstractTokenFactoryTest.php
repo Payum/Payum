@@ -487,7 +487,7 @@ class AbstractTokenFactoryTest extends TestCase
      * @param StorageInterface $tokenStorage
      * @param StorageRegistryInterface $registry
      *
-     * @return AbstractTokenFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @return AbstractTokenFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function createTokenFactoryMock(StorageInterface $tokenStorage, StorageRegistryInterface $registry)
     {
@@ -503,7 +503,7 @@ class AbstractTokenFactoryTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|StorageInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|StorageInterface
      */
     protected function createStorageMock()
     {
@@ -511,7 +511,7 @@ class AbstractTokenFactoryTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|StorageRegistryInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|StorageRegistryInterface
      */
     protected function createStorageRegistryMock()
     {

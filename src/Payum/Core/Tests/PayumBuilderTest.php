@@ -36,6 +36,7 @@ use Payum\Paypal\Rest\PaypalRestGatewayFactory;
 use Payum\Stripe\StripeCheckoutGatewayFactory;
 use Payum\Stripe\StripeJsGatewayFactory;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class PayumBuilderTest extends TestCase
 {
@@ -842,7 +843,7 @@ class PayumBuilderTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|RegistryInterface
+     * @return MockObject|RegistryInterface
      */
     protected function createRegistryMock()
     {
@@ -850,7 +851,7 @@ class PayumBuilderTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|HttpRequestVerifierInterface
+     * @return MockObject|HttpRequestVerifierInterface
      */
     protected function createHttpRequestVerifierMock()
     {
@@ -858,7 +859,7 @@ class PayumBuilderTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GenericTokenFactoryInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|GenericTokenFactoryInterface
      */
     protected function createGenericTokenFactoryMock()
     {

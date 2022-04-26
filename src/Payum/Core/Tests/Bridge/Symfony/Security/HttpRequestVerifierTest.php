@@ -247,7 +247,7 @@ class HttpRequestVerifierTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|StorageInterface
+     * @return MockObject|StorageInterface
      */
     protected function createStorageMock()
     {

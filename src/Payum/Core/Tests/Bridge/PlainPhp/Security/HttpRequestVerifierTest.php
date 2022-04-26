@@ -4,6 +4,7 @@ namespace Payum\Core\Tests\Bridge\PlainPhp\Security;
 use Payum\Core\Model\Token;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class HttpRequestVerifierTest extends TestCase
 {
@@ -189,7 +190,7 @@ class HttpRequestVerifierTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\Storage\StorageInterface
+     * @return MockObject|\Payum\Core\Storage\StorageInterface
      */
     protected function createStorageMock()
     {

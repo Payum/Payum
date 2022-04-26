@@ -111,7 +111,7 @@ class NotifyActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
@@ -119,7 +119,7 @@ class NotifyActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Klarna_Checkout_Order
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Klarna_Checkout_Order
      */
     protected function createOrderMock()
     {

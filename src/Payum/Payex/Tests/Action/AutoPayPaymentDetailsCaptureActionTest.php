@@ -118,7 +118,7 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\GatewayInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Core\GatewayInterface
      */
     protected function createGatewayMock()
     {

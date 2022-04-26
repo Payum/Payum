@@ -1,5 +1,6 @@
 # Changelog
 
+* Updated phpunit 8 => 9
 ## 1.5.0 (2018-01-09)
 
 * add tests for encoded requests

@@ -6,6 +6,7 @@ use Payum\Core\Extension\Context;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Tests\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class EndlessCycleDetectorExtensionTest extends TestCase
 {
@@ -64,7 +65,7 @@ class EndlessCycleDetectorExtensionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
