@@ -8,6 +8,7 @@ use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class TokenFactoryTest extends TestCase
 {
@@ -454,7 +455,7 @@ class TokenFactoryTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|StorageInterface
+     * @return MockObject|StorageInterface
      */
     protected function createStorageMock()
     {
@@ -462,7 +463,7 @@ class TokenFactoryTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|StorageRegistryInterface
+     * @return MockObject|StorageRegistryInterface
      */
     protected function createStorageRegistryMock()
     {
@@ -470,7 +471,7 @@ class TokenFactoryTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|UrlGeneratorInterface
+     * @return MockObject|UrlGeneratorInterface
      */
     protected function createUrlGeneratorStub()
     {

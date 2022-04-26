@@ -7,6 +7,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\Identity;
 use Payum\Core\Request\Capture;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class RequestNotSupportedExceptionTest extends TestCase
 {
@@ -105,7 +106,7 @@ class RequestNotSupportedExceptionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\Action\ActionInterface
+     * @return MockObject|\Payum\Core\Action\ActionInterface
      */
     protected function createActionMock()
     {

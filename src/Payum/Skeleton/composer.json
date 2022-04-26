@@ -1,7 +1,7 @@
 {
     "name": "payum/skeleton",
     "type": "project",
-    "description": "The Payum extension. Rapid extensino development",
+    "description": "The Payum extension. Rapid extension development",
     "keywords": ["payment"],
     "homepage": "https://payum.forma-pro.com",
     "license": "MIT",

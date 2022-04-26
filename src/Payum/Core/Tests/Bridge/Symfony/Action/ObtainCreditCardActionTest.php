@@ -14,6 +14,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ObtainCreditCardActionTest extends TestCase
 {
@@ -341,7 +342,7 @@ class ObtainCreditCardActionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface
+     * @return MockObject|FormFactoryInterface
      */
     protected function createFormFactoryMock()
     {
@@ -349,7 +350,7 @@ class ObtainCreditCardActionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|FormInterface
+     * @return MockObject|FormInterface
      */
     protected function createFormMock()
     {
@@ -357,7 +358,7 @@ class ObtainCreditCardActionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

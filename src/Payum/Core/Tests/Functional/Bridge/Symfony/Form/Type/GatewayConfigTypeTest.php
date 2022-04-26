@@ -8,6 +8,7 @@ use Payum\Core\Model\GatewayConfig;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\Forms;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class GatewayConfigTypeTest extends TestCase
 {
@@ -17,7 +18,7 @@ class GatewayConfigTypeTest extends TestCase
     protected $formFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|GatewayFactoryInterface
+     * @var MockObject|GatewayFactoryInterface
      */
     protected $fooGatewayFactoryMock;
 

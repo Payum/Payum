@@ -11,6 +11,7 @@ use Payum\Core\Reply\HttpRedirect;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class LogExecutedActionsExtensionTest extends TestCase
 {
@@ -271,7 +272,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|LoggerInterface
+     * @return MockObject|LoggerInterface
      */
     protected function createLoggerMock()
     {
@@ -279,7 +280,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ReplyInterface
+     * @return MockObject|ReplyInterface
      */
     protected function createReplyMock()
     {
@@ -287,7 +288,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\Action\ActionInterface
+     * @return MockObject|\Payum\Core\Action\ActionInterface
      */
     protected function createActionMock()
     {
@@ -295,7 +296,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

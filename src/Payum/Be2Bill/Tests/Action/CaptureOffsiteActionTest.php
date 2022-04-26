@@ -131,7 +131,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Api
+     * @return \PHPUnit\Framework\MockObject\MockObject|Api
      */
     protected function createApiMock()
     {
@@ -139,7 +139,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

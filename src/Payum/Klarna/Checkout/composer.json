@@ -27,9 +27,9 @@
         "klarna/checkout": "^1.1|^2.0"
     },
     "require-dev": {
-        "payum/core": "^1.5",
-        "phpunit/phpunit": "^5.7",
-        "symfony/phpunit-bridge": "^3.1|^4"
+        "phpunit/phpunit": "^9.5",
+        "symfony/phpunit-bridge": "^6.0",
+        "php-http/guzzle6-adapter": "^1.1.1"
     },
     "config": {
         "bin-dir": "bin"

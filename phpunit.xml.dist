@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
          backupGlobals="true"
          backupStaticAttributes="false"
          colors="true"
@@ -14,106 +12,101 @@
          stopOnRisky="true"
          failOnWarning="false"
          stopOnWarning="false"
-         bootstrap="autoload.php.dist"
->
-    <php>
-        <var name="__PAYUM_AUTHORIZE_NET_AIM_API_LOGIN_ID" value="54PB5egZ"/>
-        <var name="__PAYUM_AUTHORIZE_NET_AIM_API_TRANSACTION_KEY" value="48V258vr55AE8tcg"/>
-        <var name="__PAYUM_PAYEX_ACCOUNT_NUMBER" value="60006520"/>
-        <var name="__PAYUM_PAYEX_ENCRYPTION_KEY" value="R7TR47M545XSchyt75vZ"/>
-        <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_ACCOUNT" value="sellr1_1351171001_biz@gmail.com"/>
-        <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_USERNAME" value="sellr1_1351171001_biz_api1.gmail.com"/>
-        <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_PASSWORD" value="1351171022"/>
-        <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_SIGNATURE" value="Adt647eR0NhYG68dAfVYPGquxlvuAwSJBMEy12p4k4mO2p8oEz8t95gU"/>
-        <var name="__PAYUM_PAYPAL_PRO_CHECKOUT_NVP_API_USERNAME" value="palexanderpayflowtestapionly"/>
-        <var name="__PAYUM_PAYPAL_PRO_CHECKOUT_NVP_API_PASSWORD" value="demopass123"/>
-        <var name="__PAYUM_PAYPAL_PRO_CHECKOUT_NVP_API_PARTNER" value="PayPal"/>
-        <var name="__PAYUM_PAYPAL_PRO_CHECKOUT_NVP_API_VENDOR" value="palexanderpayflowtest"/>
-
-        <ini name="soap.wsdl_cache_enabled" value="0" />
-    </php>
-
-    <testsuites>
-        <testsuite name="Payum Core Component Test Suite">
-            <directory>./src/Payum/Core/Tests</directory>
-        </testsuite>
-        <testsuite name="Payum AuthorizeNetAim Component Test Suite">
-            <directory>./src/Payum/AuthorizeNet/Aim/Tests</directory>
-        </testsuite>
-        <testsuite name="Payum Be2Bill Component Test Suite">
-            <directory>./src/Payum/Be2Bill/Tests</directory>
-        </testsuite>
-        <testsuite name="Payum Offline Component Test Suite">
-            <directory>./src/Payum/Offline/Tests</directory>
-        </testsuite>
-        <testsuite name="Payum Payex Component Test Suite">
-            <directory>./src/Payum/Payex/Tests</directory>
-        </testsuite>
-        <testsuite name="Payum PaypalExpressCheckoutNvp Component Test Suite">
-            <directory>./src/Payum/Paypal/ExpressCheckout/Nvp/Tests</directory>
-        </testsuite>
-        <testsuite name="Payum PaypalProCheckoutNvp Component Test Suite">
-            <directory>./src/Payum/Paypal/ProCheckout/Nvp/Tests</directory>
-        </testsuite>
-        <testsuite name="Payum PaypalProHostedNvp Component Test Suite">
-            <directory>./src/Payum/Paypal/ProHosted/Nvp/Tests</directory>
-        </testsuite>
-        <testsuite name="Payum PaypalRest Component Test Suite">
-            <directory>./src/Payum/Paypal/Rest/Tests</directory>
-        </testsuite>
-        <testsuite name="Payum PaypalIpn Component Test Suite">
-            <directory>./src/Payum/Paypal/Ipn/Tests</directory>
-        </testsuite>
-        <testsuite name="Payum PaypalMasspayNvp Component Test Suite">
-            <directory>./src/Payum/Paypal/Masspay/Nvp/Tests</directory>
-        </testsuite>
-        <testsuite name="Payum KlarnaCheckout Component Test Suite">
-            <directory>./src/Payum/Klarna/Checkout/Tests</directory>
-        </testsuite>
-        <testsuite name="Payum KlarnaInvoice Component Test Suite">
-            <directory>./src/Payum/Klarna/Invoice/Tests</directory>
-        </testsuite>
-        <testsuite name="Payum Stripe Component Test Suite">
-            <directory>./src/Payum/Stripe/Tests</directory>
-        </testsuite>
-        <testsuite name="Payum Sofort Component Test Suite">
-            <directory>./src/Payum/Sofort/Tests</directory>
-        </testsuite>
-    </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory>./src/Payum</directory>
-            <exclude>
-                <directory>./src/Payum/Core/Tests</directory>
-                <directory>./src/Payum/Core/Resources</directory>
-                <directory>./src/Payum/AuthorizeNet/Aim/Tests</directory>
-                <directory>./src/Payum/AuthorizeNet/Aim/Resources</directory>
-                <directory>./src/Payum/Be2Bill/Tests</directory>
-                <directory>./src/Payum/Be2Bill/Resources</directory>
-                <directory>./src/Payum/Offline/Tests</directory>
-                <directory>./src/Payum/Offline/Resources</directory>
-                <directory>./src/Payum/Payex/Tests</directory>
-                <directory>./src/Payum/Payex/Resources</directory>
-                <directory>./src/Payum/Paypal/ExpressCheckout/Nvp/Tests</directory>
-                <directory>./src/Payum/Paypal/ExpressCheckout/Nvp/Resources</directory>
-                <directory>./src/Payum/Paypal/ProCheckout/Nvp/Tests</directory>
-                <directory>./src/Payum/Paypal/ProCheckout/Nvp/Resources</directory>
-                <directory>./src/Payum/Paypal/Rest/Tests</directory>
-                <directory>./src/Payum/Paypal/Rest/Resources</directory>
-                <directory>./src/Payum/Paypal/Ipn/Tests</directory>
-                <directory>./src/Payum/Paypal/Ipn/Resources</directory>
-                <directory>./src/Payum/Klarna/Checkout/Tests</directory>
-                <directory>./src/Payum/Klarna/Checkout/Resources</directory>
-                <directory>./src/Payum/Klarna/Invoice/Tests</directory>
-                <directory>./src/Payum/Klarna/Invoice/Resources</directory>
-                <directory>./src/Payum/Stripe/Tests</directory>
-                <directory>./src/Payum/Stripe/Resources</directory>
-            </exclude>
-        </whitelist>
-    </filter>
-
-    <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
-    </listeners>
+         bootstrap="autoload.php.dist">
+  <coverage>
+    <include>
+      <directory>./src/Payum</directory>
+    </include>
+    <exclude>
+      <directory>./src/Payum/Core/Tests</directory>
+      <directory>./src/Payum/Core/Resources</directory>
+      <directory>./src/Payum/AuthorizeNet/Aim/Tests</directory>
+      <directory>./src/Payum/AuthorizeNet/Aim/Resources</directory>
+      <directory>./src/Payum/Be2Bill/Tests</directory>
+      <directory>./src/Payum/Be2Bill/Resources</directory>
+      <directory>./src/Payum/Offline/Tests</directory>
+      <directory>./src/Payum/Offline/Resources</directory>
+      <directory>./src/Payum/Payex/Tests</directory>
+      <directory>./src/Payum/Payex/Resources</directory>
+      <directory>./src/Payum/Paypal/ExpressCheckout/Nvp/Tests</directory>
+      <directory>./src/Payum/Paypal/ExpressCheckout/Nvp/Resources</directory>
+      <directory>./src/Payum/Paypal/ProCheckout/Nvp/Tests</directory>
+      <directory>./src/Payum/Paypal/ProCheckout/Nvp/Resources</directory>
+      <directory>./src/Payum/Paypal/Rest/Tests</directory>
+      <directory>./src/Payum/Paypal/Rest/Resources</directory>
+      <directory>./src/Payum/Paypal/Ipn/Tests</directory>
+      <directory>./src/Payum/Paypal/Ipn/Resources</directory>
+      <directory>./src/Payum/Klarna/Checkout/Tests</directory>
+      <directory>./src/Payum/Klarna/Checkout/Resources</directory>
+      <directory>./src/Payum/Klarna/Invoice/Tests</directory>
+      <directory>./src/Payum/Klarna/Invoice/Resources</directory>
+      <directory>./src/Payum/Stripe/Tests</directory>
+      <directory>./src/Payum/Stripe/Resources</directory>
+    </exclude>
+  </coverage>
+  <php>
+    <var name="__PAYUM_AUTHORIZE_NET_AIM_API_LOGIN_ID" value="54PB5egZ"/>
+    <var name="__PAYUM_AUTHORIZE_NET_AIM_API_TRANSACTION_KEY" value="48V258vr55AE8tcg"/>
+    <var name="__PAYUM_PAYEX_ACCOUNT_NUMBER" value="60006520"/>
+    <var name="__PAYUM_PAYEX_ENCRYPTION_KEY" value="R7TR47M545XSchyt75vZ"/>
+    <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_ACCOUNT" value="sellr1_1351171001_biz@gmail.com"/>
+    <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_USERNAME" value="sellr1_1351171001_biz_api1.gmail.com"/>
+    <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_PASSWORD" value="1351171022"/>
+    <var name="__PAYUM_PAYPAL_EXPRESS_CHECKOUT_NVP_API_SIGNATURE" value="Adt647eR0NhYG68dAfVYPGquxlvuAwSJBMEy12p4k4mO2p8oEz8t95gU"/>
+    <var name="__PAYUM_PAYPAL_PRO_CHECKOUT_NVP_API_USERNAME" value="palexanderpayflowtestapionly"/>
+    <var name="__PAYUM_PAYPAL_PRO_CHECKOUT_NVP_API_PASSWORD" value="demopass123"/>
+    <var name="__PAYUM_PAYPAL_PRO_CHECKOUT_NVP_API_PARTNER" value="PayPal"/>
+    <var name="__PAYUM_PAYPAL_PRO_CHECKOUT_NVP_API_VENDOR" value="palexanderpayflowtest"/>
+    <ini name="soap.wsdl_cache_enabled" value="0"/>
+  </php>
+  <testsuites>
+    <testsuite name="Payum Core Component Test Suite">
+      <directory>./src/Payum/Core/Tests</directory>
+    </testsuite>
+    <testsuite name="Payum AuthorizeNetAim Component Test Suite">
+      <directory>./src/Payum/AuthorizeNet/Aim/Tests</directory>
+    </testsuite>
+    <testsuite name="Payum Be2Bill Component Test Suite">
+      <directory>./src/Payum/Be2Bill/Tests</directory>
+    </testsuite>
+    <testsuite name="Payum Offline Component Test Suite">
+      <directory>./src/Payum/Offline/Tests</directory>
+    </testsuite>
+    <testsuite name="Payum Payex Component Test Suite">
+      <directory>./src/Payum/Payex/Tests</directory>
+    </testsuite>
+    <testsuite name="Payum PaypalExpressCheckoutNvp Component Test Suite">
+      <directory>./src/Payum/Paypal/ExpressCheckout/Nvp/Tests</directory>
+    </testsuite>
+    <testsuite name="Payum PaypalProCheckoutNvp Component Test Suite">
+      <directory>./src/Payum/Paypal/ProCheckout/Nvp/Tests</directory>
+    </testsuite>
+    <testsuite name="Payum PaypalProHostedNvp Component Test Suite">
+      <directory>./src/Payum/Paypal/ProHosted/Nvp/Tests</directory>
+    </testsuite>
+    <testsuite name="Payum PaypalRest Component Test Suite">
+      <directory>./src/Payum/Paypal/Rest/Tests</directory>
+    </testsuite>
+    <testsuite name="Payum PaypalIpn Component Test Suite">
+      <directory>./src/Payum/Paypal/Ipn/Tests</directory>
+    </testsuite>
+    <testsuite name="Payum PaypalMasspayNvp Component Test Suite">
+      <directory>./src/Payum/Paypal/Masspay/Nvp/Tests</directory>
+    </testsuite>
+    <testsuite name="Payum KlarnaCheckout Component Test Suite">
+      <directory>./src/Payum/Klarna/Checkout/Tests</directory>
+    </testsuite>
+    <testsuite name="Payum KlarnaInvoice Component Test Suite">
+      <directory>./src/Payum/Klarna/Invoice/Tests</directory>
+    </testsuite>
+    <testsuite name="Payum Stripe Component Test Suite">
+      <directory>./src/Payum/Stripe/Tests</directory>
+    </testsuite>
+    <testsuite name="Payum Sofort Component Test Suite">
+      <directory>./src/Payum/Sofort/Tests</directory>
+    </testsuite>
+  </testsuites>
+  <listeners>
+    <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
+  </listeners>
 </phpunit>

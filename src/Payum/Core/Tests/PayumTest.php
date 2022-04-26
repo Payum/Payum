@@ -12,6 +12,7 @@ use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class PayumTest extends TestCase
 {
@@ -161,7 +162,7 @@ class PayumTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|RegistryInterface
+     * @return MockObject|RegistryInterface
      */
     protected function createRegistryMock()
     {
@@ -169,7 +170,7 @@ class PayumTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|HttpRequestVerifierInterface
+     * @return MockObject|HttpRequestVerifierInterface
      */
     protected function createHttpRequestVerifierMock()
     {
@@ -177,7 +178,7 @@ class PayumTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GenericTokenFactoryInterface
+     * @return MockObject|GenericTokenFactoryInterface
      */
     protected function createGenericTokenFactoryMock()
     {
@@ -185,7 +186,7 @@ class PayumTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|StorageInterface
+     * @return MockObject|StorageInterface
      */
     protected function createTokenStorage()
     {

@@ -49,7 +49,7 @@ class CreateButtonPaymentActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Paypal\ProHosted\Nvp\Api
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Paypal\ProHosted\Nvp\Api
      */
     protected function createApiMock()
     {

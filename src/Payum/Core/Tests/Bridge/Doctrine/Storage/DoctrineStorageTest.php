@@ -6,6 +6,7 @@ use Doctrine\Persistence\ObjectRepository;
 use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
 use Payum\Core\Tests\Mocks\Model\TestModel;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class DoctrineStorageTest extends TestCase
 {
@@ -110,7 +111,7 @@ class DoctrineStorageTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ObjectManager
+     * @return MockObject|ObjectManager
      */
     protected function createObjectManagerMock()
     {
@@ -118,7 +119,7 @@ class DoctrineStorageTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ObjectRepository
+     * @return MockObject|ObjectRepository
      */
     protected function createObjectRepositoryMock()
     {

@@ -6,6 +6,7 @@ use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Payum\Core\HttpClientInterface;
 use Payum\Paypal\Ipn\Api;
 use Psr\Http\Message\RequestInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ApiTest extends \PHPUnit\Framework\TestCase
 {
@@ -145,7 +146,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|HttpClientInterface
+     * @return MockObject|HttpClientInterface
      */
     protected function createHttpClientMock()
     {
@@ -161,7 +162,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|HttpClientInterface
+     * @return MockObject|HttpClientInterface
      */
     protected function createSuccessHttpClientStub()
     {
