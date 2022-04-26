@@ -32,7 +32,7 @@
     ],
     "require": {
         "php": "^8.0",
-        "alcohol/iso4217": "^3.1 || ^4.0",
+        "alcohol/iso4217": "^4.0",
         "payum/iso4217": "^1.0",
         "php-http/message": "^1.0",
         "php-http/client-implementation": "^1.0",
@@ -49,7 +49,7 @@
         "doctrine/dbal": "^2",
         "doctrine/orm": "2.*",
         "doctrine/persistence": "^1.3.3|^2.0",
-        "phpunit/phpunit": "^5.7",
+        "phpunit/phpunit": "^9.5",
         "propel/propel1": "~1.7",
         "psr/log": "~1.0",
         "php-http/guzzle6-adapter": "^1.0",
@@ -61,7 +61,7 @@
         "symfony/form": "^4.4|^5.0",
         "symfony/validator": "^4.4|^5.0",
         "symfony/dependency-injection": "^4.4|^5.0",
-        "symfony/phpunit-bridge": "^4.4|^5.0",
+        "symfony/phpunit-bridge": "^6.0",
         "defuse/php-encryption": "^2"
     },
     "suggest": {
@@ -78,10 +78,10 @@
         "laminas/laminas-db": "~2.0 If you want to store models to Laminas Db ORM",
         "propel/propel1": "~1.7 If you want to store models to Propel1 ORM",
         "propel/propel": "If you want to store models to Propel2 ORM",
-        "symfony/routing": "~2.8|~3.0 If you want to use TokenFactory from symfony's bridge",
-        "symfony/http-kernel": "~2.8|~3.0 If you want to use HttpRequestVerifier from symfony's bridge",
-        "symfony/http-foundation": "~2.8|~3.0 If you want to use HttpRequestVerifier or HttpResponse reply from symfony's bridge",
-        "symfony/form": "~2.8|~3.0 If you want to use forms",
+        "symfony/routing": "^4.4|^5.0 If you want to use TokenFactory from symfony's bridge",
+        "symfony/http-kernel": "^4.4|^5.0 If you want to use HttpRequestVerifier from symfony's bridge",
+        "symfony/http-foundation": "^4.4|^5.0 If you want to use HttpRequestVerifier or HttpResponse reply from symfony's bridge",
+        "symfony/form": "^4.4|^5.0 If you want to use forms",
         "symfony/dependency-injection": "~2.8|~3.0 If you want to use container aware stuff",
         "monolog/monolog": "~1.0 If you want to use PSR-3 logger",
         "defuse/php-encryption": "^2 If you want to encrypt gateways credentials in database"

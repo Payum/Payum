@@ -75,7 +75,7 @@ class GetTransactionDataActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Sofort\Api
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Sofort\Api
      */
     protected function createApiMock()
     {

@@ -5,6 +5,7 @@ use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionCollection;
 use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Tests\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ExtensionCollectionTest extends TestCase
 {
@@ -153,7 +154,7 @@ class ExtensionCollectionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Context
+     * @return MockObject|Context
      */
     protected function createContextMock()
     {
@@ -161,7 +162,7 @@ class ExtensionCollectionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ExtensionInterface
+     * @return MockObject|ExtensionInterface
      */
     protected function createExtensionMock()
     {

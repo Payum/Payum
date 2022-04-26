@@ -136,7 +136,7 @@ class EmailInvoiceActionTest extends GenericApiAwareActionTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Klarna
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Klarna
      */
     protected function createKlarnaMock()
     {

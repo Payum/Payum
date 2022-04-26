@@ -265,7 +265,7 @@ class CryptoStorageDecoratorTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|StorageInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|StorageInterface
      */
     private function createStorageMock()
     {
@@ -273,7 +273,7 @@ class CryptoStorageDecoratorTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|CypherInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|CypherInterface
      */
     private function createCypherMock()
     {
