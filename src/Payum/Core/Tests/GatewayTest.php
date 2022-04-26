@@ -13,6 +13,7 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\Base;
 use Payum\Core\Reply\ReplyInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class GatewayTest extends TestCase
 {
@@ -869,7 +870,7 @@ class GatewayTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ReplyInterface
+     * @return MockObject|ReplyInterface
      */
     protected function createReplyMock()
     {
@@ -877,7 +878,7 @@ class GatewayTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ExtensionInterface
+     * @return MockObject|ExtensionInterface
      */
     protected function createExtensionMock()
     {
@@ -885,7 +886,7 @@ class GatewayTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ActionInterface
+     * @return MockObject|ActionInterface
      */
     protected function createActionMock()
     {

@@ -235,7 +235,7 @@ class CaptureActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
@@ -243,7 +243,7 @@ class CaptureActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|AuthorizeNetAIM
+     * @return \PHPUnit\Framework\MockObject\MockObject|AuthorizeNetAIM
      */
     protected function createAuthorizeNetAIMMock()
     {
@@ -251,7 +251,7 @@ class CaptureActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\AuthorizeNetAIM_Response
+     * @return \PHPUnit\Framework\MockObject\MockObject|\AuthorizeNetAIM_Response
      */
     protected function createAuthorizeNetAIMResponseMock()
     {

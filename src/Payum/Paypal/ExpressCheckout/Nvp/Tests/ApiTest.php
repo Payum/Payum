@@ -418,7 +418,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|HttpClientInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|HttpClientInterface
      */
     protected function createHttpClientMock()
     {
@@ -434,7 +434,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|HttpClientInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|HttpClientInterface
      */
     protected function createSuccessHttpClientStub()
     {

@@ -7,6 +7,7 @@ use Payum\Core\Request\Generic;
 use Payum\Core\Request\RenderTemplate;
 use Payum\Core\Tests\GenericActionTest;
 use Symfony\Component\Templating\EngineInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class RenderTemplateActionTest extends GenericActionTest
 {
@@ -21,7 +22,7 @@ class RenderTemplateActionTest extends GenericActionTest
     protected $actionClass = RenderTemplateAction::class;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $templating;
 
