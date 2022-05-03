@@ -8,7 +8,7 @@ class HttpExceptionInterfaceTest extends TestCase
     /**
      * @test
      */
-    public function shouldImplementPayumExceptionInterface()
+    public function shouldImplementPayumExceptionInterface(): void
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\Http\HttpExceptionInterface');
 

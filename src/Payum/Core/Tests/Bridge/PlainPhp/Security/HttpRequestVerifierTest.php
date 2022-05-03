@@ -11,7 +11,7 @@ class HttpRequestVerifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldImplementHttpRequestVerifierInterface()
+    public function shouldImplementHttpRequestVerifierInterface(): void
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier');
 
@@ -21,7 +21,7 @@ class HttpRequestVerifierTest extends TestCase
     /**
      * @test
      */
-    public function throwIfRequestIsNotArrayOnVerify()
+    public function throwIfRequestIsNotArrayOnVerify(): void
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid request given. In most cases you have to pass $_REQUEST array.');
@@ -33,7 +33,7 @@ class HttpRequestVerifierTest extends TestCase
     /**
      * @test
      */
-    public function throwIfRequestNotContainTokenParameterOnVerify()
+    public function throwIfRequestNotContainTokenParameterOnVerify(): void
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Token parameter `payum_token` was not found in in the http request.');
@@ -45,7 +45,7 @@ class HttpRequestVerifierTest extends TestCase
     /**
      * @test
      */
-    public function throwIfStorageCouldNotFindTokenByGivenHashOnVerify()
+    public function throwIfStorageCouldNotFindTokenByGivenHashOnVerify(): void
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('A token with hash `invalidHash` could not be found.');
@@ -56,7 +56,7 @@ class HttpRequestVerifierTest extends TestCase
             ->expects($this->once())
             ->method('find')
             ->with($invalidHash)
-            ->will($this->returnValue(null))
+            ->willReturn(null)
         ;
 
         $verifier = new HttpRequestVerifier($storageMock);
@@ -67,7 +67,7 @@ class HttpRequestVerifierTest extends TestCase
     /**
      * @test
      */
-    public function throwIfTargetUrlPathNotMatchServerRequestUriPathOnVerify()
+    public function throwIfTargetUrlPathNotMatchServerRequestUriPathOnVerify(): void
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The current url http://target.com/bar not match target url http://target.com/foo set in the token.');
@@ -82,7 +82,7 @@ class HttpRequestVerifierTest extends TestCase
             ->expects($this->once())
             ->method('find')
             ->with('theHash')
-            ->will($this->returnValue($token))
+            ->willReturn($token)
         ;
 
         $verifier = new HttpRequestVerifier($storageMock);
@@ -93,7 +93,7 @@ class HttpRequestVerifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnExpectedTokenIfAllCheckPassedOnVerify()
+    public function shouldReturnExpectedTokenIfAllCheckPassedOnVerify(): void
     {
         $_SERVER['REQUEST_URI'] = 'http://target.com/foo';
 
@@ -106,7 +106,7 @@ class HttpRequestVerifierTest extends TestCase
             ->expects($this->once())
             ->method('find')
             ->with('theHash')
-            ->will($this->returnValue($expectedToken))
+            ->willReturn($expectedToken)
         ;
 
         $verifier = new HttpRequestVerifier($storageMock);
@@ -119,7 +119,7 @@ class HttpRequestVerifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnExpectedTokenIfAllEncodedCheckPassedOnVerify()
+    public function shouldReturnExpectedTokenIfAllEncodedCheckPassedOnVerify(): void
     {
         $_SERVER['REQUEST_URI'] = 'http://target.com/%5FSsYp0j9YWCZfC0qpxCK58s0kaSBXVTYVDecuCqo6%5Fw';
 
@@ -132,7 +132,7 @@ class HttpRequestVerifierTest extends TestCase
             ->expects($this->once())
             ->method('find')
             ->with('theHash')
-            ->will($this->returnValue($expectedToken))
+            ->willReturn($expectedToken)
         ;
 
         $verifier = new HttpRequestVerifier($storageMock);
@@ -145,7 +145,7 @@ class HttpRequestVerifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnTokenObjectSetToRequestGlobalArrayWithoutChecks()
+    public function shouldReturnTokenObjectSetToRequestGlobalArrayWithoutChecks(): void
     {
         $expectedToken = new Token();
 
@@ -159,7 +159,7 @@ class HttpRequestVerifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowCustomizeTokenParameterInConstructor()
+    public function shouldAllowCustomizeTokenParameterInConstructor(): void
     {
         $expectedToken = new Token();
 
@@ -173,7 +173,7 @@ class HttpRequestVerifierTest extends TestCase
     /**
      * @test
      */
-    public function shouldCallStorageDeleteModelMethodOnInvalidate()
+    public function shouldCallStorageDeleteModelMethodOnInvalidate(): void
     {
         $token = new Token();
 
@@ -189,10 +189,7 @@ class HttpRequestVerifierTest extends TestCase
         $verifier->invalidate($token);
     }
 
-    /**
-     * @return MockObject|\Payum\Core\Storage\StorageInterface
-     */
-    protected function createStorageMock()
+    protected function createStorageMock(): \Payum\Core\Storage\StorageInterface|MockObject
     {
         return $this->createMock('Payum\Core\Storage\StorageInterface');
     }

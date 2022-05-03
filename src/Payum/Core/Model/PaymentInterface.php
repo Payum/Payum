@@ -6,33 +6,15 @@ namespace Payum\Core\Model;
  */
 interface PaymentInterface extends CreditCardPaymentInterface, DetailsAggregateInterface, DetailsAwareInterface
 {
-    /**
-     * @return string
-     */
-    public function getNumber();
+    public function getNumber(): string;
 
-    /**
-     * @return string
-     */
-    public function getDescription();
+    public function getDescription(): string;
 
-    /**
-     * @return string
-     */
-    public function getClientEmail();
+    public function getClientEmail(): string;
 
-    /**
-     * @return string
-     */
-    public function getClientId();
+    public function getClientId(): string;
 
-    /**
-     * @return int
-     */
-    public function getTotalAmount();
+    public function getTotalAmount(): int;
 
-    /**
-     * @return string
-     */
-    public function getCurrencyCode();
+    public function getCurrencyCode(): string;
 }

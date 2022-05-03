@@ -6,15 +6,9 @@ class ExtensionCollection implements ExtensionInterface
     /**
      * @var ExtensionInterface[]
      */
-    protected $extensions = array();
+    protected array $extensions = [];
 
-    /**
-     * @param ExtensionInterface $extension
-     * @param bool               $forcePrepend
-     *
-     * @return void
-     */
-    public function addExtension(ExtensionInterface $extension, $forcePrepend = false)
+    public function addExtension(ExtensionInterface $extension, bool $forcePrepend = false): void
     {
         $forcePrepend ?
             array_unshift($this->extensions, $extension) :
@@ -25,7 +19,7 @@ class ExtensionCollection implements ExtensionInterface
     /**
      * {@inheritDoc}
      */
-    public function onPreExecute(Context $context)
+    public function onPreExecute(Context $context): void
     {
         foreach ($this->extensions as $extension) {
             $extension->onPreExecute($context);
@@ -35,7 +29,7 @@ class ExtensionCollection implements ExtensionInterface
     /**
      * {@inheritDoc}
      */
-    public function onExecute(Context $context)
+    public function onExecute(Context $context): void
     {
         foreach ($this->extensions as $extension) {
             $extension->onExecute($context);
@@ -45,7 +39,7 @@ class ExtensionCollection implements ExtensionInterface
     /**
      * {@inheritDoc}
      */
-    public function onPostExecute(Context $context)
+    public function onPostExecute(Context $context): void
     {
         foreach ($this->extensions as $extension) {
             $extension->onPostExecute($context);

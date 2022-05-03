@@ -3,32 +3,32 @@ namespace Payum\Core\Request;
 
 class GetHumanStatus extends BaseGetStatus
 {
-    const STATUS_CAPTURED = 'captured';
+    public const STATUS_CAPTURED = 'captured';
 
-    const STATUS_AUTHORIZED = 'authorized';
+    public const STATUS_AUTHORIZED = 'authorized';
 
-    const STATUS_PAYEDOUT = 'payedout';
+    public const STATUS_PAYEDOUT = 'payedout';
 
-    const STATUS_REFUNDED = 'refunded';
+    public const STATUS_REFUNDED = 'refunded';
 
-    const STATUS_UNKNOWN = 'unknown';
+    public const STATUS_UNKNOWN = 'unknown';
 
-    const STATUS_FAILED = 'failed';
+    public const STATUS_FAILED = 'failed';
 
-    const STATUS_SUSPENDED = 'suspended';
+    public const STATUS_SUSPENDED = 'suspended';
 
-    const STATUS_EXPIRED = 'expired';
+    public const STATUS_EXPIRED = 'expired';
 
-    const STATUS_PENDING = 'pending';
+    public const STATUS_PENDING = 'pending';
 
-    const STATUS_CANCELED = 'canceled';
+    public const STATUS_CANCELED = 'canceled';
 
-    const STATUS_NEW = 'new';
+    public const STATUS_NEW = 'new';
 
     /**
      * {@inheritDoc}
      */
-    public function markCaptured()
+    public function markCaptured(): void
     {
         $this->status = static::STATUS_CAPTURED;
     }
@@ -36,7 +36,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function isCaptured()
+    public function isCaptured(): bool
     {
         return $this->isCurrentStatusEqualTo(static::STATUS_CAPTURED);
     }
@@ -44,7 +44,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function markAuthorized()
+    public function markAuthorized(): void
     {
         $this->status = static::STATUS_AUTHORIZED;
     }
@@ -52,7 +52,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function isAuthorized()
+    public function isAuthorized(): bool
     {
         return $this->isCurrentStatusEqualTo(static::STATUS_AUTHORIZED);
     }
@@ -60,7 +60,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function markPayedout()
+    public function markPayedout(): void
     {
         $this->status = static::STATUS_PAYEDOUT;
     }
@@ -68,7 +68,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function isPayedout()
+    public function isPayedout(): bool
     {
         return $this->isCurrentStatusEqualTo(static::STATUS_PAYEDOUT);
     }
@@ -76,7 +76,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function markRefunded()
+    public function markRefunded(): void
     {
         $this->status = static::STATUS_REFUNDED;
     }
@@ -84,7 +84,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function isRefunded()
+    public function isRefunded(): bool
     {
         return $this->isCurrentStatusEqualTo(static::STATUS_REFUNDED);
     }
@@ -92,7 +92,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function markSuspended()
+    public function markSuspended(): void
     {
         $this->status = static::STATUS_SUSPENDED;
     }
@@ -100,7 +100,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function isSuspended()
+    public function isSuspended(): bool
     {
         return $this->isCurrentStatusEqualTo(static::STATUS_SUSPENDED);
     }
@@ -108,7 +108,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function markExpired()
+    public function markExpired(): void
     {
         $this->status = static::STATUS_EXPIRED;
     }
@@ -116,7 +116,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function isExpired()
+    public function isExpired(): bool
     {
         return $this->isCurrentStatusEqualTo(static::STATUS_EXPIRED);
     }
@@ -124,7 +124,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function markCanceled()
+    public function markCanceled(): void
     {
         $this->status = static::STATUS_CANCELED;
     }
@@ -132,7 +132,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function isCanceled()
+    public function isCanceled(): bool
     {
         return $this->isCurrentStatusEqualTo(static::STATUS_CANCELED);
     }
@@ -140,7 +140,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function markPending()
+    public function markPending(): void
     {
         $this->status = static::STATUS_PENDING;
     }
@@ -148,7 +148,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function isPending()
+    public function isPending(): bool
     {
         return $this->isCurrentStatusEqualTo(static::STATUS_PENDING);
     }
@@ -156,7 +156,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function markFailed()
+    public function markFailed(): void
     {
         $this->status = static::STATUS_FAILED;
     }
@@ -164,7 +164,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function isFailed()
+    public function isFailed(): bool
     {
         return $this->isCurrentStatusEqualTo(static::STATUS_FAILED);
     }
@@ -172,7 +172,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function markNew()
+    public function markNew(): void
     {
         $this->status = static::STATUS_NEW;
     }
@@ -180,7 +180,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function isNew()
+    public function isNew(): bool
     {
         return $this->isCurrentStatusEqualTo(static::STATUS_NEW);
     }
@@ -188,7 +188,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function markUnknown()
+    public function markUnknown(): void
     {
         $this->status = static::STATUS_UNKNOWN;
     }
@@ -196,17 +196,12 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * {@inheritDoc}
      */
-    public function isUnknown()
+    public function isUnknown(): bool
     {
         return $this->isCurrentStatusEqualTo(static::STATUS_UNKNOWN);
     }
 
-    /**
-     * @param string $expectedStatus
-     *
-     * @return boolean
-     */
-    protected function isCurrentStatusEqualTo($expectedStatus)
+    protected function isCurrentStatusEqualTo(string $expectedStatus): bool
     {
         return $this->getValue() === $expectedStatus;
     }

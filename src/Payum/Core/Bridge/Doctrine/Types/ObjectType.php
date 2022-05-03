@@ -18,7 +18,7 @@ class ObjectType extends Type
     /**
      * {@inheritDoc}
      */
-    public function convertToDatabaseValue($value)
+    public function convertToDatabaseValue($value): string
     {
         return serialize($value);
     }

@@ -15,7 +15,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldImplementExtensionInterface()
+    public function shouldImplementExtensionInterface(): void
     {
         $rc = new \ReflectionClass('Payum\Core\Extension\GenericTokenFactoryExtension');
 
@@ -25,7 +25,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldSetTokenFactoryToActionImplementsGenericTokenFactoryAwareInterface()
+    public function shouldSetTokenFactoryToActionImplementsGenericTokenFactoryAwareInterface(): void
     {
         $tokenFactory = $this->createGenericTokenFactoryMock();
 
@@ -44,7 +44,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldUnsetGenericTokenFactoryOnPostExecute()
+    public function shouldUnsetGenericTokenFactoryOnPostExecute(): void
     {
         $tokenFactory = $this->createGenericTokenFactoryMock();
 
@@ -64,7 +64,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldDoNothingIfActionNotImplementsGenericTokenFactoryAwareInterfaceOnPostExecute()
+    public function shouldDoNothingIfActionNotImplementsGenericTokenFactoryAwareInterfaceOnPostExecute(): void
     {
         $this->expectNotToPerformAssertions();
 
@@ -83,7 +83,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
     /**
      * @return MockObject|ActionInterface
      */
-    protected function createActionMock()
+    protected function createActionMock(): MockObject|ActionInterface
     {
         return $this->createMock('Payum\Core\Action\ActionInterface');
     }
@@ -91,7 +91,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
     /**
      * @return MockObject|GenericTokenFactoryInterface
      */
-    protected function createGenericTokenFactoryMock()
+    protected function createGenericTokenFactoryMock(): MockObject|GenericTokenFactoryInterface
     {
         return $this->createMock('Payum\Core\Security\GenericTokenFactoryInterface');
     }
@@ -99,7 +99,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
     /**
      * @return MockObject|GatewayInterface
      */
-    protected function createGatewayMock()
+    protected function createGatewayMock(): GatewayInterface|MockObject
     {
         return $this->createMock('Payum\Core\GatewayInterface');
     }

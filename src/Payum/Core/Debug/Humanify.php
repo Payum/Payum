@@ -6,11 +6,7 @@ use Payum\Core\Reply\HttpRedirect;
 
 abstract class Humanify
 {
-    /**
-     * @param  mixed  $request
-     * @return string
-     */
-    public static function request($request)
+    public static function request(mixed $request): string
     {
         $return = self::value($request);
 
@@ -30,13 +26,7 @@ abstract class Humanify
         return $return;
     }
 
-    /**
-     * @param mixed $value
-     * @param bool  $shortClass
-     *
-     * @return string
-     */
-    public static function value($value, $shortClass = true)
+    public static function value(mixed $value, bool $shortClass = true): string
     {
         if (is_object($value)) {
             if ($shortClass) {

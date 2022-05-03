@@ -8,27 +8,18 @@ use Payum\Core\Storage\StorageInterface;
 class StorageExtension implements ExtensionInterface
 {
     /**
-     * @var \Payum\Core\Storage\StorageInterface
-     */
-    protected $storage;
-
-    /**
      * @var object[]
      */
-    protected $scheduledForUpdateModels = array();
+    protected array $scheduledForUpdateModels = [];
 
-    /**
-     * @param \Payum\Core\Storage\StorageInterface $storage
-     */
-    public function __construct(StorageInterface $storage)
+    public function __construct(protected StorageInterface $storage)
     {
-        $this->storage = $storage;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function onPreExecute(Context $context)
+    public function onPreExecute(Context $context): void
     {
         $request = $context->getRequest();
 
@@ -52,14 +43,14 @@ class StorageExtension implements ExtensionInterface
     /**
      * {@inheritDoc}
      */
-    public function onExecute(Context $context)
+    public function onExecute(Context $context): void
     {
     }
 
     /**
      * {@inheritDoc}
      */
-    public function onPostExecute(Context $context)
+    public function onPostExecute(Context $context): void
     {
         $request = $context->getRequest();
 
@@ -75,10 +66,7 @@ class StorageExtension implements ExtensionInterface
         }
     }
 
-    /**
-     * @param mixed $model
-     */
-    protected function scheduleForUpdateIfSupported($model)
+    protected function scheduleForUpdateIfSupported(mixed $model): void
     {
         if ($this->storage->support($model)) {
             $modelHash = spl_object_hash($model);

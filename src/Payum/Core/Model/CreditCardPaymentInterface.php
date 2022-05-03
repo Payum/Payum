@@ -6,8 +6,5 @@ namespace Payum\Core\Model;
  */
 interface CreditCardPaymentInterface
 {
-    /**
-     * @return CreditCardInterface|null
-     */
-    public function getCreditCard();
+    public function getCreditCard(): ?CreditCardInterface;
 }

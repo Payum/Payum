@@ -7,30 +7,15 @@ use Payum\Core\Storage\IdentityInterface;
 
 class Token implements TokenInterface
 {
-    /**
-     * @var IdentityInterface
-     */
-    protected $details;
+    protected IdentityInterface $details;
 
-    /**
-     * @var string
-     */
-    protected $hash;
+    protected string $hash;
 
-    /**
-     * @var string
-     */
-    protected $afterUrl;
+    protected string $afterUrl;
 
-    /**
-     * @var string
-     */
-    protected $targetUrl;
+    protected string $targetUrl;
 
-    /**
-     * @var string
-     */
-    protected $gatewayName;
+    protected string $gatewayName;
 
     public function __construct()
     {
@@ -39,10 +24,8 @@ class Token implements TokenInterface
 
     /**
      * {@inheritDoc}
-     *
-     * @return Identity
      */
-    public function getDetails()
+    public function getDetails(): Identity
     {
         return $this->details;
     }
@@ -50,7 +33,7 @@ class Token implements TokenInterface
     /**
      * {@inheritDoc}
      */
-    public function setDetails($details)
+    public function setDetails(object $details)
     {
         $this->details = $details;
     }
@@ -66,7 +49,7 @@ class Token implements TokenInterface
     /**
      * {@inheritDoc}
      */
-    public function setHash($hash)
+    public function setHash(string $hash)
     {
         $this->hash = $hash;
     }
@@ -82,7 +65,7 @@ class Token implements TokenInterface
     /**
      * {@inheritDoc}
      */
-    public function setTargetUrl($targetUrl)
+    public function setTargetUrl(string $targetUrl)
     {
         $this->targetUrl = $targetUrl;
     }
@@ -98,7 +81,7 @@ class Token implements TokenInterface
     /**
      * {@inheritDoc}
      */
-    public function setAfterUrl($afterUrl)
+    public function setAfterUrl(string $afterUrl)
     {
         $this->afterUrl = $afterUrl;
     }
@@ -114,7 +97,7 @@ class Token implements TokenInterface
     /**
      * {@inheritDoc}
      */
-    public function setGatewayName($gatewayName)
+    public function setGatewayName(string $gatewayName)
     {
         $this->gatewayName = $gatewayName;
     }

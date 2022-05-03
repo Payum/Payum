@@ -4,6 +4,7 @@ namespace Payum\Core\Bridge\Httplug;
 use Payum\Core\HttpClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Http\Client\HttpClient;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * This is a HttpClient that support Httplug. This is an adapter class that make sure we can use Httplug without breaking
@@ -13,23 +14,13 @@ use Http\Client\HttpClient;
  */
 class HttplugClient implements HttpClientInterface
 {
-    /**
-     * @var HttpClient
-     */
-    private $client;
-
-    /**
-     * @param HttpClient $client
-     */
-    public function __construct(HttpClient $client)
-    {
-        $this->client = $client;
-    }
+    public function __construct(private HttpClient $client)
+    {}
 
     /**
      * {@inheritDoc}
      */
-    public function send(RequestInterface $request)
+    public function send(RequestInterface $request): ResponseInterface
     {
         return $this->client->sendRequest($request);
     }

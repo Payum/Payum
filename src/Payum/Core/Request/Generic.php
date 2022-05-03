@@ -9,25 +9,13 @@ use Payum\Core\Storage\IdentityInterface;
 
 abstract class Generic implements ModelAwareInterface, ModelAggregateInterface, TokenAggregateInterface
 {
-    /**
-     * @var mixed
-     */
-    protected $model;
+    protected mixed $model;
 
-    /**
-     * @var mixed
-     */
-    protected $firstModel;
+    protected mixed $firstModel;
 
-    /**
-     * @var TokenInterface
-     */
-    protected $token;
+    protected TokenInterface $token;
 
-    /**
-     * @param mixed $model
-     */
-    public function __construct($model)
+    public function __construct(mixed $model)
     {
         $this->setModel($model);
 
@@ -36,18 +24,12 @@ abstract class Generic implements ModelAwareInterface, ModelAggregateInterface, 
         }
     }
 
-    /**
-     * @return mixed
-     */
-    public function getModel()
+    public function getModel(): mixed
     {
         return $this->model;
     }
 
-    /**
-     * @param mixed $model
-     */
-    public function setModel($model)
+    public function setModel(mixed $model): void
     {
         if (is_array($model)) {
             $model = new \ArrayObject($model);
@@ -61,23 +43,17 @@ abstract class Generic implements ModelAwareInterface, ModelAggregateInterface, 
     /**
      * {@inheritDoc}
      */
-    public function getToken()
+    public function getToken(): ?TokenInterface
     {
         return $this->token;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getFirstModel()
+    public function getFirstModel(): mixed
     {
         return $this->firstModel;
     }
 
-    /**
-     * @param mixed $model
-     */
-    protected function setFirstModel($model)
+    protected function setFirstModel(mixed $model): void
     {
         if ($this->firstModel) {
             return;
