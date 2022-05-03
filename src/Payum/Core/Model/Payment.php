@@ -160,9 +160,9 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     /**
      * {@inheritDoc}
      *
-     * @param array|\Traversable $details
+     * @param object $details
      */
-    public function setDetails($details)
+    public function setDetails(object $details)
     {
         if ($details instanceof \Traversable) {
             $details = iterator_to_array($details);

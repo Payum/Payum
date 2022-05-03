@@ -12,7 +12,7 @@ class GatewayAwareActionTest extends TestCase
     /**
      * @test
      */
-    public function shouldImplementActionInterface()
+    public function shouldImplementActionInterface(): void
     {
         $rc = new \ReflectionClass(GatewayAwareAction::class);
 
@@ -22,7 +22,7 @@ class GatewayAwareActionTest extends TestCase
     /**
      * @test
      */
-    public function shouldImplementGatewayAwareInterface()
+    public function shouldImplementGatewayAwareInterface(): void
     {
         $rc = new \ReflectionClass(GatewayAwareAction::class);
 

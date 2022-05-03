@@ -5,18 +5,8 @@ use Payum\Core\Exception\InvalidArgumentException;
 
 abstract class AbstractStorage implements StorageInterface
 {
-    /**
-     * @var string
-     */
-    protected $modelClass;
-
-    /**
-     * @param $modelClass
-     */
-    public function __construct($modelClass)
-    {
-        $this->modelClass = $modelClass;
-    }
+    public function __construct(protected string $modelClass)
+    {}
 
     /**
      * {@inheritDoc}
@@ -29,7 +19,7 @@ abstract class AbstractStorage implements StorageInterface
     /**
      * {@inheritDoc}
      */
-    public function support($model)
+    public function support($model): bool
     {
         return $model instanceof $this->modelClass;
     }
@@ -37,7 +27,7 @@ abstract class AbstractStorage implements StorageInterface
     /**
      * {@inheritDoc}
      */
-    public function update($model)
+    public function update($model): void
     {
         $this->assertModelSupported($model);
 
@@ -63,7 +53,7 @@ abstract class AbstractStorage implements StorageInterface
     /**
      * {@inheritDoc}
      */
-    public function delete($model)
+    public function delete($model): void
     {
         $this->assertModelSupported($model);
 
@@ -73,7 +63,7 @@ abstract class AbstractStorage implements StorageInterface
     /**
      * {@inheritDoc}
      */
-    public function identify($model)
+    public function identify($model): IdentityInterface
     {
         $this->assertModelSupported($model);
 
@@ -82,38 +72,28 @@ abstract class AbstractStorage implements StorageInterface
 
     /**
      * @param object $model
-     *
-     * @return void
      */
-    abstract protected function doUpdateModel($model);
+    abstract protected function doUpdateModel(object $model): void;
 
     /**
      * @param object $model
-     *
-     * @return void
      */
-    abstract protected function doDeleteModel($model);
+    abstract protected function doDeleteModel($model): void;
 
     /**
      * @param object $model
-     *
-     * @return IdentityInterface
      */
-    abstract protected function doGetIdentity($model);
+    abstract protected function doGetIdentity($model): IdentityInterface;
 
     /**
      * @param mixed $id
-     *
-     * @return object|null
      */
-    abstract protected function doFind($id);
+    abstract protected function doFind($id): ?object;
 
     /**
-     * @param object $model
-     *
      * @throws \Payum\Core\Exception\InvalidArgumentException
      */
-    protected function assertModelSupported($model)
+    protected function assertModelSupported(object $model): void
     {
         if (false == $this->support($model)) {
             throw new InvalidArgumentException(sprintf(

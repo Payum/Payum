@@ -5,80 +5,41 @@ use Payum\Core\Security\SensitiveValue;
 
 interface CreditCardInterface
 {
-    /**
-     * @return string
-     */
-    public function getToken();
+    public function getToken(): string;
 
-    /**
-     * @param string $token
-     */
-    public function setToken($token);
+    public function setToken(string $token);
 
-    /**
-     * @return string
-     */
-    public function getBrand();
+    public function getBrand(): string;
 
-    /**
-     * @param string $brand
-     */
-    public function setBrand($brand);
+    public function setBrand(string $brand);
 
-    /**
-     * @return string
-     */
-    public function getHolder();
+    public function getHolder(): string;
 
-    /**
-     * @param string|SensitiveValue $holder
-     */
-    public function setHolder($holder);
+    public function setHolder(SensitiveValue|string $holder);
 
-    /**
-     * @param string $maskedHolder
-     */
-    public function setMaskedHolder($maskedHolder);
+    public function setMaskedHolder(string $maskedHolder);
 
-    /**
-     * @return string
-     */
-    public function getMaskedHolder();
+    public function getMaskedHolder(): string;
 
-    /**
-     * @return string
-     */
-    public function getNumber();
+    public function getNumber(): string;
 
     /**
      * @param string|SensitiveValue $number
      */
     public function setNumber($number);
 
-    /**
-     * @param string $maskedNumber
-     */
-    public function setMaskedNumber($maskedNumber);
+    public function setMaskedNumber(string $maskedNumber);
 
-    /**
-     * @return string
-     */
-    public function getMaskedNumber();
+    public function getMaskedNumber(): string;
 
-    /**
-     * @return string
-     */
-    public function getSecurityCode();
+    public function getSecurityCode(): string;
 
     /**
      * @param string|SensitiveValue $securityCode
      */
     public function setSecurityCode($securityCode);
 
-    /**
-     * @return \DateTime
-     */
-    public function getExpireAt();
+    public function getExpireAt(): \DateTime;
 
     /**
      * @param \DateTime|SensitiveValue $date

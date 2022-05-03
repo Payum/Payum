@@ -3,17 +3,12 @@ namespace Payum\Core\Reply;
 
 class HttpRedirect extends HttpResponse
 {
-    /**
-     * @var string
-     */
-    protected $url;
+    protected string $url;
 
     /**
-     * @param string   $url
-     * @param int      $statusCode
      * @param string[] $headers
      */
-    public function __construct($url, $statusCode = 302, array $headers = array())
+    public function __construct($url, $statusCode = 302, array $headers = [])
     {
         $this->url = $url;
 
@@ -22,20 +17,12 @@ class HttpRedirect extends HttpResponse
         parent::__construct($this->prepareContent($url), $statusCode, $headers);
     }
 
-    /**
-     * @return string
-     */
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->url;
     }
 
-    /**
-     * @param $url
-     *
-     * @return string
-     */
-    protected function prepareContent($url)
+    protected function prepareContent(string $url): string
     {
         if (empty($url)) {
             throw new \InvalidArgumentException('Cannot redirect to an empty URL.');

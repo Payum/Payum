@@ -2,35 +2,14 @@
 namespace Payum\Core\Registry;
 
 use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\GatewayFactoryInterface;
+use Payum\Core\GatewayInterface;
+use Payum\Core\Storage\StorageInterface;
 
 abstract class AbstractRegistry implements RegistryInterface
 {
-    /**
-     * @var array
-     */
-    protected $gateways;
-
-    /**
-     * @var array
-     */
-    protected $storages;
-
-    /**
-     * @var array
-     */
-    protected $gatewayFactories;
-
-    /**
-     * @param array $gateways
-     * @param array $storages
-     * @param array $gatewayFactories
-     */
-    public function __construct(array $gateways = array(), array $storages = array(), array $gatewayFactories = array())
-    {
-        $this->gateways = $gateways;
-        $this->storages = $storages;
-        $this->gatewayFactories = $gatewayFactories;
-    }
+    public function __construct(protected array $gateways = [], protected array $storages = [], protected array $gatewayFactories = [])
+    {}
 
     /**
      * Fetches/creates the given services
@@ -41,12 +20,12 @@ abstract class AbstractRegistry implements RegistryInterface
      *
      * @return object instance of the given service
      */
-    abstract protected function getService($id);
+    abstract protected function getService(string $id): object;
 
     /**
      * {@inheritDoc}
      */
-    public function getStorage($class)
+    public function getStorage($class): StorageInterface
     {
         $class = is_object($class) ? get_class($class) : $class;
 
@@ -79,7 +58,7 @@ abstract class AbstractRegistry implements RegistryInterface
     /**
      * {@inheritDoc}
      */
-    public function getStorages()
+    public function getStorages(): array
     {
         $storages = array();
         foreach ($this->storages as $modelClass => $storageId) {
@@ -92,7 +71,7 @@ abstract class AbstractRegistry implements RegistryInterface
     /**
      * {@inheritDoc}
      */
-    public function getGateway($name)
+    public function getGateway(string $name): GatewayInterface
     {
         if (!isset($this->gateways[$name])) {
             throw new InvalidArgumentException(sprintf('Gateway "%s" does not exist.', $name));
@@ -104,7 +83,7 @@ abstract class AbstractRegistry implements RegistryInterface
     /**
      * {@inheritDoc}
      */
-    public function getGateways()
+    public function getGateways(): array
     {
         $gateways = array();
         foreach ($this->gateways as $name => $id) {
@@ -117,7 +96,7 @@ abstract class AbstractRegistry implements RegistryInterface
     /**
      * {@inheritDoc}
      */
-    public function getGatewayFactory($name)
+    public function getGatewayFactory(string $name): GatewayFactoryInterface
     {
         if (!isset($this->gatewayFactories[$name])) {
             throw new InvalidArgumentException(sprintf('Gateway factory "%s" does not exist.', $name));
@@ -129,7 +108,7 @@ abstract class AbstractRegistry implements RegistryInterface
     /**
      * {@inheritDoc}
      */
-    public function getGatewayFactories()
+    public function getGatewayFactories(): array
     {
         $gatewayFactories = array();
         foreach ($this->gatewayFactories as $name => $id) {

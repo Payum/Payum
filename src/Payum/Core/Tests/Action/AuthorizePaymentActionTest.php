@@ -214,7 +214,7 @@ class AuthorizePaymentActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldSetDetailsBackToPaymentEvenIfExceptionThrown()
+    public function shouldSetDetailsBackToPaymentEvenIfExceptionThrown(): void
     {
         $expectedDetails = array('foo' => 'fooVal');
 
@@ -226,20 +226,20 @@ class AuthorizePaymentActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf(GetHumanStatus::class))
-            ->will($this->returnCallback(function (GetHumanStatus $request) {
+            ->willReturnCallback(function (GetHumanStatus $request) {
                 $request->markPending();
-            }))
+            })
         ;
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf(Authorize::class))
-            ->will($this->returnCallback(function (Authorize $request) {
+            ->willReturnCallback(function (Authorize $request) {
                 $details = $request->getModel();
                 $details['bar'] = 'barVal';
 
                 throw new \Exception();
-            }))
+            })
         ;
 
         $action = new AuthorizePaymentAction();

@@ -24,7 +24,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldImplementGatewayAwareInterface()
+    public function shouldImplementGatewayAwareInterface(): void
     {
         $rc = new \ReflectionClass($this->actionClass);
 
@@ -104,7 +104,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldWrapArrayDetailsToArrayObjectAndSetDetailsBackAfterExecution()
+    public function shouldWrapArrayDetailsToArrayObjectAndSetDetailsBackAfterExecution(): void
     {
         $expectedDetails = array('foo' => 'fooVal', 'bar' => 'barVal');
 
@@ -146,7 +146,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldWrapArrayDetailsToArrayObjectAndSetDetailsBackEvenOnException()
+    public function shouldWrapArrayDetailsToArrayObjectAndSetDetailsBackEvenOnException(): void
     {
         $expectedDetails = array('foo' => 'fooVal', 'bar' => 'barVal');
 
@@ -233,7 +233,7 @@ class DetailsAggregateAndAwareModel implements DetailsAggregateInterface, Detail
         return $this->details;
     }
 
-    public function setDetails($details)
+    public function setDetails(object $details)
     {
         $this->details = $details;
     }

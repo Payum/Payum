@@ -3,45 +3,31 @@ namespace Payum\Core\Reply;
 
 class HttpResponse extends Base
 {
-    /**
-     * @var string
-     */
-    protected $content;
+    protected string $content;
 
-    /**
-     * @var int
-     */
-    protected $statusCode;
+    protected int $statusCode;
 
     /**
      * @var string[]
      */
-    protected $headers;
+    protected array $headers;
 
     /**
-     * @param string   $content
-     * @param int      $statusCode
      * @param string[] $headers
      */
-    public function __construct($content, $statusCode = 200, array $headers = array())
+    public function __construct(string $content, int $statusCode = 200, array $headers = [])
     {
         $this->content = $content;
         $this->statusCode = $statusCode;
         $this->headers = $headers;
     }
 
-    /**
-     * @return string
-     */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
 
-    /**
-     * @return int
-     */
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         return $this->statusCode;
     }
@@ -49,7 +35,7 @@ class HttpResponse extends Base
     /**
      * @return string[]
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->headers;
     }

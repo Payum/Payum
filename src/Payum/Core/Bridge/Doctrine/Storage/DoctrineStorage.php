@@ -4,29 +4,19 @@ namespace Payum\Core\Bridge\Doctrine\Storage;
 use Doctrine\Persistence\ObjectManager;
 use Payum\Core\Model\Identity;
 use Payum\Core\Storage\AbstractStorage;
+use Payum\Core\Storage\IdentityInterface;
 
 class DoctrineStorage extends AbstractStorage
 {
-    /**
-     * @var \Doctrine\Persistence\ObjectManager
-     */
-    protected $objectManager;
-
-    /**
-     * @param \Doctrine\Persistence\ObjectManager $objectManager
-     * @param string                              $modelClass
-     */
-    public function __construct(ObjectManager $objectManager, $modelClass)
+    public function __construct(protected ObjectManager $objectManager, string $modelClass)
     {
         parent::__construct($modelClass);
-
-        $this->objectManager = $objectManager;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function findBy(array $criteria)
+    public function findBy(array $criteria): array
     {
         return $this->objectManager->getRepository($this->modelClass)->findBy($criteria);
     }
@@ -42,7 +32,7 @@ class DoctrineStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
-    protected function doUpdateModel($model)
+    protected function doUpdateModel($model): void
     {
         $this->objectManager->persist($model);
         $this->objectManager->flush();
@@ -51,7 +41,7 @@ class DoctrineStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
-    protected function doDeleteModel($model)
+    protected function doDeleteModel($model): void
     {
         $this->objectManager->remove($model);
         $this->objectManager->flush();
@@ -60,7 +50,7 @@ class DoctrineStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
-    protected function doGetIdentity($model)
+    protected function doGetIdentity($model): IdentityInterface
     {
         $modelMetadata = $this->objectManager->getClassMetadata(get_class($model));
         $id = $modelMetadata->getIdentifierValues($model);

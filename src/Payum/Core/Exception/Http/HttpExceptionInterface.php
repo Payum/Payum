@@ -7,27 +7,11 @@ use Psr\Http\Message\ResponseInterface;
 
 interface HttpExceptionInterface extends ExceptionInterface
 {
-    /**
-     * @param RequestInterface $request
-     *
-     * @return void
-     */
-    public function setRequest(RequestInterface $request);
+    public function setRequest(RequestInterface $request): void;
 
-    /**
-     * @return RequestInterface
-     */
-    public function getRequest();
+    public function getRequest(): RequestInterface;
 
-    /**
-     * @param ResponseInterface $response
-     *
-     * @return void
-     */
-    public function setResponse(ResponseInterface $response);
+    public function setResponse(ResponseInterface $response): void;
 
-    /**
-     * @return ResponseInterface
-     */
-    public function getResponse();
+    public function getResponse(): ResponseInterface;
 }

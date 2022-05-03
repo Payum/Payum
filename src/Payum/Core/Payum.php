@@ -8,48 +8,18 @@ use Payum\Core\Storage\StorageInterface;
 
 class Payum implements RegistryInterface
 {
-    /**
-     * @var RegistryInterface
-     */
-    protected $registry;
-
-    /**
-     * @var HttpRequestVerifierInterface
-     */
-    protected $httpRequestVerifier;
-
-    /**
-     * @var GenericTokenFactoryInterface
-     */
-    protected $tokenFactory;
-
-    /**
-     * @var StorageInterface
-     */
-    protected $tokenStorage;
-
-    /**
-     * @param RegistryInterface            $registry
-     * @param HttpRequestVerifierInterface $httpRequestVerifier
-     * @param GenericTokenFactoryInterface $tokenFactory
-     * @param StorageInterface             $tokenStorage
-     */
     public function __construct(
-        RegistryInterface $registry,
-        HttpRequestVerifierInterface $httpRequestVerifier,
-        GenericTokenFactoryInterface $tokenFactory,
-        StorageInterface $tokenStorage
+        protected RegistryInterface            $registry,
+        protected HttpRequestVerifierInterface $httpRequestVerifier,
+        protected GenericTokenFactoryInterface $tokenFactory,
+        protected StorageInterface $tokenStorage
     ) {
-        $this->registry = $registry;
-        $this->httpRequestVerifier = $httpRequestVerifier;
-        $this->tokenFactory = $tokenFactory;
-        $this->tokenStorage = $tokenStorage;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getGatewayFactory($name)
+    public function getGatewayFactory($name): GatewayFactoryInterface
     {
         return $this->registry->getGatewayFactory($name);
     }
@@ -57,7 +27,7 @@ class Payum implements RegistryInterface
     /**
      * {@inheritDoc}
      */
-    public function getGatewayFactories()
+    public function getGatewayFactories(): array
     {
         return $this->registry->getGatewayFactories();
     }
@@ -65,7 +35,7 @@ class Payum implements RegistryInterface
     /**
      * {@inheritDoc}
      */
-    public function getGateway($name)
+    public function getGateway(string $name): GatewayInterface
     {
         return $this->registry->getGateway($name);
     }
@@ -73,7 +43,7 @@ class Payum implements RegistryInterface
     /**
      * {@inheritDoc}
      */
-    public function getGateways()
+    public function getGateways(): array
     {
         return $this->registry->getGateways();
     }
@@ -81,7 +51,7 @@ class Payum implements RegistryInterface
     /**
      * {@inheritDoc}
      */
-    public function getStorage($class)
+    public function getStorage($class): StorageInterface
     {
         return $this->registry->getStorage($class);
     }
@@ -89,31 +59,22 @@ class Payum implements RegistryInterface
     /**
      * {@inheritDoc}
      */
-    public function getStorages()
+    public function getStorages(): array
     {
         return $this->registry->getStorages();
     }
 
-    /**
-     * @return HttpRequestVerifierInterface
-     */
-    public function getHttpRequestVerifier()
+    public function getHttpRequestVerifier(): HttpRequestVerifierInterface
     {
         return $this->httpRequestVerifier;
     }
 
-    /**
-     * @return GenericTokenFactoryInterface
-     */
-    public function getTokenFactory()
+    public function getTokenFactory(): GenericTokenFactoryInterface
     {
         return $this->tokenFactory;
     }
 
-    /**
-     * @return StorageInterface
-     */
-    public function getTokenStorage()
+    public function getTokenStorage(): StorageInterface
     {
         return $this->tokenStorage;
     }

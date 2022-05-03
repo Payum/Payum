@@ -1,10 +1,9 @@
 <?php
 namespace Payum\Core\Request;
 
+use Payum\Core\Security\TokenInterface;
+
 class GetCreditCardToken extends Generic
 {
-    /**
-     * @var string
-     */
-    public $token;
+    #public TokenInterface $token;
 }

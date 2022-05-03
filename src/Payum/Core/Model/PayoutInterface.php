@@ -6,28 +6,13 @@ namespace Payum\Core\Model;
  */
 interface PayoutInterface extends DetailsAggregateInterface, DetailsAwareInterface
 {
-    /**
-     * @return string
-     */
-    public function getRecipientId();
+    public function getRecipientId(): string;
 
-    /**
-     * @return string
-     */
-    public function getRecipientEmail();
+    public function getRecipientEmail(): string;
 
-    /**
-     * @return string
-     */
-    public function getDescription();
+    public function getDescription(): string;
 
-    /**
-     * @return int
-     */
-    public function getTotalAmount();
+    public function getTotalAmount(): int;
 
-    /**
-     * @return string
-     */
-    public function getCurrencyCode();
+    public function getCurrencyCode(): string;
 }
