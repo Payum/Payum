@@ -25,7 +25,7 @@ class PayoutPayoutActionTest extends GenericActionTest
         yield array($payout);
     }
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new \ReflectionClass($this->actionClass);
 
@@ -113,7 +113,7 @@ class PayoutPayoutActionTest extends GenericActionTest
         $this->assertSame('fooVal', $details['foo']);
     }
 
-    public function testShouldExecuteConvertRequestWithTokenIfOnePresent()
+    public function testShouldExecuteConvertRequestWithTokenIfOnePresent(): void
     {
         $payoutModel = new PayoutModel();
         $token = $this->createTokenMock();
@@ -154,7 +154,7 @@ class PayoutPayoutActionTest extends GenericActionTest
         $this->assertSame($token, $payout->getToken());
     }
 
-    public function testShouldSetDetailsBackToPayoutAfterPayoutDetailsExecution()
+    public function testShouldSetDetailsBackToPayoutAfterPayoutDetailsExecution(): void
     {
         $expectedDetails = array('foo' => 'fooVal');
 
@@ -196,7 +196,7 @@ class PayoutPayoutActionTest extends GenericActionTest
         $this->assertSame(array('foo' => 'fooVal', 'bar' => 'barVal'), $payoutModel->getDetails());
     }
 
-    public function testShouldSetDetailsBackToPayoutEvenIfExceptionThrown()
+    public function testShouldSetDetailsBackToPayoutEvenIfExceptionThrown(): void
     {
         $expectedDetails = array('foo' => 'fooVal');
 

@@ -24,14 +24,14 @@ class CapturePaymentActionTest extends GenericActionTest
         yield array($capture);
     }
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new \ReflectionClass($this->actionClass);
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayAwareInterface'));
     }
 
-    public function testShouldExecuteConvertRequestIfStatusNew()
+    public function testShouldExecuteConvertRequestIfStatusNew(): void
     {
         $payment = new Payment();
 
@@ -69,7 +69,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $this->assertNull($capture->getToken());
     }
 
-    public function testShouldSetConvertedResultToPaymentAsDetails()
+    public function testShouldSetConvertedResultToPaymentAsDetails(): void
     {
         $payment = new Payment();
 
@@ -112,7 +112,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $this->assertSame('fooVal', $details['foo']);
     }
 
-    public function testShouldExecuteConvertRequestWithTokenIfOnePresent()
+    public function testShouldExecuteConvertRequestWithTokenIfOnePresent(): void
     {
         $payment = new Payment();
         $token = $this->createTokenMock();
@@ -153,7 +153,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $this->assertSame($token, $capture->getToken());
     }
 
-    public function testShouldSetDetailsBackToPaymentAfterCaptureDetailsExecution()
+    public function testShouldSetDetailsBackToPaymentAfterCaptureDetailsExecution(): void
     {
         $expectedDetails = array('foo' => 'fooVal');
 

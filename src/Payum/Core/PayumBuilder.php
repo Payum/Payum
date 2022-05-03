@@ -59,69 +59,44 @@ class PayumBuilder
     /**
      * @var string[]
      */
-    protected $genericTokenFactoryPaths = [];
+    protected array $genericTokenFactoryPaths = [];
 
-    /**
-     * @var StorageInterface
-     */
-    protected $tokenStorage;
+    protected StorageInterface $tokenStorage;
 
     /**
      * @var GatewayFactoryInterface|callable|null
      */
     protected $coreGatewayFactory;
 
-    /**
-     * @var array
-     */
-    protected $coreGatewayFactoryConfig = [];
+    protected array $coreGatewayFactoryConfig = [];
 
-    /**
-     * @var StorageInterface
-     */
-    protected $gatewayConfigStorage;
+    protected StorageInterface $gatewayConfigStorage;
 
-    /**
-     * @var GatewayInterface[]
-     */
-    protected $gateways = [];
+    protected array $gateways = [];
 
-    /**
-     * @var array
-     */
-    protected $gatewayConfigs = [];
+    protected array $gatewayConfigs = [];
 
     /**
      * @var GatewayFactoryInterface[]|callable[]
      */
-    protected $gatewayFactories = [];
+    protected array $gatewayFactories = [];
 
-    /**
-     * @var array
-     */
-    protected $gatewayFactoryConfigs = [];
+    protected array $gatewayFactoryConfigs = [];
 
     /**
      * @var StorageInterface[]
      */
-    protected $storages = [];
+    protected array $storages = [];
 
-    /**
-     * @var RegistryInterface
-     */
-    protected $mainRegistry;
+    protected RegistryInterface $mainRegistry;
 
     /**
      * @deprecated will be removed in 2.0
-     *
-     * @var HttpClientInterface
      */
-    protected $httpClient;
+    protected HttpClientInterface $httpClient;
 
-    /**
-     * @return static
-     */
-    public function addDefaultStorages()
+
+    public function addDefaultStorages(): static
     {
         $this
             ->setTokenStorage(new FilesystemStorage(sys_get_temp_dir(), Token::class, 'hash'))
@@ -134,13 +109,7 @@ class PayumBuilder
         return $this;
     }
 
-    /**
-     * @param string           $modelClass
-     * @param StorageInterface $storage
-     *
-     * @return static
-     */
-    public function addStorage($modelClass, StorageInterface $storage)
+    public function addStorage(string $modelClass, StorageInterface $storage): static
     {
         // TODO add checks
 
@@ -149,13 +118,7 @@ class PayumBuilder
         return $this;
     }
 
-    /**
-     * @param string           $name
-     * @param GatewayInterface|array $gateway
-     *
-     * @return static
-     */
-    public function addGateway($name, $gateway)
+    public function addGateway(string $name, GatewayInterface|array $gateway): static
     {
         // TODO add checks
         if ($gateway instanceof GatewayInterface) {
@@ -175,13 +138,7 @@ class PayumBuilder
         return $this;
     }
 
-    /**
-     * @param string           $name
-     * @param GatewayFactoryInterface|callable $gatewayFactory
-     *
-     * @return static
-     */
-    public function addGatewayFactory($name, $gatewayFactory)
+    public function addGatewayFactory(string $name, callable|GatewayFactoryInterface $gatewayFactory): static
     {
         if (
             $gatewayFactory instanceof GatewayFactoryInterface ||
@@ -194,13 +151,7 @@ class PayumBuilder
         throw new InvalidArgumentException('Invalid argument');
     }
 
-    /**
-     * @param string $name
-     * @param array  $config
-     *
-     * @return static
-     */
-    public function addGatewayFactoryConfig($name, array $config)
+    public function addGatewayFactoryConfig(string $name, array $config): static
     {
         $currentConfig = $this->gatewayFactoryConfigs[$name] ?? [];
         $this->gatewayFactoryConfigs[$name] = array_replace_recursive($currentConfig, $config);
@@ -208,12 +159,7 @@ class PayumBuilder
         return $this;
     }
 
-    /**
-     * @param HttpRequestVerifierInterface|callable|null $httpRequestVerifier
-     *
-     * @return static
-     */
-    public function setHttpRequestVerifier($httpRequestVerifier = null)
+    public function setHttpRequestVerifier(callable|HttpRequestVerifierInterface $httpRequestVerifier = null): static
     {
         if (
             null === $httpRequestVerifier ||
@@ -227,12 +173,7 @@ class PayumBuilder
         throw new InvalidArgumentException('Invalid argument');
     }
 
-    /**
-     * @param TokenFactoryInterface|callable|null $tokenFactory
-     *
-     * @return static
-     */
-    public function setTokenFactory($tokenFactory = null)
+    public function setTokenFactory(callable|TokenFactoryInterface $tokenFactory = null): static
     {
         if (
             null === $tokenFactory ||
@@ -246,12 +187,7 @@ class PayumBuilder
         throw new InvalidArgumentException('Invalid argument');
     }
 
-    /**
-     * @param GenericTokenFactoryInterface|callable|null $tokenFactory
-     *
-     * @return static
-     */
-    public function setGenericTokenFactory($tokenFactory = null)
+    public function setGenericTokenFactory(callable|GenericTokenFactoryInterface $tokenFactory = null): static
     {
         if (
             null === $tokenFactory ||
@@ -267,34 +203,22 @@ class PayumBuilder
 
     /**
      * @param \string[] $paths
-     *
-     * @return static
      */
-    public function setGenericTokenFactoryPaths(array $paths = [])
+    public function setGenericTokenFactoryPaths(array $paths = []): static
     {
         $this->genericTokenFactoryPaths = $paths;
 
         return $this;
     }
 
-    /**
-     * @param StorageInterface $tokenStorage
-     *
-     * @return static
-     */
-    public function setTokenStorage(StorageInterface $tokenStorage = null)
+    public function setTokenStorage(StorageInterface $tokenStorage = null): static
     {
         $this->tokenStorage = $tokenStorage;
 
         return $this;
     }
 
-    /**
-     * @param GatewayFactoryInterface|callable|null $coreGatewayFactory
-     *
-     * @return static
-     */
-    public function setCoreGatewayFactory($coreGatewayFactory = null)
+    public function setCoreGatewayFactory(callable|GatewayFactoryInterface $coreGatewayFactory = null): static
     {
         if (
             null === $coreGatewayFactory ||
@@ -308,24 +232,14 @@ class PayumBuilder
         throw new InvalidArgumentException('Invalid argument');
     }
 
-    /**
-     * @param array $config
-     *
-     * @return static
-     */
-    public function setCoreGatewayFactoryConfig(array $config = null)
+    public function setCoreGatewayFactoryConfig(array $config = null): static
     {
         $this->coreGatewayFactoryConfig = $config;
 
         return $this;
     }
 
-    /**
-     * @param array $config
-     *
-     * @return static
-     */
-    public function addCoreGatewayFactoryConfig(array $config)
+    public function addCoreGatewayFactoryConfig(array $config): static
     {
         $currentConfig = $this->coreGatewayFactoryConfig ?: [];
         $this->coreGatewayFactoryConfig = array_replace_recursive($currentConfig, $config);
@@ -333,24 +247,14 @@ class PayumBuilder
         return $this;
     }
 
-    /**
-     * @param StorageInterface $gatewayConfigStorage
-     *
-     * @return static
-     */
-    public function setGatewayConfigStorage(StorageInterface $gatewayConfigStorage = null)
+    public function setGatewayConfigStorage(StorageInterface $gatewayConfigStorage = null): static
     {
         $this->gatewayConfigStorage = $gatewayConfigStorage;
 
         return $this;
     }
 
-    /**
-     * @param RegistryInterface $mainRegistry
-     *
-     * @return static
-     */
-    public function setMainRegistry(RegistryInterface $mainRegistry = null)
+    public function setMainRegistry(RegistryInterface $mainRegistry = null): static
     {
         $this->mainRegistry = $mainRegistry;
 
@@ -358,23 +262,16 @@ class PayumBuilder
     }
 
     /**
-     * @param HttpClientInterface $httpClient
-     *
      * @deprecated this method will be removed in 2.0 Use self::addCoreGatewayFactoryConfig to overwrite http client.
-     *
-     * @return static
      */
-    public function setHttpClient(HttpClientInterface $httpClient = null)
+    public function setHttpClient(HttpClientInterface $httpClient = null): static
     {
         $this->httpClient = $httpClient;
 
         return $this;
     }
 
-    /**
-     * @return Payum
-     */
-    public function getPayum()
+    public function getPayum(): Payum
     {
         if (false == $tokenStorage = $this->tokenStorage) {
             throw new \LogicException('Token storage must be configured.');
@@ -424,13 +321,7 @@ class PayumBuilder
         return new Payum($registry, $httpRequestVerifier, $genericTokenFactory, $tokenStorage);
     }
 
-    /**
-     * @param StorageInterface $tokenStorage
-     * @param StorageRegistryInterface $storageRegistry
-     *
-     * @return TokenFactoryInterface
-     */
-    protected function buildTokenFactory(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry)
+    protected function buildTokenFactory(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry): TokenFactoryInterface
     {
         $tokenFactory = $this->tokenFactory;
 
@@ -445,14 +336,7 @@ class PayumBuilder
         return $tokenFactory ?: new TokenFactory($tokenStorage, $storageRegistry);
     }
 
-    /**
-     * @param TokenFactoryInterface $tokenFactory
-     * @param string[]              $paths
-     *
-     * @return GenericTokenFactoryInterface
-     *
-     */
-    protected function buildGenericTokenFactory(TokenFactoryInterface $tokenFactory, array $paths)
+    protected function buildGenericTokenFactory(TokenFactoryInterface $tokenFactory, array $paths): GenericTokenFactoryInterface
     {
         $genericTokenFactory = $this->genericTokenFactory;
 
@@ -467,12 +351,7 @@ class PayumBuilder
         return $genericTokenFactory ?: new GenericTokenFactory($tokenFactory, $paths);
     }
 
-    /**
-     * @param StorageInterface $tokenStorage
-     *
-     * @return HttpRequestVerifierInterface
-     */
-    private function buildHttpRequestVerifier(StorageInterface $tokenStorage)
+    private function buildHttpRequestVerifier(StorageInterface $tokenStorage): HttpRequestVerifierInterface
     {
         $httpRequestVerifier = $this->httpRequestVerifier;
 
@@ -487,11 +366,7 @@ class PayumBuilder
         return $httpRequestVerifier ?: new HttpRequestVerifier($tokenStorage);
     }
 
-    /**
-     * @param array $config
-     * @return GatewayFactoryInterface
-     */
-    private function buildCoreGatewayFactory(array $config)
+    private function buildCoreGatewayFactory(array $config): GatewayFactoryInterface
     {
         $coreGatewayFactory = $this->coreGatewayFactory;
 
@@ -513,14 +388,7 @@ class PayumBuilder
         return $coreGatewayFactory ?: new CoreGatewayFactory($config);
     }
 
-    /**
-     * @param array $gateways
-     * @param array $storages
-     * @param array $gatewayFactories
-     *
-     * @return RegistryInterface
-     */
-    protected function buildRegistry(array $gateways = [], array $storages = [], array $gatewayFactories = [])
+    protected function buildRegistry(array $gateways = [], array $storages = [], array $gatewayFactories = []): RegistryInterface
     {
         $registry = new SimpleRegistry($gateways, $storages, $gatewayFactories);
         $registry->setAddStorageExtensions(false);
@@ -540,11 +408,9 @@ class PayumBuilder
     }
 
     /**
-     * @param GatewayFactoryInterface $coreGatewayFactory
-     *
      * @return GatewayFactoryInterface[]
      */
-    protected function buildGatewayFactories(GatewayFactoryInterface $coreGatewayFactory)
+    protected function buildGatewayFactories(GatewayFactoryInterface $coreGatewayFactory): array
     {
         $map = [
             'paypal_express_checkout' => PaypalExpressCheckoutGatewayFactory::class,
@@ -579,11 +445,9 @@ class PayumBuilder
     }
 
     /**
-     * @param GatewayFactoryInterface $coreGatewayFactory
-     *
      * @return GatewayFactoryInterface[]
      */
-    protected function buildAddedGatewayFactories(GatewayFactoryInterface $coreGatewayFactory)
+    protected function buildAddedGatewayFactories(GatewayFactoryInterface $coreGatewayFactory): array
     {
         $gatewayFactories = [];
         foreach ($this->gatewayFactories as $name => $factory) {
@@ -606,7 +470,7 @@ class PayumBuilder
      *
      * @return GatewayFactoryInterface[]
      */
-    protected function buildOmnipayGatewayFactories(GatewayFactoryInterface $coreGatewayFactory)
+    protected function buildOmnipayGatewayFactories(GatewayFactoryInterface $coreGatewayFactory): array
     {
         $gatewayFactories = [];
         if (false == class_exists(\Omnipay\Omnipay::class) || false == class_exists(OmnipayGatewayFactory::class)) {
@@ -633,11 +497,9 @@ class PayumBuilder
     }
 
     /**
-     * @param GatewayFactoryInterface $coreGatewayFactory
-     *
      * @return GatewayFactoryInterface[]
      */
-    protected function buildOmnipayV3GatewayFactories(GatewayFactoryInterface $coreGatewayFactory)
+    protected function buildOmnipayV3GatewayFactories(GatewayFactoryInterface $coreGatewayFactory): array
     {
         $gatewayFactories = [];
         if (false == class_exists(\Omnipay\Omnipay::class) || false == class_exists(OmnipayV3GatewayFactory::class)) {

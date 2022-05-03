@@ -19,7 +19,7 @@ class ExecuteSameRequestWithModelDetailsAction implements ActionInterface, Gatew
      *
      * @param ModelAggregateInterface|ModelAwareInterface $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -44,7 +44,7 @@ class ExecuteSameRequestWithModelDetailsAction implements ActionInterface, Gatew
     /**
      * {@inheritDoc}
      */
-    public function supports($request)
+    public function supports($request): bool
     {
         return
             $request instanceof ModelAggregateInterface &&

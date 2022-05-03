@@ -12,7 +12,7 @@ class ContainerAwareRegistry extends AbstractRegistry implements ContainerAwareI
     /**
      * {@inheritDoc}
      */
-    protected function getService($id)
+    protected function getService(string $id)
     {
         return $this->container->get($id);
     }

@@ -6,14 +6,14 @@ use PHPUnit\Framework\TestCase;
 
 class LogicExceptionTest extends TestCase
 {
-    public function testShouldImplementExceptionInterface()
+    public function testShouldImplementExceptionInterface(): void
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\LogicException');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Exception\ExceptionInterface'));
     }
 
-    public function testShouldBeSubClassOfRuntimeException()
+    public function testShouldBeSubClassOfRuntimeException(): void
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\LogicException');
 

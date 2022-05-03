@@ -28,7 +28,7 @@ class GetHttpRequestAction implements ActionInterface
     /**
      * {@inheritDoc}
      */
-    public function supports($request)
+    public function supports($request): bool
     {
         return $request instanceof GetHttpRequest;
     }

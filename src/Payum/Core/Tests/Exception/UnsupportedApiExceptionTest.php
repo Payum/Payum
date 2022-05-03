@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class UnsupportedApiExceptionTest extends TestCase
 {
-    public function testShouldBeSubClassOfInvalidArgumentException()
+    public function testShouldBeSubClassOfInvalidArgumentException(): void
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\UnsupportedApiException');
 

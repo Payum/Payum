@@ -8,14 +8,14 @@ use PHPUnit\Framework\TestCase;
 
 class Propel1StorageTest extends TestCase
 {
-    public function testShouldBeSubClassOfAbstractStorage()
+    public function testShouldBeSubClassOfAbstractStorage(): void
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Propel\Storage\Propel1Storage');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Storage\AbstractStorage'));
     }
 
-    public function testShouldCreateInstanceOfModelClassGivenInConstructor()
+    public function testShouldCreateInstanceOfModelClassGivenInConstructor(): void
     {
         $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\PropelModel';
 
@@ -27,7 +27,7 @@ class Propel1StorageTest extends TestCase
         $this->assertNull($model->getId());
     }
 
-    public function throwForModelClassSaveOnUpdateModel()
+    public function throwForModelClassSaveOnUpdateModel(): void
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('Save method was triggered.');
@@ -38,7 +38,7 @@ class Propel1StorageTest extends TestCase
         $storage->update($model);
     }
 
-    public function testShouldFindModelById()
+    public function testShouldFindModelById(): void
     {
         $expectedModelId = 123;
         $expectedFoundModel = new PropelModel();
@@ -51,7 +51,7 @@ class Propel1StorageTest extends TestCase
         $this->assertEquals($expectedFoundModel, $actualModel);
     }
 
-    public function testShouldFindModelByCriteria()
+    public function testShouldFindModelByCriteria(): void
     {
         $expectedModelId = 123;
         $expectedFoundModel = new PropelModel();

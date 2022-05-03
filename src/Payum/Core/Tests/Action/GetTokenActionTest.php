@@ -15,10 +15,7 @@ class GetTokenActionTest extends GenericActionTest
 
     protected $actionClass = GetTokenAction::class;
 
-    /**
-     * @var ActionInterface
-     */
-    protected $action;
+    protected ActionInterface $action;
 
     protected function setUp(): void
     {
@@ -38,7 +35,7 @@ class GetTokenActionTest extends GenericActionTest
         yield array($this->getMockForAbstractClass(Generic::class, array(array())));
     }
 
-    public function testShouldSetFoundToken()
+    public function testShouldSetFoundToken(): void
     {
         $hash = 'theHash';
         $token = $this->createMock(TokenInterface::class);
@@ -60,7 +57,7 @@ class GetTokenActionTest extends GenericActionTest
         $this->assertSame($token, $request->getToken());
     }
 
-    public function testThrowIfTokenNotFound()
+    public function testThrowIfTokenNotFound(): void
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The token theHash could not be found');

@@ -10,14 +10,14 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 class EndlessCycleDetectorExtensionTest extends TestCase
 {
-    public function testShouldImplementExtensionInterface()
+    public function testShouldImplementExtensionInterface(): void
     {
         $rc = new \ReflectionClass('Payum\Core\Extension\EndlessCycleDetectorExtension');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
     }
 
-    public function testThrowIfCycleCounterMoreOrEqualsToNumberOfPreviousRequest()
+    public function testThrowIfCycleCounterMoreOrEqualsToNumberOfPreviousRequest(): void
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('Possible endless cycle detected. ::onPreExecute was called 2 times before reach the limit.');
@@ -34,7 +34,7 @@ class EndlessCycleDetectorExtensionTest extends TestCase
         $extension->onPreExecute($context);
     }
 
-    public function testShouldNotThrowIfNumberOfPreviousRequestNotReachLimit()
+    public function testShouldNotThrowIfNumberOfPreviousRequestNotReachLimit(): void
     {
         $this->expectNotToPerformAssertions();
 
@@ -58,7 +58,7 @@ class EndlessCycleDetectorExtensionTest extends TestCase
     /**
      * @return MockObject|GatewayInterface
      */
-    protected function createGatewayMock()
+    protected function createGatewayMock(): GatewayInterface|MockObject
     {
         return $this->createMock('Payum\Core\GatewayInterface');
     }

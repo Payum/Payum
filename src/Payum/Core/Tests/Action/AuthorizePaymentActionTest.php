@@ -196,7 +196,7 @@ class AuthorizePaymentActionTest extends GenericActionTest
         $this->assertSame(array('foo' => 'fooVal', 'bar' => 'barVal'), $payment->getDetails());
     }
 
-    public function testShouldSetDetailsBackToPaymentEvenIfExceptionThrown()
+    public function testShouldSetDetailsBackToPaymentEvenIfExceptionThrown(): void
     {
         $expectedDetails = array('foo' => 'fooVal');
 

@@ -7,31 +7,19 @@ use Payum\Core\Model\ModelAwareInterface;
 
 abstract class BaseModelAware extends LogicException implements ReplyInterface, ModelAwareInterface, ModelAggregateInterface
 {
-    /**
-     * @var mixed
-     */
-    protected $model;
+    protected mixed $model;
 
-    /**
-     * @param mixed $model
-     */
-    public function __construct($model)
+    public function __construct(mixed $model)
     {
         $this->setModel($model);
     }
 
-    /**
-     * @return mixed
-     */
-    public function getModel()
+    public function getModel(): mixed
     {
         return $this->model;
     }
 
-    /**
-     * @param mixed $model
-     */
-    public function setModel($model)
+    public function setModel($model): void
     {
         if (is_array($model)) {
             $model = new \ArrayObject($model);

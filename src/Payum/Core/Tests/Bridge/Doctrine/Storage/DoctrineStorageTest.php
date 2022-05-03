@@ -10,14 +10,14 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 class DoctrineStorageTest extends TestCase
 {
-    public function testShouldBeSubClassOfAbstractStorage()
+    public function testShouldBeSubClassOfAbstractStorage(): void
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Storage\AbstractStorage'));
     }
 
-    public function testShouldCreateInstanceOfModelClassGivenInConstructor()
+    public function testShouldCreateInstanceOfModelClassGivenInConstructor(): void
     {
         $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
 
@@ -32,7 +32,7 @@ class DoctrineStorageTest extends TestCase
         $this->assertNull($model->getId());
     }
 
-    public function testShouldCallObjectManagerPersistAndFlushOnUpdateModel()
+    public function testShouldCallObjectManagerPersistAndFlushOnUpdateModel(): void
     {
         $objectManagerMock = $this->createObjectManagerMock();
         $objectManagerMock
@@ -55,7 +55,7 @@ class DoctrineStorageTest extends TestCase
         $storage->update($model);
     }
 
-    public function testShouldProxyCriteriaToRepositoryFindByMethodOnFindByCall()
+    public function testShouldProxyCriteriaToRepositoryFindByMethodOnFindByCall(): void
     {
         $modelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
         $model = new TestModel();
@@ -86,7 +86,7 @@ class DoctrineStorageTest extends TestCase
         $this->assertSame($model, $storage->findBy($criteria));
     }
 
-    public function testShouldFindModelById()
+    public function testShouldFindModelById(): void
     {
         $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
         $expectedModelId = 123;
@@ -110,18 +110,12 @@ class DoctrineStorageTest extends TestCase
         $this->assertSame($expectedFoundModel, $actualModel);
     }
 
-    /**
-     * @return MockObject|ObjectManager
-     */
-    protected function createObjectManagerMock()
+    protected function createObjectManagerMock(): MockObject|ObjectRepository
     {
         return $this->createMock(ObjectManager::class);
     }
 
-    /**
-     * @return MockObject|ObjectRepository
-     */
-    protected function createObjectRepositoryMock()
+    protected function createObjectRepositoryMock(): MockObject|ObjectRepository
     {
         return $this->createMock(ObjectRepository::class);
     }

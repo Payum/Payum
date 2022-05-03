@@ -8,20 +8,14 @@ use function is_object;
 
 trait ApiAwareTrait
 {
-    /**
-     * @var mixed
-     */
-    protected $api;
+    protected mixed $api;
 
-    /**
-     * @var string|object
-     */
-    protected $apiClass;
+    protected string|object $apiClass;
 
     /**
      * {@inheritDoc}
      */
-    public function setApi($api)
+    public function setApi($api): void
     {
         if (empty($this->apiClass)) {
             throw new LogicException(sprintf('You must configure apiClass in __constructor method of the class the trait is applied to.'));

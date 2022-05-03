@@ -8,51 +8,30 @@ use Payum\Core\Storage\IdentityInterface;
 
 class RequestNotSupportedException extends InvalidArgumentException
 {
-    /**
-     * @var mixed
-     */
-    protected $request;
+    protected mixed $request;
+    protected ?ActionInterface $action;
 
-    /**
-     * @var ActionInterface|null
-     */
-    protected $action;
-
-    /**
-     * @return mixed
-     */
-    public function getRequest()
+    public function getRequest(): mixed
     {
         return $this->request;
     }
 
-    /**
-     * @return ActionInterface|null
-     */
-    public function getAction()
+    public function getAction(): ?ActionInterface
     {
         return $this->action;
     }
 
     /**
-     * @param \Payum\Core\Action\ActionInterface $action
-     * @param mixed                              $request
-     *
      * @throws RequestNotSupportedException
      */
-    public static function assertSupports(ActionInterface $action, $request)
+    public static function assertSupports(ActionInterface $action, mixed $request): void
     {
         if (false == $action->supports($request)) {
             throw static::createActionNotSupported($action, $request);
         }
     }
 
-    /**
-     * @param mixed $request
-     *
-     * @return RequestNotSupportedException
-     */
-    public static function create($request)
+    public static function create(mixed $request): RequestNotSupportedException
     {
         $exception = new self(sprintf(
             'Request %s is not supported. %s',
@@ -65,13 +44,7 @@ class RequestNotSupportedException extends InvalidArgumentException
         return $exception;
     }
 
-    /**
-     * @param \Payum\Core\Action\ActionInterface $action
-     * @param mixed                              $request
-     *
-     * @return RequestNotSupportedException
-     */
-    public static function createActionNotSupported(ActionInterface $action, $request)
+    public static function createActionNotSupported(ActionInterface $action, mixed $request): RequestNotSupportedException
     {
         $exception = new self(sprintf("Action %s is not supported the request %s. %s",
             Humanify::value($action),
@@ -86,11 +59,9 @@ class RequestNotSupportedException extends InvalidArgumentException
     }
 
     /**
-     * @param $request
-     *
      * @return string[]
      */
-    protected static function suggestions($request)
+    protected static function suggestions($request): array
     {
         $suggestions = [];
 

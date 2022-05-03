@@ -10,43 +10,19 @@ use Payum\Core\Storage\IdentityInterface;
  */
 interface TokenInterface extends DetailsAggregateInterface, DetailsAwareInterface
 {
-    /**
-     * @return string
-     */
-    public function getHash();
+    public function getHash(): string;
 
-    /**
-     * @param string $hash
-     */
-    public function setHash($hash);
+    public function setHash(string $hash);
 
-    /**
-     * @return string
-     */
-    public function getTargetUrl();
+    public function getTargetUrl(): string;
 
-    /**
-     * @param string $targetUrl
-     */
-    public function setTargetUrl($targetUrl);
+    public function setTargetUrl(string $targetUrl);
 
-    /**
-     * @return string
-     */
-    public function getAfterUrl();
+    public function getAfterUrl(): string;
 
-    /**
-     * @param string $afterUrl
-     */
-    public function setAfterUrl($afterUrl);
+    public function setAfterUrl(string $afterUrl);
 
-    /**
-     * @return string
-     */
-    public function getGatewayName();
+    public function getGatewayName(): string;
 
-    /**
-     * @param string $gatewayName
-     */
-    public function setGatewayName($gatewayName);
+    public function setGatewayName(string $gatewayName);
 }

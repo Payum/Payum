@@ -5,30 +5,17 @@ use Payum\Core\Storage\IdentityInterface;
 
 class Identity implements IdentityInterface
 {
-    /**
-     * @var string
-     */
-    protected $class;
+    protected string $class;
 
-    /**
-     * @var mixed
-     */
-    protected $id;
-
-    /**
-     * @param mixed         $id
-     * @param string|object $class
-     */
-    public function __construct($id, $class)
+    public function __construct(protected mixed $id, string|object $class)
     {
-        $this->id = $id;
         $this->class = is_object($class) ? get_class($class) : $class;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getClass()
+    public function getClass(): object|string
     {
         return $this->class;
     }
@@ -44,7 +31,7 @@ class Identity implements IdentityInterface
     /**
      * {@inheritDoc}
      */
-    public function serialize()
+    public function serialize(): ?string
     {
         return serialize(array($this->id, $this->class));
     }
@@ -52,7 +39,7 @@ class Identity implements IdentityInterface
     /**
      * {@inheritDoc}
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
         [$this->id, $this->class] = unserialize($serialized);
     }
@@ -62,15 +49,12 @@ class Identity implements IdentityInterface
         return array($this->id, $this->class);
     }
 
-    public function __unserialize(array $data)
+    public function __unserialize(array $data): void
     {
         [$this->id, $this->class] = $data;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->class.'#'.$this->id;
     }
