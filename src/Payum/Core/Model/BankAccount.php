@@ -9,138 +9,91 @@ class BankAccount implements BankAccountInterface
 {
     /**
      * Name of the account holder
-     *
-     * @var string
      */
-    private $holder;
+    private string $holder;
 
     /**
      * The account number (BBAN)
-     *
-     * @var string
      */
-    private $number;
+    private string $number;
 
     /**
      * Code that identifies the bank where the account is held
-     *
-     * @var string
      */
-    private $bankCode;
+    private string $bankCode;
 
     /**
      * The bank's country code (ISO 3166-1 ALPHA-2)
      *
      * @link https://en.wikipedia.org/wiki/ISO_3166-1
-     * @var string
      */
-    private $bankCountryCode;
+    private string $bankCountryCode;
 
-    /**
-     * @var string
-     */
-    private $iban;
+    private string $iban;
 
     /**
      * The bank's BIC code
      *
      * @link https://en.wikipedia.org/wiki/ISO_9362
-     * @var string
      */
-    private $bic;
+    private string $bic;
 
-    /**
-     * @return string
-     */
-    public function getHolder()
+    public function getHolder(): string
     {
         return $this->holder;
     }
 
-    /**
-     * @param string $holder
-     */
-    public function setHolder($holder)
+    public function setHolder(string $holder): void
     {
         $this->holder = $holder;
     }
 
-    /**
-     * @return string
-     */
-    public function getNumber()
+    public function getNumber(): string
     {
         return $this->number;
     }
 
-    /**
-     * @param string $number
-     */
-    public function setNumber($number)
+    public function setNumber(string $number): void
     {
         $this->number = $number;
     }
 
-    /**
-     * @return string
-     */
-    public function getBankCode()
+    public function getBankCode(): string
     {
         return $this->bankCode;
     }
 
-    /**
-     * @param string $bankCode
-     */
-    public function setBankCode($bankCode)
+    public function setBankCode(string $bankCode): void
     {
         $this->bankCode = $bankCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getBankCountryCode()
+    public function getBankCountryCode(): string
     {
         return $this->bankCountryCode;
     }
 
-    /**
-     * @param string $bankCountryCode
-     */
-    public function setBankCountryCode($bankCountryCode)
+    public function setBankCountryCode(string $bankCountryCode): void
     {
         $this->bankCountryCode = $bankCountryCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getIban()
+    public function getIban(): string
     {
         return $this->iban;
     }
 
-    /**
-     * @param string $iban
-     */
-    public function setIban($iban)
+    public function setIban(string $iban): void
     {
         $this->iban = $iban;
     }
 
-    /**
-     * @return string
-     */
-    public function getBic()
+    public function getBic(): string
     {
         return $this->bic;
     }
 
-    /**
-     * @param string $bic
-     */
-    public function setBic($bic)
+    public function setBic(string $bic): void
     {
         $this->bic = $bic;
     }

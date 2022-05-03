@@ -3,78 +3,45 @@ namespace Payum\Core\Request;
 
 class RenderTemplate
 {
-    /**
-     * @var string
-     */
-    protected $templateName;
+    protected string $templateName;
 
-    /**
-     * @var array
-     */
-    protected $parameters;
+    protected array $parameters;
 
-    /**
-     * @var string
-     */
-    protected $result;
+    protected string $result;
 
-    /**
-     * @param string $templateName
-     * @param array  $parameters
-     */
-    public function __construct($templateName, array $parameters = array())
+    public function __construct(string $templateName, array $parameters = [])
     {
         $this->templateName = $templateName;
         $this->parameters = $parameters;
         $this->result = '';
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplateName()
+    public function getTemplateName(): string
     {
         return $this->templateName;
     }
 
-    /**
-     * @return array
-     */
-    public function getParameters()
+    public function getParameters(): array
     {
         return $this->parameters;
     }
 
-    /**
-     * @return string
-     */
-    public function getResult()
+    public function getResult(): string
     {
         return $this->result;
     }
 
-    /**
-     * @param string $result
-     */
-    public function setResult($result)
+    public function setResult(string $result)
     {
         $this->result = $result;
     }
 
-    /**
-     * @param string $name
-     * @param mixed  $value
-     */
-    public function setParameter($name, $value)
+    public function setParameter(string $name, mixed$value)
     {
         $this->parameters[$name] = $value;
     }
 
-    /**
-     * @param string $name
-     * @param mixed  $value
-     */
-    public function addParameter($name, $value)
+    public function addParameter(string $name, mixed $value)
     {
         if (array_key_exists($name, $this->parameters)) {
             throw new \InvalidArgumentException(sprintf('Parameter with given name "%s" already exists', $name));

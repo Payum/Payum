@@ -3,10 +3,7 @@ namespace Payum\Core\Request;
 
 abstract class BaseGetStatus extends Generic implements GetStatusInterface
 {
-    /**
-     * @var int
-     */
-    protected $status;
+    protected int $status;
 
     /**
      * {@inheritDoc}

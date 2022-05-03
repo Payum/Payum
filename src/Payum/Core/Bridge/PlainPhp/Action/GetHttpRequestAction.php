@@ -16,19 +16,19 @@ class GetHttpRequestAction implements ActionInterface
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $request->method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
+        $request->method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
         $request->query = $_GET;
         $request->request = $_REQUEST;
-        $request->clientIp = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
-        $request->uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
-        $request->userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+        $request->clientIp = $_SERVER['REMOTE_ADDR'] ?? '';
+        $request->uri = $_SERVER['REQUEST_URI'] ?? '';
+        $request->userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
         $request->content = file_get_contents('php://input');
     }
 
     /**
      * {@inheritDoc}
      */
-    public function supports($request)
+    public function supports($request): bool
     {
         return $request instanceof GetHttpRequest;
     }

@@ -7,20 +7,11 @@ use Payum\Core\Security\Util\Mask;
 
 class CreditCard implements CreditCardInterface
 {
-    /**
-     * @var string
-     */
-    protected $token;
+    protected string $token;
 
-    /**
-     * @var string
-     */
-    protected $brand;
+    protected string $brand;
 
-    /**
-     * @var string
-     */
-    protected $holder;
+    protected string $holder;
 
     /**
      * @var SensitiveValue
@@ -29,15 +20,9 @@ class CreditCard implements CreditCardInterface
      */
     protected $securedHolder;
 
-    /**
-     * @var string
-     */
-    protected $maskedHolder;
+    protected string $maskedHolder;
 
-    /**
-     * @var string
-     */
-    protected $number;
+    protected string $number;
 
     /**
      * @var SensitiveValue
@@ -46,15 +31,9 @@ class CreditCard implements CreditCardInterface
      */
     protected $securedNumber;
 
-    /**
-     * @var string
-     */
-    protected $maskedNumber;
+    protected string $maskedNumber;
 
-    /**
-     * @var string
-     */
-    protected $securityCode;
+    protected string $securityCode;
 
     /**
      * @var SensitiveValue
@@ -63,10 +42,7 @@ class CreditCard implements CreditCardInterface
      */
     protected $securedSecurityCode;
 
-    /**
-     * @var \DateTime
-     */
-    protected $expireAt;
+    protected \DateTime $expireAt;
 
     /**
      * @var SensitiveValue
@@ -86,7 +62,7 @@ class CreditCard implements CreditCardInterface
     /**
      * {@inheritDoc}
      */
-    public function setToken($token)
+    public function setToken(string $token)
     {
         $this->token = $token;
     }
@@ -102,7 +78,7 @@ class CreditCard implements CreditCardInterface
     /**
      * {@inheritDoc}
      */
-    public function setBrand($brand)
+    public function setBrand(string $brand)
     {
         $this->brand = $brand;
     }
@@ -118,7 +94,7 @@ class CreditCard implements CreditCardInterface
     /**
      * {@inheritDoc}
      */
-    public function setHolder($holder)
+    public function setHolder(SensitiveValue|string $holder)
     {
         $this->securedHolder = SensitiveValue::ensureSensitive($holder);
         $this->maskedHolder = Mask::mask($this->securedHolder->peek());
@@ -138,7 +114,7 @@ class CreditCard implements CreditCardInterface
     /**
      * {@inheritDoc}
      */
-    public function setMaskedHolder($maskedHolder)
+    public function setMaskedHolder(string $maskedHolder)
     {
         $this->maskedHolder = $maskedHolder;
     }
@@ -174,7 +150,7 @@ class CreditCard implements CreditCardInterface
     /**
      * {@inheritDoc}
      */
-    public function setMaskedNumber($maskedNumber)
+    public function setMaskedNumber(string $maskedNumber)
     {
         return $this->maskedNumber = $maskedNumber;
     }

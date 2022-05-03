@@ -10,20 +10,21 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use PHPUnit\Framework\SkippedTestError;
 
 class LoggerExtensionTest extends TestCase
 {
     public static function setUpBeforeClass(): void
     {
         if (false == interface_exists('Psr\Log\LoggerInterface')) {
-            throw new \PHPUnit_Framework_SkippedTestError('To run these tests install psr log lib.');
+            throw new SkippedTestError('To run these tests install psr log lib.');
         }
     }
 
     /**
      * @test
      */
-    public function shouldImplementExtensionInterface()
+    public function shouldImplementExtensionInterface(): void
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Psr\Log\LoggerExtension');
 
@@ -33,7 +34,7 @@ class LoggerExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldImplementLoggerAwareInterface()
+    public function shouldImplementLoggerAwareInterface(): void
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Psr\Log\LoggerExtension');
 
@@ -43,7 +44,7 @@ class LoggerExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowSetLogger()
+    public function shouldAllowSetLogger(): void
     {
         $extension = new LoggerExtension();
         $this->assertInstanceOf(LoggerAwareInterface::class, $extension);
@@ -52,7 +53,7 @@ class LoggerExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldInjectLoggerToLoggerAwareActionOnExecute()
+    public function shouldInjectLoggerToLoggerAwareActionOnExecute(): void
     {
         $logger = $this->createLoggerMock();
 
@@ -71,7 +72,7 @@ class LoggerExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldNotInjectLoggerToNotLoggerAwareActionOnExecute()
+    public function shouldNotInjectLoggerToNotLoggerAwareActionOnExecute(): void
     {
         $logger = $this->createLoggerMock();
 
@@ -91,7 +92,7 @@ class LoggerExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldInjectNullLoggerToLoggerAwareActionOnPostExecute()
+    public function shouldInjectNullLoggerToLoggerAwareActionOnPostExecute(): void
     {
         $logger = $this->createLoggerMock();
 
@@ -110,7 +111,7 @@ class LoggerExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldNotInjectNullLoggerToNotLoggerAwareActionOnPostExecute()
+    public function shouldNotInjectNullLoggerToNotLoggerAwareActionOnPostExecute(): void
     {
         $logger = $this->createLoggerMock();
 
@@ -131,7 +132,7 @@ class LoggerExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldDoNothingOnPreExecute()
+    public function shouldDoNothingOnPreExecute(): void
     {
         $logger = $this->createLoggerMock();
 
@@ -147,26 +148,17 @@ class LoggerExtensionTest extends TestCase
         $this->assertNull($action->logger);
     }
 
-    /**
-     * @return MockObject|LoggerInterface
-     */
-    protected function createLoggerMock()
+    protected function createLoggerMock(): MockObject|LoggerInterface
     {
         return $this->createMock('Psr\Log\LoggerInterface');
     }
 
-    /**
-     * @return MockObject|ActionInterface
-     */
-    protected function createActionMock()
+    protected function createActionMock(): MockObject|ActionInterface
     {
         return $this->createMock('Payum\Core\Action\ActionInterface');
     }
 
-    /**
-     * @return MockObject|GatewayInterface
-     */
-    protected function createGatewayMock()
+    protected function createGatewayMock(): GatewayInterface|MockObject
     {
         return $this->createMock('Payum\Core\GatewayInterface');
     }

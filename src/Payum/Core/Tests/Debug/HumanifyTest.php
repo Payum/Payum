@@ -11,7 +11,7 @@ class HumanifyTest extends TestCase
     /**
      * @test
      */
-    public function shouldBeAbstract()
+    public function shouldBeAbstract(): void
     {
         $rc = new \ReflectionClass('Payum\Core\Debug\Humanify');
 
@@ -21,7 +21,7 @@ class HumanifyTest extends TestCase
     /**
      * @test
      */
-    public function couldNotBeInstantiable()
+    public function couldNotBeInstantiable(): void
     {
         $rc = new \ReflectionClass('Payum\Core\Debug\Humanify');
 
@@ -31,7 +31,7 @@ class HumanifyTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnObjectClassOnValueIfObjectPassed()
+    public function shouldReturnObjectClassOnValueIfObjectPassed(): void
     {
         $this->assertEquals('HumanifyTest', Humanify::value($this));
     }
@@ -39,7 +39,7 @@ class HumanifyTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnObjectShortClassOnValueIfObjectPassedAndShortClassFlagSetTrue()
+    public function shouldReturnObjectShortClassOnValueIfObjectPassedAndShortClassFlagSetTrue(): void
     {
         $this->assertEquals('HumanifyTest', Humanify::value($this, true));
     }
@@ -47,7 +47,7 @@ class HumanifyTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnObjectClassOnValueIfObjectPassedAndShortClassFlagSetFalse()
+    public function shouldReturnObjectClassOnValueIfObjectPassedAndShortClassFlagSetFalse(): void
     {
         $this->assertEquals(__CLASS__, Humanify::value($this, false));
     }
@@ -55,7 +55,7 @@ class HumanifyTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnValueTypeIfNotObjectValueGivenOnValue()
+    public function shouldReturnValueTypeIfNotObjectValueGivenOnValue(): void
     {
         $this->assertEquals('string', Humanify::value('foo'));
     }
@@ -63,7 +63,7 @@ class HumanifyTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnRequestTypeIfRequestNotObjectOnRequest()
+    public function shouldReturnRequestTypeIfRequestNotObjectOnRequest(): void
     {
         $this->assertEquals('string', Humanify::request('foo'));
     }
@@ -71,7 +71,7 @@ class HumanifyTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnRequestShortClassIfRequestObjectOnRequest()
+    public function shouldReturnRequestShortClassIfRequestObjectOnRequest(): void
     {
         $this->assertEquals('HumanifyTest', Humanify::request($this));
     }
@@ -79,7 +79,7 @@ class HumanifyTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnRequestShortClassAndModelIfRequestImplementsModelRequestInterfaceOnRequest()
+    public function shouldReturnRequestShortClassAndModelIfRequestImplementsModelRequestInterfaceOnRequest(): void
     {
         $request = new Capture($this);
 
@@ -89,7 +89,7 @@ class HumanifyTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnReplyShortClassAndUrlIfHttpRedirectReplyOnRequest()
+    public function shouldReturnReplyShortClassAndUrlIfHttpRedirectReplyOnRequest(): void
     {
         $request = new HttpRedirect('http://example.com/foo');
 

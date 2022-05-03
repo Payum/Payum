@@ -13,10 +13,8 @@ class HttpClientFactory
 {
     /**
      * Create a Guzzle client.
-     *
-     * @return \GuzzleHttp\Client
      */
-    public static function createGuzzle()
+    public static function createGuzzle(): Client
     {
         $client = null;
         if (!class_exists(Client::class)) {
@@ -25,14 +23,14 @@ class HttpClientFactory
         }
 
         $version = \GuzzleHttp\ClientInterface::VERSION;
-        if (substr($version, 0, 1) !== '6') {
+        if ($version[0] !== '6') {
             throw new \LogicException('This version of Guzzle is not supported.');
         }
 
         $curl = curl_version();
 
         $curlOptions = [
-             CURLOPT_USERAGENT => sprintf('Payum/1.x curl/%s PHP/%s', $curl['version'], phpversion()),
+             CURLOPT_USERAGENT => sprintf('Payum/1.x curl/%s PHP/%s', $curl['version'], PHP_VERSION),
          ];
 
         return new \GuzzleHttp\Client([
@@ -40,10 +38,7 @@ class HttpClientFactory
          ]);
     }
 
-    /**
-     * @return HttpClientInterface
-     */
-    public static function create()
+    public static function create(): HttpClientInterface
     {
         return new HttpClient(static::createGuzzle());
     }

@@ -5,18 +5,14 @@ use Payum\Core\Exception\LogicException;
 
 class GenericTokenFactory implements GenericTokenFactoryInterface
 {
-    /**
-     * @var TokenFactoryInterface
-     */
-    protected $tokenFactory;
+    protected TokenFactoryInterface $tokenFactory;
 
     /**
      * @var string[]
      */
-    protected $paths;
+    protected array $paths;
 
     /**
-     * @param TokenFactoryInterface $tokenFactory
      * @param string[] $paths
      */
     public function __construct(TokenFactoryInterface $tokenFactory, array $paths)
@@ -28,7 +24,7 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createToken($gatewayName, $model, $targetPath, array $targetParameters = [], $afterPath = null, array $afterParameters = [])
+    public function createToken($gatewayName, $model, $targetPath, array $targetParameters = [], $afterPath = null, array $afterParameters = []): TokenInterface
     {
         return $this->tokenFactory->createToken(
             $gatewayName,
@@ -43,7 +39,7 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createCaptureToken($gatewayName, $model, $afterPath, array $afterParameters = [])
+    public function createCaptureToken(string $gatewayName, object $model, string $afterPath, array $afterParameters = []): TokenInterface
     {
         $capturePath = $this->getPath('capture');
 
@@ -61,7 +57,7 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createAuthorizeToken($gatewayName, $model, $afterPath, array $afterParameters = [])
+    public function createAuthorizeToken(string $gatewayName, object $model, string $afterPath, array $afterParameters = []): TokenInterface
     {
         $authorizePath = $this->getPath('authorize');
 
@@ -73,7 +69,7 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createRefundToken($gatewayName, $model, $afterPath = null, array $afterParameters = [])
+    public function createRefundToken(string $gatewayName, object $model, string $afterPath = null, array $afterParameters = []): TokenInterface
     {
         $refundPath = $this->getPath('refund');
 
@@ -85,10 +81,7 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
         return $this->createToken($gatewayName, $model, $refundPath, [], $afterUrl);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function createCancelToken($gatewayName, $model, $afterPath = null, array $afterParameters = [])
+    public function createCancelToken($gatewayName, $model, $afterPath = null, array $afterParameters = []): TokenInterface
     {
         $cancelPath = $this->getPath('cancel');
 
@@ -103,7 +96,7 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createPayoutToken($gatewayName, $model, $afterPath, array $afterParameters = [])
+    public function createPayoutToken(string $gatewayName, object $model, string $afterPath, array $afterParameters = []): TokenInterface
     {
         $capturePath = $this->getPath('payout');
 
@@ -121,17 +114,12 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createNotifyToken($gatewayName, $model = null)
+    public function createNotifyToken(string $gatewayName, object $model = null): TokenInterface
     {
         return $this->createToken($gatewayName, $model, $this->getPath('notify'));
     }
 
-    /**
-     * @param string $name
-     *
-     * @return string
-     */
-    protected function getPath($name)
+    protected function getPath(string $name): string
     {
         if (empty($this->paths[$name])) {
             throw new LogicException(sprintf(

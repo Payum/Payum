@@ -6,38 +6,18 @@ use Payum\Core\Model\Identity;
 
 class FilesystemStorage extends AbstractStorage
 {
-    /**
-     * @var string
-     */
-    protected $storageDir;
+    protected array $identityMap;
 
-    /**
-     * @var string
-     */
-    protected $idProperty;
-
-    /**
-     * @var array
-     */
-    protected $identityMap;
-
-    /**
-     * @param string $storageDir
-     * @param string $modelClass
-     * @param string $idProperty
-     */
-    public function __construct($storageDir, $modelClass, $idProperty = 'payum_id')
+    public function __construct(protected string $storageDir, string $modelClass, protected string $idProperty = 'payum_id')
     {
         parent::__construct($modelClass);
 
-        $this->storageDir = $storageDir;
-        $this->idProperty = $idProperty;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function findBy(array $criteria)
+    public function findBy(array $criteria): array
     {
         throw new LogicException('Method is not supported by the storage.');
     }
@@ -59,7 +39,7 @@ class FilesystemStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
-    protected function doUpdateModel($model)
+    protected function doUpdateModel($model): void
     {
         $ro = new \ReflectionObject($model);
 
@@ -84,7 +64,7 @@ class FilesystemStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
-    protected function doDeleteModel($model)
+    protected function doDeleteModel($model): void
     {
         $rp = new \ReflectionProperty($model, $this->idProperty);
         $rp->setAccessible(true);
@@ -98,7 +78,7 @@ class FilesystemStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
-    protected function doGetIdentity($model)
+    protected function doGetIdentity($model): IdentityInterface
     {
         $rp = new \ReflectionProperty($model, $this->idProperty);
         $rp->setAccessible(true);

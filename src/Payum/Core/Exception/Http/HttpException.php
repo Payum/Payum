@@ -7,20 +7,13 @@ use Psr\Http\Message\ResponseInterface;
 
 class HttpException extends RuntimeException implements HttpExceptionInterface
 {
-    /**
-     * @var RequestInterface
-     */
-    protected $request;
-
-    /**
-     * @var ResponseInterface
-     */
-    protected $response;
+    protected RequestInterface $request;
+    protected ResponseInterface $response;
 
     /**
      * {@inheritDoc}
      */
-    public function setRequest(RequestInterface $request)
+    public function setRequest(RequestInterface $request): void
     {
         $this->request = $request;
     }
@@ -28,7 +21,7 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
     /**
      * {@inheritDoc}
      */
-    public function getRequest()
+    public function getRequest(): RequestInterface
     {
         return $this->request;
     }
@@ -36,7 +29,7 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
     /**
      * {@inheritDoc}
      */
-    public function setResponse(ResponseInterface $response)
+    public function setResponse(ResponseInterface $response): void
     {
         $this->response = $response;
     }
@@ -44,18 +37,12 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
     /**
      * {@inheritDoc}
      */
-    public function getResponse()
+    public function getResponse(): ResponseInterface
     {
         return $this->response;
     }
 
-    /**
-     * @param RequestInterface  $request
-     * @param ResponseInterface $response
-     *
-     * @return HttpException
-     */
-    public static function factory(RequestInterface $request, ResponseInterface $response)
+    public static function factory(RequestInterface $request, ResponseInterface $response): HttpException
     {
         if ($response->getStatusCode() >= 400 && $response->getStatusCode() < 500) {
             $label = 'Client error response';

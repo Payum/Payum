@@ -3,16 +3,12 @@ namespace Payum\Core\Model;
 
 class ArrayObject implements \ArrayAccess, \IteratorAggregate
 {
-    /**
-     * @var array
-     */
-    protected $details = array();
+    protected array $details = [];
 
     /**
      * {@inheritDoc}
      */
-    #[\ReturnTypeWillChange]
-    public function offsetExists($offset)
+    public function offsetExists(mixed $offset): bool
     {
         return array_key_exists($offset, $this->details);
     }
@@ -20,8 +16,7 @@ class ArrayObject implements \ArrayAccess, \IteratorAggregate
     /**
      * {@inheritDoc}
      */
-    #[\ReturnTypeWillChange]
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         return $this->details[$offset];
     }
@@ -29,8 +24,7 @@ class ArrayObject implements \ArrayAccess, \IteratorAggregate
     /**
      * {@inheritDoc}
      */
-    #[\ReturnTypeWillChange]
-    public function offsetSet($offset, $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         $this->details[$offset] = $value;
     }
@@ -38,8 +32,7 @@ class ArrayObject implements \ArrayAccess, \IteratorAggregate
     /**
      * {@inheritDoc}
      */
-    #[\ReturnTypeWillChange]
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->details[$offset]);
     }
@@ -47,8 +40,7 @@ class ArrayObject implements \ArrayAccess, \IteratorAggregate
     /**
      * {@inheritDoc}
      */
-    #[\ReturnTypeWillChange]
-    public function getIterator()
+    public function getIterator(): \Traversable|array|\ArrayIterator
     {
         return new \ArrayIterator($this->details);
     }

@@ -16,10 +16,9 @@ class CapturePaymentAction implements ActionInterface, GatewayAwareInterface
 
     /**
      * {@inheritDoc}
-     *
      * @param Capture $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -46,7 +45,7 @@ class CapturePaymentAction implements ActionInterface, GatewayAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function supports($request)
+    public function supports($request): bool
     {
         return
             $request instanceof Capture &&

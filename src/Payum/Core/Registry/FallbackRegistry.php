@@ -48,7 +48,7 @@ class FallbackRegistry implements RegistryInterface
     /**
      * {@inheritDoc}
      */
-    public function getGateway($name)
+    public function getGateway(string $name)
     {
         try {
             return $this->registry->getGateway($name);

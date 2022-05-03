@@ -11,7 +11,7 @@ class Propel1StorageTest extends TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfAbstractStorage()
+    public function shouldBeSubClassOfAbstractStorage(): void
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Propel\Storage\Propel1Storage');
 
@@ -21,7 +21,7 @@ class Propel1StorageTest extends TestCase
     /**
      * @test
      */
-    public function shouldCreateInstanceOfModelClassGivenInConstructor()
+    public function shouldCreateInstanceOfModelClassGivenInConstructor(): void
     {
         $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\PropelModel';
 
@@ -33,7 +33,7 @@ class Propel1StorageTest extends TestCase
         $this->assertNull($model->getId());
     }
 
-    public function throwForModelClassSaveOnUpdateModel()
+    public function throwForModelClassSaveOnUpdateModel(): void
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('Save method was triggered.');
@@ -47,7 +47,7 @@ class Propel1StorageTest extends TestCase
     /**
      * @test
      */
-    public function shouldFindModelById()
+    public function shouldFindModelById(): void
     {
         $expectedModelId = 123;
         $expectedFoundModel = new PropelModel();
@@ -63,7 +63,7 @@ class Propel1StorageTest extends TestCase
     /**
      * @test
      */
-    public function shouldFindModelByCriteria()
+    public function shouldFindModelByCriteria(): void
     {
         $expectedModelId = 123;
         $expectedFoundModel = new PropelModel();

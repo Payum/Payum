@@ -13,7 +13,7 @@ class DoctrineStorageTest extends TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfAbstractStorage()
+    public function shouldBeSubClassOfAbstractStorage(): void
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage');
 
@@ -23,7 +23,7 @@ class DoctrineStorageTest extends TestCase
     /**
      * @test
      */
-    public function shouldCreateInstanceOfModelClassGivenInConstructor()
+    public function shouldCreateInstanceOfModelClassGivenInConstructor(): void
     {
         $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
 
@@ -41,7 +41,7 @@ class DoctrineStorageTest extends TestCase
     /**
      * @test
      */
-    public function shouldCallObjectManagerPersistAndFlushOnUpdateModel()
+    public function shouldCallObjectManagerPersistAndFlushOnUpdateModel(): void
     {
         $objectManagerMock = $this->createObjectManagerMock();
         $objectManagerMock
@@ -67,7 +67,7 @@ class DoctrineStorageTest extends TestCase
     /**
      * @test
      */
-    public function shouldProxyCriteriaToRepositoryFindByMethodOnFindByCall()
+    public function shouldProxyCriteriaToRepositoryFindByMethodOnFindByCall(): void
     {
         $modelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
         $model = new TestModel();
@@ -101,7 +101,7 @@ class DoctrineStorageTest extends TestCase
     /**
      * @test
      */
-    public function shouldFindModelById()
+    public function shouldFindModelById(): void
     {
         $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
         $expectedModelId = 123;
@@ -112,7 +112,7 @@ class DoctrineStorageTest extends TestCase
             ->expects($this->once())
             ->method('find')
             ->with($expectedModelClass, $expectedModelId)
-            ->will($this->returnValue($expectedFoundModel))
+            ->willReturn($expectedFoundModel)
         ;
 
         $storage = new DoctrineStorage(
@@ -125,18 +125,12 @@ class DoctrineStorageTest extends TestCase
         $this->assertSame($expectedFoundModel, $actualModel);
     }
 
-    /**
-     * @return MockObject|ObjectManager
-     */
-    protected function createObjectManagerMock()
+    protected function createObjectManagerMock(): MockObject|ObjectRepository
     {
         return $this->createMock(ObjectManager::class);
     }
 
-    /**
-     * @return MockObject|ObjectRepository
-     */
-    protected function createObjectRepositoryMock()
+    protected function createObjectRepositoryMock(): MockObject|ObjectRepository
     {
         return $this->createMock(ObjectRepository::class);
     }

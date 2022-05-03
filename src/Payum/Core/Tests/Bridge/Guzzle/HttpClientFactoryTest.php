@@ -11,7 +11,7 @@ class HttpClientFactoryTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnHttpClient()
+    public function shouldReturnHttpClient(): void
     {
         $client = HttpClientFactory::create();
 
