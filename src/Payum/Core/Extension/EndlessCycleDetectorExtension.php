@@ -5,13 +5,23 @@ use Payum\Core\Exception\LogicException;
 
 class EndlessCycleDetectorExtension implements ExtensionInterface
 {
-    public function __construct(protected int $limit = 100)
-    {}
+    /**
+     * @var int
+     */
+    protected $limit;
+
+    /**
+     * @param int $limit
+     */
+    public function __construct($limit = 100)
+    {
+        $this->limit = $limit;
+    }
 
     /**
      * {@inheritDoc}
      */
-    public function onPreExecute(Context $context): void
+    public function onPreExecute(Context $context)
     {
         if (count($context->getPrevious()) >= $this->limit) {
             throw new LogicException(sprintf(
@@ -24,14 +34,14 @@ class EndlessCycleDetectorExtension implements ExtensionInterface
     /**
      * {@inheritDoc}
      */
-    public function onExecute(Context $context): void
+    public function onExecute(Context $context)
     {
     }
 
     /**
      * {@inheritDoc}
      */
-    public function onPostExecute(Context $context): void
+    public function onPostExecute(Context $context)
     {
     }
 }

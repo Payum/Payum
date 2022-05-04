@@ -8,7 +8,7 @@ class CreateTokenForCreditCard extends Generic
     /**
      * @var array|\ArrayAccess
      */
-    protected \Payum\Core\Security\TokenInterface $token = [];
+    protected $token = [];
 
     /**
      * @return array|\ArrayAccess

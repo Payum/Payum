@@ -6,5 +6,5 @@ interface GatewayAwareInterface
     /**
      * @param \Payum\Core\GatewayInterface $gateway
      */
-    public function setGateway(GatewayInterface $gateway): void;
+    public function setGateway(GatewayInterface $gateway);
 }

@@ -3,26 +3,42 @@ namespace Payum\Core\Storage;
 
 interface StorageInterface
 {
-    public function create(): object;
-
-    public function support(object $model): bool;
+    /**
+     * @return object
+     */
+    public function create();
 
     /**
-     * @throws \Payum\Core\Exception\InvalidArgumentException if not supported model given.
+     * @param object $model
+     *
+     * @return boolean
      */
-    public function update(object $model): void;
+    public function support($model);
 
     /**
      * @param object $model
      *
      * @throws \Payum\Core\Exception\InvalidArgumentException if not supported model given.
+     *
+     * @return void
      */
-    public function delete(object $model): void;
+    public function update($model);
+
+    /**
+     * @param object $model
+     *
+     * @throws \Payum\Core\Exception\InvalidArgumentException if not supported model given.
+     *
+     * @return void
+     */
+    public function delete($model);
 
     /**
      * @param mixed|IdentityInterface $id
+     *
+     * @return object|null
      */
-    public function find($id): ?object;
+    public function find($id);
 
     /**
      * @param array $criteria

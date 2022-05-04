@@ -18,12 +18,12 @@ namespace Payum\Core\Security\Util;
  */
 class Random
 {
-    public static function generateToken(): string
+    public static function generateToken()
     {
         return rtrim(strtr(base64_encode(self::getRandomNumber()), '+/', '-_'), '=');
     }
 
-    private static function getRandomNumber(): string
+    private static function getRandomNumber()
     {
         return random_bytes(32);
     }

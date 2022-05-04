@@ -8,11 +8,17 @@ interface HttpRequestVerifierInterface
      *
      * @throws \InvalidArgumentException if request not supported
      * @throws \Exception                if token verification failed.
+     *
+     * @return TokenInterface
      */
-    public function verify(mixed $httpRequest): TokenInterface;
+    public function verify($httpRequest);
 
     /**
      * This method invalidate token so it could not be used in future.
+     *
+     * @param TokenInterface $token
+     *
+     * @return void
      */
-    public function invalidate(TokenInterface $token): void;
+    public function invalidate(TokenInterface $token);
 }

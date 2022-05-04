@@ -6,13 +6,51 @@ namespace Payum\Core\Security;
  */
 interface GenericTokenFactoryInterface extends TokenFactoryInterface
 {
-    public function createAuthorizeToken(string $gatewayName, object $model, string $afterPath, array $afterParameters = []): TokenInterface;
+    /**
+     * @param string $gatewayName
+     * @param object $model
+     * @param string $afterPath
+     * @param array  $afterParameters
+     *
+     * @return TokenInterface
+     */
+    public function createAuthorizeToken($gatewayName, $model, $afterPath, array $afterParameters = []);
 
-    function createCaptureToken(string $gatewayName, object $model, string $afterPath, array $afterParameters = []): TokenInterface;
+    /**
+     * @param string $gatewayName
+     * @param object $model
+     * @param string $afterPath
+     * @param array  $afterParameters
+     *
+     * @return TokenInterface
+     */
+    public function createCaptureToken($gatewayName, $model, $afterPath, array $afterParameters = []);
 
-    public function createRefundToken(string $gatewayName, object $model, string $afterPath = null, array $afterParameters = []): TokenInterface;
+    /**
+     * @param string $gatewayName
+     * @param object $model
+     * @param string $afterPath
+     * @param array  $afterParameters
+     *
+     * @return TokenInterface
+     */
+    public function createRefundToken($gatewayName, $model, $afterPath = null, array $afterParameters = []);
 
-    public function createPayoutToken(string $gatewayName, object $model, string $afterPath, array $afterParameters = []): TokenInterface;
+    /**
+     * @param string $gatewayName
+     * @param object $model
+     * @param string $afterPath
+     * @param array  $afterParameters
+     *
+     * @return TokenInterface
+     */
+    public function createPayoutToken($gatewayName, $model, $afterPath, array $afterParameters = []);
 
-    public function createNotifyToken(string $gatewayName, object $model = null): TokenInterface;
+    /**
+     * @param string      $gatewayName
+     * @param object|null $model
+     *
+     * @return TokenInterface
+     */
+    public function createNotifyToken($gatewayName, $model = null);
 }

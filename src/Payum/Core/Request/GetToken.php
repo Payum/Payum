@@ -5,25 +5,43 @@ use Payum\Core\Security\TokenInterface;
 
 class GetToken
 {
-    private string $hash;
+    /**
+     * @var string
+     */
+    private $hash;
 
-    private TokenInterface $token;
+    /**
+     * @var TokenInterface
+     */
+    private $token;
 
-    public function __construct(string $hash)
+    /**
+     * @param string $hash
+     */
+    public function __construct($hash)
     {
         $this->hash = $hash;
     }
 
-    public function getHash(): string
+    /**
+     * @return string
+     */
+    public function getHash()
     {
         return $this->hash;
     }
 
-    public function getToken(): TokenInterface
+    /**
+     * @return TokenInterface
+     */
+    public function getToken()
     {
         return $this->token;
     }
 
+    /**
+     * @param TokenInterface $token
+     */
     public function setToken(TokenInterface $token)
     {
         $this->token = $token;

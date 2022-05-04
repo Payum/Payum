@@ -33,13 +33,23 @@ use Twig\Loader\ChainLoader;
 
 class CoreGatewayFactory implements GatewayFactoryInterface
 {
-    public function __construct(protected array $defaultConfig = [])
-    {}
+    /**
+     * @var array
+     */
+    protected $defaultConfig;
+
+    /**
+     * @param array $defaultConfig
+     */
+    public function __construct(array $defaultConfig = [])
+    {
+        $this->defaultConfig = $defaultConfig;
+    }
 
     /**
      * {@inheritDoc}
      */
-    public function create(array $config = []): GatewayInterface|Gateway
+    public function create(array $config = [])
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->createConfig());
@@ -58,7 +68,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createConfig(array $config = []): array
+    public function createConfig(array $config = [])
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->defaultConfig);
@@ -196,6 +206,9 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         return (array) $config;
     }
 
+    /**
+     * @param ArrayObject $config
+     */
     protected function buildClosures(ArrayObject $config)
     {
         // with higher priority
@@ -213,7 +226,11 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         }
     }
 
-    protected function buildActions(Gateway $gateway, ArrayObject $config): void
+    /**
+     * @param Gateway     $gateway
+     * @param ArrayObject $config
+     */
+    protected function buildActions(Gateway $gateway, ArrayObject $config)
     {
         foreach ($config as $name => $value) {
             if (0 === strpos($name, 'payum.action')) {
@@ -224,7 +241,11 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         }
     }
 
-    protected function buildApis(Gateway $gateway, ArrayObject $config): void
+    /**
+     * @param Gateway     $gateway
+     * @param ArrayObject $config
+     */
+    protected function buildApis(Gateway $gateway, ArrayObject $config)
     {
         foreach ($config as $name => $value) {
             if (0 === strpos($name, 'payum.api')) {
@@ -235,7 +256,11 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         }
     }
 
-    protected function buildExtensions(Gateway $gateway, ArrayObject $config): void
+    /**
+     * @param Gateway     $gateway
+     * @param ArrayObject $config
+     */
+    protected function buildExtensions(Gateway $gateway, ArrayObject $config)
     {
         foreach ($config as $name => $value) {
             if (0 === strpos($name, 'payum.extension')) {

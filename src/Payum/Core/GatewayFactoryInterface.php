@@ -3,7 +3,17 @@ namespace Payum\Core;
 
 interface GatewayFactoryInterface
 {
-    public function createConfig(array $config = []): array;
+    /**
+     * @param array $config
+     *
+     * @return array
+     */
+    public function createConfig(array $config = array());
 
-    public function create(array $config = []): GatewayInterface;
+    /**
+     * @param array $config
+     *
+     * @return GatewayInterface
+     */
+    public function create(array $config = array());
 }

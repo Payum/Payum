@@ -7,47 +7,100 @@ use Payum\Core\Reply\ReplyInterface;
 
 class Context
 {
-    protected ActionInterface $action;
-    protected ?ReplyInterface $reply;
+    /**
+     * @var GatewayInterface
+     */
+    protected $gateway;
 
     /**
+     * @var mixed
+     */
+    protected $request;
+
+    /**
+     * @var ActionInterface
+     */
+    protected $action;
+
+    /**
+     * @var ReplyInterface|null
+     */
+    protected $reply;
+
+    /**
+     * @var \Exception|null
+     */
+    protected $exception;
+
+    /**
+     * @var Context[]
+     */
+    protected $previous;
+
+    /**
+     * @param GatewayInterface $gateway
+     * @param $request
      * @param Context[] $previous
      */
-    public function __construct(protected GatewayInterface $gateway, protected mixed $request, protected array $previous)
+    public function __construct(GatewayInterface $gateway, $request, array $previous)
     {
+        $this->gateway = $gateway;
+        $this->request = $request;
+        $this->previous = $previous;
     }
 
-    public function getAction(): ActionInterface
+    /**
+     * @return ActionInterface
+     */
+    public function getAction()
     {
         return $this->action;
     }
 
-    public function setAction(ActionInterface $action): void
+    /**
+     * @param ActionInterface $action
+     */
+    public function setAction(ActionInterface $action)
     {
         $this->action = $action;
     }
 
-    public function getReply(): ?ReplyInterface
+    /**
+     * @return null|ReplyInterface
+     */
+    public function getReply()
     {
         return $this->reply;
     }
 
-    public function setReply(ReplyInterface $reply = null): void
+    /**
+     * @param null|ReplyInterface $reply
+     */
+    public function setReply(ReplyInterface $reply = null)
     {
         $this->reply = $reply;
     }
 
-    public function getException(): ?\Exception
+    /**
+     * @return \Exception|null
+     */
+    public function getException()
     {
         return $this->exception;
     }
 
-    public function setException(\Exception $exception = null): void
+    /**
+     * @param \Exception|null $exception
+     */
+    public function setException(\Exception $exception = null)
     {
         $this->exception = $exception;
     }
 
-    public function getGateway(): GatewayInterface
+    /**
+     * @return GatewayInterface
+     */
+    public function getGateway()
     {
         return $this->gateway;
     }
@@ -55,12 +108,15 @@ class Context
     /**
      * @return Context[]
      */
-    public function getPrevious(): array
+    public function getPrevious()
     {
         return $this->previous;
     }
 
-    public function getRequest(): mixed
+    /**
+     * @return mixed
+     */
+    public function getRequest()
     {
         return $this->request;
     }

@@ -16,7 +16,7 @@ class TokenFactoryTest extends TestCase
     /**
      * @test
      */
-    public function shouldImplementsTokenFactoryInterface(): void
+    public function shouldImplementsTokenFactoryInterface()
     {
         $rc = new \ReflectionClass(TokenFactory::class);
 
@@ -26,7 +26,7 @@ class TokenFactoryTest extends TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfAbtractTokenFactory(): void
+    public function shouldBeSubClassOfAbtractTokenFactory()
     {
         $rc = new \ReflectionClass(TokenFactory::class);
 
@@ -44,7 +44,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->willReturn($token)
+            ->will($this->returnValue($token))
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -61,7 +61,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('identify')
             ->with($this->identicalTo($model))
-            ->willReturn($identity)
+            ->will($this->returnValue($identity))
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -69,7 +69,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('getStorage')
             ->with($this->identicalTo($model))
-            ->willReturn($modelStorage)
+            ->will($this->returnValue($modelStorage))
         ;
 
         $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, 'http://example.com');
@@ -94,7 +94,7 @@ class TokenFactoryTest extends TestCase
     /**
      * @test
      */
-    public function shouldCreateTokenWithAfterUrl(): void
+    public function shouldCreateTokenWithAfterUrl()
     {
         $token = new Token();
 
@@ -102,7 +102,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->willReturn($token)
+            ->will($this->returnValue($token))
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -119,7 +119,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('identify')
             ->with($this->identicalTo($model))
-            ->willReturn($identity)
+            ->will($this->returnValue($identity))
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -127,7 +127,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('getStorage')
             ->with($this->identicalTo($model))
-            ->willReturn($modelStorage)
+            ->will($this->returnValue($modelStorage))
         ;
 
         $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, 'http://example.com');
@@ -154,7 +154,7 @@ class TokenFactoryTest extends TestCase
     /**
      * @test
      */
-    public function shouldCreateTokenForSecuredBaseUrl(): void
+    public function shouldCreateTokenForSecuredBaseUrl()
     {
         $token = new Token();
         $token->setHash('aHash');
@@ -163,7 +163,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->willReturn($token)
+            ->will($this->returnValue($token))
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -198,7 +198,7 @@ class TokenFactoryTest extends TestCase
     /**
      * @test
      */
-    public function shouldCreateTokenForBaseUrlWithPath(): void
+    public function shouldCreateTokenForBaseUrlWithPath()
     {
         $token = new Token();
         $token->setHash('aHash');
@@ -207,7 +207,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->willReturn($token)
+            ->will($this->returnValue($token))
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -243,7 +243,7 @@ class TokenFactoryTest extends TestCase
      * @test
      * @dataProvider pathDataProvider
      */
-    public function shouldCreateTokenForBaseUrlWithPathAndScriptFile($hostname, $target, $result): void
+    public function shouldCreateTokenForBaseUrlWithPathAndScriptFile($hostname, $target, $result)
     {
         $token = new Token();
         $token->setHash('aHash');
@@ -252,7 +252,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->willReturn($token)
+            ->will($this->returnValue($token))
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -287,7 +287,7 @@ class TokenFactoryTest extends TestCase
     /**
      * @test
      */
-    public function shouldCreateTokenWithIdentityAsModel(): void
+    public function shouldCreateTokenWithIdentityAsModel()
     {
         $token = new Token();
 
@@ -295,7 +295,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->willReturn($token)
+            ->will($this->returnValue($token))
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -330,7 +330,7 @@ class TokenFactoryTest extends TestCase
     /**
      * @test
      */
-    public function shouldCreateTokenWithoutModel(): void
+    public function shouldCreateTokenWithoutModel()
     {
         $token = new Token();
 
@@ -338,7 +338,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->willReturn($token)
+            ->will($this->returnValue($token))
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -372,7 +372,7 @@ class TokenFactoryTest extends TestCase
     /**
      * @test
      */
-    public function shouldCreateTokenWithTargetPathAlreadyUrl(): void
+    public function shouldCreateTokenWithTargetPathAlreadyUrl()
     {
         $token = new Token();
 
@@ -380,7 +380,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->willReturn($token)
+            ->will($this->returnValue($token))
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -397,7 +397,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('identify')
             ->with($this->identicalTo($model))
-            ->willReturn($identity)
+            ->will($this->returnValue($identity))
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -405,7 +405,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('getStorage')
             ->with($this->identicalTo($model))
-            ->willReturn($modelStorage)
+            ->will($this->returnValue($modelStorage))
         ;
 
         $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, 'http://example.com');
@@ -432,7 +432,7 @@ class TokenFactoryTest extends TestCase
     /**
      * @test
      */
-    public function shouldNotOverwritePayumTokenHashInAfterUrl(): void
+    public function shouldNotOverwritePayumTokenHashInAfterUrl()
     {
         $authorizeToken = new Token();
 
@@ -440,7 +440,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->at(0))
             ->method('create')
-            ->willReturn($authorizeToken)
+            ->will($this->returnValue($authorizeToken))
         ;
         $tokenStorageMock
             ->expects($this->at(1))
@@ -457,7 +457,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('identify')
             ->with($this->identicalTo($model))
-            ->willReturn($identity)
+            ->will($this->returnValue($identity))
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -465,7 +465,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('getStorage')
             ->with($this->identicalTo($model))
-            ->willReturn($modelStorage)
+            ->will($this->returnValue($modelStorage))
         ;
 
         $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, 'http://example.com');
@@ -495,7 +495,7 @@ class TokenFactoryTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowCreateAfterUrlWithoutPayumToken(): void
+    public function shouldAllowCreateAfterUrlWithoutPayumToken()
     {
         $authorizeToken = new Token();
 
@@ -503,7 +503,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->at(0))
             ->method('create')
-            ->willReturn($authorizeToken)
+            ->will($this->returnValue($authorizeToken))
         ;
         $tokenStorageMock
             ->expects($this->at(1))
@@ -520,7 +520,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('identify')
             ->with($this->identicalTo($model))
-            ->willReturn($identity)
+            ->will($this->returnValue($identity))
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -528,7 +528,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('getStorage')
             ->with($this->identicalTo($model))
-            ->willReturn($modelStorage)
+            ->will($this->returnValue($modelStorage))
         ;
 
         $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, 'http://example.com');
@@ -558,7 +558,7 @@ class TokenFactoryTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowCreateAfterUrlWithFragment(): void
+    public function shouldAllowCreateAfterUrlWithFragment()
     {
         $authorizeToken = new Token();
 
@@ -566,7 +566,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->at(0))
             ->method('create')
-            ->willReturn($authorizeToken)
+            ->will($this->returnValue($authorizeToken))
         ;
         $tokenStorageMock
             ->expects($this->at(1))
@@ -583,7 +583,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('identify')
             ->with($this->identicalTo($model))
-            ->willReturn($identity)
+            ->will($this->returnValue($identity))
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -591,7 +591,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('getStorage')
             ->with($this->identicalTo($model))
-            ->willReturn($modelStorage)
+            ->will($this->returnValue($modelStorage))
         ;
 
         $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, 'http://example.com');
@@ -639,12 +639,18 @@ class TokenFactoryTest extends TestCase
         ];
     }
 
-    protected function createStorageMock(): StorageInterface|MockObject
+    /**
+     * @return MockObject|StorageInterface
+     */
+    protected function createStorageMock()
     {
         return $this->createMock('Payum\Core\Storage\StorageInterface');
     }
 
-    protected function createStorageRegistryMock(): MockObject|StorageRegistryInterface
+    /**
+     * @return MockObject|StorageRegistryInterface
+     */
+    protected function createStorageRegistryMock()
     {
         return $this->createMock('Payum\Core\Registry\StorageRegistryInterface');
     }

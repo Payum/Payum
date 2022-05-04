@@ -7,27 +7,63 @@ namespace Payum\Core\Model;
  */
 interface BankAccountInterface
 {
-    public function getHolder(): string;
+    /**
+     * @return string
+     */
+    public function getHolder();
 
-    public function setHolder(string $holder);
+    /**
+     * @param string $holder
+     */
+    public function setHolder($holder);
 
-    public function getNumber(): string;
+    /**
+     * @return string
+     */
+    public function getNumber();
 
-    public function setNumber(string $number);
+    /**
+     * @param string $number
+     */
+    public function setNumber($number);
 
-    public function getBankCode(): string;
+    /**
+     * @return string
+     */
+    public function getBankCode();
 
-    public function setBankCode(string $bankCode);
+    /**
+     * @param string $bankCode
+     */
+    public function setBankCode($bankCode);
 
-    public function getBankCountryCode(): string;
+    /**
+     * @return string
+     */
+    public function getBankCountryCode();
 
-    public function setBankCountryCode(string $bankCountryCode);
+    /**
+     * @param string $bankCountryCode
+     */
+    public function setBankCountryCode($bankCountryCode);
 
-    public function getIban(): string;
+    /**
+     * @return string
+     */
+    public function getIban();
 
-    public function setIban(string $iban);
+    /**
+     * @param string $iban
+     */
+    public function setIban($iban);
 
-    public function getBic(): string;
+    /**
+     * @return string
+     */
+    public function getBic();
 
-    public function setBic(string $bic);
+    /**
+     * @param string $bic
+     */
+    public function setBic($bic);
 }
