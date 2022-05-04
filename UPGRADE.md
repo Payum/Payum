@@ -1,5 +1,7 @@
 # Upgrades
 
+## 2.0.0 - TBD
+
 ## 1.5.0
 
 * Dropped PHP 5.x support

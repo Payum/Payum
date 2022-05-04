@@ -1,5 +1,7 @@
 # Changelog
 
+## 2.0.0 (YYYY-mm-dd)
+
 ## 1.5.0 (2018-01-09)
 
 * add tests for encoded requests
