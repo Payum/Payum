@@ -20,11 +20,10 @@
         }
     ],
     "require": {
-        "payum/core": "^1.5",
+        "payum/core": "2.0.x-dev",
         "stripe/stripe-php": "^7.0"
     },
     "require-dev": {
-        "payum/core": "^1.5",
         "phpunit/phpunit": "^5.7",
         "symfony/phpunit-bridge": "^3.1|^4"
     },
@@ -37,7 +36,7 @@
     "target-dir": "Payum/Stripe",
     "extra": {
         "branch-alias": {
-            "dev-master": "1.6-dev"
+            "dev-master": "2.0.x-dev"
         }
     }
 }

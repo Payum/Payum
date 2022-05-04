@@ -23,7 +23,7 @@
         }
     ],
     "require": {
-        "payum/core": "^1.5",
+        "payum/core": "2.0.x-dev",
         "fp/klarna-invoice": "0.1.*"
     },
     "require-dev": {
@@ -40,7 +40,7 @@
     "target-dir": "Payum/Klarna/Invoice",
     "extra": {
         "branch-alias": {
-            "dev-master": "1.6-dev"
+            "dev-master": "2.0.x-dev"
         }
     }
 }
