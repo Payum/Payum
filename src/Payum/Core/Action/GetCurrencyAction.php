@@ -12,10 +12,13 @@ class GetCurrencyAction implements ActionInterface
      * @var ISO4217
      * @deprecated The iso4217 property is deprecated and will be removed in v2
      */
-    protected mixed $iso4217;
+    protected $iso4217;
 
-    private bool $usePayumIso4217 = false;
+    private $usePayumIso4217 = false;
 
+    /**
+     * @param ISO4217 $iso4217
+     */
     public function __construct(ISO4217 $iso4217 = null)
     {
         if ($iso4217 instanceof ISO4217) {
@@ -31,7 +34,7 @@ class GetCurrencyAction implements ActionInterface
      *
      * @param GetCurrency $request
      */
-    public function execute($request): void
+    public function execute($request)
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -58,7 +61,7 @@ class GetCurrencyAction implements ActionInterface
     /**
      * {@inheritDoc}
      */
-    public function supports($request): bool
+    public function supports($request)
     {
         return
             $request instanceof GetCurrency &&

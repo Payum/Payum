@@ -11,7 +11,7 @@ class HttpExceptionTest extends TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfRuntimeException(): void
+    public function shouldBeSubClassOfRuntimeException()
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\Http\HttpException');
 
@@ -21,7 +21,7 @@ class HttpExceptionTest extends TestCase
     /**
      * @test
      */
-    public function shouldImplementHttpExceptionInterface(): void
+    public function shouldImplementHttpExceptionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\Http\HttpException');
 
@@ -31,7 +31,7 @@ class HttpExceptionTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowSetRequest(): void
+    public function shouldAllowSetRequest()
     {
         $exception = new HttpException();
 
@@ -43,7 +43,7 @@ class HttpExceptionTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowGetPreviouslySetRequest(): void
+    public function shouldAllowGetPreviouslySetRequest()
     {
         $exception = new HttpException();
 
@@ -55,7 +55,7 @@ class HttpExceptionTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowSetResponse(): void
+    public function shouldAllowSetResponse()
     {
         $exception = new HttpException();
 
@@ -67,7 +67,7 @@ class HttpExceptionTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowGetPreviouslySetResponse(): void
+    public function shouldAllowGetPreviouslySetResponse()
     {
         $exception = new HttpException();
 
@@ -79,7 +79,7 @@ class HttpExceptionTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowCreateHttpExceptionFromRequestAndResponse(): void
+    public function shouldAllowCreateHttpExceptionFromRequestAndResponse()
     {
         $request = new Request('GET', 'http://example.com/foobar');
 

@@ -1,19 +1,21 @@
 <?php
 namespace Payum\Core\Registry;
 
-use Payum\Core\GatewayFactoryInterface;
-
 interface GatewayFactoryRegistryInterface
 {
     /**
+     * @param string $name
+     *
      * @throws \Payum\Core\Exception\InvalidArgumentException if gateway factory with such name not exist
+     *
+     * @return \Payum\Core\GatewayFactoryInterface
      */
-    public function getGatewayFactory(string $name): GatewayFactoryInterface;
+    public function getGatewayFactory($name);
 
     /**
      * The key must be a gateway factory name
      *
-     * @return GatewayFactoryInterface[]
+     * @return \Payum\Core\GatewayFactoryInterface[]
      */
-    public function getGatewayFactories(): array;
+    public function getGatewayFactories();
 }

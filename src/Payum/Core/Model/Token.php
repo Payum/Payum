@@ -7,15 +7,30 @@ use Payum\Core\Storage\IdentityInterface;
 
 class Token implements TokenInterface
 {
-    protected IdentityInterface $details;
+    /**
+     * @var IdentityInterface
+     */
+    protected $details;
 
-    protected string $hash;
+    /**
+     * @var string
+     */
+    protected $hash;
 
-    protected string $afterUrl;
+    /**
+     * @var string
+     */
+    protected $afterUrl;
 
-    protected string $targetUrl;
+    /**
+     * @var string
+     */
+    protected $targetUrl;
 
-    protected string $gatewayName;
+    /**
+     * @var string
+     */
+    protected $gatewayName;
 
     public function __construct()
     {
@@ -24,8 +39,10 @@ class Token implements TokenInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @return Identity
      */
-    public function getDetails(): Identity
+    public function getDetails()
     {
         return $this->details;
     }
@@ -33,7 +50,7 @@ class Token implements TokenInterface
     /**
      * {@inheritDoc}
      */
-    public function setDetails(object $details)
+    public function setDetails($details)
     {
         $this->details = $details;
     }
@@ -49,7 +66,7 @@ class Token implements TokenInterface
     /**
      * {@inheritDoc}
      */
-    public function setHash(string $hash)
+    public function setHash($hash)
     {
         $this->hash = $hash;
     }
@@ -65,7 +82,7 @@ class Token implements TokenInterface
     /**
      * {@inheritDoc}
      */
-    public function setTargetUrl(string $targetUrl)
+    public function setTargetUrl($targetUrl)
     {
         $this->targetUrl = $targetUrl;
     }
@@ -81,7 +98,7 @@ class Token implements TokenInterface
     /**
      * {@inheritDoc}
      */
-    public function setAfterUrl(string $afterUrl)
+    public function setAfterUrl($afterUrl)
     {
         $this->afterUrl = $afterUrl;
     }
@@ -97,7 +114,7 @@ class Token implements TokenInterface
     /**
      * {@inheritDoc}
      */
-    public function setGatewayName(string $gatewayName)
+    public function setGatewayName($gatewayName)
     {
         $this->gatewayName = $gatewayName;
     }

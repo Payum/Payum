@@ -8,15 +8,25 @@ use Payum\Core\Storage\StorageInterface;
 
 class GetTokenAction implements ActionInterface
 {
-    public function __construct(private StorageInterface $tokenStorage)
-    {}
+    /**
+     * @var StorageInterface
+     */
+    private $tokenStorage;
+
+    /**
+     * @param StorageInterface $tokenStorage
+     */
+    public function __construct(StorageInterface $tokenStorage)
+    {
+        $this->tokenStorage = $tokenStorage;
+    }
 
     /**
      * {@inheritDoc}
      *
      * @param $request GetToken
      */
-    public function execute($request): void
+    public function execute($request)
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -30,7 +40,7 @@ class GetTokenAction implements ActionInterface
     /**
      * {@inheritDoc}
      */
-    public function supports($request): bool
+    public function supports($request)
     {
         return $request instanceof GetToken;
     }

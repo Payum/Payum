@@ -3,5 +3,10 @@ namespace Payum\Core\Model;
 
 interface DetailsAwareInterface
 {
-    public function setDetails(object $details): void;
+    /**
+     * @param object $details
+     *
+     * @return void
+     */
+    public function setDetails($details);
 }

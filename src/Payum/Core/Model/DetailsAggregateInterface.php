@@ -3,5 +3,8 @@ namespace Payum\Core\Model;
 
 interface DetailsAggregateInterface
 {
-    public function getDetails(): ?object;
+    /**
+     * @return object|null
+     */
+    public function getDetails();
 }

@@ -3,22 +3,40 @@ namespace Payum\Core\Request;
 
 class GetCurrency
 {
-    public string $code;
+    /**
+     * @var string
+     */
+    public $code;
 
-    public string $name;
+    /**
+     * @var string
+     */
+    public $name;
 
-    public string $alpha3;
+    /**
+     * @var string
+     */
+    public $alpha3;
 
-    public int $numeric;
+    /**
+     * @var int
+     */
+    public $numeric;
 
-    public int $exp;
+    /**
+     * @var int
+     */
+    public $exp;
 
     /**
      * @var string|string[]
      */
-    public string|array $country;
+    public $country;
 
-    public function __construct(string|int $code)
+    /**
+     * @param string|int $code
+     */
+    public function __construct($code)
     {
         $this->code = $code;
     }

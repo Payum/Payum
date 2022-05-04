@@ -3,19 +3,40 @@ namespace Payum\Core\Request;
 
 class GetHttpRequest
 {
-    public array $query;
+    /**
+     * @var array
+     */
+    public $query;
 
-    public array $request;
+    /**
+     * @var array
+     */
+    public $request;
 
-    public string $method;
+    /**
+     * @var string
+     */
+    public $method;
 
-    public string $uri;
+    /**
+     * @var string
+     */
+    public $uri;
 
-    public string $clientIp;
+    /**
+     * @var string
+     */
+    public $clientIp;
 
-    public string $userAgent;
+    /**
+     * @var string
+     */
+    public $userAgent;
 
-    public string $content;
+    /**
+     * @var string
+     */
+    public $content;
 
     public function __construct()
     {

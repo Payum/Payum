@@ -8,14 +8,14 @@ use PHPUnit\Framework\TestCase;
 
 class DefuseCypherTest extends TestCase
 {
-    public function testShouldImplementCypherInterface(): void
+    public function testShouldImplementCypherInterface()
     {
         $rc = new \ReflectionClass(DefuseCypher::class);
 
         $this->assertTrue($rc->implementsInterface(CypherInterface::class));
     }
 
-    public function testShouldEncryptAndDecryptValue(): void
+    public function testShouldEncryptAndDecryptValue()
     {
         $secret = Key::createNewRandomKey()->saveToAsciiSafeString();
 

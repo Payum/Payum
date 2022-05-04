@@ -5,33 +5,74 @@ use Payum\Core\Security\TokenInterface;
 
 class Convert
 {
-    protected mixed $result;
+    /**
+     * @var mixed
+     */
+    protected $source;
 
-    public function __construct(protected mixed $source, protected string $to, private ?TokenInterface $token = null)
+    /**
+     * @var mixed
+     */
+    protected $result;
+
+    /**
+     * @var string
+     */
+    protected $to;
+
+    /**
+     * @var TokenInterface
+     */
+    private $token;
+
+    /**
+     * @param mixed $source
+     * @param string $to
+     * @param TokenInterface $token
+     */
+    public function __construct($source, $to, TokenInterface $token = null)
     {
+        $this->source = $source;
+        $this->to = $to;
+        $this->token = $token;
     }
 
-    public function getSource(): mixed
+    /**
+     * @return mixed
+     */
+    public function getSource()
     {
         return $this->source;
     }
 
-    public function getTo(): string
+    /**
+     * @return string
+     */
+    public function getTo()
     {
         return $this->to;
     }
 
-    public function getToken(): ?TokenInterface
+    /**
+     * @return TokenInterface
+     */
+    public function getToken()
     {
         return $this->token;
     }
 
-    public function getResult(): mixed
+    /**
+     * @return mixed
+     */
+    public function getResult()
     {
         return $this->result;
     }
 
-    public function setResult(mixed $result): void
+    /**
+     * @param mixed $result
+     */
+    public function setResult($result)
     {
         $this->result = $result;
     }

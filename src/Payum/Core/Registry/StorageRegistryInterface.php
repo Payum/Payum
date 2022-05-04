@@ -7,14 +7,18 @@ use Payum\Core\Storage\StorageInterface;
 interface StorageRegistryInterface
 {
     /**
+     * @param object|string $class
+     *
      * @throws InvalidArgumentException if storage with such name not exists
+     *
+     * @return StorageInterface
      */
-    public function getStorage(object|string $class): StorageInterface;
+    public function getStorage($class);
 
     /**
      * The key must be a model class
      *
      * @return StorageInterface[]
      */
-    public function getStorages(): array;
+    public function getStorages();
 }

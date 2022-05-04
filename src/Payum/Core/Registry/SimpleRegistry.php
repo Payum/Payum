@@ -10,17 +10,21 @@ class SimpleRegistry extends AbstractRegistry
     /**
      * @var boolean[]
      */
-    protected array $initializedStorageExtensions;
+    protected $initializedStorageExtensions;
 
     /**
      * @deprecated since 1.3.3 and ill be removed in 2.x. It is here for BC
+     *
+     * @var bool
      */
-    protected bool $addStorageExtensions = true;
+    protected $addStorageExtensions = true;
 
     /**
      * @deprecated since 1.3.3 and will be removed in 2.x. It is here for BC
+     *
+     * @param boolean $bool
      */
-    public function setAddStorageExtensions(bool $bool): void
+    public function setAddStorageExtensions($bool)
     {
         $this->addStorageExtensions = $bool;
     }
@@ -28,7 +32,7 @@ class SimpleRegistry extends AbstractRegistry
     /**
      * {@inheritDoc}
      */
-    public function getGateway(string $name): GatewayInterface
+    public function getGateway($name)
     {
         $gateway = parent::getGateway($name);
 
@@ -42,15 +46,18 @@ class SimpleRegistry extends AbstractRegistry
     /**
      * {@inheritDoc}
      */
-    protected function getService(string $id): object|string
+    protected function getService($id)
     {
         return $id;
     }
 
     /**
      * @deprecated since 1.3.3 and will be removed in 2.x.
+     *
+     * @param string           $name
+     * @param GatewayInterface $gateway
      */
-    protected function addStorageToGateway(string $name, GatewayInterface $gateway): void
+    protected function addStorageToGateway($name, GatewayInterface $gateway)
     {
         /** @var Gateway $gateway */
         if (false == $gateway instanceof Gateway) {

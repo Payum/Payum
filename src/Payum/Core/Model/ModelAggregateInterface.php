@@ -3,5 +3,8 @@ namespace Payum\Core\Model;
 
 interface ModelAggregateInterface
 {
-    public function getModel(): mixed;
+    /**
+     * @return mixed
+     */
+    public function getModel();
 }

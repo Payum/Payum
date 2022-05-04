@@ -5,11 +5,21 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 
 class GatewayFactory implements GatewayFactoryInterface
 {
-    protected GatewayFactoryInterface $coreGatewayFactory;
+    /**
+     * @var GatewayFactoryInterface
+     */
+    protected $coreGatewayFactory;
 
-    protected array $defaultConfig;
+    /**
+     * @var array
+     */
+    protected $defaultConfig;
 
-    public function __construct(array $defaultConfig = [], GatewayFactoryInterface $coreGatewayFactory = null)
+    /**
+     * @param array $defaultConfig
+     * @param GatewayFactoryInterface $coreGatewayFactory
+     */
+    public function __construct(array $defaultConfig = array(), GatewayFactoryInterface $coreGatewayFactory = null)
     {
         $this->coreGatewayFactory = $coreGatewayFactory ?: new CoreGatewayFactory();
         $this->defaultConfig = $defaultConfig;
@@ -18,7 +28,7 @@ class GatewayFactory implements GatewayFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function create(array $config = []): GatewayInterface
+    public function create(array $config = array())
     {
         return $this->coreGatewayFactory->create($this->createConfig($config));
     }
@@ -26,7 +36,7 @@ class GatewayFactory implements GatewayFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createConfig(array $config = []): array
+    public function createConfig(array $config = array())
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->defaultConfig);
@@ -37,7 +47,10 @@ class GatewayFactory implements GatewayFactoryInterface
         return (array) $config;
     }
 
-    protected function populateConfig(ArrayObject $config): void
+    /**
+     * {@inheritDoc}
+     */
+    protected function populateConfig(ArrayObject $config)
     {
     }
 }
