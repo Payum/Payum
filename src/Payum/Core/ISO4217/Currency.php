@@ -7,12 +7,44 @@ namespace Payum\Core\ISO4217;
 use Alcohol\ISO4217;
 
 final class Currency {
+    /**
+     * @var string
+     */
+    private $name;
 
     /**
+     * @var string
+     */
+    private $alpha3;
+
+    /**
+     * @var string
+     */
+    private $numeric;
+
+    /**
+     * @var int
+     */
+    private $exp;
+
+    /**
+     * @var string|string[]
+     */
+    private $country;
+
+    /**
+     * @param string $name
+     * @param string $alpha3
+     * @param string $numeric
+     * @param int $exp
      * @param string|string[] $country
      */
-    public function __construct(private string $name, private string $alpha3, private string $numeric, private int $exp, private string|array $country)
+    public function __construct(string $name, string $alpha3, string $numeric, int $exp, $country)
     {
+        $this->name = $name;
+        $this->alpha3 = $alpha3;
+        $this->numeric = $numeric;
+        $this->exp = $exp;
         $this->country = $country;
     }
 
@@ -39,7 +71,7 @@ final class Currency {
     /**
      * @return string|\string[]
      */
-    public function getCountry(): array|string
+    public function getCountry()
     {
         return $this->country;
     }

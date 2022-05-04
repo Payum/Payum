@@ -3,9 +3,18 @@ namespace Payum\Core\Extension;
 
 interface ExtensionInterface
 {
-    public function onPreExecute(Context $context): void;
+    /**
+     * @var Context $context
+     */
+    public function onPreExecute(Context $context);
 
-    public function onExecute(Context $context): void;
+    /**
+     * @var Context $context
+     */
+    public function onExecute(Context $context);
 
-    public function onPostExecute(Context $context): void;
+    /**
+     * @var Context $context
+     */
+    public function onPostExecute(Context $context);
 }

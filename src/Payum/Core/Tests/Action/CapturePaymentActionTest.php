@@ -24,14 +24,14 @@ class CapturePaymentActionTest extends GenericActionTest
         yield array($capture);
     }
 
-    public function testShouldImplementGatewayAwareInterface(): void
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass($this->actionClass);
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayAwareInterface'));
     }
 
-    public function testShouldExecuteConvertRequestIfStatusNew(): void
+    public function testShouldExecuteConvertRequestIfStatusNew()
     {
         $payment = new Payment();
 
@@ -42,21 +42,21 @@ class CapturePaymentActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHumanStatus'))
-            ->willReturnCallback(function (GetHumanStatus $request) {
+            ->will($this->returnCallback(function (GetHumanStatus $request) {
                 $request->markNew();
-            })
+            }))
         ;
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Convert'))
-            ->willReturnCallback(function (Convert $request) use ($testCase, $payment) {
+            ->will($this->returnCallback(function (Convert $request) use ($testCase, $payment) {
                 $testCase->assertSame($payment, $request->getSource());
                 $testCase->assertSame('array', $request->getTo());
                 $testCase->assertNull($request->getToken());
 
                 $request->setResult(array());
-            })
+            }))
         ;
 
         $action = new CapturePaymentAction();
@@ -69,7 +69,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $this->assertNull($capture->getToken());
     }
 
-    public function testShouldSetConvertedResultToPaymentAsDetails(): void
+    public function testShouldSetConvertedResultToPaymentAsDetails()
     {
         $payment = new Payment();
 
@@ -80,21 +80,21 @@ class CapturePaymentActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHumanStatus'))
-            ->willReturnCallback(function (GetHumanStatus $request) {
+            ->will($this->returnCallback(function (GetHumanStatus $request) {
                 $request->markNew();
-            })
+            }))
         ;
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Convert'))
-            ->willReturnCallback(function (Convert $request) use ($testCase, $payment) {
+            ->will($this->returnCallback(function (Convert $request) use ($testCase, $payment) {
                 $details['foo'] = 'fooVal';
 
                 $request->setResult(array(
                     'foo' => 'fooVal',
                 ));
-            })
+            }))
         ;
 
         $action = new CapturePaymentAction();
@@ -112,7 +112,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $this->assertSame('fooVal', $details['foo']);
     }
 
-    public function testShouldExecuteConvertRequestWithTokenIfOnePresent(): void
+    public function testShouldExecuteConvertRequestWithTokenIfOnePresent()
     {
         $payment = new Payment();
         $token = $this->createTokenMock();
@@ -124,20 +124,20 @@ class CapturePaymentActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHumanStatus'))
-            ->willReturnCallback(function (GetHumanStatus $request) {
+            ->will($this->returnCallback(function (GetHumanStatus $request) {
                 $request->markNew();
-            })
+            }))
         ;
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Convert'))
-            ->willReturnCallback(function (Convert $request) use ($testCase, $payment, $token) {
+            ->will($this->returnCallback(function (Convert $request) use ($testCase, $payment, $token) {
                 $testCase->assertSame($payment, $request->getSource());
                 $testCase->assertSame($token, $request->getToken());
 
                 $request->setResult(array());
-            })
+            }))
         ;
 
         $action = new CapturePaymentAction();
@@ -153,7 +153,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $this->assertSame($token, $capture->getToken());
     }
 
-    public function testShouldSetDetailsBackToPaymentAfterCaptureDetailsExecution(): void
+    public function testShouldSetDetailsBackToPaymentAfterCaptureDetailsExecution()
     {
         $expectedDetails = array('foo' => 'fooVal');
 
@@ -167,22 +167,22 @@ class CapturePaymentActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHumanStatus'))
-            ->willReturnCallback(function (GetHumanStatus $request) {
+            ->will($this->returnCallback(function (GetHumanStatus $request) {
                 $request->markPending();
-            })
+            }))
         ;
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\Capture'))
-            ->willReturnCallback(function (Capture $request) use ($testCase, $expectedDetails) {
+            ->will($this->returnCallback(function (Capture $request) use ($testCase, $expectedDetails) {
                 $details = $request->getModel();
 
                 $testCase->assertInstanceOf('ArrayAccess', $details);
                 $testCase->assertSame($expectedDetails, iterator_to_array($details));
 
                 $details['bar'] = 'barVal';
-            })
+            }))
         ;
 
         $action = new CapturePaymentAction();

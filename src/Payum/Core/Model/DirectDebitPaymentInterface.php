@@ -3,5 +3,8 @@ namespace Payum\Core\Model;
 
 interface DirectDebitPaymentInterface
 {
-    public function getBankAccount(): ?BankAccountInterface;
+    /**
+     * @return BankAccountInterface|null
+     */
+    public function getBankAccount();
 }

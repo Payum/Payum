@@ -11,14 +11,14 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 class RequestNotSupportedExceptionTest extends TestCase
 {
-    public function testShouldBeSubClassOfInvalidArgumentException(): void
+    public function testShouldBeSubClassOfInvalidArgumentException()
     {
         $rc = new \ReflectionClass(RequestNotSupportedException::class);
 
         $this->assertTrue($rc->isSubclassOf(InvalidArgumentException::class));
     }
 
-    public function testShouldCreateWithNoneObjectRequest(): void
+    public function testShouldCreateWithNoneObjectRequest()
     {
         $exception = RequestNotSupportedException::create('anRequest');
 
@@ -29,7 +29,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         $this->assertNull($exception->getAction());
     }
 
-    public function testShouldCreateWithObjectRequest(): void
+    public function testShouldCreateWithObjectRequest()
     {
         $request = new \stdClass();
 
@@ -42,7 +42,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         $this->assertNull($exception->getAction());
     }
 
-    public function testShouldCreateWithActionAndStringRequest(): void
+    public function testShouldCreateWithActionAndStringRequest()
     {
         $action = $this->createMock(ActionInterface::class);
         $actionClass = get_class($action);
@@ -60,7 +60,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         $this->assertSame($action, $exception->getAction());
     }
 
-    public function testShouldCreateWithActionAndObjectRequest(): void
+    public function testShouldCreateWithActionAndObjectRequest()
     {
         $request = new \stdClass();
 
@@ -79,7 +79,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         $this->assertSame($action, $exception->getAction());
     }
 
-    public function testShouldCreateWithSuggestions(): void
+    public function testShouldCreateWithSuggestions()
     {
         $request = new \stdClass();
 
@@ -92,7 +92,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         );
     }
 
-    public function testShouldCreateWithSuggestionsOnIdentityAsModel(): void
+    public function testShouldCreateWithSuggestionsOnIdentityAsModel()
     {
         $request = new Capture(new Identity('theId', \stdClass::class));
 
@@ -108,7 +108,7 @@ class RequestNotSupportedExceptionTest extends TestCase
     /**
      * @return MockObject|\Payum\Core\Action\ActionInterface
      */
-    protected function createActionMock(): MockObject|ActionInterface
+    protected function createActionMock()
     {
         return $this->createMock(ActionInterface::class);
     }

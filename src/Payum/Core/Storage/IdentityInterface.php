@@ -3,7 +3,13 @@ namespace Payum\Core\Storage;
 
 interface IdentityInterface extends \Serializable
 {
-    public function getClass(): string;
+    /**
+     * @return string
+     */
+    public function getClass();
 
-    public function getId(): mixed;
+    /**
+     * @return mixed
+     */
+    public function getId();
 }

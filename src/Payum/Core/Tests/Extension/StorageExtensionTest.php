@@ -14,14 +14,14 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 class StorageExtensionTest extends TestCase
 {
-    public function testShouldImplementExtensionInterface(): void
+    public function testShouldImplementExtensionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Extension\StorageExtension');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
     }
 
-    public function testShouldDoNothingOnPreExecuteIfNoModelRequest(): void
+    public function testShouldDoNothingOnPreExecuteIfNoModelRequest()
     {
         $neverUsedStorageMock = $this->createStorageMock();
         $neverUsedStorageMock
@@ -41,7 +41,7 @@ class StorageExtensionTest extends TestCase
         $extension->onPreExecute($context);
     }
 
-    public function testShouldDoNothingOnPreExecuteIfFindModelByIdentityReturnNull(): void
+    public function testShouldDoNothingOnPreExecuteIfFindModelByIdentityReturnNull()
     {
         $expectedModel = new \stdClass();
         $expectedId = 123;
@@ -52,7 +52,7 @@ class StorageExtensionTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('find')
             ->with($identity)
-            ->willReturn(null)
+            ->will($this->returnValue(null))
         ;
 
         $requestMock = $this->createMock(ModelAggregateAndAwareInterface::class);
@@ -72,13 +72,13 @@ class StorageExtensionTest extends TestCase
         $extension->onPreExecute($context);
     }
 
-    public function testShouldDoNothingOnPreExecuteIfModelNotIdentityAndNotSupported(): void
+    public function testShouldDoNothingOnPreExecuteIfModelNotIdentityAndNotSupported()
     {
         $storageMock = $this->createStorageMock();
         $storageMock
             ->expects($this->atLeastOnce())
             ->method('support')
-            ->willReturn(true)
+            ->will($this->returnValue(true))
         ;
         $storageMock
             ->expects($this->never())
@@ -102,7 +102,7 @@ class StorageExtensionTest extends TestCase
         $extension->onPreExecute($context);
     }
 
-    public function testShouldDoNothingOnPreExecuteIfRequestNotModelRequest(): void
+    public function testShouldDoNothingOnPreExecuteIfRequestNotModelRequest()
     {
         $storageMock = $this->createStorageMock();
         $storageMock
@@ -123,7 +123,7 @@ class StorageExtensionTest extends TestCase
         $extension->onPreExecute($context);
     }
 
-    public function testShouldSetFoundModelOnRequestIfIdentifierGivenAsModelAndStorageSupportsIt(): void
+    public function testShouldSetFoundModelOnRequestIfIdentifierGivenAsModelAndStorageSupportsIt()
     {
         $expectedModel = new \stdClass();
         $expectedId = 123;
@@ -134,7 +134,7 @@ class StorageExtensionTest extends TestCase
             ->expects($this->once())
             ->method('find')
             ->with($identity)
-            ->willReturn($expectedModel)
+            ->will($this->returnValue($expectedModel))
         ;
 
         $requestMock = $this->createMock(ModelAggregateAndAwareInterface::class);
@@ -154,7 +154,7 @@ class StorageExtensionTest extends TestCase
         $extension->onPreExecute($context);
     }
 
-    public function testShouldScheduleForUpdateRequestModelIfStorageSupportItOnPreExecute(): void
+    public function testShouldScheduleForUpdateRequestModelIfStorageSupportItOnPreExecute()
     {
         $model = new \stdClass();
 
@@ -167,7 +167,7 @@ class StorageExtensionTest extends TestCase
             ->expects($this->once())
             ->method('support')
             ->with($this->identicalTo($model))
-            ->willReturn(true)
+            ->will($this->returnValue(true))
         ;
 
         $requestMock = $this->createMock(ModelAggregateInterface::class);
@@ -183,7 +183,7 @@ class StorageExtensionTest extends TestCase
         $extension->onPreExecute($context);
     }
 
-    public function testShouldScheduleForUpdateRequestModelIfStorageSupportItOnPostExecute(): void
+    public function testShouldScheduleForUpdateRequestModelIfStorageSupportItOnPostExecute()
     {
         $model = new \stdClass();
 
@@ -196,7 +196,7 @@ class StorageExtensionTest extends TestCase
             ->expects($this->once())
             ->method('support')
             ->with($this->identicalTo($model))
-            ->willReturn(true)
+            ->will($this->returnValue(true))
         ;
 
         $requestMock = $this->createMock(ModelAggregateInterface::class);
@@ -219,7 +219,7 @@ class StorageExtensionTest extends TestCase
         $extension->onPostExecute($context);
     }
 
-    public function testShouldUpdateModelOneTimeOnLatestOnPostExecute(): void
+    public function testShouldUpdateModelOneTimeOnLatestOnPostExecute()
     {
         //when previous is empty
 
@@ -230,7 +230,7 @@ class StorageExtensionTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('support')
             ->with($this->identicalTo($expectedModel))
-            ->willReturn(true)
+            ->will($this->returnValue(true))
         ;
         $storageMock
             ->expects($this->once())
@@ -253,7 +253,7 @@ class StorageExtensionTest extends TestCase
         $extension->onPostExecute($context);
     }
 
-    public function testShouldNotUpdateModelIfNotLatestOnPostExecute(): void
+    public function testShouldNotUpdateModelIfNotLatestOnPostExecute()
     {
         //when previous is NOT empty
 
@@ -264,7 +264,7 @@ class StorageExtensionTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('support')
             ->with($this->identicalTo($expectedModel))
-            ->willReturn(true)
+            ->will($this->returnValue(true))
         ;
         $storageMock
             ->expects($this->never())
@@ -289,7 +289,7 @@ class StorageExtensionTest extends TestCase
         $extension->onPostExecute($context);
     }
 
-    protected function createModelRequestWithModel($model): ModelAggregateAndAwareInterface|MockObject
+    protected function createModelRequestWithModel($model)
     {
         $modelRequestMock = $this->createMock(ModelAggregateAndAwareInterface::class);
         $modelRequestMock
@@ -303,7 +303,7 @@ class StorageExtensionTest extends TestCase
     /**
      * @return MockObject|StorageInterface
      */
-    protected function createStorageMock(): StorageInterface|MockObject
+    protected function createStorageMock()
     {
         return $this->createMock('Payum\Core\Storage\StorageInterface');
     }
@@ -311,7 +311,7 @@ class StorageExtensionTest extends TestCase
     /**
      * @return MockObject|ActionInterface
      */
-    protected function createActionMock(): MockObject|ActionInterface
+    protected function createActionMock()
     {
         return $this->createMock('Payum\Core\Action\ActionInterface');
     }
@@ -319,7 +319,7 @@ class StorageExtensionTest extends TestCase
     /**
      * @return MockObject|GatewayInterface
      */
-    protected function createGatewayMock(): GatewayInterface|MockObject
+    protected function createGatewayMock()
     {
         return $this->createMock('Payum\Core\GatewayInterface');
     }

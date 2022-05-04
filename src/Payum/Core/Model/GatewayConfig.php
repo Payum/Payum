@@ -6,18 +6,27 @@ use Payum\Core\Security\CypherInterface;
 
 class GatewayConfig implements GatewayConfigInterface, CryptedInterface
 {
-    protected string $factoryName;
+    /**
+     * @var string
+     */
+    protected $factoryName;
 
-    protected string $gatewayName;
+    /**
+     * @var string
+     */
+    protected $gatewayName;
 
-    protected array $config;
+    /**
+     * @var array
+     */
+    protected $config;
 
     /**
      * Note: This should not be persisted to database
      *
      * @var array
      */
-    protected array $decryptedConfig;
+    protected $decryptedConfig;
 
     public function __construct()
     {
@@ -28,7 +37,7 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
     /**
      * {@inheritDoc}
      */
-    public function getFactoryName(): string
+    public function getFactoryName()
     {
         return $this->factoryName;
     }
@@ -36,17 +45,23 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
     /**
      * {@inheritDoc}
      */
-    public function setFactoryName($factoryName): void
+    public function setFactoryName($factoryName)
     {
         $this->factoryName = $factoryName;
     }
 
-    public function getGatewayName(): string
+    /**
+     * @return string
+     */
+    public function getGatewayName()
     {
         return $this->gatewayName;
     }
-    
-    public function setGatewayName(string $gatewayName): void
+
+    /**
+     * @param string $gatewayName
+     */
+    public function setGatewayName($gatewayName)
     {
         $this->gatewayName = $gatewayName;
     }

@@ -50,7 +50,10 @@ class TableGatewayStorage extends AbstractStorage
      */
     protected $tableGateway;
 
-    protected string $idField;
+    /**
+     * @var string
+     */
+    protected $idField;
 
     /**
      * @param LaminasTableGateway|ZendTableGateway $tableGateway
@@ -76,7 +79,7 @@ class TableGatewayStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
-    public function findBy(array $criteria): array
+    public function findBy(array $criteria)
     {
         throw new LogicException('Method is not supported by the storage.');
     }
@@ -84,7 +87,7 @@ class TableGatewayStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
-    protected function doFind($id): ?object
+    protected function doFind($id)
     {
         return $this->tableGateway->select(array("{$this->idField} = ?" => $id))->current();
     }
@@ -92,7 +95,7 @@ class TableGatewayStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
-    protected function doUpdateModel($model): void
+    protected function doUpdateModel($model)
     {
         if ($id = $this->getModelId($model)) {
             $this->tableGateway->update(
@@ -107,7 +110,7 @@ class TableGatewayStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
-    protected function doDeleteModel($model): void
+    protected function doDeleteModel($model)
     {
         $this->tableGateway->delete(array("{$this->idField} = ?" => $this->getModelId($model)));
     }
@@ -115,7 +118,7 @@ class TableGatewayStorage extends AbstractStorage
     /**
      * {@inheritDoc}
      */
-    protected function doGetIdentity($model): IdentityInterface
+    protected function doGetIdentity($model)
     {
         $id = $this->getModelId($model);
 
@@ -126,7 +129,12 @@ class TableGatewayStorage extends AbstractStorage
         return new Identity($id, $model);
     }
 
-    protected function getModelId(object $model): mixed
+    /**
+     * @param object $model
+     *
+     * @return mixed
+     */
+    protected function getModelId($model)
     {
         $rp = new \ReflectionProperty($model, $this->idField);
         $rp->setAccessible(true);

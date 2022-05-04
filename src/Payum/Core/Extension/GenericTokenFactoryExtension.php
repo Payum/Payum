@@ -8,20 +8,30 @@ use Payum\Core\Security\GenericTokenFactoryInterface;
 
 class GenericTokenFactoryExtension implements ExtensionInterface
 {
-    public function __construct(protected GenericTokenFactoryInterface $genericTokenFactory)
-    {}
+    /**
+     * @var GenericTokenFactoryInterface
+     */
+    protected $genericTokenFactory;
+
+    /**
+     * @param GenericTokenFactoryInterface $genericTokenFactory
+     */
+    public function __construct(GenericTokenFactoryInterface $genericTokenFactory)
+    {
+        $this->genericTokenFactory = $genericTokenFactory;
+    }
 
     /**
      * {@inheritDoc}
      */
-    public function onPreExecute(Context $context): void
+    public function onPreExecute(Context $context)
     {
     }
 
     /**
      * {@inheritDoc}
      */
-    public function onExecute(Context $context): void
+    public function onExecute(Context $context)
     {
         $action = $context->getAction();
         if ($action instanceof GenericTokenFactoryAwareInterface) {
@@ -32,7 +42,7 @@ class GenericTokenFactoryExtension implements ExtensionInterface
     /**
      * {@inheritDoc}
      */
-    public function onPostExecute(Context $context): void
+    public function onPostExecute(Context $context)
     {
         $action = $context->getAction();
         if ($action instanceof GenericTokenFactoryAwareInterface) {

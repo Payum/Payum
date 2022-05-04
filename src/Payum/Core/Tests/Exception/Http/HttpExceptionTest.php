@@ -8,21 +8,21 @@ use PHPUnit\Framework\TestCase;
 
 class HttpExceptionTest extends TestCase
 {
-    public function testShouldBeSubClassOfRuntimeException(): void
+    public function testShouldBeSubClassOfRuntimeException()
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\Http\HttpException');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Exception\RuntimeException'));
     }
 
-    public function testShouldImplementHttpExceptionInterface(): void
+    public function testShouldImplementHttpExceptionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\Http\HttpException');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Exception\Http\HttpExceptionInterface'));
     }
 
-    public function testShouldAllowSetRequest(): void
+    public function testShouldAllowSetRequest()
     {
         $exception = new HttpException();
 
@@ -31,7 +31,7 @@ class HttpExceptionTest extends TestCase
         $this->assertSame($request, $exception->getRequest());
     }
 
-    public function testShouldAllowGetPreviouslySetRequest(): void
+    public function testShouldAllowGetPreviouslySetRequest()
     {
         $exception = new HttpException();
 
@@ -40,7 +40,7 @@ class HttpExceptionTest extends TestCase
         $this->assertSame($expectedRequest, $exception->getRequest());
     }
 
-    public function testShouldAllowSetResponse(): void
+    public function testShouldAllowSetResponse()
     {
         $exception = new HttpException();
 
@@ -49,7 +49,7 @@ class HttpExceptionTest extends TestCase
         $this->assertSame($response, $exception->getResponse());
     }
 
-    public function testShouldAllowGetPreviouslySetResponse(): void
+    public function testShouldAllowGetPreviouslySetResponse()
     {
         $exception = new HttpException();
 
@@ -58,7 +58,7 @@ class HttpExceptionTest extends TestCase
         $this->assertSame($expectedResponse, $exception->getResponse());
     }
 
-    public function testShouldAllowCreateHttpExceptionFromRequestAndResponse(): void
+    public function testShouldAllowCreateHttpExceptionFromRequestAndResponse()
     {
         $request = new Request('GET', 'http://example.com/foobar');
 

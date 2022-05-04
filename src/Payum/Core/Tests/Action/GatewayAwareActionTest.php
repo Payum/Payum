@@ -9,14 +9,14 @@ use PHPUnit\Framework\TestCase;
 
 class GatewayAwareActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface(): void
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(GatewayAwareAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementGatewayAwareInterface(): void
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(GatewayAwareAction::class);
 

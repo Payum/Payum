@@ -3,7 +3,17 @@ namespace Payum\Core\Security;
 
 interface CryptedInterface
 {
-    public function decrypt(CypherInterface $cypher): void;
+    /**
+     * @param CypherInterface $cypher
+     *
+     * @return void
+     */
+    public function decrypt(CypherInterface $cypher);
 
-    public function encrypt(CypherInterface $cypher): void;
+    /**
+     * @param CypherInterface $cypher
+     *
+     * @return void
+     */
+    public function encrypt(CypherInterface $cypher);
 }

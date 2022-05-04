@@ -7,14 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class Propel2StorageTest extends TestCase
 {
-    public function testShouldBeSubClassOfAbstractStorage(): void
+    public function testShouldBeSubClassOfAbstractStorage()
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Propel2\Storage\Propel2Storage');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Storage\AbstractStorage'));
     }
 
-    public function testShouldCreateInstanceOfModelClassGivenInConstructor(): void
+    public function testShouldCreateInstanceOfModelClassGivenInConstructor()
     {
         $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\Propel2Model';
 
@@ -26,7 +26,7 @@ class Propel2StorageTest extends TestCase
         $this->assertNull($model->getId());
     }
 
-    public function throwForModelClassSaveOnUpdateModel(): void
+    public function throwForModelClassSaveOnUpdateModel()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('Save method was triggered.');
@@ -37,7 +37,7 @@ class Propel2StorageTest extends TestCase
         $storage->update($model);
     }
 
-    public function testShouldFindModelById(): void
+    public function testShouldFindModelById()
     {
         $expectedModelId = 123;
         $expectedModelQuery = new Propel2ModelQuery();
@@ -50,7 +50,7 @@ class Propel2StorageTest extends TestCase
         $this->assertEquals($expectedFoundModel, $actualModel);
     }
 
-    public function testShouldFindModelByCriterion(): void
+    public function testShouldFindModelByCriterion()
     {
         $expectedModelId = 123;
         $expectedModelQuery = new Propel2ModelQuery();
@@ -63,7 +63,7 @@ class Propel2StorageTest extends TestCase
         $this->assertEquals($expectedFoundModel, $actualModel);
     }
 
-    public function testShouldFindModelByCriteria(): void
+    public function testShouldFindModelByCriteria()
     {
         $expectedModelId = 123;
         $expectedModelCurrency = "USD";
@@ -77,10 +77,10 @@ class Propel2StorageTest extends TestCase
 
         $storage = new PropelStorage('Payum\Core\Tests\Mocks\Model\Propel2Model');
 
-        $actualModel = $storage->findBy([
+        $actualModel = $storage->findBy(array(
             'id' => $expectedModelId,
             'currency' => $expectedModelCurrency
-        ]);
+        ));
 
         $this->assertEquals($expectedFoundModel, $actualModel);
     }

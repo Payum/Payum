@@ -7,8 +7,14 @@ use Payum\Core\Security\CypherInterface;
 
 class DefuseCypher implements CypherInterface
 {
-    private string|Key $key;
+    /**
+     * @var string
+     */
+    private $key;
 
+    /**
+     * {@inheritdoc}
+     */
     public function __construct($secret)
     {
         $this->key = Key::loadFromAsciiSafeString($secret);
@@ -17,7 +23,7 @@ class DefuseCypher implements CypherInterface
     /**
      * {@inheritdoc}
      */
-    public function decrypt($value): string
+    public function decrypt($value)
     {
         return Crypto::decrypt($value, $this->key);
     }
@@ -25,7 +31,7 @@ class DefuseCypher implements CypherInterface
     /**
      * {@inheritdoc}
      */
-    public function encrypt($value): string
+    public function encrypt($value)
     {
         return Crypto::encrypt($value, $this->key);
     }

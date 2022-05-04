@@ -24,7 +24,7 @@ class GetHttpRequestActionTest extends GenericActionTest
         yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
     }
 
-    public function testShouldFillRequestDetails(): void
+    public function testShouldFillRequestDetails()
     {
         $action = new GetHttpRequestAction();
 

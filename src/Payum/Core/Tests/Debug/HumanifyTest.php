@@ -8,58 +8,58 @@ use PHPUnit\Framework\TestCase;
 
 class HumanifyTest extends TestCase
 {
-    public function testShouldBeAbstract(): void
+    public function testShouldBeAbstract()
     {
         $rc = new \ReflectionClass('Payum\Core\Debug\Humanify');
 
         $this->assertTrue($rc->isAbstract());
     }
 
-    public function testCouldNotBeInstantiable(): void
+    public function testCouldNotBeInstantiable()
     {
         $rc = new \ReflectionClass('Payum\Core\Debug\Humanify');
 
         $this->assertFalse($rc->isInstantiable());
     }
 
-    public function testShouldReturnObjectClassOnValueIfObjectPassed(): void
+    public function testShouldReturnObjectClassOnValueIfObjectPassed()
     {
         $this->assertSame('HumanifyTest', Humanify::value($this));
     }
 
-    public function testShouldReturnObjectShortClassOnValueIfObjectPassedAndShortClassFlagSetTrue(): void
+    public function testShouldReturnObjectShortClassOnValueIfObjectPassedAndShortClassFlagSetTrue()
     {
         $this->assertSame('HumanifyTest', Humanify::value($this, true));
     }
 
-    public function testShouldReturnObjectClassOnValueIfObjectPassedAndShortClassFlagSetFalse(): void
+    public function testShouldReturnObjectClassOnValueIfObjectPassedAndShortClassFlagSetFalse()
     {
         $this->assertSame(self::class, Humanify::value($this, false));
     }
 
-    public function testShouldReturnValueTypeIfNotObjectValueGivenOnValue(): void
+    public function testShouldReturnValueTypeIfNotObjectValueGivenOnValue()
     {
         $this->assertSame('string', Humanify::value('foo'));
     }
 
-    public function testShouldReturnRequestTypeIfRequestNotObjectOnRequest(): void
+    public function testShouldReturnRequestTypeIfRequestNotObjectOnRequest()
     {
         $this->assertSame('string', Humanify::request('foo'));
     }
 
-    public function testShouldReturnRequestShortClassIfRequestObjectOnRequest(): void
+    public function testShouldReturnRequestShortClassIfRequestObjectOnRequest()
     {
         $this->assertSame('HumanifyTest', Humanify::request($this));
     }
 
-    public function testShouldReturnRequestShortClassAndModelIfRequestImplementsModelRequestInterfaceOnRequest(): void
+    public function testShouldReturnRequestShortClassAndModelIfRequestImplementsModelRequestInterfaceOnRequest()
     {
         $request = new Capture($this);
 
         $this->assertSame('Capture{model: HumanifyTest}', Humanify::request($request));
     }
 
-    public function testShouldReturnReplyShortClassAndUrlIfHttpRedirectReplyOnRequest(): void
+    public function testShouldReturnReplyShortClassAndUrlIfHttpRedirectReplyOnRequest()
     {
         $request = new HttpRedirect('http://example.com/foo');
 
