@@ -14,7 +14,7 @@ class RequestNotSupportedExceptionTest extends TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfInvalidArgumentException(): void
+    public function shouldBeSubClassOfInvalidArgumentException()
     {
         $rc = new \ReflectionClass(RequestNotSupportedException::class);
 
@@ -24,7 +24,7 @@ class RequestNotSupportedExceptionTest extends TestCase
     /**
      * @test
      */
-    public function shouldCreateWithNoneObjectRequest(): void
+    public function shouldCreateWithNoneObjectRequest()
     {
         $exception = RequestNotSupportedException::create('anRequest');
 
@@ -38,7 +38,7 @@ class RequestNotSupportedExceptionTest extends TestCase
     /**
      * @test
      */
-    public function shouldCreateWithObjectRequest(): void
+    public function shouldCreateWithObjectRequest()
     {
         $request = new \stdClass();
 
@@ -54,7 +54,7 @@ class RequestNotSupportedExceptionTest extends TestCase
     /**
      * @test
      */
-    public function shouldCreateWithActionAndStringRequest(): void
+    public function shouldCreateWithActionAndStringRequest()
     {
         $action = $this->createMock(ActionInterface::class);
         $actionClass = get_class($action);
@@ -75,7 +75,7 @@ class RequestNotSupportedExceptionTest extends TestCase
     /**
      * @test
      */
-    public function shouldCreateWithActionAndObjectRequest(): void
+    public function shouldCreateWithActionAndObjectRequest()
     {
         $request = new \stdClass();
 
@@ -97,7 +97,7 @@ class RequestNotSupportedExceptionTest extends TestCase
     /**
      * @test
      */
-    public function shouldCreateWithSuggestions(): void
+    public function shouldCreateWithSuggestions()
     {
         $request = new \stdClass();
 
@@ -113,7 +113,7 @@ class RequestNotSupportedExceptionTest extends TestCase
     /**
      * @test
      */
-    public function shouldCreateWithSuggestionsOnIdentityAsModel(): void
+    public function shouldCreateWithSuggestionsOnIdentityAsModel()
     {
         $request = new Capture(new Identity('theId', \stdClass::class));
 
@@ -129,7 +129,7 @@ class RequestNotSupportedExceptionTest extends TestCase
     /**
      * @return MockObject|\Payum\Core\Action\ActionInterface
      */
-    protected function createActionMock(): MockObject|ActionInterface
+    protected function createActionMock()
     {
         return $this->createMock(ActionInterface::class);
     }

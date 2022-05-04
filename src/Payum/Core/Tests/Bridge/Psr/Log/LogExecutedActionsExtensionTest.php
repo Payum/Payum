@@ -18,7 +18,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldImplementExtensionInterface(): void
+    public function shouldImplementExtensionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension');
 
@@ -28,7 +28,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldImplementLoggerAwareInterface(): void
+    public function shouldImplementLoggerAwareInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension');
 
@@ -38,7 +38,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowSetLogger(): void
+    public function shouldAllowSetLogger()
     {
         $extension = new LogExecutedActionsExtension();
 
@@ -48,7 +48,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldNotLogAnythingOnPreExecute(): void
+    public function shouldNotLogAnythingOnPreExecute()
     {
         $logger = $this->createLoggerMock();
         $logger
@@ -66,7 +66,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldNotLogAnythingOnPostExecute(): void
+    public function shouldNotLogAnythingOnPostExecute()
     {
         $logger = $this->createLoggerMock();
         $logger
@@ -85,7 +85,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldUsePreviousToGetPreviousRequestNumberOnExecute(): void
+    public function shouldUsePreviousToGetPreviousRequestNumberOnExecute()
     {
         $logger = $this->createLoggerMock();
         $logger
@@ -107,7 +107,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldLogNotObjectActionAndRequestOnExecute(): void
+    public function shouldLogNotObjectActionAndRequestOnExecute()
     {
         $stringRequest = 'a string';
         $arrayRequest = array();
@@ -141,7 +141,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldLogActionAndObjectRequestOnExecute(): void
+    public function shouldLogActionAndObjectRequestOnExecute()
     {
         $action = new FooAction();
         $stdRequest = new \stdClass();
@@ -175,7 +175,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldLogActionAndModelRequestWithModelNoObjectOnExecute(): void
+    public function shouldLogActionAndModelRequestWithModelNoObjectOnExecute()
     {
         $action = new FooAction();
         $model = array();
@@ -199,7 +199,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldLogActionAndModelRequestWithObjectModelOnExecute(): void
+    public function shouldLogActionAndModelRequestWithObjectModelOnExecute()
     {
         $action = new FooAction();
         $stdModel = new \stdClass();
@@ -223,7 +223,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldLogReplyWhenSetOnPostExecute(): void
+    public function shouldLogReplyWhenSetOnPostExecute()
     {
         $action = new FooAction();
         $replyMock = $this->createReplyMock();
@@ -249,7 +249,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldLogHttpRedirectReplyWithUrlIncludedOnPostExecute(): void
+    public function shouldLogHttpRedirectReplyWithUrlIncludedOnPostExecute()
     {
         $action = new FooAction();
         $reply = new HttpRedirect('http://example.com');
@@ -273,7 +273,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldLogExceptionWhenSetOnPostExecute(): void
+    public function shouldLogExceptionWhenSetOnPostExecute()
     {
         $action = new FooAction();
 
@@ -296,7 +296,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     /**
      * @test
      */
-    public function shouldLogExceptionWhenSetButActionNotSetOnPostExecute(): void
+    public function shouldLogExceptionWhenSetButActionNotSetOnPostExecute()
     {
         $logger = $this->createLoggerMock();
         $logger
@@ -313,22 +313,34 @@ class LogExecutedActionsExtensionTest extends TestCase
         $extension->onPostExecute($context);
     }
 
-    protected function createLoggerMock(): MockObject|LoggerInterface
+    /**
+     * @return MockObject|LoggerInterface
+     */
+    protected function createLoggerMock()
     {
         return $this->createMock('Psr\Log\LoggerInterface');
     }
 
-    protected function createReplyMock(): MockObject|ReplyInterface
+    /**
+     * @return MockObject|ReplyInterface
+     */
+    protected function createReplyMock()
     {
         return $this->createMock('Payum\Core\Reply\ReplyInterface');
     }
 
-    protected function createActionMock(): MockObject|ActionInterface
+    /**
+     * @return MockObject|\Payum\Core\Action\ActionInterface
+     */
+    protected function createActionMock()
     {
         return $this->createMock('Payum\Core\Action\ActionInterface');
     }
 
-    protected function createGatewayMock(): GatewayInterface|MockObject
+    /**
+     * @return MockObject|GatewayInterface
+     */
+    protected function createGatewayMock()
     {
         return $this->createMock('Payum\Core\GatewayInterface');
     }

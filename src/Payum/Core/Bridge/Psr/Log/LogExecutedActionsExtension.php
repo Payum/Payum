@@ -10,8 +10,14 @@ use Psr\Log\NullLogger;
 
 class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInterface
 {
-    protected LoggerInterface $logger;
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
 
+    /**
+     * @param LoggerInterface $logger
+     */
     public function __construct(LoggerInterface $logger = null)
     {
         $this->logger = $logger ?: new NullLogger();
@@ -28,14 +34,14 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
     /**
      * {@inheritDoc}
      */
-    public function onPreExecute(Context $context): void
+    public function onPreExecute(Context $context)
     {
     }
 
     /**
      * {@inheritDoc}
      */
-    public function onExecute(Context $context): void
+    public function onExecute(Context $context)
     {
         $this->logger->debug(sprintf(
             '[Payum] %d# %s::execute(%s)',

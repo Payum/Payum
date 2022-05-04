@@ -27,7 +27,7 @@ class GetHttpRequestActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldFillRequestDetails(): void
+    public function shouldFillRequestDetails()
     {
         $action = new GetHttpRequestAction();
 

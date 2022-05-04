@@ -15,20 +15,25 @@ class Gateway implements GatewayInterface
     /**
      * @var Action\ActionInterface[]
      */
-    protected array $actions;
+    protected $actions;
 
     /**
      * @var mixed[]
      */
-    protected array $apis;
+    protected $apis;
 
-    protected ExtensionCollection $extensions;
+    /**
+     * @var \Payum\Core\Extension\ExtensionCollection
+     */
+    protected $extensions;
 
     /**
      * @var Context[]
      */
-    protected array $stack;
+    protected $stack;
 
+    /**
+     */
     public function __construct()
     {
         $this->stack = [];
@@ -38,7 +43,13 @@ class Gateway implements GatewayInterface
         $this->extensions = new ExtensionCollection();
     }
 
-    public function addApi(mixed $api, bool $forcePrepend = false): void
+    /**
+     * @param mixed $api
+     * @param bool  $forcePrepend
+     *
+     * @return void
+     */
+    public function addApi($api, $forcePrepend = false)
     {
         $forcePrepend ?
             array_unshift($this->apis, $api) :
@@ -46,7 +57,13 @@ class Gateway implements GatewayInterface
         ;
     }
 
-    public function addAction(ActionInterface $action, bool $forcePrepend = false): void
+    /**
+     * @param Action\ActionInterface $action
+     * @param bool                   $forcePrepend
+     *
+     * @return void
+     */
+    public function addAction(ActionInterface $action, $forcePrepend = false)
     {
         $forcePrepend ?
             array_unshift($this->actions, $action) :
@@ -54,7 +71,13 @@ class Gateway implements GatewayInterface
         ;
     }
 
-    public function addExtension(ExtensionInterface $extension, bool $forcePrepend = false): void
+    /**
+     * @param \Payum\Core\Extension\ExtensionInterface $extension
+     * @param bool                                     $forcePrepend
+     *
+     * @return void
+     */
+    public function addExtension(ExtensionInterface $extension, $forcePrepend = false)
     {
         $this->extensions->addExtension($extension, $forcePrepend);
     }
@@ -66,7 +89,7 @@ class Gateway implements GatewayInterface
     {
         $context = new Context($this, $request, $this->stack);
 
-        $this->stack[] = $context;
+        array_push($this->stack, $context);
 
         try {
             $this->extensions->onPreExecute($context);
@@ -109,7 +132,7 @@ class Gateway implements GatewayInterface
         return;
     }
 
-    protected function onPostExecuteWithException(Context $context): void
+    protected function onPostExecuteWithException(Context $context)
     {
         array_pop($this->stack);
 
@@ -139,9 +162,11 @@ class Gateway implements GatewayInterface
     }
 
     /**
+     * @param mixed $request
+     *
      * @return ActionInterface|false
      */
-    protected function findActionSupported(mixed $request): bool|ActionInterface
+    protected function findActionSupported($request)
     {
         foreach ($this->actions as $action) {
             if ($action instanceof GatewayAwareInterface) {

@@ -3,9 +3,17 @@ namespace Payum\Core\Security;
 
 trait GenericTokenFactoryAwareTrait
 {
-    protected GenericTokenFactoryInterface $tokenFactory;
+    /**
+     * @var GenericTokenFactoryInterface
+     */
+    protected $tokenFactory;
 
-    public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null): void
+    /**
+     * @param GenericTokenFactoryInterface $genericTokenFactory
+     *
+     * @return void
+     */
+    public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null)
     {
         $this->tokenFactory = $genericTokenFactory;
     }

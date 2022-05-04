@@ -30,7 +30,7 @@ class GetCurrencyActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldSetCurrencyByAlpha3(): void
+    public function shouldSetCurrencyByAlpha3()
     {
         $action = new GetCurrencyAction();
 
@@ -42,7 +42,7 @@ class GetCurrencyActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldSetCurrencyByNumeric(): void
+    public function shouldSetCurrencyByNumeric()
     {
         $action = new GetCurrencyAction();
 
@@ -54,7 +54,7 @@ class GetCurrencyActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function throwsIfCurrencyNotSupported(): void
+    public function throwsIfCurrencyNotSupported()
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('ISO 4217 does not contain: 000');
@@ -66,7 +66,7 @@ class GetCurrencyActionTest extends GenericActionTest
     /**
      * @legacy
      */
-    public function testPassingPayumIso4217IsDeprecated(): void
+    public function testPassingPayumIso4217IsDeprecated()
     {
         set_error_handler(function ($errorCode, $errorString) {
             $this->assertSame(E_USER_DEPRECATED, $errorCode);
@@ -81,7 +81,7 @@ class GetCurrencyActionTest extends GenericActionTest
     /**
      * @group legacy
      */
-    public function testItUsesPayumIso4217WhenItIsPassedThrough(): void
+    public function testItUsesPayumIso4217WhenItIsPassedThrough()
     {
         $mock = $this->createMock(ISO4217::class);
         $mock->expects($this->once())

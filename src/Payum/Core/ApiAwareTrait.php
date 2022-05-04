@@ -6,14 +6,20 @@ use Payum\Core\Exception\UnsupportedApiException;
 
 trait ApiAwareTrait
 {
-    protected mixed $api;
+    /**
+     * @var mixed
+     */
+    protected $api;
 
-    protected string $apiClass;
+    /**
+     * @var string
+     */
+    protected $apiClass;
 
     /**
      * {@inheritDoc}
      */
-    public function setApi($api): void
+    public function setApi($api)
     {
         if (empty($this->apiClass)) {
             throw new LogicException(sprintf('You must configure apiClass in __constructor method of the class the trait is applied to.'));

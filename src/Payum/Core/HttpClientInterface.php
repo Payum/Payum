@@ -6,5 +6,10 @@ use Psr\Http\Message\ResponseInterface;
 
 interface HttpClientInterface
 {
-    public function send(RequestInterface $request): ResponseInterface;
+    /**
+     * @param RequestInterface $request
+     *
+     * @return ResponseInterface
+     */
+    public function send(RequestInterface $request);
 }

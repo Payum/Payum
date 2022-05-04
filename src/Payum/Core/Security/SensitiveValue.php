@@ -6,19 +6,28 @@ use Payum\Core\Security\Util\Mask;
 
 final class SensitiveValue implements \Serializable, \JsonSerializable
 {
-    private mixed $value;
+    private $value;
 
-    public function __construct(mixed $value)
+    /**
+     * @param mixed $value
+     */
+    final public function __construct($value)
     {
         $this->value = $value;
     }
 
-    public function peek(): mixed
+    /**
+     * @return mixed
+     */
+    public function peek()
     {
         return $this->value;
     }
 
-    public function get(): mixed
+    /**
+     * @return mixed
+     */
+    public function get()
     {
         $value = $this->value;
 
@@ -27,7 +36,7 @@ final class SensitiveValue implements \Serializable, \JsonSerializable
         return $value;
     }
 
-    public function erase(): void
+    public function erase()
     {
         $this->value = null;
     }
@@ -43,7 +52,7 @@ final class SensitiveValue implements \Serializable, \JsonSerializable
     /**
      * {@inheritDoc}
      */
-    public function unserialize($serialized): void
+    public function unserialize($serialized)
     {
     }
 
@@ -52,7 +61,7 @@ final class SensitiveValue implements \Serializable, \JsonSerializable
         return [];
     }
 
-    public function __unserialize(array $data): void
+    public function __unserialize(array $data)
     {
     }
 
@@ -64,22 +73,36 @@ final class SensitiveValue implements \Serializable, \JsonSerializable
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function __toString()
     {
         return '';
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function __clone()
     {
         throw new LogicException('It is not permitted to close this object.');
     }
 
-    public function __debugInfo(): array
+    /**
+     * {@inheritDoc}
+     */
+    public function __debugInfo()
     {
         return ['value' => is_scalar($this->value) ? Mask::mask($this->value) : '[FILTERED OUT]'];
     }
 
-    public static function ensureSensitive(mixed $value): SensitiveValue
+    /**
+     * @param mixed $value
+     *
+     * @return SensitiveValue
+     */
+    public static function ensureSensitive($value)
     {
         return $value instanceof self ? $value : new self($value);
     }

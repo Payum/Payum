@@ -12,7 +12,7 @@ class ExtensionCollectionTest extends TestCase
     /**
      * @test
      */
-    public function shouldImplementExtensionInterface(): void
+    public function shouldImplementExtensionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Extension\ExtensionCollection');
 
@@ -22,7 +22,7 @@ class ExtensionCollectionTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowAddExtensionAppendByDefault(): void
+    public function shouldAllowAddExtensionAppendByDefault()
     {
         $extensionFirst = $this->createExtensionMock();
         $extensionSecond = $this->createExtensionMock();
@@ -44,7 +44,7 @@ class ExtensionCollectionTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowAddExtensionWithForcedPrepend(): void
+    public function shouldAllowAddExtensionWithForcedPrepend()
     {
         $extensionFirst = $this->createExtensionMock();
         $extensionSecond = $this->createExtensionMock();
@@ -66,7 +66,7 @@ class ExtensionCollectionTest extends TestCase
     /**
      * @test
      */
-    public function shouldCallOnPreExecuteForAllExtensionsInCollection(): void
+    public function shouldCallOnPreExecuteForAllExtensionsInCollection()
     {
         $expectedContext = $this->createContextMock();
 
@@ -96,7 +96,7 @@ class ExtensionCollectionTest extends TestCase
     /**
      * @test
      */
-    public function shouldCallOnExecuteForAllExtensionsInCollection(): void
+    public function shouldCallOnExecuteForAllExtensionsInCollection()
     {
         $expectedContext = $this->createContextMock();
 
@@ -126,7 +126,7 @@ class ExtensionCollectionTest extends TestCase
     /**
      * @test
      */
-    public function shouldCallOnPostExecuteForAllExtensionsInCollection(): void
+    public function shouldCallOnPostExecuteForAllExtensionsInCollection()
     {
         $expectedContext = $this->createContextMock();
 
@@ -153,12 +153,18 @@ class ExtensionCollectionTest extends TestCase
         $this->assertNull($result);
     }
 
-    protected function createContextMock(): Context|MockObject
+    /**
+     * @return MockObject|Context
+     */
+    protected function createContextMock()
     {
-        return $this->createMock('Payum\Core\Extension\Context');
+        return $this->createMock('Payum\Core\Extension\Context', array(), array(), '', false);
     }
 
-    protected function createExtensionMock(): ExtensionInterface|MockObject
+    /**
+     * @return MockObject|ExtensionInterface
+     */
+    protected function createExtensionMock()
     {
         return $this->createMock('Payum\Core\Extension\ExtensionInterface');
     }

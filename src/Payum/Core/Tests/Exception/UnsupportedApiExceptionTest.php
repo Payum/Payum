@@ -9,7 +9,7 @@ class UnsupportedApiExceptionTest extends TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfInvalidArgumentException(): void
+    public function shouldBeSubClassOfInvalidArgumentException()
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\UnsupportedApiException');
 

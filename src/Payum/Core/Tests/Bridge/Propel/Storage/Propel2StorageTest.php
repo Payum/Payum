@@ -10,7 +10,7 @@ class Propel2StorageTest extends TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfAbstractStorage(): void
+    public function shouldBeSubClassOfAbstractStorage()
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Propel2\Storage\Propel2Storage');
 
@@ -20,7 +20,7 @@ class Propel2StorageTest extends TestCase
     /**
      * @test
      */
-    public function shouldCreateInstanceOfModelClassGivenInConstructor(): void
+    public function shouldCreateInstanceOfModelClassGivenInConstructor()
     {
         $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\Propel2Model';
 
@@ -32,7 +32,7 @@ class Propel2StorageTest extends TestCase
         $this->assertNull($model->getId());
     }
 
-    public function throwForModelClassSaveOnUpdateModel(): void
+    public function throwForModelClassSaveOnUpdateModel()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('Save method was triggered.');
@@ -46,7 +46,7 @@ class Propel2StorageTest extends TestCase
     /**
      * @test
      */
-    public function shouldFindModelById(): void
+    public function shouldFindModelById()
     {
         $expectedModelId = 123;
         $expectedModelQuery = new Propel2ModelQuery();
@@ -62,7 +62,7 @@ class Propel2StorageTest extends TestCase
     /**
      * @test
      */
-    public function shouldFindModelByCriterion(): void
+    public function shouldFindModelByCriterion()
     {
         $expectedModelId = 123;
         $expectedModelQuery = new Propel2ModelQuery();
@@ -78,7 +78,7 @@ class Propel2StorageTest extends TestCase
     /**
      * @test
      */
-    public function shouldFindModelByCriteria(): void
+    public function shouldFindModelByCriteria()
     {
         $expectedModelId = 123;
         $expectedModelCurrency = "USD";
@@ -92,10 +92,10 @@ class Propel2StorageTest extends TestCase
 
         $storage = new PropelStorage('Payum\Core\Tests\Mocks\Model\Propel2Model');
 
-        $actualModel = $storage->findBy([
+        $actualModel = $storage->findBy(array(
             'id' => $expectedModelId,
             'currency' => $expectedModelCurrency
-        ]);
+        ));
 
         $this->assertEquals($expectedFoundModel, $actualModel);
     }

@@ -3,5 +3,8 @@ namespace Payum\Core\Security;
 
 interface TokenAggregateInterface
 {
-    public function getToken(): ?TokenInterface;
+    /**
+     * @return TokenInterface|null
+     */
+    public function getToken();
 }

@@ -9,7 +9,7 @@ class InvalidArgumentExceptionExceptionTest extends TestCase
     /**
      * @test
      */
-    public function shouldImplementExceptionInterface(): void
+    public function shouldImplementExceptionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\InvalidArgumentException');
 
@@ -19,7 +19,7 @@ class InvalidArgumentExceptionExceptionTest extends TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfRuntimeException(): void
+    public function shouldBeSubClassOfRuntimeException()
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\InvalidArgumentException');
 

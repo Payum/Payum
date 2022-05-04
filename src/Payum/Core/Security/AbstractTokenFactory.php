@@ -11,14 +11,30 @@ use Payum\Core\Storage\StorageInterface;
 
 abstract class AbstractTokenFactory implements TokenFactoryInterface
 {
-    public function __construct(protected StorageInterface $tokenStorage, protected StorageRegistryInterface $storageRegistry)
+    /**
+     * @var StorageInterface
+     */
+    protected $tokenStorage;
+
+    /**
+     * @var StorageRegistryInterface
+     */
+    protected $storageRegistry;
+
+    /**
+     * @param StorageInterface         $tokenStorage
+     * @param StorageRegistryInterface $storageRegistry
+     */
+    public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry)
     {
+        $this->tokenStorage = $tokenStorage;
+        $this->storageRegistry = $storageRegistry;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function createToken(string $gatewayName, $model, $targetPath, array $targetParameters = [], $afterPath = null, array $afterParameters = []): TokenInterface
+    public function createToken($gatewayName, $model, $targetPath, array $targetParameters = [], $afterPath = null, array $afterParameters = [])
     {
         /** @var TokenInterface $token */
         $token = $this->tokenStorage->create();
@@ -57,7 +73,13 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
         return $token;
     }
 
-    protected function addQueryToUri(HttpUri $uri, array $query): HttpUri
+    /**
+     * @param HttpUri $uri
+     * @param array $query
+     *
+     * @return HttpUri
+     */
+    protected function addQueryToUri(HttpUri $uri, array $query)
     {
         $uriQuery = Query::createFromUri($uri)->withoutEmptyPairs();
 
@@ -66,5 +88,11 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
         return $uri->withQuery((string) Query::createFromParams($query));
     }
 
-    abstract protected function generateUrl(string $path, array $parameters = []): string;
+    /**
+     * @param string $path
+     * @param array  $parameters
+     *
+     * @return string
+     */
+    abstract protected function generateUrl($path, array $parameters = array());
 }

@@ -10,7 +10,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function shouldBeSubClassOfArrayObject(): void
+    public function shouldBeSubClassOfArrayObject()
     {
         $rc = new \ReflectionClass(ArrayObject::class);
 
@@ -20,7 +20,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowGetPreviouslySetValueByIndex(): void
+    public function shouldAllowGetPreviouslySetValueByIndex()
     {
         $array = new ArrayObject();
         $array['foo'] = 'bar';
@@ -32,7 +32,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowGetValueSetInInternalArrayObject(): void
+    public function shouldAllowGetValueSetInInternalArrayObject()
     {
         $internalArray = new \ArrayObject();
         $internalArray['foo'] = 'bar';
@@ -46,7 +46,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowGetNullIfValueWithIndexNotSet(): void
+    public function shouldAllowGetNullIfValueWithIndexNotSet()
     {
         $array = new ArrayObject();
 
@@ -57,7 +57,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function shouldReplaceFromArray(): void
+    public function shouldReplaceFromArray()
     {
         $expectedArray = array(
             'foo' => 'valNew',
@@ -78,7 +78,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function shouldReplaceFromTraversable(): void
+    public function shouldReplaceFromTraversable()
     {
         $traversable = new \ArrayIterator(array(
             'foo' => 'valNew',
@@ -104,7 +104,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function throwIfInvalidArgumentGivenForReplace(): void
+    public function throwIfInvalidArgumentGivenForReplace()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid input given. Should be an array or instance of \Traversable');
@@ -116,7 +116,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowCastToArrayFromCustomArrayObject(): void
+    public function shouldAllowCastToArrayFromCustomArrayObject()
     {
         $input = new CustomArrayObject();
         $input['foo'] = 'barbaz';
@@ -132,7 +132,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowSetToCustomArrayObject(): void
+    public function shouldAllowSetToCustomArrayObject()
     {
         $input = new CustomArrayObject();
         $input['foo'] = 'barbaz';
@@ -146,7 +146,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowUnsetToCustomArrayObject(): void
+    public function shouldAllowUnsetToCustomArrayObject()
     {
         $input = new CustomArrayObject();
         $input['foo'] = 'barbaz';
@@ -160,7 +160,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowGetValueFromCustomArrayObject(): void
+    public function shouldAllowGetValueFromCustomArrayObject()
     {
         $input = new CustomArrayObject();
         $input['foo'] = 'barbaz';
@@ -173,7 +173,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowIssetValueFromCustomArrayObject(): void
+    public function shouldAllowIssetValueFromCustomArrayObject()
     {
         $input = new CustomArrayObject();
         $input['foo'] = 'barbaz';
@@ -187,7 +187,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowIterateOverCustomArrayObject(): void
+    public function shouldAllowIterateOverCustomArrayObject()
     {
         $input = new CustomArrayObject();
         $input['foo'] = 'barbaz';
@@ -203,7 +203,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function throwIfRequiredFieldEmptyAndThrowOnInvalidTrue(): void
+    public function throwIfRequiredFieldEmptyAndThrowOnInvalidTrue()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The aRequiredField fields are required.');
@@ -215,7 +215,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function throwIfSecondRequiredFieldEmptyAndThrowOnInvalidTrue(): void
+    public function throwIfSecondRequiredFieldEmptyAndThrowOnInvalidTrue()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The otherRequiredField fields are required.');
@@ -228,7 +228,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function throwByDefaultIfRequiredFieldEmpty(): void
+    public function throwByDefaultIfRequiredFieldEmpty()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The aRequiredField fields are required.');
@@ -240,7 +240,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnFalseIfRequiredFieldEmptyAndThrowOnInvalidFalse(): void
+    public function shouldReturnFalseIfRequiredFieldEmptyAndThrowOnInvalidFalse()
     {
         $arrayObject = new ArrayObject();
 
@@ -250,7 +250,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowValidateScalarWhetherItNotEmpty(): void
+    public function shouldAllowValidateScalarWhetherItNotEmpty()
     {
         $arrayObject = new ArrayObject();
 
@@ -260,7 +260,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnTrueIfRequiredFieldsNotEmpty(): void
+    public function shouldReturnTrueIfRequiredFieldsNotEmpty()
     {
         $arrayObject = new ArrayObject();
         $arrayObject['aRequiredField'] = 'foo';
@@ -272,7 +272,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function throwIfRequiredFieldNotSetAndThrowOnInvalidTrue(): void
+    public function throwIfRequiredFieldNotSetAndThrowOnInvalidTrue()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The aRequiredField fields is not set.');
@@ -284,7 +284,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function throwIfSecondRequiredFieldNotSetAndThrowOnInvalidTrue(): void
+    public function throwIfSecondRequiredFieldNotSetAndThrowOnInvalidTrue()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The otherRequiredField fields is not set.');
@@ -297,7 +297,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function throwByDefaultIfRequiredFieldNotSet(): void
+    public function throwByDefaultIfRequiredFieldNotSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The aRequiredField fields is not set.');
@@ -309,7 +309,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnFalseIfRequiredFieldNotSetAndThrowOnInvalidFalse(): void
+    public function shouldReturnFalseIfRequiredFieldNotSetAndThrowOnInvalidFalse()
     {
         $arrayObject = new ArrayObject();
 
@@ -319,7 +319,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowValidateScalarNotSet(): void
+    public function shouldAllowValidateScalarNotSet()
     {
         $arrayObject = new ArrayObject();
 
@@ -329,7 +329,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnTrueIfRequiredFieldsSet(): void
+    public function shouldReturnTrueIfRequiredFieldsSet()
     {
         $arrayObject = new ArrayObject();
         $arrayObject['aRequiredField'] = 'foo';
@@ -341,7 +341,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function shouldConvertArrayObjectToPrimitiveArrayMakingSensitiveValueUnsafeAndEraseIt(): void
+    public function shouldConvertArrayObjectToPrimitiveArrayMakingSensitiveValueUnsafeAndEraseIt()
     {
         $sensitiveValue = new SensitiveValue('theCreditCard');
 
@@ -365,7 +365,7 @@ class ArrayObjectTest extends TestCase
     /**
      * @test
      */
-    public function shouldAllowSetDefaultValues(): void
+    public function shouldAllowSetDefaultValues()
     {
         $arrayObject = new ArrayObject();
         $arrayObject['foo'] = 'fooVal';
@@ -379,7 +379,7 @@ class ArrayObjectTest extends TestCase
         $this->assertEquals('barDefVal', $arrayObject['bar']);
     }
 
-    public function shouldAllowGetArrayAsArrayObjectIfSet(): void
+    public function shouldAllowGetArrayAsArrayObjectIfSet()
     {
         $array = new ArrayObject();
         $array['foo'] = ['foo' => 'fooVal'];
@@ -390,7 +390,7 @@ class ArrayObjectTest extends TestCase
         $this->assertEquals(['foo' => 'fooVal'], (array) $subArray);
     }
 
-    public function shouldAllowGetArrayAsArrayObjectIfNotSet(): void
+    public function shouldAllowGetArrayAsArrayObjectIfNotSet()
     {
         $array = new ArrayObject();
 
@@ -400,7 +400,7 @@ class ArrayObjectTest extends TestCase
         $this->assertEquals([], (array) $subArray);
     }
 
-    public function shouldAllowToArrayWithoutSensitiveValuesAdnLocal(): void
+    public function shouldAllowToArrayWithoutSensitiveValuesAdnLocal()
     {
         $array = new ArrayObject([
             'local' => 'theLocal',
@@ -416,30 +416,35 @@ class CustomArrayObject implements \ArrayAccess, \IteratorAggregate
 {
     private $foo;
 
-    public function offsetExists(mixed $offset): bool
+    #[\ReturnTypeWillChange]
+    public function offsetExists($offset)
     {
         return 'foo' === $offset;
     }
 
-    public function offsetGet(mixed $offset): mixed
+    #[\ReturnTypeWillChange]
+    public function offsetGet($offset)
     {
         return $this->{$offset};
     }
 
-    public function offsetSet(mixed $offset, mixed $value): void
+    #[\ReturnTypeWillChange]
+    public function offsetSet($offset, $value)
     {
         $this->{$offset} = $value;
     }
 
-    public function offsetUnset(mixed $offset): void
+    #[\ReturnTypeWillChange]
+    public function offsetUnset($offset)
     {
         $this->{$offset} = null;
     }
 
-    public function getIterator(): \ArrayIterator
+    #[\ReturnTypeWillChange]
+    public function getIterator()
     {
-        return new \ArrayIterator([
+        return new \ArrayIterator(array(
             'foo' => $this->foo,
-        ]);
+        ));
     }
 }
