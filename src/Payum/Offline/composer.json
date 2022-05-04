@@ -25,7 +25,7 @@
         }
     ],
     "require": {
-        "payum/core": "^1.5"
+        "payum/core": "2.0.x-dev"
     },
     "require-dev": {
         "payum/core": "^1.5",
@@ -41,7 +41,7 @@
     "target-dir": "Payum/Offline",
     "extra": {
         "branch-alias": {
-            "dev-master": "1.6-dev"
+            "dev-master": "2.0.x-dev"
         }
     }
 }

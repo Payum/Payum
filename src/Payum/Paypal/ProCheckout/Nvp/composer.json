@@ -24,10 +24,9 @@
         }
     ],
     "require": {
-        "payum/core": "^1.5"
+        "payum/core": "2.0.x-dev"
     },
     "require-dev": {
-        "payum/core": "^1.5",
         "phpunit/phpunit": "^5.7",
         "php-http/guzzle6-adapter": "^1.0",
         "symfony/phpunit-bridge": "^3.1|^4"
@@ -41,7 +40,7 @@
     "target-dir": "Payum/Paypal/ProCheckout/Nvp",
     "extra": {
         "branch-alias": {
-            "dev-master": "1.6-dev"
+            "dev-master": "2.0.x-dev"
         }
     }
 }

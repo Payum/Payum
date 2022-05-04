@@ -31,7 +31,7 @@
         }
     ],
     "require": {
-        "php": "^7.2 || ^8.0",
+        "php": "^8.0",
         "alcohol/iso4217": "^3.1 || ^4.0",
         "payum/iso4217": "^1.0",
         "php-http/message": "^1.0",
@@ -95,7 +95,7 @@
     "target-dir": "Payum/Core",
     "extra": {
         "branch-alias": {
-            "dev-master": "1.6-dev"
+            "dev-master": "2.0.x-dev"
         }
     }
 }

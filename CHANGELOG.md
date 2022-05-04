@@ -2,6 +2,8 @@
 
 ## 2.0.0 (YYYY-mm-dd)
 
+* drop support for PHP 7.x
+
 ## 1.5.0 (2018-01-09)
 
 * add tests for encoded requests

@@ -24,11 +24,10 @@
     }
   ],
   "require": {
-    "payum/core": "^1.5",
+    "payum/core": "2.0.x-dev",
     "sofort/sofortlib-php": "^3.0"
   },
   "require-dev": {
-    "payum/core": "^1.5",
     "phpunit/phpunit": "^5.7",
     "symfony/phpunit-bridge": "^3.1|^4"
   },
@@ -41,7 +40,7 @@
   "target-dir": "Payum/Sofort",
   "extra": {
     "branch-alias": {
-      "dev-master": "1.6-dev"
+      "dev-master": "2.0.x-dev"
     }
   }
 }
