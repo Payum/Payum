@@ -82,6 +82,7 @@ class ObtainCreditCardActionTest extends TestCase
         $formView = new FormView();
 
         $formMock = $this->createFormMock();
+
         $formMock
             ->expects($this->once())
             ->method('handleRequest')
