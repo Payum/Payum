@@ -183,7 +183,7 @@ class AuthorizeActionTest extends TestCase
             ->willReturnOnConsecutiveCalls(
                 null,
                 $this->returnCallback(function (RenderTemplate $request) use ($testCase, $expectedTemplateName, $expectedContext, $expectedContent) {
-                    $testCase->assertEquals($expectedTemplateName, $request->getTemplateName());
+                    $testCase->assertSame($expectedTemplateName, $request->getTemplateName());
                     $testCase->assertEquals($expectedContext, $request->getParameters());
 
                     $request->setResult($expectedContent);

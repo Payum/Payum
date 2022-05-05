@@ -96,7 +96,7 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
                     $request->method = 'GET';
                 }),
                 $this->returnCallback(function (RenderTemplate $request) use ($templateName, $publishableKey, $model) {
-                    $this->assertEquals($templateName, $request->getTemplateName());
+                    $this->assertSame($templateName, $request->getTemplateName());
 
                     $context = $request->getParameters();
                     $this->assertArrayHasKey('model', $context);
