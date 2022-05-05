@@ -123,12 +123,12 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
                     $request->method = 'GET';
                 }),
                 $this->returnCallback(function (RenderTemplate $request) use ($templateName, $publishableKey, $model) {
-                    $this->assertEquals($templateName, $request->getTemplateName());
+                    $this->assertSame($templateName, $request->getTemplateName());
 
                     $context = $request->getParameters();
                     $this->assertArrayHasKey('model', $context);
                     $this->assertArrayHasKey('publishable_key', $context);
-                    $this->assertEquals($publishableKey, $context['publishable_key']);
+                    $this->assertSame($publishableKey, $context['publishable_key']);
 
                     $request->setResult('theContent');
                 })
@@ -142,7 +142,7 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
         try {
             $action->execute(new ObtainToken($model));
         } catch (HttpResponse $reply) {
-            $this->assertEquals('theContent', $reply->getContent());
+            $this->assertSame('theContent', $reply->getContent());
 
             return;
         }
@@ -201,10 +201,10 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->will($this->returnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request) {
                 $request->method = 'POST';
                 $request->request = array('stripeToken' => 'theToken');
-            }))
+            })
         ;
 
         $action = new ObtainTokenAction($templateName);
@@ -214,7 +214,7 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($obtainToken = new ObtainToken($model));
 
         $model = $obtainToken->getModel();
-        $this->assertEquals('theToken', $model['card']);
+        $this->assertSame('theToken', $model['card']);
     }
 
     /**

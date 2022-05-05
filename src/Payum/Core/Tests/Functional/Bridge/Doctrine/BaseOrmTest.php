@@ -19,10 +19,10 @@ abstract class BaseOrmTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         if (false == class_exists('Doctrine\ORM\Version', $autoload = true)) {
-            throw new \PHPUnit_Framework_SkippedTestError('Doctrine ORM lib not installed. Have you run composer with --dev option?');
+            throw new \PHPUnit\Framework\SkippedTestError('Doctrine ORM lib not installed. Have you run composer with --dev option?');
         }
         if (false == extension_loaded('pdo_sqlite')) {
-            throw new \PHPUnit_Framework_SkippedTestError('The pdo_sqlite extension is not loaded. It is required to run doctrine tests.');
+            throw new \PHPUnit\Framework\SkippedTestError('The pdo_sqlite extension is not loaded. It is required to run doctrine tests.');
         }
     }
 

@@ -85,7 +85,7 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getAuthorizeTokenUrl')
             ->with($expectedToken)
-            ->will($this->returnValue($expectedRedirectUrl))
+            ->willReturn($expectedRedirectUrl)
         ;
 
         $action = new AuthorizeTokenAction();
@@ -101,7 +101,7 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
         try {
             $action->execute($request);
         } catch (HttpRedirect $reply) {
-            $this->assertEquals($expectedRedirectUrl, $reply->getUrl());
+            $this->assertSame($expectedRedirectUrl, $reply->getUrl());
 
             return;
         }
@@ -122,7 +122,7 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
                 'useraction' => 'theUserAction',
                 'cmd' => 'theCmd',
             ))
-            ->will($this->returnValue('theRedirectUrl'))
+            ->willReturn('theRedirectUrl')
         ;
 
         $action = new AuthorizeTokenAction();
@@ -137,7 +137,7 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
         try {
             $action->execute($request);
         } catch (HttpRedirect $reply) {
-            $this->assertEquals('theRedirectUrl', $reply->getUrl());
+            $this->assertSame('theRedirectUrl', $reply->getUrl());
 
             return;
         }
@@ -178,7 +178,7 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('getAuthorizeTokenUrl')
-            ->will($this->returnValue('theRedirectUrl'))
+            ->willReturn('theRedirectUrl')
         ;
 
         $action = new AuthorizeTokenAction();
@@ -192,7 +192,7 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
         try {
             $action->execute($request);
         } catch (HttpRedirect $reply) {
-            $this->assertEquals('theRedirectUrl', $reply->getUrl());
+            $this->assertSame('theRedirectUrl', $reply->getUrl());
 
             return;
         }

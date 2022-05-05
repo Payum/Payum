@@ -56,9 +56,9 @@ class TokenTest extends OrmTest
 
         $this->assertNotSame($token, $foundToken);
 
-        $this->assertEquals($token->getHash(), $foundToken->getHash());
-        $this->assertEquals($token->getTargetUrl(), $foundToken->getTargetUrl());
-        $this->assertEquals($token->getAfterUrl(), $foundToken->getAfterUrl());
+        $this->assertSame($token->getHash(), $foundToken->getHash());
+        $this->assertSame($token->getTargetUrl(), $foundToken->getTargetUrl());
+        $this->assertSame($token->getAfterUrl(), $foundToken->getAfterUrl());
 
         $this->assertNotSame($token->getDetails(), $foundToken->getDetails());
         $this->assertEquals($token->getDetails(), $foundToken->getDetails());

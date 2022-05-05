@@ -191,7 +191,7 @@ class FilesystemStorageTest extends TestCase
         $identity = $storage->identify($model);
 
         $this->assertInstanceOf('Payum\Core\Model\Identity', $identity);
-        $this->assertEquals('stdClass', $identity->getClass());
+        $this->assertSame('stdClass', $identity->getClass());
         $this->assertEquals($model->payum_id, $identity->getId());
     }
 
@@ -282,8 +282,8 @@ class FilesystemStorageTest extends TestCase
         $foundModel = $storage->find($model->getId());
 
         $this->assertSame($model, $foundModel);
-        $this->assertEquals($expectedPrice, $foundModel->getPrice());
-        $this->assertEquals($expectedCurrency, $foundModel->getCurrency());
+        $this->assertSame($expectedPrice, $foundModel->getPrice());
+        $this->assertSame($expectedCurrency, $foundModel->getCurrency());
     }
 
     /**
@@ -306,8 +306,8 @@ class FilesystemStorageTest extends TestCase
         $foundModel = $storage->find($model->payum_id);
 
         $this->assertSame($model, $foundModel);
-        $this->assertEquals($expectedPrice, $foundModel->getPrice());
-        $this->assertEquals($expectedCurrency, $foundModel->getCurrency());
+        $this->assertSame($expectedPrice, $foundModel->getPrice());
+        $this->assertSame($expectedCurrency, $foundModel->getCurrency());
 
         $this->assertObjectHasAttribute('payum_id', $foundModel);
         $this->assertNotEmpty($foundModel->payum_id);

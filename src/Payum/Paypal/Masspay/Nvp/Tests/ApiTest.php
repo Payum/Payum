@@ -50,7 +50,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->massPay([]);
 
         $this->assertArrayHasKey('METHOD', $result);
-        $this->assertEquals('MassPay', $result['METHOD']);
+        $this->assertSame('MassPay', $result['METHOD']);
     }
 
     /**
@@ -68,13 +68,13 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->massPay([]);
 
         $this->assertArrayHasKey('USER', $result);
-        $this->assertEquals('the_username', $result['USER']);
+        $this->assertSame('the_username', $result['USER']);
 
         $this->assertArrayHasKey('PWD', $result);
-        $this->assertEquals('the_password', $result['PWD']);
+        $this->assertSame('the_password', $result['PWD']);
 
         $this->assertArrayHasKey('SIGNATURE', $result);
-        $this->assertEquals('the_signature', $result['SIGNATURE']);
+        $this->assertSame('the_signature', $result['SIGNATURE']);
     }
 
     /**
@@ -92,7 +92,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->massPay([]);
 
         $this->assertArrayHasKey('VERSION', $result);
-        $this->assertEquals(Api::VERSION, $result['VERSION']);
+        $this->assertSame(Api::VERSION, $result['VERSION']);
     }
 
     /**
@@ -106,11 +106,11 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) use ($testCase) {
-                $testCase->assertEquals('https://api-3t.paypal.com/nvp', $request->getUri());
+            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
+                $testCase->assertSame('https://api-3t.paypal.com/nvp', (string) $request->getUri());
 
                 return new Response(200, [], $request->getBody());
-            }))
+            })
         ;
 
         $api = new Api(array(
@@ -134,11 +134,11 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) use ($testCase) {
-                $testCase->assertEquals('https://api-3t.sandbox.paypal.com/nvp', $request->getUri());
+            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
+                $testCase->assertSame('https://api-3t.sandbox.paypal.com/nvp', (string) $request->getUri());
 
                 return new Response(200, [], $request->getBody());
-            }))
+            })
         ;
 
         $api = new Api(array(
@@ -175,9 +175,9 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) {
+            ->willReturnCallback(function (RequestInterface $request) {
                 return new Response(200, [], $request->getBody());
-            }))
+            })
         ;
 
         return $clientMock;

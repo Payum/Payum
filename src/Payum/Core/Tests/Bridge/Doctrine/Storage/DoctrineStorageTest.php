@@ -112,7 +112,7 @@ class DoctrineStorageTest extends TestCase
             ->expects($this->once())
             ->method('find')
             ->with($expectedModelClass, $expectedModelId)
-            ->will($this->returnValue($expectedFoundModel))
+            ->willReturn($expectedFoundModel)
         ;
 
         $storage = new DoctrineStorage(

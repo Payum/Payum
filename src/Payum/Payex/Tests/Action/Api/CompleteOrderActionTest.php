@@ -119,9 +119,9 @@ class CompleteOrderActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('complete')
             ->with($this->requiredFields)
-            ->will($this->returnValue(array(
+            ->willReturn(array(
                 'transactionRef' => 'theRef',
-            )));
+            ));
 
         $action = new CompleteOrderAction();
         $action->setApi($apiMock);
@@ -131,7 +131,7 @@ class CompleteOrderActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $model = $request->getModel();
-        $this->assertEquals('theRef', $model['transactionRef']);
+        $this->assertSame('theRef', $model['transactionRef']);
     }
 
     /**

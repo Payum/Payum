@@ -71,7 +71,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('CreateAgreement3')
             ->with($this->isType('array'))
-            ->will($this->returnValue($response))
+            ->willReturn($response)
         ;
 
         $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
@@ -108,7 +108,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('Check')
             ->with($this->isType('array'))
-            ->will($this->returnValue($response))
+            ->willReturn($response)
         ;
 
         $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
@@ -145,7 +145,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('DeleteAgreement')
             ->with($this->isType('array'))
-            ->will($this->returnValue($response))
+            ->willReturn($response)
         ;
 
         $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
@@ -182,7 +182,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('AutoPay3')
             ->with($this->isType('array'))
-            ->will($this->returnValue($response))
+            ->willReturn($response)
         ;
 
         $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));

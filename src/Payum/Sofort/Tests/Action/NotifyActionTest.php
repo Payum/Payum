@@ -46,7 +46,7 @@ class NotifyActionTest extends GenericActionTest
         try {
             $action->execute(new Notify($expectedModel));
         } catch (HttpResponse $response) {
-            $this->assertEquals(200, $response->getStatusCode());
+            $this->assertSame(200, $response->getStatusCode());
         }
     }
 

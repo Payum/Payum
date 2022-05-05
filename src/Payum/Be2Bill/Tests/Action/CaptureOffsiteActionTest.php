@@ -81,7 +81,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('prepareOffsitePayment')
             ->with($model)
-            ->will($this->returnValue($postArray))
+            ->willReturn($postArray)
         ;
 
         $gatewayMock = $this->createGatewayMock();
@@ -123,10 +123,10 @@ class CaptureOffsiteActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
-            ->will($this->returnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request) {
                 $request->query['EXECCODE'] = 1;
                 $request->query['FOO'] = 'fooVal';
-            }))
+            })
         ;
 
         $action = new CaptureOffsiteAction();
@@ -142,10 +142,10 @@ class CaptureOffsiteActionTest extends GenericActionTest
         $this->assertArrayHasKey('EXECCODE', $actualModel);
 
         $this->assertArrayHasKey('FOO', $actualModel);
-        $this->assertEquals('fooVal', $actualModel['FOO']);
+        $this->assertSame('fooVal', $actualModel['FOO']);
 
         $this->assertArrayHasKey('CLIENTIDENT', $actualModel);
-        $this->assertEquals($model['CLIENTIDENT'], $actualModel['CLIENTIDENT']);
+        $this->assertSame($model['CLIENTIDENT'], $actualModel['CLIENTIDENT']);
     }
 
     /**

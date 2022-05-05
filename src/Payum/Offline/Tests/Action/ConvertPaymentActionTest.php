@@ -54,22 +54,22 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('amount', $details);
-        $this->assertEquals(123, $details['amount']);
+        $this->assertSame(123, $details['amount']);
 
         $this->assertArrayHasKey('currency', $details);
-        $this->assertEquals('USD', $details['currency']);
+        $this->assertSame('USD', $details['currency']);
 
         $this->assertArrayHasKey('number', $details);
-        $this->assertEquals('theNumber', $details['number']);
+        $this->assertSame('theNumber', $details['number']);
 
         $this->assertArrayHasKey('description', $details);
-        $this->assertEquals('the description', $details['description']);
+        $this->assertSame('the description', $details['description']);
 
         $this->assertArrayHasKey('client_id', $details);
-        $this->assertEquals('theClientId', $details['client_id']);
+        $this->assertSame('theClientId', $details['client_id']);
 
         $this->assertArrayHasKey('client_email', $details);
-        $this->assertEquals('theClientEmail', $details['client_email']);
+        $this->assertSame('theClientEmail', $details['client_email']);
 
         $this->assertArrayHasKey(Constants::FIELD_PAID, $details);
         $this->assertEquals(true, $details[Constants::FIELD_PAID]);
@@ -119,6 +119,6 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('foo', $details);
-        $this->assertEquals('fooVal', $details['foo']);
+        $this->assertSame('fooVal', $details['foo']);
     }
 }

@@ -110,7 +110,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('foo', $details);
-        $this->assertEquals('fooVal', $details['foo']);
+        $this->assertSame('fooVal', $details['foo']);
     }
 
     /**

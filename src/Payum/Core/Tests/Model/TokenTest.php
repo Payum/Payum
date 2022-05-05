@@ -36,7 +36,7 @@ class TokenTest extends TestCase
         $tokenOne = new Token();
         $tokenTwo = new Token();
 
-        $this->assertNotEquals($tokenOne->getHash(), $tokenTwo->getHash());
+        $this->assertNotSame($tokenOne->getHash(), $tokenTwo->getHash());
     }
 
     /**

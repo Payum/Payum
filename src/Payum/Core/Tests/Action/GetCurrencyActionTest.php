@@ -36,7 +36,7 @@ class GetCurrencyActionTest extends GenericActionTest
 
         $action->execute($getCurrency = new GetCurrency('USD'));
 
-        $this->assertEquals('USD', $getCurrency->alpha3);
+        $this->assertSame('USD', $getCurrency->alpha3);
     }
 
     /**
@@ -48,7 +48,7 @@ class GetCurrencyActionTest extends GenericActionTest
 
         $action->execute($getCurrency = new GetCurrency($euro = 978));
 
-        $this->assertEquals('EUR', $getCurrency->alpha3);
+        $this->assertSame('EUR', $getCurrency->alpha3);
     }
 
     /**
@@ -92,7 +92,7 @@ class GetCurrencyActionTest extends GenericActionTest
         $action = new GetCurrencyAction($mock);
         $action->execute($getCurrency = new GetCurrency($euro = 978));
 
-        $this->assertEquals('EUR', $getCurrency->alpha3);
+        $this->assertSame('EUR', $getCurrency->alpha3);
     }
 
     public function testItDoesNotUsePayumIso4217ByDefault()
@@ -110,6 +110,6 @@ class GetCurrencyActionTest extends GenericActionTest
 
         $action->execute($getCurrency = new GetCurrency($euro = 978));
 
-        $this->assertEquals('EUR', $getCurrency->alpha3);
+        $this->assertSame('EUR', $getCurrency->alpha3);
     }
 }

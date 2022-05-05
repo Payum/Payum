@@ -26,7 +26,7 @@ class ArrayObjectTest extends TestCase
         $array['foo'] = 'bar';
 
         $this->assertArrayHasKey('foo', $array);
-        $this->assertEquals('bar', $array['foo']);
+        $this->assertSame('bar', $array['foo']);
     }
 
     /**
@@ -40,7 +40,7 @@ class ArrayObjectTest extends TestCase
         $array = new ArrayObject($internalArray);
 
         $this->assertArrayHasKey('foo', $array);
-        $this->assertEquals('bar', $array['foo']);
+        $this->assertSame('bar', $array['foo']);
     }
 
     /**
@@ -140,7 +140,7 @@ class ArrayObjectTest extends TestCase
         $arrayObject = new ArrayObject($input);
         $arrayObject['foo'] = 'ololo';
 
-        $this->assertEquals('ololo', $input['foo']);
+        $this->assertSame('ololo', $input['foo']);
     }
 
     /**
@@ -167,7 +167,7 @@ class ArrayObjectTest extends TestCase
 
         $arrayObject = new ArrayObject($input);
 
-        $this->assertEquals('barbaz', $arrayObject['foo']);
+        $this->assertSame('barbaz', $arrayObject['foo']);
     }
 
     /**
@@ -354,10 +354,10 @@ class ArrayObjectTest extends TestCase
         $this->assertIsArray($primitiveArray);
 
         $this->assertArrayHasKey('creditCard', $primitiveArray);
-        $this->assertEquals('theCreditCard', $primitiveArray['creditCard']);
+        $this->assertSame('theCreditCard', $primitiveArray['creditCard']);
 
         $this->assertArrayHasKey('email', $primitiveArray);
-        $this->assertEquals('bar@example.com', $primitiveArray['email']);
+        $this->assertSame('bar@example.com', $primitiveArray['email']);
 
         $this->assertNull($sensitiveValue->peek());
     }
@@ -375,8 +375,8 @@ class ArrayObjectTest extends TestCase
             'bar' => 'barDefVal',
         ));
 
-        $this->assertEquals('fooVal', $arrayObject['foo']);
-        $this->assertEquals('barDefVal', $arrayObject['bar']);
+        $this->assertSame('fooVal', $arrayObject['foo']);
+        $this->assertSame('barDefVal', $arrayObject['bar']);
     }
 
     public function shouldAllowGetArrayAsArrayObjectIfSet()

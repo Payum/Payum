@@ -55,7 +55,7 @@ class AutorizeActionTest extends GenericActionTest
 
         $model = $request->getModel();
         $this->assertArrayHasKey('PAYMENTREQUEST_0_PAYMENTACTION', $model);
-        $this->assertEquals(Api::PAYMENTACTION_AUTHORIZATION, $model['PAYMENTREQUEST_0_PAYMENTACTION']);
+        $this->assertSame(Api::PAYMENTACTION_AUTHORIZATION, $model['PAYMENTREQUEST_0_PAYMENTACTION']);
     }
 
     /**
@@ -72,7 +72,7 @@ class AutorizeActionTest extends GenericActionTest
 
         $model = $request->getModel();
         $this->assertArrayHasKey('PAYMENTREQUEST_0_PAYMENTACTION', $model);
-        $this->assertEquals(Api::PAYMENTACTION_AUTHORIZATION, $model['PAYMENTREQUEST_0_PAYMENTACTION']);
+        $this->assertSame(Api::PAYMENTACTION_AUTHORIZATION, $model['PAYMENTREQUEST_0_PAYMENTACTION']);
     }
 
     /**
@@ -202,7 +202,7 @@ class AutorizeActionTest extends GenericActionTest
                 $this->returnCallback(function ($request) use ($testCase, $expectedTargetUrl) {
                     $model = $request->getModel();
 
-                    $testCase->assertEquals($expectedTargetUrl, $model['RETURNURL']);
+                    $testCase->assertSame($expectedTargetUrl, $model['RETURNURL']);
                 })
             )
         ;
@@ -243,7 +243,7 @@ class AutorizeActionTest extends GenericActionTest
                 $this->returnCallback(function ($request) use ($testCase, $expectedCancelUrl) {
                     $model = $request->getModel();
 
-                    $testCase->assertEquals($expectedCancelUrl, $model['CANCELURL']);
+                    $testCase->assertSame($expectedCancelUrl, $model['CANCELURL']);
                 })
             )
         ;
@@ -285,7 +285,7 @@ class AutorizeActionTest extends GenericActionTest
                 $this->returnCallback(function ($request) use ($testCase, $expectedCancelUrl) {
                     $model = $request->getModel();
 
-                    $testCase->assertEquals($expectedCancelUrl, $model['CANCELURL']);
+                    $testCase->assertSame($expectedCancelUrl, $model['CANCELURL']);
                 })
             )
         ;
@@ -495,10 +495,10 @@ class AutorizeActionTest extends GenericActionTest
         $action->execute($request);
 
         $this->assertArrayHasKey('PAYMENTREQUEST_0_NOTIFYURL', $details);
-        $this->assertEquals('theNotifyUrl', $details['PAYMENTREQUEST_0_NOTIFYURL']);
+        $this->assertSame('theNotifyUrl', $details['PAYMENTREQUEST_0_NOTIFYURL']);
 
         $this->assertArrayHasKey('foo', $details);
-        $this->assertEquals('fooVal', $details['foo']);
+        $this->assertSame('fooVal', $details['foo']);
     }
 
     /**
@@ -530,7 +530,7 @@ class AutorizeActionTest extends GenericActionTest
         $action->execute($request);
 
         $this->assertArrayHasKey('PAYMENTREQUEST_0_NOTIFYURL', $details);
-        $this->assertEquals('alreadySetUrl', $details['PAYMENTREQUEST_0_NOTIFYURL']);
+        $this->assertSame('alreadySetUrl', $details['PAYMENTREQUEST_0_NOTIFYURL']);
     }
 
     /**

@@ -49,11 +49,11 @@ class PayoutActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(Masspay::class))
-            ->will($this->returnCallback(function (Masspay $request) {
+            ->willReturnCallback(function (Masspay $request) {
                 $model = $request->getModel();
 
                 $model['foo'] = 'fooVal';
-            }))
+            })
         ;
 
         $action = new PayoutAction();

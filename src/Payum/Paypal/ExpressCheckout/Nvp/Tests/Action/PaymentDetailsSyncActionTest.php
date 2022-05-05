@@ -105,11 +105,11 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetExpressCheckoutDetails::class))
-            ->will($this->returnCallback(function (GetExpressCheckoutDetails $request) {
+            ->willReturnCallback(function (GetExpressCheckoutDetails $request) {
                 $model = $request->getModel();
                 $model['foo'] = 'fooVal';
                 $model['PAYMENTREQUEST_0_AMT'] = 33;
-            }))
+            })
         ;
 
         $action = new PaymentDetailsSyncAction();
@@ -123,10 +123,10 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($sync = new Sync($details));
 
         $this->assertArrayHasKey('foo', (array) $details);
-        $this->assertEquals('fooVal', $details['foo']);
+        $this->assertSame('fooVal', $details['foo']);
 
         $this->assertArrayHasKey('PAYMENTREQUEST_0_AMT', (array) $details);
-        $this->assertEquals(33, $details['PAYMENTREQUEST_0_AMT']);
+        $this->assertSame(33, $details['PAYMENTREQUEST_0_AMT']);
     }
 
     /**
@@ -139,12 +139,12 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetExpressCheckoutDetails::class))
-            ->will($this->returnCallback(function (GetExpressCheckoutDetails $request) {
+            ->willReturnCallback(function (GetExpressCheckoutDetails $request) {
                 $model = $request->getModel();
                 $model['foo'] = 'fooVal';
                 $model['PAYMENTREQUEST_0_AMT'] = 33;
                 $model['L_ERRORCODE0'] = Api::L_ERRORCODE_SESSION_HAS_EXPIRED;
-            }))
+            })
         ;
 
         $action = new PaymentDetailsSyncAction();
@@ -160,7 +160,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayNotHasKey('foo', (array) $details);
 
         $this->assertArrayHasKey('PAYMENTREQUEST_0_AMT', (array) $details);
-        $this->assertEquals(11, $details['PAYMENTREQUEST_0_AMT']);
+        $this->assertSame(11, $details['PAYMENTREQUEST_0_AMT']);
     }
 
     /**
@@ -202,10 +202,10 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new Sync($details));
 
         $this->assertArrayHasKey('foo', (array) $details);
-        $this->assertEquals('fooVal', $details['foo']);
+        $this->assertSame('fooVal', $details['foo']);
 
         $this->assertArrayHasKey('bar', (array) $details);
-        $this->assertEquals('barVal', $details['bar']);
+        $this->assertSame('barVal', $details['bar']);
     }
 
     /**

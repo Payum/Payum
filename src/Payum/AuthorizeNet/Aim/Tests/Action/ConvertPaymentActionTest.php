@@ -70,19 +70,19 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($result);
 
         $this->assertArrayHasKey('amount', $result);
-        $this->assertEquals(1.23, $result['amount']);
+        $this->assertSame(1.23, $result['amount']);
 
         $this->assertArrayHasKey('invoice_num', $result);
-        $this->assertEquals('theNumber', $result['invoice_num']);
+        $this->assertSame('theNumber', $result['invoice_num']);
 
         $this->assertArrayHasKey('description', $result);
-        $this->assertEquals('the description', $result['description']);
+        $this->assertSame('the description', $result['description']);
 
         $this->assertArrayHasKey('cust_id', $result);
-        $this->assertEquals('theClientId', $result['cust_id']);
+        $this->assertSame('theClientId', $result['cust_id']);
 
         $this->assertArrayHasKey('email', $result);
-        $this->assertEquals('theClientEmail', $result['email']);
+        $this->assertSame('theClientEmail', $result['email']);
     }
 
     /**
@@ -122,6 +122,6 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($result);
 
         $this->assertArrayHasKey('foo', $result);
-        $this->assertEquals('fooVal', $result['foo']);
+        $this->assertSame('fooVal', $result['foo']);
     }
 }

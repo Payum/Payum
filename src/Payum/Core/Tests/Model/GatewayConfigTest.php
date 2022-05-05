@@ -39,7 +39,7 @@ class GatewayConfigTest extends TestCase
 
         $config->setFactoryName('theName');
 
-        $this->assertEquals('theName', $config->getFactoryName());
+        $this->assertSame('theName', $config->getFactoryName());
     }
 
     /**
@@ -51,7 +51,7 @@ class GatewayConfigTest extends TestCase
 
         $config->setGatewayName('theName');
 
-        $this->assertEquals('theName', $config->getGatewayName());
+        $this->assertSame('theName', $config->getGatewayName());
     }
 
     /**

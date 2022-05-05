@@ -638,7 +638,7 @@ class PayumBuilderTest extends TestCase
         $config = $gatewayFactory->createConfig([]);
 
         $this->assertArrayHasKey('foo', $config, var_export($config, true));
-        $this->assertEquals('fooVal', $config['foo']);
+        $this->assertSame('fooVal', $config['foo']);
     }
 
     /**
@@ -745,7 +745,7 @@ class PayumBuilderTest extends TestCase
 
         $this->assertCount(2, $apis);
         $this->assertInstanceOf(OmnipayGateway::class, $apis[1]);
-        $this->assertEquals('Dummy', $apis[1]->getName());
+        $this->assertSame('Dummy', $apis[1]->getName());
     }
 
     /**

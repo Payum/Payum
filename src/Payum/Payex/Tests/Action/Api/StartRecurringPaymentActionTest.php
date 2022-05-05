@@ -128,9 +128,9 @@ class StartRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('start')
             ->with($this->requiredFields)
-            ->will($this->returnValue(array(
+            ->willReturn(array(
                 'recurringRef' => 'theRecRef',
-            )));
+            ));
 
         $action = new StartRecurringPaymentAction();
         $action->setApi($apiMock);
@@ -140,7 +140,7 @@ class StartRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $model = $request->getModel();
-        $this->assertEquals('theRecRef', $model['recurringRef']);
+        $this->assertSame('theRecRef', $model['recurringRef']);
     }
 
     /**

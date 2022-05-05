@@ -82,12 +82,12 @@ class UpdateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
         $apiMock
             ->expects($this->once())
             ->method('updateRecurringPaymentsProfile')
-            ->will($this->returnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase) {
                 $testCase->assertArrayHasKey('PROFILEID', $fields);
-                $testCase->assertEquals('theProfileId', $fields['PROFILEID']);
+                $testCase->assertSame('theProfileId', $fields['PROFILEID']);
 
                 return array();
-            }))
+            })
         ;
 
         $action = new UpdateRecurringPaymentProfileAction();
@@ -109,12 +109,12 @@ class UpdateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
         $apiMock
             ->expects($this->once())
             ->method('updateRecurringPaymentsProfile')
-            ->will($this->returnCallback(function () {
+            ->willReturnCallback(function () {
                 return array(
                     'PROFILEID' => 'theId',
                     'PROFILESTATUS' => 'theStatus',
                 );
-            }))
+            })
         ;
 
         $action = new UpdateRecurringPaymentProfileAction();
@@ -128,10 +128,10 @@ class UpdateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
 
         $model = $request->getModel();
         $this->assertArrayHasKey('PROFILEID', $model);
-        $this->assertEquals('theId', $model['PROFILEID']);
+        $this->assertSame('theId', $model['PROFILEID']);
 
         $this->assertArrayHasKey('PROFILESTATUS', $model);
-        $this->assertEquals('theStatus', $model['PROFILESTATUS']);
+        $this->assertSame('theStatus', $model['PROFILESTATUS']);
     }
 
     /**

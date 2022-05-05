@@ -57,7 +57,7 @@ class AbstractRegistryTest extends TestCase
             $gateways,
         ));
 
-        $this->assertEquals('barGateway', $registry->getGateway('barName'));
+        $this->assertSame('barGateway', $registry->getGateway('barName'));
     }
 
     /**
@@ -77,10 +77,10 @@ class AbstractRegistryTest extends TestCase
         $this->assertCount(2, $gateways);
 
         $this->assertArrayHasKey('fooName', $gateways);
-        $this->assertEquals('fooGateway', $gateways['fooName']);
+        $this->assertSame('fooGateway', $gateways['fooName']);
 
         $this->assertArrayHasKey('barName', $gateways);
-        $this->assertEquals('barGateway', $gateways['barName']);
+        $this->assertSame('barGateway', $gateways['barName']);
     }
 
     /**
@@ -112,7 +112,7 @@ class AbstractRegistryTest extends TestCase
             $gatewayFactories,
         ));
 
-        $this->assertEquals('barGatewayFactory', $registry->getGatewayFactory('bar'));
+        $this->assertSame('barGatewayFactory', $registry->getGatewayFactory('bar'));
     }
 
     /**
@@ -134,10 +134,10 @@ class AbstractRegistryTest extends TestCase
         $this->assertCount(2, $gateways);
 
         $this->assertArrayHasKey('foo', $gateways);
-        $this->assertEquals('fooGatewayFactory', $gateways['foo']);
+        $this->assertSame('fooGatewayFactory', $gateways['foo']);
 
         $this->assertArrayHasKey('bar', $gateways);
-        $this->assertEquals('barGatewayFactory', $gateways['bar']);
+        $this->assertSame('barGatewayFactory', $gateways['bar']);
     }
 
     /**
@@ -171,7 +171,7 @@ class AbstractRegistryTest extends TestCase
             $storages,
         ));
 
-        $this->assertEquals('barStorage', $registry->getStorage('stdClass'));
+        $this->assertSame('barStorage', $registry->getStorage('stdClass'));
     }
 
     /**
@@ -187,7 +187,7 @@ class AbstractRegistryTest extends TestCase
             $storages,
         ));
 
-        $this->assertEquals('barStorage', $registry->getStorage('Payum\Core\Tests\Registry\DoctrineProxy'));
+        $this->assertSame('barStorage', $registry->getStorage('Payum\Core\Tests\Registry\DoctrineProxy'));
     }
 
     /**
@@ -203,7 +203,7 @@ class AbstractRegistryTest extends TestCase
             $storages,
         ));
 
-        $this->assertEquals('barStorage', $registry->getStorage(new DoctrineProxy()));
+        $this->assertSame('barStorage', $registry->getStorage(new DoctrineProxy()));
     }
 
     /**
@@ -221,7 +221,7 @@ class AbstractRegistryTest extends TestCase
             $storages,
         ));
 
-        $this->assertEquals('barStorage', $registry->getStorage('notRegisteredModelClass'));
+        $this->assertSame('barStorage', $registry->getStorage('notRegisteredModelClass'));
     }
 
     /**
@@ -237,7 +237,7 @@ class AbstractRegistryTest extends TestCase
             $storages,
         ));
 
-        $this->assertEquals('barStorage', $registry->getStorage(new \stdClass()));
+        $this->assertSame('barStorage', $registry->getStorage(new \stdClass()));
     }
 
     /**

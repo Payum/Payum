@@ -88,12 +88,12 @@ class SetExpressCheckoutActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('setExpressCheckout')
-            ->will($this->returnCallback(function (array $fields) use ($testCase, $expectedAmount) {
+            ->willReturnCallback(function (array $fields) use ($testCase, $expectedAmount) {
                 $testCase->assertArrayHasKey('PAYMENTREQUEST_0_AMT', $fields);
-                $testCase->assertEquals($expectedAmount, $fields['PAYMENTREQUEST_0_AMT']);
+                $testCase->assertSame($expectedAmount, $fields['PAYMENTREQUEST_0_AMT']);
 
                 return array();
-            }))
+            })
         ;
 
         $action = new SetExpressCheckoutAction($apiMock);
@@ -115,12 +115,12 @@ class SetExpressCheckoutActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('setExpressCheckout')
-            ->will($this->returnCallback(function () {
+            ->willReturnCallback(function () {
                 return array(
                     'FIRSTNAME' => 'theFirstname',
                     'EMAIL' => 'the@example.com',
                 );
-            }))
+            })
         ;
 
         $action = new SetExpressCheckoutAction();
@@ -134,8 +134,8 @@ class SetExpressCheckoutActionTest extends \PHPUnit\Framework\TestCase
 
         $model = $request->getModel();
 
-        $this->assertEquals('theFirstname', $model['FIRSTNAME']);
-        $this->assertEquals('the@example.com', $model['EMAIL']);
+        $this->assertSame('theFirstname', $model['FIRSTNAME']);
+        $this->assertSame('the@example.com', $model['EMAIL']);
     }
 
     /**

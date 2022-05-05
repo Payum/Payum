@@ -89,7 +89,7 @@ class GetAddressesActionTest extends GenericApiAwareActionTest
             ->expects($this->once())
             ->method('getAddresses')
             ->with('thePno')
-            ->will($this->returnValue(array($first, $second)))
+            ->willReturn(array($first, $second))
         ;
 
         $action = new GetAddressesAction($klarnaMock);
@@ -116,7 +116,7 @@ class GetAddressesActionTest extends GenericApiAwareActionTest
             ->expects($this->once())
             ->method('getAddresses')
             ->with($details['pno'])
-            ->will($this->throwException(new \KlarnaException('theMessage', 123)))
+            ->willThrowException(new \KlarnaException('theMessage', 123))
         ;
 
         $action = new GetAddressesAction($klarnaMock);

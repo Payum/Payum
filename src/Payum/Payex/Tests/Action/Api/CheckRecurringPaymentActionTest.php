@@ -120,9 +120,9 @@ class CheckRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('check')
             ->with($this->requiredFields)
-            ->will($this->returnValue(array(
+            ->willReturn(array(
                 'recurringStatus' => RecurringApi::RECURRINGSTATUS_STOPPEDBYCLIENT,
-            )));
+            ));
 
         $action = new CheckRecurringPaymentAction();
         $action->setApi($apiMock);
@@ -132,7 +132,7 @@ class CheckRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $model = $request->getModel();
-        $this->assertEquals(RecurringApi::RECURRINGSTATUS_STOPPEDBYCLIENT, $model['recurringStatus']);
+        $this->assertSame(RecurringApi::RECURRINGSTATUS_STOPPEDBYCLIENT, $model['recurringStatus']);
     }
 
     /**

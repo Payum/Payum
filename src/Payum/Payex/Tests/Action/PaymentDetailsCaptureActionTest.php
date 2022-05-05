@@ -202,7 +202,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         $details = iterator_to_array($request->getModel());
 
         $this->assertArrayHasKey('clientIPAddress', $details);
-        $this->assertEquals('expectedClientIp', $details['clientIPAddress']);
+        $this->assertSame('expectedClientIp', $details['clientIPAddress']);
     }
 
     /**

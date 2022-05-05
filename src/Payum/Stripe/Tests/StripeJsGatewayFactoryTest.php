@@ -34,10 +34,10 @@ class StripeJsGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('foo', $config);
-        $this->assertEquals('fooVal', $config['foo']);
+        $this->assertSame('fooVal', $config['foo']);
 
         $this->assertArrayHasKey('bar', $config);
-        $this->assertEquals('barVal', $config['bar']);
+        $this->assertSame('barVal', $config['bar']);
     }
 
     /**
@@ -67,10 +67,10 @@ class StripeJsGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.factory_name', $config);
-        $this->assertEquals('stripe_js', $config['payum.factory_name']);
+        $this->assertSame('stripe_js', $config['payum.factory_name']);
 
         $this->assertArrayHasKey('payum.factory_title', $config);
-        $this->assertEquals('Stripe.Js', $config['payum.factory_title']);
+        $this->assertSame('Stripe.Js', $config['payum.factory_title']);
     }
 
     /**

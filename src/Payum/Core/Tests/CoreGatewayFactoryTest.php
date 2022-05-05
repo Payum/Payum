@@ -138,7 +138,7 @@ class CoreGatewayFactoryTest extends TestCase
         $this->assertInstanceOf(\Closure::class, $config['payum.action.render_template']);
         $this->assertInstanceOf(EndlessCycleDetectorExtension::class, $config['payum.extension.endless_cycle_detector']);
 
-        $this->assertEquals('@PayumCore/layout.html.twig', $config['payum.template.layout']);
+        $this->assertSame('@PayumCore/layout.html.twig', $config['payum.template.layout']);
         $this->assertEquals([], $config['payum.prepend_actions']);
         $this->assertEquals([], $config['payum.prepend_extensions']);
         $this->assertEquals([], $config['payum.prepend_apis']);
@@ -188,7 +188,7 @@ class CoreGatewayFactoryTest extends TestCase
         $this->assertFileExists($config['payum.paths']['PayumCore']);
 
         $this->assertArrayHasKey('FooNamespace', $config['payum.paths']);
-        $this->assertEquals('FooPath', $config['payum.paths']['FooNamespace']);
+        $this->assertSame('FooPath', $config['payum.paths']['FooNamespace']);
     }
 
     /**
@@ -275,10 +275,10 @@ class CoreGatewayFactoryTest extends TestCase
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('foo', $config);
-        $this->assertEquals('fooVal', $config['foo']);
+        $this->assertSame('fooVal', $config['foo']);
 
         $this->assertArrayHasKey('bar', $config);
-        $this->assertEquals('barVal', $config['bar']);
+        $this->assertSame('barVal', $config['bar']);
     }
 
     /**
