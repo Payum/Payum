@@ -27,7 +27,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
 
         $array = $this->createMock('ArrayAccess');
         $array
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('offsetExists')
             ->with('transactionNumber')
             ->willReturn(true)

@@ -151,32 +151,31 @@ class GenericTokenFactoryTest extends TestCase
 
         $tokenFactoryMock = $this->createTokenFactoryMock();
         $tokenFactoryMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('createToken')
-            ->with(
-                $gatewayName,
-                $this->identicalTo($model),
-                $afterPath,
-                $afterParameters,
-                null,
-                []
+            ->withConsecutive(
+                [
+                    $gatewayName,
+                    $this->identicalTo($model),
+                    $afterPath,
+                    $afterParameters,
+                    null,
+                    []
+                ],
+                [
+                    $gatewayName,
+                    $this->identicalTo($model),
+                    $capturePath,
+                    [],
+                    $afterUrl,
+                    []
+                ]
             )
-            ->willReturn($afterToken)
-        ;
-        $tokenFactoryMock
-            ->expects($this->at(1))
-            ->method('createToken')
-            ->with(
-                $gatewayName,
-                $this->identicalTo($model),
-                $capturePath,
-                [],
-                $afterUrl,
-                []
+            ->willReturnOnConsecutiveCalls(
+                $afterToken,
+                $captureToken
             )
-            ->willReturn($captureToken)
         ;
-
 
         $factory = new GenericTokenFactory($tokenFactoryMock, array(
             'capture' => $capturePath
@@ -240,32 +239,28 @@ class GenericTokenFactoryTest extends TestCase
 
         $tokenFactoryMock = $this->createTokenFactoryMock();
         $tokenFactoryMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('createToken')
-            ->with(
-                $gatewayName,
-                $this->identicalTo($model),
-                $afterPath,
-                $afterParameters,
-                null,
-                []
+            ->withConsecutive(
+                [
+                    $gatewayName,
+                    $this->identicalTo($model),
+                    $afterPath,
+                    $afterParameters,
+                    null,
+                    []
+                ],
+                [
+                    $gatewayName,
+                    $this->identicalTo($model),
+                    $authorizePath,
+                    [],
+                    $afterUrl,
+                    []
+                ]
             )
-            ->willReturn($afterToken)
+            ->willReturnOnConsecutiveCalls($afterToken, $authorizeToken)
         ;
-        $tokenFactoryMock
-            ->expects($this->at(1))
-            ->method('createToken')
-            ->with(
-                $gatewayName,
-                $this->identicalTo($model),
-                $authorizePath,
-                [],
-                $afterUrl,
-                []
-            )
-            ->willReturn($authorizeToken)
-        ;
-
 
         $factory = new GenericTokenFactory($tokenFactoryMock, array(
             'authorize' => $authorizePath
@@ -329,32 +324,28 @@ class GenericTokenFactoryTest extends TestCase
 
         $tokenFactoryMock = $this->createTokenFactoryMock();
         $tokenFactoryMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('createToken')
-            ->with(
-                $gatewayName,
-                $this->identicalTo($model),
-                $afterPath,
-                $afterParameters,
-                null,
-                []
+            ->withConsecutive(
+                [
+                    $gatewayName,
+                    $this->identicalTo($model),
+                    $afterPath,
+                    $afterParameters,
+                    null,
+                    []
+                ],
+                [
+                    $gatewayName,
+                    $this->identicalTo($model),
+                    $refundPath,
+                    [],
+                    $afterUrl,
+                    []
+                ]
             )
-            ->willReturn($afterToken)
+            ->willReturnOnConsecutiveCalls($afterToken, $refundToken)
         ;
-        $tokenFactoryMock
-            ->expects($this->at(1))
-            ->method('createToken')
-            ->with(
-                $gatewayName,
-                $this->identicalTo($model),
-                $refundPath,
-                [],
-                $afterUrl,
-                []
-            )
-            ->willReturn($refundToken)
-        ;
-
 
         $factory = new GenericTokenFactory($tokenFactoryMock, array(
             'refund' => $refundPath
@@ -453,32 +444,28 @@ class GenericTokenFactoryTest extends TestCase
 
         $tokenFactoryMock = $this->createTokenFactoryMock();
         $tokenFactoryMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('createToken')
-            ->with(
-                $gatewayName,
-                $this->identicalTo($model),
-                $afterPath,
-                $afterParameters,
-                null,
-                []
+            ->withConsecutive(
+                [
+                    $gatewayName,
+                    $this->identicalTo($model),
+                    $afterPath,
+                    $afterParameters,
+                    null,
+                    []
+                ],
+                [
+                    $gatewayName,
+                    $this->identicalTo($model),
+                    $cancelPath,
+                    [],
+                    $afterUrl,
+                    []
+                ]
             )
-            ->willReturn($afterToken)
+            ->willReturn($afterToken, $cancelToken)
         ;
-        $tokenFactoryMock
-            ->expects($this->at(1))
-            ->method('createToken')
-            ->with(
-                $gatewayName,
-                $this->identicalTo($model),
-                $cancelPath,
-                [],
-                $afterUrl,
-                []
-            )
-            ->willReturn($cancelToken)
-        ;
-
 
         $factory = new GenericTokenFactory($tokenFactoryMock, array(
             'cancel' => $cancelPath
@@ -675,32 +662,28 @@ class GenericTokenFactoryTest extends TestCase
 
         $tokenFactoryMock = $this->createTokenFactoryMock();
         $tokenFactoryMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('createToken')
-            ->with(
-                $gatewayName,
-                $this->identicalTo($model),
-                $afterPath,
-                $afterParameters,
-                null,
-                []
+            ->withConsecutive(
+                [
+                    $gatewayName,
+                    $this->identicalTo($model),
+                    $afterPath,
+                    $afterParameters,
+                    null,
+                    []
+                ],
+                [
+                    $gatewayName,
+                    $this->identicalTo($model),
+                    $payoutPath,
+                    [],
+                    $afterUrl,
+                    []
+                ]
             )
-            ->willReturn($afterToken)
+            ->willReturnOnConsecutiveCalls($afterToken, $payoutToken)
         ;
-        $tokenFactoryMock
-            ->expects($this->at(1))
-            ->method('createToken')
-            ->with(
-                $gatewayName,
-                $this->identicalTo($model),
-                $payoutPath,
-                [],
-                $afterUrl,
-                []
-            )
-            ->willReturn($payoutToken)
-        ;
-
 
         $factory = new GenericTokenFactory($tokenFactoryMock, array(
             'payout' => $payoutPath

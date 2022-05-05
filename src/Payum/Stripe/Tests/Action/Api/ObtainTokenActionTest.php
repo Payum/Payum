@@ -111,27 +111,28 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->will($this->returnCallback(function (GetHttpRequest $request) {
-                $request->method = 'GET';
-            }))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(RenderTemplate::class))
-            ->will($this->returnCallback(function (RenderTemplate $request) use ($templateName, $publishableKey, $model) {
-                $this->assertEquals($templateName, $request->getTemplateName());
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(RenderTemplate::class)]
 
-                $context = $request->getParameters();
-                $this->assertArrayHasKey('model', $context);
-                $this->assertArrayHasKey('publishable_key', $context);
-                $this->assertEquals($publishableKey, $context['publishable_key']);
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->returnCallback(function (GetHttpRequest $request) {
+                    $request->method = 'GET';
+                }),
+                $this->returnCallback(function (RenderTemplate $request) use ($templateName, $publishableKey, $model) {
+                    $this->assertEquals($templateName, $request->getTemplateName());
 
-                $request->setResult('theContent');
-            }))
+                    $context = $request->getParameters();
+                    $this->assertArrayHasKey('model', $context);
+                    $this->assertArrayHasKey('publishable_key', $context);
+                    $this->assertEquals($publishableKey, $context['publishable_key']);
+
+                    $request->setResult('theContent');
+                })
+            )
         ;
 
         $action = new ObtainTokenAction($templateName);
@@ -160,17 +161,17 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->will($this->returnCallback(function (GetHttpRequest $request) {
-                $request->method = 'POST';
-            }))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(RenderTemplate::class))
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(RenderTemplate::class)]
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->returnCallback(function (GetHttpRequest $request) {
+                    $request->method = 'POST';
+                })
+            )
         ;
 
         $action = new ObtainTokenAction($templateName);

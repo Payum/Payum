@@ -5,19 +5,21 @@ use Payum\Core\Tests\GenericActionTest;
 use Payum\Klarna\Checkout\Action\Api\CreateOrderAction;
 use Payum\Klarna\Checkout\Config;
 use Payum\Klarna\Checkout\Request\Api\CreateOrder;
+use Payum\Core\Request\Generic;
+use Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction;
 
 class CreateOrderActionTest extends GenericActionTest
 {
-    protected $requestClass = 'Payum\Klarna\Checkout\Request\Api\CreateOrder';
+    protected $requestClass = CreateOrder::class;
 
-    protected $actionClass = 'Payum\Klarna\Checkout\Action\Api\CreateOrderAction';
+    protected $actionClass = CreateOrderAction::class;
 
     public function provideNotSupportedRequests(): \Iterator
     {
         yield array('foo');
         yield array(array('foo'));
         yield array(new \stdClass());
-        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
+        yield array($this->getMockForAbstractClass(Generic::class, array(array())));
     }
 
     /**
@@ -25,9 +27,9 @@ class CreateOrderActionTest extends GenericActionTest
      */
     public function shouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\CreateOrderAction');
+        $rc = new \ReflectionClass(CreateOrderAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction'));
+        $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
     }
 
     /**
@@ -39,7 +41,7 @@ class CreateOrderActionTest extends GenericActionTest
 
         $connector = $this->createConnectorMock();
         $connector
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('apply')
             ->with('POST')
         ;
@@ -69,14 +71,14 @@ class CreateOrderActionTest extends GenericActionTest
 
         $connector = $this->createConnectorMock();
         $connector
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, $model) {
+            ->willReturnCallback(function ($method, $order, $options) use ($testCase, $model) {
                 $testCase->assertIsArray($options);
                 $testCase->assertArrayHasKey('data', $options);
                 $testCase->assertEquals($model, $options['data']);
-            }))
+            })
         ;
 
         $action = new CreateOrderAction($connector);
@@ -109,14 +111,14 @@ class CreateOrderActionTest extends GenericActionTest
 
         $connector = $this->createConnectorMock();
         $connector
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, $expectedModel) {
+            ->willReturnCallback(function ($method, $order, $options) use ($testCase, $expectedModel) {
                 $testCase->assertIsArray($options);
                 $testCase->assertArrayHasKey('data', $options);
                 $testCase->assertEquals($expectedModel, $options['data']);
-            }))
+            })
         ;
 
         $action = new CreateOrderAction($connector);
@@ -134,17 +136,16 @@ class CreateOrderActionTest extends GenericActionTest
     {
         $request = new CreateOrder(array());
 
-        $testCase = $this;
         $expectedOrder = null;
 
         $connector = $this->createConnectorMock();
         $connector
-            ->expects($this->at(0))
+            ->expects($this->once(0))
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, &$expectedOrder) {
+            ->willReturnCallback(function ($method, $order) use (&$expectedOrder) {
                 $expectedOrder = $order;
-            }))
+            })
         ;
 
         $action = new CreateOrderAction($connector);
@@ -208,18 +209,15 @@ class CreateOrderActionTest extends GenericActionTest
 
         $connector = $this->createConnectorMock();
         $connector
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('apply')
             ->with('POST')
-            ->will($this->throwException(new \Klarna_Checkout_ConnectionErrorException()))
-        ;
-        $connector
-            ->expects($this->at(1))
-            ->method('apply')
-            ->with('POST')
-            ->will($this->returnCallback(function ($method, $order, $options) use (&$expectedOrder) {
-                $expectedOrder = $order;
-            }))
+            ->willReturnOnConsecutiveCalls(
+                $this->throwException(new \Klarna_Checkout_ConnectionErrorException()),
+                $this->returnCallback(function ($method, $order, $options) use (&$expectedOrder) {
+                    $expectedOrder = $order;
+                })
+            )
         ;
 
         $action = new CreateOrderAction($connector);

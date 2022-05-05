@@ -106,15 +106,9 @@ class DynamicRegistryTest extends TestCase
 
         $storageMock = $this->createStorageMock();
         $storageMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('findBy')
-            ->with([])
-            ->willReturn([$gatewayConfig])
-        ;
-        $storageMock
-            ->expects($this->at(1))
-            ->method('findBy')
-            ->with(['gatewayName' => $gatewayName])
+            ->withConsecutive([[]], [['gatewayName' => $gatewayName]])
             ->willReturn([$gatewayConfig])
         ;
 

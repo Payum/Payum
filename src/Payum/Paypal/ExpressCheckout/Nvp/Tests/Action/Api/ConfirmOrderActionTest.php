@@ -42,26 +42,26 @@ class ConfirmOrderActionTest extends GenericActionTest
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->willReturnCallback(function (GetHttpRequest $request) {
-                $request->method = 'GET';
-            })
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(RenderTemplate::class))
-            ->willReturnCallback(function (RenderTemplate $request) use ($firstModel, $model) {
-                $this->assertEquals('theConfirmOrderTemplate', $request->getTemplateName());
-                $this->assertSame($firstModel, $request->getParameters()['firstModel']);
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(RenderTemplate::class)]
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->returnCallback(function (GetHttpRequest $request) {
+                    $request->method = 'GET';
+                }),
+                $this->returnCallback(function (RenderTemplate $request) use ($firstModel, $model) {
+                    $this->assertEquals('theConfirmOrderTemplate', $request->getTemplateName());
+                    $this->assertSame($firstModel, $request->getParameters()['firstModel']);
 
-                $this->assertInstanceOf(ArrayObject::class, $request->getParameters()['model']);
-                $this->assertSame(['foo' => 'fooVal', 'bar' => 'barVal'], (array) $request->getParameters()['model']);
+                    $this->assertInstanceOf(ArrayObject::class, $request->getParameters()['model']);
+                    $this->assertSame(['foo' => 'fooVal', 'bar' => 'barVal'], (array) $request->getParameters()['model']);
 
-                $request->setResult('thePage');
-            })
+                    $request->setResult('thePage');
+                })
+            )
         ;
 
         $request = new ConfirmOrder($firstModel);
@@ -92,26 +92,26 @@ class ConfirmOrderActionTest extends GenericActionTest
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->willReturnCallback(function (GetHttpRequest $request) {
-                $request->method = 'POST';
-            })
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(RenderTemplate::class))
-            ->willReturnCallback(function (RenderTemplate $request) use ($firstModel, $model) {
-                $this->assertEquals('theConfirmOrderTemplate', $request->getTemplateName());
-                $this->assertSame($firstModel, $request->getParameters()['firstModel']);
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(RenderTemplate::class)]
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->returnCallback(function (GetHttpRequest $request) {
+                    $request->method = 'POST';
+                }),
+                $this->returnCallback(function (RenderTemplate $request) use ($firstModel, $model) {
+                    $this->assertEquals('theConfirmOrderTemplate', $request->getTemplateName());
+                    $this->assertSame($firstModel, $request->getParameters()['firstModel']);
 
-                $this->assertInstanceOf(ArrayObject::class, $request->getParameters()['model']);
-                $this->assertSame(['foo' => 'fooVal', 'bar' => 'barVal'], (array) $request->getParameters()['model']);
+                    $this->assertInstanceOf(ArrayObject::class, $request->getParameters()['model']);
+                    $this->assertSame(['foo' => 'fooVal', 'bar' => 'barVal'], (array) $request->getParameters()['model']);
 
-                $request->setResult('thePage');
-            })
+                    $request->setResult('thePage');
+                })
+            )
         ;
 
         $request = new ConfirmOrder($firstModel);

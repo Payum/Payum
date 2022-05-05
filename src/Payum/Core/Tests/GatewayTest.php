@@ -115,12 +115,12 @@ class GatewayTest extends TestCase
 
         $action = $this->getMockForAbstractClass(ApiAwareAction::class);
         $action
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('setApi')
             ->with($this->identicalTo($firstApi))
         ;
         $action
-            ->expects($this->at(1))
+            ->expects($this->once())
             ->method('supports')
             ->willReturn(true)
         ;
@@ -142,18 +142,19 @@ class GatewayTest extends TestCase
 
         $action = $this->getMockForAbstractClass(ApiAwareAction::class);
         $action
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('setApi')
-            ->with($this->identicalTo($firstApi))
-            ->willThrowException(new UnsupportedApiException('first api not supported'))
+            ->withConsecutive(
+                [$this->identicalTo($firstApi)],
+                [$this->identicalTo($secondApi)]
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->throwException(new UnsupportedApiException('first api not supported'))
+            )
         ;
+
         $action
-            ->expects($this->at(1))
-            ->method('setApi')
-            ->with($this->identicalTo($secondApi))
-        ;
-        $action
-            ->expects($this->at(2))
+            ->expects($this->once())
             ->method('supports')
             ->willReturn(true)
         ;
@@ -178,17 +179,18 @@ class GatewayTest extends TestCase
 
         $action = $this->getMockForAbstractClass(ApiAwareAction::class);
         $action
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('setApi')
-            ->with($this->identicalTo($firstApi))
-            ->willThrowException(new UnsupportedApiException('first api not supported'))
+            ->withConsecutive(
+                [$this->identicalTo($firstApi)],
+                [$this->identicalTo($secondApi)]
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->throwException(new UnsupportedApiException('first api not supported')),
+                $this->throwException(new UnsupportedApiException('second api not supported'))
+            )
         ;
-        $action
-            ->expects($this->at(1))
-            ->method('setApi')
-            ->with($this->identicalTo($secondApi))
-            ->willThrowException(new UnsupportedApiException('second api not supported'))
-        ;
+
         $action
             ->expects($this->never())
             ->method('supports')
@@ -225,7 +227,7 @@ class GatewayTest extends TestCase
             ->expects($this->once())
             ->method('supports')
             ->with($request)
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
         $actionMock
             ->expects($this->once())
@@ -251,7 +253,7 @@ class GatewayTest extends TestCase
         $actionMock
             ->expects($this->once())
             ->method('supports')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
         $actionMock
             ->expects($this->once())
@@ -301,12 +303,12 @@ class GatewayTest extends TestCase
 
         $actionMock = $this->createMock(GatewayAwareAction::class);
         $actionMock
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('setGateway')
             ->with($this->identicalTo($gateway))
         ;
         $actionMock
-            ->expects($this->at(1))
+            ->expects($this->once())
             ->method('supports')
             ->willReturn(true)
         ;
@@ -335,7 +337,7 @@ class GatewayTest extends TestCase
         ;
         $actionMock
             ->method('supports')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $extensionMock = $this->createExtensionMock();
@@ -380,7 +382,7 @@ class GatewayTest extends TestCase
         ;
         $actionMock
             ->method('supports')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $extensionMock = $this->createExtensionMock();
@@ -420,7 +422,7 @@ class GatewayTest extends TestCase
         ;
         $actionMock
             ->method('supports')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $extensionMock = $this->createExtensionMock();
@@ -460,7 +462,7 @@ class GatewayTest extends TestCase
         ;
         $actionMock
             ->method('supports')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $extensionMock = $this->createExtensionMock();
@@ -509,7 +511,7 @@ class GatewayTest extends TestCase
         ;
         $actionMock
             ->method('supports')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $extensionMock = $this->createExtensionMock();
@@ -554,7 +556,7 @@ class GatewayTest extends TestCase
         ;
         $actionMock
             ->method('supports')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $anotherActionMock = $this->createActionMock();
@@ -598,7 +600,7 @@ class GatewayTest extends TestCase
         $actionMock
             ->expects($this->never())
             ->method('supports')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $gateway = new Gateway();
@@ -636,7 +638,7 @@ class GatewayTest extends TestCase
         ;
         $actionMock
             ->method('supports')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $gateway = new Gateway();
@@ -680,7 +682,7 @@ class GatewayTest extends TestCase
         ;
         $actionMock
             ->method('supports')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $gateway = new Gateway();
@@ -721,7 +723,7 @@ class GatewayTest extends TestCase
         ;
         $actionMock
             ->method('supports')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $gateway = new Gateway();
@@ -756,7 +758,7 @@ class GatewayTest extends TestCase
         $actionMock = $this->createActionMock();
         $actionMock
             ->method('supports')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $gateway = new Gateway();
@@ -792,7 +794,7 @@ class GatewayTest extends TestCase
         $actionMock = $this->createActionMock();
         $actionMock
             ->method('supports')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $gateway = new Gateway();
@@ -845,23 +847,21 @@ class GatewayTest extends TestCase
 
         $extensionMock = $this->createExtensionMock();
         $extensionMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('onPreExecute')
-            ->willReturnCallback(function (Context $context) use ($firstRequest) {
-                $this->assertSame($firstRequest, $context->getRequest());
+            ->willReturnOnConsecutiveCalls(
+                $this->returnCallback(function (Context $context) use ($firstRequest) {
+                    $this->assertSame($firstRequest, $context->getRequest());
 
-                $this->assertEmpty($context->getPrevious());
-            })
-        ;
-        $extensionMock
-            ->expects($this->at(1))
-            ->method('onPreExecute')
-            ->willReturnCallback(function (Context $context) use ($secondRequest) {
-                $this->assertSame($secondRequest, $context->getRequest());
+                    $this->assertEmpty($context->getPrevious());
+                }),
+                $this->returnCallback(function (Context $context) use ($secondRequest) {
+                    $this->assertSame($secondRequest, $context->getRequest());
 
-                $this->assertCount(1, $context->getPrevious());
-                $this->assertContainsOnly(Context::class, $context->getPrevious());
-            })
+                    $this->assertCount(1, $context->getPrevious());
+                    $this->assertContainsOnly(Context::class, $context->getPrevious());
+                })
+            )
         ;
 
         $gateway->addExtension($extensionMock);
