@@ -33,6 +33,6 @@ class GetHttpRequestActionTest extends GenericActionTest
 
         $action->execute($httpRequest = new GetHttpRequest());
 
-        $this->assertEquals('GET', $httpRequest->method);
+        $this->assertSame('GET', $httpRequest->method);
     }
 }

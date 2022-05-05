@@ -122,9 +122,9 @@ class DeleteAgreementActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('delete')
             ->with($this->requiredNotEmptyFields)
-            ->will($this->returnValue(array(
+            ->willReturn(array(
                 'errorCode' => AgreementApi::ERRORCODE_OK,
-            )));
+            ));
 
         $action = new DeleteAgreementAction();
         $action->setApi($apiMock);
@@ -134,7 +134,7 @@ class DeleteAgreementActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $model = $request->getModel();
-        $this->assertEquals(AgreementApi::ERRORCODE_OK, $model['errorCode']);
+        $this->assertSame(AgreementApi::ERRORCODE_OK, $model['errorCode']);
     }
 
     /**

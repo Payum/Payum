@@ -122,9 +122,9 @@ class CheckAgreementActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('check')
             ->with($this->requiredNotEmptyFields)
-            ->will($this->returnValue(array(
+            ->willReturn(array(
                 'agreementStatus' => AgreementApi::AGREEMENTSTATUS_VERIFIED,
-            )));
+            ));
 
         $action = new CheckAgreementAction();
         $action->setApi($apiMock);
@@ -134,7 +134,7 @@ class CheckAgreementActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $model = $request->getModel();
-        $this->assertEquals(AgreementApi::AGREEMENTSTATUS_VERIFIED, $model['agreementStatus']);
+        $this->assertSame(AgreementApi::AGREEMENTSTATUS_VERIFIED, $model['agreementStatus']);
     }
 
     /**

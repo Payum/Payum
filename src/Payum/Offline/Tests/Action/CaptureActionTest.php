@@ -82,7 +82,7 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $this->assertArrayHasKey(Constants::FIELD_STATUS, $details);
-        $this->assertEquals(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
+        $this->assertSame(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
     }
 
     /**
@@ -103,7 +103,7 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $this->assertArrayHasKey(Constants::FIELD_STATUS, $details);
-        $this->assertEquals(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
+        $this->assertSame(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
     }
 
     /**
@@ -124,6 +124,6 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $this->assertArrayHasKey(Constants::FIELD_STATUS, $details);
-        $this->assertEquals(Constants::STATUS_CAPTURED, $details[Constants::FIELD_STATUS]);
+        $this->assertSame(Constants::STATUS_CAPTURED, $details[Constants::FIELD_STATUS]);
     }
 }

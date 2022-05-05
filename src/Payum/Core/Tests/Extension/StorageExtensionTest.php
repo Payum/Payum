@@ -33,7 +33,7 @@ class StorageExtensionTest extends TestCase
         $neverUsedStorageMock
             ->expects($this->never())
             ->method('support')
-            ->will($this->returnValue(false))
+            ->willReturn(false)
         ;
         $neverUsedStorageMock
             ->expects($this->never())
@@ -61,7 +61,7 @@ class StorageExtensionTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('find')
             ->with($identity)
-            ->will($this->returnValue(null))
+            ->willReturn(null)
         ;
 
         $requestMock = $this->createMock(ModelAggregateAndAwareInterface::class);
@@ -90,7 +90,7 @@ class StorageExtensionTest extends TestCase
         $storageMock
             ->expects($this->atLeastOnce())
             ->method('support')
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
         $storageMock
             ->expects($this->never())
@@ -152,7 +152,7 @@ class StorageExtensionTest extends TestCase
             ->expects($this->once())
             ->method('find')
             ->with($identity)
-            ->will($this->returnValue($expectedModel))
+            ->willReturn($expectedModel)
         ;
 
         $requestMock = $this->createMock(ModelAggregateAndAwareInterface::class);
@@ -188,7 +188,7 @@ class StorageExtensionTest extends TestCase
             ->expects($this->once())
             ->method('support')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $requestMock = $this->createMock(ModelAggregateInterface::class);
@@ -220,7 +220,7 @@ class StorageExtensionTest extends TestCase
             ->expects($this->once())
             ->method('support')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $requestMock = $this->createMock(ModelAggregateInterface::class);
@@ -257,7 +257,7 @@ class StorageExtensionTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('support')
             ->with($this->identicalTo($expectedModel))
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
         $storageMock
             ->expects($this->once())
@@ -294,7 +294,7 @@ class StorageExtensionTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('support')
             ->with($this->identicalTo($expectedModel))
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
         $storageMock
             ->expects($this->never())

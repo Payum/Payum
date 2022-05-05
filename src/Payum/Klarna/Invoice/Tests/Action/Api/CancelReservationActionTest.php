@@ -109,7 +109,7 @@ class CancelReservationActionTest extends GenericApiAwareActionTest
             ->expects($this->once())
             ->method('cancelReservation')
             ->with($details['rno'])
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $action = new CancelReservationAction($klarnaMock);
@@ -136,7 +136,7 @@ class CancelReservationActionTest extends GenericApiAwareActionTest
             ->expects($this->once())
             ->method('cancelReservation')
             ->with($details['rno'])
-            ->will($this->throwException(new \KlarnaException('theMessage', 123)))
+            ->willThrowException(new \KlarnaException('theMessage', 123))
         ;
 
         $action = new CancelReservationAction($klarnaMock);
@@ -145,8 +145,8 @@ class CancelReservationActionTest extends GenericApiAwareActionTest
         $action->execute($cancel = new CancelReservation($details));
 
         $activatedDetails = $cancel->getModel();
-        $this->assertEquals(123, $activatedDetails['error_code']);
-        $this->assertEquals('theMessage', $activatedDetails['error_message']);
+        $this->assertSame(123, $activatedDetails['error_code']);
+        $this->assertSame('theMessage', $activatedDetails['error_message']);
     }
 
     /**

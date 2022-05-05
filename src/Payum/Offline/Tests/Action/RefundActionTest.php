@@ -83,7 +83,7 @@ class RefundActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $this->assertArrayHasKey(Constants::FIELD_STATUS, $details);
-        $this->assertEquals(Constants::STATUS_REFUNDED, $details[Constants::FIELD_STATUS]);
+        $this->assertSame(Constants::STATUS_REFUNDED, $details[Constants::FIELD_STATUS]);
     }
 
     /**
@@ -104,6 +104,6 @@ class RefundActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $this->assertArrayHasKey(Constants::FIELD_STATUS, $details);
-        $this->assertEquals(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
+        $this->assertSame(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
     }
 }

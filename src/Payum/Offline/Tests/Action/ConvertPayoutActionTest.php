@@ -53,19 +53,19 @@ class ConvertPayoutActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('amount', $details);
-        $this->assertEquals(123, $details['amount']);
+        $this->assertSame(123, $details['amount']);
 
         $this->assertArrayHasKey('currency', $details);
-        $this->assertEquals('USD', $details['currency']);
+        $this->assertSame('USD', $details['currency']);
 
         $this->assertArrayHasKey('description', $details);
-        $this->assertEquals('the description', $details['description']);
+        $this->assertSame('the description', $details['description']);
 
         $this->assertArrayHasKey('recipient_id', $details);
-        $this->assertEquals('theRecipientId', $details['recipient_id']);
+        $this->assertSame('theRecipientId', $details['recipient_id']);
 
         $this->assertArrayHasKey('recipient_email', $details);
-        $this->assertEquals('theRecipientEmail', $details['recipient_email']);
+        $this->assertSame('theRecipientEmail', $details['recipient_email']);
 
         $this->assertArrayHasKey(Constants::FIELD_PAYOUT, $details);
         $this->assertEquals(true, $details[Constants::FIELD_PAYOUT]);
@@ -115,6 +115,6 @@ class ConvertPayoutActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('foo', $details);
-        $this->assertEquals('fooVal', $details['foo']);
+        $this->assertSame('fooVal', $details['foo']);
     }
 }

@@ -115,7 +115,7 @@ class ActivateActionTest extends GenericApiAwareActionTest
                 $details['osr'],
                 $details['activation_flags']
             )
-            ->will($this->returnValue(array('theRisk', 'theInvNumber')))
+            ->willReturn(array('theRisk', 'theInvNumber'))
         ;
 
         $action = new ActivateAction($klarnaMock);
@@ -124,8 +124,8 @@ class ActivateActionTest extends GenericApiAwareActionTest
         $action->execute($activate = new Activate($details));
 
         $activatedDetails = $activate->getModel();
-        $this->assertEquals('theRisk', $activatedDetails['risk_status']);
-        $this->assertEquals('theInvNumber', $activatedDetails['invoice_number']);
+        $this->assertSame('theRisk', $activatedDetails['risk_status']);
+        $this->assertSame('theInvNumber', $activatedDetails['invoice_number']);
     }
 
     /**
@@ -148,7 +148,7 @@ class ActivateActionTest extends GenericApiAwareActionTest
                 $details['osr'],
                 $details['activation_flags']
             )
-            ->will($this->throwException(new \KlarnaException('theMessage', 123)))
+            ->willThrowException(new \KlarnaException('theMessage', 123))
         ;
 
         $action = new ActivateAction($klarnaMock);
@@ -158,8 +158,8 @@ class ActivateActionTest extends GenericApiAwareActionTest
 
         $activatedDetails = $activate->getModel();
 
-        $this->assertEquals(123, $activatedDetails['error_code']);
-        $this->assertEquals('theMessage', $activatedDetails['error_message']);
+        $this->assertSame(123, $activatedDetails['error_code']);
+        $this->assertSame('theMessage', $activatedDetails['error_message']);
     }
 
     /**

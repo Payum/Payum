@@ -328,7 +328,7 @@ class DynamicRegistryTest extends TestCase
             $staticRegistryMock
         );
 
-        $this->assertEquals('theGatewaysFactories', $registry->getGatewayFactories());
+        $this->assertSame('theGatewaysFactories', $registry->getGatewayFactories());
     }
 
     /**
@@ -365,7 +365,7 @@ class DynamicRegistryTest extends TestCase
             $staticRegistryMock
         );
 
-        $this->assertEquals('theGatewayFactory', $registry->getGatewayFactory('theName'));
+        $this->assertSame('theGatewayFactory', $registry->getGatewayFactory('theName'));
     }
 
     /**
@@ -403,7 +403,7 @@ class DynamicRegistryTest extends TestCase
             $staticRegistryMock
         );
 
-        $this->assertEquals('theStorages', $registry->getStorages());
+        $this->assertSame('theStorages', $registry->getStorages());
     }
 
     /**
@@ -440,7 +440,7 @@ class DynamicRegistryTest extends TestCase
             $staticRegistryMock
         );
 
-        $this->assertEquals('theStorage', $registry->getStorage('theName'));
+        $this->assertSame('theStorage', $registry->getStorage('theName'));
     }
 
     /**

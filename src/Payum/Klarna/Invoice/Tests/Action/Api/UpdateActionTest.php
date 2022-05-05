@@ -124,7 +124,7 @@ class UpdateActionTest extends GenericApiAwareActionTest
             ->expects($this->once())
             ->method('update')
             ->with($details['rno'])
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $action = new UpdateAction($klarnaMock);
@@ -134,7 +134,7 @@ class UpdateActionTest extends GenericApiAwareActionTest
         $action->execute($request = new Update($details));
 
         $model = $request->getModel();
-        $this->assertEquals('theRno', $model['rno']);
+        $this->assertSame('theRno', $model['rno']);
         $this->assertTrue($model['updated']);
     }
 
@@ -159,7 +159,7 @@ class UpdateActionTest extends GenericApiAwareActionTest
             ->expects($this->once())
             ->method('update')
             ->with($details['rno'])
-            ->will($this->throwException(new \KlarnaException('theMessage', 123)))
+            ->willThrowException(new \KlarnaException('theMessage', 123))
         ;
 
         $action = new UpdateAction($klarnaMock);
@@ -169,8 +169,8 @@ class UpdateActionTest extends GenericApiAwareActionTest
         $action->execute($request = new Update($details));
 
         $model = $request->getModel();
-        $this->assertEquals(123, $model['error_code']);
-        $this->assertEquals('theMessage', $model['error_message']);
+        $this->assertSame(123, $model['error_code']);
+        $this->assertSame('theMessage', $model['error_message']);
     }
 
     /**

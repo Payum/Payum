@@ -56,13 +56,13 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertArrayNotHasKey('card', $details);
 
         $this->assertArrayHasKey('amount', $details);
-        $this->assertEquals(123, $details['amount']);
+        $this->assertSame(123, $details['amount']);
 
         $this->assertArrayHasKey('currency', $details);
-        $this->assertEquals('USD', $details['currency']);
+        $this->assertSame('USD', $details['currency']);
 
         $this->assertArrayHasKey('description', $details);
-        $this->assertEquals('the description', $details['description']);
+        $this->assertSame('the description', $details['description']);
     }
 
     /**
@@ -87,7 +87,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('foo', $details);
-        $this->assertEquals('fooVal', $details['foo']);
+        $this->assertSame('fooVal', $details['foo']);
     }
 
     /**
@@ -119,16 +119,16 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertIsArray($card);
 
         $this->assertArrayHasKey('number', $card);
-        $this->assertEquals('4111111111111111', $card['number']);
+        $this->assertSame('4111111111111111', $card['number']);
 
         $this->assertArrayHasKey('exp_month', $card);
-        $this->assertEquals('05', $card['exp_month']);
+        $this->assertSame('05', $card['exp_month']);
 
         $this->assertArrayHasKey('exp_year', $card);
-        $this->assertEquals('2018', $card['exp_year']);
+        $this->assertSame('2018', $card['exp_year']);
 
         $this->assertArrayHasKey('cvc', $card);
-        $this->assertEquals('123', $card['cvc']);
+        $this->assertSame(123, $card['cvc']);
     }
 
     /**
@@ -151,6 +151,6 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('customer', $details);
-        $this->assertEquals('theCustomerId', $details['customer']);
+        $this->assertSame('theCustomerId', $details['customer']);
     }
 }

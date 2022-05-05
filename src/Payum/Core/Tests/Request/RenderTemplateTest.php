@@ -35,7 +35,7 @@ class RenderTemplateTest extends TestCase
 
         $request->setResult('theResult');
 
-        $this->assertEquals('theResult', $request->getResult());
+        $this->assertSame('theResult', $request->getResult());
     }
 
     public function provideParameters(): \Iterator

@@ -86,12 +86,12 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit\Framework\Te
         $apiMock
             ->expects($this->once())
             ->method('getRecurringPaymentsProfileDetails')
-            ->will($this->returnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase) {
                 $testCase->assertArrayHasKey('PROFILEID', $fields);
-                $testCase->assertEquals('theProfileId', $fields['PROFILEID']);
+                $testCase->assertSame('theProfileId', $fields['PROFILEID']);
 
                 return array();
-            }))
+            })
         ;
 
         $action = new GetRecurringPaymentsProfileDetailsAction();
@@ -113,11 +113,11 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit\Framework\Te
         $apiMock
             ->expects($this->once())
             ->method('getRecurringPaymentsProfileDetails')
-            ->will($this->returnCallback(function () {
+            ->willReturnCallback(function () {
                 return array(
                     'STATUS' => 'theStatus',
                 );
-            }))
+            })
         ;
 
         $action = new GetRecurringPaymentsProfileDetailsAction();
@@ -132,7 +132,7 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit\Framework\Te
         $model = $request->getModel();
 
         $this->assertArrayHasKey('STATUS', $model);
-        $this->assertEquals('theStatus', $model['STATUS']);
+        $this->assertSame('theStatus', $model['STATUS']);
     }
 
     /**

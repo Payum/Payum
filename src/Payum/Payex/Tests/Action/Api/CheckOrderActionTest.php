@@ -119,9 +119,9 @@ class CheckOrderActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('check')
             ->with($this->requiredFields)
-            ->will($this->returnValue(array(
+            ->willReturn(array(
                 'transactionStatus' => 'theStatus',
-            )));
+            ));
 
         $action = new CheckOrderAction();
         $action->setApi($apiMock);
@@ -131,7 +131,7 @@ class CheckOrderActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $model = $request->getModel();
-        $this->assertEquals('theStatus', $model['transactionStatus']);
+        $this->assertSame('theStatus', $model['transactionStatus']);
     }
 
     /**

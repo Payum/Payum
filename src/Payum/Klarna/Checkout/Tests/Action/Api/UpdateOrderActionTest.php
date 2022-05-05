@@ -54,11 +54,11 @@ class UpdateOrderActionTest extends GenericActionTest
             ->expects($this->exactly(1))
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, $model) {
+            ->willReturnCallback(function ($method, $order, $options) use ($testCase, $model) {
                 $testCase->assertIsArray($options);
                 $testCase->assertArrayHasKey('data', $options);
                 $testCase->assertEquals(array('cart' => $model['cart']), $options['data']);
-            }))
+            })
         ;
 
         $action = new UpdateOrderAction($connector);
@@ -90,7 +90,7 @@ class UpdateOrderActionTest extends GenericActionTest
             ->expects($this->exactly(3))
             ->method('apply')
             ->with('POST')
-            ->will($this->throwException(new \Klarna_Checkout_ConnectionErrorException()))
+            ->willThrowException(new \Klarna_Checkout_ConnectionErrorException())
         ;
 
         $action = new UpdateOrderAction($connector);

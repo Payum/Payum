@@ -33,7 +33,7 @@ class HumanifyTest extends TestCase
      */
     public function shouldReturnObjectClassOnValueIfObjectPassed()
     {
-        $this->assertEquals('HumanifyTest', Humanify::value($this));
+        $this->assertSame('HumanifyTest', Humanify::value($this));
     }
 
     /**
@@ -41,7 +41,7 @@ class HumanifyTest extends TestCase
      */
     public function shouldReturnObjectShortClassOnValueIfObjectPassedAndShortClassFlagSetTrue()
     {
-        $this->assertEquals('HumanifyTest', Humanify::value($this, true));
+        $this->assertSame('HumanifyTest', Humanify::value($this, true));
     }
 
     /**
@@ -49,7 +49,7 @@ class HumanifyTest extends TestCase
      */
     public function shouldReturnObjectClassOnValueIfObjectPassedAndShortClassFlagSetFalse()
     {
-        $this->assertEquals(__CLASS__, Humanify::value($this, false));
+        $this->assertSame(__CLASS__, Humanify::value($this, false));
     }
 
     /**
@@ -57,7 +57,7 @@ class HumanifyTest extends TestCase
      */
     public function shouldReturnValueTypeIfNotObjectValueGivenOnValue()
     {
-        $this->assertEquals('string', Humanify::value('foo'));
+        $this->assertSame('string', Humanify::value('foo'));
     }
 
     /**
@@ -65,7 +65,7 @@ class HumanifyTest extends TestCase
      */
     public function shouldReturnRequestTypeIfRequestNotObjectOnRequest()
     {
-        $this->assertEquals('string', Humanify::request('foo'));
+        $this->assertSame('string', Humanify::request('foo'));
     }
 
     /**
@@ -73,7 +73,7 @@ class HumanifyTest extends TestCase
      */
     public function shouldReturnRequestShortClassIfRequestObjectOnRequest()
     {
-        $this->assertEquals('HumanifyTest', Humanify::request($this));
+        $this->assertSame('HumanifyTest', Humanify::request($this));
     }
 
     /**
@@ -83,7 +83,7 @@ class HumanifyTest extends TestCase
     {
         $request = new Capture($this);
 
-        $this->assertEquals('Capture{model: HumanifyTest}', Humanify::request($request));
+        $this->assertSame('Capture{model: HumanifyTest}', Humanify::request($request));
     }
 
     /**
@@ -93,6 +93,6 @@ class HumanifyTest extends TestCase
     {
         $request = new HttpRedirect('http://example.com/foo');
 
-        $this->assertEquals('HttpRedirect{url: http://example.com/foo}', Humanify::request($request));
+        $this->assertSame('HttpRedirect{url: http://example.com/foo}', Humanify::request($request));
     }
 }
