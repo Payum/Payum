@@ -12,6 +12,8 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use Payum\Core\Extension\ExtensionInterface;
+use function get_class;
 
 class LogExecutedActionsExtensionTest extends TestCase
 {
@@ -20,9 +22,9 @@ class LogExecutedActionsExtensionTest extends TestCase
      */
     public function shouldImplementExtensionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension');
+        $rc = new \ReflectionClass(LogExecutedActionsExtension::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
+        $this->assertTrue($rc->implementsInterface(ExtensionInterface::class));
     }
 
     /**
@@ -30,9 +32,9 @@ class LogExecutedActionsExtensionTest extends TestCase
      */
     public function shouldImplementLoggerAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension');
+        $rc = new \ReflectionClass(LogExecutedActionsExtension::class);
 
-        $this->assertTrue($rc->implementsInterface('Psr\Log\LoggerAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(LoggerAwareInterface::class));
     }
 
     /**
@@ -89,7 +91,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     {
         $logger = $this->createLoggerMock();
         $logger
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('debug')
             ->with($this->stringStartsWith('[Payum] 2# '))
         ;
@@ -115,14 +117,12 @@ class LogExecutedActionsExtensionTest extends TestCase
 
         $logger = $this->createLoggerMock();
         $logger
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('debug')
-            ->with('[Payum] 1# '.get_class($action).'::execute(string)')
-        ;
-        $logger
-            ->expects($this->at(1))
-            ->method('debug')
-            ->with('[Payum] 1# '.get_class($action).'::execute(array)')
+            ->withConsecutive(
+                ['[Payum] 1# '.get_class($action).'::execute(string)'],
+                ['[Payum] 1# '.get_class($action).'::execute(array)']
+            )
         ;
 
         $extension = new LogExecutedActionsExtension($logger);
@@ -149,14 +149,12 @@ class LogExecutedActionsExtensionTest extends TestCase
 
         $logger = $this->createLoggerMock();
         $logger
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('debug')
-            ->with('[Payum] 1# '.get_class($action).'::execute(stdClass)')
-        ;
-        $logger
-            ->expects($this->at(1))
-            ->method('debug')
-            ->with('[Payum] 1# '.get_class($action).'::execute(NamespacedRequest)')
+            ->withConsecutive(
+                ['[Payum] 1# '.get_class($action).'::execute(stdClass)'],
+                ['[Payum] 1# '.get_class($action).'::execute(NamespacedRequest)']
+            )
         ;
 
         $extension = new LogExecutedActionsExtension($logger);
@@ -183,7 +181,7 @@ class LogExecutedActionsExtensionTest extends TestCase
 
         $logger = $this->createLoggerMock();
         $logger
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('debug')
             ->with('[Payum] 1# '.get_class($action).'::execute(Capture{model: ArrayObject})')
         ;
@@ -207,7 +205,7 @@ class LogExecutedActionsExtensionTest extends TestCase
 
         $logger = $this->createLoggerMock();
         $logger
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('debug')
             ->with('[Payum] 1# '.get_class($action).'::execute(Capture{model: stdClass})')
         ;
@@ -232,7 +230,7 @@ class LogExecutedActionsExtensionTest extends TestCase
 
         $logger = $this->createLoggerMock();
         $logger
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('debug')
             ->with('[Payum] 1# FooAction::execute(string) throws reply '.$ro->getShortName())
         ;
@@ -256,7 +254,7 @@ class LogExecutedActionsExtensionTest extends TestCase
 
         $logger = $this->createLoggerMock();
         $logger
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('debug')
             ->with('[Payum] 1# FooAction::execute(string) throws reply HttpRedirect{url: '.$reply->getUrl().'}')
         ;
@@ -279,7 +277,7 @@ class LogExecutedActionsExtensionTest extends TestCase
 
         $logger = $this->createLoggerMock();
         $logger
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('debug')
             ->with('[Payum] 1# FooAction::execute(string) throws exception LogicException')
         ;
@@ -300,7 +298,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     {
         $logger = $this->createLoggerMock();
         $logger
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('debug')
             ->with('[Payum] 1# Gateway::execute(string) throws exception LogicException')
         ;
@@ -318,7 +316,7 @@ class LogExecutedActionsExtensionTest extends TestCase
      */
     protected function createLoggerMock()
     {
-        return $this->createMock('Psr\Log\LoggerInterface');
+        return $this->createMock(LoggerInterface::class);
     }
 
     /**
@@ -326,7 +324,7 @@ class LogExecutedActionsExtensionTest extends TestCase
      */
     protected function createReplyMock()
     {
-        return $this->createMock('Payum\Core\Reply\ReplyInterface');
+        return $this->createMock(ReplyInterface::class);
     }
 
     /**
@@ -334,7 +332,7 @@ class LogExecutedActionsExtensionTest extends TestCase
      */
     protected function createActionMock()
     {
-        return $this->createMock('Payum\Core\Action\ActionInterface');
+        return $this->createMock(ActionInterface::class);
     }
 
     /**
@@ -342,7 +340,7 @@ class LogExecutedActionsExtensionTest extends TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(GatewayInterface::class);
     }
 }
 

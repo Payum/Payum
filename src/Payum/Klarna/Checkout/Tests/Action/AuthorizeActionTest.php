@@ -114,14 +114,12 @@ class AuthorizeActionTest extends TestCase
         $this->expectException(\Payum\Core\Reply\HttpResponse::class);
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(RenderTemplate::class))
+            ->withConsecutive(
+                [$this->isInstanceOf(Sync::class)],
+                [$this->isInstanceOf(RenderTemplate::class)]
+            )
         ;
 
         $action = new AuthorizeAction('aTemplate');
@@ -157,22 +155,22 @@ class AuthorizeActionTest extends TestCase
         $orderMock
             ->expects($this->once())
             ->method('getLocation')
-            ->will($this->returnValue('theLocation'))
+            ->willReturn('theLocation')
         ;
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(CreateOrder::class))
-            ->will($this->returnCallback(function (CreateOrder $request) use ($orderMock) {
-                $request->setOrder($orderMock);
-            }))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
+            ->withConsecutive(
+                [$this->isInstanceOf(CreateOrder::class)],
+                [$this->isInstanceOf(Sync::class)]
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->returnCallback(function (CreateOrder $request) use ($orderMock) {
+                    $request->setOrder($orderMock);
+                })
+            )
         ;
 
         $action = new AuthorizeAction('aTemplate');
@@ -209,15 +207,21 @@ class AuthorizeActionTest extends TestCase
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(1))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(RenderTemplate::class))
-            ->will($this->returnCallback(function (RenderTemplate $request) use ($testCase, $expectedTemplateName, $expectedContext, $expectedContent) {
-                $testCase->assertEquals($expectedTemplateName, $request->getTemplateName());
-                $testCase->assertEquals($expectedContext, $request->getParameters());
+            ->withConsecutive(
+                [$this->isInstanceOf(Sync::class)],
+                [$this->isInstanceOf(RenderTemplate::class)]
+            )
+            ->willReturnOnConsecutiveCalls(
+                null,
+                $this->returnCallback(function (RenderTemplate $request) use ($testCase, $expectedTemplateName, $expectedContext, $expectedContent) {
+                    $testCase->assertEquals($expectedTemplateName, $request->getTemplateName());
+                    $testCase->assertEquals($expectedContext, $request->getParameters());
 
-                $request->setResult($expectedContent);
-            }))
+                    $request->setResult($expectedContent);
+                })
+            )
         ;
 
         $action = new AuthorizeAction($expectedTemplateName);

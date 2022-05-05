@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Core\Tests\Action;
 
+use Exception;
 use Payum\Core\Action\PayoutPayoutAction;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Model\Payout as PayoutModel;
@@ -10,6 +11,7 @@ use Payum\Core\Request\Convert;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
+use function iterator_to_array;
 
 class PayoutPayoutActionTest extends GenericActionTest
 {
@@ -46,24 +48,21 @@ class PayoutPayoutActionTest extends GenericActionTest
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHumanStatus::class))
-            ->will($this->returnCallback(function (GetHumanStatus $request) {
-                $request->markNew();
-            }))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(Convert::class))
-            ->will($this->returnCallback(function (Convert $request) use ($testCase, $payoutModel) {
-                $testCase->assertSame($payoutModel, $request->getSource());
-                $testCase->assertSame('array', $request->getTo());
-                $testCase->assertNull($request->getToken());
+            ->withConsecutive([$this->isInstanceOf(GetHumanStatus::class)], [$this->isInstanceOf(Convert::class)])
+            ->willReturnOnConsecutiveCalls(
+                $this->returnCallback(function (GetHumanStatus $request) {
+                    $request->markNew();
+                }),
+                $this->returnCallback(function (Convert $request) use ($testCase, $payoutModel) {
+                    $testCase->assertSame($payoutModel, $request->getSource());
+                    $testCase->assertSame('array', $request->getTo());
+                    $testCase->assertNull($request->getToken());
 
-                $request->setResult(array());
-            }))
+                    $request->setResult(array());
+                })
+            )
         ;
 
         $action = new PayoutPayoutAction();
@@ -83,28 +82,24 @@ class PayoutPayoutActionTest extends GenericActionTest
     {
         $payoutModel = new PayoutModel();
 
-        $testCase = $this;
-
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHumanStatus::class))
-            ->will($this->returnCallback(function (GetHumanStatus $request) {
-                $request->markNew();
-            }))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(Convert::class))
-            ->will($this->returnCallback(function (Convert $request) use ($testCase, $payoutModel) {
-                $details['foo'] = 'fooVal';
-
-                $request->setResult(array(
-                    'foo' => 'fooVal',
-                ));
-            }))
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHumanStatus::class)],
+                [$this->isInstanceOf(Convert::class)]
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->returnCallback(function (GetHumanStatus $request) {
+                    $request->markNew();
+                }),
+                $this->returnCallback(function (Convert $request) {
+                    $request->setResult(array(
+                        'foo' => 'fooVal',
+                    ));
+                })
+            )
         ;
 
         $action = new PayoutPayoutAction();
@@ -134,23 +129,20 @@ class PayoutPayoutActionTest extends GenericActionTest
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHumanStatus::class))
-            ->will($this->returnCallback(function (GetHumanStatus $request) {
-                $request->markNew();
-            }))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(Convert::class))
-            ->will($this->returnCallback(function (Convert $request) use ($testCase, $payoutModel, $token) {
-                $testCase->assertSame($payoutModel, $request->getSource());
-                $testCase->assertSame($token, $request->getToken());
+            ->withConsecutive([$this->isInstanceOf(GetHumanStatus::class)], [$this->isInstanceOf(Convert::class)])
+            ->willReturnOnConsecutiveCalls(
+                $this->returnCallback(function (GetHumanStatus $request) {
+                    $request->markNew();
+                }),
+                $this->returnCallback(function (Convert $request) use ($testCase, $payoutModel, $token) {
+                    $testCase->assertSame($payoutModel, $request->getSource());
+                    $testCase->assertSame($token, $request->getToken());
 
-                $request->setResult(array());
-            }))
+                    $request->setResult(array());
+                })
+            )
         ;
 
         $action = new PayoutPayoutAction();
@@ -180,25 +172,22 @@ class PayoutPayoutActionTest extends GenericActionTest
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHumanStatus::class))
-            ->will($this->returnCallback(function (GetHumanStatus $request) {
-                $request->markPending();
-            }))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(Payout::class))
-            ->will($this->returnCallback(function (Payout $request) use ($testCase, $expectedDetails) {
-                $details = $request->getModel();
+            ->withConsecutive([$this->isInstanceOf(GetHumanStatus::class)], [$this->isInstanceOf(Payout::class)])
+            ->willReturnOnConsecutiveCalls(
+                $this->returnCallback(function (GetHumanStatus $request) {
+                    $request->markPending();
+                }),
+                $this->returnCallback(function (Payout $request) use ($testCase, $expectedDetails) {
+                    $details = $request->getModel();
 
-                $testCase->assertInstanceOf('ArrayAccess', $details);
-                $testCase->assertEquals($expectedDetails, iterator_to_array($details));
+                    $testCase->assertInstanceOf('ArrayAccess', $details);
+                    $testCase->assertEquals($expectedDetails, iterator_to_array($details));
 
-                $details['bar'] = 'barVal';
-            }))
+                    $details['bar'] = 'barVal';
+                })
+            )
         ;
 
         $action = new PayoutPayoutAction();
@@ -223,23 +212,15 @@ class PayoutPayoutActionTest extends GenericActionTest
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHumanStatus::class))
-            ->will($this->returnCallback(function (GetHumanStatus $request) {
-                $request->markPending();
-            }))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(Payout::class))
-            ->will($this->returnCallback(function (Payout $request) {
-                $details = $request->getModel();
-                $details['bar'] = 'barVal';
-
-                throw new \Exception();
-            }))
+            ->withConsecutive([$this->isInstanceOf(GetHumanStatus::class)], [$this->isInstanceOf(Payout::class)])
+            ->willReturnOnConsecutiveCalls(
+                $this->returnCallback(function (GetHumanStatus $request) {
+                    $request->markPending();
+                }),
+                $this->throwException(new Exception())
+            )
         ;
 
         $action = new PayoutPayoutAction();

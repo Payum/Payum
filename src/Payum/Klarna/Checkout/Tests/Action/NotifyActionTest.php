@@ -8,6 +8,7 @@ use Payum\Core\Tests\GenericActionTest;
 use Payum\Klarna\Checkout\Action\NotifyAction;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\UpdateOrder;
+use Payum\Core\Request\Sync;
 
 class NotifyActionTest extends GenericActionTest
 {
@@ -34,26 +35,24 @@ class NotifyActionTest extends GenericActionTest
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(3))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\UpdateOrder'))
-            ->will($this->returnCallback(function (UpdateOrder $request) use ($testCase) {
-                $model = $request->getModel();
+            ->withConsecutive(
+                [$this->isInstanceOf(Sync::class)],
+                [$this->isInstanceOf(UpdateOrder::class)],
+                [$this->isInstanceOf(Sync::class)]
+            )
+            ->willReturnOnConsecutiveCalls(
+                null,
+                $this->returnCallback(function (UpdateOrder $request) use ($testCase) {
+                    $model = $request->getModel();
 
-                $testCase->assertEquals(Constants::STATUS_CREATED, $model['status']);
-                $testCase->assertEquals('theLocation', $model['location']);
-                $testCase->assertEquals('theOrderId', $model['merchant_reference']['orderid1']);
-            }))
-        ;
-        $gatewayMock
-            ->expects($this->at(2))
-            ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
+                    $testCase->assertEquals(Constants::STATUS_CREATED, $model['status']);
+                    $testCase->assertEquals('theLocation', $model['location']);
+                    $testCase->assertEquals('theOrderId', $model['merchant_reference']['orderid1']);
+                }),
+                null
+            )
         ;
 
         $action = new NotifyAction();
@@ -75,9 +74,9 @@ class NotifyActionTest extends GenericActionTest
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
+            ->with($this->isInstanceOf(Sync::class))
         ;
 
         $action = new NotifyAction();
@@ -96,9 +95,9 @@ class NotifyActionTest extends GenericActionTest
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
+            ->with($this->isInstanceOf(Sync::class))
         ;
 
         $action = new NotifyAction();
@@ -115,7 +114,7 @@ class NotifyActionTest extends GenericActionTest
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(GatewayInterface::class);
     }
 
     /**
