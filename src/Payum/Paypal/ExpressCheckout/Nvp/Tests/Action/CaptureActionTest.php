@@ -82,24 +82,14 @@ class CaptureActionTest extends GenericActionTest
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(4))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHttpRequest::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(SetExpressCheckout::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(2))
-            ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(3))
-            ->method('execute')
-            ->with($this->isInstanceOf(AuthorizeToken::class))
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(SetExpressCheckout::class)],
+                [$this->isInstanceOf(Sync::class)],
+                [$this->isInstanceOf(AuthorizeToken::class)]
+            )
         ;
 
         $action = new CaptureAction();
@@ -115,19 +105,13 @@ class CaptureActionTest extends GenericActionTest
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(3))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHttpRequest::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(2))
-            ->method('execute')
-            ->with($this->isInstanceOf(AuthorizeToken::class))
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(Sync::class)],
+                [$this->isInstanceOf(AuthorizeToken::class)]
+            )
         ;
 
         $action = new CaptureAction();
@@ -146,14 +130,12 @@ class CaptureActionTest extends GenericActionTest
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHttpRequest::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(Sync::class)]
+            )
         ;
 
         $action = new CaptureAction();
@@ -172,19 +154,20 @@ class CaptureActionTest extends GenericActionTest
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHttpRequest::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(SetExpressCheckout::class))
-            ->will($this->returnCallback(function (SetExpressCheckout $request) {
-                $model = $request->getModel();
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(SetExpressCheckout::class)]
+            )
+            ->willReturnOnConsecutiveCalls(
+                null,
+                $this->returnCallback(function (SetExpressCheckout $request) {
+                    $model = $request->getModel();
 
-                $model['L_ERRORCODE0'] = 'aCode';
-            }))
+                    $model['L_ERRORCODE0'] = 'aCode';
+                })
+            )
         ;
 
         $action = new CaptureAction();
@@ -208,19 +191,20 @@ class CaptureActionTest extends GenericActionTest
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHttpRequest::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(SetExpressCheckout::class))
-            ->will($this->returnCallback(function ($request) use ($testCase, $expectedTargetUrl) {
-                $model = $request->getModel();
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(SetExpressCheckout::class)]
+            )
+            ->willReturnOnConsecutiveCalls(
+                null,
+                $this->returnCallback(function ($request) use ($testCase, $expectedTargetUrl) {
+                    $model = $request->getModel();
 
-                $testCase->assertEquals($expectedTargetUrl, $model['RETURNURL']);
-            }))
+                    $testCase->assertEquals($expectedTargetUrl, $model['RETURNURL']);
+                })
+            )
         ;
 
         $action = new CaptureAction();
@@ -248,19 +232,20 @@ class CaptureActionTest extends GenericActionTest
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHttpRequest::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(SetExpressCheckout::class))
-            ->will($this->returnCallback(function ($request) use ($testCase, $expectedCancelUrl) {
-                $model = $request->getModel();
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(SetExpressCheckout::class)]
+            )
+            ->willReturnOnConsecutiveCalls(
+                null,
+                $this->returnCallback(function ($request) use ($testCase, $expectedCancelUrl) {
+                    $model = $request->getModel();
 
-                $testCase->assertEquals($expectedCancelUrl, $model['CANCELURL']);
-            }))
+                    $testCase->assertEquals($expectedCancelUrl, $model['CANCELURL']);
+                })
+            )
         ;
 
         $action = new CaptureAction();
@@ -289,14 +274,20 @@ class CaptureActionTest extends GenericActionTest
         $gatewayMock = $this->createGatewayMock();
 
         $gatewayMock
-            ->expects($this->at(1))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(SetExpressCheckout::class))
-            ->will($this->returnCallback(function ($request) use ($testCase, $expectedCancelUrl) {
-                $model = $request->getModel();
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(SetExpressCheckout::class)]
+            )
+            ->willReturnOnConsecutiveCalls(
+                null,
+                $this->returnCallback(function ($request) use ($testCase, $expectedCancelUrl) {
+                    $model = $request->getModel();
 
-                $testCase->assertEquals($expectedCancelUrl, $model['CANCELURL']);
-            }))
+                    $testCase->assertEquals($expectedCancelUrl, $model['CANCELURL']);
+                })
+            )
         ;
 
         $action = new CaptureAction();
@@ -315,14 +306,12 @@ class CaptureActionTest extends GenericActionTest
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHttpRequest::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(Sync::class)]
+            )
         ;
 
         $action = new CaptureAction();
@@ -340,24 +329,14 @@ class CaptureActionTest extends GenericActionTest
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(4))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHttpRequest::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(2))
-            ->method('execute')
-            ->with($this->isInstanceOf(DoExpressCheckoutPayment::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(3))
-            ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(Sync::class)],
+                [$this->isInstanceOf(DoExpressCheckoutPayment::class)],
+                [$this->isInstanceOf(Sync::class)]
+            )
         ;
 
         $action = new CaptureAction();
@@ -379,29 +358,15 @@ class CaptureActionTest extends GenericActionTest
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(5))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHttpRequest::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(2))
-            ->method('execute')
-            ->with($this->isInstanceOf(ConfirmOrder::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(3))
-            ->method('execute')
-            ->with($this->isInstanceOf(DoExpressCheckoutPayment::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(4))
-            ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(Sync::class)],
+                [$this->isInstanceOf(ConfirmOrder::class)],
+                [$this->isInstanceOf(DoExpressCheckoutPayment::class)],
+                [$this->isInstanceOf(Sync::class)]
+            )
         ;
 
         $action = new CaptureAction();
@@ -423,24 +388,14 @@ class CaptureActionTest extends GenericActionTest
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(4))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHttpRequest::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(2))
-            ->method('execute')
-            ->with($this->isInstanceOf(AuthorizeToken::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(3))
-            ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(Sync::class)],
+                [$this->isInstanceOf(AuthorizeToken::class)],
+                [$this->isInstanceOf(Sync::class)]
+            )
         ;
 
         $action = new CaptureAction();
@@ -460,19 +415,13 @@ class CaptureActionTest extends GenericActionTest
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(3))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHttpRequest::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(2))
-            ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(Sync::class)],
+                [$this->isInstanceOf(Sync::class)]
+            )
         ;
 
         $action = new CaptureAction();
@@ -492,19 +441,13 @@ class CaptureActionTest extends GenericActionTest
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(3))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHttpRequest::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(Sync::class)],
+                [$this->isInstanceOf(Sync::class)]
+            )
         ;
 
         $action = new CaptureAction();

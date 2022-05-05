@@ -42,7 +42,7 @@ class AbstractTokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($token))
+            ->willReturn($token)
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -59,7 +59,7 @@ class AbstractTokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('identify')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($identity))
+            ->willReturn($identity)
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -67,7 +67,7 @@ class AbstractTokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('getStorage')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($modelStorage))
+            ->willReturn($modelStorage)
         ;
 
         $factory = $this->createTokenFactoryMock($tokenStorageMock, $storageRegistryMock);
@@ -100,7 +100,7 @@ class AbstractTokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($token))
+            ->willReturn($token)
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -117,7 +117,7 @@ class AbstractTokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('identify')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($identity))
+            ->willReturn($identity)
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -125,7 +125,7 @@ class AbstractTokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('getStorage')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($modelStorage))
+            ->willReturn($modelStorage)
         ;
 
         $factory = $this->createTokenFactoryMock($tokenStorageMock, $storageRegistryMock);
@@ -160,7 +160,7 @@ class AbstractTokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($token))
+            ->willReturn($token)
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -203,7 +203,7 @@ class AbstractTokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($token))
+            ->willReturn($token)
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -245,7 +245,7 @@ class AbstractTokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($token))
+            ->willReturn($token)
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -262,7 +262,7 @@ class AbstractTokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('identify')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($identity))
+            ->willReturn($identity)
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -270,7 +270,7 @@ class AbstractTokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('getStorage')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($modelStorage))
+            ->willReturn($modelStorage)
         ;
 
         $factory = $this->createTokenFactoryMock($tokenStorageMock, $storageRegistryMock);
@@ -303,12 +303,12 @@ class AbstractTokenFactoryTest extends TestCase
 
         $tokenStorageMock = $this->createStorageMock();
         $tokenStorageMock
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($authorizeToken))
+            ->willReturn($authorizeToken)
         ;
         $tokenStorageMock
-            ->expects($this->at(1))
+            ->expects($this->once())
             ->method('update')
             ->with($this->identicalTo($authorizeToken))
         ;
@@ -322,7 +322,7 @@ class AbstractTokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('identify')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($identity))
+            ->willReturn($identity)
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -330,7 +330,7 @@ class AbstractTokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('getStorage')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($modelStorage))
+            ->willReturn($modelStorage)
         ;
 
         $factory = $this->createTokenFactoryMock($tokenStorageMock, $storageRegistryMock);
@@ -366,12 +366,12 @@ class AbstractTokenFactoryTest extends TestCase
 
         $tokenStorageMock = $this->createStorageMock();
         $tokenStorageMock
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($authorizeToken))
+            ->willReturn($authorizeToken)
         ;
         $tokenStorageMock
-            ->expects($this->at(1))
+            ->expects($this->once())
             ->method('update')
             ->with($this->identicalTo($authorizeToken))
         ;
@@ -385,7 +385,7 @@ class AbstractTokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('identify')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($identity))
+            ->willReturn($identity)
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -393,7 +393,7 @@ class AbstractTokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('getStorage')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($modelStorage))
+            ->willReturn($modelStorage)
         ;
 
         $factory = $this->createTokenFactoryMock($tokenStorageMock, $storageRegistryMock);
@@ -429,12 +429,12 @@ class AbstractTokenFactoryTest extends TestCase
 
         $tokenStorageMock = $this->createStorageMock();
         $tokenStorageMock
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($authorizeToken))
+            ->willReturn($authorizeToken)
         ;
         $tokenStorageMock
-            ->expects($this->at(1))
+            ->expects($this->once())
             ->method('update')
             ->with($this->identicalTo($authorizeToken))
         ;
@@ -448,7 +448,7 @@ class AbstractTokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('identify')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($identity))
+            ->willReturn($identity)
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -456,7 +456,7 @@ class AbstractTokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('getStorage')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($modelStorage))
+            ->willReturn($modelStorage)
         ;
 
         $factory = $this->createTokenFactoryMock($tokenStorageMock, $storageRegistryMock);
@@ -507,7 +507,7 @@ class AbstractTokenFactoryTest extends TestCase
      */
     protected function createStorageMock()
     {
-        return $this->createMock('Payum\Core\Storage\StorageInterface');
+        return $this->createMock(StorageInterface::class);
     }
 
     /**
@@ -515,6 +515,6 @@ class AbstractTokenFactoryTest extends TestCase
      */
     protected function createStorageRegistryMock()
     {
-        return $this->createMock('Payum\Core\Registry\StorageRegistryInterface');
+        return $this->createMock(StorageRegistryInterface::class);
     }
 }
