@@ -136,7 +136,7 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
         if (method_exists($this, 'expectExceptionMessageMatches')) {
             $this->expectExceptionMessageMatches('/Given \"config_path\" is invalid. \w+/');
         } else {
-            $this->expectExceptionMessageMatches('/Given \"config_path\" is invalid. \w+/');
+            $this->expectExceptionMessageRegExp('/Given \"config_path\" is invalid. \w+/');
         }
 
         $factory = new PaypalRestGatewayFactory();
