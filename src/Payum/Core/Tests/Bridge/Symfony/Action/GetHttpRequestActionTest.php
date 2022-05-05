@@ -88,7 +88,7 @@ class GetHttpRequestActionTest extends TestCase
     /**
      * @test
      */
-    public function shouldPopulateFromGetMasterRequestOnStack()
+    public function shouldPopulateFromGetMainRequestOnStack()
     {
         $stack = new RequestStack();
         $stack->push(Request::create(
@@ -114,7 +114,7 @@ class GetHttpRequestActionTest extends TestCase
     /**
      * @test
      */
-    public function shouldPopulateFromPostMasterRequestOnStack()
+    public function shouldPopulateFromPostMainRequestOnStack()
     {
         $stack = new RequestStack();
         $stack->push(Request::create(
@@ -140,7 +140,7 @@ class GetHttpRequestActionTest extends TestCase
     /**
      * @test
      */
-    public function shouldPopulateFromMasterRequestIgnoringSubRequestsOnStack()
+    public function shouldPopulateFromMainRequestIgnoringSubRequestsOnStack()
     {
         $stack = new RequestStack();
         $stack->push(Request::create(

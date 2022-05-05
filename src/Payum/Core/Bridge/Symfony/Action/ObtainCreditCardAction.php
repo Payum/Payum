@@ -81,7 +81,13 @@ class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
         if ($this->httpRequest instanceof Request) {
             $httpRequest = $this->httpRequest;
         } elseif ($this->httpRequestStack instanceof RequestStack) {
-            $httpRequest = $this->httpRequestStack->getMasterRequest();
+
+            # BC Layer for Symfony 4 (Simplify after support for Symfony < 5 is dropped)
+            if (method_exists($this->httpRequestStack, 'getMainRequest')) {
+                $httpRequest = $this->httpRequestStack->getMainRequest();
+            } else {
+                $httpRequest = $this->httpRequestStack->getMasterRequest();
+            }
         }
 
         if (false == $httpRequest) {
