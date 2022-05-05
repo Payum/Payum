@@ -48,9 +48,9 @@ class CaptureActionTest extends GenericActionTest
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('execute')
-            ->with($this->isInstanceOf(ObtainToken::class))
+            ->withConsecutive([$this->isInstanceOf(ObtainToken::class)], [$this->isInstanceOf(CreateCharge::class)])
         ;
 
         $action = new CaptureAction();
@@ -65,12 +65,15 @@ class CaptureActionTest extends GenericActionTest
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('execute')
-            ->willReturnCallback(function (ObtainToken $request) use ($model) {
-                $this->assertInstanceOf(ArrayObject::class, $request->getModel());
-                $this->assertSame(['foo' => 'fooVal'], (array) $request->getModel());
-            })
+            ->withConsecutive([$this->isInstanceOf(ObtainToken::class)], [$this->isInstanceOf(CreateCharge::class)])
+            ->willReturnOnConsecutiveCalls(
+                $this->returnCallback(function (ObtainToken $request) use ($model) {
+                    $this->assertInstanceOf(ArrayObject::class, $request->getModel());
+                    $this->assertSame(['foo' => 'fooVal'], (array) $request->getModel());
+                })
+            )
         ;
 
         $action = new CaptureAction();

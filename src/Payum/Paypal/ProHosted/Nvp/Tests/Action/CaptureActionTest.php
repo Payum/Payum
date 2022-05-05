@@ -36,14 +36,13 @@ class CaptureActionTest extends GenericActionTest
     {
         $gatewayMock = $this->createGatewayMock();
 
-        $gatewayMock->expects($this->at(0))
+        $gatewayMock->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHttpRequest::class));
-
-        $gatewayMock->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(CreateButtonPayment::class));
-
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(CreateButtonPayment::class)]
+            )
+        ;
         $action = new CaptureAction();
         $action->setGateway($gatewayMock);
 

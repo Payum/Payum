@@ -3,6 +3,7 @@ namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\Generic;
 use PHPUnit\Framework\TestCase;
+use Payum\Core\Storage\IdentityInterface;
 
 class GenericTest extends TestCase
 {
@@ -125,8 +126,32 @@ class GenericTest extends TestCase
 
     public function testShouldNotSetIdentityAsFirstModelOnConstruct()
     {
-        /** @var Generic $request */
-        $identity = $this->createMock('Payum\Core\Storage\IdentityInterface', array(), array(), '', false);
+        $identity = new class implements IdentityInterface {
+            public function serialize()
+            {
+            }
+
+            public function unserialize($data)
+            {
+            }
+
+            public function getClass()
+            {
+            }
+
+            public function getId()
+            {
+            }
+
+            public function __serialize(): array
+            {
+                return [];
+            }
+
+            public function __unserialize(array $data): void
+            {
+            }
+        };
 
         $request = $this->getMockForAbstractClass(Generic::class, array($identity));
 
@@ -156,7 +181,32 @@ class GenericTest extends TestCase
 
     public function testShouldNotSetIdentityAsFirstModelOnSetModel()
     {
-        $identity = $this->createMock('Payum\Core\Storage\IdentityInterface', array(), array(), '', false);
+        $identity = new class implements IdentityInterface {
+            public function serialize()
+            {
+            }
+
+            public function unserialize($data)
+            {
+            }
+
+            public function getClass()
+            {
+            }
+
+            public function getId()
+            {
+            }
+
+            public function __serialize(): array
+            {
+                return [];
+            }
+
+            public function __unserialize(array $data): void
+            {
+            }
+        };
 
         /** @var Generic $request */
         $request = $this->getMockForAbstractClass(Generic::class, array(null));

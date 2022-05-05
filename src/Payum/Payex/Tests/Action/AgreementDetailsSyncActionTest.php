@@ -21,16 +21,10 @@ class AgreementDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
 
         $array = $this->createMock('ArrayAccess');
         $array
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('offsetExists')
-            ->with('agreementRef')
-            ->willReturn(true)
-        ;
-        $array
-            ->expects($this->at(1))
-            ->method('offsetExists')
-            ->with('orderId')
-            ->willReturn(false)
+            ->withConsecutive(['agreementRef'], ['orderId'])
+            ->willReturnOnConsecutiveCalls(true, false)
         ;
 
         $this->assertTrue($action->supports(new Sync($array)));
@@ -42,15 +36,9 @@ class AgreementDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
 
         $array = $this->createMock('ArrayAccess');
         $array
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('offsetExists')
-            ->with('agreementRef')
-            ->willReturn(true)
-        ;
-        $array
-            ->expects($this->at(1))
-            ->method('offsetExists')
-            ->with('orderId')
+            ->withConsecutive(['agreementRef'], ['orderId'])
             ->willReturn(true)
         ;
 

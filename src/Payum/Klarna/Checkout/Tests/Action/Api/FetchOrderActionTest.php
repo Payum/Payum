@@ -5,26 +5,28 @@ use Payum\Core\Tests\GenericActionTest;
 use Payum\Klarna\Checkout\Action\Api\FetchOrderAction;
 use Payum\Klarna\Checkout\Config;
 use Payum\Klarna\Checkout\Request\Api\FetchOrder;
+use Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction;
+use Payum\Core\Request\Generic;
 
 class FetchOrderActionTest extends GenericActionTest
 {
-    protected $requestClass = 'Payum\Klarna\Checkout\Request\Api\FetchOrder';
+    protected $requestClass = FetchOrder::class;
 
-    protected $actionClass = 'Payum\Klarna\Checkout\Action\Api\FetchOrderAction';
+    protected $actionClass = FetchOrderAction::class;
 
     public function provideNotSupportedRequests(): \Iterator
     {
         yield array('foo');
         yield array(array('foo'));
         yield array(new \stdClass());
-        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
+        yield array($this->getMockForAbstractClass(Generic::class, array(array())));
     }
 
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\FetchOrderAction');
+        $rc = new \ReflectionClass(FetchOrderAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction'));
+        $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
     }
 
     public function testThrowIfLocationNotSetOnExecute()
@@ -49,7 +51,7 @@ class FetchOrderActionTest extends GenericActionTest
         $testCase = $this;
 
         $connector
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('apply')
             ->with('GET')
             ->willReturnCallback(function ($method, $order, $options) use ($testCase, $model) {
@@ -81,15 +83,14 @@ class FetchOrderActionTest extends GenericActionTest
 
         $request = new FetchOrder($model);
 
-        $testCase = $this;
         $expectedOrder = null;
 
         $connector = $this->createConnectorMock();
         $connector
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('apply')
             ->with('GET')
-            ->willReturnCallback(function ($method, $order, $options) use ($testCase, &$expectedOrder) {
+            ->willReturnCallback(function ($method, $order) use (&$expectedOrder) {
                 $expectedOrder = $order;
             })
         ;
@@ -145,18 +146,15 @@ class FetchOrderActionTest extends GenericActionTest
 
         $connector = $this->createConnectorMock();
         $connector
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('apply')
-            ->with('GET')
-            ->willThrowException(new \Klarna_Checkout_ConnectionErrorException())
-        ;
-        $connector
-            ->expects($this->at(1))
-            ->method('apply')
-            ->with('GET')
-            ->willReturnCallback(function ($method, $order, $options) use (&$expectedOrder) {
-                $expectedOrder = $order;
-            })
+            ->withConsecutive(['GET'], ['GET'])
+            ->willReturnOnConsecutiveCalls(
+                $this->throwException(new \Klarna_Checkout_ConnectionErrorException()),
+                $this->returnCallback(function ($method, $order, $options) use (&$expectedOrder) {
+                    $expectedOrder = $order;
+                })
+            )
         ;
 
         $action = new FetchOrderAction($connector);

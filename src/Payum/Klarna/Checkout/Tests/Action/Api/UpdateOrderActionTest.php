@@ -45,7 +45,7 @@ class UpdateOrderActionTest extends GenericActionTest
 
         $connector = $this->createConnectorMock();
         $connector
-            ->expects($this->at(0))
+            ->expects($this->exactly(1))
             ->method('apply')
             ->with('POST')
             ->willReturnCallback(function ($method, $order, $options) use ($testCase, $model) {
@@ -104,20 +104,17 @@ class UpdateOrderActionTest extends GenericActionTest
 
         $connector = $this->createConnectorMock();
         $connector
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('apply')
-            ->with('POST')
-            ->willThrowException(new \Klarna_Checkout_ConnectionErrorException())
-        ;
-        $connector
-            ->expects($this->at(1))
-            ->method('apply')
-            ->with('POST')
-            ->willReturnCallback(function ($method, $order, $options) use ($model) {
-                $this->assertIsArray($options);
-                $this->assertArrayHasKey('data', $options);
-                $this->assertSame(array('cart' => $model['cart']), $options['data']);
-            })
+            ->withConsecutive(['POST'], ['POST'])
+            ->willReturnOnConsecutiveCalls(
+                $this->throwException(new \Klarna_Checkout_ConnectionErrorException()),
+                $this->returnCallback(function ($method, $order, $options) use ($model) {
+                    $this->assertIsArray($options);
+                    $this->assertArrayHasKey('data', $options);
+                    $this->assertEquals(array('cart' => $model['cart']), $options['data']);
+                })
+            )
         ;
 
         $action = new UpdateOrderAction($connector);

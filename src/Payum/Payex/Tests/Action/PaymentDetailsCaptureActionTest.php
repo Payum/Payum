@@ -6,6 +6,9 @@ use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Payex\Action\PaymentDetailsCaptureAction;
+use Payum\Payex\Request\Api\StartRecurringPayment;
+use Payum\Payex\Request\Api\CompleteOrder;
+use Payum\Payex\Request\Api\InitializeOrder;
 
 class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
 {
@@ -79,7 +82,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\InitializeOrder'))
+            ->with($this->isInstanceOf(InitializeOrder::class))
         ;
 
         $action = new PaymentDetailsCaptureAction();
@@ -98,7 +101,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\CompleteOrder'))
+            ->with($this->isInstanceOf(CompleteOrder::class))
         ;
 
         $action = new PaymentDetailsCaptureAction();
@@ -116,9 +119,12 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(1))
+            ->expects($this->atLeastOnce())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\StartRecurringPayment'))
+            ->withConsecutive(
+                [$this->isInstanceOf(CompleteOrder::class)],
+                [$this->isInstanceOf(StartRecurringPayment::class)]
+            )
         ;
 
         $action = new PaymentDetailsCaptureAction();
@@ -137,12 +143,17 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeastOnce())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
-            ->willReturnCallback(function (GetHttpRequest $request) {
-                $request->clientIp = 'expectedClientIp';
-            })
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(InitializeOrder::class)]
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->returnCallback(function (GetHttpRequest $request) {
+                    $request->clientIp = 'expectedClientIp';
+                })
+            )
         ;
 
         $action = new PaymentDetailsCaptureAction();
@@ -163,6 +174,6 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(GatewayInterface::class);
     }
 }

@@ -9,21 +9,23 @@ use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use Payum\Core\Security\TokenFactoryInterface;
+use Payum\Core\Security\AbstractTokenFactory;
 
 class TokenFactoryTest extends TestCase
 {
     public function testShouldImplementsTokenFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Security\TokenFactory');
+        $rc = new \ReflectionClass(TokenFactory::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Security\TokenFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface(TokenFactoryInterface::class));
     }
 
     public function testShouldBeSubClassOfAbtractTokenFactory()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Security\TokenFactory');
+        $rc = new \ReflectionClass(TokenFactory::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Security\AbstractTokenFactory'));
+        $this->assertTrue($rc->isSubclassOf(AbstractTokenFactory::class));
     }
 
     public function testShouldCreateTokenWithoutAfterPath()
@@ -280,12 +282,12 @@ class TokenFactoryTest extends TestCase
 
         $tokenStorageMock = $this->createStorageMock();
         $tokenStorageMock
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('create')
             ->willReturn($authorizeToken)
         ;
         $tokenStorageMock
-            ->expects($this->at(1))
+            ->expects($this->once())
             ->method('update')
             ->with($this->identicalTo($authorizeToken))
         ;
@@ -340,12 +342,12 @@ class TokenFactoryTest extends TestCase
 
         $tokenStorageMock = $this->createStorageMock();
         $tokenStorageMock
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('create')
             ->willReturn($authorizeToken)
         ;
         $tokenStorageMock
-            ->expects($this->at(1))
+            ->expects($this->once())
             ->method('update')
             ->with($this->identicalTo($authorizeToken))
         ;
@@ -400,12 +402,12 @@ class TokenFactoryTest extends TestCase
 
         $tokenStorageMock = $this->createStorageMock();
         $tokenStorageMock
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('create')
             ->willReturn($authorizeToken)
         ;
         $tokenStorageMock
-            ->expects($this->at(1))
+            ->expects($this->once())
             ->method('update')
             ->with($this->identicalTo($authorizeToken))
         ;
@@ -459,7 +461,7 @@ class TokenFactoryTest extends TestCase
      */
     protected function createStorageMock()
     {
-        return $this->createMock('Payum\Core\Storage\StorageInterface');
+        return $this->createMock(StorageInterface::class);
     }
 
     /**
@@ -467,7 +469,7 @@ class TokenFactoryTest extends TestCase
      */
     protected function createStorageRegistryMock()
     {
-        return $this->createMock('Payum\Core\Registry\StorageRegistryInterface');
+        return $this->createMock(StorageRegistryInterface::class);
     }
 
     /**
@@ -475,7 +477,7 @@ class TokenFactoryTest extends TestCase
      */
     protected function createUrlGeneratorStub()
     {
-        $urlGenerator = $this->createMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
 
         $urlGenerator
             ->method('generate')

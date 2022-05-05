@@ -5,14 +5,15 @@ use Payum\Payex\Api\AgreementApi;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\GetBinaryStatus;
 use Payum\Payex\Action\AgreementDetailsStatusAction;
+use Payum\Core\Action\ActionInterface;
 
 class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\AgreementDetailsStatusAction');
+        $rc = new \ReflectionClass(AgreementDetailsStatusAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
     public function testShouldSupportStatusRequestWithArrayAccessAsModelIfOrderIdNotSetAndAgreementRefSet()
@@ -21,16 +22,10 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
 
         $array = $this->createMock('ArrayAccess');
         $array
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('offsetExists')
-            ->with('agreementRef')
-            ->willReturn(true)
-        ;
-        $array
-            ->expects($this->at(1))
-            ->method('offsetExists')
-            ->with('orderId')
-            ->willReturn(false)
+            ->withConsecutive(['agreementRef'], ['orderId'])
+            ->willReturnOnConsecutiveCalls(true, false)
         ;
 
         $this->assertTrue($action->supports(new GetBinaryStatus($array)));
@@ -42,15 +37,9 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
 
         $array = $this->createMock('ArrayAccess');
         $array
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('offsetExists')
-            ->with('agreementRef')
-            ->willReturn(true)
-        ;
-        $array
-            ->expects($this->at(1))
-            ->method('offsetExists')
-            ->with('orderId')
+            ->withConsecutive(['agreementRef'], ['orderId'])
             ->willReturn(true)
         ;
 

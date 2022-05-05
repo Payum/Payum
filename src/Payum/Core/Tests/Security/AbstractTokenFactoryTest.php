@@ -279,12 +279,12 @@ class AbstractTokenFactoryTest extends TestCase
 
         $tokenStorageMock = $this->createStorageMock();
         $tokenStorageMock
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('create')
             ->willReturn($authorizeToken)
         ;
         $tokenStorageMock
-            ->expects($this->at(1))
+            ->expects($this->once())
             ->method('update')
             ->with($this->identicalTo($authorizeToken))
         ;
@@ -339,12 +339,12 @@ class AbstractTokenFactoryTest extends TestCase
 
         $tokenStorageMock = $this->createStorageMock();
         $tokenStorageMock
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('create')
             ->willReturn($authorizeToken)
         ;
         $tokenStorageMock
-            ->expects($this->at(1))
+            ->expects($this->once())
             ->method('update')
             ->with($this->identicalTo($authorizeToken))
         ;
@@ -399,12 +399,12 @@ class AbstractTokenFactoryTest extends TestCase
 
         $tokenStorageMock = $this->createStorageMock();
         $tokenStorageMock
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('create')
             ->willReturn($authorizeToken)
         ;
         $tokenStorageMock
-            ->expects($this->at(1))
+            ->expects($this->once())
             ->method('update')
             ->with($this->identicalTo($authorizeToken))
         ;
@@ -477,7 +477,7 @@ class AbstractTokenFactoryTest extends TestCase
      */
     protected function createStorageMock()
     {
-        return $this->createMock('Payum\Core\Storage\StorageInterface');
+        return $this->createMock(StorageInterface::class);
     }
 
     /**
@@ -485,6 +485,6 @@ class AbstractTokenFactoryTest extends TestCase
      */
     protected function createStorageRegistryMock()
     {
-        return $this->createMock('Payum\Core\Registry\StorageRegistryInterface');
+        return $this->createMock(StorageRegistryInterface::class);
     }
 }
