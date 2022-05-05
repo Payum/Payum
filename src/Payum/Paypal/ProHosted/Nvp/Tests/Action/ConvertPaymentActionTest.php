@@ -65,13 +65,13 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('INVNUM', $details);
-        $this->assertEquals('theNumber', $details['INVNUM']);
+        $this->assertSame('theNumber', $details['INVNUM']);
 
         $this->assertArrayHasKey('AMT', $details);
-        $this->assertEquals(123, $details['AMT']);
+        $this->assertSame(123.0, $details['AMT']);
 
         $this->assertArrayHasKey('CURRENCYCODE', $details);
-        $this->assertEquals('USD', $details['CURRENCYCODE']);
+        $this->assertSame('USD', $details['CURRENCYCODE']);
     }
 
     /**
@@ -106,6 +106,6 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('foo', $details);
-        $this->assertEquals('fooVal', $details['foo']);
+        $this->assertSame('fooVal', $details['foo']);
     }
 }

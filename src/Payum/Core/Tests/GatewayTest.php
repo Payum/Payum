@@ -258,7 +258,7 @@ class GatewayTest extends TestCase
         $actionMock
             ->expects($this->once())
             ->method('execute')
-            ->will($this->throwException($expectedReply))
+            ->willThrowException($expectedReply)
         ;
 
         $gateway = new Gateway();
@@ -333,7 +333,7 @@ class GatewayTest extends TestCase
         $actionMock
             ->expects($this->once())
             ->method('execute')
-            ->will($this->throwException($exception))
+            ->willThrowException($exception)
         ;
         $actionMock
             ->method('supports')
@@ -378,7 +378,7 @@ class GatewayTest extends TestCase
         $actionMock
             ->expects($this->once())
             ->method('execute')
-            ->will($this->throwException($exception))
+            ->willThrowException($exception)
         ;
         $actionMock
             ->method('supports')
@@ -418,7 +418,7 @@ class GatewayTest extends TestCase
         $actionMock
             ->expects($this->once())
             ->method('execute')
-            ->will($this->throwException($exception))
+            ->willThrowException($exception)
         ;
         $actionMock
             ->method('supports')
@@ -458,7 +458,7 @@ class GatewayTest extends TestCase
         $actionMock
             ->expects($this->once())
             ->method('execute')
-            ->will($this->throwException($exception))
+            ->willThrowException($exception)
         ;
         $actionMock
             ->method('supports')
@@ -484,7 +484,7 @@ class GatewayTest extends TestCase
             $gateway->execute($request);
         } catch (\Exception $e) {
             $this->assertInstanceOf(\InvalidArgumentException::class, $e);
-            $this->assertEquals('Another error.', $e->getMessage());
+            $this->assertSame('Another error.', $e->getMessage());
             $this->assertSame($exception, $e->getPrevious());
 
             return;
@@ -507,7 +507,7 @@ class GatewayTest extends TestCase
         $actionMock
             ->expects($this->once())
             ->method('execute')
-            ->will($this->throwException($exception))
+            ->willThrowException($exception)
         ;
         $actionMock
             ->method('supports')
@@ -533,7 +533,7 @@ class GatewayTest extends TestCase
             $gateway->execute($request);
         } catch (\Exception $e) {
             $this->assertInstanceOf(\InvalidArgumentException::class, $e);
-            $this->assertEquals('Another error.', $e->getMessage());
+            $this->assertSame('Another error.', $e->getMessage());
             $this->assertSame($exception, $e->getPrevious());
 
             return;
@@ -634,7 +634,7 @@ class GatewayTest extends TestCase
         $actionMock
             ->expects($this->once())
             ->method('execute')
-            ->will($this->throwException($reply))
+            ->willThrowException($reply)
         ;
         $actionMock
             ->method('supports')
@@ -678,7 +678,7 @@ class GatewayTest extends TestCase
         $actionMock
             ->expects($this->once())
             ->method('execute')
-            ->will($this->throwException($thrownReplyMock))
+            ->willThrowException($thrownReplyMock)
         ;
         $actionMock
             ->method('supports')
@@ -719,7 +719,7 @@ class GatewayTest extends TestCase
         $actionMock
             ->expects($this->once())
             ->method('execute')
-            ->will($this->throwException($thrownReplyMock))
+            ->willThrowException($thrownReplyMock)
         ;
         $actionMock
             ->method('supports')

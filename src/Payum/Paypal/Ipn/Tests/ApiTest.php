@@ -29,7 +29,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'sandbox' => true,
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
-        $this->assertEquals('https://www.sandbox.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
+        $this->assertSame('https://www.sandbox.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
     }
 
     /**
@@ -41,7 +41,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'sandbox' => false,
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
-        $this->assertEquals('https://www.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
+        $this->assertSame('https://www.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
     }
 
     /**
@@ -55,9 +55,9 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) {
+            ->willReturnCallback(function (RequestInterface $request) {
                 return new Response(404);
-            }))
+            })
         ;
 
         $api = new Api(array(
@@ -79,11 +79,11 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) use (&$actualRequest) {
+            ->willReturnCallback(function (RequestInterface $request) use (&$actualRequest) {
                 $actualRequest = $request;
 
                 return new Response(200);
-            }))
+            })
         ;
 
         $api = new Api(array(
@@ -102,8 +102,8 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
         $this->assertInstanceOf('Psr\Http\Message\RequestInterface', $actualRequest);
         $this->assertEquals(array('cmd' => Api::CMD_NOTIFY_VALIDATE) + $expectedNotification, $content);
-        $this->assertEquals($api->getIpnEndpoint(), $actualRequest->getUri());
-        $this->assertEquals('POST', $actualRequest->getMethod());
+        $this->assertSame($api->getIpnEndpoint(), (string) $actualRequest->getUri());
+        $this->assertSame('POST', $actualRequest->getMethod());
     }
 
     /**
@@ -115,16 +115,16 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) {
+            ->willReturnCallback(function (RequestInterface $request) {
                 return new Response(200, array(), Api::NOTIFY_VERIFIED);
-            }))
+            })
         ;
 
         $api = new Api(array(
             'sandbox' => false,
         ), $clientMock, $this->createHttpMessageFactory());
 
-        $this->assertEquals(Api::NOTIFY_VERIFIED, $api->notifyValidate(array()));
+        $this->assertSame(Api::NOTIFY_VERIFIED, $api->notifyValidate(array()));
     }
 
     /**
@@ -136,16 +136,16 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) {
+            ->willReturnCallback(function (RequestInterface $request) {
                 return new Response(200, array(), Api::NOTIFY_INVALID);
-            }))
+            })
         ;
 
         $api = new Api(array(
             'sandbox' => false,
         ), $clientMock, $this->createHttpMessageFactory());
 
-        $this->assertEquals(Api::NOTIFY_INVALID, $api->notifyValidate(array()));
+        $this->assertSame(Api::NOTIFY_INVALID, $api->notifyValidate(array()));
     }
 
     /**
@@ -157,16 +157,16 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) {
+            ->willReturnCallback(function (RequestInterface $request) {
                 return new Response(200, array(), 'foobarbaz');
-            }))
+            })
         ;
 
         $api = new Api(array(
             'sandbox' => false,
         ), $clientMock, $this->createHttpMessageFactory());
 
-        $this->assertEquals(Api::NOTIFY_INVALID, $api->notifyValidate(array()));
+        $this->assertSame(Api::NOTIFY_INVALID, $api->notifyValidate(array()));
     }
 
     /**
@@ -193,9 +193,9 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) {
+            ->willReturnCallback(function (RequestInterface $request) {
                 return new Response(200);
-            }))
+            })
         ;
 
         return $clientMock;

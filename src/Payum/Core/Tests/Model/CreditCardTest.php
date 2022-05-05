@@ -44,7 +44,7 @@ class CreditCardTest extends TestCase
 
         $card->setBrand('theBrand');
 
-        $this->assertEquals('theBrand', $card->getBrand());
+        $this->assertSame('theBrand', $card->getBrand());
     }
 
     /**
@@ -56,7 +56,7 @@ class CreditCardTest extends TestCase
 
         $card->setToken('theToken');
 
-        $this->assertEquals('theToken', $card->getToken());
+        $this->assertSame('theToken', $card->getToken());
     }
 
     /**
@@ -68,7 +68,7 @@ class CreditCardTest extends TestCase
 
         $card->setHolder('Mahatma Gandhi');
 
-        $this->assertEquals('Mahatma Gandhi', $card->getHolder());
+        $this->assertSame('Mahatma Gandhi', $card->getHolder());
     }
 
     /**
@@ -82,7 +82,7 @@ class CreditCardTest extends TestCase
 
         $value = $this->readAttribute($card, 'securedHolder');
         $this->assertInstanceOf(SensitiveValue::class, $value);
-        $this->assertEquals('Mahatma Gandhi', $value->peek());
+        $this->assertSame('Mahatma Gandhi', $value->peek());
     }
 
     /**
@@ -94,7 +94,7 @@ class CreditCardTest extends TestCase
 
         $card->setHolder('Mahatma Gandhi');
 
-        $this->assertEquals('MXXXXXX XXndhi', $card->getMaskedHolder());
+        $this->assertSame('MXXXXXX XXndhi', $card->getMaskedHolder());
     }
 
     /**
@@ -107,8 +107,8 @@ class CreditCardTest extends TestCase
         $card->setHolder('Mahatma Gandhi');
         $card->setMaskedHolder('theMaskedHolder');
 
-        $this->assertEquals('Mahatma Gandhi', $card->getHolder());
-        $this->assertEquals('theMaskedHolder', $card->getMaskedHolder());
+        $this->assertSame('Mahatma Gandhi', $card->getHolder());
+        $this->assertSame('theMaskedHolder', $card->getMaskedHolder());
     }
 
     /**
@@ -120,7 +120,7 @@ class CreditCardTest extends TestCase
 
         $card->setNumber('1234 5678 1234 5678');
 
-        $this->assertEquals('1234 5678 1234 5678', $card->getNumber());
+        $this->assertSame('1234 5678 1234 5678', $card->getNumber());
     }
 
     /**
@@ -134,7 +134,7 @@ class CreditCardTest extends TestCase
 
         $value = $this->readAttribute($card, 'securedNumber');
         $this->assertInstanceOf(SensitiveValue::class, $value);
-        $this->assertEquals('1234 5678 1234 5678', $value->peek());
+        $this->assertSame('1234 5678 1234 5678', $value->peek());
     }
 
     /**
@@ -146,7 +146,7 @@ class CreditCardTest extends TestCase
 
         $card->setNumber('1234 5678 1234 5678');
 
-        $this->assertEquals('1XXX XXXX XXXX 5678', $card->getMaskedNumber());
+        $this->assertSame('1XXX XXXX XXXX 5678', $card->getMaskedNumber());
     }
 
     /**
@@ -159,9 +159,9 @@ class CreditCardTest extends TestCase
         $card->setNumber('1234 5678 1234 5678');
         $card->setMaskedNumber('theMaskedNumber');
 
-        $this->assertEquals('1234 5678 1234 5678', $card->getNumber());
+        $this->assertSame('1234 5678 1234 5678', $card->getNumber());
 
-        $this->assertEquals('theMaskedNumber', $card->getMaskedNumber());
+        $this->assertSame('theMaskedNumber', $card->getMaskedNumber());
     }
 
     /**
@@ -173,7 +173,7 @@ class CreditCardTest extends TestCase
 
         $card->setSecurityCode('theCode');
 
-        $this->assertEquals('theCode', $card->getSecurityCode());
+        $this->assertSame('theCode', $card->getSecurityCode());
     }
 
     /**
@@ -187,7 +187,7 @@ class CreditCardTest extends TestCase
 
         $value = $this->readAttribute($card, 'securedSecurityCode');
         $this->assertInstanceOf(SensitiveValue::class, $value);
-        $this->assertEquals('123', $value->peek());
+        $this->assertSame('123', $value->peek());
     }
 
     /**

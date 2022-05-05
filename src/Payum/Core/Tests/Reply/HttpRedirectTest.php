@@ -35,7 +35,7 @@ class HttpRedirectTest extends TestCase
 
         $request = new HttpRedirect($expectedUrl);
 
-        $this->assertEquals($expectedUrl, $request->getUrl());
+        $this->assertSame($expectedUrl, $request->getUrl());
     }
 
     /**
@@ -60,7 +60,7 @@ HTML;
 
         $request = new HttpRedirect('foo');
 
-        $this->assertEquals($expectedContent, $request->getContent());
+        $this->assertSame($expectedContent, $request->getContent());
     }
 
     /**
@@ -70,7 +70,7 @@ HTML;
     {
         $request = new HttpRedirect('anUrl');
 
-        $this->assertEquals(302, $request->getStatusCode());
+        $this->assertSame(302, $request->getStatusCode());
     }
 
     /**
@@ -80,7 +80,7 @@ HTML;
     {
         $request = new HttpRedirect('anUrl', 301);
 
-        $this->assertEquals(301, $request->getStatusCode());
+        $this->assertSame(301, $request->getStatusCode());
     }
 
     /**

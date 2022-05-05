@@ -12,7 +12,7 @@ class KeysTest extends \PHPUnit\Framework\TestCase
     {
         $keys = new Keys('thePublishableKey', 'aSecretKey');
 
-        $this->assertEquals('thePublishableKey', $keys->getPublishableKey());
+        $this->assertSame('thePublishableKey', $keys->getPublishableKey());
     }
 
     /**
@@ -22,6 +22,6 @@ class KeysTest extends \PHPUnit\Framework\TestCase
     {
         $keys = new Keys('aPublishableKey', 'theSecretKey');
 
-        $this->assertEquals('theSecretKey', $keys->getSecretKey());
+        $this->assertSame('theSecretKey', $keys->getSecretKey());
     }
 }

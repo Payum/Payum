@@ -16,7 +16,7 @@ class LoggerExtensionTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         if (false == interface_exists('Psr\Log\LoggerInterface')) {
-            throw new \PHPUnit_Framework_SkippedTestError('To run these tests install psr log lib.');
+            throw new \PHPUnit\Framework\SkippedTestError('To run these tests install psr log lib.');
         }
     }
 

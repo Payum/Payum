@@ -25,7 +25,7 @@ class CreditCardTypeTest extends TestCase
     {
         $type = new CreditCardType();
 
-        $this->assertEquals(FormType::class, $type->getParent());
+        $this->assertSame(FormType::class, $type->getParent());
     }
 
     /**
@@ -42,7 +42,7 @@ class CreditCardTypeTest extends TestCase
         $options = $resolver->resolve();
 
         $this->assertArrayHasKey('data_class', $options);
-        $this->assertEquals('Payum\Core\Model\CreditCard', $options['data_class']);
+        $this->assertSame('Payum\Core\Model\CreditCard', $options['data_class']);
 
         $this->assertArrayHasKey('validation_groups', $options);
         $this->assertEquals(array('Payum'), $options['validation_groups']);

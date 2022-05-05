@@ -48,7 +48,7 @@ HTML;
 
         $request = new HttpPostRedirect('theUrl');
 
-        $this->assertEquals($expectedContent, $request->getContent());
+        $this->assertSame($expectedContent, $request->getContent());
     }
 
     /**
@@ -75,7 +75,7 @@ HTML;
 
         $request = new HttpPostRedirect('theUrl', array('foo' => 'fooVal', 'bar' => 'barVal'));
 
-        $this->assertEquals($expectedContent, $request->getContent());
+        $this->assertSame($expectedContent, $request->getContent());
     }
 
     /**
@@ -101,7 +101,7 @@ HTML;
 
         $request = new HttpPostRedirect('theUrl', array('foo' => '<>&"'));
 
-        $this->assertEquals($expectedContent, $request->getContent());
+        $this->assertSame($expectedContent, $request->getContent());
     }
 
     /**
@@ -111,7 +111,7 @@ HTML;
     {
         $request = new HttpPostRedirect('anUrl');
 
-        $this->assertEquals(200, $request->getStatusCode());
+        $this->assertSame(200, $request->getStatusCode());
     }
 
     /**
@@ -121,7 +121,7 @@ HTML;
     {
         $request = new HttpPostRedirect('anUrl', array(), 201);
 
-        $this->assertEquals(201, $request->getStatusCode());
+        $this->assertSame(201, $request->getStatusCode());
     }
 
     /**

@@ -94,10 +94,10 @@ class GatewayConfigTypeTest extends TestCase
         $this->assertTrue($form->has('config'));
 
         $this->assertTrue($form->get('config')->has('username'));
-        $this->assertEquals('defaultName', $form->get('config')->get('username')->getData());
+        $this->assertSame('defaultName', $form->get('config')->get('username')->getData());
 
         $this->assertTrue($form->get('config')->has('password'));
-        $this->assertEquals('defaultPass', $form->get('config')->get('password')->getData());
+        $this->assertSame('defaultPass', $form->get('config')->get('password')->getData());
 
         $this->assertTrue($form->get('config')->has('sandbox'));
         $this->assertEquals(true, $form->get('config')->get('sandbox')->getData());
@@ -138,10 +138,10 @@ class GatewayConfigTypeTest extends TestCase
         $this->assertTrue($form->has('config'));
 
         $this->assertTrue($form->get('config')->has('username'));
-        $this->assertEquals('submitName', $form->get('config')->get('username')->getData());
+        $this->assertSame('submitName', $form->get('config')->get('username')->getData());
 
         $this->assertTrue($form->get('config')->has('password'));
-        $this->assertEquals('submitPass', $form->get('config')->get('password')->getData());
+        $this->assertSame('submitPass', $form->get('config')->get('password')->getData());
 
         $this->assertTrue($form->get('config')->has('sandbox'));
         $this->assertEquals(false, $form->get('config')->get('sandbox')->getData());
@@ -181,10 +181,10 @@ class GatewayConfigTypeTest extends TestCase
         $this->assertTrue($form->has('config'));
 
         $this->assertTrue($form->get('config')->has('username'));
-        $this->assertEquals('submitName', $form->get('config')->get('username')->getData());
+        $this->assertSame('submitName', $form->get('config')->get('username')->getData());
 
         $this->assertTrue($form->get('config')->has('password'));
-        $this->assertEquals('submitPass', $form->get('config')->get('password')->getData());
+        $this->assertSame('submitPass', $form->get('config')->get('password')->getData());
 
         $this->assertTrue($form->get('config')->has('sandbox'));
         $this->assertEquals(false, $form->get('config')->get('sandbox')->getData());
@@ -224,10 +224,10 @@ class GatewayConfigTypeTest extends TestCase
         $this->assertTrue($form->has('config'));
 
         $this->assertTrue($form->get('config')->has('username'));
-        $this->assertEquals('modelName', $form->get('config')->get('username')->getData());
+        $this->assertSame('modelName', $form->get('config')->get('username')->getData());
 
         $this->assertTrue($form->get('config')->has('password'));
-        $this->assertEquals('modelPass', $form->get('config')->get('password')->getData());
+        $this->assertSame('modelPass', $form->get('config')->get('password')->getData());
 
         $this->assertTrue($form->get('config')->has('sandbox'));
         $this->assertEquals(false, $form->get('config')->get('sandbox')->getData());

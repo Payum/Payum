@@ -98,12 +98,12 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('RefundTransaction')
-            ->will($this->returnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase) {
                 $testCase->assertArrayHasKey('TRANSACTIONID', $fields);
-                $testCase->assertEquals('theOriginalTransactionId', $fields['TRANSACTIONID']);
+                $testCase->assertSame('theOriginalTransactionId', $fields['TRANSACTIONID']);
 
                 return array();
-            }))
+            })
         ;
 
         $action = new RefundTransactionAction();
@@ -125,12 +125,12 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('RefundTransaction')
-            ->will($this->returnCallback(function () {
+            ->willReturnCallback(function () {
                 return array(
                     'TRANSACTIONID' => 'theTransactionId',
                     'REFUNDTRANSACTIONID' => 'theRefundTransactionId',
                 );
-            }))
+            })
         ;
 
         $action = new RefundTransactionAction();
@@ -145,10 +145,10 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
         $model = $request->getModel();
 
         $this->assertArrayHasKey('TRANSACTIONID', $model);
-        $this->assertEquals('theTransactionId', $model['TRANSACTIONID']);
+        $this->assertSame('theTransactionId', $model['TRANSACTIONID']);
 
         $this->assertArrayHasKey('REFUNDTRANSACTIONID', $model);
-        $this->assertEquals('theRefundTransactionId', $model['REFUNDTRANSACTIONID']);
+        $this->assertSame('theRefundTransactionId', $model['REFUNDTRANSACTIONID']);
     }
 
     /**

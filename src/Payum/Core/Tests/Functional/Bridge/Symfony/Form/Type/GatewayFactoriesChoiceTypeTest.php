@@ -47,7 +47,7 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
 
         $this->assertTrue($form->isValid());
 
-        $this->assertEquals('foo', $form->getData());
+        $this->assertSame('foo', $form->getData());
     }
 
     /**

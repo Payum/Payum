@@ -50,6 +50,6 @@ class GetCreditCardTokenActionTest extends GenericActionTest
 
         $action->execute($getCreditCardToken = new GetCreditCardToken($model));
 
-        self::assertEquals('theToken', $getCreditCardToken->token);
+        self::assertSame('theToken', $getCreditCardToken->token);
     }
 }

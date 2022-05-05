@@ -62,19 +62,19 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->doCreateButton([]);
 
         $this->assertArrayHasKey('USER', $result);
-        $this->assertEquals('the_username', $result['USER']);
+        $this->assertSame('the_username', $result['USER']);
 
         $this->assertArrayHasKey('PWD', $result);
-        $this->assertEquals('the_password', $result['PWD']);
+        $this->assertSame('the_password', $result['PWD']);
 
         $this->assertArrayHasKey('SIGNATURE', $result);
-        $this->assertEquals('the_signature', $result['SIGNATURE']);
+        $this->assertSame('the_signature', $result['SIGNATURE']);
 
         $this->assertArrayHasKey('BUSINESS', $result);
-        $this->assertEquals('the_business', $result['BUSINESS']);
+        $this->assertSame('the_business', $result['BUSINESS']);
 
         $this->assertArrayHasKey('SUBJECT', $result);
-        $this->assertEquals('the_business', $result['SUBJECT']);
+        $this->assertSame('the_business', $result['SUBJECT']);
     }
 
     /**
@@ -94,7 +94,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->doCreateButton([]);
 
         $this->assertArrayHasKey('VERSION', $result);
-        $this->assertEquals(Api::VERSION, $result['VERSION']);
+        $this->assertSame(Api::VERSION, $result['VERSION']);
     }
 
     /**
@@ -105,13 +105,13 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $testCase = $this;
 
         $clientMock = $this->createHttpClientMock();
-        $clientMock->expects($this->once())->method('send')->will($this->returnCallback(function (RequestInterface $request) use (
+        $clientMock->expects($this->once())->method('send')->willReturnCallback(function (RequestInterface $request) use (
             $testCase
         ) {
-            $testCase->assertEquals('https://api-3t.paypal.com/nvp', $request->getUri());
+            $testCase->assertSame('https://api-3t.paypal.com/nvp', (string) $request->getUri());
 
             return new Response(200, [], $request->getBody());
-        }));
+        });
 
         $api = new Api(array(
             'username'  => 'a_username',
@@ -133,13 +133,13 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $testCase = $this;
 
         $clientMock = $this->createHttpClientMock();
-        $clientMock->expects($this->once())->method('send')->will($this->returnCallback(function (RequestInterface $request) use (
+        $clientMock->expects($this->once())->method('send')->willReturnCallback(function (RequestInterface $request) use (
             $testCase
         ) {
-            $testCase->assertEquals('https://api-3t.sandbox.paypal.com/nvp', $request->getUri());
+            $testCase->assertSame('https://api-3t.sandbox.paypal.com/nvp', (string) $request->getUri());
 
             return new Response(200, [], $request->getBody());
-        }));
+        });
 
         $api = new Api(array(
             'username'  => 'a_username',
@@ -170,7 +170,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->doCreateButton([]);
 
         $this->assertArrayHasKey('METHOD', $result);
-        $this->assertEquals('BMCreateButton', $result['METHOD']);
+        $this->assertSame('BMCreateButton', $result['METHOD']);
     }
 
     /**
@@ -223,9 +223,9 @@ class ApiTest extends \PHPUnit\Framework\TestCase
     protected function createSuccessHttpClientStub()
     {
         $clientMock = $this->createHttpClientMock();
-        $clientMock->method('send')->will($this->returnCallback(function (RequestInterface $request) {
+        $clientMock->method('send')->willReturnCallback(function (RequestInterface $request) {
             return new Response(200, [], $request->getBody());
-        }));
+        });
 
         return $clientMock;
     }

@@ -66,7 +66,7 @@ class FetchOrderActionTest extends GenericActionTest
             ->willReturnCallback(function ($method, $order, $options) use ($testCase, $model) {
                 $testCase->assertIsArray($options);
                 $testCase->assertArrayHasKey('url', $options);
-                $testCase->assertEquals($model['location'], $options['url']);
+                $testCase->assertSame($model['location'], $options['url']);
             })
         ;
 
@@ -136,7 +136,7 @@ class FetchOrderActionTest extends GenericActionTest
             ->expects($this->exactly(3))
             ->method('apply')
             ->with('GET')
-            ->will($this->throwException(new \Klarna_Checkout_ConnectionErrorException()))
+            ->willThrowException(new \Klarna_Checkout_ConnectionErrorException())
         ;
 
         $action = new FetchOrderAction($connector);

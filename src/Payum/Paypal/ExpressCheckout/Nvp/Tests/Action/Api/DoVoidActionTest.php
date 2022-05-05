@@ -114,12 +114,12 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('DoVoid')
-            ->will($this->returnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase) {
                 $testCase->assertArrayHasKey('AUTHORIZATIONID', $fields);
-                $testCase->assertEquals('theOriginalTransactionId', $fields['AUTHORIZATIONID']);
+                $testCase->assertSame('theOriginalTransactionId', $fields['AUTHORIZATIONID']);
 
                 return array();
-            }))
+            })
         ;
 
         $action = new DoVoidAction();
@@ -141,12 +141,12 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('DoVoid')
-            ->will($this->returnCallback(function () {
+            ->willReturnCallback(function () {
                 return array(
                     'AUTHORIZATIONID' => 'theTransactionId',
                     'MSGSUBID' => 'aMessageId',
                 );
-            }))
+            })
         ;
 
         $action = new DoVoidAction();
@@ -161,10 +161,10 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
         $model = $request->getModel();
 
         $this->assertArrayHasKey('AUTHORIZATIONID', $model);
-        $this->assertEquals('theTransactionId', $model['AUTHORIZATIONID']);
+        $this->assertSame('theTransactionId', $model['AUTHORIZATIONID']);
 
         $this->assertArrayHasKey('MSGSUBID', $model);
-        $this->assertEquals('aMessageId', $model['MSGSUBID']);
+        $this->assertSame('aMessageId', $model['MSGSUBID']);
     }
 
     /**

@@ -47,6 +47,6 @@ class GatewayConfigTest extends OrmTest
         //guard
         $this->assertNotSame($gatewayConfig, $foundGatewayConfig);
 
-        $this->assertEquals($gatewayConfig->getId(), $foundGatewayConfig->getId());
+        $this->assertSame($gatewayConfig->getId(), $foundGatewayConfig->getId());
     }
 }
