@@ -4,7 +4,7 @@ namespace Payum\Be2Bill\Tests;
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
 use Payum\Core\Tests\AbstractGatewayFactoryTest;
 
-class Be2billOffsiteGatewayFactoryTest extends AbstractGatewayFactoryTest
+class Be2BillOffsiteGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
     protected function getGatewayFactoryClass(): string
     {
