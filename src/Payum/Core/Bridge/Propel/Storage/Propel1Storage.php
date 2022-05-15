@@ -6,7 +6,9 @@ use \Criteria;
 use Payum\Core\Storage\AbstractStorage;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\Identity;
+use function trigger_error;
 
+@trigger_error('Propel storage is deprecated and will be removed in V2', \E_USER_DEPRECATED);
 class Propel1Storage extends AbstractStorage
 {
     /**
