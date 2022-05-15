@@ -271,7 +271,7 @@ $storage = new FilesystemStorage(
 );
 ```
 
-## Propel 2
+## Propel 2 (Deprecated, will be removed in V2)
 
 First, you have to generate the model base classes.
 
