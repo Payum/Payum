@@ -158,7 +158,7 @@ payum:
 _**Note**: You should use commented path if you install payum/payum package._
 
 
-## Propel.
+## Propel (Deprecated, will be removed in V2)
 
 Firstly, you will need to build your schema schema. You can either use your own schema or you can copy the schema into your resources\config file from Payum\Core\Bridge\Propel\Resources\config\schema.xml
 Once this has been done you will need to implement the required classes
