@@ -5,6 +5,7 @@
 * Dropped support for PHP 7.x
 * Twig 1.x is no longer supported
 * `Payum\Core\Action\GetCurrencyAction` does not accept any constructor arguments anymore and uses alcohol/iso4217 by default
+* Support for Propel storage has been removed
 
 ## 1.5.0
 

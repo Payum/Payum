@@ -2,9 +2,10 @@
 
 ## 2.0.0 (TBD)
 
-* drop support for PHP 7.x
-* drop support for Twig 1.x
-* remove payum/iso4217 package
+* Drop support for PHP 7.x
+* Drop support for Twig 1.x
+* Remove payum/iso4217 package
+* Remove support for Propel storage
 
 ## 1.5.0 (2018-01-09)
 

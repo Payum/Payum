@@ -20,8 +20,6 @@ Payum is an MIT-licensed open source project with its ongoing development made p
 ## Storages.
 
 * Doctrine ORM\MongoODM
-* Propel1 (Deprecated, will be removed in V2)
-* Propel2 (Deprecated, will be removed in V2)
 * Laminas Db Gateway
 * Elouqent
 * Filesystem
