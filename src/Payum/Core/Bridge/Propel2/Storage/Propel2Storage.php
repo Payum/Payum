@@ -3,7 +3,10 @@ namespace Payum\Core\Bridge\Propel2\Storage;
 
 use Payum\Core\Model\Identity;
 use Payum\Core\Storage\AbstractStorage;
+use function trigger_error;
+use function vsprintf;
 
+@trigger_error('Propel storage is deprecated and will be removed in V2', \E_USER_DEPRECATED);
 class Propel2Storage extends AbstractStorage
 {
     /**
