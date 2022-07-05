@@ -20,9 +20,6 @@ class GetExpressCheckoutDetailsAction implements ActionInterface, ApiAwareInterf
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request GetExpressCheckoutDetails */
@@ -38,9 +35,6 @@ class GetExpressCheckoutDetailsAction implements ActionInterface, ApiAwareInterf
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof GetExpressCheckoutDetails &&

@@ -24,8 +24,6 @@ class DoVoidAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param $request DoVoid
      */
     public function execute($request)
@@ -43,9 +41,6 @@ class DoVoidAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($request)
     {
         return $request instanceof DoVoid &&

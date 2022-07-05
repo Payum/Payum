@@ -49,9 +49,6 @@ class ObtainTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
         $this->apiClass = Keys::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setApi($api)
     {
         $this->_setApi($api);
@@ -60,9 +57,6 @@ class ObtainTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
         $this->keys = $this->api;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request ObtainToken */
@@ -91,9 +85,6 @@ class ObtainTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
         throw new HttpResponse($renderTemplate->getResult());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof ObtainToken &&

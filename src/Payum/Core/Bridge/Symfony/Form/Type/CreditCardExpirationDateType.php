@@ -12,9 +12,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreditCardExpirationDateType extends AbstractType
 {
-    /**
-     * {@inheritDoc}
-     */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         if ('choice' == $options['widget']) {
@@ -31,9 +28,6 @@ class CreditCardExpirationDateType extends AbstractType
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
@@ -46,7 +40,6 @@ class CreditCardExpirationDateType extends AbstractType
     }
 
     /**
-     * {@inheritDoc}
      * @return ?string
      */
     public function getParent()

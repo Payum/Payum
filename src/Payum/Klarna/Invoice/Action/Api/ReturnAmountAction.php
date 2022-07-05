@@ -9,8 +9,6 @@ use Payum\Klarna\Invoice\Request\Api\ReturnAmount;
 class ReturnAmountAction extends BaseApiAwareAction
 {
     /**
-     * {@inheritDoc}
-     *
      * @param ReturnAmount $request
      */
     public function execute($request)
@@ -34,9 +32,6 @@ class ReturnAmountAction extends BaseApiAwareAction
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof ReturnAmount &&

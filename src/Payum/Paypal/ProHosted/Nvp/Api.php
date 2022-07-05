@@ -125,10 +125,6 @@ class Api
     );
 
     /**
-     * @param array               $options
-     * @param HttpClientInterface $client
-     * @param MessageFactory      $messageFactory
-     *
      * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
      */
     public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
@@ -152,8 +148,6 @@ class Api
 
     /**
      * Solution BMCreateButton
-     *
-     * @param array $fields
      *
      * @throws RuntimeException
      *
@@ -217,8 +211,6 @@ class Api
     }
 
     /**
-     * @param array $fields
-     *
      * @throws HttpException
      *
      * @return array
@@ -254,9 +246,6 @@ class Api
         return $this->options['sandbox'] ? 'https://api-3t.sandbox.paypal.com/nvp' : 'https://api-3t.paypal.com/nvp';
     }
 
-    /**
-     * @param array $fields
-     */
     protected function addAuthorizeFields(array &$fields)
     {
         $fields['USER'] = $this->options['username'];
@@ -269,9 +258,6 @@ class Api
         }
     }
 
-    /**
-     * @param array $fields
-     */
     protected function addVersionField(array &$fields)
     {
         $fields['VERSION'] = self::VERSION;

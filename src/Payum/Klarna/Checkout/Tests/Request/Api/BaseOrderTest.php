@@ -48,8 +48,6 @@ class BaseOrderTest extends TestCase
     }
 
     /**
-     * @param array $arguments
-     *
      * @return \PHPUnit\Framework\MockObject\MockObject|BaseOrder
      */
     protected function createBaseOrderMock($model)

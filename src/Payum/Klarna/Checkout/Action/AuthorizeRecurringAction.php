@@ -37,9 +37,6 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
         $this->apiClass = Config::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setApi($api)
     {
         $this->_setApi($api);
@@ -49,8 +46,6 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param Authorize $request
      */
     public function execute($request)
@@ -101,9 +96,6 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
         $this->api->baseUri = $backupConfig->baseUri;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         if (false == ($request instanceof Authorize && $request->getModel() instanceof \ArrayAccess)) {

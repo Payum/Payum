@@ -8,12 +8,10 @@ class BaseApiAwareActionTest extends TestCase
 {
     protected function getActionClass(): string
     {
-        // TODO: Implement getActionClass() method.
     }
 
     protected function getApiClass()
     {
-        // TODO: Implement getApiClass() method.
     }
 
     public function testShouldImplementActionInterface()

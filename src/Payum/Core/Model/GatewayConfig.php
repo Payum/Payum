@@ -35,17 +35,11 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
         $this->decryptedConfig = [];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getFactoryName()
     {
         return $this->factoryName;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setFactoryName($factoryName)
     {
         $this->factoryName = $factoryName;
@@ -67,9 +61,6 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
         $this->gatewayName = $gatewayName;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getConfig()
     {
         if (isset($this->config['encrypted'])) {
@@ -79,18 +70,12 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
         return $this->config;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setConfig(array $config)
     {
         $this->config = $config;
         $this->decryptedConfig = $config;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function decrypt(CypherInterface $cypher)
     {
         if (empty($this->config['encrypted'])) {
@@ -108,9 +93,6 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function encrypt(CypherInterface $cypher)
     {
         $this->decryptedConfig['encrypted'] = true;

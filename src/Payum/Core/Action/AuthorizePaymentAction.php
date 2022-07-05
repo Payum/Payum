@@ -16,8 +16,6 @@ class AuthorizePaymentAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param Authorize $request
      */
     public function execute($request)
@@ -44,9 +42,6 @@ class AuthorizePaymentAction implements ActionInterface, GatewayAwareInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Authorize &&

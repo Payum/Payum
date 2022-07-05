@@ -12,8 +12,6 @@ use Payum\Payex\Api\OrderApi;
 class AgreementDetailsStatusAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetStatusInterface $request
      */
     public function execute($request)
@@ -59,9 +57,6 @@ class AgreementDetailsStatusAction implements ActionInterface
         $request->markUnknown();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof GetStatusInterface &&

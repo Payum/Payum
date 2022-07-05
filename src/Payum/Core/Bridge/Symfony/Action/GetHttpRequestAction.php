@@ -21,7 +21,6 @@ class GetHttpRequestAction implements ActionInterface
     protected $httpRequestStack;
 
     /**
-     * @param Request|null $httpRequest
      * @deprecated
      */
     public function setHttpRequest(Request $httpRequest = null)
@@ -29,17 +28,11 @@ class GetHttpRequestAction implements ActionInterface
         $this->httpRequest = $httpRequest;
     }
 
-    /**
-     * @param RequestStack|null $httpRequestStack
-     */
     public function setHttpRequestStack(RequestStack $httpRequestStack = null)
     {
         $this->httpRequestStack = $httpRequestStack;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request GetHttpRequest */
@@ -64,18 +57,11 @@ class GetHttpRequestAction implements ActionInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof GetHttpRequest;
     }
 
-    /**
-     * @param GetHttpRequest $request
-     * @param Request $httpRequest
-     */
     protected function updateRequest(GetHttpRequest $request, Request $httpRequest)
     {
         $request->query = $httpRequest->query->all();

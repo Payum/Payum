@@ -122,17 +122,12 @@ class Payout implements PayoutInterface
         $this->description = $description;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getDetails()
     {
         return $this->details;
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param array|\Traversable $details
      */
     public function setDetails($details)

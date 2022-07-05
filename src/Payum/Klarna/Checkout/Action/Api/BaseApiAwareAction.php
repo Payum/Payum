@@ -33,9 +33,6 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Config::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setApi($api)
     {
         $this->_setApi($api);
@@ -61,9 +58,6 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
         return \Klarna_Checkout_Connector::create($this->config->secret);
     }
 
-    /**
-     * @param \ArrayAccess $details
-     */
     protected function addMerchantId(\ArrayAccess $details)
     {
         if (false == isset($details['merchant'])) {
@@ -79,7 +73,6 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * @param \Closure $function
      * @param int $maxRetry
      *
      * @throws \Klarna_Checkout_ConnectionErrorException

@@ -15,9 +15,6 @@ class CancelAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request Cancel */
@@ -37,9 +34,6 @@ class CancelAction implements ActionInterface, GatewayAwareInterface
         $this->gateway->execute(new Sync($request->getModel()));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         if (false == ($request instanceof Cancel && $request->getModel() instanceof \ArrayAccess)) {

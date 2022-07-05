@@ -29,9 +29,6 @@ use Payum\Payex\Api\SoapClientFactory;
 
 class PayexGatewayFactory extends GatewayFactory
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function populateConfig(ArrayObject $config)
     {
         if (! class_exists('SoapClient')) {

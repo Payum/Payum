@@ -22,8 +22,6 @@ class AuthorizeTokenAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @throws \Payum\Core\Exception\LogicException if the token not set in the instruction.
      * @throws \Payum\Core\Reply\HttpRedirect       if authorization required.
      */
@@ -47,9 +45,6 @@ class AuthorizeTokenAction implements ActionInterface, ApiAwareInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof AuthorizeToken &&

@@ -28,8 +28,6 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param Capture $request
      */
     public function execute($request)
@@ -87,9 +85,6 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
         $model->replace((array) $result);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Capture &&

@@ -16,8 +16,6 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param Capture $request
      */
     public function execute($request)
@@ -43,9 +41,6 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
         $this->gateway->execute(new CreateCharge($model));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Capture &&

@@ -33,8 +33,6 @@ class Gateway implements GatewayInterface
      */
     protected $stack;
 
-    /**
-     */
     public function __construct()
     {
         $this->stack = [];
@@ -47,8 +45,6 @@ class Gateway implements GatewayInterface
     /**
      * @param mixed $api
      * @param bool  $forcePrepend
-     *
-     * @return void
      */
     public function addApi($api, $forcePrepend = false)
     {
@@ -61,8 +57,6 @@ class Gateway implements GatewayInterface
     /**
      * @param Action\ActionInterface $action
      * @param bool                   $forcePrepend
-     *
-     * @return void
      */
     public function addAction(ActionInterface $action, $forcePrepend = false)
     {
@@ -73,19 +67,13 @@ class Gateway implements GatewayInterface
     }
 
     /**
-     * @param \Payum\Core\Extension\ExtensionInterface $extension
      * @param bool                                     $forcePrepend
-     *
-     * @return void
      */
     public function addExtension(ExtensionInterface $extension, $forcePrepend = false)
     {
         $this->extensions->addExtension($extension, $forcePrepend);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request, $catchReply = false)
     {
         $context = new Context($this, $request, $this->stack);

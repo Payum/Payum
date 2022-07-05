@@ -24,24 +24,15 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
         $this->logger = $logger ?: new NullLogger();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function onPreExecute(Context $context)
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function onExecute(Context $context)
     {
         $this->logger->debug(sprintf(
@@ -52,9 +43,6 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
         ));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function onPostExecute(Context $context)
     {
         if ($context->getReply()) {

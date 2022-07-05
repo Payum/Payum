@@ -10,9 +10,6 @@ use Payum\Offline\Constants;
 
 class StatusAction implements ActionInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request GetStatusInterface */
@@ -65,9 +62,6 @@ class StatusAction implements ActionInterface
         $request->markUnknown();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof GetStatusInterface &&

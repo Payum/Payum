@@ -14,7 +14,6 @@ class TwigUtil
     protected static $storage;
 
     /**
-     * @param Environment $twig
      * @param string[] $paths
      */
     public static function registerPaths(Environment $twig, array $paths)

@@ -12,8 +12,6 @@ use Payum\Core\Storage\IdentityInterface;
 class ConvertPaymentAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param Convert $request
      */
     public function execute($request)
@@ -33,9 +31,6 @@ class ConvertPaymentAction implements ActionInterface
         $request->setResult((array) $details);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Convert &&

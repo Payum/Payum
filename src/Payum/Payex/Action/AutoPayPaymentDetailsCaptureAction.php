@@ -14,9 +14,6 @@ class AutoPayPaymentDetailsCaptureAction implements ActionInterface, GatewayAwar
 {
     use GatewayAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request \Payum\Core\Request\Capture */
@@ -25,9 +22,6 @@ class AutoPayPaymentDetailsCaptureAction implements ActionInterface, GatewayAwar
         $this->gateway->execute(new AutoPayAgreement($request->getModel()));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         if (false == (

@@ -19,9 +19,6 @@ class UpdateRecurringPaymentProfileAction implements ActionInterface, ApiAwareIn
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request UpdateRecurringPaymentProfile */
@@ -36,12 +33,9 @@ class UpdateRecurringPaymentProfileAction implements ActionInterface, ApiAwareIn
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return             $request instanceof UpdateRecurringPaymentProfile &&
+        return $request instanceof UpdateRecurringPaymentProfile &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

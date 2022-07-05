@@ -20,8 +20,6 @@ interface StorageInterface
      * @param object $model
      *
      * @throws \Payum\Core\Exception\InvalidArgumentException if not supported model given.
-     *
-     * @return void
      */
     public function update($model);
 
@@ -29,8 +27,6 @@ interface StorageInterface
      * @param object $model
      *
      * @throws \Payum\Core\Exception\InvalidArgumentException if not supported model given.
-     *
-     * @return void
      */
     public function delete($model);
 
@@ -42,8 +38,6 @@ interface StorageInterface
     public function find($id);
 
     /**
-     * @param array $criteria
-     *
      * @return object[]
      */
     public function findBy(array $criteria);

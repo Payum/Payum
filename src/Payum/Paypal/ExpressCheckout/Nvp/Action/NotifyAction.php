@@ -13,9 +13,6 @@ class NotifyAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request Notify */
@@ -24,9 +21,6 @@ class NotifyAction implements ActionInterface, GatewayAwareInterface
         $this->gateway->execute(new Sync($request->getModel()));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Notify &&

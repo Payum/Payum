@@ -20,9 +20,6 @@ class StopRecurringPaymentAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = RecurringApi::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request StopRecurringPayment */
@@ -39,12 +36,9 @@ class StopRecurringPaymentAction implements ActionInterface, ApiAwareInterface
         $model->replace($result);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return             $request instanceof StopRecurringPayment &&
+        return $request instanceof StopRecurringPayment &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }
