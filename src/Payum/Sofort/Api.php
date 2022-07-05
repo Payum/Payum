@@ -38,9 +38,6 @@ class Api
         'config_key' => null,
     ];
 
-    /**
-     * @param array $options
-     */
     public function __construct(array $options)
     {
         $this->options = array_replace([
@@ -51,8 +48,6 @@ class Api
     }
 
     /**
-     * @param array $fields
-     *
      * @return array
      */
     public function createTransaction(array $fields)
@@ -155,8 +150,6 @@ class Api
     }
 
     /**
-     * @param array $fields
-     *
      * @return array
      */
     public function refundTransaction(array $fields)

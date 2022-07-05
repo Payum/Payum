@@ -14,9 +14,6 @@ use Payum\Offline\Action\StatusAction;
 
 class OfflineGatewayFactory extends GatewayFactory
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function populateConfig(ArrayObject $config)
     {
         $config->defaults([

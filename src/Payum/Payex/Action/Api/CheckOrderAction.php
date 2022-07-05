@@ -20,9 +20,6 @@ class CheckOrderAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = OrderApi::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request CheckOrder */
@@ -39,9 +36,6 @@ class CheckOrderAction implements ActionInterface, ApiAwareInterface
         $model->replace($result);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof CheckOrder &&

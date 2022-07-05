@@ -18,8 +18,6 @@ class TokenFactory extends AbstractTokenFactory
     protected $baseUrl;
 
     /**
-     * @param StorageInterface         $tokenStorage
-     * @param StorageRegistryInterface $storageRegistry
      * @param string                   $baseUrl
      */
     public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $baseUrl = null)
@@ -29,9 +27,6 @@ class TokenFactory extends AbstractTokenFactory
         $this->baseUrl = $baseUrl ? HttpUri::createFromString($baseUrl) : HttpUri::createFromServer($_SERVER);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function generateUrl($path, array $parameters = [])
     {
         $hierarchicalPath = HierarchicalPath::createFromUri($this->baseUrl);

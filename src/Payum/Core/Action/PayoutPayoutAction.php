@@ -16,8 +16,6 @@ class PayoutPayoutAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param Payout $request
      */
     public function execute($request)
@@ -44,9 +42,6 @@ class PayoutPayoutAction implements ActionInterface, GatewayAwareInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Payout &&

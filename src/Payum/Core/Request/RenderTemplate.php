@@ -21,7 +21,6 @@ class RenderTemplate
 
     /**
      * @param string $templateName
-     * @param array  $parameters
      */
     public function __construct($templateName, array $parameters = array())
     {

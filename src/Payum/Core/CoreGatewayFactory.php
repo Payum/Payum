@@ -39,17 +39,11 @@ class CoreGatewayFactory implements GatewayFactoryInterface
      */
     protected $defaultConfig;
 
-    /**
-     * @param array $defaultConfig
-     */
     public function __construct(array $defaultConfig = [])
     {
         $this->defaultConfig = $defaultConfig;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function create(array $config = [])
     {
         $config = ArrayObject::ensureArrayObject($config);
@@ -66,9 +60,6 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         return $gateway;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function createConfig(array $config = [])
     {
         $config = ArrayObject::ensureArrayObject($config);
@@ -207,9 +198,6 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         return (array) $config;
     }
 
-    /**
-     * @param ArrayObject $config
-     */
     protected function buildClosures(ArrayObject $config)
     {
         // with higher priority
@@ -227,10 +215,6 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         }
     }
 
-    /**
-     * @param Gateway     $gateway
-     * @param ArrayObject $config
-     */
     protected function buildActions(Gateway $gateway, ArrayObject $config)
     {
         foreach ($config as $name => $value) {
@@ -242,10 +226,6 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         }
     }
 
-    /**
-     * @param Gateway     $gateway
-     * @param ArrayObject $config
-     */
     protected function buildApis(Gateway $gateway, ArrayObject $config)
     {
         foreach ($config as $name => $value) {
@@ -257,10 +237,6 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         }
     }
 
-    /**
-     * @param Gateway     $gateway
-     * @param ArrayObject $config
-     */
     protected function buildExtensions(Gateway $gateway, ArrayObject $config)
     {
         foreach ($config as $name => $value) {

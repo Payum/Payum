@@ -11,8 +11,6 @@ use Payum\Core\Request\GetStatusInterface;
 class StatusAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetStatusInterface $request
      */
     public function execute($request)
@@ -42,9 +40,6 @@ class StatusAction implements ActionInterface
         $request->markFailed();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof GetStatusInterface &&

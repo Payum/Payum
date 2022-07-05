@@ -25,9 +25,6 @@ abstract class PurchaseAction implements ActionInterface, GatewayAwareInterface,
     use GatewayAwareTrait;
     use GenericTokenFactoryAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request Capture */

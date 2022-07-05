@@ -15,18 +15,12 @@ class TokenFactoryBuilder
      */
     private $urlGenerator;
 
-    /**
-     * @param UrlGeneratorInterface $urlGenerator
-     */
     public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
     }
 
     /**
-     * @param StorageInterface $tokenStorage
-     * @param StorageRegistryInterface $storageRegistry
-     *
      * @return TokenFactoryInterface
      */
     public function build(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry)

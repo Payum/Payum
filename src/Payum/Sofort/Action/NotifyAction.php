@@ -15,8 +15,6 @@ class NotifyAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritdoc}
-     *
      * @param $request Notify
      */
     public function execute($request)
@@ -28,9 +26,6 @@ class NotifyAction implements ActionInterface, GatewayAwareInterface
         throw new HttpResponse('OK', 200);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($request)
     {
         return $request instanceof Notify &&

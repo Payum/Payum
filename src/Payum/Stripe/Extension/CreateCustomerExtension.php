@@ -14,7 +14,7 @@ use Payum\Stripe\Request\Api\ObtainToken;
 class CreateCustomerExtension implements ExtensionInterface
 {
     /**
-     * @var Context $context
+     * @var Context
      */
     public function onPreExecute(Context $context)
     {
@@ -33,14 +33,14 @@ class CreateCustomerExtension implements ExtensionInterface
     }
 
     /**
-     * @var Context $context
+     * @var Context
      */
     public function onExecute(Context $context)
     {
     }
 
     /**
-     * @var Context $context
+     * @var Context
      */
     public function onPostExecute(Context $context)
     {
@@ -58,10 +58,6 @@ class CreateCustomerExtension implements ExtensionInterface
         $this->createCustomer($context->getGateway(), ArrayObject::ensureArrayObject($model));
     }
 
-    /**
-     * @param GatewayInterface $gateway
-     * @param ArrayObject $model
-     */
     protected function createCustomer(GatewayInterface $gateway, ArrayObject $model)
     {
         if ($model['customer']) {

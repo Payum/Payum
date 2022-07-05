@@ -16,17 +16,12 @@ class ReserveAmountAction extends BaseApiAwareAction implements GatewayAwareInte
      */
     protected $gateway;
 
-    /**
-     * {@inheritDoc}
-     */
     public function setGateway(GatewayInterface $gateway)
     {
         $this->gateway = $gateway;
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param ReserveAmount $request
      */
     public function execute($request)
@@ -54,9 +49,6 @@ class ReserveAmountAction extends BaseApiAwareAction implements GatewayAwareInte
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof ReserveAmount &&

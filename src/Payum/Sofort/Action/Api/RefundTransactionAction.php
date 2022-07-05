@@ -21,8 +21,6 @@ class RefundTransactionAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param $request RefundTransaction
      */
     public function execute($request)
@@ -48,9 +46,6 @@ class RefundTransactionAction implements ActionInterface, ApiAwareInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($request)
     {
         return $request instanceof RefundTransaction &&

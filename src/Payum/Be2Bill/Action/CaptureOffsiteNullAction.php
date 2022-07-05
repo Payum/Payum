@@ -19,8 +19,6 @@ class CaptureOffsiteNullAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param Capture $request
      */
     public function execute($request)
@@ -51,9 +49,6 @@ class CaptureOffsiteNullAction implements ActionInterface, GatewayAwareInterface
         throw new HttpRedirect((string) $uri);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Capture &&

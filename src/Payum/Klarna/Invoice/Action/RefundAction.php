@@ -15,8 +15,6 @@ class RefundAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param Refund $request
      */
     public function execute($request)
@@ -34,9 +32,6 @@ class RefundAction implements ActionInterface, GatewayAwareInterface
         $this->gateway->execute(new CreditPart($details));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Refund &&

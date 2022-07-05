@@ -12,9 +12,6 @@ interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterfac
      */
     public function getValue();
 
-    /**
-     * @return void
-     */
     public function markNew();
 
     /**
@@ -22,9 +19,6 @@ interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterfac
      */
     public function isNew();
 
-    /**
-     * @return void
-     */
     public function markCaptured();
 
     /**
@@ -37,14 +31,8 @@ interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterfac
      */
     public function isAuthorized();
 
-    /**
-     * @return void
-     */
     public function markAuthorized();
 
-    /**
-     * @return void
-     */
     public function markPayedout();
 
     /**
@@ -57,9 +45,6 @@ interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterfac
      */
     public function isRefunded();
 
-    /**
-     * @return void
-     */
     public function markRefunded();
 
     /**
@@ -67,9 +52,6 @@ interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterfac
      */
     public function isSuspended();
 
-    /**
-     * @return void
-     */
     public function markSuspended();
 
     /**
@@ -77,9 +59,6 @@ interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterfac
      */
     public function isExpired();
 
-    /**
-     * @return void
-     */
     public function markExpired();
 
     /**
@@ -87,9 +66,6 @@ interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterfac
      */
     public function isCanceled();
 
-    /**
-     * @return void
-     */
     public function markCanceled();
 
     /**
@@ -97,9 +73,6 @@ interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterfac
      */
     public function isPending();
 
-    /**
-     * @return void
-     */
     public function markPending();
 
     /**
@@ -107,9 +80,6 @@ interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterfac
      */
     public function isFailed();
 
-    /**
-     * @return void
-     */
     public function markFailed();
 
     /**
@@ -117,8 +87,5 @@ interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterfac
      */
     public function isUnknown();
 
-    /**
-     * @return void
-     */
     public function markUnknown();
 }

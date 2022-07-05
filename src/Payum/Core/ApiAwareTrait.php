@@ -17,9 +17,6 @@ trait ApiAwareTrait
      */
     protected $apiClass;
 
-    /**
-     * {@inheritDoc}
-     */
     public function setApi($api)
     {
         if (empty($this->apiClass)) {

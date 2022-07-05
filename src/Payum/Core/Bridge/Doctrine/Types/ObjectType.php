@@ -16,17 +16,11 @@ use Doctrine\ODM\MongoDB\Types\Type;
  */
 class ObjectType extends Type
 {
-    /**
-     * {@inheritDoc}
-     */
     public function convertToDatabaseValue($value)
     {
         return serialize($value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function convertToPHPValue($value)
     {
         if ($value === null) {

@@ -123,10 +123,6 @@ class Api
     );
 
     /**
-     * @param array               $options
-     * @param HttpClientInterface $client
-     * @param MessageFactory      $messageFactory
-     *
      * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
      */
     public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
@@ -148,8 +144,6 @@ class Api
     }
 
     /**
-     * @param array $params
-     *
      * @return array
      */
     public function payment(array $params)
@@ -167,8 +161,6 @@ class Api
     /**
      * Verify if the hash of the given parameter is correct
      *
-     * @param array $params
-     *
      * @return bool
      */
     public function verifyHash(array $params)
@@ -184,8 +176,6 @@ class Api
     }
 
     /**
-     * @param array $fields
-     *
      * @return array
      */
     protected function doRequest(array $fields)
@@ -222,8 +212,6 @@ class Api
     }
 
     /**
-     * @param  array $params
-     *
      * @return array
      */
     public function prepareOffsitePayment(array $params)
@@ -260,9 +248,6 @@ class Api
         return $params;
     }
 
-    /**
-     * @param  array $params
-     */
     protected function addGlobalParams(array &$params)
     {
         $params['VERSION'] = self::VERSION;
@@ -282,8 +267,6 @@ class Api
     }
 
     /**
-     * @param array $params
-     *
      * @return string
      */
     public function calculateHash(array $params)

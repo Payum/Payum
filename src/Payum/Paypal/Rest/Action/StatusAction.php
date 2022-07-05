@@ -20,9 +20,7 @@ class StatusAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @var GetStatusInterface $request
+     * @var GetStatusInterface
      */
     public function execute($request)
     {
@@ -60,9 +58,6 @@ class StatusAction implements ActionInterface, ApiAwareInterface
         $request->markUnknown();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof GetStatusInterface &&

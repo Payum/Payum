@@ -15,7 +15,7 @@ class TestModel extends BaseTestModel
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
-     * @var integer $id
+     * @var integer
      */
     protected $id;
 

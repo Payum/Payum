@@ -20,9 +20,6 @@ class DoReferenceTransactionAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request DoReferenceTransaction */
@@ -45,9 +42,6 @@ class DoReferenceTransactionAction implements ActionInterface, ApiAwareInterface
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof DoReferenceTransaction &&
