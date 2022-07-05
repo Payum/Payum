@@ -3,7 +3,6 @@
 namespace Payum\Payex\Tests\Action;
 
 use Payum\Core\GatewayAwareInterface;
-use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Sync;
 use Payum\Payex\Action\AgreementDetailsSyncAction;
 

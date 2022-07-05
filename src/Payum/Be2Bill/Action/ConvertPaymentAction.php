@@ -7,7 +7,6 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
-use Payum\Core\Storage\IdentityInterface;
 
 class ConvertPaymentAction implements ActionInterface
 {

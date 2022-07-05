@@ -3,7 +3,6 @@
 namespace Payum\Core\Bridge\Guzzle;
 
 use GuzzleHttp\Client;
-use Http\Discovery\HttpClientDiscovery;
 use Payum\Core\HttpClientInterface;
 
 /**

@@ -4,7 +4,6 @@ namespace Payum\Core\Tests\Storage;
 
 use Payum\Core\Model\Identity;
 use Payum\Core\Storage\AbstractStorage;
-use Payum\Core\Storage\IdentityInterface;
 use PHPUnit\Framework\TestCase;
 
 class AbstractStorageTest extends TestCase

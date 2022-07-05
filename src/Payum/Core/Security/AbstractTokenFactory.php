@@ -4,7 +4,6 @@ namespace Payum\Core\Security;
 
 use League\Uri\Components\Query;
 use League\Uri\Http as HttpUri;
-use League\Uri\QueryString;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\Util\Random;
 use Payum\Core\Storage\IdentityInterface;

@@ -11,7 +11,6 @@ use Payum\Core\Model\Identity;
 use Payum\Core\Model\Token;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Authorize;
-use Payum\Core\Request\Generic;
 use Payum\Core\Request\RenderTemplate;
 use Payum\Core\Request\Sync;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;

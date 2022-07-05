@@ -2,7 +2,6 @@
 
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
-use Payum\Klarna\Invoice\Config;
 use PHPUnit\Framework\TestCase;
 
 class BaseApiAwareActionTest extends TestCase

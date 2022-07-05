@@ -8,7 +8,6 @@ use Payum\Core\Tests\GenericApiAwareActionTest;
 use Payum\Klarna\Invoice\Action\Api\UpdateAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\Update;
-use PHPUnit\Framework\TestCase;
 use PhpXmlRpc\Client;
 
 class UpdateActionTest extends GenericApiAwareActionTest

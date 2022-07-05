@@ -8,7 +8,6 @@ use Payum\Core\Tests\GenericApiAwareActionTest;
 use Payum\Klarna\Invoice\Action\Api\ReserveAmountAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\ReserveAmount;
-use PHPUnit\Framework\TestCase;
 use PhpXmlRpc\Client;
 
 class ReserveAmountActionTest extends GenericApiAwareActionTest
