@@ -17,11 +17,11 @@ class Mask
         $showLast = max(0, $showLast);
 
         if (mb_strlen($value) <= ($showLast + 1) * 2 || false == $showLast) {
-            $showRegExpPart = "";
+            $showRegExpPart = '';
         } else {
-            $showRegExpPart = "(?!(.){0,$showLast}$)";
+            $showRegExpPart = "(?!(.){0,${showLast}}$)";
         }
 
-        return preg_replace("/(?!^.?)[^-_\s]$showRegExpPart/u", $maskSymbol, $value);
+        return preg_replace("/(?!^.?)[^-_\s]${showRegExpPart}/u", $maskSymbol, $value);
     }
 }

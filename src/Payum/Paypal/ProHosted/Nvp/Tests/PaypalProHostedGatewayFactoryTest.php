@@ -7,21 +7,6 @@ use Payum\Paypal\ProHosted\Nvp\PaypalProHostedGatewayFactory;
 
 class PaypalProHostedGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    protected function getGatewayFactoryClass(): string
-    {
-        return PaypalProHostedGatewayFactory::class;
-    }
-
-    protected function getRequiredOptions(): array
-    {
-        return [
-            'business' => 'aBusiness',
-            'username' => 'aName',
-            'password' => 'aPass',
-            'signature' => 'aSign',
-        ];
-    }
-
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new PaypalProHostedGatewayFactory([
@@ -84,5 +69,20 @@ class PaypalProHostedGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory = new PaypalProHostedGatewayFactory();
 
         $factory->create();
+    }
+
+    protected function getGatewayFactoryClass(): string
+    {
+        return PaypalProHostedGatewayFactory::class;
+    }
+
+    protected function getRequiredOptions(): array
+    {
+        return [
+            'business' => 'aBusiness',
+            'username' => 'aName',
+            'password' => 'aPass',
+            'signature' => 'aSign',
+        ];
     }
 }

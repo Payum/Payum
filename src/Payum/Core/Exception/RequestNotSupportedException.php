@@ -57,7 +57,7 @@ class RequestNotSupportedException extends InvalidArgumentException
         $exception = new self(sprintf(
             'Request %s is not supported. %s',
             Humanify::request($request),
-            implode(" ", static::suggestions($request))
+            implode(' ', static::suggestions($request))
         ));
 
         $exception->request = $request;
@@ -73,10 +73,10 @@ class RequestNotSupportedException extends InvalidArgumentException
     public static function createActionNotSupported(ActionInterface $action, $request)
     {
         $exception = new self(sprintf(
-            "Action %s is not supported the request %s. %s",
+            'Action %s is not supported the request %s. %s',
             Humanify::value($action),
             Humanify::request($request),
-            implode(" ", static::suggestions($request))
+            implode(' ', static::suggestions($request))
         ));
 
         $exception->request = $request;

@@ -59,7 +59,7 @@ class GetHumanStatusTest extends TestCase
     {
         $getStatus = new GetHumanStatus(new \stdClass());
 
-        $getStatus->$markXXXMethod();
+        $getStatus->{$markXXXMethod}();
 
         $this->assertNotEmpty($getStatus->getValue());
     }
@@ -71,7 +71,7 @@ class GetHumanStatusTest extends TestCase
     {
         $getStatus = new GetHumanStatus(new \stdClass());
 
-        $this->assertIsBool($getStatus->$isXXXMethod());
+        $this->assertIsBool($getStatus->{$isXXXMethod}());
     }
 
     public function testShouldNotMatchOthersThenCapturedStatus()

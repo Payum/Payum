@@ -7,19 +7,6 @@ use Payum\Stripe\StripeJsGatewayFactory;
 
 class StripeJsGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    protected function getGatewayFactoryClass(): string
-    {
-        return StripeJsGatewayFactory::class;
-    }
-
-    protected function getRequiredOptions(): array
-    {
-        return [
-            'publishable_key' => 'aPubKey',
-            'secret_key' => 'aSecretKey',
-        ];
-    }
-
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new StripeJsGatewayFactory([
@@ -96,5 +83,18 @@ class StripeJsGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertArrayHasKey('PayumStripe', $config['payum.paths']);
         $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumStripe']);
         $this->assertFileExists($config['payum.paths']['PayumStripe']);
+    }
+
+    protected function getGatewayFactoryClass(): string
+    {
+        return StripeJsGatewayFactory::class;
+    }
+
+    protected function getRequiredOptions(): array
+    {
+        return [
+            'publishable_key' => 'aPubKey',
+            'secret_key' => 'aSecretKey',
+        ];
     }
 }

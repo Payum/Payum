@@ -7,6 +7,10 @@ use Payum\Core\Reply\HttpRedirect;
 
 abstract class Humanify
 {
+    final private function __construct()
+    {
+    }
+
     /**
      * @param  mixed  $request
      * @return string
@@ -50,9 +54,5 @@ abstract class Humanify
         }
 
         return gettype($value);
-    }
-
-    final private function __construct()
-    {
     }
 }

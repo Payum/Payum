@@ -7,22 +7,6 @@ use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
 
 class KlarnaInvoiceGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    protected function getGatewayFactoryClass(): string
-    {
-        return KlarnaInvoiceGatewayFactory::class;
-    }
-
-    protected function getRequiredOptions(): array
-    {
-        return [
-            'eid' => 'aEID',
-            'secret' => 'aSecret',
-            'country' => 'SV',
-            'language' => 'SE',
-            'currency' => 'SEK',
-        ];
-    }
-
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new KlarnaInvoiceGatewayFactory([
@@ -85,5 +69,21 @@ class KlarnaInvoiceGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory = new KlarnaInvoiceGatewayFactory();
 
         $factory->create();
+    }
+
+    protected function getGatewayFactoryClass(): string
+    {
+        return KlarnaInvoiceGatewayFactory::class;
+    }
+
+    protected function getRequiredOptions(): array
+    {
+        return [
+            'eid' => 'aEID',
+            'secret' => 'aSecret',
+            'country' => 'SV',
+            'language' => 'SE',
+            'currency' => 'SEK',
+        ];
     }
 }

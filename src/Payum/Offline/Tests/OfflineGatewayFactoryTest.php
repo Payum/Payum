@@ -7,11 +7,6 @@ use Payum\Offline\OfflineGatewayFactory;
 
 class OfflineGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    protected function getGatewayFactoryClass(): string
-    {
-        return OfflineGatewayFactory::class;
-    }
-
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new OfflineGatewayFactory([
@@ -55,5 +50,10 @@ class OfflineGatewayFactoryTest extends AbstractGatewayFactoryTest
 
         $this->assertArrayHasKey('payum.factory_title', $config);
         $this->assertSame('Offline', $config['payum.factory_title']);
+    }
+
+    protected function getGatewayFactoryClass(): string
+    {
+        return OfflineGatewayFactory::class;
     }
 }

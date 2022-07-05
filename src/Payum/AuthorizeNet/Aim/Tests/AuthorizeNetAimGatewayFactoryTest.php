@@ -7,19 +7,6 @@ use Payum\Core\Tests\AbstractGatewayFactoryTest;
 
 class AuthorizeNetAimGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    protected function getGatewayFactoryClass(): string
-    {
-        return AuthorizeNetAimGatewayFactory::class;
-    }
-
-    protected function getRequiredOptions(): array
-    {
-        return [
-            'login_id' => 'aLoginId',
-            'transaction_key' => 'aTransKey',
-        ];
-    }
-
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new AuthorizeNetAimGatewayFactory([
@@ -76,5 +63,18 @@ class AuthorizeNetAimGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory = new AuthorizeNetAimGatewayFactory();
 
         $factory->create();
+    }
+
+    protected function getGatewayFactoryClass(): string
+    {
+        return AuthorizeNetAimGatewayFactory::class;
+    }
+
+    protected function getRequiredOptions(): array
+    {
+        return [
+            'login_id' => 'aLoginId',
+            'transaction_key' => 'aTransKey',
+        ];
     }
 }

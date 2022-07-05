@@ -12,16 +12,6 @@ use PhpXmlRpc\Client;
 
 class ReserveAmountActionTest extends GenericApiAwareActionTest
 {
-    protected function getActionClass(): string
-    {
-        return ReserveAmountAction::class;
-    }
-
-    protected function getApiClass()
-    {
-        return new Config();
-    }
-
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\ReserveAmountAction');
@@ -157,6 +147,16 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
         $reserved = $reserve->getModel();
         $this->assertSame(123, $reserved['error_code']);
         $this->assertSame('theMessage', $reserved['error_message']);
+    }
+
+    protected function getActionClass(): string
+    {
+        return ReserveAmountAction::class;
+    }
+
+    protected function getApiClass()
+    {
+        return new Config();
     }
 
     /**
