@@ -71,7 +71,7 @@ class SyncActionTest extends \PHPUnit\Framework\TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ProHosted\Nvp\Request\Api\GetTransactionDetails'))
+            ->with($this->isInstanceOf(\Payum\Paypal\ProHosted\Nvp\Request\Api\GetTransactionDetails::class))
             ->willReturnCallback(function (GetTransactionDetails $request) {
                 $model = $request->getModel();
                 $model['foo'] = 'fooVal';
@@ -101,6 +101,6 @@ class SyncActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }

@@ -10,7 +10,7 @@ class ArrayObject extends \ArrayObject
 {
     protected $input;
 
-    public function __construct($input = [], $flags = 0, $iterator_class = 'ArrayIterator')
+    public function __construct($input = [], $flags = 0, $iterator_class = \ArrayIterator::class)
     {
         if ($input instanceof \ArrayAccess && false == $input instanceof \ArrayObject) {
             $this->input = $input;
@@ -33,7 +33,7 @@ class ArrayObject extends \ArrayObject
      */
     public function get($key, $default = null)
     {
-        return isset($this[$key]) ? $this[$key] : $default;
+        return $this[$key] ?? $default;
     }
 
     /**

@@ -28,7 +28,7 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new RefundTransactionAction();
 
-        $this->assertTrue($action->supports(new RefundTransaction($this->createMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new RefundTransaction($this->createMock(\ArrayAccess::class))));
     }
 
     public function testShouldNotSupportAnythingRefundTransactionRequest()

@@ -27,7 +27,7 @@ class CreateBillingAgreementActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new CreateBillingAgreementAction();
 
-        $this->assertTrue($action->supports(new CreateBillingAgreement($this->createMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new CreateBillingAgreement($this->createMock(\ArrayAccess::class))));
     }
 
     public function testShouldNotSupportAnythingNotCreateBillingAgreementRequest()
@@ -117,6 +117,6 @@ class CreateBillingAgreementActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
+        return $this->createMock(\Payum\Paypal\ExpressCheckout\Nvp\Api::class, [], [], '', false);
     }
 }

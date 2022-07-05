@@ -10,9 +10,9 @@ class StatusActionTest extends TestCase
 {
     public function testShouldImplementsActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\StatusAction');
+        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Action\StatusAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldSupportGetStatusWithArrayAsModel()

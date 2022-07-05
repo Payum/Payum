@@ -11,16 +11,16 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Offline\Action\CaptureAction');
+        $rc = new \ReflectionClass(\Payum\Offline\Action\CaptureAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldSupportCaptureWithArrayAccessAsModel()
     {
         $action = new CaptureAction();
 
-        $request = new Capture($this->createMock('ArrayAccess'));
+        $request = new Capture($this->createMock(\ArrayAccess::class));
 
         $this->assertTrue($action->supports($request));
     }

@@ -12,7 +12,7 @@ class DoctrineStorageOrmTest extends OrmTest
     {
         $storage = new DoctrineStorage(
             $this->em,
-            'Payum\Core\Tests\Mocks\Entity\TestModel'
+            \Payum\Core\Tests\Mocks\Entity\TestModel::class
         );
 
         $model = $storage->create();
@@ -26,7 +26,7 @@ class DoctrineStorageOrmTest extends OrmTest
     {
         $storage = new DoctrineStorage(
             $this->em,
-            'Payum\Core\Tests\Mocks\Entity\TestModel'
+            \Payum\Core\Tests\Mocks\Entity\TestModel::class
         );
 
         $model = $storage->create();
@@ -37,7 +37,7 @@ class DoctrineStorageOrmTest extends OrmTest
 
         $identity = $storage->identify($model);
 
-        $this->assertInstanceOf('Payum\Core\Model\Identity', $identity);
+        $this->assertInstanceOf(\Payum\Core\Model\Identity::class, $identity);
         $this->assertInstanceOf($identity->getClass(), $model);
         $this->assertEquals($model->getId(), $identity->getId());
     }
@@ -46,7 +46,7 @@ class DoctrineStorageOrmTest extends OrmTest
     {
         $storage = new DoctrineStorage(
             $this->em,
-            'Payum\Core\Tests\Mocks\Entity\TestModel'
+            \Payum\Core\Tests\Mocks\Entity\TestModel::class
         );
 
         $model = $storage->create();
@@ -59,7 +59,7 @@ class DoctrineStorageOrmTest extends OrmTest
 
         $model = $storage->find($requestId);
 
-        $this->assertInstanceOf('Payum\Core\Tests\Mocks\Entity\TestModel', $model);
+        $this->assertInstanceOf(\Payum\Core\Tests\Mocks\Entity\TestModel::class, $model);
         $this->assertEquals($requestId, $model->getId());
     }
 
@@ -67,7 +67,7 @@ class DoctrineStorageOrmTest extends OrmTest
     {
         $storage = new DoctrineStorage(
             $this->em,
-            'Payum\Core\Tests\Mocks\Entity\TestModel'
+            \Payum\Core\Tests\Mocks\Entity\TestModel::class
         );
 
         $model = $storage->create();
@@ -82,7 +82,7 @@ class DoctrineStorageOrmTest extends OrmTest
 
         $foundModel = $storage->find($identity);
 
-        $this->assertInstanceOf('Payum\Core\Tests\Mocks\Entity\TestModel', $foundModel);
+        $this->assertInstanceOf(\Payum\Core\Tests\Mocks\Entity\TestModel::class, $foundModel);
         $this->assertEquals($requestId, $foundModel->getId());
     }
 
@@ -90,7 +90,7 @@ class DoctrineStorageOrmTest extends OrmTest
     {
         $storage = new DoctrineStorage(
             $this->em,
-            'Payum\Core\Tests\Mocks\Entity\TestModel'
+            \Payum\Core\Tests\Mocks\Entity\TestModel::class
         );
 
         /** @var TestModel $model */
@@ -113,21 +113,21 @@ class DoctrineStorageOrmTest extends OrmTest
         ]);
 
         $this->assertCount(2, $result);
-        $this->assertContainsOnly('Payum\Core\Tests\Mocks\Entity\TestModel', $result);
+        $this->assertContainsOnly(\Payum\Core\Tests\Mocks\Entity\TestModel::class, $result);
 
         $result = $storage->findBy([
             'currency' => 'EUR',
         ]);
 
         $this->assertCount(1, $result);
-        $this->assertContainsOnly('Payum\Core\Tests\Mocks\Entity\TestModel', $result);
+        $this->assertContainsOnly(\Payum\Core\Tests\Mocks\Entity\TestModel::class, $result);
     }
 
     public function testShouldFindByAllIfCriteriaIsEmpty()
     {
         $storage = new DoctrineStorage(
             $this->em,
-            'Payum\Core\Tests\Mocks\Entity\TestModel'
+            \Payum\Core\Tests\Mocks\Entity\TestModel::class
         );
 
         /** @var TestModel $model */
@@ -148,6 +148,6 @@ class DoctrineStorageOrmTest extends OrmTest
         $result = $storage->findBy([]);
 
         $this->assertCount(3, $result);
-        $this->assertContainsOnly('Payum\Core\Tests\Mocks\Entity\TestModel', $result);
+        $this->assertContainsOnly(\Payum\Core\Tests\Mocks\Entity\TestModel::class, $result);
     }
 }

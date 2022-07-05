@@ -46,7 +46,7 @@ class CreateOrderActionTest extends GenericActionTest
 
         $action->execute($request);
 
-        $this->assertInstanceOf('Klarna_Checkout_Order', $request->getOrder());
+        $this->assertInstanceOf(\Klarna_Checkout_Order::class, $request->getOrder());
     }
 
     public function testShouldUseModelAsDataToCreateOrderOnExecute()
@@ -80,7 +80,7 @@ class CreateOrderActionTest extends GenericActionTest
 
         $action->execute($request);
 
-        $this->assertInstanceOf('Klarna_Checkout_Order', $request->getOrder());
+        $this->assertInstanceOf(\Klarna_Checkout_Order::class, $request->getOrder());
     }
 
     public function testShouldAddMerchantIdFromConfigIfNotSetInModelOnExecute()
@@ -117,7 +117,7 @@ class CreateOrderActionTest extends GenericActionTest
 
         $action->execute($request);
 
-        $this->assertInstanceOf('Klarna_Checkout_Order', $request->getOrder());
+        $this->assertInstanceOf(\Klarna_Checkout_Order::class, $request->getOrder());
     }
 
     public function testShouldReturnSameOrderUsedWhileCreateAndFetchCallsOnExecute()
@@ -215,6 +215,6 @@ class CreateOrderActionTest extends GenericActionTest
      */
     protected function createConnectorMock()
     {
-        return $this->createMock('Klarna_Checkout_ConnectorInterface', [], [], '', false);
+        return $this->createMock(\Klarna_Checkout_ConnectorInterface::class, [], [], '', false);
     }
 }

@@ -25,7 +25,7 @@ class IdentificatorTest extends TestCase
     {
         $id = new Identificator('theId', new \stdClass());
 
-        $this->assertSame('stdClass', $id->getClass());
+        $this->assertSame(\stdClass::class, $id->getClass());
     }
 
     public function testShouldBeCorrectlySerializedAndUnserialized()

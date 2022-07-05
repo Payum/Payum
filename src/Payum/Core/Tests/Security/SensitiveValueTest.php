@@ -18,7 +18,7 @@ class SensitiveValueTest extends TestCase
     {
         $rc = new \ReflectionClass(SensitiveValue::class);
 
-        $this->assertTrue($rc->implementsInterface('Serializable'));
+        $this->assertTrue($rc->implementsInterface(\Serializable::class));
     }
 
     public function testShouldAllowGetValueSetInConstructorAndErase()

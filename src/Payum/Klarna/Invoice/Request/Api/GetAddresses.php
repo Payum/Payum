@@ -49,6 +49,6 @@ class GetAddresses
      */
     public function getFirstAddress()
     {
-        return isset($this->addresses[0]) ? $this->addresses[0] : null;
+        return $this->addresses[0] ?? null;
     }
 }

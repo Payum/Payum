@@ -24,7 +24,7 @@ class CreditCardDate extends Constraint
         parent::__construct($options);
 
         if (null === $this->min) {
-            throw new MissingOptionsException('Either option "min" must be given for constraint ' . __CLASS__, ['min']);
+            throw new MissingOptionsException('Either option "min" must be given for constraint ' . self::class, ['min']);
         }
 
         if (null !== $this->min) {

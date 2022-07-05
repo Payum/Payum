@@ -9,23 +9,23 @@ use Payum\Klarna\Checkout\Request\Api\UpdateOrder;
 
 class UpdateOrderActionTest extends GenericActionTest
 {
-    protected $requestClass = 'Payum\Klarna\Checkout\Request\Api\UpdateOrder';
+    protected $requestClass = \Payum\Klarna\Checkout\Request\Api\UpdateOrder::class;
 
-    protected $actionClass = 'Payum\Klarna\Checkout\Action\Api\UpdateOrderAction';
+    protected $actionClass = \Payum\Klarna\Checkout\Action\Api\UpdateOrderAction::class;
 
     public function provideNotSupportedRequests(): \Iterator
     {
         yield ['foo'];
         yield [['foo']];
         yield [new \stdClass()];
-        yield [$this->getMockForAbstractClass('Payum\Core\Request\Generic', [[]])];
+        yield [$this->getMockForAbstractClass(\Payum\Core\Request\Generic::class, [[]])];
     }
 
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\UpdateOrderAction');
+        $rc = new \ReflectionClass(\Payum\Klarna\Checkout\Action\Api\UpdateOrderAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction::class));
     }
 
     public function testShouldUpdateOrderIfModelHasCartItemsSetOnExecute()
@@ -63,7 +63,7 @@ class UpdateOrderActionTest extends GenericActionTest
 
         $action->execute($request);
 
-        $this->assertInstanceOf('Klarna_Checkout_Order', $request->getOrder());
+        $this->assertInstanceOf(\Klarna_Checkout_Order::class, $request->getOrder());
     }
 
     public function testShouldFailedAfterThreeRetriesOnTimeout()
@@ -127,7 +127,7 @@ class UpdateOrderActionTest extends GenericActionTest
 
         $action->execute($request = new UpdateOrder($model));
 
-        $this->assertInstanceOf('Klarna_Checkout_Order', $request->getOrder());
+        $this->assertInstanceOf(\Klarna_Checkout_Order::class, $request->getOrder());
     }
 
     /**
@@ -135,6 +135,6 @@ class UpdateOrderActionTest extends GenericActionTest
      */
     protected function createConnectorMock()
     {
-        return $this->createMock('Klarna_Checkout_ConnectorInterface', [], [], '', false);
+        return $this->createMock(\Klarna_Checkout_ConnectorInterface::class, [], [], '', false);
     }
 }

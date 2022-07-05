@@ -15,9 +15,9 @@ class GenericTokenFactoryExtensionTest extends TestCase
 {
     public function testShouldImplementExtensionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Extension\GenericTokenFactoryExtension');
+        $rc = new \ReflectionClass(\Payum\Core\Extension\GenericTokenFactoryExtension::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Extension\ExtensionInterface::class));
     }
 
     public function testShouldSetTokenFactoryToActionImplementsGenericTokenFactoryAwareInterface()
@@ -74,7 +74,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
      */
     protected function createActionMock()
     {
-        return $this->createMock('Payum\Core\Action\ActionInterface');
+        return $this->createMock(\Payum\Core\Action\ActionInterface::class);
     }
 
     /**
@@ -82,7 +82,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
      */
     protected function createGenericTokenFactoryMock()
     {
-        return $this->createMock('Payum\Core\Security\GenericTokenFactoryInterface');
+        return $this->createMock(\Payum\Core\Security\GenericTokenFactoryInterface::class);
     }
 
     /**
@@ -90,7 +90,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }
 

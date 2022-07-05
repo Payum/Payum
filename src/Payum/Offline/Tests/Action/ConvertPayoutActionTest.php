@@ -11,15 +11,15 @@ use Payum\Offline\Constants;
 
 class ConvertPayoutActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\Offline\Action\ConvertPayoutAction';
+    protected $actionClass = \Payum\Offline\Action\ConvertPayoutAction::class;
 
-    protected $requestClass = 'Payum\Core\Request\Convert';
+    protected $requestClass = \Payum\Core\Request\Convert::class;
 
     public function provideSupportedRequests(): \Iterator
     {
         yield [new $this->requestClass(new Payout(), 'array')];
         yield [new $this->requestClass($this->createMock(PayoutInterface::class), 'array')];
-        yield [new $this->requestClass(new Payout(), 'array', $this->createMock('Payum\Core\Security\TokenInterface'))];
+        yield [new $this->requestClass(new Payout(), 'array', $this->createMock(\Payum\Core\Security\TokenInterface::class))];
     }
 
     public function provideNotSupportedRequests(): \Iterator
@@ -27,7 +27,7 @@ class ConvertPayoutActionTest extends GenericActionTest
         yield ['foo'];
         yield [['foo']];
         yield [new \stdClass()];
-        yield [$this->getMockForAbstractClass('Payum\Core\Request\Generic', [[]])];
+        yield [$this->getMockForAbstractClass(\Payum\Core\Request\Generic::class, [[]])];
         yield [new $this->requestClass(new \stdClass(), 'array')];
         yield [new $this->requestClass(new Payout(), 'foobar')];
         yield [new $this->requestClass($this->createMock(PayoutInterface::class), 'foobar')];

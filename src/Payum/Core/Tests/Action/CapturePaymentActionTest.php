@@ -65,7 +65,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $action->execute($capture = new Capture($payment));
 
         $this->assertSame($payment, $capture->getFirstModel());
-        $this->assertInstanceOf('ArrayAccess', $capture->getModel());
+        $this->assertInstanceOf(\ArrayAccess::class, $capture->getModel());
         $this->assertNull($capture->getToken());
     }
 
@@ -96,7 +96,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $action->execute($capture = new Capture($payment));
 
         $this->assertSame($payment, $capture->getFirstModel());
-        $this->assertInstanceOf('ArrayAccess', $capture->getModel());
+        $this->assertInstanceOf(\ArrayAccess::class, $capture->getModel());
 
         $details = $payment->getDetails();
         $this->assertNotEmpty($details);
@@ -139,7 +139,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $action->execute($capture);
 
         $this->assertSame($payment, $capture->getFirstModel());
-        $this->assertInstanceOf('ArrayAccess', $capture->getModel());
+        $this->assertInstanceOf(\ArrayAccess::class, $capture->getModel());
         $this->assertSame($token, $capture->getToken());
     }
 
@@ -166,7 +166,7 @@ class CapturePaymentActionTest extends GenericActionTest
                 $this->returnCallback(function (Capture $request) use ($testCase, $expectedDetails) {
                     $details = $request->getModel();
 
-                    $testCase->assertInstanceOf('ArrayAccess', $details);
+                    $testCase->assertInstanceOf(\ArrayAccess::class, $details);
                     $testCase->assertEquals($expectedDetails, iterator_to_array($details));
 
                     $details['bar'] = 'barVal';
@@ -180,7 +180,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $action->execute($capture = new Capture($payment));
 
         $this->assertSame($payment, $capture->getFirstModel());
-        $this->assertInstanceOf('ArrayAccess', $capture->getModel());
+        $this->assertInstanceOf(\ArrayAccess::class, $capture->getModel());
         $this->assertEquals([
             'foo' => 'fooVal',
             'bar' => 'barVal',
@@ -221,7 +221,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $action->execute($capture = new Capture($payment));
 
         $this->assertSame($payment, $capture->getFirstModel());
-        $this->assertInstanceOf('ArrayAccess', $capture->getModel());
+        $this->assertInstanceOf(\ArrayAccess::class, $capture->getModel());
         $this->assertEquals([
             'foo' => 'fooVal',
             'bar' => 'barVal',

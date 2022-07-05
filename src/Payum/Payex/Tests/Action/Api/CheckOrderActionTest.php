@@ -24,16 +24,16 @@ class CheckOrderActionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\Api\CheckOrderAction');
+        $rc = new \ReflectionClass(\Payum\Payex\Action\Api\CheckOrderAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\Api\CheckOrderAction');
+        $rc = new \ReflectionClass(\Payum\Payex\Action\Api\CheckOrderAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\ApiAwareInterface::class));
     }
 
     public function testThrowOnTryingSetNotOrderApiAsApi()
@@ -49,7 +49,7 @@ class CheckOrderActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new CheckOrderAction();
 
-        $this->assertTrue($action->supports(new CheckOrder($this->createMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new CheckOrder($this->createMock(\ArrayAccess::class))));
     }
 
     public function testShouldNotSupportAnythingNotCheckOrderRequest()
@@ -114,6 +114,6 @@ class CheckOrderActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Payex\Api\OrderApi', [], [], '', false);
+        return $this->createMock(\Payum\Payex\Api\OrderApi::class, [], [], '', false);
     }
 }

@@ -9,9 +9,9 @@ use Payum\Klarna\Checkout\Constants;
 
 class StatusActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\Klarna\Checkout\Action\StatusAction';
+    protected $actionClass = \Payum\Klarna\Checkout\Action\StatusAction::class;
 
-    protected $requestClass = 'Payum\Core\Request\GetHumanStatus';
+    protected $requestClass = \Payum\Core\Request\GetHumanStatus::class;
 
     public function testShouldMarkUnknownIfStatusNotSupported()
     {

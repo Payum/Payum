@@ -161,7 +161,7 @@ class PayumBuilder
         if ($gateway instanceof GatewayInterface) {
             $this->gateways[$name] = $gateway;
         } elseif (is_array($gateway)) {
-            $currentConfig = isset($this->gatewayConfigs[$name]) ? $this->gatewayConfigs[$name] : [];
+            $currentConfig = $this->gatewayConfigs[$name] ?? [];
             $currentConfig = array_replace_recursive($currentConfig, $gateway);
             if (empty($currentConfig['factory'])) {
                 throw new InvalidArgumentException('Gateway config must have factory set in it and it must not be empty.');
@@ -201,7 +201,7 @@ class PayumBuilder
      */
     public function addGatewayFactoryConfig($name, array $config)
     {
-        $currentConfig = isset($this->gatewayFactoryConfigs[$name]) ? $this->gatewayFactoryConfigs[$name] : [];
+        $currentConfig = $this->gatewayFactoryConfigs[$name] ?? [];
         $this->gatewayFactoryConfigs[$name] = array_replace_recursive($currentConfig, $config);
 
         return $this;
@@ -509,7 +509,7 @@ class PayumBuilder
         foreach ($map as $name => $factoryClass) {
             if (class_exists($factoryClass)) {
                 $gatewayFactories[$name] = new $factoryClass(
-                    isset($this->gatewayFactoryConfigs[$name]) ? $this->gatewayFactoryConfigs[$name] : [],
+                    $this->gatewayFactoryConfigs[$name] ?? [],
                     $coreGatewayFactory
                 );
             }
@@ -526,7 +526,7 @@ class PayumBuilder
         $gatewayFactories = [];
         foreach ($this->gatewayFactories as $name => $factory) {
             if (is_callable($factory)) {
-                $config = isset($this->gatewayFactoryConfigs[$name]) ? $this->gatewayFactoryConfigs[$name] : [];
+                $config = $this->gatewayFactoryConfigs[$name] ?? [];
 
                 $factory = call_user_func($factory, $config, $coreGatewayFactory);
             }

@@ -26,7 +26,7 @@ class TokenTest extends MongoTest
         $token->setTargetUrl('anUrl');
         $token->setGatewayName('aName');
         $token->setAfterUrl('anAfterUrl');
-        $token->setDetails(new Identity('anId', 'stdClass'));
+        $token->setDetails(new Identity('anId', \stdClass::class));
 
         $this->dm->persist($token);
         $this->dm->flush();

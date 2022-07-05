@@ -19,7 +19,7 @@ class CreateButtonPaymentActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new CreateButtonPaymentAction();
 
-        $request = new CreateButtonPayment($this->createMock('ArrayAccess'));
+        $request = new CreateButtonPayment($this->createMock(\ArrayAccess::class));
 
         $this->assertTrue($action->supports($request));
     }
@@ -54,6 +54,6 @@ class CreateButtonPaymentActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ProHosted\Nvp\Api', [], [], '', false);
+        return $this->createMock(\Payum\Paypal\ProHosted\Nvp\Api::class, [], [], '', false);
     }
 }

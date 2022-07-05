@@ -69,7 +69,7 @@ class TokenTest extends TestCase
 
     public function testShouldAllowGetPreviouslySetDetails()
     {
-        $expectedIdentity = new Identity('anId', 'stdClass');
+        $expectedIdentity = new Identity('anId', \stdClass::class);
 
         $token = new Token();
 
@@ -80,7 +80,7 @@ class TokenTest extends TestCase
 
     public function testShouldAllowGetIdentityPreviouslySetAsDetails()
     {
-        $expectedIdentity = new Identity('anId', 'stdClass');
+        $expectedIdentity = new Identity('anId', \stdClass::class);
 
         $token = new Token();
 

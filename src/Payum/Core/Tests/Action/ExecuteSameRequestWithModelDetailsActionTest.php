@@ -12,7 +12,7 @@ use Payum\Core\Tests\GenericActionTest;
 
 class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction';
+    protected $actionClass = \Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction::class;
 
     protected $requestClass = 'Payum\Core\Tests\Action\ModelAggregateAwareRequest';
 
@@ -40,7 +40,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
+        $gatewayMock = $this->createMock(\Payum\Core\GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
@@ -72,7 +72,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
+        $gatewayMock = $this->createMock(\Payum\Core\GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
@@ -80,7 +80,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             ->willReturnCallback(function ($request) use ($expectedDetails, $testCase) {
                 $details = $request->getModel();
 
-                $testCase->assertInstanceOf('ArrayAccess', $details);
+                $testCase->assertInstanceOf(\ArrayAccess::class, $details);
                 $testCase->assertSame($expectedDetails, iterator_to_array($details));
 
                 $details['baz'] = 'bazVal';
@@ -110,7 +110,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
+        $gatewayMock = $this->createMock(\Payum\Core\GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
@@ -118,7 +118,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             ->willReturnCallback(function ($request) use ($expectedDetails, $testCase) {
                 $details = $request->getModel();
 
-                $testCase->assertInstanceOf('ArrayAccess', $details);
+                $testCase->assertInstanceOf(\ArrayAccess::class, $details);
                 $testCase->assertSame($expectedDetails, iterator_to_array($details));
 
                 $details['baz'] = 'bazVal';
@@ -131,7 +131,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
         $action->execute($request);
 
         $details = $model->getDetails();
-        $testCase->assertInstanceOf('ArrayAccess', $details);
+        $testCase->assertInstanceOf(\ArrayAccess::class, $details);
         $testCase->assertSame(
             [
                 'foo' => 'fooVal',
@@ -156,7 +156,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
+        $gatewayMock = $this->createMock(\Payum\Core\GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
@@ -164,7 +164,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             ->willReturnCallback(function ($request) use ($expectedDetails, $testCase) {
                 $details = $request->getModel();
 
-                $testCase->assertInstanceOf('ArrayAccess', $details);
+                $testCase->assertInstanceOf(\ArrayAccess::class, $details);
                 $testCase->assertSame($expectedDetails, iterator_to_array($details));
 
                 $details['baz'] = 'bazVal';
@@ -180,7 +180,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             $action->execute($request);
         } catch (\LogicException $e) {
             $details = $model->getDetails();
-            $testCase->assertInstanceOf('ArrayAccess', $details);
+            $testCase->assertInstanceOf(\ArrayAccess::class, $details);
             $testCase->assertSame(
                 [
                     'foo' => 'fooVal',

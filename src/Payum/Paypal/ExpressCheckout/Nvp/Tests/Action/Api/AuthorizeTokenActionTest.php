@@ -28,7 +28,7 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AuthorizeTokenAction();
 
-        $this->assertTrue($action->supports(new AuthorizeToken($this->createMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new AuthorizeToken($this->createMock(\ArrayAccess::class))));
     }
 
     public function testShouldNotSupportAnythingNotAuthorizeTokenRequest()
@@ -176,6 +176,6 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
+        return $this->createMock(\Payum\Paypal\ExpressCheckout\Nvp\Api::class, [], [], '', false);
     }
 }

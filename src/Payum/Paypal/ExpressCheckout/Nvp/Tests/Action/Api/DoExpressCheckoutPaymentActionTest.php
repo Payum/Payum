@@ -27,7 +27,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new DoExpressCheckoutPaymentAction();
 
-        $this->assertTrue($action->supports(new DoExpressCheckoutPayment($this->createMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new DoExpressCheckoutPayment($this->createMock(\ArrayAccess::class))));
     }
 
     public function testShouldNotSupportAnythingNotDoExpressCheckoutPaymentRequest()
@@ -174,6 +174,6 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
+        return $this->createMock(\Payum\Paypal\ExpressCheckout\Nvp\Api::class, [], [], '', false);
     }
 }

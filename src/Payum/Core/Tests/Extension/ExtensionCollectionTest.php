@@ -12,9 +12,9 @@ class ExtensionCollectionTest extends TestCase
 {
     public function testShouldImplementExtensionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Extension\ExtensionCollection');
+        $rc = new \ReflectionClass(\Payum\Core\Extension\ExtensionCollection::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Extension\ExtensionInterface::class));
     }
 
     public function testShouldAllowAddExtensionAppendByDefault()
@@ -141,7 +141,7 @@ class ExtensionCollectionTest extends TestCase
      */
     protected function createContextMock()
     {
-        return $this->createMock('Payum\Core\Extension\Context', [], [], '', false);
+        return $this->createMock(\Payum\Core\Extension\Context::class, [], [], '', false);
     }
 
     /**
@@ -149,6 +149,6 @@ class ExtensionCollectionTest extends TestCase
      */
     protected function createExtensionMock()
     {
-        return $this->createMock('Payum\Core\Extension\ExtensionInterface');
+        return $this->createMock(\Payum\Core\Extension\ExtensionInterface::class);
     }
 }
