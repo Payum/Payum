@@ -96,8 +96,7 @@ class ObtainTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
      */
     public function supports($request)
     {
-        return
-            $request instanceof ObtainToken &&
+        return $request instanceof ObtainToken &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

@@ -85,8 +85,7 @@ class CreateCustomerAction implements ActionInterface, ApiAwareInterface, Gatewa
      */
     public function supports($request)
     {
-        return
-            $request instanceof CreateCustomer &&
+        return $request instanceof CreateCustomer &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

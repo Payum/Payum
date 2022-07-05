@@ -22,7 +22,7 @@ class MasspayAction implements ActionInterface, ApiAwareInterface
     {
         $this->apiClass = Api::class;
     }
-    
+
     /**
      * {@inheritdoc}
      *
@@ -48,8 +48,7 @@ class MasspayAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof Masspay &&
+        return $request instanceof Masspay &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

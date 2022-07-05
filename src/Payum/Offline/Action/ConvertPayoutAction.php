@@ -29,7 +29,7 @@ class ConvertPayoutAction implements ActionInterface
         $details['description'] = $payout->getDescription();
         $details['recipient_email'] = $payout->getRecipientEmail();
         $details['recipient_id'] = $payout->getRecipientId();
-        
+
         $details->defaults(array(
             Constants::FIELD_PAYOUT => true,
         ));
@@ -42,8 +42,7 @@ class ConvertPayoutAction implements ActionInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof Convert &&
+        return $request instanceof Convert &&
             $request->getSource() instanceof PayoutInterface &&
             $request->getTo() == 'array'
         ;

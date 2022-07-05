@@ -33,8 +33,7 @@ class EmailInvoiceAction extends BaseApiAwareAction
      */
     public function supports($request)
     {
-        return
-            $request instanceof EmailInvoice &&
+        return $request instanceof EmailInvoice &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

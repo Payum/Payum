@@ -69,7 +69,6 @@ class GenericTest extends TestCase
         $this->assertEquals($phpType, $request->getModel());
     }
 
-
     /**
      * @test
      *

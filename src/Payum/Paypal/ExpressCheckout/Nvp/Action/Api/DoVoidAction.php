@@ -48,8 +48,7 @@ class DoVoidAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
      */
     public function supports($request)
     {
-        return
-            $request instanceof DoVoid &&
+        return $request instanceof DoVoid &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

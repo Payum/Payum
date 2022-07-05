@@ -35,7 +35,7 @@ class ConvertPaymentAction implements ActionInterface, GatewayAwareInterface
         $details['PAYMENTREQUEST_0_CURRENCYCODE'] = $payment->getCurrencyCode();
         $details['PAYMENTREQUEST_0_AMT'] = $payment->getTotalAmount() / $divisor;
         $details['PAYMENTREQUEST_0_DESC'] = $payment->getDescription();
-        
+
         $request->setResult((array) $details);
     }
 
@@ -44,8 +44,7 @@ class ConvertPaymentAction implements ActionInterface, GatewayAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof Convert &&
+        return $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&
             $request->getTo() == 'array'
         ;

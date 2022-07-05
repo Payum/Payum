@@ -49,8 +49,7 @@ class NotifyNullAction implements ActionInterface, GatewayAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof Notify &&
+        return $request instanceof Notify &&
             null === $request->getModel()
         ;
     }

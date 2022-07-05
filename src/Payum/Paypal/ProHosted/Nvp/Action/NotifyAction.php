@@ -29,8 +29,7 @@ class NotifyAction implements ActionInterface, GatewayAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof Notify &&
+        return $request instanceof Notify &&
             $request->getModel() instanceof \ArrayAccess;
     }
 }

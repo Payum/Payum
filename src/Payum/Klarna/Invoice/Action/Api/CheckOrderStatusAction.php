@@ -39,8 +39,7 @@ class CheckOrderStatusAction extends BaseApiAwareAction
      */
     public function supports($request)
     {
-        return
-            $request instanceof CheckOrderStatus &&
+        return $request instanceof CheckOrderStatus &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

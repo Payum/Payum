@@ -34,8 +34,7 @@ class PaymentDetailsSyncAction implements ActionInterface, GatewayAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof Sync &&
+        return $request instanceof Sync &&
             $request->getModel() instanceof \ArrayAccess &&
             $request->getModel()->offsetExists('transactionNumber')
         ;

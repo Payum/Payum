@@ -44,8 +44,7 @@ class CheckAgreementAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof CheckAgreement &&
+        return $request instanceof CheckAgreement &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

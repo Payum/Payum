@@ -69,8 +69,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
      */
     public function supports($request)
     {
-        return
-            $request instanceof Capture &&
+        return $request instanceof Capture &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

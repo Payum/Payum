@@ -186,7 +186,6 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
                     'PAYMENTREQUEST_0_AMT' => 'theAmt',
                 ), (array) $request->getModel());
 
-
                 $model = $request->getModel();
                 $model['FIRSTNAME'] = 'theFirstname';
                 $model['EMAIL'] = 'the@example.com';

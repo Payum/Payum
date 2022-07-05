@@ -49,7 +49,6 @@ class GenericTokenFactoryTest extends TestCase
             ->willReturn($token)
         ;
 
-
         $factory = new GenericTokenFactory($tokenFactoryMock, []);
 
         $actualToken = $factory->createToken(
@@ -91,7 +90,6 @@ class GenericTokenFactoryTest extends TestCase
             ->willReturn($token)
         ;
 
-
         $factory = new GenericTokenFactory($tokenFactoryMock, []);
 
         $actualToken = $factory->createToken(
@@ -121,7 +119,6 @@ class GenericTokenFactoryTest extends TestCase
             ->expects($this->never())
             ->method('createToken')
         ;
-
 
         $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
 
@@ -210,7 +207,6 @@ class GenericTokenFactoryTest extends TestCase
             ->method('createToken')
         ;
 
-
         $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
 
         $factory->createAuthorizeToken(
@@ -294,7 +290,6 @@ class GenericTokenFactoryTest extends TestCase
             ->expects($this->never())
             ->method('createToken')
         ;
-
 
         $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
 
@@ -415,7 +410,6 @@ class GenericTokenFactoryTest extends TestCase
             ->method('createToken')
         ;
 
-
         $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
 
         $factory->createCancelToken(
@@ -535,7 +529,6 @@ class GenericTokenFactoryTest extends TestCase
             ->method('createToken')
         ;
 
-
         $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
 
         $factory->createNotifyToken(
@@ -632,7 +625,6 @@ class GenericTokenFactoryTest extends TestCase
             ->expects($this->never())
             ->method('createToken')
         ;
-
 
         $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
 

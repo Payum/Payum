@@ -160,7 +160,6 @@ class GatewayTest extends TestCase
             ->willReturn(true)
         ;
 
-
         $gateway->addAction($action);
 
         $gateway->execute(new \stdClass());
@@ -196,7 +195,6 @@ class GatewayTest extends TestCase
             ->expects($this->never())
             ->method('supports')
         ;
-
 
         $gateway->addAction($action);
 
@@ -313,7 +311,6 @@ class GatewayTest extends TestCase
             ->method('supports')
             ->willReturn(true)
         ;
-
 
         $gateway->addAction($actionMock);
 

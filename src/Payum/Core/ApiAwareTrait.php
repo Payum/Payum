@@ -28,7 +28,7 @@ trait ApiAwareTrait
         if (false == (class_exists($this->apiClass) || interface_exists($this->apiClass))) {
             throw new LogicException(sprintf('Api class not found or invalid class. "%s", $this->apiClass', $this->apiClass));
         }
-        
+
         if (false == $api instanceof $this->apiClass) {
             throw new UnsupportedApiException(sprintf('Not supported api given. It must be an instance of %s', $this->apiClass));
         }

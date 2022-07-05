@@ -16,7 +16,7 @@ class AuthorizeNetAimGatewayFactory extends GatewayFactory
      */
     protected function populateConfig(ArrayObject $config)
     {
-        if (!class_exists(\AuthorizeNetAIM::class)) {
+        if (! class_exists(\AuthorizeNetAIM::class)) {
             throw new \LogicException('You must install "authorizenet/authorizenet" library.');
         }
 

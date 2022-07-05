@@ -19,7 +19,7 @@ class PaypalMasspayGatewayFactory extends GatewayFactory
         $config->defaults(array(
             'payum.factory_name' => 'paypal_masspay_nvp',
             'payum.factory_title' => 'PayPal Masspay',
-            
+
             'payum.action.payout' => new PayoutAction(),
             'payum.action.api.masspay' => new MasspayAction(),
             'payum.action.convert_payout' => new ConvertPayoutAction(),

@@ -45,7 +45,7 @@ class ConvertPayoutAction implements ActionInterface, GatewayAwareInterface
         } else {
             throw new LogicException('Either recipient id or email must be set.');
         }
-        
+
         $request->setResult((array) $details);
     }
 
@@ -54,8 +54,7 @@ class ConvertPayoutAction implements ActionInterface, GatewayAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof Convert &&
+        return $request instanceof Convert &&
             $request->getSource() instanceof PayoutInterface &&
             'array' == $request->getTo()
         ;

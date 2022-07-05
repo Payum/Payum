@@ -25,7 +25,7 @@ class CancelAction implements ActionInterface, GatewayAwareInterface
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (!$details['TRANSACTIONID']) {
+        if (! $details['TRANSACTIONID']) {
             return;
         }
 

@@ -20,7 +20,6 @@ class StripeCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         ];
     }
 
-
     /**
      * @test
      */

@@ -53,8 +53,7 @@ class CreditPartAction extends BaseApiAwareAction implements GatewayAwareInterfa
      */
     public function supports($request)
     {
-        return
-            $request instanceof CreditPart &&
+        return $request instanceof CreditPart &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

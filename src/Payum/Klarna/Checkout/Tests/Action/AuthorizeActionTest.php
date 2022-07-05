@@ -537,8 +537,6 @@ class AuthorizeActionTest extends TestCase
         $action->setApi($config);
         $action->setGenericTokenFactory($tokenFactory);
 
-
-
         $authorize = new Authorize($token);
         $authorize->setModel([
             'location' => 'aLocation',

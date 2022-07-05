@@ -60,8 +60,7 @@ class CreateAgreementAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof CreateAgreement &&
+        return $request instanceof CreateAgreement &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

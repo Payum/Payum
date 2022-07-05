@@ -47,8 +47,7 @@ class ExecuteSameRequestWithModelDetailsAction implements ActionInterface, Gatew
      */
     public function supports($request)
     {
-        return
-            $request instanceof ModelAggregateInterface &&
+        return $request instanceof ModelAggregateInterface &&
             $request instanceof ModelAwareInterface &&
             $request->getModel() instanceof DetailsAggregateInterface
         ;

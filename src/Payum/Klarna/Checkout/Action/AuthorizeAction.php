@@ -27,7 +27,7 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface, Generic
     use ApiAwareTrait;
     use GatewayAwareTrait;
     use GenericTokenFactoryAwareTrait;
-    
+
     /**
      * @var string
      */
@@ -104,8 +104,7 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface, Generic
      */
     public function supports($request)
     {
-        return
-            $request instanceof Authorize &&
+        return $request instanceof Authorize &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

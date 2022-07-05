@@ -24,12 +24,12 @@ class CaptureOffsiteAction implements ActionInterface, ApiAwareInterface, Gatewa
     use ApiAwareTrait;
     use GatewayAwareTrait;
     use GenericTokenFactoryAwareTrait;
-    
+
     public function __construct()
     {
         $this->apiClass = Api::class;
     }
-    
+
     /**
      * {@inheritDoc}
      *
@@ -77,8 +77,7 @@ class CaptureOffsiteAction implements ActionInterface, ApiAwareInterface, Gatewa
      */
     public function supports($request)
     {
-        return
-            $request instanceof Capture &&
+        return $request instanceof Capture &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

@@ -221,7 +221,6 @@ class GatewayConfigTypeTest extends TestCase
 
         $form = $this->formFactory->create(GatewayConfigType::class, $gatewayConfig);
 
-
         $this->assertTrue($form->has('config'));
 
         $this->assertTrue($form->get('config')->has('username'));

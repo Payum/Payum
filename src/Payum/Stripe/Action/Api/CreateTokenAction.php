@@ -81,8 +81,7 @@ class CreateTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
      */
     public function supports($request)
     {
-        return
-            $request instanceof CreateToken &&
+        return $request instanceof CreateToken &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

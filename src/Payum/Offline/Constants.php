@@ -19,7 +19,7 @@ abstract class Constants
     public const STATUS_REFUNDED = 'refunded';
 
     public const STATUS_PENDING = 'pending';
-    
+
     public const STATUS_CANCELED = 'canceled';
 
     final private function __construct()

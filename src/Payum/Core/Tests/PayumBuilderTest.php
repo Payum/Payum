@@ -83,7 +83,6 @@ class PayumBuilderTest extends TestCase
         $this->assertArrayHasKey(ArrayObject::class, $payum->getStorages());
         $this->assertArrayHasKey(Payout::class, $payum->getStorages());
 
-
         $factories = $payum->getGatewayFactories();
         $this->assertIsArray($factories);
         $this->assertGreaterThan(40, $factories);

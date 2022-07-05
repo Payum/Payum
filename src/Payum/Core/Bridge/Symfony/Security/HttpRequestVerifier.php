@@ -50,7 +50,7 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
                 throw new NotFoundHttpException(sprintf('A token with hash `%s` could not be found.', $hash));
             }
 
-            if (!RequestTokenVerifier::isValid($httpRequest->getUri(), $token->getTargetUrl())) {
+            if (! RequestTokenVerifier::isValid($httpRequest->getUri(), $token->getTargetUrl())) {
                 throw new HttpException(400, sprintf('The current url %s not match target url %s set in the token.', $httpRequest->getUri(), $token->getTargetUrl()));
             }
         }

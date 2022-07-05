@@ -30,8 +30,7 @@ class AuthorizeAction extends PurchaseAction
      */
     public function supports($request)
     {
-        return
-            $request instanceof Authorize &&
+        return $request instanceof Authorize &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

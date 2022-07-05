@@ -123,7 +123,6 @@ class DoctrineStorageMongoOdmTest extends MongoTest
         $model->setCurrency('EUR');
         $storage->update($model);
 
-
         $result = $storage->findBy(array(
             'currency' => 'USD'
         ));
@@ -163,7 +162,6 @@ class DoctrineStorageMongoOdmTest extends MongoTest
         $model = $storage->create();
         $model->setCurrency('EUR');
         $storage->update($model);
-
 
         $result = $storage->findBy(array());
 

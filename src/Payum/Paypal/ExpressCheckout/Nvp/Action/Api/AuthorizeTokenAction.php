@@ -52,8 +52,7 @@ class AuthorizeTokenAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof AuthorizeToken &&
+        return $request instanceof AuthorizeToken &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }
