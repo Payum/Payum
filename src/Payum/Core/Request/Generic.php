@@ -59,9 +59,6 @@ abstract class Generic implements ModelAwareInterface, ModelAggregateInterface, 
         $this->setFirstModel($model);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getToken()
     {
         return $this->token;

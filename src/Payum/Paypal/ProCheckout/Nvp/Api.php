@@ -181,10 +181,6 @@ class Api
     );
 
     /**
-     * @param array               $options
-     * @param HttpClientInterface $client
-     * @param MessageFactory      $messageFactory
-     *
      * @throw InvalidArgumentException
      */
     public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
@@ -209,8 +205,6 @@ class Api
     }
 
     /**
-     * @param array $fields
-     *
      * @return array
      */
     public function doSale(array $fields)
@@ -225,8 +219,6 @@ class Api
     }
 
     /**
-     * @param array $fields
-     *
      * @return array
      */
     public function doCredit(array $fields)
@@ -241,8 +233,6 @@ class Api
     }
 
     /**
-     * @param array $fields
-     *
      * @return array
      */
     protected function doRequest(array $fields)
@@ -279,9 +269,6 @@ class Api
         ;
     }
 
-    /**
-     * @param array $fields
-     */
     protected function addAuthorizeFields(array &$fields)
     {
         $fields['USER'] = $this->options['username'];

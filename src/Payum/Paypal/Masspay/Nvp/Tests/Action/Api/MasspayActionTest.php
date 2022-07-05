@@ -21,7 +21,6 @@ class MasspayActionTest extends GenericActionTest
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-
     public function testThrowIfPayoutAlreadyAcknowledged()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);

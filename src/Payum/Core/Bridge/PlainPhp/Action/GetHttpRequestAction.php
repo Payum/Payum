@@ -9,8 +9,6 @@ use Payum\Core\Request\GetHttpRequest;
 class GetHttpRequestAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetHttpRequest $request
      */
     public function execute($request)
@@ -26,9 +24,6 @@ class GetHttpRequestAction implements ActionInterface
         $request->content = file_get_contents('php://input');
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof GetHttpRequest;

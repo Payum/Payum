@@ -36,9 +36,6 @@ class CreateTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
         $this->apiClass = Keys::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setApi($api)
     {
         $this->_setApi($api);
@@ -47,9 +44,6 @@ class CreateTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
         $this->keys = $this->api;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request CreateToken */
@@ -76,9 +70,6 @@ class CreateTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof CreateToken &&

@@ -11,8 +11,6 @@ use Payum\Stripe\Constants;
 class StatusAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetStatusInterface $request
      */
     public function execute($request)
@@ -63,7 +61,6 @@ class StatusAction implements ActionInterface
             return;
         }
 
-
         if (Constants::STATUS_SUCCEEDED == $model['status'] && false == $model['captured']) {
             $request->markAuthorized();
 
@@ -78,13 +75,9 @@ class StatusAction implements ActionInterface
         $request->markUnknown();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof GetStatusInterface &&
+        return $request instanceof GetStatusInterface &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

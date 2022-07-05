@@ -12,8 +12,6 @@ use Payum\Payex\Api\OrderApi;
 class AutoPayPaymentDetailsStatusAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetStatusInterface $request
      */
     public function execute($request)
@@ -56,9 +54,6 @@ class AutoPayPaymentDetailsStatusAction implements ActionInterface
         $request->markFailed();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         if (false == (

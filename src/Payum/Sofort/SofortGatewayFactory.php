@@ -18,9 +18,6 @@ use Sofort\SofortLib\Sofortueberweisung;
 
 class SofortGatewayFactory extends GatewayFactory
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function populateConfig(ArrayObject $config)
     {
         if (false == class_exists(Sofortueberweisung::class)) {

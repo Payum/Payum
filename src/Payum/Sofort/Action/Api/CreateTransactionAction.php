@@ -22,8 +22,6 @@ class CreateTransactionAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param $request CreateTransaction
      */
     public function execute($request)
@@ -45,13 +43,9 @@ class CreateTransactionAction implements ActionInterface, ApiAwareInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof CreateTransaction &&
+        return $request instanceof CreateTransaction &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

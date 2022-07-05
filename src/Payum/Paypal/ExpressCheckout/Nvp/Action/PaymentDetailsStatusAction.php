@@ -11,8 +11,6 @@ use Payum\Paypal\ExpressCheckout\Nvp\Api;
 class PaymentDetailsStatusAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetStatusInterface $request
      */
     public function execute($request)
@@ -175,9 +173,6 @@ class PaymentDetailsStatusAction implements ActionInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         if (false == $request instanceof GetStatusInterface) {

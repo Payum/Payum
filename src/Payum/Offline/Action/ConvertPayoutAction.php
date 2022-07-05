@@ -12,8 +12,6 @@ use Payum\Offline\Constants;
 class ConvertPayoutAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param Convert $request
      */
     public function execute($request)
@@ -37,9 +35,6 @@ class ConvertPayoutAction implements ActionInterface
         $request->setResult((array) $details);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Convert &&

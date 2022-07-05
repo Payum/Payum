@@ -11,8 +11,6 @@ trait GenericTokenFactoryAwareTrait
 
     /**
      * @param GenericTokenFactoryInterface $genericTokenFactory
-     *
-     * @return void
      */
     public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null)
     {

@@ -10,9 +10,6 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoCapture;
 
 class CaptureAction extends PurchaseAction
 {
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request Capture */
@@ -33,9 +30,6 @@ class CaptureAction extends PurchaseAction
         parent::execute($request);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Capture &&

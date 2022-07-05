@@ -10,8 +10,6 @@ use Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails;
 class PopulateKlarnaFromDetailsAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param PopulateKlarnaFromDetails $request
      */
     public function execute($request)
@@ -97,9 +95,6 @@ class PopulateKlarnaFromDetailsAction implements ActionInterface
         $klarna->setComment(utf8_decode($details['comment']));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof PopulateKlarnaFromDetails;

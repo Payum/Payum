@@ -10,9 +10,6 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 
 class Be2BillOffsiteGatewayFactory extends Be2BillDirectGatewayFactory
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function populateConfig(ArrayObject $config)
     {
         $config->defaults([

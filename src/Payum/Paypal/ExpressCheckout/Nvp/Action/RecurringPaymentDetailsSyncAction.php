@@ -14,9 +14,6 @@ class RecurringPaymentDetailsSyncAction implements ActionInterface, GatewayAware
 {
     use GatewayAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request Sync */
@@ -31,9 +28,6 @@ class RecurringPaymentDetailsSyncAction implements ActionInterface, GatewayAware
         $this->gateway->execute(new GetRecurringPaymentsProfileDetails($model));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         if (false == $request instanceof Sync) {

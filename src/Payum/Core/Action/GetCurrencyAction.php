@@ -9,8 +9,6 @@ use Payum\Core\Request\GetCurrency;
 class GetCurrencyAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetCurrency $request
      */
     public function execute($request)
@@ -29,13 +27,9 @@ class GetCurrencyAction implements ActionInterface
         $request->numeric = $currency->getNumeric();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof GetCurrency &&
+        return $request instanceof GetCurrency &&
             $request->code
         ;
     }

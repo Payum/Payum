@@ -10,9 +10,6 @@ use Payum\Offline\Constants;
 
 class PayoutAction implements ActionInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request Payout */
@@ -27,13 +24,9 @@ class PayoutAction implements ActionInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Payout &&
+        return $request instanceof Payout &&
             $request->getModel() instanceof \ArrayAccess
             ;
     }

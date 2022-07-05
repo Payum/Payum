@@ -14,24 +14,15 @@ class GenericTokenFactoryExtension implements ExtensionInterface
      */
     protected $genericTokenFactory;
 
-    /**
-     * @param GenericTokenFactoryInterface $genericTokenFactory
-     */
     public function __construct(GenericTokenFactoryInterface $genericTokenFactory)
     {
         $this->genericTokenFactory = $genericTokenFactory;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function onPreExecute(Context $context)
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function onExecute(Context $context)
     {
         $action = $context->getAction();
@@ -40,9 +31,6 @@ class GenericTokenFactoryExtension implements ExtensionInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function onPostExecute(Context $context)
     {
         $action = $context->getAction();

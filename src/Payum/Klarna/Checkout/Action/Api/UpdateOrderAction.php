@@ -10,8 +10,6 @@ use Payum\Klarna\Checkout\Request\Api\UpdateOrder;
 class UpdateOrderAction extends BaseApiAwareAction
 {
     /**
-     * {@inheritDoc}
-     *
      * @param CreateOrder $request
      */
     public function execute($request)
@@ -32,9 +30,6 @@ class UpdateOrderAction extends BaseApiAwareAction
         });
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof UpdateOrder;

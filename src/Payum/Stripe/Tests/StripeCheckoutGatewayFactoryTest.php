@@ -20,7 +20,6 @@ class StripeCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         ];
     }
 
-
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new StripeCheckoutGatewayFactory(array(

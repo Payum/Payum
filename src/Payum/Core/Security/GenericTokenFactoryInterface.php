@@ -11,7 +11,6 @@ interface GenericTokenFactoryInterface extends TokenFactoryInterface
      * @param string $gatewayName
      * @param object $model
      * @param string $afterPath
-     * @param array  $afterParameters
      *
      * @return TokenInterface
      */
@@ -21,7 +20,6 @@ interface GenericTokenFactoryInterface extends TokenFactoryInterface
      * @param string $gatewayName
      * @param object $model
      * @param string $afterPath
-     * @param array  $afterParameters
      *
      * @return TokenInterface
      */
@@ -31,7 +29,6 @@ interface GenericTokenFactoryInterface extends TokenFactoryInterface
      * @param string $gatewayName
      * @param object $model
      * @param string $afterPath
-     * @param array  $afterParameters
      *
      * @return TokenInterface
      */
@@ -41,7 +38,6 @@ interface GenericTokenFactoryInterface extends TokenFactoryInterface
      * @param string $gatewayName
      * @param object $model
      * @param string $afterPath
-     * @param array  $afterParameters
      *
      * @return TokenInterface
      */

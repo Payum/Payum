@@ -16,17 +16,12 @@ class CreditPartAction extends BaseApiAwareAction implements GatewayAwareInterfa
      */
     protected $gateway;
 
-    /**
-     * {@inheritDoc}
-     */
     public function setGateway(GatewayInterface $gateway)
     {
         $this->gateway = $gateway;
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param CreditPart $request
      */
     public function execute($request)
@@ -48,9 +43,6 @@ class CreditPartAction extends BaseApiAwareAction implements GatewayAwareInterfa
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof CreditPart &&

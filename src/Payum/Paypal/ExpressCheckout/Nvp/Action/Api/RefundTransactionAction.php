@@ -19,9 +19,6 @@ class RefundTransactionAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute($request)
     {
         /** @var $request RefundTransaction */
@@ -35,13 +32,9 @@ class RefundTransactionAction implements ActionInterface, ApiAwareInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof RefundTransaction &&
+        return $request instanceof RefundTransaction &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

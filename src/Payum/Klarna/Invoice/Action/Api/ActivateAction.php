@@ -9,8 +9,6 @@ use Payum\Klarna\Invoice\Request\Api\Activate;
 class ActivateAction extends BaseApiAwareAction
 {
     /**
-     * {@inheritDoc}
-     *
      * @param Activate $request
      */
     public function execute($request)
@@ -32,9 +30,6 @@ class ActivateAction extends BaseApiAwareAction
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Activate &&

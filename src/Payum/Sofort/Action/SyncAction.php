@@ -15,8 +15,6 @@ class SyncAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritdoc}
-     *
      * @param $request Sync
      */
     public function execute($request)
@@ -30,13 +28,9 @@ class SyncAction implements ActionInterface, GatewayAwareInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Sync &&
+        return $request instanceof Sync &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

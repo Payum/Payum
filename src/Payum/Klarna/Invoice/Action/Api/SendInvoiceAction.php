@@ -9,8 +9,6 @@ use Payum\Klarna\Invoice\Request\Api\SendInvoice;
 class SendInvoiceAction extends BaseApiAwareAction
 {
     /**
-     * {@inheritDoc}
-     *
      * @param SendInvoice $request
      */
     public function execute($request)
@@ -28,13 +26,9 @@ class SendInvoiceAction extends BaseApiAwareAction
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof SendInvoice &&
+        return $request instanceof SendInvoice &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

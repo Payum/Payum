@@ -455,9 +455,6 @@ class AbstractTokenFactoryTest extends TestCase
     }
 
     /**
-     * @param StorageInterface $tokenStorage
-     * @param StorageRegistryInterface $registry
-     *
      * @return AbstractTokenFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function createTokenFactoryMock(StorageInterface $tokenStorage, StorageRegistryInterface $registry)

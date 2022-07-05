@@ -26,9 +26,6 @@ use Payum\Klarna\Invoice\Action\SyncAction;
 
 class KlarnaInvoiceGatewayFactory extends GatewayFactory
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function populateConfig(ArrayObject $config)
     {
         if (! class_exists('KlarnaCurrency')) {

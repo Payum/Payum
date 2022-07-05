@@ -362,7 +362,6 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isUnknown());
     }
 
-
     public function testShouldMarkCanceledIfPaymentIsCancelledByUser()
     {
         $action = new PaymentDetailsStatusAction();

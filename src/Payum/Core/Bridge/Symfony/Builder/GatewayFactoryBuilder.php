@@ -20,9 +20,6 @@ class GatewayFactoryBuilder
     }
 
     /**
-     * @param array $defaultConfig
-     * @param GatewayFactoryInterface $coreGatewayFactory
-     *
      * @return GatewayFactoryInterface
      */
     public function build(array $defaultConfig, GatewayFactoryInterface $coreGatewayFactory)

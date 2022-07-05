@@ -10,8 +10,6 @@ use Payum\Core\Request\GetCreditCardToken;
 class GetCreditCardTokenAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetCreditCardToken $request
      */
     public function execute($request)
@@ -22,13 +20,10 @@ class GetCreditCardTokenAction implements ActionInterface
 
         $request->token = $model['customer'];
     }
-    /**
-     * {@inheritDoc}
-     */
+
     public function supports($request)
     {
-        return
-            $request instanceof GetCreditCardToken &&
+        return $request instanceof GetCreditCardToken &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

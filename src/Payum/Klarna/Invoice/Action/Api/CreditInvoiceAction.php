@@ -9,8 +9,6 @@ use Payum\Klarna\Invoice\Request\Api\CreditInvoice;
 class CreditInvoiceAction extends BaseApiAwareAction
 {
     /**
-     * {@inheritDoc}
-     *
      * @param CreditInvoice $request
      */
     public function execute($request)
@@ -30,9 +28,6 @@ class CreditInvoiceAction extends BaseApiAwareAction
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof CreditInvoice &&

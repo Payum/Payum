@@ -39,7 +39,6 @@ class Context
     protected $previous;
 
     /**
-     * @param GatewayInterface $gateway
      * @param $request
      * @param Context[] $previous
      */
@@ -58,9 +57,6 @@ class Context
         return $this->action;
     }
 
-    /**
-     * @param ActionInterface $action
-     */
     public function setAction(ActionInterface $action)
     {
         $this->action = $action;
@@ -74,9 +70,6 @@ class Context
         return $this->reply;
     }
 
-    /**
-     * @param null|ReplyInterface $reply
-     */
     public function setReply(ReplyInterface $reply = null)
     {
         $this->reply = $reply;
@@ -90,9 +83,6 @@ class Context
         return $this->exception;
     }
 
-    /**
-     * @param \Exception|null $exception
-     */
     public function setException(\Exception $exception = null)
     {
         $this->exception = $exception;

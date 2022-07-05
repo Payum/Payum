@@ -16,8 +16,6 @@ class NotifyNullAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param $request Notify
      */
     public function execute($request)
@@ -44,9 +42,6 @@ class NotifyNullAction implements ActionInterface, GatewayAwareInterface
         $this->gateway->execute(new Notify($getToken->getToken()));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Notify &&

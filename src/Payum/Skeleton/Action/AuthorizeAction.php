@@ -14,8 +14,6 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param Authorize $request
      */
     public function execute($request)
@@ -27,13 +25,9 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface
         throw new \LogicException('Not implemented');
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Authorize &&
+        return $request instanceof Authorize &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

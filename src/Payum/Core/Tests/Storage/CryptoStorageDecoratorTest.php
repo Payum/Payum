@@ -289,9 +289,6 @@ class CryptedModel implements CryptedInterface
         $cypher->decrypt('theEncryptedVal');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function encrypt(CypherInterface $cypher)
     {
         $cypher->encrypt('theVal');

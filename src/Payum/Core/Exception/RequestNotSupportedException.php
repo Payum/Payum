@@ -36,7 +36,6 @@ class RequestNotSupportedException extends InvalidArgumentException
     }
 
     /**
-     * @param \Payum\Core\Action\ActionInterface $action
      * @param mixed                              $request
      *
      * @throws RequestNotSupportedException
@@ -67,7 +66,6 @@ class RequestNotSupportedException extends InvalidArgumentException
     }
 
     /**
-     * @param \Payum\Core\Action\ActionInterface $action
      * @param mixed                              $request
      *
      * @return RequestNotSupportedException

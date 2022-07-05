@@ -10,17 +10,11 @@ class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
 {
     protected $logger;
 
-    /**
-     * {@inheritDoc}
-     */
     public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         if ($this->logger) {
@@ -28,9 +22,6 @@ class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request == 'a request';

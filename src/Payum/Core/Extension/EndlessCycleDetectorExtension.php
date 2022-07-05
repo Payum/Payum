@@ -19,9 +19,6 @@ class EndlessCycleDetectorExtension implements ExtensionInterface
         $this->limit = $limit;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function onPreExecute(Context $context)
     {
         if (count($context->getPrevious()) >= $this->limit) {
@@ -32,16 +29,10 @@ class EndlessCycleDetectorExtension implements ExtensionInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function onExecute(Context $context)
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function onPostExecute(Context $context)
     {
     }

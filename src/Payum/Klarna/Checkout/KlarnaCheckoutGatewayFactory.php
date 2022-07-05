@@ -16,9 +16,6 @@ use Payum\Klarna\Checkout\Action\SyncAction;
 
 class KlarnaCheckoutGatewayFactory extends GatewayFactory
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function populateConfig(ArrayObject $config)
     {
         if (! class_exists('Klarna_Checkout_Order')) {

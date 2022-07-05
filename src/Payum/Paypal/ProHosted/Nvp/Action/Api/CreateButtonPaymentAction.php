@@ -23,9 +23,6 @@ class CreateButtonPaymentAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request CreateButtonPayment */
@@ -45,13 +42,9 @@ class CreateButtonPaymentAction implements ActionInterface, ApiAwareInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof CreateButtonPayment &&
+        return $request instanceof CreateButtonPayment &&
             $request->getModel() instanceof \ArrayAccess;
     }
 }

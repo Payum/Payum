@@ -29,9 +29,6 @@ abstract class BaseOrder extends Generic
         return $this->order;
     }
 
-    /**
-     * @param \Klarna_Checkout_Order $order
-     */
     public function setOrder(\Klarna_Checkout_Order $order)
     {
         $this->order = $order;

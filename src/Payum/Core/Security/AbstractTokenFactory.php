@@ -22,19 +22,12 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
      */
     protected $storageRegistry;
 
-    /**
-     * @param StorageInterface         $tokenStorage
-     * @param StorageRegistryInterface $storageRegistry
-     */
     public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry)
     {
         $this->tokenStorage = $tokenStorage;
         $this->storageRegistry = $storageRegistry;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function createToken($gatewayName, $model, $targetPath, array $targetParameters = [], $afterPath = null, array $afterParameters = [])
     {
         /** @var TokenInterface $token */
@@ -75,9 +68,6 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
     }
 
     /**
-     * @param HttpUri $uri
-     * @param array $query
-     *
      * @return HttpUri
      */
     protected function addQueryToUri(HttpUri $uri, array $query)
@@ -91,7 +81,6 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
 
     /**
      * @param string $path
-     * @param array  $parameters
      *
      * @return string
      */

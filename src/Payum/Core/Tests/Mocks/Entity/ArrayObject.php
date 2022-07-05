@@ -15,7 +15,7 @@ class ArrayObject extends BaseArrayObject
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
-     * @var integer $id
+     * @var integer
      */
     protected $id;
 

@@ -16,17 +16,12 @@ class UpdateAction extends BaseApiAwareAction implements GatewayAwareInterface
      */
     protected $gateway;
 
-    /**
-     * {@inheritDoc}
-     */
     public function setGateway(GatewayInterface $gateway)
     {
         $this->gateway = $gateway;
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param Update $request
      */
     public function execute($request)
@@ -46,13 +41,9 @@ class UpdateAction extends BaseApiAwareAction implements GatewayAwareInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Update &&
+        return $request instanceof Update &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }
