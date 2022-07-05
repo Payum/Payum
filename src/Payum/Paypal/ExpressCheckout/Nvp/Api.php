@@ -308,7 +308,7 @@ class Api
         'cancel_url' => null,
         'sandbox' => null,
         'useraction' => null,
-        'cmd' => Api::CMD_EXPRESS_CHECKOUT,
+        'cmd' => self::CMD_EXPRESS_CHECKOUT,
     ];
 
     /**
@@ -553,6 +553,28 @@ class Api
     }
 
     /**
+     * @param string $token
+     *
+     * @return string
+     */
+    public function getAuthorizeTokenUrl($token, array $query = [])
+    {
+        $defaultQuery = array_filter([
+            'useraction' => $this->options['useraction'],
+            'cmd' => $this->options['cmd'],
+            'token' => $token,
+        ]);
+
+        $query = array_filter($query);
+
+        return sprintf(
+            'https://%s/cgi-bin/webscr?%s',
+            $this->options['sandbox'] ? 'www.sandbox.paypal.com' : 'www.paypal.com',
+            http_build_query(array_replace($defaultQuery, $query))
+        );
+    }
+
+    /**
      * @throws HttpException
      *
      * @return array
@@ -578,28 +600,6 @@ class Api
         }
 
         return $result;
-    }
-
-    /**
-     * @param string $token
-     *
-     * @return string
-     */
-    public function getAuthorizeTokenUrl($token, array $query = [])
-    {
-        $defaultQuery = array_filter([
-            'useraction' => $this->options['useraction'],
-            'cmd' => $this->options['cmd'],
-            'token' => $token,
-        ]);
-
-        $query = array_filter($query);
-
-        return sprintf(
-            'https://%s/cgi-bin/webscr?%s',
-            $this->options['sandbox'] ? 'www.sandbox.paypal.com' : 'www.paypal.com',
-            http_build_query(array_replace($defaultQuery, $query))
-        );
     }
 
     /**

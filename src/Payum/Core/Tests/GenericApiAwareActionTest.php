@@ -7,10 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 abstract class GenericApiAwareActionTest extends TestCase
 {
-    abstract protected function getApiClass();
-
-    abstract protected function getActionClass(): string;
-
     public function testShouldImplementApiAwareInterface()
     {
         $rc = new \ReflectionClass($this->getActionClass());
@@ -30,4 +26,8 @@ abstract class GenericApiAwareActionTest extends TestCase
 
         $this->assertInstanceOf($rc->getValue($api), $apiClass);
     }
+
+    abstract protected function getApiClass();
+
+    abstract protected function getActionClass(): string;
 }

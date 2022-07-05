@@ -28,17 +28,6 @@ abstract class AbstractRegistry implements RegistryInterface
         $this->gatewayFactories = $gatewayFactories;
     }
 
-    /**
-     * Fetches/creates the given services
-     *
-     * A service in this context is a storage or a gateway or gateway factory instance
-     *
-     * @param string $id name of the service
-     *
-     * @return object instance of the given service
-     */
-    abstract protected function getService($id);
-
     public function getStorage($class)
     {
         $class = is_object($class) ? get_class($class) : $class;
@@ -116,4 +105,15 @@ abstract class AbstractRegistry implements RegistryInterface
 
         return $gatewayFactories;
     }
+
+    /**
+     * Fetches/creates the given services
+     *
+     * A service in this context is a storage or a gateway or gateway factory instance
+     *
+     * @param string $id name of the service
+     *
+     * @return object instance of the given service
+     */
+    abstract protected function getService($id);
 }

@@ -20,16 +20,16 @@ class TokenFactoryBuilder
         $this->urlGenerator = $urlGenerator;
     }
 
+    public function __invoke()
+    {
+        return call_user_func_array([$this, 'build'], func_get_args());
+    }
+
     /**
      * @return TokenFactoryInterface
      */
     public function build(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry)
     {
         return new TokenFactory($tokenStorage, $storageRegistry, $this->urlGenerator);
-    }
-
-    public function __invoke()
-    {
-        return call_user_func_array([$this, 'build'], func_get_args());
     }
 }

@@ -10,16 +10,6 @@ use PhpXmlRpc\Client;
 
 class CheckOrderStatusActionTest extends GenericApiAwareActionTest
 {
-    protected function getActionClass(): string
-    {
-        return CheckOrderStatusAction::class;
-    }
-
-    protected function getApiClass(): Config
-    {
-        return new Config();
-    }
-
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\CheckOrderStatusAction');
@@ -138,6 +128,16 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
         $action = new CheckOrderStatusAction($klarnaMock);
 
         $action->execute($activate = new CheckOrderStatus($details));
+    }
+
+    protected function getActionClass(): string
+    {
+        return CheckOrderStatusAction::class;
+    }
+
+    protected function getApiClass(): Config
+    {
+        return new Config();
     }
 
     /**

@@ -460,49 +460,6 @@ class PayumBuilder
     }
 
     /**
-     * @return HttpRequestVerifierInterface
-     */
-    private function buildHttpRequestVerifier(StorageInterface $tokenStorage)
-    {
-        $httpRequestVerifier = $this->httpRequestVerifier;
-
-        if (is_callable($httpRequestVerifier)) {
-            $httpRequestVerifier = call_user_func($httpRequestVerifier, $tokenStorage);
-
-            if (false == $httpRequestVerifier instanceof HttpRequestVerifierInterface) {
-                throw new \LogicException('Builder returned invalid instance');
-            }
-        }
-
-        return $httpRequestVerifier ?: new HttpRequestVerifier($tokenStorage);
-    }
-
-    /**
-     * @return GatewayFactoryInterface
-     */
-    private function buildCoreGatewayFactory(array $config)
-    {
-        $coreGatewayFactory = $this->coreGatewayFactory;
-
-        $storages = $this->storages;
-        foreach ($storages as $modelClass => $storage) {
-            $extensionName = 'payum.extension.storage_' . strtolower(str_replace('\\', '_', $modelClass));
-
-            $config[$extensionName] = new StorageExtension($storage);
-        }
-
-        if (is_callable($coreGatewayFactory)) {
-            $coreGatewayFactory = call_user_func($coreGatewayFactory, $config);
-
-            if (false == $coreGatewayFactory instanceof GatewayFactoryInterface) {
-                throw new \LogicException('Builder returned invalid instance');
-            }
-        }
-
-        return $coreGatewayFactory ?: new CoreGatewayFactory($config);
-    }
-
-    /**
      * @return RegistryInterface
      */
     protected function buildRegistry(array $gateways = [], array $storages = [], array $gatewayFactories = [])
@@ -626,5 +583,48 @@ class PayumBuilder
         $gatewayFactories['omnipay'] = new OmnipayV3GatewayFactory($factory, [], $coreGatewayFactory);
 
         return $gatewayFactories;
+    }
+
+    /**
+     * @return HttpRequestVerifierInterface
+     */
+    private function buildHttpRequestVerifier(StorageInterface $tokenStorage)
+    {
+        $httpRequestVerifier = $this->httpRequestVerifier;
+
+        if (is_callable($httpRequestVerifier)) {
+            $httpRequestVerifier = call_user_func($httpRequestVerifier, $tokenStorage);
+
+            if (false == $httpRequestVerifier instanceof HttpRequestVerifierInterface) {
+                throw new \LogicException('Builder returned invalid instance');
+            }
+        }
+
+        return $httpRequestVerifier ?: new HttpRequestVerifier($tokenStorage);
+    }
+
+    /**
+     * @return GatewayFactoryInterface
+     */
+    private function buildCoreGatewayFactory(array $config)
+    {
+        $coreGatewayFactory = $this->coreGatewayFactory;
+
+        $storages = $this->storages;
+        foreach ($storages as $modelClass => $storage) {
+            $extensionName = 'payum.extension.storage_' . strtolower(str_replace('\\', '_', $modelClass));
+
+            $config[$extensionName] = new StorageExtension($storage);
+        }
+
+        if (is_callable($coreGatewayFactory)) {
+            $coreGatewayFactory = call_user_func($coreGatewayFactory, $config);
+
+            if (false == $coreGatewayFactory instanceof GatewayFactoryInterface) {
+                throw new \LogicException('Builder returned invalid instance');
+            }
+        }
+
+        return $coreGatewayFactory ?: new CoreGatewayFactory($config);
     }
 }

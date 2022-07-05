@@ -61,7 +61,7 @@ class GatewayConfigType extends AbstractType
         $propertyPath = is_array($data) ? '[config]' : 'config';
         $firstTime = false == PropertyAccess::createPropertyAccessor()->getValue($data, $propertyPath);
         foreach ($config['payum.default_options'] as $name => $value) {
-            $propertyPath = is_array($data) ? "[config][$name]" : "config[$name]";
+            $propertyPath = is_array($data) ? "[config][${name}]" : "config[${name}]";
             if ($firstTime) {
                 PropertyAccess::createPropertyAccessor()->setValue($data, $propertyPath, $value);
             }

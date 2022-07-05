@@ -12,16 +12,6 @@ use PhpXmlRpc\Client;
 
 class CreditPartActionTest extends GenericApiAwareActionTest
 {
-    protected function getActionClass(): string
-    {
-        return CreditPartAction::class;
-    }
-
-    protected function getApiClass()
-    {
-        return new Config();
-    }
-
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\CreditPartAction');
@@ -148,6 +138,16 @@ class CreditPartActionTest extends GenericApiAwareActionTest
         $actualDetails = $creditPart->getModel();
         $this->assertSame(123, $actualDetails['error_code']);
         $this->assertSame('theMessage', $actualDetails['error_message']);
+    }
+
+    protected function getActionClass(): string
+    {
+        return CreditPartAction::class;
+    }
+
+    protected function getApiClass()
+    {
+        return new Config();
     }
 
     /**

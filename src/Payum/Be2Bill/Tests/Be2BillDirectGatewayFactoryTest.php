@@ -8,19 +8,6 @@ use Payum\Core\Tests\AbstractGatewayFactoryTest;
 
 class Be2BillDirectGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    protected function getGatewayFactoryClass(): string
-    {
-        return Be2BillDirectGatewayFactory::class;
-    }
-
-    protected function getRequiredOptions(): array
-    {
-        return [
-            'identifier' => 'anId',
-            'password' => 'aPass',
-        ];
-    }
-
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new Be2BillDirectGatewayFactory([
@@ -77,5 +64,18 @@ class Be2BillDirectGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory = new Be2BillDirectGatewayFactory();
 
         $factory->create();
+    }
+
+    protected function getGatewayFactoryClass(): string
+    {
+        return Be2BillDirectGatewayFactory::class;
+    }
+
+    protected function getRequiredOptions(): array
+    {
+        return [
+            'identifier' => 'anId',
+            'password' => 'aPass',
+        ];
     }
 }

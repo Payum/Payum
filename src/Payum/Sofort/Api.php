@@ -134,11 +134,11 @@ class Api
             $varName = strtolower(preg_replace('/([^A-Z])([A-Z])/', '$1_$2', substr($varName, 3)));
 
             if (is_array($params) && 2 == count($params)) {
-                $fields[$varName] = $transactionData->$method($params[0], $params[1]);
+                $fields[$varName] = $transactionData->{$method}($params[0], $params[1]);
             } elseif ('' !== $params) {
-                $fields[$varName] = $transactionData->$method($params);
+                $fields[$varName] = $transactionData->{$method}($params);
             } else {
-                $fields[$varName] = $transactionData->$method();
+                $fields[$varName] = $transactionData->{$method}();
             }
         }
 

@@ -10,9 +10,9 @@ class Constants
 
     public const STATUS_FAILED = 'failed';
 
-    public const PAYUM_STRIPE_APP_NAME = "Payum Stripe";
+    public const PAYUM_STRIPE_APP_NAME = 'Payum Stripe';
 
-    public const PAYUM_URL = "https://github.com/Payum/Payum";
+    public const PAYUM_URL = 'https://github.com/Payum/Payum';
 
     private function __construct()
     {

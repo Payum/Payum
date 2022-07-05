@@ -8,20 +8,6 @@ use Payum\Paypal\Masspay\Nvp\PaypalMasspayGatewayFactory;
 
 class PaypalMasspayGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    protected function getGatewayFactoryClass(): string
-    {
-        return PaypalMasspayGatewayFactory::class;
-    }
-
-    protected function getRequiredOptions(): array
-    {
-        return [
-            'username' => 'aName',
-            'password' => 'aPass',
-            'signature' => 'aSign',
-        ];
-    }
-
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new PaypalMasspayGatewayFactory([
@@ -84,5 +70,19 @@ class PaypalMasspayGatewayFactoryTest extends AbstractGatewayFactoryTest
         $gateway = $factory->create();
 
         $this->assertInstanceOf(Gateway::class, $gateway);
+    }
+
+    protected function getGatewayFactoryClass(): string
+    {
+        return PaypalMasspayGatewayFactory::class;
+    }
+
+    protected function getRequiredOptions(): array
+    {
+        return [
+            'username' => 'aName',
+            'password' => 'aPass',
+            'signature' => 'aSign',
+        ];
     }
 }

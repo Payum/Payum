@@ -7,18 +7,6 @@ use Payum\Sofort\SofortGatewayFactory;
 
 class SofortGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    protected function getGatewayFactoryClass(): string
-    {
-        return SofortGatewayFactory::class;
-    }
-
-    protected function getRequiredOptions(): array
-    {
-        return [
-            'config_key' => 'foo:bar:baz',
-        ];
-    }
-
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new SofortGatewayFactory([
@@ -78,5 +66,17 @@ class SofortGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory = new SofortGatewayFactory();
 
         $factory->create();
+    }
+
+    protected function getGatewayFactoryClass(): string
+    {
+        return SofortGatewayFactory::class;
+    }
+
+    protected function getRequiredOptions(): array
+    {
+        return [
+            'config_key' => 'foo:bar:baz',
+        ];
     }
 }

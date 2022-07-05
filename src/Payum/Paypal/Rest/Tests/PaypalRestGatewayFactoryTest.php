@@ -7,20 +7,6 @@ use Payum\Paypal\Rest\PaypalRestGatewayFactory;
 
 class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    protected function getGatewayFactoryClass(): string
-    {
-        return PaypalRestGatewayFactory::class;
-    }
-
-    protected function getRequiredOptions(): array
-    {
-        return [
-            'client_id' => 'cId',
-            'client_secret' => 'cSecret',
-            'config_path' => __DIR__,
-        ];
-    }
-
     public function testShouldAllowCreateGatewayWithCustomConfig()
     {
         $factory = new PaypalRestGatewayFactory();
@@ -132,5 +118,19 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
             'client_secret' => 'cSecret',
             'config_path' => dirname(__DIR__),
         ]);
+    }
+
+    protected function getGatewayFactoryClass(): string
+    {
+        return PaypalRestGatewayFactory::class;
+    }
+
+    protected function getRequiredOptions(): array
+    {
+        return [
+            'client_id' => 'cId',
+            'client_secret' => 'cSecret',
+            'config_path' => __DIR__,
+        ];
     }
 }

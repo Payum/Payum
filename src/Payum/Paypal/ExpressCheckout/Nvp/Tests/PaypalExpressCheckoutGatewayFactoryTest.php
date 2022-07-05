@@ -7,20 +7,6 @@ use Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory;
 
 class PaypalExpressCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    protected function getGatewayFactoryClass(): string
-    {
-        return PaypalExpressCheckoutGatewayFactory::class;
-    }
-
-    protected function getRequiredOptions(): array
-    {
-        return [
-            'username' => 'aName',
-            'password' => 'aPass',
-            'signature' => 'aSign',
-        ];
-    }
-
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new PaypalExpressCheckoutGatewayFactory([
@@ -102,5 +88,19 @@ class PaypalExpressCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertArrayHasKey('PayumPaypalExpressCheckout', $config['payum.paths']);
         $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumPaypalExpressCheckout']);
         $this->assertFileExists($config['payum.paths']['PayumPaypalExpressCheckout']);
+    }
+
+    protected function getGatewayFactoryClass(): string
+    {
+        return PaypalExpressCheckoutGatewayFactory::class;
+    }
+
+    protected function getRequiredOptions(): array
+    {
+        return [
+            'username' => 'aName',
+            'password' => 'aPass',
+            'signature' => 'aSign',
+        ];
     }
 }

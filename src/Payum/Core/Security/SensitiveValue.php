@@ -17,6 +17,32 @@ final class SensitiveValue implements \Serializable, \JsonSerializable
         $this->value = $value;
     }
 
+    public function __serialize(): array
+    {
+        return [];
+    }
+
+    public function __unserialize(array $data)
+    {
+    }
+
+    public function __toString()
+    {
+        return '';
+    }
+
+    public function __clone()
+    {
+        throw new LogicException('It is not permitted to close this object.');
+    }
+
+    public function __debugInfo()
+    {
+        return [
+            'value' => is_scalar($this->value) ? Mask::mask($this->value) : '[FILTERED OUT]',
+        ];
+    }
+
     /**
      * @return mixed
      */
@@ -51,38 +77,12 @@ final class SensitiveValue implements \Serializable, \JsonSerializable
     {
     }
 
-    public function __serialize(): array
-    {
-        return [];
-    }
-
-    public function __unserialize(array $data)
-    {
-    }
-
     /**
      * {@inheritDoc}
      */
     #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
-    }
-
-    public function __toString()
-    {
-        return '';
-    }
-
-    public function __clone()
-    {
-        throw new LogicException('It is not permitted to close this object.');
-    }
-
-    public function __debugInfo()
-    {
-        return [
-            'value' => is_scalar($this->value) ? Mask::mask($this->value) : '[FILTERED OUT]',
-        ];
     }
 
     /**
