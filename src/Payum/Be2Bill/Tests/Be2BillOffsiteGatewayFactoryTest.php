@@ -3,6 +3,7 @@
 namespace Payum\Be2Bill\Tests;
 
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Tests\AbstractGatewayFactoryTest;
 
 class Be2BillOffsiteGatewayFactoryTest extends AbstractGatewayFactoryTest
@@ -58,7 +59,7 @@ class Be2BillOffsiteGatewayFactoryTest extends AbstractGatewayFactoryTest
 
     public function testShouldThrowIfRequiredOptionsNotPassed()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The identifier, password fields are required.');
         $factory = new Be2BillOffsiteGatewayFactory();
 

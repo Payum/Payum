@@ -2,13 +2,16 @@
 
 namespace Payum\Core\Tests\Request;
 
+use Iterator;
 use Payum\Core\Request\BaseGetStatus;
 use Payum\Core\Request\GetBinaryStatus;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class GetBinaryStatusTest extends TestCase
 {
-    public static function provideIsXXXMethods(): \Iterator
+    public static function provideIsXXXMethods(): Iterator
     {
         yield ['isCaptured'];
         yield ['isAuthorized'];
@@ -23,7 +26,7 @@ class GetBinaryStatusTest extends TestCase
         yield ['isExpired'];
     }
 
-    public static function provideMarkXXXMethods(): \Iterator
+    public static function provideMarkXXXMethods(): Iterator
     {
         yield ['markCaptured'];
         yield ['markAuthorized'];
@@ -40,14 +43,14 @@ class GetBinaryStatusTest extends TestCase
 
     public function testShouldBeSubClassOfBaseGetStatus()
     {
-        $rc = new \ReflectionClass(GetBinaryStatus::class);
+        $rc = new ReflectionClass(GetBinaryStatus::class);
 
         $this->assertTrue($rc->isSubclassOf(BaseGetStatus::class));
     }
 
     public function testShouldMarkUnknownInConstructor()
     {
-        $getStatus = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new stdClass());
 
         $this->assertTrue($getStatus->isUnknown());
     }
@@ -57,7 +60,7 @@ class GetBinaryStatusTest extends TestCase
      */
     public function testShouldAllowGetMarkedStatus($markXXXMethod)
     {
-        $getStatus = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new stdClass());
 
         $getStatus->{$markXXXMethod}();
 
@@ -69,14 +72,14 @@ class GetBinaryStatusTest extends TestCase
      */
     public function testShouldCallIsXXXStatus($isXXXMethod)
     {
-        $getStatus = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new stdClass());
 
         $this->assertIsBool($getStatus->{$isXXXMethod}());
     }
 
     public function testShouldNotMatchOthersThenCapturedStatus()
     {
-        $getStatus = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new stdClass());
 
         $getStatus->markCaptured();
 
@@ -96,7 +99,7 @@ class GetBinaryStatusTest extends TestCase
 
     public function testShouldNotMatchOthersThenFailedStatus()
     {
-        $getStatus = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new stdClass());
 
         $getStatus->markFailed();
 
@@ -115,7 +118,7 @@ class GetBinaryStatusTest extends TestCase
 
     public function testShouldNotMatchOthersThenPendingStatus()
     {
-        $getStatus = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new stdClass());
 
         $getStatus->markPending();
 
@@ -134,7 +137,7 @@ class GetBinaryStatusTest extends TestCase
 
     public function testShouldNotMatchOthersThenCanceledStatus()
     {
-        $getStatus = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new stdClass());
 
         $getStatus->markCanceled();
 
@@ -153,7 +156,7 @@ class GetBinaryStatusTest extends TestCase
 
     public function testShouldNotMatchOthersThenNewStatus()
     {
-        $getStatus = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new stdClass());
 
         $getStatus->markNew();
 
@@ -172,7 +175,7 @@ class GetBinaryStatusTest extends TestCase
 
     public function testShouldNotMatchOthersThenUnknownStatus()
     {
-        $getStatus = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new stdClass());
 
         $getStatus->markUnknown();
 
@@ -191,7 +194,7 @@ class GetBinaryStatusTest extends TestCase
 
     public function testShouldNotMatchOthersThenExpiredStatus()
     {
-        $getStatus = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new stdClass());
 
         $getStatus->markExpired();
 
@@ -210,7 +213,7 @@ class GetBinaryStatusTest extends TestCase
 
     public function testShouldNotMatchOthersThenSuspendedStatus()
     {
-        $getStatus = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new stdClass());
 
         $getStatus->markSuspended();
 
@@ -229,7 +232,7 @@ class GetBinaryStatusTest extends TestCase
 
     public function testShouldNotMatchOthersThenPayedoutStatus()
     {
-        $getStatus = new GetBinaryStatus(new \stdClass());
+        $getStatus = new GetBinaryStatus(new stdClass());
 
         $getStatus->markPayedout();
 

@@ -7,6 +7,8 @@ use Payum\Core\GatewayInterface;
 use Payum\Core\Registry\AbstractRegistry;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -14,14 +16,14 @@ class ContainerAwareRegistryTest extends TestCase
 {
     public function testShouldBeSubClassOfAbstractRegistry()
     {
-        $rc = new \ReflectionClass(ContainerAwareRegistry::class);
+        $rc = new ReflectionClass(ContainerAwareRegistry::class);
 
         $this->assertTrue($rc->isSubclassOf(AbstractRegistry::class));
     }
 
     public function testShouldImplementContainerAwareInterface()
     {
-        $rc = new \ReflectionClass(ContainerAwareRegistry::class);
+        $rc = new ReflectionClass(ContainerAwareRegistry::class);
 
         $this->assertTrue($rc->implementsInterface(ContainerAwareInterface::class));
     }
@@ -49,7 +51,7 @@ class ContainerAwareRegistryTest extends TestCase
     {
         $gateways = [];
         $storages = [
-            \stdClass::class => 'fooStorageServiceId',
+            stdClass::class => 'fooStorageServiceId',
         ];
 
         $container = new Container();
@@ -58,7 +60,7 @@ class ContainerAwareRegistryTest extends TestCase
         $registry = new ContainerAwareRegistry($gateways, $storages);
         $registry->setContainer($container);
 
-        $this->assertSame($container->get('fooStorageServiceId'), $registry->getStorage(\stdClass::class));
+        $this->assertSame($container->get('fooStorageServiceId'), $registry->getStorage(stdClass::class));
     }
 
     public function testShouldReturnGatewayFactorySetToContainer()

@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\ProCheckout\Nvp\Tests;
 
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Tests\AbstractGatewayFactoryTest;
 use Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory;
 
@@ -61,7 +62,7 @@ class PaypalProCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
 
     public function testShouldThrowIfRequiredOptionsNotPassed()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The username, password, partner, vendor, tender fields are required.');
         $factory = new PaypalProCheckoutGatewayFactory();
 

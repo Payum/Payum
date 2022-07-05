@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\ProHosted\Nvp\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -45,6 +46,6 @@ class CreateButtonPaymentAction implements ActionInterface, ApiAwareInterface
     public function supports($request)
     {
         return $request instanceof CreateButtonPayment &&
-            $request->getModel() instanceof \ArrayAccess;
+            $request->getModel() instanceof ArrayAccess;
     }
 }

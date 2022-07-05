@@ -6,12 +6,14 @@ use Payum\Core\Model\Identity;
 use Payum\Core\Model\Token;
 use Payum\Core\Security\TokenInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class TokenTest extends TestCase
 {
     public function testShouldExtendDetailsAwareInterface()
     {
-        $rc = new \ReflectionClass(Token::class);
+        $rc = new ReflectionClass(Token::class);
 
         $this->assertTrue($rc->implementsInterface(TokenInterface::class));
     }
@@ -69,7 +71,7 @@ class TokenTest extends TestCase
 
     public function testShouldAllowGetPreviouslySetDetails()
     {
-        $expectedIdentity = new Identity('anId', \stdClass::class);
+        $expectedIdentity = new Identity('anId', stdClass::class);
 
         $token = new Token();
 
@@ -80,7 +82,7 @@ class TokenTest extends TestCase
 
     public function testShouldAllowGetIdentityPreviouslySetAsDetails()
     {
-        $expectedIdentity = new Identity('anId', \stdClass::class);
+        $expectedIdentity = new Identity('anId', stdClass::class);
 
         $token = new Token();
 

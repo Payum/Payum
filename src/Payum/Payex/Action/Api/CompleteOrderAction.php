@@ -2,6 +2,7 @@
 
 namespace Payum\Payex\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -38,7 +39,7 @@ class CompleteOrderAction implements ActionInterface, ApiAwareInterface
     public function supports($request)
     {
         return $request instanceof CompleteOrder &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

@@ -4,9 +4,13 @@ namespace Payum\Paypal\ProHosted\Nvp\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Notify;
+use Payum\Core\Request\Sync;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\ProHosted\Nvp\Action\NotifyAction;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
 
 class NotifyActionTest extends GenericActionTest
 {
@@ -16,14 +20,14 @@ class NotifyActionTest extends GenericActionTest
 
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(NotifyAction::class);
+        $rc = new ReflectionClass(NotifyAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass(NotifyAction::class);
+        $rc = new ReflectionClass(NotifyAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
@@ -38,7 +42,7 @@ class NotifyActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf(\Payum\Core\Request\Sync::class))
+            ->with($this->isInstanceOf(Sync::class))
         ;
 
         $action = new NotifyAction();
@@ -48,10 +52,10 @@ class NotifyActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Core\GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock(\Payum\Core\GatewayInterface::class);
+        return $this->createMock(GatewayInterface::class);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Payum\Klarna\Invoice\Action\Api;
 
+use KlarnaAddr;
+use KlarnaFlags;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -30,7 +32,7 @@ class PopulateKlarnaFromDetailsAction implements ActionInterface
                     utf8_decode($article['price']),
                     utf8_decode($article['vat']),
                     utf8_decode($article['discount']),
-                    $article['flags'] ?: \KlarnaFlags::NO_FLAG
+                    $article['flags'] ?: KlarnaFlags::NO_FLAG
                 );
             }
         }
@@ -47,7 +49,7 @@ class PopulateKlarnaFromDetailsAction implements ActionInterface
         if ($details['shipping_address']) {
             $address = ArrayObject::ensureArrayObject($details['shipping_address']);
 
-            $klarna->setAddress(\KlarnaFlags::IS_SHIPPING, new \KlarnaAddr(
+            $klarna->setAddress(KlarnaFlags::IS_SHIPPING, new KlarnaAddr(
                 utf8_decode($address['email']),
                 utf8_decode($address['telno']),
                 utf8_decode($address['cellno']),
@@ -66,7 +68,7 @@ class PopulateKlarnaFromDetailsAction implements ActionInterface
         if ($details['billing_address']) {
             $address = ArrayObject::ensureArrayObject($details['billing_address']);
 
-            $klarna->setAddress(\KlarnaFlags::IS_BILLING, new \KlarnaAddr(
+            $klarna->setAddress(KlarnaFlags::IS_BILLING, new KlarnaAddr(
                 utf8_decode($address['email']),
                 utf8_decode($address['telno']),
                 utf8_decode($address['cellno']),

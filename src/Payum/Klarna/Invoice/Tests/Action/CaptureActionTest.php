@@ -2,17 +2,23 @@
 
 namespace Payum\Klarna\Invoice\Tests\Action;
 
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
+use Payum\Core\Request\Authorize;
 use Payum\Core\Request\Capture;
 use Payum\Klarna\Invoice\Action\CaptureAction;
+use Payum\Klarna\Invoice\Request\Api\Activate;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class CaptureActionTest extends TestCase
 {
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass(CaptureAction::class);
+        $rc = new ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
@@ -28,22 +34,22 @@ class CaptureActionTest extends TestCase
     {
         $action = new CaptureAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testShouldNotSupportCaptureWithNotArrayAccessModel()
     {
         $action = new CaptureAction();
 
-        $this->assertFalse($action->supports(new Capture(new \stdClass())));
+        $this->assertFalse($action->supports(new Capture(new stdClass())));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new CaptureAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testShouldSubExecuteAuthorizeIfRnoNotSet()
@@ -52,7 +58,7 @@ class CaptureActionTest extends TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf(\Payum\Core\Request\Authorize::class))
+            ->with($this->isInstanceOf(Authorize::class))
         ;
 
         $action = new CaptureAction();
@@ -69,7 +75,7 @@ class CaptureActionTest extends TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf(\Payum\Klarna\Invoice\Request\Api\Activate::class))
+            ->with($this->isInstanceOf(Activate::class))
         ;
 
         $action = new CaptureAction();
@@ -102,10 +108,10 @@ class CaptureActionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock(\Payum\Core\GatewayInterface::class);
+        return $this->createMock(GatewayInterface::class);
     }
 }

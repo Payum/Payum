@@ -2,28 +2,39 @@
 
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
+use Klarna;
+use KlarnaException;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Tests\GenericApiAwareActionTest;
+use Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction;
 use Payum\Klarna\Invoice\Action\Api\CreditPartAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\CreditPart;
+use Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails;
+use PHPUnit\Framework\MockObject\MockObject;
 use PhpXmlRpc\Client;
+use ReflectionClass;
+use ReflectionProperty;
+use stdClass;
 
 class CreditPartActionTest extends GenericApiAwareActionTest
 {
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Action\Api\CreditPartAction::class);
+        $rc = new ReflectionClass(CreditPartAction::class);
 
-        $this->assertTrue($rc->isSubclassOf(\Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction::class));
+        $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
     }
 
     public function testShouldImplementsGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Action\Api\CreditPartAction::class);
+        $rc = new ReflectionClass(CreditPartAction::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\GatewayAwareInterface::class));
+        $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     public function testShouldAllowSetGateway()
@@ -33,11 +44,11 @@ class CreditPartActionTest extends GenericApiAwareActionTest
 
     public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
     {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
         $action = new CreditPartAction($this->createKlarnaMock());
 
-        $action->setApi(new \stdClass());
+        $action->setApi(new stdClass());
     }
 
     public function testShouldSupportCreditPartWithArrayAsModel()
@@ -51,27 +62,27 @@ class CreditPartActionTest extends GenericApiAwareActionTest
     {
         $action = new CreditPartAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testShouldNotSupportCreditPartWithNotArrayAccessModel()
     {
         $action = new CreditPartAction();
 
-        $this->assertFalse($action->supports(new CreditPart(new \stdClass())));
+        $this->assertFalse($action->supports(new CreditPart(new stdClass())));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new CreditPartAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testThrowIfDetailsDoNotHaveInvoiceNumber()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The invoice_number fields are required.');
         $action = new CreditPartAction();
 
@@ -88,7 +99,7 @@ class CreditPartActionTest extends GenericApiAwareActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf(\Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails::class))
+            ->with($this->isInstanceOf(PopulateKlarnaFromDetails::class))
         ;
 
         $klarnaMock = $this->createKlarnaMock();
@@ -119,14 +130,14 @@ class CreditPartActionTest extends GenericApiAwareActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf(\Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails::class))
+            ->with($this->isInstanceOf(PopulateKlarnaFromDetails::class))
         ;
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
             ->expects($this->once())
             ->method('creditPart')
-            ->willThrowException(new \KlarnaException('theMessage', 123))
+            ->willThrowException(new KlarnaException('theMessage', 123))
         ;
 
         $action = new CreditPartAction($klarnaMock);
@@ -151,13 +162,13 @@ class CreditPartActionTest extends GenericApiAwareActionTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Klarna
+     * @return MockObject|Klarna
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock = $this->createMock(\Klarna::class, ['config', 'activate', 'cancelReservation', 'checkOrderStatus', 'reserveAmount', 'creditPart']);
+        $klarnaMock = $this->createMock(Klarna::class, ['config', 'activate', 'cancelReservation', 'checkOrderStatus', 'reserveAmount', 'creditPart']);
 
-        $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
+        $rp = new ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);
         $rp->setValue($klarnaMock, $this->createMock(class_exists('xmlrpc_client') ? 'xmlrpc_client' : Client::class));
         $rp->setAccessible(false);
@@ -166,10 +177,10 @@ class CreditPartActionTest extends GenericApiAwareActionTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock(\Payum\Core\GatewayInterface::class);
+        return $this->createMock(GatewayInterface::class);
     }
 }

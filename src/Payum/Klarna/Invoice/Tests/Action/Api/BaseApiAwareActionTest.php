@@ -2,37 +2,43 @@
 
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class BaseApiAwareActionTest extends TestCase
 {
     public function testShouldImplementsApiAwareInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction::class);
+        $rc = new ReflectionClass(BaseApiAwareAction::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\ApiAwareInterface::class));
+        $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
     public function testShouldImplementsActionInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction::class);
+        $rc = new ReflectionClass(BaseApiAwareAction::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldBeAbstracted()
     {
-        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction::class);
+        $rc = new ReflectionClass(BaseApiAwareAction::class);
 
         $this->assertFalse($rc->isInstantiable());
     }
 
     public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
     {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
-        $action = $this->getMockForAbstractClass(\Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction::class);
+        $action = $this->getMockForAbstractClass(BaseApiAwareAction::class);
 
-        $action->setApi(new \stdClass());
+        $action->setApi(new stdClass());
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Payum\Klarna\Invoice\Action\Api;
 
+use ArrayAccess;
+use KlarnaException;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Klarna\Invoice\Request\Api\CancelReservation;
@@ -22,7 +24,7 @@ class CancelReservationAction extends BaseApiAwareAction
 
         try {
             $details['canceled'] = $klarna->cancelReservation($details['rno']);
-        } catch (\KlarnaException $e) {
+        } catch (KlarnaException $e) {
             $this->populateDetailsWithError($details, $e, $request);
         }
     }
@@ -30,7 +32,7 @@ class CancelReservationAction extends BaseApiAwareAction
     public function supports($request)
     {
         return $request instanceof CancelReservation &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

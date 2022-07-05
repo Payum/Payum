@@ -2,6 +2,8 @@
 
 namespace Payum\Core\Reply;
 
+use InvalidArgumentException;
+
 class HttpRedirect extends HttpResponse
 {
     /**
@@ -39,7 +41,7 @@ class HttpRedirect extends HttpResponse
     protected function prepareContent($url)
     {
         if (empty($url)) {
-            throw new \InvalidArgumentException('Cannot redirect to an empty URL.');
+            throw new InvalidArgumentException('Cannot redirect to an empty URL.');
         }
 
         return sprintf('<!DOCTYPE html>

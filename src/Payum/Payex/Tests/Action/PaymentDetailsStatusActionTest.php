@@ -2,18 +2,23 @@
 
 namespace Payum\Payex\Tests\Action;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Payex\Action\PaymentDetailsStatusAction;
 use Payum\Payex\Api\OrderApi;
 use Payum\Payex\Api\RecurringApi;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
+class PaymentDetailsStatusActionTest extends TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Payex\Action\PaymentDetailsStatusAction::class);
+        $rc = new ReflectionClass(PaymentDetailsStatusAction::class);
 
-        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Action\ActionInterface::class));
+        $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
     public function testShouldSupportGetStatusRequestWithEmptyArrayAsModel()
@@ -55,22 +60,22 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testShouldNotSupportStatusRequestWithNotArrayAccessModel()
     {
         $action = new PaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new GetHumanStatus(new \stdClass())));
+        $this->assertFalse($action->supports(new GetHumanStatus(new stdClass())));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new PaymentDetailsStatusAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testShouldMarkNewIfDetailsEmpty()

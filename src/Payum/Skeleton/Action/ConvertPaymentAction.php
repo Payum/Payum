@@ -2,6 +2,7 @@
 
 namespace Payum\Skeleton\Action;
 
+use LogicException;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareTrait;
@@ -22,7 +23,7 @@ class ConvertPaymentAction implements ActionInterface
         /** @var PaymentInterface $payment */
         $payment = $request->getSource();
 
-        throw new \LogicException('Not implemented');
+        throw new LogicException('Not implemented');
     }
 
     public function supports($request)

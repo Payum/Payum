@@ -3,6 +3,7 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Cancel;
@@ -10,19 +11,23 @@ use Payum\Core\Request\Sync;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CancelAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoVoid;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class CancelActionTest extends \PHPUnit\Framework\TestCase
+class CancelActionTest extends TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(CancelAction::class);
+        $rc = new ReflectionClass(CancelAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass(CancelAction::class);
+        $rc = new ReflectionClass(CancelAction::class);
 
         $this->assertTrue($rc->isSubclassOf(GatewayAwareInterface::class));
     }
@@ -79,7 +84,7 @@ class CancelActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new CancelAction();
 
-        $request = new Cancel(new \stdClass());
+        $request = new Cancel(new stdClass());
 
         $this->assertFalse($action->supports($request));
     }
@@ -88,15 +93,15 @@ class CancelActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new CancelAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new CancelAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testShouldNotExecuteDoVoidIfTransactionIdNotSet()
@@ -138,7 +143,7 @@ class CancelActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Core\GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

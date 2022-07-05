@@ -2,6 +2,8 @@
 
 namespace Payum\Klarna\Invoice\Action\Api;
 
+use ArrayAccess;
+use KlarnaException;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
@@ -38,7 +40,7 @@ class CreditPartAction extends BaseApiAwareAction implements GatewayAwareInterfa
             $this->gateway->execute(new PopulateKlarnaFromDetails($details, $klarna));
 
             $details['refund_invoice_number'] = $klarna->creditPart($details['invoice_number']);
-        } catch (\KlarnaException $e) {
+        } catch (KlarnaException $e) {
             $this->populateDetailsWithError($details, $e, $request);
         }
     }
@@ -46,7 +48,7 @@ class CreditPartAction extends BaseApiAwareAction implements GatewayAwareInterfa
     public function supports($request)
     {
         return $request instanceof CreditPart &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

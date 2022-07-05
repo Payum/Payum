@@ -2,23 +2,27 @@
 
 namespace Payum\Core\Tests\Model;
 
+use ArrayAccess;
+use ArrayIterator;
+use IteratorAggregate;
 use Payum\Core\Model\ArrayObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class ArrayObjectTest extends TestCase
 {
     public function testShouldImplementArrayAccessInterface()
     {
-        $rc = new \ReflectionClass(ArrayObject::class);
+        $rc = new ReflectionClass(ArrayObject::class);
 
-        $this->assertTrue($rc->implementsInterface(\ArrayAccess::class));
+        $this->assertTrue($rc->implementsInterface(ArrayAccess::class));
     }
 
     public function testShouldImplementIteratorAggregateInterface()
     {
-        $rc = new \ReflectionClass(ArrayObject::class);
+        $rc = new ReflectionClass(ArrayObject::class);
 
-        $this->assertTrue($rc->implementsInterface(\IteratorAggregate::class));
+        $this->assertTrue($rc->implementsInterface(IteratorAggregate::class));
     }
 
     public function testShouldAllowAddElementToArray()
@@ -69,7 +73,7 @@ class ArrayObjectTest extends TestCase
 
         $iterator = $model->getIterator();
 
-        $this->assertInstanceOf(\ArrayIterator::class, $iterator);
+        $this->assertInstanceOf(ArrayIterator::class, $iterator);
         $this->assertEquals(
             [
                 'foo' => 'theFoo',

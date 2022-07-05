@@ -2,10 +2,12 @@
 
 namespace Payum\Core\Bridge\Laminas\Storage;
 
+use InvalidArgumentException;
 use Laminas\Db\TableGateway\TableGateway as LaminasTableGateway;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\Identity;
 use Payum\Core\Storage\AbstractStorage;
+use ReflectionProperty;
 use Zend\Db\TableGateway\TableGateway as ZendTableGateway;
 
 /**
@@ -70,7 +72,7 @@ class TableGatewayStorage extends AbstractStorage
             @trigger_error(sprintf('Passing an instance of %s as the first argument to %s is deprecated and won\'t be supported in 2.0. Please using Laminas instead.', ZendTableGateway::class, self::class));
             $this->tableGateway = $tableGateway;
         } else {
-            throw new \InvalidArgumentException(sprintf('Argument $tableGateway of %s must be an instance of %s or %s, %s given.', self::class, LaminasTableGateway::class, ZendTableGateway::class, (is_object($tableGateway) ? get_class($tableGateway) : gettype($tableGateway))));
+            throw new InvalidArgumentException(sprintf('Argument $tableGateway of %s must be an instance of %s or %s, %s given.', self::class, LaminasTableGateway::class, ZendTableGateway::class, (is_object($tableGateway) ? get_class($tableGateway) : gettype($tableGateway))));
         }
 
         $this->idField = $idField;
@@ -127,7 +129,7 @@ class TableGatewayStorage extends AbstractStorage
      */
     protected function getModelId($model)
     {
-        $rp = new \ReflectionProperty($model, $this->idField);
+        $rp = new ReflectionProperty($model, $this->idField);
         $rp->setAccessible(true);
         $id = $rp->getValue($model);
         $rp->setAccessible(false);

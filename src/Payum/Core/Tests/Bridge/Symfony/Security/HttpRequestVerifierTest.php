@@ -3,32 +3,38 @@
 namespace Payum\Core\Tests\Bridge\Symfony\Security;
 
 use Payum\Core\Bridge\Symfony\Security\HttpRequestVerifier;
+use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Model\Token;
+use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class HttpRequestVerifierTest extends TestCase
 {
     public function testShouldImplementHttpRequestVerifierInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Core\Bridge\Symfony\Security\HttpRequestVerifier::class);
+        $rc = new ReflectionClass(HttpRequestVerifier::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\Security\HttpRequestVerifierInterface::class));
+        $this->assertTrue($rc->implementsInterface(HttpRequestVerifierInterface::class));
     }
 
     public function testThrowIfNotSymfonyRequestGivenOnVerify()
     {
-        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid request given. Expected Symfony\Component\HttpFoundation\Request but it is stdClass');
         $verifier = new HttpRequestVerifier($this->createStorageMock());
 
-        $verifier->verify(new \stdClass());
+        $verifier->verify(new stdClass());
     }
 
     public function testThrowIfRequestNotContainTokenParameterOnVerify()
     {
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
+        $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('Token parameter not set in request');
         $verifier = new HttpRequestVerifier($this->createStorageMock());
 
@@ -37,7 +43,7 @@ class HttpRequestVerifierTest extends TestCase
 
     public function testThrowIfStorageCouldNotFindTokenByGivenHashOnVerify()
     {
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
+        $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('A token with hash `invalidHash` could not be found.');
         $invalidHash = 'invalidHash';
 
@@ -59,7 +65,7 @@ class HttpRequestVerifierTest extends TestCase
 
     public function testThrowIfTargetUrlPathNotMatchServerRequestUriPathOnVerify()
     {
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\HttpException::class);
+        $this->expectException(HttpException::class);
         $this->expectExceptionMessage('The current url http://target.com/bar not match target url http://target.com/foo set in the token.');
         $token = new Token();
         $token->setHash('theHash');
@@ -225,6 +231,6 @@ class HttpRequestVerifierTest extends TestCase
      */
     protected function createStorageMock()
     {
-        return $this->createMock(\Payum\Core\Storage\StorageInterface::class);
+        return $this->createMock(StorageInterface::class);
     }
 }

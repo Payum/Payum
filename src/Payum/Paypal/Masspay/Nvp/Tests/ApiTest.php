@@ -3,23 +3,28 @@
 namespace Payum\Paypal\Masspay\Nvp\Tests;
 
 use GuzzleHttp\Psr7\Response;
+use Http\Message\MessageFactory;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
+use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\HttpClientInterface;
 use Payum\Paypal\Masspay\Nvp\Api;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 
-class ApiTest extends \PHPUnit\Framework\TestCase
+class ApiTest extends TestCase
 {
     public function testThrowIfRequiredOptionsNotSetInConstructor()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The username, password, signature fields are required.');
         new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
     public function testThrowIfSandboxOptionNotSetInConstructor()
     {
-        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
         new Api([
             'username' => 'a_username',
@@ -132,7 +137,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|HttpClientInterface
+     * @return MockObject|HttpClientInterface
      */
     protected function createHttpClientMock()
     {
@@ -140,7 +145,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Http\Message\MessageFactory
+     * @return MessageFactory
      */
     protected function createHttpMessageFactory()
     {
@@ -148,7 +153,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|HttpClientInterface
+     * @return MockObject|HttpClientInterface
      */
     protected function createSuccessHttpClientStub()
     {

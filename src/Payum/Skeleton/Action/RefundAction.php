@@ -2,6 +2,8 @@
 
 namespace Payum\Skeleton\Action;
 
+use ArrayAccess;
+use LogicException;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -21,13 +23,13 @@ class RefundAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        throw new \LogicException('Not implemented');
+        throw new LogicException('Not implemented');
     }
 
     public function supports($request)
     {
         return $request instanceof Refund &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

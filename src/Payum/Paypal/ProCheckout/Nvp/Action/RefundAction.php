@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\ProCheckout\Nvp\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -63,7 +64,7 @@ class RefundAction implements ActionInterface, ApiAwareInterface
     public function supports($request)
     {
         return $request instanceof Refund &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

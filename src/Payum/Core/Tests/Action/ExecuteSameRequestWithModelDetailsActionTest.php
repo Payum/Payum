@@ -2,21 +2,27 @@
 
 namespace Payum\Core\Tests\Action;
 
+use ArrayAccess;
+use Iterator;
+use LogicException;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Model\DetailsAggregateInterface;
 use Payum\Core\Model\DetailsAwareInterface;
 use Payum\Core\Model\ModelAggregateInterface;
 use Payum\Core\Model\ModelAwareInterface;
 use Payum\Core\Tests\GenericActionTest;
+use ReflectionClass;
+use stdClass;
 
 class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 {
-    protected $actionClass = \Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction::class;
+    protected $actionClass = ExecuteSameRequestWithModelDetailsAction::class;
 
     protected $requestClass = 'Payum\Core\Tests\Action\ModelAggregateAwareRequest';
 
-    public function provideSupportedRequests(): \Iterator
+    public function provideSupportedRequests(): Iterator
     {
         yield [new $this->requestClass(new DetailsAggregateAndAwareModel())];
         yield [new $this->requestClass(new DetailsAggregateModel())];
@@ -24,14 +30,14 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass($this->actionClass);
+        $rc = new ReflectionClass($this->actionClass);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     public function testShouldExecuteSameRequestWithModelDetails()
     {
-        $expectedDetails = new \stdClass();
+        $expectedDetails = new stdClass();
 
         $model = new DetailsAggregateModel();
         $model->details = $expectedDetails;
@@ -40,7 +46,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $gatewayMock = $this->createMock(\Payum\Core\GatewayInterface::class);
+        $gatewayMock = $this->createMock(GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
@@ -72,7 +78,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $gatewayMock = $this->createMock(\Payum\Core\GatewayInterface::class);
+        $gatewayMock = $this->createMock(GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
@@ -80,7 +86,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             ->willReturnCallback(function ($request) use ($expectedDetails, $testCase) {
                 $details = $request->getModel();
 
-                $testCase->assertInstanceOf(\ArrayAccess::class, $details);
+                $testCase->assertInstanceOf(ArrayAccess::class, $details);
                 $testCase->assertSame($expectedDetails, iterator_to_array($details));
 
                 $details['baz'] = 'bazVal';
@@ -110,7 +116,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $gatewayMock = $this->createMock(\Payum\Core\GatewayInterface::class);
+        $gatewayMock = $this->createMock(GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
@@ -118,7 +124,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             ->willReturnCallback(function ($request) use ($expectedDetails, $testCase) {
                 $details = $request->getModel();
 
-                $testCase->assertInstanceOf(\ArrayAccess::class, $details);
+                $testCase->assertInstanceOf(ArrayAccess::class, $details);
                 $testCase->assertSame($expectedDetails, iterator_to_array($details));
 
                 $details['baz'] = 'bazVal';
@@ -131,7 +137,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
         $action->execute($request);
 
         $details = $model->getDetails();
-        $testCase->assertInstanceOf(\ArrayAccess::class, $details);
+        $testCase->assertInstanceOf(ArrayAccess::class, $details);
         $testCase->assertSame(
             [
                 'foo' => 'fooVal',
@@ -156,7 +162,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $gatewayMock = $this->createMock(\Payum\Core\GatewayInterface::class);
+        $gatewayMock = $this->createMock(GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
@@ -164,12 +170,12 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             ->willReturnCallback(function ($request) use ($expectedDetails, $testCase) {
                 $details = $request->getModel();
 
-                $testCase->assertInstanceOf(\ArrayAccess::class, $details);
+                $testCase->assertInstanceOf(ArrayAccess::class, $details);
                 $testCase->assertSame($expectedDetails, iterator_to_array($details));
 
                 $details['baz'] = 'bazVal';
 
-                throw new \LogicException('The exception');
+                throw new LogicException('The exception');
             })
         ;
 
@@ -178,9 +184,9 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         try {
             $action->execute($request);
-        } catch (\LogicException $e) {
+        } catch (LogicException $e) {
             $details = $model->getDetails();
-            $testCase->assertInstanceOf(\ArrayAccess::class, $details);
+            $testCase->assertInstanceOf(ArrayAccess::class, $details);
             $testCase->assertSame(
                 [
                     'foo' => 'fooVal',

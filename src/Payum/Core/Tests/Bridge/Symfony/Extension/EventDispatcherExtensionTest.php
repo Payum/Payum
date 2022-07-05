@@ -2,17 +2,22 @@
 
 namespace Payum\Core\Tests\Bridge\Symfony\Extension;
 
+use Payum\Core\Bridge\Symfony\Event\ExecuteEvent;
 use Payum\Core\Bridge\Symfony\Extension\EventDispatcherExtension;
 use Payum\Core\Bridge\Symfony\PayumEvents;
+use Payum\Core\Extension\Context;
+use Payum\Core\Extension\ExtensionInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class EventDispatcherExtensionTest extends TestCase
 {
     public function testShouldImplementExtensionInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Core\Bridge\Symfony\Extension\EventDispatcherExtension::class);
+        $rc = new ReflectionClass(EventDispatcherExtension::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\Extension\ExtensionInterface::class));
+        $this->assertTrue($rc->implementsInterface(ExtensionInterface::class));
     }
 
     public function testShouldTriggerEventWhenCallOnPreExecute()
@@ -21,7 +26,7 @@ class EventDispatcherExtensionTest extends TestCase
         $dispatcherMock
             ->expects($this->once())
             ->method('dispatch')
-            ->with($this->isInstanceOf(\Payum\Core\Bridge\Symfony\Event\ExecuteEvent::class), PayumEvents::GATEWAY_PRE_EXECUTE)
+            ->with($this->isInstanceOf(ExecuteEvent::class), PayumEvents::GATEWAY_PRE_EXECUTE)
         ;
 
         $extension = new EventDispatcherExtension($dispatcherMock);
@@ -35,7 +40,7 @@ class EventDispatcherExtensionTest extends TestCase
         $dispatcherMock
             ->expects($this->once())
             ->method('dispatch')
-            ->with($this->isInstanceOf(\Payum\Core\Bridge\Symfony\Event\ExecuteEvent::class), PayumEvents::GATEWAY_EXECUTE)
+            ->with($this->isInstanceOf(ExecuteEvent::class), PayumEvents::GATEWAY_EXECUTE)
         ;
 
         $extension = new EventDispatcherExtension($dispatcherMock);
@@ -49,7 +54,7 @@ class EventDispatcherExtensionTest extends TestCase
         $dispatcherMock
             ->expects($this->once())
             ->method('dispatch')
-            ->with($this->isInstanceOf(\Payum\Core\Bridge\Symfony\Event\ExecuteEvent::class), PayumEvents::GATEWAY_POST_EXECUTE)
+            ->with($this->isInstanceOf(ExecuteEvent::class), PayumEvents::GATEWAY_POST_EXECUTE)
         ;
 
         $extension = new EventDispatcherExtension($dispatcherMock);
@@ -59,11 +64,11 @@ class EventDispatcherExtensionTest extends TestCase
 
     protected function createEventDispatcherMock()
     {
-        return $this->createMock(\Symfony\Component\EventDispatcher\EventDispatcherInterface::class);
+        return $this->createMock(EventDispatcherInterface::class);
     }
 
     protected function createContextMock()
     {
-        return $this->createMock(\Payum\Core\Extension\Context::class);
+        return $this->createMock(Context::class);
     }
 }

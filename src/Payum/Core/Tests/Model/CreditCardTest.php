@@ -2,16 +2,18 @@
 
 namespace Payum\Core\Tests\Model;
 
+use DateTime;
 use Payum\Core\Model\CreditCard;
 use Payum\Core\Model\CreditCardInterface;
 use Payum\Core\Security\SensitiveValue;
 use Payum\Core\Tests\TestCase;
+use ReflectionClass;
 
 class CreditCardTest extends TestCase
 {
     public function testShouldExtendDetailsAwareInterface()
     {
-        $rc = new \ReflectionClass(CreditCard::class);
+        $rc = new ReflectionClass(CreditCard::class);
 
         $this->assertTrue($rc->implementsInterface(CreditCardInterface::class));
     }
@@ -153,7 +155,7 @@ class CreditCardTest extends TestCase
     {
         $card = new CreditCard();
 
-        $expected = new \DateTime();
+        $expected = new DateTime();
 
         $card->setExpireAt($expected);
 
@@ -164,7 +166,7 @@ class CreditCardTest extends TestCase
     {
         $card = new CreditCard();
 
-        $expected = new \DateTime();
+        $expected = new DateTime();
 
         $card->setExpireAt($expected);
 

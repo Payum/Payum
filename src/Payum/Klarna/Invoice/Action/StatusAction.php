@@ -2,6 +2,8 @@
 
 namespace Payum\Klarna\Invoice\Action;
 
+use ArrayAccess;
+use KlarnaFlags;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -48,19 +50,19 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (\KlarnaFlags::ACCEPTED == $details['status']) {
+        if (KlarnaFlags::ACCEPTED == $details['status']) {
             $request->markAuthorized();
 
             return;
         }
 
-        if (\KlarnaFlags::PENDING == $details['status']) {
+        if (KlarnaFlags::PENDING == $details['status']) {
             $request->markPending();
 
             return;
         }
 
-        if (\KlarnaFlags::DENIED == $details['status']) {
+        if (KlarnaFlags::DENIED == $details['status']) {
             $request->markFailed();
 
             return;
@@ -72,7 +74,7 @@ class StatusAction implements ActionInterface
     public function supports($request)
     {
         return $request instanceof GetStatusInterface &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

@@ -2,17 +2,23 @@
 
 namespace Payum\Payex\Tests\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\GetBinaryStatus;
 use Payum\Payex\Action\AgreementDetailsStatusAction;
 use Payum\Payex\Api\AgreementApi;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
+class AgreementDetailsStatusActionTest extends TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(AgreementDetailsStatusAction::class);
+        $rc = new ReflectionClass(AgreementDetailsStatusAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
@@ -21,7 +27,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AgreementDetailsStatusAction();
 
-        $array = $this->createMock(\ArrayAccess::class);
+        $array = $this->createMock(ArrayAccess::class);
         $array
             ->expects($this->atLeast(2))
             ->method('offsetExists')
@@ -36,7 +42,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AgreementDetailsStatusAction();
 
-        $array = $this->createMock(\ArrayAccess::class);
+        $array = $this->createMock(ArrayAccess::class);
         $array
             ->expects($this->atLeast(2))
             ->method('offsetExists')
@@ -51,22 +57,22 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AgreementDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testShouldNotSupportStatusRequestWithNotArrayAccessModel()
     {
         $action = new AgreementDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new GetBinaryStatus(new \stdClass())));
+        $this->assertFalse($action->supports(new GetBinaryStatus(new stdClass())));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new AgreementDetailsStatusAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testShouldMarkUnknownIfTransactionStatusNotSet()
@@ -154,10 +160,10 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock(\Payum\Core\GatewayInterface::class);
+        return $this->createMock(GatewayInterface::class);
     }
 }

@@ -2,17 +2,22 @@
 
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetBinaryStatus;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
+class RecurringPaymentDetailsStatusActionTest extends TestCase
 {
     public function testShouldImplementsActionInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction::class);
+        $rc = new ReflectionClass(RecurringPaymentDetailsStatusAction::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldSupportStatusRequestWithArrayAsModelWhichHasBillingPeriodSet()
@@ -32,7 +37,7 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(new \stdClass());
+        $request = new GetBinaryStatus(new stdClass());
 
         $this->assertFalse($action->supports($request));
     }
@@ -41,15 +46,15 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testShouldMarkFailedIfErrorCodeSetToModel()

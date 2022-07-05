@@ -2,6 +2,7 @@
 
 namespace Payum\Core\Extension;
 
+use Exception;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\ReplyInterface;
@@ -29,7 +30,7 @@ class Context
     protected $reply;
 
     /**
-     * @var \Exception|null
+     * @var Exception|null
      */
     protected $exception;
 
@@ -76,14 +77,14 @@ class Context
     }
 
     /**
-     * @return \Exception|null
+     * @return Exception|null
      */
     public function getException()
     {
         return $this->exception;
     }
 
-    public function setException(\Exception $exception = null)
+    public function setException(Exception $exception = null)
     {
         $this->exception = $exception;
     }

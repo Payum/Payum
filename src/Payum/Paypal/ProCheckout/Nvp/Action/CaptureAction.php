@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\ProCheckout\Nvp\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -64,7 +65,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
     public function supports($request)
     {
         return $request instanceof Capture &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

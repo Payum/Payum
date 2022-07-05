@@ -2,6 +2,7 @@
 
 namespace Payum\Payex\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -58,7 +59,7 @@ class AutoPayPaymentDetailsStatusAction implements ActionInterface
     {
         if (false == (
             $request instanceof GetStatusInterface &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         )) {
             return false;
         }

@@ -2,6 +2,8 @@
 
 namespace Payum\Klarna\Checkout;
 
+use Klarna_Checkout_Order;
+use LogicException;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
 use Payum\Klarna\Checkout\Action\Api\CreateOrderAction;
@@ -18,8 +20,8 @@ class KlarnaCheckoutGatewayFactory extends GatewayFactory
 {
     protected function populateConfig(ArrayObject $config)
     {
-        if (! class_exists(\Klarna_Checkout_Order::class)) {
-            throw new \LogicException('You must install "klarna/checkout" library.');
+        if (! class_exists(Klarna_Checkout_Order::class)) {
+            throw new LogicException('You must install "klarna/checkout" library.');
         }
 
         $config->defaults([

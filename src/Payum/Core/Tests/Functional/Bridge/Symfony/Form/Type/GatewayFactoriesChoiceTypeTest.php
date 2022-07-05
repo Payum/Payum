@@ -4,8 +4,10 @@ namespace Payum\Core\Tests\Functional\Bridge\Symfony\Form\Type;
 
 use Payum\Core\Bridge\Symfony\Form\Type\GatewayFactoriesChoiceType;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\Forms;
+use Symfony\Component\Form\FormView;
 
 class GatewayFactoriesChoiceTypeTest extends TestCase
 {
@@ -29,8 +31,8 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
     {
         $form = $this->formFactory->create(GatewayFactoriesChoiceType::class);
 
-        $this->assertInstanceOf(\Symfony\Component\Form\Form::class, $form);
-        $this->assertInstanceOf(\Symfony\Component\Form\FormView::class, $form->createView());
+        $this->assertInstanceOf(Form::class, $form);
+        $this->assertInstanceOf(FormView::class, $form->createView());
     }
 
     public function testShouldCorrectlyBindValidValue()

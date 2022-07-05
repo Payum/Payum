@@ -6,11 +6,16 @@ use Payum\Be2Bill\Action\CaptureOffsiteAction;
 use Payum\Be2Bill\Api;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
+use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Tests\GenericActionTest;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
+use stdClass;
 
 class CaptureOffsiteActionTest extends GenericActionTest
 {
@@ -20,36 +25,36 @@ class CaptureOffsiteActionTest extends GenericActionTest
 
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(CaptureOffsiteAction::class);
+        $rc = new ReflectionClass(CaptureOffsiteAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass(CaptureOffsiteAction::class);
+        $rc = new ReflectionClass(CaptureOffsiteAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     public function testShouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass(CaptureOffsiteAction::class);
+        $rc = new ReflectionClass(CaptureOffsiteAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
     public function testThrowIfUnsupportedApiGiven()
     {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectException(UnsupportedApiException::class);
         $action = new CaptureOffsiteAction();
 
-        $action->setApi(new \stdClass());
+        $action->setApi(new stdClass());
     }
 
     public function testShouldRedirectToBe2billSiteIfExecCodeNotPresentInQuery()
     {
-        $this->expectException(\Payum\Core\Reply\HttpPostRedirect::class);
+        $this->expectException(HttpPostRedirect::class);
         $model = [
             'AMOUNT' => 1000,
             'CLIENTIDENT' => 'payerId',
@@ -74,7 +79,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf(\Payum\Core\Request\GetHttpRequest::class))
+            ->with($this->isInstanceOf(GetHttpRequest::class))
         ;
 
         $action = new CaptureOffsiteAction();
@@ -105,7 +110,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf(\Payum\Core\Request\GetHttpRequest::class))
+            ->with($this->isInstanceOf(GetHttpRequest::class))
             ->willReturnCallback(function (GetHttpRequest $request) {
                 $request->query['EXECCODE'] = 1;
                 $request->query['FOO'] = 'fooVal';
@@ -132,7 +137,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|Api
+     * @return MockObject|Api
      */
     protected function createApiMock()
     {
@@ -140,7 +145,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

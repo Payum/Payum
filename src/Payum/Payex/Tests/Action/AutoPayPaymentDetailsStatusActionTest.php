@@ -2,18 +2,24 @@
 
 namespace Payum\Payex\Tests\Action;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\GetBinaryStatus;
 use Payum\Payex\Action\AutoPayPaymentDetailsStatusAction;
 use Payum\Payex\Api\OrderApi;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
+class AutoPayPaymentDetailsStatusActionTest extends TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Payex\Action\AutoPayPaymentDetailsStatusAction::class);
+        $rc = new ReflectionClass(AutoPayPaymentDetailsStatusAction::class);
 
-        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Action\ActionInterface::class));
+        $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
     public function testShouldSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToTrue()
@@ -55,22 +61,22 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testShouldNotSupportBinaryMaskStatusRequestWithNotArrayAccessModel()
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new GetBinaryStatus(new \stdClass())));
+        $this->assertFalse($action->supports(new GetBinaryStatus(new stdClass())));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testShouldMarkNewIfTransactionStatusNotSet()
@@ -144,10 +150,10 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock(\Payum\Core\GatewayInterface::class);
+        return $this->createMock(GatewayInterface::class);
     }
 }

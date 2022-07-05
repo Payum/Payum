@@ -2,22 +2,24 @@
 
 namespace Payum\Core\Tests\Request;
 
+use ArrayObject;
 use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetCreditCardToken;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class GetCreditCardTokenTest extends TestCase
 {
     public function testShouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass(GetCreditCardToken::class);
+        $rc = new ReflectionClass(GetCreditCardToken::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
     public function testShouldAllowGetModelSetInConstructor()
     {
-        $model = new \ArrayObject();
+        $model = new ArrayObject();
 
         $request = new GetCreditCardToken($model);
 

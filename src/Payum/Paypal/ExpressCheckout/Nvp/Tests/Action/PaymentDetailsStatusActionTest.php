@@ -2,17 +2,22 @@
 
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
+class PaymentDetailsStatusActionTest extends TestCase
 {
     public function testShouldImplementsActionInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction::class);
+        $rc = new ReflectionClass(PaymentDetailsStatusAction::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldSupportStatusRequestWithArrayAsModelWhichHasPaymentRequestAmountSet()
@@ -54,7 +59,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(new \stdClass());
+        $request = new GetHumanStatus(new stdClass());
 
         $this->assertFalse($action->supports($request));
     }
@@ -63,15 +68,15 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new PaymentDetailsStatusAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testShouldMarkCanceledIfPaymentNotAuthorized()

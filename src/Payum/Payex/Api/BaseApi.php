@@ -3,6 +3,7 @@
 namespace Payum\Payex\Api;
 
 use Payum\Core\Exception\InvalidArgumentException;
+use SimpleXMLElement;
 
 abstract class BaseApi
 {
@@ -31,7 +32,7 @@ abstract class BaseApi
     protected $options;
 
     /**
-     * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
+     * @throws InvalidArgumentException if an option is invalid
      */
     public function __construct(SoapClientFactory $clientFactory, array $options)
     {
@@ -63,7 +64,7 @@ abstract class BaseApi
 
         $response = @$client->{$operation}($parameters);
 
-        $result = $this->convertSimpleXmlToArray(new \SimpleXMLElement($response->{$operation . 'Result'}));
+        $result = $this->convertSimpleXmlToArray(new SimpleXMLElement($response->{$operation . 'Result'}));
 
         $result = $this->normalizeStatusFields($result);
         $result = $this->removeHeader($result);
@@ -93,7 +94,7 @@ abstract class BaseApi
     /**
      * @return array
      */
-    protected function convertSimpleXmlToArray(\SimpleXMLElement $element)
+    protected function convertSimpleXmlToArray(SimpleXMLElement $element)
     {
         return json_decode(
             json_encode((array) $element),

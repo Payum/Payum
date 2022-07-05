@@ -3,15 +3,16 @@
 namespace Payum\Klarna\Checkout\Tests\Action;
 
 use Payum\Core\Request\GetBinaryStatus;
+use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Klarna\Checkout\Action\StatusAction;
 use Payum\Klarna\Checkout\Constants;
 
 class StatusActionTest extends GenericActionTest
 {
-    protected $actionClass = \Payum\Klarna\Checkout\Action\StatusAction::class;
+    protected $actionClass = StatusAction::class;
 
-    protected $requestClass = \Payum\Core\Request\GetHumanStatus::class;
+    protected $requestClass = GetHumanStatus::class;
 
     public function testShouldMarkUnknownIfStatusNotSupported()
     {

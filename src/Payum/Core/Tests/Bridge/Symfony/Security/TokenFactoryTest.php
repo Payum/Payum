@@ -11,20 +11,22 @@ use Payum\Core\Security\TokenFactoryInterface;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TokenFactoryTest extends TestCase
 {
     public function testShouldImplementsTokenFactoryInterface()
     {
-        $rc = new \ReflectionClass(TokenFactory::class);
+        $rc = new ReflectionClass(TokenFactory::class);
 
         $this->assertTrue($rc->implementsInterface(TokenFactoryInterface::class));
     }
 
     public function testShouldBeSubClassOfAbtractTokenFactory()
     {
-        $rc = new \ReflectionClass(TokenFactory::class);
+        $rc = new ReflectionClass(TokenFactory::class);
 
         $this->assertTrue($rc->isSubclassOf(AbstractTokenFactory::class));
     }
@@ -45,8 +47,8 @@ class TokenFactoryTest extends TestCase
             ->with($this->identicalTo($token))
         ;
 
-        $model = new \stdClass();
-        $identity = new Identity('anId', \stdClass::class);
+        $model = new stdClass();
+        $identity = new Identity('anId', stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -102,8 +104,8 @@ class TokenFactoryTest extends TestCase
             ->with($this->identicalTo($token))
         ;
 
-        $model = new \stdClass();
-        $identity = new Identity('anId', \stdClass::class);
+        $model = new stdClass();
+        $identity = new Identity('anId', stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -164,7 +166,7 @@ class TokenFactoryTest extends TestCase
         ;
 
         $gatewayName = 'theGatewayName';
-        $identity = new Identity('anId', \stdClass::class);
+        $identity = new Identity('anId', stdClass::class);
 
         $storageRegistryMock = $this->createStorageRegistryMock();
         $storageRegistryMock
@@ -250,8 +252,8 @@ class TokenFactoryTest extends TestCase
             ->with($this->identicalTo($token))
         ;
 
-        $model = new \stdClass();
-        $identity = new Identity('anId', \stdClass::class);
+        $model = new stdClass();
+        $identity = new Identity('anId', stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -311,8 +313,8 @@ class TokenFactoryTest extends TestCase
             ->with($this->identicalTo($authorizeToken))
         ;
 
-        $model = new \stdClass();
-        $identity = new Identity('anId', \stdClass::class);
+        $model = new stdClass();
+        $identity = new Identity('anId', stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -373,8 +375,8 @@ class TokenFactoryTest extends TestCase
             ->with($this->identicalTo($authorizeToken))
         ;
 
-        $model = new \stdClass();
-        $identity = new Identity('anId', \stdClass::class);
+        $model = new stdClass();
+        $identity = new Identity('anId', stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -436,8 +438,8 @@ class TokenFactoryTest extends TestCase
             ->with($this->identicalTo($authorizeToken))
         ;
 
-        $model = new \stdClass();
-        $identity = new Identity('anId', \stdClass::class);
+        $model = new stdClass();
+        $identity = new Identity('anId', stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();

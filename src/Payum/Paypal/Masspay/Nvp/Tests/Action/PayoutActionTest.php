@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\Masspay\Nvp\Tests\Action;
 
+use ArrayObject;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
@@ -9,6 +10,8 @@ use Payum\Core\Request\Payout;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\Masspay\Nvp\Action\PayoutAction;
 use Payum\Paypal\Masspay\Nvp\Request\Api\Masspay;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
 
 class PayoutActionTest extends GenericActionTest
 {
@@ -18,21 +21,21 @@ class PayoutActionTest extends GenericActionTest
 
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(PayoutAction::class);
+        $rc = new ReflectionClass(PayoutAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass(PayoutAction::class);
+        $rc = new ReflectionClass(PayoutAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     public function testShouldDoMasspayRequestIfModelNotAcknowledge()
     {
-        $payoutModel = new \ArrayObject([
+        $payoutModel = new ArrayObject([
             'bar' => 'barVal',
         ]);
 
@@ -60,7 +63,7 @@ class PayoutActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

@@ -2,6 +2,7 @@
 
 namespace Payum\Core\Model;
 
+use DateTime;
 use Payum\Core\Security\SensitiveValue;
 
 interface CreditCardInterface
@@ -77,12 +78,12 @@ interface CreditCardInterface
     public function setSecurityCode($securityCode);
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getExpireAt();
 
     /**
-     * @param \DateTime|SensitiveValue $date
+     * @param DateTime|SensitiveValue $date
      */
     public function setExpireAt($date = null);
 

@@ -2,25 +2,31 @@
 
 namespace Payum\Offline\Tests\Action;
 
+use ArrayAccess;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Payout;
 use Payum\Offline\Action\PayoutAction;
 use Payum\Offline\Constants;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class PayoutActionTest extends \PHPUnit\Framework\TestCase
+class PayoutActionTest extends TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Offline\Action\PayoutAction::class);
+        $rc = new ReflectionClass(PayoutAction::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldSupportPayoutWithArrayAccessAsModel()
     {
         $action = new PayoutAction();
 
-        $request = new Payout($this->createMock(\ArrayAccess::class));
+        $request = new Payout($this->createMock(ArrayAccess::class));
 
         $this->assertTrue($action->supports($request));
     }
@@ -29,7 +35,7 @@ class PayoutActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PayoutAction();
 
-        $request = new \stdClass();
+        $request = new stdClass();
 
         $this->assertFalse($action->supports($request));
     }
@@ -38,17 +44,17 @@ class PayoutActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PayoutAction();
 
-        $request = new Payout(new \stdClass());
+        $request = new Payout(new stdClass());
 
         $this->assertFalse($action->supports($request));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new PayoutAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testShouldSetStatusPendingIfPayoutNotSet()

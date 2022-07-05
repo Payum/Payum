@@ -2,7 +2,9 @@
 
 namespace Payum\Core\Tests\Action;
 
+use ArrayAccess;
 use Exception;
+use Iterator;
 use function iterator_to_array;
 use Payum\Core\Action\PayoutPayoutAction;
 use Payum\Core\GatewayAwareInterface;
@@ -13,6 +15,7 @@ use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Request\Payout;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
+use ReflectionClass;
 
 class PayoutPayoutActionTest extends GenericActionTest
 {
@@ -20,7 +23,7 @@ class PayoutPayoutActionTest extends GenericActionTest
 
     protected $actionClass = PayoutPayoutAction::class;
 
-    public function provideSupportedRequests(): \Iterator
+    public function provideSupportedRequests(): Iterator
     {
         $payout = new $this->requestClass($this->createMock(TokenInterface::class));
         $payout->setModel($this->createMock(PayoutInterface::class));
@@ -30,7 +33,7 @@ class PayoutPayoutActionTest extends GenericActionTest
 
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass($this->actionClass);
+        $rc = new ReflectionClass($this->actionClass);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
@@ -66,7 +69,7 @@ class PayoutPayoutActionTest extends GenericActionTest
         $action->execute($payout = new Payout($payoutModel));
 
         $this->assertSame($payoutModel, $payout->getFirstModel());
-        $this->assertInstanceOf(\ArrayAccess::class, $payout->getModel());
+        $this->assertInstanceOf(ArrayAccess::class, $payout->getModel());
         $this->assertNull($payout->getToken());
     }
 
@@ -100,7 +103,7 @@ class PayoutPayoutActionTest extends GenericActionTest
         $action->execute($payout = new Payout($payoutModel));
 
         $this->assertSame($payoutModel, $payout->getFirstModel());
-        $this->assertInstanceOf(\ArrayAccess::class, $payout->getModel());
+        $this->assertInstanceOf(ArrayAccess::class, $payout->getModel());
 
         $details = $payoutModel->getDetails();
         $this->assertNotEmpty($details);
@@ -143,7 +146,7 @@ class PayoutPayoutActionTest extends GenericActionTest
         $action->execute($payout);
 
         $this->assertSame($payoutModel, $payout->getFirstModel());
-        $this->assertInstanceOf(\ArrayAccess::class, $payout->getModel());
+        $this->assertInstanceOf(ArrayAccess::class, $payout->getModel());
         $this->assertSame($token, $payout->getToken());
     }
 
@@ -170,7 +173,7 @@ class PayoutPayoutActionTest extends GenericActionTest
                 $this->returnCallback(function (Payout $request) use ($testCase, $expectedDetails) {
                     $details = $request->getModel();
 
-                    $testCase->assertInstanceOf(\ArrayAccess::class, $details);
+                    $testCase->assertInstanceOf(ArrayAccess::class, $details);
                     $testCase->assertEquals($expectedDetails, iterator_to_array($details));
 
                     $details['bar'] = 'barVal';
@@ -184,7 +187,7 @@ class PayoutPayoutActionTest extends GenericActionTest
         $action->execute($payout = new Payout($payoutModel));
 
         $this->assertSame($payoutModel, $payout->getFirstModel());
-        $this->assertInstanceOf(\ArrayAccess::class, $payout->getModel());
+        $this->assertInstanceOf(ArrayAccess::class, $payout->getModel());
         $this->assertEquals([
             'foo' => 'fooVal',
             'bar' => 'barVal',
@@ -220,7 +223,7 @@ class PayoutPayoutActionTest extends GenericActionTest
         $action->execute($payout = new Payout($payoutModel));
 
         $this->assertSame($payoutModel, $payout->getFirstModel());
-        $this->assertInstanceOf(\ArrayAccess::class, $payout->getModel());
+        $this->assertInstanceOf(ArrayAccess::class, $payout->getModel());
         $this->assertEquals([
             'foo' => 'fooVal',
             'bar' => 'barVal',

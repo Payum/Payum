@@ -3,6 +3,7 @@
 namespace Payum\Core\Tests\Bridge\Twig;
 
 use Payum\Core\Bridge\Twig\TwigFactory;
+use Payum\Core\Gateway;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 
@@ -17,7 +18,7 @@ class TwigFactoryTest extends TestCase
 
     public function testShouldGuessCorrectCorePathByGatewayClass()
     {
-        $path = TwigFactory::guessViewsPath(\Payum\Core\Gateway::class);
+        $path = TwigFactory::guessViewsPath(Gateway::class);
 
         $this->assertFileExists($path);
         $this->assertStringEndsWith('Payum/Core/Resources/views', $path);

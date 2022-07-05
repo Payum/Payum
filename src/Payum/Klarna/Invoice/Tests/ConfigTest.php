@@ -2,6 +2,10 @@
 
 namespace Payum\Klarna\Invoice\Tests;
 
+use Klarna;
+use KlarnaCountry;
+use KlarnaCurrency;
+use KlarnaLanguage;
 use Payum\Klarna\Invoice\Config;
 use PHPUnit\Framework\TestCase;
 
@@ -11,11 +15,11 @@ class ConfigTest extends TestCase
     {
         $config = new Config();
 
-        $this->assertSame(\KlarnaCountry::SE, $config->country);
-        $this->assertSame(\KlarnaLanguage::SV, $config->language);
-        $this->assertSame(\KlarnaCurrency::SEK, $config->currency);
-        $this->assertSame(\Klarna::BETA, $config->mode);
-        $this->assertSame(\Klarna::BETA, $config->mode);
+        $this->assertSame(KlarnaCountry::SE, $config->country);
+        $this->assertSame(KlarnaLanguage::SV, $config->language);
+        $this->assertSame(KlarnaCurrency::SEK, $config->currency);
+        $this->assertSame(Klarna::BETA, $config->mode);
+        $this->assertSame(Klarna::BETA, $config->mode);
         $this->assertSame('json', $config->pClassStorage);
         $this->assertSame('./pclasses.json', $config->pClassStoragePath);
     }

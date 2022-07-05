@@ -5,12 +5,13 @@ namespace Payum\Core\Tests\Model;
 use Payum\Core\Model\BankAccount;
 use Payum\Core\Model\BankAccountInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class BankAccountTest extends TestCase
 {
     public function testShouldExtendBankAccountInterface()
     {
-        $rc = new \ReflectionClass(BankAccount::class);
+        $rc = new ReflectionClass(BankAccount::class);
 
         $this->assertTrue($rc->implementsInterface(BankAccountInterface::class));
     }

@@ -2,6 +2,7 @@
 
 namespace Payum\Core\Model;
 
+use DateTime;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Security\SensitiveValue;
 use Payum\Core\Security\Util\Mask;
@@ -65,7 +66,7 @@ class CreditCard implements CreditCardInterface
     protected $securedSecurityCode;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     protected $expireAt;
 
@@ -174,7 +175,7 @@ class CreditCard implements CreditCardInterface
     {
         $date = SensitiveValue::ensureSensitive($date);
 
-        if (false == (null === $date->peek() || $date->peek() instanceof \DateTime)) {
+        if (false == (null === $date->peek() || $date->peek() instanceof DateTime)) {
             throw new InvalidArgumentException('The date argument must be either instance of DateTime or null');
         }
 

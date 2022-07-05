@@ -2,6 +2,8 @@
 
 namespace Payum\AuthorizeNet\Aim\Action;
 
+use ArrayAccess;
+use AuthorizeNetAIM_Response;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -24,25 +26,25 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (\AuthorizeNetAIM_Response::APPROVED == $model['response_code']) {
+        if (AuthorizeNetAIM_Response::APPROVED == $model['response_code']) {
             $request->markCaptured();
 
             return;
         }
 
-        if (\AuthorizeNetAIM_Response::DECLINED == $model['response_code']) {
+        if (AuthorizeNetAIM_Response::DECLINED == $model['response_code']) {
             $request->markCanceled();
 
             return;
         }
 
-        if (\AuthorizeNetAIM_Response::ERROR == $model['response_code']) {
+        if (AuthorizeNetAIM_Response::ERROR == $model['response_code']) {
             $request->markFailed();
 
             return;
         }
 
-        if (\AuthorizeNetAIM_Response::HELD == $model['response_code']) {
+        if (AuthorizeNetAIM_Response::HELD == $model['response_code']) {
             $request->markPending();
 
             return;
@@ -54,7 +56,7 @@ class StatusAction implements ActionInterface
     public function supports($request)
     {
         return $request instanceof GetStatusInterface &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

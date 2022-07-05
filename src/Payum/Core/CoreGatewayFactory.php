@@ -2,6 +2,7 @@
 
 namespace Payum\Core;
 
+use GuzzleHttp\Psr7\Request;
 use Http\Adapter\Buzz\Client as HttpBuzzClient;
 use Http\Adapter\Guzzle5\Client as HttpGuzzle5Client;
 use Http\Adapter\Guzzle6\Client as HttpGuzzle6Client;
@@ -15,6 +16,7 @@ use Http\Message\MessageFactory\DiactorosMessageFactory;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Http\Message\StreamFactory\DiactorosStreamFactory;
 use Http\Message\StreamFactory\GuzzleStreamFactory;
+use LogicException;
 use Nyholm\Psr7\Factory\HttplugFactory;
 use Payum\Core\Action\AuthorizePaymentAction;
 use Payum\Core\Action\CapturePaymentAction;
@@ -71,7 +73,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                     return MessageFactoryDiscovery::find();
                 }
 
-                if (class_exists(\GuzzleHttp\Psr7\Request::class)) {
+                if (class_exists(Request::class)) {
                     return new GuzzleMessageFactory();
                 }
 
@@ -83,14 +85,14 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                     return new HttplugFactory();
                 }
 
-                throw new \LogicException('The httplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
+                throw new LogicException('The httplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
             },
             'httplug.stream_factory' => function (ArrayObject $config) {
                 if (class_exists(StreamFactoryDiscovery::class)) {
                     return StreamFactoryDiscovery::find();
                 }
 
-                if (class_exists(\GuzzleHttp\Psr7\Request::class)) {
+                if (class_exists(Request::class)) {
                     return new GuzzleStreamFactory();
                 }
 
@@ -102,7 +104,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                     return new HttplugFactory();
                 }
 
-                throw new \LogicException('The httplug.stream_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
+                throw new LogicException('The httplug.stream_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
             },
             'httplug.client' => function (ArrayObject $config) {
                 if (class_exists(HttpClientDiscovery::class)) {
@@ -137,7 +139,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                     return new HttpBuzzClient();
                 }
 
-                throw new \LogicException('The httplug.client could not be guessed. Install one of the following packages: php-http/guzzle7-adapter, php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
+                throw new LogicException('The httplug.client could not be guessed. Install one of the following packages: php-http/guzzle7-adapter, php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
             },
             'payum.http_client' => function (ArrayObject $config) {
                 return new HttplugClient($config['httplug.client']);
@@ -150,7 +152,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
             'twig.register_paths' => function (ArrayObject $config) {
                 $twig = $config['twig.env'];
                 if (false == $twig instanceof Environment) {
-                    throw new \LogicException(sprintf(
+                    throw new LogicException(sprintf(
                         'The `twig.env config option must contains instance of Twig\Environment but got %s`',
                         is_object($twig) ? get_class($twig) : gettype($twig)
                     ));

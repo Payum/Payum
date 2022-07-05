@@ -2,13 +2,16 @@
 
 namespace Payum\Core\Tests\Action;
 
+use Iterator;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\GetTokenAction;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetToken;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Tests\GenericActionTest;
+use stdClass;
 
 class GetTokenActionTest extends GenericActionTest
 {
@@ -26,16 +29,16 @@ class GetTokenActionTest extends GenericActionTest
         $this->action = new $this->actionClass($this->createMock(StorageInterface::class));
     }
 
-    public function provideSupportedRequests(): \Iterator
+    public function provideSupportedRequests(): Iterator
     {
         yield [new $this->requestClass('aHash')];
     }
 
-    public function provideNotSupportedRequests(): \Iterator
+    public function provideNotSupportedRequests(): Iterator
     {
         yield ['foo'];
         yield [['foo']];
-        yield [new \stdClass()];
+        yield [new stdClass()];
         yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
@@ -63,7 +66,7 @@ class GetTokenActionTest extends GenericActionTest
 
     public function testThrowIfTokenNotFound()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The token theHash could not be found');
         $hash = 'theHash';
 

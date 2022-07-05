@@ -13,7 +13,7 @@ use Payum\Sofort\Api;
 abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
 {
     /**
-     * @var \Payum\Sofort\Api
+     * @var Api
      */
     protected $api;
 

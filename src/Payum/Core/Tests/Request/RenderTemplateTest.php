@@ -2,6 +2,8 @@
 
 namespace Payum\Core\Tests\Request;
 
+use InvalidArgumentException;
+use Iterator;
 use Payum\Core\Request\RenderTemplate;
 use PHPUnit\Framework\TestCase;
 
@@ -36,7 +38,7 @@ class RenderTemplateTest extends TestCase
         $this->assertSame('theResult', $request->getResult());
     }
 
-    public function provideParameters(): \Iterator
+    public function provideParameters(): Iterator
     {
         yield ['foo', 'fooVal'];
         yield ['bar', 'barVal'];
@@ -93,7 +95,7 @@ class RenderTemplateTest extends TestCase
 
     public function testShouldThrowExceptionIfParameterExistsOnAddParameter()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $request = new RenderTemplate('aTemplate', []);
 
         $request->addParameter('foo', 'fooVal');

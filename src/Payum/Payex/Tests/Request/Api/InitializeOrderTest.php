@@ -2,12 +2,17 @@
 
 namespace Payum\Payex\Tests\Request\Api;
 
-class InitializeOrderTest extends \PHPUnit\Framework\TestCase
+use Payum\Core\Request\Generic;
+use Payum\Payex\Request\Api\InitializeOrder;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+
+class InitializeOrderTest extends TestCase
 {
     public function testShouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass(\Payum\Payex\Request\Api\InitializeOrder::class);
+        $rc = new ReflectionClass(InitializeOrder::class);
 
-        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Request\Generic::class));
+        $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 }

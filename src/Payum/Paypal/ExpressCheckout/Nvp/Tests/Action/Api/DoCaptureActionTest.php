@@ -2,34 +2,41 @@
 
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
+use ArrayObject;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoCaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoCapture;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
+class DoCaptureActionTest extends TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(DoCaptureAction::class);
+        $rc = new ReflectionClass(DoCaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldImplementApoAwareInterface()
     {
-        $rc = new \ReflectionClass(DoCaptureAction::class);
+        $rc = new ReflectionClass(DoCaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
     public function testShouldImplementsGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass(DoCaptureAction::class);
+        $rc = new ReflectionClass(DoCaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
@@ -38,27 +45,27 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new DoCaptureAction();
 
-        $this->assertTrue($action->supports(new DoCapture(new \ArrayObject(), 0)));
+        $this->assertTrue($action->supports(new DoCapture(new ArrayObject(), 0)));
     }
 
     public function testShouldNotSupportAnythingNotDoCaptureRequest()
     {
         $action = new DoCaptureAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new DoCaptureAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testThrowIfTransactionIdNorAuthorizationIdNotSetInModel()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The AMT, COMPLETETYPE, AUTHORIZATIONID fields are required.');
         $action = new DoCaptureAction();
 
@@ -67,7 +74,7 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
 
     public function testThrowIfCompleteTypeNotSet()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The COMPLETETYPE fields are required.');
         $action = new DoCaptureAction();
 
@@ -81,7 +88,7 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
 
     public function testThrowIfAmtNotSet()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The AMT fields are required.');
         $action = new DoCaptureAction();
 
@@ -181,7 +188,7 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|Api
+     * @return MockObject|Api
      */
     protected function createApiMock()
     {
@@ -189,7 +196,7 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

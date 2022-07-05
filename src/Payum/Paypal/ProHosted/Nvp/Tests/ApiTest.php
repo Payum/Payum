@@ -3,17 +3,22 @@
 namespace Payum\Paypal\ProHosted\Nvp\Tests;
 
 use GuzzleHttp\Psr7\Response;
+use Http\Message\MessageFactory;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
+use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RuntimeException;
 use Payum\Core\HttpClientInterface;
 use Payum\Paypal\ProHosted\Nvp\Api;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 
-class ApiTest extends \PHPUnit\Framework\TestCase
+class ApiTest extends TestCase
 {
     public function testThrowIfSandboxOptionNotSetInConstructor()
     {
-        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
         new Api([
             'username' => 'a_username',
@@ -157,7 +162,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
     public function testThrowIfReturnUrlNeitherSetToFormRequestNorToOptions()
     {
-        $this->expectException(\Payum\Core\Exception\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The return must be set either to FormRequest or to options.');
         $api = new Api([
             'username' => 'a_username',
@@ -172,7 +177,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
     public function testThrowIfRequiredOptionsNotSetInConstructor()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The username, password, signature fields are required.');
         new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
@@ -182,11 +187,11 @@ class ApiTest extends \PHPUnit\Framework\TestCase
      */
     protected function createHttpClientMock()
     {
-        return $this->createMock(\Payum\Core\HttpClientInterface::class);
+        return $this->createMock(HttpClientInterface::class);
     }
 
     /**
-     * @return \Http\Message\MessageFactory
+     * @return MessageFactory
      */
     protected function createHttpMessageFactory()
     {

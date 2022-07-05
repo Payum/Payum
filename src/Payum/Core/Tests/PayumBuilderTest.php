@@ -2,12 +2,14 @@
 
 namespace Payum\Core\Tests;
 
+use LogicException;
 use Omnipay\Dummy\Gateway as OmnipayGateway;
 use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
 use Payum\Be2Bill\Be2BillDirectGatewayFactory;
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\CoreGatewayFactory;
+use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Gateway;
 use Payum\Core\GatewayFactory;
@@ -38,6 +40,8 @@ use Payum\Stripe\StripeCheckoutGatewayFactory;
 use Payum\Stripe\StripeJsGatewayFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
+use stdClass;
 
 class PayumBuilderTest extends TestCase
 {
@@ -50,7 +54,7 @@ class PayumBuilderTest extends TestCase
 
     public function testThrowsIfTokenStorageIsNotSet()
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Token storage must be configured.');
         $payum = (new PayumBuilder())->getPayum();
 
@@ -157,12 +161,12 @@ class PayumBuilderTest extends TestCase
 
     public function testThrowsIfHttpRequestVerifierBuilderReturnsInvalidInstance()
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Builder returned invalid instance');
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
             ->setHttpRequestVerifier(function () {
-                return new \stdClass();
+                return new stdClass();
             })
             ->getPayum()
         ;
@@ -230,7 +234,7 @@ class PayumBuilderTest extends TestCase
         $this->assertInstanceOf(Payum::class, $payum);
 
         $genericTokenFactory = $payum->getTokenFactory();
-        $ref = new \ReflectionProperty($genericTokenFactory, 'paths');
+        $ref = new ReflectionProperty($genericTokenFactory, 'paths');
         $ref->setAccessible(true);
 
         $this->assertSame($expectedPaths, $ref->getValue($genericTokenFactory));
@@ -238,12 +242,12 @@ class PayumBuilderTest extends TestCase
 
     public function testThrowsIfGenericTokenFactoryBuilderReturnInvalidInstance()
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Builder returned invalid instance');
         (new PayumBuilder())
             ->addDefaultStorages()
             ->setGenericTokenFactory(function () {
-                return new \stdClass();
+                return new stdClass();
             })
             ->getPayum()
         ;
@@ -263,7 +267,7 @@ class PayumBuilderTest extends TestCase
         $this->assertInstanceOf(Payum::class, $payum);
 
         $genericTokenFactory = $payum->getTokenFactory();
-        $ref = new \ReflectionProperty($genericTokenFactory, 'tokenFactory');
+        $ref = new ReflectionProperty($genericTokenFactory, 'tokenFactory');
         $ref->setAccessible(true);
 
         $this->assertSame($expectedTokenFactory, $ref->getValue($genericTokenFactory));
@@ -286,7 +290,7 @@ class PayumBuilderTest extends TestCase
         ;
 
         $genericTokenFactory = $payum->getTokenFactory();
-        $ref = new \ReflectionProperty($genericTokenFactory, 'tokenFactory');
+        $ref = new ReflectionProperty($genericTokenFactory, 'tokenFactory');
         $ref->setAccessible(true);
 
         $this->assertInstanceOf(Payum::class, $payum);
@@ -295,12 +299,12 @@ class PayumBuilderTest extends TestCase
 
     public function testThrowsIfTokenFactoryBuilderReturnInvalidInstance()
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Builder returned invalid instance');
         (new PayumBuilder())
             ->addDefaultStorages()
             ->setTokenFactory(function () {
-                return new \stdClass();
+                return new stdClass();
             })
             ->getPayum()
         ;
@@ -336,7 +340,7 @@ class PayumBuilderTest extends TestCase
 
     public function testThrowIfTryToAddGatewayConfigWithoutFactoryKeySet()
     {
-        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Gateway config must have factory set in it and it must not be empty.');
         (new PayumBuilder())
             ->addDefaultStorages()
@@ -479,7 +483,7 @@ class PayumBuilderTest extends TestCase
 
         $this->assertInstanceOf(OfflineGatewayFactory::class, $gatewayFactory);
 
-        $ref = new \ReflectionProperty($gatewayFactory, 'coreGatewayFactory');
+        $ref = new ReflectionProperty($gatewayFactory, 'coreGatewayFactory');
         $ref->setAccessible(true);
 
         $this->assertSame($expectedCoreGatewayFactory, $ref->getValue($gatewayFactory));
@@ -504,7 +508,7 @@ class PayumBuilderTest extends TestCase
 
         $this->assertInstanceOf(OfflineGatewayFactory::class, $gatewayFactory);
 
-        $ref = new \ReflectionProperty($gatewayFactory, 'coreGatewayFactory');
+        $ref = new ReflectionProperty($gatewayFactory, 'coreGatewayFactory');
         $ref->setAccessible(true);
 
         $this->assertSame($expectedCoreGatewayFactory, $ref->getValue($gatewayFactory));
@@ -523,7 +527,7 @@ class PayumBuilderTest extends TestCase
                 $this->assertArrayHasKey('payum.extension.storage_payum_core_tests_testmodel', $config, var_export($config, true));
                 $this->assertInstanceOf(StorageExtension::class, $config['payum.extension.storage_payum_core_tests_testmodel']);
 
-                $ref = new \ReflectionProperty($config['payum.extension.storage_payum_core_tests_testmodel'], 'storage');
+                $ref = new ReflectionProperty($config['payum.extension.storage_payum_core_tests_testmodel'], 'storage');
                 $ref->setAccessible(true);
 
                 $this->assertSame($expectedStorage, $ref->getValue($config['payum.extension.storage_payum_core_tests_testmodel']));
@@ -542,7 +546,7 @@ class PayumBuilderTest extends TestCase
         $this->assertArrayHasKey('payum.extension.storage_payum_core_tests_testmodel', $config, var_export($config, true));
         $this->assertInstanceOf(StorageExtension::class, $config['payum.extension.storage_payum_core_tests_testmodel']);
 
-        $ref = new \ReflectionProperty($config['payum.extension.storage_payum_core_tests_testmodel'], 'storage');
+        $ref = new ReflectionProperty($config['payum.extension.storage_payum_core_tests_testmodel'], 'storage');
         $ref->setAccessible(true);
 
         $this->assertSame($expectedStorage, $ref->getValue($config['payum.extension.storage_payum_core_tests_testmodel']));
@@ -571,14 +575,14 @@ class PayumBuilderTest extends TestCase
 
     public function testThrowsIfCoreGatewayFactoryBuilderReturnInvalidInstance()
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Builder returned invalid instance');
         $expectedCoreGateway = $this->createMock(GatewayFactoryInterface::class);
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
             ->setCoreGatewayFactory(function () {
-                return new \stdClass();
+                return new stdClass();
             })
             ->getPayum()
         ;
@@ -587,7 +591,7 @@ class PayumBuilderTest extends TestCase
 
         $this->assertInstanceOf(OfflineGatewayFactory::class, $gatewayFactory);
 
-        $ref = new \ReflectionProperty($gatewayFactory, 'coreGatewayFactory');
+        $ref = new ReflectionProperty($gatewayFactory, 'coreGatewayFactory');
         $ref->setAccessible(true);
 
         $this->assertSame($expectedCoreGateway, $ref->getValue($gatewayFactory));
@@ -630,7 +634,7 @@ class PayumBuilderTest extends TestCase
 
         $this->assertInstanceOf(OmnipayGatewayFactory::class, $gatewayFactory);
 
-        $ref = new \ReflectionProperty($gatewayFactory, 'coreGatewayFactory');
+        $ref = new ReflectionProperty($gatewayFactory, 'coreGatewayFactory');
         $ref->setAccessible(true);
 
         $this->assertSame($expectedCoreGatewayFactory, $ref->getValue($gatewayFactory));
@@ -655,7 +659,7 @@ class PayumBuilderTest extends TestCase
             'type' => 'dummy',
         ]);
 
-        $ref = new \ReflectionProperty($gateway, 'apis');
+        $ref = new ReflectionProperty($gateway, 'apis');
         $ref->setAccessible(true);
         $apis = $ref->getValue($gateway);
 
@@ -690,7 +694,7 @@ class PayumBuilderTest extends TestCase
             'foo' => 'fooVal',
             'bar' => 'barVal',
         ]);
-        $ref = new \ReflectionProperty($payumBuilder, 'coreGatewayFactoryConfig');
+        $ref = new ReflectionProperty($payumBuilder, 'coreGatewayFactoryConfig');
         $ref->setAccessible(true);
 
         $this->assertSame([
@@ -719,7 +723,7 @@ class PayumBuilderTest extends TestCase
             'foo' => 'fooVal',
             'bar' => 'barVal',
         ]);
-        $ref = new \ReflectionProperty($payumBuilder, 'gatewayConfigs');
+        $ref = new ReflectionProperty($payumBuilder, 'gatewayConfigs');
         $ref->setAccessible(true);
 
         $this->assertSame([
@@ -755,7 +759,7 @@ class PayumBuilderTest extends TestCase
             'foo' => 'fooVal',
             'bar' => 'barVal',
         ]);
-        $ref = new \ReflectionProperty($payumBuilder, 'gatewayFactoryConfigs');
+        $ref = new ReflectionProperty($payumBuilder, 'gatewayFactoryConfigs');
         $ref->setAccessible(true);
 
         $this->assertSame([
@@ -816,7 +820,7 @@ class PayumBuilderTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|GenericTokenFactoryInterface
+     * @return MockObject|GenericTokenFactoryInterface
      */
     protected function createGenericTokenFactoryMock()
     {

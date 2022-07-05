@@ -2,6 +2,7 @@
 
 namespace Payum\Payex\Tests\Action;
 
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Capture;
@@ -10,12 +11,16 @@ use Payum\Payex\Action\PaymentDetailsCaptureAction;
 use Payum\Payex\Request\Api\CompleteOrder;
 use Payum\Payex\Request\Api\InitializeOrder;
 use Payum\Payex\Request\Api\StartRecurringPayment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
+class PaymentDetailsCaptureActionTest extends TestCase
 {
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass(PaymentDetailsCaptureAction::class);
+        $rc = new ReflectionClass(PaymentDetailsCaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
@@ -59,22 +64,22 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsCaptureAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testShouldNotSupportCaptureWithNotArrayAccessModel()
     {
         $action = new PaymentDetailsCaptureAction();
 
-        $this->assertFalse($action->supports(new Capture(new \stdClass())));
+        $this->assertFalse($action->supports(new Capture(new stdClass())));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new PaymentDetailsCaptureAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testShouldDoSubExecuteInitializeOrderApiRequestIfOrderRefNotSet()
@@ -171,7 +176,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

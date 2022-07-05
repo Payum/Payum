@@ -5,6 +5,7 @@ namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Document;
 use Payum\Core\Model\Identity;
 use Payum\Core\Tests\Functional\Bridge\Doctrine\MongoTest;
 use Payum\Core\Tests\Mocks\Document\Token;
+use stdClass;
 
 class TokenTest extends MongoTest
 {
@@ -26,7 +27,7 @@ class TokenTest extends MongoTest
         $token->setTargetUrl('anUrl');
         $token->setGatewayName('aName');
         $token->setAfterUrl('anAfterUrl');
-        $token->setDetails(new Identity('anId', \stdClass::class));
+        $token->setDetails(new Identity('anId', stdClass::class));
 
         $this->dm->persist($token);
         $this->dm->flush();

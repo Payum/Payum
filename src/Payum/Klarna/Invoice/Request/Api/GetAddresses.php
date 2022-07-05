@@ -2,6 +2,8 @@
 
 namespace Payum\Klarna\Invoice\Request\Api;
 
+use KlarnaAddr;
+
 class GetAddresses
 {
     /**
@@ -10,7 +12,7 @@ class GetAddresses
     protected $pno;
 
     /**
-     * @var \KlarnaAddr[]
+     * @var KlarnaAddr[]
      */
     protected $addresses;
 
@@ -31,13 +33,13 @@ class GetAddresses
         return $this->pno;
     }
 
-    public function addAddress(\KlarnaAddr $address)
+    public function addAddress(KlarnaAddr $address)
     {
         $this->addresses[] = $address;
     }
 
     /**
-     * @return \KlarnaAddr[]
+     * @return KlarnaAddr[]
      */
     public function getAddresses()
     {
@@ -45,7 +47,7 @@ class GetAddresses
     }
 
     /**
-     * @return \KlarnaAddr|null
+     * @return KlarnaAddr|null
      */
     public function getFirstAddress()
     {

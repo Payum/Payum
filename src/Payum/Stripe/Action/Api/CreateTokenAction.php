@@ -2,6 +2,7 @@
 
 namespace Payum\Stripe\Action\Api;
 
+use ArrayAccess;
 use Composer\InstalledVersions;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
@@ -13,7 +14,7 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Stripe\Constants;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateToken;
-use Stripe\Exception;
+use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
 use Stripe\Token;
 
@@ -65,7 +66,7 @@ class CreateTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
             $token = Token::create($model->toUnsafeArrayWithoutLocal());
 
             $model->replace($token->toArray(true));
-        } catch (Exception\ApiErrorException $e) {
+        } catch (ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }
@@ -73,7 +74,7 @@ class CreateTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
     public function supports($request)
     {
         return $request instanceof CreateToken &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

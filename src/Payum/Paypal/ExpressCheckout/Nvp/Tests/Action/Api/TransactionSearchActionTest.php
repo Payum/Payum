@@ -2,23 +2,30 @@
 
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\LogicException;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\TransactionSearchAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\TransactionSearch;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class TransactionSearchActionTest extends \PHPUnit\Framework\TestCase
+class TransactionSearchActionTest extends TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(TransactionSearchAction::class);
+        $rc = new ReflectionClass(TransactionSearchAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass(TransactionSearchAction::class);
+        $rc = new ReflectionClass(TransactionSearchAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
@@ -27,19 +34,19 @@ class TransactionSearchActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new TransactionSearchAction();
 
-        $this->assertTrue($action->supports(new TransactionSearch($this->createMock(\ArrayAccess::class))));
+        $this->assertTrue($action->supports(new TransactionSearch($this->createMock(ArrayAccess::class))));
     }
 
     public function testShouldNotSupportAnythingNotAuthorizeTokenRequest()
     {
         $action = new TransactionSearchAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testThrowIfRequiredFieldMissing()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The STARTDATE fields are required.');
         $action = new TransactionSearchAction();
 
@@ -169,10 +176,10 @@ class TransactionSearchActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Paypal\ExpressCheckout\Nvp\Api
+     * @return MockObject|Api
      */
     protected function createApiMock()
     {
-        return $this->createMock(\Payum\Paypal\ExpressCheckout\Nvp\Api::class, [], [], '', false);
+        return $this->createMock(Api::class, [], [], '', false);
     }
 }

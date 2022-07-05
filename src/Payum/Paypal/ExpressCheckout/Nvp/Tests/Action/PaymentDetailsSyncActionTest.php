@@ -2,6 +2,8 @@
 
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
+use ArrayObject;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Sync;
@@ -9,12 +11,16 @@ use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetails;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
+class PaymentDetailsSyncActionTest extends TestCase
 {
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass(PaymentDetailsSyncAction::class);
+        $rc = new ReflectionClass(PaymentDetailsSyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
@@ -49,15 +55,15 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsSyncAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new PaymentDetailsSyncAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testShouldDoNothingIfTokenNotSet()
@@ -95,7 +101,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $action = new PaymentDetailsSyncAction();
         $action->setGateway($gatewayMock);
 
-        $details = new \ArrayObject([
+        $details = new ArrayObject([
             'PAYMENTREQUEST_0_AMT' => 11,
             'TOKEN' => 'aToken',
         ]);
@@ -127,7 +133,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $action = new PaymentDetailsSyncAction();
         $action->setGateway($gatewayMock);
 
-        $details = new \ArrayObject([
+        $details = new ArrayObject([
             'PAYMENTREQUEST_0_AMT' => 11,
             'TOKEN' => 'aToken',
         ]);
@@ -166,7 +172,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $action = new PaymentDetailsSyncAction();
         $action->setGateway($gatewayMock);
 
-        $details = new \ArrayObject([
+        $details = new ArrayObject([
             'PAYMENTREQUEST_0_AMT' => 12,
             'TOKEN' => 'aToken',
             'PAYMENTREQUEST_0_TRANSACTIONID' => 'zeroTransId',
@@ -183,7 +189,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Core\GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

@@ -9,7 +9,7 @@ use Payum\Core\Storage\StorageInterface;
 class StorageExtension implements ExtensionInterface
 {
     /**
-     * @var \Payum\Core\Storage\StorageInterface
+     * @var StorageInterface
      */
     protected $storage;
 

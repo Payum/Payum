@@ -28,7 +28,7 @@ class RenderTemplateAction implements ActionInterface
     /**
      * @param mixed $request
      *
-     * @throws \Payum\Core\Exception\RequestNotSupportedException if the action dose not support the request.
+     * @throws RequestNotSupportedException if the action dose not support the request.
      */
     public function execute($request)
     {

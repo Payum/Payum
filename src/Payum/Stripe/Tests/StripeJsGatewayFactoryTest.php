@@ -2,6 +2,7 @@
 
 namespace Payum\Stripe\Tests;
 
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Tests\AbstractGatewayFactoryTest;
 use Payum\Stripe\StripeJsGatewayFactory;
 
@@ -57,7 +58,7 @@ class StripeJsGatewayFactoryTest extends AbstractGatewayFactoryTest
 
     public function testShouldThrowIfRequiredOptionsNotPassed()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The publishable_key, secret_key fields are required.');
         $factory = new StripeJsGatewayFactory();
 

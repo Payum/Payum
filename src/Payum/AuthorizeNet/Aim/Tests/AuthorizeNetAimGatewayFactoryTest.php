@@ -3,6 +3,7 @@
 namespace Payum\AuthorizeNet\Aim\Tests;
 
 use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Tests\AbstractGatewayFactoryTest;
 
 class AuthorizeNetAimGatewayFactoryTest extends AbstractGatewayFactoryTest
@@ -58,7 +59,7 @@ class AuthorizeNetAimGatewayFactoryTest extends AbstractGatewayFactoryTest
 
     public function testShouldThrowIfRequiredOptionsNotPassed()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The login_id, transaction_key fields are required.');
         $factory = new AuthorizeNetAimGatewayFactory();
 

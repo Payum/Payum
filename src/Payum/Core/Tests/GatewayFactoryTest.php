@@ -2,15 +2,18 @@
 
 namespace Payum\Core\Tests;
 
+use Payum\Core\Gateway;
 use Payum\Core\GatewayFactory;
+use Payum\Core\GatewayFactoryInterface;
+use ReflectionClass;
 
 class GatewayFactoryTest extends TestCase
 {
     public function testShouldImplementGatewayFactoryInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Core\GatewayFactory::class);
+        $rc = new ReflectionClass(GatewayFactory::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\GatewayFactoryInterface::class));
+        $this->assertTrue($rc->implementsInterface(GatewayFactoryInterface::class));
     }
 
     public function testShouldAllowCreateGateway()
@@ -19,7 +22,7 @@ class GatewayFactoryTest extends TestCase
 
         $gateway = $factory->create([]);
 
-        $this->assertInstanceOf(\Payum\Core\Gateway::class, $gateway);
+        $this->assertInstanceOf(Gateway::class, $gateway);
     }
 
     public function testShouldAllowCreateGatewayConfig()

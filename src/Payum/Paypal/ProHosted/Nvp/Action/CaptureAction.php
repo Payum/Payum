@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\ProHosted\Nvp\Action;
 
+use ArrayAccess;
 use League\Uri\Http as HttpUri;
 use League\Uri\UriModifier;
 use Payum\Core\Action\ActionInterface;
@@ -64,6 +65,6 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
 
     public function supports($request)
     {
-        return $request instanceof Capture && $request->getModel() instanceof \ArrayAccess;
+        return $request instanceof Capture && $request->getModel() instanceof ArrayAccess;
     }
 }

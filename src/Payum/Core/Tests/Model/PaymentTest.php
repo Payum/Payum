@@ -9,26 +9,27 @@ use Payum\Core\Model\DirectDebitPaymentInterface;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class PaymentTest extends TestCase
 {
     public function testShouldImplementsPaymentInterface()
     {
-        $rc = new \ReflectionClass(Payment::class);
+        $rc = new ReflectionClass(Payment::class);
 
         $this->assertTrue($rc->implementsInterface(PaymentInterface::class));
     }
 
     public function testShouldImplementsCreditCardPaymentInterface()
     {
-        $rc = new \ReflectionClass(Payment::class);
+        $rc = new ReflectionClass(Payment::class);
 
         $this->assertTrue($rc->implementsInterface(CreditCardPaymentInterface::class));
     }
 
     public function testShouldImplementsDirectDebitPaymentInterface()
     {
-        $rc = new \ReflectionClass(Payment::class);
+        $rc = new ReflectionClass(Payment::class);
 
         $this->assertTrue($rc->implementsInterface(DirectDebitPaymentInterface::class));
     }

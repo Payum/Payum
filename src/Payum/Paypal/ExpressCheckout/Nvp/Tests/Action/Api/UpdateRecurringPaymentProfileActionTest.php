@@ -2,23 +2,31 @@
 
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\UpdateRecurringPaymentProfileAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\UpdateRecurringPaymentProfile;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class UpdateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCase
+class UpdateRecurringPaymentProfileActionTest extends TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(UpdateRecurringPaymentProfileAction::class);
+        $rc = new ReflectionClass(UpdateRecurringPaymentProfileAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldImplementApoAwareInterface()
     {
-        $rc = new \ReflectionClass(UpdateRecurringPaymentProfileAction::class);
+        $rc = new ReflectionClass(UpdateRecurringPaymentProfileAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
@@ -27,27 +35,27 @@ class UpdateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
     {
         $action = new UpdateRecurringPaymentProfileAction();
 
-        $this->assertTrue($action->supports(new UpdateRecurringPaymentProfile($this->createMock(\ArrayAccess::class))));
+        $this->assertTrue($action->supports(new UpdateRecurringPaymentProfile($this->createMock(ArrayAccess::class))));
     }
 
     public function testShouldNotSupportAnythingNotUpdateRecurringPaymentProfileRequest()
     {
         $action = new UpdateRecurringPaymentProfileAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new UpdateRecurringPaymentProfileAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testThrowIfProfileIdNotSetInModel()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The PROFILEID fields are required.');
         $action = new UpdateRecurringPaymentProfileAction();
 
@@ -112,10 +120,10 @@ class UpdateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Paypal\ExpressCheckout\Nvp\Api
+     * @return MockObject|Api
      */
     protected function createApiMock()
     {
-        return $this->createMock(\Payum\Paypal\ExpressCheckout\Nvp\Api::class, [], [], '', false);
+        return $this->createMock(Api::class, [], [], '', false);
     }
 }

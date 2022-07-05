@@ -4,28 +4,33 @@ namespace Payum\Stripe\Tests\Action\Api;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Stripe\Action\Api\CreateCustomerAction;
 use Payum\Stripe\Request\Api\CreateCustomer;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class CreateCustomerActionTest extends \PHPUnit\Framework\TestCase
+class CreateCustomerActionTest extends TestCase
 {
     public function testShouldImplementsActionInterface()
     {
-        $rc = new \ReflectionClass(CreateCustomerAction::class);
+        $rc = new ReflectionClass(CreateCustomerAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
     public function testShouldImplementsApiAwareInterface()
     {
-        $rc = new \ReflectionClass(CreateCustomerAction::class);
+        $rc = new ReflectionClass(CreateCustomerAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
     public function testThrowNotSupportedApiIfNotKeysGivenAsApi()
     {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectException(UnsupportedApiException::class);
         $action = new CreateCustomerAction();
 
         $action->setApi('not keys instance');
@@ -42,22 +47,22 @@ class CreateCustomerActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new CreateCustomerAction();
 
-        $this->assertFalse($action->supports(new CreateCustomer(new \stdClass())));
+        $this->assertFalse($action->supports(new CreateCustomer(new stdClass())));
     }
 
     public function testShouldNotSupportNotCreateCustomerRequest()
     {
         $action = new CreateCustomerAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testThrowRequestNotSupportedIfNotSupportedGiven()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $this->expectExceptionMessage('Action CreateCustomerAction is not supported the request stdClass.');
         $action = new CreateCustomerAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 }

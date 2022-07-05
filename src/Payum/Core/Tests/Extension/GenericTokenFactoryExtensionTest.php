@@ -4,20 +4,23 @@ namespace Payum\Core\Tests\Extension;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Extension\Context;
+use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Extension\GenericTokenFactoryExtension;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class GenericTokenFactoryExtensionTest extends TestCase
 {
     public function testShouldImplementExtensionInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Core\Extension\GenericTokenFactoryExtension::class);
+        $rc = new ReflectionClass(GenericTokenFactoryExtension::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\Extension\ExtensionInterface::class));
+        $this->assertTrue($rc->implementsInterface(ExtensionInterface::class));
     }
 
     public function testShouldSetTokenFactoryToActionImplementsGenericTokenFactoryAwareInterface()
@@ -28,7 +31,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
 
         $action = new ActionGenericTokenFactoryAware();
 
-        $context = new Context($this->createGatewayMock(), new \stdClass(), []);
+        $context = new Context($this->createGatewayMock(), new stdClass(), []);
         $context->setAction($action);
 
         $extension->onExecute($context);
@@ -45,7 +48,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
         $action = new ActionGenericTokenFactoryAware();
         $action->tokenFactory = $tokenFactory;
 
-        $context = new Context($this->createGatewayMock(), new \stdClass(), []);
+        $context = new Context($this->createGatewayMock(), new stdClass(), []);
         $context->setAction($action);
 
         $extension->onPostExecute($context);
@@ -63,7 +66,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
 
         $action = $this->createActionMock();
 
-        $context = new Context($this->createGatewayMock(), new \stdClass(), []);
+        $context = new Context($this->createGatewayMock(), new stdClass(), []);
         $context->setAction($action);
 
         $extension->onPostExecute($context);
@@ -74,7 +77,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
      */
     protected function createActionMock()
     {
-        return $this->createMock(\Payum\Core\Action\ActionInterface::class);
+        return $this->createMock(ActionInterface::class);
     }
 
     /**
@@ -82,7 +85,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
      */
     protected function createGenericTokenFactoryMock()
     {
-        return $this->createMock(\Payum\Core\Security\GenericTokenFactoryInterface::class);
+        return $this->createMock(GenericTokenFactoryInterface::class);
     }
 
     /**
@@ -90,7 +93,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock(\Payum\Core\GatewayInterface::class);
+        return $this->createMock(GatewayInterface::class);
     }
 }
 

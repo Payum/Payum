@@ -2,7 +2,9 @@
 
 namespace Payum\Core\Registry;
 
+use Doctrine\Persistence\Proxy;
 use Payum\Core\Exception\InvalidArgumentException;
+use ReflectionClass;
 
 abstract class AbstractRegistry implements RegistryInterface
 {
@@ -34,13 +36,13 @@ abstract class AbstractRegistry implements RegistryInterface
 
         // TODO: this is a quick fix. I have to find a better\clean solution.
         if (class_exists($class)) {
-            if (interface_exists(\Doctrine\Persistence\Proxy::class)) {
-                $rc = new \ReflectionClass($class);
-                if ($rc->implementsInterface(\Doctrine\Persistence\Proxy::class)) {
+            if (interface_exists(Proxy::class)) {
+                $rc = new ReflectionClass($class);
+                if ($rc->implementsInterface(Proxy::class)) {
                     $class = $rc->getParentClass()->getName();
                 }
             } elseif (interface_exists('Doctrine\Common\Persistence\Proxy')) {
-                $rc = new \ReflectionClass($class);
+                $rc = new ReflectionClass($class);
                 if ($rc->implementsInterface(\Doctrine\Common\Persistence\Proxy::class)) {
                     $class = $rc->getParentClass()->getName();
                 }

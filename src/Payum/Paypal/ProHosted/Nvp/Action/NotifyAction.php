@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\ProHosted\Nvp\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
@@ -24,6 +25,6 @@ class NotifyAction implements ActionInterface, GatewayAwareInterface
     public function supports($request)
     {
         return $request instanceof Notify &&
-            $request->getModel() instanceof \ArrayAccess;
+            $request->getModel() instanceof ArrayAccess;
     }
 }

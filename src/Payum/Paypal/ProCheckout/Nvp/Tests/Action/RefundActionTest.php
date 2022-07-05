@@ -2,30 +2,37 @@
 
 namespace Payum\Paypal\ProCheckout\Nvp\Tests\Action;
 
+use ArrayObject;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Request\Refund;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\ProCheckout\Nvp\Action\RefundAction;
 use Payum\Paypal\ProCheckout\Nvp\Api;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
+use stdClass;
 
 class RefundActionTest extends GenericActionTest
 {
-    protected $actionClass = \Payum\Paypal\ProCheckout\Nvp\Action\RefundAction::class;
+    protected $actionClass = RefundAction::class;
 
-    protected $requestClass = \Payum\Core\Request\Refund::class;
+    protected $requestClass = Refund::class;
 
     public function testShouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Paypal\ProCheckout\Nvp\Action\RefundAction::class);
+        $rc = new ReflectionClass(RefundAction::class);
 
-        $this->assertTrue($rc->isSubclassOf(\Payum\Core\ApiAwareInterface::class));
+        $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
     public function testThrowIfUnsupportedApiGiven()
     {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectException(UnsupportedApiException::class);
         $action = new RefundAction();
 
-        $action->setApi(new \stdClass());
+        $action->setApi(new stdClass());
     }
 
     public function testShouldDoNothingIfPaymentNew()
@@ -44,7 +51,7 @@ class RefundActionTest extends GenericActionTest
 
     public function testThrowIfTransactionTypeIsNotRefundable()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('You cannot refund transaction with type notSupported. Only these types could be refunded: S, D, F');
         $apiMock = $this->createApiMock();
         $apiMock
@@ -63,7 +70,7 @@ class RefundActionTest extends GenericActionTest
 
     public function testThrowIfTransactionIdNotSet()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The PNREF fields are required.');
         $apiMock = $this->createApiMock();
         $apiMock
@@ -82,7 +89,7 @@ class RefundActionTest extends GenericActionTest
 
     public function testShouldSetPnrefAsOriginIdAndPerformCreditApiCall()
     {
-        $details = new \ArrayObject([
+        $details = new ArrayObject([
             'RESULT' => Api::RESULT_SUCCESS,
             'TRXTYPE' => Api::TRXTYPE_SALE,
             'PNREF' => 'aRef',
@@ -122,10 +129,10 @@ class RefundActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|Api
+     * @return MockObject|Api
      */
     protected function createApiMock()
     {
-        return $this->createMock(\Payum\Paypal\ProCheckout\Nvp\Api::class, [], [], '', false);
+        return $this->createMock(Api::class, [], [], '', false);
     }
 }

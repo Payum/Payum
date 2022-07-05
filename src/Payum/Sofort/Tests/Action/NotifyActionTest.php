@@ -9,6 +9,8 @@ use Payum\Core\Request\Notify;
 use Payum\Core\Request\Sync;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Sofort\Action\NotifyAction;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
 
 class NotifyActionTest extends GenericActionTest
 {
@@ -18,7 +20,7 @@ class NotifyActionTest extends GenericActionTest
 
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass(NotifyAction::class);
+        $rc = new ReflectionClass(NotifyAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
@@ -47,7 +49,7 @@ class NotifyActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Core\GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

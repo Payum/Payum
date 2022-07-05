@@ -3,23 +3,27 @@
 namespace Payum\Paypal\ProCheckout\Nvp\Tests;
 
 use GuzzleHttp\Psr7\Response;
+use Http\Message\MessageFactory;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\HttpClientInterface;
 use Payum\Paypal\ProCheckout\Nvp\Api;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 
-class ApiTest extends \PHPUnit\Framework\TestCase
+class ApiTest extends TestCase
 {
     public function testThrowIfRequiredOptionsNotSetInConstructor()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The username, password, partner, vendor fields are required.');
         new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
     public function testThrowIfSandboxOptionsNotBooleanInConstructor()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
         new Api([
             'username' => 'aUsername',
@@ -174,15 +178,15 @@ class ApiTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|HttpClientInterface
+     * @return MockObject|HttpClientInterface
      */
     protected function createHttpClientMock()
     {
-        return $this->createMock(\Payum\Core\HttpClientInterface::class);
+        return $this->createMock(HttpClientInterface::class);
     }
 
     /**
-     * @return \Http\Message\MessageFactory
+     * @return MessageFactory
      */
     protected function createHttpMessageFactory()
     {
@@ -190,7 +194,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|HttpClientInterface
+     * @return MockObject|HttpClientInterface
      */
     protected function createSuccessHttpClientStub()
     {

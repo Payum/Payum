@@ -2,6 +2,7 @@
 
 namespace Payum\Stripe\Action\Api;
 
+use ArrayAccess;
 use Composer\InstalledVersions;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
@@ -13,7 +14,7 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Stripe\Constants;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreatePlan;
-use Stripe\Exception;
+use Stripe\Exception\ApiErrorException;
 use Stripe\Plan;
 use Stripe\Stripe;
 
@@ -69,7 +70,7 @@ class CreatePlanAction implements ActionInterface, GatewayAwareInterface, ApiAwa
             $plan = Plan::create($model->toUnsafeArrayWithoutLocal());
 
             $model->replace($plan->toArray(true));
-        } catch (Exception\ApiErrorException $e) {
+        } catch (ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }
@@ -77,7 +78,7 @@ class CreatePlanAction implements ActionInterface, GatewayAwareInterface, ApiAwa
     public function supports($request)
     {
         return $request instanceof CreatePlan &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

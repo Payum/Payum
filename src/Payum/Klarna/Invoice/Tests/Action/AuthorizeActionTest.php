@@ -2,17 +2,22 @@
 
 namespace Payum\Klarna\Invoice\Tests\Action;
 
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Authorize;
 use Payum\Klarna\Invoice\Action\AuthorizeAction;
+use Payum\Klarna\Invoice\Request\Api\ReserveAmount;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class AuthorizeActionTest extends TestCase
 {
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass(AuthorizeAction::class);
+        $rc = new ReflectionClass(AuthorizeAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
@@ -28,22 +33,22 @@ class AuthorizeActionTest extends TestCase
     {
         $action = new AuthorizeAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testShouldNotSupportAuthorizeWithNotArrayAccessModel()
     {
         $action = new AuthorizeAction();
 
-        $this->assertFalse($action->supports(new Authorize(new \stdClass())));
+        $this->assertFalse($action->supports(new Authorize(new stdClass())));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new AuthorizeAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testShouldSubExecuteReserveAmountIfRnoNotSet()
@@ -52,7 +57,7 @@ class AuthorizeActionTest extends TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf(\Payum\Klarna\Invoice\Request\Api\ReserveAmount::class))
+            ->with($this->isInstanceOf(ReserveAmount::class))
         ;
 
         $action = new AuthorizeAction();
@@ -82,10 +87,10 @@ class AuthorizeActionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock(\Payum\Core\GatewayInterface::class);
+        return $this->createMock(GatewayInterface::class);
     }
 }

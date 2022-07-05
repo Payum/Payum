@@ -6,10 +6,13 @@ use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\GatewayFactoryI
 use Payum\Core\Bridge\Symfony\Form\Type\GatewayConfigType;
 use Payum\Core\Bridge\Symfony\Form\Type\GatewayFactoriesChoiceType;
 use Payum\Core\Model\GatewayConfig;
+use Payum\Core\Registry\GatewayFactoryRegistryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\Forms;
+use Symfony\Component\Form\FormView;
 
 class GatewayConfigTypeTest extends TestCase
 {
@@ -27,7 +30,7 @@ class GatewayConfigTypeTest extends TestCase
     {
         $this->fooGatewayFactoryMock = $this->createMock(\Payum\Core\GatewayFactoryInterface::class);
 
-        $registry = $this->createMock(\Payum\Core\Registry\GatewayFactoryRegistryInterface::class);
+        $registry = $this->createMock(GatewayFactoryRegistryInterface::class);
         $registry
             ->method('getGatewayFactory')
             ->with('foo')
@@ -47,8 +50,8 @@ class GatewayConfigTypeTest extends TestCase
     {
         $form = $this->formFactory->create(GatewayConfigType::class);
 
-        $this->assertInstanceOf(\Symfony\Component\Form\Form::class, $form);
-        $this->assertInstanceOf(\Symfony\Component\Form\FormView::class, $form->createView());
+        $this->assertInstanceOf(Form::class, $form);
+        $this->assertInstanceOf(FormView::class, $form->createView());
     }
 
     public function testShouldAddDefaultFieldsIfFactoryNameChosen()

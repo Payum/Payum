@@ -4,6 +4,7 @@ namespace Payum\Core\Tests\Extension;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Extension\Context;
+use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Model\Identity;
@@ -12,14 +13,16 @@ use Payum\Core\Model\ModelAwareInterface;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Tests\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
+use stdClass;
 
 class StorageExtensionTest extends TestCase
 {
     public function testShouldImplementExtensionInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Core\Extension\StorageExtension::class);
+        $rc = new ReflectionClass(StorageExtension::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\Extension\ExtensionInterface::class));
+        $this->assertTrue($rc->implementsInterface(ExtensionInterface::class));
     }
 
     public function testShouldDoNothingOnPreExecuteIfNoModelRequest()
@@ -35,7 +38,7 @@ class StorageExtensionTest extends TestCase
             ->method('find')
         ;
 
-        $context = new Context($this->createGatewayMock(), new \stdClass(), []);
+        $context = new Context($this->createGatewayMock(), new stdClass(), []);
 
         $extension = new StorageExtension($neverUsedStorageMock);
 
@@ -44,7 +47,7 @@ class StorageExtensionTest extends TestCase
 
     public function testShouldDoNothingOnPreExecuteIfFindModelByIdentityReturnNull()
     {
-        $expectedModel = new \stdClass();
+        $expectedModel = new stdClass();
         $expectedId = 123;
         $identity = new Identity($expectedId, $expectedModel);
 
@@ -89,7 +92,7 @@ class StorageExtensionTest extends TestCase
         $requestMock = $this->createMock(ModelAggregateAndAwareInterface::class);
         $requestMock
             ->method('getModel')
-            ->willReturn(new \stdClass())
+            ->willReturn(new stdClass())
         ;
         $requestMock
             ->expects($this->never())
@@ -115,7 +118,7 @@ class StorageExtensionTest extends TestCase
             ->method('find')
         ;
 
-        $requestMock = $this->createMock(\stdClass::class);
+        $requestMock = $this->createMock(stdClass::class);
 
         $context = new Context($this->createGatewayMock(), $requestMock, []);
 
@@ -126,7 +129,7 @@ class StorageExtensionTest extends TestCase
 
     public function testShouldSetFoundModelOnRequestIfIdentifierGivenAsModelAndStorageSupportsIt()
     {
-        $expectedModel = new \stdClass();
+        $expectedModel = new stdClass();
         $expectedId = 123;
         $identity = new Identity($expectedId, $expectedModel);
 
@@ -157,7 +160,7 @@ class StorageExtensionTest extends TestCase
 
     public function testShouldScheduleForUpdateRequestModelIfStorageSupportItOnPreExecute()
     {
-        $model = new \stdClass();
+        $model = new stdClass();
 
         $storageMock = $this->createStorageMock();
         $storageMock
@@ -186,7 +189,7 @@ class StorageExtensionTest extends TestCase
 
     public function testShouldScheduleForUpdateRequestModelIfStorageSupportItOnPostExecute()
     {
-        $model = new \stdClass();
+        $model = new stdClass();
 
         $storageMock = $this->createStorageMock();
         $storageMock
@@ -224,7 +227,7 @@ class StorageExtensionTest extends TestCase
     {
         //when previous is empty
 
-        $expectedModel = new \stdClass();
+        $expectedModel = new stdClass();
 
         $storageMock = $this->createStorageMock();
         $storageMock
@@ -258,7 +261,7 @@ class StorageExtensionTest extends TestCase
     {
         //when previous is NOT empty
 
-        $expectedModel = new \stdClass();
+        $expectedModel = new stdClass();
 
         $storageMock = $this->createStorageMock();
         $storageMock
@@ -305,7 +308,7 @@ class StorageExtensionTest extends TestCase
      */
     protected function createStorageMock()
     {
-        return $this->createMock(\Payum\Core\Storage\StorageInterface::class);
+        return $this->createMock(StorageInterface::class);
     }
 
     /**
@@ -313,7 +316,7 @@ class StorageExtensionTest extends TestCase
      */
     protected function createActionMock()
     {
-        return $this->createMock(\Payum\Core\Action\ActionInterface::class);
+        return $this->createMock(ActionInterface::class);
     }
 
     /**
@@ -321,7 +324,7 @@ class StorageExtensionTest extends TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock(\Payum\Core\GatewayInterface::class);
+        return $this->createMock(GatewayInterface::class);
     }
 }
 
