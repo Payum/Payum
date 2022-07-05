@@ -6,14 +6,6 @@ use PHPUnit\Framework\TestCase;
 
 class BaseApiAwareActionTest extends TestCase
 {
-    protected function getActionClass(): string
-    {
-    }
-
-    protected function getApiClass()
-    {
-    }
-
     public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
@@ -41,6 +33,14 @@ class BaseApiAwareActionTest extends TestCase
         $action = $this->getMockForAbstractClass('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
 
         $action->setApi(new \stdClass());
+    }
+
+    protected function getActionClass(): string
+    {
+    }
+
+    protected function getApiClass()
+    {
     }
 
     /**

@@ -59,7 +59,7 @@ class GetBinaryStatusTest extends TestCase
     {
         $getStatus = new GetBinaryStatus(new \stdClass());
 
-        $getStatus->$markXXXMethod();
+        $getStatus->{$markXXXMethod}();
 
         $this->assertNotEmpty($getStatus->getValue());
     }
@@ -71,7 +71,7 @@ class GetBinaryStatusTest extends TestCase
     {
         $getStatus = new GetBinaryStatus(new \stdClass());
 
-        $this->assertIsBool($getStatus->$isXXXMethod());
+        $this->assertIsBool($getStatus->{$isXXXMethod}());
     }
 
     public function testShouldNotMatchOthersThenCapturedStatus()

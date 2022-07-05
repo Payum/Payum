@@ -10,16 +10,6 @@ use PhpXmlRpc\Client;
 
 class GetAddressesActionTest extends GenericApiAwareActionTest
 {
-    protected function getActionClass(): string
-    {
-        return GetAddressesAction::class;
-    }
-
-    protected function getApiClass()
-    {
-        return new Config();
-    }
-
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\GetAddressesAction');
@@ -102,6 +92,16 @@ class GetAddressesActionTest extends GenericApiAwareActionTest
         $action->setApi(new Config());
 
         $action->execute($getAddresses = new GetAddresses('thePno'));
+    }
+
+    protected function getActionClass(): string
+    {
+        return GetAddressesAction::class;
+    }
+
+    protected function getApiClass()
+    {
+        return new Config();
     }
 
     /**

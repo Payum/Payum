@@ -7,19 +7,6 @@ use Payum\Payex\PayexGatewayFactory;
 
 class PayexGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    protected function getGatewayFactoryClass(): string
-    {
-        return PayexGatewayFactory::class;
-    }
-
-    protected function getRequiredOptions(): array
-    {
-        return [
-            'account_number' => 'aNum',
-            'encryption_key' => 'aKey',
-        ];
-    }
-
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new PayexGatewayFactory([
@@ -76,5 +63,18 @@ class PayexGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory = new PayexGatewayFactory();
 
         $factory->create();
+    }
+
+    protected function getGatewayFactoryClass(): string
+    {
+        return PayexGatewayFactory::class;
+    }
+
+    protected function getRequiredOptions(): array
+    {
+        return [
+            'account_number' => 'aNum',
+            'encryption_key' => 'aKey',
+        ];
     }
 }

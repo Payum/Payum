@@ -44,6 +44,13 @@ class DoCaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwar
         $this->gateway->execute(new GetTransactionDetails($model, $paymentRequestN));
     }
 
+    public function supports($request)
+    {
+        return $request instanceof DoCapture &&
+            $request->getModel() instanceof \ArrayAccess
+        ;
+    }
+
     /**
      * @return array
      */
@@ -67,12 +74,5 @@ class DoCaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwar
             'REASONCODE',
             'COMPLETETYPE',
         ];
-    }
-
-    public function supports($request)
-    {
-        return $request instanceof DoCapture &&
-            $request->getModel() instanceof \ArrayAccess
-        ;
     }
 }

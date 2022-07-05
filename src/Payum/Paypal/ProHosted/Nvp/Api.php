@@ -121,7 +121,7 @@ class Api
         'business' => null,
         'return' => null,
         'sandbox' => null,
-        'cmd' => Api::FORM_CMD,
+        'cmd' => self::FORM_CMD,
     ];
 
     /**

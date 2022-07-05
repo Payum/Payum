@@ -12,16 +12,6 @@ use PhpXmlRpc\Client;
 
 class UpdateActionTest extends GenericApiAwareActionTest
 {
-    protected function getActionClass(): string
-    {
-        return UpdateAction::class;
-    }
-
-    protected function getApiClass()
-    {
-        return new Config();
-    }
-
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\UpdateAction');
@@ -141,6 +131,16 @@ class UpdateActionTest extends GenericApiAwareActionTest
         $model = $request->getModel();
         $this->assertSame(123, $model['error_code']);
         $this->assertSame('theMessage', $model['error_message']);
+    }
+
+    protected function getActionClass(): string
+    {
+        return UpdateAction::class;
+    }
+
+    protected function getApiClass()
+    {
+        return new Config();
     }
 
     /**

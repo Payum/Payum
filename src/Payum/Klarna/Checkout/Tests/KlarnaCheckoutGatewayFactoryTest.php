@@ -7,19 +7,6 @@ use Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory;
 
 class KlarnaCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    protected function getGatewayFactoryClass(): string
-    {
-        return KlarnaCheckoutGatewayFactory::class;
-    }
-
-    protected function getRequiredOptions(): array
-    {
-        return [
-            'merchant_id' => 'aMerchId',
-            'secret' => 'aSecret',
-        ];
-    }
-
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new KlarnaCheckoutGatewayFactory([
@@ -102,5 +89,18 @@ class KlarnaCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertArrayHasKey('PayumKlarnaCheckout', $config['payum.paths']);
         $this->assertStringEndsWith('Resources/views', $config['payum.paths']['PayumKlarnaCheckout']);
         $this->assertFileExists($config['payum.paths']['PayumKlarnaCheckout']);
+    }
+
+    protected function getGatewayFactoryClass(): string
+    {
+        return KlarnaCheckoutGatewayFactory::class;
+    }
+
+    protected function getRequiredOptions(): array
+    {
+        return [
+            'merchant_id' => 'aMerchId',
+            'secret' => 'aSecret',
+        ];
     }
 }

@@ -42,13 +42,12 @@ class ApiAwareTraitTest extends TestCase
 
 class ApiAwareClass
 {
+    use ApiAwareTrait;
+
     public function setApiClass($apiClass)
     {
         $this->apiClass = $apiClass;
     }
-
-
-    use ApiAwareTrait;
 }
 
 interface FooInterface

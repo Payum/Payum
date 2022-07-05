@@ -7,22 +7,6 @@ use Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory;
 
 class PaypalProCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    protected function getGatewayFactoryClass(): string
-    {
-        return PaypalProCheckoutGatewayFactory::class;
-    }
-
-    protected function getRequiredOptions(): array
-    {
-        return [
-            'username' => 'aName',
-            'password' => 'aPass',
-            'partner' => 'aPartner',
-            'vendor' => 'aVendor',
-            'tender' => 'aTender',
-        ];
-    }
-
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new PaypalProCheckoutGatewayFactory([
@@ -82,5 +66,21 @@ class PaypalProCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory = new PaypalProCheckoutGatewayFactory();
 
         $factory->create();
+    }
+
+    protected function getGatewayFactoryClass(): string
+    {
+        return PaypalProCheckoutGatewayFactory::class;
+    }
+
+    protected function getRequiredOptions(): array
+    {
+        return [
+            'username' => 'aName',
+            'password' => 'aPass',
+            'partner' => 'aPartner',
+            'vendor' => 'aVendor',
+            'tender' => 'aTender',
+        ];
     }
 }

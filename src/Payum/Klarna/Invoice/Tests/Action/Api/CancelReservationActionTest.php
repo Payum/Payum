@@ -10,16 +10,6 @@ use PhpXmlRpc\Client;
 
 class CancelReservationActionTest extends GenericApiAwareActionTest
 {
-    protected function getActionClass(): string
-    {
-        return CancelReservationAction::class;
-    }
-
-    protected function getApiClass()
-    {
-        return new Config();
-    }
-
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\CancelReservationAction');
@@ -120,6 +110,16 @@ class CancelReservationActionTest extends GenericApiAwareActionTest
         $activatedDetails = $cancel->getModel();
         $this->assertSame(123, $activatedDetails['error_code']);
         $this->assertSame('theMessage', $activatedDetails['error_message']);
+    }
+
+    protected function getActionClass(): string
+    {
+        return CancelReservationAction::class;
+    }
+
+    protected function getApiClass()
+    {
+        return new Config();
     }
 
     /**

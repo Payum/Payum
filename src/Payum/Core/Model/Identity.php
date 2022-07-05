@@ -26,6 +26,24 @@ class Identity implements IdentityInterface
         $this->class = is_object($class) ? get_class($class) : $class;
     }
 
+    public function __serialize(): array
+    {
+        return [$this->id, $this->class];
+    }
+
+    public function __unserialize(array $data)
+    {
+        list($this->id, $this->class) = $data;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->class . '#' . $this->id;
+    }
+
     public function getClass()
     {
         return $this->class;
@@ -44,23 +62,5 @@ class Identity implements IdentityInterface
     public function unserialize($serialized)
     {
         list($this->id, $this->class) = unserialize($serialized);
-    }
-
-    public function __serialize(): array
-    {
-        return [$this->id, $this->class];
-    }
-
-    public function __unserialize(array $data)
-    {
-        list($this->id, $this->class) = $data;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->class . '#' . $this->id;
     }
 }

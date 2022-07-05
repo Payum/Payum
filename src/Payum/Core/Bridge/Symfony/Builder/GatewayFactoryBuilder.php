@@ -19,6 +19,11 @@ class GatewayFactoryBuilder
         $this->gatewayFactoryClass = $gatewayFactoryClass;
     }
 
+    public function __invoke()
+    {
+        return call_user_func_array([$this, 'build'], func_get_args());
+    }
+
     /**
      * @return GatewayFactoryInterface
      */
@@ -27,10 +32,5 @@ class GatewayFactoryBuilder
         $gatewayFactoryClass = $this->gatewayFactoryClass;
 
         return new $gatewayFactoryClass($defaultConfig, $coreGatewayFactory);
-    }
-
-    public function __invoke()
-    {
-        return call_user_func_array([$this, 'build'], func_get_args());
     }
 }

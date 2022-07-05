@@ -175,31 +175,6 @@ class Api
     }
 
     /**
-     * @return array
-     */
-    protected function doRequest(array $fields)
-    {
-        $headers = [
-            'Content-Type' => 'application/x-www-form-urlencoded',
-        ];
-
-        $request = $this->messageFactory->createRequest('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
-
-        $response = $this->client->send($request);
-
-        if (false == ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
-            throw HttpException::factory($request, $response);
-        }
-
-        $result = json_decode($response->getBody()->getContents());
-        if (null === $result) {
-            throw new LogicException("Response content is not valid json: \n\n{$response->getBody()->getContents()}");
-        }
-
-        return $result;
-    }
-
-    /**
      * @return string
      */
     public function getOffsiteUrl()
@@ -247,6 +222,47 @@ class Api
         return $params;
     }
 
+    /**
+     * @return string
+     */
+    public function calculateHash(array $params)
+    {
+        #Alpha sort
+        ksort($params);
+
+        $clearString = $this->options['password'];
+        foreach ($params as $key => $value) {
+            $clearString .= $key . '=' . $value . $this->options['password'];
+        }
+
+        return hash('sha256', $clearString);
+    }
+
+    /**
+     * @return array
+     */
+    protected function doRequest(array $fields)
+    {
+        $headers = [
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        ];
+
+        $request = $this->messageFactory->createRequest('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
+
+        $response = $this->client->send($request);
+
+        if (false == ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
+            throw HttpException::factory($request, $response);
+        }
+
+        $result = json_decode($response->getBody()->getContents());
+        if (null === $result) {
+            throw new LogicException("Response content is not valid json: \n\n{$response->getBody()->getContents()}");
+        }
+
+        return $result;
+    }
+
     protected function addGlobalParams(array &$params)
     {
         $params['VERSION'] = self::VERSION;
@@ -263,21 +279,5 @@ class Api
             'https://secure-test.be2bill.com/front/service/rest/process' :
             'https://secure-magenta1.be2bill.com/front/service/rest/process'
         ;
-    }
-
-    /**
-     * @return string
-     */
-    public function calculateHash(array $params)
-    {
-        #Alpha sort
-        ksort($params);
-
-        $clearString = $this->options['password'];
-        foreach ($params as $key => $value) {
-            $clearString .= $key . '=' . $value . $this->options['password'];
-        }
-
-        return hash('sha256', $clearString);
     }
 }

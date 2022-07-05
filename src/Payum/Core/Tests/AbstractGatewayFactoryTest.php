@@ -9,13 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 abstract class AbstractGatewayFactoryTest extends TestCase
 {
-    abstract protected function getGatewayFactoryClass(): string;
-
-    protected function getRequiredOptions(): array
-    {
-        return [];
-    }
-
     public function testFactoryImplementsGatewayFactoryInterface()
     {
         $class = $this->getGatewayFactoryClass();
@@ -77,6 +70,13 @@ abstract class AbstractGatewayFactoryTest extends TestCase
 
         $this->assertIsArray($config);
         $this->assertNotEmpty($config);
+    }
+
+    abstract protected function getGatewayFactoryClass(): string;
+
+    protected function getRequiredOptions(): array
+    {
+        return [];
     }
 
     protected function getPropertyValue(object $object, string $property)

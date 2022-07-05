@@ -25,6 +25,11 @@ class ObtainCreditCardActionBuilder
         $this->requestStack = $requestStack;
     }
 
+    public function __invoke()
+    {
+        return call_user_func_array([$this, 'build'], func_get_args());
+    }
+
     /**
      * @return ObtainCreditCardAction
      */
@@ -34,10 +39,5 @@ class ObtainCreditCardActionBuilder
         $action->setRequestStack($this->requestStack);
 
         return $action;
-    }
-
-    public function __invoke()
-    {
-        return call_user_func_array([$this, 'build'], func_get_args());
     }
 }

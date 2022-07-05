@@ -10,14 +10,14 @@ use Symfony\Component\Templating\EngineInterface;
 class RenderTemplateAction implements ActionInterface
 {
     /**
-     * @var EngineInterface
-     */
-    private $templating;
-
-    /**
      * @var string
      */
     protected $layout;
+
+    /**
+     * @var EngineInterface
+     */
+    private $templating;
 
     public function __construct(EngineInterface $templating, $layout = null)
     {

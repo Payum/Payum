@@ -8,11 +8,6 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 class CreditCardDateValidatorTest extends ConstraintValidatorTestCase
 {
-    protected function createValidator()
-    {
-        return new CreditCardDateValidator();
-    }
-
     public function testValidate()
     {
         $options = [
@@ -35,12 +30,17 @@ class CreditCardDateValidatorTest extends ConstraintValidatorTestCase
         $validator = new CreditCardDateValidator();
         $validator->initialize($this->context);
 
-        $value = new \Datetime("1981-08-24");
+        $value = new \Datetime('1981-08-24');
 
         $validator->validate($value, $constraint);
 
         $this->buildViolation('validator.credit_card.invalidDate')
             ->atPath('property.path.expireAt')
             ->assertRaised();
+    }
+
+    protected function createValidator()
+    {
+        return new CreditCardDateValidator();
     }
 }

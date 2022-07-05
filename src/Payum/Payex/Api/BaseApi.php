@@ -61,7 +61,7 @@ abstract class BaseApi
     {
         $client = $this->clientFactory->createWsdlClient($serviceWsdl);
 
-        $response = @$client->$operation($parameters);
+        $response = @$client->{$operation}($parameters);
 
         $result = $this->convertSimpleXmlToArray(new \SimpleXMLElement($response->{$operation . 'Result'}));
 
@@ -87,7 +87,7 @@ abstract class BaseApi
             $orderedParameters[$parametersKey] = $parameters[$parametersKey];
         }
 
-        return md5(trim(implode("", $orderedParameters)) . $this->options['encryption_key']);
+        return md5(trim(implode('', $orderedParameters)) . $this->options['encryption_key']);
     }
 
     /**

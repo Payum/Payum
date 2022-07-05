@@ -10,16 +10,6 @@ use PhpXmlRpc\Client;
 
 class SendInvoiceActionTest extends GenericApiAwareActionTest
 {
-    protected function getActionClass(): string
-    {
-        return SendInvoiceAction::class;
-    }
-
-    protected function getApiClass()
-    {
-        return new Config();
-    }
-
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\SendInvoiceAction');
@@ -110,6 +100,16 @@ class SendInvoiceActionTest extends GenericApiAwareActionTest
         $postDetails = $reserve->getModel();
         $this->assertSame(123, $postDetails['error_code']);
         $this->assertSame('theMessage', $postDetails['error_message']);
+    }
+
+    protected function getActionClass(): string
+    {
+        return SendInvoiceAction::class;
+    }
+
+    protected function getApiClass()
+    {
+        return new Config();
     }
 
     /**
