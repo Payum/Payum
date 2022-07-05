@@ -23,12 +23,12 @@ class CreditCardDateValidator extends ConstraintValidator
             return;
         }
 
-        if (!($value instanceof \DateTime)) {
+        if (! ($value instanceof \DateTime)) {
             if (method_exists($this->context, 'buildViolation')) {
                 $this->context->buildViolation($constraint->invalidMessage, array(
                              '{{ value }}' => $value,
                          ))
-                     ->addViolation();
+                    ->addViolation();
 
                 return;
             }

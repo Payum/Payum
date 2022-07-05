@@ -13,13 +13,15 @@ class MasspayActionTest extends GenericActionTest
     protected $requestClass = Masspay::class;
 
     protected $actionClass = MasspayAction::class;
-    public function testShouldImplementsApiAwareAction()
+
+        public function testShouldImplementsApiAwareAction()
     {
         $rc = new \ReflectionClass(MasspayAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
-    
+
+
     public function testThrowIfPayoutAlreadyAcknowledged()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);

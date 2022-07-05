@@ -221,7 +221,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         }
 
         foreach ($config as $name => $value) {
-            if (is_callable($value) && !(is_string($value) && function_exists('\\' . $value))) {
+            if (is_callable($value) && ! (is_string($value) && function_exists('\\' . $value))) {
                 $config[$name] = call_user_func($value, $config);
             }
         }

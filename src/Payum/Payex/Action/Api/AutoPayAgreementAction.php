@@ -50,8 +50,7 @@ class AutoPayAgreementAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof AutoPayAgreement &&
+        return $request instanceof AutoPayAgreement &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

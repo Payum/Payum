@@ -44,8 +44,7 @@ class StopRecurringPaymentAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof StopRecurringPayment &&
+        return             $request instanceof StopRecurringPayment &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

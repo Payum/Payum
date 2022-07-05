@@ -49,8 +49,7 @@ class CapturePaymentAction implements ActionInterface, GatewayAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof Capture &&
+        return             $request instanceof Capture &&
             $request->getModel() instanceof PaymentInterface
         ;
     }

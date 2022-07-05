@@ -26,7 +26,6 @@ class ConfirmOrderAction implements ActionInterface, GatewayAwareInterface, ApiA
      */
     private $templateName;
 
-
     public function __construct($templateName)
     {
         $this->templateName = $templateName;
@@ -61,8 +60,7 @@ class ConfirmOrderAction implements ActionInterface, GatewayAwareInterface, ApiA
      */
     public function supports($request)
     {
-        return
-            $request instanceof ConfirmOrder &&
+        return $request instanceof ConfirmOrder &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

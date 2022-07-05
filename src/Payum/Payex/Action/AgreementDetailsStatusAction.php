@@ -64,8 +64,7 @@ class AgreementDetailsStatusAction implements ActionInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof GetStatusInterface &&
+        return $request instanceof GetStatusInterface &&
             $request->getModel() instanceof \ArrayAccess &&
             //Make sure it is payment. Apparently an order(payment) does not have this field.
             $request->getModel()->offsetExists('agreementRef') &&

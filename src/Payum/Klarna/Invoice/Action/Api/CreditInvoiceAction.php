@@ -35,8 +35,7 @@ class CreditInvoiceAction extends BaseApiAwareAction
      */
     public function supports($request)
     {
-        return
-            $request instanceof CreditInvoice &&
+        return $request instanceof CreditInvoice &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

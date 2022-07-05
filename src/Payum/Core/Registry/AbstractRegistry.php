@@ -66,7 +66,7 @@ abstract class AbstractRegistry implements RegistryInterface
             }
         }
 
-        if (!isset($this->storages[$class])) {
+        if (! isset($this->storages[$class])) {
             throw new InvalidArgumentException(sprintf(
                 'A storage for model %s was not registered. There are storages for next models: %s.',
                 $class,
@@ -95,7 +95,7 @@ abstract class AbstractRegistry implements RegistryInterface
      */
     public function getGateway($name)
     {
-        if (!isset($this->gateways[$name])) {
+        if (! isset($this->gateways[$name])) {
             throw new InvalidArgumentException(sprintf('Gateway "%s" does not exist.', $name));
         }
 
@@ -120,7 +120,7 @@ abstract class AbstractRegistry implements RegistryInterface
      */
     public function getGatewayFactory($name)
     {
-        if (!isset($this->gatewayFactories[$name])) {
+        if (! isset($this->gatewayFactories[$name])) {
             throw new InvalidArgumentException(sprintf('Gateway factory "%s" does not exist.', $name));
         }
 

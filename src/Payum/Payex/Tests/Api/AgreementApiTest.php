@@ -201,12 +201,15 @@ class AgreementSoapClient extends \SoapClient
     public function CreateAgreement3()
     {
     }
+
     public function Check()
     {
     }
+
     public function DeleteAgreement()
     {
     }
+
     public function AutoPay3()
     {
     }

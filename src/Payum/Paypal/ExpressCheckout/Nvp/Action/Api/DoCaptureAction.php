@@ -77,8 +77,7 @@ class DoCaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwar
      */
     public function supports($request)
     {
-        return
-            $request instanceof DoCapture &&
+        return $request instanceof DoCapture &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

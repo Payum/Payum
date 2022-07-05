@@ -59,8 +59,7 @@ class ReserveAmountAction extends BaseApiAwareAction implements GatewayAwareInte
      */
     public function supports($request)
     {
-        return
-            $request instanceof ReserveAmount &&
+        return $request instanceof ReserveAmount &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

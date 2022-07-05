@@ -39,8 +39,7 @@ class ReturnAmountAction extends BaseApiAwareAction
      */
     public function supports($request)
     {
-        return
-            $request instanceof ReturnAmount &&
+        return $request instanceof ReturnAmount &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

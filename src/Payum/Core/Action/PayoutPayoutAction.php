@@ -49,8 +49,7 @@ class PayoutPayoutAction implements ActionInterface, GatewayAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof Payout &&
+        return $request instanceof Payout &&
             $request->getModel() instanceof PayoutInterface
         ;
     }

@@ -19,7 +19,7 @@ class HttpClientFactory
     public static function createGuzzle()
     {
         $client = null;
-        if (!class_exists(Client::class)) {
+        if (! class_exists(Client::class)) {
             @trigger_error('The function "HttpClientFactory::createGuzzle" is depcrecated and will be removed in 2.0.', E_USER_DEPRECATED);
             throw new \LogicException('Can not use "HttpClientFactory::createGuzzle" since Guzzle is not installed. This function is deprecated and will be removed in 2.0.');
         }

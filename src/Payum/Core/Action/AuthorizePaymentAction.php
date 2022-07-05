@@ -49,8 +49,7 @@ class AuthorizePaymentAction implements ActionInterface, GatewayAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof Authorize &&
+        return $request instanceof Authorize &&
             $request->getModel() instanceof PaymentInterface
         ;
     }

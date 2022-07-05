@@ -41,8 +41,7 @@ class TransactionSearchAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof TransactionSearch &&
+        return $request instanceof TransactionSearch &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

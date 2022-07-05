@@ -34,7 +34,6 @@ class ConfirmOrderActionTest extends GenericActionTest
         $firstModel = new \stdClass();
         $model = new \ArrayObject(['foo' => 'fooVal', 'bar' => 'barVal']);
 
-
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->atLeast(2))
@@ -81,7 +80,6 @@ class ConfirmOrderActionTest extends GenericActionTest
         $firstModel = new \stdClass();
         $model = new \ArrayObject(['foo' => 'fooVal', 'bar' => 'barVal']);
 
-
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->atLeast(2))
@@ -127,7 +125,6 @@ class ConfirmOrderActionTest extends GenericActionTest
     {
         $firstModel = new \stdClass();
         $model = new \ArrayObject(['foo' => 'fooVal', 'bar' => 'barVal']);
-
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

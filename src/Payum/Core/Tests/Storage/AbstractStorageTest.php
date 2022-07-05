@@ -29,15 +29,19 @@ class AbstractStorageTest extends TestCase
             protected function doUpdateModel($model)
             {
             }
+
             protected function doDeleteModel($model)
             {
             }
+
             protected function doGetIdentity($model)
             {
             }
+
             protected function doFind($id)
             {
             }
+
             public function findBy(array $criteria)
             {
             }

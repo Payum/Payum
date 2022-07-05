@@ -34,8 +34,7 @@ class CancelReservationAction extends BaseApiAwareAction
      */
     public function supports($request)
     {
-        return
-            $request instanceof CancelReservation &&
+        return $request instanceof CancelReservation &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

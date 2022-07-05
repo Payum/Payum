@@ -167,9 +167,11 @@ class RecurringSoapClient extends \SoapClient
     public function Start()
     {
     }
+
     public function Stop()
     {
     }
+
     public function Check()
     {
     }

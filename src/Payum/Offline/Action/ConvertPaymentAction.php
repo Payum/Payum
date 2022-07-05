@@ -30,7 +30,7 @@ class ConvertPaymentAction implements ActionInterface
         $details['description'] = $payment->getDescription();
         $details['client_email'] = $payment->getClientEmail();
         $details['client_id'] = $payment->getClientId();
-        
+
         $details->defaults(array(
             Constants::FIELD_PAID => true,
         ));
@@ -43,8 +43,7 @@ class ConvertPaymentAction implements ActionInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof Convert &&
+        return $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&
             $request->getTo() == 'array'
         ;

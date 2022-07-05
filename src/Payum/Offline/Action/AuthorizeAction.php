@@ -33,8 +33,7 @@ class AuthorizeAction implements ActionInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof Authorize &&
+        return $request instanceof Authorize &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

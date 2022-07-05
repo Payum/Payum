@@ -22,12 +22,12 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
 {
     use ApiAwareTrait;
     use GatewayAwareTrait;
-    
+
     public function __construct()
     {
         $this->apiClass = AuthorizeNetAIM::class;
     }
-    
+
     /**
      * {@inheritDoc}
      *
@@ -73,8 +73,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
      */
     public function supports($request)
     {
-        return
-            $request instanceof Capture &&
+        return $request instanceof Capture &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

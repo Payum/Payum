@@ -41,8 +41,7 @@ class ManageRecurringPaymentsProfileStatusAction implements ActionInterface, Api
      */
     public function supports($request)
     {
-        return
-            $request instanceof ManageRecurringPaymentsProfileStatus &&
+        return $request instanceof ManageRecurringPaymentsProfileStatus &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

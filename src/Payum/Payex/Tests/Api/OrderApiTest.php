@@ -167,9 +167,11 @@ class OrderSoapClient extends \SoapClient
     public function Initialize8()
     {
     }
+
     public function Complete()
     {
     }
+
     public function Check2()
     {
     }

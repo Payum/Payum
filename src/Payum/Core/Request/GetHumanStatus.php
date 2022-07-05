@@ -73,7 +73,7 @@ class GetHumanStatus extends BaseGetStatus
     {
         return $this->isCurrentStatusEqualTo(static::STATUS_PAYEDOUT);
     }
-    
+
     /**
      * {@inheritDoc}
      */

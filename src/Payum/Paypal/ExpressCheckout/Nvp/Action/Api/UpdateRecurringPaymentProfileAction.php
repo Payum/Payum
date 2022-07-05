@@ -41,8 +41,7 @@ class UpdateRecurringPaymentProfileAction implements ActionInterface, ApiAwareIn
      */
     public function supports($request)
     {
-        return
-            $request instanceof UpdateRecurringPaymentProfile &&
+        return             $request instanceof UpdateRecurringPaymentProfile &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

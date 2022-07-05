@@ -13,7 +13,7 @@ class ObtainCreditCardActionBuilder
      * @var FormFactoryInterface
      */
     private $formFactory;
-    
+
     /**
      * @var RequestStack
      */
@@ -38,7 +38,7 @@ class ObtainCreditCardActionBuilder
     {
         $action = new ObtainCreditCardAction($this->formFactory, $config['payum.template.obtain_credit_card']);
         $action->setRequestStack($this->requestStack);
-        
+
         return $action;
     }
 

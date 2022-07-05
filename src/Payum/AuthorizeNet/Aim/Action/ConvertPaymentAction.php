@@ -14,7 +14,7 @@ use Payum\Core\Request\GetCurrency;
 class ConvertPaymentAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
-    
+
     /**
      * {@inheritDoc}
      *
@@ -45,8 +45,7 @@ class ConvertPaymentAction implements ActionInterface, GatewayAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof Convert &&
+        return $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&
             $request->getTo() == 'array'
         ;

@@ -122,7 +122,7 @@ class TableGatewayStorage extends AbstractStorage
     {
         $id = $this->getModelId($model);
 
-        if (!$id) {
+        if (! $id) {
             throw new LogicException('The model must be persisted before usage of this method');
         }
 

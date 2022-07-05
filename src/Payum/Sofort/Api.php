@@ -9,17 +9,29 @@ use Sofort\SofortLib\TransactionData;
 class Api
 {
     public const STATUS_LOSS = 'loss';
+
     public const SUB_LOSS = 'not_credited';
+
     public const STATUS_PENDING = 'pending';
+
     public const SUB_PENDING = 'not_credited_yet';
+
     public const STATUS_RECEIVED = 'received';
+
     public const SUB_CREDITED = 'credited';
+
     public const SUB_PARTIALLY = 'partially_credited';
+
     public const SUB_OVERPAYMENT = 'overpayment';
+
     public const STATUS_REFUNDED = 'refunded';
+
     public const SUB_COMPENSATION = 'compensation';
+
     public const SUB_REFUNDED = 'refunded';
+
     public const STATUS_UNTRACEABLE = 'untraceable';
+
     public const SUB_SOFORT_NEEDED = 'sofort_bank_account_needed';
 
     protected $options = [

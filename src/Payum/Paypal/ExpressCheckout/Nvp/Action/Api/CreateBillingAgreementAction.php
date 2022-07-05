@@ -44,8 +44,7 @@ class CreateBillingAgreementAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof CreateBillingAgreement &&
+        return $request instanceof CreateBillingAgreement &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

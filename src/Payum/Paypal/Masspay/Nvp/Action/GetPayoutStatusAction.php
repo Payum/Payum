@@ -20,7 +20,7 @@ class GetPayoutStatusAction implements ActionInterface
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        
+
         if (false == $model['ACK']) {
             $request->markNew();
 
@@ -47,8 +47,7 @@ class GetPayoutStatusAction implements ActionInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof GetStatusInterface &&
+        return $request instanceof GetStatusInterface &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

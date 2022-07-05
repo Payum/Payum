@@ -50,8 +50,7 @@ class DoReferenceTransactionAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof DoReferenceTransaction &&
+        return $request instanceof DoReferenceTransaction &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }
