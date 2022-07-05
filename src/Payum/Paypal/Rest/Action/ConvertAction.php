@@ -41,7 +41,7 @@ class ConvertAction implements ActionInterface, GatewayAwareInterface
     {
         return $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&
-            $request->getTo() == 'array'
+            'array' == $request->getTo()
         ;
     }
 }
