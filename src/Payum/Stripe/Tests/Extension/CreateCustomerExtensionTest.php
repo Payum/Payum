@@ -6,7 +6,6 @@ use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Capture;
-use Payum\Core\Request\Generic;
 use Payum\Core\Request\Refund;
 use Payum\Stripe\Constants;
 use Payum\Stripe\Extension\CreateCustomerExtension;

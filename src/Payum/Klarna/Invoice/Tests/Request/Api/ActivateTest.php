@@ -2,7 +2,6 @@
 
 namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
-use Payum\Klarna\Invoice\Request\Api\Activate;
 use PHPUnit\Framework\TestCase;
 
 class ActivateTest extends TestCase

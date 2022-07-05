@@ -14,5 +14,6 @@ return static function (ECSConfig $ecsConfig): void {
         SetList::DOCBLOCK,
         SetList::COMMENTS,
         SetList::PHPUNIT,
+        SetList::NAMESPACES,
     ]);
 };

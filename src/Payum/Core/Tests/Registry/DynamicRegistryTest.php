@@ -2,7 +2,6 @@
 
 namespace Payum\Core\Tests\Registry;
 
-use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Gateway;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\Model\GatewayConfig;

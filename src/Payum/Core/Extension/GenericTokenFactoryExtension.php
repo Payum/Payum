@@ -2,8 +2,6 @@
 
 namespace Payum\Core\Extension;
 
-use Payum\Core\Action\ActionInterface;
-use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 

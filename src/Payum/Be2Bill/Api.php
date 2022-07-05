@@ -5,7 +5,6 @@ namespace Payum\Be2Bill;
 use Http\Message\MessageFactory;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\Http\HttpException;
-use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\HttpClientInterface;
 

@@ -5,7 +5,6 @@ namespace Payum\Stripe\Tests\Action\Api;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Stripe\Action\Api\CreateChargeAction;
-use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateCharge;
 
 class CreateChargeActionTest extends \PHPUnit\Framework\TestCase

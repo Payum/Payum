@@ -2,7 +2,6 @@
 
 namespace Payum\Core\Tests\Exception;
 
-use Payum\Core\Exception\UnsupportedApiException;
 use PHPUnit\Framework\TestCase;
 
 class UnsupportedApiExceptionTest extends TestCase

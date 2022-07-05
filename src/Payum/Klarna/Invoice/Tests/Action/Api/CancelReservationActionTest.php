@@ -6,7 +6,6 @@ use Payum\Core\Tests\GenericApiAwareActionTest;
 use Payum\Klarna\Invoice\Action\Api\CancelReservationAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\CancelReservation;
-use PHPUnit\Framework\TestCase;
 use PhpXmlRpc\Client;
 
 class CancelReservationActionTest extends GenericApiAwareActionTest

@@ -2,6 +2,7 @@
 /**
  * @author Marc Pantel <pantel.m@gmail.com>
  */
+
 namespace Payum\Core\Bridge\Symfony\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;

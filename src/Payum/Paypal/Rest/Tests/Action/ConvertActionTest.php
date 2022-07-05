@@ -6,7 +6,6 @@ use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
 use Payum\Core\Request\Generic;
-use Payum\Core\Request\GetCurrency;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\Rest\Action\ConvertAction;

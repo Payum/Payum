@@ -2,7 +2,6 @@
 
 namespace Payum\Paypal\Rest\Action;
 
-use PayPal\Api\Payment as PaypalPayment;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -10,7 +9,6 @@ use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
-use Payum\Core\Request\Sync;
 use Payum\Core\Security\TokenInterface;
 
 class ConvertAction implements ActionInterface, GatewayAwareInterface

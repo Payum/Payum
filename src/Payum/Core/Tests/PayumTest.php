@@ -2,10 +2,7 @@
 
 namespace Payum\Core\Tests;
 
-use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\CoreGatewayFactory;
 use Payum\Core\GatewayInterface;
-use Payum\Core\HttpClientInterface;
 use Payum\Core\Payum;
 use Payum\Core\Registry\RegistryInterface;
 use Payum\Core\Registry\SimpleRegistry;

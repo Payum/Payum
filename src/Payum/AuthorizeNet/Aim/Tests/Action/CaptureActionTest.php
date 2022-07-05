@@ -13,7 +13,6 @@ use Payum\Core\Model\CreditCard;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Tests\GenericActionTest;
-use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
 
 class CaptureActionTest extends GenericActionTest
 {

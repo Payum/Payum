@@ -2,7 +2,6 @@
 
 namespace Payum\Core\Tests\Exception;
 
-use Payum\Core\Exception\LogicException;
 use PHPUnit\Framework\TestCase;
 
 class LogicExceptionTest extends TestCase
