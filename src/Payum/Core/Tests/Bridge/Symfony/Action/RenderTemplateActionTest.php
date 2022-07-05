@@ -53,7 +53,9 @@ class RenderTemplateActionTest extends GenericActionTest
                 ]
             );
 
-        $request = new $this->requestClass('template.html.engine', ['foo' => 'bar']);
+        $request = new $this->requestClass('template.html.engine', [
+            'foo' => 'bar',
+        ]);
         $this->action->execute($request);
     }
 }

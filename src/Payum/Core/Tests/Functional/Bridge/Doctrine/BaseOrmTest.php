@@ -49,7 +49,10 @@ abstract class BaseOrmTest extends TestCase
             $config->setMetadataCacheImpl(new ArrayCache());
         }
 
-        $connection = ['driver' => 'pdo_sqlite', 'path' => ':memory:'];
+        $connection = [
+            'driver' => 'pdo_sqlite',
+            'path' => ':memory:',
+        ];
 
         $this->em = EntityManager::create($connection, $config);
     }

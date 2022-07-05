@@ -31,12 +31,12 @@ class HttpClientFactory
         $curl = curl_version();
 
         $curlOptions = [
-             CURLOPT_USERAGENT => sprintf('Payum/1.x curl/%s PHP/%s', $curl['version'], phpversion()),
-         ];
+            CURLOPT_USERAGENT => sprintf('Payum/1.x curl/%s PHP/%s', $curl['version'], phpversion()),
+        ];
 
         return new \GuzzleHttp\Client([
-             'curl' => $curlOptions,
-         ]);
+            'curl' => $curlOptions,
+        ]);
     }
 
     /**

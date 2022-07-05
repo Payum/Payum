@@ -52,7 +52,9 @@ class UpdateOrderActionTest extends GenericActionTest
             ->willReturnCallback(function ($method, $order, $options) use ($testCase, $model) {
                 $testCase->assertIsArray($options);
                 $testCase->assertArrayHasKey('data', $options);
-                $testCase->assertSame(['cart' => $model['cart']], $options['data']);
+                $testCase->assertSame([
+                    'cart' => $model['cart'],
+                ], $options['data']);
             })
         ;
 
@@ -113,7 +115,9 @@ class UpdateOrderActionTest extends GenericActionTest
                 $this->returnCallback(function ($method, $order, $options) use ($model) {
                     $this->assertIsArray($options);
                     $this->assertArrayHasKey('data', $options);
-                    $this->assertEquals(['cart' => $model['cart']], $options['data']);
+                    $this->assertEquals([
+                        'cart' => $model['cart'],
+                    ], $options['data']);
                 })
             )
         ;

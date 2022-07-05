@@ -50,7 +50,6 @@ class SofortGatewayFactory extends GatewayFactory
                  * @link https://github.com/Payum/Payum/issues/628
                  */
                 'disable_notification' => false,
-
             ];
             $config->defaults($config['payum.default_options']);
             $config['payum.required_options'] = ['config_key'];

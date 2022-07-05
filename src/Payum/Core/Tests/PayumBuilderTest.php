@@ -325,7 +325,7 @@ class PayumBuilderTest extends TestCase
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
             ->addGateway('a_gateway', [
-                'factory' => 'offline'
+                'factory' => 'offline',
             ])
             ->getPayum()
         ;
@@ -398,9 +398,13 @@ class PayumBuilderTest extends TestCase
     {
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->addGatewayFactoryConfig('a_factory', ['foo' => 'fooVal'])
+            ->addGatewayFactoryConfig('a_factory', [
+                'foo' => 'fooVal',
+            ])
             ->addGatewayFactory('a_factory', function (array $config, GatewayFactoryInterface $coreGatewayFactory) use (&$expectedFactory) {
-                $this->assertSame(['foo' => 'fooVal'], $config);
+                $this->assertSame([
+                    'foo' => 'fooVal',
+                ], $config);
 
                 return new GatewayFactory($config, $coreGatewayFactory);
             })
@@ -432,7 +436,7 @@ class PayumBuilderTest extends TestCase
             ->addDefaultStorages()
             ->addGateway('fallback_factory', $fallbackGateway)
             ->setMainRegistry(new SimpleRegistry([
-                'main_gateway' => $mainGateway
+                'main_gateway' => $mainGateway,
             ]))
             ->getPayum()
         ;
@@ -451,7 +455,7 @@ class PayumBuilderTest extends TestCase
             ->addDefaultStorages()
             ->addGateway('fallback_factory', $fallbackGateway)
             ->setMainRegistry(new SimpleRegistry([
-                'main_gateway' => $mainGateway
+                'main_gateway' => $mainGateway,
             ]))
             ->getPayum()
         ;
@@ -548,7 +552,9 @@ class PayumBuilderTest extends TestCase
     {
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->addGatewayFactoryConfig('offline', ['foo' => 'fooVal'])
+            ->addGatewayFactoryConfig('offline', [
+                'foo' => 'fooVal',
+            ])
 
             ->getPayum()
         ;
@@ -680,45 +686,99 @@ class PayumBuilderTest extends TestCase
     {
         $payumBuilder = new PayumBuilder();
 
-        $payumBuilder->setCoreGatewayFactoryConfig(['foo' => 'fooVal', 'bar' => 'barVal']);
+        $payumBuilder->setCoreGatewayFactoryConfig([
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ]);
         $ref = new \ReflectionProperty($payumBuilder, 'coreGatewayFactoryConfig');
         $ref->setAccessible(true);
 
-        $this->assertSame(['foo' => 'fooVal', 'bar' => 'barVal'], $ref->getValue($payumBuilder));
+        $this->assertSame([
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ], $ref->getValue($payumBuilder));
 
-        $payumBuilder->addCoreGatewayFactoryConfig(['baz' => 'bazVal', 'foo' => 'fooNewVal']);
+        $payumBuilder->addCoreGatewayFactoryConfig([
+            'baz' => 'bazVal',
+            'foo' => 'fooNewVal',
+        ]);
 
-        $this->assertSame(['foo' => 'fooNewVal', 'bar' => 'barVal', 'baz' => 'bazVal'], $ref->getValue($payumBuilder));
+        $this->assertSame([
+            'foo' => 'fooNewVal',
+            'bar' => 'barVal',
+            'baz' => 'bazVal',
+        ], $ref->getValue($payumBuilder));
     }
 
     public function testShouldAllowAddGatewayConfigSeveralTimes()
     {
         $payumBuilder = new PayumBuilder();
 
-        $payumBuilder->addGateway('foo', ['factory' => 'aFactory', 'foo' => 'fooVal', 'bar' => 'barVal']);
+        $payumBuilder->addGateway('foo', [
+            'factory' => 'aFactory',
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ]);
         $ref = new \ReflectionProperty($payumBuilder, 'gatewayConfigs');
         $ref->setAccessible(true);
 
-        $this->assertSame(['foo' => ['factory' => 'aFactory', 'foo' => 'fooVal', 'bar' => 'barVal']], $ref->getValue($payumBuilder));
+        $this->assertSame([
+            'foo' => [
+                'factory' => 'aFactory',
+                'foo' => 'fooVal',
+                'bar' => 'barVal',
 
-        $payumBuilder->addGateway('foo', ['baz' => 'bazVal', 'foo' => 'fooNewVal']);
+            ],
+        ], $ref->getValue($payumBuilder));
 
-        $this->assertSame(['foo' => ['factory' => 'aFactory', 'foo' => 'fooNewVal', 'bar' => 'barVal', 'baz' => 'bazVal']], $ref->getValue($payumBuilder));
+        $payumBuilder->addGateway('foo', [
+            'baz' => 'bazVal',
+            'foo' => 'fooNewVal',
+        ]);
+
+        $this->assertSame([
+            'foo' => [
+                'factory' => 'aFactory',
+                'foo' => 'fooNewVal',
+                'bar' => 'barVal',
+                'baz' => 'bazVal',
+
+            ],
+        ], $ref->getValue($payumBuilder));
     }
 
     public function testShouldAllowAddGatewayFactoryConfigSeveralTimes()
     {
         $payumBuilder = new PayumBuilder();
 
-        $payumBuilder->addGatewayFactoryConfig('foo', ['foo' => 'fooVal', 'bar' => 'barVal']);
+        $payumBuilder->addGatewayFactoryConfig('foo', [
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ]);
         $ref = new \ReflectionProperty($payumBuilder, 'gatewayFactoryConfigs');
         $ref->setAccessible(true);
 
-        $this->assertSame(['foo' => ['foo' => 'fooVal', 'bar' => 'barVal']], $ref->getValue($payumBuilder));
+        $this->assertSame([
+            'foo' => [
+                'foo' => 'fooVal',
+                'bar' => 'barVal',
 
-        $payumBuilder->addGatewayFactoryConfig('foo', ['baz' => 'bazVal', 'foo' => 'fooNewVal']);
+            ],
+        ], $ref->getValue($payumBuilder));
 
-        $this->assertSame(['foo' => ['foo' => 'fooNewVal', 'bar' => 'barVal', 'baz' => 'bazVal']], $ref->getValue($payumBuilder));
+        $payumBuilder->addGatewayFactoryConfig('foo', [
+            'baz' => 'bazVal',
+            'foo' => 'fooNewVal',
+        ]);
+
+        $this->assertSame([
+            'foo' => [
+                'foo' => 'fooNewVal',
+                'bar' => 'barVal',
+                'baz' => 'bazVal',
+
+            ],
+        ], $ref->getValue($payumBuilder));
     }
 
     public function testShouldAllowBuildGatewayWithCoreGatewayFactory()
@@ -727,7 +787,9 @@ class PayumBuilderTest extends TestCase
 
         $payum = $payumBuilder
             ->addDefaultStorages()
-            ->addGateway('foo', ['factory' => 'core'])
+            ->addGateway('foo', [
+                'factory' => 'core',
+            ])
 
             ->getPayum()
         ;

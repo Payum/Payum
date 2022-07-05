@@ -50,7 +50,14 @@ class PaypalProCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
-        $this->assertEquals(['username' => '', 'password' => '', 'partner' => '', 'vendor' => '', 'tender' => '', 'sandbox' => true], $config['payum.default_options']);
+        $this->assertEquals([
+            'username' => '',
+            'password' => '',
+            'partner' => '',
+            'vendor' => '',
+            'tender' => '',
+            'sandbox' => true,
+        ], $config['payum.default_options']);
     }
 
     public function testShouldConfigContainFactoryNameAndTitle()

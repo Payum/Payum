@@ -22,15 +22,17 @@ class ConvertPaymentAction implements ActionInterface
         $details = ArrayObject::ensureArrayObject($payment->getDetails());
 
         if ('SEK' == $payment->getCurrencyCode()) {
-            $details['cart'] = ['items' => [[
-                'reference' => $payment->getNumber(),
-                'name' => $payment->getNumber(),
-                'quantity' => 1,
-                // klarna calculate the tax later.
-                'unit_price' => round($payment->getTotalAmount() / 0.75),
-                'discount_rate' => 0,
-                'tax_rate' => 2500
-            ]]];
+            $details['cart'] = [
+                'items' => [[
+                    'reference' => $payment->getNumber(),
+                    'name' => $payment->getNumber(),
+                    'quantity' => 1,
+                    // klarna calculate the tax later.
+                    'unit_price' => round($payment->getTotalAmount() / 0.75),
+                    'discount_rate' => 0,
+                    'tax_rate' => 2500,
+                ]],
+            ];
 
             $details['purchase_country'] = 'SE';
             $details['purchase_currency'] = 'SEK';

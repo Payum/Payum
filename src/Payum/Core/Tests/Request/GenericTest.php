@@ -94,7 +94,9 @@ class GenericTest extends TestCase
 
     public function testShouldConvertArrayToArrayObjectInConstructor()
     {
-        $model = ['foo' => 'bar'];
+        $model = [
+            'foo' => 'bar',
+        ];
 
         /** @var Generic $request */
         $request = $this->getMockForAbstractClass(Generic::class, [$model]);
@@ -108,7 +110,9 @@ class GenericTest extends TestCase
         /** @var Generic $request */
         $request = $this->getMockForAbstractClass(Generic::class, [123321]);
 
-        $model = ['foo' => 'bar'];
+        $model = [
+            'foo' => 'bar',
+        ];
 
         $request->setModel($model);
 

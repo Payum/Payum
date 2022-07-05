@@ -149,7 +149,9 @@ class PayoutPayoutActionTest extends GenericActionTest
 
     public function testShouldSetDetailsBackToPayoutAfterPayoutDetailsExecution()
     {
-        $expectedDetails = ['foo' => 'fooVal'];
+        $expectedDetails = [
+            'foo' => 'fooVal',
+        ];
 
         $payoutModel = new PayoutModel();
         $payoutModel->setDetails($expectedDetails);
@@ -183,12 +185,17 @@ class PayoutPayoutActionTest extends GenericActionTest
 
         $this->assertSame($payoutModel, $payout->getFirstModel());
         $this->assertInstanceOf('ArrayAccess', $payout->getModel());
-        $this->assertSame(['foo' => 'fooVal', 'bar' => 'barVal'], $payoutModel->getDetails());
+        $this->assertSame([
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ], $payoutModel->getDetails());
     }
 
     public function testShouldSetDetailsBackToPayoutEvenIfExceptionThrown()
     {
-        $expectedDetails = ['foo' => 'fooVal'];
+        $expectedDetails = [
+            'foo' => 'fooVal',
+        ];
 
         $payoutModel = new PayoutModel();
         $payoutModel->setDetails($expectedDetails);
@@ -214,6 +221,9 @@ class PayoutPayoutActionTest extends GenericActionTest
 
         $this->assertSame($payoutModel, $payout->getFirstModel());
         $this->assertInstanceOf('ArrayAccess', $payout->getModel());
-        $this->assertSame(['foo' => 'fooVal', 'bar' => 'barVal'], $payoutModel->getDetails());
+        $this->assertSame([
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ], $payoutModel->getDetails());
     }
 }

@@ -87,7 +87,9 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         parse_str($actualRequest->getBody()->getContents(), $content);
 
         $this->assertInstanceOf('Psr\Http\Message\RequestInterface', $actualRequest);
-        $this->assertSame($expectedNotification + ['cmd' => Api::CMD_NOTIFY_VALIDATE], $content);
+        $this->assertSame($expectedNotification + [
+            'cmd' => Api::CMD_NOTIFY_VALIDATE,
+        ], $content);
         $this->assertSame($api->getIpnEndpoint(), (string) $actualRequest->getUri());
         $this->assertSame('POST', $actualRequest->getMethod());
     }

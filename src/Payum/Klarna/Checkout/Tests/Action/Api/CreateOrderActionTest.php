@@ -54,7 +54,9 @@ class CreateOrderActionTest extends GenericActionTest
         $model = [
             'foo' => 'fooVal',
             'bar' => 'barVal',
-            'merchant' => ['id' => 'anId'],
+            'merchant' => [
+                'id' => 'anId',
+            ],
         ];
 
         $request = new CreateOrder($model);

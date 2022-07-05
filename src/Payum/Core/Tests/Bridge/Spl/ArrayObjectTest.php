@@ -51,7 +51,10 @@ class ArrayObjectTest extends TestCase
             'baz' => 'bazNew',
         ];
 
-        $array = new ArrayObject(['foo' => 'valCurr', 'ololo' => 'valCurr']);
+        $array = new ArrayObject([
+            'foo' => 'valCurr',
+            'ololo' => 'valCurr',
+        ]);
 
         $array->replace([
             'foo' => 'valNew',
@@ -77,7 +80,10 @@ class ArrayObjectTest extends TestCase
             'baz' => 'bazNew',
         ];
 
-        $array = new ArrayObject(['foo' => 'valCurr', 'ololo' => 'valCurr']);
+        $array = new ArrayObject([
+            'foo' => 'valCurr',
+            'ololo' => 'valCurr',
+        ]);
 
         $array->replace($traversable);
 
@@ -103,7 +109,9 @@ class ArrayObjectTest extends TestCase
         $array = (array) $arrayObject;
 
         $this->assertIsArray($array);
-        $this->assertSame(['foo' => 'barbaz'], $array);
+        $this->assertSame([
+            'foo' => 'barbaz',
+        ], $array);
     }
 
     public function testShouldAllowSetToCustomArrayObject()
@@ -159,7 +167,9 @@ class ArrayObjectTest extends TestCase
         $array = iterator_to_array($arrayObject);
 
         $this->assertIsArray($array);
-        $this->assertSame(['foo' => 'barbaz'], $array);
+        $this->assertSame([
+            'foo' => 'barbaz',
+        ], $array);
     }
 
     public function testThrowIfRequiredFieldEmptyAndThrowOnInvalidTrue()
@@ -302,12 +312,16 @@ class ArrayObjectTest extends TestCase
     public function shouldAllowGetArrayAsArrayObjectIfSet()
     {
         $array = new ArrayObject();
-        $array['foo'] = ['foo' => 'fooVal'];
+        $array['foo'] = [
+            'foo' => 'fooVal',
+        ];
 
         $subArray = $array->getArray('foo');
 
         $this->assertInstanceOf(ArrayObject::class, $subArray);
-        $this->assertSame(['foo' => 'fooVal'], (array) $subArray);
+        $this->assertSame([
+            'foo' => 'fooVal',
+        ], (array) $subArray);
     }
 
     public function shouldAllowGetArrayAsArrayObjectIfNotSet()
@@ -328,7 +342,9 @@ class ArrayObjectTest extends TestCase
             'foo' => 'fooVal',
         ]);
 
-        $this->assertSame(['foo' => 'fooVal'], $array->toUnsafeArrayWithoutLocal());
+        $this->assertSame([
+            'foo' => 'fooVal',
+        ], $array->toUnsafeArrayWithoutLocal());
     }
 }
 

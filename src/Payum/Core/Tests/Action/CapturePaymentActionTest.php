@@ -145,7 +145,9 @@ class CapturePaymentActionTest extends GenericActionTest
 
     public function testShouldSetDetailsBackToPaymentAfterCaptureDetailsExecution()
     {
-        $expectedDetails = ['foo' => 'fooVal'];
+        $expectedDetails = [
+            'foo' => 'fooVal',
+        ];
 
         $payment = new Payment();
         $payment->setDetails($expectedDetails);
@@ -179,12 +181,17 @@ class CapturePaymentActionTest extends GenericActionTest
 
         $this->assertSame($payment, $capture->getFirstModel());
         $this->assertInstanceOf('ArrayAccess', $capture->getModel());
-        $this->assertSame(['foo' => 'fooVal', 'bar' => 'barVal'], $payment->getDetails());
+        $this->assertSame([
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ], $payment->getDetails());
     }
 
     public function testShouldSetDetailsBackToPaymentEvenIfExceptionThrown()
     {
-        $expectedDetails = ['foo' => 'fooVal'];
+        $expectedDetails = [
+            'foo' => 'fooVal',
+        ];
 
         $payment = new Payment();
         $payment->setDetails($expectedDetails);
@@ -215,6 +222,9 @@ class CapturePaymentActionTest extends GenericActionTest
 
         $this->assertSame($payment, $capture->getFirstModel());
         $this->assertInstanceOf('ArrayAccess', $capture->getModel());
-        $this->assertSame(['foo' => 'fooVal', 'bar' => 'barVal'], $payment->getDetails());
+        $this->assertSame([
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ], $payment->getDetails());
     }
 }

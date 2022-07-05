@@ -33,7 +33,9 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
         $token = $this->tokenStorage->create();
         $token->setHash($token->getHash() ?: Random::generateToken());
 
-        $targetParameters = array_replace(['payum_token' => $token->getHash()], $targetParameters);
+        $targetParameters = array_replace([
+            'payum_token' => $token->getHash(),
+        ], $targetParameters);
 
         $token->setGatewayName($gatewayName);
 

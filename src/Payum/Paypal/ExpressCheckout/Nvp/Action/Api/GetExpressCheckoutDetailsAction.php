@@ -31,7 +31,9 @@ class GetExpressCheckoutDetailsAction implements ActionInterface, ApiAwareInterf
         }
 
         $model->replace(
-            $this->api->getExpressCheckoutDetails(['TOKEN' => $model['TOKEN']])
+            $this->api->getExpressCheckoutDetails([
+                'TOKEN' => $model['TOKEN'],
+            ])
         );
     }
 

@@ -51,7 +51,13 @@ class PaypalProHostedGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertArrayHasKey('payum.default_options', $config);
 
         $this->assertEquals(
-            ['username' => '', 'password' => '', 'signature' => '', 'business' => '', 'sandbox' => true],
+            [
+                'username' => '',
+                'password' => '',
+                'signature' => '',
+                'business' => '',
+                'sandbox' => true,
+            ],
             $config['payum.default_options']
         );
     }

@@ -25,7 +25,9 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
     {
         $model = new \ArrayObject([
             'card' => 'theCardToken',
-            'local' => ['save_card' => true],
+            'local' => [
+                'save_card' => true,
+            ],
         ]);
         $request = new Capture($model);
 
@@ -39,7 +41,9 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
                 $this->assertInstanceOf(\ArrayObject::class, $model);
 
-                $this->assertSame(['card' => 'theCardToken'], (array) $model);
+                $this->assertSame([
+                    'card' => 'theCardToken',
+                ], (array) $model);
 
                 $model['id'] = 'theCustomerId';
             });
@@ -56,7 +60,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
                 'customer' => [
                     'id' => 'theCustomerId',
                     'card' => 'theCardToken',
-                ]
+                ],
             ],
         ], (array) $request->getModel());
     }
@@ -67,7 +71,10 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
             'card' => 'theCardToken',
             'local' => [
                 'save_card' => true,
-                'customer' => ['foo' => 'fooVal', 'bar' => 'barVal'],
+                'customer' => [
+                    'foo' => 'fooVal',
+                    'bar' => 'barVal',
+                ],
             ],
         ]);
         $request = new Capture($model);
@@ -104,8 +111,8 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
                     'id' => 'theCustomerId',
                     'card' => 'theCardToken',
                     'foo' => 'fooVal',
-                    'bar' => 'barVal'
-                ]
+                    'bar' => 'barVal',
+                ],
             ],
         ], (array) $request->getModel());
     }
@@ -130,7 +137,9 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
                 $this->assertInstanceOf(\ArrayObject::class, $model);
 
-                $this->assertSame(['card' => 'theCardToken'], (array) $model);
+                $this->assertSame([
+                    'card' => 'theCardToken',
+                ], (array) $model);
 
                 // we assume the customer creation has failed when the customer does not have an id set.
                 $model['id'] = null;
@@ -148,7 +157,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
                 'customer' => [
                     'id' => null,
                     'card' => 'theCardToken',
-                ]
+                ],
             ],
         ], (array) $request->getModel());
     }
@@ -298,7 +307,9 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
     {
         $model = new \ArrayObject([
             'card' => 'theCardToken',
-            'local' => ['save_card' => true],
+            'local' => [
+                'save_card' => true,
+            ],
         ]);
         $request = new ObtainToken($model);
 
@@ -312,7 +323,9 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
                 $this->assertInstanceOf(\ArrayObject::class, $model);
 
-                $this->assertSame(['card' => 'theCardToken'], (array) $model);
+                $this->assertSame([
+                    'card' => 'theCardToken',
+                ], (array) $model);
 
                 $model['id'] = 'theCustomerId';
             });
@@ -329,7 +342,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
                 'customer' => [
                     'id' => 'theCustomerId',
                     'card' => 'theCardToken',
-                ]
+                ],
             ],
         ], (array) $request->getModel());
     }
@@ -340,7 +353,10 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
             'card' => 'theCardToken',
             'local' => [
                 'save_card' => true,
-                'customer' => ['foo' => 'fooVal', 'bar' => 'barVal'],
+                'customer' => [
+                    'foo' => 'fooVal',
+                    'bar' => 'barVal',
+                ],
             ],
         ]);
         $request = new ObtainToken($model);
@@ -377,8 +393,8 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
                     'id' => 'theCustomerId',
                     'card' => 'theCardToken',
                     'foo' => 'fooVal',
-                    'bar' => 'barVal'
-                ]
+                    'bar' => 'barVal',
+                ],
             ],
         ], (array) $request->getModel());
     }
@@ -403,7 +419,9 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
                 $this->assertInstanceOf(\ArrayObject::class, $model);
 
-                $this->assertSame(['card' => 'theCardToken'], (array) $model);
+                $this->assertSame([
+                    'card' => 'theCardToken',
+                ], (array) $model);
 
                 // we assume the customer creation has failed when the customer does not have an id set.
                 $model['id'] = null;
@@ -421,7 +439,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
                 'customer' => [
                     'id' => null,
                     'card' => 'theCardToken',
-                ]
+                ],
             ],
         ], (array) $request->getModel());
     }

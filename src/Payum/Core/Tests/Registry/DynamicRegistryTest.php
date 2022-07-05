@@ -68,13 +68,17 @@ class DynamicRegistryTest extends TestCase
         $gatewayConfig = new GatewayConfig();
         $gatewayConfig->setConfig(
             [
-            'factory' => $factoryName,
-            'foo' => 'fooVal',
-            'bar' => 'barVal']
+                'factory' => $factoryName,
+                'foo' => 'fooVal',
+                'bar' => 'barVal',
+            ]
         );
         $gatewayConfig->setGatewayName($gatewayName = 'theGatewayName');
 
-        $config = ['foo' => 'fooVal', 'bar' => 'barVal'];
+        $config = [
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ];
 
         $gateway = new Gateway();
 
@@ -98,13 +102,17 @@ class DynamicRegistryTest extends TestCase
         $storageMock
             ->expects($this->atLeast(2))
             ->method('findBy')
-            ->withConsecutive([[]], [['gatewayName' => $gatewayName]])
+            ->withConsecutive([[]], [[
+                'gatewayName' => $gatewayName,
+            ]])
             ->willReturn([$gatewayConfig])
         ;
 
         $registry = new DynamicRegistry($storageMock, $gatewayFactoryRegistry);
 
-        $this->assertSame([$gatewayName => $gateway], $registry->getGateways());
+        $this->assertSame([
+            $gatewayName => $gateway,
+        ], $registry->getGateways());
     }
 
     /**
@@ -113,7 +121,10 @@ class DynamicRegistryTest extends TestCase
     public function testShouldCreateGatewayUsingConfigAndGetFactoryNameOnGetGateway()
     {
         $gatewayConfig = new GatewayConfig();
-        $gatewayConfig->setConfig($config = ['foo' => 'fooVal', 'bar' => 'barVal']);
+        $gatewayConfig->setConfig($config = [
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ]);
         $gatewayConfig->setFactoryName($factoryName = 'theFactoryName');
         $gatewayConfig->setGatewayName($gatewayName = 'theGatewayName');
 
@@ -139,7 +150,9 @@ class DynamicRegistryTest extends TestCase
         $storageMock
             ->expects($this->once())
             ->method('findBy')
-            ->with(['gatewayName' => $gatewayName])
+            ->with([
+                'gatewayName' => $gatewayName,
+            ])
             ->willReturn([$gatewayConfig])
         ;
 
@@ -155,13 +168,17 @@ class DynamicRegistryTest extends TestCase
         $gatewayConfig = new GatewayConfig();
         $gatewayConfig->setConfig(
             [
-            'factory' => $factoryName,
-            'foo' => 'fooVal',
-            'bar' => 'barVal']
+                'factory' => $factoryName,
+                'foo' => 'fooVal',
+                'bar' => 'barVal',
+            ]
         );
         $gatewayConfig->setGatewayName($gatewayName = 'theGatewayName');
 
-        $config = ['foo' => 'fooVal', 'bar' => 'barVal'];
+        $config = [
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ];
 
         $gateway = new Gateway();
 
@@ -185,7 +202,9 @@ class DynamicRegistryTest extends TestCase
         $storageMock
             ->expects($this->once())
             ->method('findBy')
-            ->with(['gatewayName' => $gatewayName])
+            ->with([
+                'gatewayName' => $gatewayName,
+            ])
             ->willReturn([$gatewayConfig])
         ;
 
@@ -197,7 +216,10 @@ class DynamicRegistryTest extends TestCase
     public function testShouldCreateGatewayOnlyOnceWhenCalledMultipleTimes()
     {
         $gatewayConfig = new GatewayConfig();
-        $gatewayConfig->setConfig($config = ['foo' => 'fooVal', 'bar' => 'barVal']);
+        $gatewayConfig->setConfig($config = [
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ]);
         $gatewayConfig->setFactoryName($factoryName = 'theFactoryName');
         $gatewayConfig->setGatewayName($gatewayName = 'theGatewayName');
 
@@ -223,7 +245,9 @@ class DynamicRegistryTest extends TestCase
         $storageMock
             ->expects($this->atLeastOnce())
             ->method('findBy')
-            ->with(['gatewayName' => $gatewayName])
+            ->with([
+                'gatewayName' => $gatewayName,
+            ])
             ->willReturn([$gatewayConfig])
         ;
 
@@ -254,7 +278,9 @@ class DynamicRegistryTest extends TestCase
         $storageMock
             ->expects($this->once())
             ->method('findBy')
-            ->with(['gatewayName' => 'theGatewayName'])
+            ->with([
+                'gatewayName' => 'theGatewayName',
+            ])
             ->willReturn(null)
         ;
 
@@ -277,7 +303,9 @@ class DynamicRegistryTest extends TestCase
         $storageMock
             ->expects($this->once())
             ->method('findBy')
-            ->with(['gatewayName' => 'theGatewayName'])
+            ->with([
+                'gatewayName' => 'theGatewayName',
+            ])
             ->willReturn(null)
         ;
 

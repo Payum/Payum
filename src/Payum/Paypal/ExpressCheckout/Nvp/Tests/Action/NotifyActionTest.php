@@ -22,7 +22,9 @@ class NotifyActionTest extends GenericActionTest
 
     public function testShouldSubExecuteSyncWithSameModel()
     {
-        $expectedModel = ['foo' => 'fooVal'];
+        $expectedModel = [
+            'foo' => 'fooVal',
+        ];
 
         $testCase = $this;
 

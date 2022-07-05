@@ -145,7 +145,9 @@ class CoreGatewayFactoryTest extends TestCase
         $factory = new CoreGatewayFactory();
 
         $config = $factory->createConfig([
-            'payum.paths' => ['FooNamespace' => 'FooPath']
+            'payum.paths' => [
+                'FooNamespace' => 'FooPath',
+            ],
         ]);
 
         $this->assertIsArray($config);
@@ -260,8 +262,8 @@ class CoreGatewayFactoryTest extends TestCase
             'payum.action.foo' => $firstAction,
             'payum.action.bar' => $secondAction,
             'payum.prepend_actions' => [
-                'payum.action.bar'
-            ]
+                'payum.action.bar',
+            ],
         ]);
 
         $actions = $this->readAttribute($gateway, 'actions');
@@ -289,8 +291,8 @@ class CoreGatewayFactoryTest extends TestCase
             'payum.api.foo' => $firstApi,
             'payum.api.bar' => $secondApi,
             'payum.prepend_apis' => [
-                'payum.api.bar'
-            ]
+                'payum.api.bar',
+            ],
         ]);
 
         $apis = $this->readAttribute($gateway, 'apis');
@@ -318,8 +320,8 @@ class CoreGatewayFactoryTest extends TestCase
             'payum.extension.foo' => $firstExtension,
             'payum.extension.bar' => $secondExtension,
             'payum.prepend_extensions' => [
-                'payum.extension.bar'
-            ]
+                'payum.extension.bar',
+            ],
         ]);
 
         $extensions = $this->readAttribute($this->readAttribute($gateway, 'extensions'), 'extensions');

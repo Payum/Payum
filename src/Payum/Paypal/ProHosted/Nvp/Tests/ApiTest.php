@@ -34,7 +34,9 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'return' => 'optionReturnUrl',
         ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
-        $result = $api->doCreateButton(['return' => 'formRequestReturnUrl']);
+        $result = $api->doCreateButton([
+            'return' => 'formRequestReturnUrl',
+        ]);
 
         $this->assertContains('return=formRequestReturnUrl', $result);
     }

@@ -46,7 +46,10 @@ class RenderTemplateActionTest extends TestCase
 
         $expectedView = 'theView';
 
-        $context = $expectedContext = ['foo' => 'fooVal', 'bar' => 'barVal'];
+        $context = $expectedContext = [
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ];
         $expectedContext['layout'] = 'theLayout';
 
         $twigMock = $this->createTwigMock();
@@ -71,7 +74,11 @@ class RenderTemplateActionTest extends TestCase
 
         $expectedView = 'theView';
 
-        $context = $expectedContext = ['foo' => 'fooVal', 'bar' => 'barVal', 'layout' => 'theCustomLayout'];
+        $context = $expectedContext = [
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+            'layout' => 'theCustomLayout',
+        ];
         $expectedContext['layout'] = 'theCustomLayout';
 
         $twigMock = $this->createTwigMock();

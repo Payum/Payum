@@ -83,7 +83,9 @@ class TableGatewayStorage extends AbstractStorage
 
     protected function doFind($id)
     {
-        return $this->tableGateway->select(["{$this->idField} = ?" => $id])->current();
+        return $this->tableGateway->select([
+            "{$this->idField} = ?" => $id,
+        ])->current();
     }
 
     protected function doUpdateModel($model)
@@ -91,7 +93,9 @@ class TableGatewayStorage extends AbstractStorage
         if ($id = $this->getModelId($model)) {
             $this->tableGateway->update(
                 $this->tableGateway->getResultSetPrototype()->getHydrator()->extract($model),
-                ["{$this->idField} = ?" => $id]
+                [
+                    "{$this->idField} = ?" => $id,
+                ]
             );
         } else {
             $this->tableGateway->insert($this->tableGateway->getResultSetPrototype()->getHydrator()->extract($model));
@@ -100,7 +104,9 @@ class TableGatewayStorage extends AbstractStorage
 
     protected function doDeleteModel($model)
     {
-        $this->tableGateway->delete(["{$this->idField} = ?" => $this->getModelId($model)]);
+        $this->tableGateway->delete([
+            "{$this->idField} = ?" => $this->getModelId($model),
+        ]);
     }
 
     protected function doGetIdentity($model)

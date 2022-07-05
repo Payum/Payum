@@ -20,7 +20,9 @@ class CoreGatewayFactoryBuilderTest extends TestCase
     public function testShouldBuildContainerAwareCoreGatewayFactory()
     {
         $container = new Container();
-        $defaultConfig = ['foo' => 'fooVal'];
+        $defaultConfig = [
+            'foo' => 'fooVal',
+        ];
 
         $builder = new CoreGatewayFactoryBuilder();
         $builder->setContainer($container);
@@ -33,7 +35,9 @@ class CoreGatewayFactoryBuilderTest extends TestCase
     public function testAllowUseBuilderAsAsFunction()
     {
         $container = new Container();
-        $defaultConfig = ['foo' => 'fooVal'];
+        $defaultConfig = [
+            'foo' => 'fooVal',
+        ];
 
         $builder = new CoreGatewayFactoryBuilder();
         $builder->setContainer($container);

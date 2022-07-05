@@ -32,7 +32,9 @@ class GetTransactionDetailsAction implements ActionInterface, ApiAwareInterface
             throw new LogicException($transactionIndex . ' must be set.');
         }
 
-        $result = $this->api->getTransactionDetails(['TRANSACTIONID' => $model[$transactionIndex]]);
+        $result = $this->api->getTransactionDetails([
+            'TRANSACTIONID' => $model[$transactionIndex],
+        ]);
         foreach ($result as $name => $value) {
             if (in_array($name, $this->getPaymentRequestNFields())) {
                 $model['PAYMENTREQUEST_' . $request->getPaymentRequestN() . '_' . $name] = $value;

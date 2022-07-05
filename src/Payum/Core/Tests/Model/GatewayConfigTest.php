@@ -54,9 +54,13 @@ class GatewayConfigTest extends TestCase
     {
         $config = new GatewayConfig();
 
-        $config->setConfig(['foo' => 'fooVal']);
+        $config->setConfig([
+            'foo' => 'fooVal',
+        ]);
 
-        $this->assertSame(['foo' => 'fooVal'], $config->getConfig());
+        $this->assertSame([
+            'foo' => 'fooVal',
+        ], $config->getConfig());
     }
 
     public function testShouldDecryptConfigValuesOnDecrypt()

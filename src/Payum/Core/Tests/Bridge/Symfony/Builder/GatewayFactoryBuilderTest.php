@@ -13,7 +13,9 @@ class GatewayFactoryBuilderTest extends TestCase
     {
         /** @var GatewayFactoryInterface $coreGatewayFactory */
         $coreGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
-        $defaultConfig = ['foo' => 'fooVal'];
+        $defaultConfig = [
+            'foo' => 'fooVal',
+        ];
 
         $builder = new GatewayFactoryBuilder(GatewayFactory::class);
 
@@ -26,7 +28,9 @@ class GatewayFactoryBuilderTest extends TestCase
     {
         /** @var GatewayFactoryInterface $coreGatewayFactory */
         $coreGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
-        $defaultConfig = ['foo' => 'fooVal'];
+        $defaultConfig = [
+            'foo' => 'fooVal',
+        ];
 
         $builder = new GatewayFactoryBuilder(GatewayFactory::class);
 

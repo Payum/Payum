@@ -26,7 +26,10 @@ class SimpleRegistryTest extends TestCase
         $gatewayBarMock = $this->createMock(GatewayInterface::class);
 
         $registry = new SimpleRegistry(
-            ['foo' => $gatewayFooMock, 'bar' => $gatewayBarMock]
+            [
+                'foo' => $gatewayFooMock,
+                'bar' => $gatewayBarMock,
+            ]
         );
 
         $this->assertSame($gatewayFooMock, $registry->getGateway('foo'));
@@ -39,7 +42,10 @@ class SimpleRegistryTest extends TestCase
         $gatewayBarMock = $this->createMock(GatewayInterface::class);
 
         $registry = new SimpleRegistry(
-            ['foo' => $gatewayFooMock, 'bar' => $gatewayBarMock]
+            [
+                'foo' => $gatewayFooMock,
+                'bar' => $gatewayBarMock,
+            ]
         );
 
         $gateways = $registry->getGateways();
@@ -95,8 +101,12 @@ class SimpleRegistryTest extends TestCase
         ;
 
         $registry = new SimpleRegistry(
-            ['foo' => $gatewayMock],
-            ['stdClass' => $storageMock]
+            [
+                'foo' => $gatewayMock,
+            ],
+            [
+                'stdClass' => $storageMock,
+            ]
         );
 
         $this->assertSame($gatewayMock, $registry->getGateway('foo'));
@@ -108,7 +118,9 @@ class SimpleRegistryTest extends TestCase
     {
         $gatewayMock = $this->createMock(GatewayInterface::class);
 
-        $registry = new SimpleRegistry(['foo' => $gatewayMock]);
+        $registry = new SimpleRegistry([
+            'foo' => $gatewayMock,
+        ]);
 
         $this->assertSame($gatewayMock, $registry->getGateway('foo'));
     }
@@ -132,7 +144,10 @@ class SimpleRegistryTest extends TestCase
         ;
 
         $registry = new SimpleRegistry(
-            ['foo' => $gatewayFooMock, 'bar' => $gatewayBarMock],
+            [
+                'foo' => $gatewayFooMock,
+                'bar' => $gatewayBarMock,
+            ],
             [
                 'fooClass' => $storageOneMock,
                 'barClass' => $storageTwoMock,
@@ -163,7 +178,10 @@ class SimpleRegistryTest extends TestCase
         ;
 
         $registry = new SimpleRegistry(
-            ['foo' => $gatewayFooMock, 'bar' => $gatewayBarMock],
+            [
+                'foo' => $gatewayFooMock,
+                'bar' => $gatewayBarMock,
+            ],
             [
                 'fooClass' => $storageOneMock,
                 'barClass' => $storageTwoMock,
@@ -193,7 +211,10 @@ class SimpleRegistryTest extends TestCase
         ;
 
         $registry = new SimpleRegistry(
-            ['foo' => $gatewayFooMock, 'bar' => $gatewayBarMock],
+            [
+                'foo' => $gatewayFooMock,
+                'bar' => $gatewayBarMock,
+            ],
             [
                 'fooClass' => $storageOneMock,
             ]
@@ -212,14 +233,22 @@ class SimpleRegistryTest extends TestCase
         $gatewayBarMock = $this->createMock(GatewayInterface::class);
 
         $registry = new SimpleRegistry(
-            ['foo' => $gatewayFooMock, 'bar' => $gatewayBarMock],
+            [
+                'foo' => $gatewayFooMock,
+                'bar' => $gatewayBarMock,
+            ],
             [
                 'fooClass' => $storageOneMock,
             ]
         );
 
-        $this->assertSame(['foo' => $gatewayFooMock, 'bar' => $gatewayBarMock], $registry->getGateways());
+        $this->assertSame([
+            'foo' => $gatewayFooMock,
+            'bar' => $gatewayBarMock,
+        ], $registry->getGateways());
 
-        $this->assertSame(['fooClass' => $storageOneMock], $registry->getStorages());
+        $this->assertSame([
+            'fooClass' => $storageOneMock,
+        ], $registry->getStorages());
     }
 }
