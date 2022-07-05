@@ -178,7 +178,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
             },
             'payum.extension.endless_cycle_detector' => new EndlessCycleDetectorExtension(),
             'payum.action.get_currency' => function (ArrayObject $config) {
-                return new GetCurrencyAction($config['payum.iso4217']);
+                return new GetCurrencyAction();
             },
             'payum.prepend_actions' => [],
             'payum.prepend_extensions' => [],

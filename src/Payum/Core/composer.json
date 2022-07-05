@@ -33,7 +33,6 @@
     "require": {
         "php": "^8.0",
         "alcohol/iso4217": "^4.0",
-        "payum/iso4217": "^1.0",
         "php-http/message": "^1.0",
         "php-http/client-implementation": "^1.0",
         "psr/log": "^1 || ^2 || ^3",

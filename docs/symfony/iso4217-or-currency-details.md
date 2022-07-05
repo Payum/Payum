@@ -20,10 +20,10 @@ $gateway = $container->get('payum')->getGatewayFactory('offline')->create();
 
 $gateway->execute($currency = new \Payum\Core\GetCurrency('USD'));
 
-echo $currency->alpha3;  // USD
-echo $currency->name;    // US Dollar
-echo $currency->exp;     // 2
-echo $currency->country; // US
+echo $currency->getAlpha3();  // USD
+echo $currency->getName();    // US Dollar
+echo $currency->getExp();     // 2
+echo $currency->getCountry(); // US
 
 // and so on...
 ```
@@ -42,16 +42,14 @@ class FooAction extends GatewayAwareAction
 }
 ```
 
-Or directly ISO4217 service:
+Or directly using the Currency class:
 
 ```php
 <?php
 
-/** @var \Payum\ISO4216\ISO4217 $iso4217
-$iso4217 = $container->get('payum.iso4217');
+use Payum\Core\ISO4217\Currency;
 
-/** @var \Payum\ISO4216\Currency $currency **/
-$currency = $iso4217->findByAlpha3('USD');
+$currency = Currency::createFromIso4217Alpha3('USD');
 
 echo $currency->getAlpha3();  // USD
 echo $currency->getName();    // US Dollar

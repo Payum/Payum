@@ -1,9 +1,10 @@
 # Changelog
 
-## 2.0.0 (YYYY-mm-dd)
+## 2.0.0 (TBD)
 
 * drop support for PHP 7.x
 * drop support for Twig 1.x
+* remove payum/iso4217 package
 
 ## 1.5.0 (2018-01-09)
 
