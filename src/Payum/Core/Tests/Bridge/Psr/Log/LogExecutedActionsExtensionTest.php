@@ -2,6 +2,7 @@
 
 namespace Payum\Core\Tests\Bridge\Psr\Log;
 
+use function get_class;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension;
 use Payum\Core\Extension\Context;
@@ -14,7 +15,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
-use function get_class;
 
 class LogExecutedActionsExtensionTest extends TestCase
 {

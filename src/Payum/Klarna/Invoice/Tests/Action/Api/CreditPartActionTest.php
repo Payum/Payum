@@ -8,7 +8,6 @@ use Payum\Core\Tests\GenericApiAwareActionTest;
 use Payum\Klarna\Invoice\Action\Api\CreditPartAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\CreditPart;
-use PHPUnit\Framework\TestCase;
 use PhpXmlRpc\Client;
 
 class CreditPartActionTest extends GenericApiAwareActionTest

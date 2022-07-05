@@ -3,8 +3,6 @@
 namespace Payum\Paypal\Rest\Tests\Action;
 
 use PayPal\Api\Payment as PaypalPayment;
-use PayPal\Auth\OAuthTokenCredential;
-use PayPal\Rest\ApiContext;
 use Payum\Core\Request\Capture;
 use Payum\Paypal\Rest\Action\CaptureAction;
 use Payum\Paypal\Rest\Model\PaymentDetails;

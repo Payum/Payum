@@ -2,8 +2,6 @@
 
 namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
-use Payum\Klarna\Invoice\Request\Api\CreditInvoice;
-
 class CreditInvoiceTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldBeSubClassOfBaseOrder()

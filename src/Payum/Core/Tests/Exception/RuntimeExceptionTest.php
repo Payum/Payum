@@ -2,7 +2,6 @@
 
 namespace Payum\Core\Tests\Exception;
 
-use Payum\Core\Exception\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 class RuntimeExceptionTest extends TestCase

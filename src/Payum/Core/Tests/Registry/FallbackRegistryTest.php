@@ -3,11 +3,8 @@
 namespace Payum\Core\Tests\Registry;
 
 use Payum\Core\Exception\InvalidArgumentException;
-use Payum\Core\Gateway;
-use Payum\Core\Model\GatewayConfig;
 use Payum\Core\Registry\FallbackRegistry;
 use Payum\Core\Registry\RegistryInterface;
-use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 
 class FallbackRegistryTest extends TestCase

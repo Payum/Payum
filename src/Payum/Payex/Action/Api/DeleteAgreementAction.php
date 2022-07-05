@@ -7,7 +7,6 @@ use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Payex\Api\AgreementApi;
 use Payum\Payex\Request\Api\DeleteAgreement;
 

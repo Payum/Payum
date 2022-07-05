@@ -6,7 +6,6 @@ use Payum\Core\Bridge\Symfony\Form\Type\GatewayFactoriesChoiceType;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\Forms;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class GatewayFactoriesChoiceTypeTest extends TestCase
 {

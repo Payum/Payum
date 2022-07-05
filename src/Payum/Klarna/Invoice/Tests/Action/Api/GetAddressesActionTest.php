@@ -6,7 +6,6 @@ use Payum\Core\Tests\GenericApiAwareActionTest;
 use Payum\Klarna\Invoice\Action\Api\GetAddressesAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\GetAddresses;
-use PHPUnit\Framework\TestCase;
 use PhpXmlRpc\Client;
 
 class GetAddressesActionTest extends GenericApiAwareActionTest

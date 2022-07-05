@@ -6,7 +6,6 @@ use Payum\Core\Tests\GenericApiAwareActionTest;
 use Payum\Klarna\Invoice\Action\Api\SendInvoiceAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\SendInvoice;
-use PHPUnit\Framework\TestCase;
 use PhpXmlRpc\Client;
 
 class SendInvoiceActionTest extends GenericApiAwareActionTest

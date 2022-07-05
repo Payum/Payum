@@ -6,7 +6,6 @@ use Payum\Core\Tests\GenericApiAwareActionTest;
 use Payum\Klarna\Invoice\Action\Api\ReturnAmountAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\ReturnAmount;
-use PHPUnit\Framework\TestCase;
 use PhpXmlRpc\Client;
 
 class ReturnAmountActionTest extends GenericApiAwareActionTest
