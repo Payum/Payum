@@ -6,7 +6,8 @@ namespace Payum\Core\ISO4217;
 
 use Alcohol\ISO4217;
 
-final class Currency {
+final class Currency
+{
     /**
      * @var string
      */

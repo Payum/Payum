@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Stripe\Tests;
 
 use Payum\Core\Tests\AbstractGatewayFactoryTest;

@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Exception;
 
 use Payum\Core\Exception\InvalidArgumentException;

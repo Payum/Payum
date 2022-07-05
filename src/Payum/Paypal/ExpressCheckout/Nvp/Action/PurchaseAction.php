@@ -1,23 +1,24 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use League\Uri\Http as HttpUri;
 use League\Uri\UriModifier;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Sync;
-use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryAwareTrait;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ConfirmOrder;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ConfirmOrder;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout;
 
 abstract class PurchaseAction implements ActionInterface, GatewayAwareInterface, GenericTokenFactoryAwareInterface
 {

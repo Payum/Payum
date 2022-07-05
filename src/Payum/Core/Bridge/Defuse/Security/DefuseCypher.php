@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Defuse\Security;
 
 use Defuse\Crypto\Crypto;

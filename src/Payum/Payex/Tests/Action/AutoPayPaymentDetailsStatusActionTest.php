@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Payex\Tests\Action;
 
 use Payum\Core\GatewayInterface;

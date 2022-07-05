@@ -1,11 +1,12 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
-use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Model\Identity;
 use Payum\Core\Model\Token;
 use Payum\Core\Reply\HttpResponse;
@@ -259,7 +260,8 @@ class AuthorizeActionTest extends TestCase
 
         $gateway->expects($this->once())
             ->method('execute')
-            ->with(new Sync(ArrayObject::ensureArrayObject([
+            ->with(
+                new Sync(ArrayObject::ensureArrayObject([
                 'location' => 'aLocation',
                 'gui' => array('snippet' => 'theSnippet'),
                 'merchant' => [
@@ -269,7 +271,7 @@ class AuthorizeActionTest extends TestCase
                     'terms_uri' => 'theTermsUri',
                 ]
             ]))
-        );
+            );
 
         $action->execute(new Authorize(array(
             'location' => 'aLocation',
@@ -294,7 +296,9 @@ class AuthorizeActionTest extends TestCase
 
         $gateway->expects($this->once())
             ->method('execute')
-            ->with(new Sync(ArrayObject::ensureArrayObject([
+            ->with(
+                new Sync(ArrayObject::ensureArrayObject(
+                    [
                 'location' => 'aLocation',
                 'status' => Constants::STATUS_CREATED,
                 'gui' => array('snippet' => 'theSnippet'),
@@ -304,8 +308,8 @@ class AuthorizeActionTest extends TestCase
                     'checkout_uri' => 'theCheckoutUri',
                     'terms_uri' => 'theTermsUri',
                 ]]
-            ))
-        );
+                ))
+            );
 
         $action->execute(new Authorize(array(
             'location' => 'aLocation',
@@ -440,7 +444,8 @@ class AuthorizeActionTest extends TestCase
 
         $gateway->expects($this->once())
             ->method('execute')
-            ->with(new Sync(ArrayObject::ensureArrayObject([
+            ->with(
+                new Sync(ArrayObject::ensureArrayObject([
                 'location' => 'aLocation',
                 'merchant' => [
                     'confirmation_uri' => 'theConfirmationUri',
@@ -449,7 +454,7 @@ class AuthorizeActionTest extends TestCase
                     'terms_uri' => 'theTermsUrl',
                 ]
             ]))
-        );
+            );
 
         $action->execute(new Authorize([
             'location' => 'aLocation',
@@ -478,7 +483,8 @@ class AuthorizeActionTest extends TestCase
 
         $gateway->expects($this->once())
             ->method('execute')
-            ->with(new Sync(ArrayObject::ensureArrayObject([
+            ->with(
+                new Sync(ArrayObject::ensureArrayObject([
                     'location' => 'aLocation',
                     'merchant' => [
                         'confirmation_uri' => 'theTargetUrl',

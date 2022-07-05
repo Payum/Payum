@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Model;
 
 use Payum\Core\Security\SensitiveValue;

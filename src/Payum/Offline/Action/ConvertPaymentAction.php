@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Offline\Action;
 
 use Payum\Core\Action\ActionInterface;

@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony\Form\Type;
 
 use Symfony\Component\Form\AbstractType;

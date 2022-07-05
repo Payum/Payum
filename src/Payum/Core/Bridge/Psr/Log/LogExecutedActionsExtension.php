@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Psr\Log;
 
 use Payum\Core\Debug\Humanify;
@@ -57,14 +58,16 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
     public function onPostExecute(Context $context)
     {
         if ($context->getReply()) {
-            $this->logger->debug(sprintf('[Payum] %d# %s::execute(%s) throws reply %s',
+            $this->logger->debug(sprintf(
+                '[Payum] %d# %s::execute(%s) throws reply %s',
                 count($context->getPrevious()) + 1,
                 Humanify::value($context->getAction()),
                 Humanify::request($context->getRequest()),
                 Humanify::request($context->getReply())
             ));
         } elseif ($context->getException()) {
-            $this->logger->debug(sprintf('[Payum] %d# %s::execute(%s) throws exception %s',
+            $this->logger->debug(sprintf(
+                '[Payum] %d# %s::execute(%s) throws exception %s',
                 count($context->getPrevious()) + 1,
                 $context->getAction() ? Humanify::value($context->getAction()) : 'Gateway',
                 Humanify::request($context->getRequest()),

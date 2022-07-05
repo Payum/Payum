@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Sofort;
 
 use Payum\Core\Bridge\Spl\ArrayObject;

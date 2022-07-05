@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Be2Bill\Tests;
 
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;

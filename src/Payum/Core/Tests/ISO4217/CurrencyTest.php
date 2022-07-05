@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\ISO4217;
 
 use Payum\Core\ISO4217\Currency;
@@ -26,7 +27,7 @@ class CurrencyTest extends TestCase
         $this->assertSame('USD', $currency->getAlpha3());
         $this->assertSame('840', $currency->getNumeric());
         $this->assertSame(2, $currency->getExp());
-        $this->assertSame(['AS', 'BQ', 'EC', 'FM', 'GU', 'MF', 'MH', 'MP', 'PR', 'PW', 'SV', 'TC', 'TL', 'UM', 'US', 'VG', 'VI', 'ZW',], $currency->getCountry());
+        $this->assertSame(['AS', 'BQ', 'EC', 'FM', 'GU', 'MF', 'MH', 'MP', 'PR', 'PW', 'SV', 'TC', 'TL', 'UM', 'US', 'VG', 'VI', 'ZW', ], $currency->getCountry());
     }
 
     public function testItShouldCreateCurrencyByNumeric()
@@ -38,6 +39,6 @@ class CurrencyTest extends TestCase
         $this->assertSame('USD', $currency->getAlpha3());
         $this->assertSame('840', $currency->getNumeric());
         $this->assertSame(2, $currency->getExp());
-        $this->assertSame(['AS', 'BQ', 'EC', 'FM', 'GU', 'MF', 'MH', 'MP', 'PR', 'PW', 'SV', 'TC', 'TL', 'UM', 'US', 'VG', 'VI', 'ZW',], $currency->getCountry());
+        $this->assertSame(['AS', 'BQ', 'EC', 'FM', 'GU', 'MF', 'MH', 'MP', 'PR', 'PW', 'SV', 'TC', 'TL', 'UM', 'US', 'VG', 'VI', 'ZW', ], $currency->getCountry());
     }
 }

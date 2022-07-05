@@ -1,14 +1,15 @@
 <?php
+
 namespace Payum\Payex\Action\Api;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Payex\Api\AgreementApi;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Payex\Api\AgreementApi;
 use Payum\Payex\Request\Api\CreateAgreement;
 
 class CreateAgreementAction implements ActionInterface, ApiAwareInterface

@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony;
 
 use Payum\Core\Registry\AbstractRegistry;

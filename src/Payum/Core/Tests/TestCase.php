@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;

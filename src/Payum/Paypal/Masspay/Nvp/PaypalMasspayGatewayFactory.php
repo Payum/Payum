@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\Masspay\Nvp;
 
 use Payum\Core\Bridge\Spl\ArrayObject;

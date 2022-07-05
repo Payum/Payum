@@ -1,11 +1,12 @@
 <?php
+
 namespace Payum\Offline\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Offline\Constants;
 use Payum\Core\Request\GetStatusInterface;
+use Payum\Offline\Constants;
 
 class StatusAction implements ActionInterface
 {

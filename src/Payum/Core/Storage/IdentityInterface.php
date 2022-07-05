@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Storage;
 
 interface IdentityInterface extends \Serializable

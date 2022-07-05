@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Bridge\Symfony\Builder;
 
 use Payum\Core\Bridge\Symfony\Builder\HttpRequestVerifierBuilder;

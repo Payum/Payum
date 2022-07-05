@@ -1,80 +1,81 @@
 <?php
+
 namespace Payum\Be2Bill;
 
 use Http\Message\MessageFactory;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\Http\HttpException;
+use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\HttpClientInterface;
 
 class Api
 {
-    const VERSION = '2.0';
+    public const VERSION = '2.0';
 
-    const EXECCODE_SUCCESSFUL = '0000';
+    public const EXECCODE_SUCCESSFUL = '0000';
 
-    const EXECCODE_3DSECURE_IDENTIFICATION_REQUIRED = '0001';
+    public const EXECCODE_3DSECURE_IDENTIFICATION_REQUIRED = '0001';
 
-    const EXECCODE_PARAMETER_X_MISSING = '1001';
+    public const EXECCODE_PARAMETER_X_MISSING = '1001';
 
-    const EXECCODE_INVALID_PARAMETER_X = '1002';
+    public const EXECCODE_INVALID_PARAMETER_X = '1002';
 
-    const EXECCODE_HASH_ERROR = '1003';
+    public const EXECCODE_HASH_ERROR = '1003';
 
-    const EXECCODE_UNSUPPORTED_PROTOCOL = '1004';
+    public const EXECCODE_UNSUPPORTED_PROTOCOL = '1004';
 
-    const EXECCODE_ALIAS_NOT_FOUND = '2001';
+    public const EXECCODE_ALIAS_NOT_FOUND = '2001';
 
-    const EXECCODE_UNSUCCESSFUL_REFERENCE_TRANSACTION = '2002';
+    public const EXECCODE_UNSUCCESSFUL_REFERENCE_TRANSACTION = '2002';
 
-    const EXECCODE_NON_REFUNDABLE_REFERENCE_TRANSACTION = '2003';
+    public const EXECCODE_NON_REFUNDABLE_REFERENCE_TRANSACTION = '2003';
 
-    const EXECCODE_REFERENCE_TRANSACTION_NOT_FOUND = '2004';
+    public const EXECCODE_REFERENCE_TRANSACTION_NOT_FOUND = '2004';
 
-    const EXECCODE_NOT_ABLE_TO_CAPTURE_THE_REFERENCE_AUTHORIZATION = '2005';
+    public const EXECCODE_NOT_ABLE_TO_CAPTURE_THE_REFERENCE_AUTHORIZATION = '2005';
 
-    const EXECCODE_UNFINISHED_REFERENCE_TRANSACTION = '2006';
+    public const EXECCODE_UNFINISHED_REFERENCE_TRANSACTION = '2006';
 
-    const EXECCODE_INVALID_CAPTURE_AMOUNT = '2007';
+    public const EXECCODE_INVALID_CAPTURE_AMOUNT = '2007';
 
-    const EXECCODE_ACCOUNT_DEACTIVATED = '3001';
+    public const EXECCODE_ACCOUNT_DEACTIVATED = '3001';
 
-    const EXECCODE_UNAUTHORIZED_SERVER_IP_ADDRESS = '3002';
+    public const EXECCODE_UNAUTHORIZED_SERVER_IP_ADDRESS = '3002';
 
-    const EXECCODE_UNAUTHORIZED_TRANSACTION = '3003';
+    public const EXECCODE_UNAUTHORIZED_TRANSACTION = '3003';
 
-    const EXECCODE_TRANSACTION_REFUSED_BY_THE_BANK = '4001';
+    public const EXECCODE_TRANSACTION_REFUSED_BY_THE_BANK = '4001';
 
-    const EXECCODE_INSUFFICIENT_FUNDS = '4002';
+    public const EXECCODE_INSUFFICIENT_FUNDS = '4002';
 
-    const EXECCODE_CARD_REFUSED_BY_THE_BANK = '4003';
+    public const EXECCODE_CARD_REFUSED_BY_THE_BANK = '4003';
 
-    const EXECCODE_ABORTED_TRANSACTION = '4004';
+    public const EXECCODE_ABORTED_TRANSACTION = '4004';
 
-    const EXECCODE_SUSPECTED_FRAUD = '4005';
+    public const EXECCODE_SUSPECTED_FRAUD = '4005';
 
-    const EXECCODE_CARD_LOST = '4006';
+    public const EXECCODE_CARD_LOST = '4006';
 
-    const EXECCODE_STOLEN_CARD = '4007';
+    public const EXECCODE_STOLEN_CARD = '4007';
 
-    const EXECCODE_3DSECURE_AUTHENTICATION_FAILED = '4008';
+    public const EXECCODE_3DSECURE_AUTHENTICATION_FAILED = '4008';
 
-    const EXECCODE_EXPIRED_3DSECURE_AUTHENTICATION = '4009';
+    public const EXECCODE_EXPIRED_3DSECURE_AUTHENTICATION = '4009';
 
-    const EXECCODE_INTERNAL_ERROR = '5001';
+    public const EXECCODE_INTERNAL_ERROR = '5001';
 
-    const EXECCODE_BANK_ERROR = '5002';
+    public const EXECCODE_BANK_ERROR = '5002';
 
-    const EXECCODE_UNDERGOING_MAINTENANCE = '5003';
+    public const EXECCODE_UNDERGOING_MAINTENANCE = '5003';
 
-    const EXECCODE_TIME_OUT = '5004';
+    public const EXECCODE_TIME_OUT = '5004';
 
     /**
      * The "payment" function is the basic function that allows collecting from a cardholder.
      * This operation collects money directly.
      */
-    const OPERATION_PAYMENT = 'payment';
+    public const OPERATION_PAYMENT = 'payment';
 
     /**
      * The "authorization" function allows "freezing" temporarily the funds in a cardholder's bank
@@ -82,25 +83,25 @@ class Api
      * This type of operation is mainly used in the world of physical goods ("retail") when the merchant
      * decides to debit his customer at merchandise shipping time.
      */
-    const OPERATION_AUTHORIZATION = 'authorization';
+    public const OPERATION_AUTHORIZATION = 'authorization';
 
     /**
      * The "capture" function allows collecting funds from a cardholder after an authorization
      * ("authorization" function). This capture can take place within 7 days after the authorization.
      */
-    const OPERATION_CAPTURE = 'capture';
+    public const OPERATION_CAPTURE = 'capture';
 
     /**
      * This dual function is directly managed by the system:
      * - Refund: Consists of returning the already collected funds to a cardholder
      * - Cancellation: Consists of not sending a payment transaction as compensation
      */
-    const OPERATION_REFUND = 'refund';
+    public const OPERATION_REFUND = 'refund';
 
     /**
      * The "credit" function allows sending funds to a cardholder.
      */
-    const OPERATION_CREDIT = 'credit';
+    public const OPERATION_CREDIT = 'credit';
 
     /**
      * @var HttpClientInterface
@@ -291,7 +292,7 @@ class Api
 
         $clearString = $this->options['password'];
         foreach ($params as $key => $value) {
-            $clearString .= $key.'='.$value.$this->options['password'];
+            $clearString .= $key . '=' . $value . $this->options['password'];
         }
 
         return hash('sha256', $clearString);

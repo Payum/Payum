@@ -1,12 +1,13 @@
 <?php
+
 namespace Payum\Payex\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Capture;
-use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Payex\Request\Api\AutoPayAgreement;
 
 class AutoPayPaymentDetailsCaptureAction implements ActionInterface, GatewayAwareInterface
@@ -30,9 +31,9 @@ class AutoPayPaymentDetailsCaptureAction implements ActionInterface, GatewayAwar
     public function supports($request)
     {
         if (false == (
-                $request instanceof Capture &&
+            $request instanceof Capture &&
                 $request->getModel() instanceof \ArrayAccess
-            )) {
+        )) {
             return false;
         }
 

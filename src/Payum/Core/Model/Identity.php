@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Model;
 
 use Payum\Core\Storage\IdentityInterface;
@@ -72,6 +73,6 @@ class Identity implements IdentityInterface
      */
     public function __toString()
     {
-        return $this->class.'#'.$this->id;
+        return $this->class . '#' . $this->id;
     }
 }

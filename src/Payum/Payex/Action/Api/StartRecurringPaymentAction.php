@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Payex\Action\Api;
 
 use Payum\Core\Action\ActionInterface;

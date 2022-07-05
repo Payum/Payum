@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Psr\Log;
 
 use Payum\Core\Extension\Context;

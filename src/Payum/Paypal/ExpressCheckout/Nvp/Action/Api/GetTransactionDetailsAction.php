@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
 use Payum\Core\Action\ActionInterface;
@@ -6,9 +7,9 @@ use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
-use Payum\Core\Exception\RequestNotSupportedException;
 
 class GetTransactionDetailsAction implements ActionInterface, ApiAwareInterface
 {
@@ -29,15 +30,15 @@ class GetTransactionDetailsAction implements ActionInterface, ApiAwareInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $transactionIndex = 'PAYMENTREQUEST_'.$request->getPaymentRequestN().'_TRANSACTIONID';
+        $transactionIndex = 'PAYMENTREQUEST_' . $request->getPaymentRequestN() . '_TRANSACTIONID';
         if (false == $model[$transactionIndex]) {
-            throw new LogicException($transactionIndex.' must be set.');
+            throw new LogicException($transactionIndex . ' must be set.');
         }
 
         $result = $this->api->getTransactionDetails(array('TRANSACTIONID' => $model[$transactionIndex]));
         foreach ($result as $name => $value) {
             if (in_array($name, $this->getPaymentRequestNFields())) {
-                $model['PAYMENTREQUEST_'.$request->getPaymentRequestN().'_'.$name] = $value;
+                $model['PAYMENTREQUEST_' . $request->getPaymentRequestN() . '_' . $name] = $value;
             }
         }
     }

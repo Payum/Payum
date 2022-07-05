@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -23,7 +24,7 @@ class CreditCardExpirationDateType extends AbstractType
 
             $style = 'display:none';
             if (false == empty($view['day']->vars['attr']['style'])) {
-                $style = $view['day']->vars['attr']['style'].'; '.$style;
+                $style = $view['day']->vars['attr']['style'] . '; ' . $style;
             }
 
             $view['day']->vars['attr']['style'] = $style;

@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Functional\Bridge\Symfony\Form\Type;
 
 use Payum\Core\Bridge\Symfony\Form\Type\GatewayFactoriesChoiceType;

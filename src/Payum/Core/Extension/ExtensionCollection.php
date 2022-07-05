@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Extension;
 
 class ExtensionCollection implements ExtensionInterface

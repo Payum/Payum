@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Exception;
 
 use Payum\Core\Action\ActionInterface;
@@ -73,7 +74,8 @@ class RequestNotSupportedException extends InvalidArgumentException
      */
     public static function createActionNotSupported(ActionInterface $action, $request)
     {
-        $exception = new self(sprintf("Action %s is not supported the request %s. %s",
+        $exception = new self(sprintf(
+            "Action %s is not supported the request %s. %s",
             Humanify::value($action),
             Humanify::request($request),
             implode(" ", static::suggestions($request))

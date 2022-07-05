@@ -1,10 +1,11 @@
 <?php
+
 namespace Payum\AuthorizeNet\Aim\Action;
 
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Request\GetStatusInterface;
 
 class StatusAction implements ActionInterface
 {

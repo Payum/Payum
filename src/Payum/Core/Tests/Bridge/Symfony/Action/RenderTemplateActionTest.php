@@ -6,8 +6,8 @@ use Payum\Core\Bridge\Symfony\Action\RenderTemplateAction;
 use Payum\Core\Request\Generic;
 use Payum\Core\Request\RenderTemplate;
 use Payum\Core\Tests\GenericActionTest;
-use Symfony\Component\Templating\EngineInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\Templating\EngineInterface;
 
 class RenderTemplateActionTest extends GenericActionTest
 {

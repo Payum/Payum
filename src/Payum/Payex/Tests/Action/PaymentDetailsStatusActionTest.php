@@ -1,10 +1,11 @@
 <?php
+
 namespace Payum\Payex\Tests\Action;
 
-use Payum\Payex\Api\RecurringApi;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Payex\Action\PaymentDetailsStatusAction;
 use Payum\Payex\Api\OrderApi;
+use Payum\Payex\Api\RecurringApi;
 
 class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
 {

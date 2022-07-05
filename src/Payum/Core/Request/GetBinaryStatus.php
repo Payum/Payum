@@ -1,29 +1,30 @@
 <?php
+
 namespace Payum\Core\Request;
 
 class GetBinaryStatus extends BaseGetStatus
 {
-    const STATUS_PAYEDOUT = 4194304; //2^22
+    public const STATUS_PAYEDOUT = 4194304; //2^22
 
-    const STATUS_UNKNOWN = 2097152; //2^21
+    public const STATUS_UNKNOWN = 2097152; //2^21
 
-    const STATUS_FAILED = 1048576; //2^20
+    public const STATUS_FAILED = 1048576; //2^20
 
-    const STATUS_SUSPENDED = 524288; // 2^19
+    public const STATUS_SUSPENDED = 524288; // 2^19
 
-    const STATUS_EXPIRED = 262144; // 2^18
+    public const STATUS_EXPIRED = 262144; // 2^18
 
-    const STATUS_PENDING = 1024; // 2^10
+    public const STATUS_PENDING = 1024; // 2^10
 
-    const STATUS_CANCELED = 32; //2^5
+    public const STATUS_CANCELED = 32; //2^5
 
-    const STATUS_REFUNDED = 16; // 2^4
+    public const STATUS_REFUNDED = 16; // 2^4
 
-    const STATUS_AUTHORIZED = 8; // 2^3
+    public const STATUS_AUTHORIZED = 8; // 2^3
 
-    const STATUS_CAPTURED = 4; // 2^2
+    public const STATUS_CAPTURED = 4; // 2^2
 
-    const STATUS_NEW = 2; //2^1
+    public const STATUS_NEW = 2; //2^1
 
     /**
      * {@inheritDoc}

@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Security;
 
 use Payum\Core\Model\Token;

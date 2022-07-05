@@ -1,11 +1,12 @@
 <?php
+
 namespace Payum\Paypal\ProCheckout\Nvp;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
 use Payum\Paypal\ProCheckout\Nvp\Action\CaptureAction;
-use Payum\Paypal\ProCheckout\Nvp\Action\RefundAction;
 use Payum\Paypal\ProCheckout\Nvp\Action\ConvertPaymentAction;
+use Payum\Paypal\ProCheckout\Nvp\Action\RefundAction;
 use Payum\Paypal\ProCheckout\Nvp\Action\StatusAction;
 
 class PaypalProCheckoutGatewayFactory extends GatewayFactory

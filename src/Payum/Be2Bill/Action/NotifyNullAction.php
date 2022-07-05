@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Be2Bill\Action;
 
 use Payum\Core\Action\ActionInterface;

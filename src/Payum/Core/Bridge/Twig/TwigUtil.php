@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Twig;
 
 use Twig\Environment;

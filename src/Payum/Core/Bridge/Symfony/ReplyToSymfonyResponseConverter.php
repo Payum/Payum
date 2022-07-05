@@ -1,10 +1,11 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony;
 
 use Payum\Core\Bridge\Symfony\Reply\HttpResponse as SymfonyHttpResponse;
 use Payum\Core\Exception\LogicException;
-use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Reply\ReplyInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class ReplyToSymfonyResponseConverter

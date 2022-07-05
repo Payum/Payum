@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\Masspay\Nvp\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;

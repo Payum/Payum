@@ -1,9 +1,10 @@
 <?php
+
 namespace Payum\Core\Action;
 
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Request\GetCurrency;
 use Payum\Core\ISO4217\Currency;
+use Payum\Core\Request\GetCurrency;
 
 class GetCurrencyAction implements ActionInterface
 {

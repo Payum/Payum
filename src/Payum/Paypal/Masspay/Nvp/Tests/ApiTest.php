@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\Masspay\Nvp\Tests;
 
 use GuzzleHttp\Psr7\Response;

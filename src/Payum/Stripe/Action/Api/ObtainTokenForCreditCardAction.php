@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Stripe\Action\Api;
 
 use Payum\Core\Action\ActionInterface;

@@ -1,11 +1,12 @@
 <?php
+
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine;
 
 use Doctrine\Common\Cache\ArrayCache;
-use Doctrine\Persistence\Mapping\Driver\MappingDriver;
-use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Configuration;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Types\Type;
+use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 

@@ -1,10 +1,11 @@
 <?php
+
 namespace Payum\Payex\Tests\Action\Api;
 
+use Payum\Core\Reply\HttpRedirect;
 use Payum\Payex\Action\Api\InitializeOrderAction;
 use Payum\Payex\Api\OrderApi;
 use Payum\Payex\Request\Api\InitializeOrder;
-use Payum\Core\Reply\HttpRedirect;
 
 class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
 {

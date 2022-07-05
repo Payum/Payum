@@ -1,10 +1,11 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Authorize;
 use Payum\Core\Request\Capture;
-use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class AuthorizeAction extends PurchaseAction

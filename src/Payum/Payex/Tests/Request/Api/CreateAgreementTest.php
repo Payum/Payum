@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Payex\Tests\Request\Api;
 
 class CreateAgreementTest extends \PHPUnit\Framework\TestCase

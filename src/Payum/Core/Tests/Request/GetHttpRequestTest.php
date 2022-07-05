@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\GetHttpRequest;
@@ -6,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class GetHttpRequestTest extends TestCase
 {
-
     /**
      * @test
      */

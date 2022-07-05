@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Klarna\Invoice\Action;
 
 use Payum\Core\Action\ActionInterface;

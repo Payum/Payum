@@ -1,11 +1,12 @@
 <?php
+
 namespace Payum\Paypal\ProHosted\Nvp;
 
 use Http\Message\MessageFactory;
-use Payum\Core\Exception\InvalidArgumentException;
-use Payum\Core\Exception\Http\HttpException;
-use Payum\Core\Exception\RuntimeException;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\Http\HttpException;
+use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\Exception\RuntimeException;
 use Payum\Core\HttpClientInterface;
 
 /**
@@ -16,82 +17,82 @@ use Payum\Core\HttpClientInterface;
  */
 class Api
 {
-    const VERSION = '65.2';
-    const ACK_SUCCESS = 'Success';
-    const ACK_SUCCESS_WITH_WARNING = 'SuccessWithWarning';
-    const ACK_FAILURE = 'Failure';
-    const ACK_FAILUREWITHWARNING = 'FailureWithWarning';
-    const ACK_WARNING = 'Warning';
+    public const VERSION = '65.2';
+    public const ACK_SUCCESS = 'Success';
+    public const ACK_SUCCESS_WITH_WARNING = 'SuccessWithWarning';
+    public const ACK_FAILURE = 'Failure';
+    public const ACK_FAILUREWITHWARNING = 'FailureWithWarning';
+    public const ACK_WARNING = 'Warning';
 
     /**
      * No status
      */
-    const PAYMENTSTATUS_NONE = 'None';
+    public const PAYMENTSTATUS_NONE = 'None';
 
     /**
      * A reversal has been canceled; for example, when you win a dispute and the funds for the reversal have been returned to you.
      */
-    const PAYMENTSTATUS_CANCELED_REVERSAL = 'Canceled-Reversal';
+    public const PAYMENTSTATUS_CANCELED_REVERSAL = 'Canceled-Reversal';
 
     /**
      * The payment has been completed, and the funds have been added successfully to your account balance.
      */
-    const PAYMENTSTATUS_COMPLETED = 'Completed';
+    public const PAYMENTSTATUS_COMPLETED = 'Completed';
 
     /**
      * You denied the payment. This happens only if the payment was previously pending because of possible reasons described for the PendingReason element.
      */
-    const PAYMENTSTATUS_DENIED = 'Denied';
+    public const PAYMENTSTATUS_DENIED = 'Denied';
 
     /**
      * The authorization period for this payment has been reached.
      */
-    const PAYMENTSTATUS_EXPIRED = 'Expired';
+    public const PAYMENTSTATUS_EXPIRED = 'Expired';
 
     /**
      * The payment has failed. This happens only if the payment was made from your buyer's bank account.
      */
-    const PAYMENTSTATUS_FAILED = 'Failed';
+    public const PAYMENTSTATUS_FAILED = 'Failed';
 
     /**
      * The transaction has not terminated, e.g. an authorization may be awaiting completion.
      */
-    const PAYMENTSTATUS_IN_PROGRESS = 'In-Progress';
+    public const PAYMENTSTATUS_IN_PROGRESS = 'In-Progress';
 
     /**
      * The payment has been partially refunded.
      */
-    const PAYMENTSTATUS_PARTIALLY_REFUNDED = 'Partially-Refunded';
+    public const PAYMENTSTATUS_PARTIALLY_REFUNDED = 'Partially-Refunded';
 
     /**
      * The payment is pending. See the PendingReason field for more information.
      */
-    const PAYMENTSTATUS_PENDING = 'Pending';
+    public const PAYMENTSTATUS_PENDING = 'Pending';
 
     /**
      * A payment was reversed due to a chargeback or other type of reversal.
      * The funds have been removed from your account balance and returned to the buyer.
      * The reason for the reversal is specified in the ReasonCode element.
      */
-    const PAYMENTSTATUS_REVERSED = 'Reversed';
+    public const PAYMENTSTATUS_REVERSED = 'Reversed';
 
     /**
      * You refunded the payment.
      */
-    const PAYMENTSTATUS_REFUNDED = 'Refunded';
+    public const PAYMENTSTATUS_REFUNDED = 'Refunded';
 
     /**
      *  A payment has been accepted.
      */
-    const PAYMENTSTATUS_PROCESSED = 'Processed';
+    public const PAYMENTSTATUS_PROCESSED = 'Processed';
 
-    const PAYERSTATUS_VERIFIED = 'verified';
-    const PAYERSTATUS_UNVERIFIED = 'unverified';
+    public const PAYERSTATUS_VERIFIED = 'verified';
+    public const PAYERSTATUS_UNVERIFIED = 'unverified';
 
-    const PENDINGREASON_AUTHORIZATION = 'authorization';
+    public const PENDINGREASON_AUTHORIZATION = 'authorization';
 
-    const PAYMENTACTION_SALE = 'sale';
-    const FORM_CMD = '_hosted-payment';
+    public const PAYMENTACTION_SALE = 'sale';
+    public const FORM_CMD = '_hosted-payment';
 
     /**
      * @var HttpClientInterface
@@ -107,13 +108,13 @@ class Api
      * @var array
      */
     protected $options = array(
-        'username'  => null,
-        'password'  => null,
+        'username' => null,
+        'password' => null,
         'signature' => null,
-        'business'  => null,
-        'return'    => null,
-        'sandbox'   => null,
-        'cmd'       => Api::FORM_CMD,
+        'business' => null,
+        'return' => null,
+        'sandbox' => null,
+        'cmd' => Api::FORM_CMD,
     );
 
     /**
@@ -137,8 +138,8 @@ class Api
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
         }
 
-        $this->options        = $options;
-        $this->client         = $client;
+        $this->options = $options;
+        $this->client = $client;
         $this->messageFactory = $messageFactory;
     }
 
@@ -162,16 +163,16 @@ class Api
         }
 
         $fields['paymentaction'] = self::PAYMENTACTION_SALE;
-        $fields['cmd']           = self::FORM_CMD;
+        $fields['cmd'] = self::FORM_CMD;
 
         $newFields = [];
-        $i         = 0;
+        $i = 0;
         foreach ($fields as $key => $val) {
-            $newFields['L_BUTTONVAR'.$i] = $key.'='.$val;
+            $newFields['L_BUTTONVAR' . $i] = $key . '=' . $val;
             $i++;
         }
 
-        $newFields['METHOD']     = 'BMCreateButton';
+        $newFields['METHOD'] = 'BMCreateButton';
         $newFields['BUTTONTYPE'] = 'PAYMENT';
         $newFields['BUTTONCODE'] = 'TOKEN';
 
@@ -251,8 +252,8 @@ class Api
      */
     protected function addAuthorizeFields(array &$fields)
     {
-        $fields['USER']      = $this->options['username'];
-        $fields['PWD']       = $this->options['password'];
+        $fields['USER'] = $this->options['username'];
+        $fields['PWD'] = $this->options['password'];
         $fields['SIGNATURE'] = $this->options['signature'];
 
         if ($this->options['business']) {

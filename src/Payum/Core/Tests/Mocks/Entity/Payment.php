@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Mocks\Entity;
 
 use Doctrine\ORM\Mapping as ORM;

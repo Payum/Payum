@@ -1,28 +1,29 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\AuthorizeTokenAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\ConfirmOrderAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateBillingAgreementAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateRecurringPaymentProfileAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoCaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoExpressCheckoutPaymentAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoReferenceTransactionAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetRecurringPaymentsProfileDetailsAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetTransactionDetailsAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\ManageRecurringPaymentsProfileStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\RefundTransactionAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\SetExpressCheckoutAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\AuthorizeTokenAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\ManageRecurringPaymentsProfileStatusAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\CreateBillingAgreementAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoReferenceTransactionAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\TransactionSearchAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\UpdateRecurringPaymentProfileAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\AuthorizeAction;
-use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CancelAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CancelRecurringPaymentsProfileAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\ConvertPaymentAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\NotifyAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction;
@@ -99,7 +100,7 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
         }
 
         $config['payum.paths'] = array_replace([
-            'PayumPaypalExpressCheckout' => __DIR__.'/Resources/views',
+            'PayumPaypalExpressCheckout' => __DIR__ . '/Resources/views',
         ], $config['payum.paths'] ?: []);
     }
 }

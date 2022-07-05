@@ -1,13 +1,14 @@
 <?php
+
 namespace Payum\Paypal\ProHosted\Nvp\Tests\Action;
 
+use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Request\Convert;
 use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetCurrency;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\ProHosted\Nvp\Action\ConvertPaymentAction;
-use Payum\Core\Model\Payment;
-use Payum\Core\Request\Convert;
 
 class ConvertPaymentActionTest extends GenericActionTest
 {
@@ -40,10 +41,10 @@ class ConvertPaymentActionTest extends GenericActionTest
     {
         $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
         $gatewayMock->expects($this->once())->method('execute')->with($this->isInstanceOf('Payum\Core\Request\GetCurrency'))->willReturnCallback(function (GetCurrency $request) {
-            $request->name    = 'US Dollar';
-            $request->alpha3  = 'USD';
+            $request->name = 'US Dollar';
+            $request->alpha3 = 'USD';
             $request->numeric = 123;
-            $request->exp     = 2;
+            $request->exp = 2;
             $request->country = 'US';
         });
 
@@ -81,10 +82,10 @@ class ConvertPaymentActionTest extends GenericActionTest
     {
         $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
         $gatewayMock->expects($this->once())->method('execute')->with($this->isInstanceOf('Payum\Core\Request\GetCurrency'))->willReturnCallback(function (GetCurrency $request) {
-            $request->name    = 'US Dollar';
-            $request->alpha3  = 'USD';
+            $request->name = 'US Dollar';
+            $request->alpha3 = 'USD';
             $request->numeric = 123;
-            $request->exp     = 2;
+            $request->exp = 2;
             $request->country = 'US';
         });
 

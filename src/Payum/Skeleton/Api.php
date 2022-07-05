@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Skeleton;
 
 use Http\Message\MessageFactory;

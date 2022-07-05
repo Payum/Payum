@@ -1,12 +1,13 @@
 <?php
+
 namespace Payum\Core\Tests\Bridge\Doctrine\Storage;
 
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
 use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
 use Payum\Core\Tests\Mocks\Model\TestModel;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class DoctrineStorageTest extends TestCase
 {
