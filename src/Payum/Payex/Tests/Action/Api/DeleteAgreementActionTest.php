@@ -25,16 +25,16 @@ class DeleteAgreementActionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\Api\DeleteAgreementAction');
+        $rc = new \ReflectionClass(\Payum\Payex\Action\Api\DeleteAgreementAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\Api\DeleteAgreementAction');
+        $rc = new \ReflectionClass(\Payum\Payex\Action\Api\DeleteAgreementAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\ApiAwareInterface::class));
     }
 
     public function testThrowOnTryingSetNotAgreementApiAsApi()
@@ -50,7 +50,7 @@ class DeleteAgreementActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new DeleteAgreementAction();
 
-        $this->assertTrue($action->supports(new DeleteAgreement($this->createMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new DeleteAgreement($this->createMock(\ArrayAccess::class))));
     }
 
     public function testShouldNotSupportAnythingNotDeleteAgreementRequest()
@@ -117,6 +117,6 @@ class DeleteAgreementActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Payex\Api\AgreementApi', [], [], '', false);
+        return $this->createMock(\Payum\Payex\Api\AgreementApi::class, [], [], '', false);
     }
 }

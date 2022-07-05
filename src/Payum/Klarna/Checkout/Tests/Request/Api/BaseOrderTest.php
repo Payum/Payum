@@ -9,14 +9,14 @@ class BaseOrderTest extends TestCase
 {
     public function testShouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Request\Api\BaseOrder');
+        $rc = new \ReflectionClass(\Payum\Klarna\Checkout\Request\Api\BaseOrder::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Request\Generic::class));
     }
 
     public function testShouldBeAbstractClass()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Request\Api\BaseOrder');
+        $rc = new \ReflectionClass(\Payum\Klarna\Checkout\Request\Api\BaseOrder::class);
 
         $this->assertTrue($rc->isAbstract());
     }
@@ -44,7 +44,7 @@ class BaseOrderTest extends TestCase
      */
     protected function createOrderMock()
     {
-        return $this->createMock('Klarna_Checkout_Order', [], [], '', false);
+        return $this->createMock(\Klarna_Checkout_Order::class, [], [], '', false);
     }
 
     /**
@@ -52,6 +52,6 @@ class BaseOrderTest extends TestCase
      */
     protected function createBaseOrderMock($model)
     {
-        return $this->getMockForAbstractClass('Payum\Klarna\Checkout\Request\Api\BaseOrder', [$model]);
+        return $this->getMockForAbstractClass(\Payum\Klarna\Checkout\Request\Api\BaseOrder::class, [$model]);
     }
 }

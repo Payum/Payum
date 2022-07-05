@@ -44,6 +44,7 @@ class CreateCustomerExtension implements ExtensionInterface
      */
     public function onPostExecute(Context $context)
     {
+        $model = null;
         /** @var Capture $request */
         $request = $context->getRequest();
         if (false == $request instanceof ObtainToken) {

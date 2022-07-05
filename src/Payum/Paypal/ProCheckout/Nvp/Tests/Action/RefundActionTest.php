@@ -9,15 +9,15 @@ use Payum\Paypal\ProCheckout\Nvp\Api;
 
 class RefundActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\Paypal\ProCheckout\Nvp\Action\RefundAction';
+    protected $actionClass = \Payum\Paypal\ProCheckout\Nvp\Action\RefundAction::class;
 
-    protected $requestClass = 'Payum\Core\Request\Refund';
+    protected $requestClass = \Payum\Core\Request\Refund::class;
 
     public function testShouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ProCheckout\Nvp\Action\RefundAction');
+        $rc = new \ReflectionClass(\Payum\Paypal\ProCheckout\Nvp\Action\RefundAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\ApiAwareInterface::class));
     }
 
     public function testThrowIfUnsupportedApiGiven()
@@ -126,6 +126,6 @@ class RefundActionTest extends GenericActionTest
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ProCheckout\Nvp\Api', [], [], '', false);
+        return $this->createMock(\Payum\Paypal\ProCheckout\Nvp\Api::class, [], [], '', false);
     }
 }

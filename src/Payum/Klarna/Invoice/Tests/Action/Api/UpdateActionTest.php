@@ -14,16 +14,16 @@ class UpdateActionTest extends GenericApiAwareActionTest
 {
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\UpdateAction');
+        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Action\Api\UpdateAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction::class));
     }
 
     public function testShouldImplementsGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\UpdateAction');
+        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Action\Api\UpdateAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\GatewayAwareInterface::class));
     }
 
     public function testShouldAllowSetGateway()
@@ -79,7 +79,7 @@ class UpdateActionTest extends GenericApiAwareActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails'))
+            ->with($this->isInstanceOf(\Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails::class))
         ;
 
         $klarnaMock = $this->createKlarnaMock();
@@ -111,7 +111,7 @@ class UpdateActionTest extends GenericApiAwareActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails'))
+            ->with($this->isInstanceOf(\Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails::class))
         ;
 
         $klarnaMock = $this->createKlarnaMock();
@@ -148,7 +148,7 @@ class UpdateActionTest extends GenericApiAwareActionTest
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock = $this->createMock('Klarna', ['config', 'update']);
+        $klarnaMock = $this->createMock(\Klarna::class, ['config', 'update']);
 
         $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);
@@ -163,6 +163,6 @@ class UpdateActionTest extends GenericApiAwareActionTest
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }

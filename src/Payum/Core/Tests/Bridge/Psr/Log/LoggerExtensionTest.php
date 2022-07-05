@@ -17,23 +17,23 @@ class LoggerExtensionTest extends TestCase
 {
     public static function setUpBeforeClass(): void
     {
-        if (false == interface_exists('Psr\Log\LoggerInterface')) {
+        if (false == interface_exists(\Psr\Log\LoggerInterface::class)) {
             throw new SkippedTestError('To run these tests install psr log lib.');
         }
     }
 
     public function testShouldImplementExtensionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Psr\Log\LoggerExtension');
+        $rc = new \ReflectionClass(\Payum\Core\Bridge\Psr\Log\LoggerExtension::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Extension\ExtensionInterface::class));
     }
 
     public function testShouldImplementLoggerAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Psr\Log\LoggerExtension');
+        $rc = new \ReflectionClass(\Payum\Core\Bridge\Psr\Log\LoggerExtension::class);
 
-        $this->assertTrue($rc->implementsInterface('Psr\Log\LoggerAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(\Psr\Log\LoggerAwareInterface::class));
     }
 
     public function testShouldAllowSetLogger()
@@ -88,7 +88,7 @@ class LoggerExtensionTest extends TestCase
 
         $extension->onPostExecute($context);
 
-        $this->assertInstanceOf('Psr\Log\NullLogger', $action->logger);
+        $this->assertInstanceOf(\Psr\Log\NullLogger::class, $action->logger);
     }
 
     public function testShouldNotInjectNullLoggerToNotLoggerAwareActionOnPostExecute()
@@ -130,7 +130,7 @@ class LoggerExtensionTest extends TestCase
      */
     protected function createLoggerMock()
     {
-        return $this->createMock('Psr\Log\LoggerInterface');
+        return $this->createMock(\Psr\Log\LoggerInterface::class);
     }
 
     /**
@@ -138,7 +138,7 @@ class LoggerExtensionTest extends TestCase
      */
     protected function createActionMock()
     {
-        return $this->createMock('Payum\Core\Action\ActionInterface');
+        return $this->createMock(\Payum\Core\Action\ActionInterface::class);
     }
 
     /**
@@ -146,7 +146,7 @@ class LoggerExtensionTest extends TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }
 

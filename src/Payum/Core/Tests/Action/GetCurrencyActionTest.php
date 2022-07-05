@@ -8,9 +8,9 @@ use Payum\Core\Tests\GenericActionTest;
 
 class GetCurrencyActionTest extends GenericActionTest
 {
-    protected $requestClass = 'Payum\Core\Request\GetCurrency';
+    protected $requestClass = \Payum\Core\Request\GetCurrency::class;
 
-    protected $actionClass = 'Payum\Core\Action\GetCurrencyAction';
+    protected $actionClass = \Payum\Core\Action\GetCurrencyAction::class;
 
     public function provideSupportedRequests(): \Iterator
     {
@@ -23,7 +23,7 @@ class GetCurrencyActionTest extends GenericActionTest
         yield ['foo'];
         yield [['foo']];
         yield [new \stdClass()];
-        yield [$this->getMockForAbstractClass('Payum\Core\Request\Generic', [[]])];
+        yield [$this->getMockForAbstractClass(\Payum\Core\Request\Generic::class, [[]])];
     }
 
     public function testShouldSetCurrencyByAlpha3()

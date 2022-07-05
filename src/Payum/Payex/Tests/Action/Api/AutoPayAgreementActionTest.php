@@ -31,16 +31,16 @@ class AutoPayAgreementActionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\Api\AutoPayAgreementAction');
+        $rc = new \ReflectionClass(\Payum\Payex\Action\Api\AutoPayAgreementAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\Api\AutoPayAgreementAction');
+        $rc = new \ReflectionClass(\Payum\Payex\Action\Api\AutoPayAgreementAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\ApiAwareInterface::class));
     }
 
     public function testThrowOnTryingSetNotAgreementApiAsApi()
@@ -56,7 +56,7 @@ class AutoPayAgreementActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AutoPayAgreementAction();
 
-        $this->assertTrue($action->supports(new AutoPayAgreement($this->createMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new AutoPayAgreement($this->createMock(\ArrayAccess::class))));
     }
 
     public function testShouldNotSupportAnythingNotAutoPayAgreementRequest()
@@ -121,6 +121,6 @@ class AutoPayAgreementActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Payex\Api\AgreementApi', [], [], '', false);
+        return $this->createMock(\Payum\Payex\Api\AgreementApi::class, [], [], '', false);
     }
 }

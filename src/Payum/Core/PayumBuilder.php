@@ -201,7 +201,7 @@ class PayumBuilder
      */
     public function addGatewayFactoryConfig($name, array $config)
     {
-        $currentConfig = isset($this->gatewayFactoryConfigs[$name]) ? $this->gatewayFactoryConfigs[$name] : [];
+        $currentConfig = $this->gatewayFactoryConfigs[$name] ?? [];
         $this->gatewayFactoryConfigs[$name] = array_replace_recursive($currentConfig, $config);
 
         return $this;
@@ -509,7 +509,7 @@ class PayumBuilder
         foreach ($map as $name => $factoryClass) {
             if (class_exists($factoryClass)) {
                 $gatewayFactories[$name] = new $factoryClass(
-                    isset($this->gatewayFactoryConfigs[$name]) ? $this->gatewayFactoryConfigs[$name] : [],
+                    $this->gatewayFactoryConfigs[$name] ?? [],
                     $coreGatewayFactory
                 );
             }

@@ -32,7 +32,7 @@ class NotifyActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\Sync::class))
         ;
 
         $action = new NotifyAction();
@@ -46,6 +46,6 @@ class NotifyActionTest extends GenericActionTest
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }

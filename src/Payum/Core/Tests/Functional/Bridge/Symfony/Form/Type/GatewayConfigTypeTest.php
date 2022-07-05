@@ -25,9 +25,9 @@ class GatewayConfigTypeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->fooGatewayFactoryMock = $this->createMock('Payum\Core\GatewayFactoryInterface');
+        $this->fooGatewayFactoryMock = $this->createMock(\Payum\Core\GatewayFactoryInterface::class);
 
-        $registry = $this->createMock('Payum\Core\Registry\GatewayFactoryRegistryInterface');
+        $registry = $this->createMock(\Payum\Core\Registry\GatewayFactoryRegistryInterface::class);
         $registry
             ->method('getGatewayFactory')
             ->with('foo')
@@ -47,8 +47,8 @@ class GatewayConfigTypeTest extends TestCase
     {
         $form = $this->formFactory->create(GatewayConfigType::class);
 
-        $this->assertInstanceOf('Symfony\Component\Form\Form', $form);
-        $this->assertInstanceOf('Symfony\Component\Form\FormView', $form->createView());
+        $this->assertInstanceOf(\Symfony\Component\Form\Form::class, $form);
+        $this->assertInstanceOf(\Symfony\Component\Form\FormView::class, $form->createView());
     }
 
     public function testShouldAddDefaultFieldsIfFactoryNameChosen()

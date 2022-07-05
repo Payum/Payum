@@ -6,8 +6,8 @@ class ReserveAmountTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldBeSubClassOfBaseOrder()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Request\Api\ReserveAmount');
+        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Request\Api\ReserveAmount::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Request\Generic::class));
     }
 }

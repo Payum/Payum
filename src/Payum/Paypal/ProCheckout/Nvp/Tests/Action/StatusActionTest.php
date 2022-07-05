@@ -9,9 +9,9 @@ use Payum\Paypal\ProCheckout\Nvp\Api;
 
 class StatusActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\Paypal\ProCheckout\Nvp\Action\StatusAction';
+    protected $actionClass = \Payum\Paypal\ProCheckout\Nvp\Action\StatusAction::class;
 
-    protected $requestClass = 'Payum\Core\Request\GetHumanStatus';
+    protected $requestClass = \Payum\Core\Request\GetHumanStatus::class;
 
     public function testShouldMarkNewIfDetailsEmpty()
     {

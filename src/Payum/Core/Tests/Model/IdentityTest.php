@@ -26,7 +26,7 @@ class IdentityTest extends TestCase
     {
         $id = new Identity('theId', new \stdClass());
 
-        $this->assertSame('stdClass', $id->getClass());
+        $this->assertSame(\stdClass::class, $id->getClass());
     }
 
     public function testShouldBeCorrectlySerializedAndUnserialized()

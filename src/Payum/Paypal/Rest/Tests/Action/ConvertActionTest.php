@@ -14,13 +14,13 @@ class ConvertActionTest extends GenericActionTest
 {
     protected $actionClass = ConvertAction::class;
 
-    protected $requestClass = 'Payum\Core\Request\Convert';
+    protected $requestClass = \Payum\Core\Request\Convert::class;
 
     public function provideSupportedRequests(): \Iterator
     {
         yield [new $this->requestClass(new Payment(), 'array')];
         yield [new $this->requestClass($this->createMock(PaymentInterface::class), 'array')];
-        yield [new $this->requestClass(new Payment(), 'array', $this->createMock('Payum\Core\Security\TokenInterface'))];
+        yield [new $this->requestClass(new Payment(), 'array', $this->createMock(\Payum\Core\Security\TokenInterface::class))];
     }
 
     public function provideNotSupportedRequests(): \Iterator

@@ -12,7 +12,7 @@ class DoctrineStorageMongoOdmTest extends MongoTest
     {
         $storage = new DoctrineStorage(
             $this->dm,
-            'Payum\Core\Tests\Mocks\Document\TestModel'
+            \Payum\Core\Tests\Mocks\Document\TestModel::class
         );
 
         $model = $storage->create();
@@ -26,7 +26,7 @@ class DoctrineStorageMongoOdmTest extends MongoTest
     {
         $storage = new DoctrineStorage(
             $this->dm,
-            'Payum\Core\Tests\Mocks\Document\TestModel'
+            \Payum\Core\Tests\Mocks\Document\TestModel::class
         );
 
         $model = $storage->create();
@@ -37,7 +37,7 @@ class DoctrineStorageMongoOdmTest extends MongoTest
 
         $identity = $storage->identify($model);
 
-        $this->assertInstanceOf('Payum\Core\Model\Identity', $identity);
+        $this->assertInstanceOf(\Payum\Core\Model\Identity::class, $identity);
         $this->assertInstanceOf($identity->getClass(), $model);
         $this->assertEquals($model->getId(), $identity->getId());
     }
@@ -46,7 +46,7 @@ class DoctrineStorageMongoOdmTest extends MongoTest
     {
         $storage = new DoctrineStorage(
             $this->dm,
-            'Payum\Core\Tests\Mocks\Document\TestModel'
+            \Payum\Core\Tests\Mocks\Document\TestModel::class
         );
 
         $model = $storage->create();
@@ -59,7 +59,7 @@ class DoctrineStorageMongoOdmTest extends MongoTest
 
         $model = $storage->find($requestId);
 
-        $this->assertInstanceOf('Payum\Core\Tests\Mocks\Document\TestModel', $model);
+        $this->assertInstanceOf(\Payum\Core\Tests\Mocks\Document\TestModel::class, $model);
         $this->assertEquals($requestId, $model->getId());
     }
 
@@ -67,7 +67,7 @@ class DoctrineStorageMongoOdmTest extends MongoTest
     {
         $storage = new DoctrineStorage(
             $this->dm,
-            'Payum\Core\Tests\Mocks\Document\TestModel'
+            \Payum\Core\Tests\Mocks\Document\TestModel::class
         );
 
         $model = $storage->create();
@@ -82,7 +82,7 @@ class DoctrineStorageMongoOdmTest extends MongoTest
 
         $foundModel = $storage->find($identity);
 
-        $this->assertInstanceOf('Payum\Core\Tests\Mocks\Document\TestModel', $foundModel);
+        $this->assertInstanceOf(\Payum\Core\Tests\Mocks\Document\TestModel::class, $foundModel);
         $this->assertEquals($requestId, $foundModel->getId());
     }
 
@@ -90,7 +90,7 @@ class DoctrineStorageMongoOdmTest extends MongoTest
     {
         $storage = new DoctrineStorage(
             $this->dm,
-            'Payum\Core\Tests\Mocks\Document\TestModel'
+            \Payum\Core\Tests\Mocks\Document\TestModel::class
         );
 
         /** @var TestModel $model */
@@ -113,21 +113,21 @@ class DoctrineStorageMongoOdmTest extends MongoTest
         ]);
 
         $this->assertCount(2, $result);
-        $this->assertContainsOnly('Payum\Core\Tests\Mocks\Document\TestModel', $result);
+        $this->assertContainsOnly(\Payum\Core\Tests\Mocks\Document\TestModel::class, $result);
 
         $result = $storage->findBy([
             'currency' => 'EUR',
         ]);
 
         $this->assertCount(1, $result);
-        $this->assertContainsOnly('Payum\Core\Tests\Mocks\Document\TestModel', $result);
+        $this->assertContainsOnly(\Payum\Core\Tests\Mocks\Document\TestModel::class, $result);
     }
 
     public function testShouldFindByAllIfCriteriaIsEmpty()
     {
         $storage = new DoctrineStorage(
             $this->dm,
-            'Payum\Core\Tests\Mocks\Document\TestModel'
+            \Payum\Core\Tests\Mocks\Document\TestModel::class
         );
 
         /** @var TestModel $model */
@@ -148,6 +148,6 @@ class DoctrineStorageMongoOdmTest extends MongoTest
         $result = $storage->findBy([]);
 
         $this->assertCount(3, $result);
-        $this->assertContainsOnly('Payum\Core\Tests\Mocks\Document\TestModel', $result);
+        $this->assertContainsOnly(\Payum\Core\Tests\Mocks\Document\TestModel::class, $result);
     }
 }

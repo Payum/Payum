@@ -12,7 +12,7 @@ class ArrayObjectTest extends TestCase
     {
         $rc = new \ReflectionClass(ArrayObject::class);
 
-        $this->assertTrue($rc->isSubclassOf('ArrayObject'));
+        $this->assertTrue($rc->isSubclassOf(\ArrayObject::class));
     }
 
     public function testShouldAllowGetPreviouslySetValueByIndex()
@@ -72,7 +72,7 @@ class ArrayObjectTest extends TestCase
         ]);
 
         //guard
-        $this->assertInstanceOf('Traversable', $traversable);
+        $this->assertInstanceOf(\Traversable::class, $traversable);
 
         $expectedArray = [
             'foo' => 'valNew',

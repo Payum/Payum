@@ -8,7 +8,7 @@ class DoReferenceTransactionTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoReferenceTransaction');
+        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoReferenceTransaction::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }

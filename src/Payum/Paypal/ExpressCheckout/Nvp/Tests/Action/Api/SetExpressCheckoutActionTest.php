@@ -27,7 +27,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new SetExpressCheckoutAction();
 
-        $request = new SetExpressCheckout($this->createMock('ArrayAccess'));
+        $request = new SetExpressCheckout($this->createMock(\ArrayAccess::class));
 
         $this->assertTrue($action->supports($request));
     }
@@ -120,6 +120,6 @@ class SetExpressCheckoutActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
+        return $this->createMock(\Payum\Paypal\ExpressCheckout\Nvp\Api::class, [], [], '', false);
     }
 }

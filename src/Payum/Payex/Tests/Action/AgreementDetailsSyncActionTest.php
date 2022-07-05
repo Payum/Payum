@@ -19,7 +19,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AgreementDetailsSyncAction();
 
-        $array = $this->createMock('ArrayAccess');
+        $array = $this->createMock(\ArrayAccess::class);
         $array
             ->expects($this->atLeast(2))
             ->method('offsetExists')
@@ -34,7 +34,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AgreementDetailsSyncAction();
 
-        $array = $this->createMock('ArrayAccess');
+        $array = $this->createMock(\ArrayAccess::class);
         $array
             ->expects($this->atLeast(2))
             ->method('offsetExists')
@@ -73,7 +73,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\CheckAgreement'))
+            ->with($this->isInstanceOf(\Payum\Payex\Request\Api\CheckAgreement::class))
         ;
 
         $action = new AgreementDetailsSyncAction();
@@ -89,6 +89,6 @@ class AgreementDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }

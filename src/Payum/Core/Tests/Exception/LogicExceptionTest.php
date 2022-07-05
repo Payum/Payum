@@ -8,15 +8,15 @@ class LogicExceptionTest extends TestCase
 {
     public function testShouldImplementExceptionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Exception\LogicException');
+        $rc = new \ReflectionClass(\Payum\Core\Exception\LogicException::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Exception\ExceptionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Exception\ExceptionInterface::class));
     }
 
     public function testShouldBeSubClassOfRuntimeException()
     {
-        $rc = new \ReflectionClass('Payum\Core\Exception\LogicException');
+        $rc = new \ReflectionClass(\Payum\Core\Exception\LogicException::class);
 
-        $this->assertTrue($rc->isSubclassOf('LogicException'));
+        $this->assertTrue($rc->isSubclassOf(\LogicException::class));
     }
 }

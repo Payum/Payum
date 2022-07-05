@@ -11,9 +11,9 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
 {
     public function testShouldBeSubClassOfAbstractType()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Form\Type\GatewayFactoriesChoiceType');
+        $rc = new \ReflectionClass(\Payum\Core\Bridge\Symfony\Form\Type\GatewayFactoriesChoiceType::class);
 
-        $this->assertTrue($rc->isSubclassOf('Symfony\Component\Form\AbstractType'));
+        $this->assertTrue($rc->isSubclassOf(\Symfony\Component\Form\AbstractType::class));
     }
 
     public function testShouldExtendChoice()

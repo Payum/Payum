@@ -66,7 +66,7 @@ class AuthorizePaymentActionTest extends GenericActionTest
         $action->execute($authorize = new Authorize($payment));
 
         $this->assertSame($payment, $authorize->getFirstModel());
-        $this->assertInstanceOf('ArrayAccess', $authorize->getModel());
+        $this->assertInstanceOf(\ArrayAccess::class, $authorize->getModel());
         $this->assertNull($authorize->getToken());
     }
 
@@ -97,7 +97,7 @@ class AuthorizePaymentActionTest extends GenericActionTest
         $action->execute($authorize = new Authorize($payment));
 
         $this->assertSame($payment, $authorize->getFirstModel());
-        $this->assertInstanceOf('ArrayAccess', $authorize->getModel());
+        $this->assertInstanceOf(\ArrayAccess::class, $authorize->getModel());
 
         $details = $payment->getDetails();
         $this->assertNotEmpty($details);
@@ -139,7 +139,7 @@ class AuthorizePaymentActionTest extends GenericActionTest
         $action->execute($authorize);
 
         $this->assertSame($payment, $authorize->getFirstModel());
-        $this->assertInstanceOf('ArrayAccess', $authorize->getModel());
+        $this->assertInstanceOf(\ArrayAccess::class, $authorize->getModel());
         $this->assertSame($token, $authorize->getToken());
     }
 
@@ -166,7 +166,7 @@ class AuthorizePaymentActionTest extends GenericActionTest
                 $this->returnCallback(function (Authorize $request) use ($testCase, $expectedDetails) {
                     $details = $request->getModel();
 
-                    $testCase->assertInstanceOf('ArrayAccess', $details);
+                    $testCase->assertInstanceOf(\ArrayAccess::class, $details);
                     $testCase->assertSame($expectedDetails, iterator_to_array($details));
 
                     $details['bar'] = 'barVal';
@@ -180,7 +180,7 @@ class AuthorizePaymentActionTest extends GenericActionTest
         $action->execute($authorize = new Authorize($payment));
 
         $this->assertSame($payment, $authorize->getFirstModel());
-        $this->assertInstanceOf('ArrayAccess', $authorize->getModel());
+        $this->assertInstanceOf(\ArrayAccess::class, $authorize->getModel());
         $this->assertSame([
             'foo' => 'fooVal',
             'bar' => 'barVal',
@@ -221,7 +221,7 @@ class AuthorizePaymentActionTest extends GenericActionTest
         $action->execute($authorize = new Authorize($payment));
 
         $this->assertSame($payment, $authorize->getFirstModel());
-        $this->assertInstanceOf('ArrayAccess', $authorize->getModel());
+        $this->assertInstanceOf(\ArrayAccess::class, $authorize->getModel());
         $this->assertSame([
             'foo' => 'fooVal',
             'bar' => 'barVal',

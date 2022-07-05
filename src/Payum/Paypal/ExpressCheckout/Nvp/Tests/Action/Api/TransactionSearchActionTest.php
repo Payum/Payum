@@ -27,7 +27,7 @@ class TransactionSearchActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new TransactionSearchAction();
 
-        $this->assertTrue($action->supports(new TransactionSearch($this->createMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new TransactionSearch($this->createMock(\ArrayAccess::class))));
     }
 
     public function testShouldNotSupportAnythingNotAuthorizeTokenRequest()
@@ -173,6 +173,6 @@ class TransactionSearchActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
+        return $this->createMock(\Payum\Paypal\ExpressCheckout\Nvp\Api::class, [], [], '', false);
     }
 }

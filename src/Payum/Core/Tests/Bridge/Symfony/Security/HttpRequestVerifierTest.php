@@ -12,9 +12,9 @@ class HttpRequestVerifierTest extends TestCase
 {
     public function testShouldImplementHttpRequestVerifierInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Security\HttpRequestVerifier');
+        $rc = new \ReflectionClass(\Payum\Core\Bridge\Symfony\Security\HttpRequestVerifier::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Security\HttpRequestVerifierInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Security\HttpRequestVerifierInterface::class));
     }
 
     public function testThrowIfNotSymfonyRequestGivenOnVerify()
@@ -225,6 +225,6 @@ class HttpRequestVerifierTest extends TestCase
      */
     protected function createStorageMock()
     {
-        return $this->createMock('Payum\Core\Storage\StorageInterface');
+        return $this->createMock(\Payum\Core\Storage\StorageInterface::class);
     }
 }

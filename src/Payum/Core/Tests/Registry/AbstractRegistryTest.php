@@ -9,28 +9,28 @@ class AbstractRegistryTest extends TestCase
 {
     public function testShouldImplementGatewayRegistryInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Registry\AbstractRegistry');
+        $rc = new \ReflectionClass(\Payum\Core\Registry\AbstractRegistry::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Registry\GatewayRegistryInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Registry\GatewayRegistryInterface::class));
     }
 
     public function testShouldImplementStorageRegistryInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Registry\AbstractRegistry');
+        $rc = new \ReflectionClass(\Payum\Core\Registry\AbstractRegistry::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Registry\StorageRegistryInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Registry\StorageRegistryInterface::class));
     }
 
     public function testShouldImplementGatewayFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Registry\AbstractRegistry');
+        $rc = new \ReflectionClass(\Payum\Core\Registry\AbstractRegistry::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Registry\GatewayFactoryRegistryInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Registry\GatewayFactoryRegistryInterface::class));
     }
 
     public function testShouldBeAbstractClass()
     {
-        $rc = new \ReflectionClass('Payum\Core\Registry\AbstractRegistry');
+        $rc = new \ReflectionClass(\Payum\Core\Registry\AbstractRegistry::class);
 
         $this->assertTrue($rc->isAbstract());
     }
@@ -154,7 +154,7 @@ class AbstractRegistryTest extends TestCase
             'barName' => 'barGateway',
         ];
         $storages = [
-            'stdClass' => 'barStorage',
+            \stdClass::class => 'barStorage',
         ];
 
         $registry = $this->createAbstractRegistryMock([
@@ -162,7 +162,7 @@ class AbstractRegistryTest extends TestCase
             $storages,
         ]);
 
-        $this->assertSame('barStorage', $registry->getStorage('stdClass'));
+        $this->assertSame('barStorage', $registry->getStorage(\stdClass::class));
     }
 
     public function testShouldAllowGetStorageIfDoctrineProxyClassGiven()
@@ -210,7 +210,7 @@ class AbstractRegistryTest extends TestCase
             'barName' => 'barGateway',
         ];
         $storages = [
-            'stdClass' => 'barStorage',
+            \stdClass::class => 'barStorage',
         ];
 
         $registry = $this->createAbstractRegistryMock([
@@ -228,7 +228,7 @@ class AbstractRegistryTest extends TestCase
             'barName' => 'barGateway',
         ];
         $storages = [
-            'stdClass' => 'barStorage',
+            \stdClass::class => 'barStorage',
         ];
 
         $registry = $this->createAbstractRegistryMock([
@@ -246,7 +246,7 @@ class AbstractRegistryTest extends TestCase
             'barName' => 'barGateway',
         ];
         $storages = [
-            'stdClass' => 'barStorage',
+            \stdClass::class => 'barStorage',
             'FooClass' => 'FooStorage',
         ];
 
@@ -263,7 +263,7 @@ class AbstractRegistryTest extends TestCase
      */
     protected function createAbstractRegistryMock(array $constructorArguments)
     {
-        $registryMock = $this->getMockForAbstractClass('Payum\Core\Registry\AbstractRegistry', $constructorArguments);
+        $registryMock = $this->getMockForAbstractClass(\Payum\Core\Registry\AbstractRegistry::class, $constructorArguments);
 
         $registryMock
             ->method('getService')

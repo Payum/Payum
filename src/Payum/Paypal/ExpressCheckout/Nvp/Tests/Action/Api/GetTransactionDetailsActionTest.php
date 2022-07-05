@@ -27,7 +27,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new GetTransactionDetailsAction();
 
-        $request = new GetTransactionDetails($this->createMock('ArrayAccess'), $paymentRequestN = 5);
+        $request = new GetTransactionDetails($this->createMock(\ArrayAccess::class), $paymentRequestN = 5);
 
         $this->assertTrue($action->supports($request));
     }
@@ -117,6 +117,6 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
+        return $this->createMock(\Payum\Paypal\ExpressCheckout\Nvp\Api::class, [], [], '', false);
     }
 }

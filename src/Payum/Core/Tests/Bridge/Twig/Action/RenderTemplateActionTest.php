@@ -12,9 +12,9 @@ class RenderTemplateActionTest extends TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Twig\Action\RenderTemplateAction');
+        $rc = new \ReflectionClass(\Payum\Core\Bridge\Twig\Action\RenderTemplateAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldSupportRenderTemplate()

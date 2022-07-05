@@ -9,9 +9,9 @@ class HttpResponseTest extends TestCase
 {
     public function testShouldImplementReplyInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Reply\HttpResponse');
+        $rc = new \ReflectionClass(\Payum\Core\Reply\HttpResponse::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Reply\ReplyInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Reply\ReplyInterface::class));
     }
 
     public function testShouldAllowGetContentSetInConstructor()

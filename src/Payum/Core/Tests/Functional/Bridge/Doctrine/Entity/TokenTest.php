@@ -35,7 +35,7 @@ class TokenTest extends OrmTest
         $token->setTargetUrl('anUrl');
         $token->setGatewayName('aName');
         $token->setAfterUrl('anAfterUrl');
-        $token->setDetails(new Identity('anId', 'stdClass'));
+        $token->setDetails(new Identity('anId', \stdClass::class));
 
         $this->em->persist($token);
         $this->em->flush();

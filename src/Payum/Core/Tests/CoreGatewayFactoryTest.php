@@ -244,8 +244,8 @@ class CoreGatewayFactoryTest extends TestCase
 
     public function testShouldAllowPrependAction()
     {
-        $firstAction = $this->createMock('Payum\Core\Action\ActionInterface');
-        $secondAction = $this->createMock('Payum\Core\Action\ActionInterface');
+        $firstAction = $this->createMock(\Payum\Core\Action\ActionInterface::class);
+        $secondAction = $this->createMock(\Payum\Core\Action\ActionInterface::class);
 
         $factory = new CoreGatewayFactory();
 

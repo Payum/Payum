@@ -31,7 +31,7 @@ class PayexGatewayFactory extends GatewayFactory
 {
     protected function populateConfig(ArrayObject $config)
     {
-        if (! class_exists('SoapClient')) {
+        if (! class_exists(\SoapClient::class)) {
             throw new \LogicException('You must install "ext-soap" extension.');
         }
 

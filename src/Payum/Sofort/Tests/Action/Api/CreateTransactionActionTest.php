@@ -28,7 +28,7 @@ class CreateTransactionActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new CreateTransactionAction();
 
-        $this->assertTrue($action->supports(new CreateTransaction($this->createMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new CreateTransaction($this->createMock(\ArrayAccess::class))));
     }
 
     public function testShouldNotSupportAnythingCreateTransactionRequest()
