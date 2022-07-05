@@ -51,7 +51,7 @@ class PaymentDetailsStatusAction implements ActionInterface
             return;
         }
 
-        if (count(iterator_to_array($model)) == 0) {
+        if (0 == count(iterator_to_array($model))) {
             $request->markNew();
 
             return;
@@ -75,7 +75,7 @@ class PaymentDetailsStatusAction implements ActionInterface
                 $errorDetails = $model['errorDetails'];
                 if (
                     isset($errorDetails['transactionErrorCode']) &&
-                    $errorDetails['transactionErrorCode'] == OrderApi::TRANSACTIONERRORCODE_OPERATIONCANCELLEDBYCUSTOMER
+                    OrderApi::TRANSACTIONERRORCODE_OPERATIONCANCELLEDBYCUSTOMER == $errorDetails['transactionErrorCode']
                 ) {
                     $request->markCanceled();
 
@@ -147,7 +147,7 @@ class PaymentDetailsStatusAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (count(iterator_to_array($model)) == 0) {
+        if (0 == count(iterator_to_array($model))) {
             return true;
         }
 

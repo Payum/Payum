@@ -23,13 +23,13 @@ class ObjectType extends Type
 
     public function convertToPHPValue($value)
     {
-        if ($value === null) {
+        if (null === $value) {
             return;
         }
 
         $value = (is_resource($value)) ? stream_get_contents($value) : $value;
         $val = unserialize($value);
-        if ($val === false && $value !== 'b:0;') {
+        if (false === $val && 'b:0;' !== $value) {
             throw new \LogicException('Conversion exception: ' . $value . '. ' . $this->getName());
         }
 

@@ -39,7 +39,7 @@ class ConvertPayoutAction implements ActionInterface
     {
         return $request instanceof Convert &&
             $request->getSource() instanceof PayoutInterface &&
-            $request->getTo() == 'array'
+            'array' == $request->getTo()
         ;
     }
 }

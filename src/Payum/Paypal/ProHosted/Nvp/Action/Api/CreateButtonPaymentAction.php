@@ -37,7 +37,7 @@ class CreateButtonPaymentAction implements ActionInterface, ApiAwareInterface
         $result = $this->api->doCreateButton((array) $model);
         $model->replace((array) $result);
 
-        if ($model['EMAILLINK'] != null) {
+        if (null != $model['EMAILLINK']) {
             throw new HttpRedirect($model['EMAILLINK']);
         }
     }

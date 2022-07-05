@@ -43,7 +43,7 @@ class PaypalRestGatewayFactory extends GatewayFactory
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
 
-                if (isset($config['config_path']) && $config['config_path'] !== '') {
+                if (isset($config['config_path']) && '' !== $config['config_path']) {
                     if (false == defined('PP_CONFIG_PATH')) {
                         define('PP_CONFIG_PATH', $config['config_path']);
                     } elseif (PP_CONFIG_PATH !== $config['config_path']) {
