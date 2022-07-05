@@ -27,16 +27,16 @@ abstract class PurchaseAction implements ActionInterface, GatewayAwareInterface,
 
     public function execute($request)
     {
-        /** @var $request Capture */
+        /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
         $details->validateNotEmpty('PAYMENTREQUEST_0_PAYMENTACTION');
 
-        $details->defaults(array(
+        $details->defaults([
             'AUTHORIZE_TOKEN_USERACTION' => Api::USERACTION_COMMIT,
-        ));
+        ]);
 
         $this->gateway->execute($httpRequest = new GetHttpRequest());
         if (isset($httpRequest->query['cancelled'])) {

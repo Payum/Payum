@@ -26,18 +26,18 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
 
     public function provideSupportedRequests(): \Iterator
     {
-        yield array(new $this->requestClass(array('BILLINGPERIOD' => 'foo')));
-        yield array(new $this->requestClass(new \ArrayObject(array('BILLINGPERIOD' => 'foo'))));
+        yield [new $this->requestClass(['BILLINGPERIOD' => 'foo'])];
+        yield [new $this->requestClass(new \ArrayObject(['BILLINGPERIOD' => 'foo']))];
     }
 
     public function provideNotSupportedRequests(): \Iterator
     {
-        yield array('foo');
-        yield array(array('foo'));
-        yield array(new \stdClass());
-        yield array(new $this->requestClass('foo'));
-        yield array(new $this->requestClass(new \stdClass()));
-        yield array($this->getMockForAbstractClass(Generic::class, array(array())));
+        yield ['foo'];
+        yield [['foo']];
+        yield [new \stdClass()];
+        yield [new $this->requestClass('foo')];
+        yield [new $this->requestClass(new \stdClass())];
+        yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
     public function testShouldImplementActionInterface()
@@ -59,11 +59,11 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
         $action = new CancelRecurringPaymentsProfileAction();
 
         $this->assertTrue(
-            $action->supports(new Cancel(array('BILLINGPERIOD' => 'foo')))
+            $action->supports(new Cancel(['BILLINGPERIOD' => 'foo']))
         );
 
         $this->assertTrue(
-            $action->supports(new Cancel(new \ArrayObject(array('BILLINGPERIOD' => 'foo'))))
+            $action->supports(new Cancel(new \ArrayObject(['BILLINGPERIOD' => 'foo'])))
         );
     }
 
@@ -88,7 +88,7 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
         $this->expectExceptionMessage('The PROFILEID fields are required.');
         $action = new CancelRecurringPaymentsProfileAction();
 
-        $request = new Cancel(array('BILLINGPERIOD' => 'foo'));
+        $request = new Cancel(['BILLINGPERIOD' => 'foo']);
 
         $action->execute($request);
     }
@@ -100,18 +100,18 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
             ->expects($this->exactly(2))
             ->method('execute')
             ->withConsecutive(
-                array($this->isInstanceOf(ManageRecurringPaymentsProfileStatus::class)),
-                array($this->isInstanceOf(Sync::class))
+                [$this->isInstanceOf(ManageRecurringPaymentsProfileStatus::class)],
+                [$this->isInstanceOf(Sync::class)]
             )
         ;
 
         $action = new CancelRecurringPaymentsProfileAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Cancel(array(
+        $request = new Cancel([
             'BILLINGPERIOD' => 'Month',
             'PROFILEID' => 'profile-ID',
-        ));
+        ]);
 
         $action->execute($request);
     }

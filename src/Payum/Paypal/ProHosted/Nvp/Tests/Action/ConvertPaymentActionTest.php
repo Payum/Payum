@@ -18,20 +18,20 @@ class ConvertPaymentActionTest extends GenericActionTest
 
     public function provideSupportedRequests(): \Iterator
     {
-        yield array(new $this->requestClass(new Payment(), 'array'));
-        yield array(new $this->requestClass($this->createMock(PaymentInterface::class), 'array'));
-        yield array(new $this->requestClass(new Payment(), 'array', $this->createMock('Payum\Core\Security\TokenInterface')));
+        yield [new $this->requestClass(new Payment(), 'array')];
+        yield [new $this->requestClass($this->createMock(PaymentInterface::class), 'array')];
+        yield [new $this->requestClass(new Payment(), 'array', $this->createMock('Payum\Core\Security\TokenInterface'))];
     }
 
     public function provideNotSupportedRequests(): \Iterator
     {
-        yield array('foo');
-        yield array(array('foo'));
-        yield array(new \stdClass());
-        yield array($this->getMockForAbstractClass(Generic::class, array(array())));
-        yield array(new $this->requestClass(new \stdClass(), 'array'));
-        yield array(new $this->requestClass(new Payment(), 'foobar'));
-        yield array(new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar'));
+        yield ['foo'];
+        yield [['foo']];
+        yield [new \stdClass()];
+        yield [$this->getMockForAbstractClass(Generic::class, [[]])];
+        yield [new $this->requestClass(new \stdClass(), 'array')];
+        yield [new $this->requestClass(new Payment(), 'foobar')];
+        yield [new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar')];
     }
 
     public function testShouldCorrectlyConvertOrderToDetailsAndSetItBack()
@@ -87,9 +87,9 @@ class ConvertPaymentActionTest extends GenericActionTest
         $payment->setCurrencyCode('USD');
         $payment->setTotalAmount(123);
         $payment->setDescription('the description');
-        $payment->setDetails(array(
+        $payment->setDetails([
             'foo' => 'fooVal',
-        ));
+        ]);
 
         $action = new ConvertPaymentAction();
         $action->setGateway($gatewayMock);

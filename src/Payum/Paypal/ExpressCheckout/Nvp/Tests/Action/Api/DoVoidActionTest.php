@@ -72,7 +72,7 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('AUTHORIZATIONID must be set. Has user not authorized this transaction?');
         $action = new DoVoidAction();
 
-        $request = new DoVoid(array());
+        $request = new DoVoid([]);
 
         $action->execute($request);
     }
@@ -89,16 +89,16 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
                 $testCase->assertArrayHasKey('AUTHORIZATIONID', $fields);
                 $testCase->assertSame('theOriginalTransactionId', $fields['AUTHORIZATIONID']);
 
-                return array();
+                return [];
             })
         ;
 
         $action = new DoVoidAction();
         $action->setApi($apiMock);
 
-        $request = new DoVoid(array(
+        $request = new DoVoid([
             'AUTHORIZATIONID' => 'theOriginalTransactionId',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -110,19 +110,19 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('DoVoid')
             ->willReturnCallback(function () {
-                return array(
+                return [
                     'AUTHORIZATIONID' => 'theTransactionId',
                     'MSGSUBID' => 'aMessageId',
-                );
+                ];
             })
         ;
 
         $action = new DoVoidAction();
         $action->setApi($apiMock);
 
-        $request = new DoVoid(array(
+        $request = new DoVoid([
             'AUTHORIZATIONID' => 'theTransactionId',
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -140,6 +140,6 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
     }
 }

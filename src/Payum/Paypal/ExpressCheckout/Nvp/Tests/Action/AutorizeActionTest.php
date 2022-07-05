@@ -161,7 +161,7 @@ class AutorizeActionTest extends GenericActionTest
 
         $token = new Token();
         $token->setTargetUrl($expectedTargetUrl);
-        $token->setDetails(array());
+        $token->setDetails([]);
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -185,7 +185,7 @@ class AutorizeActionTest extends GenericActionTest
         $action->setGateway($gatewayMock);
 
         $request = new Authorize($token);
-        $request->setModel(array());
+        $request->setModel([]);
 
         $action->execute($request);
     }
@@ -199,7 +199,7 @@ class AutorizeActionTest extends GenericActionTest
 
         $token = new Token();
         $token->setTargetUrl($cancelUrl);
-        $token->setDetails(array());
+        $token->setDetails([]);
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -223,7 +223,7 @@ class AutorizeActionTest extends GenericActionTest
         $action->setGateway($gatewayMock);
 
         $request = new Authorize($token);
-        $request->setModel(array());
+        $request->setModel([]);
 
         $action->execute($request);
     }
@@ -237,7 +237,7 @@ class AutorizeActionTest extends GenericActionTest
 
         $token = new Token();
         $token->setTargetUrl($cancelUrl);
-        $token->setDetails(array());
+        $token->setDetails([]);
 
         $gatewayMock = $this->createGatewayMock();
 
@@ -262,7 +262,7 @@ class AutorizeActionTest extends GenericActionTest
         $action->setGateway($gatewayMock);
 
         $request = new Authorize($token);
-        $request->setModel(array());
+        $request->setModel([]);
 
         $action->execute($request);
     }
@@ -282,9 +282,9 @@ class AutorizeActionTest extends GenericActionTest
         $action = new AuthorizeAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Authorize(array(
+        $action->execute(new Authorize([
             'TOKEN' => 'aToken',
-        )));
+        ]));
     }
 
     public function testShouldRequestDoExpressCheckoutGatewayActionIfCheckoutStatusNotInitiatedAndPayerIdSetInModelAndUserActionCommit()
@@ -304,13 +304,13 @@ class AutorizeActionTest extends GenericActionTest
         $action = new AuthorizeAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Authorize(array(
+        $action->execute(new Authorize([
             'AUTHORIZE_TOKEN_USERACTION' => Api::USERACTION_COMMIT,
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
             'PAYMENTREQUEST_0_AMT' => 5,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
-        )));
+        ]));
     }
 
     public function testShouldRequestConfirmOrderActionIfCheckoutStatusNotInitiatedAndPayerIdSetInModelAndUserActionNotCommit()
@@ -331,13 +331,13 @@ class AutorizeActionTest extends GenericActionTest
         $action = new AuthorizeAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Authorize(array(
+        $action->execute(new Authorize([
             'AUTHORIZE_TOKEN_USERACTION' => '',
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
             'PAYMENTREQUEST_0_AMT' => 5,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
-        )));
+        ]));
     }
 
     public function testShouldRequestAuthorizeTokenIfPayerIdNotSetInModel()
@@ -357,11 +357,11 @@ class AutorizeActionTest extends GenericActionTest
         $action = new AuthorizeAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Authorize(array(
+        $action->execute(new Authorize([
             'TOKEN' => 'aToken',
             'PAYERID' => null,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
-        )));
+        ]));
     }
 
     public function testShouldNotRequestDoExpressCheckoutGatewayActionIfCheckoutStatusOtherThenNotInitiatedSetInModel()
@@ -380,11 +380,11 @@ class AutorizeActionTest extends GenericActionTest
         $action = new AuthorizeAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Authorize(array(
+        $action->execute(new Authorize([
             'TOKEN' => 'aToken',
             'PAYERID' => 'anId',
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS,
-        )));
+        ]));
     }
 
     public function testShouldNotRequestDoExpressCheckoutGatewayActionIfAmountZero()
@@ -403,19 +403,19 @@ class AutorizeActionTest extends GenericActionTest
         $action = new AuthorizeAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Authorize(array(
+        $action->execute(new Authorize([
             'TOKEN' => 'aToken',
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
             'PAYERID' => 'aPayerId',
             'PAYMENTREQUEST_0_AMT' => 0,
-        )));
+        ]));
     }
 
     public function testShouldAddNotifyUrlIfTokenFactorySetAndCaptureTokenPassed()
     {
-        $details = new \ArrayObject(array(
+        $details = new \ArrayObject([
             'foo' => 'fooVal',
-        ));
+        ]);
 
         $captureToken = new Token();
         $captureToken->setGatewayName('theGatewayName');
@@ -450,9 +450,9 @@ class AutorizeActionTest extends GenericActionTest
 
     public function testShouldNotAddNotifyUrlIfAlreadySet()
     {
-        $details = new \ArrayObject(array(
+        $details = new \ArrayObject([
             'PAYMENTREQUEST_0_NOTIFYURL' => 'alreadySetUrl',
-        ));
+        ]);
 
         $captureToken = new Token();
         $captureToken->setGatewayName('theGatewayName');
@@ -479,9 +479,9 @@ class AutorizeActionTest extends GenericActionTest
 
     public function testShouldNotAddNotifyUrlIfPaypalTokenAlreadySet()
     {
-        $details = new \ArrayObject(array(
+        $details = new \ArrayObject([
             'TOKEN' => 'foo',
-        ));
+        ]);
 
         $captureToken = new Token();
         $captureToken->setGatewayName('theGatewayName');
@@ -507,8 +507,8 @@ class AutorizeActionTest extends GenericActionTest
 
     public function testShouldNotAddNotifyUrlIfTokenFactoryNotSet()
     {
-        $details = new \ArrayObject(array(
-        ));
+        $details = new \ArrayObject([
+        ]);
 
         $captureToken = new Token();
         $captureToken->setGatewayName('theGatewayName');

@@ -22,7 +22,7 @@ class GetExpressCheckoutDetailsAction implements ActionInterface, ApiAwareInterf
 
     public function execute($request)
     {
-        /** @var $request GetExpressCheckoutDetails */
+        /** @var GetExpressCheckoutDetails $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -31,7 +31,7 @@ class GetExpressCheckoutDetailsAction implements ActionInterface, ApiAwareInterf
         }
 
         $model->replace(
-            $this->api->getExpressCheckoutDetails(array('TOKEN' => $model['TOKEN']))
+            $this->api->getExpressCheckoutDetails(['TOKEN' => $model['TOKEN']])
         );
     }
 

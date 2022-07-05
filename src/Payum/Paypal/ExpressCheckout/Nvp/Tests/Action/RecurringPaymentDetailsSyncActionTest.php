@@ -19,9 +19,9 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new RecurringPaymentDetailsSyncAction();
 
-        $paymentDetails = array(
+        $paymentDetails = [
             'BILLINGPERIOD' => 12,
-        );
+        ];
 
         $request = new Sync($paymentDetails);
 
@@ -54,9 +54,9 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $action = new RecurringPaymentDetailsSyncAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Sync(array(
+        $request = new Sync([
             'BILLINGPERIOD' => 12,
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -73,10 +73,10 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $action = new RecurringPaymentDetailsSyncAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Sync(array(
+        $action->execute(new Sync([
             'BILLINGPERIOD' => 'aBillingPeriod',
             'PROFILEID' => 'anId',
-        )));
+        ]));
     }
 
     /**

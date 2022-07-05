@@ -50,7 +50,7 @@ class CreateCustomerAction implements ActionInterface, ApiAwareInterface, Gatewa
 
     public function execute($request)
     {
-        /** @var $request CreateCustomer */
+        /** @var CreateCustomer $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());

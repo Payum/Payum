@@ -63,7 +63,7 @@ class DynamicRegistry implements RegistryInterface
             return $this->gateways[$name];
         }
 
-        if ($gatewayConfigs = $this->gatewayConfigStore->findBy(array('gatewayName' => $name))) {
+        if ($gatewayConfigs = $this->gatewayConfigStore->findBy(['gatewayName' => $name])) {
             $gateway = $this->createGateway(array_shift($gatewayConfigs));
             $this->gateways[$name] = $gateway;
 

@@ -35,7 +35,7 @@ class CreateChargeActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new CreateChargeAction();
 
-        $this->assertTrue($action->supports(new CreateCharge(array())));
+        $this->assertTrue($action->supports(new CreateCharge([])));
     }
 
     public function testShouldNotSupportCreateChargeRequestWithNotArrayAccessModel()

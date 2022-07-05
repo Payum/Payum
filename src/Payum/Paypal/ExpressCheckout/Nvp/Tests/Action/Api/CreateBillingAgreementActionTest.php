@@ -51,7 +51,7 @@ class CreateBillingAgreementActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('TOKEN must be set. Have you run SetExpressCheckoutAction?');
         $action = new CreateBillingAgreementAction();
 
-        $action->execute(new CreateBillingAgreement(array()));
+        $action->execute(new CreateBillingAgreement([]));
     }
 
     public function testShouldCallApiCreateBillingAgreementMethodWithExpectedRequiredArguments()
@@ -66,16 +66,16 @@ class CreateBillingAgreementActionTest extends \PHPUnit\Framework\TestCase
                 $testCase->assertArrayHasKey('TOKEN', $fields);
                 $testCase->assertSame('theToken', $fields['TOKEN']);
 
-                return array();
+                return [];
             })
         ;
 
         $action = new CreateBillingAgreementAction();
         $action->setApi($apiMock);
 
-        $request = new CreateBillingAgreement(array(
+        $request = new CreateBillingAgreement([
             'TOKEN' => 'theToken',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -87,19 +87,19 @@ class CreateBillingAgreementActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('createBillingAgreement')
             ->willReturnCallback(function () {
-                return array(
+                return [
                     'FIRSTNAME' => 'theFirstname',
                     'EMAIL' => 'the@example.com',
-                );
+                ];
             })
         ;
 
         $action = new CreateBillingAgreementAction();
         $action->setApi($apiMock);
 
-        $request = new CreateBillingAgreement(array(
+        $request = new CreateBillingAgreement([
             'TOKEN' => 'aToken',
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -117,6 +117,6 @@ class CreateBillingAgreementActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
     }
 }

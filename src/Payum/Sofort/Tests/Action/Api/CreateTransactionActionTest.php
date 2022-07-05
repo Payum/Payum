@@ -52,7 +52,7 @@ class CreateTransactionActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('The amount, currency_code, reason, success_url, notification_url fields are required.');
         $action = new CreateTransactionAction();
 
-        $request = new CreateTransaction(array());
+        $request = new CreateTransaction([]);
         $action->execute($request);
     }
 
@@ -62,7 +62,7 @@ class CreateTransactionActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('The currency_code, reason, success_url, notification_url fields are required.');
         $action = new CreateTransactionAction();
 
-        $request = new CreateTransaction(array('amount' => 55));
+        $request = new CreateTransaction(['amount' => 55]);
         $action->execute($request);
     }
 
@@ -72,7 +72,7 @@ class CreateTransactionActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('The reason, success_url, notification_url fields are required.');
         $action = new CreateTransactionAction();
 
-        $request = new CreateTransaction(array('amount' => 55, 'currency_code' => 'CHF'));
+        $request = new CreateTransaction(['amount' => 55, 'currency_code' => 'CHF']);
         $action->execute($request);
     }
 
@@ -81,6 +81,6 @@ class CreateTransactionActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, array(), array(), '', false);
+        return $this->createMock(Api::class, [], [], '', false);
     }
 }

@@ -18,11 +18,11 @@ class CancelRecurringPaymentsProfileAction implements ActionInterface, GatewayAw
 
     public function execute($request)
     {
-        /** @var $request Cancel */
+        /** @var Cancel $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        $model->validateNotEmpty(array('PROFILEID', 'BILLINGPERIOD'));
+        $model->validateNotEmpty(['PROFILEID', 'BILLINGPERIOD']);
 
         $cancelDetails = new ArrayObject([
             'PROFILEID' => $model['PROFILEID'],

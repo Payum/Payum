@@ -62,7 +62,7 @@ HTML;
 </html>
 HTML;
 
-        $request = new HttpPostRedirect('theUrl', array('foo' => 'fooVal', 'bar' => 'barVal'));
+        $request = new HttpPostRedirect('theUrl', ['foo' => 'fooVal', 'bar' => 'barVal']);
 
         $this->assertSame($expectedContent, $request->getContent());
     }
@@ -85,7 +85,7 @@ HTML;
 </html>
 HTML;
 
-        $request = new HttpPostRedirect('theUrl', array('foo' => '<>&"'));
+        $request = new HttpPostRedirect('theUrl', ['foo' => '<>&"']);
 
         $this->assertSame($expectedContent, $request->getContent());
     }
@@ -99,7 +99,7 @@ HTML;
 
     public function testShouldAllowGetCustomStatusCodeSetInConstructor()
     {
-        $request = new HttpPostRedirect('anUrl', array(), 201);
+        $request = new HttpPostRedirect('anUrl', [], 201);
 
         $this->assertSame(201, $request->getStatusCode());
     }
@@ -108,17 +108,17 @@ HTML;
     {
         $request = new HttpPostRedirect('anUrl');
 
-        $this->assertEquals(array(), $request->getHeaders());
+        $this->assertEquals([], $request->getHeaders());
     }
 
     public function testShouldAllowGetCustomHeadersSetInConstructor()
     {
-        $expectedHeaders = array(
+        $expectedHeaders = [
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        );
+        ];
 
-        $request = new HttpPostRedirect('anUrl', array(), 200, $expectedHeaders);
+        $request = new HttpPostRedirect('anUrl', [], 200, $expectedHeaders);
 
         $this->assertEquals($expectedHeaders, $request->getHeaders());
     }

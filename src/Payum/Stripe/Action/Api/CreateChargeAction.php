@@ -46,7 +46,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
 
     public function execute($request)
     {
-        /** @var $request CreateCharge */
+        /** @var CreateCharge $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());

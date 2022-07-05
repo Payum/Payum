@@ -18,17 +18,17 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
 
     public function testShouldExtendChoice()
     {
-        $type = new GatewayFactoriesChoiceType(array());
+        $type = new GatewayFactoriesChoiceType([]);
 
         $this->assertSame(ChoiceType::class, $type->getParent());
     }
 
     public function testShouldAllowResolveOptions()
     {
-        $expectedChoices = array(
+        $expectedChoices = [
             'foo' => 'Foo Factory',
             'bar' => 'Bar Factory',
-        );
+        ];
 
         $type = new GatewayFactoriesChoiceType($expectedChoices);
 

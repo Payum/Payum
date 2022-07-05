@@ -7,7 +7,7 @@ class ArrayObject implements \ArrayAccess, \IteratorAggregate
     /**
      * @var array
      */
-    protected $details = array();
+    protected $details = [];
 
     /**
      * {@inheritDoc}

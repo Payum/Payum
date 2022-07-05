@@ -21,7 +21,7 @@ class ArrayObjectTest extends OrmTest
     {
         $model = new ArrayObject();
         $model['foo'] = 'theFoo';
-        $model['bar'] = array('bar1', 'bar2' => 'theBar2');
+        $model['bar'] = ['bar1', 'bar2' => 'theBar2'];
 
         $this->em->persist($model);
         $this->em->flush();
@@ -33,7 +33,7 @@ class ArrayObjectTest extends OrmTest
     {
         $model = new ArrayObject();
         $model['foo'] = 'theFoo';
-        $model['bar'] = array('bar1', 'bar2' => 'theBar2');
+        $model['bar'] = ['bar1', 'bar2' => 'theBar2'];
 
         $this->em->persist($model);
         $this->em->flush();

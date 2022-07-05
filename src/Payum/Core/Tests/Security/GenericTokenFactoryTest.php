@@ -22,9 +22,9 @@ class GenericTokenFactoryTest extends TestCase
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $targetPath = 'theTargetPath';
-        $targetParameters = array('target' => 'val');
+        $targetParameters = ['target' => 'val'];
         $afterPath = 'theAfterPath';
-        $afterParameters = array('after' => 'val');
+        $afterParameters = ['after' => 'val'];
 
         $token = new Token();
 
@@ -62,7 +62,7 @@ class GenericTokenFactoryTest extends TestCase
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $targetPath = 'theTargetPath';
-        $targetParameters = array('target' => 'val');
+        $targetParameters = ['target' => 'val'];
 
         $token = new Token();
 
@@ -100,7 +100,7 @@ class GenericTokenFactoryTest extends TestCase
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $afterPath = 'theAfterPath';
-        $afterParameters = array('after' => 'val');
+        $afterParameters = ['after' => 'val'];
 
         $tokenFactoryMock = $this->createTokenFactoryMock();
         $tokenFactoryMock
@@ -108,7 +108,7 @@ class GenericTokenFactoryTest extends TestCase
             ->method('createToken')
         ;
 
-        $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
+        $factory = new GenericTokenFactory($tokenFactoryMock, ['foo' => 'fooPath', 'bar' => 'barPath']);
 
         $factory->createCaptureToken(
             $gatewayName,
@@ -125,7 +125,7 @@ class GenericTokenFactoryTest extends TestCase
         $capturePath = 'theCapturePath';
         $afterPath = 'theAfterPath';
         $afterUrl = 'theAfterUrl';
-        $afterParameters = array('after' => 'val');
+        $afterParameters = ['after' => 'val'];
 
         $afterToken = new Token();
         $afterToken->setTargetUrl($afterUrl);
@@ -160,9 +160,9 @@ class GenericTokenFactoryTest extends TestCase
             )
         ;
 
-        $factory = new GenericTokenFactory($tokenFactoryMock, array(
+        $factory = new GenericTokenFactory($tokenFactoryMock, [
             'capture' => $capturePath
-        ));
+        ]);
 
         $actualToken = $factory->createCaptureToken(
             $gatewayName,
@@ -181,7 +181,7 @@ class GenericTokenFactoryTest extends TestCase
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $afterPath = 'theAfterPath';
-        $afterParameters = array('after' => 'val');
+        $afterParameters = ['after' => 'val'];
 
         $tokenFactoryMock = $this->createTokenFactoryMock();
         $tokenFactoryMock
@@ -189,7 +189,7 @@ class GenericTokenFactoryTest extends TestCase
             ->method('createToken')
         ;
 
-        $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
+        $factory = new GenericTokenFactory($tokenFactoryMock, ['foo' => 'fooPath', 'bar' => 'barPath']);
 
         $factory->createAuthorizeToken(
             $gatewayName,
@@ -206,7 +206,7 @@ class GenericTokenFactoryTest extends TestCase
         $authorizePath = 'theAuthorizePath';
         $afterPath = 'theAfterPath';
         $afterUrl = 'theAfterUrl';
-        $afterParameters = array('after' => 'val');
+        $afterParameters = ['after' => 'val'];
 
         $afterToken = new Token();
         $afterToken->setTargetUrl($afterUrl);
@@ -238,9 +238,9 @@ class GenericTokenFactoryTest extends TestCase
             ->willReturnOnConsecutiveCalls($afterToken, $authorizeToken)
         ;
 
-        $factory = new GenericTokenFactory($tokenFactoryMock, array(
+        $factory = new GenericTokenFactory($tokenFactoryMock, [
             'authorize' => $authorizePath
-        ));
+        ]);
 
         $actualToken = $factory->createAuthorizeToken(
             $gatewayName,
@@ -259,7 +259,7 @@ class GenericTokenFactoryTest extends TestCase
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $afterPath = 'theAfterPath';
-        $afterParameters = array('after' => 'val');
+        $afterParameters = ['after' => 'val'];
 
         $tokenFactoryMock = $this->createTokenFactoryMock();
         $tokenFactoryMock
@@ -267,7 +267,7 @@ class GenericTokenFactoryTest extends TestCase
             ->method('createToken')
         ;
 
-        $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
+        $factory = new GenericTokenFactory($tokenFactoryMock, ['foo' => 'fooPath', 'bar' => 'barPath']);
 
         $factory->createRefundToken(
             $gatewayName,
@@ -284,7 +284,7 @@ class GenericTokenFactoryTest extends TestCase
         $refundPath = 'theRefundPath';
         $afterPath = 'theAfterPath';
         $afterUrl = 'theAfterUrl';
-        $afterParameters = array('after' => 'val');
+        $afterParameters = ['after' => 'val'];
 
         $afterToken = new Token();
         $afterToken->setTargetUrl($afterUrl);
@@ -316,9 +316,9 @@ class GenericTokenFactoryTest extends TestCase
             ->willReturnOnConsecutiveCalls($afterToken, $refundToken)
         ;
 
-        $factory = new GenericTokenFactory($tokenFactoryMock, array(
+        $factory = new GenericTokenFactory($tokenFactoryMock, [
             'refund' => $refundPath
-        ));
+        ]);
 
         $actualToken = $factory->createRefundToken(
             $gatewayName,
@@ -353,9 +353,9 @@ class GenericTokenFactoryTest extends TestCase
             ->willReturn($refundToken)
         ;
 
-        $factory = new GenericTokenFactory($tokenFactoryMock, array(
+        $factory = new GenericTokenFactory($tokenFactoryMock, [
             'refund' => $refundPath
-        ));
+        ]);
 
         $actualToken = $factory->createRefundToken($gatewayName, $model);
 
@@ -369,7 +369,7 @@ class GenericTokenFactoryTest extends TestCase
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $afterPath = 'theAfterPath';
-        $afterParameters = array('after' => 'val');
+        $afterParameters = ['after' => 'val'];
 
         $tokenFactoryMock = $this->createTokenFactoryMock();
         $tokenFactoryMock
@@ -377,7 +377,7 @@ class GenericTokenFactoryTest extends TestCase
             ->method('createToken')
         ;
 
-        $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
+        $factory = new GenericTokenFactory($tokenFactoryMock, ['foo' => 'fooPath', 'bar' => 'barPath']);
 
         $factory->createCancelToken(
             $gatewayName,
@@ -394,7 +394,7 @@ class GenericTokenFactoryTest extends TestCase
         $cancelPath = 'theCancelPath';
         $afterPath = 'theAfterPath';
         $afterUrl = 'theAfterUrl';
-        $afterParameters = array('after' => 'val');
+        $afterParameters = ['after' => 'val'];
 
         $afterToken = new Token();
         $afterToken->setTargetUrl($afterUrl);
@@ -426,9 +426,9 @@ class GenericTokenFactoryTest extends TestCase
             ->willReturn($afterToken, $cancelToken)
         ;
 
-        $factory = new GenericTokenFactory($tokenFactoryMock, array(
+        $factory = new GenericTokenFactory($tokenFactoryMock, [
             'cancel' => $cancelPath
-        ));
+        ]);
 
         $actualToken = $factory->createCancelToken(
             $gatewayName,
@@ -463,9 +463,9 @@ class GenericTokenFactoryTest extends TestCase
             ->willReturn($cancelToken)
         ;
 
-        $factory = new GenericTokenFactory($tokenFactoryMock, array(
+        $factory = new GenericTokenFactory($tokenFactoryMock, [
             'cancel' => $cancelPath
-        ));
+        ]);
 
         $actualToken = $factory->createCancelToken($gatewayName, $model);
 
@@ -479,7 +479,7 @@ class GenericTokenFactoryTest extends TestCase
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $afterPath = 'theAfterPath';
-        $afterParameters = array('after' => 'val');
+        $afterParameters = ['after' => 'val'];
 
         $tokenFactoryMock = $this->createTokenFactoryMock();
         $tokenFactoryMock
@@ -487,7 +487,7 @@ class GenericTokenFactoryTest extends TestCase
             ->method('createToken')
         ;
 
-        $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
+        $factory = new GenericTokenFactory($tokenFactoryMock, ['foo' => 'fooPath', 'bar' => 'barPath']);
 
         $factory->createNotifyToken(
             $gatewayName,
@@ -520,9 +520,9 @@ class GenericTokenFactoryTest extends TestCase
             ->willReturn($notifyToken)
         ;
 
-        $factory = new GenericTokenFactory($tokenFactoryMock, array(
+        $factory = new GenericTokenFactory($tokenFactoryMock, [
             'notify' => $notifyPath
-        ));
+        ]);
 
         $actualToken = $factory->createNotifyToken($gatewayName, $model);
 
@@ -551,9 +551,9 @@ class GenericTokenFactoryTest extends TestCase
             ->willReturn($notifyToken)
         ;
 
-        $factory = new GenericTokenFactory($tokenFactoryMock, array(
+        $factory = new GenericTokenFactory($tokenFactoryMock, [
             'notify' => $notifyPath
-        ));
+        ]);
 
         $actualToken = $factory->createNotifyToken($gatewayName);
 
@@ -567,7 +567,7 @@ class GenericTokenFactoryTest extends TestCase
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
         $afterPath = 'theAfterPath';
-        $afterParameters = array('after' => 'val');
+        $afterParameters = ['after' => 'val'];
 
         $tokenFactoryMock = $this->createTokenFactoryMock();
         $tokenFactoryMock
@@ -575,7 +575,7 @@ class GenericTokenFactoryTest extends TestCase
             ->method('createToken')
         ;
 
-        $factory = new GenericTokenFactory($tokenFactoryMock, array('foo' => 'fooPath', 'bar' => 'barPath'));
+        $factory = new GenericTokenFactory($tokenFactoryMock, ['foo' => 'fooPath', 'bar' => 'barPath']);
 
         $factory->createPayoutToken(
             $gatewayName,
@@ -592,7 +592,7 @@ class GenericTokenFactoryTest extends TestCase
         $payoutPath = 'thePayoutPath';
         $afterPath = 'theAfterPath';
         $afterUrl = 'theAfterUrl';
-        $afterParameters = array('after' => 'val');
+        $afterParameters = ['after' => 'val'];
 
         $afterToken = new Token();
         $afterToken->setTargetUrl($afterUrl);
@@ -624,9 +624,9 @@ class GenericTokenFactoryTest extends TestCase
             ->willReturnOnConsecutiveCalls($afterToken, $payoutToken)
         ;
 
-        $factory = new GenericTokenFactory($tokenFactoryMock, array(
+        $factory = new GenericTokenFactory($tokenFactoryMock, [
             'payout' => $payoutPath
-        ));
+        ]);
 
         $actualToken = $factory->createPayoutToken(
             $gatewayName,

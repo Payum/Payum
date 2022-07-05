@@ -23,8 +23,8 @@ class CapturePaymentActionTest extends GenericActionTest
     {
         $capture = new $this->requestClass($this->createMock(TokenInterface::class));
         $capture->setModel($this->createMock(PaymentInterface::class));
-        yield array(new $this->requestClass(new Payment()));
-        yield array($capture);
+        yield [new $this->requestClass(new Payment())];
+        yield [$capture];
     }
 
     public function testShouldImplementGatewayAwareInterface()
@@ -54,7 +54,7 @@ class CapturePaymentActionTest extends GenericActionTest
                     $testCase->assertSame('array', $request->getTo());
                     $testCase->assertNull($request->getToken());
 
-                    $request->setResult(array());
+                    $request->setResult([]);
                 })
             )
         ;
@@ -83,9 +83,9 @@ class CapturePaymentActionTest extends GenericActionTest
                     $request->markNew();
                 }),
                 $this->returnCallback(function (Convert $request) {
-                    $request->setResult(array(
+                    $request->setResult([
                         'foo' => 'fooVal',
-                    ));
+                    ]);
                 })
             )
         ;
@@ -125,7 +125,7 @@ class CapturePaymentActionTest extends GenericActionTest
                     $testCase->assertSame($payment, $request->getSource());
                     $testCase->assertSame($token, $request->getToken());
 
-                    $request->setResult(array());
+                    $request->setResult([]);
                 })
             )
         ;
@@ -145,7 +145,7 @@ class CapturePaymentActionTest extends GenericActionTest
 
     public function testShouldSetDetailsBackToPaymentAfterCaptureDetailsExecution()
     {
-        $expectedDetails = array('foo' => 'fooVal');
+        $expectedDetails = ['foo' => 'fooVal'];
 
         $payment = new Payment();
         $payment->setDetails($expectedDetails);
@@ -179,12 +179,12 @@ class CapturePaymentActionTest extends GenericActionTest
 
         $this->assertSame($payment, $capture->getFirstModel());
         $this->assertInstanceOf('ArrayAccess', $capture->getModel());
-        $this->assertEquals(array('foo' => 'fooVal', 'bar' => 'barVal'), $payment->getDetails());
+        $this->assertEquals(['foo' => 'fooVal', 'bar' => 'barVal'], $payment->getDetails());
     }
 
     public function testShouldSetDetailsBackToPaymentEvenIfExceptionThrown()
     {
-        $expectedDetails = array('foo' => 'fooVal');
+        $expectedDetails = ['foo' => 'fooVal'];
 
         $payment = new Payment();
         $payment->setDetails($expectedDetails);
@@ -215,6 +215,6 @@ class CapturePaymentActionTest extends GenericActionTest
 
         $this->assertSame($payment, $capture->getFirstModel());
         $this->assertInstanceOf('ArrayAccess', $capture->getModel());
-        $this->assertEquals(array('foo' => 'fooVal', 'bar' => 'barVal'), $payment->getDetails());
+        $this->assertEquals(['foo' => 'fooVal', 'bar' => 'barVal'], $payment->getDetails());
     }
 }

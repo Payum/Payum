@@ -14,10 +14,10 @@ class OfflineGatewayFactoryTest extends AbstractGatewayFactoryTest
 
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
-        $factory = new OfflineGatewayFactory(array(
+        $factory = new OfflineGatewayFactory([
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        ));
+        ]);
 
         $config = $factory->createConfig();
 
@@ -39,7 +39,7 @@ class OfflineGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
-        $this->assertEquals(array(), $config['payum.default_options']);
+        $this->assertEquals([], $config['payum.default_options']);
     }
 
     public function testShouldConfigContainFactoryNameAndTitle()

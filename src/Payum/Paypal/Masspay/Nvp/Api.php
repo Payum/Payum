@@ -47,11 +47,11 @@ class Api
     {
         $options = ArrayObject::ensureArrayObject($options);
         $options->defaults($this->options);
-        $options->validateNotEmpty(array(
+        $options->validateNotEmpty([
             'username',
             'password',
             'signature',
-        ));
+        ]);
 
         if (false == is_bool($options['sandbox'])) {
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
@@ -82,9 +82,9 @@ class Api
      */
     protected function doRequest(array $fields)
     {
-        $headers = array(
+        $headers = [
             'Content-Type' => 'application/x-www-form-urlencoded',
-        );
+        ];
 
         $request = $this->messageFactory->createRequest('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
 

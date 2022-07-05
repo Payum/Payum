@@ -14,15 +14,15 @@ class GetHttpRequestActionTest extends GenericActionTest
 
     public function provideSupportedRequests(): \Iterator
     {
-        yield array(new $this->requestClass());
+        yield [new $this->requestClass()];
     }
 
     public function provideNotSupportedRequests(): \Iterator
     {
-        yield array('foo');
-        yield array(array('foo'));
-        yield array(new \stdClass());
-        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
+        yield ['foo'];
+        yield [['foo']];
+        yield [new \stdClass()];
+        yield [$this->getMockForAbstractClass('Payum\Core\Request\Generic', [[]])];
     }
 
     public function testShouldFillRequestDetails()

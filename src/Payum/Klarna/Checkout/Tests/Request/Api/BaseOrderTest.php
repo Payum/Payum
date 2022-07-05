@@ -30,7 +30,7 @@ class BaseOrderTest extends TestCase
 
     public function testShouldAllowGetPreviouslySetOrder()
     {
-        $request = $this->createBaseOrderMock(array());
+        $request = $this->createBaseOrderMock([]);
 
         $expectedOrder = $this->createOrderMock();
 
@@ -44,7 +44,7 @@ class BaseOrderTest extends TestCase
      */
     protected function createOrderMock()
     {
-        return $this->createMock('Klarna_Checkout_Order', array(), array(), '', false);
+        return $this->createMock('Klarna_Checkout_Order', [], [], '', false);
     }
 
     /**
@@ -52,6 +52,6 @@ class BaseOrderTest extends TestCase
      */
     protected function createBaseOrderMock($model)
     {
-        return $this->getMockForAbstractClass('Payum\Klarna\Checkout\Request\Api\BaseOrder', array($model));
+        return $this->getMockForAbstractClass('Payum\Klarna\Checkout\Request\Api\BaseOrder', [$model]);
     }
 }

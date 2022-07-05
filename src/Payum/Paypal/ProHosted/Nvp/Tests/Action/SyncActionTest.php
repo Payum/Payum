@@ -28,9 +28,9 @@ class SyncActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new SyncAction();
 
-        $paymentDetails = array(
+        $paymentDetails = [
             'AMT' => 12,
-        );
+        ];
 
         $request = new Sync($paymentDetails);
 
@@ -41,9 +41,9 @@ class SyncActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new SyncAction();
 
-        $paymentDetails = array(
+        $paymentDetails = [
             'AMT' => 0,
-        );
+        ];
 
         $request = new Sync($paymentDetails);
 
@@ -82,10 +82,10 @@ class SyncActionTest extends \PHPUnit\Framework\TestCase
         $action = new SyncAction();
         $action->setGateway($gatewayMock);
 
-        $details = new \ArrayObject(array(
+        $details = new \ArrayObject([
             'AMT' => 11,
             'txn_id' => 'aTxn_id',
-        ));
+        ]);
 
         $action->execute($sync = new Sync($details));
 

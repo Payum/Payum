@@ -18,8 +18,8 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
     public function provideSupportedRequests(): \Iterator
     {
-        yield array(new $this->requestClass(new DetailsAggregateAndAwareModel()));
-        yield array(new $this->requestClass(new DetailsAggregateModel()));
+        yield [new $this->requestClass(new DetailsAggregateAndAwareModel())];
+        yield [new $this->requestClass(new DetailsAggregateModel())];
     }
 
     public function testShouldImplementGatewayAwareInterface()
@@ -60,7 +60,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
     public function testShouldWrapArrayDetailsToArrayObjectAndExecute()
     {
-        $expectedDetails = array('foo' => 'fooVal', 'bar' => 'barVal');
+        $expectedDetails = ['foo' => 'fooVal', 'bar' => 'barVal'];
 
         $model = new DetailsAggregateModel();
         $model->details = $expectedDetails;
@@ -95,7 +95,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
     public function testShouldWrapArrayDetailsToArrayObjectAndSetDetailsBackAfterExecution()
     {
-        $expectedDetails = array('foo' => 'fooVal', 'bar' => 'barVal');
+        $expectedDetails = ['foo' => 'fooVal', 'bar' => 'barVal'];
 
         $model = new DetailsAggregateAndAwareModel();
         $model->details = $expectedDetails;
@@ -127,14 +127,14 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
         $details = $model->getDetails();
         $testCase->assertInstanceOf('ArrayAccess', $details);
         $testCase->assertSame(
-            array('foo' => 'fooVal', 'bar' => 'barVal', 'baz' => 'bazVal'),
+            ['foo' => 'fooVal', 'bar' => 'barVal', 'baz' => 'bazVal'],
             iterator_to_array($details)
         );
     }
 
     public function testShouldWrapArrayDetailsToArrayObjectAndSetDetailsBackEvenOnException()
     {
-        $expectedDetails = array('foo' => 'fooVal', 'bar' => 'barVal');
+        $expectedDetails = ['foo' => 'fooVal', 'bar' => 'barVal'];
 
         $model = new DetailsAggregateAndAwareModel();
         $model->details = $expectedDetails;
@@ -169,7 +169,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             $details = $model->getDetails();
             $testCase->assertInstanceOf('ArrayAccess', $details);
             $testCase->assertSame(
-                array('foo' => 'fooVal', 'bar' => 'barVal', 'baz' => 'bazVal'),
+                ['foo' => 'fooVal', 'bar' => 'barVal', 'baz' => 'bazVal'],
                 iterator_to_array($details)
             );
 
@@ -202,7 +202,7 @@ class ModelAggregateAwareRequest implements ModelAwareInterface, ModelAggregateI
 
 class DetailsAggregateModel implements DetailsAggregateInterface
 {
-    public $details = array();
+    public $details = [];
 
     public function getDetails()
     {
@@ -212,7 +212,7 @@ class DetailsAggregateModel implements DetailsAggregateInterface
 
 class DetailsAggregateAndAwareModel implements DetailsAggregateInterface, DetailsAwareInterface
 {
-    public $details = array();
+    public $details = [];
 
     public function getDetails()
     {

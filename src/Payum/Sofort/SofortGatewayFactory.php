@@ -24,7 +24,7 @@ class SofortGatewayFactory extends GatewayFactory
             throw new LogicException('You must install "sofort/sofortlib-php:^3.0" library.');
         }
 
-        $config->defaults(array(
+        $config->defaults([
             'payum.factory_name' => 'sofort',
             'payum.factory_title' => 'Sofort',
             'payum.action.capture' => new CaptureAction(),
@@ -37,7 +37,7 @@ class SofortGatewayFactory extends GatewayFactory
             'payum.action.api.create_transaction' => new CreateTransactionAction(),
             'payum.action.api.get_transaction_data' => new GetTransactionDataAction(),
             'payum.action.api.refund_transaction' => new RefundTransactionAction(),
-        ));
+        ]);
 
         if (false == $config['payum.api']) {
             $config['payum.default_options'] = [

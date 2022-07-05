@@ -54,7 +54,7 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
     {
         $action = new ReserveAmountAction();
 
-        $this->assertTrue($action->supports(new ReserveAmount(array())));
+        $this->assertTrue($action->supports(new ReserveAmount([])));
     }
 
     public function testShouldNotSupportAnythingNotReserveAmount()
@@ -81,12 +81,12 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
 
     public function testShouldCallKlarnaActivate()
     {
-        $details = array(
+        $details = [
             'pno' => 'thePno',
             'gender' => 'theGender',
             'amount' => 'theAmount',
             'reservation_flags' => 'theFlags',
-        );
+        ];
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -105,7 +105,7 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
                 $details['amount'],
                 $details['reservation_flags']
             )
-            ->willReturn(array('theRno', 'theStatus'))
+            ->willReturn(['theRno', 'theStatus'])
         ;
 
         $action = new ReserveAmountAction($klarnaMock);
@@ -121,12 +121,12 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
 
     public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
-        $details = array(
+        $details = [
             'pno' => 'thePno',
             'gender' => 'theGender',
             'amount' => 'theAmount',
             'reservation_flags' => 'theFlags',
-        );
+        ];
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -164,7 +164,7 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock = $this->createMock('Klarna', array('config', 'activate', 'cancelReservation', 'checkOrderStatus', 'reserveAmount'));
+        $klarnaMock = $this->createMock('Klarna', ['config', 'activate', 'cancelReservation', 'checkOrderStatus', 'reserveAmount']);
 
         $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);

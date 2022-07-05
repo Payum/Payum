@@ -15,7 +15,7 @@ class AgreementDetailsSyncAction implements ActionInterface, GatewayAwareInterfa
 
     public function execute($request)
     {
-        /** @var $request Sync */
+        /** @var Sync $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $this->gateway->execute(new CheckAgreement($request->getModel()));

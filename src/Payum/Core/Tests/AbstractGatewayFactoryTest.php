@@ -41,7 +41,7 @@ abstract class AbstractGatewayFactoryTest extends TestCase
 
         $class = $this->getGatewayFactoryClass();
 
-        $factory = new $class(array(), $coreGatewayFactory);
+        $factory = new $class([], $coreGatewayFactory);
 
         $ref = new \ReflectionProperty($factory, 'coreGatewayFactory');
         $ref->setAccessible(true);

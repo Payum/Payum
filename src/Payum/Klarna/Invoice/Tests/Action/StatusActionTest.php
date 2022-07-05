@@ -19,7 +19,7 @@ class StatusActionTest extends TestCase
     {
         $action = new StatusAction();
 
-        $this->assertTrue($action->supports(new GetHumanStatus(array())));
+        $this->assertTrue($action->supports(new GetHumanStatus([])));
     }
 
     public function testShouldNotSupportAnythingNotGetStatus()
@@ -48,7 +48,7 @@ class StatusActionTest extends TestCase
     {
         $action = new StatusAction();
 
-        $action->execute($getStatus = new GetHumanStatus(array()));
+        $action->execute($getStatus = new GetHumanStatus([]));
 
         $this->assertTrue($getStatus->isNew());
     }
@@ -57,7 +57,7 @@ class StatusActionTest extends TestCase
     {
         $action = new StatusAction();
 
-        $action->execute($getStatus = new GetHumanStatus(array()));
+        $action->execute($getStatus = new GetHumanStatus([]));
 
         $this->assertTrue($getStatus->isNew());
     }
@@ -66,9 +66,9 @@ class StatusActionTest extends TestCase
     {
         $action = new StatusAction();
 
-        $action->execute($getStatus = new GetHumanStatus(array(
+        $action->execute($getStatus = new GetHumanStatus([
             'error_code' => 'aCode',
-        )));
+        ]));
 
         $this->assertTrue($getStatus->isFailed());
     }
@@ -77,9 +77,9 @@ class StatusActionTest extends TestCase
     {
         $action = new StatusAction();
 
-        $action->execute($getStatus = new GetHumanStatus(array(
+        $action->execute($getStatus = new GetHumanStatus([
             'canceled' => true,
-        )));
+        ]));
 
         $this->assertTrue($getStatus->isCanceled());
     }
@@ -88,9 +88,9 @@ class StatusActionTest extends TestCase
     {
         $action = new StatusAction();
 
-        $action->execute($getStatus = new GetHumanStatus(array(
+        $action->execute($getStatus = new GetHumanStatus([
             'invoice_number' => 'aNumber',
-        )));
+        ]));
 
         $this->assertTrue($getStatus->isCaptured());
     }
@@ -99,9 +99,9 @@ class StatusActionTest extends TestCase
     {
         $action = new StatusAction();
 
-        $action->execute($getStatus = new GetHumanStatus(array(
+        $action->execute($getStatus = new GetHumanStatus([
             'status' => \KlarnaFlags::ACCEPTED,
-        )));
+        ]));
 
         $this->assertTrue($getStatus->isAuthorized());
     }
@@ -110,9 +110,9 @@ class StatusActionTest extends TestCase
     {
         $action = new StatusAction();
 
-        $action->execute($getStatus = new GetHumanStatus(array(
+        $action->execute($getStatus = new GetHumanStatus([
             'status' => \KlarnaFlags::PENDING,
-        )));
+        ]));
 
         $this->assertTrue($getStatus->isPending());
     }
@@ -121,9 +121,9 @@ class StatusActionTest extends TestCase
     {
         $action = new StatusAction();
 
-        $action->execute($getStatus = new GetHumanStatus(array(
+        $action->execute($getStatus = new GetHumanStatus([
             'status' => \KlarnaFlags::DENIED,
-        )));
+        ]));
 
         $this->assertTrue($getStatus->isFailed());
     }
@@ -132,9 +132,9 @@ class StatusActionTest extends TestCase
     {
         $action = new StatusAction();
 
-        $action->execute($getStatus = new GetHumanStatus(array(
+        $action->execute($getStatus = new GetHumanStatus([
             'status' => 'unknown',
-        )));
+        ]));
 
         $this->assertTrue($getStatus->isUnknown());
     }
@@ -143,9 +143,9 @@ class StatusActionTest extends TestCase
     {
         $action = new StatusAction();
 
-        $action->execute($getStatus = new GetHumanStatus(array(
+        $action->execute($getStatus = new GetHumanStatus([
             'refund_invoice_number' => 'aNum',
-        )));
+        ]));
 
         $this->assertTrue($getStatus->isRefunded());
     }

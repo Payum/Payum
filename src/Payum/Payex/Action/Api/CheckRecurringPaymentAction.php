@@ -21,14 +21,14 @@ class CheckRecurringPaymentAction implements ActionInterface, ApiAwareInterface
 
     public function execute($request)
     {
-        /** @var $request CheckRecurringPayment */
+        /** @var CheckRecurringPayment $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validatedKeysSet(array(
+        $model->validatedKeysSet([
             'agreementRef',
-        ));
+        ]);
 
         $result = $this->api->check((array) $model);
 

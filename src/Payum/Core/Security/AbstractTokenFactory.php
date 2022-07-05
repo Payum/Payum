@@ -83,5 +83,5 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
      *
      * @return string
      */
-    abstract protected function generateUrl($path, array $parameters = array());
+    abstract protected function generateUrl($path, array $parameters = []);
 }

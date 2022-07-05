@@ -12,5 +12,5 @@ interface TokenFactoryInterface
      *
      * @return TokenInterface
      */
-    public function createToken($gatewayName, $model, $targetPath, array $targetParameters = array(), $afterPath = null, array $afterParameters = array());
+    public function createToken($gatewayName, $model, $targetPath, array $targetParameters = [], $afterPath = null, array $afterParameters = []);
 }

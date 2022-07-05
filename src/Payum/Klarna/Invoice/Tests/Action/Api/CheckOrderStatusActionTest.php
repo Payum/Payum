@@ -40,7 +40,7 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
     {
         $action = new CheckOrderStatusAction();
 
-        $this->assertTrue($action->supports(new CheckOrderStatus(array())));
+        $this->assertTrue($action->supports(new CheckOrderStatus([])));
     }
 
     public function testShouldNotSupportAnythingNotCheckOrderStatus()
@@ -71,14 +71,14 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
         $this->expectExceptionMessage('The rno fields are required.');
         $action = new CheckOrderStatusAction();
 
-        $action->execute(new CheckOrderStatus(array()));
+        $action->execute(new CheckOrderStatus([]));
     }
 
     public function testShouldCallKlarnaCheckOrderStatusMethod()
     {
-        $details = array(
+        $details = [
             'rno' => 'theRno',
-        );
+        ];
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
@@ -100,9 +100,9 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
 
     public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
-        $details = array(
+        $details = [
             'rno' => 'theRno',
-        );
+        ];
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
@@ -124,10 +124,10 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
 
     public function testShouldDoNothingIfAlreadyActivated()
     {
-        $details = array(
+        $details = [
             'rno' => 'theRno',
             'invoice_number' => 'anInvNumber',
-        );
+        ];
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
@@ -145,7 +145,7 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock = $this->createMock('Klarna', array('config', 'activate', 'cancelReservation', 'checkOrderStatus'));
+        $klarnaMock = $this->createMock('Klarna', ['config', 'activate', 'cancelReservation', 'checkOrderStatus']);
 
         $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);

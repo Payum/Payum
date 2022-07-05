@@ -20,35 +20,35 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $this->assertTrue($action->supports(new GetBinaryStatus(array(
+        $this->assertTrue($action->supports(new GetBinaryStatus([
             'autoPay' => true,
-        ))));
+        ])));
     }
 
     public function testShouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPayNotSet()
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new GetBinaryStatus(array())));
+        $this->assertFalse($action->supports(new GetBinaryStatus([])));
     }
 
     public function testShouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToTrueAndRecurringSetToTrue()
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new GetBinaryStatus(array(
+        $this->assertFalse($action->supports(new GetBinaryStatus([
             'autoPay' => true,
             'recurring' => true,
-        ))));
+        ])));
     }
 
     public function testShouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToFalse()
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new GetBinaryStatus(array(
+        $this->assertFalse($action->supports(new GetBinaryStatus([
             'autoPay' => false,
-        ))));
+        ])));
     }
 
     public function testShouldNotSupportAnythingNotBinaryMaskStatusRequest()
@@ -77,9 +77,9 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'autoPay' => true,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -93,11 +93,11 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'purchaseOperation' => OrderApi::PURCHASEOPERATION_AUTHORIZATION,
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_AUTHORIZE,
             'autoPay' => true,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -111,11 +111,11 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'purchaseOperation' => OrderApi::PURCHASEOPERATION_SALE,
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_SALE,
             'autoPay' => true,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -129,11 +129,11 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'purchaseOperation' => OrderApi::PURCHASEOPERATION_AUTHORIZATION,
             'transactionStatus' => 'foobarbaz',
             'autoPay' => true,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();

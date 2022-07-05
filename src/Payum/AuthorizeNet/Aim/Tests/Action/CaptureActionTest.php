@@ -75,9 +75,9 @@ class CaptureActionTest extends GenericActionTest
         $action->setApi($api);
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Capture(array(
+        $action->execute(new Capture([
             'response_code' => 'foo',
-        )));
+        ]));
     }
 
     public function testShouldCaptureWithCreditCardSetExplicitly()
@@ -99,11 +99,11 @@ class CaptureActionTest extends GenericActionTest
         $action->setApi($api);
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Capture(array(
+        $action->execute(new Capture([
             'amount' => 10,
             'card_num' => '1234567812345678',
             'exp_date' => '10/16',
-        )));
+        ]));
     }
 
     public function testThrowIfCreditCardNotSetExplicitlyAndObtainRequestNotSupportedOnCapture()
@@ -129,17 +129,17 @@ class CaptureActionTest extends GenericActionTest
         $action->setApi($api);
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Capture(array(
+        $action->execute(new Capture([
             'amount' => 10,
-        )));
+        ]));
     }
 
     public function testShouldPassFirstAndCurrentModelsWithObtainCreditCardSubRequest()
     {
         $firstModel = new \stdClass();
-        $currentModel = new \ArrayObject(array(
+        $currentModel = new \ArrayObject([
             'amount' => 10,
-        ));
+        ]);
 
         $api = $this->createAuthorizeNetAIMMock();
         $api
@@ -201,9 +201,9 @@ class CaptureActionTest extends GenericActionTest
         $action->setApi($api);
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Capture(array(
+        $action->execute(new Capture([
             'amount' => 10,
-        )));
+        ]));
     }
 
     /**
@@ -219,7 +219,7 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createAuthorizeNetAIMMock()
     {
-        return $this->createMock('Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM', array(), array(), '', false);
+        return $this->createMock('Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM', [], [], '', false);
     }
 
     /**
@@ -227,6 +227,6 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createAuthorizeNetAIMResponseMock()
     {
-        return $this->createMock('AuthorizeNetAIM_Response', array(), array(), '', false);
+        return $this->createMock('AuthorizeNetAIM_Response', [], [], '', false);
     }
 }

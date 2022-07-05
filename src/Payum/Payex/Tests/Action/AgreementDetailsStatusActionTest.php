@@ -73,9 +73,9 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AgreementDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'agreementRef' => 'aRef',
-        ));
+        ]);
 
         //guard
         $status->markCaptured();
@@ -89,10 +89,10 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AgreementDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'agreementRef' => 'aRef',
             'agreementStatus' => AgreementApi::AGREEMENTSTATUS_NOTVERIFIED,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -106,10 +106,10 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AgreementDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'agreementRef' => 'aRef',
             'agreementStatus' => AgreementApi::AGREEMENTSTATUS_VERIFIED,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -123,10 +123,10 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AgreementDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'agreementRef' => 'aRef',
             'agreementStatus' => AgreementApi::AGREEMENTSTATUS_DELETED,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -140,10 +140,10 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AgreementDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'agreementRef' => 'aRef',
             'errorCode' => 'not-ok',
-        ));
+        ]);
 
         //guard
         $status->markUnknown();

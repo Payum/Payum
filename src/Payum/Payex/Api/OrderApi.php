@@ -95,7 +95,7 @@ class OrderApi extends BaseApi
             unset($parameters['orderId']);
         }
 
-        $parameters['hash'] = $this->calculateHash($parameters, array(
+        $parameters['hash'] = $this->calculateHash($parameters, [
             'accountNumber',
             'purchaseOperation',
             'price',
@@ -114,7 +114,7 @@ class OrderApi extends BaseApi
             'agreementRef',
             'cancelUrl',
             'clientLanguage',
-        ));
+        ]);
 
         return $this->call('Initialize8', $parameters, $this->getPxOrderWsdl());
     }
@@ -128,10 +128,10 @@ class OrderApi extends BaseApi
     {
         $parameters['accountNumber'] = $this->options['account_number'];
 
-        $parameters['hash'] = $this->calculateHash($parameters, array(
+        $parameters['hash'] = $this->calculateHash($parameters, [
             'accountNumber',
             'orderRef',
-        ));
+        ]);
 
         return $this->call('Complete', $parameters, $this->getPxOrderWsdl());
     }
@@ -145,10 +145,10 @@ class OrderApi extends BaseApi
     {
         $parameters['accountNumber'] = $this->options['account_number'];
 
-        $parameters['hash'] = $this->calculateHash($parameters, array(
+        $parameters['hash'] = $this->calculateHash($parameters, [
             'accountNumber',
             'transactionNumber',
-        ));
+        ]);
 
         return $this->call('Check2', $parameters, $this->getPxOrderWsdl());
     }

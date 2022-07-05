@@ -21,14 +21,14 @@ class CompleteOrderAction implements ActionInterface, ApiAwareInterface
 
     public function execute($request)
     {
-        /** @var $request CompleteOrder */
+        /** @var CompleteOrder $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validateNotEmpty(array(
+        $model->validateNotEmpty([
             'orderRef',
-        ));
+        ]);
 
         $result = $this->api->complete((array) $model);
 

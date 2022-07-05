@@ -71,7 +71,7 @@ class GetAddressesActionTest extends GenericApiAwareActionTest
             ->expects($this->once())
             ->method('getAddresses')
             ->with('thePno')
-            ->willReturn(array($first, $second))
+            ->willReturn([$first, $second])
         ;
 
         $action = new GetAddressesAction($klarnaMock);
@@ -86,9 +86,9 @@ class GetAddressesActionTest extends GenericApiAwareActionTest
     public function testShouldNotCatchKlarnaException()
     {
         $this->expectException(\KlarnaException::class);
-        $details = array(
+        $details = [
             'pno' => 'thePno',
-        );
+        ];
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
@@ -109,7 +109,7 @@ class GetAddressesActionTest extends GenericApiAwareActionTest
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock = $this->createMock('Klarna', array('config', 'getAddresses'));
+        $klarnaMock = $this->createMock('Klarna', ['config', 'getAddresses']);
 
         $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);

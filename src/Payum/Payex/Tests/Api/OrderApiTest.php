@@ -18,7 +18,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The account_number option must be set.');
-        new OrderApi(new SoapClientFactory(), array());
+        new OrderApi(new SoapClientFactory(), []);
     }
 
     public function testThrowIfEncryptionKeyOptionNotSet()
@@ -27,9 +27,9 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('The encryption_key option must be set.');
         new OrderApi(
             new SoapClientFactory(),
-            array(
+            [
                 'account_number' => 'aNumber',
-            )
+            ]
         );
     }
 
@@ -39,11 +39,11 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
         new OrderApi(
             new SoapClientFactory(),
-            array(
+            [
                 'account_number' => 'aNumber',
                 'encryption_key' => 'aKey',
                 'sandbox' => 'not a bool',
-            )
+            ]
         );
     }
 
@@ -60,7 +60,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
             ->willReturn($response)
         ;
 
-        $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
+        $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', ['createWsdlClient']);
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
@@ -69,16 +69,16 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
 
         $orderApi = new OrderApi(
             $clientFactoryMock,
-            array(
+            [
                 'encryption_key' => 'aKey',
                 'account_number' => 'aNumber',
                 'sandbox' => true,
-            )
+            ]
         );
 
-        $result = $orderApi->initialize(array());
+        $result = $orderApi->initialize([]);
 
-        $this->assertEquals(array('fooValue'), $result);
+        $this->assertEquals(['fooValue'], $result);
     }
 
     public function testShouldUseSoapClientOnCompleteAndConvertItsResponse()
@@ -94,7 +94,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
             ->willReturn($response)
         ;
 
-        $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
+        $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', ['createWsdlClient']);
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
@@ -103,16 +103,16 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
 
         $orderApi = new OrderApi(
             $clientFactoryMock,
-            array(
+            [
                 'encryption_key' => 'aKey',
                 'account_number' => 'aNumber',
                 'sandbox' => true,
-            )
+            ]
         );
 
-        $result = $orderApi->complete(array());
+        $result = $orderApi->complete([]);
 
-        $this->assertEquals(array('fooValue'), $result);
+        $this->assertEquals(['fooValue'], $result);
     }
 
     public function testShouldUseSoapClientOnCheckAndConvertItsResponse()
@@ -128,7 +128,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
             ->willReturn($response)
         ;
 
-        $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
+        $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', ['createWsdlClient']);
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
@@ -137,16 +137,16 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
 
         $orderApi = new OrderApi(
             $clientFactoryMock,
-            array(
+            [
                 'encryption_key' => 'aKey',
                 'account_number' => 'aNumber',
                 'sandbox' => true,
-            )
+            ]
         );
 
-        $result = $orderApi->check(array());
+        $result = $orderApi->check([]);
 
-        $this->assertEquals(array('fooValue'), $result);
+        $this->assertEquals(['fooValue'], $result);
     }
 
     /**
@@ -175,4 +175,4 @@ class OrderSoapClient extends \SoapClient
     public function Check2()
     {
     }
-};
+}

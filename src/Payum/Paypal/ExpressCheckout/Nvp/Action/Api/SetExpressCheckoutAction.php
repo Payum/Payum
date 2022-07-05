@@ -22,7 +22,7 @@ class SetExpressCheckoutAction implements ActionInterface, ApiAwareInterface
 
     public function execute($request)
     {
-        /** @var $request SetExpressCheckout */
+        /** @var SetExpressCheckout $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());

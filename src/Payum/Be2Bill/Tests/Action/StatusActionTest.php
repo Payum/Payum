@@ -17,7 +17,7 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $action->execute($status = new GetHumanStatus(array()));
+        $action->execute($status = new GetHumanStatus([]));
 
         $this->assertTrue($status->isNew());
     }
@@ -26,7 +26,7 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $action->execute($status = new GetHumanStatus(array()));
+        $action->execute($status = new GetHumanStatus([]));
 
         $this->assertTrue($status->isNew());
     }
@@ -35,9 +35,9 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $action->execute($status = new GetHumanStatus(array(
+        $action->execute($status = new GetHumanStatus([
             'EXECCODE' => Api::EXECCODE_SUCCESSFUL,
-        )));
+        ]));
 
         $this->assertTrue($status->isCaptured());
     }
@@ -46,9 +46,9 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $action->execute($status = new GetHumanStatus(array(
+        $action->execute($status = new GetHumanStatus([
             'EXECCODE' => Api::EXECCODE_BANK_ERROR,
-        )));
+        ]));
 
         $this->assertTrue($status->isFailed());
     }
@@ -57,9 +57,9 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $action->execute($status = new GetHumanStatus(array(
+        $action->execute($status = new GetHumanStatus([
             'EXECCODE' => Api::EXECCODE_TIME_OUT,
-        )));
+        ]));
 
         $this->assertTrue($status->isUnknown());
     }

@@ -74,9 +74,9 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
         $model = new \ArrayObject();
         $model['TOKEN'] = $expectedRedirectUrl;
 
-        $request = new AuthorizeToken(array(
+        $request = new AuthorizeToken([
             'TOKEN' => $expectedToken,
-        ));
+        ]);
 
         try {
             $action->execute($request);
@@ -95,21 +95,21 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('getAuthorizeTokenUrl')
-            ->with('aToken', array(
+            ->with('aToken', [
                 'useraction' => 'theUserAction',
                 'cmd' => 'theCmd',
-            ))
+            ])
             ->willReturn('theRedirectUrl')
         ;
 
         $action = new AuthorizeTokenAction();
         $action->setApi($apiMock);
 
-        $request = new AuthorizeToken(array(
+        $request = new AuthorizeToken([
             'TOKEN' => 'aToken',
             'AUTHORIZE_TOKEN_USERACTION' => 'theUserAction',
             'AUTHORIZE_TOKEN_CMD' => 'theCmd',
-        ));
+        ]);
 
         try {
             $action->execute($request);
@@ -133,12 +133,12 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
         $action = new AuthorizeTokenAction();
         $action->setApi($apiMock);
 
-        $request = new AuthorizeToken(array(
+        $request = new AuthorizeToken([
             'TOKEN' => 'aToken',
             //payer id means that the user already authorize the token.
             //Entered his login\passowrd and press enter at paypal side.
             'PAYERID' => 'aPayerId',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -155,10 +155,10 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
         $action = new AuthorizeTokenAction();
         $action->setApi($apiMock);
 
-        $request = new AuthorizeToken(array(
+        $request = new AuthorizeToken([
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
-        ), $force = true);
+        ], $force = true);
 
         try {
             $action->execute($request);
@@ -176,6 +176,6 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
     }
 }

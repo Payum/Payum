@@ -15,7 +15,7 @@ class NotifyAction implements ActionInterface, GatewayAwareInterface
 
     public function execute($request)
     {
-        /** @var $request Notify */
+        /** @var Notify $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $this->gateway->execute(new Sync($request->getModel()));

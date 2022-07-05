@@ -22,7 +22,7 @@ class TableGatewayStorageTest extends TestCase
         $this->expectExceptionMessage('Method is not supported by the storage.');
         $storage = new TableGatewayStorage($this->createTableGatewayMock(), 'stdClass');
 
-        $storage->findBy(array());
+        $storage->findBy([]);
     }
 
     /**

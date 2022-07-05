@@ -75,12 +75,12 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        $failedStatuses = array(
+        $failedStatuses = [
             Api::PAYMENTSTATUS_FAILED,
             Api::PAYMENTSTATUS_EXPIRED,
             Api::PAYMENTSTATUS_DENIED,
             Api::PAYMENTSTATUS_CANCELED_REVERSAL,
-        );
+        ];
 
         if (in_array($paymentStatus, $failedStatuses)) {
             $request->markFailed();

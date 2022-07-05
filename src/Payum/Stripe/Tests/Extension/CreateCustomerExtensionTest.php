@@ -43,7 +43,6 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
                 $model['id'] = 'theCustomerId';
             });
-        ;
 
         $context = new Context($gatewayMock, $request, []);
 
@@ -91,7 +90,6 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
                 $model['id'] = 'theCustomerId';
             });
-        ;
 
         $context = new Context($gatewayMock, $request, []);
 
@@ -137,7 +135,6 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
                 // we assume the customer creation has failed when the customer does not have an id set.
                 $model['id'] = null;
             });
-        ;
 
         $context = new Context($gatewayMock, $request, []);
 
@@ -319,7 +316,6 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
                 $model['id'] = 'theCustomerId';
             });
-        ;
 
         $context = new Context($gatewayMock, $request, []);
 
@@ -367,7 +363,6 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
                 $model['id'] = 'theCustomerId';
             });
-        ;
 
         $context = new Context($gatewayMock, $request, []);
 
@@ -413,7 +408,6 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
                 // we assume the customer creation has failed when the customer does not have an id set.
                 $model['id'] = null;
             });
-        ;
 
         $context = new Context($gatewayMock, $request, []);
 

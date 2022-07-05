@@ -17,22 +17,22 @@ class AuthorizeNetAimGatewayFactory extends GatewayFactory
             throw new \LogicException('You must install "authorizenet/authorizenet" library.');
         }
 
-        $config->defaults(array(
+        $config->defaults([
             'payum.factory_name' => 'authorize_net_aim',
             'payum.factory_title' => 'Authorize.NET AIM',
             'payum.action.capture' => new CaptureAction(),
             'payum.action.status' => new StatusAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),
-        ));
+        ]);
 
         if (false == $config['payum.api']) {
-            $config['payum.default_options'] = array(
+            $config['payum.default_options'] = [
                 'login_id' => '',
                 'transaction_key' => '',
                 'sandbox' => true,
-            );
+            ];
             $config->defaults($config['payum.default_options']);
-            $config['payum.required_options'] = array('login_id', 'transaction_key');
+            $config['payum.required_options'] = ['login_id', 'transaction_key'];
 
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);

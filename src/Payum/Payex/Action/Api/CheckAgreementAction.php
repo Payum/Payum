@@ -21,14 +21,14 @@ class CheckAgreementAction implements ActionInterface, ApiAwareInterface
 
     public function execute($request)
     {
-        /** @var $request CheckAgreement */
+        /** @var CheckAgreement $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validateNotEmpty(array(
+        $model->validateNotEmpty([
             'agreementRef',
-        ));
+        ]);
 
         $result = $this->api->check((array) $model);
 

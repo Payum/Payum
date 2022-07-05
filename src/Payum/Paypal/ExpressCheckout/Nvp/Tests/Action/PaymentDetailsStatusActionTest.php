@@ -19,9 +19,9 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $payment = array(
+        $payment = [
            'PAYMENTREQUEST_0_AMT' => 1,
-        );
+        ];
 
         $request = new GetHumanStatus($payment);
 
@@ -32,7 +32,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array());
+        $request = new GetHumanStatus([]);
 
         $this->assertTrue($action->supports($request));
     }
@@ -41,9 +41,9 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $payment = array(
+        $payment = [
             'PAYMENTREQUEST_0_AMT' => 0,
-        );
+        ];
 
         $request = new GetHumanStatus($payment);
 
@@ -78,10 +78,10 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'L_ERRORCODE0' => Api::L_ERRORCODE_PAYMENT_NOT_AUTHORIZED,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -92,9 +92,9 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'CANCELLED' => true,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -105,10 +105,10 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 21,
             'L_ERRORCODE9' => 'foo'
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -119,12 +119,12 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 0,
             'PAYERID' => 'thePayerId',
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
             'L_BILLINGTYPE0' => Api::BILLINGTYPE_RECURRING_PAYMENTS,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -135,7 +135,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array());
+        $request = new GetHumanStatus([]);
 
         $action->execute($request);
 
@@ -146,11 +146,11 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 0,
             'PAYERID' => 'thePayerId',
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -161,10 +161,10 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -175,11 +175,11 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'PAYERID' => null,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -190,10 +190,10 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_FAILED,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -204,12 +204,12 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
             'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_IN_PROGRESS,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -220,12 +220,12 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
             'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_FAILED,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -236,12 +236,12 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
             'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_REVERSED,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -252,12 +252,12 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
             'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_REFUNDED,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -268,12 +268,12 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
             'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PARTIALLY_REFUNDED,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -284,12 +284,12 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
             'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PROCESSED,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -300,14 +300,14 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_VOIDED,
             'PAYMENTINFO_0_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
             'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_VOIDED,
             'PAYMENTINFO_9_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -318,7 +318,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PENDING,
@@ -326,7 +326,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
             'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PENDING,
             'PAYMENTINFO_9_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
 
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -337,10 +337,10 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => 'unknownCheckoutStatus',
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -351,11 +351,11 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTINFO_9_PAYMENTSTATUS' => 'unknownPaymentStatus',
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -366,10 +366,10 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
             'CANCELLED' => true,
-        ));
+        ]);
 
         $action->execute($request);
 

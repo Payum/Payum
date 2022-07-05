@@ -22,7 +22,7 @@ class GetTransactionDetailsAction implements ActionInterface, ApiAwareInterface
 
     public function execute($request)
     {
-        /** @var $request GetTransactionDetails */
+        /** @var GetTransactionDetails $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -32,7 +32,7 @@ class GetTransactionDetailsAction implements ActionInterface, ApiAwareInterface
             throw new LogicException($transactionIndex . ' must be set.');
         }
 
-        $result = $this->api->getTransactionDetails(array('TRANSACTIONID' => $model[$transactionIndex]));
+        $result = $this->api->getTransactionDetails(['TRANSACTIONID' => $model[$transactionIndex]]);
         foreach ($result as $name => $value) {
             if (in_array($name, $this->getPaymentRequestNFields())) {
                 $model['PAYMENTREQUEST_' . $request->getPaymentRequestN() . '_' . $name] = $value;
@@ -52,7 +52,7 @@ class GetTransactionDetailsAction implements ActionInterface, ApiAwareInterface
      */
     protected function getPaymentRequestNFields()
     {
-        return array(
+        return [
             'TRANSACTIONID',
             'PARENTTRANSACTIONID',
             'RECEIPTID',
@@ -68,6 +68,6 @@ class GetTransactionDetailsAction implements ActionInterface, ApiAwareInterface
             'PAYMENTSTATUS',
             'PENDINGREASON',
             'REASONCODE',
-        );
+        ];
     }
 }

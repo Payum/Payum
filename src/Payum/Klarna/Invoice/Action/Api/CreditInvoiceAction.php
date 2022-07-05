@@ -17,7 +17,7 @@ class CreditInvoiceAction extends BaseApiAwareAction
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        $details->validateNotEmpty(array('invoice_number'));
+        $details->validateNotEmpty(['invoice_number']);
 
         $klarna = $this->getKlarna();
 

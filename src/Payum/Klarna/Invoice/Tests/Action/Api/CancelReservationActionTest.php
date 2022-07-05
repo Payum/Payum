@@ -40,7 +40,7 @@ class CancelReservationActionTest extends GenericApiAwareActionTest
     {
         $action = new CancelReservationAction();
 
-        $this->assertTrue($action->supports(new CancelReservation(array())));
+        $this->assertTrue($action->supports(new CancelReservation([])));
     }
 
     public function testShouldNotSupportAnythingNotCancelReservation()
@@ -71,14 +71,14 @@ class CancelReservationActionTest extends GenericApiAwareActionTest
         $this->expectExceptionMessage('The rno fields are required.');
         $action = new CancelReservationAction();
 
-        $action->execute(new CancelReservation(array()));
+        $action->execute(new CancelReservation([]));
     }
 
     public function testShouldCallKlarnaCancelReservationMethod()
     {
-        $details = array(
+        $details = [
             'rno' => 'theRno',
-        );
+        ];
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
@@ -100,9 +100,9 @@ class CancelReservationActionTest extends GenericApiAwareActionTest
 
     public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
-        $details = array(
+        $details = [
             'rno' => 'theRno',
-        );
+        ];
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
@@ -127,7 +127,7 @@ class CancelReservationActionTest extends GenericApiAwareActionTest
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock = $this->createMock('Klarna', array('config', 'activate', 'cancelReservation', 'checkOrderStatus'));
+        $klarnaMock = $this->createMock('Klarna', ['config', 'activate', 'cancelReservation', 'checkOrderStatus']);
 
         $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);

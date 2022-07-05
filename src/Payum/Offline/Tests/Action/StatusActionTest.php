@@ -53,7 +53,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldMarkNewIfDetailsEmpty()
     {
-        $request = new GetBinaryStatus(array());
+        $request = new GetBinaryStatus([]);
         $request->markUnknown();
 
         $action = new StatusAction();
@@ -65,7 +65,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldMarkNewIfStatusNotSet()
     {
-        $request = new GetBinaryStatus(array());
+        $request = new GetBinaryStatus([]);
         $request->markUnknown();
 
         $action = new StatusAction();
@@ -77,9 +77,9 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldMarkPendingIfStatusSetToPending()
     {
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             Constants::FIELD_STATUS => Constants::STATUS_PENDING,
-        ));
+        ]);
         $request->markUnknown();
 
         $action = new StatusAction();
@@ -91,9 +91,9 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldMarkCapturedIfStatusSetToCaptured()
     {
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             Constants::FIELD_STATUS => Constants::STATUS_CAPTURED,
-        ));
+        ]);
         $request->markUnknown();
 
         $action = new StatusAction();
@@ -105,9 +105,9 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldMarkPayedoutIfStatusSetToPayedout()
     {
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             Constants::FIELD_STATUS => Constants::STATUS_PAYEDOUT,
-        ));
+        ]);
         $request->markUnknown();
 
         $action = new StatusAction();
@@ -119,9 +119,9 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldMarkRefundedIfStatusSetToRefunded()
     {
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             Constants::FIELD_STATUS => Constants::STATUS_REFUNDED,
-        ));
+        ]);
         $request->markUnknown();
 
         $action = new StatusAction();
@@ -133,9 +133,9 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldMarkCanceledIfStatusSetToCanceled()
     {
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             Constants::FIELD_STATUS => Constants::STATUS_CANCELED,
-        ));
+        ]);
         $request->markUnknown();
 
         $action = new StatusAction();
@@ -147,9 +147,9 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldMarkUnknownIfStatusNotRecognized()
     {
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             Constants::FIELD_STATUS => 'some-foo-bar-status',
-        ));
+        ]);
         $request->markCaptured();
 
         $action = new StatusAction();

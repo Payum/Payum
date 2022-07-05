@@ -14,7 +14,7 @@ class HttpRedirect extends HttpResponse
      * @param int      $statusCode
      * @param string[] $headers
      */
-    public function __construct($url, $statusCode = 302, array $headers = array())
+    public function __construct($url, $statusCode = 302, array $headers = [])
     {
         $this->url = $url;
 

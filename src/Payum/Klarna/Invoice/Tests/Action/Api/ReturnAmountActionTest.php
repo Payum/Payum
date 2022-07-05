@@ -40,7 +40,7 @@ class ReturnAmountActionTest extends GenericApiAwareActionTest
     {
         $action = new ReturnAmountAction();
 
-        $this->assertTrue($action->supports(new ReturnAmount(array())));
+        $this->assertTrue($action->supports(new ReturnAmount([])));
     }
 
     public function testShouldNotSupportAnythingNotReserveAmount()
@@ -67,13 +67,13 @@ class ReturnAmountActionTest extends GenericApiAwareActionTest
 
     public function testShouldCallKlarnaReturnAmount()
     {
-        $details = array(
+        $details = [
             'invoice_number' => 'invoice number',
             'amount' => 100,
             'vat' => 50,
             'flags' => 123,
             'description' => 'description',
-        );
+        ];
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
@@ -96,13 +96,13 @@ class ReturnAmountActionTest extends GenericApiAwareActionTest
 
     public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
-        $details = array(
+        $details = [
             'invoice_number' => 'invoice number',
             'amount' => 100,
             'vat' => 50,
             'flags' => 123,
             'description' => 'description',
-        );
+        ];
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
@@ -133,7 +133,7 @@ class ReturnAmountActionTest extends GenericApiAwareActionTest
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock = $this->createMock('Klarna', array('config', 'returnAmount'));
+        $klarnaMock = $this->createMock('Klarna', ['config', 'returnAmount']);
 
         $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);

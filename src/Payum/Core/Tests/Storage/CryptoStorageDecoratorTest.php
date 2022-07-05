@@ -155,7 +155,7 @@ class CryptoStorageDecoratorTest extends TestCase
             ->expects($this->once())
             ->method('encrypt')
             ->with('theVal');
-        ;
+
         $cypherMock
             ->expects($this->never())
             ->method('decrypt')
@@ -195,7 +195,6 @@ class CryptoStorageDecoratorTest extends TestCase
             ->expects($this->once())
             ->method('decrypt')
             ->with('theEncryptedVal');
-        ;
 
         $storage = new CryptoStorageDecorator($decoratedStorage, $cypherMock);
 
@@ -240,7 +239,6 @@ class CryptoStorageDecoratorTest extends TestCase
             ->expects($this->exactly(2))
             ->method('decrypt')
             ->with('theEncryptedVal');
-        ;
 
         $storage = new CryptoStorageDecorator($decoratedStorage, $cypherMock);
 

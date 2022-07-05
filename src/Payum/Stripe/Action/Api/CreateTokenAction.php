@@ -46,7 +46,7 @@ class CreateTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
 
     public function execute($request)
     {
-        /** @var $request CreateToken */
+        /** @var CreateToken $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());

@@ -41,8 +41,8 @@ class GetHttpRequest
 
     public function __construct()
     {
-        $this->query = array();
-        $this->request = array();
+        $this->query = [];
+        $this->request = [];
         $this->method = '';
         $this->uri = '';
         $this->clientIp = '';

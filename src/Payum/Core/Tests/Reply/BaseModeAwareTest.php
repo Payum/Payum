@@ -44,12 +44,12 @@ class BaseModeAwareTest extends TestCase
 
     public static function provideDifferentPhpTypes(): \Iterator
     {
-        yield 'object' => array(new \stdClass());
-        yield 'int' => array(5);
-        yield 'float' => array(5.5);
-        yield 'string' => array('foo');
-        yield 'boolean' => array(false);
-        yield 'resource' => array(tmpfile());
+        yield 'object' => [new \stdClass()];
+        yield 'int' => [5];
+        yield 'float' => [5.5];
+        yield 'string' => ['foo'];
+        yield 'boolean' => [false];
+        yield 'resource' => [tmpfile()];
     }
 
     /**
@@ -78,9 +78,9 @@ class BaseModeAwareTest extends TestCase
 
     public function testShouldConvertArrayToArrayObjectInConstructor()
     {
-        $model = array('foo' => 'bar');
+        $model = ['foo' => 'bar'];
 
-        $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array($model));
+        $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', [$model]);
 
         $this->assertInstanceOf('ArrayObject', $request->getModel());
         $this->assertEquals($model, (array) $request->getModel());
@@ -88,9 +88,9 @@ class BaseModeAwareTest extends TestCase
 
     public function testShouldConvertArrayToArrayObjectSetWithSetter()
     {
-        $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array(123321));
+        $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', [123321]);
 
-        $model = array('foo' => 'bar');
+        $model = ['foo' => 'bar'];
 
         $request->setModel($model);
 

@@ -21,14 +21,14 @@ class DeleteAgreementAction implements ActionInterface, ApiAwareInterface
 
     public function execute($request)
     {
-        /** @var $request DeleteAgreement */
+        /** @var DeleteAgreement $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validateNotEmpty(array(
+        $model->validateNotEmpty([
             'agreementRef',
-        ));
+        ]);
 
         $result = $this->api->delete((array) $model);
 

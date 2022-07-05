@@ -8,27 +8,27 @@ use Payum\Payex\Request\Api\CreateAgreement;
 
 class CreateAgreementActionTest extends \PHPUnit\Framework\TestCase
 {
-    protected $requiredFields = array(
+    protected $requiredFields = [
         'merchantRef' => 'aMerchRef',
         'description' => 'aDesc',
         'purchaseOperation' => AgreementApi::PURCHASEOPERATION_SALE,
         'maxAmount' => 100000,
         'startDate' => '',
         'stopDate' => '',
-    );
+    ];
 
-    protected $requiredNotEmptyFields = array(
+    protected $requiredNotEmptyFields = [
         'merchantRef' => 'aMerchRef',
         'description' => 'aDesc',
         'maxAmount' => 100000,
-    );
+    ];
 
     public function provideRequiredFields()
     {
-        $fields = array();
+        $fields = [];
 
         foreach ($this->requiredFields as $name => $value) {
-            $fields[] = array($name);
+            $fields[] = [$name];
         }
 
         return $fields;
@@ -36,10 +36,10 @@ class CreateAgreementActionTest extends \PHPUnit\Framework\TestCase
 
     public function provideRequiredNotEmptyFields()
     {
-        $fields = array();
+        $fields = [];
 
         foreach ($this->requiredNotEmptyFields as $name => $value) {
-            $fields[] = array($name);
+            $fields[] = [$name];
         }
 
         return $fields;
@@ -132,9 +132,9 @@ class CreateAgreementActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('create')
             ->with($this->requiredFields)
-            ->willReturn(array(
+            ->willReturn([
                 'agreementRef' => 'theRef',
-            ));
+            ]);
 
         $action = new CreateAgreementAction();
         $action->setApi($apiMock);
@@ -153,9 +153,9 @@ class CreateAgreementActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('The agreement has already been created.');
         $action = new CreateAgreementAction();
 
-        $request = new CreateAgreement(array(
+        $request = new CreateAgreement([
             'agreementRef' => 'aRef',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -165,6 +165,6 @@ class CreateAgreementActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
+        return $this->createMock('Payum\Payex\Api\AgreementApi', [], [], '', false);
     }
 }

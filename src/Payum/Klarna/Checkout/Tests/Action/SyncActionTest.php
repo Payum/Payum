@@ -27,7 +27,7 @@ class SyncActionTest extends GenericActionTest
     {
         $action = new SyncAction();
 
-        $this->assertTrue($action->supports(new Sync(array())));
+        $this->assertTrue($action->supports(new Sync([])));
     }
 
     public function testShouldNotSupportAnythingNotSync()
@@ -54,11 +54,11 @@ class SyncActionTest extends GenericActionTest
 
     public function testShouldSubExecuteFetchOrderRequestIfModelHasLocationSet()
     {
-        $orderMock = $this->createMock('Klarna_Checkout_Order', array('marshal'), array(), '', false);
+        $orderMock = $this->createMock('Klarna_Checkout_Order', ['marshal'], [], '', false);
         $orderMock
             ->expects($this->once())
             ->method('marshal')
-            ->willReturn(array('foo' => 'fooVal', 'bar' => 'barVal'))
+            ->willReturn(['foo' => 'fooVal', 'bar' => 'barVal'])
         ;
 
         $gatewayMock = $this->createGatewayMock();
@@ -74,10 +74,10 @@ class SyncActionTest extends GenericActionTest
         $action = new SyncAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Sync(array(
+        $request = new Sync([
             'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
             'location' => 'theLocation',
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -99,7 +99,7 @@ class SyncActionTest extends GenericActionTest
         $action = new SyncAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Sync(array());
+        $request = new Sync([]);
 
         $action->execute($request);
     }
@@ -117,6 +117,6 @@ class SyncActionTest extends GenericActionTest
      */
     protected function createOrderMock()
     {
-        return $this->createMock('Klarna_Checkout_Order', array(), array(), '', false);
+        return $this->createMock('Klarna_Checkout_Order', [], [], '', false);
     }
 }

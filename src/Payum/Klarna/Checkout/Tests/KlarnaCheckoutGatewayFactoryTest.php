@@ -22,10 +22,10 @@ class KlarnaCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
 
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
-        $factory = new KlarnaCheckoutGatewayFactory(array(
+        $factory = new KlarnaCheckoutGatewayFactory([
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        ));
+        ]);
 
         $config = $factory->createConfig();
 
@@ -48,13 +48,13 @@ class KlarnaCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
 
         $this->assertArrayHasKey('payum.default_options', $config);
         $this->assertEquals(
-            array(
+            [
                 'merchant_id' => '',
                 'secret' => '',
                 'checkout_uri' => '',
                 'terms_uri' => '',
                 'sandbox' => true,
-            ),
+            ],
             $config['payum.default_options']
         );
     }

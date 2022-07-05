@@ -21,12 +21,12 @@ class StartRecurringPaymentAction implements ActionInterface, ApiAwareInterface
 
     public function execute($request)
     {
-        /** @var $request StartRecurringPayment */
+        /** @var StartRecurringPayment $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validatedKeysSet(array(
+        $model->validatedKeysSet([
             'agreementRef',
             'startDate',
             'periodType',
@@ -36,7 +36,7 @@ class StartRecurringPaymentAction implements ActionInterface, ApiAwareInterface
             'productNumber',
             'orderId',
             'description',
-        ));
+        ]);
 
         $result = $this->api->start((array) $model);
 

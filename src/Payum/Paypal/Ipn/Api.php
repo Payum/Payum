@@ -58,9 +58,9 @@ class Api
     {
         $fields['cmd'] = self::CMD_NOTIFY_VALIDATE;
 
-        $headers = array(
+        $headers = [
             'Content-Type' => 'application/x-www-form-urlencoded',
-        );
+        ];
 
         $request = $this->messageFactory->createRequest('POST', $this->getIpnEndpoint(), $headers, http_build_query($fields));
 

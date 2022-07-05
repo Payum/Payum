@@ -19,35 +19,35 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
-        $this->assertTrue($action->supports(new Capture(array(
+        $this->assertTrue($action->supports(new Capture([
             'autoPay' => true,
-        ))));
+        ])));
     }
 
     public function testShouldNotSupportCaptureWithArrayAsModelIfAutoPayNotSet()
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
-        $this->assertFalse($action->supports(new Capture(array())));
+        $this->assertFalse($action->supports(new Capture([])));
     }
 
     public function testShouldNotSupportCaptureWithArrayAsModelIfAutoPaySetToTrueAndRecurringSetToTrue()
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
-        $this->assertFalse($action->supports(new Capture(array(
+        $this->assertFalse($action->supports(new Capture([
             'autoPay' => true,
             'recurring' => true,
-        ))));
+        ])));
     }
 
     public function testShouldNotSupportCaptureayAsModelIfAutoPaySetToFalse()
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
-        $this->assertFalse($action->supports(new Capture(array(
+        $this->assertFalse($action->supports(new Capture([
             'autoPay' => false,
-        ))));
+        ])));
     }
 
     public function testShouldNotSupportAnythingNotCapture()
@@ -84,9 +84,9 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         $action = new AutoPayPaymentDetailsCaptureAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array(
+        $request = new Capture([
             'autoPay' => true,
-        ));
+        ]);
 
         $action->execute($request);
     }

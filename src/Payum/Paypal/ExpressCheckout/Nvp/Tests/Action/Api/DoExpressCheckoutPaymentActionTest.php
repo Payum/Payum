@@ -51,7 +51,7 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('TOKEN must be set. Have you run SetExpressCheckoutAction?');
         $action = new DoExpressCheckoutPaymentAction();
 
-        $action->execute(new DoExpressCheckoutPayment(array()));
+        $action->execute(new DoExpressCheckoutPayment([]));
     }
 
     public function testThrowIfPayerIdNotSetInModel()
@@ -60,9 +60,9 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('PAYERID must be set.');
         $action = new DoExpressCheckoutPaymentAction();
 
-        $request = new DoExpressCheckoutPayment(array(
+        $request = new DoExpressCheckoutPayment([
             'TOKEN' => 'aToken',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -73,10 +73,10 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('PAYMENTREQUEST_0_PAYMENTACTION must be set.');
         $action = new DoExpressCheckoutPaymentAction();
 
-        $request = new DoExpressCheckoutPayment(array(
+        $request = new DoExpressCheckoutPayment([
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -87,11 +87,11 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('PAYMENTREQUEST_0_AMT must be set.');
         $action = new DoExpressCheckoutPaymentAction();
 
-        $request = new DoExpressCheckoutPayment(array(
+        $request = new DoExpressCheckoutPayment([
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
             'PAYMENTREQUEST_0_PAYMENTACTION' => 'anAction',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -117,19 +117,19 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit\Framework\TestCase
                 $testCase->assertArrayHasKey('PAYERID', $fields);
                 $testCase->assertSame('thePayerId', $fields['PAYERID']);
 
-                return array();
+                return [];
             })
         ;
 
         $action = new DoExpressCheckoutPaymentAction();
         $action->setApi($apiMock);
 
-        $request = new DoExpressCheckoutPayment(array(
+        $request = new DoExpressCheckoutPayment([
             'TOKEN' => 'theToken',
             'PAYERID' => 'thePayerId',
             'PAYMENTREQUEST_0_PAYMENTACTION' => 'theAction',
             'PAYMENTREQUEST_0_AMT' => 'theAmt',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -141,22 +141,22 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('doExpressCheckoutPayment')
             ->willReturnCallback(function () {
-                return array(
+                return [
                     'FIRSTNAME' => 'theFirstname',
                     'EMAIL' => 'the@example.com',
-                );
+                ];
             })
         ;
 
         $action = new DoExpressCheckoutPaymentAction();
         $action->setApi($apiMock);
 
-        $request = new DoExpressCheckoutPayment(array(
+        $request = new DoExpressCheckoutPayment([
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
             'PAYMENTREQUEST_0_PAYMENTACTION' => 'anAction',
             'PAYMENTREQUEST_0_AMT' => 'anAmt',
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -174,6 +174,6 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
     }
 }

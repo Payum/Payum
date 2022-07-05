@@ -40,7 +40,7 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new ObtainTokenAction('aTemplateName');
 
-        $this->assertTrue($action->supports(new ObtainToken(array())));
+        $this->assertTrue($action->supports(new ObtainToken([])));
     }
 
     public function testShouldNotSupportObtainTokenRequestWithNotArrayAccessModel()
@@ -72,9 +72,9 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('The token has already been set.');
         $action = new ObtainTokenAction('aTemplateName');
 
-        $action->execute(new ObtainToken(array(
+        $action->execute(new ObtainToken([
             'card' => 'aToken',
-        )));
+        ]));
     }
 
     public function testShouldRenderExpectedTemplateIfHttpRequestNotPOST()
@@ -125,7 +125,7 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldRenderTemplateIfHttpRequestPOSTButNotContainStripeToken()
     {
-        $model = array();
+        $model = [];
         $templateName = 'aTemplateName';
         $publishableKey = 'aPubKey';
 
@@ -159,7 +159,7 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldSetTokenFromHttpRequestToObtainTokenRequestOnPOST()
     {
-        $model = array();
+        $model = [];
         $templateName = 'aTemplateName';
         $publishableKey = 'aPubKey';
 
@@ -170,7 +170,7 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
             ->with($this->isInstanceOf(GetHttpRequest::class))
             ->willReturnCallback(function (GetHttpRequest $request) {
                 $request->method = 'POST';
-                $request->request = array('stripeToken' => 'theToken');
+                $request->request = ['stripeToken' => 'theToken'];
             })
         ;
 

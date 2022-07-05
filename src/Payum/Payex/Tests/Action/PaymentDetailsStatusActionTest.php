@@ -20,35 +20,35 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $this->assertTrue($action->supports(new GetHumanStatus(array())));
+        $this->assertTrue($action->supports(new GetHumanStatus([])));
     }
 
     public function testShouldNotSupportGetStatusRequestWithArrayAsModelIfAutoPaySet()
     {
         $action = new PaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new GetHumanStatus(array(
+        $this->assertFalse($action->supports(new GetHumanStatus([
             'autoPay' => true,
-        ))));
+        ])));
     }
 
     public function testShouldSupportGetStatusRequestWithArrayAsModelIfAutoPaySetToFalse()
     {
         $action = new PaymentDetailsStatusAction();
 
-        $this->assertTrue($action->supports(new GetHumanStatus(array(
+        $this->assertTrue($action->supports(new GetHumanStatus([
             'autoPay' => false,
-        ))));
+        ])));
     }
 
     public function testShouldSupportGetStatusRequestWithArrayAsModelIfRecurringSetToTrueAndAutoPaySet()
     {
         $action = new PaymentDetailsStatusAction();
 
-        $this->assertTrue($action->supports(new GetHumanStatus(array(
+        $this->assertTrue($action->supports(new GetHumanStatus([
             'autoPay' => true,
             'recurring' => true,
-        ))));
+        ])));
     }
 
     public function testShouldNotSupportAnythingNotStatusRequest()
@@ -77,7 +77,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetHumanStatus(array());
+        $status = new GetHumanStatus([]);
 
         //guard
         $status->markUnknown();
@@ -91,11 +91,11 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'orderStatus' => 'not-supported-status',
             'orderId' => 'anId',
             'autoPay' => false,
-        ));
+        ]);
 
         //guard
         $status->markNew();
@@ -109,12 +109,12 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'transactionStatus' => 'not-supported-status',
             'orderId' => 'anId',
             'autoPay' => false,
-        ));
+        ]);
 
         //guard
         $status->markNew();
@@ -128,10 +128,10 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'orderId' => 'anId',
             'autoPay' => false,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -145,13 +145,13 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'purchaseOperation' => OrderApi::PURCHASEOPERATION_AUTHORIZATION,
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_AUTHORIZE,
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'orderId' => 'anId',
             'autoPay' => false,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -165,13 +165,13 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'purchaseOperation' => OrderApi::PURCHASEOPERATION_AUTHORIZATION,
             'transactionStatus' => 'not-authorize-status',
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'orderId' => 'anId',
             'autoPay' => false,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -185,13 +185,13 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'purchaseOperation' => OrderApi::PURCHASEOPERATION_SALE,
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_SALE,
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'orderId' => 'anId',
             'autoPay' => false,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -205,13 +205,13 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'purchaseOperation' => OrderApi::PURCHASEOPERATION_SALE,
             'transactionStatus' => 'not-sale-status',
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'orderId' => 'anId',
             'autoPay' => false,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -225,12 +225,12 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_CANCEL,
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'orderId' => 'anId',
             'autoPay' => false,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -244,15 +244,15 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_CANCEL,
-            'errorDetails' => array(
+            'errorDetails' => [
                 'transactionErrorCode' => OrderApi::TRANSACTIONERRORCODE_OPERATIONCANCELLEDBYCUSTOMER,
-            ),
+            ],
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'orderId' => 'anId',
             'autoPay' => false,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -266,12 +266,12 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_FAILURE,
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'orderId' => 'anId',
             'autoPay' => false,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -285,11 +285,11 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'orderStatus' => OrderApi::ORDERSTATUS_PROCESSING,
             'orderId' => 'anId',
             'autoPay' => false,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -303,11 +303,11 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'orderStatus' => OrderApi::ORDERSTATUS_NOT_FOUND,
             'orderId' => 'anId',
             'autoPay' => false,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -321,11 +321,11 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'errorCode' => 'not-ok',
             'orderId' => 'anId',
             'autoPay' => false,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -339,14 +339,14 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'errorCode' => OrderApi::ERRORCODE_OK,
             'purchaseOperation' => OrderApi::PURCHASEOPERATION_SALE,
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_SALE,
             'orderStatus' => OrderApi::ORDERSTATUS_COMPLETED,
             'orderId' => 'anId',
             'autoPay' => false,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -360,11 +360,11 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'recurringStatus' => RecurringApi::RECURRINGSTATUS_STOPPEDBYMERCHANT,
             'orderId' => 'anId',
             'autoPay' => false,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -378,11 +378,11 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'recurringStatus' => RecurringApi::RECURRINGSTATUS_STOPPEDBYADMIN,
             'orderId' => 'anId',
             'autoPay' => false,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -396,11 +396,11 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'recurringStatus' => RecurringApi::RECURRINGSTATUS_STOPPEDBYCLIENT,
             'orderId' => 'anId',
             'autoPay' => false,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -414,11 +414,11 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'recurringStatus' => RecurringApi::RECURRINGSTATUS_STOPPEDBYSYSTEM,
             'orderId' => 'anId',
             'autoPay' => false,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -432,11 +432,11 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsStatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'recurringStatus' => RecurringApi::RECURRINGSTATUS_FAILED,
             'orderId' => 'anId',
             'autoPay' => false,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();

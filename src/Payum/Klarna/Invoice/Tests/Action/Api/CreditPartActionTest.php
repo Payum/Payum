@@ -54,7 +54,7 @@ class CreditPartActionTest extends GenericApiAwareActionTest
     {
         $action = new CreditPartAction();
 
-        $this->assertTrue($action->supports(new CreditPart(array())));
+        $this->assertTrue($action->supports(new CreditPart([])));
     }
 
     public function testShouldNotSupportAnythingNotCreditPart()
@@ -85,14 +85,14 @@ class CreditPartActionTest extends GenericApiAwareActionTest
         $this->expectExceptionMessage('The invoice_number fields are required.');
         $action = new CreditPartAction();
 
-        $action->execute(new CreditPart(array()));
+        $action->execute(new CreditPart([]));
     }
 
     public function testShouldCallKlarnaCreditPart()
     {
-        $details = array(
+        $details = [
             'invoice_number' => 'theInvNum',
-        );
+        ];
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -121,9 +121,9 @@ class CreditPartActionTest extends GenericApiAwareActionTest
 
     public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
-        $details = array(
+        $details = [
             'invoice_number' => 'theInvNum',
-        );
+        ];
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -155,7 +155,7 @@ class CreditPartActionTest extends GenericApiAwareActionTest
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock = $this->createMock('Klarna', array('config', 'activate', 'cancelReservation', 'checkOrderStatus', 'reserveAmount', 'creditPart'));
+        $klarnaMock = $this->createMock('Klarna', ['config', 'activate', 'cancelReservation', 'checkOrderStatus', 'reserveAmount', 'creditPart']);
 
         $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);

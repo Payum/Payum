@@ -25,7 +25,7 @@ class CreateButtonPaymentAction implements ActionInterface, ApiAwareInterface
 
     public function execute($request)
     {
-        /** @var $request CreateButtonPayment */
+        /** @var CreateButtonPayment $request */
         RequestNotSupportedException::assertSupports($this, $request);
         $model = ArrayObject::ensureArrayObject($request->getModel());
 

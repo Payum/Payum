@@ -26,7 +26,7 @@ class PaymentTest extends MongoTest
         $order->setDetails('aDesc');
         $order->setClientEmail('anEmail');
         $order->setClientId('anId');
-        $order->setDetails(array('bar1', 'bar2' => 'theBar2'));
+        $order->setDetails(['bar1', 'bar2' => 'theBar2']);
 
         $this->dm->persist($order);
         $this->dm->flush();
@@ -56,7 +56,7 @@ class PaymentTest extends MongoTest
     public function testShouldNotStoreSensitiveValue()
     {
         $order = new Payment();
-        $order->setDetails(array('cardNumber' => new SensitiveValue('theCardNumber')));
+        $order->setDetails(['cardNumber' => new SensitiveValue('theCardNumber')]);
 
         $this->dm->persist($order);
         $this->dm->flush();
@@ -64,10 +64,10 @@ class PaymentTest extends MongoTest
         $this->dm->refresh($order);
 
         if (PHP_VERSION_ID >= 70400) {
-            $this->assertEquals(array('cardNumber' => new SensitiveValue(null)), $order->getDetails());
-            $this->assertNotEquals(array('cardNumber' => new SensitiveValue('theCardNumber')), $order->getDetails());
+            $this->assertEquals(['cardNumber' => new SensitiveValue(null)], $order->getDetails());
+            $this->assertNotEquals(['cardNumber' => new SensitiveValue('theCardNumber')], $order->getDetails());
         } else {
-            $this->assertEquals(array('cardNumber' => null), $order->getDetails());
+            $this->assertEquals(['cardNumber' => null], $order->getDetails());
         }
     }
 }

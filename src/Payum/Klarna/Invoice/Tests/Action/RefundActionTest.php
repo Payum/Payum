@@ -21,7 +21,7 @@ class RefundActionTest extends TestCase
     {
         $action = new RefundAction();
 
-        $this->assertTrue($action->supports(new Refund(array())));
+        $this->assertTrue($action->supports(new Refund([])));
     }
 
     public function testShouldNotSupportAnythingNotRefund()
@@ -58,9 +58,9 @@ class RefundActionTest extends TestCase
         $action = new RefundAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Refund(array(
+        $request = new Refund([
             'invoice_number' => 'aNum',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -76,10 +76,10 @@ class RefundActionTest extends TestCase
         $action = new RefundAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Refund(array(
+        $request = new Refund([
             'invoice_number' => 'aNum',
             'refund_invoice_number' => 'aFooNum',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -97,7 +97,7 @@ class RefundActionTest extends TestCase
         $action = new RefundAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Refund(array());
+        $request = new Refund([]);
 
         $action->execute($request);
     }

@@ -38,7 +38,7 @@ class Identity implements IdentityInterface
 
     public function serialize()
     {
-        return serialize(array($this->id, $this->class));
+        return serialize([$this->id, $this->class]);
     }
 
     public function unserialize($serialized)
@@ -48,7 +48,7 @@ class Identity implements IdentityInterface
 
     public function __serialize(): array
     {
-        return array($this->id, $this->class);
+        return [$this->id, $this->class];
     }
 
     public function __unserialize(array $data)
