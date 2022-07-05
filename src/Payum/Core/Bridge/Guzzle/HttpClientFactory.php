@@ -24,7 +24,7 @@ class HttpClientFactory
         }
 
         $version = \GuzzleHttp\ClientInterface::VERSION;
-        if (substr($version, 0, 1) !== '6') {
+        if ('6' !== substr($version, 0, 1)) {
             throw new \LogicException('This version of Guzzle is not supported.');
         }
 

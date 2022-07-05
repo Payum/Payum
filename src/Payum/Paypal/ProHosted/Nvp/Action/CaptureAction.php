@@ -37,7 +37,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
             return;
         }
 
-        if ($response['txn_id'] != null) {
+        if (null != $response['txn_id']) {
             $response->validateNotEmpty([
                 'payment_status',
                 'business',

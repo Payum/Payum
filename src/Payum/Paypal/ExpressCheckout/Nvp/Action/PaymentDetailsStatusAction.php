@@ -55,7 +55,7 @@ class PaymentDetailsStatusAction implements ActionInterface
             $model['PAYERID'] &&
             Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $model['CHECKOUTSTATUS'] &&
             $model['L_BILLINGTYPE0'] &&
-            $model['PAYMENTREQUEST_0_AMT'] == 0
+            0 == $model['PAYMENTREQUEST_0_AMT']
         ) {
             $request->markCaptured();
 

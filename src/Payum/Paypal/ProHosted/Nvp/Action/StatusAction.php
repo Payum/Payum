@@ -50,7 +50,7 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if ($paymentStatus == Api::PAYMENTSTATUS_COMPLETED) {
+        if (Api::PAYMENTSTATUS_COMPLETED == $paymentStatus) {
             $request->markCaptured();
 
             return;
@@ -69,7 +69,7 @@ class StatusAction implements ActionInterface
             }
         }
 
-        if ($paymentStatus == Api::PAYMENTSTATUS_PENDING) {
+        if (Api::PAYMENTSTATUS_PENDING == $paymentStatus) {
             $request->markPending();
 
             return;

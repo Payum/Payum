@@ -72,7 +72,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
             }
 
             foreach ($payment->links as $link) {
-                if ($link->rel == 'approval_url') {
+                if ('approval_url' == $link->rel) {
                     throw new HttpRedirect($link->href);
                 }
             }
