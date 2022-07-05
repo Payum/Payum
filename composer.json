@@ -78,7 +78,8 @@
         "php-http/guzzle6-adapter": "^1.1.1",
         "defuse/php-encryption": "^2",
         "ext-soap": "*",
-        "rector/rector": "^0.12.23"
+        "rector/rector": "^0.13.7",
+        "symplify/easy-coding-standard": "^11.0"
     },
     "replace": {
         "payum/core": "^1",
