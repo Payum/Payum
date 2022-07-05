@@ -35,17 +35,11 @@ class FilesystemStorage extends AbstractStorage
         $this->idProperty = $idProperty;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function findBy(array $criteria)
     {
         throw new LogicException('Method is not supported by the storage.');
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function doFind($id)
     {
         if (isset($this->identityMap[$id])) {
@@ -57,9 +51,6 @@ class FilesystemStorage extends AbstractStorage
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function doUpdateModel($model)
     {
         $ro = new \ReflectionObject($model);
@@ -82,9 +73,6 @@ class FilesystemStorage extends AbstractStorage
         file_put_contents($this->storageDir . '/payum-model-' . $id, serialize($model));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function doDeleteModel($model)
     {
         $rp = new \ReflectionProperty($model, $this->idProperty);
@@ -96,9 +84,6 @@ class FilesystemStorage extends AbstractStorage
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function doGetIdentity($model)
     {
         $rp = new \ReflectionProperty($model, $this->idProperty);

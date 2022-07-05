@@ -20,9 +20,6 @@ use Stripe\Stripe;
 
 class StripeCheckoutGatewayFactory extends GatewayFactory
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function populateConfig(ArrayObject $config)
     {
         if (false == class_exists(Stripe::class)) {

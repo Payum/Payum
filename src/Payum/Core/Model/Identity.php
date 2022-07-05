@@ -26,33 +26,21 @@ class Identity implements IdentityInterface
         $this->class = is_object($class) ? get_class($class) : $class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getClass()
     {
         return $this->class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function serialize()
     {
         return serialize(array($this->id, $this->class));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function unserialize($serialized)
     {
         list($this->id, $this->class) = unserialize($serialized);

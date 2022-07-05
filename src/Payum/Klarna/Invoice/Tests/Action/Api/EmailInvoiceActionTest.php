@@ -20,20 +20,14 @@ class EmailInvoiceActionTest extends GenericApiAwareActionTest
         return new Config();
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\EmailInvoiceAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
     }
 
-    /**
-     * @test
-     */
-    public function throwApiNotSupportedIfNotConfigGivenAsApi()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
@@ -42,40 +36,28 @@ class EmailInvoiceActionTest extends GenericApiAwareActionTest
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportEmailInvoiceWithArrayAsModel()
+    public function testShouldSupportEmailInvoiceWithArrayAsModel()
     {
         $action = new EmailInvoiceAction();
 
         $this->assertTrue($action->supports(new EmailInvoice(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotEmailInvoice()
+    public function testShouldNotSupportAnythingNotEmailInvoice()
     {
         $action = new EmailInvoiceAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportEmailInvoiceWithNotArrayAccessModel()
+    public function testShouldNotSupportEmailInvoiceWithNotArrayAccessModel()
     {
         $action = new EmailInvoiceAction();
 
         $this->assertFalse($action->supports(new EmailInvoice(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new EmailInvoiceAction();
@@ -83,10 +65,7 @@ class EmailInvoiceActionTest extends GenericApiAwareActionTest
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallKlarnaEmailInvoice()
+    public function testShouldCallKlarnaEmailInvoice()
     {
         $details = array(
             'invoice_number' => 'invoice number',
@@ -107,10 +86,7 @@ class EmailInvoiceActionTest extends GenericApiAwareActionTest
         $action->execute(new EmailInvoice($details));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
         $details = array(
             'invoice_number' => 'invoice number',

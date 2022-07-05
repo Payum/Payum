@@ -17,7 +17,6 @@ class GatewayFactory implements GatewayFactoryInterface
     protected $defaultConfig;
 
     /**
-     * @param array $defaultConfig
      * @param GatewayFactoryInterface $coreGatewayFactory
      */
     public function __construct(array $defaultConfig = array(), GatewayFactoryInterface $coreGatewayFactory = null)
@@ -26,17 +25,11 @@ class GatewayFactory implements GatewayFactoryInterface
         $this->defaultConfig = $defaultConfig;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function create(array $config = array())
     {
         return $this->coreGatewayFactory->create($this->createConfig($config));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function createConfig(array $config = array())
     {
         $config = ArrayObject::ensureArrayObject($config);
@@ -48,9 +41,6 @@ class GatewayFactory implements GatewayFactoryInterface
         return (array) $config;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function populateConfig(ArrayObject $config)
     {
     }

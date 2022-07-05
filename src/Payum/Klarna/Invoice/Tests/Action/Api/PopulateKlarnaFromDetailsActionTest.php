@@ -8,40 +8,28 @@ use PHPUnit\Framework\TestCase;
 
 class PopulateKlarnaFromDetailsActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementsActionInterface()
+    public function testShouldImplementsActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\PopulateKlarnaFromDetailsAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportPopulateKlarnaFromDetails()
+    public function testShouldSupportPopulateKlarnaFromDetails()
     {
         $action = new PopulateKlarnaFromDetailsAction();
 
         $this->assertTrue($action->supports(new PopulateKlarnaFromDetails(new \ArrayObject(), new \Klarna())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotPopulateKlarnaFromDetails()
+    public function testShouldNotSupportAnythingNotPopulateKlarnaFromDetails()
     {
         $action = new PopulateKlarnaFromDetailsAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new PopulateKlarnaFromDetailsAction();
@@ -49,10 +37,7 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldPopulateKlarnaFromDetails()
+    public function testShouldPopulateKlarnaFromDetails()
     {
         $details = new \ArrayObject(array(
             'pno' => '410321-9202',
@@ -137,10 +122,7 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
         //Klarna does not provide a way to get data from its object. So we just test that there werent any errors.
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotFaileIfEmptyDetailsGiven()
+    public function testShouldNotFaileIfEmptyDetailsGiven()
     {
         $klarna = $this->createMock(\Klarna::class);
 
@@ -157,10 +139,7 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
         //Klarna does not provide a way to get data from its object. So we just test that there werent any errors.
     }
 
-    /**
-     * @test
-     */
-    public function shouldCorrectlyPutPartialArticles()
+    public function testShouldCorrectlyPutPartialArticles()
     {
         $details = new \ArrayObject(array(
             'partial_articles' => array(

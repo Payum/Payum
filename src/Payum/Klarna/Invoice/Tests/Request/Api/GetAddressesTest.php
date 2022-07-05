@@ -6,20 +6,14 @@ use Payum\Klarna\Invoice\Request\Api\GetAddresses;
 
 class GetAddressesTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldAllowGetPnoSetInConstructor()
+    public function testShouldAllowGetPnoSetInConstructor()
     {
         $request = new GetAddresses($pno = 'thePno');
 
         $this->assertSame($pno, $request->getPno());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowAddKLarnaAddress()
+    public function testShouldAllowAddKLarnaAddress()
     {
         $request = new GetAddresses('aPno');
 
@@ -28,10 +22,7 @@ class GetAddressesTest extends \PHPUnit\Framework\TestCase
         $this->assertSame([$address], $request->getAddresses());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslyAddedKLarnaAddresses()
+    public function testShouldAllowGetPreviouslyAddedKLarnaAddresses()
     {
         $request = new GetAddresses('aPno');
 
@@ -45,20 +36,14 @@ class GetAddressesTest extends \PHPUnit\Framework\TestCase
         $this->assertContains($second, $addresses);
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnNullIfAnyAddressAddedOnGetFirstAddress()
+    public function testShouldReturnNullIfAnyAddressAddedOnGetFirstAddress()
     {
         $request = new GetAddresses('aPno');
 
         $this->assertNull($request->getFirstAddress());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetFirstAddress()
+    public function testShouldAllowGetFirstAddress()
     {
         $request = new GetAddresses('aPno');
 

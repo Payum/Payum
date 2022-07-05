@@ -19,40 +19,28 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ObtainCreditCardActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(ObtainCreditCardAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportObtainCreditCardRequest()
+    public function testShouldSupportObtainCreditCardRequest()
     {
         $action = new ObtainCreditCardAction($this->createFormFactoryMock(), 'aTemplate');
 
         $this->assertTrue($action->supports(new ObtainCreditCard()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotObtainCreditCardRequest()
+    public function testShouldNotSupportAnythingNotObtainCreditCardRequest()
     {
         $action = new ObtainCreditCardAction($this->createFormFactoryMock(), 'aTemplate');
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotObtainCreditCardRequestGivenOnExecute()
+    public function testThrowIfNotObtainCreditCardRequestGivenOnExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $this->expectExceptionMessage('Action ObtainCreditCardAction is not supported the request stdClass.');
@@ -61,10 +49,7 @@ class ObtainCreditCardActionTest extends TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSetBeforeExecute()
+    public function testThrowIfNotSetBeforeExecute()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The action can be run only when http request is set.');
@@ -73,10 +58,7 @@ class ObtainCreditCardActionTest extends TestCase
         $action->execute(new ObtainCreditCard());
     }
 
-    /**
-     * @test
-     */
-    public function shouldRenderFormWhenNotSubmitted()
+    public function testShouldRenderFormWhenNotSubmitted()
     {
         $httpRequest = new Request();
 
@@ -153,10 +135,7 @@ class ObtainCreditCardActionTest extends TestCase
         $this->fail('Reply exception was expected to be thrown');
     }
 
-    /**
-     * @test
-     */
-    public function shouldRenderFormWhenSubmittedButNotValid()
+    public function testShouldRenderFormWhenSubmittedButNotValid()
     {
         $httpRequest = new Request();
 
@@ -240,10 +219,7 @@ class ObtainCreditCardActionTest extends TestCase
         $this->fail('Reply exception was expected to be thrown');
     }
 
-    /**
-     * @test
-     */
-    public function shouldRenderFormWhenSubmittedAndValid()
+    public function testShouldRenderFormWhenSubmittedAndValid()
     {
         $httpRequest = new Request();
 
@@ -289,10 +265,7 @@ class ObtainCreditCardActionTest extends TestCase
         $this->assertSame($creditCard, $obtainCreditCard->obtain());
     }
 
-    /**
-     * @test
-     */
-    public function shouldPassFirstAndCurrentModelsToTemplate()
+    public function testShouldPassFirstAndCurrentModelsToTemplate()
     {
         $firstModel = new \stdClass();
         $currentModel = new \stdClass();

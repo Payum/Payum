@@ -14,9 +14,6 @@ use Symfony\Component\Validator\ConstraintValidator;
  */
 class CreditCardDateValidator extends ConstraintValidator
 {
-    /**
-     * {@inheritDoc}
-     */
     public function validate($value, Constraint $constraint)
     {
         if (null === $value) {

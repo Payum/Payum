@@ -7,30 +7,21 @@ use Payum\Payex\Api\SoapClientFactory;
 
 class RecurringApiTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApi()
+    public function testShouldBeSubClassOfBaseApi()
     {
         $rc = new \ReflectionClass('Payum\Payex\Api\RecurringApi');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Payex\Api\BaseApi'));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfAccountNumberOptionNotSet()
+    public function testThrowIfAccountNumberOptionNotSet()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The account_number option must be set.');
         new RecurringApi(new SoapClientFactory(), array());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfEncryptionKeyOptionNotSet()
+    public function testThrowIfEncryptionKeyOptionNotSet()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The encryption_key option must be set.');
@@ -42,10 +33,7 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotBoolSandboxOptionGiven()
+    public function testThrowIfNotBoolSandboxOptionGiven()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -59,10 +47,7 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseSoapClientOnStartRecurringPaymentAndConvertItsResponse()
+    public function testShouldUseSoapClientOnStartRecurringPaymentAndConvertItsResponse()
     {
         $response = new \stdClass();
         $response->StartResult = '<foo>fooValue</foo>';
@@ -96,10 +81,7 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(array('fooValue'), $result);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseSoapClientOnStopRecurringPaymentAndConvertItsResponse()
+    public function testShouldUseSoapClientOnStopRecurringPaymentAndConvertItsResponse()
     {
         $response = new \stdClass();
         $response->StopResult = '<foo>fooValue</foo>';
@@ -133,10 +115,7 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(array('fooValue'), $result);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseSoapClientOnCheckRecurringPaymentAndConvertItsResponse()
+    public function testShouldUseSoapClientOnCheckRecurringPaymentAndConvertItsResponse()
     {
         $response = new \stdClass();
         $response->CheckResult = '<foo>fooValue</foo>';

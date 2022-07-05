@@ -7,10 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class RandomTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldAllowGenerateToken()
+    public function testShouldAllowGenerateToken()
     {
         $token = Random::generateToken();
 

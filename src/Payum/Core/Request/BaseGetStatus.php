@@ -9,9 +9,6 @@ abstract class BaseGetStatus extends Generic implements GetStatusInterface
      */
     protected $status;
 
-    /**
-     * {@inheritDoc}
-     */
     public function __construct($model)
     {
         parent::__construct($model);
@@ -19,9 +16,6 @@ abstract class BaseGetStatus extends Generic implements GetStatusInterface
         $this->markUnknown();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getValue()
     {
         return $this->status;

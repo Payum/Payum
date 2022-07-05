@@ -16,17 +16,12 @@ class ActivateReservationAction extends BaseApiAwareAction implements GatewayAwa
      */
     protected $gateway;
 
-    /**
-     * {@inheritDoc}
-     */
     public function setGateway(GatewayInterface $gateway)
     {
         $this->gateway = $gateway;
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param ActivateReservation $request
      */
     public function execute($request)
@@ -55,13 +50,9 @@ class ActivateReservationAction extends BaseApiAwareAction implements GatewayAwa
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof ActivateReservation &&
+        return $request instanceof ActivateReservation &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

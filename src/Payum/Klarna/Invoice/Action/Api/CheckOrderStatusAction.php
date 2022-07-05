@@ -9,8 +9,6 @@ use Payum\Klarna\Invoice\Request\Api\CheckOrderStatus;
 class CheckOrderStatusAction extends BaseApiAwareAction
 {
     /**
-     * {@inheritDoc}
-     *
      * @param CheckOrderStatus $request
      */
     public function execute($request)
@@ -34,9 +32,6 @@ class CheckOrderStatusAction extends BaseApiAwareAction
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof CheckOrderStatus &&

@@ -8,20 +8,14 @@ use PHPUnit\Framework\TestCase;
 
 class ArrayObjectTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfArrayObject()
+    public function testShouldBeSubClassOfArrayObject()
     {
         $rc = new \ReflectionClass(ArrayObject::class);
 
         $this->assertTrue($rc->isSubclassOf('ArrayObject'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetValueByIndex()
+    public function testShouldAllowGetPreviouslySetValueByIndex()
     {
         $array = new ArrayObject();
         $array['foo'] = 'bar';
@@ -30,10 +24,7 @@ class ArrayObjectTest extends TestCase
         $this->assertSame('bar', $array['foo']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetValueSetInInternalArrayObject()
+    public function testShouldAllowGetValueSetInInternalArrayObject()
     {
         $internalArray = new \ArrayObject();
         $internalArray['foo'] = 'bar';
@@ -44,10 +35,7 @@ class ArrayObjectTest extends TestCase
         $this->assertSame('bar', $array['foo']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetNullIfValueWithIndexNotSet()
+    public function testShouldAllowGetNullIfValueWithIndexNotSet()
     {
         $array = new ArrayObject();
 
@@ -55,10 +43,7 @@ class ArrayObjectTest extends TestCase
         $this->assertNull($array['foo']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldReplaceFromArray()
+    public function testShouldReplaceFromArray()
     {
         $expectedArray = array(
             'foo' => 'valNew',
@@ -76,10 +61,7 @@ class ArrayObjectTest extends TestCase
         $this->assertEquals($expectedArray, (array) $array);
     }
 
-    /**
-     * @test
-     */
-    public function shouldReplaceFromTraversable()
+    public function testShouldReplaceFromTraversable()
     {
         $traversable = new \ArrayIterator(array(
             'foo' => 'valNew',
@@ -102,10 +84,7 @@ class ArrayObjectTest extends TestCase
         $this->assertEquals($expectedArray, (array) $array);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfInvalidArgumentGivenForReplace()
+    public function testThrowIfInvalidArgumentGivenForReplace()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid input given. Should be an array or instance of \Traversable');
@@ -114,10 +93,7 @@ class ArrayObjectTest extends TestCase
         $array->replace('foo');
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowCastToArrayFromCustomArrayObject()
+    public function testShouldAllowCastToArrayFromCustomArrayObject()
     {
         $input = new CustomArrayObject();
         $input['foo'] = 'barbaz';
@@ -130,10 +106,7 @@ class ArrayObjectTest extends TestCase
         $this->assertEquals(array('foo' => 'barbaz'), $array);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowSetToCustomArrayObject()
+    public function testShouldAllowSetToCustomArrayObject()
     {
         $input = new CustomArrayObject();
         $input['foo'] = 'barbaz';
@@ -144,10 +117,7 @@ class ArrayObjectTest extends TestCase
         $this->assertSame('ololo', $input['foo']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowUnsetToCustomArrayObject()
+    public function testShouldAllowUnsetToCustomArrayObject()
     {
         $input = new CustomArrayObject();
         $input['foo'] = 'barbaz';
@@ -158,10 +128,7 @@ class ArrayObjectTest extends TestCase
         $this->assertNull($input['foo']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetValueFromCustomArrayObject()
+    public function testShouldAllowGetValueFromCustomArrayObject()
     {
         $input = new CustomArrayObject();
         $input['foo'] = 'barbaz';
@@ -171,10 +138,7 @@ class ArrayObjectTest extends TestCase
         $this->assertSame('barbaz', $arrayObject['foo']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowIssetValueFromCustomArrayObject()
+    public function testShouldAllowIssetValueFromCustomArrayObject()
     {
         $input = new CustomArrayObject();
         $input['foo'] = 'barbaz';
@@ -185,10 +149,7 @@ class ArrayObjectTest extends TestCase
         $this->assertArrayNotHasKey('bar', $arrayObject);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowIterateOverCustomArrayObject()
+    public function testShouldAllowIterateOverCustomArrayObject()
     {
         $input = new CustomArrayObject();
         $input['foo'] = 'barbaz';
@@ -201,10 +162,7 @@ class ArrayObjectTest extends TestCase
         $this->assertEquals(array('foo' => 'barbaz'), $array);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfRequiredFieldEmptyAndThrowOnInvalidTrue()
+    public function testThrowIfRequiredFieldEmptyAndThrowOnInvalidTrue()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The aRequiredField fields are required.');
@@ -213,10 +171,7 @@ class ArrayObjectTest extends TestCase
         $arrayObject->validateNotEmpty(array('aRequiredField'), $throwOnInvalid = true);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfSecondRequiredFieldEmptyAndThrowOnInvalidTrue()
+    public function testThrowIfSecondRequiredFieldEmptyAndThrowOnInvalidTrue()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The otherRequiredField fields are required.');
@@ -226,10 +181,7 @@ class ArrayObjectTest extends TestCase
         $arrayObject->validateNotEmpty(array('aRequiredField', 'otherRequiredField'), $throwOnInvalid = true);
     }
 
-    /**
-     * @test
-     */
-    public function throwByDefaultIfRequiredFieldEmpty()
+    public function testThrowByDefaultIfRequiredFieldEmpty()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The aRequiredField fields are required.');
@@ -238,30 +190,21 @@ class ArrayObjectTest extends TestCase
         $arrayObject->validateNotEmpty(array('aRequiredField'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnFalseIfRequiredFieldEmptyAndThrowOnInvalidFalse()
+    public function testShouldReturnFalseIfRequiredFieldEmptyAndThrowOnInvalidFalse()
     {
         $arrayObject = new ArrayObject();
 
         $this->assertFalse($arrayObject->validateNotEmpty(array('aRequiredField'), $throwOnInvalid = false));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowValidateScalarWhetherItNotEmpty()
+    public function testShouldAllowValidateScalarWhetherItNotEmpty()
     {
         $arrayObject = new ArrayObject();
 
         $this->assertFalse($arrayObject->validateNotEmpty('aRequiredField', $throwOnInvalid = false));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnTrueIfRequiredFieldsNotEmpty()
+    public function testShouldReturnTrueIfRequiredFieldsNotEmpty()
     {
         $arrayObject = new ArrayObject();
         $arrayObject['aRequiredField'] = 'foo';
@@ -270,10 +213,7 @@ class ArrayObjectTest extends TestCase
         $this->assertTrue($arrayObject->validateNotEmpty(array('aRequiredField', 'otherRequiredField')));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfRequiredFieldNotSetAndThrowOnInvalidTrue()
+    public function testThrowIfRequiredFieldNotSetAndThrowOnInvalidTrue()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The aRequiredField fields is not set.');
@@ -282,10 +222,7 @@ class ArrayObjectTest extends TestCase
         $arrayObject->validatedKeysSet(array('aRequiredField'), $throwOnInvalid = true);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfSecondRequiredFieldNotSetAndThrowOnInvalidTrue()
+    public function testThrowIfSecondRequiredFieldNotSetAndThrowOnInvalidTrue()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The otherRequiredField fields is not set.');
@@ -295,10 +232,7 @@ class ArrayObjectTest extends TestCase
         $arrayObject->validatedKeysSet(array('aRequiredField', 'otherRequiredField'), $throwOnInvalid = true);
     }
 
-    /**
-     * @test
-     */
-    public function throwByDefaultIfRequiredFieldNotSet()
+    public function testThrowByDefaultIfRequiredFieldNotSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The aRequiredField fields is not set.');
@@ -307,30 +241,21 @@ class ArrayObjectTest extends TestCase
         $arrayObject->validatedKeysSet(array('aRequiredField'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnFalseIfRequiredFieldNotSetAndThrowOnInvalidFalse()
+    public function testShouldReturnFalseIfRequiredFieldNotSetAndThrowOnInvalidFalse()
     {
         $arrayObject = new ArrayObject();
 
         $this->assertFalse($arrayObject->validatedKeysSet(array('aRequiredField'), $throwOnInvalid = false));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowValidateScalarNotSet()
+    public function testShouldAllowValidateScalarNotSet()
     {
         $arrayObject = new ArrayObject();
 
         $this->assertFalse($arrayObject->validatedKeysSet('aRequiredField', $throwOnInvalid = false));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnTrueIfRequiredFieldsSet()
+    public function testShouldReturnTrueIfRequiredFieldsSet()
     {
         $arrayObject = new ArrayObject();
         $arrayObject['aRequiredField'] = 'foo';
@@ -339,10 +264,7 @@ class ArrayObjectTest extends TestCase
         $this->assertTrue($arrayObject->validatedKeysSet(array('aRequiredField', 'otherRequiredField')));
     }
 
-    /**
-     * @test
-     */
-    public function shouldConvertArrayObjectToPrimitiveArrayMakingSensitiveValueUnsafeAndEraseIt()
+    public function testShouldConvertArrayObjectToPrimitiveArrayMakingSensitiveValueUnsafeAndEraseIt()
     {
         $sensitiveValue = new SensitiveValue('theCreditCard');
 
@@ -363,10 +285,7 @@ class ArrayObjectTest extends TestCase
         $this->assertNull($sensitiveValue->peek());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowSetDefaultValues()
+    public function testShouldAllowSetDefaultValues()
     {
         $arrayObject = new ArrayObject();
         $arrayObject['foo'] = 'fooVal';

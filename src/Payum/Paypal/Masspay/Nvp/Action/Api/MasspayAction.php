@@ -24,8 +24,6 @@ class MasspayAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param Masspay $request
      */
     public function execute($request)
@@ -43,9 +41,6 @@ class MasspayAction implements ActionInterface, ApiAwareInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($request)
     {
         return $request instanceof Masspay &&

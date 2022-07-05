@@ -17,19 +17,12 @@ final class CryptoStorageDecorator implements StorageInterface
      */
     private $crypto;
 
-    /**
-     * @param StorageInterface $decoratedStorage
-     * @param CypherInterface $crypto
-     */
     public function __construct(StorageInterface $decoratedStorage, CypherInterface $crypto)
     {
         $this->decoratedStorage = $decoratedStorage;
         $this->crypto = $crypto;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create()
     {
         $model = $this->decoratedStorage->create();
@@ -39,17 +32,11 @@ final class CryptoStorageDecorator implements StorageInterface
         return $model;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function support($model)
     {
         return $this->decoratedStorage->support($model);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update($model)
     {
         $this->assertCrypted($model);
@@ -59,17 +46,11 @@ final class CryptoStorageDecorator implements StorageInterface
         $this->decoratedStorage->update($model);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete($model)
     {
         $this->decoratedStorage->delete($model);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function find($id)
     {
         $model = $this->decoratedStorage->find($id);
@@ -81,9 +62,6 @@ final class CryptoStorageDecorator implements StorageInterface
         return $model;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function findBy(array $criteria)
     {
         $models = $this->decoratedStorage->findBy($criteria);
@@ -97,9 +75,6 @@ final class CryptoStorageDecorator implements StorageInterface
         return $models;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function identify($model)
     {
         return $this->decoratedStorage->identify($model);

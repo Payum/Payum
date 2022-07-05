@@ -9,20 +9,14 @@ use Payum\Offline\Constants;
 
 class CaptureActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Offline\Action\CaptureAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureWithArrayAccessAsModel()
+    public function testShouldSupportCaptureWithArrayAccessAsModel()
     {
         $action = new CaptureAction();
 
@@ -31,10 +25,7 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotCapture()
+    public function testShouldNotSupportNotCapture()
     {
         $action = new CaptureAction();
 
@@ -43,10 +34,7 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCaptureAndNotArrayAccessAsModel()
+    public function testShouldNotSupportCaptureAndNotArrayAccessAsModel()
     {
         $action = new CaptureAction();
 
@@ -55,10 +43,7 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CaptureAction();
@@ -66,10 +51,7 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetStatusPendingIfPaidNotSet()
+    public function testShouldSetStatusPendingIfPaidNotSet()
     {
         $action = new CaptureAction();
 
@@ -86,10 +68,7 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetStatusPendingIfPaidSetToFalse()
+    public function testShouldSetStatusPendingIfPaidSetToFalse()
     {
         $action = new CaptureAction();
 
@@ -107,10 +86,7 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetStatusCapturedIfPaidSetToTrue()
+    public function testShouldSetStatusCapturedIfPaidSetToTrue()
     {
         $action = new CaptureAction();
 

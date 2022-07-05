@@ -10,9 +10,6 @@ class ContainerAwareRegistry extends AbstractRegistry implements ContainerAwareI
 {
     use ContainerAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
     protected function getService($id)
     {
         return $this->container->get($id);

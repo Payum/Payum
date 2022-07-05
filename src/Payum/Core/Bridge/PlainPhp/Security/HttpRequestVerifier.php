@@ -21,7 +21,6 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
     protected $tokenParameter;
 
     /**
-     * @param StorageInterface $tokenStorage
      * @param string           $tokenParameter
      */
     public function __construct(StorageInterface $tokenStorage, $tokenParameter = 'payum_token')
@@ -30,9 +29,6 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
         $this->tokenParameter = (string) $tokenParameter;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function verify($httpRequest)
     {
         if (false == is_array($httpRequest)) {
@@ -52,16 +48,13 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
         }
 
         /** @var $token TokenInterface */
-        if (!RequestTokenVerifier::isValid($_SERVER['REQUEST_URI'], $token->getTargetUrl())) {
+        if (! RequestTokenVerifier::isValid($_SERVER['REQUEST_URI'], $token->getTargetUrl())) {
             throw new InvalidArgumentException(sprintf('The current url %s not match target url %s set in the token.', $_SERVER['REQUEST_URI'], $token->getTargetUrl()));
         }
 
         return $token;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function invalidate(TokenInterface $token)
     {
         $this->tokenStorage->delete($token);

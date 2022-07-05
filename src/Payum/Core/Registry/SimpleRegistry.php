@@ -30,9 +30,6 @@ class SimpleRegistry extends AbstractRegistry
         $this->addStorageExtensions = $bool;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getGateway($name)
     {
         $gateway = parent::getGateway($name);
@@ -44,9 +41,6 @@ class SimpleRegistry extends AbstractRegistry
         return $gateway;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function getService($id)
     {
         return $id;
@@ -56,7 +50,6 @@ class SimpleRegistry extends AbstractRegistry
      * @deprecated since 1.3.3 and will be removed in 2.x.
      *
      * @param string           $name
-     * @param GatewayInterface $gateway
      */
     protected function addStorageToGateway($name, GatewayInterface $gateway)
     {

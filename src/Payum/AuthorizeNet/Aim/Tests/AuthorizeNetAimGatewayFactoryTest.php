@@ -20,10 +20,7 @@ class AuthorizeNetAimGatewayFactoryTest extends AbstractGatewayFactoryTest
         ];
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new AuthorizeNetAimGatewayFactory(array(
             'foo' => 'fooVal',
@@ -41,10 +38,7 @@ class AuthorizeNetAimGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('barVal', $config['bar']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions()
     {
         $factory = new AuthorizeNetAimGatewayFactory();
 
@@ -56,10 +50,7 @@ class AuthorizeNetAimGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertEquals(array('login_id' => '', 'transaction_key' => '', 'sandbox' => true), $config['payum.default_options']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle()
     {
         $factory = new AuthorizeNetAimGatewayFactory();
 
@@ -74,10 +65,7 @@ class AuthorizeNetAimGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('Authorize.NET AIM', $config['payum.factory_title']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The login_id, transaction_key fields are required.');

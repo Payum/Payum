@@ -47,10 +47,7 @@ abstract class GenericActionTest extends TestCase
         yield array($this->getMockForAbstractClass(Generic::class, array(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass($this->actionClass);
 
@@ -58,31 +55,25 @@ abstract class GenericActionTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideSupportedRequests
      */
-    public function shouldSupportRequest($request)
+    public function testShouldSupportRequest($request)
     {
         $this->assertTrue($this->action->supports($request));
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideNotSupportedRequests
      */
-    public function shouldNotSupportRequest($request)
+    public function testShouldNotSupportRequest($request)
     {
         $this->assertFalse($this->action->supports($request));
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideNotSupportedRequests
      */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute($request)
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute($request)
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $this->action->execute($request);

@@ -16,8 +16,6 @@ class RefundAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritdoc}
-     *
      * @param $request Notify
      */
     public function execute($request)
@@ -29,13 +27,9 @@ class RefundAction implements ActionInterface, GatewayAwareInterface
         $this->gateway->execute(new Sync($request->getModel()));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Refund &&
+        return $request instanceof Refund &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

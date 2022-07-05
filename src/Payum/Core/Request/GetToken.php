@@ -40,9 +40,6 @@ class GetToken
         return $this->token;
     }
 
-    /**
-     * @param TokenInterface $token
-     */
     public function setToken(TokenInterface $token)
     {
         $this->token = $token;

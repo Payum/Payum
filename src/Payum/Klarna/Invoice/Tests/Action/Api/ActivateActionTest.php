@@ -21,20 +21,14 @@ class ActivateActionTest extends GenericApiAwareActionTest
         return new Config();
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\ActivateAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
     }
 
-    /**
-     * @test
-     */
-    public function throwApiNotSupportedIfNotConfigGivenAsApi()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
@@ -43,40 +37,28 @@ class ActivateActionTest extends GenericApiAwareActionTest
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportActivateWithArrayAsModel()
+    public function testShouldSupportActivateWithArrayAsModel()
     {
         $action = new ActivateAction();
 
         $this->assertTrue($action->supports(new Activate(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotActivate()
+    public function testShouldNotSupportAnythingNotActivate()
     {
         $action = new ActivateAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportActivateWithNotArrayAccessModel()
+    public function testShouldNotSupportActivateWithNotArrayAccessModel()
     {
         $action = new ActivateAction();
 
         $this->assertFalse($action->supports(new Activate(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new ActivateAction();
@@ -84,10 +66,7 @@ class ActivateActionTest extends GenericApiAwareActionTest
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfRnoNotSet()
+    public function testThrowIfRnoNotSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The rno fields are required.');
@@ -96,10 +75,7 @@ class ActivateActionTest extends GenericApiAwareActionTest
         $action->execute(new Activate(array()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallKlarnaActivate()
+    public function testShouldCallKlarnaActivate()
     {
         $details = array(
             'rno' => 'theRno',
@@ -129,10 +105,7 @@ class ActivateActionTest extends GenericApiAwareActionTest
         $this->assertSame('theInvNumber', $activatedDetails['invoice_number']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
         $details = array(
             'rno' => 'theRno',

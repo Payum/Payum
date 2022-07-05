@@ -30,9 +30,6 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request Capture */
@@ -64,9 +61,6 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
         $model->replace($this->api->doSale($model->toUnsafeArray()));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Capture &&

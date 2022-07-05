@@ -20,10 +20,7 @@ class StripeCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         ];
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new StripeCheckoutGatewayFactory(array(
             'foo' => 'fooVal',
@@ -41,10 +38,7 @@ class StripeCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('barVal', $config['bar']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions()
     {
         $factory = new StripeCheckoutGatewayFactory();
 
@@ -56,10 +50,7 @@ class StripeCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertEquals(array('publishable_key' => '', 'secret_key' => ''), $config['payum.default_options']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle()
     {
         $factory = new StripeCheckoutGatewayFactory();
 
@@ -74,10 +65,7 @@ class StripeCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('Stripe Checkout', $config['payum.factory_title']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The publishable_key, secret_key fields are required.');
@@ -86,10 +74,7 @@ class StripeCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory->create();
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigurePaths()
+    public function testShouldConfigurePaths()
     {
         $factory = new StripeCheckoutGatewayFactory();
 

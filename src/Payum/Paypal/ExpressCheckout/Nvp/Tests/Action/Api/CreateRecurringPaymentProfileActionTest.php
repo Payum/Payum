@@ -9,50 +9,35 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfile;
 
 class CreateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(CreateRecurringPaymentProfileAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface()
     {
         $rc = new \ReflectionClass(CreateRecurringPaymentProfileAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateRecurringPaymentProfileRequestAndArrayAccessAsModel()
+    public function testShouldCreateRecurringPaymentProfileRequestAndArrayAccessAsModel()
     {
         $action = new CreateRecurringPaymentProfileAction();
 
         $this->assertTrue($action->supports(new CreateRecurringPaymentProfile($this->createMock('ArrayAccess'))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotCreateRecurringPaymentProfileRequest()
+    public function testShouldNotSupportAnythingNotCreateRecurringPaymentProfileRequest()
     {
         $action = new CreateRecurringPaymentProfileAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CreateRecurringPaymentProfileAction();
@@ -60,10 +45,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTokenNotSetInModel()
+    public function testThrowIfTokenNotSetInModel()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The TOKEN, PROFILESTARTDATE, DESC, BILLINGPERIOD, BILLINGFREQUENCY, AMT, CURRENCYCODE fields are required.');
@@ -72,10 +54,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
         $action->execute(new CreateRecurringPaymentProfile(array()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfRequiredFieldMissing()
+    public function testThrowIfRequiredFieldMissing()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The PROFILESTARTDATE, DESC, BILLINGPERIOD, BILLINGFREQUENCY, AMT, CURRENCYCODE fields are required.');
@@ -86,10 +65,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
         )));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiCreateRecurringPaymentsProfileMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiCreateRecurringPaymentsProfileMethodWithExpectedRequiredArguments()
     {
         $testCase = $this;
 
@@ -159,10 +135,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiCreateRecurringPaymentsProfileMethodAndUpdateModelFromResponse()
+    public function testShouldCallApiCreateRecurringPaymentsProfileMethodAndUpdateModelFromResponse()
     {
         $apiMock = $this->createApiMock();
         $apiMock

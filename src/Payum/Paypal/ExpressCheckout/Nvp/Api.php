@@ -312,7 +312,6 @@ class Api
     );
 
     /**
-     * @param array                    $options
      * @param HttpClientInterface|null $client
      * @param MessageFactory|null      $messageFactory
      */
@@ -337,8 +336,6 @@ class Api
 
     /**
      * Require: PAYMENTREQUEST_0_AMT
-     *
-     * @param array $fields
      *
      * @return array
      */
@@ -371,8 +368,6 @@ class Api
     /**
      * Require: TOKEN
      *
-     * @param array $fields
-     *
      * @return array
      */
     public function getExpressCheckoutDetails(array $fields)
@@ -387,8 +382,6 @@ class Api
 
     /**
      * Require: TRANSACTIONID
-     *
-     * @param array $fields
      *
      * @return array
      */
@@ -405,8 +398,6 @@ class Api
     /**
      * Require: STARTDATE
      *
-     * @param array $fields
-     *
      * @return array
      */
     public function transactionSearch(array $fields)
@@ -422,8 +413,6 @@ class Api
     /**
      * Require: PAYMENTREQUEST_0_AMT, PAYMENTREQUEST_0_PAYMENTACTION, PAYERID, TOKEN
      *
-     * @param array $fields
-     *
      * @return array
      */
     public function doExpressCheckoutPayment(array $fields)
@@ -437,8 +426,6 @@ class Api
     }
 
     /**
-     * @param array $fields
-     *
      * @return array
      */
     public function createRecurringPaymentsProfile(array $fields)
@@ -452,8 +439,6 @@ class Api
     }
 
     /**
-     * @param array $fields
-     *
      * @return array
      */
     public function updateRecurringPaymentsProfile(array $fields)
@@ -467,8 +452,6 @@ class Api
     }
 
     /**
-     * @param array $fields
-     *
      * @return array
      */
     public function getRecurringPaymentsProfileDetails(array $fields)
@@ -482,8 +465,6 @@ class Api
     }
 
     /**
-     * @param array $fields
-     *
      * @return array
      */
     public function manageRecurringPaymentsProfileStatus(array $fields)
@@ -498,8 +479,6 @@ class Api
 
     /**
      * Require: PAYERID, TOKEN
-     *
-     * @param array $fields
      *
      * @return array
      */
@@ -516,8 +495,6 @@ class Api
     /**
      * Require: AMT, PAYMENTACTION, REFERENCEID
      *
-     * @param array $fields
-     *
      * @return array
      */
     public function doReferenceTransaction(array $fields)
@@ -532,8 +509,6 @@ class Api
 
     /**
      * Require: AUTHORIZATIONID, AMT, COMPLETETYPE
-     *
-     * @param array $fields
      *
      * @return array
      */
@@ -550,8 +525,6 @@ class Api
     /**
      * Require: TRANSACTIONID
      *
-     * @param array $fields
-     *
      * @return array
      */
     public function refundTransaction(array $fields)
@@ -567,8 +540,6 @@ class Api
     /**
      * Require: AUTHORIZATIONID
      *
-     * @param array $fields
-     *
      * @return array
      */
     public function doVoid(array $fields)
@@ -582,8 +553,6 @@ class Api
     }
 
     /**
-     * @param array $fields
-     *
      * @throws HttpException
      *
      * @return array
@@ -613,7 +582,6 @@ class Api
 
     /**
      * @param string $token
-     * @param array  $query
      *
      * @return string
      */
@@ -645,9 +613,6 @@ class Api
         ;
     }
 
-    /**
-     * @param array $fields
-     */
     protected function addAuthorizeFields(array &$fields)
     {
         $fields['PWD'] = $this->options['password'];
@@ -659,9 +624,6 @@ class Api
         }
     }
 
-    /**
-     * @param array $fields
-     */
     protected function addVersionField(array &$fields)
     {
         $fields['VERSION'] = self::VERSION;

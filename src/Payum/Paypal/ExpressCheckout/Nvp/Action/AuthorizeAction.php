@@ -10,9 +10,6 @@ use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class AuthorizeAction extends PurchaseAction
 {
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request Capture */
@@ -25,9 +22,6 @@ class AuthorizeAction extends PurchaseAction
         parent::execute($request);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Authorize &&

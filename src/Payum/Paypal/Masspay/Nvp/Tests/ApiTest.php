@@ -10,20 +10,14 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function throwIfRequiredOptionsNotSetInConstructor()
+    public function testThrowIfRequiredOptionsNotSetInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The username, password, signature fields are required.');
         new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfSandboxOptionNotSetInConstructor()
+    public function testThrowIfSandboxOptionNotSetInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -34,10 +28,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddMethodOnMasspayCall()
+    public function testShouldAddMethodOnMasspayCall()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -54,10 +45,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('MassPay', $result['METHOD']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddAuthorizeFieldsOnMasspayCall()
+    public function testShouldAddAuthorizeFieldsOnMasspayCall()
     {
         $api = new Api(array(
             'username' => 'the_username',
@@ -78,10 +66,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('the_signature', $result['SIGNATURE']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddVersionOnMasspayCall()
+    public function testShouldAddVersionOnMasspayCall()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -96,10 +81,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(Api::VERSION, $result['VERSION']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseRealApiEndpointIfSandboxFalse()
+    public function testShouldUseRealApiEndpointIfSandboxFalse()
     {
         $testCase = $this;
 
@@ -124,10 +106,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $api->massPay([]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseSandboxApiEndpointIfSandboxTrue()
+    public function testShouldUseSandboxApiEndpointIfSandboxTrue()
     {
         $testCase = $this;
 

@@ -11,10 +11,6 @@ class PopulateKlarnaFromDetails extends Generic
      */
     protected $klarna;
 
-    /**
-     * @param \ArrayAccess $details
-     * @param \Klarna      $klarna
-     */
     public function __construct(\ArrayAccess $details, \Klarna $klarna)
     {
         parent::__construct($details);

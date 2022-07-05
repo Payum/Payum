@@ -10,50 +10,35 @@ use PHPUnit\Framework\TestCase;
 
 class AuthorizeActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(AuthorizeAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportAuthorizeWithArrayAsModel()
+    public function testShouldSupportAuthorizeWithArrayAsModel()
     {
         $action = new AuthorizeAction();
 
         $this->assertTrue($action->supports(new Authorize(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotAuthorize()
+    public function testShouldNotSupportAnythingNotAuthorize()
     {
         $action = new AuthorizeAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAuthorizeWithNotArrayAccessModel()
+    public function testShouldNotSupportAuthorizeWithNotArrayAccessModel()
     {
         $action = new AuthorizeAction();
 
         $this->assertFalse($action->supports(new Authorize(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new AuthorizeAction();
@@ -61,10 +46,7 @@ class AuthorizeActionTest extends TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSubExecuteReserveAmountIfRnoNotSet()
+    public function testShouldSubExecuteReserveAmountIfRnoNotSet()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -81,10 +63,7 @@ class AuthorizeActionTest extends TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSubExecuteReserveAmountIfRnoAlreadySet()
+    public function testShouldNotSubExecuteReserveAmountIfRnoAlreadySet()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

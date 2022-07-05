@@ -36,9 +36,6 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Keys::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setApi($api)
     {
         $this->_setApi($api);
@@ -47,9 +44,6 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
         $this->keys = $this->api;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request CreateCharge */
@@ -84,13 +78,9 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof CreateCharge &&
+        return $request instanceof CreateCharge &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

@@ -18,17 +18,11 @@ class HttpClient implements HttpClientInterface
      */
     private $client;
 
-    /**
-     * @param ClientInterface $client
-     */
     public function __construct(ClientInterface $client)
     {
         $this->client = $client;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function send(RequestInterface $request)
     {
         return $this->client->send($request);

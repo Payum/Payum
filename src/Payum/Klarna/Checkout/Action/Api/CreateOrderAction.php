@@ -9,8 +9,6 @@ use Payum\Klarna\Checkout\Request\Api\CreateOrder;
 class CreateOrderAction extends BaseApiAwareAction
 {
     /**
-     * {@inheritDoc}
-     *
      * @param CreateOrder $request
      */
     public function execute($request)
@@ -29,9 +27,6 @@ class CreateOrderAction extends BaseApiAwareAction
         });
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof CreateOrder;

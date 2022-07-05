@@ -16,9 +16,6 @@ class CancelRecurringPaymentsProfileAction implements ActionInterface, GatewayAw
 {
     use GatewayAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request Cancel */
@@ -36,9 +33,6 @@ class CancelRecurringPaymentsProfileAction implements ActionInterface, GatewayAw
         $this->gateway->execute(new Sync($request->getModel()));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         if (false == ($request instanceof Cancel && $request->getModel() instanceof \ArrayAccess)) {

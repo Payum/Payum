@@ -12,30 +12,21 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 class ContainerAwareRegistryTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfAbstractRegistry()
+    public function testShouldBeSubClassOfAbstractRegistry()
     {
         $rc = new \ReflectionClass(ContainerAwareRegistry::class);
 
         $this->assertTrue($rc->isSubclassOf(AbstractRegistry::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementContainerAwareInterface()
+    public function testShouldImplementContainerAwareInterface()
     {
         $rc = new \ReflectionClass(ContainerAwareRegistry::class);
 
         $this->assertTrue($rc->implementsInterface(ContainerAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnGatewaySetToContainer()
+    public function testShouldReturnGatewaySetToContainer()
     {
         $gateways = array('fooGateway' => 'fooGatewayServiceId');
         $storages = array();
@@ -52,10 +43,7 @@ class ContainerAwareRegistryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnStorageSetToContainer()
+    public function testShouldReturnStorageSetToContainer()
     {
         $gateways = array();
         $storages = array(
@@ -71,10 +59,7 @@ class ContainerAwareRegistryTest extends TestCase
         $this->assertSame($container->get('fooStorageServiceId'), $registry->getStorage('stdClass'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnGatewayFactorySetToContainer()
+    public function testShouldReturnGatewayFactorySetToContainer()
     {
         $container = new Container();
         $container->set('fooFactoryServiceId', $this->createMock(StorageInterface::class));

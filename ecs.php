@@ -13,5 +13,6 @@ return static function (ECSConfig $ecsConfig): void {
         SetList::SPACES,
         SetList::DOCBLOCK,
         SetList::COMMENTS,
+        SetList::PHPUNIT,
     ]);
 };

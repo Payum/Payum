@@ -9,8 +9,6 @@ use Payum\Klarna\Invoice\Request\Api\EmailInvoice;
 class EmailInvoiceAction extends BaseApiAwareAction
 {
     /**
-     * {@inheritDoc}
-     *
      * @param EmailInvoice $request
      */
     public function execute($request)
@@ -28,9 +26,6 @@ class EmailInvoiceAction extends BaseApiAwareAction
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof EmailInvoice &&

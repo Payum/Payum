@@ -8,20 +8,14 @@ use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementsActionInterface()
+    public function testShouldImplementsActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestWithArrayAsModelWhichHasBillingPeriodSet()
+    public function testShouldSupportStatusRequestWithArrayAsModelWhichHasBillingPeriodSet()
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -34,10 +28,7 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportStatusRequestWithNoArrayAccessAsModel()
+    public function testShouldNotSupportStatusRequestWithNoArrayAccessAsModel()
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -46,20 +37,14 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotStatusRequest()
+    public function testShouldNotSupportAnythingNotStatusRequest()
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new RecurringPaymentDetailsStatusAction();
@@ -67,10 +52,7 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfErrorCodeSetToModel()
+    public function testShouldMarkFailedIfErrorCodeSetToModel()
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -84,10 +66,7 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
         $this->assertTrue($request->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfProfileStatusAndStatusNotSet()
+    public function testShouldMarkNewIfProfileStatusAndStatusNotSet()
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -100,10 +79,7 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
         $this->assertTrue($request->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfProfileStatusAndStatusNotRecognized()
+    public function testShouldMarkUnknownIfProfileStatusAndStatusNotRecognized()
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -118,10 +94,7 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
         $this->assertTrue($request->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldStatusHasGreaterPriorityOverProfileStatus()
+    public function testShouldStatusHasGreaterPriorityOverProfileStatus()
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -136,10 +109,7 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
         $this->assertTrue($request->isExpired());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPendingIfProfileStatusPendingAndStatusNotSet()
+    public function testShouldMarkPendingIfProfileStatusPendingAndStatusNotSet()
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -153,10 +123,7 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
         $this->assertTrue($request->isPending());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfProfileStatusActiveAndStatusNotSet()
+    public function testShouldMarkCapturedIfProfileStatusActiveAndStatusNotSet()
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -170,10 +137,7 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
         $this->assertTrue($request->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfStatusActive()
+    public function testShouldMarkCapturedIfStatusActive()
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -187,10 +151,7 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
         $this->assertTrue($request->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCanceledIfStatusCanceled()
+    public function testShouldMarkCanceledIfStatusCanceled()
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -204,10 +165,7 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
         $this->assertTrue($request->isCanceled());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPendingIfStatusPending()
+    public function testShouldMarkPendingIfStatusPending()
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -221,10 +179,7 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
         $this->assertTrue($request->isPending());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkExpiredIfStatusExpired()
+    public function testShouldMarkExpiredIfStatusExpired()
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -238,10 +193,7 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
         $this->assertTrue($request->isExpired());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkSuspendedIfStatusSuspended()
+    public function testShouldMarkSuspendedIfStatusSuspended()
     {
         $action = new RecurringPaymentDetailsStatusAction();
 

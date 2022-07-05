@@ -9,20 +9,14 @@ use Payum\Payex\Api\OrderApi;
 
 class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Payex\Action\AutoPayPaymentDetailsStatusAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToTrue()
+    public function testShouldSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToTrue()
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
@@ -31,20 +25,14 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         ))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPayNotSet()
+    public function testShouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPayNotSet()
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
         $this->assertFalse($action->supports(new GetBinaryStatus(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToTrueAndRecurringSetToTrue()
+    public function testShouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToTrueAndRecurringSetToTrue()
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
@@ -54,10 +42,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         ))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToFalse()
+    public function testShouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToFalse()
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
@@ -66,30 +51,21 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         ))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotBinaryMaskStatusRequest()
+    public function testShouldNotSupportAnythingNotBinaryMaskStatusRequest()
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportBinaryMaskStatusRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportBinaryMaskStatusRequestWithNotArrayAccessModel()
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
         $this->assertFalse($action->supports(new GetBinaryStatus(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new AutoPayPaymentDetailsStatusAction();
@@ -97,10 +73,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfTransactionStatusNotSet()
+    public function testShouldMarkNewIfTransactionStatusNotSet()
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
@@ -116,10 +89,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($status->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfPurchaseOperationAuthorizeAndTransactionStatusThree()
+    public function testShouldMarkCapturedIfPurchaseOperationAuthorizeAndTransactionStatusThree()
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
@@ -137,10 +107,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($status->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfPurchaseOperationSaleAndTransactionStatusZero()
+    public function testShouldMarkCapturedIfPurchaseOperationSaleAndTransactionStatusZero()
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
@@ -158,10 +125,7 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($status->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfTransactionStatusNeitherZeroOrThree()
+    public function testShouldMarkFailedIfTransactionStatusNeitherZeroOrThree()
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 

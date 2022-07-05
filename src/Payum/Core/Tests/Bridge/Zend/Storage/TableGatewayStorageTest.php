@@ -9,20 +9,14 @@ use PHPUnit\Framework\TestCase;
 
 class TableGatewayStorageTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfAbstractStorage()
+    public function testShouldBeSubClassOfAbstractStorage()
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Zend\Storage\TableGatewayStorage');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Storage\AbstractStorage'));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTryToUseNotSupportedFindByMethod()
+    public function testThrowIfTryToUseNotSupportedFindByMethod()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('Method is not supported by the storage.');

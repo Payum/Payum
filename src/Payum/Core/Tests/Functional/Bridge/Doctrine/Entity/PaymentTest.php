@@ -8,10 +8,7 @@ use Payum\Core\Tests\Mocks\Entity\Payment;
 
 class PaymentTest extends OrmTest
 {
-    /**
-     * @test
-     */
-    public function shouldAllowPersistEmpty()
+    public function testShouldAllowPersistEmpty()
     {
         $entity = new Payment();
         $this->em->persist($entity);
@@ -20,10 +17,7 @@ class PaymentTest extends OrmTest
         $this->assertSame([$entity], $this->em->getRepository(Payment::class)->findAll());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowPersistWithSomeFieldsSet()
+    public function testShouldAllowPersistWithSomeFieldsSet()
     {
         $order = new Payment();
         $order->setTotalAmount(100);
@@ -40,10 +34,7 @@ class PaymentTest extends OrmTest
         $this->assertSame([$order], $this->em->getRepository(Payment::class)->findAll());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowFindPersistedOrder()
+    public function testShouldAllowFindPersistedOrder()
     {
         $order = new Payment();
 
@@ -62,10 +53,7 @@ class PaymentTest extends OrmTest
         $this->assertSame($order->getId(), $foundOrder->getId());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotStoreSensitiveValue()
+    public function testShouldNotStoreSensitiveValue()
     {
         $order = new Payment();
         $order->setDetails(array('cardNumber' => new SensitiveValue('theCardNumber')));

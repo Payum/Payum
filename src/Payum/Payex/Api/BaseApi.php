@@ -31,9 +31,6 @@ abstract class BaseApi
     protected $options;
 
     /**
-     * @param SoapClientFactory $clientFactory
-     * @param array             $options
-     *
      * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
      */
     public function __construct(SoapClientFactory $clientFactory, array $options)
@@ -56,7 +53,6 @@ abstract class BaseApi
 
     /**
      * @param string $operation
-     * @param array  $parameters
      * @param string $serviceWsdl
      *
      * @return array
@@ -77,9 +73,6 @@ abstract class BaseApi
     }
 
     /**
-     * @param array $parameters
-     * @param array $parametersKeys
-     *
      * @return string
      */
     protected function calculateHash(array $parameters, array $parametersKeys)
@@ -98,8 +91,6 @@ abstract class BaseApi
     }
 
     /**
-     * @param \SimpleXMLElement $element
-     *
      * @return array
      */
     protected function convertSimpleXmlToArray(\SimpleXMLElement $element)
@@ -111,8 +102,6 @@ abstract class BaseApi
     }
 
     /**
-     * @param array $inputResult
-     *
      * @return array
      */
     protected function normalizeStatusFields(array $inputResult)
@@ -141,8 +130,6 @@ abstract class BaseApi
     }
 
     /**
-     * @param array $inputResult
-     *
      * @return array
      */
     protected function removeHeader(array $inputResult)
@@ -155,7 +142,6 @@ abstract class BaseApi
     }
 
     /**
-     * @param  array $inputResult
      * @return array
      */
     protected function removeObsolete(array $inputResult)

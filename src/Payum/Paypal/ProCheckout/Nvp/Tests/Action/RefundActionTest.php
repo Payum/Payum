@@ -13,20 +13,14 @@ class RefundActionTest extends GenericActionTest
 
     protected $requestClass = 'Payum\Core\Request\Refund';
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ProCheckout\Nvp\Action\RefundAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfUnsupportedApiGiven()
+    public function testThrowIfUnsupportedApiGiven()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $action = new RefundAction();
@@ -34,10 +28,7 @@ class RefundActionTest extends GenericActionTest
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingIfPaymentNew()
+    public function testShouldDoNothingIfPaymentNew()
     {
         $apiMock = $this->createApiMock();
         $apiMock
@@ -51,10 +42,7 @@ class RefundActionTest extends GenericActionTest
         $action->execute(new Refund(array()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTransactionTypeIsNotRefundable()
+    public function testThrowIfTransactionTypeIsNotRefundable()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('You cannot refund transaction with type notSupported. Only these types could be refunded: S, D, F');
@@ -73,10 +61,7 @@ class RefundActionTest extends GenericActionTest
         )));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTransactionIdNotSet()
+    public function testThrowIfTransactionIdNotSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The PNREF fields are required.');
@@ -95,10 +80,7 @@ class RefundActionTest extends GenericActionTest
         )));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetPnrefAsOriginIdAndPerformCreditApiCall()
+    public function testShouldSetPnrefAsOriginIdAndPerformCreditApiCall()
     {
         $details = new \ArrayObject(array(
             'RESULT' => Api::RESULT_SUCCESS,

@@ -8,9 +8,7 @@ interface TokenFactoryInterface
      * @param string      $gatewayName
      * @param object|null $model
      * @param string      $targetPath
-     * @param array       $targetParameters
      * @param string      $afterPath
-     * @param array       $afterParameters
      *
      * @return TokenInterface
      */

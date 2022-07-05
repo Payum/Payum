@@ -18,30 +18,21 @@ class NotifyActionTest extends GenericActionTest
 
     protected $requestClass = Notify::class;
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(NotifyAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface()
     {
         $rc = new \ReflectionClass(NotifyAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfUnsupportedApiGiven()
+    public function testThrowIfUnsupportedApiGiven()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $action = new NotifyAction();
@@ -49,10 +40,7 @@ class NotifyActionTest extends GenericActionTest
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfQueryHashDoesNotMatchExpected()
+    public function testThrowIfQueryHashDoesNotMatchExpected()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -87,10 +75,7 @@ class NotifyActionTest extends GenericActionTest
         $this->fail('The exception is expected');
     }
 
-    /**
-     * @test
-     */
-    public function throwIfQueryAmountDoesNotMatchOneFromModel()
+    public function testThrowIfQueryAmountDoesNotMatchOneFromModel()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -127,10 +112,7 @@ class NotifyActionTest extends GenericActionTest
         $this->fail('The exception is expected');
     }
 
-    /**
-     * @test
-     */
-    public function shouldUpdateModelIfNotificationValid()
+    public function testShouldUpdateModelIfNotificationValid()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

@@ -84,41 +84,26 @@ class CreditCard implements CreditCardInterface
         $this->securedExpireAt = SensitiveValue::ensureSensitive(null);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setToken($token)
     {
         $this->token = $token;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getToken()
     {
         return $this->token;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setBrand($brand)
     {
         $this->brand = $brand;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getBrand()
     {
         return $this->brand;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setHolder($holder)
     {
         $this->securedHolder = SensitiveValue::ensureSensitive($holder);
@@ -128,33 +113,21 @@ class CreditCard implements CreditCardInterface
         $this->holder = $this->securedHolder->peek();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getHolder()
     {
         return $this->securedHolder->peek();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setMaskedHolder($maskedHolder)
     {
         $this->maskedHolder = $maskedHolder;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getMaskedHolder()
     {
         return $this->maskedHolder;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setNumber($number)
     {
         $this->securedNumber = SensitiveValue::ensureSensitive($number);
@@ -164,33 +137,21 @@ class CreditCard implements CreditCardInterface
         $this->number = $this->securedNumber->peek();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getNumber()
     {
         return $this->securedNumber->peek();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setMaskedNumber($maskedNumber)
     {
         return $this->maskedNumber = $maskedNumber;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getMaskedNumber()
     {
         return $this->maskedNumber;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setSecurityCode($securityCode)
     {
         $this->securedSecurityCode = SensitiveValue::ensureSensitive($securityCode);
@@ -199,25 +160,16 @@ class CreditCard implements CreditCardInterface
         $this->securityCode = $this->securedSecurityCode->peek();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getSecurityCode()
     {
         return $this->securedSecurityCode->peek();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getExpireAt()
     {
         return $this->securedExpireAt->peek();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setExpireAt($date = null)
     {
         $date = SensitiveValue::ensureSensitive($date);
@@ -232,9 +184,6 @@ class CreditCard implements CreditCardInterface
         $this->expireAt = $this->securedExpireAt->peek();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function secure()
     {
         $this->holder = $this->number = $this->expireAt = $this->securityCode = null;

@@ -26,10 +26,7 @@ class GetCurrencyActionTest extends GenericActionTest
         yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetCurrencyByAlpha3()
+    public function testShouldSetCurrencyByAlpha3()
     {
         $action = new GetCurrencyAction();
 
@@ -38,10 +35,7 @@ class GetCurrencyActionTest extends GenericActionTest
         $this->assertSame('USD', $getCurrency->alpha3);
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetCurrencyByNumeric()
+    public function testShouldSetCurrencyByNumeric()
     {
         $action = new GetCurrencyAction();
 
@@ -50,10 +44,7 @@ class GetCurrencyActionTest extends GenericActionTest
         $this->assertSame('EUR', $getCurrency->alpha3);
     }
 
-    /**
-     * @test
-     */
-    public function throwsIfCurrencyNotSupported()
+    public function testThrowsIfCurrencyNotSupported()
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('ISO 4217 does not contain: 000');

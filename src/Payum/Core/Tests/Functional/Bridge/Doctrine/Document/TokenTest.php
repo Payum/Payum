@@ -8,10 +8,7 @@ use Payum\Core\Tests\Mocks\Document\Token;
 
 class TokenTest extends MongoTest
 {
-    /**
-     * @test
-     */
-    public function shouldAllowPersist()
+    public function testShouldAllowPersist()
     {
         $token = new Token();
         $token->setTargetUrl('anUrl');
@@ -23,10 +20,7 @@ class TokenTest extends MongoTest
         $this->assertSame([$token], $this->dm->getRepository(Token::class)->findAll());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowFindPersistedToken()
+    public function testShouldAllowFindPersistedToken()
     {
         $token = new Token();
         $token->setTargetUrl('anUrl');

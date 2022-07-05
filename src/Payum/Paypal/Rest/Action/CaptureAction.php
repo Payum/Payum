@@ -35,9 +35,6 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
         $this->apiClass = ApiContext::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request Capture */
@@ -112,13 +109,9 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Capture &&
+        return $request instanceof Capture &&
             ($request->getModel() instanceof PaypalPayment || $request->getModel() instanceof \ArrayAccess)
         ;
     }
@@ -148,7 +141,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
 
         $cancelUri = HttpUri::createFromString($returnUrl);
         $redirectUrls->setReturnUrl($returnUrl)
-        ->setCancelUrl((string) UriModifier::mergeQuery($cancelUri, 'cancelled=1'));
+            ->setCancelUrl((string) UriModifier::mergeQuery($cancelUri, 'cancelled=1'));
 
         $payment = new PaypalPayment();
         $payment->setIntent('sale')

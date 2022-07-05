@@ -20,9 +20,6 @@ class GetTransactionDetailsAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request GetTransactionDetails */
@@ -42,13 +39,9 @@ class GetTransactionDetailsAction implements ActionInterface, ApiAwareInterface
         $model->replace($result);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof GetTransactionDetails &&
+        return $request instanceof GetTransactionDetails &&
             $request->getModel() instanceof \ArrayAccess;
     }
 }

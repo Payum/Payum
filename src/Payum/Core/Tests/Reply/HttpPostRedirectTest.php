@@ -7,30 +7,21 @@ use PHPUnit\Framework\TestCase;
 
 class HttpPostRedirectTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementReplyInterface()
+    public function testShouldImplementReplyInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Reply\HttpPostRedirect');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Reply\ReplyInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfHttpPostRedirectReply()
+    public function testShouldBeSubClassOfHttpPostRedirectReply()
     {
         $rc = new \ReflectionClass('Payum\Core\Reply\HttpPostRedirect');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Reply\HttpResponse'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetContentWhenPostNotSet()
+    public function testShouldAllowGetContentWhenPostNotSet()
     {
         $expectedContent = <<<'HTML'
 <!DOCTYPE html>
@@ -52,10 +43,7 @@ HTML;
         $this->assertSame($expectedContent, $request->getContent());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetContentWhenPostSet()
+    public function testShouldAllowGetContentWhenPostSet()
     {
         $expectedContent = <<<'HTML'
 <!DOCTYPE html>
@@ -79,10 +67,7 @@ HTML;
         $this->assertSame($expectedContent, $request->getContent());
     }
 
-    /**
-     * @test
-     */
-    public function shouldEscapeHtmlSpecialChars()
+    public function testShouldEscapeHtmlSpecialChars()
     {
         $expectedContent = <<<'HTML'
 <!DOCTYPE html>
@@ -105,40 +90,28 @@ HTML;
         $this->assertSame($expectedContent, $request->getContent());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetDefaultStatusCodeSetInConstructor()
+    public function testShouldAllowGetDefaultStatusCodeSetInConstructor()
     {
         $request = new HttpPostRedirect('anUrl');
 
         $this->assertSame(200, $request->getStatusCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetCustomStatusCodeSetInConstructor()
+    public function testShouldAllowGetCustomStatusCodeSetInConstructor()
     {
         $request = new HttpPostRedirect('anUrl', array(), 201);
 
         $this->assertSame(201, $request->getStatusCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetDefaultHeadersSetInConstructor()
+    public function testShouldAllowGetDefaultHeadersSetInConstructor()
     {
         $request = new HttpPostRedirect('anUrl');
 
         $this->assertEquals(array(), $request->getHeaders());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetCustomHeadersSetInConstructor()
+    public function testShouldAllowGetCustomHeadersSetInConstructor()
     {
         $expectedHeaders = array(
             'foo' => 'fooVal',

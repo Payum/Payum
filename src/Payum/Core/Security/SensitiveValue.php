@@ -42,17 +42,11 @@ final class SensitiveValue implements \Serializable, \JsonSerializable
         $this->value = null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function serialize()
     {
         return;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function unserialize($serialized)
     {
     }
@@ -74,25 +68,16 @@ final class SensitiveValue implements \Serializable, \JsonSerializable
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function __toString()
     {
         return '';
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function __clone()
     {
         throw new LogicException('It is not permitted to close this object.');
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function __debugInfo()
     {
         return ['value' => is_scalar($this->value) ? Mask::mask($this->value) : '[FILTERED OUT]'];

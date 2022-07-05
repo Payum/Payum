@@ -19,9 +19,6 @@ class TransactionSearchAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request TransactionSearch */
@@ -36,9 +33,6 @@ class TransactionSearchAction implements ActionInterface, ApiAwareInterface
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof TransactionSearch &&

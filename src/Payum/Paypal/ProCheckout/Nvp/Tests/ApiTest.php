@@ -10,20 +10,14 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function throwIfRequiredOptionsNotSetInConstructor()
+    public function testThrowIfRequiredOptionsNotSetInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The username, password, partner, vendor fields are required.');
         new Api(array(), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfSandboxOptionsNotBooleanInConstructor()
+    public function testThrowIfSandboxOptionsNotBooleanInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -37,10 +31,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddTRXTYPEOnDoSaleCall()
+    public function testShouldAddTRXTYPEOnDoSaleCall()
     {
         $api = new Api(array(
             'username' => 'aUsername',
@@ -56,10 +47,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(Api::TRXTYPE_SALE, $result['TRXTYPE']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddTRXTYPEOnDoCreditCall()
+    public function testShouldAddTRXTYPEOnDoCreditCall()
     {
         $api = new Api(array(
             'username' => 'aUsername',
@@ -75,10 +63,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(Api::TRXTYPE_CREDIT, $result['TRXTYPE']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddAuthorizeFieldsOnDoSaleCall()
+    public function testShouldAddAuthorizeFieldsOnDoSaleCall()
     {
         $api = new Api(array(
             'username' => 'theUsername',
@@ -106,10 +91,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('theTender', $result['TENDER']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddAuthorizeFieldsOnDoCreditCall()
+    public function testShouldAddAuthorizeFieldsOnDoCreditCall()
     {
         $api = new Api(array(
             'username' => 'theUsername',
@@ -137,10 +119,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('theTender', $result['TENDER']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseRealApiEndpointIfSandboxFalse()
+    public function testShouldUseRealApiEndpointIfSandboxFalse()
     {
         $testCase = $this;
 
@@ -167,10 +146,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $api->doCredit(array());
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseSandboxApiEndpointIfSandboxTrue()
+    public function testShouldUseSandboxApiEndpointIfSandboxTrue()
     {
         $testCase = $this;
 

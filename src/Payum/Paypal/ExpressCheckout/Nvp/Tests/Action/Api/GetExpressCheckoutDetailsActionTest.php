@@ -9,30 +9,21 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetails;
 
 class GetExpressCheckoutDetailsActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(GetExpressCheckoutDetailsAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface()
     {
         $rc = new \ReflectionClass(GetExpressCheckoutDetailsAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportGetExpressCheckoutDetailsRequestAndArrayAccessAsModel()
+    public function testShouldSupportGetExpressCheckoutDetailsRequestAndArrayAccessAsModel()
     {
         $action = new GetExpressCheckoutDetailsAction();
 
@@ -41,20 +32,14 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotGetExpressCheckoutDetailsRequest()
+    public function testShouldNotSupportAnythingNotGetExpressCheckoutDetailsRequest()
     {
         $action = new GetExpressCheckoutDetailsAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new GetExpressCheckoutDetailsAction();
@@ -62,10 +47,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTokenNotSetInModel()
+    public function testThrowIfTokenNotSetInModel()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('TOKEN must be set. Have you run SetExpressCheckoutAction?');
@@ -76,10 +58,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiGetExpressCheckoutDetailsMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiGetExpressCheckoutDetailsMethodWithExpectedRequiredArguments()
     {
         $testCase = $this;
 
@@ -105,10 +84,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiGetExpressCheckoutDetailsMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiGetExpressCheckoutDetailsMethodAndUpdateModelFromResponseOnSuccess()
     {
         $apiMock = $this->createApiMock();
         $apiMock

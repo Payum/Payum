@@ -9,30 +9,21 @@ use PHPUnit\Framework\TestCase;
 
 class BaseGetStatusTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGetStatusInterface()
+    public function testShouldImplementGetStatusInterface()
     {
         $rc = new \ReflectionClass(BaseGetStatus::class);
 
         $this->assertTrue($rc->implementsInterface(GetStatusInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass(BaseGetStatus::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeAbstract()
+    public function testShouldBeAbstract()
     {
         $rc = new \ReflectionClass(BaseGetStatus::class);
 

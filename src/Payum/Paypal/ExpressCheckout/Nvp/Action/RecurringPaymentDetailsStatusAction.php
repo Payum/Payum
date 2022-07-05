@@ -11,8 +11,6 @@ use Payum\Paypal\ExpressCheckout\Nvp\Api;
 class RecurringPaymentDetailsStatusAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetStatusInterface $request
      */
     public function execute($request)
@@ -80,9 +78,6 @@ class RecurringPaymentDetailsStatusAction implements ActionInterface
         $request->markUnknown();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         if (false == $request instanceof GetStatusInterface) {

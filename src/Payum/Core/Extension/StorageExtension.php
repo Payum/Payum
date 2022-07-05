@@ -18,17 +18,11 @@ class StorageExtension implements ExtensionInterface
      */
     protected $scheduledForUpdateModels = array();
 
-    /**
-     * @param \Payum\Core\Storage\StorageInterface $storage
-     */
     public function __construct(StorageInterface $storage)
     {
         $this->storage = $storage;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function onPreExecute(Context $context)
     {
         $request = $context->getRequest();
@@ -50,16 +44,10 @@ class StorageExtension implements ExtensionInterface
         $this->scheduleForUpdateIfSupported($request->getModel());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function onExecute(Context $context)
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function onPostExecute(Context $context)
     {
         $request = $context->getRequest();

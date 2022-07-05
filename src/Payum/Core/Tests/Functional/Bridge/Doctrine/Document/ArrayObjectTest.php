@@ -8,10 +8,7 @@ use Payum\Core\Tests\Mocks\Document\ArrayObject;
 
 class ArrayObjectTest extends MongoTest
 {
-    /**
-     * @test
-     */
-    public function shouldAllowPersistEmpty()
+    public function testShouldAllowPersistEmpty()
     {
         $document = new ArrayObject();
         $this->dm->persist($document);
@@ -20,10 +17,7 @@ class ArrayObjectTest extends MongoTest
         $this->assertSame([$document], $this->dm->getRepository(ArrayObject::class)->findAll());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowPersistWithSomeFieldsSet()
+    public function testShouldAllowPersistWithSomeFieldsSet()
     {
         $model = new ArrayObject();
         $model['foo'] = 'theFoo';
@@ -35,10 +29,7 @@ class ArrayObjectTest extends MongoTest
         $this->assertSame([$model], $this->dm->getRepository(ArrayObject::class)->findAll());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowFindPersistedArrayobject()
+    public function testShouldAllowFindPersistedArrayobject()
     {
         $model = new ArrayObject();
         $model['foo'] = 'theFoo';
@@ -59,10 +50,7 @@ class ArrayObjectTest extends MongoTest
         $this->assertEquals(iterator_to_array($model), iterator_to_array($foundModel));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotStoreSensitiveValue()
+    public function testShouldNotStoreSensitiveValue()
     {
         $model = new ArrayObject();
         $model['cardNumber'] = new SensitiveValue('theCardNumber');

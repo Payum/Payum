@@ -9,20 +9,14 @@ use Payum\Offline\Constants;
 
 class StatusActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Offline\Action\StatusAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestWithArrayAccessAsModel()
+    public function testShouldSupportStatusRequestWithArrayAccessAsModel()
     {
         $action = new StatusAction();
 
@@ -31,10 +25,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotStatusRequest()
+    public function testShouldNotSupportNotStatusRequest()
     {
         $action = new StatusAction();
 
@@ -43,10 +34,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportStatusRequestWithNotArrayAccessAsModel()
+    public function testShouldNotSupportStatusRequestWithNotArrayAccessAsModel()
     {
         $action = new StatusAction();
 
@@ -55,10 +43,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new StatusAction();
@@ -66,10 +51,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfDetailsEmpty()
+    public function testShouldMarkNewIfDetailsEmpty()
     {
         $request = new GetBinaryStatus(array());
         $request->markUnknown();
@@ -81,10 +63,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfStatusNotSet()
+    public function testShouldMarkNewIfStatusNotSet()
     {
         $request = new GetBinaryStatus(array());
         $request->markUnknown();
@@ -96,10 +75,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPendingIfStatusSetToPending()
+    public function testShouldMarkPendingIfStatusSetToPending()
     {
         $request = new GetBinaryStatus(array(
             Constants::FIELD_STATUS => Constants::STATUS_PENDING,
@@ -113,10 +89,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isPending());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfStatusSetToCaptured()
+    public function testShouldMarkCapturedIfStatusSetToCaptured()
     {
         $request = new GetBinaryStatus(array(
             Constants::FIELD_STATUS => Constants::STATUS_CAPTURED,
@@ -130,10 +103,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPayedoutIfStatusSetToPayedout()
+    public function testShouldMarkPayedoutIfStatusSetToPayedout()
     {
         $request = new GetBinaryStatus(array(
             Constants::FIELD_STATUS => Constants::STATUS_PAYEDOUT,
@@ -147,10 +117,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isPayedout());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkRefundedIfStatusSetToRefunded()
+    public function testShouldMarkRefundedIfStatusSetToRefunded()
     {
         $request = new GetBinaryStatus(array(
             Constants::FIELD_STATUS => Constants::STATUS_REFUNDED,
@@ -164,10 +131,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isRefunded());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCanceledIfStatusSetToCanceled()
+    public function testShouldMarkCanceledIfStatusSetToCanceled()
     {
         $request = new GetBinaryStatus(array(
             Constants::FIELD_STATUS => Constants::STATUS_CANCELED,
@@ -181,10 +145,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isCanceled());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfStatusNotRecognized()
+    public function testShouldMarkUnknownIfStatusNotRecognized()
     {
         $request = new GetBinaryStatus(array(
             Constants::FIELD_STATUS => 'some-foo-bar-status',

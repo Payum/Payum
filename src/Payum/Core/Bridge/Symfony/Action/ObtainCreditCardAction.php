@@ -43,7 +43,6 @@ class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
     protected $templateName;
 
     /**
-     * @param FormFactoryInterface $formFactory
      * @param string               $templateName
      */
     public function __construct(FormFactoryInterface $formFactory, $templateName)
@@ -61,17 +60,12 @@ class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
         $this->httpRequest = $request;
     }
 
-    /**
-     * @param RequestStack|null $requestStack
-     */
     public function setRequestStack(RequestStack $requestStack = null)
     {
         $this->httpRequestStack = $requestStack;
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param ObtainCreditCard $request
      */
     public function execute($request)
@@ -125,9 +119,6 @@ class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
         )));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof ObtainCreditCard;

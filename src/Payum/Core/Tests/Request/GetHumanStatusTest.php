@@ -38,20 +38,14 @@ class GetHumanStatusTest extends TestCase
         yield ['markExpired'];
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseStatusRequest()
+    public function testShouldBeSubClassOfBaseStatusRequest()
     {
         $rc = new \ReflectionClass(GetHumanStatus::class);
 
         $this->assertTrue($rc->isSubclassOf(BaseGetStatus::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownInConstructor()
+    public function testShouldMarkUnknownInConstructor()
     {
         $getStatus = new GetHumanStatus(new \stdClass());
 
@@ -59,11 +53,9 @@ class GetHumanStatusTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideMarkXXXMethods
      */
-    public function shouldAllowGetMarkedStatus($markXXXMethod)
+    public function testShouldAllowGetMarkedStatus($markXXXMethod)
     {
         $getStatus = new GetHumanStatus(new \stdClass());
 
@@ -73,21 +65,16 @@ class GetHumanStatusTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideIsXXXMethods
      */
-    public function shouldCallIsXXXStatus($isXXXMethod)
+    public function testShouldCallIsXXXStatus($isXXXMethod)
     {
         $getStatus = new GetHumanStatus(new \stdClass());
 
         $this->assertIsBool($getStatus->$isXXXMethod());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotMatchOthersThenCapturedStatus()
+    public function testShouldNotMatchOthersThenCapturedStatus()
     {
         $getStatus = new GetHumanStatus(new \stdClass());
 
@@ -106,10 +93,7 @@ class GetHumanStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotMatchOthersThenFailedStatus()
+    public function testShouldNotMatchOthersThenFailedStatus()
     {
         $getStatus = new GetHumanStatus(new \stdClass());
 
@@ -128,10 +112,7 @@ class GetHumanStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotMatchOthersThenPendingStatus()
+    public function testShouldNotMatchOthersThenPendingStatus()
     {
         $getStatus = new GetHumanStatus(new \stdClass());
 
@@ -150,10 +131,7 @@ class GetHumanStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotMatchOthersThenCanceledStatus()
+    public function testShouldNotMatchOthersThenCanceledStatus()
     {
         $getStatus = new GetHumanStatus(new \stdClass());
 
@@ -172,10 +150,7 @@ class GetHumanStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotMatchOthersThenNewStatus()
+    public function testShouldNotMatchOthersThenNewStatus()
     {
         $getStatus = new GetHumanStatus(new \stdClass());
 
@@ -194,10 +169,7 @@ class GetHumanStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotMatchOthersThenUnknownStatus()
+    public function testShouldNotMatchOthersThenUnknownStatus()
     {
         $getStatus = new GetHumanStatus(new \stdClass());
 
@@ -216,10 +188,7 @@ class GetHumanStatusTest extends TestCase
         $this->assertFalse($getStatus->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotMatchOthersThenExpiredStatus()
+    public function testShouldNotMatchOthersThenExpiredStatus()
     {
         $getStatus = new GetHumanStatus(new \stdClass());
 
@@ -238,10 +207,7 @@ class GetHumanStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotMatchOthersThenSuspendedStatus()
+    public function testShouldNotMatchOthersThenSuspendedStatus()
     {
         $getStatus = new GetHumanStatus(new \stdClass());
 
@@ -260,10 +226,7 @@ class GetHumanStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotMatchOthersThenPayedoutStatus()
+    public function testShouldNotMatchOthersThenPayedoutStatus()
     {
         $getStatus = new GetHumanStatus(new \stdClass());
 

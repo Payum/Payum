@@ -11,8 +11,6 @@ use Payum\Paypal\Masspay\Nvp\Api;
 class GetPayoutStatusAction implements ActionInterface
 {
     /**
-     * {@inheritdoc}
-     *
      * @param GetStatusInterface $request
      */
     public function execute($request)
@@ -42,9 +40,6 @@ class GetPayoutStatusAction implements ActionInterface
         $request->markUnknown();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($request)
     {
         return $request instanceof GetStatusInterface &&

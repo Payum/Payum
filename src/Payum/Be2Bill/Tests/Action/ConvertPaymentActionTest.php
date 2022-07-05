@@ -34,10 +34,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         yield array(new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCorrectlyConvertOrderToDetailsAndSetItBack()
+    public function testShouldCorrectlyConvertOrderToDetailsAndSetItBack()
     {
         $payment = new Payment();
         $payment->setNumber('theNumber');
@@ -71,10 +68,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertSame('theClientEmail', $details['CLIENTEMAIL']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotOverwriteAlreadySetExtraDetails()
+    public function testShouldNotOverwriteAlreadySetExtraDetails()
     {
         $payment = new Payment();
         $payment->setCurrencyCode('USD');

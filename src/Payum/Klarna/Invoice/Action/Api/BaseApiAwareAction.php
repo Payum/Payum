@@ -77,8 +77,6 @@ abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
     }
 
     /**
-     * @param \ArrayAccess     $details
-     * @param \KlarnaException $e
      * @param object           $request
      */
     protected function populateDetailsWithError(\ArrayAccess $details, \KlarnaException $e, $request)

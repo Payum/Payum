@@ -12,8 +12,6 @@ class CoreGatewayFactoryBuilder implements ContainerAwareInterface
     use ContainerAwareTrait;
 
     /**
-     * @param array $defaultConfig
-     *
      * @return GatewayFactoryInterface
      */
     public function build(array $defaultConfig)

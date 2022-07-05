@@ -7,10 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class FetchOrderTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseOrder()
+    public function testShouldBeSubClassOfBaseOrder()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Request\Api\FetchOrder');
 

@@ -10,8 +10,6 @@ use Payum\Klarna\Checkout\Request\Api\FetchOrder;
 class FetchOrderAction extends BaseApiAwareAction
 {
     /**
-     * {@inheritDoc}
-     *
      * @param FetchOrder $request
      */
     public function execute($request)
@@ -32,9 +30,6 @@ class FetchOrderAction extends BaseApiAwareAction
         });
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof FetchOrder;

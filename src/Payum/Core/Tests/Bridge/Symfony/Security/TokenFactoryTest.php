@@ -15,30 +15,21 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TokenFactoryTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementsTokenFactoryInterface()
+    public function testShouldImplementsTokenFactoryInterface()
     {
         $rc = new \ReflectionClass(TokenFactory::class);
 
         $this->assertTrue($rc->implementsInterface(TokenFactoryInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfAbtractTokenFactory()
+    public function testShouldBeSubClassOfAbtractTokenFactory()
     {
         $rc = new \ReflectionClass(TokenFactory::class);
 
         $this->assertTrue($rc->isSubclassOf(AbstractTokenFactory::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateTokenWithoutAfterPath()
+    public function testShouldCreateTokenWithoutAfterPath()
     {
         $token = new Token();
 
@@ -93,10 +84,7 @@ class TokenFactoryTest extends TestCase
         $this->assertNull($token->getAfterUrl());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateTokenWithAfterUrl()
+    public function testShouldCreateTokenWithAfterUrl()
     {
         $token = new Token();
 
@@ -153,10 +141,7 @@ class TokenFactoryTest extends TestCase
         $this->assertSame('theAfterPath?after=val', $token->getAfterUrl());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateTokenWithIdentityAsModel()
+    public function testShouldCreateTokenWithIdentityAsModel()
     {
         $token = new Token();
 
@@ -196,10 +181,7 @@ class TokenFactoryTest extends TestCase
         $this->assertSame($identity, $token->getDetails());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateTokenWithoutModel()
+    public function testShouldCreateTokenWithoutModel()
     {
         $token = new Token();
 
@@ -238,10 +220,7 @@ class TokenFactoryTest extends TestCase
         $this->assertNull($token->getDetails());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateTokenWithTargetPathAlreadyUrl()
+    public function testShouldCreateTokenWithTargetPathAlreadyUrl()
     {
         $token = new Token();
 
@@ -298,10 +277,7 @@ class TokenFactoryTest extends TestCase
         $this->assertSame('theAfterPath?after=val', $token->getAfterUrl());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotOverwritePayumTokenHashInAfterUrl()
+    public function testShouldNotOverwritePayumTokenHashInAfterUrl()
     {
         $authorizeToken = new Token();
 
@@ -361,10 +337,7 @@ class TokenFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowCreateAfterUrlWithoutPayumToken()
+    public function testShouldAllowCreateAfterUrlWithoutPayumToken()
     {
         $authorizeToken = new Token();
 
@@ -424,10 +397,7 @@ class TokenFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowCreateAfterUrlWithFragment()
+    public function testShouldAllowCreateAfterUrlWithFragment()
     {
         $authorizeToken = new Token();
 

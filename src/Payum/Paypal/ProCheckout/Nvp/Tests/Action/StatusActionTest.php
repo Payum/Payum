@@ -13,10 +13,7 @@ class StatusActionTest extends GenericActionTest
 
     protected $requestClass = 'Payum\Core\Request\GetHumanStatus';
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfDetailsEmpty()
+    public function testShouldMarkNewIfDetailsEmpty()
     {
         $action = new StatusAction();
 
@@ -30,10 +27,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfResultNotSupported()
+    public function testShouldMarkFailedIfResultNotSupported()
     {
         $action = new StatusAction();
 
@@ -49,10 +43,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfResultSuccess()
+    public function testShouldMarkCapturedIfResultSuccess()
     {
         $action = new StatusAction();
 
@@ -69,10 +60,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkRefundedIfOrigIdSetAndTrxTypeCreditAndResultSuccess()
+    public function testShouldMarkRefundedIfOrigIdSetAndTrxTypeCreditAndResultSuccess()
     {
         $action = new StatusAction();
 
@@ -90,10 +78,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isRefunded());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfResultGreaterThenZero()
+    public function testShouldMarkFailedIfResultGreaterThenZero()
     {
         $action = new StatusAction();
 
@@ -120,10 +105,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfResultSuccessButTrxTypeNotPurchaseOne()
+    public function testShouldMarkUnknownIfResultSuccessButTrxTypeNotPurchaseOne()
     {
         $action = new StatusAction();
 

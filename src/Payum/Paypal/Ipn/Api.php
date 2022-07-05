@@ -39,11 +39,6 @@ class Api
      */
     protected $options;
 
-    /**
-     * @param array               $options
-     * @param HttpClientInterface $client
-     * @param MessageFactory      $messageFactory
-     */
     public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
     {
         $this->client = $client;
@@ -57,8 +52,6 @@ class Api
     }
 
     /**
-     * @param array $fields
-     *
      * @return string
      */
     public function notifyValidate(array $fields)

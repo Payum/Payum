@@ -8,20 +8,14 @@ use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementsActionInterface()
+    public function testShouldImplementsActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestWithArrayAsModelWhichHasPaymentRequestAmountSet()
+    public function testShouldSupportStatusRequestWithArrayAsModelWhichHasPaymentRequestAmountSet()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -34,10 +28,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportEmptyModel()
+    public function testShouldSupportEmptyModel()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -46,10 +37,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestWithArrayAsModelWhichHasPaymentRequestAmountSetToZero()
+    public function testShouldSupportStatusRequestWithArrayAsModelWhichHasPaymentRequestAmountSetToZero()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -62,10 +50,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportStatusRequestWithNoArrayAccessAsModel()
+    public function testShouldNotSupportStatusRequestWithNoArrayAccessAsModel()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -74,20 +59,14 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotStatusRequest()
+    public function testShouldNotSupportAnythingNotStatusRequest()
     {
         $action = new PaymentDetailsStatusAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new PaymentDetailsStatusAction();
@@ -95,10 +74,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCanceledIfPaymentNotAuthorized()
+    public function testShouldMarkCanceledIfPaymentNotAuthorized()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -112,10 +88,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isCanceled());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCanceledIfDetailsContainCanceledKey()
+    public function testShouldMarkCanceledIfDetailsContainCanceledKey()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -128,10 +101,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isCanceled());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfErrorCodeSetToModel()
+    public function testShouldMarkFailedIfErrorCodeSetToModel()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -145,10 +115,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfCreateBillingAgreementRequestAndZeroAmount()
+    public function testShouldMarkCapturedIfCreateBillingAgreementRequestAndZeroAmount()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -164,10 +131,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfDetailsEmpty()
+    public function testShouldMarkNewIfDetailsEmpty()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -178,10 +142,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfPayerIdSetAndCheckoutStatusNotInitiated()
+    public function testShouldMarkNewIfPayerIdSetAndCheckoutStatusNotInitiated()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -196,10 +157,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPendingIfCheckoutStatusInProgress()
+    public function testShouldMarkPendingIfCheckoutStatusInProgress()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -213,10 +171,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isPending());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPendingIfPayerIdNotSetAndCheckoutStatusNotInitiated()
+    public function testShouldMarkPendingIfPayerIdNotSetAndCheckoutStatusNotInitiated()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -231,10 +186,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isPending());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfCheckoutStatusFailed()
+    public function testShouldMarkFailedIfCheckoutStatusFailed()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -248,10 +200,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPendingIfAtLeastOnePaymentStatusInProgress()
+    public function testShouldMarkPendingIfAtLeastOnePaymentStatusInProgress()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -267,10 +216,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isPending());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfAtLeastOnePaymentStatusFailed()
+    public function testShouldMarkFailedIfAtLeastOnePaymentStatusFailed()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -286,10 +232,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfAtLeastOnePaymentStatusReversed()
+    public function testShouldMarkFailedIfAtLeastOnePaymentStatusReversed()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -305,10 +248,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkRefundedIfAtLeastOnePaymentStatusRefund()
+    public function testShouldMarkRefundedIfAtLeastOnePaymentStatusRefund()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -324,10 +264,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isRefunded());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkRefundedIfAtLeastOnePaymentStatusPartiallyRefund()
+    public function testShouldMarkRefundedIfAtLeastOnePaymentStatusPartiallyRefund()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -343,10 +280,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isRefunded());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfAllPaymentStatusCompletedOrProcessed()
+    public function testShouldMarkCapturedIfAllPaymentStatusCompletedOrProcessed()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -362,10 +296,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCanceledIfAllPaymentStatusVoidedAndReasonAuthorization()
+    public function testShouldMarkCanceledIfAllPaymentStatusVoidedAndReasonAuthorization()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -383,10 +314,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isCanceled());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkAuthorizedIfAllPaymentStatusPendingAndReasonAuthorization()
+    public function testShouldMarkAuthorizedIfAllPaymentStatusPendingAndReasonAuthorization()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -405,10 +333,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isAuthorized());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfCheckoutStatusUnknown()
+    public function testShouldMarkUnknownIfCheckoutStatusUnknown()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -422,10 +347,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfPaymentStatusUnknown()
+    public function testShouldMarkUnknownIfPaymentStatusUnknown()
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -440,10 +362,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCanceledIfPaymentIsCancelledByUser()
+    public function testShouldMarkCanceledIfPaymentIsCancelledByUser()
     {
         $action = new PaymentDetailsStatusAction();
 

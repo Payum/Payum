@@ -39,8 +39,6 @@ class Token implements TokenInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @return Identity
      */
     public function getDetails()
@@ -48,73 +46,46 @@ class Token implements TokenInterface
         return $this->details;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setDetails($details)
     {
         $this->details = $details;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getHash()
     {
         return $this->hash;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setHash($hash)
     {
         $this->hash = $hash;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTargetUrl()
     {
         return $this->targetUrl;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setTargetUrl($targetUrl)
     {
         $this->targetUrl = $targetUrl;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getAfterUrl()
     {
         return $this->afterUrl;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setAfterUrl($afterUrl)
     {
         $this->afterUrl = $afterUrl;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getGatewayName()
     {
         return $this->gatewayName;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setGatewayName($gatewayName)
     {
         $this->gatewayName = $gatewayName;

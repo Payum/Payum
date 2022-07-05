@@ -8,20 +8,14 @@ use PHPUnit\Framework\TestCase;
 
 class EventDispatcherExtensionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementExtensionInterface()
+    public function testShouldImplementExtensionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Extension\EventDispatcherExtension');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldTriggerEventWhenCallOnPreExecute()
+    public function testShouldTriggerEventWhenCallOnPreExecute()
     {
         $dispatcherMock = $this->createEventDispatcherMock();
         $dispatcherMock
@@ -35,10 +29,7 @@ class EventDispatcherExtensionTest extends TestCase
         $extension->onPreExecute($this->createContextMock());
     }
 
-    /**
-     * @test
-     */
-    public function shouldTriggerEventWhenCallOnExecute()
+    public function testShouldTriggerEventWhenCallOnExecute()
     {
         $dispatcherMock = $this->createEventDispatcherMock();
         $dispatcherMock
@@ -52,10 +43,7 @@ class EventDispatcherExtensionTest extends TestCase
         $extension->onExecute($this->createContextMock());
     }
 
-    /**
-     * @test
-     */
-    public function shouldTriggerEventWhenCallOnPostExecute()
+    public function testShouldTriggerEventWhenCallOnPostExecute()
     {
         $dispatcherMock = $this->createEventDispatcherMock();
         $dispatcherMock

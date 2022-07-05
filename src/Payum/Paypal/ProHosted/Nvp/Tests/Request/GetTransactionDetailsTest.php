@@ -8,10 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class GetTransactionDetailsTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass(GetTransactionDetails::class);
 

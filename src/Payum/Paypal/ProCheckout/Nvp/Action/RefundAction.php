@@ -18,9 +18,6 @@ class RefundAction implements ActionInterface, ApiAwareInterface
      */
     protected $api;
 
-    /**
-     * {@inheritDoc}
-     */
     public function setApi($api)
     {
         if (false == $api instanceof Api) {
@@ -30,9 +27,6 @@ class RefundAction implements ActionInterface, ApiAwareInterface
         $this->api = $api;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request Refund */
@@ -66,9 +60,6 @@ class RefundAction implements ActionInterface, ApiAwareInterface
         $details->replace($this->api->doCredit($details->toUnsafeArray()));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Refund &&

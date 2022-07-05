@@ -25,8 +25,6 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param $request Notify
      */
     public function execute($request)
@@ -50,13 +48,9 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
         throw new HttpResponse('OK', 200);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Notify &&
+        return $request instanceof Notify &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

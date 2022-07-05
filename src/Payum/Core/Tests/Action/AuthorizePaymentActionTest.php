@@ -27,20 +27,14 @@ class AuthorizePaymentActionTest extends GenericActionTest
         yield array($authorize);
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass($this->actionClass);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldExecuteConvertRequestIfStatusNew()
+    public function testShouldExecuteConvertRequestIfStatusNew()
     {
         $payment = new Payment();
 
@@ -76,10 +70,7 @@ class AuthorizePaymentActionTest extends GenericActionTest
         $this->assertNull($authorize->getToken());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetConvertedResultToPaymentAsDetails()
+    public function testShouldSetConvertedResultToPaymentAsDetails()
     {
         $payment = new Payment();
 
@@ -115,10 +106,7 @@ class AuthorizePaymentActionTest extends GenericActionTest
         $this->assertSame('fooVal', $details['foo']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldExecuteConvertRequestWithTokenIfOnePresent()
+    public function testShouldExecuteConvertRequestWithTokenIfOnePresent()
     {
         $payment = new Payment();
         $token = $this->createTokenMock();
@@ -155,10 +143,7 @@ class AuthorizePaymentActionTest extends GenericActionTest
         $this->assertSame($token, $authorize->getToken());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetDetailsBackToPaymentAfterAuthorizeDetailsExecution()
+    public function testShouldSetDetailsBackToPaymentAfterAuthorizeDetailsExecution()
     {
         $expectedDetails = array('foo' => 'fooVal');
 
@@ -197,10 +182,7 @@ class AuthorizePaymentActionTest extends GenericActionTest
         $this->assertEquals(array('foo' => 'fooVal', 'bar' => 'barVal'), $payment->getDetails());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetDetailsBackToPaymentEvenIfExceptionThrown()
+    public function testShouldSetDetailsBackToPaymentEvenIfExceptionThrown()
     {
         $expectedDetails = array('foo' => 'fooVal');
 
